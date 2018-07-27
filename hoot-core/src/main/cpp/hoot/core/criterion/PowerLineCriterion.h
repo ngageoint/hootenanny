@@ -22,44 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ATTRIBUTEDISTANCEEXTRACTOR_H
-#define ATTRIBUTEDISTANCEEXTRACTOR_H
+#ifndef POWERLINECRITERION_H
+#define POWERLINECRITERION_H
 
-#include "WayFeatureExtractor.h"
+#include "ElementCriterion.h"
 
 namespace hoot
 {
 
 /**
- * See exporatory funds report for details.
- * Calculates "distance" between tags using hoot::TagComparator
+ * A filter that will either keep or remove power line utilities.
  */
-class AttributeDistanceExtractor : public WayFeatureExtractor
+class PowerLineCriterion : public ElementCriterion
 {
 public:
-  static std::string className() { return "hoot::AttributeDistanceExtractor"; }
 
-  AttributeDistanceExtractor(ValueAggregatorPtr wayAgg, QString key = "");
+  static std::string className() { return "hoot::PowerLineCriterion"; }
 
-  AttributeDistanceExtractor(QString key = "");
+  PowerLineCriterion() {}
 
-  virtual std::string getClassName() const { return className(); }
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual std::string getName() const;
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PowerLineCriterion()); }
 
-  virtual QString getDescription() const
-  { return "Calculates \"distance\" between tags using hoot::TagComparator"; }
-
-protected:
-
-  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
-
-  bool _useWeight;
-  QString _key;
+  virtual QString getDescription() const { return "Identifies power line utilities"; }
 };
 
 }
 
-#endif // ATTRIBUTEDISTANCEEXTRACTOR_H
+#endif // POWERLINECRITERION_H

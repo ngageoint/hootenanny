@@ -1584,7 +1584,7 @@ bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp)
   return d->isAncestor(childKvp, parentKvp);
 }
 
-bool OsmSchema::isArea(const Tags& t, ElementType type) const
+bool OsmSchema::isArea(const Tags& t, const ElementType& type) const
 {
   bool result = false;
 
@@ -1618,7 +1618,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
   return result;
 } 
 
-bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList)
+bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList) const
 {
   LOG_VART(tagList.size());
   for (int i = 0; i < tagList.size(); i++)
@@ -1636,7 +1636,7 @@ bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList)
   return false;
 }
 
-bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tagIgnoreList)
+bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tagIgnoreList) const
 {
   const Tags& tags = e->getTags();
 
@@ -1672,7 +1672,7 @@ bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tag
   return isPoly;
 }
 
-bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagIgnoreList)
+bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagIgnoreList) const
 {
   const Tags& tags = e->getTags();
 
@@ -1718,7 +1718,7 @@ bool OsmSchema::isNonBuildingArea(const ConstElementPtr& e) const
   return isArea(e) && !isBuilding(e);
 }
 
-bool OsmSchema::isAreaForStats(const Tags& t, ElementType type) const
+bool OsmSchema::isAreaForStats(const Tags& t, const ElementType& type) const
 {
   bool result = false;
 
@@ -1764,7 +1764,7 @@ bool OsmSchema::isAreaForStats(const ConstElementPtr& e) const
   return isAreaForStats(e->getTags(), e->getElementType());
 }
 
-bool OsmSchema::isBuilding(const Tags& t, ElementType type) const
+bool OsmSchema::isBuilding(const Tags& t, const ElementType& type) const
 {
   bool result = false;
   if ((type != ElementType::Node) && (hasCategory(t, "building") == true))
@@ -1780,7 +1780,7 @@ bool OsmSchema::isBuilding(const ConstElementPtr& e) const
   return isBuilding(e->getTags(), e->getElementType());
 }
 
-bool OsmSchema::isBuildingPart(const Tags& t, ElementType type) const
+bool OsmSchema::isBuildingPart(const Tags& t, const ElementType& type) const
 {
   bool result = false;
   if (type != ElementType::Node && t.isTrue(MetadataTags::BuildingPart()))
@@ -1795,7 +1795,7 @@ bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
   return isBuildingPart(e->getTags(), e->getElementType());
 }
 
-bool OsmSchema::isMultiUseBuilding(const Element& e)
+bool OsmSchema::isMultiUseBuilding(const Element& e) const
 {
   const OsmSchema& osmSchema = OsmSchema::getInstance();
   const ElementType elementType = e.getElementType();
@@ -1815,7 +1815,7 @@ bool OsmSchema::isMultiUseBuilding(const Element& e)
      osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
 }
 
-bool OsmSchema::isMultiUse(const Element& e)
+bool OsmSchema::isMultiUse(const Element& e) const
 {
   return
     OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::multiUse());
@@ -1843,7 +1843,7 @@ bool OsmSchema::isCollection(const Element& e) const
   return result;
 }
 
-bool OsmSchema::isHgisPoi(const Element& e)
+bool OsmSchema::isHgisPoi(const Element& e) const
 {
   bool result = false;
 
@@ -1856,7 +1856,7 @@ bool OsmSchema::isHgisPoi(const Element& e)
   return result;
 }
 
-bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
+bool OsmSchema::isLinearHighway(const Tags& t, const ElementType& type) const
 {
 //  if (t.contains("name"))
 //  {
@@ -1904,7 +1904,7 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
   return result;
 }
 
-bool OsmSchema::isLinear(const Element &e)
+bool OsmSchema::isLinear(const Element& e) const
 {
   bool result = false;
 
@@ -1956,7 +1956,21 @@ bool OsmSchema::isLinearWaterway(const Element& e)
   return false;
 }
 
-bool OsmSchema::isRoundabout(const Tags& tags, ElementType type)
+bool OsmSchema::isPowerLine(const Element& e) const
+{
+  if (e.getElementType() == ElementType::Way)
+  {
+    const Tags& tags = e.getTags();
+    const QString powerVal = tags.get("power").toLower().trimmed();
+    if (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable")
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool OsmSchema::isRoundabout(const Tags& tags, const ElementType& type) const
 {
   // If it's not a highway, it's not a roundabout
   if (!isLinearHighway(tags, type))
@@ -1981,7 +1995,7 @@ bool OsmSchema::isRoundabout(const Tags& tags, ElementType type)
   return result;
 }
 
-bool OsmSchema::isList(const QString& /*key*/, const QString& value)
+bool OsmSchema::isList(const QString& /*key*/, const QString& value) const
 {
   return value.contains(';');
 }
@@ -2038,7 +2052,7 @@ bool OsmSchema::hasName(const Element& element) const
   return false;
 }
 
-bool OsmSchema::isPoi(const Element& e)
+bool OsmSchema::isPoi(const Element& e) const
 {
   bool result = false;
 

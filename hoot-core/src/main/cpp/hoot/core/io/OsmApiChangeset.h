@@ -61,7 +61,7 @@ class XmlChangeset
 public:
   /** Constructors */
   XmlChangeset();
-  XmlChangeset(const QList<QString>& changesets);
+  explicit XmlChangeset(const QList<QString>& changesets);
   /**
    * @brief loadChangeset Load changeset file, can be called multiple times on changeset that are split across files
    * @param changesetPath
@@ -126,6 +126,51 @@ public:
    * @return true if any elements failed upload
    */
   bool hasFailedElements() { return _failedCount > 0; }
+  /**
+   * @brief getFailedCount
+   * @return number of failed elements
+   */
+  long getFailedCount()         { return _failedCount; }
+  /**
+   * @brief getTotalElementCount
+   * @return total number of elements in the changeset
+   */
+  long getTotalElementCount()   { return _allNodes.size() + _allWays.size() + _allRelations.size(); }
+  /**
+   * @brief getTotalNodeCount
+   * @return total number of nodes in the changeset (create, modify, or delete)
+   */
+  long getTotalNodeCount()      { return _allNodes.size(); }
+  /**
+   * @brief getTotalWayCount
+   * @return total number of ways in the changeset (create, modify, or delete)
+   */
+  long getTotalWayCount()       { return _allWays.size(); }
+  /**
+   * @brief getTotalRelationCount
+   * @return total number of relations in the changeset (create, modify, or delete)
+   */
+  long getTotalRelationCount()  { return _allRelations.size(); }
+  /**
+   * @brief getTotalCreateCount
+   * @return total number of nodes/ways/relations created in the changeset
+   */
+  long getTotalCreateCount()    { return _nodes[TypeCreate].size() + _ways[TypeCreate].size() + _relations[TypeCreate].size(); }
+  /**
+   * @brief getTotalModifyCount
+   * @return total number of nodes/ways/relations modified in the changeset
+   */
+  long getTotalModifyCount()    { return _nodes[TypeModify].size() + _ways[TypeModify].size() + _relations[TypeModify].size(); }
+  /**
+   * @brief getTotalDeleteCount
+   * @return total number of nodes/ways/relations deleted in the changeset
+   */
+  long getTotalDeleteCount()    { return _nodes[TypeDelete].size() + _ways[TypeDelete].size() + _relations[TypeDelete].size(); }
+  /**
+   * @brief getProcessedCount
+   * @return Number of elements processed so far
+   */
+  long getProcessedCount()      { return _processedCount; }
 
 private:
   /**
@@ -234,10 +279,6 @@ private:
   ChangesetTypeMap _relations;
   /** Element ID to ID data structure for checking old ID to new ID and new ID to old ID lookups */
   ElementIdToIdMap _idMap;
-  /** Map listing node IDs with all way IDs that they are a part of */
-  std::map<long, std::vector<long>> _nodesToWays;
-  /** Three element array of maps of element IDs to relations that they are a part of */
-  std::array<std::map<long, std::vector<long>>, ElementType::Unknown> _idsToRelations;
   /** Soft maximum changeset size */
   long _maxChangesetSize;
   /** Count of elements that have been sent */
@@ -280,6 +321,9 @@ public:
     if (selectedSet.find(id) != selectedSet.end())
       selectedSet.erase(id);
   }
+
+  long getFirst(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
+  { return *(_changeset[element_type][changeset_type].begin()); }
   /**
    * @brief clear Clear out this entire changeset subset
    */

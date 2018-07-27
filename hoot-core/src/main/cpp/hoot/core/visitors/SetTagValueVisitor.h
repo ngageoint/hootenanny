@@ -59,7 +59,7 @@ public:
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual QString getDescription() const
-  { return "Adds or updates tags using the specified key/value pair"; }
+  { return "Adds or updates one or more tags using specified key/value pairs"; }
 
   void setNegateFilter(bool negate) { _negateFilter = negate; }
 

@@ -53,7 +53,7 @@ public:
 
   void runSimpleTest()
   {
-    boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
+    boost::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     OsmXmlChangesetFileWriter().write(
       "test-output/io/OsmXmlChangesetFileWriterTest/changeset.osc", changesetProvider);
 
@@ -64,7 +64,7 @@ public:
 
   void runSplitTest()
   {
-    boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
+    boost::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     OsmXmlChangesetFileWriter writer;
     Settings testSettings = conf();
     testSettings.set("changeset.max.size", "5");

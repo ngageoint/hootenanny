@@ -39,6 +39,8 @@ namespace hoot
  * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
  * appropriate data structures.
+ *
+ * Hausdorff distance measures how far two subsets of a metric space are from each other.
  */
 class HausdorffDistanceExtractor : public AbstractDistanceExtractor
 {

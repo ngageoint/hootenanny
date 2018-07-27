@@ -26,15 +26,14 @@
  */
 
 //  Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/util/FileUtils.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class OsmApiChangesetTest : public CppUnit::TestFixture
+class OsmApiChangesetTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiChangesetTest);
   CPPUNIT_TEST(runXmlChangesetTest);
@@ -45,10 +44,6 @@ class OsmApiChangesetTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void setUp()
-  {
-  }
 
   void runXmlChangesetTest()
   {
@@ -122,34 +117,47 @@ public:
     XmlChangeset changeset;
     changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
 
-    changeset.setMaxSize(5);
+    changeset.setMaxSize(10);
 
     QStringList expectedFiles;
     expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit1.osc");
     expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit2.osc");
     expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit3.osc");
+    expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit4.osc");
 
     QStringList updatedFiles;
     updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit1.response.xml");
     updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit2.response.xml");
     updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit3.response.xml");
+    updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit4.response.xml");
+
+    long processed[] = { 10, 20, 30, 40 };
 
     ChangesetInfoPtr info;
-    int i = 1;
+    int index = 0;
     while (!changeset.isDone())
     {
       info.reset(new ChangesetInfo());
       changeset.calculateChangeset(info);
 
-      QString expectedText = FileUtils::readFully(expectedFiles[i - 1]);
+      QString expectedText = FileUtils::readFully(expectedFiles[index]);
 
-      HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, i));
+      HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, index + 1));
 
-      QString updatedText = FileUtils::readFully(updatedFiles[i - 1]);
+      QString updatedText = FileUtils::readFully(updatedFiles[index]);
       changeset.updateChangeset(updatedText);
 
-      ++i;
+      CPPUNIT_ASSERT_EQUAL(processed[index], changeset.getProcessedCount());
+
+      ++index;
     }
+    CPPUNIT_ASSERT_EQUAL(40L, changeset.getTotalElementCount());
+    CPPUNIT_ASSERT_EQUAL(36L, changeset.getTotalNodeCount());
+    CPPUNIT_ASSERT_EQUAL(4L, changeset.getTotalWayCount());
+    CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalRelationCount());
+    CPPUNIT_ASSERT_EQUAL(40L, changeset.getTotalCreateCount());
+    CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalModifyCount());
+    CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalDeleteCount());
   }
 
 };

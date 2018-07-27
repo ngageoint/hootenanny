@@ -43,20 +43,27 @@ HOOT_FACTORY_REGISTER(ElementCriterion, UselessElementCriterion)
 bool UselessElementCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   ElementId eid = e->getElementId();
+  LOG_VART(eid);
 
   const boost::shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
 
   // Is this element part of a relation? If so, it's not useless!
   const std::set<long>& parentRels = e2r->getRelationByElement(eid);
   if (parentRels.size() > 0)
+  {
+    LOG_TRACE("UselessElementCriterion not satisified: element part of relation");
     return false;
+  }
 
   if (ElementType::Node == eid.getType().getEnum())
   {
     // Check ways
     const std::set<long>& parentWays = _map->getIndex().getNodeToWayMap()->getWaysByNode(eid.getId());
     if (parentWays.size() > 0)
+    {
+      LOG_TRACE("UselessElementCriterion not satisified: node has parent");
       return false;
+    }
   }
   else if (ElementType::Way == eid.getType().getEnum())
   {
@@ -64,16 +71,23 @@ bool UselessElementCriterion::isSatisfied(const boost::shared_ptr<const Element>
 
     // Check for kids
     if (pWay->getNodeCount() > 0)
+    {
+      LOG_TRACE("UselessElementCriterion not satisified: way has children");
       return false;
+    }
   }
   else if (ElementType::Relation == eid.getType().getEnum())
   {
     ConstRelationPtr pRel = boost::dynamic_pointer_cast<const Relation>(e);
     if (pRel->getMembers().size() > 0)
+    {
+      LOG_TRACE("UselessElementCriterion not satisified: relation has children");
       return false;
+    }
   }
 
   // No parents, no children, no siblings, no use!
+  LOG_TRACE("UselessElementCriterion satisifed");
   return true;
 }
 

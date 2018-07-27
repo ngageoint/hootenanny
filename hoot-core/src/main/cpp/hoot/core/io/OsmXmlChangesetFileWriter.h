@@ -69,7 +69,7 @@ public:
    * @param path Pathname for the output file(s)
    * @param cs Changeset provider to stream the changes from
    */
-  void write(QString path, ChangeSetProviderPtr cs);
+  void write(QString path, ChangesetProviderPtr cs);
 
   /**
    * Set the configuration settings

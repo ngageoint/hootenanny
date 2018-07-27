@@ -87,9 +87,9 @@ To read more information on Area to Area Conflation, see the "Area to Area Confl
 [[River-Conflation]]
 === River Conflation
 
-Rivers may be conflated using the Javascript generic conflation capability.  For more information on
-generic conflation, see the related sections in this document.  See the algorithms documentation for 
-more details on the algorithms and techniques used in river conflation.
+Rivers may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the 
+related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in 
+this conflation.
 
 ==== Configurable Files
 
@@ -97,24 +97,46 @@ more details on the algorithms and techniques used in river conflation.
 [width="65%"]
 |======
 | *Location* | *Description*
-| `conf/WaterwaySchema.json` | attribute schema definitions for river data
-| `rules/LinearWaterway.js` | custom rule based model for river conflation
+| `conf/schema/WaterwaySchema.json` | attribute schema definitions
+| `rules/LinearWaterway.js` | custom rule based conflation model
 |======
 
 ==== Usage
 
-River conflation can be done from the command line or the web user interface.  This section describes
-how to conflate river data from the command line.  For details on how to do it in the web user interface,
-see the associated section in the Hootenanny User Interface guide.  To conflate river data, a 
-command similar to the following may be issued:
+River conflation can be done from the command line or the web user interface.  This section describes how to conflate river data 
+from the command line.  For details on how to do it in the web user interface, see the associated section in the Hootenanny User 
+Interface guide.  To conflate river data, a command similar to the following may be issued:
 
 ------
 hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
-All of the settings that can be modified for river conflation exist in +conf/core/ConfigOptions.asciidoc++ and are read in by 
-+rules/LinearWaterway.js+  Tweaking the settings can result in better conflation performance depending on the datasets being conflated.  
-See the configuration options for details on the settings that may be modified (search for "waterway").
+All of the settings that can be modified for river conflation exist in +conf/core/ConfigOptions.asciidoc+.  Tweaking the settings can 
+result in better conflation performance depending on the datasets being conflated.  See the configuration options for details on the 
+settings that may be modified (search for "waterway").
+
+[[Power-Line-Conflation]]
+=== Power Line Conflation
+
+Power lines may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the 
+related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in 
+this conflation.
+
+==== Configurable Files
+
+.*Power Line Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `conf/schema/Power.json` | attribute schema definitions
+| `rules/PowerLine.js` | custom rule based conflation model
+|======
+
+==== Usage
+
+Power line conflation can be done from the command line or the web user interface.  Conflating in both environments is similar as described
+in the above River Conflation section.  Power line conflation settings start with "power.line" and exist in 
++conf/core/ConfigOptions.asciidoc+.
 
 [[Feature-Review]]
 === Feature Review

@@ -1,8 +1,5 @@
 "use strict";
 
-var MATCH_OVERLAP_THRESHOLD = 0.75;
-var MISS_OVERLAP_THRESHOLD = 0.15;
-
 exports.description = "Linear Waterway";
 exports.experimental = false;
 exports.baseFeatureType = "Waterway";
@@ -41,7 +38,7 @@ exports.calculateSearchRadius = function(map)
   else
   {
     exports.searchRadius = parseFloat(hoot.get("search.radius.waterway"));
-    hoot.log("Using specified search radius for waterway conflation: " + exports.searchRadius);
+    hoot.debug("Using specified search radius for waterway conflation: " + exports.searchRadius);
   }
 }
 

@@ -42,11 +42,15 @@ using namespace std;
 namespace hoot
 {
 
-ArffWriter::ArffWriter(ostream* strm, bool useNulls) : _strm(strm), _useNulls(useNulls)
+ArffWriter::ArffWriter(ostream* strm, bool useNulls) :
+_strm(strm),
+_useNulls(useNulls)
 {
 }
 
-ArffWriter::ArffWriter(QString path, bool useNulls) : _useNulls(useNulls)
+ArffWriter::ArffWriter(QString path, bool useNulls) :
+_path(path),
+_useNulls(useNulls)
 {
   fstream* fs = new fstream();
   fs->exceptions(fstream::failbit | fstream::badbit);
@@ -62,7 +66,13 @@ void ArffWriter::_w(const QString& s)
 
 void ArffWriter::write(const vector<Sample> &samples)
 {
-  LOG_INFO("Writing .arff file...");
+  QString msg = "Writing attribute-relation model file";
+  if (!_path.isEmpty())
+  {
+    msg += " to " + _path.right(50);
+  }
+  msg += "...";
+  LOG_INFO(msg);
 
   set<QString> attributes;
 
@@ -78,8 +88,6 @@ void ArffWriter::write(const vector<Sample> &samples)
     }
   }
 
-  QString result;
-
   _w("@RELATION manipulations");
   _w("");
 
@@ -91,6 +99,7 @@ void ArffWriter::write(const vector<Sample> &samples)
 
   _w("@DATA");
 
+  const int precision = ConfigOptions().getArffWriterPrecision();
   for (vector<Sample>::const_iterator st = samples.begin(); st != samples.end(); ++st)
   {
     const Sample& s = *st;
@@ -116,7 +125,7 @@ void ArffWriter::write(const vector<Sample> &samples)
         {
           // 17 digits is guaranteed to be the same by IEEE 754
           // http://en.wikipedia.org/wiki/Double-precision_floating-point_format
-          l.append(QString("%1").arg(v, 0, 'g', 17));
+          l.append(QString("%1").arg(v, 0, 'g', precision));
         }
       }
       else

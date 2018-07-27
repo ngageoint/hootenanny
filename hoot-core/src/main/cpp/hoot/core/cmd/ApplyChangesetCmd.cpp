@@ -26,13 +26,16 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/io/OsmApiWriter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QFile>
+#include <QFileInfo>
 
 using namespace std;
 
@@ -54,31 +57,81 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 2 && args.size() != 4)
+    bool showStats = false;
+    bool showProgress = false;
+    //  Check for stats flag
+    if (args.contains("--stats"))
+    {
+      showStats = true;
+      args.removeAll("--stats");
+    }
+    //  Check for progress flag
+    if (args.contains("--progress"))
+    {
+      showProgress = true;
+      args.removeAll("--progress");
+    }
+    //  Make sure that there are at least two other arguments
+    if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
       throw HootException(
-        QString("%1 takes two or four parameters and was given %2 parameters")
+        QString("%1 takes at least two parameters and was given %2 parameters")
           .arg(getName())
           .arg(args.size()));
     }
-
-    LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
-
-    // Not easy to extend this to N osc files without refactoring the *.osc.sql version
-    if (args[0].endsWith(".osc"))
+    //  Write changeset/OSM XML to OSM API
+    if (args[0].endsWith(".osc") || args[0].endsWith(".osm"))
     {
+      //  Get the endpoint URL
       QUrl osm;
-      osm.setUrl(args[1]);
-
+      osm.setUrl(args[args.size() - 1]);
+      //  Grab all the changeset files
       QList<QString> changesets;
-      changesets.append(args[0]);
-
+      for (int i = 0; i < args.size() - 1; ++i)
+      {
+        LOG_INFO("Applying changeset " << args[i] << " to " << args[args.size() - 1] << "...");
+        changesets.append(args[i]);
+      }
+      //  Do the actual splitting and uploading
       OsmApiWriter writer(osm, changesets);
+      writer.showProgress(showProgress);
       writer.apply();
+      //  Write out the failed changeset if there is one
+      if (writer.containsFailed())
+      {
+        //  Output the errors from 'changeset.osc' to 'changeset-error.osc'
+        QFileInfo path(args[0]);
+        QString errorFilename =
+          path.absolutePath() + QDir::separator() +
+          path.baseName() + "-error." + path.completeSuffix();
+        LOG_ERROR(QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
+        FileUtils::writeFully(errorFilename, writer.getFailedChangeset());
+      }
+      //  Output the stats if requested
+      if (showStats)
+      {
+        //  Jump through a few hoops to use the MapStatsWriter
+        QList<QList<SingleStat>> allStats;
+        allStats.append(writer.getStats());
+        QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
+        cout << "stats = (stat)\n" << statsMsg << endl;
+      }
     }
+    //  Write changeset SQL directly to the database
     else if (args[0].endsWith(".osc.sql"))
     {
+      if (args.size() != 2 && args.size() != 4)
+      {
+        cout << getHelp() << endl << endl;
+        throw HootException(
+          QString("%1 takes two or four parameters and was given %2 parameters")
+            .arg(getName())
+            .arg(args.size()));
+      }
+
+      LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
+
       QUrl url(args[1]);
       OsmApiDbSqlChangesetApplier changesetWriter(url);
 

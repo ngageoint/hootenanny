@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESETPROVIDER_H
 #define CHANGESETPROVIDER_H
@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Interface for classes implementing OSM changeset capabilities
  */
-class ChangeSetProvider
+class ChangesetProvider
 {
 
 public:
@@ -56,7 +56,7 @@ public:
    *
    * If the stream is open when the destructor is called, closeStream must be called in the destructor
    */
-  virtual ~ChangeSetProvider() {}
+  virtual ~ChangesetProvider() {}
 
   /**
    * @brief closeStream
@@ -81,7 +81,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
+typedef boost::shared_ptr<ChangesetProvider> ChangesetProviderPtr;
 
 }
 

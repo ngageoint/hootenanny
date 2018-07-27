@@ -85,6 +85,20 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== angle.histogram.extractor.bins
+
+* Data Type: int
+* Default Value: `16`
+
+The number of data bins used by the AngleHistogramExtractor.
+
+=== angle.histogram.extractor.smoothing
+
+* Data Type: double
+* Default Value: `0.0`
+
+Smoothing value in radians used by the AngleHistogramExtractor.
+
 === api.db.email
 
 * Data Type: string
@@ -173,6 +187,13 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
+=== arff.writer.precision
+
+* Data Type: int
+* Default Value: `17`
+
+The precision of numeric values written to Attribute-Relation (.arff) files.
+
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
@@ -187,6 +208,13 @@ Determines whether the AttributeScoreExtractor uses weighting when extracting sc
 
 Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
 MatchFactory::_tempFixDefaults() for more info.
+
+=== buffered.overlap.extractor.portion
+
+* Data Type: double
+* Default Value: `0.1`
+
+The portion of the sqrt max of the area that the BufferedOverlapExtractor buffers object by.
 
 === building.date.format
 
@@ -1254,21 +1282,22 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js;hoot::ScriptMatchCreator,Railway.js`
+* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js;hoot::ScriptMatchCreator,Railway.js;hoot::ScriptMatchCreator,PowerLine.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
 
 Some of the possible options include:
 
-* `hoot::BuildingMatchCreator` - Matches building polygons.
-* `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify algorithm.
-* `hoot::NetworkMatchCreator` - Matches linear highway features using the Network algorithm.
-* `hoot::PoiPolygonMatchCreator` - Matches POIs with buildings or areas.
-* `hoot::ScriptMatchCreator,Area.js` - Matches areas (non-building polygons marked as areas; e.g. parks, parking lots, etc.).
-* `hoot::ScriptMatchCreator,LinearWaterway.js` - Matches linear rivers and streams.
-* `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify algorithm.
-* `hoot::ScriptMatchCreator,Railway.js` - Matches railways.
+* `hoot::BuildingMatchCreator` - matches building polygons
+* `hoot::HighwayMatchCreator` - matches roads using the non-greedy algorithm
+* `hoot::NetworkMatchCreator` - matches roads using the Network algorithm.
+* `hoot::PoiPolygonMatchCreator` - matches POIs with buildings or areas
+* `hoot::ScriptMatchCreator,Area.js` - matches areas (non-building polygons marked as areas=yes).
+* `hoot::ScriptMatchCreator,LinearWaterway.js` - matches linear rivers and streams
+* `hoot::ScriptMatchCreator,PoiGeneric.js` - matches POIs using Generic Conflation
+* `hoot::ScriptMatchCreator,PowerLine.js` - matches power lines using Generic Conflation
+* `hoot::ScriptMatchCreator,Railway.js` - matches railways using Generic Conflation
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The script should be
   in `$HOOT_HOME/rules/<yourscript.js>`.
 
@@ -1310,6 +1339,14 @@ The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analago
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
 
+=== maximal.subline.spacing
+
+* Data Type: double
+* Default Value: `2.0`
+
+Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
+matching ways.  Larger values may increase runtime performance but decrease conflation quality.
+
 === merge.nearby.nodes.distance
 
 * Data Type: double
@@ -1322,7 +1359,7 @@ are identical. Units in meters and defaults to 1.0m.
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator;hoot::ScriptMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator;hoot::ScriptMergerCreator;hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
@@ -1475,6 +1512,14 @@ node hash calculation.
 
 The number of decimal places taken into account when comparing node coordinates.  Used by node
 hash calculation.
+
+=== node.matcher.angle.calc.delta
+
+* Data Type: double
+* Default Value: `0.001`
+
+The distance moved along a way, in meters, before calculating the outbound heading for a node on
+that way by the NodeMatcher.
 
 === node.matcher.strictness
 
@@ -2406,6 +2451,45 @@ reference data store (associated with the unknown1 status) where modifying exist
 preferred over replacing them for provenance purposes.  Not honored by all visitors, map operations,
 or mergers which modify features.
 
+=== power.line.auto.calc.search.radius
+
+* Data Type: bool
+* Default Value: `true`
+
+Automatically calculates the search radius to be used during conflation of power lines using rubber
+sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
+pre-conflation operation on the input data to be conflated.
+
+=== power.line.matcher.distance.weight.coefficient
+
+* Data Type: double
+* Default Value: `0.01`
+
+A weighting coefficient value from 0.0 to 1.0 for the applying distance weighting to power line
+matches.  This will favor feature that are closer together.  The higher the coefficient value, the
+higher the weighting applied.  A value of 0.0 will disable distance weighting.
+
+=== power.line.subline.matcher
+
+* Data Type: string
+* Default Value: `hoot::FrechetSublineMatcher`
+
+The way subline matcher to use when determining matching power line sublines.
+
+=== power.line.matcher.max.angle
+
+* Data Type: double
+* Default Value: `155.0`
+
+Sets that maximum angle that is still considered a power line match. Units in degrees.
+
+=== quantile.aggregator.quantile
+
+* Data Type: double
+* Default Value: `0.0`
+
+A quantile value from 0.0 to 1.0 for the QuantileAggregator.
+
 === progress.reporting.format
 
 * Data Type: string
@@ -2707,6 +2791,13 @@ The search radius to use when conflating generic polygons.  See `search.radius.d
 
 The search radius to use when conflating highways.  See `search.radius.default`.
 
+=== search.radius.railway
+
+* Data Type: double
+* Default Value: `15`
+
+The search radius to use when conflating railways.
+
 === search.radius.waterway
 
 * Data Type: double
@@ -2714,13 +2805,6 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
-
-=== search.radius.railway
-
-* Data Type: double
-* Default Value: `15`
-
-The search radius to use when conflating railways.
 
 === set.tag.value.visitor.append.to.existing.value
 
@@ -2744,8 +2828,9 @@ in complex nested criterion, use the Hootenanny Javascript interface instead.
 * Default Value: ``
 
 Set the key member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
-adding/modifying a particular tag on all elements in a map. The number of keys in
+adding/modifying one or more tags on all elements in a map. The number of keys in
 `set.tag.value.visitor.key` should match the number of keys in `set.tag.value.visitor.value`.
+Separate list items with a semicolon.
 
 === set.tag.value.visitor.overwrite
 
@@ -2761,7 +2846,7 @@ key=set.tag.value.visitor.key, otherwise it will skip updating the tag.
 * Default Value: ``
 
 Set the value member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
-adding/modifying a particular tag on all elements in a map.
+adding/modifying one or more tags on all elements in a map.  Separate list items with a semicolon.
 
 === small.way.merger.diff
 
@@ -3204,7 +3289,7 @@ Values are in meters.
 === way.matcher.max.angle
 
 * Data Type: double
-* Default Value: `60`
+* Default Value: `60.0`
 
 Sets the maximum angle that is still considered a way match. Units in degrees.
 

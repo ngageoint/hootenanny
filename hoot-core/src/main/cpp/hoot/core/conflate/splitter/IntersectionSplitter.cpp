@@ -85,7 +85,8 @@ void IntersectionSplitter::_mapNodesToWays()
     bool isNetworkType = false;
 
     if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) ||
-      OsmSchema::getInstance().isLinearWaterway(*w))
+        OsmSchema::getInstance().isLinearWaterway(*w) ||
+        OsmSchema::getInstance().isPowerLine(*w))
     {
       isNetworkType  = true;
     }
@@ -100,7 +101,7 @@ void IntersectionSplitter::_mapNodesToWays()
         ElementPtr r = _map->getRelation(rid);
         const Tags& tags = r->getTags();
         if (OsmSchema::getInstance().isLinearHighway(tags, ElementType::Relation) ||
-          OsmSchema::getInstance().isLinearWaterway(*r))
+            OsmSchema::getInstance().isLinearWaterway(*r))
         {
           isNetworkType  = true;
         }

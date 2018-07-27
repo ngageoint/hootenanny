@@ -1,8 +1,5 @@
 "use strict";
 
-var MATCH_OVERLAP_THRESHOLD = 0.75;
-var MISS_OVERLAP_THRESHOLD = 0.15;
-
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Polygon Generic";
 exports.matchThreshold = parseFloat(hoot.get("generic.polygon.match.threshold"));

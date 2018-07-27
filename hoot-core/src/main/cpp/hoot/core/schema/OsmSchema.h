@@ -346,21 +346,21 @@ public:
 
   bool isAncestor(const QString& childKvp, const QString& parentKvp);
 
-  bool isArea(const Tags& t, ElementType type) const;
+  bool isArea(const Tags& t, const ElementType& type) const;
   bool isArea(const ConstElementPtr& e) const;
 
-  bool isAreaForStats(const Tags& t, ElementType type) const;
+  bool isAreaForStats(const Tags& t, const ElementType& type) const;
   bool isAreaForStats(const ConstElementPtr& e) const;
 
   bool isNonBuildingArea(const ConstElementPtr& e) const;
 
-  bool isBuilding(const Tags& t, ElementType type) const;
+  bool isBuilding(const Tags& t, const ElementType& type) const;
   bool isBuilding(const ConstElementPtr& e) const;
 
   /**
    * Returns true if this is a building:part. This is mutually exclusive with isBuilding.
    */
-  bool isBuildingPart(const Tags& t, ElementType type) const;
+  bool isBuildingPart(const Tags& t, const ElementType& type) const;
   bool isBuildingPart(const ConstElementPtr& e) const;
 
   /**
@@ -372,7 +372,8 @@ public:
    * will always return false
    * @return true if the element meets the specified criteria; false otherwise
    */
-  bool isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tagIgnoreList = QStringList());
+  bool isPoiPolygonPoly(const ConstElementPtr& e,
+                        const QStringList tagIgnoreList = QStringList()) const;
 
   /**
    * Determines whether the element passed in is a POI under the POI to Polygon conflation
@@ -383,7 +384,8 @@ public:
    * will always return false
    * @return true if the element meets the specified criteria; false otherwise
    */
-  bool isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagIgnoreList = QStringList());
+  bool isPoiPolygonPoi(const ConstElementPtr& e,
+                       const QStringList tagIgnoreList = QStringList()) const;
 
   /**
    * Returns true if this is a geometry collection.
@@ -393,7 +395,7 @@ public:
   /**
    * Returns true if this is a POI as defined by the Tampa DG group.
    */
-  bool isHgisPoi(const Element& e);
+  bool isHgisPoi(const Element& e) const;
 
   /**
    * Returns true if the element is a highway type (e.g. road, primary, path, etc.)
@@ -401,7 +403,7 @@ public:
    * This is not an exhaustive list, be sure and check the function to make sure it will do what
    * you expect in your instance.
    */
-  bool isLinearHighway(const Tags& t, ElementType type);
+  bool isLinearHighway(const Tags& t, const ElementType& type) const;
 
   /**
    * Returns true if the element is a linear object (e.g. road, etc.)
@@ -409,35 +411,40 @@ public:
    * This is not an exhaustive list, be sure and check the function to make sure it will do what
    * you expect in your instance.
    */
-  bool isLinear(const Element& e);
+  bool isLinear(const Element& e) const;
 
   /**
    * Returns true if the specified element is a linear waterway.
    */
-  bool isLinearWaterway(const Element &e);
+  bool isLinearWaterway(const Element& e);
+
+  /**
+   * Returns true if the specified element is a power utility line.
+   */
+  bool isPowerLine(const Element& e) const;
 
   /**
    * Returns true if the element is a roundabout
    *
    * This is not an exhaustive check, feel free to add more criteria
    */
-  bool isRoundabout(const Tags& tags, ElementType type);
+  bool isRoundabout(const Tags& tags, const ElementType& type) const;
 
   /**
    * Returns true if the specified element is a multi-use building.
    */
-  bool isMultiUseBuilding(const Element &e);
+  bool isMultiUseBuilding(const Element& e) const;
 
   /**
    * Returns true if the specified element is multi-use.
    */
-  bool isMultiUse(const Element &e);
+  bool isMultiUse(const Element& e) const;
 
   /**
    * Returns true if this is a list of values. Right now this just looks for a semicolon in value,
    * but in the future the list of valid list keys may be stored in the schema file.
    */
-  bool isList(const QString& key, const QString& value);
+  bool isList(const QString& key, const QString& value) const;
 
   /**
    * Returns true if the kvp contains metadata about the feature as opposed to real information
@@ -456,7 +463,7 @@ public:
    */
   bool isOneWay(const Element &e) const;
 
-  bool isPoi(const Element& e);
+  bool isPoi(const Element& e) const;
 
   /**
    * Determines whether an element has a name
@@ -469,7 +476,7 @@ public:
   /**
    * Returns true if the specified element is a railway.
    */
-  bool isRailway(const Element &e);
+  bool isRailway(const Element& e);
 
   /**
    * Returns true if this is a reversed unidirectional way. (E.g. oneway=reverse)
@@ -520,7 +527,7 @@ public:
    * probably get rid of this method altogether and just check against the tags whereever this
    * method is being called.
    */
-  bool containsTagFromList(const Tags& tags, const QStringList tagList);
+  bool containsTagFromList(const Tags& tags, const QStringList tagList) const;
 
 private:
 

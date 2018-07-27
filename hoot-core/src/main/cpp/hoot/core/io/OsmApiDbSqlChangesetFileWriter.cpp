@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbSqlChangesetFileWriter.h"
 
@@ -56,7 +56,7 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
 }
 
 void OsmApiDbSqlChangesetFileWriter::write(const QString path,
-                                           ChangeSetProviderPtr changesetProvider)
+                                           ChangesetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
 
