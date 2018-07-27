@@ -40,7 +40,7 @@ class InfoCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::InfoCmd"; }
+  static std::string className() { return "hoot::InfoCmd"; }
 
   InfoCmd() { }
 
@@ -94,7 +94,7 @@ public:
 
       if (args.size() > 1)
       {
-        cout << getHelp() << endl << endl;
+        std::cout << getHelp() << std::endl << std::endl;
         throw HootException(
           QString("%1 with the --config-options option takes zero to one parameters.")
             .arg(getName()));
@@ -176,6 +176,8 @@ public:
 
     return 0;
   }
+
+private:
 
   QStringList _getSupportedOptions() const
   {
