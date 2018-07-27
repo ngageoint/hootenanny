@@ -109,7 +109,10 @@ vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAll
   {
     TranslatedFeature tf;
     tf.feature = _createFeature(list[i].toMap(), tf.tableName);
-    result.push_back(tf);
+    if (tf.feature)
+    {
+      result.push_back(tf);
+    }
   }
 
   return result;
@@ -127,10 +130,14 @@ boost::shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, 
   }
 
   tableName = vm["tableName"].toString();
+  if (tableName.length() < 1)
+  {
+    LOG_WARN("_createFeature: Empty tableName");
+    return boost::shared_ptr<Feature>(); // Null feature
+  }
 
   // figure out which layer this feature belongs in.
   boost::shared_ptr<const Layer> layer;
-
   for (size_t i = 0; i < _schema->getLayerCount(); ++i)
   {
     boost::shared_ptr<const Layer> l = _schema->getLayer(i);
