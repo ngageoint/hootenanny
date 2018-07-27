@@ -27,30 +27,10 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/core/io/ArffWriter.h>
-#include <hoot/core/scoring/MatchFeatureExtractor.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/IoUtils.h>
 
 #include <hoot/core/io/ArffToRfConverter.h>
 #include <hoot/core/scoring/RandomForestModelBuilder.h>
-
-// Standard
-#include <fstream>
-#include <iostream>
-
-// Tgs
-#include <tgs/RandomForest/RandomForest.h>
-#include <tgs/Statistics/Random.h>
-#include <tgs/System/DisableCout.h>
-
-using namespace std;
-using namespace Tgs;
 
 namespace hoot
 {
@@ -59,7 +39,7 @@ class BuildModelCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::BuildModelCmd"; }
+  static std::string className() { return "hoot::BuildModelCmd"; }
 
   BuildModelCmd() { }
 
@@ -81,12 +61,12 @@ public:
     if (args.size() == 2 && !exportArffOnly)
     {
       //must be a .arff to .rf conversion
-      ArffToRfConverter().convert(args[0], args[1]);
+      ArffToRfConverter::convert(args[0], args[1]);
     }
     //must be a conversion to .rf from training data
     else if (args.size() < 3 || args.size() % 2 == 0)
     {
-      cout << getHelp() << endl << endl;
+      std::cout << getHelp() << std::endl << std::endl;
       throw HootException(
         QString(
           "%1 takes an odd number of parameters and at least three parameters when converting to .rf from training data.")
@@ -100,7 +80,7 @@ public:
         inputs.append(args.at(i));
       }
 
-      RandomForestModelBuilder().build(inputs, args.last(), exportArffOnly);
+      RandomForestModelBuilder::build(inputs, args.last(), exportArffOnly);
     }
 
     return 0;

@@ -52,6 +52,7 @@ public:
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 
 protected:
+
   bool _swap;
 };
 
@@ -68,10 +69,13 @@ public:
   OverwriteTag2Merger() : OverwriteTagMerger(false) {}
 
   virtual ~OverwriteTag2Merger() {}
+
+  virtual QString getDescription()
+  { return "Overwrites tags in the secondary feature with tags from the reference feature"; }
 };
 
 /**
- * Similar to OverwritTagMerger, but tag 1 values will be overwritten with tag 2 values.
+ * Similar to OverwriteTagMerger, but tag 1 values will be overwritten with tag 2 values.
  */
 class OverwriteTag1Merger : public OverwriteTagMerger
 {
@@ -82,6 +86,9 @@ public:
   OverwriteTag1Merger() : OverwriteTagMerger(true) {}
 
   virtual ~OverwriteTag1Merger() {}
+
+  virtual QString getDescription()
+  { return "Overwrites tags in the reference feature with tags from the secondary feature"; }
 };
 
 }

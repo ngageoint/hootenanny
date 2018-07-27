@@ -1,34 +1,9 @@
-/*
- * This file is part of Hootenanny.
- *
- * Hootenanny is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * --------------------------------------------------------------------
- *
- * The following copyright notices are generated automatically. If you
- * have a new notice to add, please use the format:
- * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
- * copyrights will be updated automatically.
- *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
- */
+
 #include "RandomForestModelBuilder.h"
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/io/ArffWriter.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
@@ -49,10 +24,6 @@
 
 namespace hoot
 {
-
-RandomForestModelBuilder::RandomForestModelBuilder()
-{
-}
 
 void RandomForestModelBuilder::build(const QStringList trainingData, QString output,
                                      const bool exportArffOnly)
@@ -105,17 +76,18 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
 
   // using -1 for null isn't ideal, but it doesn't seem to have a big impact on performance.
   // ideally we'll circle back and update RF to use null values.
-  boost::shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
+  boost::shared_ptr<Tgs::DataFrame> df = mfe.getSamples().toDataFrame(-1);
 
   Tgs::Random::instance()->seed(0);
-  RandomForest rf;
-  boost::shared_ptr<DisableCout> dc;
+  Tgs::RandomForest rf;
+  boost::shared_ptr<Tgs::DisableCout> dc;
   if (Log::getInstance().getLevel() >= Log::Warn)
   {
     // disable the printing of "Trained Tree ..."
-    dc.reset(new DisableCout());
+    dc.reset(new Tgs::DisableCout());
   }
-  const int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
+  const int numFactors =
+    std::min(df->getNumFactors(), std::max<unsigned int>(3, df->getNumFactors() / 5));
   LOG_INFO("Training on data with " << numFactors << " factors...");
   //make the number of trees configurable?
   rf.trainMulticlass(df, ConfigOptions().getRandomForestModelTrees(), numFactors);
@@ -127,7 +99,7 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
   LOG_INFO("Error: " << error << " sigma: " << sigma);
 
   LOG_INFO("Writing .rf file...");
-  ofstream fileStream;
+  std::ofstream fileStream;
   fileStream.open((output + ".rf").toStdString().data());
   rf.exportModel(fileStream);
   fileStream.close();

@@ -1,0 +1,185 @@
+== info
+
+The +info+ command displays information about Hootenanny capabilities.  
+
+=== Option Overview
+
+Only one of the following options can be passed to the command:
+
+* +--config-options+ - Prints available configuration options
+* +--feature-extractors+ - Prints feature extractors used for conflation model building
+* +--formats+ - Prints supported data formats
+* +--matchers+ - Prints available matchers used with conflation
+* +--mergers+ - Prints available mergers used with conflation
+* +--operators+ - Prints inline operators that can be applied to map datasets
+* +--tag-mergers+ - Prints available tag mergers used with conflation
+
+Each of the following sections describes an option that may be used with this command and its input parameters.
+
+=== Configuration Options
+
+The +--config-options+ option prints out available Hootenanny configuration options.
+
+==== Input Parameters
+
+One of the following input parameters must be specified:
+
+* +name+             - name or partial name of a configuration option to list and/or print a description for
+* +--option-names+   - if no name is specified, lists all configuration option names; if a name is specified, lists only 
+                       configuration option names that have a full or partial match with the input name
+* +--option-details+ - if no name is specified, lists all configuration option names and descriptions; if a name is specified, 
+                       lists only configuration option names and descriptions that have a full or partial match with the input name
+
+==== Usage
+
+--------------------------------------
+info --config-options (--option-names)
+info --config-options (--option-details)
+info --config-options (name) [--option-names]
+info --config-options (name) [--option-details]
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+# list all config option names
+hoot info --config-options --option-names
+
+# list all config option names and their descriptions
+hoot info --config-options --option-details
+
+# list all config option names where the name contains the given string
+hoot info --config-options poi.polygon --option-names
+
+# list all config option names and their descriptions where the name contains the given string
+hoot info --config-options poi.polygon --option-details
+--------------------------------------
+
+=== Feature Extractors
+
+The +--feature-extractors+ option prints out available feature extractors that can be used when building a model with map training data. 
+
+==== Usage
+
+--------------------------------------
+info feature-extractors
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+# prints all
+hoot info --feature-extractors
+--------------------------------------
+
+=== Formats
+
+The +--formats+ option prints out supported data formats.
+
+==== Usage
+
+--------------------------------------
+info --formats [--input] [--output]
+---------------------------------------
+
+==== Example
+
+--------------------------------------
+# prints all
+hoot info --formats
+
+hoot info --format --input
+
+hoot info --format --output
+--------------------------------------
+
+=== Matchers
+
+The +--matchers+ option prints out available conflate matchers that may be applied when conflating data.
+
+==== Usage
+
+--------------------------------------
+info --matchers
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+# lists all
+hoot info --matchers
+--------------------------------------
+
+=== Mergers
+
+The +--mergers+ option prints out available conflate mergers that may be applied when conflating data.
+
+==== Usage
+
+--------------------------------------
+info --mergers
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+# lists all
+hoot info --mergers
+--------------------------------------
+
+=== Operators
+
+The +--operators+ option prints out available inline operators that can be applied to map data in a Hootenanny command.  Map operators
+can be criterion, operations, or visitors.  
+
+* An example of an operation is DuplicateWayRemover, which removes all duplicate ways from a map.  
+* An example of a criterion is NodeCriterion, which acts as a filter to return all nodes in a map.  
+* An example of a visitor is RemoveTagsVisitor, which removes selected tags from features in a map.
+
+==== Usage
+
+--------------------------------------
+info --operators
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+# lists all available operators
+hoot info --operators
+
+# criterion example - filters only nodes from the map to the output
+hoot convert -D convert.ops="hoot::RemoveElementsVisitor" -D remove.elements.visitor.element.criterion="hoot::NodeCriterion" \ 
+input1.osm input2.osm output.osm
+
+# operation example - writes a map based on the input data with all duplicate ways removed
+hoot convert -D convert.ops="hoot::DuplicateWayRemover" input1.osm input2.osm output.osm
+
+# visitor example - writes a map based on the input data with all of the specified tags removed from the nodes
+hoot convert -D convert.ops="hoot::RemoveTagsVisitor" -D remove.tags.visitor.element.criterion="hoot::WayCriterion" -D remove.tags.visitor.keys="source;error:circular" input1.osm input2.osm output.osm
+--------------------------------------
+
+=== Tag Mergers
+
+The +--tag-mergers+ option prints out available tag mergers that may be applied when conflating data.
+
+==== Usage
+
+--------------------------------------
+info --tag-mergers
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+# lists all
+hoot info --tag-mergers
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+# lists all
+hoot info --tag-mergers
+--------------------------------------
+
