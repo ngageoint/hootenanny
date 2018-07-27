@@ -118,6 +118,16 @@ public final class HootProperties {
     private static final String OSMAPI_DB_HOST;
     private static final String OSMAPI_DB_PORT;
 
+    public static final String MAIN_OSMAPI_URL;
+    public static final String RAILSPORT_PUSH_URL;
+    public static final String RAILSPORT_PULL_URL;
+
+    private static final String RAILSPORT_USER;
+    private static final String RAILSPORT_PASSWORD;
+    private static final String RAILSPORT_HOST;
+    private static final String RAILSPORT_PORT;
+
+
     static {
         try {
             Properties appProperties = new Properties();
@@ -244,6 +254,19 @@ public final class HootProperties {
 
         HOOTAPI_DB_URL = "hootapidb://" + HOOTAPI_DB_USER + ":" + HOOTAPI_DB_PASSWORD + "@" + HOOTAPI_DB_HOST + ":" + HOOTAPI_DB_PORT + "/" + HOOTAPI_DB_NAME;
         OSMAPI_DB_URL = "osmapidb://" + OSMAPI_DB_USER + ":" + OSMAPI_DB_PASSWORD + "@" + OSMAPI_DB_HOST + ":" + OSMAPI_DB_PORT + "/" + OSMAPI_DB_NAME;
+
+        // The base URL for pulling OSM data
+        MAIN_OSMAPI_URL = "${OSM_API_URL}";
+
+        // The OSM Rails Port that we are going to pull and push data to.
+        RAILSPORT_USER = "${RAILSPORT_USER}";
+        RAILSPORT_PASSWORD = "${RAILSPORT_PASSWORD}";
+        RAILSPORT_HOST = "${RAILSPORT_HOST}";
+        RAILSPORT_PORT = "${RAILSPORT_PORT}";
+
+        // This _should_ goto https at some stage
+        RAILSPORT_PUSH_URL = "http://" + RAILSPORT_USER + ":" + RAILSPORT_PASSWORD + "@"  + RAILSPORT_HOST + ":" + RAILSPORT_PORT;
+        RAILSPORT_PULL_URL = "http://" + RAILSPORT_HOST + ":" + RAILSPORT_PORT + "/api/0.6";
     }
 
     private HootProperties() {}

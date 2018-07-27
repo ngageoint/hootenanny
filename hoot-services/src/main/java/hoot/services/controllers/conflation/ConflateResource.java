@@ -89,8 +89,8 @@ public class ConflateResource {
      *
      *     INPUT1_TYPE: Conflation input type [OSM] | [OGR] | [DB] | [OSM_API_DB]
      *     INPUT2_TYPE: Conflation input type [OSM] | [OGR] | [DB]
-     *     INPUT1: Conlfation input 1
-     *     INPUT2: Conlfation input 2
+     *     INPUT1: Conflation input 1
+     *     INPUT2: Conflation input 2
      *     OUTPUT_NAME: Conflation operation output name
      *     CONFLATION_TYPE: [Average] | [Reference]
      *     REFERENCE_LAYER:

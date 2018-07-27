@@ -57,6 +57,7 @@
         <url-pattern>/info/*</url-pattern>
         <url-pattern>/ogr/*</url-pattern>
         <url-pattern>/ingest/*</url-pattern>
+        <url-pattern>/grail/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
