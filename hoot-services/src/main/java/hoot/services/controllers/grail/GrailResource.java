@@ -72,7 +72,7 @@ import hoot.services.utils.XmlDocumentBuilder;
 
 
 @Controller
-@Path("/diff")
+@Path("")
 @Transactional
 public class GrailResource {
     private static final Logger logger = LoggerFactory.getLogger(GrailResource.class);
@@ -97,7 +97,7 @@ public class GrailResource {
      * Push the result to the specified DB
      * Return anything that cannot be pushed to the user as an osc file.
      *
-     * POST hoot-services/grail/bybox?BBOX=left,bottom,right,top&USER_NAME=JSmith&INPUT_NAME=ToyTest
+     * POST hoot-services/grail/bybox?BBOX=left,bottom,right,top&USER_NAME=JSmith
      *
      * @param BBOX
      *        left is the longitude of the left (west) side of the bounding box  
@@ -167,38 +167,66 @@ public class GrailResource {
     /**
      * To retrieve the output from job make GET request.
      *
-     * GET hoot-services/job/export/[job id from export job]?outputname=[user defined name]&ext=[file extension override from zip]
+     * GET hoot-services/grail/[job id from export job]
      *
      * @param jobId
      *            job id
-     * @param outputname
-     *            parameter overrides the output file name with the user defined
-     *            name. If not specified then defaults to job id as name.
-     * @param ext
-     *            parameter overrides the file extension of the file being
-     *            downloaded
+     *
+     * @return Octet stream
+     */
+    // @GET
+    // @Path("/{id}")
+    // @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    // public Response exportFile(@PathParam("id") String jobId) {
+    //     Response response;
+
+    //     try {
+    //         String fileExt = StringUtils.isEmpty(ext) ? "osc" : ext;
+    //         File exportFile = getExportFile(jobId, outputname, fileExt);
+
+    //         String outFileName = jobId;
+    //         if (! StringUtils.isBlank(outputname)) {
+    //             outFileName = outputname;
+    //         }
+
+    //         ResponseBuilder responseBuilder = Response.ok(exportFile);
+    //         responseBuilder.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
+
+    //         response = responseBuilder.build();
+    //     }
+    //     catch (WebApplicationException e) {
+    //         throw e;
+    //     }
+    //     catch (Exception e) {
+    //         throw new WebApplicationException(e);
+    //     }
+
+    //     return response;
+    // }
+
+    // Taken from ExportResource.java
+    /**
+     * To retrieve the output from job make GET request.
+     *
+     * GET hoot-services/grail/[job id from export job]
+     *
+     * @param jobId
+     *            job id
      *
      * @return Octet stream
      */
     @GET
-    @Path("/{id}")
+    @Path("diff/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response exportFile(@PathParam("id") String jobId,
-                               @QueryParam("outputname") String outputname,
-                               @QueryParam("ext") String ext) {
+    public Response exportFile(@PathParam("id") String jobId) {
         Response response;
 
         try {
-            String fileExt = StringUtils.isEmpty(ext) ? "osc" : ext;
-            File exportFile = getExportFile(jobId, outputname, fileExt);
-
-            String outFileName = jobId;
-            if (! StringUtils.isBlank(outputname)) {
-                outFileName = outputname;
-            }
+            String fileExt = "osc";
+            File exportFile = getExportFile(jobId, "diff", "osc");
 
             ResponseBuilder responseBuilder = Response.ok(exportFile);
-            responseBuilder.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
+            responseBuilder.header("Content-Disposition", "attachment; filename=diff.osc");
 
             response = responseBuilder.build();
         }
@@ -212,43 +240,27 @@ public class GrailResource {
         return response;
     }
 
-    // Taken from ExportResource.java
-    /**
-     * Returns the contents of an XML job output file
-     *
-     * GET hoot-services/job/export/xml/[job id from exportjob]?ext=[file extension override from xml]
-     *
-     * @param jobId
-     *            job id
-     * @param ext
-     *            parameter overrides the file extension of the file being downloaded
-     * @return job output XML
-     *
-     * @throws WebApplicationException
-     *             if the job with ID = id does not exist, the referenced job
-     *             output file no longer exists, or the changeset is made up of
-     *             multiple changeset files.
-     */
-    @GET
-    @Path("/xml/{id}")
-    @Produces(MediaType.TEXT_XML)
-    public Response getXmlOutput(@PathParam("id") String jobId,
-                                 @QueryParam("ext") String ext) {
-        Response response;
 
-        try {
-            File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "xml" : ext);
-            response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8")))).build();
-        }
-        catch (WebApplicationException e) {
-            throw e;
-        }
-        catch (Exception e) {
-            throw new WebApplicationException(e);
-        }
+    // @GET
+    // @Path("/xml/{id}")
+    // @Produces(MediaType.TEXT_XML)
+    // public Response getXmlOutput(@PathParam("id") String jobId,
+    //                              @QueryParam("ext") String ext) {
+    //     Response response;
 
-        return response;
-    }
+    //     try {
+    //         File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "xml" : ext);
+    //         response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8")))).build();
+    //     }
+    //     catch (WebApplicationException e) {
+    //         throw e;
+    //     }
+    //     catch (Exception e) {
+    //         throw new WebApplicationException(e);
+    //     }
+
+    //     return response;
+    // }
 
     // Taken from ExportResource.java
     private static File getExportFile(String jobId, String outputName, String fileExt) {
