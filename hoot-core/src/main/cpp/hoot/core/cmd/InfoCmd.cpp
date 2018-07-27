@@ -30,7 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/info/ConfigOptionsDisplayer.h>
-#include <hoot/core/info/FeatureExtractorsDisplayer.h>
 #include <hoot/core/info/FormatsDisplayer.h>
 #include <hoot/core/info/ApiEntityDisplayer.h>
 
