@@ -55,8 +55,10 @@ class RunDiffCommand extends ExternalCommand {
         options.add("element.cache.size.relation=2000000");
         options.add("element.cache.size.way=2000000");
         options.add("map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover;hoot::CornerSplitter;hoot::RubberSheet");
-        options.add("match.creators=hoot::NetworkMatchCreator;hoot::ScriptMatchCreator,Area.js;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,PowerLine.js;hoot::ScriptMatchCreator,Railway.js;hoot::ScriptMatchCreator,LinearWaterway.js");
-        options.add("merger.creators=hoot::NetworkMergerCreator;hoot::ScriptMergerCreator;hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
+        // options.add("match.creators=hoot::NetworkMatchCreator;hoot::ScriptMatchCreator,Area.js;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,PowerLine.js;hoot::ScriptMatchCreator,Railway.js;hoot::ScriptMatchCreator,LinearWaterway.js");
+        // options.add("merger.creators=hoot::NetworkMergerCreator;hoot::ScriptMergerCreator;hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
+        options.add("match.creators=hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,Area.js;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,PowerLine.js;hoot::ScriptMatchCreator,Railway.js;hoot::ScriptMatchCreator,LinearWaterway.js");
+        options.add("merger.creators=hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
         options.add("reader.conflate.use.data.source.ids.1=true");
         options.add("reader.conflate.use.data.source.ids.2=false");
         options.add("way.subline.matcher=hoot::MaximalSublineMatcher");

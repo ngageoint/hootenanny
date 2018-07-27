@@ -162,4 +162,104 @@ public class GrailResource {
 
         return Response.ok(json.toJSONString()).build();
     }
+
+    // Taken from ExportResource.java
+    /**
+     * To retrieve the output from job make GET request.
+     *
+     * GET hoot-services/job/export/[job id from export job]?outputname=[user defined name]&ext=[file extension override from zip]
+     *
+     * @param jobId
+     *            job id
+     * @param outputname
+     *            parameter overrides the output file name with the user defined
+     *            name. If not specified then defaults to job id as name.
+     * @param ext
+     *            parameter overrides the file extension of the file being
+     *            downloaded
+     *
+     * @return Octet stream
+     */
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response exportFile(@PathParam("id") String jobId,
+                               @QueryParam("outputname") String outputname,
+                               @QueryParam("ext") String ext) {
+        Response response;
+
+        try {
+            String fileExt = StringUtils.isEmpty(ext) ? "osc" : ext;
+            File exportFile = getExportFile(jobId, outputname, fileExt);
+
+            String outFileName = jobId;
+            if (! StringUtils.isBlank(outputname)) {
+                outFileName = outputname;
+            }
+
+            ResponseBuilder responseBuilder = Response.ok(exportFile);
+            responseBuilder.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
+
+            response = responseBuilder.build();
+        }
+        catch (WebApplicationException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new WebApplicationException(e);
+        }
+
+        return response;
+    }
+
+    // Taken from ExportResource.java
+    /**
+     * Returns the contents of an XML job output file
+     *
+     * GET hoot-services/job/export/xml/[job id from exportjob]?ext=[file extension override from xml]
+     *
+     * @param jobId
+     *            job id
+     * @param ext
+     *            parameter overrides the file extension of the file being downloaded
+     * @return job output XML
+     *
+     * @throws WebApplicationException
+     *             if the job with ID = id does not exist, the referenced job
+     *             output file no longer exists, or the changeset is made up of
+     *             multiple changeset files.
+     */
+    @GET
+    @Path("/xml/{id}")
+    @Produces(MediaType.TEXT_XML)
+    public Response getXmlOutput(@PathParam("id") String jobId,
+                                 @QueryParam("ext") String ext) {
+        Response response;
+
+        try {
+            File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "xml" : ext);
+            response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8")))).build();
+        }
+        catch (WebApplicationException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new WebApplicationException(e);
+        }
+
+        return response;
+    }
+
+    // Taken from ExportResource.java
+    private static File getExportFile(String jobId, String outputName, String fileExt) {
+        File exportFile = new File(new File(TEMP_OUTPUT_PATH, jobId), outputName + "." + fileExt);
+
+        if (!exportFile.exists()) {
+            String errorMsg = "Error exporting data.  Missing output file.";
+            throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(errorMsg).build());
+        }
+
+        return exportFile;
+    }
+
 }
