@@ -102,6 +102,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(DualWaySplitterTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DualWaySplitterTest, "quick");
 
 }

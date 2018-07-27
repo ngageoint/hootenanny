@@ -78,7 +78,7 @@ public:
    * @return Return all of the registered match creators. This is the list of creators that will
    * be used if createMatches is called.
    */
-  std::vector< boost::shared_ptr<MatchCreator> > getCreators() const { return _creators; }
+  std::vector<boost::shared_ptr<MatchCreator>> getCreators() const { return _creators; }
 
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
@@ -110,7 +110,7 @@ private:
 
   static boost::shared_ptr<MatchFactory> _theInstance;
 
-  std::vector< boost::shared_ptr<MatchCreator> > _creators;
+  std::vector<boost::shared_ptr<MatchCreator>> _creators;
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;
