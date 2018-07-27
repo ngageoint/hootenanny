@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySublineMatchString.h"
 
@@ -172,6 +172,7 @@ bool WaySublineMatchString::isValid() const
 
 void WaySublineMatchString::removeEmptyMatches()
 {
+  LOG_TRACE("Removing empty matches...");
   MatchCollection copy = _matches;
   _matches.clear();
   for (size_t i = 0; i < copy.size(); i++)

@@ -180,7 +180,7 @@ bool OsmMapReaderFactory::isSupportedFormat(const QString url)
 void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,
                                Status defaultStatus)
 {
-  LOG_INFO("Loading map from " << url << "...");
+  LOG_INFO("Loading map from " << url.right(50) << "...");
   boost::shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
   _read(map, reader, url);
@@ -189,7 +189,7 @@ void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool 
 void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, bool useDataSourceIds,
                                bool useFileStatus, QString url)
 {
-  LOG_INFO("Loading map from " << url << "...");
+  LOG_INFO("Loading map from " << url.right(50) << "...");
   boost::shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, useFileStatus);
   _read(map, reader, url);

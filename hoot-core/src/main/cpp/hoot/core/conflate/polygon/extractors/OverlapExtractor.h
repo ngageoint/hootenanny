@@ -68,7 +68,7 @@ public:
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual QString getDescription() const
-  { return "Exactly the same as the SymDiffMatcher (in JCS speak)"; }
+  { return "Uses symmetric difference as the criterion for determining match scores"; }
 };
 
 }

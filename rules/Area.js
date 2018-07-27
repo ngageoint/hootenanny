@@ -1,8 +1,5 @@
 "use strict";
 
-var MATCH_OVERLAP_THRESHOLD = 0.75;
-var MISS_OVERLAP_THRESHOLD = 0.15;
-
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Area";
 exports.matchThreshold = parseFloat(hoot.get("generic.polygon.match.threshold"));
@@ -124,7 +121,6 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
   featureDetails["edgeDist"] = new hoot.EdgeDistanceExtractor().extract(map, e1, e2);
   featureDetails["bufferedOverlap"] = new hoot.BufferedOverlapExtractor().extract(map, e1, e2);
   featureDetails["hausDist"] = new hoot.HausdorffDistanceExtractor().extract(map, e1, e2);
-  featureDetails["attrDist"] = new hoot.AttributeDistanceExtractor().extract(map, e1, e2);
   featureDetails["attrScore"] = new hoot.AttributeScoreExtractor().extract(map, e1, e2);
   featureDetails["soundex"] = soundexExtractor.extract(map, e1, e2);
   featureDetails["mean"] = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);

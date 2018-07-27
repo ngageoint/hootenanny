@@ -49,7 +49,7 @@ public:
   virtual std::string getClassName() const { return className(); }
 
   virtual QString getDescription() const
-  { return "Similar to Metric Distance as described in [1].  1. Savary & Zeitouni, 2005"; }
+  { return "Calculates metric distance between features"; }
 
 protected:
 

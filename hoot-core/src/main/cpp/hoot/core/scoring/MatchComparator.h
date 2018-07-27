@@ -136,7 +136,6 @@ private:
 
   /**
    * Matrix of wrong values. The data is arranged as [row][col] where row <= col. Using
-   *
    */
   QHash< QString, QHash<QString, QVariant> > _wrongBreakdown;
 
@@ -150,8 +149,8 @@ private:
   void _addWrong(const Tags& t1, const Tags& t2);
 
   void _clearCache();
-  void _createMatches(const std::set<QString>& uuids1, const std::set<QString>& uuids2, std::set<UuidPair>& matches,
-    Tgs::DisjointSetMap<QString>& groups);
+  void _createMatches(const std::set<QString>& uuids1, const std::set<QString>& uuids2,
+                      std::set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups);
 
   bool _debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,
     const ConstOsmMapPtr& conflated);

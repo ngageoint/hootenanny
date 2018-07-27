@@ -1,6 +1,6 @@
 #!/bin/python
 
-# This translates U.S. country-wide power line data from the United States Energy Information Adminstration.
+# This translates U.S. country-wide power line data published by the United States Energy Information Adminstration.
 
 def translateAttributes(attrs, layerName, geometryType):
 
@@ -40,7 +40,7 @@ def translateAttributes(attrs, layerName, geometryType):
     #attrs['location'] = 'overhead'
     if voltage == -1:
         attrs['power'] = 'line'
-    elif voltage >= 45:
+    elif voltage >= 45000:
         attrs['power'] = 'line'
     else:
         attrs['power'] = 'minor_line'

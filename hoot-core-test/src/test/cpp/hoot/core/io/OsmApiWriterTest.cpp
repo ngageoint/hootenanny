@@ -25,9 +25,8 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "../TestUtils.h"
-
 //  hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/Log.h>
 
@@ -37,7 +36,7 @@
 namespace hoot
 {
 
-class OsmApiWriterTest : public CppUnit::TestFixture
+class OsmApiWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiWriterTest);
   CPPUNIT_TEST(runParseStatusTest);

@@ -48,7 +48,7 @@ public:
   virtual std::string getClassName() const { return className(); }
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Calculates a score based on the length of a match between way features"; }
 
 protected:
 

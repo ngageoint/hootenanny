@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPARSE2DMATRIX_H
 #define SPARSE2DMATRIX_H
@@ -94,6 +94,8 @@ public:
   HashMap<CellId, double>::const_iterator end() const { return _map.end(); }
 
   QString toString() const;
+
+  long size() { return _map.size(); }
 
 private:
   HashMap<CellId, double> _map;

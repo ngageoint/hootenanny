@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySublineCollection.h"
 
@@ -30,6 +30,8 @@ using namespace std;
 
 namespace hoot
 {
+
+unsigned int WaySublineCollection::logWarnCount = 0;
 
 WaySublineCollection::WaySublineCollection()
 {
@@ -48,6 +50,17 @@ void WaySublineCollection::addSubline(const WaySubline& subline)
       if (subline.overlaps(_sublines[i]))
       {
         throw HootException("A subline string may not contain overlapping sublines.");
+
+        //use this for debugging only
+        /*if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("A subline string may not contain overlapping sublines.");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;*/
       }
     }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -2513,6 +2513,7 @@ tds61 = {
                     // Debug
                     // print('## Skipping: ' + gFcode);
                     returnData.splice(i,1);
+                    fLen = returnData.length;
                 }
             } // End returnData loop
 

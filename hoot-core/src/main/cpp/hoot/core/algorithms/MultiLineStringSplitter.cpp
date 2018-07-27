@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringSplitter.h"
 
@@ -129,6 +129,8 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
   const vector<bool> &reverse, ElementPtr& match, ElementPtr &scraps,
   GeometryConverter::NodeFactory *nf) const
 {
+  LOG_TRACE("Splitting " << string.toString().left(100) << "...");
+
   boost::shared_ptr<FindNodesInWayFactory> nfPtr;
   if (nf == 0)
   {
@@ -144,6 +146,7 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
   // create all the sublines that fall within the positive WaySublineCollection and put them into
   // the match element.
   match = createSublines(map, positive, reverse, nf);
+  LOG_VART(match.get());
 
   // create all the sublines that fall within the negative WaySublineCollection and put them into
   // the scraps element.

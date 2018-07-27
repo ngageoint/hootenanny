@@ -66,7 +66,6 @@ namespace hoot
 Conflator::Conflator()
 {
   _debug = false;
-  _vectorError = 15.0;
   _maxDividedSeparation = 25.0;
   _createBogusReviewTags = ConfigOptions().getCreateBogusReviewTags();
 

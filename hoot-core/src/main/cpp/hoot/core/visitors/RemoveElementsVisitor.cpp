@@ -64,7 +64,9 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   _negateFilter = configOptions.getElementCriterionNegate();
+  LOG_VART(_negateFilter);
   const QString filterName = configOptions.getRemoveElementsVisitorElementCriterion();
+  LOG_VART(filterName);
   if (filterName.isEmpty() == false)
   {
     LOG_VART(filterName);
@@ -73,6 +75,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
         Factory::getInstance().constructObject<ElementCriterion>(filterName.trimmed())));
   }
   _recursive = configOptions.getRemoveElementsVisitorRecursive();
+  LOG_VART(_recursive);
 }
 
 void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& e)
@@ -92,10 +95,13 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   assert(_filter);
   ElementType type = e->getElementType();
   long id = e->getId();
+  LOG_VART(id);
   const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
 
   if (_filter->isSatisfied(ee))
   {
+    LOG_TRACE("RemoveElementsVisitor filter satisfied");
+    LOG_VART(_recursive);
     _count++;
     if (_recursive)
     {

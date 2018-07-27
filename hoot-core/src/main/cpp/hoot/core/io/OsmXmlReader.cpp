@@ -61,7 +61,9 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
-_circularError(-1),
+//This should be using the config option, but with the change a couple of the tests have suspect
+//results, so the change needs further investigation.
+_circularError(-1/*ConfigOptions().getCircularErrorDefaultValue()*/),
 _keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
 _useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
@@ -82,7 +84,7 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
        (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
        (_addSourceDateTime == true) )
   {
-    _element->setTag(MetadataTags::SourceDateTime(),attributes.value("timestamp"));
+    _element->setTag(MetadataTags::SourceDateTime(), attributes.value("timestamp"));
   }
 }
 
