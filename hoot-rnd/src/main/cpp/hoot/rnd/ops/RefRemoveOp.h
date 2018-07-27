@@ -27,9 +27,9 @@
 #ifndef REFREMOVEOP_H
 #define REFREMOVEOP_H
 
-#include "OsmMapOperation.h"
-
+// Hoot
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
