@@ -35,18 +35,21 @@ namespace hoot
 {
 
 /**
- *
+ * Random Forest model builder
  */
 class RandomForestModelBuilder
 {
 public:
 
   /**
+   * Builds a Random Forest model file (.rf) from training data
    *
-   *
-   * @param trainingData
-   * @param output
-   * @param exportArffOnly
+   * @param trainingData pairs of paths to training data files (containing REF tags); the first
+   * file in the pair must contain only REF1 tags and the second in the pair must contain only
+   * REF2 tags
+   * @param output model output path
+   * @param exportArffOnly if true; will build an .arff file only (.arff is a pre-req for
+   * generating the .rf file)
    */
   static void build(const QStringList trainingData, QString output,
                     const bool exportArffOnly = false);

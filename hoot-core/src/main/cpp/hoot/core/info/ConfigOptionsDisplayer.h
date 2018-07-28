@@ -35,24 +35,26 @@ namespace hoot
 {
 
 /**
- *
+ * Displays configuration options
  */
 class ConfigOptionsDisplayer
 {
 public:
 
   /**
+   * Displays all configuration options
    *
-   *
-   * @param withDetails
+   * @param withDetails if true, displays details along with the option names; if false only
+   * displays option names
    */
   static void displayAllOptionNames(const bool withDetails = false);
 
   /**
+   * Display a single configuration option
    *
-   *
-   * @param optionName
-   * @param withDetails
+   * @param optionName the name of the option to display
+   * @param withDetails if true, displays details along with the option name; if false only
+   * displays the option name
    */
   static void displayOptionName(const QString optionName, const bool withDetails = false);
   

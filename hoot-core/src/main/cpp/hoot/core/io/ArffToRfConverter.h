@@ -35,20 +35,19 @@ namespace hoot
 {
 
 /**
- *
+ * Converter between .arff and .rf files
  */
 class ArffToRfConverter
 {
 public:
 
   /**
+   * Converts an Attribute-Relation file (.arff) to a Random Forest file (.rf)
    *
-   *
-   * @param input
-   * @param output
+   * @param input a .arff file
+   * @param output a .rf file
    */
   static void convert(const QString input, const QString output);
-
 };
 
 }

@@ -43,7 +43,7 @@ namespace hoot
 {
 
 /**
- *
+ * Contains descriptive information about MatchCreators and MergerCreators
  */
 class CreatorDescription
 {
