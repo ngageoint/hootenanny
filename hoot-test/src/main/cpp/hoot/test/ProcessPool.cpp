@@ -26,6 +26,8 @@
  */
 #include "ProcessPool.h"
 
+#include <hoot/core/util/Log.h>
+
 #include <iostream>
 
 using namespace std;
@@ -158,7 +160,13 @@ void ProcessThread::processJobs(JobQueue* queue)
           ++restart_count;
           //  Restart the process if there was a process failure
           if (restart_count < MAX_RESTART)
+          {
             _proc.reset(createProcess());
+            _outMutex->lock();
+            LOG_INFO(test.toStdString() << " failed, requeued." << endl);
+            _outMutex->unlock();
+            output.clear();
+          }
           else
             working = false;
           break;
