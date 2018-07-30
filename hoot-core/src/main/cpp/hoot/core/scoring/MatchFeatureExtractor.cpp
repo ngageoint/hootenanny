@@ -84,7 +84,7 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     logWarnCount++;
   }
 
-  // go through the set of provided ways
+  // go through the set of provided elements
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
   {
     const boost::shared_ptr<const Element>& e = map->getElement(*it);
@@ -254,7 +254,7 @@ void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &ma
   boost::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
   _matchFactory->createMatches(map, matches, bounds, mt);
   // go through all the manipulators
-  LOG_INFO("Processing " << matches.size() << " matches...");
+  size_t matchCount = 0;
   for (size_t i = 0; i < matches.size(); i++)
   {
     const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i]);
@@ -275,6 +275,7 @@ void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &ma
       try
       {
         Sample s = d->getFeatures(map);
+        LOG_VART(s.size());
 
         set< pair<ElementId, ElementId> > pairs = matches[i]->getMatchPairs();
         if (pairs.size() != 1)
@@ -303,11 +304,19 @@ void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &ma
       }
       catch (const NeedsReviewException&)
       {
-        // pass don't include the bad match pairs. A classifier won't impact those situations.
+        // pass - don't include the bad match pairs. A classifier won't impact those situations.
+      }
+
+      matchCount++;
+      if (matchCount % 10 == 0)
+      {
+        PROGRESS_INFO(
+          "Processed " << matchCount << " / " << matches.size() <<
+          " matches; samples collected: " << _samples.size());
       }
     }
   }
-  LOG_INFO("Collected " << _samples.size() << " samples.");
+  LOG_INFO("Collected " << _samples.size() << " samples from " << matches.size() << " matches.");
 }
 
 void MatchFeatureExtractor::_resampleClasses()

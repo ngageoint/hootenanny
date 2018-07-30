@@ -267,7 +267,6 @@ public:
       }
     }
 
-    LOG_VART(result);
     return result;
   }
 
@@ -424,11 +423,16 @@ public:
       checkForMatch(e);
     }
     _elementsVisited++;
-    if (_elementsVisited % 10 == 0 && Log::getInstance().getLevel() <= Log::Info)
+    if (_elementsVisited % 1000 == 0 && Log::getInstance().getLevel() <= Log::Info)
     {
-      cout << "Progress: " << _elementsVisited <<
-              " _neighborCountSum: " << _neighborCountSum << "          \r";
-      cout << flush;
+      QString msg =
+        "Match candidates: " + QString::number(_elementsEvaluated) + " / " +
+        QString::number(_elementsVisited);
+      if (Log::getInstance().getLevel() <= Log::Debug)
+      {
+        msg += "; _neighborCountSum: " + QString::number(_neighborCountSum);
+      }
+      PROGRESS_INFO(msg);
     }
   }
 

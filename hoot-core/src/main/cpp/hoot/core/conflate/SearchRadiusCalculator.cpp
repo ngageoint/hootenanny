@@ -158,7 +158,7 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
   else
   {
     _result = 2 * _calculateStandardDeviation(tiePointDistances);
-    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', 2));
+    LOG_DEBUG("Calculated search radius = " + QString::number(_result, 'g', 2));
   }
 }
 

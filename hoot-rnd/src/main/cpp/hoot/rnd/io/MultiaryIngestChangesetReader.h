@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARY_INGEST_CHANGESET_READER_H
 #define MULTIARY_INGEST_CHANGESET_READER_H
@@ -41,7 +41,7 @@ namespace hoot
 /**
  * This is a reader for the internal temp changeset format used by the multiary ingester.
  */
-class MultiaryIngestChangesetReader : public ChangeSetProvider
+class MultiaryIngestChangesetReader : public ChangesetProvider
 {
 
 public:

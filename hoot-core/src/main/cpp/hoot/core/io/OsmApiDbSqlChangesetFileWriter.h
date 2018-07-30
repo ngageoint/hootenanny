@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBSQLCHANGESETFILEWRITER_H
 #define OSMAPIDBSQLCHANGESETFILEWRITER_H
@@ -63,7 +63,7 @@ public:
    * @param path SQL file output path
    * @param changesetProvider changeset data
    */
-  void write(const QString path, ChangeSetProviderPtr changesetProvider);
+  void write(const QString path, ChangesetProviderPtr changesetProvider);
 
   /**
    * Set the configuration settings

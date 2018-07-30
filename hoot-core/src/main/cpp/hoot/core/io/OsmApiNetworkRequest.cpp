@@ -48,6 +48,7 @@ bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Opera
   //  Reset status
   _status = 0;
   _content.clear();
+  _error.clear();
   //  Do HTTP request
   boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
   QNetworkRequest request(url);
@@ -93,15 +94,18 @@ bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Opera
   loop.exec();
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
-  if (reply != NULL)
-    _content = reply->readAll();
+  //  According to the documention this shouldn't ever happen
+  if (reply == NULL)
+  {
+    throw HootException(QString("Network request error: GET/POST/PUT request failed to create reply object."));
+    return false;
+  }
+  _content = reply->readAll();
   //  Check error status on our reply
   if (QNetworkReply::NoError != reply->error())
   {
-    QString errMsg = reply->errorString();
-    throw HootException(QString("Network error for request (%1): %2\n%3")
-      .arg(url.toString())
-      .arg(errMsg).arg(QString(_content)));
+    _error = reply->errorString();
+    return false;
   }
   //  return successfully
   return true;

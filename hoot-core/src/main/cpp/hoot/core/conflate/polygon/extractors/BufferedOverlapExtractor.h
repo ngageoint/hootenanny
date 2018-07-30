@@ -30,6 +30,7 @@
 
 // hoot
 #include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -48,16 +49,17 @@ class Element;
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
  * appropriate data structures.
  */
-class BufferedOverlapExtractor : public FeatureExtractor
+class BufferedOverlapExtractor : public FeatureExtractor, public Configurable
 {
 public:
 
+  BufferedOverlapExtractor();
   /**
    * Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated.
    *
    * @param bufferPortion Buffer the objects by this portion of the sqrt of the max area.
    */
-  BufferedOverlapExtractor(double bufferPortion=0.1);
+  explicit BufferedOverlapExtractor(double bufferPortion);
 
   static std::string className() { return "hoot::BufferedOverlapExtractor"; }
 
@@ -72,11 +74,13 @@ public:
     return Tgs::DataFrame::NullAsMissingValue;
   }
 
+  virtual void setConfiguration(const Settings& conf);
+
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual QString getDescription() const
-  { return "Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated"; }
+  { return "Uses symmetric difference as the criterion for determining match scores and objects are buffered before the overlap is calculated"; }
 
 private:
 
