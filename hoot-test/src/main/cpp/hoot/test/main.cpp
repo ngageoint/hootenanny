@@ -503,7 +503,8 @@ int main(int argc, char *argv[])
         slowTest = args[i].toDouble();
 
       listener.reset(new HootTestListener(false, slowTest, false));
-      if (args.contains("--names"))
+//TODO: Reenable this after
+//      if (args.contains("--names"))
         listener->showTestNames(true);
       result.addListener(listener.get());
 

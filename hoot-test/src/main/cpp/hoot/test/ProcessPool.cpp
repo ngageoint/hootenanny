@@ -163,7 +163,7 @@ void ProcessThread::processJobs(JobQueue* queue)
           {
             _proc.reset(createProcess());
             _outMutex->lock();
-            LOG_INFO(test.toStdString() << " failed, requeued." << endl);
+            cout << test.toStdString() << " failed, requeued." << endl;
             _outMutex->unlock();
             output.clear();
           }
