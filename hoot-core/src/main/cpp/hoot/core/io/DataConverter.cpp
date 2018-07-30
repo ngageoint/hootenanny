@@ -34,7 +34,7 @@
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/IoUtils.h>
@@ -211,6 +211,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
 
+    LOG_INFO("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
     MapProjector::projectToWgs84(map);
     writer->write(map);
@@ -344,6 +345,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   {
     _convertOps.prepend("hoot::MergeNearbyNodes");
   }
+  LOG_INFO("Applying conversion operations...");
   NamedOp(_convertOps).apply(map);
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, output);
@@ -353,6 +355,8 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
 
 void DataConverter::_convert(const QString input, const QString output)
 {
+  LOG_TRACE("general convert");
+
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
@@ -408,6 +412,7 @@ void DataConverter::_convert(const QString input, const QString output)
       map, input, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
+    LOG_INFO("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
     MapProjector::projectToWgs84(map);
 

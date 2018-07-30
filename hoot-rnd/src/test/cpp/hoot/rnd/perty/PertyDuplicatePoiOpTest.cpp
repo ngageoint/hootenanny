@@ -32,19 +32,19 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/rnd/perty/PertyDuplicatePoiOp.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/rnd/perty/PertyDuplicatePoiOp.h>
 
 // tbs
 #include <tbs/stats/SampleStats.h>
 
 // Qt
-#include <QDir>
 #include <QSet>
 
 using namespace std;
@@ -52,7 +52,7 @@ using namespace std;
 namespace hoot
 {
 
-class PertyDuplicatePoiOpTest : public CppUnit::TestFixture
+class PertyDuplicatePoiOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PertyDuplicatePoiOpTest);
   CPPUNIT_TEST(runBasicTest);

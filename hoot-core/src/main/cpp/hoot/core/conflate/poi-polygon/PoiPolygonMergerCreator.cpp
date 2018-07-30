@@ -214,21 +214,19 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     }
     LOG_VART(o2);
 
-    if (_autoMergeManyPoiToOnePolyMatches)
-    {
-      //We only want the situation here where two pois are matching against the same poly.  We
-      //want to leave default behavior for the situation where the same poi is being reviewed
-      //against multiple polys, so those end up as reviews.
+    //We only want the auto-merge to occur here in the situation where two pois are matching
+    //against the same poly.  We do not want auto-merges occurring in the situation where the
+    //same poi is being reviewed against multiple polys, so those end up as reviews.
 
-      //not passing the tag ignore list here, since it would have already be used when calling
-      //these methods from PoiPolygonMatch
-      if (OsmSchema::getInstance().isPoiPolygonPoi(map->getElement(o1)) &&
-          OsmSchema::getInstance().isPoiPolygonPoi(map->getElement(o2)) &&
-          OsmSchema::getInstance().isPoiPolygonPoly(map->getElement(sharedEid)))
-      {
-        LOG_TRACE("Automatically merging pois: " << o1 << ", " << o2 << " into poly: " << sharedEid);
-        return false;
-      }
+    //not passing the tag ignore list here, since it would have already be used when calling
+    //these methods from PoiPolygonMatch
+    if (_autoMergeManyPoiToOnePolyMatches &&
+        OsmSchema::getInstance().isPoiPolygonPoi(map->getElement(o1)) &&
+        OsmSchema::getInstance().isPoiPolygonPoi(map->getElement(o2)) &&
+        OsmSchema::getInstance().isPoiPolygonPoly(map->getElement(sharedEid)))
+    {
+      LOG_TRACE("Automatically merging pois: " << o1 << ", " << o2 << " into poly: " << sharedEid);
+      return false;
     }
 
     // create POI/Polygon matches and check to see if it is a miss

@@ -7,10 +7,12 @@ The +convert+ command converts map data from one input format to another.  Optio
 conversion.  The process may be memory bound depending upon the formats selected.  See the README for information on 
 supported formats.
 
-* +input(s)+ - Input path(s); 1) When converting from an OGR format, one or more inputs are supported.  Each input is made up of a file 
-               name and, optionally, a layer name.  Use a single space to separate each input and a ';' between inputs and layer.  
-               2) For all other conversions, the input must be a single path (e.g. .osm file, etc.).
-* +output+   - Output path (e.g. .osm file, etc.).
+* +input(s)+ - Input path(s) to convert from; Wildcard paths can be used for multiple inputs within the same directory.  
+               1) When converting from an OGR format, one or more inputs are supported.  Each input is made up of a file 
+               name and, optionally, a layer name.  Use a single space to separate each input and a ';' between 
+               inputs and layer (<filename>;<layer name>).  2) For all other conversions, the input must be a 
+               single path (e.g. .osm file, etc.).
+* +output+   - Output path to convert to (e.g. .osm file, etc.).
 * +--trans+  - (optional) Translation file to translate the input data from one schema to another.  Required if converting to/from an 
                OGR format.  Use either the base name of a Python translation file (without the .py extension) or the full path to a 
                Javascript file (.js).  For more information on translation files read the "Translation" section of the Hootenanny User 
@@ -35,7 +37,7 @@ convert "(input1[;layer]) [input2[;layer]]" (output) [--trans translation] [--li
 If the `convert.ops` configuration option is included, then all the specified operations are applied to the map, in order, before 
 writing the result to the output.
 
-Use the following configuration options to control the size of the element cache (valid only when converting OSM to an OGR format).  This
+Use the following configuration options to control the size of the element memory cache (valid only when converting OSM to an OGR format).  This
 can prevent memory issues:
 * `element.cache.size.node`
 * `element.cache.size.relation`
@@ -43,23 +45,24 @@ can prevent memory issues:
 
 === Examples
 
-==== Converting OSM Files to OGR
+==== Converting OSM Files to Geodatabases
 
-Convert MyInput.osm file to File-GDB MyOutput.gdb and apply translation found in MyTranslation.js:
+Convert an OSM file to a file geodatabase and apply a translation:
 
 --------------------------------------
 hoot convert MyInput.osm MyOutput.gdb --trans MyTranslation.js
 --------------------------------------
 
-Convert OSM database on myhost to File-GDB MyOutput.gdb and apply translation found in MyTranslation.js:
+==== Converting OSM Databases to Geodatabases
+
+Convert an OSM database to a file geodatabase and apply a translation:
 
 --------------------------------------
 hoot convert \
  PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" MyOutput.gdb --trans MyTranslation.js
 --------------------------------------
 
-Convert OSM database on myhost to File-GDB MyOutput.gdb, apply translation found in MyTranslation.js, and set cache capacities for 
-nodes, ways, and relations:
+Convert an OSM database to a file geodatabase, apply a translation, and set element cache capacities:
 
 --------------------------------------
 hoot convert \
@@ -67,7 +70,21 @@ hoot convert \
  MyOutput.gdb --trans MyTranslation.js -D element.cache.size.node=10000 -D element.cache.size.way=2000 -D element.cache.size.relation=2000
 --------------------------------------
 
-==== Converting Shape Files to OSM
+==== Converting OSM Files to Shape Files
+
+Convert an OSM file to a shape file specifying export columns:
+
+--------------------------------------
+hoot convert MyInput.osm MyOutput.shp --cols "highway,surface,name,alt_name,oneway,bridge" 
+--------------------------------------
+
+Convert an OSM file to a shape file, allowing the export columns to be automatically selected based on frequency:
+
+--------------------------------------
+hoot convert MyInput.osm MyOutput.shp --cols
+--------------------------------------
+
+==== Converting Shape Files to OSM Files
 
 Convert multiple shape files to an OSM file with translation:
 
@@ -82,19 +99,7 @@ at one time.  Hootenanny will make sure that road end points that fall within 1 
 hoot convert til_2010_*_roads.shp TigerRoadsOutput.osm --trans TigerRoads
 --------------------------------------
 
-Convert an OSM file to a shape file specifying export columns:
-
---------------------------------------
-hoot convert MyInput.osm MyOutput.shp --cols "highway,surface,name,alt_name,oneway,bridge" 
---------------------------------------
-
-Convert an OSM file to a shape file, allowing the export columns to be automatically selected based on frequency:
-
---------------------------------------
-hoot convert MyInput.osm MyOutput.shp --cols
---------------------------------------
-
-==== Converting File Geodatabases to OSM
+==== Converting File Geodatabases to OSM Files
 
 Convert roads, bridges, overpasses and tunnels from a File Geodatabase into a single .osm file using a translation file named
 _translations/MyGdbTranslation.py_:

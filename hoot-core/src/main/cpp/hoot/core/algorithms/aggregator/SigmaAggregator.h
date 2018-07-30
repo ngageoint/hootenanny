@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SIGMAAGGREGATOR_H
 #define SIGMAAGGREGATOR_H
@@ -38,17 +38,11 @@ public:
 
   static std::string className() { return "hoot::SigmaAggregator"; }
 
-  /**
-   * quantile - A value from 0 to 1 for the quantile.
-   */
   SigmaAggregator() {}
 
   virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return QString("Sigma Aggregator"); }
-
-private:
-  double _quantile;
 };
 
 }

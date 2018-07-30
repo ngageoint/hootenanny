@@ -28,19 +28,16 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/rnd/scoring/GraphComparator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/OpenCv.h>
-using namespace hoot;
+#include <hoot/rnd/scoring/GraphComparator.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -48,16 +45,13 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-
-// Standard
-#include <stdio.h>
-
 using namespace geos::geom;
 using namespace std;
 
-class GraphComparatorTest : public CppUnit::TestFixture
+namespace hoot
+{
+
+class GraphComparatorTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(GraphComparatorTest);
     CPPUNIT_TEST(runTest);
@@ -185,5 +179,5 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(GraphComparatorTest);
 
-
+}
 

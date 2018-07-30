@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FilePageStore.h"
 
 #include <errno.h>
-#include "../TgsException.h"
-#include "Page.h"
+#include <tgs/TgsException.h>
+#include <tgs/RStarTree/Page.h>
 
 using namespace std;
 

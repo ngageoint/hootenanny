@@ -50,6 +50,7 @@ namespace hoot
 class ArffWriter
 {
 public:
+
   typedef std::map<QString, double> Sample;
 
   /**
@@ -71,6 +72,8 @@ public:
   void write(const std::vector<Sample>& samples);
 
 private:
+
+  QString _path;
   boost::shared_ptr<std::fstream> _autoStrm;
   std::ostream* _strm;
   bool _useNulls;

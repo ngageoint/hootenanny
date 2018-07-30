@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/SearchRadiusCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -43,20 +44,15 @@
 #include <cppunit/TestFixture.h>
 
 // Qt
-#include <QDebug>
-#include <QDir>
 #include <QBuffer>
 #include <QByteArray>
 
-#include "../TestUtils.h"
-
-using namespace boost;
 using namespace std;
 
 namespace hoot
 {
 
-class SearchRadiusCalculatorTest : public CppUnit::TestFixture
+class SearchRadiusCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SearchRadiusCalculatorTest);
   CPPUNIT_TEST(runCalcResultTest);
@@ -90,13 +86,13 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(34.334710, any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(34.334710, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
   void runBadPreOpTest()
   {
     Settings testSettings = conf();
-    testSettings.set("unify.pre.ops", "hoot::SetTagVisitor;hoot::RubberSheet");
+    testSettings.set("unify.pre.ops", "hoot::SetTagValueVisitor;hoot::RubberSheet");
     SearchRadiusCalculator searchRadiusCalculator;
 
     QString exceptionMsg("");
@@ -163,7 +159,7 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(32.675054, any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(32.675054, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
 };

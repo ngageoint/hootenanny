@@ -69,7 +69,7 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-void OsmXmlChangesetFileWriter::write(QString path, ChangeSetProviderPtr cs)
+void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
 {
   QFileInfo info(path);
   info.setCaching(false);

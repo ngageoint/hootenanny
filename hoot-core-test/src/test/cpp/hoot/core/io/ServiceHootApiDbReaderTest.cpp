@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootApiDbReader.h>
@@ -40,24 +41,19 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/RemoveAttributeVisitor.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
-#include "ServicesDbTestUtils.h"
+#include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class ServiceHootApiDbReaderTest : public CppUnit::TestFixture
+class ServiceHootApiDbReaderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbReaderTest);
   CPPUNIT_TEST(runCalculateBoundsTest);
@@ -92,8 +88,9 @@ public:
     TestUtils::mkpath("test-output/io/ServiceHootApiDbReaderTest");
   }
 
-  void tearDown()
+  virtual void tearDown()
   {
+    HootTestFixture::tearDown();
     ServicesDbTestUtils::deleteUser(userEmail());
 
     if (mapId != -1)
@@ -621,7 +618,7 @@ public:
     QList<ElementAttributeType> types;
     types.append(ElementAttributeType(ElementAttributeType::Changeset));
     types.append(ElementAttributeType(ElementAttributeType::Timestamp));
-    RemoveAttributeVisitor attrVis(types);
+    RemoveAttributesVisitor attrVis(types);
     map->visitRw(attrVis);
 
     MapProjector::projectToWgs84(map);

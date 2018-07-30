@@ -24,20 +24,15 @@
  *
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
 // Hoot
-#include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/TestUtils.h>
-
-//#include <hoot/core/io/GeoNamesReader.h>
-//#include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
-
-// Qt
-#include <QDir>
+#include <hoot/rnd/io/SparkChangesetWriter.h>
 
 namespace hoot
 {
 
-class SparkChangesetWriterTest : public CppUnit::TestFixture
+class SparkChangesetWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SparkChangesetWriterTest);
   CPPUNIT_TEST(elementAsJsonTest);
@@ -50,8 +45,9 @@ class SparkChangesetWriterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/SparkChangesetWriterTest/");
   }
 

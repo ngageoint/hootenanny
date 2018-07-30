@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include "../TestUtils.h"
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -40,12 +41,10 @@
 // Qt
 #include <qnumeric.h>
 
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class CalculateStatsOpTest : public CppUnit::TestFixture
+class CalculateStatsOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CalculateStatsOpTest);
   CPPUNIT_TEST(runStatsNumTest);
@@ -55,15 +54,10 @@ class CalculateStatsOpTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
-    TestUtils::resetEnvironment();
+    HootTestFixture::setUp();
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
-  }
-
-  void tearDown()
-  {
-    TestUtils::resetEnvironment();
   }
 
   //this is here just to prevent someone from adding a stat that doesn't get tested in this test
@@ -71,7 +65,7 @@ public:
   {
     boost::shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
-    CPPUNIT_ASSERT_EQUAL(129, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(139, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
@@ -125,7 +119,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       61.29, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Number of Match Creators"));
     //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
     //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::BuildingMatchCreator"));
@@ -182,6 +176,21 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
+
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Line Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Lines Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Power Line Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Power Lines"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Meters of Power Line Processed by Conflation"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Power Lines Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Power Lines Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Power Lines"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygon Conflatable POIs"));
@@ -291,7 +300,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       62.07, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Number of Match Creators"));
     //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
     //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::BuildingMatchCreator"));
@@ -347,6 +356,21 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
+
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Line Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Lines Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Power Line Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Power Lines"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Meters of Power Line Processed by Conflation"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Power Lines Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Power Lines Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Power Lines"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygon Conflatable POIs"));
@@ -417,9 +441,7 @@ private:
 
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "slow");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "current");
 
-
+}

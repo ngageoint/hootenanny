@@ -30,9 +30,9 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/filters/ArbitraryCriterion.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/criterion/ArbitraryCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
@@ -267,7 +267,6 @@ public:
       }
     }
 
-    LOG_VART(result);
     return result;
   }
 
@@ -424,11 +423,16 @@ public:
       checkForMatch(e);
     }
     _elementsVisited++;
-    if (_elementsVisited % 10 == 0 && Log::getInstance().getLevel() <= Log::Info)
+    if (_elementsVisited % 1000 == 0 && Log::getInstance().getLevel() <= Log::Info)
     {
-      cout << "Progress: " << _elementsVisited <<
-              " _neighborCountSum: " << _neighborCountSum << "          \r";
-      cout << flush;
+      QString msg =
+        "Match candidates: " + QString::number(_elementsEvaluated) + " / " +
+        QString::number(_elementsVisited);
+      if (Log::getInstance().getLevel() <= Log::Debug)
+      {
+        msg += "; _neighborCountSum: " + QString::number(_neighborCountSum);
+      }
+      PROGRESS_INFO(msg);
     }
   }
 

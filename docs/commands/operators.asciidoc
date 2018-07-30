@@ -31,3 +31,7 @@ hoot operators --visitors
 hoot convert -D convert.ops=hoot::SetTagVisitor -D set.tag.visitor.key=poi -D set.tag.visitor.value=yes input.osm output.osm
 -------------------------
 
+=== Notes
+
+A '*' next to a visitor name indicates it implements the SingleStatistic interface.
+

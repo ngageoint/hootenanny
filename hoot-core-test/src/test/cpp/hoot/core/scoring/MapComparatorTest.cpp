@@ -27,12 +27,13 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/util/MapProjector.h>
 
 #define int64 opencv_broken_int
@@ -60,7 +61,10 @@ using namespace boost;
 // Standard
 #include <stdio.h>
 
-class MapComparatorTest : public CppUnit::TestFixture
+namespace hoot
+{
+
+class MapComparatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MapComparatorTest);
   CPPUNIT_TEST(runTest);
@@ -91,7 +95,7 @@ public:
     uut.setUseDateTime();
 
     // Change dates...
-    SetTagVisitor vtor("source:datetime", "1989-12-13T12:34:56Z");
+    SetTagValueVisitor vtor("source:datetime", "1989-12-13T12:34:56Z");
     map2->visitRw(vtor);
 
     // Make sure it fails now!
@@ -107,5 +111,5 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MapComparatorTest);
 
-
+}
 

@@ -36,15 +36,14 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-
-#include "../../TestUtils.h"
 
 namespace hoot
 {
 
-class LocationOfPointTest : public CppUnit::TestFixture
+class LocationOfPointTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(LocationOfPointTest);
   //TODO: fixme or remove me - #1737

@@ -35,22 +35,15 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/WayCleaner.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
-
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QTest>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class WayCleanerTest : public CppUnit::TestFixture
+class WayCleanerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayCleanerTest);
   CPPUNIT_TEST(runDuplicateNodesTest);
@@ -130,8 +123,7 @@ public:
   }
 };
 
-}
-
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayCleanerTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayCleanerTest, "quick");
 
+}

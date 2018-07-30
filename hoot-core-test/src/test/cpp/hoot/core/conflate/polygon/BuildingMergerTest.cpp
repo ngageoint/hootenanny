@@ -43,6 +43,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Way.h>
@@ -61,33 +62,28 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Tgs
 #include <tgs/StreamUtils.h>
-
-#include "../../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class BuildingMergerTest : public CppUnit::TestFixture
+class BuildingMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingMergerTest);
   CPPUNIT_TEST(runMatchTest);
   CPPUNIT_TEST(runTagTest);
+  CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest1);
+  CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest2);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate/polygon");
   }
 
@@ -96,41 +92,6 @@ public:
     std::vector<long> wids = FindWaysVisitor::findWaysByTag(map, key, value);
     CPPUNIT_ASSERT_EQUAL((size_t)1, wids.size());
     return map->getWay(wids[0]);
-  }
-
-  void runMatchTest()
-  {
-    OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-    OsmMapPtr map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
-
-    MapProjector::projectToPlanar(map);
-
-    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
-    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Target");
-    set< pair<ElementId, ElementId> > pairs;
-
-    for (size_t i = 0; i < wids2.size(); i++)
-    {
-      pairs.insert(pair<ElementId, ElementId>(ElementId::way(wids1[0]), ElementId::way(wids2[i])));
-    }
-
-    vector< pair<ElementId, ElementId> > replaced;
-
-    BuildingMerger bm(pairs);
-    bm.apply(map, replaced);
-
-    MapProjector::projectToWgs84(map);
-
-    OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest-runMatchTest.osm");
-
-    HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
   }
 
   class RemoveMissVisitor : public ConstElementVisitor
@@ -154,6 +115,37 @@ public:
     OsmMapPtr _map;
     QString _ref;
   };
+
+  void runMatchTest()
+  {
+    OsmXmlReader reader;
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    MapProjector::projectToPlanar(map);
+
+    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
+    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Target");
+    set< pair<ElementId, ElementId> > pairs;
+
+    for (size_t i = 0; i < wids2.size(); i++)
+    {
+      pairs.insert(pair<ElementId, ElementId>(ElementId::way(wids1[0]), ElementId::way(wids2[i])));
+    }
+
+    BuildingMerger bm(pairs);
+    vector< pair<ElementId, ElementId> > replaced;
+    bm.apply(map, replaced);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest-runMatchTest.osm");
+
+    HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
+  }
 
   void runTagTest()
   {
@@ -183,10 +175,6 @@ public:
     BuildingMerger bm(pairs);
     bm.apply(map, replaced);
 
-//    QDir(".").mkpath("test-output/conflate/polygon");
-//    OsmXmlWriter writer;
-//    writer.write(map, "test-output/conflate/polygon/BuildingTagTest.osm");
-
     HOOT_STR_EQUALS("[3]{(Way:-26, Relation:-1), (Way:-25, Relation:-1), (Way:-14, Relation:-1)}",
                     replaced);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
@@ -206,17 +194,80 @@ public:
                     "{\"type\":\"node\",\"id\":-231,\"lat\":39.593152,\"lon\":-104.80613},\n"
                     "{\"type\":\"node\",\"id\":-232,\"lat\":39.593143,\"lon\":-104.80622},\n"
                     "{\"type\":\"node\",\"id\":-233,\"lat\":39.593122,\"lon\":-104.80621},\n"
-                    "{\"type\":\"way\",\"id\":-26,\"nodes\":[-224,-227,-228,-229,-230,-231,-232,-233,-223,-224],\"tags\":{\"building:part\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-25,\"nodes\":[-218,-219,-220,-221,-222,-223,-224,-225,-226,-218],\"tags\":{\"building:part\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-26,\"nodes\":[-224,-227,-228,-229,-230,-231,-232,-233,-223,-224],\"tags\":{\"" + MetadataTags::BuildingPart() + "\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-25,\"nodes\":[-218,-219,-220,-221,-222,-223,-224,-225,-226,-218],\"tags\":{\"" + MetadataTags::BuildingPart() + "\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"way\",\"ref\":-26,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-25,\"role\":\"part\"}],\"tags\":{\"" + MetadataTags::Ref1() + "\":\"Panera\",\"" + MetadataTags::Ref2() + "\":\"Panera\",\"" + MetadataTags::HootBuildingMatch() + "\":\"true\",\"alt_name\":\"Maid-Rite;Maid-Rite Diner\",\"building\":\"yes\",\"name\":\"Panera Bread\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter(8).toString(map));
   }
+
+  void runKeepMoreComplexGeometryWhenAutoMergingTest1()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    set< pair<ElementId, ElementId> > pairs = getPairsForComplexAutoMergingTests(map);
+
+    BuildingMerger bm(pairs);
+    bm.setKeepMoreComplexGeometryWhenAutoMerging(true);
+    vector< pair<ElementId, ElementId> > replaced;
+    bm.apply(map, replaced);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(
+      map,
+      "test-output/conflate/polygon/BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-true.osm");
+    HOOT_STR_EQUALS(
+      "[3]{(Way:-18, Relation:-1), (Way:-17, Relation:-1), (Way:-1, Relation:-1)}", replaced);
+  }
+
+  void runKeepMoreComplexGeometryWhenAutoMergingTest2()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    set< pair<ElementId, ElementId> > pairs = getPairsForComplexAutoMergingTests(map);
+
+    BuildingMerger bm(pairs);
+    bm.setKeepMoreComplexGeometryWhenAutoMerging(false);
+    vector< pair<ElementId, ElementId> > replaced;
+    bm.apply(map, replaced);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(
+      map,
+      "test-output/conflate/polygon/BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-false.osm");
+    HOOT_STR_EQUALS("[2]{(Way:-18, Way:-1), (Way:-17, Way:-1)}", replaced);
+  }
+
+private:
+
+  set< pair<ElementId, ElementId> > getPairsForComplexAutoMergingTests(OsmMapPtr map)
+  {
+    OsmXmlReader reader;
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    MapProjector::projectToPlanar(map);
+
+    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
+    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
+    vector<long> wids3 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Maid-Rite");
+    wids2.insert(wids2.end(), wids3.begin(), wids3.end());
+    set< pair<ElementId, ElementId> > pairs;
+
+    for (size_t i = 0; i < wids2.size(); i++)
+    {
+      pairs.insert(pair<ElementId, ElementId>(ElementId::way(wids1[0]), ElementId::way(wids2[i])));
+    }
+
+    return pairs;
+  }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingMergerTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingMergerTest, "quick");
 
 }

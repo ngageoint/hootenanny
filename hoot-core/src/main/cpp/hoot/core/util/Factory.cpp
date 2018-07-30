@@ -79,10 +79,13 @@ vector<std::string> Factory::getObjectNamesByBase(const std::string& baseName)
   QMutexLocker locker(&_mutex);
   vector<std::string> result;
 
+  LOG_VART(baseName);
   for (std::map<std::string, boost::shared_ptr<ObjectCreator> >::const_iterator it = _creators.begin();
        it != _creators.end(); ++it)
   {
     boost::shared_ptr<ObjectCreator> c = it->second;
+    LOG_VART(c->getName());
+    LOG_VART(c->getBaseName());
     if (c->getBaseName() == baseName)
     {
       result.push_back(c->getName());

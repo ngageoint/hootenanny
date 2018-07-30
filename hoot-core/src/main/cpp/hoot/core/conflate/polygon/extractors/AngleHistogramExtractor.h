@@ -31,6 +31,7 @@
 // hoot
 #include <hoot/core/conflate/extractors/FeatureExtractor.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace geos
 {
@@ -55,11 +56,12 @@ class Histogram;
  *
  * 1 means the histograms have effectively no difference. 0 means they're completely different.
  */
-class AngleHistogramExtractor : public FeatureExtractor
+class AngleHistogramExtractor : public FeatureExtractor, public Configurable
 {
 public:
 
-  AngleHistogramExtractor(Radians smoothing = 0.0, unsigned int bins = 16);
+  AngleHistogramExtractor();
+  AngleHistogramExtractor(Radians smoothing, unsigned int bins = 16);
 
   static std::string className() { return "hoot::AngleHistogramExtractor"; }
 
@@ -73,6 +75,8 @@ public:
   {
     return Tgs::DataFrame::NullAsMissingValue;
   }
+
+  virtual void setConfiguration(const Settings& conf);
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;

@@ -27,9 +27,9 @@
 
 #include "FindWaysVisitor.h"
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/filters/ContainsNodeCriterion.h>
-#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ContainsNodeCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
 
 using namespace std;
 

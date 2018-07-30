@@ -25,9 +25,8 @@
  * @copyright Copyright (C) 2013, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "../TestUtils.h"
-
 // hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
 #include <hoot/core/algorithms/WayMatchStringSplitter.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
@@ -40,15 +39,12 @@
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
 
-// Qt
-#include <QDir>
-
 using namespace std;
 
 namespace hoot
 {
 
-class WayMatchStringMergerTest : public CppUnit::TestFixture
+class WayMatchStringMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayMatchStringMergerTest);
   CPPUNIT_TEST(runMergeNodeTest);
@@ -58,8 +54,9 @@ class WayMatchStringMergerTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/algorithms/");
   }
 

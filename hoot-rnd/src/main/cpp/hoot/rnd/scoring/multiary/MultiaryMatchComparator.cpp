@@ -31,11 +31,11 @@
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/ElementTypeCriterion.h>
-#include <hoot/core/filters/TagKeyCriterion.h>
-#include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/TagContainsFilter.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/criterion/TagContainsFilter.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>

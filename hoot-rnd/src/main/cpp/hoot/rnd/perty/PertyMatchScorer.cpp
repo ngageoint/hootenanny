@@ -39,7 +39,7 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
 #include <hoot/core/visitors/TagRenameKeyVisitor.h>
 #include <hoot/core/OsmMap.h>
@@ -126,8 +126,8 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString referenceMapInputPat
 
   boost::shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
   referenceMap->visitRw(*addRef1Visitor);
-  boost::shared_ptr<SetTagVisitor> setAccuracyVisitor(
-    new SetTagVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
+  boost::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
+    new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   referenceMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(referenceMap->getNodes().size());
   LOG_VARD(referenceMap->getWays().size());
@@ -158,12 +158,13 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
   IoUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
   MapCleaner().apply(perturbedMap);
 
-  boost::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
+  boost::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(
+    new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
   perturbedMap->visitRw(*tagRenameKeyVisitor);
-  // This could be replaced with a SetTagVisitor passed in from the command line
+  // This could be replaced with a SetTagValueVisitor passed in from the command line
   // instead.
-  boost::shared_ptr<SetTagVisitor> setAccuracyVisitor(
-    new SetTagVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
+  boost::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
+    new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   perturbedMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());

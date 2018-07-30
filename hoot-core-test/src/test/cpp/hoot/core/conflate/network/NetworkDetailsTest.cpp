@@ -26,15 +26,15 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
-#include "../../TestUtils.h"
-#include <hoot/core/filters/TagCriterion.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/MapProjector.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -42,7 +42,7 @@ using namespace std;
 namespace hoot
 {
 
-class NetworkDetailsTest : public CppUnit::TestFixture
+class NetworkDetailsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NetworkDetailsTest);
   CPPUNIT_TEST(calculateDistanceTest);

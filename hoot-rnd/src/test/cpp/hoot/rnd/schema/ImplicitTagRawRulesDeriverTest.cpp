@@ -26,17 +26,16 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
 
 // Qt
-#include <QDir>
 #include <QTemporaryFile>
 
 namespace hoot
 {
 
-class ImplicitTagRawRulesDeriverTest : public CppUnit::TestFixture
+class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
 
@@ -54,10 +53,14 @@ public:
   static QString inDir() { return "test-files/schema/ImplicitTagRawRulesDeriverTest"; }
   static QString outDir() { return "test-output/schema/ImplicitTagRawRulesDeriverTest"; }
 
+  virtual void setUp()
+  {
+    HootTestFixture::setUp();
+    TestUtils::mkpath(outDir());
+  }
+
   void runBasicPoiTest()
   {
-    TestUtils::mkpath(outDir());
-
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     const QString outputFile =
@@ -79,8 +82,6 @@ public:
 
   void runMultipleInputsPoiTest()
   {
-    TestUtils::mkpath(outDir());
-
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     inputs.append(inDir() + "/philippines-1.osm.pbf");
@@ -108,7 +109,6 @@ public:
   void runDuplicateWordKeyCountPoiTest()
   {
     DisableLog dl;
-    TestUtils::mkpath(outDir());
 
     boost::shared_ptr<QTemporaryFile> sortedCountFile(
       new QTemporaryFile(
@@ -155,8 +155,6 @@ public:
     //Case is actually already handled correctly in runBasicTest, but this smaller input dataset
     //will make debugging case problems easier, if needed.
 
-    TestUtils::mkpath(outDir());
-
     QStringList inputs;
     inputs.append(inDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest.osm");
 
@@ -180,8 +178,6 @@ public:
 
   void runTranslateNamesFalsePoiTest()
   {
-    TestUtils::mkpath(outDir());
-
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     const QString outputFile =
@@ -204,8 +200,6 @@ public:
 
   void runBadInputsTest()
   {
-    TestUtils::mkpath(outDir());
-
     QString exceptionMsg("");
     QStringList inputs;
     QStringList translationScripts;

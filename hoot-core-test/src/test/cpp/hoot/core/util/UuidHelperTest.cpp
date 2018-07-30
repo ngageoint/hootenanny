@@ -32,15 +32,14 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class UuidHelperTest : public CppUnit::TestFixture
+class UuidHelperTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(UuidHelperTest);
   CPPUNIT_TEST(uuid5Test);

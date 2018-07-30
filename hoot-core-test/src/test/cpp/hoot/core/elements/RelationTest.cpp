@@ -27,18 +27,17 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class RelationTest : public CppUnit::TestFixture
+class RelationTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RelationTest);
   CPPUNIT_TEST(runCircularVisitRo1Test);

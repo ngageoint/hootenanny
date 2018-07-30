@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MANIPULATORFEATUREEXTRACTOR_H
@@ -93,6 +93,7 @@ public:
   void processMap(const boost::shared_ptr<const OsmMap>& map);
 
 private:
+
   DataSamples _samples;
   std::vector<boost::shared_ptr<MatchCreator> > _creators;
   // if true then make sure there is an even representation from each class and only fully populated
@@ -101,8 +102,8 @@ private:
   bool _useNulls;
   const MatchFactory* _matchFactory;
 
-  MatchType _getActualMatchType(const std::set<ElementId> &eids, const boost::shared_ptr<const OsmMap>& map)
-    const;
+  MatchType _getActualMatchType(const std::set<ElementId> &eids,
+                                const boost::shared_ptr<const OsmMap>& map) const;
 
   /**
    * Returns a vector of unique factor labels. Not efficient.

@@ -32,7 +32,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/conflate/frechet/FrechetDistance.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 
 using namespace geos::geom;
@@ -55,7 +55,7 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(const ConstOsmMapPtr& map
     maxRelevantDistance;
   //  Create a copy of the map and the two ways
   OsmMapPtr mapCopy(new OsmMap());
-  CopySubsetOp(map,
+  CopyMapSubsetOp(map,
                way1->getElementId(),
                way2->getElementId()).apply(mapCopy);
   //  Calculate the Frechet subline

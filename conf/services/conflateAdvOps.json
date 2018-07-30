@@ -476,7 +476,7 @@
                 "members":[
                     {
                         "id":"hoot_road_opt_engine_unify",
-                        "description":"Unify options",
+                        "description":"A non-greedy road conflation algorithm which uses a random-forest model for classification",
                         "name":"Unify",
                         "members":[
                             {
@@ -546,7 +546,7 @@
                     },
                     {
                         "id":"hoot_road_opt_engine_network",
-                        "description":"Network Conflation Options",
+                        "description":"A road conflation algorithm based on graph operations treating the data as a network",
                         "name":"Network",
                         "members":[
                             {
@@ -589,7 +589,7 @@
                     },
                     {
                     "id": "hoot_road_opt_engine_differential",
-                    "description": "Differential Conflation (with the Network roads conflation algorithm)",
+                    "description": "An application of the Network Roads Conflation algorithm that outputs only road data existing in the secondary dataset but not in the reference dataset",
                     "name": "Differential",
                     "members": [
                           {
@@ -706,7 +706,7 @@
             	"id":"building_review_if_secondary_newer",
                 "elem_type":"bool",
                 "defaultvalue":"false",
-                "description":"If true, any buildings in the secondary layer will be automatically reviewed against matching buildings in the reference layer if they are marked with a more recent date than that of the reference building.",
+                "description":"If true, any buildings in the secondary layer will be automatically reviewed against potentially matching features in the reference layer if they are marked with a more recent date than that of the reference feature.",
                 "name":"Review If Secondary Layer Building Newer",
                 "hoot_key":"building.review.if.secondary.newer"
             },
@@ -854,7 +854,7 @@
         	"id":"poipolygon_keep_closest_matches_only",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw out any others even if they score high enough for a match.",
+        	"description":"If this setting is true, POI to Polygon conflation will attempt to match the closest feature pairs only.  The conflation will not match additional features at greater distances, even if they are within the match distance threshold.  Multiple features matches are still possible in the case of exact distance ties.  If this setting is false, then multiple POIs found within the match distance threshold of a polygon are treated as reviews.",
                 "name":"Keep Closest Matches Only",
         	"hoot_key":"poi.polygon.keep.closest.matches.only"
     	    },
@@ -894,7 +894,7 @@
         	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of the POIs being merged into the polygon.  If false, then each POI will generate a review against the polygon instead.",
+        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of those POIs being automatically merged into the polygon.  If false, then each matched POI will generate a review against the polygon instead.",
 		"name":"Merge Many POI to Single Polygon Matches",
         	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
     	    },
@@ -985,6 +985,150 @@
         	"hoot_key":"poi.polygon.type.score.threshold"
     	    }
         ]
+    },
+    {
+        "id":"hoot_power_line_options",
+        "elem_type":"group",
+        "description":"Hootenanny Power Line options",
+        "name":"Power Line Options",
+        "members":[
+            {
+                "id":"hoot_enable_power_line_options",
+                "elem_type":"checkbox",
+                "override":{
+                    "elem_type":"checkbox"
+                },
+                "description":"Enable power line options",
+                "name":"Enabled",
+                "defaultvalue":"true",
+                "onchange":"true"
+            },
+            {
+                "id":"power_line_match_creator",
+                "elem_type":"string",
+                "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+                "name":"Match Creator",
+                "required":"true",
+                "defaultvalue":"hoot::ScriptMatchCreator,PowerLine.js",
+                "override":{
+                    "defaultvalue":"hoot::ScriptMatchCreator,PowerLine.js"
+                },
+                "hoot_key":"match.creators"
+            },
+            {
+                "id":"power_line_merger_creator",
+                "elem_type":"string",
+                "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+                "name":"Merger Creator",
+                "required":"true",
+                "defaultvalue":"hoot::ScriptMergerCreator",
+                "override":{
+                    "defaultvalue":"hoot::ScriptMergerCreator"
+                },
+                "hoot_key":"merger.creators"
+            },
+            {
+                "id":"power_line_auto_calc_search_radius",
+                "elem_type":"bool",
+                "description":"Automatically calculates the search radius to be used during conflation of power lines using rubber sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a pre-conflation operation on the input data to be conflated.",
+                "name":"Power Line Auto Calculate Search Radius",
+                "defaultvalue":"true",
+                "disabled":"false",
+                "hoot_key":"power.line.auto.calc.search.radius",
+                "onchange":"true"
+            },
+            {
+                "id":"power_line_distance_weight_coefficient",
+                "minvalue":"0.0",
+                "elem_type":"double",
+                "description":"A weighting coefficient value from 0.0 to 1.0 for the applying distance weighting to power line matches.  This will favor feature that are closer together.  The higher the coefficient value, the higher the weighting applied.  A value of 0.0 will disable distance weighting.",
+                "maxvalue":"1.0",
+                "name":"Power Line Matcher Distance Weight Coefficient",
+                "defaultvalue":"0.01",
+                "hoot_key":"power.line.matcher.distance.weight.coefficient"
+            },
+            {
+                "id":"power_line_matcher_max_angle",
+                "minvalue":"0.0",
+                "elem_type":"double",
+                "description":"Sets that maximum angle that is still considered a power line match. Units in degrees.",
+                "maxvalue":"360.0",
+                "name":"Power Line Matcher Max Angle",
+                "defaultvalue":"155.0",
+                "hoot_key":"power.line.matcher.max.angle"
+            },
+            {
+                "id":"power_line_subline_matcher",
+                "elem_type":"string",
+                "description":"The subline matcher to use when determining matching sublines for power lines.",
+                "name":"Power Line Subline Matcher",
+                "defaultvalue":"hoot::FrechetSublineMatcher",
+                "hoot_key":"power.line.subline.matcher",
+                "required":"true"
+            }
+        ]
+    },
+    {
+        "id":"hoot_railway_options",
+        "elem_type":"group",
+        "description":"Hootenanny Railway options",
+        "name":"Railway Options",
+        "members":[
+        {
+            "id":"hoot_enable_railway_options",
+            "elem_type":"checkbox",
+            "override":{
+                "elem_type":"checkbox"
+            },
+            "description":"Enable railway options",
+            "name":"Enabled",
+            "defaultvalue":"true",
+            "onchange":"true"
+        },
+        {
+            "id":"railway_match_creator",
+            "elem_type":"string",
+            "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+            "name":"Match Creator",
+            "required":"true",
+            "defaultvalue":"hoot::ScriptMatchCreator,Railway.js",
+            "override":{
+                "defaultvalue":"hoot::ScriptMatchCreator,Railway.js"
+            },
+            "hoot_key":"match.creators"
+        },
+        {
+            "id":"railway_merger_creator",
+            "elem_type":"string",
+            "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+            "name":"Merger Creator",
+            "required":"true",
+            "defaultvalue":"hoot::ScriptMergerCreator",
+            "override":{
+                "defaultvalue":"hoot::ScriptMergerCreator"
+            },
+            "hoot_key":"merger.creators"
+        },
+        {
+            "id":"railway_way_subline_matcher",
+            "elem_type":"string",
+            "description":"The way subline matcher to use when determining matching sublines.",
+            "name":"Railway Subline Matcher",
+            "defaultvalue":"hoot::MaximalSublineMatcher",
+            "hoot_key":"railway.subline.matcher",
+            "required":"true"
+        },
+        {
+            "id":"railway_matcher_max_angle",
+            "minvalue":"0.0",
+            "maxvalue":"360.0",
+            "defaultvalue":"90.0",
+            "elem_type":"double",
+            "description":"Sets that maximum angle that is still considered a railway match. Units in degrees.",
+            "name":"Railway Matcher Max Angle",
+            "hoot_key":"railway.matcher.max.angle"
+        }
+      ]
     },
     {
         "id":"hoot_waterway_options",
@@ -1109,67 +1253,5 @@
                 "required":"true"
             }
         ]
-    },
-    {
-        "id":"hoot_railway_options",
-        "elem_type":"group",
-        "description":"Hootenanny Railway options",
-        "name":"Railway Options",
-        "members":[
-        {
-            "id":"hoot_enable_railway_options",
-            "elem_type":"checkbox",
-            "override":{
-                "elem_type":"checkbox"
-            },
-            "description":"Enable railway options",
-            "name":"Enabled",
-            "defaultvalue":"true",
-            "onchange":"true"
-        },
-        {
-            "id":"railway_match_creator",
-            "elem_type":"string",
-            "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-            "name":"Match Creator",
-            "required":"true",
-            "defaultvalue":"hoot::ScriptMatchCreator,Railway.js",
-            "override":{
-                "defaultvalue":"hoot::ScriptMatchCreator,Railway.js"
-            },
-            "hoot_key":"match.creators"
-        },
-        {
-            "id":"railway_merger_creator",
-            "elem_type":"string",
-            "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-            "name":"Merger Creator",
-            "required":"true",
-            "defaultvalue":"hoot::ScriptMergerCreator",
-            "override":{
-                "defaultvalue":"hoot::ScriptMergerCreator"
-            },
-            "hoot_key":"merger.creators"
-        },
-        {
-            "id":"railway_way_subline_matcher",
-            "elem_type":"string",
-            "description":"The way subline matcher to use when determining matching sublines.",
-            "name":"Railway Subline Matcher",
-            "defaultvalue":"hoot::MaximalSublineMatcher",
-            "hoot_key":"railway.subline.matcher",
-            "required":"true"
-        },
-        {
-            "id":"railway_matcher_max_angle",
-            "minvalue":"0.0",
-            "maxvalue":"360.0",
-            "defaultvalue":"90.0",
-            "elem_type":"double",
-            "description":"Sets that maximum angle that is still considered a railway match. Units in degrees.",
-            "name":"Railway Matcher Max Angle",
-            "hoot_key":"railway.matcher.max.angle"
-        }
-    ]
-}
+    }
 ]

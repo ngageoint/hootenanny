@@ -28,10 +28,9 @@
 #define CONFLATECASETEST_H
 
 // Qt
-#include <QDir>
 #include <QStringList>
 
-#include "AbstractTest.h"
+#include <hoot/core/test/AbstractTest.h>
 
 namespace hoot
 {

@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
@@ -44,23 +45,15 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Tgs
 #include <tgs/StreamUtils.h>
-
-#include "../../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class BuildingMatchCreatorTest : public CppUnit::TestFixture
+class BuildingMatchCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingMatchCreatorTest);
   CPPUNIT_TEST(runMatchTest);

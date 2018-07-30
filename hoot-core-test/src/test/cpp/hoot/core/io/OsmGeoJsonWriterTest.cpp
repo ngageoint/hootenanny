@@ -31,23 +31,18 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmGeoJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
 // TGS
 #include <tgs/Statistics/Random.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class OsmGeoJsonWriterTest : public CppUnit::TestFixture
+class OsmGeoJsonWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmGeoJsonWriterTest);
   CPPUNIT_TEST(runAllDataTypesTest);
@@ -59,8 +54,9 @@ class OsmGeoJsonWriterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/GeoJson");
   }
 

@@ -27,13 +27,9 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/rnd/scoring/RasterComparator.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -41,16 +37,10 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-
-// Standard
-#include <stdio.h>
-
 namespace hoot
 {
 
-class RasterComparatorTest : public CppUnit::TestFixture
+class RasterComparatorTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(RasterComparatorTest);
     CPPUNIT_TEST(runTest);

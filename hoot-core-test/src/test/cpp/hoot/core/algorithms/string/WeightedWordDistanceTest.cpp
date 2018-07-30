@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/string/TextFileWordWeightDictionary.h>
@@ -38,12 +39,10 @@
 // Tgs
 #include <tgs/System/SystemInfo.h>
 
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class WeightedWordDistanceTest : public CppUnit::TestFixture
+class WeightedWordDistanceTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WeightedWordDistanceTest);
   CPPUNIT_TEST(runTest);

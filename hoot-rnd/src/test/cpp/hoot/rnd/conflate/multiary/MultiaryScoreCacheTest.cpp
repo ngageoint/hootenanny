@@ -42,7 +42,7 @@ using namespace std;
 namespace hoot
 {
 
-class MultiaryScoreCacheTest : public CppUnit::TestFixture
+class MultiaryScoreCacheTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryScoreCacheTest);
   CPPUNIT_TEST(basicTest);

@@ -26,25 +26,22 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/HighwayCriterion.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
+#include <hoot/core/conflate/network/OsmNetworkExtractor.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h>
-#include <hoot/core/conflate/network/OsmNetworkExtractor.h>
-
-// Qt
-#include <QDir>
 
 namespace hoot
 {
 
-class SingleSidedNetworkMatcherTest : public CppUnit::TestFixture
+class SingleSidedNetworkMatcherTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SingleSidedNetworkMatcherTest);
   CPPUNIT_TEST(toyTest);

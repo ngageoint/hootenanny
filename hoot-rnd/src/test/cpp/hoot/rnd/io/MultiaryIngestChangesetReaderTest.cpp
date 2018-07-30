@@ -22,20 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
-#include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Node.h>
-
-// Qt
-#include <QDir>
+#include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 
 namespace hoot
 {
 
-class MultiaryIngestChangesetReaderTest : public CppUnit::TestFixture
+class MultiaryIngestChangesetReaderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryIngestChangesetReaderTest);
   CPPUNIT_TEST(elementAsJsonTest);

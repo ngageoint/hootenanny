@@ -26,20 +26,17 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 
-using namespace hoot;
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class ReviewMarkerTest : public CppUnit::TestFixture
+class ReviewMarkerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ReviewMarkerTest);
   CPPUNIT_TEST(runNeedsReviewTest);

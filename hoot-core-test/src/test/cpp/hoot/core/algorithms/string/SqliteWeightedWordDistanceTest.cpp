@@ -26,18 +26,17 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/System/SystemInfo.h>
 
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class SqliteWordWeightDictionaryTest : public CppUnit::TestFixture
+class SqliteWordWeightDictionaryTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SqliteWordWeightDictionaryTest);
   CPPUNIT_TEST(runTest);

@@ -8,7 +8,7 @@ Percentage of Total Features Conflatable	100	100	0
 Untagged Feature Count	0	0	0	
 Total Unconflatable Features	0	0	0	
 Percentage of Total Features Unconflatable	0	0	0	
-Number of Match Creators	6	6	6	
+Number of Match Creators	8	8	8	
 Features Conflatable by: hoot::BuildingMatchCreator	10	8	0	
 Polygons Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0	
 POIs Conflatable by: hoot::PoiPolygonMatchCreator	0	0	0	
@@ -95,8 +95,18 @@ Meters of Railway Processed by Conflation	0	0	0
 Percentage of Railways Conflated	0	0	0	
 Percentage of Railways Marked for Review	0	0	0	
 Percentage of Unmatched Railways	0	0	0	
+Power Line Count	0	0	0	
+Conflatable Power Lines	0	0	0	
+Conflated Power Lines	0	0	0	
+Power Lines Marked for Review	0	0	0	
+Number of Power Line Reviews to be Made	0	0	0	
+Unmatched Power Lines	0	0	0	
+Meters of Power Line Processed by Conflation	0	0	0	
+Percentage of Power Lines Conflated	0	0	0	
+Percentage of Power Lines Marked for Review	0	0	0	
+Percentage of Unmatched Power Lines	0	0	0	
 Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
 Difference Between Total Features in Output and Total Features in Inputs			-4	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-22.22222222222222	
 
-17:06:07.446 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 355) Conflation job completed.
+20:57:06.435 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 377) Conflation job completed.

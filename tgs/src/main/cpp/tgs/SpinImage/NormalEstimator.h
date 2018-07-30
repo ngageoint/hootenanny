@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__NORMAL_ESTIMATOR_H__
@@ -31,10 +31,10 @@
 // Standard Includes
 #include <queue>
 
-#include "../HashMap.h"
-#include "../SharedPtr.h"
-#include "../TgsExport.h"
-#include "Points.h"
+#include <tgs/HashMap.h>
+#include <tgs/SharedPtr.h>
+#include <tgs/TgsExport.h>
+#include <tgs/SpinImage/Points.h>
 
 namespace Tgs
 {

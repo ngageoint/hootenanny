@@ -33,10 +33,10 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/manipulators/WayMerger.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -44,16 +44,10 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
-// Qt
-#include <QDir>
-#include <QFile>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class MatchFeatureExtractorTest : public CppUnit::TestFixture
+class MatchFeatureExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MatchFeatureExtractorTest);
   CPPUNIT_TEST(runBuildingTest);
@@ -61,8 +55,9 @@ class MatchFeatureExtractorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::resetEnvironment();
   }
 

@@ -57,7 +57,6 @@ public:
     if (e->getElementType() == ElementType::Way)
     {
       const ConstWayPtr& w = boost::dynamic_pointer_cast<const Way>(e);
-      //const ConstWayPtr& w = _map.getWay(e->getId());
 
       vector<long> nodes = w->getNodeIds();
       if (nodes[0] != nodes[nodes.size() - 1])
@@ -85,9 +84,26 @@ private:
   const OsmMap& _map;
 };
 
-AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing, unsigned int bins)
-  : _smoothing(smoothing), _bins(bins)
+AngleHistogramExtractor::AngleHistogramExtractor()
 {
+  setConfiguration(conf());
+}
+
+AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing, unsigned int bins) :
+_smoothing(smoothing),
+_bins(bins)
+{
+  LOG_VART(_smoothing);
+  LOG_VART(_bins);
+}
+
+void AngleHistogramExtractor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions options(conf);
+  _smoothing = options.getAngleHistogramExtractorSmoothing();
+  _bins = options.getAngleHistogramExtractorBins();
+  LOG_VART(_smoothing);
+  LOG_VART(_bins);
 }
 
 Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const ConstElementPtr& e)

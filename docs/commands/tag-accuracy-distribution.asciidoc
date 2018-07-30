@@ -1,0 +1,34 @@
+== tag-accuracy-distribution
+
+=== Description
+
+The +tag-accuracy-distribution+ command prints out the distribution of accuracy (circular error) values, in meters, for all ways in 
+the input data.
+
+* +input+ - Input; must be an OSM XML file
+
+=== Usage
+
+--------------------------------------
+tag-accuracy-distribution (input.osm)
+--------------------------------------
+
+==== Example Usage
+
+--------------------------------------
+hoot tag-accuracy-distribution test-files/ToyTestA.osm
+--------------------------------------
+
+==== Example Output
+
+The first number represents a unique accuracy value found and the second number represents the 
+number of times that value occurs in the input data.  The number in parantheses indicates
+what percentage the unique accuracy value makes up of all the unique accuracy values found.
+
+---------------------
+15 : 14 (1)
+---------------------
+
+For the above, 14 ways were found with an accuracy of 15 meters and the value of 15 meters
+represents 100% of the ways examined.
+

@@ -32,15 +32,12 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ObjectOutputStream.h>
-
-using namespace hoot;
 
 // Standard
 #include <sstream>
 using namespace std;
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
@@ -64,7 +61,7 @@ public:
   int b;
 };
 
-class ObjectOutputStreamTest : public CppUnit::TestFixture
+class ObjectOutputStreamTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ObjectOutputStreamTest);
   CPPUNIT_TEST(runToyTest);

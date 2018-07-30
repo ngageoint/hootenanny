@@ -1,0 +1,98 @@
+{
+  "jakarta_raya_coastline.shp":{
+    "jakarta_raya_coastline":{
+      "NATURAL":[
+        "shoreline",
+        "water"
+        ]
+      }
+  }
+}
+{
+  "jakarta_raya_coastline.shp":{
+    "jakarta_raya_coastline":{
+      "NATURAL":[
+        "shoreline"
+        ]
+      }
+  }
+}
+{
+  "DcTigerRoads.osm":{
+    "osm":{
+      "foot":[
+        "designated"
+        ],
+      "highway":[
+        "path",
+        "primary",
+        "road",
+        "secondary",
+        "unclassified"
+        ],
+      "name":[
+        "D St NW",
+        "Ellipse Rd NW",
+        "Pennsylvania Ave NW",
+        "Snows Ct NW",
+        "Vermont Ave NW"
+        ]
+      }
+  }
+}
+{
+  "DcTigerRoads.osm":{
+    "osm":[
+      "foot",
+      "highway",
+      "name"
+      ]
+
+  }
+}
+{
+  "DcTigerRoads.osm":{
+    "osm":{
+      "foot":[
+        "designated"
+        ],
+      "highway":[
+        "path",
+        "primary",
+        "road",
+        "secondary",
+        "unclassified"
+        ]
+      }
+  }
+}
+{
+  "DcTigerRoads.osm":{
+    "osm":{
+      "foot":[
+        "designated"
+        ]
+      }
+  }
+}
+{
+  "DcTigerRoads.osm":{
+    "osm":{
+      "foot":[
+        "designated"
+        ],
+      "highway":[
+        "path",
+        "primary",
+        "road",
+        "secondary",
+        "unclassified"
+        ]
+      }
+  }
+}
+{
+  "DcTigerRoads.osm":{
+No keys found from input key list.
+  }
+}

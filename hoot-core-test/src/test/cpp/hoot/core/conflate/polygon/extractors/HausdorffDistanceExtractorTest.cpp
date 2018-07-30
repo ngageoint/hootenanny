@@ -26,13 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-using namespace hoot;
+#include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -40,32 +40,19 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Tgs
 #include <tgs/StreamUtils.h>
-
-#include "../../../TestUtils.h"
 
 namespace hoot
 {
 
-class HausdorffDistanceExtractorTest : public CppUnit::TestFixture
+class HausdorffDistanceExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HausdorffDistanceExtractorTest);
   CPPUNIT_TEST(runRoadsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void setUp()
-  {
-    TestUtils::resetEnvironment();
-  }
 
   OsmMapPtr _map;
 

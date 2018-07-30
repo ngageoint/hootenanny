@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/OsmApiDb.h>
@@ -40,24 +41,19 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmApiDbBulkInserter.h>
-#include <hoot/core/visitors/RemoveAttributeVisitor.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
-#include "ServicesDbTestUtils.h"
+#include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class ServiceOsmApiDbReaderTest : public CppUnit::TestFixture
+class ServiceOsmApiDbReaderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbReaderTest);
   CPPUNIT_TEST(runReadOsmApiTest);
@@ -69,8 +65,9 @@ public:
 
   static QString userEmail() { return "ServiceOsmApiDbReaderTest@hoottestcpp.org"; }
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
   }
 
@@ -204,7 +201,7 @@ public:
     //Need to remove timestamps, otherwise they cause issues with the compare
     QList<ElementAttributeType> types;
     types.append(ElementAttributeType(ElementAttributeType::Timestamp));
-    RemoveAttributeVisitor attrVis(types);
+    RemoveAttributesVisitor attrVis(types);
     map->visitRw(attrVis);
 
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbReaderTest");

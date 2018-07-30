@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CentroidDistanceExtractor.h"
 
@@ -44,7 +44,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(FeatureExtractor, CentroidDistanceExtractor)
 
 double CentroidDistanceExtractor::distance(const OsmMap &map,
-  const boost::shared_ptr<const Element>& target, const boost::shared_ptr<const Element> &candidate) const
+  const boost::shared_ptr<const Element>& target,
+  const boost::shared_ptr<const Element> &candidate) const
 {
   ElementConverter ec(map.shared_from_this());
   boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);

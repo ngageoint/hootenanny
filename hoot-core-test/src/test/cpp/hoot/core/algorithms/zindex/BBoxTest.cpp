@@ -35,9 +35,8 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/zindex/BBox.h>
-
-#include "../../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -45,7 +44,7 @@ using namespace std;
 namespace hoot
 {
 
-class BBoxTest : public CppUnit::TestFixture
+class BBoxTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BBoxTest);
   CPPUNIT_TEST(testBasics);

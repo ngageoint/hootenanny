@@ -33,21 +33,14 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Tgs
 #include <tgs/StreamUtils.h>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 
@@ -58,7 +51,7 @@ namespace hoot
  * all the hard core tests are in MaximalNearestSublineTest. This just makes sure the interface is
  * wrapped properly.
  */
-class MaximalNearestSublineMatcherTest : public CppUnit::TestFixture
+class MaximalNearestSublineMatcherTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MaximalNearestSublineMatcherTest);
   CPPUNIT_TEST(runSimpleTest);

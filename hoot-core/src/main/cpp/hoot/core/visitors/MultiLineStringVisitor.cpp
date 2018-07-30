@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringVisitor.h"
 
@@ -35,12 +35,15 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, MultiLineStringVisitor)
 
 MultiLineStringVisitor::MultiLineStringVisitor() :
   _provider(),

@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include "../../../TestUtils.h"
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h>
@@ -42,7 +42,7 @@ using namespace std;
 namespace hoot
 {
 
-class PoiPolygonMatchVisitorTest : public CppUnit::TestFixture
+class PoiPolygonMatchVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMatchVisitorTest);
   CPPUNIT_TEST(runIsCandidateTest);

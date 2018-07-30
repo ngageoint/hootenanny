@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLATOR_H
 #define CONFLATOR_H
@@ -149,7 +149,7 @@ protected:
   bool _debug;
   int _maxIterations;
   double _bestScore;
-  Meters _vectorError, _maxDividedSeparation;
+  Meters _maxDividedSeparation;
   std::priority_queue<
           boost::shared_ptr<const WorkingMap>,
           std::deque< boost::shared_ptr<const WorkingMap> >,

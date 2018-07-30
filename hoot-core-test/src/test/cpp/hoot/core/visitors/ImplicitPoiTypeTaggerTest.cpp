@@ -26,19 +26,16 @@
  */
 
 // Hoot
-#include "../TestUtils.h"
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
-#include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
-
-// Qt
-#include <QDir>
 
 namespace hoot
 {
 
-class ImplicitPoiTypeTaggerTest : public CppUnit::TestFixture
+class ImplicitPoiTypeTaggerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitPoiTypeTaggerTest);
   CPPUNIT_TEST(runBasicTest);
@@ -52,13 +49,10 @@ public:
   static QString inDir() { return "test-files/visitors/ImplicitPoiTypeTaggerTest"; }
   static QString outDir() { return "test-output/visitors/ImplicitPoiTypeTaggerTest"; }
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath(outDir());
-  }
-  void tearDown()
-  {
-    TestUtils::resetEnvironment();
   }
 
   void runBasicTest()

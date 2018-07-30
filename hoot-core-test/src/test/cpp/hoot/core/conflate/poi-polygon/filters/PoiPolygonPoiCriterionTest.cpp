@@ -26,19 +26,15 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
-
-// Qt
-#include <QDir>
-
-#include "../../../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class PoiPolygonPoiCriterionTest : public CppUnit::TestFixture
+class PoiPolygonPoiCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonPoiCriterionTest);
   CPPUNIT_TEST(runBasicTest);

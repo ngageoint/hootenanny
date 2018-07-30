@@ -26,11 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
 #include <hoot/js/conflate/js/ScriptMatchCreator.h>
@@ -47,9 +47,10 @@ using namespace v8;
 namespace hoot
 {
 
-class ScriptMatchTest : public CppUnit::TestFixture
+class ScriptMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ScriptMatchTest);
+  //TODO: should this test be re-enabled?
   //CPPUNIT_TEST(cacheTest);
   CPPUNIT_TEST(conflictTest);
   CPPUNIT_TEST_SUITE_END();

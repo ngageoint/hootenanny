@@ -30,9 +30,9 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -40,21 +40,16 @@
 #include <hoot/core/ops/RefRemoveOp.h>
 #include <hoot/core/ops/FindIntersectionsOp.h>
 #include <hoot/core/util/Log.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
+#include <hoot/core/util/MapProjector.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
-
-#include "../TestUtils.h"
+using namespace Tgs;
 
 namespace hoot
 {
-using namespace Tgs;
 
-class FindIntersectionsOpTest : public CppUnit::TestFixture
+class FindIntersectionsOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(FindIntersectionsOpTest);
   CPPUNIT_TEST(runToyTest);
@@ -62,9 +57,9 @@ class FindIntersectionsOpTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
-    TestUtils::resetEnvironment();
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/ops/FindIntersectionsOp/");
   }
 

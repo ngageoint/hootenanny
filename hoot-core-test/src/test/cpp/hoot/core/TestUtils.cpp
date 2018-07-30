@@ -31,11 +31,10 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>

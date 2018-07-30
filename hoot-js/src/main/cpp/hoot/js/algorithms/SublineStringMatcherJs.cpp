@@ -31,7 +31,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
@@ -91,6 +91,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
     if (match.isEmpty())
     {
+      LOG_TRACE("Empty match");
       args.GetReturnValue().SetUndefined();
       return;
     }
@@ -100,25 +101,26 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     eids.insert(e1->getElementId());
     eids.insert(e2->getElementId());
     OsmMapPtr copiedMap(new OsmMap(m->getProjection()));
-    CopySubsetOp(m, eids).apply(copiedMap);
+    CopyMapSubsetOp(m, eids).apply(copiedMap);
     WaySublineMatchString copiedMatch(match, copiedMap);
 
     // split the shared line based on the matching subline
     ElementPtr match1, scraps1;
     ElementPtr match2, scraps2;
     WaySublineCollection string1 = copiedMatch.getSublineString1();
+    LOG_VART(string1);
     WaySublineCollection string2 = copiedMatch.getSublineString2();
+    LOG_VART(string2);
 
+    MultiLineStringSplitter splitter;
     try
     {
-      MultiLineStringSplitter().split(copiedMap, string1, copiedMatch.getReverseVector1(), match1,
-        scraps1);
-      MultiLineStringSplitter().split(copiedMap, string2, copiedMatch.getReverseVector2(), match2,
-        scraps2);
+      splitter.split(copiedMap, string1, copiedMatch.getReverseVector1(), match1, scraps1);
+      splitter.split(copiedMap, string2, copiedMatch.getReverseVector2(), match2, scraps2);
     }
     catch (const IllegalArgumentException&)
     {
-      // this is unusual print out some information useful to debugging.
+      // this is unusual; print out some information useful to debugging.
       MapProjector::projectToWgs84(copiedMap);
       LOG_TRACE(OsmXmlWriter::toString(copiedMap));
       logWarnCount++;
@@ -127,10 +129,12 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
     if (!match1 || !match2)
     {
+      LOG_TRACE("No match");
       result = Undefined(current);
     }
     else
     {
+      LOG_TRACE("match");
       Handle<Object> obj = Object::New(current);
       obj->Set(String::NewFromUtf8(current, "map"), OsmMapJs::create(copiedMap));
       obj->Set(String::NewFromUtf8(current, "match1"), ElementJs::New(match1));

@@ -26,12 +26,11 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
-
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -43,8 +42,6 @@ using namespace hoot;
 #include <QDebug>
 #include <QFile>
 
-#include "../TestUtils.h"
-
 const double epsilon = 1e-6;
 
 using namespace geos::geom;
@@ -53,7 +50,7 @@ using namespace std;
 namespace hoot
 {
 
-class OsmSchemaTest : public CppUnit::TestFixture
+class OsmSchemaTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmSchemaTest);
   CPPUNIT_TEST(averageTest);
@@ -424,11 +421,11 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
 
     t.clear();
-    t["building:part"] = "yes";
+    t[MetadataTags::BuildingPart()] = "yes";
     CPPUNIT_ASSERT_EQUAL(true, uut.isArea(t, ElementType::Way));
-    t["building:part"] = "no";
+    t[MetadataTags::BuildingPart()] = "no";
     CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
-    t["building:part"] = "invalid";
+    t[MetadataTags::BuildingPart()] = "invalid";
     CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
 
     t.clear();

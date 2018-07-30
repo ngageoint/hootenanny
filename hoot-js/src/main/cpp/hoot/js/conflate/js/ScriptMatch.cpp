@@ -27,24 +27,10 @@
 #include "ScriptMatch.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/aggregator/MeanAggregator.h>
-#include <hoot/core/algorithms/aggregator/RmseAggregator.h>
-#include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
-#include <hoot/core/algorithms/MaxWordSetDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/merging/Merger.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/CopySubsetOp.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/conflate/js/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
@@ -56,9 +42,6 @@
 
 // Standard
 #include <sstream>
-
-// tgs
-#include <tgs/RandomForest/RandomForest.h>
 
 using namespace std;
 using namespace Tgs;
@@ -271,7 +254,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
   eids.insert(other2);
 
   OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
-  CopySubsetOp(map, eids).apply(copiedMap);
+  CopyMapSubsetOp(map, eids).apply(copiedMap);
 
   Handle<Object> copiedMapJs = OsmMapJs::create(copiedMap);
 
@@ -411,6 +394,7 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
   global->Get(String::NewFromUtf8(current, "plugin"));
 
   std::map<QString, double> result;
+  LOG_TRACE("Calling getMatchFeatureDetails...");
   Handle<Value> v = _callGetMatchFeatureDetails(map);
 
   if (v.IsEmpty() || v->IsObject() == false)
@@ -420,6 +404,8 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
   }
 
   QVariantMap vm = toCpp<QVariantMap>(v);
+  long valCtr = 0;
+  LOG_VART(vm.size());
   for (QVariantMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
   {
     if (it.value().isNull() == false)
@@ -439,6 +425,12 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
         logWarnCount++;
       }
     }
+    valCtr++;
+  }
+
+  if (vm.size() > 0)
+  {
+    LOG_DEBUG("Processed " << vm.size() << " sample values.");
   }
 
   return result;

@@ -32,14 +32,15 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/BuildingCriterion.h>
-#include <hoot/core/filters/NonBuildingAreaCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 
 //Qt
 #include <QDateTime>
+#include <QRegExp>
 
 using namespace geos::geom;
 using namespace std;
@@ -101,6 +102,13 @@ QString OsmUtils::toTimeString(quint64 timestamp)
 
 quint64 OsmUtils::fromTimeString(QString timestamp)
 {
+  //2016-05-04T22:07:19Z
+  QRegExp timestampRegex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z*");
+  if (!timestampRegex.exactMatch(timestamp))
+  {
+    throw IllegalArgumentException("Invalid timestamp string: " + timestamp);
+  }
+
   struct tm t;
   strptime(timestamp.toStdString().c_str(), "%Y-%m-%dT%H:%M:%SZ", &t);
 

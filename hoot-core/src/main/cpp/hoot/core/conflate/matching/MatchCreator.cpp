@@ -28,14 +28,15 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/BuildingCriterion.h>
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/WaterwayCriterion.h>
-#include <hoot/core/filters/HighwayFilter.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/WaterwayCriterion.h>
+#include <hoot/core/criterion/HighwayFilter.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
-#include <hoot/core/filters/NonBuildingAreaCriterion.h>
-#include <hoot/core/filters/RailwayCriterion.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
 
 namespace hoot
 {
@@ -60,6 +61,8 @@ QString MatchCreator::BaseFeatureTypeToString(BaseFeatureType t)
       return "Area";
     case Railway:
       return "Railway";
+    case PowerLine:
+      return "Power Line";
     case Unknown:
     default:
       return "Unknown";
@@ -85,6 +88,8 @@ MatchCreator::BaseFeatureType MatchCreator::StringToBaseFeatureType(QString s)
     return Area;
   else if (0 == s.compare("railway"))
     return Railway;
+  else if (0 == s.compare("powerline"))
+    return PowerLine;
   else
     return Unknown;
 }
@@ -108,6 +113,8 @@ MatchCreator::FeatureCalcType MatchCreator::getFeatureCalcType (BaseFeatureType 
     case Area:
       return CalcTypeArea;
     case Railway:
+      return CalcTypeLength;
+    case PowerLine:
       return CalcTypeLength;
     case Unknown:
     default:
@@ -135,6 +142,8 @@ ElementCriterionPtr MatchCreator::getElementCriterion (BaseFeatureType t, ConstO
       return ElementCriterionPtr(new NonBuildingAreaCriterion());
     case Railway:
       return ElementCriterionPtr(new RailwayCriterion());
+    case PowerLine:
+      return ElementCriterionPtr(new PowerLineCriterion());
     case Unknown:
     default:
       return ElementCriterionPtr();

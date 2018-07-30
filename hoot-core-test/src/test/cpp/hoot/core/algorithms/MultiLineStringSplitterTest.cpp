@@ -35,25 +35,16 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-// Qt
-#include <QDir>
-#include <QString>
-
-// Standard
-#include <string>
+#include <hoot/core/util/MapProjector.h>
 
 // TGS
 #include <tgs/System/Time.h>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -61,7 +52,7 @@ using namespace std;
 namespace hoot
 {
 
-class MultiLineStringSplitterTest : public CppUnit::TestFixture
+class MultiLineStringSplitterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiLineStringSplitterTest);
   CPPUNIT_TEST(runTest);

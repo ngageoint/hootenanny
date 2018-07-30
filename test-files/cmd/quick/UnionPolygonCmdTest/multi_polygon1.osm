@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-39042' action='modify' visible='true' lat='0.01620694983' lon='-0.028734353' />
+  <node id='-39043' action='modify' visible='true' lat='0.01612187409' lon='-0.02022677884' />
+  <node id='-39045' action='modify' visible='true' lat='0.00876282262' lon='-0.02022677884' />
+  <node id='-39047' action='modify' visible='true' lat='0.0089329741' lon='-0.02879815981' />
+  <node id='-39066' action='modify' visible='true' lat='0.0217794106' lon='-0.02556528162' />
+  <node id='-39067' action='modify' visible='true' lat='0.01792973352' lon='-0.02745821687' />
+  <node id='-39069' action='modify' visible='true' lat='0.01750435483' lon='-0.02309808512' />
+  <way id='-39044' action='modify' visible='true'>
+    <nd ref='-39042' />
+    <nd ref='-39043' />
+    <nd ref='-39045' />
+    <nd ref='-39047' />
+    <nd ref='-39042' />
+  </way>
+  <way id='-39068' action='modify' visible='true'>
+    <nd ref='-39066' />
+    <nd ref='-39067' />
+    <nd ref='-39069' />
+    <nd ref='-39066' />
+  </way>
+  <relation id='-39089' action='modify' visible='true'>
+    <member type='way' ref='-39068' role='outer' />
+    <member type='way' ref='-39044' role='outer' />
+    <tag k='landuse' v='forest' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+</osm>

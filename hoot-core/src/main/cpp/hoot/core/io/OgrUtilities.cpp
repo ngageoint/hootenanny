@@ -31,6 +31,7 @@
 #include <gdal_priv.h>
 
 // hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
@@ -183,8 +184,19 @@ boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, b
   LOG_VART(driverInfo._driverType);
   const char* drivers[2] = { driverInfo._driverName, NULL };
   LOG_VART(url.toUtf8().data());
+
+  // Setup read options for various file types
+  OgrOptions options;
+  if (QString(driverInfo._driverName) == "CSV")
+  {
+    options["X_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLonfield();
+    options["Y_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLatfield();
+//    options["Z_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvZfield();
+    options["KEEP_GEOM_COLUMNS"] = ConfigOptions().getOgrReaderCsvKeepGeomFields();
+  }
+
   boost::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),
-    driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL)));
+    driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), options.getCrypticOptions(), NULL)));
 
   if (!result)
     throw HootException("Unable to open: " + url);

@@ -12,10 +12,10 @@ include::developer/HootenannyFasterCompile.asciidoc[]
 include::developer/HootenannyInconsistentOutput.asciidoc[]
 include::developer/HootenannyNotesOnConfigure.asciidoc[]
 include::developer/HootenannyDevelopmentAdvancedOptionsInfo.asciidoc[]
-include::developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc[]
-include::developer/HootenannyOsmApiDatabaseConflationNotes.asciidoc[]
 include::developer/HootenannyManualConflation.asciidoc[]
 include::developer/HootenannyManualMultiaryConflation.asciidoc[]
+include::developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc[]
+include::developer/HootenannyOsmApiDatabaseConflationNotes.asciidoc[]
 include::developer/HootenannyImplicitTagDatabaseGeneration.asciidoc[]
 
 

@@ -36,7 +36,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -50,10 +50,11 @@
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/filters/BuildingCriterion.h>
-#include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
+#include <hoot/core/io/MultipleChangesetProvider.h>
 
 // Standard
 #include <fstream>
@@ -90,7 +91,7 @@ boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, Os
   return delta;
 }
 
-void ConflateCmd::_writeChangeset(OsmMapPtr pMap, QString outFileName)
+ChangesetProviderPtr ConflateCmd::_getChangesetFromMap(OsmMapPtr pMap)
 {
   // Make empty map
   OsmMapPtr pEmptyMap(new OsmMap());
@@ -98,9 +99,8 @@ void ConflateCmd::_writeChangeset(OsmMapPtr pMap, QString outFileName)
   // Get Changeset Deriver
   boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
 
-  // Write the file!
-  OsmXmlChangesetFileWriter writer;
-  writer.write(outFileName, pDeriver);
+  // Return the provider
+  return pDeriver;
 }
 
 int ConflateCmd::runSimple(QStringList args)
@@ -134,6 +134,22 @@ int ConflateCmd::runSimple(QStringList args)
   {
     isDiffConflate = true;
     args.removeAt(args.indexOf("--differential"));
+  }
+
+  // Check for tags argument "--Include-Tags"
+  bool conflateTags = false;
+  if (args.contains("--include-tags"))
+  {
+    conflateTags = true;
+    args.removeAt(args.indexOf("--include-tags"));
+  }
+
+  // Check for separate output files (for geometry & tags)
+  bool separateOutput = false;
+  if (args.contains("--separate-output"))
+  {
+    separateOutput = true;
+    args.removeAt(args.indexOf("--separate-output"));
   }
 
   if (args.size() < 2 || args.size() > 3)
@@ -173,8 +189,12 @@ int ConflateCmd::runSimple(QStringList args)
   IoUtils::loadMap(
     map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
 
+  DiffConflator diffConflator;
   if (isDiffConflate)
   {
+    // Store original IDs for tag diff
+    diffConflator.storeOriginalIDs(map);
+
     // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
     Settings visitorConf;
     visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
@@ -229,9 +249,8 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate)
   {
     // call the diff conflator
-    DiffConflator conflator;
-    conflator.apply(result);
-    stats.append(conflator.getStats());
+    diffConflator.apply(result);
+    stats.append(diffConflator.getStats());
     stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
   }
   else
@@ -262,13 +281,56 @@ int ConflateCmd::runSimple(QStringList args)
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
-  if (output.endsWith(".osc"))
-  {
-    _writeChangeset(result, output);
+  // Figure out what to write
+  if (isDiffConflate && output.endsWith(".osc"))
+  { // Write a changeset
+    ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(result);
+    ChangesetProviderPtr pTagChanges;
+    if (conflateTags)
+    {
+      pTagChanges = diffConflator.getTagDiff();
+    }
+
+    if (!conflateTags)
+    { // only one changeset to write
+      OsmXmlChangesetFileWriter writer;
+      writer.write(output, pGeoChanges);
+    }
+    else if(separateOutput)
+    { // write two changesets
+      OsmXmlChangesetFileWriter writer;
+      writer.write(output, pGeoChanges);
+
+      QString outFileName = output;
+      outFileName.replace(".osc", "");
+      outFileName.append(".tags.osc");
+      OsmXmlChangesetFileWriter tagChangeWriter;
+      tagChangeWriter.write(outFileName, pTagChanges);
+    }
+    else
+    { // write unified output
+      MultipleChangesetProviderPtr pChanges(new MultipleChangesetProvider(result->getProjection()));
+      pChanges->addChangesetProvider(pGeoChanges);
+      pChanges->addChangesetProvider(pTagChanges);
+      OsmXmlChangesetFileWriter writer;
+      writer.write(output, pChanges);
+    }
   }
   else
-  {
+  { // Write a map
     IoUtils::saveMap(result, output);
+  }
+
+  // Do the tags if we need to
+  if (isDiffConflate && conflateTags)
+  {
+    LOG_INFO("Generating tag changeset...");
+    MemChangesetProviderPtr pTagChanges = diffConflator.getTagDiff();
+
+    // Write the file!
+    QString outFileName = output;
+    outFileName.replace(".osm", "");
+
   }
 
   double timingOutput = t.getElapsedAndRestart();

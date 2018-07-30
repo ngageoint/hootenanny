@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/filters/ElementCriterionConsumer.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -54,13 +54,10 @@ public:
    */
   RemoveElementsVisitor();
 
-  RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter);
+  RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter,
+                        bool negateFilter = false);
 
-  virtual void addCriterion(const ElementCriterionPtr& e)
-  {
-    assert(_filter.get() == 0);
-    _filter = e;
-  }
+  virtual void addCriterion(const ElementCriterionPtr& e);
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -79,12 +76,16 @@ public:
 
   virtual QString getDescription() const { return "Removes elements that satisfy a filter"; }
 
+  void setNegateFilter(bool negate) { _negateFilter = negate; }
+
 private:
 
   OsmMap* _map;
   boost::shared_ptr<ElementCriterion> _filter;
   bool _recursive;
   int _count;
+  //This allows for negating the filter as an option sent in from the command line.
+  bool _negateFilter;
 };
 
 

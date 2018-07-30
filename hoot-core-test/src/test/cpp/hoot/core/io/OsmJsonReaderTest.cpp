@@ -45,7 +45,7 @@
 namespace hoot
 {
 
-class OsmJsonReaderTest : public CppUnit::TestFixture
+class OsmJsonReaderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmJsonReaderTest);
   CPPUNIT_TEST(nodeTest);

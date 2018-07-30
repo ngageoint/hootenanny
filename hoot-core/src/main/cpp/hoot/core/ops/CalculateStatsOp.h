@@ -28,7 +28,7 @@
 #define CALCULATESTATSOP_H
 
 // hoot
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include "ConstOsmMapOperation.h"
@@ -45,6 +45,8 @@ class FilteredVisitor;
 class CalculateStatsOp : public ConstOsmMapOperation
 {
 public:
+
+  static std::string className() { return "hoot::CalculateStatsOp"; }
 
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",

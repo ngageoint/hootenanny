@@ -59,7 +59,8 @@ public:
     Polygon = 5,    //polygon is a superset of building
     Area = 6,
     Railway = 7,
-    Unknown = 8 // Unknown must always be last
+    PowerLine = 8,
+    Unknown = 9 // Unknown must always be last
   };
 
   enum FeatureCalcType
