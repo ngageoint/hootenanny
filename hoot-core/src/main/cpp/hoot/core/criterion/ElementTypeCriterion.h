@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-class ElementTypeCriterion : public BaseElementFilter
+class ElementTypeCriterion : public ElementCriterion
 {
 
 public:

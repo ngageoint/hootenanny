@@ -33,7 +33,7 @@
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/criterion/TagContainsFilter.h>
+#include <hoot/core/criterion/TagContainsCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -212,14 +212,13 @@ void MatchComparator::_clearCache()
 bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,
   const ConstOsmMapPtr& /*conflated*/)
 {
-  TagContainsFilter tcf(Filter::KeepMatches, "uuid", uuid1);
+  TagContainsCriterion tcf("uuid", uuid1);
   tcf.addPair("uuid", uuid2);
   ElementIdSetVisitor sv;
   FilteredVisitor fv2(tcf, sv);
   in->visitRo(fv2);
   const set<ElementId>& s = sv.getElementSet();
 
-  //QStringList interesting = QString("009489").split(";");
   QStringList interesting;
 
   bool found = false;
