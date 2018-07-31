@@ -71,7 +71,6 @@ void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
 
   /// @todo move this to a config file.
   // pragmatically remove "bad" data in OSM afghanistan
-  //map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));
   boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("source", "AIMS"));
   RemoveElementsVisitor::removeWays(map, pCrit);
 
@@ -85,21 +84,8 @@ void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   IntersectionSplitter::splitIntersections(map);
   UnlikelyIntersectionRemover::removeIntersections(map);
   LOG_INFO("Assuming drives on right.");
-//  map = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 12.5);
-//  map = ImpliedDividedMarker::markDivided(map);
-
-//  LOG_INFO("removeDuplicates()");
-//  DuplicateNameRemover::removeDuplicates(map);
-//  LOG_INFO("SmallWayMerger::mergeWays()");
-//  SmallWayMerger::mergeWays(map, 15.0);
-
-//  LOG_INFO("RemoveEmptyAreasVisitor()");
-//  VisitorOp(new RemoveEmptyAreasVisitor()).apply(map);
-//  LOG_INFO("RemoveDuplicateAreaVisitor()");
-//  VisitorOp(new RemoveDuplicateAreaVisitor()).apply(map);
 
   // find all intersections
-//  LOG_INFO("FindIntersectionsVisitor()");
   boost::shared_ptr<FindIntersectionsVisitor> v(new FindIntersectionsVisitor());
   VisitorOp(v).apply(map);
   LOG_INFO(QString("%1 Intersections found.").arg(v->getIntersections().size()));
@@ -109,7 +95,8 @@ void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   VisitorOp(new RemoveElementsVisitor(wayFilter)).apply(map);
 
   // then remove everything except for the intersection that we found
-  boost::shared_ptr<IntersectionFilter> intersectionFilter(new IntersectionFilter(v->getIntersections()));
+  boost::shared_ptr<IntersectionFilter> intersectionFilter(
+    new IntersectionFilter(v->getIntersections()));
   VisitorOp(new RemoveElementsVisitor(intersectionFilter)).apply(map);
 
   MapCleaner().apply(map);
