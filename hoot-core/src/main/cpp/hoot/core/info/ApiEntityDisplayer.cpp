@@ -60,10 +60,10 @@ public:
 
 template<typename ApiEntity>
 void printApiEntities(const std::string& apiEntityClassName, const QString apiEntityType,
-                      const bool displayType)
+                      const bool displayType,
+                      //the size of the longest names plus a 3 space buffer
+                      const int maxNameSize)
 {
-  //the size of the longest names plus a 3 space buffer
-  const int maxNameSize = 45;
   const int maxTypeSize = 18;
 
   std::vector<std::string> cmds =
@@ -160,42 +160,50 @@ void printApiEntities2(const std::string& apiEntityClassName)
 void ApiEntityDisplayer::display(const QString apiEntityType)
 {
   DisableLog dl;
-  QString msg = " (prepend 'hoot::' before using; * = implements SingleStatistic):";
+  QString msg = " (prepend 'hoot::' before using";
   if (apiEntityType == "operators")
   {
+    msg += "* = implements SingleStatistic):";
     msg.prepend("Operators");
     std::cout << msg << std::endl << std::endl;
 
-    printApiEntities<ElementCriterion>(ElementCriterion::className(), "criterion", true);
-    printApiEntities<OsmMapOperation>(OsmMapOperation::className(), "operation", true);
+    const int maxNameSize = 45;
+    printApiEntities<ElementCriterion>(
+      ElementCriterion::className(), "criterion", true, maxNameSize);
+    printApiEntities<OsmMapOperation>(OsmMapOperation::className(), "operation", true, maxNameSize);
     //TODO: would like to combine these into one, as far as the display is concerned, somehow
-    printApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true);
+    printApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true, maxNameSize);
     printApiEntities<ConstElementVisitor>(
-      ConstElementVisitor::className(), "visitor (const)", true);
+      ConstElementVisitor::className(), "visitor (const)", true, maxNameSize);
   }
   else if (apiEntityType == "feature-extractors")
   {
+    msg += "):";
     msg.prepend("Feature Extractors");
     std::cout << msg << std::endl << std::endl;
-    printApiEntities<FeatureExtractor>(FeatureExtractor::className(), "feature extractor", false);
+    printApiEntities<FeatureExtractor>(
+      FeatureExtractor::className(), "feature extractor", false, 45);
   }
   else if (apiEntityType == "matchers")
   {
+    msg += "):";
     msg.prepend("Conflate Matchers");
     std::cout << msg << std::endl << std::endl;
     printApiEntities2<MatchCreator>(MatchCreator::className());
   }
   else if (apiEntityType == "mergers")
   {
+    msg += "):";
     msg.prepend("Conflate Mergers");
     std::cout << msg << std::endl << std::endl;
     printApiEntities2<MergerCreator>(MergerCreator::className());
   }
   else if (apiEntityType == "tag-mergers")
   {
+    msg += "):";
     msg.prepend("Tag Mergers");
     std::cout << msg << std::endl << std::endl;
-    printApiEntities<TagMerger>(TagMerger::className(), "tag merger", false);
+    printApiEntities<TagMerger>(TagMerger::className(), "tag merger", false, 35);
   }
 }
 

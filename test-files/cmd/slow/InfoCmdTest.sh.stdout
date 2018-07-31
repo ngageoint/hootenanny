@@ -3640,5 +3640,5 @@ Listing a criterion...
 
 Listing a tag merger...
 
-  AverageTagMerger                             Keeps tags from both reference and secondary features.  Overlapping tags are averaged together
+  AverageTagMerger                   Keeps tags from both reference and secondary features.  Overlapping tags are averaged together
 
