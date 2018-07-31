@@ -29,9 +29,9 @@
 // hoot
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/conflate/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/conflate/extractors/OverlapExtractor.h>
+#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/util/Log.h>
 #include "BuildingRfClassifier.h"
 

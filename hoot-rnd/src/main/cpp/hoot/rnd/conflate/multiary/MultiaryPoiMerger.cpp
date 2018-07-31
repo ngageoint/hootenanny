@@ -68,8 +68,7 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
   }
 
   // find the appropriate merger creator for merging elements in clusters
-  foreach (const MergerCreator::Description& d,
-    MergerFactory::getInstance().getAllAvailableCreators())
+  foreach (const CreatorDescription& d, MergerFactory::getInstance().getAllAvailableCreators())
   {
     // ugh. Magic string. To work around this we'll need to link against hoot-js, or find another
     // way to add that dep.

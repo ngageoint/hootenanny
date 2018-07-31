@@ -366,16 +366,16 @@ nohup java -Xmx1000M -jar /usr/local/weka-3-6-12/weka.jar &
 ==== Creating the Weka Model File Output
 
 After you have implemented the getMatchFeatureDetails method in your Javascript rules file, a Weka 
-model file can be output from Hootenanny using the model-build command.  An example:
+model file can be output from Hootenanny using the build-model command.  An example:
 ----------------
-hoot model-build -C conf/LinearWaterway.conf dataset-1.osm dataset-2.osm model-file
+hoot build-model -C conf/LinearWaterway.conf dataset-1.osm dataset-2.osm model-file
 ---------------
 
 ==== Examining the Model in Weka
 
 1. Launch the Weka Explorer application.
 2. From the Preprocess tab, select the Open File button and open the file you exported with the 
-model-build command.
+build-model command.
 
 ===== Visualizing Relationships
 

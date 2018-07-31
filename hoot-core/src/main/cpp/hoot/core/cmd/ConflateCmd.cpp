@@ -330,7 +330,6 @@ int ConflateCmd::runSimple(QStringList args)
     // Write the file!
     QString outFileName = output;
     outFileName.replace(".osm", "");
-
   }
 
   double timingOutput = t.getElapsedAndRestart();

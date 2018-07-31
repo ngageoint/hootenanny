@@ -16,7 +16,7 @@ The +tag-info+ command prints out tag key/value information for map data.
 === Usage
 
 --------------------------------------
-tag-values (input1[;layer]) [input2[;layer]] ... [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] [--case-insensitive]
+tag-info (input1[;layer]) [input2[;layer]] ... [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] [--case-insensitive]
 --------------------------------------
 
 ==== Examples

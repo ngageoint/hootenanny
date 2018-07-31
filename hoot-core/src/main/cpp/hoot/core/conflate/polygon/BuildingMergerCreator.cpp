@@ -84,10 +84,10 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
   return result;
 }
 
-vector<MergerCreator::Description> BuildingMergerCreator::getAllCreators() const
+vector<CreatorDescription> BuildingMergerCreator::getAllCreators() const
 {
-  vector<Description> result;
-  result.push_back(Description(className(), "Building Merge Creator", false));
+  vector<CreatorDescription> result;
+  result.push_back(CreatorDescription(className(), "merges buildings together", false));
   return result;
 }
 
