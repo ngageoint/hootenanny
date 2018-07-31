@@ -59,6 +59,13 @@ class BufferedOverlapExtractorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   OsmMapPtr _map;
 
   NodePtr createNode(double x, double y)
@@ -101,8 +108,6 @@ public:
   {
     //test building (polygon)
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);

@@ -62,6 +62,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
     HootTestFixture::setUp();
     mapId = -1;
     ServicesDbTestUtils::deleteUser(userEmail());
@@ -76,7 +78,6 @@ public:
 
   virtual void tearDown()
   {
-    HootTestFixture::tearDown();
     ServicesDbTestUtils::deleteUser(userEmail());
 
     if (mapId != -1)
@@ -91,7 +92,6 @@ public:
   void runPsqlDbOfflineTest()
   {
     QString testName = "runPsqlDbOfflineTest";
-    OsmMap::resetCounters();
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     HootApiDbBulkInserter writer;

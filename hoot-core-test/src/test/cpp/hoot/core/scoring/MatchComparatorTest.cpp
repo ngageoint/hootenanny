@@ -58,6 +58,13 @@ class MatchComparatorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runTest()
   {
     DisableLog dl;
@@ -65,7 +72,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);

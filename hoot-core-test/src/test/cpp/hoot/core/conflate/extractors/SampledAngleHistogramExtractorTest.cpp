@@ -54,10 +54,16 @@ class SampledAngleHistogramExtractorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runTest()
   {
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(

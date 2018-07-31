@@ -68,6 +68,13 @@ class BuildingMatchCreatorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)
   {
     std::vector<long> wids = FindWaysVisitor::findWaysByTag(map, key, value);
@@ -99,7 +106,6 @@ public:
   OsmMapPtr getTestMap(const bool targetWaysOnly = true)
   {
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
@@ -149,14 +155,12 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
 
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Panera Bread")[0]), map));
 
-    OsmMap::resetCounters();
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
@@ -223,8 +227,6 @@ public:
         CPPUNIT_ASSERT(match->getClassification().getReviewP() != 1.0);
       }
     }
-
-    TestUtils::resetEnvironment();
   }
 
   void runReviewIfSecondaryNewer2Test()
@@ -253,8 +255,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-15)));
     CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-14)));
     CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-13)));
-
-    TestUtils::resetEnvironment();
   }
 
   void runReviewIfSecondaryNewerMismatchingDateKeyTest()
@@ -283,8 +283,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-15)));
     CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-14)));
     CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-13)));
-
-    TestUtils::resetEnvironment();
   }
 
   void runReviewIfSecondaryNewerBadDateFormatTest()
@@ -337,8 +335,6 @@ public:
       const Match* match = *it;
       CPPUNIT_ASSERT_EQUAL(1.0, match->getClassification().getReviewP());
     }
-
-    TestUtils::resetEnvironment();
   }
 
   void runReviewNonOneToOneMatches2Test()
@@ -392,8 +388,6 @@ public:
                        uut.getMatchThreshold()->getMatchThreshold());
       }
     }
-
-    TestUtils::resetEnvironment();
   }
 };
 

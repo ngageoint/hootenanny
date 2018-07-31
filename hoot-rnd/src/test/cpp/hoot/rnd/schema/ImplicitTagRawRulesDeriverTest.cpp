@@ -55,7 +55,6 @@ public:
 
   virtual void setUp()
   {
-    HootTestFixture::setUp();
     TestUtils::mkpath(outDir());
   }
 

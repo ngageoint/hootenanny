@@ -51,9 +51,15 @@ class RemoveRef2VisitorMultipleCriterionTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   void runToyTest1()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(
       map, "test-files/visitors/RemoveRef2VisitorMultipleCriterionInput.osm");
@@ -83,7 +89,6 @@ public:
 
   void runToyTest2()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(
       map, "test-files/visitors/RemoveRef2VisitorMultipleCriterionInput.osm");

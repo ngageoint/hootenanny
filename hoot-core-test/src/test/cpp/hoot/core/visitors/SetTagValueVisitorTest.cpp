@@ -56,6 +56,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/visitors");
   }
@@ -63,7 +65,6 @@ public:
   void runAddNewTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -81,7 +82,6 @@ public:
   void runOverwriteExistingTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -99,7 +99,6 @@ public:
   void runAppendValueTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -117,7 +116,6 @@ public:
   void runFilterTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -135,7 +133,6 @@ public:
   void runOverwriteDisabledTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -156,7 +153,6 @@ public:
   void runNegatedFilterTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 

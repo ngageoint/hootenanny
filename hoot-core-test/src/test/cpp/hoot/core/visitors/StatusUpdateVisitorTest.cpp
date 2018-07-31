@@ -52,6 +52,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/visitors");
   }
@@ -59,7 +61,6 @@ public:
   void runUpdateTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/StatusUpdateVisitorTest.osm", false, Status::Unknown1);
 
@@ -78,7 +79,6 @@ public:
   void runUpdateOnlyIfInvalidTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/StatusUpdateVisitorTest.osm", false, Status::Unknown1);
 

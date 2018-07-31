@@ -53,6 +53,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/visitors");
   }
@@ -60,7 +62,6 @@ public:
   void runRemoveAttributesTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveAttributesVisitorTest.osm", false, Status::Unknown1);
 

@@ -52,6 +52,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate/splitter");
   }
@@ -59,8 +61,6 @@ public:
   void runTest()
   {
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

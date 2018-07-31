@@ -79,6 +79,13 @@ class MaximalSublineTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   void addEndNode(OsmMapPtr map, Coordinate c, QString note)
   {
     NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), c, 10));
@@ -118,7 +125,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);
 
     double score;
@@ -156,7 +162,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/MaximalSublineTestIn.osm", map);
 
@@ -403,7 +408,6 @@ public:
     {
       OsmMapPtr map(new OsmMap());
       OsmXmlReader reader;
-      OsmMap::resetCounters();
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/ToyTestA.osm", map);
       reader.setDefaultStatus(Status::Unknown2);

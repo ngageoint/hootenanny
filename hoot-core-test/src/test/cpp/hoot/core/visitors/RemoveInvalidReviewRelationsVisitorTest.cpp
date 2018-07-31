@@ -47,10 +47,16 @@ class RemoveInvalidReviewRelationsVisitorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runInvalidMemberCountTest()
   {
     //add some nodes to a map
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
@@ -98,7 +104,6 @@ public:
   void runEmptyRelationNoMemberCountTagTest()
   {
     //add some nodes to a map
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));

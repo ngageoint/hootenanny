@@ -56,6 +56,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/algorithms/");
   }
@@ -122,7 +124,6 @@ public:
 
   void runMergeNodeTest()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr map = createTestMap("test-files/algorithms/WayMatchStringMergerTestMergeNode.osm");
 
     WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(createWayString1(map),
@@ -153,7 +154,6 @@ public:
 
   void runMergeTagsTest()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr map = createTestMap();
 
     WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(createWayString1(map),
@@ -181,7 +181,6 @@ public:
 
   void runSplitTest()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr map = createTestMap();
 
     WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(createWayString1(map),

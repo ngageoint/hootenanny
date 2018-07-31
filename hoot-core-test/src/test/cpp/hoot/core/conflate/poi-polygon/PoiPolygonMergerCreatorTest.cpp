@@ -52,12 +52,20 @@ class PoiPolygonMergerCreatorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+    conf().set(ConfigOptions().getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
+    conf().set(ConfigOptions().getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
+  }
+
   /**
    * Creates a single match and should result in a PoiPolygonMerger
    */
   void basicTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -94,7 +102,6 @@ public:
    */
   void reviewTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -146,13 +153,6 @@ public:
     HOOT_STR_EQUALS(1, mergers.size());
     LOG_VAR(*mergers[0]);
     HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
-  }
-
-  virtual void setUp()
-  {
-    HootTestFixture::setUp();
-    conf().set(ConfigOptions().getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
-    conf().set(ConfigOptions().getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
   }
 };
 

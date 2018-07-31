@@ -60,12 +60,18 @@ class RemoveDuplicateAreaVisitorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runToyTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/RemoveDuplicateAreaVisitorTest.osm", map);
     MapProjector::projectToPlanar(map);

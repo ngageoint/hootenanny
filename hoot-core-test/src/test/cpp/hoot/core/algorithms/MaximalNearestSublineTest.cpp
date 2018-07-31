@@ -66,6 +66,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/algorithms/");
   }
@@ -129,8 +131,6 @@ public:
 
   void funnyCurveTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
@@ -185,8 +185,6 @@ public:
   void oneShortTest()
   {
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

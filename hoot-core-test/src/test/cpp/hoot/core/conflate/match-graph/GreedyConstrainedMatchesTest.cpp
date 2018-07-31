@@ -208,14 +208,12 @@ public:
 
   virtual void setUp()
   {
-    HootTestFixture::setUp();
     MergerFactory::getInstance().clear();
     MergerFactory::getInstance().registerCreator(new ConstrainedFakeCreator());
   }
 
   virtual void tearDown()
   {
-    HootTestFixture::tearDown();
     MergerFactory::getInstance().clear();
     MergerFactory::getInstance().registerDefaultCreators();
   }

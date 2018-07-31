@@ -60,6 +60,13 @@ class MaximalNearestSublineMatcherTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   /**
    * Two identical ways are 5m apart and have a 10% overlap. All straight and 100m long.
    * x and o signifiy Unknown1 and Unknown2, respectively.
@@ -69,7 +76,6 @@ public:
    */
   void runSimpleTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
@@ -107,7 +113,6 @@ public:
    */
   void runNoOverlapTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;

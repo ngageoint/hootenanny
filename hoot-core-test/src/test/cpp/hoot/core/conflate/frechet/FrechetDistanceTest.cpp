@@ -63,6 +63,13 @@ class FrechetDistanceTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void simpleFrechet()
   {
     OsmMapPtr map = createTestMapSimple();
@@ -137,7 +144,6 @@ public:
 
   OsmMapPtr createEmptyMap()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;

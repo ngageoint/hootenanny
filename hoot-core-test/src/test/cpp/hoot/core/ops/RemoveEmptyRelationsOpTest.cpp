@@ -42,11 +42,17 @@ class RemoveEmptyRelationsOpTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runBasicTest()
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ops/RemoveEmptyRelationsOp/input.osm", map);
 

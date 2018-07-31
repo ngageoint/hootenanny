@@ -67,13 +67,14 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 
   void runIoTest()
   {
-    TestUtils::resetEnvironment();
     QByteArray arr1;
     QByteArray arr2;
     {
@@ -142,10 +143,7 @@ public:
 
   void runSimpleTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
@@ -206,10 +204,7 @@ public:
 
   void runCalculateTiePointDistancesNotEnoughTiePointsTest2()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);

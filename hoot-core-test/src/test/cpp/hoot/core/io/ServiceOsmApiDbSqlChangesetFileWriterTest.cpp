@@ -47,13 +47,11 @@ public:
 
   virtual void setUp()
   {
-    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest");
   }
 
   virtual void tearDown()
   {
-    HootTestFixture::tearDown();
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
     database.close();

@@ -68,6 +68,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
     HootTestFixture::setUp();
     // we are testing the map reprojector so we don't want to force to a single projection.
     conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), false);

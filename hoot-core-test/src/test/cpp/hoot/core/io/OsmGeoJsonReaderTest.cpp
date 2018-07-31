@@ -57,6 +57,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/GeoJson");
   }
@@ -96,7 +98,6 @@ public:
     OsmGeoJsonReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.open(input);
     reader.read(map);

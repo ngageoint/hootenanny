@@ -66,6 +66,13 @@ public:
 
   QMap<QString, OsmMapPtr > _inputMapCache;
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runTest(const QString inputFile, const int randomNumberGeneratorSeed,
                const double generalizeProbability, const double epsilon, const QString outputFile,
                const QString outputCompareFile, const bool enableDebugLogging = false)
@@ -76,7 +83,6 @@ public:
       Log::getInstance().setLevel(Log::Debug);
     }
 
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     if (_inputMapCache.contains(inputFile))
     {

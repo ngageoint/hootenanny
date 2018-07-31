@@ -56,6 +56,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
     HootTestFixture::setUp();
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
   }
@@ -422,7 +424,6 @@ private:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseStatusFromFile(true);
     reader.setUseDataSourceIds(true);

@@ -57,10 +57,15 @@ class PoiPolygonMatchTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void matchTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -114,8 +119,6 @@ public:
 
   void missTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -168,8 +171,6 @@ public:
 
   void reviewTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -241,8 +242,6 @@ public:
   void reviewIfMatchedTypedTest()
   {
     //we let the user specify a custom list of types that always force a review if a match was found
-
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -516,8 +515,6 @@ public:
 
   void exactSourceMatchDisableConflationTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -580,8 +577,6 @@ public:
 
   void sourceMatchTagKeyPrefixOnlyDisableConflationTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -644,8 +639,6 @@ public:
 
   void sourceTagKeyMismatchDisableConflationTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -686,8 +679,6 @@ public:
 
   void missingSourceTagTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -745,7 +736,6 @@ public:
 
   void multiUseBuildingTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),

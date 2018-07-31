@@ -52,6 +52,13 @@ class HighwayMatchCreatorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runIsCandidateTest()
   {
     HighwayMatchCreator uut;
@@ -59,7 +66,6 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
 
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     MapProjector::projectToPlanar(map);
@@ -68,7 +74,6 @@ public:
       !uut.isMatchCandidate(
         map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Panera Bread")[0]), map));
 
-    OsmMap::resetCounters();
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);

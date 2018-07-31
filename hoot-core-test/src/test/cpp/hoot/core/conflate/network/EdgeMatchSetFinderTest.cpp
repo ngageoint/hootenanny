@@ -52,6 +52,13 @@ public:
   OsmNetworkPtr network1, network2;
   IndexedEdgeMatchSetPtr matchSet;
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   void writeDebugMap(OsmMapPtr map)
   {
     TestUtils::mkpath("tmp");
@@ -64,7 +71,6 @@ public:
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)
   {
-    TestUtils::resetEnvironment();
     NetworkVertex::reset();
 
     OsmMapPtr map(new OsmMap());

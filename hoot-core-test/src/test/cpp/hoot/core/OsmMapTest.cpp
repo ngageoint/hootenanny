@@ -84,6 +84,13 @@ class OsmMapTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void _checkKnnWayIterator(OsmMapPtr map)
   {
     boost::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
@@ -562,10 +569,6 @@ public:
   void runReplaceNodeTest()
   {
     OsmXmlReader reader;
-
-    // Turns out when you're counting on IDs not changing depending on what tests are run
-    //    before yours? Reset the IDs back to the beginning. :)
-    OsmMap::resetCounters();
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

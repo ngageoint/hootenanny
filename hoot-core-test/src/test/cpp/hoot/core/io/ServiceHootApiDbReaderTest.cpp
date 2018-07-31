@@ -74,6 +74,13 @@ public:
   long mapId;
   QString testName;
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   void setUpTest(const QString& test_name)
   {
     mapId = -1;
@@ -90,7 +97,6 @@ public:
 
   virtual void tearDown()
   {
-    HootTestFixture::tearDown();
     ServicesDbTestUtils::deleteUser(userEmail());
 
     if (mapId != -1)
@@ -161,7 +167,6 @@ public:
 
     HootApiDbReader reader;
     // make sure all the element ids start with -1
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setUseDataSourceIds(false);
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());

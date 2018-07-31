@@ -52,10 +52,16 @@ class WayCleanerTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runDuplicateNodesTest()
   {
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/WayCleanerTest/DuplicateNodesTest.osm", map);
@@ -92,7 +98,6 @@ public:
   void runDuplicateCoordsTest()
   {
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/WayCleanerTest/DuplicateCoordsTest.osm", map);

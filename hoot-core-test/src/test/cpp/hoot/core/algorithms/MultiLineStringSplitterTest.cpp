@@ -61,10 +61,16 @@ class MultiLineStringSplitterTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   OsmMapPtr createMap()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     boost::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
 

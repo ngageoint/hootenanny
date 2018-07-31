@@ -61,25 +61,34 @@ class BuildingPartMergeOpTest : public HootTestFixture
 
 public:
 
+  QString inputPath = "test-files/ops/BuildingPartMergeOp/";
+  QString outputPath = "test-output/ops/BuildingPartMergeOp/";
+
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+    TestUtils::mkpath(outputPath);
+  }
+
   void runToyTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/BuildingPartMergeOp/ToyBuildings.osm", map);
+    reader.read(inputPath + "ToyBuildings.osm", map);
 
     BuildingPartMergeOp uut;
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
 
-    TestUtils::mkpath("test-output/ops/BuildingPartMergeOp/");
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/BuildingPartMergeOp/ToyBuildings.osm");
-    HOOT_FILE_EQUALS("test-files/ops/BuildingPartMergeOp/ToyBuildingsOutput.osm",
-                     "test-output/ops/BuildingPartMergeOp/ToyBuildings.osm");
+    writer.write(map, outputPath + "ToyBuildings.osm");
+    HOOT_FILE_EQUALS(inputPath + "ToyBuildingsOutput.osm",
+                     outputPath + "ToyBuildings.osm");
   }
 
 };

@@ -57,6 +57,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/visitors");
   }
@@ -64,7 +66,6 @@ public:
   void runAddAttributesTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -88,7 +89,6 @@ public:
   void runAddAttributesOnlyIfEmptyTest1()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/AddAttributesVisitorTest2.osm", false, Status::Unknown1);
 
@@ -115,7 +115,6 @@ public:
   void runAddAttributesOnlyIfEmptyTest2()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/AddAttributesVisitorTest3.osm", false, Status::Unknown1);
 
@@ -142,7 +141,6 @@ public:
   void runAddInvalidAttributeKeyTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -166,7 +164,6 @@ public:
   void runAddMissingAttributeValueTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -190,7 +187,6 @@ public:
   void runAddEmptyAttributeValueTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -214,7 +210,6 @@ public:
   void runAddInvalidValueTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
 

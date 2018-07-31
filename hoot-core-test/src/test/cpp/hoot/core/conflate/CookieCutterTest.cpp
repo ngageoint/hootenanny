@@ -59,15 +59,15 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 
   void runTest()
   {
-    Settings::getInstance().clear();
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
     OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -89,10 +89,7 @@ public:
 
   void runCropTest()
   {
-    Settings::getInstance().clear();
     OsmXmlReader reader;
-    OsmMap::resetCounters();
-    OsmSchema::getInstance().loadDefault();
     OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
@@ -113,10 +110,7 @@ public:
 
   void runBufferTest()
   {
-    Settings::getInstance().clear();
     OsmXmlReader reader;
-    OsmMap::resetCounters();
-    OsmSchema::getInstance().loadDefault();
     OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
@@ -137,10 +131,7 @@ public:
 
   void runNegativeBufferTest()
   {
-    Settings::getInstance().clear();
     OsmXmlReader reader;
-    OsmMap::resetCounters();
-    OsmSchema::getInstance().loadDefault();
     OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
@@ -161,10 +152,7 @@ public:
 
   void runCropAndBufferTest()
   {
-    Settings::getInstance().clear();
     OsmXmlReader reader;
-    OsmMap::resetCounters();
-    OsmSchema::getInstance().loadDefault();
     OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);

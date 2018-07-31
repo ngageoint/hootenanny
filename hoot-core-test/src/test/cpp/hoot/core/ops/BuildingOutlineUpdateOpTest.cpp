@@ -54,6 +54,8 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/ops/BuildingOutlineUpdateOp/");
   }
@@ -65,7 +67,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsIn.osm", map);
 
@@ -94,7 +95,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ops/BuildingOutlineUpdateOp/UncleanableTopologiesIn.osm", map);
 

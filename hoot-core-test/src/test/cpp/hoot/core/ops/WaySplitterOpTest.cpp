@@ -56,8 +56,9 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
     HootTestFixture::setUp();
-    TestUtils::resetEnvironment();
   }
 
   void runTest()
@@ -70,7 +71,6 @@ public:
 
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(inputPath + inputFile, map);
 

@@ -57,16 +57,14 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
     HootTestFixture::setUp();
-    TestUtils::resetEnvironment();
   }
 
   OsmMapPtr load(QString s1, QString s2)
   {
     OsmXmlReader reader;
-
-    Tgs::Random::instance()->seed(0);
-    OsmMap::resetCounters();
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

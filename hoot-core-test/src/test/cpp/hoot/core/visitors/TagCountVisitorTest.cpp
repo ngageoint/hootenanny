@@ -49,6 +49,13 @@ class TagCountVisitorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void totalTagCountTest()
   {
     ConstOsmMapPtr constMap = _loadMap();
@@ -75,7 +82,6 @@ private:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/TagCountVisitorTest.osm", map);
     ConstOsmMapPtr constMap = map;

@@ -128,6 +128,9 @@ public:
 
   void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
     TestUtils::mkpath(outDir);
   }
 
@@ -141,7 +144,6 @@ public:
     QString exceptionMsg("");
     try
     {
-      OsmMap::resetCounters();
       OsmMapPtr map(new OsmMap());
       OsmMapReaderFactory::read(map, true, true, inDir + "/" + inFileName);
 

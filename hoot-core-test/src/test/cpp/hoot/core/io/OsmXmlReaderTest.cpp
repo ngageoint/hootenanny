@@ -46,6 +46,13 @@ class OsmXmlReaderTest : public HootTestFixture
 
 public:
 
+    virtual void setUp()
+    {
+      //  Reset the environment
+      reset(ResetBasic);
+      HootTestFixture::setUp();
+    }
+
     void runTest()
     {
         OsmXmlReader uut;
@@ -60,8 +67,6 @@ public:
     void runUseIdTest()
     {
         OsmXmlReader uut;
-
-        OsmMap::resetCounters();
 
         OsmMapPtr map(new OsmMap());
         uut.setUseDataSourceIds(true);
@@ -92,8 +97,6 @@ public:
     void runUseStatusTest()
     {
         OsmXmlReader uut;
-
-        OsmMap::resetCounters();
 
         OsmMapPtr map(new OsmMap());
         uut.setUseDataSourceIds(true);
@@ -135,7 +138,6 @@ public:
       }
 
       OsmXmlReader uut;
-      OsmMap::resetCounters();
       OsmMapPtr map(new OsmMap());
       uut.setUseDataSourceIds(true);
 

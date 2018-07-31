@@ -26,8 +26,6 @@
  */
 #include "ProcessPool.h"
 
-#include <hoot/core/util/Log.h>
-
 #include <iostream>
 
 using namespace std;

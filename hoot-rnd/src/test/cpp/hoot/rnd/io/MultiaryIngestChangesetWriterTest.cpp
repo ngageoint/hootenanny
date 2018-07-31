@@ -48,7 +48,6 @@ public:
 
   virtual void setUp()
   {
-    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/MultiaryIngestChangesetWriterTest/");
   }
 

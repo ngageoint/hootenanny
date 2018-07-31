@@ -49,9 +49,15 @@ class AddGeometryTypeVisitorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runBasicTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()["name"] = "strange test";

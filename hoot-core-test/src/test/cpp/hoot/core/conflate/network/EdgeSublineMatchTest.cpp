@@ -41,10 +41,15 @@ class EdgeSublineMatchTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   void basicTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));

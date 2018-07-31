@@ -60,12 +60,18 @@ class DividedHighwayManipulationTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void individualManipulationsTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DividedHighway.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -107,6 +113,7 @@ public:
     TestUtils::mkpath("test-output");
     OsmXmlWriter writer;
     writer.write(after, "test-output/DividedHighwayManipulationTest.osm");
+    //TODO: This test doesn't compare the output with anything
   }
 
 };

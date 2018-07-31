@@ -54,10 +54,15 @@ class PertyRemoveTagVisitorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runBasicTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()["name"] = "strange test";
@@ -89,8 +94,6 @@ public:
 
   void runExemptTagKeysTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();
@@ -125,8 +128,6 @@ public:
 
   void runSubstituteValuesTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();

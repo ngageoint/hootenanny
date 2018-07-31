@@ -54,17 +54,25 @@ class ReprojectToGeographicOpTest : public HootTestFixture
 
 public:
 
+  QString inputPath = "test-files/ops/ReprojectToGeographicOp/";
+  QString outputPath = "test-output/ops/ReprojectToGeographicOp/";
+
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+    TestUtils::mkpath(outputPath);
+  }
+
   void runTest()
   {
-    QString inputPath = "test-files/ops/ReprojectToGeographicOp/";
     QString inputFile = "ToyMercator.osm";
-    QString outputPath = "test-output/ops/ReprojectToGeographicOp/";
     QString outputFile = "ToyWGS84.osm";
 
 
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(inputPath + inputFile, map);
 

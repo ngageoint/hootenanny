@@ -52,14 +52,14 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/algorithms/wayjoiner");
   }
 
   void runSimpleTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -79,8 +79,6 @@ public:
 
   void runCornerSplitterTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -100,8 +98,6 @@ public:
 
   void runIntersectionSplitterTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -121,8 +117,6 @@ public:
 
   void runConflateTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

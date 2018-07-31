@@ -41,13 +41,18 @@ class WayMatchStringMappingConverterTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   /**
    * Create a couple of simple way strings and verify that the generated subline match is correct.
    */
   void runTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmMapPtr map(new OsmMap());
 
     NodePtr n1a = TestUtils::createNode(map, Status::Unknown1, 0, 0);

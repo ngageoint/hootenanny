@@ -49,6 +49,13 @@ class KeepTagsVisitorTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetBasic);
+    HootTestFixture::setUp();
+  }
+
   void runTest()
   {
     OsmMapPtr map = _loadMap();
@@ -78,7 +85,6 @@ private:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/TagRenameKeyVisitorTest.osm", map);
     return map;

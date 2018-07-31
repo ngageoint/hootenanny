@@ -146,6 +146,11 @@ public:
   void registerReset(RegisteredReset* r) { _resets.append(r); }
 
   /**
+   * Resets the test environment including counters, keys, and seeds
+   */
+  static void resetBasic();
+
+  /**
    * Resets the test environment to a known state.
    *
    * @param confs custom confs to load during reset; if left blank the default config in
@@ -198,8 +203,24 @@ public:
 class HootTestFixture : public CppUnit::TestFixture
 {
 public:
-  virtual void setUp()    { TestUtils::resetEnvironment(); }
-  virtual void tearDown() { TestUtils::resetEnvironment(); }
+  enum HootTestReset
+  {
+    ResetNone,
+    ResetBasic,
+    ResetAll
+  };
+
+  virtual void setUp()
+  {
+    if (_reset == ResetBasic)
+      TestUtils::resetBasic();
+    else if (_reset == ResetAll)
+      TestUtils::resetEnvironment();
+  }
+
+  void reset(HootTestReset reset) { _reset = reset; }
+private:
+  HootTestReset _reset;
 };
 
 }

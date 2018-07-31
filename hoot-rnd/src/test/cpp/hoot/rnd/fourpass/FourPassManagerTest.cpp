@@ -65,6 +65,10 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+//    reset(ResetAll);
+//TODO: Is Basic sufficient
+    reset(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/fourpass");
   }

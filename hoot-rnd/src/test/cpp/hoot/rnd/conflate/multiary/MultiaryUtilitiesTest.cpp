@@ -48,6 +48,13 @@ class MultiaryUtilitiesTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   QByteArray convertJsonToPbf(QString json)
   {
     OsmMapPtr map = OsmJsonReader().loadFromString(json);
@@ -101,8 +108,6 @@ public:
    */
   void findMatchesTest()
   {
-    TestUtils::resetEnvironment();
-
     QByteArray e1 = convertJsonToPbf(
       "{ 'elements': [ { 'type': 'node', 'id': -1, 'lat': 2.0, 'lon': -3.0, \n"
       "   'tags': { 'amenity': 'pub', 'name': 'My Restaurant' } } ] }");

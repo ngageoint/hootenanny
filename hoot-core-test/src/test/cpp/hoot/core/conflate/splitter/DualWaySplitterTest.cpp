@@ -55,12 +55,18 @@ class DualWaySplitterTest : public HootTestFixture
 
 public:
 
+    virtual void setUp()
+    {
+      //  Reset the environment
+      reset(ResetBasic);
+      HootTestFixture::setUp();
+    }
+
   void simpleTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DualWaySplitterSimpleInput.osm", map);
 
@@ -83,7 +89,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/UndividedHighway.osm", map);
 

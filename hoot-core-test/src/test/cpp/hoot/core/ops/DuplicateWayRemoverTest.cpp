@@ -68,14 +68,14 @@ public:
 
   virtual void setUp()
   {
+    //  Reset the environment
+    reset(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 
   void runTest()
   {
-    OsmMap::resetCounters();
-
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -99,8 +99,6 @@ public:
    */
   void runStrictTagMatchingOnTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
@@ -130,8 +128,6 @@ public:
    */
   void runStrictTagMatchingOffTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 

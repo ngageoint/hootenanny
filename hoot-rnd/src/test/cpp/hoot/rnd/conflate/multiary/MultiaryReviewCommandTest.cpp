@@ -45,6 +45,13 @@ class MultiaryReviewCommandTest : public HootTestFixture
 
 public:
 
+  virtual void setUp()
+  {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
+  }
+
   OsmMapPtr getTestMap()
   {
     QString testJsonStr =
@@ -72,7 +79,6 @@ public:
    */
   void basicTest()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr pMap = getTestMap();
 
     MultiaryReviewCommand missCmd, matchCmd, modifyCmd, deleteCmd;
@@ -127,7 +133,6 @@ public:
    */
   void hashTest()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr pMap = getTestMap();
 
     MultiaryReviewCommand matchCmd;

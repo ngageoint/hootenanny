@@ -51,14 +51,14 @@ public:
 
   void setUp()
   {
+    //  Reset the environment
+    reset(ResetAll);
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/perty/PertyMatchScorerTest");
   }
 
   void runLoadReferenceMapTest()
   {
-    TestUtils::resetEnvironment();
-    OsmMap::resetCounters();
-
     PertyMatchScorer matchScorer;
     matchScorer.setSearchDistance(15.0);
     matchScorer.setApplyRubberSheet(true);
@@ -72,7 +72,6 @@ public:
 
   void runLoadPerturbedMapTest()
   {
-    TestUtils::resetEnvironment();
     Settings testSettings = conf();
     testSettings.set("perty.seed", QString::number(1));
     testSettings.set("perty.systematic.error.x", QString::number(1));
@@ -81,7 +80,6 @@ public:
     matchScorer.setConfiguration(testSettings);
     matchScorer.setSearchDistance(15.0);
     matchScorer.setApplyRubberSheet(true);
-    OsmMap::resetCounters();
     matchScorer._loadPerturbedMap(
       "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-reference-out-1.osm",
       "test-output/perty/PertyMatchScorerTest/PertyMatchScorerTest-perturbed-out-1.osm");
@@ -92,8 +90,6 @@ public:
 
   void runCombineMapTest()
   {
-    TestUtils::resetEnvironment();
-    OsmMap::resetCounters();
     OsmXmlReader reader;
     OsmMapPtr referenceMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -123,11 +119,9 @@ public:
 
   void runConflateTest()
   {
-    TestUtils::resetEnvironment();
     Settings testSettings = conf();
     testSettings.set("conflate.enable.old.roads", "false");
 
-    OsmMap::resetCounters();
     OsmXmlReader reader;
     OsmMapPtr combinedMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
