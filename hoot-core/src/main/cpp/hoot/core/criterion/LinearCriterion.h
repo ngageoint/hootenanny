@@ -22,20 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef LINEARCRITERION_H
+#define LINEARCRITERION_H
 
-#include "LinearFilter.h"
-
-// Hoot
-#include <hoot/core/schema/OsmSchema.h>
+#include "ElementCriterion.h"
 
 namespace hoot
 {
 
-bool LinearFilter::isMatch(const Element& e) const
+/**
+ * Identifies linear features
+ */
+class LinearCriterion : public ElementCriterion
 {
-  return OsmSchema::getInstance().isLinear(e);
-}
+public:
+  static std::string className() { return "hoot::LinearCriterion"; }
+
+  LinearCriterion() {}
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearCriterion()); }
+
+  virtual QString getDescription() const { return "Identifies linear features"; }
+};
 
 }
+#endif // LINEARCRITERION_H

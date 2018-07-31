@@ -32,7 +32,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/LinearFilter.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/NeedsReviewCriterion.h>
 #include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
@@ -174,18 +174,37 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     UniqueNamesVisitor v;
     _applyVisitor(constMap, &v);
     _stats.append(SingleStat("Unique Names", v.getStat()));
-    _stats.append(SingleStat("Meters of Linear Features",
-      _applyVisitor(constMap, FilteredVisitor(LinearFilter(keep), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
-    _stats.append(SingleStat("Meters Squared of Area Features",
-      _applyVisitor(constMap, FilteredVisitor(StatsAreaFilter(keep), ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())))));
-    _stats.append(SingleStat("Meters of Highway",
-      _applyVisitor(constMap, FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
-    _stats.append(SingleStat("Highway Unique Name Count",
-      _applyVisitor(constMap, FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
-    _stats.append(SingleStat("Meters Squared of Buildings",
-      _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
-    _stats.append(SingleStat("Building Unique Name Count",
-      _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
+    _stats.append(
+      SingleStat("Meters of Linear Features",
+      _applyVisitor(
+        constMap,
+        FilteredVisitor(LinearCriterion(), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
+    _stats.append(
+      SingleStat("Meters Squared of Area Features",
+      _applyVisitor(
+        constMap,
+        FilteredVisitor(StatsAreaFilter(keep),
+          ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())))));
+    _stats.append(
+      SingleStat("Meters of Highway",
+      _applyVisitor(
+        constMap,
+        FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
+    _stats.append(
+      SingleStat("Highway Unique Name Count",
+      _applyVisitor(
+      constMap,
+      FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
+    _stats.append(
+      SingleStat("Meters Squared of Buildings",
+      _applyVisitor(
+      constMap,
+      FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
+    _stats.append(
+      SingleStat("Building Unique Name Count",
+      _applyVisitor(
+      constMap,
+      FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
 
     FeatureCountVisitor featureCountVisitor;
     _applyVisitor(constMap, &featureCountVisitor);
