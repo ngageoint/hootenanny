@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.9190595" minlon="-105.5984193" maxlat="40.1319241" maxlon="-105.40788"/>
+        <node visible="true" id="-20551" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645402000000018" lon="-105.5072361000000001">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+        <node visible="true" id="-20557" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644770999999963" lon="-105.5072473000000031">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20556" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644771000000034" lon="-105.5072356000000013">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20555" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645130999999978" lon="-105.5072358999999835">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20554" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645131999999919" lon="-105.5072241999999818">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20553" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645492000000004" lon="-105.5072245000000066">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20552" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645492000000004" lon="-105.5072361999999941">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20550" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645401000000007" lon="-105.5072478000000018">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20549" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645490999999993" lon="-105.5072478999999817">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20548" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645490999999922" lon="-105.5072595999999834">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20547" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645401000000007" lon="-105.5072595000000035">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20546" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645400000000137" lon="-105.5072712000000053">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20545" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645579999999896" lon="-105.5072713999999934">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20544" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645579999999896" lon="-105.5072830999999951">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20543" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645670000000024" lon="-105.5072830999999951">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20542" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645664999999894" lon="-105.5073885000000047">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20541" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645574999999909" lon="-105.5073883999999964">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20540" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645574999999980" lon="-105.5074002000000064">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20539" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645484999999994" lon="-105.5074000999999981">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20538" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645483999999982" lon="-105.5074117999999999">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20537" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645393999999925" lon="-105.5074117000000058">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20536" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645395000000008" lon="-105.5074000000000041">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20535" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645303999999939" lon="-105.5074000000000041">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20534" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9645303999999939" lon="-105.5074117000000058">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20533" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644943999999995" lon="-105.5074113999999952">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20532" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644943999999995" lon="-105.5073996999999935">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20531" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644764000000023" lon="-105.5073995999999994">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20530" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644764000000094" lon="-105.5073877999999894">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20529" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644673999999966" lon="-105.5073877999999894">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20528" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644675999999990" lon="-105.5073526999999984">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20527" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644586000000075" lon="-105.5073526000000044">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20526" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.9644590000000051" lon="-105.5072471999999948">
+        <tag k="is_in" v="Nederland"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2280" timestamp="2011-09-22T02:08:34Z" version="4" changeset="9365128" user="42429" uid="42429" lat="39.9633201999999983" lon="-105.5072200000000038">
+        <tag k="denomination" v="catholic"/>
+        <tag k="gnis:state_id" v="08"/>
+        <tag k="gnis:county_id" v="013"/>
+        <tag k="religion" v="christian"/>
+        <tag k="ele" v="2507"/>
+        <tag k="building" v="yes"/>
+        <tag k="gnis:created" v="08/31/1992"/>
+        <tag k="gnis:feature_id" v="2036593"/>
+        <tag k="name" v="Saint Rita's Catholic Church"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <way visible="true" id="-1359" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20526"/>
+        <nd ref="-20527"/>
+        <nd ref="-20528"/>
+        <nd ref="-20529"/>
+        <nd ref="-20530"/>
+        <nd ref="-20531"/>
+        <nd ref="-20532"/>
+        <nd ref="-20533"/>
+        <nd ref="-20534"/>
+        <nd ref="-20535"/>
+        <nd ref="-20536"/>
+        <nd ref="-20537"/>
+        <nd ref="-20538"/>
+        <nd ref="-20539"/>
+        <nd ref="-20540"/>
+        <nd ref="-20541"/>
+        <nd ref="-20542"/>
+        <nd ref="-20543"/>
+        <nd ref="-20544"/>
+        <nd ref="-20545"/>
+        <nd ref="-20546"/>
+        <nd ref="-20547"/>
+        <nd ref="-20548"/>
+        <nd ref="-20549"/>
+        <nd ref="-20550"/>
+        <nd ref="-20551"/>
+        <nd ref="-20552"/>
+        <nd ref="-20553"/>
+        <nd ref="-20554"/>
+        <nd ref="-20555"/>
+        <nd ref="-20556"/>
+        <nd ref="-20557"/>
+        <nd ref="-20526"/>
+        <tag k="is_in" v="Nederland"/>
+        <tag k="description" v="1723.4117089ft"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="Teracog and the town of Nederland."/>
+        <tag k="source:datetime" v="2011-09-19T16:31:42Z"/>
+    </way>
+    <relation visible="true" id="-264" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-2280" role="reviewee"/>
+        <member type="way" ref="-1359" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (127m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
+        <tag k="hoot:review:sort_order" v="72"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-265" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-2280" role="blah"/>
+        <member type="way" ref="-1359" role="blah"/>
+        <tag k="type" v="blah"/>
+    </relation>
+</osm>

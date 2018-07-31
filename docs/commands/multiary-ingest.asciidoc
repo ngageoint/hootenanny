@@ -1,8 +1,8 @@
-== multiary-ingest
+== multiary-poi-ingest
 
 === Description
 
-The +multiary-ingest+ command ingests POI data for use by the +multiary-conflate+ command by calculating the difference between 
+The +multiary-poi-ingest+ command ingests POI data for use by the +multiary-conflate+ command by calculating the difference between 
 new and existing data.
 
 * +newInput+          - path to a supported Hootenanny data format
@@ -14,13 +14,13 @@ new and existing data.
 === Usage
 
 --------------------------------------
-multiary-ingest (newInput) (translationScript) (referenceOutput) (changesetOutput)
+multiary-poi-ingest (newInput) (translationScript) (referenceOutput) (changesetOutput)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot multiary-ingest newData.geonames translations/GeoNames.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1 
+hoot multiary-poi-ingest newData.geonames translations/GeoNames.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1 
 
-hoot multiary-ingest planet.osm.pbf translations/OSM_Ingest.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1 
+hoot multiary-poi-ingest planet.osm.pbf translations/OSM_Ingest.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1 
 --------------------------------------

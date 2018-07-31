@@ -546,9 +546,9 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
   map->visitRo(v);
 }
 
-vector<MatchCreator::Description> ScriptMatchCreator::getAllCreators() const
+vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
 {
-  vector<Description> result;
+  vector<CreatorDescription> result;
 
   // find all the files that end with .js in [ConfPath]/rules/
   QStringList scripts = ConfPath::find(QStringList() << "*.js", "rules");
@@ -559,7 +559,7 @@ vector<MatchCreator::Description> ScriptMatchCreator::getAllCreators() const
     try
     {
       // if the script is a valid generic script w/ 'description' exposed, add it to the list.
-      Description d = _getScriptDescription(scripts[i]);
+      CreatorDescription d = _getScriptDescription(scripts[i]);
       if (!d.description.isEmpty())
       {
         result.push_back(d);
@@ -618,9 +618,9 @@ boost::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
   return _cachedScriptVisitor;
 }
 
-MatchCreator::Description ScriptMatchCreator::_getScriptDescription(QString path) const
+CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
 {
-  MatchCreator::Description result;
+  CreatorDescription result;
   result.experimental = true;
 
   boost::shared_ptr<PluginContext> script(new PluginContext());
@@ -646,7 +646,7 @@ MatchCreator::Description ScriptMatchCreator::_getScriptDescription(QString path
   if (ToLocal(&plugin)->Has(featureTypeStr))
   {
     Handle<Value> value = ToLocal(&plugin)->Get(featureTypeStr);
-    result.baseFeatureType = MatchCreator::StringToBaseFeatureType(toCpp<QString>(value));
+    result.baseFeatureType = CreatorDescription::StringToBaseFeatureType(toCpp<QString>(value));
   }
 
   QFileInfo fi(path);

@@ -51,6 +51,10 @@ public:
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 
+  //TODO: verify this is accurate
+  virtual QString getDescription()
+  { return "Keeps tags from both reference and secondary features and preserves overlapping type tags"; }
+
 private:
 
   Tags _preserveAltTypes(const Tags& source, const Tags& target) const;

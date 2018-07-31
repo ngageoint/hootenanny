@@ -53,7 +53,7 @@ public:
   virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
                              ConstMatchThresholdPtr threshold);
 
-  virtual std::vector<Description> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const;
 
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
 

@@ -4,7 +4,7 @@ set -e
 mkdir -p test-output/translation/
 
 function compareFiles {
-    hoot map-diff $1 $2 || diff $1 $2
+    hoot diff $1 $2 || diff $1 $2
 }
 
 hoot convert test-files/translation/MgcpTest.osm test-output/translation/MgcpTest.shp --cols "LTN,WTC,HCT,UID"

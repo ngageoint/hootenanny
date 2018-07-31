@@ -1,6 +1,6 @@
 "use strict";
 
-exports.description = "Linear Waterway";
+exports.description = "matches linear waterways";
 exports.experimental = false;
 exports.baseFeatureType = "Waterway";
 

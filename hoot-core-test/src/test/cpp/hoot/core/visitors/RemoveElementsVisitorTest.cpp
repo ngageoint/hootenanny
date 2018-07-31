@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/criterion/ReviewRelationCriterion.h>
 
 namespace hoot
 {
@@ -45,6 +46,7 @@ class RemoveElementsVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runRecursiveTest);
   CPPUNIT_TEST(runNegatedFilterTest);
+  CPPUNIT_TEST(runReviewRelationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -108,6 +110,25 @@ public:
     writer.write(map, "test-output/visitors/RemoveElementsVisitorNegatedFilterOutput.osm");
     HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorNegatedFilterOutput.osm",
                      "test-output/visitors/RemoveElementsVisitorNegatedFilterOutput.osm");
+  }
+
+  void runReviewRelationTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::getInstance().read(
+      map, "test-files/visitors/RemoveElementsVisitorTest-reviewRelationTest.osm");
+
+    boost::shared_ptr<ReviewRelationCriterion> elementCriterion(new ReviewRelationCriterion());
+    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.setNegateFilter(false);
+    map->visitRw(removeElementsVisitor);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, "test-output/visitors/RemoveElementsVisitorTest-reviewRelationTestOut.osm");
+    HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorTest-reviewRelationTestOut.osm",
+                     "test-output/visitors/RemoveElementsVisitorTest-reviewRelationTestOut.osm");
   }
 
 };

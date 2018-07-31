@@ -1,6 +1,6 @@
 "use strict";
 
-exports.description = "Power Line";
+exports.description = "matches power lines";
 exports.experimental = false;
 exports.baseFeatureType = "PowerLine";
 

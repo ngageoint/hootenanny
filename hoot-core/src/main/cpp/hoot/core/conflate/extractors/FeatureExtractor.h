@@ -49,6 +49,7 @@ namespace hoot
 class FeatureExtractor
 {
 public:
+
   static std::string className() { return "hoot::FeatureExtractor"; }
 
   static double nullValue() { return -999999999; }
@@ -83,7 +84,6 @@ public:
    * on one line when displayed with the 'feature-extractors' command.
    */
   virtual QString getDescription() const = 0;
-
 };
 
 typedef boost::shared_ptr<FeatureExtractor> FeatureExtractorPtr;

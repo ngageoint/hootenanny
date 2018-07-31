@@ -18,7 +18,7 @@ hoot changeset-derive --stats \
  test-output/NonDestructiveTest/changeset.osc
 
 # Check the output against the expected output
-hoot map-diff \
+hoot diff \
   test-output/NonDestructiveTest/output.osm \
   test-files/NonDestructiveTest/Expected.osm || \
   diff \

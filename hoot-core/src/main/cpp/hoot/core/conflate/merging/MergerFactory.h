@@ -83,7 +83,7 @@ public:
   /**
    * @brief Returns a description of all available match creators.
    */
-  std::vector<MergerCreator::Description> getAllAvailableCreators() const;
+  std::vector<CreatorDescription> getAllAvailableCreators() const;
 
   /**
    * A singleton is provided, but not required.

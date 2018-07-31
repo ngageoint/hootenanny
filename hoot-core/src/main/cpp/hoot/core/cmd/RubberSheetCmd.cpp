@@ -27,17 +27,10 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/RubberSheet.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/IoUtils.h>
-
-using namespace std;
+#include <hoot/core/conflate/RubberSheeter.h>
+#include <hoot/core/conflate/RubberSheetDeriver.h>
+#include <hoot/core/conflate/RubberSheetApplier.h>
 
 namespace hoot
 {
@@ -46,7 +39,7 @@ class RubberSheetCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::RubberSheetCmd"; }
+  static std::string className() { return "hoot::RubberSheetCmd"; }
 
   RubberSheetCmd() { }
 
@@ -56,25 +49,58 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    if (args.contains("--derive"))
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      args.removeAt(args.indexOf("--derive"));
+      if (args.size() < 3 || args.size() > 5)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(
+          QString("%1 with the --derive option takes three to five parameters.").arg(getName()));
+      }
+
+      bool ref = false;
+      if (args[0] == "--ref")
+      {
+        ref = true;
+        args.pop_front();
+      }
+
+      QString transform1to2Path;
+      if (args.size() == 4)
+      {
+        transform1to2Path = args[3];
+      }
+      else if (ref == false)
+      {
+        throw HootException(QString("You must specify a transform1to2.rs argument if --ref isn't "
+          "specified."));
+      }
+
+      RubberSheetDeriver().derive(args[0], args[1], args[2], transform1to2Path, ref);
     }
+    else if (args.contains("--apply"))
+    {
+      args.removeAt(args.indexOf("--apply"));
+      if (args.size() != 3)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(
+          QString("%1 with the --apply option takes three parameters.").arg(getName()));
+      }
 
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, args[0], false, Status::Unknown1);
-    IoUtils::loadMap(map, args[1], false, Status::Unknown2);
+      RubberSheetApplier().apply(args[0], args[1], args[2]);
+    }
+    else
+    {
+      if (args.size() != 3)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      }
 
-    QStringList l = ConfigOptions().getMapCleanerTransforms();
-    l.removeAll(QString::fromStdString(RubberSheet::className()));
-    conf().set(MapCleaner::opsKey(), l);
-    MapCleaner().apply(map);
-    RubberSheet().apply(map);
-
-    MapProjector::projectToWgs84(map);
-
-    IoUtils::saveMap(map, args[2]);
+      RubberSheeter().rubberSheet(args[0], args[1], args[2]);
+    }
 
     return 0;
   }

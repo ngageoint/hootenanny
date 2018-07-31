@@ -37,7 +37,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/RefRemoveOp.h>
 #include <hoot/core/ops/FindIntersectionsOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -75,10 +74,6 @@ public:
 
     FindIntersectionsOp op;
     op.apply(map);
-
-//    RefRemoveOp uut;
-//    uut.addCriterion(ElementCriterionPtr(new BuildingCriterion()));
-//    uut.apply(map);
 
     LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
 
