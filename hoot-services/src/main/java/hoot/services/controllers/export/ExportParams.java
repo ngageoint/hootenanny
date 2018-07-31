@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -42,6 +42,9 @@ public class ExportParams {
 
     @JsonProperty("textstatus")
     private Boolean textStatus;
+
+    @JsonProperty("includehoottags")
+    private Boolean includeHootTags;
 
     @JsonProperty("tagoverrides")
     private String tagOverrides;
@@ -111,6 +114,14 @@ public class ExportParams {
 
     public void setTextStatus(Boolean textStatus) {
         this.textStatus = textStatus;
+    }
+
+    public Boolean getIncludeHootTags() {
+        return includeHootTags;
+    }
+
+    public void setIncludeHootTags(Boolean includeHootTags) {
+        this.includeHootTags = includeHootTags;
     }
 
     public String getTagOverrides() {

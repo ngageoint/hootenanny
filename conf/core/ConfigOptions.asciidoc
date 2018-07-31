@@ -658,21 +658,21 @@ The spacing used by the EdgeDistanceExtractor.  Units in meters.
 === element.cache.size.node
 
 * Data Type: long
-* Default Value: `2000000`
+* Default Value: `10000000`
 
 Size of the in memory node cache used when streaming I/O is used with nodes.
 
 === element.cache.size.relation
 
 * Data Type: long
-* Default Value: `200000`
+* Default Value: `2000000`
 
 Size of the in memory relation cache used when streaming I/O is used with relations.
 
 === element.cache.size.way
 
 * Data Type: long
-* Default Value: `200000`
+* Default Value: `2000000`
 
 Size of the in memory way cache used when streaming I/O is used with ways.
 
