@@ -41,12 +41,10 @@ import hoot.services.geo.BoundingBox;
 class PullOSMDataCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullOSMDataCommand.class);
 
-    PullOSMDataCommand(String jobId, String bbox, String apiUrl, File outputFile, Class<?> caller) {
+    PullOSMDataCommand(String jobId, BoundingBox bbox, String apiUrl, File outputFile, Class<?> caller) {
         super(jobId);
-
-        logger.info("Started to pull OSM");
-
-        String fullUrl = apiUrl + "/map?bbox=" + bbox;
+            
+        String fullUrl = apiUrl + "/map?bbox=" + bbox.toServicesString();
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("OUTPUT_FILE", outputFile.getAbsolutePath());

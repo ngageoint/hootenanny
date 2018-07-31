@@ -30,13 +30,15 @@ package hoot.services.controllers.grail;
 import java.io.File;
 import java.util.List;
 
+import hoot.services.geo.BoundingBox;
+
 import org.springframework.stereotype.Component;
 
 
 @Component
 class PullOSMDataCommandFactory {
 
-    PullOSMDataCommand build(String jobId, String bbox, String apiUrl, File outputFile, Class<?> caller) {
+    PullOSMDataCommand build(String jobId, BoundingBox bbox, String apiUrl, File outputFile, Class<?> caller) {
         return new PullOSMDataCommand(jobId, bbox, apiUrl, outputFile, caller);
     }
 }
