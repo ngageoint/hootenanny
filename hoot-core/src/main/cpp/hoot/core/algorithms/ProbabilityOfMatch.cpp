@@ -36,7 +36,7 @@ using namespace geos::geom;
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/criterion/ParallelWayFilter.h>
+#include <hoot/core/criterion/ParallelWayCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -72,22 +72,6 @@ double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
 {
   double score = 1.0;
 
-//  if (w1->getTags()["oneway"] != w2->getTags()["oneway"])
-//  {
-//    score *= .5;
-//  }
-//  if (w1->getTags()["tunnel"] != w2->getTags()["tunnel"])
-//  {
-//    score *= .5;
-//  }
-//  if (w1->getTags()["bridge"] != w2->getTags()["bridge"])
-//  {
-//    score *= .5;
-//  }
-//  if (w1->getTags()["highway"] != w2->getTags()["highway"])
-//  {
-//    score *= .5;
-//  }
   score = TagComparator::getInstance().compareTags(w1->getTags(), w2->getTags());
   if (OsmSchema::getInstance().isOneWay(*w1) && OsmSchema::getInstance().isOneWay(*w2))
   {
@@ -183,7 +167,7 @@ double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr &map, const ConstWay
 double ProbabilityOfMatch::parallelScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
                                          const ConstWayPtr& w2)
 {
-  ParallelWayFilter pwf(map, w1, true);
+  ParallelWayCriterion pwf(map, w1, true);
 
   double delta = pwf.calculateDifference(w2);
   return pow(cos(delta), _parallelExp);
