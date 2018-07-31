@@ -32,7 +32,7 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/WaterwayCriterion.h>
-#include <hoot/core/criterion/HighwayFilter.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
@@ -152,7 +152,7 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
     case POI:
       return ElementCriterionPtr(new PoiCriterion());
     case Highway:
-      return ElementCriterionPtr(new HighwayFilter(Filter::KeepMatches));
+      return ElementCriterionPtr(new HighwayCriterion());
     case Building:
       return ElementCriterionPtr(new BuildingCriterion(map));
     case Waterway:

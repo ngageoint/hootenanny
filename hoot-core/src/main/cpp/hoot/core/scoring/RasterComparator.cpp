@@ -36,7 +36,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/criterion/HighwayFilter.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
 
@@ -155,7 +155,7 @@ void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& imag
   QMatrix m = gp.createMatrix(pt.viewport(), _projectedBounds);
 
   PaintVisitor pv(map, gp, pt, m);
-  HighwayFilter filter(HighwayFilter::KeepMatches);
+  HighwayCriterion filter;
   FilteredVisitor v(filter, pv);
   map->visitRo(v);
 
