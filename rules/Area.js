@@ -1,12 +1,12 @@
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.description = "Area";
+exports.description = "matches areas";
 exports.matchThreshold = parseFloat(hoot.get("generic.polygon.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.polygon.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
-exports.experimental = false;
+exports.experimental = true;
 exports.baseFeatureType = "Area";
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();

@@ -98,7 +98,7 @@ private:
    */
   boost::shared_ptr<MatchCreator> getMatchCreator(const std::vector< boost::shared_ptr<MatchCreator> > &matchCreators,
                                            const QString &matchCreatorName,
-                                           MatchCreator::BaseFeatureType &featureType);
+                                           CreatorDescription::BaseFeatureType &featureType);
 
   double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v);
 
@@ -107,18 +107,18 @@ private:
 
   void _applyVisitor(boost::shared_ptr<const OsmMap> &map, ConstElementVisitor *v);
 
-  static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
-                                      const MatchCreator::Description& m2);
+  static bool _matchDescriptorCompare(const CreatorDescription& m1,
+                                      const CreatorDescription& m2);
 
   void _generateFeatureStats(boost::shared_ptr<const OsmMap>& map,
-                             const MatchCreator::BaseFeatureType& featureType,
+                             const CreatorDescription::BaseFeatureType& featureType,
                              const float conflatableCount,
-                             const MatchCreator::FeatureCalcType& type,
+                             const CreatorDescription::FeatureCalcType& type,
                              ElementCriterionPtr criterion,
                              const long poisMergedIntoPolys);
 
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
-      const MatchCreator::BaseFeatureType& featureType);
+      const CreatorDescription::BaseFeatureType& featureType);
 };
 
 }

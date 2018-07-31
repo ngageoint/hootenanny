@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OVERWRITETAGMERGER_H
 #define OVERWRITETAGMERGER_H
@@ -51,7 +51,11 @@ public:
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 
+  virtual QString getDescription()
+  { return "Overwrites tags in the secondary feature with tags from the reference feature"; }
+
 protected:
+
   bool _swap;
 };
 
@@ -71,7 +75,7 @@ public:
 };
 
 /**
- * Similar to OverwritTagMerger, but tag 1 values will be overwritten with tag 2 values.
+ * Similar to OverwriteTagMerger, but tag 1 values will be overwritten with tag 2 values.
  */
 class OverwriteTag1Merger : public OverwriteTagMerger
 {
@@ -82,6 +86,9 @@ public:
   OverwriteTag1Merger() : OverwriteTagMerger(true) {}
 
   virtual ~OverwriteTag1Merger() {}
+
+  virtual QString getDescription()
+  { return "Overwrites tags in the reference feature with tags from the secondary feature"; }
 };
 
 }

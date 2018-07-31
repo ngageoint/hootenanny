@@ -31,7 +31,7 @@
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
+#include <hoot/core/conflate/extractors/NameExtractor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TranslateStringDistance.h>

@@ -37,9 +37,9 @@
 #include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/conflate/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/conflate/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>

@@ -101,10 +101,10 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   return result;
 }
 
-vector<MergerCreator::Description> MarkForReviewMergerCreator::getAllCreators() const
+vector<CreatorDescription> MarkForReviewMergerCreator::getAllCreators() const
 {
   // don't provide this as an option in the UI. This will be added automatically in the right place.
-  return vector<Description>();
+  return vector<CreatorDescription>();
 }
 
 bool MarkForReviewMergerCreator::isConflicting(const ConstOsmMapPtr&, const Match*, const Match*)

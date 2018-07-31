@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
+#include <hoot/core/conflate/CreatorDescription.h>
 
 // Standard
 #include <set>
@@ -45,27 +46,6 @@ class Merger;
 class MergerCreator
 {
 public:
-  class Description
-  {
-  public:
-    Description() : experimental() {}
-    Description(std::string className, QString description, bool experimental)
-    {
-      this->className = className;
-      this->experimental = experimental;
-      this->description = description;
-    }
-
-    QString toString() const
-    {
-      return QString("%1 %2").arg(QString::fromStdString(className)).
-        arg(experimental ? "(experimental)" : "");
-    }
-
-    bool experimental;
-    std::string className;
-    QString description;
-  };
 
   static std::string className() { return "hoot::MergerCreator"; }
 
@@ -87,7 +67,7 @@ public:
    * Generally this just returns the class name of this creator. However, creators that take
    * arguments to specify scripts such as the ScriptMatchCreator may return multiple results.
    */
-  virtual std::vector<Description> getAllCreators() const = 0;
+  virtual std::vector<CreatorDescription> getAllCreators() const = 0;
 
   /**
    * Returns true if m1 and m2 are conflicting. If the MergerCreator has no information on the two

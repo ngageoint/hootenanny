@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/CreatorDescription.h>
 
 // Standard
 #include <string>
@@ -46,65 +47,6 @@ class ElementCriterion;
 class MatchCreator
 {
 public:
-
-  // This is how we map various match creators to the feature
-  // they operate on. Helpful when generating stats later.
-  enum BaseFeatureType
-  {
-    POI = 0,
-    Highway = 1,
-    Building = 2,
-    Waterway = 3,
-    PoiPolygonPOI = 4,  //this is a superset of POI specific to poi/poly conflation
-    Polygon = 5,    //polygon is a superset of building
-    Area = 6,
-    Railway = 7,
-    PowerLine = 8,
-    Unknown = 9 // Unknown must always be last
-  };
-
-  enum FeatureCalcType
-  {
-    CalcTypeNone = 0,
-    CalcTypeLength = 1,
-    CalcTypeArea = 2
-  };
-
-  static QString BaseFeatureTypeToString(BaseFeatureType t);
-
-  static BaseFeatureType StringToBaseFeatureType(QString s);
-
-  /* These two functions, getFeatureCalcType & getElementCriterion could be
-   * pushed down into the classes that are derived from MatchCreator, and
-   * that would seem logical and clean - BUT ScriptMatchCreator becomes
-   * problematic, as those match creators are generated at runtime. So you'd
-   * have to hard code the mappings between featureTypes and FeatureCalcTypes
-   * and the ElementCriterions for each script down in the ScriptMatchCreator
-   * class. SO, rather than that - we'll just keep all of this feature type
-   * stuff grouped together in one place.
-   */
-  static FeatureCalcType getFeatureCalcType(BaseFeatureType t);
-
-  static boost::shared_ptr<ElementCriterion> getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map);
-
-  class Description
-  {
-  public:
-    Description() : experimental() {}
-    Description(std::string className, QString description, BaseFeatureType featureType,
-                bool experimental)
-      : experimental(experimental),
-        className(className),
-        description(description),
-        baseFeatureType(featureType)
-    {
-    }
-
-    bool experimental;
-    std::string className;
-    QString description;
-    BaseFeatureType baseFeatureType;
-  };
 
   static std::string className() { return "hoot::MatchCreator"; }
 
@@ -126,7 +68,7 @@ public:
    * Generally this just returns the class name of this creator. However, creators that take
    * arguments to specify scripts such as the ScriptMatchCreator may return multiple results.
    */
-  virtual std::vector<Description> getAllCreators() const = 0;
+  virtual std::vector<CreatorDescription> getAllCreators() const = 0;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -149,15 +91,15 @@ public:
 
   /*
    * This is actually being done in order to track the script name in ScriptMatchCreator, so we
-   * need to do some refactoring to get rid of this.  Redundant with Description class above.
+   * need to do some refactoring to get rid of this.  Could be redundant with the
+   * CreatorDescription class.
    */
-  QString getDescription() { return _description; }
-  void setDescription(QString description) { _description = description; }
+  QString getDescription() const { return _description; }
+  //void setDescription(QString description) { _description = description; }
 
 protected:
 
   QString _description;
-
 };
 
 typedef boost::shared_ptr<MatchCreator> MatchCreatorPtr;

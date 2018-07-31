@@ -29,7 +29,7 @@ hoot convert $HOOT_OPT $inputDir/*.shp $outputDir/new_TDSv40.osm --trans $TRANS 
 #cp $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm
 
 # compareFiles. Test taken from MGCP test
-hoot map-diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm || diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm
+hoot diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm || diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm
 
 # Make shapefiles
 # NOTE: These are thematic.
@@ -43,10 +43,10 @@ hoot convert --debug $outputDir/new_TDSv40.osm $outputDir".shp" --trans $TRANS #
 
 # echo
 # echo "Compare the second with orig"
-# hoot map-diff $outputDir/second_TDSv40_new.osm $inputDir/TDSv40.osm || diff $outputDir/second_TDSv40.osm $inputDir/TDSv40.osm
+# hoot diff $outputDir/second_TDSv40_new.osm $inputDir/TDSv40.osm || diff $outputDir/second_TDSv40.osm $inputDir/TDSv40.osm
 # echo
 # echo "Compare the second with new"
-# hoot map-diff $outputDir/second_TDSv40.osm $outputDir/new_TDSv40.osm || diff $outputDir/second_TDSv40.osm $outputDir/new_TDSv40.osm
+# hoot diff $outputDir/second_TDSv40.osm $outputDir/new_TDSv40.osm || diff $outputDir/second_TDSv40.osm $outputDir/new_TDSv40.osm
 # echo
 # echo
 

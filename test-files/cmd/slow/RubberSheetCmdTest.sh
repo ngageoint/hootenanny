@@ -13,5 +13,5 @@ hoot rubber-sheet $input1 $input2 $outputfile | \
            sed "s/RMSE: [0-9]\+\.[0-9]\+//g"
 
 # Check output
-hoot map-diff $comparefile $outputfile || diff $comparefile $outputfile
+hoot diff $comparefile $outputfile || diff $comparefile $outputfile
 
