@@ -37,7 +37,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/FindIntersectionsOp.h>
+#include <hoot/core/ops/FindHighwayIntersectionsOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 
@@ -48,9 +48,9 @@ using namespace Tgs;
 namespace hoot
 {
 
-class FindIntersectionsOpTest : public HootTestFixture
+class FindHighwayIntersectionsOpTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(FindIntersectionsOpTest);
+  CPPUNIT_TEST_SUITE(FindHighwayIntersectionsOpTest);
   CPPUNIT_TEST(runToyTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -59,7 +59,7 @@ public:
   virtual void setUp()
   {
     HootTestFixture::setUp();
-    TestUtils::mkpath("test-output/ops/FindIntersectionsOp/");
+    TestUtils::mkpath("test-output/ops/FindHighwayIntersectionsOp/");
   }
 
   void runToyTest()
@@ -71,21 +71,21 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    FindIntersectionsOp op;
+    FindHighwayIntersectionsOp op;
     op.apply(map);
 
     LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/FindIntersectionsOp/Toy_intersections.osm");
-    HOOT_FILE_EQUALS("test-files/ops/FindIntersectionsOp/ToyTestA_intersections.osm",
-                     "test-output/ops/FindIntersectionsOp/Toy_intersections.osm");
+    writer.write(map, "test-output/ops/FindHighwayIntersectionsOp/Toy_intersections.osm");
+    HOOT_FILE_EQUALS("test-files/ops/FindHighwayIntersectionsOp/ToyTestA_intersections.osm",
+                     "test-output/ops/FindHighwayIntersectionsOp/Toy_intersections.osm");
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FindIntersectionsOpTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FindHighwayIntersectionsOpTest, "quick");
 
 }
 

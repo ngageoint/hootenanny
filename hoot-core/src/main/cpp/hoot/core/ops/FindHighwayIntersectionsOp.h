@@ -24,18 +24,39 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-#include "StatsAreaFilter.h"
+#ifndef FINDHIGHWAYINTERSECTIONSOP_H
+#define FINDHIGHWAYINTERSECTIONSOP_H
 
 // Hoot
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
 
-bool StatsAreaFilter::isMatch(const Element& e) const
+
+/**
+ * Op. to find intersections
+ */
+class FindHighwayIntersectionsOp : public OsmMapOperation
 {
-  return OsmSchema::getInstance().isAreaForStats(e.getTags(), e.getElementType());
-}
+public:
+
+  static std::string className() { return "hoot::FindHighwayIntersectionsOp"; }
+
+  static QString opsKey() { return "map.cleaner.transforms"; }
+
+  FindHighwayIntersectionsOp();
+
+  virtual ~FindHighwayIntersectionsOp() {}
+
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
+
+  virtual QString getDescription() const { return "Identifies road intersections"; }
+};
 
 }
+
+#endif // FINDHIGHWAYINTERSECTIONSOP_H

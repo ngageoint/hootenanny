@@ -22,45 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FINDINTERSECTIONSVISITOR_H
-#define FINDINTERSECTIONSVISITOR_H
+#include "StatsAreaCriterion.h"
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-/**
- * Finds all intersections (nodes), adds some parameters to them and records their node ids
- */
-class FindIntersectionsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+HOOT_FACTORY_REGISTER(ElementCriterion, StatsAreaCriterion)
+
+bool StatsAreaCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
-public:
-
-  static std::string className() { return "hoot::FindIntersectionsVisitor"; }
-
-  FindIntersectionsVisitor() {}
-
-  virtual void visit(const ConstElementPtr& e);
-
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
-
-  std::vector<long>& getIntersections() { return _ids; }
-
-  virtual QString getDescription() const { return "Identifies intersections"; }
-
-private:
-
-  OsmMap* _map;
-  std::vector<long> _ids;
-};
+  return OsmSchema::getInstance().isAreaForStats(e);
+}
 
 }
 
-#endif // FINDINTERSECTIONSVISITOR_H

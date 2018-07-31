@@ -22,41 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FINDINTERSECTIONSOP_H
-#define FINDINTERSECTIONSOP_H
+#ifndef STATSAREACRITERION_H
+#define STATSAREACRITERION_H
 
-// Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
-
-// Qt
-#include <QString>
+#include "ElementCriterion.h"
 
 namespace hoot
 {
 
-
 /**
- * Op. to find intersections
+ * Identifies areas as defined by CalculateStatsOp
  */
-class FindIntersectionsOp : public OsmMapOperation
+class StatsAreaCriterion : public ElementCriterion
 {
 public:
+  static std::string className() { return "hoot::StatsAreaCriterion"; }
 
-  static std::string className() { return "hoot::FindIntersectionsOp"; }
+  StatsAreaCriterion() {}
 
-  static QString opsKey() { return "map.cleaner.transforms"; }
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-  FindIntersectionsOp();
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaCriterion()); }
 
-  virtual ~FindIntersectionsOp() {}
-
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
-
-  virtual QString getDescription() const { return "Identifies road intersections"; }
+  virtual QString getDescription() const { return "Identifies areas for use by stats"; }
 };
 
 }
-
-#endif // FINDINTERSECTIONSOP_H
+#endif // STATSAREACRITERION_H

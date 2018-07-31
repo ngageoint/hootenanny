@@ -33,7 +33,7 @@
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/ops/FindIntersectionsOp.h>
+#include <hoot/core/ops/FindHighwayIntersectionsOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
 
@@ -65,7 +65,7 @@ public:
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, args[0], false, Status::Unknown1);
 
-    FindIntersectionsOp().apply(map);
+    FindHighwayIntersectionsOp().apply(map);
 
     MapProjector::projectToWgs84(map);
 

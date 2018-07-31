@@ -37,7 +37,7 @@
 #include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/StatsAreaFilter.h>
+#include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/WaterwayCriterion.h>
@@ -127,7 +127,6 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
   }
   logMsg += "...";
   LOG_INFO(logMsg);
-  Filter::FilterType keep = Filter::KeepMatches;
 
   MapProjector::projectToPlanar(map);
 
@@ -183,7 +182,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       SingleStat("Meters Squared of Area Features",
       _applyVisitor(
         constMap,
-        FilteredVisitor(StatsAreaFilter(keep),
+        FilteredVisitor(StatsAreaCriterion(),
           ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())))));
     _stats.append(
       SingleStat("Meters of Highway",

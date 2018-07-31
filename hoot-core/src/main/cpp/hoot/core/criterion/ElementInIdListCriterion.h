@@ -1,4 +1,4 @@
-/*
+ /*
  * This file is part of Hootenanny.
  *
  * Hootenanny is free software: you can redistribute it and/or modify
@@ -24,29 +24,40 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef STATSAREAFILTER_H
-#define STATSAREAFILTER_H
+#ifndef ELEMENTINIDLISTCRITERION_H
+#define ELEMENTINIDLISTCRITERION_H
 
-#include "BaseFilter.h"
+#include "ElementCriterion.h"
 
+// Std
+#include <set>
 
 namespace hoot
 {
 
-class StatsAreaFilter : public BaseFilter
+/**
+ * Identifies elements in a list of IDs
+ */
+class ElementInIdListCriterion : public ElementCriterion
 {
 public:
 
-  StatsAreaFilter(FilterType type) : BaseFilter(type) {}
+  static std::string className() { return "hoot::ElementInIdListCriterion"; }
 
-  virtual bool isMatch(const Element& e) const;
+  ElementInIdListCriterion() {}
+  ElementInIdListCriterion(const std::vector<long>& ids);
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaFilter(_type)); }
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-  virtual QString getDescription() const
-  { return "Identifies areas as defined by map statistics calculation"; }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new ElementInIdListCriterion()); }
+
+  virtual QString getDescription() const { return "Identifies elements in a list of IDs"; }
+
+private:
+
+  std::set<long> _ids;
 };
 
 }
-
-#endif // AREAFILTER_H
+#endif // ELEMENTINIDLISTCRITERION_H

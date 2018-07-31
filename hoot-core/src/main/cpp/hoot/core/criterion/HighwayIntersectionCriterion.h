@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef INTERSECTIONCRITERION_H
-#define INTERSECTIONCRITERION_H
+#ifndef HIGHWAYINTERSECTIONCRITERION_H
+#define HIGHWAYINTERSECTIONCRITERION_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
@@ -41,20 +41,20 @@ namespace hoot
  *
  * This class assumes that IntersectionSplitter was applied to the map before being called.
  */
-class IntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class HighwayIntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::IntersectionCriterion"; }
+  static std::string className() { return "hoot::HighwayIntersectionCriterion"; }
 
-  IntersectionCriterion() {}
+  HighwayIntersectionCriterion() {}
 
-  virtual ~IntersectionCriterion() {}
+  virtual ~HighwayIntersectionCriterion() {}
 
-  IntersectionCriterion(ConstOsmMapPtr map);
+  HighwayIntersectionCriterion(ConstOsmMapPtr map);
 
   virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new IntersectionCriterion(_map)); }
+  { return ElementCriterionPtr(new HighwayIntersectionCriterion(_map)); }
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
@@ -70,4 +70,4 @@ private:
 
 }
 
-#endif // INTERSECTIONCRITERION_H
+#endif // HIGHWAYINTERSECTIONCRITERION_H

@@ -22,41 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef INTERSECTIONFILTER_H
-#define INTERSECTIONFILTER_H
+#include "ElementInIdListCriterion.h"
 
-#include "ElementCriterion.h"
-
-#include <set>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
-/**
- * Filters out all features except nodes with the provided ids
- *
- * TODO: remove
- */
-class IntersectionFilter : public BaseElementFilter
+
+HOOT_FACTORY_REGISTER(ElementCriterion, ElementInIdListCriterion)
+
+ElementInIdListCriterion::ElementInIdListCriterion(const std::vector<long>& ids)
 {
-public:
+  for (uint i = 0; i < ids.size(); i++)
+  {
+    _ids.insert(ids[i]);
+  }
+}
 
-  IntersectionFilter(std::vector<long> ids);
-
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IntersectionFilter(_nids)); }
-
-  virtual QString getDescription() const { return "Identifies highway intersections"; }
-
-protected:
-
-  IntersectionFilter(std::set<long> ids) : _nids(ids) { }
-
-  std::set<long> _nids;
-};
+bool ElementInIdListCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+{
+  return _ids.find(e->getId()) != _ids.end();
+}
 
 }
 
-#endif // INTERSECTIONFILTER_H

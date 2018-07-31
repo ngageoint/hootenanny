@@ -24,16 +24,12 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "FindIntersectionsOp.h"
+#include "FindHighwayIntersectionsOp.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/ops/DuplicateNameRemover.h>
 #include <hoot/core/ops/DuplicateWayRemover.h>
-#include <hoot/core/conflate/highway/ImpliedDividedMarker.h>
-#include <hoot/core/conflate/merging/SmallWayMerger.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/UnlikelyIntersectionRemover.h>
@@ -41,27 +37,27 @@
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/RemoveDuplicateAreaVisitor.h>
-#include <hoot/core/visitors/RemoveEmptyAreasVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/visitors/FindIntersectionsVisitor.h>
-#include <hoot/core/criterion/IntersectionFilter.h>
+#include <hoot/core/visitors/FindHighwayIntersectionsVisitor.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/criterion/ElementInIdListCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/NodeCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, FindIntersectionsOp)
+HOOT_FACTORY_REGISTER(OsmMapOperation, FindHighwayIntersectionsOp)
 
-FindIntersectionsOp::FindIntersectionsOp()
+FindHighwayIntersectionsOp::FindHighwayIntersectionsOp()
 {
 }
 
-void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
+void FindHighwayIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   // remove all relations
   LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
@@ -86,7 +82,7 @@ void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   LOG_INFO("Assuming drives on right.");
 
   // find all intersections
-  boost::shared_ptr<FindIntersectionsVisitor> v(new FindIntersectionsVisitor());
+  boost::shared_ptr<FindHighwayIntersectionsVisitor> v(new FindHighwayIntersectionsVisitor());
   VisitorOp(v).apply(map);
   LOG_INFO(QString("%1 Intersections found.").arg(v->getIntersections().size()));
 
@@ -94,10 +90,14 @@ void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   boost::shared_ptr<ElementTypeCriterion> wayFilter(new ElementTypeCriterion(ElementType::Way));
   VisitorOp(new RemoveElementsVisitor(wayFilter)).apply(map);
 
-  // then remove everything except for the intersection that we found
-  boost::shared_ptr<IntersectionFilter> intersectionFilter(
-    new IntersectionFilter(v->getIntersections()));
-  VisitorOp(new RemoveElementsVisitor(intersectionFilter)).apply(map);
+  // remove anything that is not a node and in the list of intersections found
+  boost::shared_ptr<NotCriterion> intersectionCrit(
+    new NotCriterion(
+      new ChainCriterion(
+        boost::shared_ptr<ElementInIdListCriterion>(
+          new ElementInIdListCriterion(v->getIntersections())),
+        boost::shared_ptr<NodeCriterion>(new NodeCriterion()))));
+  VisitorOp(new RemoveElementsVisitor(intersectionCrit)).apply(map);
 
   MapCleaner().apply(map);
 }
