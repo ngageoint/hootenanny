@@ -175,10 +175,13 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   }
 }
 
-vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const
+vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
 {
-  vector<Description> result;
-  result.push_back(Description(className(), "Network Match Creator", Highway, true));
+  vector<CreatorDescription> result;
+  result.push_back(
+    CreatorDescription(
+      className(), "matches roads with the network algorithm",
+      CreatorDescription::BaseFeatureType::Highway, false));
   return result;
 }
 

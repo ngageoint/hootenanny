@@ -100,9 +100,9 @@ void MatchFactory::_checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> m
   }
 }
 
-vector<MatchCreator::Description> MatchFactory::getAllAvailableCreators() const
+vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
 {
-  vector<MatchCreator::Description> result;
+  vector<CreatorDescription> result;
 
   // get all match creators from the factory
   vector<std::string> names =
@@ -111,9 +111,10 @@ vector<MatchCreator::Description> MatchFactory::getAllAvailableCreators() const
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator.
-    boost::shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(names[i]));
+    boost::shared_ptr<MatchCreator> mc(
+      Factory::getInstance().constructObject<MatchCreator>(names[i]));
 
-    vector<MatchCreator::Description> d = mc->getAllCreators();
+    vector<CreatorDescription> d = mc->getAllCreators();
     result.insert(result.end(), d.begin(), d.end());
   }
 
@@ -128,7 +129,8 @@ void MatchFactory::registerCreator(QString c)
   if (className.length() > 0)
   {
     args.removeFirst();
-    boost::shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
+    boost::shared_ptr<MatchCreator> mc(
+      Factory::getInstance().constructObject<MatchCreator>(className));
     _theInstance->registerCreator(mc);
 
     if (args.size() > 0)

@@ -35,8 +35,8 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
+#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/conflate/extractors/OverlapExtractor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 #include <hoot/core/util/ConfigOptions.h>

@@ -38,14 +38,14 @@
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/conflate/extractors/BufferedOverlapExtractor.h>
+#include <hoot/core/conflate/extractors/CentroidDistanceExtractor.h>
+#include <hoot/core/conflate/extractors/CompactnessExtractor.h>
+#include <hoot/core/conflate/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/conflate/extractors/NameExtractor.h>
+#include <hoot/core/conflate/extractors/OverlapExtractor.h>
+#include <hoot/core/conflate/extractors/SmallerOverlapExtractor.h>
+#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 
 // Standard

@@ -284,10 +284,13 @@ void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   map->visitRo(v);
 }
 
-vector<MatchCreator::Description> HighwayMatchCreator::getAllCreators() const
+vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
 {
-  vector<Description> result;
-  result.push_back(Description(className(), "Highway Match Creator", MatchCreator::Highway, false));
+  vector<CreatorDescription> result;
+  result.push_back(
+    CreatorDescription(
+      className(), "matches roads with the non-greedy algorithm", CreatorDescription::Highway,
+      false));
   return result;
 }
 
