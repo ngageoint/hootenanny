@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-  class OsmMap;
 
 /**
  * Recursively removes all elements that are deemed non-conflatable
@@ -59,7 +58,7 @@ class NonConflatableElementRemover : public OsmMapOperation
       return "Removes elements that are non-conflatable by hootenanny";
     }
 
-  protected:
+  private:
 
     boost::shared_ptr<OsmMap> _map;
 };
