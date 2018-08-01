@@ -46,7 +46,7 @@ public:
   static std::string className() { return "hoot::ElementInIdListCriterion"; }
 
   ElementInIdListCriterion() {}
-  ElementInIdListCriterion(const std::vector<long>& ids);
+  explicit ElementInIdListCriterion(const std::vector<long>& ids);
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
