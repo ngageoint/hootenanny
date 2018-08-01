@@ -39,9 +39,8 @@ class ImplicitTagRulesSqliteWriterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  ImplicitTagRulesSqliteWriterTest()
   {
-    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/ImplicitTagRulesSqliteWriterTest");
   }
 

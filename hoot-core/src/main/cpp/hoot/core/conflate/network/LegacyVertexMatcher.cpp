@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/conflate/matching/NodeMatcher.h>
-#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/conflate/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/network/SearchRadiusProvider.h>
 

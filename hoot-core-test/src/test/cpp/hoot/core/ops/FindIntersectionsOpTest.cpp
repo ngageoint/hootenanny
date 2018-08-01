@@ -37,7 +37,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/RefRemoveOp.h>
 #include <hoot/core/ops/FindIntersectionsOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -57,9 +56,9 @@ class FindIntersectionsOpTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  FindIntersectionsOpTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/ops/FindIntersectionsOp/");
   }
 
@@ -68,16 +67,11 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
     FindIntersectionsOp op;
     op.apply(map);
-
-//    RefRemoveOp uut;
-//    uut.addCriterion(ElementCriterionPtr(new BuildingCriterion()));
-//    uut.apply(map);
 
     LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
 

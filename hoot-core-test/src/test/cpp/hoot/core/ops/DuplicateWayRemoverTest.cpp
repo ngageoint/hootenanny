@@ -66,16 +66,14 @@ class DuplicateWayRemoverTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  DuplicateWayRemoverTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate");
   }
 
   void runTest()
   {
-    OsmMap::resetCounters();
-
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -99,8 +97,6 @@ public:
    */
   void runStrictTagMatchingOnTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
@@ -130,8 +126,6 @@ public:
    */
   void runStrictTagMatchingOffTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 

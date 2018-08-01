@@ -97,17 +97,17 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   }
 }
 
-std::vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() const
+std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
 {
-  std::vector<Description> result;
+  std::vector<CreatorDescription> result;
   result.push_back(
-    Description(
+    CreatorDescription(
       className(),
-      "POI to Polygon Match Creator",
+      "matches POIs to polygons",
       //this match creator has two conflatable types, so arbitrarily just picking one of them as
       //the base feature type; stats class will handle the logic to deal with both poi and polygon
       //input types
-      MatchCreator::Polygon,
+      CreatorDescription::Polygon,
       false));
   return result;
 }

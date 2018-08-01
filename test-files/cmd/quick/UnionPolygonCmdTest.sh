@@ -20,7 +20,7 @@ mkdir -p $OUTPUTFILEDIR
 # COMPAREFILE=$INPUTFILEDIR/union_polygon.osm
 
 # hoot union-polygons $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
-# hoot map-diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
+# hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 
 # Input: 2 x polygons
 # Output: 1 x polygon 
@@ -30,7 +30,7 @@ OUTPUTFILE=$OUTPUTFILEDIR/union_polygon.osm
 COMPAREFILE=$INPUTFILEDIR/union_polygon.osm
 
 hoot union-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
-hoot map-diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
+hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 
 
 # Input: 1 x multipolygon, 1 x polygon
@@ -41,7 +41,7 @@ hoot map-diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 # COMPAREFILE=$INPUTFILEDIR/union_multi_one.osm
 
 # hoot union-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
-# hoot map-diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
+# hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 
 
 # Input: 2 x multipolygons
@@ -52,4 +52,4 @@ OUTPUTFILE=$OUTPUTFILEDIR/union_multi_both.osm
 COMPAREFILE=$INPUTFILEDIR/union_multi_both.osm
 
 hoot union-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
-hoot map-diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
+hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE

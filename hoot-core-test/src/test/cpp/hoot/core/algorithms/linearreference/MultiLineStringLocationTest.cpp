@@ -66,9 +66,13 @@ class MultiLineStringLocationTest : public HootTestFixture
 
 public:
 
+  MultiLineStringLocationTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runSingleWayTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -109,7 +113,6 @@ public:
 
   void runMultipleWaysWayLocationOnFirstWayTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -151,7 +154,6 @@ public:
 
   void runMultipleWaysWayLocationOnLastWayTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -193,7 +195,6 @@ public:
 
   void runMultipleWaysWayLocationOnMiddleWayTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -239,7 +240,6 @@ public:
 
   void runWayLocationAtBeginningOfWayTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -280,7 +280,6 @@ public:
 
   void runWayLocationAtEndOfWayTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -321,7 +320,6 @@ public:
 
   void runRelationHasNoWaysTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -351,7 +349,6 @@ public:
 
   void runRelationNotMultiLineStringTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -380,7 +377,6 @@ public:
 
   void runInvalidWayIndexTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -409,7 +405,6 @@ public:
 
   void runRelationWayMemberDoesntMatchWayLocationWayTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
@@ -440,7 +435,6 @@ public:
 
   void runRelationContainsFeaturesOtherThanWaysTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),

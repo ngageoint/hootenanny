@@ -54,9 +54,9 @@ class PertyTestRunnerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  PertyTestRunnerTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Dynamic");
     TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Static");
     TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Variance");
@@ -64,13 +64,10 @@ public:
 
   void runDynamicVariablesTest()
   {
-    TestUtils::resetEnvironment();
-
     QFile resultsFile("test-output/perty/PertyTestRunnerTest/Dynamic/results");
     resultsFile.remove();
     QFile resultsPlotFile("test-output/perty/PertyTestRunnerTest/Dynamic/results-plot.dat");
     resultsPlotFile.remove();
-    OsmMap::resetCounters();
 
     Settings testSettings = conf();
     testSettings.set("perty.seed", QString::number(2));
@@ -105,14 +102,14 @@ public:
     testRunner._testScores.append(0.75);
     testRunner._testScores.append(0.85);
 
-    const QList<boost::shared_ptr<const PertyTestRunResult> > results =
+    const QList<boost::shared_ptr<const PertyTestRunResult>> results =
       testRunner.runTest(
         "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
         "test-output/perty/PertyTestRunnerTest/Dynamic");
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
-    for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+    for (QList<boost::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
          it != results.end(); ++it)
     {
       boost::shared_ptr<const PertyTestRunResult> result = *it;
@@ -184,7 +181,6 @@ public:
 
   void runNoDynamicVariablesTest()
   {
-    OsmMap::resetCounters();
     QFile resultsFile("test-output/perty/PertyTestRunnerTest/Static/results");
     resultsFile.remove();
     QFile resultsPlotFile("test-output/perty/PertyTestRunnerTest/Static/results-plot.dat");
@@ -220,12 +216,12 @@ public:
     testRunner._testScores.append(0.75);
     testRunner._testScores.append(0.85);
 
-    const QList<boost::shared_ptr<const PertyTestRunResult> > results =
+    const QList<boost::shared_ptr<const PertyTestRunResult>> results =
       testRunner.runTest(
         "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
         "test-output/perty/PertyTestRunnerTest/Static");
     QString testRunResultsStr = "";
-    for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+    for (QList<boost::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
          it != results.end(); ++it)
     {
       boost::shared_ptr<const PertyTestRunResult> result = *it;
@@ -291,7 +287,6 @@ public:
     resultsFile.remove();
     QFile resultsPlotFile("test-output/perty/PertyTestRunnerTest/Variance/results-plot.dat");
     resultsPlotFile.remove();
-    OsmMap::resetCounters();
 
     Settings testSettings = conf();
     testSettings.set("perty.seed", QString::number(2));
@@ -321,14 +316,14 @@ public:
     testRunner._testScores.append(0.75);
     testRunner._testScores.append(0.85);
 
-    const QList<boost::shared_ptr<const PertyTestRunResult> > results =
+    const QList<boost::shared_ptr<const PertyTestRunResult>> results =
       testRunner.runTest(
         "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
         "test-output/perty/PertyTestRunnerTest/Variance");
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
-    for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+    for (QList<boost::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
          it != results.end(); ++it)
     {
       boost::shared_ptr<const PertyTestRunResult> result = *it;

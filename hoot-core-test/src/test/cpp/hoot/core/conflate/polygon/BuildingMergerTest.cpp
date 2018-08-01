@@ -81,9 +81,9 @@ class BuildingMergerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  BuildingMergerTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate/polygon");
   }
 
@@ -119,7 +119,6 @@ public:
   void runMatchTest()
   {
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
@@ -150,8 +149,6 @@ public:
   void runTagTest()
   {
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -205,13 +202,12 @@ public:
 
   void runKeepMoreComplexGeometryWhenAutoMergingTest1()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
-    set< pair<ElementId, ElementId> > pairs = getPairsForComplexAutoMergingTests(map);
+    set<pair<ElementId, ElementId>> pairs = getPairsForComplexAutoMergingTests(map);
 
     BuildingMerger bm(pairs);
     bm.setKeepMoreComplexGeometryWhenAutoMerging(true);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     bm.apply(map, replaced);
 
     MapProjector::projectToWgs84(map);
@@ -225,13 +221,12 @@ public:
 
   void runKeepMoreComplexGeometryWhenAutoMergingTest2()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
-    set< pair<ElementId, ElementId> > pairs = getPairsForComplexAutoMergingTests(map);
+    set<pair<ElementId, ElementId>> pairs = getPairsForComplexAutoMergingTests(map);
 
     BuildingMerger bm(pairs);
     bm.setKeepMoreComplexGeometryWhenAutoMerging(false);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     bm.apply(map, replaced);
 
     MapProjector::projectToWgs84(map);
@@ -244,7 +239,7 @@ public:
 
 private:
 
-  set< pair<ElementId, ElementId> > getPairsForComplexAutoMergingTests(OsmMapPtr map)
+  set<pair<ElementId, ElementId>> getPairsForComplexAutoMergingTests(OsmMapPtr map)
   {
     OsmXmlReader reader;
     reader.setDefaultStatus(Status::Unknown1);

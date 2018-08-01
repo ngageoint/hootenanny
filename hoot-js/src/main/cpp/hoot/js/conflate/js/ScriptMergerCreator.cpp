@@ -128,13 +128,13 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
   return result;
 }
 
-vector<MergerCreator::Description> ScriptMergerCreator::getAllCreators() const
+vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
 {
-  MergerCreator::Description d;
+  CreatorDescription d;
   d.className = className();
   d.description = "Script merge creator required by all script match creators.";
   d.experimental = false;
-  vector<MergerCreator::Description> result;
+  vector<CreatorDescription> result;
   result.push_back(d);
 
   return result;

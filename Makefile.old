@@ -252,7 +252,7 @@ conf/models/%.rf: conf/models/%.arff.bz2 qt-make always
 	   (test -e $(@:.rf=.sha1sum) && test "$$(sha1sum $@)" != "$$(cat $(@:.rf=.sha1sum))"); then \
 	     test -e $(@:.rf=.sha1sum) || echo "Please create a sha1sum for $@."; \
 	     ( test -e $(@:.rf=.sha1sum) && test -e $@ && test "$$(sha1sum $@)" != "$$(cat $(@:.rf=.sha1sum))" ) && echo "Rebuilding $@ due to mismatched sha1sum." ; \
-	     hoot model-rf-build $< $@ ; \
+	     hoot build-model $< $@ ; \
 	     sha1sum $@ > $(@:.rf=.sha1sum); \
 	fi
 

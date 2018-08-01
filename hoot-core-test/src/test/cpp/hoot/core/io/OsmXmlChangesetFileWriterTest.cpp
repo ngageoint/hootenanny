@@ -45,9 +45,8 @@ class OsmXmlChangesetFileWriterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  OsmXmlChangesetFileWriterTest()
   {
-    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/OsmXmlChangesetFileWriterTest");
   }
 

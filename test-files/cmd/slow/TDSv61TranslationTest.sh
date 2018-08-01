@@ -29,7 +29,7 @@ hoot convert $HOOT_OPT $inputDir/*.shp $outputDir/new_TDSv61.osm --trans $TRANS 
 #cp $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm
 
 # compareFiles. Test taken from MGCP test
-hoot map-diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm || diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm
+hoot diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm || diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm
 
 # Make shapefiles
 # NOTE: These are 1 x FCODE / file and it assumes that the output dir doesn't have any shapefiles in it
@@ -47,10 +47,10 @@ hoot convert --debug -D ogr.thematic.structure=false $outputDir/new_TDSv61.osm $
 
 # echo
 # echo "Compare the second with orig"
-# hoot map-diff $outputDir/second_TDSv61_new.osm $inputDir/TDSv61.osm || diff $outputDir/second_TDSv61.osm $inputDir/TDSv61.osm
+# hoot diff $outputDir/second_TDSv61_new.osm $inputDir/TDSv61.osm || diff $outputDir/second_TDSv61.osm $inputDir/TDSv61.osm
 # echo
 # echo "Compare the second with new"
-# hoot map-diff $outputDir/second_TDSv61.osm $outputDir/new_TDSv61.osm || diff $outputDir/second_TDSv61.osm $outputDir/new_TDSv61.osm
+# hoot diff $outputDir/second_TDSv61.osm $outputDir/new_TDSv61.osm || diff $outputDir/second_TDSv61.osm $outputDir/new_TDSv61.osm
 # echo
 # echo
 

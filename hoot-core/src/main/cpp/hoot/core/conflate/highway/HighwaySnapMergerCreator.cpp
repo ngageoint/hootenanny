@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwaySnapMerger.h"
 
@@ -89,12 +89,11 @@ bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches, vector<Mer
   return result;
 }
 
-vector<MergerCreator::Description> HighwaySnapMergerCreator::getAllCreators() const
+vector<CreatorDescription> HighwaySnapMergerCreator::getAllCreators() const
 {
-  vector<Description> result;
-
-  result.push_back(Description(className(), "Highway Snap Merge Creator", false));
-
+  vector<CreatorDescription> result;
+  result.push_back(
+    CreatorDescription(className(), "merges roads conflated with the non-greedy algorithm", false));
   return result;
 }
 

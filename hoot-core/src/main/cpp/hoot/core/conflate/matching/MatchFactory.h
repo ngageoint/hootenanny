@@ -72,7 +72,7 @@ public:
   /**
    * @brief Returns a description of all available match creators.
    */
-  std::vector<MatchCreator::Description> getAllAvailableCreators() const;
+  std::vector<CreatorDescription> getAllAvailableCreators() const;
 
   /**
    * @return Return all of the registered match creators. This is the list of creators that will

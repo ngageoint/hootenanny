@@ -51,9 +51,9 @@ Feature: Advanced Conflation Options
             | option name | option id | element | placeholder |
             | Cleaning Options | hoot_cleaning_options_label | small_way_merger_threshold | 15 |
             | General Conflation Options | hoot_general_conflation_options_label | unify_optimizer_time_limit | 60 |
-            | General Conflation Options | hoot_general_conflation_options_label | element_cache_size_node | 2000000 |
-            | General Conflation Options | hoot_general_conflation_options_label | element_cache_size_relation | 200000 |
-            | General Conflation Options | hoot_general_conflation_options_label | element_cache_size_way | 200000 |
+            | General Conflation Options | hoot_general_conflation_options_label | element_cache_size_node | 10000000 |
+            | General Conflation Options | hoot_general_conflation_options_label | element_cache_size_relation | 2000000 |
+            | General Conflation Options | hoot_general_conflation_options_label | element_cache_size_way | 2000000 |
             | Waterway Options | hoot_waterway_options_label | waterway_way_angle_sample_distance | "20.0" |
             #TODO: fix me
             #| Waterway Options | hoot_waterway_options_label | waterway_way_matcher_heading_delta | "150.0" |

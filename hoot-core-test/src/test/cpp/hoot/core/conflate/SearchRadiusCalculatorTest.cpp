@@ -64,10 +64,14 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 
 public:
 
+  SearchRadiusCalculatorTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runCalcResultTest()
   {
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(
@@ -135,7 +139,6 @@ public:
   void runPreviouslyConflatedDataTest()
   {
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(

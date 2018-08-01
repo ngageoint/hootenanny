@@ -67,13 +67,11 @@ public:
 
   virtual void setUp()
   {
-    HootTestFixture::setUp();
     deleteUser(userEmail());
   }
 
   virtual void tearDown()
   {
-    HootTestFixture::tearDown();
     deleteUser(userEmail());
 
     OsmApiDb database;

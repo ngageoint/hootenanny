@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-static const QString multiaryConflateClass = "hoot::MultiaryConflateCmd";
+static const QString multiaryConflateClass = "hoot::MultiaryPoiConflateCmd";
 
 ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs) :
 AbstractTest(d, confs)
@@ -170,7 +170,6 @@ void ConflateCaseTest::_runMultiaryConflateCmd()
 
 void ConflateCaseTest::runTest()
 {
-  TestUtils::resetEnvironment();
   LOG_DEBUG("Running conflate case test...");
 
   // configures and cleans up the conf() environment

@@ -65,15 +65,14 @@ class RubberSheetTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RubberSheetTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/conflate");
   }
 
   void runIoTest()
   {
-    TestUtils::resetEnvironment();
     QByteArray arr1;
     QByteArray arr2;
     {
@@ -142,10 +141,7 @@ public:
 
   void runSimpleTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
@@ -206,10 +202,7 @@ public:
 
   void runCalculateTiePointDistancesNotEnoughTiePointsTest2()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);

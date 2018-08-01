@@ -52,14 +52,22 @@ class CookieCutterOpTest : public HootTestFixture
 
 public:
 
+  const QString inputPath = "test-files/ops/CookieCutterOp/";
+  const QString outputPath = "test-output/ops/CookieCutterOp/";
+
+  CookieCutterOpTest()
+  {
+    setResetType(ResetBasic);
+    TestUtils::mkpath(outputPath);
+  }
+
   void runTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/CookieCutterOp/DcTigerRoads-cropped.osm", map);
+    reader.read(inputPath + "DcTigerRoads-cropped.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/DcGisRoads.osm", map);
 
@@ -73,11 +81,10 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    TestUtils::mkpath("test-output/ops/CookieCutterOp");
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/CookieCutterOp/CookieCutterOpTest.osm");
-    HOOT_FILE_EQUALS("test-files/ops/CookieCutterOp/CookieCutterOpTest.osm",
-                     "test-output/ops/CookieCutterOp/CookieCutterOpTest.osm");
+    writer.write(map, outputPath + "CookieCutterOpTest.osm");
+    HOOT_FILE_EQUALS(inputPath + "CookieCutterOpTest.osm",
+                     outputPath + "CookieCutterOpTest.osm");
   }
 
 };

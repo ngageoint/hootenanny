@@ -63,9 +63,9 @@ class FourPassManagerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  FourPassManagerTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/fourpass");
   }
 

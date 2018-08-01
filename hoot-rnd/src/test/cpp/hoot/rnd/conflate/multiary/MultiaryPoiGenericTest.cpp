@@ -47,6 +47,11 @@ class MultiaryPoiGenericTest : public HootTestFixture
 
 public:
 
+  MultiaryPoiGenericTest()
+  {
+    setResetType(ResetAll);
+  }
+
   /**
    * @brief basicTest Should conflate the three POIs into a single POI.
    *
@@ -55,8 +60,6 @@ public:
    */
   void basicTest()
   {
-    TestUtils::resetEnvironment();
-
     OGREnvelope env;
     env.MinX = -1;
     env.MinY = -1;

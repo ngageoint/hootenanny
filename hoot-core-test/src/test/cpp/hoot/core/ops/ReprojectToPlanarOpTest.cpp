@@ -57,23 +57,21 @@ class ReprojectToPlanarOpTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  const QString inputPath  = "test-files/ops/ReprojectToPlanarOp/";
+  const QString outputPath = "test-output/ops/ReprojectToPlanarOp/";
+
+  ReprojectToPlanarOpTest()
   {
-    HootTestFixture::setUp();
-    TestUtils::resetEnvironment();
+    setResetType(ResetAll);
   }
 
   void runTest()
   {
-    QString inputPath  = "test-files/ops/ReprojectToPlanarOp/";
     QString inputFile  = "ToyWGS84.osm";
-    QString outputPath = "test-output/ops/ReprojectToPlanarOp/";
     QString outputFile = "ToyPlanar.osm";
-
 
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(inputPath + inputFile, map);
 
@@ -83,8 +81,8 @@ public:
     TestUtils::mkpath(outputPath);
     OsmXmlWriter writer;
     writer.write(map, outputPath + outputFile);
-    HOOT_FILE_EQUALS(inputPath+outputFile,
-                     outputPath+outputFile);
+    HOOT_FILE_EQUALS(inputPath + outputFile,
+                     outputPath + outputFile);
   }
 
 };

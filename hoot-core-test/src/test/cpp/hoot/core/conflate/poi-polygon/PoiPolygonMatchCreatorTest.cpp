@@ -53,7 +53,6 @@ private:
 
   OsmMapPtr getTestMap1()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -79,6 +78,11 @@ private:
   }
 
 public:
+
+  PoiPolygonMatchCreatorTest()
+  {
+    setResetType(ResetBasic);
+  }
 
   void basicTest()
   {
@@ -108,7 +112,6 @@ public:
       uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
 
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);

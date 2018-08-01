@@ -54,9 +54,8 @@ class ConflatorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  ConflatorTest()
   {
-    HootTestFixture::setUp();
     TestUtils::mkpath("test-output");
   }
 

@@ -54,18 +54,15 @@ class AlphaShapeGeneratorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  AlphaShapeGeneratorTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/conflate/");
   }
 
   void runBasicTest()
   {
-    Settings::getInstance().clear();
     OsmXmlReader reader;
-    OsmMap::resetCounters();
-    OsmSchema::getInstance().loadDefault();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", map);
@@ -83,10 +80,7 @@ public:
 
   void runBufferTest()
   {
-    Settings::getInstance().clear();
     OsmXmlReader reader;
-    OsmMap::resetCounters();
-    OsmSchema::getInstance().loadDefault();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", map);
@@ -104,10 +98,7 @@ public:
 
   void runNegativeBufferTest()
   {
-    Settings::getInstance().clear();
     OsmXmlReader reader;
-    OsmMap::resetCounters();
-    OsmSchema::getInstance().loadDefault();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", map);

@@ -52,9 +52,9 @@ class TileBoundsCalculatorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  TileBoundsCalculatorTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate");
   }
 
@@ -89,8 +89,6 @@ public:
   void runToyTest()
   {
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
