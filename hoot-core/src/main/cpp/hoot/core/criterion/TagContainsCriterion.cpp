@@ -43,10 +43,10 @@ TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring)
   _valueSubstring.append(valueSubstring);
 }
 
-TagContainsCriterion::TagContainsCriterion(QStringList keys, QStringList valueSubstrings)
+TagContainsCriterion::TagContainsCriterion(QStringList keys, QStringList valueSubstrings) :
+_key(keys),
+_valueSubstring(valueSubstrings)
 {
-  _key = keys;
-  _valueSubstring = valueSubstrings;
 }
 
 bool TagContainsCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
