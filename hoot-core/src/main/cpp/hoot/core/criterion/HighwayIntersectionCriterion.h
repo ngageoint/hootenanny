@@ -48,10 +48,9 @@ public:
   static std::string className() { return "hoot::HighwayIntersectionCriterion"; }
 
   HighwayIntersectionCriterion() {}
+  explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);
 
   virtual ~HighwayIntersectionCriterion() {}
-
-  HighwayIntersectionCriterion(ConstOsmMapPtr map);
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new HighwayIntersectionCriterion(_map)); }
