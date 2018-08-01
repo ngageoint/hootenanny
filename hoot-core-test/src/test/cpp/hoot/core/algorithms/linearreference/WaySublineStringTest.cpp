@@ -49,9 +49,13 @@ class WaySublineStringTest : public HootTestFixture
 
 public:
 
+  WaySublineStringTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   OsmMapPtr createTestMap()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0, 0), Coordinate(10, 0), Coordinate(20, 0), Coordinate(30, 0),

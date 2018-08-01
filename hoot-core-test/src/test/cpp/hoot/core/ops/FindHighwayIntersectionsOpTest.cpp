@@ -56,9 +56,9 @@ class FindHighwayIntersectionsOpTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  FindIntersectionsOpTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/ops/FindHighwayIntersectionsOp/");
   }
 
@@ -67,7 +67,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 

@@ -54,9 +54,9 @@ class OsmGeoJsonWriterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  OsmGeoJsonWriterTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/io/GeoJson");
   }
 
@@ -99,7 +99,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(input, map);
 

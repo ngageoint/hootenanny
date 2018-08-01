@@ -60,6 +60,12 @@ public:
 
   long mapId;
 
+  ServiceHootApiDbBulkInserterTest()
+  {
+    setResetType(ResetBasic);
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
+  }
+
   virtual void setUp()
   {
     HootTestFixture::setUp();
@@ -70,13 +76,10 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
     database.close();
-
-    TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
   virtual void tearDown()
   {
-    HootTestFixture::tearDown();
     ServicesDbTestUtils::deleteUser(userEmail());
 
     if (mapId != -1)
@@ -91,7 +94,6 @@ public:
   void runPsqlDbOfflineTest()
   {
     QString testName = "runPsqlDbOfflineTest";
-    OsmMap::resetCounters();
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     HootApiDbBulkInserter writer;

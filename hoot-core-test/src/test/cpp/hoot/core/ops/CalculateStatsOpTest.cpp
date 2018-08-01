@@ -54,10 +54,20 @@ class CalculateStatsOpTest : public HootTestFixture
 
 public:
 
+  CalculateStatsOpTest()
+  {
+    setResetType(ResetAll);
+  }
+
   virtual void setUp()
   {
     HootTestFixture::setUp();
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
+  }
+
+  virtual void takeDown()
+  {
+    conf().set(ConfigOptions::getStatsTranslateScriptKey(), ConfigOptions::getStatsTranslateScriptDefaultValue());
   }
 
   //this is here just to prevent someone from adding a stat that doesn't get tested in this test
@@ -422,7 +432,6 @@ private:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseStatusFromFile(true);
     reader.setUseDataSourceIds(true);

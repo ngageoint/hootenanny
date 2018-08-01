@@ -64,7 +64,12 @@ class PertyWayGeneralizeVisitorTest : public HootTestFixture
 
 public:
 
-  QMap<QString, OsmMapPtr > _inputMapCache;
+  QMap<QString, OsmMapPtr> _inputMapCache;
+
+  PertyWayGeneralizeVisitorTest()
+  {
+    setResetType(ResetBasic);
+  }
 
   void runTest(const QString inputFile, const int randomNumberGeneratorSeed,
                const double generalizeProbability, const double epsilon, const QString outputFile,
@@ -76,7 +81,6 @@ public:
       Log::getInstance().setLevel(Log::Debug);
     }
 
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     if (_inputMapCache.contains(inputFile))
     {

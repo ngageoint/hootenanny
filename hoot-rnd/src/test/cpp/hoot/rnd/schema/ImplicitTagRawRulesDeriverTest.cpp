@@ -53,9 +53,8 @@ public:
   static QString inDir() { return "test-files/schema/ImplicitTagRawRulesDeriverTest"; }
   static QString outDir() { return "test-output/schema/ImplicitTagRawRulesDeriverTest"; }
 
-  virtual void setUp()
+  ImplicitTagRawRulesDeriverTest()
   {
-    HootTestFixture::setUp();
     TestUtils::mkpath(outDir());
   }
 

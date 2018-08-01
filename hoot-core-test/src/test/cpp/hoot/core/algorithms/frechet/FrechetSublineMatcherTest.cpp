@@ -59,6 +59,11 @@ class FrechetSublineMatcherTest : public HootTestFixture
 
 public:
 
+  FrechetSublineMatcherTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void singleSublineTest()
   {
     Settings s;
@@ -129,7 +134,6 @@ public:
   {
     Settings s;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmXmlReader reader;
     reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);
     double score;
@@ -152,7 +156,6 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     MapProjector::projectToPlanar(map);
     return map;

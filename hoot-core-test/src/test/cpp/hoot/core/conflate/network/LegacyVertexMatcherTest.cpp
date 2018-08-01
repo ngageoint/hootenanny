@@ -45,12 +45,16 @@ class LegacyVertexMatcherTest : public HootTestFixture
 
 public:
 
+  LegacyVertexMatcherTest()
+  {
+    setResetType(ResetAll);
+  }
+
   /**
    * Extract a toy network and verify that the result is as expected.
    */
   void toyTest()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr map(new OsmMap());
 
     //       c

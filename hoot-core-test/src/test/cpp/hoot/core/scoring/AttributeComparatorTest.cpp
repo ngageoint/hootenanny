@@ -66,11 +66,14 @@ class AttributeComparatorTest : public HootTestFixture
 
 public:
 
+  AttributeComparatorTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runTest()
   {
     OsmXmlReader reader;
-
-    Tgs::Random::instance()->seed(0);
 
     OsmMapPtr map(new OsmMap());
     reader.read("test-files/DcGisRoads.osm", map);

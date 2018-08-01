@@ -48,13 +48,17 @@ class MapScoringStatusAndRefTagValidatorTest : public HootTestFixture
 
 public:
 
+  MapScoringStatusAndRefTagValidatorTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   /*
    * This test makes sure data loaded with an Unknown1 status doesn't have any REF2 tags in it and
    * that data loaded with an Unknown2 status doesn't have any REF1 tags in it.
    */
   void runTest()
   {
-    OsmMap::resetCounters();
     OsmXmlReader reader;
 
     OsmMapPtr map1(new OsmMap());

@@ -54,6 +54,11 @@ class CentroidDistanceExtractorTest : public HootTestFixture
 
 public:
 
+  CentroidDistanceExtractorTest()
+  {
+    setResetType(ResetAll);
+  }
+
   OsmMapPtr _map;
 
   NodePtr createNode(double x, double y)

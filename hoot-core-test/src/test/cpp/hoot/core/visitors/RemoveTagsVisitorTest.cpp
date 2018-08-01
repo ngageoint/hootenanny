@@ -52,16 +52,15 @@ class RemoveTagsVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RemoveTagsVisitorTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/visitors");
   }
 
   void runRemoveTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
@@ -80,7 +79,6 @@ public:
   void runFilterTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
@@ -100,7 +98,6 @@ public:
   void runNegatedFilterTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 

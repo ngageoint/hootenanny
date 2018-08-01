@@ -50,16 +50,15 @@ class StatusUpdateVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  StatusUpdateVisitorTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/visitors");
   }
 
   void runUpdateTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/StatusUpdateVisitorTest.osm", false, Status::Unknown1);
 
@@ -78,7 +77,6 @@ public:
   void runUpdateOnlyIfInvalidTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/StatusUpdateVisitorTest.osm", false, Status::Unknown1);
 

@@ -50,17 +50,15 @@ class CornerSplitterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  CornerSplitterTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate/splitter");
   }
 
   void runTest()
   {
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

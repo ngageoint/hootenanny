@@ -52,11 +52,15 @@ class MatchCandidateCountVisitorRndTest : public HootTestFixture
 
 public:
 
+  MatchCandidateCountVisitorRndTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void runMatchCandidateCountTest()
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);

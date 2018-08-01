@@ -66,6 +66,11 @@ class HighwayMatchTest : public HootTestFixture
 
 public:
 
+  HighwayMatchTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   /**
    * Creates three ways like this:
    *
@@ -79,7 +84,6 @@ public:
    */
   void runMajorOverlapTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
@@ -128,7 +132,6 @@ public:
    */
   void runPartialMatchTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
@@ -179,7 +182,6 @@ public:
    */
   void runPartialOverlapTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
@@ -226,7 +228,6 @@ public:
    */
   void runSimpleConflictTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
@@ -274,7 +275,6 @@ public:
    */
   void runRealWorld1Test()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld1Test.osm",
       false);
@@ -302,7 +302,6 @@ public:
    */
   void runRealWorld2Test()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld2Test.osm",
       false);

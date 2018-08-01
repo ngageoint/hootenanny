@@ -55,18 +55,14 @@ class MatchFeatureExtractorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MatchFeatureExtractorTest()
   {
-    HootTestFixture::setUp();
-    TestUtils::resetEnvironment();
+    setResetType(ResetAll);
   }
 
   OsmMapPtr load(QString s1, QString s2)
   {
     OsmXmlReader reader;
-
-    Tgs::Random::instance()->seed(0);
-    OsmMap::resetCounters();
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

@@ -60,9 +60,9 @@ class OsmPbfWriterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  OsmPbfWriterTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/io");
   }
 
@@ -195,9 +195,6 @@ public:
     // makes for a consistent output.
     writer.setCompressionLevel(0);
     writer.includVersion(false);
-
-    OsmMap::resetCounters();
-    Tgs::Random::instance()->seed(0);
 
     OsmMapPtr map(new OsmMap());
     NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
