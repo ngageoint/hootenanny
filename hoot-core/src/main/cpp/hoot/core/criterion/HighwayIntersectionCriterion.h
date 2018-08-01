@@ -63,7 +63,6 @@ public:
 
 private:
 
-  std::set<long> _highwayIds;
   ConstOsmMapPtr _map;
 };
 
