@@ -54,6 +54,11 @@ class HausdorffDistanceExtractorTest : public HootTestFixture
 
 public:
 
+  HausdorffDistanceExtractorTest()
+  {
+    setResetType(ResetAll);
+  }
+
   OsmMapPtr _map;
 
   NodePtr createNode(double x, double y)

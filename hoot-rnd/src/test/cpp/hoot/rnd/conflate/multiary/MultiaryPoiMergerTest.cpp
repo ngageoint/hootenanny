@@ -50,14 +50,17 @@ class MultiaryPoiMergerTest : public HootTestFixture
 
 public:
 
+  MultiaryPoiMergerTest()
+  {
+    setResetType(ResetAll);
+  }
+
   /**
    * Simple conflation test case. Should merge 1/2 and 3/4. There should be a review generated
    * between 1/2 and 3/4 due to the amenity=pub tag.
    */
   void basicTest()
   {
-    TestUtils::resetEnvironment();
-
     QString testJsonStr =
       "{                                      \n"
       " 'elements': [                         \n"

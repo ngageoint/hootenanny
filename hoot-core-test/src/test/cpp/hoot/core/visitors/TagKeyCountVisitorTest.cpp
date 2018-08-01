@@ -48,6 +48,11 @@ class TagKeyCountVisitorTest : public HootTestFixture
 
 public:
 
+  TagKeyCountVisitorTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void tagKeyCountTest()
   {
     OsmMapPtr map = _loadMap();
@@ -64,7 +69,6 @@ private:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/TagKeyCountVisitorTest.osm", map);
     return map;

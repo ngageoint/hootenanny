@@ -61,6 +61,11 @@ class BufferedLineSegmentIntersectorTest : public HootTestFixture
 
 public:
 
+  BufferedLineSegmentIntersectorTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   bool geosIntersect(const LineSegment& ls1, Meters buffer, const LineSegment& ls2,
                      LineSegment& result)
   {
@@ -145,7 +150,6 @@ public:
 
   void runRandomTest()
   {
-    Tgs::Random::instance()->seed(0);
     BufferedLineSegmentIntersector uut;
 
     double scale = 5;

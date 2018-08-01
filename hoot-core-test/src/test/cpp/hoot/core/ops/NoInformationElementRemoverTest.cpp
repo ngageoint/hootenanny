@@ -60,9 +60,13 @@ class NoInformationElementRemoverTest : public HootTestFixture
 
 public:
 
+  NoInformationElementRemoverTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runWayWithInfoOneNodeWithoutInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
@@ -91,7 +95,6 @@ public:
 
   void runStandAloneNodesWithAndWithoutInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -118,7 +121,6 @@ public:
 
   void runWayWithoutInfoOneNodeWithInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
@@ -143,7 +145,6 @@ public:
 
   void runEmptyWayOrphanNodesTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
@@ -169,7 +170,6 @@ public:
 
   void runWayWithoutInfoAllNodesWithoutInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
@@ -192,7 +192,6 @@ public:
 
   void runRelationWithInfoOneElementWithoutInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
@@ -233,7 +232,6 @@ public:
 
   void runRelationWithoutInfoOneNodeElementWithInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
@@ -271,7 +269,6 @@ public:
 
   void runRelationWithoutInfoOneWayElementWithInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
@@ -309,7 +306,6 @@ public:
 
   void runEmptyRelationWithoutInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
@@ -348,7 +344,6 @@ public:
 
   void runRelationWithoutInfoAllElementsWithoutInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -379,7 +374,6 @@ public:
 
   void runUnrelatedElementsWithInfoTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));

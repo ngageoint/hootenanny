@@ -47,10 +47,13 @@ class ReviewMarkerTest : public HootTestFixture
 
 public:
 
+  ReviewMarkerTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void runNeedsReviewTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
@@ -83,8 +86,6 @@ public:
 
   void runSimpleTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
@@ -114,8 +115,6 @@ public:
    */
   void runMultipleScoresTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmMapPtr map(new OsmMap());
     DisableLog dl;
 
@@ -148,8 +147,6 @@ public:
 
   void runAddReviewTagsToFeaturesTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
@@ -180,8 +177,6 @@ public:
     CPPUNIT_ASSERT(n1->getTags().get(MetadataTags::HootReviewNeeds()) == "yes");
     CPPUNIT_ASSERT(n2->getTags().get(MetadataTags::HootReviewNeeds()) == "yes");
     CPPUNIT_ASSERT(!n3->getTags().contains(MetadataTags::HootReviewNeeds()));
-
-    TestUtils::resetEnvironment();
   }
 
 };

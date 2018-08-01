@@ -62,6 +62,11 @@ class ClosePointHashTest : public HootTestFixture
 
 public:
 
+  ClosePointHashTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runBasicTest()
   {
     ClosePointHash cph(1.0);
@@ -84,7 +89,6 @@ public:
 
   void runRandomTest()
   {
-    Tgs::Random::instance()->seed(0);
     double neighborDistance = 1.0;
     ClosePointHash cph(neighborDistance);
 

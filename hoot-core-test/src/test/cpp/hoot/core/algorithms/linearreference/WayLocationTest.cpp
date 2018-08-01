@@ -56,9 +56,13 @@ class WayLocationTest : public HootTestFixture
 
 public:
 
+  WayLocationTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   OsmMapPtr createMap()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;

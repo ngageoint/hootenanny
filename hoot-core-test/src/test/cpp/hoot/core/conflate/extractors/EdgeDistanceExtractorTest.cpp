@@ -63,11 +63,14 @@ class EdgeDistanceExtractorTest : public HootTestFixture
 
 public:
 
+  EdgeDistanceExtractorTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void runBuildingsTest()
   {
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
@@ -101,8 +104,6 @@ public:
   void runRoadsTest()
   {
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/extractor/EdgeDistanceExtractor/ToyTestA.osm", map);

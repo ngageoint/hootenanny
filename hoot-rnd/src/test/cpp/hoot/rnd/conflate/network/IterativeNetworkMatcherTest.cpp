@@ -51,6 +51,11 @@ class IterativeNetworkMatcherTest : public HootTestFixture
 
 public:
 
+  IterativeNetworkMatcherTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void writeDebugMap(OsmMapPtr map, IterativeNetworkMatcher& uut, int index)
   {
     TestUtils::mkpath("tmp");
@@ -69,8 +74,6 @@ public:
    */
   void edgeMatchTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmMapPtr map(new OsmMap());
 
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestE1.osm", true,
@@ -147,8 +150,6 @@ public:
       uut->iterate();
       writeDebugMap(map, *uut, i);
     }
-
-    TestUtils::resetEnvironment();
   }
 };
 

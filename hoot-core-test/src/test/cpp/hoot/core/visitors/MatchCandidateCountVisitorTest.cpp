@@ -58,11 +58,15 @@ class MatchCandidateCountVisitorTest : public HootTestFixture
 
 public:
 
+  MatchCandidateCountVisitorTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void runBuildingMatchCandidateCountTest()
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -87,7 +91,6 @@ public:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -112,7 +115,6 @@ public:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -148,14 +150,11 @@ public:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
-
-    TestUtils::resetEnvironment();
 
     QStringList matchCreators;
     matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
@@ -176,14 +175,11 @@ public:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
-
-    TestUtils::resetEnvironment();
 
     QStringList matchCreators;
     matchCreators.append("hoot::ScriptMatchCreator,LinearWaterway.js");
@@ -206,14 +202,11 @@ public:
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
-
-    TestUtils::resetEnvironment();
 
     QStringList matchCreators;
     matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");

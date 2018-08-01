@@ -52,16 +52,15 @@ class LargeWaySplitterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  LargeWaySplitterTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/conflate");
   }
 
   void runToyTest()
   {
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);

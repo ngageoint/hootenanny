@@ -74,6 +74,12 @@ public:
   long mapId;
   QString testName;
 
+  ServiceHootApiDbReaderTest()
+  {
+    setResetType(ResetAll);
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbReaderTest");
+  }
+
   void setUpTest(const QString& test_name)
   {
     mapId = -1;
@@ -84,13 +90,10 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), QString("%1.ServiceHootApiDbReaderTest").arg(testName));
     database.close();
-
-    TestUtils::mkpath("test-output/io/ServiceHootApiDbReaderTest");
   }
 
   virtual void tearDown()
   {
-    HootTestFixture::tearDown();
     ServicesDbTestUtils::deleteUser(userEmail());
 
     if (mapId != -1)
@@ -161,7 +164,6 @@ public:
 
     HootApiDbReader reader;
     // make sure all the element ids start with -1
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setUseDataSourceIds(false);
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());

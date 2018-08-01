@@ -52,6 +52,11 @@ public:
   OsmNetworkPtr network1, network2;
   IndexedEdgeMatchSetPtr matchSet;
 
+  EdgeMatchSetFinderTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void writeDebugMap(OsmMapPtr map)
   {
     TestUtils::mkpath("tmp");
@@ -64,7 +69,6 @@ public:
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)
   {
-    TestUtils::resetEnvironment();
     NetworkVertex::reset();
 
     OsmMapPtr map(new OsmMap());

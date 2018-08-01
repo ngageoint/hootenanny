@@ -49,9 +49,9 @@ public:
   static QString inDir() { return "test-files/visitors/ImplicitPoiTypeTaggerTest"; }
   static QString outDir() { return "test-output/visitors/ImplicitPoiTypeTaggerTest"; }
 
-  virtual void setUp()
+  ImplicitPoiTypeTaggerTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath(outDir());
   }
 

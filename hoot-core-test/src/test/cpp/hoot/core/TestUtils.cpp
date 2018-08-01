@@ -193,6 +193,17 @@ std::string TestUtils::readFile(QString f1)
   return QString(fpTest.readAll()).toStdString();
 }
 
+void TestUtils::resetBasic()
+{
+  LOG_DEBUG("Resetting test environment...");
+  // provide the most basic configuration.
+  OsmMap::resetCounters();
+  // make sure the UUIDs are repeatable
+  UuidHelper::resetRepeatableKey();
+  //  Reset the pseudo random number generator seed
+  Tgs::Random::instance()->seed();
+}
+
 void TestUtils::resetEnvironment(const QStringList confs)
 {
   LOG_DEBUG("Resetting test environment...");

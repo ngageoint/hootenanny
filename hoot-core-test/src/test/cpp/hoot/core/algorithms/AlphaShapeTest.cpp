@@ -61,13 +61,13 @@ class AlphaShapeTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  AlphaShapeTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/algorithms");
   }
 
-  void createDonut(vector< pair<double, double> >& p, double innerRadius, double outerRadius,
+  void createDonut(vector<pair<double, double>>& p, double innerRadius, double outerRadius,
                    double centerX, double centerY, int count)
   {
     for (int i = 0; i < count; i++)
@@ -84,9 +84,8 @@ public:
 
   void runRandomTest()
   {
-    vector< pair<double, double> > points;
+    vector<pair<double, double>> points;
 
-    Tgs::Random::instance()->seed(0);
     createDonut(points, 0, 35, 10, 0, 250);
     //createDonut(points, 15, 20, 20, 0, 2000);
 
@@ -117,7 +116,7 @@ public:
 
   void runTest()
   {
-    vector< pair<double, double> > points;
+    vector<pair<double, double>> points;
     points.push_back(pair<double, double>(0.0, 0.0));
     points.push_back(pair<double, double>(0.0, 1.0));
     points.push_back(pair<double, double>(1.0, 1.0));

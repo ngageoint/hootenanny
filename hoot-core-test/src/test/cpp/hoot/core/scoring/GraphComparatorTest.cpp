@@ -61,11 +61,14 @@ class GraphComparatorTest : public HootTestFixture
 
 public:
 
+    GraphComparatorTest()
+    {
+      setResetType(ResetBasic);
+    }
+
     void runTest()
     {
         OsmXmlReader reader;
-
-        Tgs::Random::instance()->seed(0);
 
         OsmMapPtr map(new OsmMap());
         reader.read("test-files/ToyTestA.osm", map);
@@ -100,8 +103,6 @@ public:
     void runDenverDistanceTest()
     {
         OsmXmlReader reader;
-
-        Tgs::Random::instance()->seed(0);
 
 //        int argc = 0;
 //        char* argv[] = {""};
@@ -140,8 +141,6 @@ public:
     void runKentuckyDistanceTest()
     {
         OsmXmlReader reader;
-
-        Tgs::Random::instance()->seed(0);
 
 //        int argc = 0;
 //        char* argv[] = {""};

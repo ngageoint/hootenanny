@@ -49,6 +49,11 @@ class MultiaryHierarchicalClusterAlgorithmTest : public HootTestFixture
 
 public:
 
+  MultiaryHierarchicalClusterAlgorithmTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   /**
    * Cluster a simple set of nodes and verify that the output is reasonable
    */

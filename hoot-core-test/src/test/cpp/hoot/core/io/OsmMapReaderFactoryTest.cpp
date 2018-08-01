@@ -41,9 +41,13 @@ class OsmMapReaderFactoryTest : public HootTestFixture
 
 public:
 
+  OsmMapReaderFactoryTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void runUnsupportedBoundingBoxRead()
   {
-    TestUtils::resetEnvironment();
     conf().set(ConfigOptions::getConvertBoundingBoxKey(), "-180,-90,180,90");
     //map and data inputs don't matter; we just want to see that it throws for any reader other
     //than db readers when convert bounding box is used (only readers that currently support it)
@@ -64,7 +68,6 @@ public:
         ConfigOptions::getConvertBoundingBoxKey() +
         " configuration option used with unsupported reader"));
 
-    TestUtils::resetEnvironment();
   }
 };
 

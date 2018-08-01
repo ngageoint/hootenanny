@@ -49,6 +49,11 @@ class VagabondNetworkMatcherTest : public HootTestFixture
 
 public:
 
+  VagabondNetworkMatcherTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void writeDebugMap(OsmMapPtr map, VagabondNetworkMatcher& uut, int index)
   {
     TestUtils::mkpath("tmp");
@@ -119,8 +124,6 @@ public:
       uut->iterate();
       writeDebugMap(map, *uut, i);
     }
-
-    TestUtils::resetEnvironment();
   }
 };
 

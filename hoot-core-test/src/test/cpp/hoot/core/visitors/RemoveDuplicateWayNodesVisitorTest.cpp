@@ -44,9 +44,13 @@ class RemoveDuplicateWayNodesVisitorTest : public HootTestFixture
 
 public:
 
+  RemoveDuplicateWayNodesVisitorTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runInvalidWayTest1()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
@@ -81,7 +85,6 @@ public:
 
   void runInvalidWayTest2()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
@@ -116,7 +119,6 @@ public:
 
   void runValidStartAndEndNodeSameTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
@@ -151,7 +153,6 @@ public:
 
   void runValidUnclosedWayTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));

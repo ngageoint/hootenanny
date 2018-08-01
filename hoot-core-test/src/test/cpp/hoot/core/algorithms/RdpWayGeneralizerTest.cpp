@@ -65,10 +65,13 @@ public:
   QMap<QString, QList<ConstNodePtr>> _inputPointsCache;
   QMap<QString, QList<Coordinate>> _inputCoordsCache;
 
+  RdpWayGeneralizerTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   QList<ConstNodePtr> readPoints(const QString filePath)
   {
-    OsmMap::resetCounters();
-
     if (_inputPointsCache.contains(filePath))
     {
       return _inputPointsCache[filePath];
@@ -144,7 +147,6 @@ public:
   QString writePointOutput(const QList<ConstNodePtr>& points, const QString outDir,
                            const QString outFileName)
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     //points will be empty for the generalize calls with way inputs instead of points
@@ -246,7 +248,6 @@ public:
 
   void runGeneralizeWayInput1NoInformationNodesTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     QList<Coordinate> inputCoords =
       readCoords("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
@@ -270,7 +271,6 @@ public:
 
   void runGeneralizeWayInput1WithInformationNodesTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     QList<Coordinate> inputCoords =
       readCoords("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");

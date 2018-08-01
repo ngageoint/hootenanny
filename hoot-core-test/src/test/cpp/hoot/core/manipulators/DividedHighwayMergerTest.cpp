@@ -60,9 +60,9 @@ class DividedHighwayMergerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  DividedHighwayMergerTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output");
   }
 
@@ -71,7 +71,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DividedHighway.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -93,10 +92,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DividedHighwayPreSplit.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -119,7 +115,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DividedHighway.osm", map);
     reader.setDefaultStatus(Status::Unknown2);

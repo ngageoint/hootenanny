@@ -60,15 +60,14 @@ class PoiPolygonMergerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  PoiPolygonMergerTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate/poi-polygon/PoiPolygonMergerTest");
   }
 
   void basicTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -132,9 +131,9 @@ public:
 
     AddPairsVisitor(OsmMapPtr map, QString scenario) : _map(map), _scenario(scenario) {}
 
-    set< pair<ElementId, ElementId> > getPairs() const
+    set<pair<ElementId, ElementId>> getPairs() const
     {
-      set< pair<ElementId, ElementId> > result;
+      set<pair<ElementId, ElementId>> result;
 
       for (size_t i = 0; i < max(_e1.size(), _e2.size()); i++)
       {
@@ -173,13 +172,13 @@ public:
 
   private:
 
-    set< pair<ElementId, ElementId> > _pairs;
+    set<pair<ElementId, ElementId>> _pairs;
     vector<ElementId> _e1, _e2;
     OsmMapPtr _map;
     QString _scenario;
   };
 
-  set< pair<ElementId, ElementId> > _addPairs(QString scenario, OsmMapPtr map)
+  set<pair<ElementId, ElementId>> _addPairs(QString scenario, OsmMapPtr map)
   {
     AddPairsVisitor v(map, scenario);
     map->visitRw(v);
@@ -188,17 +187,16 @@ public:
 
   void toyScenario1Test()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
-    set< pair<ElementId, ElementId> > s = _addPairs("Toy Scenario 1", map);
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 1", map);
 
     PoiPolygonMerger uut(s);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
     HOOT_STR_EQUALS("[6]{(Way:-22, Relation:-1), (Way:-21, Relation:-1), (Way:-20, Relation:-1), (Way:-19, Relation:-1), (Way:-6, Relation:-1), (Node:-145, Relation:-1)}",
@@ -235,17 +233,16 @@ public:
 
   void toyScenario2Test()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
-    set< pair<ElementId, ElementId> > s = _addPairs("Toy Scenario 2", map);
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 2", map);
 
     PoiPolygonMerger uut(s);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
     //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy2.osm");
@@ -283,17 +280,16 @@ public:
 
   void toyScenario3Test()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
-    set< pair<ElementId, ElementId> > s = _addPairs("Toy Scenario 3", map);
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 3", map);
 
     PoiPolygonMerger uut(s);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
     //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy3.osm");
@@ -331,17 +327,16 @@ public:
 
   void toyScenario4Test()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
-    set< pair<ElementId, ElementId> > s = _addPairs("Toy Scenario 4", map);
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 4", map);
 
     PoiPolygonMerger uut(s);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
     //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy4.osm");
@@ -373,19 +368,18 @@ public:
 
   void toyScenario5Test()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
-    set< pair<ElementId, ElementId> > s = _addPairs("Toy Scenario 5", map);
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 5", map);
     // remove the dummy road that is in the test. This isn't getting merged.
     s.erase(pair<ElementId, ElementId>(ElementId::way(-2), ElementId::way(-7)));
 
     PoiPolygonMerger uut(s);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
     //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy5.osm");
@@ -418,17 +412,16 @@ public:
 
   void toyScenario6Test()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
-    set< pair<ElementId, ElementId> > s = _addPairs("Toy Scenario 6", map);
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 6", map);
 
     PoiPolygonMerger uut(s);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
     //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy6.osm");

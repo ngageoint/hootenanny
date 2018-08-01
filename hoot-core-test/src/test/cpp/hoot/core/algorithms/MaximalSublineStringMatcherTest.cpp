@@ -64,10 +64,13 @@ class MaximalSublineStringMatcherTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+  MaximalSublineStringMatcherTest()
+  {
+    setResetType(ResetBasic);
+  }
 
   OsmMapPtr createMap()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
@@ -82,7 +85,6 @@ public:
   OsmMapPtr createMatchTestMap()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
 
     OGREnvelope env;
     env.MinX = 0;
