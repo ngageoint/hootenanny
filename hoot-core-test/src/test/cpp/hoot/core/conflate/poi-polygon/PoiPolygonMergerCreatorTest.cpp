@@ -52,10 +52,13 @@ class PoiPolygonMergerCreatorTest : public HootTestFixture
 
 public:
 
+  PoiPolygonMergerCreatorTest()
+  {
+    setResetType(ResetAll);
+  }
+
   virtual void setUp()
   {
-    //  Reset the environment
-    reset(ResetAll);
     HootTestFixture::setUp();
     conf().set(ConfigOptions().getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
     conf().set(ConfigOptions().getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");

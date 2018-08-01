@@ -51,11 +51,9 @@ class RemoveRef2VisitorMultipleCriterionTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RemoveRef2VisitorMultipleCriterionTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void runToyTest1()

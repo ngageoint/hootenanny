@@ -54,11 +54,9 @@ class WayMatchStringMergerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  WayMatchStringMergerTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/algorithms/");
   }
 

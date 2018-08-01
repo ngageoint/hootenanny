@@ -60,11 +60,9 @@ class RemoveDuplicateAreaVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RemoveDuplicateAreaVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runToyTest()

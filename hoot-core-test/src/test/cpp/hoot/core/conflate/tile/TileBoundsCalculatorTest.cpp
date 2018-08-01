@@ -52,11 +52,9 @@ class TileBoundsCalculatorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  TileBoundsCalculatorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate");
   }
 

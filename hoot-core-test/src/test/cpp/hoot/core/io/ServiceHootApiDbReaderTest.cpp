@@ -74,11 +74,10 @@ public:
   long mapId;
   QString testName;
 
-  virtual void setUp()
+  ServiceHootApiDbReaderTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbReaderTest");
   }
 
   void setUpTest(const QString& test_name)
@@ -91,8 +90,6 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), QString("%1.ServiceHootApiDbReaderTest").arg(testName));
     database.close();
-
-    TestUtils::mkpath("test-output/io/ServiceHootApiDbReaderTest");
   }
 
   virtual void tearDown()

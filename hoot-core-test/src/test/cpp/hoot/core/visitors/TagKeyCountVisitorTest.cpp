@@ -48,11 +48,9 @@ class TagKeyCountVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  TagKeyCountVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void tagKeyCountTest()

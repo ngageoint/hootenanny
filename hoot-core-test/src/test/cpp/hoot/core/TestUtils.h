@@ -218,7 +218,8 @@ public:
       TestUtils::resetEnvironment();
   }
 
-  void reset(HootTestReset reset) { _reset = reset; }
+  void setResetType(HootTestReset reset) { _reset = reset; }
+
 private:
   HootTestReset _reset;
 };

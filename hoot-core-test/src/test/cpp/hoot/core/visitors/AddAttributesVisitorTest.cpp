@@ -55,11 +55,9 @@ class AddAttributesVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  AddAttributesVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/visitors");
   }
 

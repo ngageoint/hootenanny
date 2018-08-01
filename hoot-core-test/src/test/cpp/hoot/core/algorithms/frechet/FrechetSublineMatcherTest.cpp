@@ -59,11 +59,9 @@ class FrechetSublineMatcherTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  FrechetSublineMatcherTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void singleSublineTest()

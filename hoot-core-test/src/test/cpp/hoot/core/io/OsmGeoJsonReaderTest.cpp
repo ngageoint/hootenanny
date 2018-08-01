@@ -55,11 +55,9 @@ class OsmGeoJsonReaderTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  OsmGeoJsonReaderTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/io/GeoJson");
   }
 

@@ -66,11 +66,9 @@ class MultiLineStringLocationTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MultiLineStringLocationTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runSingleWayTest()

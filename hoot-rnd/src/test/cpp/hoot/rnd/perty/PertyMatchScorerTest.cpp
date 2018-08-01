@@ -52,7 +52,7 @@ public:
   void setUp()
   {
     //  Reset the environment
-    reset(ResetAll);
+    setResetType(ResetAll);
     HootTestFixture::setUp();
     TestUtils::mkpath("test-output/perty/PertyMatchScorerTest");
   }

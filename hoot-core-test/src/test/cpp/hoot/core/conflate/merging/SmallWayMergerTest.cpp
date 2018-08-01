@@ -51,7 +51,7 @@ class SmallWayMergerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  SmallWayMergerTest()
   {
     TestUtils::mkpath("test-output/conflate");
   }

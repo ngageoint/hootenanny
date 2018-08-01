@@ -57,11 +57,9 @@ class CookieCutterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  CookieCutterTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/conflate");
   }
 

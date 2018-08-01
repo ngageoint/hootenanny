@@ -45,11 +45,9 @@ class LegacyVertexMatcherTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  LegacyVertexMatcherTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   /**

@@ -57,11 +57,9 @@ class ReprojectToPlanarOpTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  ReprojectToPlanarOpTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void runTest()

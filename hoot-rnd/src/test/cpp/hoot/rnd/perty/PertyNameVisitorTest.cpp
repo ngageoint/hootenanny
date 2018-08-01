@@ -57,11 +57,9 @@ class PertyNameVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  PertyNameVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runBasicTest()

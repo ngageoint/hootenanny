@@ -55,11 +55,9 @@ class MatchFeatureExtractorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MatchFeatureExtractorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   OsmMapPtr load(QString s1, QString s2)

@@ -60,11 +60,9 @@ public:
   QString inputPath = "test-files/manipulators/";
   QString outputPath = "test-output/manipulators/";
 
-  virtual void setUp()
+  WayMergeManipulationTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath(outputPath);
   }
 

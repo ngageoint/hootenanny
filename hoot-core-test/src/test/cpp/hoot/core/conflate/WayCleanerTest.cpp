@@ -52,11 +52,9 @@ class WayCleanerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  WayCleanerTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runDuplicateNodesTest()

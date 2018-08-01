@@ -41,11 +41,9 @@ class OsmMapReaderFactoryTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  OsmMapReaderFactoryTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void runUnsupportedBoundingBoxRead()

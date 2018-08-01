@@ -61,11 +61,9 @@ class GraphComparatorTest : public HootTestFixture
 
 public:
 
-    virtual void setUp()
+    GraphComparatorTest()
     {
-      //  Reset the environment
-      reset(ResetBasic);
-      HootTestFixture::setUp();
+      setResetType(ResetBasic);
     }
 
     void runTest()

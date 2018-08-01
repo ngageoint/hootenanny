@@ -54,11 +54,9 @@ class AlphaShapeGeneratorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  AlphaShapeGeneratorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/conflate/");
   }
 

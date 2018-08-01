@@ -67,11 +67,9 @@ class ServiceOsmApiDbBulkInserterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  ServiceOsmApiDbBulkInserterTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
   }
 

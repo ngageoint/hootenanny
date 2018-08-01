@@ -66,11 +66,9 @@ class DuplicateWayRemoverTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  DuplicateWayRemoverTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate");
   }
 

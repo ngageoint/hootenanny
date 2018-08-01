@@ -51,7 +51,7 @@ class RemoveElementsVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RemoveElementsVisitorTest()
   {
     TestUtils::mkpath("test-output/visitors");
   }

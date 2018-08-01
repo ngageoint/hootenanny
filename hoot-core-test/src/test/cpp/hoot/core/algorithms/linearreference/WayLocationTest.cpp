@@ -56,11 +56,9 @@ class WayLocationTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  WayLocationTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   OsmMapPtr createMap()

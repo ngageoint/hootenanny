@@ -65,11 +65,9 @@ public:
   QMap<QString, QList<ConstNodePtr>> _inputPointsCache;
   QMap<QString, QList<Coordinate>> _inputCoordsCache;
 
-  virtual void setUp()
+  RdpWayGeneralizerTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   QList<ConstNodePtr> readPoints(const QString filePath)

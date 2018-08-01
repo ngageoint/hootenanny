@@ -56,11 +56,9 @@ class PertyWaySplitVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  PertyWaySplitVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/perty/PertyWaySplitVisitorTest/");
   }
 

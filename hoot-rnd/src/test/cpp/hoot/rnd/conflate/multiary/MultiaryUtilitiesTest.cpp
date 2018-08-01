@@ -48,11 +48,9 @@ class MultiaryUtilitiesTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MultiaryUtilitiesTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   QByteArray convertJsonToPbf(QString json)

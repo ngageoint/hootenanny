@@ -49,7 +49,7 @@ class NodeReplacementsTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  NodeReplacementsTest()
   {
     TestUtils::mkpath("test-output/conflate");
   }

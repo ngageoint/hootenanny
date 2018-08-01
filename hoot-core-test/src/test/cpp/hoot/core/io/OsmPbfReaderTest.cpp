@@ -76,11 +76,9 @@ class OsmPbfReaderTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  OsmPbfReaderTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/io/");
   }
 

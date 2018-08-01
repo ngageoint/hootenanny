@@ -51,11 +51,9 @@ class RemoveAttributesVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RemoveAttributesVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/visitors");
   }
 

@@ -52,11 +52,9 @@ class LocationOfPointTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  LocationOfPointTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runLocateAfterTest()

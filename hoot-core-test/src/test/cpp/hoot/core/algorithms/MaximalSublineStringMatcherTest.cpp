@@ -64,11 +64,9 @@ class MaximalSublineStringMatcherTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-  virtual void setUp()
+  MaximalSublineStringMatcherTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   OsmMapPtr createMap()

@@ -68,11 +68,9 @@ class BuildingMatchCreatorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  BuildingMatchCreatorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)

@@ -66,11 +66,9 @@ class HighwayMatchTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  HighwayMatchTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   /**

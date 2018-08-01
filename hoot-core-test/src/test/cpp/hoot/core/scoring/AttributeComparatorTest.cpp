@@ -66,11 +66,9 @@ class AttributeComparatorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  AttributeComparatorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runTest()

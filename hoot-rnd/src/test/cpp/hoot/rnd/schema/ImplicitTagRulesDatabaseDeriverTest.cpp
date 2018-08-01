@@ -51,7 +51,7 @@ public:
   static QString inDir() { return "test-files/schema/ImplicitTagRulesDatabaseDeriverTest"; }
   static QString outDir() { return "test-output/schema/ImplicitTagRulesDatabaseDeriverTest"; }
 
-  virtual void setUp()
+  ImplicitTagRulesDatabaseDeriverTest()
   {
     TestUtils::mkpath(outDir());
   }

@@ -59,11 +59,9 @@ class BufferedOverlapExtractorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  BufferedOverlapExtractorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   OsmMapPtr _map;

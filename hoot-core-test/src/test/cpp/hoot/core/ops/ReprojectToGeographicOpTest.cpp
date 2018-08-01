@@ -57,11 +57,9 @@ public:
   QString inputPath = "test-files/ops/ReprojectToGeographicOp/";
   QString outputPath = "test-output/ops/ReprojectToGeographicOp/";
 
-  virtual void setUp()
+  ReprojectToGeographicOpTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath(outputPath);
   }
 

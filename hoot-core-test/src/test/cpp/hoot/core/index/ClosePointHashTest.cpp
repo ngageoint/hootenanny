@@ -62,11 +62,9 @@ class ClosePointHashTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  ClosePointHashTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runBasicTest()

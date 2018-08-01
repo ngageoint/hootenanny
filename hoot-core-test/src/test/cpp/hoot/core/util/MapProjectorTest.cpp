@@ -66,13 +66,21 @@ public:
   boost::minstd_rand rng;
   ofstream fs;
 
+  MapProjectorTest()
+  {
+    setResetType(ResetAll);
+  }
+
   virtual void setUp()
   {
-    //  Reset the environment
-    reset(ResetAll);
     HootTestFixture::setUp();
     // we are testing the map reprojector so we don't want to force to a single projection.
     conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), false);
+  }
+
+  virtual void tearDown()
+  {
+    conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), ConfigOptions::getTestForceOrthographicProjectionDefaultValue());
   }
 
   Radians calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3)

@@ -54,11 +54,9 @@ class WaySplitterOpTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  WaySplitterOpTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void runTest()

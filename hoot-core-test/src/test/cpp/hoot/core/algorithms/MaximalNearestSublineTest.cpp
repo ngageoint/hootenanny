@@ -64,11 +64,9 @@ class MaximalNearestSublineTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MaximalNearestSublineTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/algorithms/");
   }
 

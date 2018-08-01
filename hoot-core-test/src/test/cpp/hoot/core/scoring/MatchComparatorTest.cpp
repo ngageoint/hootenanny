@@ -58,11 +58,9 @@ class MatchComparatorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MatchComparatorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runTest()

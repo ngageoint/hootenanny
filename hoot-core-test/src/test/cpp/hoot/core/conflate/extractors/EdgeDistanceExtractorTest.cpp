@@ -63,11 +63,9 @@ class EdgeDistanceExtractorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  EdgeDistanceExtractorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void runBuildingsTest()

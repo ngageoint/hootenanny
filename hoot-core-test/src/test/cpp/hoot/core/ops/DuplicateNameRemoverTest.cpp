@@ -52,11 +52,9 @@ class DuplicateNameRemoverTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  DuplicateNameRemoverTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runCaseInsensitiveTest()

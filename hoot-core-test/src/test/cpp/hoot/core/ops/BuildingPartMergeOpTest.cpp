@@ -64,11 +64,9 @@ public:
   QString inputPath = "test-files/ops/BuildingPartMergeOp/";
   QString outputPath = "test-output/ops/BuildingPartMergeOp/";
 
-  virtual void setUp()
+  BuildingPartMergeOpTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath(outputPath);
   }
 

@@ -50,11 +50,9 @@ class IntersectionSplitterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  IntersectionSplitterTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate/splitter");
   }
 

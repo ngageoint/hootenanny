@@ -41,11 +41,9 @@ class WayMatchStringMappingConverterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  WayMatchStringMappingConverterTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   /**

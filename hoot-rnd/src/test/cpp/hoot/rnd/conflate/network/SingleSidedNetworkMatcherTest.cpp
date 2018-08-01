@@ -49,11 +49,9 @@ class SingleSidedNetworkMatcherTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  SingleSidedNetworkMatcherTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void writeDebugMap(OsmMapPtr map, SingleSidedNetworkMatcher& uut, int index)

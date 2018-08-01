@@ -51,7 +51,7 @@ class OgrWriterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  OgrWriterTest()
   {
     TestUtils::mkpath("test-output/io");
   }

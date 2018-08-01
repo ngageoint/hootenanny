@@ -52,11 +52,9 @@ public:
   OsmNetworkPtr network1, network2;
   IndexedEdgeMatchSetPtr matchSet;
 
-  virtual void setUp()
+  EdgeMatchSetFinderTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void writeDebugMap(OsmMapPtr map)

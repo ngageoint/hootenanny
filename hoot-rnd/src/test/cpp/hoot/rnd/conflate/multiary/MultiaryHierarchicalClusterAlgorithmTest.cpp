@@ -49,11 +49,9 @@ class MultiaryHierarchicalClusterAlgorithmTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MultiaryHierarchicalClusterAlgorithmTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   /**

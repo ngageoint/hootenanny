@@ -54,11 +54,9 @@ class PertyTestRunnerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  PertyTestRunnerTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Dynamic");
     TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Static");
     TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Variance");

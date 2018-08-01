@@ -41,11 +41,9 @@ class EdgeSublineMatchTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  EdgeSublineMatchTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void basicTest()

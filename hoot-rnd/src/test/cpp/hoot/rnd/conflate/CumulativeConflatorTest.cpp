@@ -41,11 +41,9 @@ class CumulativeConflatorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  CumulativeConflatorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/conflate/");
   }
 

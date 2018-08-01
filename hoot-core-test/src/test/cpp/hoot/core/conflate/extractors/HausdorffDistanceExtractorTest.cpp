@@ -54,11 +54,9 @@ class HausdorffDistanceExtractorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  HausdorffDistanceExtractorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   OsmMapPtr _map;

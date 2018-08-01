@@ -44,11 +44,9 @@ class RemoveDuplicateWayNodesVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RemoveDuplicateWayNodesVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runInvalidWayTest1()

@@ -45,11 +45,9 @@ class MultiaryReviewCommandTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MultiaryReviewCommandTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   OsmMapPtr getTestMap()

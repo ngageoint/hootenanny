@@ -47,11 +47,9 @@ class ReviewMarkerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  ReviewMarkerTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void runNeedsReviewTest()

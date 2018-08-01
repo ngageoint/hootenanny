@@ -50,11 +50,9 @@ class RemoveRef2VisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RemoveRef2VisitorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void runToyTest()

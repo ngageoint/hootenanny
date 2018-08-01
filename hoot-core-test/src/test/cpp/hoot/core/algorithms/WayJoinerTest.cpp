@@ -50,11 +50,9 @@ class WayJoinerTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 public:
 
-  virtual void setUp()
+  WayJoinerTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/algorithms/wayjoiner");
   }
 

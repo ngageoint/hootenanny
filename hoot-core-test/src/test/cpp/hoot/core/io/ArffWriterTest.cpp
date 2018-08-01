@@ -44,7 +44,7 @@ class ArffWriterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  ArffWriterTest()
   {
     TestUtils::mkpath("test-output/io/ArffWriterTest/");
   }

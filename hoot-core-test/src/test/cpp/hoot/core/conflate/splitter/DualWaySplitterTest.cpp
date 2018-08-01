@@ -55,12 +55,10 @@ class DualWaySplitterTest : public HootTestFixture
 
 public:
 
-    virtual void setUp()
-    {
-      //  Reset the environment
-      reset(ResetBasic);
-      HootTestFixture::setUp();
-    }
+  DualWaySplitterTest()
+  {
+    setResetType(ResetBasic);
+  }
 
   void simpleTest()
   {

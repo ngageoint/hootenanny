@@ -129,7 +129,7 @@ public:
   void setUp()
   {
     //  Reset the environment
-    reset(ResetBasic);
+    setResetType(ResetBasic);
     HootTestFixture::setUp();
     TestUtils::mkpath(outDir);
   }

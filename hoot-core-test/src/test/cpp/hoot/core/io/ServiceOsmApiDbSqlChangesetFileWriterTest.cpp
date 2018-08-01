@@ -45,7 +45,7 @@ public:
 
   OsmApiDb database;
 
-  virtual void setUp()
+  ServiceOsmApiDbSqlChangesetFileWriterTest()
   {
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest");
   }

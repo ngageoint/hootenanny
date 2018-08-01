@@ -79,11 +79,9 @@ class MaximalSublineTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MaximalSublineTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void addEndNode(OsmMapPtr map, Coordinate c, QString note)

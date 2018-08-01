@@ -52,11 +52,9 @@ class HighwayMatchCreatorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  HighwayMatchCreatorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runIsCandidateTest()

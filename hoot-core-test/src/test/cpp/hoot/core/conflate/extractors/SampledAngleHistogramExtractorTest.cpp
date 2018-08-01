@@ -54,11 +54,9 @@ class SampledAngleHistogramExtractorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  SampledAngleHistogramExtractorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runTest()

@@ -45,7 +45,7 @@ class SparkChangesetWriterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  SparkChangesetWriterTest()
   {
     TestUtils::mkpath("test-output/io/SparkChangesetWriterTest/");
   }

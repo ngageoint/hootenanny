@@ -49,11 +49,9 @@ class WaySublineStringTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  WaySublineStringTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   OsmMapPtr createTestMap()

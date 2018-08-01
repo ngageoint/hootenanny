@@ -54,11 +54,9 @@ class CentroidDistanceExtractorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  CentroidDistanceExtractorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   OsmMapPtr _map;

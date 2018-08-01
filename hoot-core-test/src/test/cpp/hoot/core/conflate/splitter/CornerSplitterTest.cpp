@@ -50,11 +50,9 @@ class CornerSplitterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  CornerSplitterTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate/splitter");
   }
 

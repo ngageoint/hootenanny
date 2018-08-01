@@ -58,11 +58,9 @@ class HighwayExpertClassifierTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  HighwayExpertClassifierTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   /**

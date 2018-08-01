@@ -46,11 +46,9 @@ class OsmXmlReaderTest : public HootTestFixture
 
 public:
 
-    virtual void setUp()
+    OsmXmlReaderTest()
     {
-      //  Reset the environment
-      reset(ResetBasic);
-      HootTestFixture::setUp();
+      setResetType(ResetBasic);
     }
 
     void runTest()

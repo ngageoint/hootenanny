@@ -58,11 +58,9 @@ class MatchCandidateCountVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MatchCandidateCountVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void runBuildingMatchCandidateCountTest()

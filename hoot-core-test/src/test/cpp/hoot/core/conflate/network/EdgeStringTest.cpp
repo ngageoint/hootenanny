@@ -56,11 +56,9 @@ class EdgeStringTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  EdgeStringTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void basicTest()

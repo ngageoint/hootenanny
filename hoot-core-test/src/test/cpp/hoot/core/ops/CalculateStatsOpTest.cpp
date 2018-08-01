@@ -54,12 +54,20 @@ class CalculateStatsOpTest : public HootTestFixture
 
 public:
 
+  CalculateStatsOpTest()
+  {
+    setResetType(ResetAll);
+  }
+
   virtual void setUp()
   {
-    //  Reset the environment
-    reset(ResetAll);
     HootTestFixture::setUp();
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
+  }
+
+  virtual void takeDown()
+  {
+    conf().set(ConfigOptions::getStatsTranslateScriptKey(), ConfigOptions::getStatsTranslateScriptDefaultValue());
   }
 
   //this is here just to prevent someone from adding a stat that doesn't get tested in this test

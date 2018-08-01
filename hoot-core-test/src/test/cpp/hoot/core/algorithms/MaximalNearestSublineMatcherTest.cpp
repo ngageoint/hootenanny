@@ -60,11 +60,9 @@ class MaximalNearestSublineMatcherTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MaximalNearestSublineMatcherTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   /**

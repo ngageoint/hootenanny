@@ -54,11 +54,9 @@ public:
   QString inputPath = "test-files/ops/BuildingOutlineRemoveOp/";
   QString outputPath = "test-output/ops/BuildingOutlineRemoveOp/";
 
-  virtual void setUp()
+  BuildingOutlineRemoveOpTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath(outputPath);
   }
 

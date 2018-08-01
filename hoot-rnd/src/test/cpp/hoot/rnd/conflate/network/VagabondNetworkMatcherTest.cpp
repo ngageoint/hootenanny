@@ -49,11 +49,9 @@ class VagabondNetworkMatcherTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  VagabondNetworkMatcherTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void writeDebugMap(OsmMapPtr map, VagabondNetworkMatcher& uut, int index)

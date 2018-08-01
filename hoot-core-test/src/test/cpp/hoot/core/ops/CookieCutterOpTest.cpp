@@ -55,11 +55,9 @@ public:
   QString inputPath = "test-files/ops/CookieCutterOp/";
   QString outputPath = "test-output/ops/CookieCutterOp/";
 
-  virtual void setUp()
+  CookieCutterOpTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath(outputPath);
   }
 

@@ -57,11 +57,9 @@ public:
   NetworkEdgePtr _e1ab, _e1bc, _e1cd, _e1df;
   NetworkEdgePtr _e2ab, _e2bc;
 
-  virtual void setUp()
+  NetworkDetailsTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   NetworkDetailsPtr createSampleDetails()

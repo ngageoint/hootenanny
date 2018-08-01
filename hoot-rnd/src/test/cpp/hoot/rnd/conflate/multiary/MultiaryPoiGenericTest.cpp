@@ -47,11 +47,9 @@ class MultiaryPoiGenericTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MultiaryPoiGenericTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   /**

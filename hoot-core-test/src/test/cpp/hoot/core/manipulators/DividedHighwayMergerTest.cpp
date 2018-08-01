@@ -60,11 +60,9 @@ class DividedHighwayMergerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  DividedHighwayMergerTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output");
   }
 

@@ -54,11 +54,9 @@ class SetTagValueVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  SetTagValueVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/visitors");
   }
 

@@ -60,10 +60,14 @@ public:
 
   long mapId;
 
+  ServiceHootApiDbBulkInserterTest()
+  {
+    setResetType(ResetBasic);
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
+  }
+
   virtual void setUp()
   {
-    //  Reset the environment
-    reset(ResetBasic);
     HootTestFixture::setUp();
     mapId = -1;
     ServicesDbTestUtils::deleteUser(userEmail());
@@ -72,8 +76,6 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
     database.close();
-
-    TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
   virtual void tearDown()

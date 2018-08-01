@@ -52,11 +52,9 @@ class BuildingOutlineUpdateOpTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  BuildingOutlineUpdateOpTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/ops/BuildingOutlineUpdateOp/");
   }
 

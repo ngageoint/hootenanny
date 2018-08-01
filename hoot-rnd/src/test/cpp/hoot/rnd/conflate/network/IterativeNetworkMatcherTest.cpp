@@ -51,11 +51,9 @@ class IterativeNetworkMatcherTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  IterativeNetworkMatcherTest()
   {
-    //  Reset the environment
-    reset(ResetAll);
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
   }
 
   void writeDebugMap(OsmMapPtr map, IterativeNetworkMatcher& uut, int index)

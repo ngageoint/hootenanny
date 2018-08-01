@@ -73,11 +73,9 @@ class HighwaySnapMergerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  HighwaySnapMergerTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   OsmMapPtr createMap()

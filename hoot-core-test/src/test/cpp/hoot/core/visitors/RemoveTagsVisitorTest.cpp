@@ -52,11 +52,9 @@ class RemoveTagsVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RemoveTagsVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/visitors");
   }
 

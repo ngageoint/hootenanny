@@ -78,11 +78,9 @@ private:
 
 public:
 
-  virtual void setUp()
+  PoiPolygonMatchVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runIsCandidateTest()

@@ -64,13 +64,11 @@ class PertyWayGeneralizeVisitorTest : public HootTestFixture
 
 public:
 
-  QMap<QString, OsmMapPtr > _inputMapCache;
+  QMap<QString, OsmMapPtr> _inputMapCache;
 
-  virtual void setUp()
+  PertyWayGeneralizeVisitorTest()
   {
-    //  Reset the environment
-    reset(ResetBasic);
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
   }
 
   void runTest(const QString inputFile, const int randomNumberGeneratorSeed,
