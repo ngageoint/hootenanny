@@ -86,7 +86,6 @@ QString CreatorDescription::BaseFeatureTypeToString(BaseFeatureType t)
       return "Railway";
     case PowerLine:
       return "Power Line";
-    case Unknown:
     default:
       return "Unknown";
   }
@@ -139,7 +138,6 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType (Base
       return CalcTypeLength;
     case PowerLine:
       return CalcTypeLength;
-    case Unknown:
     default:
       return CalcTypeNone;
   }
@@ -167,7 +165,6 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
       return ElementCriterionPtr(new RailwayCriterion());
     case PowerLine:
       return ElementCriterionPtr(new PowerLineCriterion());
-    case Unknown:
     default:
       return ElementCriterionPtr();
   }

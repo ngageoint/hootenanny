@@ -61,23 +61,24 @@ double RasterComparator::compareMaps()
 
   _wayLengthSum = 0.0;
 
-  cv::Mat image1, image2;
+  cv::Mat image1;
+  cv::Mat image2;
 
   _renderImage(_mapP1, image1);
   _renderImage(_mapP2, image2);
 
   CvMat i1 = image1;
   CvMat i2 = image2;
-  double min, max, minTemp, maxTemp;
+  double min;
+  double max;
+  double minTemp;
+  double maxTemp;
   CvPoint p1, p2;
 
   cvMinMaxLoc(&i1, &min, &max, &p1, &p2);
   cvMinMaxLoc(&i2, &minTemp, &maxTemp, &p1, &p2);
   min = std::min(min, minTemp);
   max = std::max(max, maxTemp);
-
-  //_dumpImage(image1);
-  //_dumpImage(image1);
 
   double error = _calculateError(image1, image2);
 
@@ -92,7 +93,6 @@ double RasterComparator::compareMaps()
   {
     diffData[i] = fabs(image1Data[i] - image2Data[i]);
   }
-
 
   _saveImage(diff, "test-output/diff.png", max);
   _saveImage(image1, "test-output/image1.png", max);
@@ -162,16 +162,16 @@ void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& imag
   cv::Mat in(cvSize(_width, _height), CV_32FC1);
   image = cv::Mat(cvSize(_width, _height), CV_32FC1);
 
-  double rawSum = 0.0;
-  for (int y = 0; y < _height; y++)
-  {
-    float* row = in.ptr<float>(y);
-    for (int x = 0; x < _width; x++)
-    {
-      row[x] = qRed(qImage.pixel(x, y)) * _pixelSize;
-      rawSum += row[x] * _pixelSize;
-    }
-  }
+//  double rawSum = 0.0;
+//  for (int y = 0; y < _height; y++)
+//  {
+//    float* row = in.ptr<float>(y);
+//    for (int x = 0; x < _width; x++)
+//    {
+//      row[x] = qRed(qImage.pixel(x, y)) * _pixelSize;
+//      rawSum += row[x] * _pixelSize;
+//    }
+//  }
 
   int ks = ceil(_sigma / _pixelSize * 3) * 2 + 1;
   cv::GaussianBlur(in, image, cvSize(ks, ks), _sigma / _pixelSize, _sigma / _pixelSize,
