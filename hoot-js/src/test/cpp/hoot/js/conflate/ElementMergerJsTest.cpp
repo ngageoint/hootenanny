@@ -126,11 +126,9 @@ public:
   QString inDir = "test-files/js/conflate/ElementMergerJsTest";
   QString outDir = "test-output/js/conflate/ElementMergerJsTest";
 
-  void setUp()
+  ElementMergerJsTest()
   {
-    //  Reset the environment
     setResetType(ResetBasic);
-    HootTestFixture::setUp();
     TestUtils::mkpath(outDir);
   }
 

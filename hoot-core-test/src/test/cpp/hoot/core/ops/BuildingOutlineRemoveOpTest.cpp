@@ -51,8 +51,8 @@ class BuildingOutlineRemoveOpTest : public HootTestFixture
 
 public:
 
-  QString inputPath = "test-files/ops/BuildingOutlineRemoveOp/";
-  QString outputPath = "test-output/ops/BuildingOutlineRemoveOp/";
+  const QString inputPath = "test-files/ops/BuildingOutlineRemoveOp/";
+  const QString outputPath = "test-output/ops/BuildingOutlineRemoveOp/";
 
   BuildingOutlineRemoveOpTest()
   {

@@ -61,8 +61,8 @@ class BuildingPartMergeOpTest : public HootTestFixture
 
 public:
 
-  QString inputPath = "test-files/ops/BuildingPartMergeOp/";
-  QString outputPath = "test-output/ops/BuildingPartMergeOp/";
+  const QString inputPath = "test-files/ops/BuildingPartMergeOp/";
+  const QString outputPath = "test-output/ops/BuildingPartMergeOp/";
 
   BuildingPartMergeOpTest()
   {

@@ -202,7 +202,7 @@ public:
 
 class HootTestFixture : public CppUnit::TestFixture
 {
-public:
+protected:
   enum HootTestReset
   {
     ResetNone,
@@ -210,6 +210,19 @@ public:
     ResetAll
   };
 
+  /** Constructor to set the default reset to none */
+  HootTestFixture() : _reset(ResetNone) { }
+
+  /**
+   * @brief setResetType Set the reset type to do basic, all, or none
+   * @param reset Enum type to resent
+   */
+  void setResetType(HootTestReset reset) { _reset = reset; }
+
+public:
+  /**
+   * @brief setUp Overload of the CppUnit::TextFixture::setUp() to reset Hootenanny environment
+   */
   virtual void setUp()
   {
     if (_reset == ResetBasic)
@@ -218,9 +231,8 @@ public:
       TestUtils::resetEnvironment();
   }
 
-  void setResetType(HootTestReset reset) { _reset = reset; }
-
 private:
+  /** Reset flag on setup to reset nothing, basic IDs, or everything */
   HootTestReset _reset;
 };
 

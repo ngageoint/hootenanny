@@ -64,6 +64,12 @@ public:
     conf().set(ConfigOptions().getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
   }
 
+  virtual void tearDown()
+  {
+    conf().set(ConfigOptions().getMatchCreatorsKey(), ConfigOptions().getMatchCreatorsDefaultValue());
+    conf().set(ConfigOptions().getMergerCreatorsKey(), ConfigOptions().getMergerCreatorsDefaultValue());
+  }
+
   /**
    * Creates a single match and should result in a PoiPolygonMerger
    */

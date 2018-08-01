@@ -57,8 +57,8 @@ class WayMergeManipulationTest : public HootTestFixture
 
 public:
 
-  QString inputPath = "test-files/manipulators/";
-  QString outputPath = "test-output/manipulators/";
+  const QString inputPath = "test-files/manipulators/";
+  const QString outputPath = "test-output/manipulators/";
 
   WayMergeManipulationTest()
   {

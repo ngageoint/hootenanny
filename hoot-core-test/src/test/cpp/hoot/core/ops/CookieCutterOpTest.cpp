@@ -52,8 +52,8 @@ class CookieCutterOpTest : public HootTestFixture
 
 public:
 
-  QString inputPath = "test-files/ops/CookieCutterOp/";
-  QString outputPath = "test-output/ops/CookieCutterOp/";
+  const QString inputPath = "test-files/ops/CookieCutterOp/";
+  const QString outputPath = "test-output/ops/CookieCutterOp/";
 
   CookieCutterOpTest()
   {

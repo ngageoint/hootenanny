@@ -54,6 +54,9 @@ class WaySplitterOpTest : public HootTestFixture
 
 public:
 
+  const QString inputPath  = "test-files/ops/WaySplitterOp/";
+  const QString outputPath = "test-output/ops/WaySplitterOp/";
+
   WaySplitterOpTest()
   {
     setResetType(ResetAll);
@@ -61,9 +64,7 @@ public:
 
   void runTest()
   {
-    QString inputPath  = "test-files/ops/WaySplitterOp/";
     QString inputFile  = "ToyWGS84.osm";
-    QString outputPath = "test-output/ops/WaySplitterOp/";
     QString outputFile = "ToySplit.osm";
 
 
@@ -79,8 +80,8 @@ public:
     TestUtils::mkpath(outputPath);
     OsmXmlWriter writer;
     writer.write(map, outputPath + outputFile);
-    HOOT_FILE_EQUALS(inputPath+outputFile,
-                     outputPath+outputFile);
+    HOOT_FILE_EQUALS(inputPath + outputFile,
+                     outputPath + outputFile);
   }
 
 };

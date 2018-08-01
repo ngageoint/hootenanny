@@ -49,12 +49,13 @@ class PertyMatchScorerTest : public HootTestFixture
 
 public:
 
-  void setUp()
+  const QString inputPath = "test-files/perty/PertyMatchScorerTest/";
+  const QString outputPath = "test-output/perty/PertyMatchScorerTest/";
+
+  PertyMatchScorerTest()
   {
-    //  Reset the environment
     setResetType(ResetAll);
-    HootTestFixture::setUp();
-    TestUtils::mkpath("test-output/perty/PertyMatchScorerTest");
+    TestUtils::mkpath(outputPath);
   }
 
   void runLoadReferenceMapTest()
@@ -63,11 +64,11 @@ public:
     matchScorer.setSearchDistance(15.0);
     matchScorer.setApplyRubberSheet(true);
     matchScorer._loadReferenceMap(
-      "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-reference-in-1.osm",
-      "test-output/perty/PertyMatchScorerTest/PertyMatchScorerTest-reference-out-1.osm");
+      inputPath + "PertyMatchScorerTest-reference-in-1.osm",
+      outputPath + "PertyMatchScorerTest-reference-out-1.osm");
     HOOT_FILE_EQUALS(
-      "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-reference-out-1.osm",
-      "test-output/perty/PertyMatchScorerTest/PertyMatchScorerTest-reference-out-1.osm");
+      inputPath + "PertyMatchScorerTest-reference-out-1.osm",
+      outputPath + "PertyMatchScorerTest-reference-out-1.osm");
   }
 
   void runLoadPerturbedMapTest()
@@ -81,11 +82,11 @@ public:
     matchScorer.setSearchDistance(15.0);
     matchScorer.setApplyRubberSheet(true);
     matchScorer._loadPerturbedMap(
-      "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-reference-out-1.osm",
-      "test-output/perty/PertyMatchScorerTest/PertyMatchScorerTest-perturbed-out-1.osm");
+      inputPath + "PertyMatchScorerTest-reference-out-1.osm",
+      outputPath + "PertyMatchScorerTest-perturbed-out-1.osm");
     HOOT_FILE_EQUALS(
-      "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-perturbed-out-1.osm",
-      "test-output/perty/PertyMatchScorerTest/PertyMatchScorerTest-perturbed-out-1.osm");
+      inputPath + "PertyMatchScorerTest-perturbed-out-1.osm",
+      outputPath + "PertyMatchScorerTest-perturbed-out-1.osm");
   }
 
   void runCombineMapTest()
@@ -95,7 +96,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(
-      "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-reference-out-1.osm", referenceMap);
+      inputPath + "PertyMatchScorerTest-reference-out-1.osm", referenceMap);
     CPPUNIT_ASSERT_EQUAL(44, (int)referenceMap->getElementCount());
 
     PertyMatchScorer matchScorer;
@@ -104,7 +105,7 @@ public:
     OsmMapPtr combinedMap =
       matchScorer._combineMapsAndPrepareForConflation(
         referenceMap,
-        "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-perturbed-out-1.osm");
+        inputPath + "PertyMatchScorerTest-perturbed-out-1.osm");
 
     //can't do a file comparison on the output here since the UUID's added to the file will be
     //different with each run
@@ -127,7 +128,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(
-      "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-combined-out-1.osm", combinedMap);
+      inputPath + "PertyMatchScorerTest-combined-out-1.osm", combinedMap);
 
     PertyMatchScorer matchScorer;
     matchScorer.setConfiguration(testSettings);
@@ -137,13 +138,13 @@ public:
     /*boost::shared_ptr<MatchComparator> result =*/
     matchScorer._conflateAndScoreMatches(
       combinedMap,
-      "test-output/perty/PertyMatchScorerTest/PertyMatchScorerTest-conflated-out-1.osm");
+      outputPath + "PertyMatchScorerTest-conflated-out-1.osm");
     //const double score = result->getPertyScore();
 
     //MatchComparator test already covers testing the scoring, so not doing that here.
     HOOT_FILE_EQUALS(
-      "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-conflated-out-1.osm",
-      "test-output/perty/PertyMatchScorerTest/PertyMatchScorerTest-conflated-out-1.osm");
+      inputPath + "PertyMatchScorerTest-conflated-out-1.osm",
+      outputPath + "PertyMatchScorerTest-conflated-out-1.osm");
   }
 
 };
