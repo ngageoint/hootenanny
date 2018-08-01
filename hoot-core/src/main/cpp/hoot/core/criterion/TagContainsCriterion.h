@@ -65,7 +65,8 @@ public:
 
 private:
 
-  QStringList _key, _valueSubstring;
+  QStringList _key;
+  QStringList _valueSubstring;
 };
 
 }
