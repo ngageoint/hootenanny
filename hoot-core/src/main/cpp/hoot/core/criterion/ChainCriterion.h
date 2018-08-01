@@ -52,16 +52,16 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_filters)); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
 
   virtual QString getDescription() const
   { return "Allows for chaining together multiple criterion (logical AND)"; }
 
 protected:
 
-  ChainCriterion(std::vector< boost::shared_ptr<ElementCriterion> > filters);
+  ChainCriterion(std::vector< boost::shared_ptr<ElementCriterion> > criteria);
 
-  std::vector< boost::shared_ptr<ElementCriterion> > _filters;
+  std::vector< boost::shared_ptr<ElementCriterion> > _criteria;
 
 private:
 

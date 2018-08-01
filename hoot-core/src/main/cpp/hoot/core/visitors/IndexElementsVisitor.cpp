@@ -46,11 +46,11 @@ namespace hoot
 
 IndexElementsVisitor::IndexElementsVisitor(boost::shared_ptr<HilbertRTree>& index,
                                            deque<ElementId>& indexToEid,
-                                           const boost::shared_ptr<ElementCriterion>& filter,
+                                           const boost::shared_ptr<ElementCriterion>& criterion,
                                            boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
                                            ConstOsmMapPtr pMap):
   _pMap(pMap),
-  _filter(filter),
+  _criterion(criterion),
   _getSearchRadius(getSearchRadius),
   _index(index),
   _indexToEid(indexToEid)
@@ -60,8 +60,8 @@ IndexElementsVisitor::IndexElementsVisitor(boost::shared_ptr<HilbertRTree>& inde
 
 void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 {
-  assert(_filter.get() == 0);
-  _filter = e;
+  assert(_criterion.get() == 0);
+  _criterion = e;
 }
 
 void IndexElementsVisitor::finalizeIndex()
@@ -71,7 +71,7 @@ void IndexElementsVisitor::finalizeIndex()
 
 void IndexElementsVisitor::visit(const ConstElementPtr& e)
 {
-  if (!_filter || _filter->isSatisfied(e))
+  if (!_criterion || _criterion->isSatisfied(e))
   {
     _fids.push_back((int)_indexToEid.size());
     _indexToEid.push_back(e->getElementId());

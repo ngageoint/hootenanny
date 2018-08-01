@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove power line utilities.
+ * A criterion that will either keep or remove power line utilities.
  */
 class PowerLineCriterion : public ElementCriterion
 {

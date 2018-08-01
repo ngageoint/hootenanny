@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * A filter that keeps nodes belonging to a building way.
+ * A criterion that keeps nodes belonging to a building way.
  */
 class BuildingWayNodeCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {

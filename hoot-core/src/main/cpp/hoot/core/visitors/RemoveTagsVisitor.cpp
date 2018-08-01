@@ -43,13 +43,13 @@ RemoveTagsVisitor::RemoveTagsVisitor()
 }
 
 RemoveTagsVisitor::RemoveTagsVisitor(QString key) :
-_negateFilter(false)
+_negateCriterion(false)
 {
   addKey(key);
 }
 
 RemoveTagsVisitor::RemoveTagsVisitor(QString key1, QString key2) :
-_negateFilter(false)
+_negateCriterion(false)
 {
   addKey(key1);
   addKey(key2);
@@ -57,7 +57,7 @@ _negateFilter(false)
 
 RemoveTagsVisitor::RemoveTagsVisitor(QStringList keys) :
 _keys(keys),
-_negateFilter(false)
+_negateCriterion(false)
 {
 }
 
@@ -66,30 +66,30 @@ void RemoveTagsVisitor::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   _keys = configOptions.getRemoveTagsVisitorKeys();
   LOG_VART(_keys);
-  _negateFilter = configOptions.getElementCriterionNegate();
-  _setFilter(configOptions.getRemoveTagsVisitorElementCriterion());
+  _negateCriterion = configOptions.getElementCriterionNegate();
+  _setCriterion(configOptions.getRemoveTagsVisitorElementCriterion());
 }
 
 void RemoveTagsVisitor::addCriterion(const ElementCriterionPtr& e)
 {
-  if (!_negateFilter)
+  if (!_negateCriterion)
   {
-    _filter = e;
+    _criterion = e;
   }
   else
   {
-    _filter.reset(new NotCriterion(e));
+    _criterion.reset(new NotCriterion(e));
   }
 }
 
-void RemoveTagsVisitor::_setFilter(const QString filterName)
+void RemoveTagsVisitor::_setCriterion(const QString criterionName)
 {
-  if (!filterName.trimmed().isEmpty())
+  if (!criterionName.trimmed().isEmpty())
   {
-    LOG_VART(filterName);
+    LOG_VART(criterionName);
     addCriterion(
       boost::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(filterName.trimmed())));
+        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
   }
 }
 
@@ -100,7 +100,7 @@ void RemoveTagsVisitor::addKey(QString key)
 
 void RemoveTagsVisitor::visit(const boost::shared_ptr<Element>& e)
 {
-  if (_filter.get() && !_filter->isSatisfied(e))
+  if (_criterion.get() && !_criterion->isSatisfied(e))
   {
     return;
   }

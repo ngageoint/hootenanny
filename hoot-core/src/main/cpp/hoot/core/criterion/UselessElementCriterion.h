@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * A filter for detecting elements with no parents or children.
+ * A criterion for detecting elements with no parents or children.
+ *
  * For nodes: return true if the node has no parent ways or relations
  * For ways: return true if the way has no child nodes or parent relations
  * For relations: return true if the relation has no parent relations or members

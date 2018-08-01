@@ -61,8 +61,9 @@ void FindHighwayIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   // remove all relations
   LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
-  boost::shared_ptr<ElementTypeCriterion> rFilter(new ElementTypeCriterion(ElementType::Relation));
-  VisitorOp(new RemoveElementsVisitor(rFilter)).apply(map);
+  boost::shared_ptr<ElementTypeCriterion> relationCrit(
+    new ElementTypeCriterion(ElementType::Relation));
+  VisitorOp(new RemoveElementsVisitor(relationCrit)).apply(map);
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
 
   /// @todo move this to a config file.
@@ -87,8 +88,8 @@ void FindHighwayIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   LOG_INFO(QString("%1 Intersections found.").arg(v->getIntersections().size()));
 
   // remove all ways first
-  boost::shared_ptr<ElementTypeCriterion> wayFilter(new ElementTypeCriterion(ElementType::Way));
-  VisitorOp(new RemoveElementsVisitor(wayFilter)).apply(map);
+  boost::shared_ptr<ElementTypeCriterion> wayCrit(new ElementTypeCriterion(ElementType::Way));
+  VisitorOp(new RemoveElementsVisitor(wayCrit)).apply(map);
 
   // remove anything that is not a node and in the list of intersections found
   boost::shared_ptr<NotCriterion> intersectionCrit(

@@ -155,8 +155,8 @@ void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& imag
   QMatrix m = gp.createMatrix(pt.viewport(), _projectedBounds);
 
   PaintVisitor pv(map, gp, pt, m);
-  HighwayCriterion filter;
-  FilteredVisitor v(filter, pv);
+  HighwayCriterion crit;
+  FilteredVisitor v(crit, pv);
   map->visitRo(v);
 
   cv::Mat in(cvSize(_width, _height), CV_32FC1);

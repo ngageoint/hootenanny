@@ -250,9 +250,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
     LOG_VART(multiPolyMemberIds);
 
     // remove the duplicate element
-    DeletableBuildingCriterion filter;
+    DeletableBuildingCriterion crit;
     ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
-    RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
+    RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
     scrap->getTags().clear();
 
     //delete any multipoly members
@@ -377,15 +377,15 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
     boost::shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
     LOG_VART(result);
 
-    // likely create a filter that only matches buildings and building parts and pass that to the
-    DeletableBuildingCriterion filter;
+    // likely create a crit that only matches buildings and building parts and pass that to the
+    DeletableBuildingCriterion crit;
     for (size_t i = 0; i < toRemove.size(); i++)
     {
       if (map->containsElement(toRemove[i]))
       {
         ElementPtr willRemove = map->getElement(toRemove[i]);
         ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
-        RecursiveElementRemover(toRemove[i], &filter).apply(map);
+        RecursiveElementRemover(toRemove[i], &crit).apply(map);
         // just in case it wasn't removed (e.g. part of another relation)
         willRemove->getTags().clear();
       }

@@ -45,21 +45,21 @@ SetTagValueVisitor::SetTagValueVisitor()
 }
 
 SetTagValueVisitor::SetTagValueVisitor(QString key, QString value, bool appendToExistingValue,
-                                       const QString filterName, bool overwriteExistingTag,
-                                       bool negateFilter) :
+                                       const QString criterionName, bool overwriteExistingTag,
+                                       bool negateCriterion) :
 _appendToExistingValue(appendToExistingValue),
 _overwriteExistingTag(overwriteExistingTag),
-_negateFilter(negateFilter)
+_negateCriterion(negateCriterion)
 {
   _k.append(key);
   _v.append(value);
-  _setFilter(filterName);
+  _setCriterion(criterionName);
 
   LOG_VART(_k);
   LOG_VART(_v);
   LOG_VART(_appendToExistingValue);
   LOG_VART(_overwriteExistingTag);
-  LOG_VART(_negateFilter);
+  LOG_VART(_negateCriterion);
 }
 
 void SetTagValueVisitor::setConfiguration(const Settings& conf)
@@ -73,36 +73,36 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
   }
   _appendToExistingValue = configOptions.getSetTagValueVisitorAppendToExistingValue();
   _overwriteExistingTag = configOptions.getSetTagValueVisitorOverwrite();
-  _negateFilter = configOptions.getElementCriterionNegate();
-  _setFilter(configOptions.getSetTagValueVisitorElementCriterion());
+  _negateCriterion = configOptions.getElementCriterionNegate();
+  _setCriterion(configOptions.getSetTagValueVisitorElementCriterion());
 
   LOG_VART(_k);
   LOG_VART(_v);
   LOG_VART(_appendToExistingValue);
   LOG_VART(_overwriteExistingTag);
-  LOG_VART(_negateFilter);
+  LOG_VART(_negateCriterion);
 }
 
 void SetTagValueVisitor::addCriterion(const ElementCriterionPtr& e)
 {
-  if (!_negateFilter)
+  if (!_negateCriterion)
   {
-    _filter = e;
+    _criterion = e;
   }
   else
   {
-    _filter.reset(new NotCriterion(e));
+    _criterion.reset(new NotCriterion(e));
   }
 }
 
-void SetTagValueVisitor::_setFilter(const QString filterName)
+void SetTagValueVisitor::_setCriterion(const QString criterionName)
 {
-  if (!filterName.trimmed().isEmpty())
+  if (!criterionName.trimmed().isEmpty())
   {
-    LOG_VART(filterName);
+    LOG_VART(criterionName);
     addCriterion(
       boost::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(filterName.trimmed())));
+        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
   }
 }
 
@@ -119,7 +119,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)
 
   LOG_VART(e->getElementId());
 
-  if (_filter.get() && !_filter->isSatisfied(e))
+  if (_criterion.get() && !_criterion->isSatisfied(e))
   {
     return;
   }

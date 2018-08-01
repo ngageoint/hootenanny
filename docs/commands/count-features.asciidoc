@@ -2,20 +2,20 @@
 
 === Description
 
-The +count-features+ command displays a count of the number of features in a map, allowing for an optional filter.  Features are defined as
+The +count-features+ command displays a count of the number of features in a map, allowing for optional filtering with a criterion.  Features are defined as
 elements with at least one information tag, whereas elements have no tag requirements.
 
 * +inputs+         - One or more OSM data inputs; specify multiple inputs by separating them with a semicolon and surrounding them with quotes
-* +filter+         - (optional) The filter may be either the single class name of a Hootenanny criterion or a visitor that supports the 
+* +criterion+      - (optional) The criterion may be either the single class name of a Hootenanny criterion or a visitor that supports the
                      SingleStatistic interface.  Use the +operators+ command to obtain a list of available Hootenanny visitors and criterion.
-* +--all-elements+ - The default behavior when no filter is specified or when a criterion filter is specified is to only consider features.  
+* +--all-elements+ - The default behavior when no criterion is specified or when a criterion is specified is to only consider features.
                      Activating this option causes the command to consider all elements.  This setting has no affect when passing a
-                     visitor as a filter.
+                     visitor as a criterion.
 
 === Usage
 
 --------------------------------------
-hoot count-features (input(s)) [filter] [--all-elements]
+hoot count-features (input(s)) [criterion] [--all-elements]
 --------------------------------------
 
 === Examples

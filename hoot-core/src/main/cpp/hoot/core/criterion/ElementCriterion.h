@@ -57,12 +57,6 @@ public:
   virtual ~ElementCriterion() {}
 
   /**
-   * Provided for backwards compatibility with the old filter. This method should be avoided.
-   */
-  virtual bool isNotSatisfied(const boost::shared_ptr<const Element>& e) const
-  { return !isSatisfied(e); }
-
-  /**
    * Returns true if the element satisfies the criterion.
    */
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const = 0;

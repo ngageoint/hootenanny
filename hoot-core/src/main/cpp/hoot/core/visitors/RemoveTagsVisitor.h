@@ -60,16 +60,16 @@ public:
 
   virtual QString getDescription() const { return "Removes tags with matching keys"; }
 
-  void setNegateFilter(bool negate) { _negateFilter = negate; }
+  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
 private:
 
   QStringList _keys;
-  boost::shared_ptr<ElementCriterion> _filter;
-  //This allows for negating the filter as an option sent in from the command line.
-  bool _negateFilter;
+  boost::shared_ptr<ElementCriterion> _criterion;
+  //This allows for negating the criterion as an option sent in from the command line.
+  bool _negateCriterion;
 
-  void _setFilter(const QString filterName);
+  void _setCriterion(const QString criterionName);
 };
 
 }

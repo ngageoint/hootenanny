@@ -343,12 +343,12 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
 
 void OsmGbdxXmlWriter::_writeNodes(ConstOsmMapPtr map)
 {
-  NoInformationCriterion filter;
+  NoInformationCriterion crit;
   QList<long> nids;
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (filter.isNotSatisfied(map->getNode(it->first)))
+    if (!crit.isSatisfied(map->getNode(it->first)))
         nids.append(it->first);
   }
 

@@ -63,8 +63,8 @@
 #include <hoot/core/util/DataProducer.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 
 #include <math.h>
 

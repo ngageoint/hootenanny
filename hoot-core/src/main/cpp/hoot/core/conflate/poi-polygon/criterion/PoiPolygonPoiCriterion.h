@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONPOLYCRITERION_H
-#define POIPOLYGONPOLYCRITERION_H
+#ifndef POIPOLYGONPOICRITERION_H
+#define POIPOLYGONPOICRITERION_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
@@ -34,24 +34,24 @@ namespace hoot
 {
 
 /**
- * A filter that will keep poly-like features, as defined by PoiPolygonMatch.
+ * A criterion that will keep poi features, as defined by PoiPolygonMatch.
  */
-class PoiPolygonPolyCriterion : public ElementCriterion
+class PoiPolygonPoiCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonPolyCriterion"; }
+  static std::string className() { return "hoot::PoiPolygonPoiCriterion"; }
 
-  PoiPolygonPolyCriterion();
+  PoiPolygonPoiCriterion();
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
 
   virtual QString getDescription() const
-  { return "Identifies polygons as defined by POI/Polygon conflation"; }
+  { return "Identifies POIs as defined by POI/Polygon conflation"; }
 };
 
 }
 
-#endif // POIPOLYGONPOLYCRITERION_H
+#endif // POIPOLYGONPOICRITERION_H
