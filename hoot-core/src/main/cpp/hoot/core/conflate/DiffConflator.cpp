@@ -33,9 +33,11 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/NonConflatableElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
@@ -89,17 +91,28 @@ void DiffConflator::apply(OsmMapPtr& map)
   // Store the map - we might need it for tag diff later.
   _pMap = map;
 
+  LOG_INFO("Discarding relations...");
+  boost::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
+  RemoveElementsVisitor removeRelationsVisitor(pRelationCrit);
+  _pMap->visitRw(removeRelationsVisitor);
+  _stats.append(SingleStat("Remove Relations Time (sec)", timer.getElapsedAndRestart()));
+
+  LOG_INFO("Discarding non-conflatable elements...");
+  NonConflatableElementRemover nonConflateRemover;
+  nonConflateRemover.apply(_pMap);
+  _stats.append(SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
+
   LOG_INFO("Applying pre diff-conflation operations...");
   NamedOp(ConfigOptions().getUnifyPreOps()).apply(_pMap);
-
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
-  // will reproject if necessary.
+  // Will reproject if necessary.
+  LOG_INFO("Projecting to planar...");
   MapProjector::projectToPlanar(_pMap);
-
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
   // find all the matches in this _pMap
+  LOG_INFO("Finding matches...");
   if (_matchThreshold.get())
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds, _matchThreshold);
