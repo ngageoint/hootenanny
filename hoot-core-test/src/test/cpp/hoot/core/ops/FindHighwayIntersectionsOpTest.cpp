@@ -56,7 +56,7 @@ class FindHighwayIntersectionsOpTest : public HootTestFixture
 
 public:
 
-  FindIntersectionsOpTest()
+  FindHighwayIntersectionsOpTest()
   {
     setResetType(ResetAll);
     TestUtils::mkpath("test-output/ops/FindHighwayIntersectionsOp/");
