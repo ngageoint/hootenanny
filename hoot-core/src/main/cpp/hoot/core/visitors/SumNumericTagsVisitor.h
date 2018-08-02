@@ -37,6 +37,10 @@ namespace hoot
 
 /**
  * Sums numeric tag values with a specified key
+ *
+ * TODO: make configurable
+ * TODO: have this support multiple keys
+ * TODO: have this support substrings
  */
 class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic
 {
@@ -66,6 +70,7 @@ public:
 private:
 
   QString _key;
+  //TODO: should be double
   long _sum;
 };
 
