@@ -4,6 +4,11 @@
 pipeline {
     agent { label 'master' }
 
+    environment {
+        URL = ""
+        VER = ""
+    }
+
     triggers {
         // Set nightly trigger
         cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(20-21) * * 1-5" : "")
@@ -48,6 +53,10 @@ pipeline {
             steps {
                 // NOTE: Only installs hoot build dependencies
                 sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
+                VER = sh(returnStdout: true, script: "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
+                URL = sh(returnStdout: true, script: "vagrant ssh-config ${params.Box} | grep HostName | awk '{print \$2}'")
+                URL = URL.trim()
+                echo "System under test version ${VER}  https://${URL}:8080/hootenanny-id/"
             }       
         }
         stage("Test Configure") {
@@ -159,10 +168,7 @@ pipeline {
             script {
                 if (env.BRANCH_NAME.startsWith("release")) {
                     // Don't clean up this workspace.  We want to leave it up for acceptance testing
-                    def VERS = sh(returnStdout: true, script: "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
-                    def URL = sh(returnStdout: true, script: "vagrant ssh-config ${params.Box} | grep HostName | awk '{print \$2}'")
-                    URL = URL.trim()
-                    slackSend channel: "#builds_hoot", message: "Release candidate version ${VERS} ready for testing https://${URL}:8080/hootenanny-id/"
+                    slackSend channel: "#builds_hoot", message: "Release candidate version ${VER} ready for testing https://${URL}:8080/hootenanny-id/"
                 } else {
                     // If all tests passed, clean everything up
                     sh "vagrant destroy -f ${params.Box}"
