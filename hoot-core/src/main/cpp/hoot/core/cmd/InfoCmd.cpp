@@ -70,7 +70,7 @@ public:
       throw HootException(QString("%1 takes a single option.").arg(getName()));
     }
     LOG_VARD(specifiedOpts.size());
-    assert(specifiedOpts.size() == 1);
+    //assert(specifiedOpts.size() == 1);
 
     if (specifiedOpts.contains("--config-options"))
     {
