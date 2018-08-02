@@ -29,8 +29,8 @@
 
 // hoot
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
@@ -56,7 +56,7 @@ protected:
 
 private:
 
-  PoiPolygonPolyCriterion _polyFilter;
+  PoiPolygonPolyCriterion _polyCrit;
   bool _inABuildingOrPoiCategory;
 
   bool _elementIsATaggablePolygon(const ElementPtr& e);

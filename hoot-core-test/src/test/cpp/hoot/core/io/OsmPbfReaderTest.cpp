@@ -76,15 +76,14 @@ class OsmPbfReaderTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  OsmPbfReaderTest()
   {
-    HootTestFixture::setUp();
-    TestUtils::mkpath("test-output/io");
+    setResetType(ResetAll);
+    TestUtils::mkpath("test-output/io/");
   }
 
   void runOffsetsTest()
   {
-    OsmMap::resetCounters();
     OsmPbfReader uut(false);
     fstream input("test-files/io/SmallSplits.pbf", ios::in | ios::binary);
     OsmMapPtr map(new OsmMap());
@@ -284,8 +283,6 @@ public:
 
   void runToyTest()
   {
-    OsmMap::resetCounters();
-
     OsmPbfReader uut(false);
     fstream input("test-files/ToyTestA.osm.pbf", ios::in | ios::binary);
     OsmMapPtr map(new OsmMap());
@@ -301,8 +298,6 @@ public:
 
   void runToyRelationTest()
   {
-    OsmMap::resetCounters();
-
     OsmPbfReader uut(false);
     fstream input("test-files/io/OsmPbfRelationTest.osm.pbf", ios::in | ios::binary);
     OsmMapPtr map(new OsmMap());
@@ -382,8 +377,6 @@ public:
 
   void runReadMapTest()
   {
-    OsmMap::resetCounters();
-
     OsmPbfReader reader(false);
     OsmMapPtr map(new OsmMap());
     reader.open("test-files/ToyTestA.osm.pbf");
@@ -400,8 +393,6 @@ public:
 
   void runFactoryReadMapTest()
   {
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm.pbf", false, Status::Unknown1);
 
@@ -415,8 +406,6 @@ public:
 
   void runReadMapPartialTest()
   {
-    OsmMap::resetCounters();
-
     OsmPbfReader reader(false);
     const int chunkSize = 10;
     reader.setMaxElementsPerMap(chunkSize);
@@ -458,8 +447,6 @@ public:
 
   void runReadMapPartialMultipleBlobsTest()
   {
-    OsmMap::resetCounters();
-
     OsmPbfReader reader(false);
     const int chunkSize = 40;
     reader.setMaxElementsPerMap(chunkSize);
@@ -542,8 +529,6 @@ public:
 
   void runReadSortTypeTest()
   {
-    OsmMap::resetCounters();
-
     //This pbf file contains Sort.Type_then_ID in the header. Test to read it.
     OsmMapPtr map(new OsmMap());
     OsmPbfReader reader(true);

@@ -49,7 +49,6 @@ public:
 
   void runBasicTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()["name"] = "أَلِف";
@@ -62,7 +61,6 @@ public:
     //characters is latin, no "note, Transliterated Name" added.
     CPPUNIT_ASSERT_EQUAL(true, n1->getTags().find("note") == n1->getTags().end());
 
-    OsmMap::resetCounters();
     OsmMapPtr map1(new OsmMap());
     NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
     n2->getTags()["name"] = "little town";

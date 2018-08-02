@@ -46,8 +46,8 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 #include "PoiMergerJs.h"
 #include "AreaMergerJs.h"
 
@@ -205,9 +205,9 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
       "Input map must have one feature marked with a " + MetadataTags::HootMergeTarget() + " tag.");
   }
 
-  TagKeyCriterion mergeTagFilter(MetadataTags::HootMergeTarget());
+  TagKeyCriterion mergeTagCrit(MetadataTags::HootMergeTarget());
   ElementIdSetVisitor idSetVis;
-  FilteredVisitor filteredVis(mergeTagFilter, idSetVis);
+  FilteredVisitor filteredVis(mergeTagCrit, idSetVis);
   map->visitRo(filteredVis);
   const std::set<ElementId>& mergeTargetIds = idSetVis.getElementSet();
   assert(mergeTargetIds.size() == 1);

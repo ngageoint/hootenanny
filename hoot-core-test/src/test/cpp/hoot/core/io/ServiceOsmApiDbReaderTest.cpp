@@ -67,7 +67,6 @@ public:
 
   virtual void setUp()
   {
-    HootTestFixture::setUp();
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
   }
 

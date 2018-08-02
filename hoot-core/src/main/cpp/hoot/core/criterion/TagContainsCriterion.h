@@ -22,46 +22,53 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TAGCONTAINSFILTER_H
-#define TAGCONTAINSFILTER_H
+
+#ifndef TAGCONTAINSCRITERION_H
+#define TAGCONTAINSCRITERION_H
+
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
 #include <QStringList>
 
-#include "ElementCriterion.h"
-
 namespace hoot
 {
 
-class TagContainsFilter : public BaseElementFilter
+/**
+ * Identifies elements by tag key and tag value substring
+ */
+class TagContainsCriterion : public ElementCriterion
 {
 public:
 
-  TagContainsFilter(FilterType type, QString key, QString valueSubstring);
-  TagContainsFilter(FilterType type, QStringList keys, QStringList valueSubstrings);
+  static std::string className() { return "hoot::TagContainsCriterion"; }
+
+  TagContainsCriterion() {}
+  TagContainsCriterion(QString key, QString valueSubstring);
+  TagContainsCriterion(QStringList keys, QStringList valueSubstrings);
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   /**
-   * Adds an additional pair to the search list. If any one of the pairs matches then it is
-   * considered a match.
-   */
-  void addPair(QString key, QString valueSubstring);
+    * Adds an additional pair to the search list. If any one of the pairs matches then it is
+    * considered a match.
+    */
+   void addPair(QString key, QString valueSubstring);
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new TagContainsFilter(_type, _key, _valueSubstring)); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagContainsCriterion()); }
 
   virtual QString getDescription() const
-  { return "Filters elements based on tag keys and tag value substrings"; }
+  { return "Identifies elements by tag key and tag value substring"; }
 
-protected:
+private:
 
-  virtual bool isFiltered(const Element& e) const;
-
-  QStringList _key, _valueSubstring;
-  FilterType _type;
+  QStringList _key;
+  QStringList _valueSubstring;
 };
 
 }
 
-#endif // TAGCONTAINSFILTER_H
+#endif // TAGCONTAINSCRITERION_H

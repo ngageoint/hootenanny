@@ -32,9 +32,9 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/WaterwayCriterion.h>
-#include <hoot/core/criterion/HighwayFilter.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
@@ -86,7 +86,6 @@ QString CreatorDescription::BaseFeatureTypeToString(BaseFeatureType t)
       return "Railway";
     case PowerLine:
       return "Power Line";
-    case Unknown:
     default:
       return "Unknown";
   }
@@ -139,7 +138,6 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType (Base
       return CalcTypeLength;
     case PowerLine:
       return CalcTypeLength;
-    case Unknown:
     default:
       return CalcTypeNone;
   }
@@ -152,7 +150,7 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
     case POI:
       return ElementCriterionPtr(new PoiCriterion());
     case Highway:
-      return ElementCriterionPtr(new HighwayFilter(Filter::KeepMatches));
+      return ElementCriterionPtr(new HighwayCriterion());
     case Building:
       return ElementCriterionPtr(new BuildingCriterion(map));
     case Waterway:
@@ -167,7 +165,6 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
       return ElementCriterionPtr(new RailwayCriterion());
     case PowerLine:
       return ElementCriterionPtr(new PowerLineCriterion());
-    case Unknown:
     default:
       return ElementCriterionPtr();
   }

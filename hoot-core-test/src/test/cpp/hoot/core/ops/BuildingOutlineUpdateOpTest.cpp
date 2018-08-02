@@ -52,9 +52,9 @@ class BuildingOutlineUpdateOpTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  BuildingOutlineUpdateOpTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/ops/BuildingOutlineUpdateOp/");
   }
 
@@ -65,7 +65,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsIn.osm", map);
 
@@ -94,7 +93,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ops/BuildingOutlineUpdateOp/UncleanableTopologiesIn.osm", map);
 

@@ -83,7 +83,6 @@ public:
 
   virtual void tearDown()
   {
-    HootTestFixture::tearDown();
     ServicesDbTestUtils::deleteUser(userEmail());
 
     if (mapId != -1)

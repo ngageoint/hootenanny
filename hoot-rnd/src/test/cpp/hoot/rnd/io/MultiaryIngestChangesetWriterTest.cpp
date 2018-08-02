@@ -46,9 +46,8 @@ class MultiaryIngestChangesetWriterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MultiaryIngestChangesetWriterTest()
   {
-    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/MultiaryIngestChangesetWriterTest/");
   }
 

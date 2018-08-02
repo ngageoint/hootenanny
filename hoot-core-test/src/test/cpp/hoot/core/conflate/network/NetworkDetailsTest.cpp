@@ -57,14 +57,16 @@ public:
   NetworkEdgePtr _e1ab, _e1bc, _e1cd, _e1df;
   NetworkEdgePtr _e2ab, _e2bc;
 
+  NetworkDetailsTest()
+  {
+    setResetType(ResetAll);
+  }
+
   NetworkDetailsPtr createSampleDetails()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     boost::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
-
 
     NodePtr n1a(new Node(Status::Invalid, -1, 0, 0, 15.0));
     NetworkVertexPtr v1(new NetworkVertex(n1a));

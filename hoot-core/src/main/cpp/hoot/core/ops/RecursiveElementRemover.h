@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/criterion/BaseFilter.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Standard
 #include <set>
@@ -67,15 +67,15 @@ public:
 
   /**
    * @param eid The element to recursively delete.
-   * @param filter If this is specified then only elements that return true to "isSatisfied" will be
+   * @param criterion If this is specified then only elements that return true to "isSatisfied" will be
    * deleted. Even if isSatisfied returns false the children of that element will still be searched.
    */
-  RecursiveElementRemover(ElementId eid, const ElementCriterion* filter = 0);
+  RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion = 0);
 
   /**
    * It is expected that the eid will be populated with addElement after construction.
    */
-  RecursiveElementRemover() : _filter() {}
+  RecursiveElementRemover() : _criterion() {}
 
   virtual ~RecursiveElementRemover() {}
 
@@ -91,7 +91,7 @@ public:
 private:
 
   ElementId _eid;
-  const ElementCriterion* _filter;
+  const ElementCriterion* _criterion;
 
   void _remove(const boost::shared_ptr<OsmMap> &map, ElementId eid,
                const std::set<ElementId>& removeSet);

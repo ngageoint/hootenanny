@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove areas.
+ * A criterion that will either keep or remove areas.
  */
 class AreaCriterion : public ElementCriterion
 {

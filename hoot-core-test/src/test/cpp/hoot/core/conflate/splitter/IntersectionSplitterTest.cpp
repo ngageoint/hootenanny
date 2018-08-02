@@ -50,18 +50,15 @@ class IntersectionSplitterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  IntersectionSplitterTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/conflate/splitter");
   }
 
   void runTest()
   {
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/splitter/IntersectionSplitter.osm", map);
@@ -79,7 +76,6 @@ public:
   void runTestSimple()
   {
     OsmXmlReader reader;
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/splitter/SimpleSplitter.osm", map);

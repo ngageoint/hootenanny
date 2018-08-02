@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A filter that will keep node features.
+ * A criterion that will keep node features.
  */
 class NodeCriterion : public ElementCriterion
 {

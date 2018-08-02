@@ -73,9 +73,13 @@ class HighwaySnapMergerTest : public HootTestFixture
 
 public:
 
+  HighwaySnapMergerTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   OsmMapPtr createMap()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;

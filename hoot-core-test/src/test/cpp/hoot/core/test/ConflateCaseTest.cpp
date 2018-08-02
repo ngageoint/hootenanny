@@ -170,7 +170,6 @@ void ConflateCaseTest::_runMultiaryConflateCmd()
 
 void ConflateCaseTest::runTest()
 {
-  TestUtils::resetEnvironment();
   LOG_DEBUG("Running conflate case test...");
 
   // configures and cleans up the conf() environment

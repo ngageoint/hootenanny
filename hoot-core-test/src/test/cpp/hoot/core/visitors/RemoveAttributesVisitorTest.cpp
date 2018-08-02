@@ -51,16 +51,15 @@ class RemoveAttributesVisitorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  RemoveAttributesVisitorTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/visitors");
   }
 
   void runRemoveAttributesTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveAttributesVisitorTest.osm", false, Status::Unknown1);
 

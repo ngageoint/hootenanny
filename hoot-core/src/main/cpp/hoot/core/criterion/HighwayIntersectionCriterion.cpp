@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "IntersectionCriterion.h"
+#include "HighwayIntersectionCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -37,14 +37,14 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, IntersectionCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, HighwayIntersectionCriterion)
 
-IntersectionCriterion::IntersectionCriterion(ConstOsmMapPtr map)
+HighwayIntersectionCriterion::HighwayIntersectionCriterion(ConstOsmMapPtr map)
 {
   setOsmMap(map.get());
 }
 
-bool IntersectionCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool HighwayIntersectionCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   if (e->getElementType() != ElementType::Node)
   {
@@ -78,7 +78,7 @@ bool IntersectionCriterion::isSatisfied(const boost::shared_ptr<const Element>& 
   return result;
 }
 
-void IntersectionCriterion::setOsmMap(const OsmMap *map)
+void HighwayIntersectionCriterion::setOsmMap(const OsmMap *map)
 {
   _map = map->shared_from_this();
 }

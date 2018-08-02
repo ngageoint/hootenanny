@@ -52,9 +52,13 @@ class LocationOfPointTest : public HootTestFixture
 
 public:
 
+  LocationOfPointTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runLocateAfterTest()
   {
-//    OsmMap::resetCounters();
 //    shared_ptr<OsmMap> map(new OsmMap());
 
 //    Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),

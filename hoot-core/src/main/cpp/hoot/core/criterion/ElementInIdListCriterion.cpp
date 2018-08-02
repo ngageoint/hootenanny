@@ -22,41 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FINDINTERSECTIONSOP_H
-#define FINDINTERSECTIONSOP_H
 
-// Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
+#include "ElementInIdListCriterion.h"
 
-// Qt
-#include <QString>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(ElementCriterion, ElementInIdListCriterion)
 
-/**
- * Op. to find intersections
- */
-class FindIntersectionsOp : public OsmMapOperation
+ElementInIdListCriterion::ElementInIdListCriterion(const std::vector<long>& ids)
 {
-public:
+  for (uint i = 0; i < ids.size(); i++)
+  {
+    _ids.insert(ids[i]);
+  }
+}
 
-  static std::string className() { return "hoot::FindIntersectionsOp"; }
-
-  static QString opsKey() { return "map.cleaner.transforms"; }
-
-  FindIntersectionsOp();
-
-  virtual ~FindIntersectionsOp() {}
-
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
-
-  virtual QString getDescription() const { return "Identifies road intersections"; }
-};
+bool ElementInIdListCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+{
+  return _ids.find(e->getId()) != _ids.end();
+}
 
 }
 
-#endif // FINDINTERSECTIONSOP_H

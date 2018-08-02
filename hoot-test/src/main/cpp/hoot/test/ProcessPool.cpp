@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ProcessPool.h"
 
@@ -158,7 +158,13 @@ void ProcessThread::processJobs(JobQueue* queue)
           ++restart_count;
           //  Restart the process if there was a process failure
           if (restart_count < MAX_RESTART)
+          {
             _proc.reset(createProcess());
+            _outMutex->lock();
+            cout << test.toStdString() << " failed, requeued." << endl;
+            _outMutex->unlock();
+            output.clear();
+          }
           else
             working = false;
           break;

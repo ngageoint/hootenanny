@@ -72,19 +72,20 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setKeepTempFiles(options.getImplicitTaggingKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
   setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
-  setElementFilter(options.getImplicitTaggingElementCriterion());
+  setElementCriterion(options.getImplicitTaggingElementCriterion());
 }
 
-void ImplicitTagRawRulesDeriver::setElementFilter(QString filterName)
+void ImplicitTagRawRulesDeriver::setElementCriterion(QString criterionName)
 {
-  ElementCriterion* filter = Factory::getInstance().constructObject<ElementCriterion>(filterName);
-  if (dynamic_cast<ImplicitTagEligibleCriterion*>(filter) != 0)
+  ElementCriterion* criterion =
+    Factory::getInstance().constructObject<ElementCriterion>(criterionName);
+  if (dynamic_cast<ImplicitTagEligibleCriterion*>(criterion) != 0)
   {
-    _elementFilter.reset(dynamic_cast<ImplicitTagEligibleCriterion*>(filter));
+    _elementCriterion.reset(dynamic_cast<ImplicitTagEligibleCriterion*>(criterion));
   }
   else
   {
-    throw IllegalArgumentException("Invalid filter type: " + filterName);
+    throw IllegalArgumentException("Invalid criterion type: " + criterionName);
   }
 }
 
@@ -136,8 +137,8 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
 
       totalFeatureCount++;
 
-      assert(_elementFilter.get());
-      if (_skipFiltering || _elementFilter->isSatisfied(element))
+      assert(_elementCriterion.get());
+      if (_skipFiltering || _elementCriterion->isSatisfied(element))
       {
         QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
@@ -162,7 +163,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
 
         //get back only the tags that we'd be interested in applying to future elements implicitly
         //based on name
-        const QStringList kvps = _elementFilter->getEligibleKvps(element->getTags());
+        const QStringList kvps = _elementCriterion->getEligibleKvps(element->getTags());
         assert(!kvps.isEmpty());
         if (kvps.isEmpty())
         {
@@ -225,7 +226,7 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList inputs,
   LOG_VARD(translationScripts);
   LOG_VARD(output);
 
-  if (!_elementFilter.get())
+  if (!_elementCriterion.get())
   {
     throw HootException("No element type was specified.");
   }

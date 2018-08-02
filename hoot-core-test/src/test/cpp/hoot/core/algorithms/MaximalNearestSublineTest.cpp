@@ -64,9 +64,9 @@ class MaximalNearestSublineTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  MaximalNearestSublineTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/algorithms/");
   }
 
@@ -129,8 +129,6 @@ public:
 
   void funnyCurveTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
@@ -185,8 +183,6 @@ public:
   void oneShortTest()
   {
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

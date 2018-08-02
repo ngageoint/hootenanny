@@ -126,8 +126,9 @@ public:
   QString inDir = "test-files/js/conflate/ElementMergerJsTest";
   QString outDir = "test-output/js/conflate/ElementMergerJsTest";
 
-  void setUp()
+  ElementMergerJsTest()
   {
+    setResetType(ResetBasic);
     TestUtils::mkpath(outDir);
   }
 
@@ -141,7 +142,6 @@ public:
     QString exceptionMsg("");
     try
     {
-      OsmMap::resetCounters();
       OsmMapPtr map(new OsmMap());
       OsmMapReaderFactory::read(map, true, true, inDir + "/" + inFileName);
 

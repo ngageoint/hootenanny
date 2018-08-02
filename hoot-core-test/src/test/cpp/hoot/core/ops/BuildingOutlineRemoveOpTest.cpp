@@ -51,6 +51,15 @@ class BuildingOutlineRemoveOpTest : public HootTestFixture
 
 public:
 
+  const QString inputPath = "test-files/ops/BuildingOutlineRemoveOp/";
+  const QString outputPath = "test-output/ops/BuildingOutlineRemoveOp/";
+
+  BuildingOutlineRemoveOpTest()
+  {
+    setResetType(ResetBasic);
+    TestUtils::mkpath(outputPath);
+  }
+
   void runSelfIntersectingRelationTest()
   {
     DisableLog dl;
@@ -58,20 +67,18 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/BuildingOutlineRemoveOp/SelfIntersectingRelationsIn.osm", map);
+    reader.read(inputPath + "SelfIntersectingRelationsIn.osm", map);
 
     BuildingOutlineRemoveOp myOp;
     myOp.apply(map);
 
     MapProjector::projectToWgs84(map);
 
-    TestUtils::mkpath("test-output/ops/BuildingOutlineRemoveOp/");
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/BuildingOutlineRemoveOp/SelfIntersectingRelationsOut.osm");
-    HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineRemoveOp/SelfIntersectingRelationsOut.osm",
-                     "test-output/ops/BuildingOutlineRemoveOp/SelfIntersectingRelationsOut.osm");
+    writer.write(map, outputPath + "SelfIntersectingRelationsOut.osm");
+    HOOT_FILE_EQUALS(inputPath + "SelfIntersectingRelationsOut.osm",
+                     outputPath + "SelfIntersectingRelationsOut.osm");
   }
 
 };

@@ -22,20 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef POIPOLYGONPOICRITERION_H
+#define POIPOLYGONPOICRITERION_H
 
-#include "StatsAreaFilter.h"
-
-// Hoot
-#include <hoot/core/schema/OsmSchema.h>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-bool StatsAreaFilter::isMatch(const Element& e) const
+/**
+ * A criterion that will keep poi features, as defined by PoiPolygonMatch.
+ */
+class PoiPolygonPoiCriterion : public ElementCriterion
 {
-  return OsmSchema::getInstance().isAreaForStats(e.getTags(), e.getElementType());
-}
+public:
+
+  static std::string className() { return "hoot::PoiPolygonPoiCriterion"; }
+
+  PoiPolygonPoiCriterion();
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
+
+  virtual QString getDescription() const
+  { return "Identifies POIs as defined by POI/Polygon conflation"; }
+};
 
 }
+
+#endif // POIPOLYGONPOICRITERION_H

@@ -44,13 +44,15 @@ class MedianNodeVisitorTest : public HootTestFixture
 
 public:
 
+  MedianNodeVisitorTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void runTest()
   {
-    TestUtils::resetEnvironment();
-
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);

@@ -58,6 +58,11 @@ class MatchComparatorTest : public HootTestFixture
 
 public:
 
+  MatchComparatorTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runTest()
   {
     DisableLog dl;
@@ -65,7 +70,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -80,9 +84,9 @@ public:
     map->getWay(wids[0])->getTags()[MetadataTags::Ref1()] = "Biondi";
 
     // add a uuid to all buildings.
-    TagKeyCriterion filter(MetadataTags::Ref1(), MetadataTags::Ref2());
+    TagKeyCriterion tagKeyCrit(MetadataTags::Ref1(), MetadataTags::Ref2());
     AddUuidVisitor uuid("uuid");
-    FilteredVisitor v(filter, uuid);
+    FilteredVisitor v(tagKeyCrit, uuid);
     map->visitRw(v);
 
     OsmMapPtr copy(new OsmMap(map));

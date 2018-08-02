@@ -67,9 +67,9 @@ class ServiceOsmApiDbBulkInserterTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  ServiceOsmApiDbBulkInserterTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetBasic);
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
   }
 
@@ -443,8 +443,6 @@ public:
 
   void runPsqlDbOfflineValidateOffTest()
   {
-    OsmMap::resetCounters();
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";

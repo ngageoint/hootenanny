@@ -49,6 +49,11 @@ class SingleSidedNetworkMatcherTest : public HootTestFixture
 
 public:
 
+  SingleSidedNetworkMatcherTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void writeDebugMap(OsmMapPtr map, SingleSidedNetworkMatcher& uut, int index)
   {
     TestUtils::mkpath("tmp");
@@ -119,8 +124,6 @@ public:
       uut->iterate();
       writeDebugMap(map, *uut, i);
     }
-
-    TestUtils::resetEnvironment();
   }
 };
 

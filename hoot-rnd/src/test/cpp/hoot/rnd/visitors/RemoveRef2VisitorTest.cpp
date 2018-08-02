@@ -50,9 +50,13 @@ class RemoveRef2VisitorTest : public HootTestFixture
 
 public:
 
+  RemoveRef2VisitorTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void runToyTest()
   {
-    TestUtils::resetEnvironment();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/visitors/RemoveRef2VisitorInput.osm");
 

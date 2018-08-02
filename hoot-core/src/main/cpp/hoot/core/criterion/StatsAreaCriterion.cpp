@@ -22,45 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef INWAYNODEFILTER_H
-#define INWAYNODEFILTER_H
+#include "StatsAreaCriterion.h"
 
-#include "NodeFilter.h"
-
-// Standard
-#include <set>
-#include <vector>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-class OsmMap;
+HOOT_FACTORY_REGISTER(ElementCriterion, StatsAreaCriterion)
 
-/**
- * The filter matches all nodes that are in at least one of the ways referenced by wids.
- */
-class InWayNodeFilter : public NodeFilter
+bool StatsAreaCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
-public:
-
-  InWayNodeFilter(FilterType type, const OsmMap& map, const std::vector<long>& wids);
-
-  virtual QString getDescription() const
-  { return "Matches all nodes that are in at least one of the ways referenced by wids"; }
-
-protected:
-
-  virtual bool isFiltered(const Node& n) const;
-
-private:
-
-  std::set<long> _nids;
-  FilterType _type;
-};
+  return OsmSchema::getInstance().isAreaForStats(e);
+}
 
 }
 
-#endif // INWAYNODEFILTER_H

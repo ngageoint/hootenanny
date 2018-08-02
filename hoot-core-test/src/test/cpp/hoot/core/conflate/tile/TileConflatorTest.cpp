@@ -56,9 +56,9 @@ class TileConflatorTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
+  TileConflatorTest()
   {
-    HootTestFixture::setUp();
+    setResetType(ResetAll);
     TestUtils::mkpath("test-output/conflate");
   }
 

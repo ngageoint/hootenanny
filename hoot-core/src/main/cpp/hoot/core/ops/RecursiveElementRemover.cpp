@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RecursiveElementRemover.h"
 
@@ -43,9 +43,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RecursiveElementRemover)
 
-RecursiveElementRemover::RecursiveElementRemover(ElementId eid, const ElementCriterion* filter) :
-  _eid(eid),
-  _filter(filter)
+RecursiveElementRemover::RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion) :
+_eid(eid),
+_criterion(criterion)
 {
 }
 
@@ -98,13 +98,13 @@ void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
     }
   }
 
-  if (_filter)
+  if (_criterion)
   {
     // go through all remaining delete candidates
     for (set<ElementId>::iterator it = toErase.begin(); it != toErase.end();)
     {
       ConstElementPtr child = map->getElement(*it);
-      if (_filter->isSatisfied(child))
+      if (_criterion->isSatisfied(child))
       {
         // remove the child
         toErase.erase(it++);

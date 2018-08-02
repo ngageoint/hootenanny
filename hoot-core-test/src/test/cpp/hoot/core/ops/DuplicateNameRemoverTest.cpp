@@ -52,9 +52,13 @@ class DuplicateNameRemoverTest : public HootTestFixture
 
 public:
 
+  DuplicateNameRemoverTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runCaseInsensitiveTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -75,7 +79,6 @@ public:
 
   void runCaseSensitiveTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -96,7 +99,6 @@ public:
 
   void runExtraNamesTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),

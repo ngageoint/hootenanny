@@ -22,26 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef POIPOLYGONPOLYCRITERION_H
+#define POIPOLYGONPOLYCRITERION_H
 
-#ifndef FILTER_H
-#define FILTER_H
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class Filter
+/**
+ * A criterion that will keep poly-like features, as defined by PoiPolygonMatch.
+ */
+class PoiPolygonPolyCriterion : public ElementCriterion
 {
 public:
-  typedef enum FilterType
-  {
-    KeepMatches,
-    FilterMatches
-  } FilterType;
 
+  static std::string className() { return "hoot::PoiPolygonPolyCriterion"; }
+
+  PoiPolygonPolyCriterion();
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
+
+  virtual QString getDescription() const
+  { return "Identifies polygons as defined by POI/Polygon conflation"; }
 };
 
 }
 
-#endif // FILTER_H
+#endif // POIPOLYGONPOLYCRITERION_H

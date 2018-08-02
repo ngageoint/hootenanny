@@ -57,6 +57,12 @@
 #include <cppunit/Portability.h>
 #endif
 
+// NodeJs
+#include <node/node_version.h>
+
+// v8
+#include <v8-version-string.h>
+
 // tgs
 #include <tgs/System/SystemInfo.h>
 
@@ -99,7 +105,8 @@ public:
 #   ifdef HOOT_HAVE_LIBCPPUNIT
       LOG_DEBUG("CppUnit Version: " << CPPUNIT_VERSION);
 #   endif
-
+    LOG_DEBUG("NodeJs Version: " << NODE_VERSION_STRING);
+    LOG_DEBUG("v8 Version: " << V8_VERSION_STRING);
     LOG_DEBUG(Tgs::SystemInfo::getMemoryUsageString());
 
     return 0;

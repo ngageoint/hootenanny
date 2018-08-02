@@ -57,13 +57,21 @@ class WayMergeManipulationTest : public HootTestFixture
 
 public:
 
+  const QString inputPath = "test-files/manipulators/";
+  const QString outputPath = "test-output/manipulators/";
+
+  WayMergeManipulationTest()
+  {
+    setResetType(ResetBasic);
+    TestUtils::mkpath(outputPath);
+  }
+
   void individualManipulationsTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
-    reader.read("test-files/manipulators/WayMergeManipulation.osm", map);
+    reader.read(inputPath + "WayMergeManipulation.osm", map);
 
     MapProjector::projectToOrthographic(map);
 
@@ -80,14 +88,12 @@ public:
 
     MapProjector::projectToWgs84(after);
 
-    TestUtils::mkpath("test-output/manipulators/");
-
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(after, "test-output/manipulators/WayMergeManipulation.osm");
+    writer.write(after, outputPath + "WayMergeManipulation.osm");
 
-    HOOT_FILE_EQUALS("test-output/manipulators/WayMergeManipulation.osm",
-                     "test-files/manipulators/WayMergeManipulationOutput.osm");
+    HOOT_FILE_EQUALS(inputPath + "WayMergeManipulationOutput.osm",
+                     outputPath + "WayMergeManipulation.osm");
   }
 
 };

@@ -54,17 +54,22 @@ class ReprojectToGeographicOpTest : public HootTestFixture
 
 public:
 
+  const QString inputPath = "test-files/ops/ReprojectToGeographicOp/";
+  const QString outputPath = "test-output/ops/ReprojectToGeographicOp/";
+
+  ReprojectToGeographicOpTest()
+  {
+    setResetType(ResetBasic);
+    TestUtils::mkpath(outputPath);
+  }
+
   void runTest()
   {
-    QString inputPath = "test-files/ops/ReprojectToGeographicOp/";
     QString inputFile = "ToyMercator.osm";
-    QString outputPath = "test-output/ops/ReprojectToGeographicOp/";
     QString outputFile = "ToyWGS84.osm";
-
 
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(inputPath + inputFile, map);
 
@@ -74,8 +79,8 @@ public:
     TestUtils::mkpath(outputPath);
     OsmXmlWriter writer;
     writer.write(map, outputPath + outputFile);
-    HOOT_FILE_EQUALS(inputPath+outputFile,
-                     outputPath+outputFile);
+    HOOT_FILE_EQUALS(inputPath + outputFile,
+                     outputPath + outputFile);
   }
 
 };
