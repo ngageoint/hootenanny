@@ -73,7 +73,7 @@ class RunDiffCommand extends ExternalCommand {
         substitutionMap.put("OUTPUT", outputFile.getAbsolutePath());
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
 
-        String command = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --include-tags";
+        String command = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --include-tags --separate-output";
 
         super.configureCommand(command, substitutionMap, caller);
     }
