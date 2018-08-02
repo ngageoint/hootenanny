@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * Any POI whose name can be harvested to feed the POI implicit tagger will pass this filter
+ * Any POI whose name can be harvested to feed the POI implicit tagger will pass this criterion
  */
 class ImplicitTagEligiblePoiCriterion : public ImplicitTagEligibleCriterion
 {

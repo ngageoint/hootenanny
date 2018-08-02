@@ -22,34 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef NODEFILTER_H
-#define NODEFILTER_H
+#ifndef LINEARCRITERION_H
+#define LINEARCRITERION_H
 
-// hoot
-#include <hoot/core/util/NotImplementedException.h>
-
-#include "Filter.h"
+#include "ElementCriterion.h"
 
 namespace hoot
 {
-  class Node;
 
-class NodeFilter : public Filter
+/**
+ * Identifies linear features
+ */
+class LinearCriterion : public ElementCriterion
 {
 public:
+  static std::string className() { return "hoot::LinearCriterion"; }
 
-  virtual ~NodeFilter() {}
+  LinearCriterion() {}
 
-  virtual bool isFiltered(const boost::shared_ptr<const Node>& w) const { return isFiltered(*w); }
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-protected:
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearCriterion()); }
 
-  virtual bool isFiltered(const Node&) const { throw NotImplementedException(); }
+  virtual QString getDescription() const { return "Identifies linear features"; }
 };
 
 }
-
-#endif // NODEFILTER_H
+#endif // LINEARCRITERION_H

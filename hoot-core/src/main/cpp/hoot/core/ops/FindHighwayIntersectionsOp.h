@@ -22,39 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ISNODEFILTER_H
-#define ISNODEFILTER_H
+#ifndef FINDHIGHWAYINTERSECTIONSOP_H
+#define FINDHIGHWAYINTERSECTIONSOP_H
+
+// Hoot
+#include <hoot/core/ops/OsmMapOperation.h>
 
 // Qt
 #include <QString>
 
-// hoot
-#include "ElementCriterion.h"
-
 namespace hoot
 {
 
-class Element;
 
-class IsNodeFilter : public BaseElementFilter
+/**
+ * Op. to find intersections
+ */
+class FindHighwayIntersectionsOp : public OsmMapOperation
 {
 public:
 
-  IsNodeFilter(FilterType type) { _type = type; }
+  static std::string className() { return "hoot::FindHighwayIntersectionsOp"; }
 
-  virtual bool isFiltered(const Element& e) const;
+  static QString opsKey() { return "map.cleaner.transforms"; }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IsNodeFilter(_type)); }
+  FindHighwayIntersectionsOp();
 
-  virtual QString getDescription() const { return "Identifies nodes"; }
+  virtual ~FindHighwayIntersectionsOp() {}
 
-private:
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  FilterType _type;
+  virtual QString getDescription() const { return "Identifies road intersections"; }
 };
 
 }
 
-#endif // ISNODEFILTER_H
+#endif // FINDHIGHWAYINTERSECTIONSOP_H

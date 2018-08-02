@@ -35,7 +35,7 @@ namespace hoot
 
 /**
  * Any POI or polygon whose name can be harvested to feed the POI/Poly implicit tagger will pass
- * this filter
+ * this criterion
  */
 class ImplicitTagEligiblePoiPolyCriterion : public ImplicitTagEligibleCriterion
 {

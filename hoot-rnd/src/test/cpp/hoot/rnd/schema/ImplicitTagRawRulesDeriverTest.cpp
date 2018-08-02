@@ -72,7 +72,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
-    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -97,7 +97,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
-    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -137,7 +137,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
-    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver._sortedCountFile = sortedCountFile;
     rawRulesDeriver._removeDuplicatedKeyTypes();
     rawRulesDeriver._resolveCountTies();
@@ -168,7 +168,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
-    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -189,7 +189,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(false);
-    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -211,13 +211,13 @@ public:
 
     try
     {
-      rawRulesDeriver.setElementFilter("hoot::AreaCriterion");
+      rawRulesDeriver.setElementCriterion("hoot::AreaCriterion");
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid filter type"));
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid criterion type"));
 
     inputs.clear();
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
@@ -236,7 +236,7 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("No element type was specified"));
 
-    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     inputs.clear();
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     translationScripts.clear();

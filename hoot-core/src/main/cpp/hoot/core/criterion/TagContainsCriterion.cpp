@@ -22,33 +22,51 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "IntersectionFilter.h"
+#include "TagContainsCriterion.h"
 
+// hoot
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-IntersectionFilter::IntersectionFilter(std::vector<long> ids)
+HOOT_FACTORY_REGISTER(ElementCriterion, TagContainsCriterion)
+
+TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring)
 {
-  for (uint i = 0; i < ids.size(); i++)
-  {
-    _nids.insert(ids[i]);
-  }
+  _key.append(key);
+  _valueSubstring.append(valueSubstring);
 }
 
-bool IntersectionFilter::isSatisfied(const boost::shared_ptr<const Element>& e) const
+TagContainsCriterion::TagContainsCriterion(QStringList keys, QStringList valueSubstrings) :
+_key(keys),
+_valueSubstring(valueSubstrings)
 {
-  if (e->getElementType() != ElementType::Node) // only keep nodes
-  {
-    return true;
-  }
+}
 
-  bool found = _nids.find(e->getId()) != _nids.end(); // with the following ids
-  return !found;
+bool TagContainsCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+{
+  bool matches = false;
+  for (int i = 0; i < _key.size(); i++)
+  {
+    if (e->getTags().contains(_key[i]) && e->getTags()[_key[i]].contains(_valueSubstring[i]))
+    {
+      matches = true;
+      break;  //  Only one match is required
+    }
+  }
+  return matches;
+}
+
+void TagContainsCriterion::addPair(QString key, QString valueSubstring)
+{
+  _key.append(key);
+  _valueSubstring.append(valueSubstring);
 }
 
 }

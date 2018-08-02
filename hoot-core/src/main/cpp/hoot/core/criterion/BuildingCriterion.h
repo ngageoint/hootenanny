@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove matches.
+ * A criterion that will either keep or remove matches.
  */
 class BuildingCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {

@@ -65,7 +65,7 @@ public:
     boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
     RemoveElementsVisitor removeElementsVisitor(elementCriterion);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.setNegateFilter(false);
+    removeElementsVisitor.setNegateCriterion(false);
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -84,7 +84,7 @@ public:
     boost::shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion());
     RemoveElementsVisitor removeElementsVisitor(elementCriterion);
     removeElementsVisitor.setRecursive(true);
-    removeElementsVisitor.setNegateFilter(false);
+    removeElementsVisitor.setNegateCriterion(false);
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -121,7 +121,7 @@ public:
     boost::shared_ptr<ReviewRelationCriterion> elementCriterion(new ReviewRelationCriterion());
     RemoveElementsVisitor removeElementsVisitor(elementCriterion);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.setNegateFilter(false);
+    removeElementsVisitor.setNegateCriterion(false);
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);

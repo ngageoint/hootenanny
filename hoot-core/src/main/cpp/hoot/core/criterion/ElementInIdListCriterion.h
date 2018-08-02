@@ -22,41 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+ 
+#ifndef ELEMENTINIDLISTCRITERION_H
+#define ELEMENTINIDLISTCRITERION_H
 
-#ifndef WAYFILTER_H
-#define WAYFILTER_H
+#include "ElementCriterion.h"
 
-#include <hoot/core/util/NotImplementedException.h>
-
-#include "Filter.h"
+// Std
+#include <set>
 
 namespace hoot
 {
-  class Way;
 
 /**
- * Base class for filtering ways. One of the two isFiltered methods should be overridden.
+ * Identifies elements in a list of IDs
  */
-class WayFilter : public Filter
+class ElementInIdListCriterion : public ElementCriterion
 {
 public:
 
-  virtual ~WayFilter() {}
+  static std::string className() { return "hoot::ElementInIdListCriterion"; }
 
-  /**
-   * Returns true if the way should be filtered.
-   */
-  virtual bool isFiltered(const ConstWayPtr& w) const { return isFiltered(*w); }
+  ElementInIdListCriterion() {}
+  explicit ElementInIdListCriterion(const std::vector<long>& ids);
 
-protected:
-  /**
-   * A convenience method that can be overridden by the implementing class.
-   */
-  virtual bool isFiltered(const Way&) const { throw NotImplementedException(); }
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new ElementInIdListCriterion()); }
+
+  virtual QString getDescription() const { return "Identifies elements in a list of IDs"; }
+
+private:
+
+  std::set<long> _ids;
 };
 
 }
-
-#endif // WAYFILTER_H
+#endif // ELEMENTINIDLISTCRITERION_H

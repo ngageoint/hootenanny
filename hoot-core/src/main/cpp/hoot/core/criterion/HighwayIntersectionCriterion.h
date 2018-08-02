@@ -22,41 +22,50 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef INTERSECTIONFILTER_H
-#define INTERSECTIONFILTER_H
+#ifndef HIGHWAYINTERSECTIONCRITERION_H
+#define HIGHWAYINTERSECTIONCRITERION_H
 
-#include "ElementCriterion.h"
-
-#include <set>
+// hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
+
 /**
- * Filters out all features except nodes with the provided ids
+ * This criterion is satisified for all highway intersections with 3 or more interacting ways.
+ * Multilinestring relations are not handled.
  *
- * TODO: remove
+ * This class assumes that IntersectionSplitter was applied to the map before being called.
  */
-class IntersectionFilter : public BaseElementFilter
+class HighwayIntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  IntersectionFilter(std::vector<long> ids);
+  static std::string className() { return "hoot::HighwayIntersectionCriterion"; }
+
+  HighwayIntersectionCriterion() {}
+  explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);
+
+  virtual ~HighwayIntersectionCriterion() {}
+
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new HighwayIntersectionCriterion(_map)); }
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IntersectionFilter(_nids)); }
+  virtual void setOsmMap(const OsmMap* map);
 
   virtual QString getDescription() const { return "Identifies highway intersections"; }
 
-protected:
+private:
 
-  IntersectionFilter(std::set<long> ids) : _nids(ids) { }
-
-  std::set<long> _nids;
+  ConstOsmMapPtr _map;
 };
 
 }
 
-#endif // INTERSECTIONFILTER_H
+#endif // HIGHWAYINTERSECTIONCRITERION_H

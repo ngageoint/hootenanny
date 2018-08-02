@@ -36,7 +36,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/criterion/ParallelWayFilter.h>
+#include <hoot/core/criterion/ParallelWayCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/manipulators/DividedHighwayManipulation.h>
@@ -139,30 +139,30 @@ public:
     long n18 = FindWaysVisitor::findWaysByTag(map, "note", "18")[0];
     long n19 = FindWaysVisitor::findWaysByTag(map, "note", "19")[0];
 
-    ParallelWayFilter f1(map, map->getWay(n0));
+    ParallelWayCriterion f1(map, map->getWay(n0));
 
-    CPPUNIT_ASSERT_EQUAL(f1.isFiltered(map->getWay(n1)), false);
-    CPPUNIT_ASSERT_EQUAL(f1.isFiltered(map->getWay(n2)), false);
-    CPPUNIT_ASSERT_EQUAL(f1.isFiltered(map->getWay(n6)), true);
-    CPPUNIT_ASSERT_EQUAL(f1.isFiltered(map->getWay(n8)), true);
+    CPPUNIT_ASSERT_EQUAL(f1.isSatisfied(map->getWay(n1)), true);
+    CPPUNIT_ASSERT_EQUAL(f1.isSatisfied(map->getWay(n2)), true);
+    CPPUNIT_ASSERT_EQUAL(f1.isSatisfied(map->getWay(n6)), false);
+    CPPUNIT_ASSERT_EQUAL(f1.isSatisfied(map->getWay(n8)), false);
 
-    ParallelWayFilter f2(map, map->getWay(n9));
+    ParallelWayCriterion f2(map, map->getWay(n9));
 
-    CPPUNIT_ASSERT_EQUAL(f2.isFiltered(map->getWay(n10)), false);
-    CPPUNIT_ASSERT_EQUAL(f2.isFiltered(map->getWay(n11)), false);
-    CPPUNIT_ASSERT_EQUAL(f2.isFiltered(map->getWay(n12)), true);
-    CPPUNIT_ASSERT_EQUAL(f2.isFiltered(map->getWay(n13)), true);
-    CPPUNIT_ASSERT_EQUAL(f2.isFiltered(map->getWay(n14)), true);
+    CPPUNIT_ASSERT_EQUAL(f2.isSatisfied(map->getWay(n10)), true);
+    CPPUNIT_ASSERT_EQUAL(f2.isSatisfied(map->getWay(n11)), true);
+    CPPUNIT_ASSERT_EQUAL(f2.isSatisfied(map->getWay(n12)), false);
+    CPPUNIT_ASSERT_EQUAL(f2.isSatisfied(map->getWay(n13)), false);
+    CPPUNIT_ASSERT_EQUAL(f2.isSatisfied(map->getWay(n14)), false);
 
-    ParallelWayFilter f3(map, map->getWay(n15));
+    ParallelWayCriterion f3(map, map->getWay(n15));
 
-    CPPUNIT_ASSERT_EQUAL(f3.isFiltered(map->getWay(n16)), false);
-    CPPUNIT_ASSERT_EQUAL(f3.isFiltered(map->getWay(n10)), true);
+    CPPUNIT_ASSERT_EQUAL(f3.isSatisfied(map->getWay(n16)), true);
+    CPPUNIT_ASSERT_EQUAL(f3.isSatisfied(map->getWay(n10)), false);
 
-    ParallelWayFilter f17(map, map->getWay(n17));
+    ParallelWayCriterion f17(map, map->getWay(n17));
 
-    CPPUNIT_ASSERT_EQUAL(f17.isFiltered(map->getWay(n18)), false);
-    CPPUNIT_ASSERT_EQUAL(f17.isFiltered(map->getWay(n19)), false);
+    CPPUNIT_ASSERT_EQUAL(f17.isSatisfied(map->getWay(n18)), true);
+    CPPUNIT_ASSERT_EQUAL(f17.isSatisfied(map->getWay(n19)), true);
 
   }
 

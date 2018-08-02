@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A filter that will keep way features.
+ * A criterion that will keep way features.
  */
 class WayCriterion : public ElementCriterion
 {

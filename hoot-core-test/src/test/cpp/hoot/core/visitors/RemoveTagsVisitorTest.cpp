@@ -65,7 +65,7 @@ public:
       map, "test-files/visitors/RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
     RemoveTagsVisitor visitor("key1", "key2");
-    visitor.setNegateFilter(false);
+    visitor.setNegateCriterion(false);
     map->visitRw(visitor);
 
     OsmMapWriterFactory::getInstance().write(map,
@@ -83,7 +83,7 @@ public:
       map, "test-files/visitors/RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
     RemoveTagsVisitor visitor("key1", "key2");
-    visitor.setNegateFilter(false);
+    visitor.setNegateCriterion(false);
     visitor.addCriterion(boost::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);
 
@@ -102,7 +102,7 @@ public:
       map, "test-files/visitors/RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
     RemoveTagsVisitor visitor("key1", "key2");
-    visitor.setNegateFilter(true);
+    visitor.setNegateCriterion(true);
     visitor.addCriterion(boost::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);
 

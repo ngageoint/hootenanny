@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove waterways.
+ * A criterion that will either keep or remove waterways.
  */
 class WaterwayCriterion : public ElementCriterion
 {

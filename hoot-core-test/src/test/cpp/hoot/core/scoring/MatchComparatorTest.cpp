@@ -84,9 +84,9 @@ public:
     map->getWay(wids[0])->getTags()[MetadataTags::Ref1()] = "Biondi";
 
     // add a uuid to all buildings.
-    TagKeyCriterion filter(MetadataTags::Ref1(), MetadataTags::Ref2());
+    TagKeyCriterion tagKeyCrit(MetadataTags::Ref1(), MetadataTags::Ref2());
     AddUuidVisitor uuid("uuid");
-    FilteredVisitor v(filter, uuid);
+    FilteredVisitor v(tagKeyCrit, uuid);
     map->visitRw(v);
 
     OsmMapPtr copy(new OsmMap(map));

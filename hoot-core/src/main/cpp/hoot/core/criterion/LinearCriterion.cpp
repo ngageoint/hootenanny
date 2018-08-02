@@ -22,36 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "BaseFilter.h"
+
+#include "LinearCriterion.h"
 
 // hoot
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-BaseFilter::BaseFilter(FilterType type) : _type(type)
+HOOT_FACTORY_REGISTER(ElementCriterion, LinearCriterion)
+
+bool LinearCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
-}
-
-bool BaseFilter::isFiltered(const Element& e) const
-{
-  bool match = isMatch(e);
-
-  if (_type == KeepMatches)
-  {
-    return !match;
-  }
-  else if (_type == FilterMatches)
-  {
-    return match;
-  }
-  else
-  {
-    throw NotImplementedException();
-  }
+  return OsmSchema::getInstance().isLinear(*e);
 }
 
 }
+

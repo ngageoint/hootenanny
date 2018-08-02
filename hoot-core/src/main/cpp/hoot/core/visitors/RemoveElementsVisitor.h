@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Removes any elements where isFiltered() == true
+ * Removes any elements where that satisfy a criterion
  */
 class RemoveElementsVisitor :
     public ConstElementVisitor,
@@ -49,13 +49,13 @@ public:
 
   static std::string className() { return "hoot::RemoveElementsVisitor"; }
 
-  /**
-   * Loads the filter from the config setting.
-   */
   RemoveElementsVisitor();
 
-  RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter,
-                        bool negateFilter = false);
+  /**
+   * Loads the criterion from the config setting.
+   */
+  RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& criterion,
+                        bool negateCriterion = false);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
@@ -74,18 +74,18 @@ public:
 
   int getCount() { return _count; }
 
-  virtual QString getDescription() const { return "Removes elements that satisfy a filter"; }
+  virtual QString getDescription() const { return "Removes elements that satisfy a criterion"; }
 
-  void setNegateFilter(bool negate) { _negateFilter = negate; }
+  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
 private:
 
   OsmMap* _map;
-  boost::shared_ptr<ElementCriterion> _filter;
+  boost::shared_ptr<ElementCriterion> _criterion;
   bool _recursive;
   int _count;
-  //This allows for negating the filter as an option sent in from the command line.
-  bool _negateFilter;
+  //This allows for negating the criterion as an option sent in from the command line.
+  bool _negateCriterion;
 };
 
 

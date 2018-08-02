@@ -36,7 +36,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/criterion/HighwayFilter.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
 
@@ -61,23 +61,24 @@ double RasterComparator::compareMaps()
 
   _wayLengthSum = 0.0;
 
-  cv::Mat image1, image2;
+  cv::Mat image1;
+  cv::Mat image2;
 
   _renderImage(_mapP1, image1);
   _renderImage(_mapP2, image2);
 
   CvMat i1 = image1;
   CvMat i2 = image2;
-  double min, max, minTemp, maxTemp;
+  double min;
+  double max;
+  double minTemp;
+  double maxTemp;
   CvPoint p1, p2;
 
   cvMinMaxLoc(&i1, &min, &max, &p1, &p2);
   cvMinMaxLoc(&i2, &minTemp, &maxTemp, &p1, &p2);
   min = std::min(min, minTemp);
   max = std::max(max, maxTemp);
-
-  //_dumpImage(image1);
-  //_dumpImage(image1);
 
   double error = _calculateError(image1, image2);
 
@@ -92,7 +93,6 @@ double RasterComparator::compareMaps()
   {
     diffData[i] = fabs(image1Data[i] - image2Data[i]);
   }
-
 
   _saveImage(diff, "test-output/diff.png", max);
   _saveImage(image1, "test-output/image1.png", max);
@@ -155,8 +155,8 @@ void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& imag
   QMatrix m = gp.createMatrix(pt.viewport(), _projectedBounds);
 
   PaintVisitor pv(map, gp, pt, m);
-  HighwayFilter filter(HighwayFilter::KeepMatches);
-  FilteredVisitor v(filter, pv);
+  HighwayCriterion crit;
+  FilteredVisitor v(crit, pv);
   map->visitRo(v);
 
   cv::Mat in(cvSize(_width, _height), CV_32FC1);

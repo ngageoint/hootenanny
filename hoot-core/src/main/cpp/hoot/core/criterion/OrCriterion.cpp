@@ -37,9 +37,9 @@ HOOT_FACTORY_REGISTER(ElementCriterion, OrCriterion)
 
 bool OrCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
-  for (size_t i = 0; i < _filters.size(); i++)
+  for (size_t i = 0; i < _criteria.size(); i++)
   {
-    if (_filters[i]->isSatisfied(e))
+    if (_criteria[i]->isSatisfied(e))
     {
       return true;
     }

@@ -42,37 +42,37 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveElementsVisitor)
 
 RemoveElementsVisitor::RemoveElementsVisitor():
 _count(0),
-_negateFilter(false)
+_negateCriterion(false)
 {
   setConfiguration(conf());
 }
 
-RemoveElementsVisitor::RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter,
-                                             bool negateFilter) :
-_filter(filter),
+RemoveElementsVisitor::RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& criterion,
+                                             bool negateCriterion) :
+_criterion(criterion),
 _recursive(false),
 _count(0),
-_negateFilter(negateFilter)
+_negateCriterion(negateCriterion)
 {
-  if (_negateFilter)
+  if (_negateCriterion)
   {
-    _filter.reset(new NotCriterion(filter));
+    _criterion.reset(new NotCriterion(criterion));
   }
 }
 
 void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  _negateFilter = configOptions.getElementCriterionNegate();
-  LOG_VART(_negateFilter);
-  const QString filterName = configOptions.getRemoveElementsVisitorElementCriterion();
-  LOG_VART(filterName);
-  if (filterName.isEmpty() == false)
+  _negateCriterion = configOptions.getElementCriterionNegate();
+  LOG_VART(_negateCriterion);
+  const QString critName = configOptions.getRemoveElementsVisitorElementCriterion();
+  LOG_VART(critName);
+  if (critName.isEmpty() == false)
   {
-    LOG_VART(filterName);
+    LOG_VART(critName);
     addCriterion(
       boost::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(filterName.trimmed())));
+        Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed())));
   }
   _recursive = configOptions.getRemoveElementsVisitorRecursive();
   LOG_VART(_recursive);
@@ -80,27 +80,27 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 
 void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 {
-  if (!_negateFilter)
+  if (!_negateCriterion)
   {
-    _filter = e;
+    _criterion = e;
   }
   else
   {
-    _filter.reset(new NotCriterion(e));
+    _criterion.reset(new NotCriterion(e));
   }
 }
 
 void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 {
-  assert(_filter);
+  assert(_criterion);
   ElementType type = e->getElementType();
   long id = e->getId();
   LOG_VART(id);
   const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
 
-  if (_filter->isSatisfied(ee))
+  if (_criterion->isSatisfied(ee))
   {
-    LOG_TRACE("RemoveElementsVisitor filter satisfied");
+    LOG_TRACE("RemoveElementsVisitor criterion satisfied");
     LOG_VART(_recursive);
     _count++;
     if (_recursive)

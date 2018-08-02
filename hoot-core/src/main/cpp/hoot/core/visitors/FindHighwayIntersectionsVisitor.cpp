@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "FindIntersectionsVisitor.h"
+#include "FindHighwayIntersectionsVisitor.h"
 
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -38,9 +38,9 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, FindIntersectionsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, FindHighwayIntersectionsVisitor)
 
-void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
+void FindHighwayIntersectionsVisitor::visit(const ConstElementPtr& e)
 {
   boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
@@ -58,7 +58,6 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
       hwids.insert(*it);
     }
   }
-
 
   if (hwids.size() >= 3) // two or more roads intersecting
   {

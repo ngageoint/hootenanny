@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * Filters an element if any of the child filters return true.
+ * Filters an element if any of the child criterion return true.
  */
 class OrCriterion : public ChainCriterion
 {
@@ -54,7 +54,7 @@ public:
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new OrCriterion(_filters[0]->clone(), _filters[1]->clone())); }
+  { return ElementCriterionPtr(new OrCriterion(_criteria[0]->clone(), _criteria[1]->clone())); }
 
   virtual QString getDescription() const
   { return "Allows for combining criterion with the logical OR operation"; }

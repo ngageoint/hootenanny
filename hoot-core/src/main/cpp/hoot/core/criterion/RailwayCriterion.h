@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * A filter that will keep railways.
+ * A criterion that will keep railways.
  */
 class RailwayCriterion : public ElementCriterion
 {
