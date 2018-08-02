@@ -98,7 +98,7 @@ public class GrailResource {
      * Push the result to the specified DB
      * Return anything that cannot be pushed to the user as an osc file.
      *
-     * POST hoot-services/grail/bybox?BBOX=left,bottom,right,top&USER_NAME=JSmith
+     * POST hoot-services/grail/everythingbybox?BBOX=left,bottom,right,top&user_name=JSmith&DEBUG_LEVEL=<info,debug,verbose,trace>
      *
      * @param BBOX
      *        left is the longitude of the left (west) side of the bounding box  
@@ -112,17 +112,15 @@ public class GrailResource {
      * @return Job ID
      */
     @POST
-    @Path("/bybox")
+    @Path("/everythingbybox")
     //@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response grailByBox(@QueryParam("bbox") String bbox,
+    public Response everythingByBox(@QueryParam("bbox") String bbox,
                           @QueryParam("user_name") String userName,
-                          @QueryParam("tag_diff") @DefaultValue("false") Boolean tagDiff,
-                          @QueryParam("split_output") @DefaultValue("false") Boolean splitOutput,
                           @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
-        // String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-        String jobId = "grail_01";
+        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        List<Command> workflow = new LinkedList<>();
 
         BoundingBox boundingBox = new BoundingBox(bbox);
         double bboxArea = boundingBox.getArea();
@@ -143,24 +141,32 @@ public class GrailResource {
             // Pull OSM data from the local OSM API Db
             File localOSMFile = new File(workDir,"local.osm");
             ExternalCommand getLocalOSM = OSMDataCommandFactory.build(jobId,boundingBox,RAILSPORT_PULL_URL,localOSMFile, this.getClass());
+            workflow.add(getLocalOSM);
+
 
             // Pull OSM data from the real, internet, OSM API Db
             File internetOSMFile = new File(workDir,"internet.osm");
             ExternalCommand getInternetOSM = OSMDataCommandFactory.build(jobId,boundingBox,MAIN_OSMAPI_URL,internetOSMFile, this.getClass());
+            workflow.add(getInternetOSM);
 
             // Run the diff command.
             // TODO: We could possibly use ConflateCommand.java for this. If we setup the params for it 
-            File diffFile = new File(workDir,"diff.osc");
-            ExternalCommand makeDiff = runDiffCommandFactory.build(jobId,localOSMFile,internetOSMFile,diffFile,debugLevel, this.getClass());
+            File geomDiffFile = new File(workDir,"diff.osc");
+            ExternalCommand makeDiff = runDiffCommandFactory.build(jobId,localOSMFile,internetOSMFile,geomDiffFile,debugLevel, this.getClass());
+            workflow.add(makeDiff);
 
             // Push to the local OSM API Db
             // TODO: The export/ApplyChangesetCommand.java command is hardcoded to push to OSMAPI_DB_URL. We could refactor it to 
-            // take the DB URL as a parameter. 
-            ExternalCommand applyChange = applyChangesetCommandFactory.build(jobId,diffFile,RAILSPORT_PUSH_URL,userName, debugLevel, this.getClass());
+            // take the DB URL as a parameter.
+            ExternalCommand applyGeomChange = applyChangesetCommandFactory.build(jobId,geomDiffFile,RAILSPORT_PUSH_URL,userName, debugLevel, this.getClass());
+            workflow.add(applyGeomChange);
 
-            Command[] workflow = { getLocalOSM, getInternetOSM, makeDiff, applyChange };
+            File tagDiffFile = new File(workDir,"diff.tags.osc");
+            ExternalCommand applyTagChange = applyChangesetCommandFactory.build(jobId,tagDiffFile,RAILSPORT_PUSH_URL,userName, debugLevel, this.getClass());
+            workflow.add(applyTagChange);
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            // Now run the lot.
+            jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -169,7 +175,7 @@ public class GrailResource {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
-            String msg = "Error during grail! ";
+            String msg = "Error during everything by box!";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -182,9 +188,9 @@ public class GrailResource {
 
     // Taken from ExportResource.java and modified
     /**
-     * To retrieve the diff file from job make a GET request.
+     * To retrieve the geometry diff file from job make a GET request.
      *
-     * GET hoot-services/grail/diff/[job id from export job]
+     * GET hoot-services/grail/geomdiff/[job id from export job]
      *
      * @param jobId
      *            job id
@@ -192,9 +198,9 @@ public class GrailResource {
      * @return Octet stream
      */
     @GET
-    @Path("diff/{id}")
+    @Path("geomdiff/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response exportDiffFile(@PathParam("id") String jobId) {
+    public Response exportGeomDiffFile(@PathParam("id") String jobId) {
         Response response;
 
         try {
@@ -202,6 +208,41 @@ public class GrailResource {
 
             ResponseBuilder responseBuilder = Response.ok(exportFile);
             responseBuilder.header("Content-Disposition", "attachment; filename=diff.osc");
+
+            response = responseBuilder.build();
+        }
+        catch (WebApplicationException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new WebApplicationException(e);
+        }
+
+        return response;
+    }
+
+    // Taken from ExportResource.java and modified
+    /**
+     * To retrieve the tag diff file from job make a GET request.
+     *
+     * GET hoot-services/grail/tagdiff/[job id from export job]
+     *
+     * @param jobId
+     *            job id
+     *
+     * @return Octet stream
+     */
+    @GET
+    @Path("tagdiff/{id}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response exportTagDiffFile(@PathParam("id") String jobId) {
+        Response response;
+
+        try {
+            File exportFile = getExportFile(jobId, "diff.tags", "osc");
+
+            ResponseBuilder responseBuilder = Response.ok(exportFile);
+            responseBuilder.header("Content-Disposition", "attachment; filename=diff.tags.osc");
 
             response = responseBuilder.build();
         }
@@ -308,7 +349,7 @@ public class GrailResource {
         return exportFile;
     }
 
-    // Testing: Just runn the diff
+    // Testing: Just run the diff
     @GET
     @Path("/rundiff/{dir}")
     @Produces(MediaType.APPLICATION_JSON)
