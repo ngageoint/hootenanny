@@ -42,13 +42,13 @@ HOOT_REGISTER_EXCEPTION(NeedsReviewException)
 HOOT_REGISTER_EXCEPTION(UnsupportedException)
 HOOT_REGISTER_EXCEPTION(NotImplementedException)
 
-boost::shared_ptr<HootExceptionThrower> HootExceptionThrower::_theInstance = 0;
+HootExceptionThrower* HootExceptionThrower::_theInstance = 0;
 
 HootExceptionThrower& HootExceptionThrower::getInstance()
 {
-  if (_theInstance == NULL)
+  if (_theInstance == 0)
   {
-    _theInstance.reset(new HootExceptionThrower());
+    _theInstance = new HootExceptionThrower();
   }
   return *_theInstance;
 }

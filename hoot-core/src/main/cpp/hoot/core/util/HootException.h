@@ -118,7 +118,7 @@ public:
 
 private:
   QVector<ThrowMethod> _throwMethods;
-  static boost::shared_ptr<HootExceptionThrower> _theInstance;
+  static HootExceptionThrower* _theInstance;
 };
 
 #define HOOT_REGISTER_EXCEPTION(ClassName)      \
