@@ -22,15 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SUMNUMERICTAGSVISITOR_H
-#define SUMNUMERICTAGSVISITOR_H
+
+#ifndef AVERAGE_NUMERIC_TAGS_VISITOR_H
+#define AVERAGE_NUMERIC_TAGS_VISITOR_H
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/Configurable.h>
 
 #include "SingleStatistic.h"
+
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
@@ -38,42 +43,44 @@ namespace hoot
 /**
  * Sums numeric tag values with a specified key
  *
- * TODO: make configurable
- * TODO: have this support multiple keys
  * TODO: have this support substrings
  */
-class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic
+class AverageNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic,
+  public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SumNumericTagsVisitor"; }
+  static std::string className() { return "hoot::AverageNumericTagsVisitor"; }
 
   static unsigned int logWarnCount;
 
-  SumNumericTagsVisitor();
-  SumNumericTagsVisitor(const QString key);
+  AverageNumericTagsVisitor();
+  AverageNumericTagsVisitor(const QStringList keys);
 
-  virtual ~SumNumericTagsVisitor() {}
+  virtual ~AverageNumericTagsVisitor() {}
 
   /**
-   * Given a tag key and for all features having the tag, sums the values of those tags.  If
+   * Given a tag key and for all features having the tag, averages the values of those tags.  If
    * the tag value cannot be converted to a number, a warning is logged and the tag is skipped.
    *
    * @param e element to check for tag on
    */
   virtual void visit(const ConstElementPtr& e);
 
-  virtual double getStat() const { return _sum; }
+  virtual double getStat() const;
 
-  virtual QString getDescription() const { return "Sums numeric tag values with a specified key"; }
+  virtual QString getDescription() const
+  { return "Averages numeric tag values with a specified key"; }
+
+  virtual void setConfiguration(const Settings& conf);
 
 private:
 
-  QString _key;
-  //TODO: should be double
-  long _sum;
+  QStringList _keys;
+  double _sum;
+  long _tagCount;
 };
 
 }
 
-#endif // SUMNUMERICTAGSVISITOR_H
+#endif // AVERAGE_NUMERIC_TAGS_VISITOR_H

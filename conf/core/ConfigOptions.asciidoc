@@ -209,6 +209,15 @@ Determines whether the AttributeScoreExtractor uses weighting when extracting sc
 Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
 MatchFactory::_tempFixDefaults() for more info.
 
+=== average.numeric.tags.visitor.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of tag keys for which the AverageNumericTagsVisitor averages numeric values.  Separate keys
+with a ';' when passing in from the command line.
+
 === buffered.overlap.extractor.portion
 
 * Data Type: double
@@ -549,8 +558,8 @@ the convert.bounding.box setting for OSM API database data sources only.
 * Default Value:
 ** ``
 
-Specifies one or more semi-colon delimited operations to perform before writing converted data.
-This is only applicable to the convert command.
+Specifies one or more semi-colon delimited map operations or visitors to apply before writing
+converted data.  This is only applicable to the convert command.
 
 === cookie.cutter.alpha
 
