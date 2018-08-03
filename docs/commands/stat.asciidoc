@@ -1,0 +1,27 @@
+== stat 
+
+=== Description
+
+The +stat+ command displays a statistic calculated from the features in a map.
+
+* +inputs+  - One or more OSM data inputs; specify multiple inputs by separating them with a semicolon and surrounding them with quotes
+* +visitor+ - The stat visitor must be the single class name of a Hootenanny visitor that inherits from ConstElementVisitor and 
+              supports the SingleStatistic interface.  Use the +info --operators+ command to obtain a list of available Hootenanny visitors.
+
+=== Usage
+
+--------------------------------------
+hoot stat (input(s)) (visitor)
+--------------------------------------
+
+=== Examples
+
+--------------------------------------
+# calculate the numerical average of all values for a specific tag
+hoot stat -D average.numeric.tags.visitor.keys=accuracy input1.osm hoot::AverageNumericTagsVisitor
+
+# count all manual matches made on features in a map
+hoot stat input1.osm hoot::CountManualMatchesVisitor
+--------------------------------------
+
+

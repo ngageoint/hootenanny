@@ -1,0 +1,35 @@
+== count 
+
+=== Description
+
+The +count+ command displays a count of the number of features in a map , allowing for optional filtering with a criterion.  Features 
+are defined as elements with at least one information tag, whereas elements have no tag requirements.
+
+* +inputs+         - One or more OSM data inputs; specify multiple inputs by separating them with a semicolon and surrounding them with quotes
+* +criterion+      - (optional) The criterion must be a single class name of a Hootenanny criterion inherting from ElementCriterion.  Use 
+                     the +info --operators+ command to obtain a list of available Hootenanny criterion.
+* +--all-elements+ - The default behavior is to only count features.  Activating this option causes the command to consider all elements.
+
+=== Usage
+
+--------------------------------------
+hoot count (input(s)) [criterion] [--all-elements]
+--------------------------------------
+
+=== Examples
+
+--------------------------------------
+# count all features
+hoot count input1.osm
+
+# count all elements
+hoot count input1.osm --all-elements
+
+# count all POIs
+hoot count "input1.osm;input2.osm" hoot::PoiCriterion
+
+# count all elements that are not POIs
+hoot count -D element.criterion.negate=true "input1.osm;input2.osm" hoot::PoiCriterion --all-elements
+--------------------------------------
+
+

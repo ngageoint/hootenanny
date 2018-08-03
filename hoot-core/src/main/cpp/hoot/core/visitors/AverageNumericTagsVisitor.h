@@ -44,6 +44,7 @@ namespace hoot
  * Sums numeric tag values with a specified key
  *
  * TODO: have this support substrings
+ * TODO: need test for this
  */
 class AverageNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic,
   public Configurable

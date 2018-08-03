@@ -30,8 +30,6 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/visitors/SingleStatistic.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -45,18 +43,18 @@
 namespace hoot
 {
 
-class CountFeaturesCmd : public BaseCommand
+class CountCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::CountFeaturesCmd"; }
+  static std::string className() { return "hoot::CountCmd"; }
 
-  CountFeaturesCmd() { }
+  CountCmd() { }
 
-  virtual QString getName() const { return "count-features"; }
+  virtual QString getName() const { return "count"; }
 
   virtual QString getDescription() const
-  { return "Counts the number of or calculates a statisc on features matching a specified criterion"; }
+  { return "Counts the number of features matching a specified criterion"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -136,47 +134,23 @@ private:
     {
       //filter the elements/features
 
-      boost::shared_ptr<ConstElementVisitor> visFilter;
-      try
-      {
-        visFilter.reset(
-          Factory::getInstance().constructObject<ConstElementVisitor>(criterionClassName));
-      }
-      catch (const boost::bad_any_cast&)
-      {
-      }
-      LOG_VART(visFilter.get());
-      boost::shared_ptr<SingleStatistic> singleStat;
-      if (visFilter.get())
-      {
-        singleStat = boost::dynamic_pointer_cast<SingleStatistic>(visFilter);
-      }
-      LOG_VART(singleStat.get());
-      boost::shared_ptr<Configurable> visConfig;
-      if (visFilter.get())
-      {
-        visConfig = boost::dynamic_pointer_cast<Configurable>(visConfig);
-      }
-      LOG_VART(visConfig.get());
-      if (visConfig.get())
-      {
-        visConfig->setConfiguration(conf());
-      }
-
       boost::shared_ptr<ElementCriterion> crit;
       try
       {
         crit.reset(
           Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
-        if (ConfigOptions().getElementCriterionNegate())
-        {
-          crit.reset(new NotCriterion(crit));
-        }
       }
       catch (const boost::bad_any_cast&)
       {
+        throw IllegalArgumentException("Invalid criterion: " + criterionClassName);
+      }
+
+      if (ConfigOptions().getElementCriterionNegate())
+      {
+        crit.reset(new NotCriterion(crit));
       }
       LOG_VART(crit.get());
+
       boost::shared_ptr<Configurable> critConfig;
       if (crit.get())
       {
@@ -188,27 +162,14 @@ private:
         critConfig->setConfiguration(conf());
       }
 
-      if (visFilter.get() && singleStat.get())
+      LOG_TRACE("Using criterion...");
+      if (countFeaturesOnly)
       {
-        LOG_TRACE("Using visitor with SingleStatistic...");
-        map->visitRo(*visFilter);
-        total = singleStat->getStat();
-      }
-      else if (crit.get())
-      {
-        LOG_TRACE("Using criterion...");
-        if (countFeaturesOnly)
-        {
-          total = FilteredVisitor::getStat(crit, featureCountVis, map);
-        }
-        else
-        {
-          total = FilteredVisitor::getStat(crit, elementCountVis, map);
-        }
+        total = FilteredVisitor::getStat(crit, featureCountVis, map);
       }
       else
       {
-        throw IllegalArgumentException("Invalid filter: " + criterionClassName);
+        total = FilteredVisitor::getStat(crit, elementCountVis, map);
       }
     }
     LOG_VART(total);
@@ -217,7 +178,7 @@ private:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, CountFeaturesCmd)
+HOOT_FACTORY_REGISTER(Command, CountCmd)
 
 }
 
