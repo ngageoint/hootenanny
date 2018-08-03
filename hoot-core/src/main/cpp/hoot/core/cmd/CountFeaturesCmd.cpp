@@ -40,6 +40,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/visitors/FeatureCountVisitor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -55,7 +56,7 @@ public:
   virtual QString getName() const { return "count-features"; }
 
   virtual QString getDescription() const
-  { return "Counts the number of features matching an optionally specified criterion"; }
+  { return "Counts the number of or calculates a statisc on features matching a specified criterion"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -73,6 +74,7 @@ public:
       args.removeAt(args.indexOf("--all-elements"));
       LOG_VART(args);
     }
+    LOG_VARD(countFeaturesOnly);
 
     LOG_VARD(args[0]);
     if (args.size() > 1)
@@ -90,6 +92,7 @@ public:
     {
       criterionClassName = args[1];
     }
+    LOG_VARD(criterionClassName);
     _applyOperator(criterionClassName, map, countFeaturesOnly);
 
     return 0;
@@ -111,7 +114,7 @@ private:
 
   void _applyOperator(const QString criterionClassName, OsmMapPtr map, const bool countFeaturesOnly)
   {
-    int total = 0;
+    double total = 0;
     boost::shared_ptr<ElementCountVisitor> elementCountVis(new ElementCountVisitor());
     boost::shared_ptr<FeatureCountVisitor> featureCountVis(new FeatureCountVisitor());
     if (criterionClassName.trimmed().isEmpty())
@@ -149,6 +152,17 @@ private:
         singleStat = boost::dynamic_pointer_cast<SingleStatistic>(visFilter);
       }
       LOG_VART(singleStat.get());
+      boost::shared_ptr<Configurable> visConfig;
+      if (visFilter.get())
+      {
+        visConfig = boost::dynamic_pointer_cast<Configurable>(visConfig);
+      }
+      LOG_VART(visConfig.get());
+      if (visConfig.get())
+      {
+        visConfig->setConfiguration(conf());
+      }
+
       boost::shared_ptr<ElementCriterion> crit;
       try
       {
@@ -163,21 +177,33 @@ private:
       {
       }
       LOG_VART(crit.get());
+      boost::shared_ptr<Configurable> critConfig;
+      if (crit.get())
+      {
+        critConfig = boost::dynamic_pointer_cast<Configurable>(crit);
+      }
+      LOG_VART(critConfig.get());
+      if (critConfig.get())
+      {
+        critConfig->setConfiguration(conf());
+      }
 
       if (visFilter.get() && singleStat.get())
       {
+        LOG_TRACE("Using visitor with SingleStatistic...");
         map->visitRo(*visFilter);
-        total = (int)singleStat->getStat();
+        total = singleStat->getStat();
       }
       else if (crit.get())
       {
+        LOG_TRACE("Using criterion...");
         if (countFeaturesOnly)
         {
-          total = (int)FilteredVisitor::getStat(crit, featureCountVis, map);
+          total = FilteredVisitor::getStat(crit, featureCountVis, map);
         }
         else
         {
-          total = (int)FilteredVisitor::getStat(crit, elementCountVis, map);
+          total = FilteredVisitor::getStat(crit, elementCountVis, map);
         }
       }
       else

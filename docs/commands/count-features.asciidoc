@@ -2,8 +2,9 @@
 
 === Description
 
-The +count-features+ command displays a count of the number of features in a map, allowing for optional filtering with a criterion.  Features are defined as
-elements with at least one information tag, whereas elements have no tag requirements.
+The +count-features+ command displays a count of the number of features in a map or calculates a statistic on them, allowing for 
+optional filtering with a criterion.  Features are defined as elements with at least one information tag, whereas elements have no 
+tag requirements.
 
 * +inputs+         - One or more OSM data inputs; specify multiple inputs by separating them with a semicolon and surrounding them with quotes
 * +criterion+      - (optional) The criterion may be either the single class name of a Hootenanny criterion or a visitor that supports the
@@ -32,6 +33,9 @@ hoot count-features "input1.osm;input2.osm" hoot::PoiCriterion
 
 # count all elements that are not POIs
 hoot count-features -D element.criterion.negate=true "input1.osm;input2.osm" hoot::PoiCriterion --all-elements
+
+# calculate the numericical average of all values for a custom tag
+hoot count-features -D average.numeric.tags.visitor.keys=tagKey1 input1.osm hoot::AverageNumericTagsVisitor
 
 # count all manual matches made on features
 hoot count-features input1.osm hoot::CountManualMatchesVisitor

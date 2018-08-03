@@ -110,7 +110,7 @@ OgrWriter::OgrWriter():
 
   _textStatus = ConfigOptions().getWriterTextStatus();
   _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
-  _maxFieldWidth = 10240; // Default to a max of 10kb per attribute. This gets reduced if needed
+  _maxFieldWidth = -1; // We set this if we really need to.
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
@@ -344,17 +344,18 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
     {
       boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
       OGRFieldDefn oField(f->getName().toAscii(), toOgrFieldType(f->getType()));
-      if (f->getWidth() > 0)
+
+      // Fix the field length but only for Strings
+      if (oField.GetType() == OFTString)
       {
-        // Make sure that we create a valid field. Looking at you Shapefile.....
-        // NOTE: This is only if we specify a width for the output field.
-        if (f->getWidth() > _maxFieldWidth)
-        {
-          oField.SetWidth(_maxFieldWidth);
-        }
-        else
+        // If the schema sets a field width then use it.
+        if (f->getWidth() > 0)
         {
           oField.SetWidth(f->getWidth());
+        }
+        else if (_maxFieldWidth > 0) // Looking at you Shapefile.....
+        {
+          oField.SetWidth(_maxFieldWidth);
         }
       }
 
