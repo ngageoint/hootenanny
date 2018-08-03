@@ -174,12 +174,12 @@ private:
   // Stores the changes we calculate when doing the tag differential
   MemChangesetProviderPtr _pTagChanges;
 
-  // Set of the elements that came from the "Input1" map
-  // Used when calculating the tag differential
-  // This is important, because elements get modified by map cleaning
-  // operations prior to conflation - and we need this list of IDs to help
-  // us generate a clean changeset output for the tag diff.
-  std::set<ElementId> _originalIds;
+  // A copy of the "Input1" map. This is used when calculating the tag
+  // differential. It's important, because elements get modified by map
+  // cleaning operations prior to conflation - and we need this as a reference
+  // for original IDs and original geometry, so that we can generate a clean
+  // changeset output for the tag diff.
+  OsmMapPtr _pOriginalMap;
 
   template <typename InputCollection>
   void _deleteAll(InputCollection& ic)
