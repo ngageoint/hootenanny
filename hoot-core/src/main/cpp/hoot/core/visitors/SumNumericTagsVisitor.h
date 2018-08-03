@@ -24,11 +24,12 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SUMNUMERICTAGSVISITOR_H
-#define SUMNUMERICTAGSVISITOR_H
+#ifndef SUM_NUMERIC_TAGS_VISITOR_H
+#define SUM_NUMERIC_TAGS_VISITOR_H
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/Configurable.h>
 
 #include "SingleStatistic.h"
 
@@ -38,11 +39,10 @@ namespace hoot
 /**
  * Sums numeric tag values with a specified key
  *
- * TODO: make configurable
- * TODO: have this support multiple keys
- * TODO: have this support substrings
+ * In the future, we may want to have this support substrings as well.
  */
-class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic
+class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic,
+  public Configurable
 {
 public:
 
@@ -51,13 +51,14 @@ public:
   static unsigned int logWarnCount;
 
   SumNumericTagsVisitor();
-  SumNumericTagsVisitor(const QString key);
+  explicit SumNumericTagsVisitor(const QStringList keys);
 
   virtual ~SumNumericTagsVisitor() {}
 
   /**
-   * Given a tag key and for all features having the tag, sums the values of those tags.  If
-   * the tag value cannot be converted to a number, a warning is logged and the tag is skipped.
+   * Given a set of tag keys and for all features having those tags, sums the numerical values of
+   * the tags.  If the tag value cannot be converted to a number, a warning is logged and the tag
+   * is skipped.
    *
    * @param e element to check for tag on
    */
@@ -65,15 +66,16 @@ public:
 
   virtual double getStat() const { return _sum; }
 
-  virtual QString getDescription() const { return "Sums numeric tag values with a specified key"; }
+  virtual QString getDescription() const { return "Sums numeric tag values with specified keys"; }
+
+  virtual void setConfiguration(const Settings& conf);
 
 private:
 
-  QString _key;
-  //TODO: should be double
-  long _sum;
+  QStringList _keys;
+  double _sum;
 };
 
 }
 
-#endif // SUMNUMERICTAGSVISITOR_H
+#endif // SUM_NUMERIC_TAGS_VISITOR_H

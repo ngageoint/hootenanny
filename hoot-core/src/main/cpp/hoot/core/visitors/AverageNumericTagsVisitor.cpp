@@ -54,7 +54,11 @@ _tagCount(0)
 
 void AverageNumericTagsVisitor::setConfiguration(const Settings& conf)
 {
+<<<<<<< HEAD
   _keys = ConfigOptions(conf).getAverageNumericTagsVisitorKeys();
+=======
+  _keys = ConfigOptions(conf).getNumericTagsVisitorKeys();
+>>>>>>> 2552
   LOG_VART(_keys);
 }
 

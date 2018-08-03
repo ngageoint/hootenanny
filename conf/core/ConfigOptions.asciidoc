@@ -1539,6 +1539,15 @@ Determines how strictly the angle should be considered when calculating intersec
 rubber sheeting. A value of 0 will ignore angle entirely. Large will make the angle comparison more
 strict.
 
+=== numeric.tags.visitor.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of tag keys for which the AverageNumericTagsVisitor or SumNumericTagsVisitor calculates
+numeric values.  Separate keys with a ';' when passing in from the command line.
+
 === ogr.append.data
 
 * Data Type: bool

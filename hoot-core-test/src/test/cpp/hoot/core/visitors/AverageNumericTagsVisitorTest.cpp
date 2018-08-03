@@ -22,21 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/visitors/SumNumericTagsVisitor.h>
+#include <hoot/core/visitors/AverageNumericTagsVisitor.h>
 
 namespace hoot
 {
 
-class SumNumericTagsVisitorTest : public HootTestFixture
+class AverageNumericTagsVisitorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(SumNumericTagsVisitorTest);
+  CPPUNIT_TEST_SUITE(AverageNumericTagsVisitorTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -51,15 +51,15 @@ public:
       false,
       Status::Unknown1);
 
-    SumNumericTagsVisitor uut(QStringList("test1"));
+    AverageNumericTagsVisitor uut(QStringList("test1"));
     map->visitRo(uut);
-    const int sum = (int)uut.getStat();
-    CPPUNIT_ASSERT_EQUAL(11, sum);
+    const double avg = uut.getStat();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.667, avg, 1e-3);
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SumNumericTagsVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AverageNumericTagsVisitorTest, "quick");
 
 }
 
