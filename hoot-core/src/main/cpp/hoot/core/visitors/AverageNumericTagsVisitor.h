@@ -55,7 +55,7 @@ public:
   static unsigned int logWarnCount;
 
   AverageNumericTagsVisitor();
-  AverageNumericTagsVisitor(const QStringList keys);
+  explicit AverageNumericTagsVisitor(const QStringList keys);
 
   virtual ~AverageNumericTagsVisitor() {}
 
