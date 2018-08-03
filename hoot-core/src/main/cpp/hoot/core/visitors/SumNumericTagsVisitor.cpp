@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SumNumericTagsVisitor.h"
 
@@ -36,41 +36,53 @@ unsigned int SumNumericTagsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, SumNumericTagsVisitor)
 
-SumNumericTagsVisitor::SumNumericTagsVisitor()
+SumNumericTagsVisitor::SumNumericTagsVisitor() :
+_sum(0.0)
 {
-
 }
 
-SumNumericTagsVisitor::SumNumericTagsVisitor(const QString key) :
-_key(key),
-_sum(0)
+SumNumericTagsVisitor::SumNumericTagsVisitor(const QStringList keys) :
+_keys(keys),
+_sum(0.0)
 {
+}
+
+void SumNumericTagsVisitor::setConfiguration(const Settings& conf)
+{
+  _keys = ConfigOptions(conf).getNumericTagsVisitorKeys();
+  LOG_VART(_keys);
 }
 
 void SumNumericTagsVisitor::visit(const ConstElementPtr& e)
 {
-  if (e->getTags().contains(_key))
+  for (int i = 0; i < _keys.size(); i++)
   {
-    bool parsed = false;
-    const QString strValue = e->getTags().get(_key);
-    const long value = strValue.toLong(&parsed);
-    if (parsed)
+    const QString key = _keys.at(i);
+    LOG_VART(key);
+
+    if (e->getTags().contains(key))
     {
-      _sum += value;
-    }
-    else
-    {
-      if (logWarnCount < Log::getWarnMessageLimit())
+      bool parsed = false;
+      const QString strValue = e->getTags().get(key);
+      const long value = strValue.toLong(&parsed);
+      if (parsed)
       {
-        LOG_WARN(
-          "Unsuccessfully attempted to convert tag with key: " << _key << " and value: " <<
-          strValue << " to number.");
+        _sum += value;
       }
-      else if (logWarnCount == Log::getWarnMessageLimit())
+      else
       {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN(
+            "Unsuccessfully attempted to convert tag with key: " << key << " and value: " <<
+            strValue << " to number.");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
-      logWarnCount++;
     }
   }
 }

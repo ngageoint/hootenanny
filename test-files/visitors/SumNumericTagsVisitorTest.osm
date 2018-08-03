@@ -3,7 +3,7 @@
   <node id='-861083' action='modify' visible='true' lat='37.80126265613346' lon='-122.41673202552577'>
     <tag k='REF1' v='C' />
     <tag k='amenity' v='restaurant' />
-	  <tag k='test1' v='2' />
+    <tag k='test1' v='2' />
   </node>
   <node id='-861082' action='modify' visible='true' lat='37.80124689079134' lon='-122.4167220492491'>
     <tag k='REF2' v='C' />
