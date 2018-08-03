@@ -40,8 +40,17 @@ void LanguageTranslationComparisonVisitor::setConfiguration(const Settings& conf
   if (_preTranslatedTagKeys.size() != _toTranslateTagKeys.size())
   {
     throw HootException(
-      "When preforming language translation comparison, the number of pre-translated tag keys " +
-      "must match that of the keys of the tags to be translated.");
+      QString("When preforming language translation comparison, the number of pre-translated ") +
+      QString("tag keys must match that of the keys of the tags to be translated."));
+  }
+
+  if (opts.getLanguageTranslationSourceLanguage().toLower() != "de")
+  {
+    throw HootException("Unsupported source translation language.");
+  }
+  if (opts.getLanguageTranslationTargetLanguage().toLower() != "en")
+  {
+    throw HootException("Unsupported target translation language.");
   }
 
   _translationClient.reset(new QTcpSocket());
@@ -58,13 +67,13 @@ void LanguageTranslationComparisonVisitor::visit(const boost::shared_ptr<Element
 {
   for (int i = 0; i < _preTranslatedTagKeys.size(); i++)
   {
-    _translateName(e->getTags(), _preTranslatedTagKeys.at(i), _toTranslateTagKeys.at(i));
+    _translate(e->getTags(), _preTranslatedTagKeys.at(i), _toTranslateTagKeys.at(i));
   }
 }
 
-void LanguageTranslationComparisonVisitor::_translateName(Tags& tags,
-                                                          const QString preTranslatedNameKey,
-                                                          const QString toTranslateNameKey)
+void LanguageTranslationComparisonVisitor::_translate(Tags& tags,
+                                                      const QString preTranslatedNameKey,
+                                                      const QString toTranslateNameKey)
 {
   //only care about features that have both the pre-translated tag and the tag we want to compare
   //our translation to it with
@@ -96,7 +105,7 @@ void LanguageTranslationComparisonVisitor::_translateName(Tags& tags,
           returnedData.append(_translationClient->readAll());
         }
         //106 = UTF-8
-        translatedVal = QTextCodec::codecForMib(106)->toUnicode(returnData).trimmed();
+        translatedVal = QTextCodec::codecForMib(106)->toUnicode(returnedData).trimmed();
       }
       else
       {
@@ -115,7 +124,7 @@ void LanguageTranslationComparisonVisitor::_translateName(Tags& tags,
       //if (strComparison != 0)
       //{
         tags.appendValue("hoot:translated:" + toTranslateNameKey + ":en", translatedVal);
-        const double similarityScore = _translationScorer.score(preTranslatedName, translatedVal);
+        const double similarityScore = _translationScorer->compare(preTranslatedVal, translatedVal);
         LOG_VARD(similarityScore);
         tags.appendValue(
           "hoot:translated:similarity:score:" + toTranslateNameKey + ":en",

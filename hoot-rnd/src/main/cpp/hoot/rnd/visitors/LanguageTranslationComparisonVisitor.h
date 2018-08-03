@@ -44,13 +44,12 @@ public:
 
 private:
 
-  StringDistance _translationScorer;
+  StringDistancePtr _translationScorer;
   boost::shared_ptr<QTcpSocket> _translationClient;
   QStringList _preTranslatedTagKeys;
   QStringList _toTranslateTagKeys;
 
-  void _translateName(Tags& tags, const QString preTranslatedNameKey,
-                      const QString toTranslateNameKey);
+  void _translate(Tags& tags, const QString preTranslatedNameKey, const QString toTranslateNameKey);
 };
 
 }

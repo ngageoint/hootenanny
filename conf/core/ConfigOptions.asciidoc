@@ -1247,7 +1247,7 @@ Port the server hosting the language translation service is listening on
 === language.translation.source.language
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `de`
 
 ISO-639 language code for the source language of the translation
 
