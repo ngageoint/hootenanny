@@ -194,7 +194,7 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate)
   {
     // Store original IDs for tag diff
-    diffConflator.storeOriginalIDs(map);
+    diffConflator.storeOriginalMap(map);
 
     // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
     Settings visitorConf;

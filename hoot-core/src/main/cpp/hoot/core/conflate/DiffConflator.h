@@ -149,13 +149,12 @@ public:
   MemChangesetProviderPtr getTagDiff();
 
   /**
-   * @brief storeOriginalIDs - Stores the ElementIDs for the original Input1
-   * elements. This is necessary for calculating the tag differential, and it's
-   * important to call this after loading the Input1 map, and before loading the
-   * Input2 map.
+   * @brief storeOriginalMap - Stores the original map. This is necessary
+   * for calculating the tag differential, and it's important to call this
+   * after loading the Input1 map, and before loading the Input2 map.
    * @param pMap - Map that should be holding only the original "Input1" elements
    */
-  void storeOriginalIDs(OsmMapPtr& pMap);
+  void storeOriginalMap(OsmMapPtr& pMap);
 
 private:
 

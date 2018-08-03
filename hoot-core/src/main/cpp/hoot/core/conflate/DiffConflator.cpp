@@ -178,7 +178,7 @@ MemChangesetProviderPtr DiffConflator::getTagDiff()
   return _pTagChanges;
 }
 
-void DiffConflator::storeOriginalIDs(OsmMapPtr& pMap)
+void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 {
   // Use the copy constructor
   _pOriginalMap.reset(new OsmMap(pMap));
