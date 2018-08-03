@@ -1203,6 +1203,62 @@ Write out JSON in a more legible manner
 A list of tag keys for which the KeepTagsVisitor will retain on elements, while removing all
 other tags from elements.
 
+=== language.translation.comparison.pretranslated.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of tag keys known to have been previously translated to the desired target language.  The
+list ordering should correspond to that of language.translation.comparison.to.translate.tag.keys.
+Separate keys with a ';' and surround in quotes when passing in from the command line.
+
+=== language.translation.comparison.scorer
+
+* Data Type: string
+* Default Value: `hoot::LevenshteinDistance`
+
+StringDistance implementation used to score translated tag values for comparison
+
+=== language.translation.comparison.to.translate.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of tag keys for tag translation comparison against pre-translated tags.  The list ordering
+should correspond to that of language.translation.comparison.pretranslated.tag.keys.  Separate
+keys with a ';' and surround in quotes when passing in from the command line.
+
+=== language.translation.service.host
+
+* Data Type: string
+* Default Value: `localhost`
+
+Server hosting the language translation service
+
+=== language.translation.service.port
+
+* Data Type: int
+* Default Value: `5674`
+
+Port the server hosting the language translation service is listening on
+
+=== language.translation.source.language
+
+* Data Type: string
+* Default Value: ``
+
+ISO-639 language code for the source language of the translation
+
+=== language.translation.target.language
+
+* Data Type: string
+* Default Value: `en`
+
+ISO-639 language code for the source language of the translation.  Currently only English (en) is
+supported.
+
 === levenshtein.distance.alpha
 
 * Data Type: double
@@ -1537,7 +1593,8 @@ strict.
 ** ``
 
 List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
-TagKeyCountVisitor uses.  Separate keys with a ';' when passing in from the command line.
+TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in quotes when passing
+in from the command line.
 
 === ogr.append.data
 
@@ -2402,7 +2459,7 @@ require it.
 
 List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always
 review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.
-e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from
+e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'.  Also, when specifying the list from
 the command line, surround the entire value string in double quotes.
 
 === poi.polygon.review.multiuse.buildings
@@ -2692,7 +2749,7 @@ nested criterion, use the Hootenanny Javascript interface instead.
 ** ``
 
 A list of tag keys the RemoveTagsVisitor will remove on elements.  From the command line, separate
-list items with a semicolon.
+list items with a semicolon and surround the entire list in quotes.
 
 === replace.tag.visitor.match.tag
 
@@ -2942,7 +2999,8 @@ Primarily, this is useful within the node.js interface.
 * Default Value: ``
 
 Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
-delimit multiple key/value pairs with ';'.  E.g. 'highway=road;amenity=school'
+delimit multiple key/value pairs with ';' and surround the entire list in quotes.
+E.g. "highway=road;amenity=school"
 
 === tag.merger.default
 
@@ -3003,7 +3061,7 @@ renaming existing tag keys on all elements in a map.
 
 The keys the TagValueNumericRangeCriterion examines the numeric value of.  Tags for all keys must
 meet the numeric range requirement for the criterion to be met.  Separate multiple keys with a
-semicolon from the command line.
+semicolon from the command line and surround the entire list in quotes.
 
 === tag.value.numeric.range.criterion.max
 
