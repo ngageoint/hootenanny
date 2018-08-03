@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/Configurable.h>
 
 #include "SingleStatistic.h"
 
@@ -36,16 +37,17 @@ namespace hoot
 {
 
 /**
- * Counts the number of tags in all elements with the given key
+ * Counts the number of tags in all elements with the given keys
  */
-class TagKeyCountVisitor : public ConstElementVisitor, public SingleStatistic
+class TagKeyCountVisitor : public ConstElementVisitor, public SingleStatistic, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::TagKeyCountVisitor"; }
 
-  TagKeyCountVisitor() {}
+  TagKeyCountVisitor();
   TagKeyCountVisitor(const QString key);
+  TagKeyCountVisitor(const QStringList keys);
 
   virtual ~TagKeyCountVisitor() {}
 
@@ -54,11 +56,13 @@ public:
   virtual double getStat() const { return _keyCount; }
 
   virtual QString getDescription() const
-  { return "Counts the number of tags in all elements with the given key"; }
+  { return "Counts the number of tags in all elements with the given keys"; }
+
+  virtual void setConfiguration(const Settings& conf);
 
 private:
 
-  QString _key;
+  QStringList _keys;
   long _keyCount;
 };
 

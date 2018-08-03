@@ -72,6 +72,7 @@ public:
 
   virtual QString getDescription() const
   { return "Averages numeric tag values with specified keys"; }
+
   virtual void setConfiguration(const Settings& conf);
 
 private:

@@ -11,6 +11,7 @@
 #include <QProcess>
 #include <QTextCodec>
 #include <QLocale>
+#include <QDataStream>
 
 namespace hoot
 {
@@ -19,6 +20,20 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationComparisonVisitor
 
 ToEnglishTranslationComparisonVisitor::ToEnglishTranslationComparisonVisitor()
 {
+  _translationClient.reset(new QTcpSocket());
+  _translationClient->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+  //TODO: configure
+  _translationClient->connectToHost("localhost", 5674);
+  const bool connected = _translationClient->waitForConnected();
+  LOG_VARD(connected);
+}
+
+ToEnglishTranslationComparisonVisitor::~ToEnglishTranslationComparisonVisitor()
+{
+  //keeps complaining about already being disconnected...
+//  _translationClient->disconnectFromHost();
+//  const bool disconnected = _translationClient->waitForDisconnected();
+//  LOG_VARD(disconnected);
 }
 
 void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& /*conf*/)
@@ -38,43 +53,39 @@ void ToEnglishTranslationComparisonVisitor::_translateName(Tags& tags,
 {
   if ((tags.contains(toTranslateNameKey) && tags.contains(preTranslatedNameKey)))
   {
-    //TODO: these replacements are to appease the bash command; if we switch to a network call
-    //with qt, shouldn't be needed (or maybe there's a better way to encode these inside the
-    //bash command)
     QString name = tags.get(toTranslateNameKey).trimmed();
-    name = name.replace("&amp;", "and");
-    name = name.replace("&", "and");
-    name = name.replace("'", "");
-    name = name.replace("(", "");
-    name = name.replace(")", "");
     LOG_VARD(name);
-    QString preTranslatedName = tags.get(preTranslatedNameKey).trimmed();
-    preTranslatedName = preTranslatedName.replace("&amp;", "and");
-    preTranslatedName = preTranslatedName.replace("&", "and");
-    preTranslatedName = preTranslatedName.replace("'", "");
-    preTranslatedName = preTranslatedName.replace("(", "");
-    preTranslatedName = preTranslatedName.replace(")", "");
+    const QString preTranslatedName = tags.get(preTranslatedNameKey).trimmed();;
     LOG_VARD(preTranslatedName);
     //TODO: add english common word lookup
     if (!name.isEmpty() && name != preTranslatedName)
     {
-      //TODO: replace with net call
-      QProcess process;
-      const QString cmd = "bash -c \"echo " + name + " | nc localhost 5674\"";
-      LOG_VARD(cmd);
-      process.start(cmd);
-      process.waitForFinished(-1);
-
-      const QString error = process.readAllStandardError();
-      if (!error.trimmed().isEmpty())
+      QByteArray returnData;
+      QString translatedName;
+      //TODO: make this non-blocking
+      if (_translationClient->state() == QAbstractSocket::ConnectedState)
       {
-        throw HootException("Unable to translate name: " + name + "; error: " + error);
+        //joshua expects a newline at the end
+        _translationClient->write(QString(name + "\n").toUtf8());
+        const bool bytesWereWritten = _translationClient->waitForBytesWritten();
+        LOG_VART(bytesWereWritten);
+        LOG_VART(_translationClient->bytesAvailable());
+        const bool readyRead = _translationClient->waitForReadyRead();
+        LOG_VART(readyRead);
+        while (_translationClient->bytesAvailable())
+        {
+          returnData.append(_translationClient->readAll());
+        }
+        //106 = UTF-8
+        translatedName = QTextCodec::codecForMib(106)->toUnicode(returnData).trimmed();
       }
-
-      const QString translatedName =
-        QTextCodec::codecForMib(106)->toUnicode(process.readAllStandardOutput()).trimmed();
+      else
+      {
+        throw HootException("Language ranslation client has no active connection to server.");
+      }
       LOG_VARD(translatedName);
-      //not sure if this locale stuff is needed yet
+
+      //not sure if locale is needed yet
       //QLocale::setDefault(QLocale(QLocale::German, QLocale::Germany));
       //QLocale::setDefault(QLocale(QLocale::German));
       //const int nameComparison = translatedName.localeAwareCompare(name);
@@ -82,11 +93,12 @@ void ToEnglishTranslationComparisonVisitor::_translateName(Tags& tags,
       LOG_VARD(nameComparison);
       if (nameComparison != 0)
       {
-        tags.appendValue("joshua:translated:" + toTranslateNameKey, translatedName);
+        tags.appendValue("hoot:translated:" + toTranslateNameKey + ":en", translatedName);
         const double similarityScore = _levDist.score(preTranslatedName, translatedName);
         LOG_VARD(similarityScore);
         tags.appendValue(
-          "joshua:similarityscore:" + toTranslateNameKey, QString::number(similarityScore));
+          "hoot:translated:similarity:score:" + toTranslateNameKey + ":en",
+          QString::number(similarityScore));
       }
     }
   }
