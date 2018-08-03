@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Translator.h"
@@ -106,9 +106,7 @@ private:
   }
 };
 
-
-
-Translator* Translator::_theInstance = 0;
+boost::shared_ptr<Translator> Translator::_theInstance = NULL;
 
 Translator::Translator()
 {
@@ -124,18 +122,19 @@ Translator::~Translator()
 {
   delete _transliterator;
   delete _titler;
+  delete _buffer;
 }
 
 Translator& Translator::getInstance()
 {
-  if (_theInstance == 0)
+  if (_theInstance == NULL)
   {
     QString dictionary = ConfPath::search("dictionary.json");
 
-    _theInstance = new Translator();
+    _theInstance.reset(new Translator());
     _theInstance->_bufferLength = 1024;
     _theInstance->_buffer = new char[_theInstance->_bufferLength + 1];
-    _theInstance->_dictionary = new JsonDictionary();
+    _theInstance->_dictionary.reset(new JsonDictionary());
     _theInstance->_dictionary->load(dictionary);
 
     _theInstance->_streetTypes.insert("street");

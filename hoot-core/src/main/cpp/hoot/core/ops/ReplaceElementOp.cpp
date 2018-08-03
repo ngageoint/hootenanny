@@ -39,6 +39,12 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ReplaceElementOp)
 
+ReplaceElementOp::ReplaceElementOp()
+  : _clearAndRemove(false)
+{
+}
+
+
 ReplaceElementOp::ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove) :
   _from(from),
   _to(to),

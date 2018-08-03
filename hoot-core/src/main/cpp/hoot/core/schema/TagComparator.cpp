@@ -46,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-TagComparator* TagComparator::_theInstance;
+boost::shared_ptr<TagComparator> TagComparator::_theInstance;
 
 struct Entry
 {
@@ -473,9 +473,9 @@ bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2)
 
 TagComparator& TagComparator::getInstance()
 {
-  if (_theInstance == 0)
+  if (_theInstance == NULL)
   {
-    _theInstance = new TagComparator();
+    _theInstance.reset(new TagComparator());
   }
   return *_theInstance;
 }

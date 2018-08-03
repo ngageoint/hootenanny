@@ -79,6 +79,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(CornerSplitterTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CornerSplitterTest, "quick");
 
 }

@@ -92,6 +92,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(IntersectionSplitterTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IntersectionSplitterTest, "quick");
 
 }

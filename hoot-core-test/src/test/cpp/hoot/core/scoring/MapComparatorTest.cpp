@@ -109,7 +109,7 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(MapComparatorTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapComparatorTest, "quick");
 
 }
 
