@@ -168,6 +168,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(DividedHighwayMergerTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DividedHighwayMergerTest, "quick");
 
 }

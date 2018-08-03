@@ -100,6 +100,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(MapScoringStatusAndRefTagValidatorTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapScoringStatusAndRefTagValidatorTest, "quick");
 
 }

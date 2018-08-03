@@ -176,7 +176,7 @@ public:
     }
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(GraphComparatorTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GraphComparatorTest, "quick");
 
 }
 

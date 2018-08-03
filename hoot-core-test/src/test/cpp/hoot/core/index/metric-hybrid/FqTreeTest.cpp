@@ -287,6 +287,6 @@ public:
 
 int FqTreeTest::count = 0;
 
-CPPUNIT_TEST_SUITE_REGISTRATION(FqTreeTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FqTreeTest, "quick");
 
 }
