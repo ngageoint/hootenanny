@@ -31,13 +31,13 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/criterion/HighwayFilter.h>
-#include <hoot/core/criterion/LinearFilter.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/NeedsReviewCriterion.h>
 #include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/StatsAreaFilter.h>
+#include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/WaterwayCriterion.h>
@@ -63,8 +63,8 @@
 #include <hoot/core/util/DataProducer.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 
 #include <math.h>
 
@@ -127,7 +127,6 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
   }
   logMsg += "...";
   LOG_INFO(logMsg);
-  Filter::FilterType keep = Filter::KeepMatches;
 
   MapProjector::projectToPlanar(map);
 
@@ -174,18 +173,37 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     UniqueNamesVisitor v;
     _applyVisitor(constMap, &v);
     _stats.append(SingleStat("Unique Names", v.getStat()));
-    _stats.append(SingleStat("Meters of Linear Features",
-      _applyVisitor(constMap, FilteredVisitor(LinearFilter(keep), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
-    _stats.append(SingleStat("Meters Squared of Area Features",
-      _applyVisitor(constMap, FilteredVisitor(StatsAreaFilter(keep), ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())))));
-    _stats.append(SingleStat("Meters of Highway",
-      _applyVisitor(constMap, FilteredVisitor(HighwayFilter(keep), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
-    _stats.append(SingleStat("Highway Unique Name Count",
-      _applyVisitor(constMap, FilteredVisitor(HighwayFilter(keep), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
-    _stats.append(SingleStat("Meters Squared of Buildings",
-      _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
-    _stats.append(SingleStat("Building Unique Name Count",
-      _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
+    _stats.append(
+      SingleStat("Meters of Linear Features",
+      _applyVisitor(
+        constMap,
+        FilteredVisitor(LinearCriterion(), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
+    _stats.append(
+      SingleStat("Meters Squared of Area Features",
+      _applyVisitor(
+        constMap,
+        FilteredVisitor(StatsAreaCriterion(),
+          ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())))));
+    _stats.append(
+      SingleStat("Meters of Highway",
+      _applyVisitor(
+        constMap,
+        FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
+    _stats.append(
+      SingleStat("Highway Unique Name Count",
+      _applyVisitor(
+      constMap,
+      FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
+    _stats.append(
+      SingleStat("Meters Squared of Buildings",
+      _applyVisitor(
+      constMap,
+      FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
+    _stats.append(
+      SingleStat("Building Unique Name Count",
+      _applyVisitor(
+      constMap,
+      FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
 
     FeatureCountVisitor featureCountVisitor;
     _applyVisitor(constMap, &featureCountVisitor);
@@ -403,7 +421,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
       _stats.append(SingleStat("Highway Translated Populated Tag Percent",
-        _applyVisitor(constMap, FilteredVisitor(HighwayFilter(keep),
+        _applyVisitor(constMap, FilteredVisitor(HighwayCriterion(),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
       _stats.append(SingleStat("POI Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(PoiCriterion(),

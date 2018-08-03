@@ -28,23 +28,17 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/criterion/TagContainsFilter.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>

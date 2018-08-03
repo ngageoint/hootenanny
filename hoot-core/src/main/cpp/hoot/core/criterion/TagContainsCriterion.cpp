@@ -22,43 +22,51 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "InWayNodeFilter.h"
+#include "TagContainsCriterion.h"
 
-// Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-
-using namespace std;
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-InWayNodeFilter::InWayNodeFilter(FilterType type, const OsmMap& map, const vector<long>& wids)
-{
-  _type = type;
-  for (size_t i = 0; i < wids.size(); i++)
-  {
-    ConstWayPtr w = map.getWay(wids[i]);
-    const vector<long>& nids = w->getNodeIds();
+HOOT_FACTORY_REGISTER(ElementCriterion, TagContainsCriterion)
 
-    _nids.insert(nids.begin(), nids.end());
-  }
+TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring)
+{
+  _key.append(key);
+  _valueSubstring.append(valueSubstring);
 }
 
-bool InWayNodeFilter::isFiltered(const Node& n) const
+TagContainsCriterion::TagContainsCriterion(QStringList keys, QStringList valueSubstrings) :
+_key(keys),
+_valueSubstring(valueSubstrings)
 {
-  bool found = _nids.find(n.getId()) != _nids.end();
-  if (_type == KeepMatches)
+}
+
+bool TagContainsCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+{
+  bool matches = false;
+  for (int i = 0; i < _key.size(); i++)
   {
-    return !found;
+    if (e->getTags().contains(_key[i]) && e->getTags()[_key[i]].contains(_valueSubstring[i]))
+    {
+      matches = true;
+      break;  //  Only one match is required
+    }
   }
-  else
-  {
-    return found;
-  }
+  return matches;
+}
+
+void TagContainsCriterion::addPair(QString key, QString valueSubstring)
+{
+  _key.append(key);
+  _valueSubstring.append(valueSubstring);
 }
 
 }

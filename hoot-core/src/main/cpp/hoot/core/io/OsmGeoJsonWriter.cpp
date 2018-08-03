@@ -235,12 +235,12 @@ void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
 
 void OsmGeoJsonWriter::_writeNodes()
 {
-  NoInformationCriterion filter;
+  NoInformationCriterion crit;
   QList<long> nids;
   const NodeMap& nodes = _map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (filter.isNotSatisfied(_map->getNode(it->first)))
+    if (!crit.isSatisfied(_map->getNode(it->first)))
       nids.append(it->first);
   }
   // sort the values to give consistent results.

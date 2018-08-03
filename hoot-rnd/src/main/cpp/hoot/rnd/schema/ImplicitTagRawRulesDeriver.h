@@ -80,7 +80,7 @@ public:
   void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
-  void setElementFilter(QString filterName);
+  void setElementCriterion(QString criterionName);
 
 private:
 
@@ -93,7 +93,7 @@ private:
   //environments can cause memory issues due to the VM OS not releasing the memory used by the
   //command after it finishes
   int _sortParallelCount;
-  //completely skip filtering out ineligible elements (those which don't satisfy _elementFilter);
+  //completely skip filtering out ineligible elements (those which don't satisfy _elementCriterion);
   //to be used only when the input data has been pre-filtered
   bool _skipFiltering;
   //will keep all temp files; very useful for debugging sort work done by the Unix commands
@@ -122,7 +122,7 @@ private:
   boost::shared_ptr<PartialOsmMapReader> _inputReader;
 
   //controls which elements have tags harvested from them
-  boost::shared_ptr<ImplicitTagEligibleCriterion> _elementFilter;
+  boost::shared_ptr<ImplicitTagEligibleCriterion> _elementCriterion;
 
   void _init();
   void _validateInputs(const QStringList inputs, const QStringList translationScripts,

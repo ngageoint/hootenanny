@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef INWAYNODEFILTER_H
-#define INWAYNODEFILTER_H
+#ifndef INWAYNODECRITERION_H
+#define INWAYNODECRITERION_H
 
-#include "NodeFilter.h"
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Standard
 #include <set>
@@ -40,27 +41,29 @@ namespace hoot
 class OsmMap;
 
 /**
- * The filter matches all nodes that are in at least one of the ways referenced by wids.
+ * Identifies nodes contained in a specified set of ways
  */
-class InWayNodeFilter : public NodeFilter
+class InWayNodeCriterion : public ElementCriterion
 {
 public:
 
-  InWayNodeFilter(FilterType type, const OsmMap& map, const std::vector<long>& wids);
+  static std::string className() { return "hoot::InWayNodeCriterion"; }
+
+  InWayNodeCriterion() {}
+  InWayNodeCriterion(const OsmMap& map, const std::vector<long>& wayIds);
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new InWayNodeCriterion()); }
 
   virtual QString getDescription() const
-  { return "Matches all nodes that are in at least one of the ways referenced by wids"; }
-
-protected:
-
-  virtual bool isFiltered(const Node& n) const;
+  { return "Identifies nodes contained in a specified set of ways"; }
 
 private:
 
   std::set<long> _nids;
-  FilterType _type;
 };
 
 }
 
-#endif // INWAYNODEFILTER_H
+#endif // INWAYNODECRITERION_H

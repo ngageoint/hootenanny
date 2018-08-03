@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove matches.
+ * A criterion that will either keep or remove matches.
  */
 class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {

@@ -50,15 +50,15 @@ void RemoveRef2VisitorMultipleCriterion::addCriterion(const ElementCriterionPtr&
   //hacking use of ChainCriterion here
   boost::shared_ptr<const ChainCriterion> chainCrit =
     boost::dynamic_pointer_cast<const ChainCriterion>(e);
-  LOG_VARD(chainCrit->_filters.size());
-  if (!chainCrit.get() && chainCrit->_filters.size() != 2)
+  LOG_VARD(chainCrit->_criteria.size());
+  if (!chainCrit.get() && chainCrit->_criteria.size() != 2)
   {
     throw HootException(
       QString("RemoveRef2VisitorDifferentElementTypes expects a chain criterion passed to it ") +
-      QString("the first filter as the REF1 filter and the second as the REF2 filter."));
+      QString("the first criterion as the REF1 criterion and the second as the REF2 criterion."));
   }
-  _ref1Criterion = chainCrit->_filters[0];
-  _ref2Criterion = chainCrit->_filters[1];
+  _ref1Criterion = chainCrit->_criteria[0];
+  _ref2Criterion = chainCrit->_criteria[1];
 }
 
 void RemoveRef2VisitorMultipleCriterion::visit(const ConstElementPtr& e)

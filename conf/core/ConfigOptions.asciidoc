@@ -1054,7 +1054,7 @@ value in the Hootenanny schema.
 * Data Type: string
 * Default Value: `hoot::ImplicitTagEligiblePoiPolyCriterion`
 
-Filter class inheriting from hoot::ImplicitTagEligibleCriterion; The default,
+Criterion class inheriting from hoot::ImplicitTagEligibleCriterion; The default,
 ImplicitTagEligiblePoiPolyCriterion, derives tag information from POIs, buildings, and areas.  To
 pass in more nested criterion, use the Hootenanny Javascript interface instead.
 

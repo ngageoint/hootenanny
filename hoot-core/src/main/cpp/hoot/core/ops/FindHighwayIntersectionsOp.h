@@ -22,46 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TAGCONTAINSFILTER_H
-#define TAGCONTAINSFILTER_H
+#ifndef FINDHIGHWAYINTERSECTIONSOP_H
+#define FINDHIGHWAYINTERSECTIONSOP_H
+
+// Hoot
+#include <hoot/core/ops/OsmMapOperation.h>
 
 // Qt
-#include <QStringList>
-
-#include "ElementCriterion.h"
+#include <QString>
 
 namespace hoot
 {
 
-class TagContainsFilter : public BaseElementFilter
+
+/**
+ * Op. to find intersections
+ */
+class FindHighwayIntersectionsOp : public OsmMapOperation
 {
 public:
 
-  TagContainsFilter(FilterType type, QString key, QString valueSubstring);
-  TagContainsFilter(FilterType type, QStringList keys, QStringList valueSubstrings);
+  static std::string className() { return "hoot::FindHighwayIntersectionsOp"; }
 
-  /**
-   * Adds an additional pair to the search list. If any one of the pairs matches then it is
-   * considered a match.
-   */
-  void addPair(QString key, QString valueSubstring);
+  static QString opsKey() { return "map.cleaner.transforms"; }
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new TagContainsFilter(_type, _key, _valueSubstring)); }
+  FindHighwayIntersectionsOp();
 
-  virtual QString getDescription() const
-  { return "Filters elements based on tag keys and tag value substrings"; }
+  virtual ~FindHighwayIntersectionsOp() {}
 
-protected:
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual bool isFiltered(const Element& e) const;
-
-  QStringList _key, _valueSubstring;
-  FilterType _type;
+  virtual QString getDescription() const { return "Identifies road intersections"; }
 };
 
 }
 
-#endif // TAGCONTAINSFILTER_H
+#endif // FINDHIGHWAYINTERSECTIONSOP_H

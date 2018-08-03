@@ -22,38 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BASEFILTER_H
-#define BASEFILTER_H
+#include "RelationCriterion.h"
 
-#include "ElementCriterion.h"
+// Hoot
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
 
-/**
- * A filter that will either keep or remove matches.
- */
-class BaseFilter : public BaseElementFilter
+HOOT_FACTORY_REGISTER(ElementCriterion, RelationCriterion)
+
+bool RelationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-public:
-
-  BaseFilter(FilterType type);
-
-protected:
-
-  virtual bool isFiltered(const Element& e) const;
-
-  /**
-   * Returns true if the element matches. E.g. if it is a highway filter then it will return true
-   * if e is a highway type.
-   */
-  virtual bool isMatch(const Element& e) const = 0;
-
-  FilterType _type;
-};
-
+  return (e->getElementType() == ElementType::Relation);
 }
 
-#endif // BASEFILTER_H
+}

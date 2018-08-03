@@ -22,20 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "HighwayFilter.h"
+#include "LinearCriterion.h"
 
-// Hoot
+// hoot
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-bool HighwayFilter::isMatch(const Element& e) const
+HOOT_FACTORY_REGISTER(ElementCriterion, LinearCriterion)
+
+bool LinearCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
-  return OsmSchema::getInstance().isLinearHighway(e.getTags(), e.getElementType());
+  return OsmSchema::getInstance().isLinear(*e);
 }
 
 }
+

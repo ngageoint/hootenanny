@@ -48,7 +48,7 @@ namespace hoot
 /**
  * This class was extracted from ScriptMatchCreator so that it could be used by the other
  * match creators (highway, building, etc). It is used to build an index of input elements
- * (which can be filterd by various criteria, if need be). The envelope plus the search
+ * (which can be filtered by various criteria, if need be). The envelope plus the search
    radius is created as the index box for each element. This is more efficient than using
    the OsmMapIndex index.
  */
@@ -64,7 +64,7 @@ public:
 
   explicit IndexElementsVisitor(boost::shared_ptr<Tgs::HilbertRTree>& index,
                                 std::deque<ElementId>& indexToEid,
-                                const boost::shared_ptr<ElementCriterion>& filter,
+                                const boost::shared_ptr<ElementCriterion>& criterion,
                                 boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
                                 ConstOsmMapPtr pMap);
 
@@ -84,7 +84,7 @@ public:
 private:
 
   ConstOsmMapPtr _pMap;
-  boost::shared_ptr<ElementCriterion> _filter;
+  boost::shared_ptr<ElementCriterion> _criterion;
   boost::function<Meters (const ConstElementPtr& e)> _getSearchRadius;
 
   boost::shared_ptr<Tgs::HilbertRTree>& _index;

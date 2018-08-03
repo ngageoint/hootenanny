@@ -22,20 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "StatsAreaFilter.h"
+#include "StatsAreaCriterion.h"
 
-// Hoot
+// hoot
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-bool StatsAreaFilter::isMatch(const Element& e) const
+HOOT_FACTORY_REGISTER(ElementCriterion, StatsAreaCriterion)
+
+bool StatsAreaCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
-  return OsmSchema::getInstance().isAreaForStats(e.getTags(), e.getElementType());
+  return OsmSchema::getInstance().isAreaForStats(e);
 }
 
 }
+

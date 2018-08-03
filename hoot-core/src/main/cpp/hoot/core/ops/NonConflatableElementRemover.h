@@ -22,26 +22,47 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef FILTER_H
-#define FILTER_H
+#ifndef NONCONFLATABLEELEMENTREMOVER_H
+#define NONCONFLATABLEELEMENTREMOVER_H
+
+// TGS
+#include <tgs/SharedPtr.h>
+
+// Hoot
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
 
-class Filter
+/**
+ * Recursively removes all elements that are deemed non-conflatable
+ */
+class NonConflatableElementRemover : public OsmMapOperation
 {
-public:
-  typedef enum FilterType
-  {
-    KeepMatches,
-    FilterMatches
-  } FilterType;
+  public:
 
+    static std::string className() { return "hoot::NonConflatableElementRemover"; }
+
+    NonConflatableElementRemover();
+
+    /**
+      @see OsmMapOperation
+    */
+    void apply(boost::shared_ptr<OsmMap>& map);
+
+    virtual QString getDescription() const
+    {
+      return "Removes elements that are non-conflatable by hootenanny";
+    }
+
+  private:
+
+    boost::shared_ptr<OsmMap> _map;
 };
 
 }
 
-#endif // FILTER_H
+#endif // NONCONFLATABLEELEMENTREMOVER_H

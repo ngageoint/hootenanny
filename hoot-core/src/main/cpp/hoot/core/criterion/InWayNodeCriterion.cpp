@@ -22,36 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONPOICRITERION_H
-#define POIPOLYGONPOICRITERION_H
+
+#include "InWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
 
-/**
- * A filter that will keep poi features, as defined by PoiPolygonMatch.
- */
-class PoiPolygonPoiCriterion : public ElementCriterion
+HOOT_FACTORY_REGISTER(ElementCriterion, InWayNodeCriterion)
+
+InWayNodeCriterion::InWayNodeCriterion(const OsmMap& map, const std::vector<long>& wayIds)
 {
-public:
+  for (size_t i = 0; i < wayIds.size(); i++)
+  {
+    ConstWayPtr w = map.getWay(wayIds[i]);
+    const std::vector<long>& nids = w->getNodeIds();
 
-  static std::string className() { return "hoot::PoiPolygonPoiCriterion"; }
-
-  PoiPolygonPoiCriterion();
-
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
-
-  virtual QString getDescription() const
-  { return "Identifies POIs as defined by POI/Polygon conflation"; }
-};
-
+    _nids.insert(nids.begin(), nids.end());
+  }
 }
 
-#endif // POIPOLYGONPOICRITERION_H
+bool InWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+{
+  return _nids.find(e->getId()) != _nids.end();
+}
+
+}

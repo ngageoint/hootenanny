@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove matches.
+ * A criterion that will either keep or remove matches.
  */
 class JsFunctionVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public JsFunctionConsumer
@@ -48,7 +48,8 @@ public:
 
   JsFunctionVisitor() : _map(0) {}
 
-  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) { _func.Reset(isolate, func); }
+  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func)
+  { _func.Reset(isolate, func); }
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 

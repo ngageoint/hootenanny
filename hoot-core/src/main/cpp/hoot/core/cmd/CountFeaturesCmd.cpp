@@ -55,7 +55,7 @@ public:
   virtual QString getName() const { return "count-features"; }
 
   virtual QString getDescription() const
-  { return "Counts the number of features matching an optionally specified filter"; }
+  { return "Counts the number of features matching an optionally specified criterion"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -85,12 +85,12 @@ public:
     OsmMapPtr map(new OsmMap());
     _readInputs(inputs, map);
 
-    QString filterClassName = "";
+    QString criterionClassName = "";
     if (args.size() > 1)
     {
-      filterClassName = args[1];
+      criterionClassName = args[1];
     }
-    _applyOperator(filterClassName, map, countFeaturesOnly);
+    _applyOperator(criterionClassName, map, countFeaturesOnly);
 
     return 0;
   }
@@ -109,12 +109,12 @@ private:
     }
   }
 
-  void _applyOperator(const QString filterClassName, OsmMapPtr map, const bool countFeaturesOnly)
+  void _applyOperator(const QString criterionClassName, OsmMapPtr map, const bool countFeaturesOnly)
   {
     int total = 0;
     boost::shared_ptr<ElementCountVisitor> elementCountVis(new ElementCountVisitor());
     boost::shared_ptr<FeatureCountVisitor> featureCountVis(new FeatureCountVisitor());
-    if (filterClassName.trimmed().isEmpty())
+    if (criterionClassName.trimmed().isEmpty())
     {
       //count all the elements/features
 
@@ -137,7 +137,7 @@ private:
       try
       {
         visFilter.reset(
-          Factory::getInstance().constructObject<ConstElementVisitor>(filterClassName));
+          Factory::getInstance().constructObject<ConstElementVisitor>(criterionClassName));
       }
       catch (const boost::bad_any_cast&)
       {
@@ -149,40 +149,40 @@ private:
         singleStat = boost::dynamic_pointer_cast<SingleStatistic>(visFilter);
       }
       LOG_VART(singleStat.get());
-      boost::shared_ptr<ElementCriterion> critFilter;
+      boost::shared_ptr<ElementCriterion> crit;
       try
       {
-        critFilter.reset(
-          Factory::getInstance().constructObject<ElementCriterion>(filterClassName));
+        crit.reset(
+          Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
         if (ConfigOptions().getElementCriterionNegate())
         {
-          critFilter.reset(new NotCriterion(critFilter));
+          crit.reset(new NotCriterion(crit));
         }
       }
       catch (const boost::bad_any_cast&)
       {
       }
-      LOG_VART(critFilter.get());
+      LOG_VART(crit.get());
 
       if (visFilter.get() && singleStat.get())
       {
         map->visitRo(*visFilter);
         total = (int)singleStat->getStat();
       }
-      else if (critFilter.get())
+      else if (crit.get())
       {
         if (countFeaturesOnly)
         {
-          total = (int)FilteredVisitor::getStat(critFilter, featureCountVis, map);
+          total = (int)FilteredVisitor::getStat(crit, featureCountVis, map);
         }
         else
         {
-          total = (int)FilteredVisitor::getStat(critFilter, elementCountVis, map);
+          total = (int)FilteredVisitor::getStat(crit, elementCountVis, map);
         }
       }
       else
       {
-        throw IllegalArgumentException("Invalid filter: " + filterClassName);
+        throw IllegalArgumentException("Invalid filter: " + criterionClassName);
       }
     }
     LOG_VART(total);

@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/criterion/IsNodeFilter.h>
+#include <hoot/core/criterion/NodeCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
@@ -91,8 +91,8 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
   {
     // remove all REF1/REF2 tags from the nodes.
     RemoveTagsVisitor removeRef(MetadataTags::Ref1(), MetadataTags::Ref2());
-    IsNodeFilter nodeFilter(Filter::KeepMatches);
-    FilteredVisitor removeRefV(nodeFilter, removeRef);
+    NodeCriterion nodeCrit;
+    FilteredVisitor removeRefV(nodeCrit, removeRef);
     map->visitRw(removeRefV);
   }
 }

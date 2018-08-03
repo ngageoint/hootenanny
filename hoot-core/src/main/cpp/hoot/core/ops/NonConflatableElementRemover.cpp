@@ -22,39 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ISNODEFILTER_H
-#define ISNODEFILTER_H
 
-// Qt
-#include <QString>
+#include "NonConflatableElementRemover.h"
 
-// hoot
-#include "ElementCriterion.h"
+// Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/CriterionCountVisitor.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/NonConflatableCriterion.h>
 
 namespace hoot
 {
 
-class Element;
+HOOT_FACTORY_REGISTER(OsmMapOperation, NonConflatableElementRemover)
 
-class IsNodeFilter : public BaseElementFilter
+NonConflatableElementRemover::NonConflatableElementRemover()
 {
-public:
-
-  IsNodeFilter(FilterType type) { _type = type; }
-
-  virtual bool isFiltered(const Element& e) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IsNodeFilter(_type)); }
-
-  virtual QString getDescription() const { return "Identifies nodes"; }
-
-private:
-
-  FilterType _type;
-};
 
 }
 
-#endif // ISNODEFILTER_H
+void NonConflatableElementRemover::apply(boost::shared_ptr<OsmMap>& map)
+{
+  _map = map;
+  boost::shared_ptr<NonConflatableCriterion> pNonConflateCrit(new NonConflatableCriterion());
+  RemoveElementsVisitor removeElementsVisitor(pNonConflateCrit);
+  removeElementsVisitor.setRecursive(true);
+  _map->visitRw(removeElementsVisitor);
+}
+
+}

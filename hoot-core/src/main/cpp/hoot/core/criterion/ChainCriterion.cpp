@@ -40,46 +40,46 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ChainCriterion)
 ChainCriterion::ChainCriterion(boost::shared_ptr<ElementCriterion> child1,
                                boost::shared_ptr<ElementCriterion> child2)
 {
-  _filters.push_back(child1);
-  _filters.push_back(child2);
+  _criteria.push_back(child1);
+  _criteria.push_back(child2);
 }
 
 ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterion* child2)
 {
-  _filters.push_back(boost::shared_ptr<ElementCriterion>(child1));
-  _filters.push_back(boost::shared_ptr<ElementCriterion>(child2));
+  _criteria.push_back(boost::shared_ptr<ElementCriterion>(child1));
+  _criteria.push_back(boost::shared_ptr<ElementCriterion>(child2));
 }
 
 ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2)
 {
-  _filters.push_back(boost::shared_ptr<ElementCriterion>(child1));
-  _filters.push_back(child2);
+  _criteria.push_back(boost::shared_ptr<ElementCriterion>(child1));
+  _criteria.push_back(child2);
 }
 
 ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterion* child2,
                                ElementCriterion* child3)
 {
-  _filters.push_back(boost::shared_ptr<ElementCriterion>(child1));
-  _filters.push_back(boost::shared_ptr<ElementCriterion>(child2));
-  _filters.push_back(boost::shared_ptr<ElementCriterion>(child3));
+  _criteria.push_back(boost::shared_ptr<ElementCriterion>(child1));
+  _criteria.push_back(boost::shared_ptr<ElementCriterion>(child2));
+  _criteria.push_back(boost::shared_ptr<ElementCriterion>(child3));
 }
 
-ChainCriterion::ChainCriterion(vector< boost::shared_ptr<ElementCriterion> > filters)
+ChainCriterion::ChainCriterion(vector< boost::shared_ptr<ElementCriterion> > criteria)
 {
-  for (size_t i = 0; i < filters.size(); i++)
-    _filters.push_back(boost::shared_ptr<ElementCriterion>(filters[i]->clone()));
+  for (size_t i = 0; i < criteria.size(); i++)
+    _criteria.push_back(boost::shared_ptr<ElementCriterion>(criteria[i]->clone()));
 }
 
 void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
 {
-  _filters.push_back(e);
+  _criteria.push_back(e);
 }
 
 bool ChainCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
-  for (size_t i = 0; i < _filters.size(); i++)
+  for (size_t i = 0; i < _criteria.size(); i++)
   {
-    if (!_filters[i]->isSatisfied(e))
+    if (!_criteria[i]->isSatisfied(e))
     {
       return false;
     }

@@ -35,8 +35,8 @@
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 
 //Qt
 #include <QDateTime>

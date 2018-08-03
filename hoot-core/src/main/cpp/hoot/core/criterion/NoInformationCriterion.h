@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- * A filter that will remove elements with no non-metadata information.
+ * A criterion that will remove elements with no non-metadata information.
  */
 class NoInformationCriterion : public ElementCriterion, public Configurable
 {

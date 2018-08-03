@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIFILTER_H
-#define POIFILTER_H
+#ifndef POICRITERION_H
+#define POICRITERION_H
 
 #include "ElementCriterion.h"
 
@@ -52,4 +52,4 @@ public:
 };
 
 }
-#endif // POIFILTER_H
+#endif // POICRITERION_H

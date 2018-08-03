@@ -22,55 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef POIPOLYGONPOICRITERION_H
+#define POIPOLYGONPOICRITERION_H
 
-#ifndef PARALLELWAYFILTER_H
-#define PARALLELWAYFILTER_H
-
-// GEOS
-#include <geos/geom/LineString.h>
-
-// Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/util/Units.h>
-
-#include "WayFilter.h"
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class Way;
-
-class ParallelWayFilter : public WayFilter
+/**
+ * A criterion that will keep poi features, as defined by PoiPolygonMatch.
+ */
+class PoiPolygonPoiCriterion : public ElementCriterion
 {
 public:
 
-  ParallelWayFilter(const ConstOsmMapPtr& map, ConstWayPtr baseWay,
-    bool filterUnparallel = true);
+  static std::string className() { return "hoot::PoiPolygonPoiCriterion"; }
 
-  virtual ~ParallelWayFilter();
+  PoiPolygonPoiCriterion();
 
-  Radians calculateDifference(const ConstWayPtr& w) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  void setThreshold(Degrees threshold) { _threshold = threshold; }
-
-  virtual bool isFiltered(const ConstWayPtr& w) const;
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
 
   virtual QString getDescription() const
-  { return "Identifies ways that are parallel to each other"; }
-
-private:
-
-  ConstWayPtr _baseWay;
-  bool _filterUnparallel;
-  // heading of baseWay at each coord
-  std::vector<Radians> _headings;
-  ConstOsmMapPtr _map;
-  std::vector<geos::geom::Point*> _points;
-  Degrees _threshold;
+  { return "Identifies POIs as defined by POI/Polygon conflation"; }
 };
 
 }
 
-#endif // PARALLELWAYFILTER_H
+#endif // POIPOLYGONPOICRITERION_H

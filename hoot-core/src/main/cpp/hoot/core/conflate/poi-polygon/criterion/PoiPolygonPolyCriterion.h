@@ -22,33 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef POIPOLYGONPOLYCRITERION_H
+#define POIPOLYGONPOLYCRITERION_H
 
-#include "IntersectionFilter.h"
-
-#include <hoot/core/elements/Element.h>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-IntersectionFilter::IntersectionFilter(std::vector<long> ids)
+/**
+ * A criterion that will keep poly-like features, as defined by PoiPolygonMatch.
+ */
+class PoiPolygonPolyCriterion : public ElementCriterion
 {
-  for (uint i = 0; i < ids.size(); i++)
-  {
-    _nids.insert(ids[i]);
-  }
-}
+public:
 
-bool IntersectionFilter::isSatisfied(const boost::shared_ptr<const Element>& e) const
-{
-  if (e->getElementType() != ElementType::Node) // only keep nodes
-  {
-    return true;
-  }
+  static std::string className() { return "hoot::PoiPolygonPolyCriterion"; }
 
-  bool found = _nids.find(e->getId()) != _nids.end(); // with the following ids
-  return !found;
-}
+  PoiPolygonPolyCriterion();
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
+
+  virtual QString getDescription() const
+  { return "Identifies polygons as defined by POI/Polygon conflation"; }
+};
 
 }
+
+#endif // POIPOLYGONPOLYCRITERION_H

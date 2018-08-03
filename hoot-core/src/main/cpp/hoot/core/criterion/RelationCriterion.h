@@ -22,36 +22,52 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "BaseFilter.h"
+#ifndef RELATIONCRITERION_H
+#define RELATIONCRITERION_H
 
-// hoot
-#include <hoot/core/schema/OsmSchema.h>
+// Hoot
+#include "ElementCriterion.h"
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 
-BaseFilter::BaseFilter(FilterType type) : _type(type)
+/**
+ * Matches any old relation
+ */
+class RelationCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
+public:
+
+  static std::string className() { return "hoot::RelationCriterion"; }
+
+  RelationCriterion() {}
+
+  explicit RelationCriterion(ConstOsmMapPtr& map) : _map(map) { }
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+
+  virtual ElementCriterionPtr clone()
+  {
+    return ElementCriterionPtr(new RelationCriterion(_map));
+  }
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+  virtual QString getDescription() const
+  {
+    return "Identifies relations";
+  }
+
+private:
+
+  ConstOsmMapPtr _map;
+
+};
+
 }
 
-bool BaseFilter::isFiltered(const Element& e) const
-{
-  bool match = isMatch(e);
-
-  if (_type == KeepMatches)
-  {
-    return !match;
-  }
-  else if (_type == FilterMatches)
-  {
-    return match;
-  }
-  else
-  {
-    throw NotImplementedException();
-  }
-}
-
-}
+#endif // RELATIONCRITERION_H

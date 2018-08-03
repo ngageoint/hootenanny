@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FINDINTERSECTIONSVISITOR_H
-#define FINDINTERSECTIONSVISITOR_H
+#ifndef FINDHIGHWAYINTERSECTIONSVISITOR_H
+#define FINDHIGHWAYINTERSECTIONSVISITOR_H
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
@@ -37,13 +37,13 @@ namespace hoot
 /**
  * Finds all intersections (nodes), adds some parameters to them and records their node ids
  */
-class FindIntersectionsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class FindHighwayIntersectionsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::FindIntersectionsVisitor"; }
+  static std::string className() { return "hoot::FindHighwayIntersectionsVisitor"; }
 
-  FindIntersectionsVisitor() {}
+  FindHighwayIntersectionsVisitor() {}
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -63,4 +63,4 @@ private:
 
 }
 
-#endif // FINDINTERSECTIONSVISITOR_H
+#endif // FINDHIGHWAYINTERSECTIONSVISITOR_H

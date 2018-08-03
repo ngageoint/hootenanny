@@ -33,8 +33,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/StatusUpdateVisitor.h>
@@ -293,22 +293,22 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   LOG_INFO("Merging one POI and one polygon...");
 
   StatusUpdateVisitor statusVisitor(Status::Unknown1, true);
-  PoiPolygonPoiCriterion poiFilter;
-  PoiPolygonPolyCriterion polyFilter;
+  PoiPolygonPoiCriterion poiCrit;
+  PoiPolygonPolyCriterion polyCrit;
 
   //If the features involved in the merging don't have statuses, let's arbitrarily set them to
   //Unknown1, since poi/poly requires it.  Setting them artificially *shouldn't* have a negative
   //effect on the poi/poly merging, though.
 
-  FilteredVisitor filteredVis1(poiFilter, statusVisitor);
+  FilteredVisitor filteredVis1(poiCrit, statusVisitor);
   map->visitRw(filteredVis1);
 
-  FilteredVisitor filteredVis2(polyFilter, statusVisitor);
+  FilteredVisitor filteredVis2(polyCrit, statusVisitor);
   map->visitRw(filteredVis2);
 
   //get our poi id
   ElementIdSetVisitor idSetVis1;
-  FilteredVisitor filteredVis3(poiFilter, idSetVis1);
+  FilteredVisitor filteredVis3(poiCrit, idSetVis1);
   map->visitRo(filteredVis3);
   const std::set<ElementId>& poiIds = idSetVis1.getElementSet();
   if (poiIds.size() != 1)
@@ -321,7 +321,7 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
 
   //get our poly id
   ElementIdSetVisitor idSetVis2;
-  FilteredVisitor filteredVis4(polyFilter, idSetVis2);
+  FilteredVisitor filteredVis4(polyCrit, idSetVis2);
   map->visitRo(filteredVis4);
   const std::set<ElementId>& polyIds = idSetVis2.getElementSet();
   if (polyIds.size() != 1)

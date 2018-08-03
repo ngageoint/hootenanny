@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/criterion/BaseFilter.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -42,42 +41,44 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class DeletableBuildingPart : public BaseFilter
+class DeletableBuildingCriterion : public ElementCriterion
 {
 
 public:
 
-  DeletableBuildingPart() : BaseFilter(Filter::FilterMatches) {}
+  DeletableBuildingCriterion() {}
 
-  bool isMatch(const Element &e) const
+  bool isSatisfied(const boost::shared_ptr<const Element>& e) const
   {
     bool result = false;
 
-    if (e.getElementType() == ElementType::Node && e.getTags().getInformationCount() == 0)
+    if (e->getElementType() == ElementType::Node && e->getTags().getInformationCount() == 0)
     {
       result = true;
     }
-    else if (e.getElementType() != ElementType::Node)
+    else if (e->getElementType() != ElementType::Node)
     {
-      if (OsmSchema::getInstance().isBuilding(e.getTags(), e.getElementType()) ||
-          OsmSchema::getInstance().isBuildingPart(e.getTags(), e.getElementType()))
+      if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()) ||
+          OsmSchema::getInstance().isBuildingPart(e->getTags(), e->getElementType()))
       {
         result = true;
       }
     }
 
-    return result;
+    return !result;
   }
 
   virtual QString getDescription() const { return ""; }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new DeletableBuildingPart()); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
 };
 
 unsigned int BuildingMerger::logWarnCount = 0;
@@ -249,9 +250,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
     LOG_VART(multiPolyMemberIds);
 
     // remove the duplicate element
-    DeletableBuildingPart filter;
+    DeletableBuildingCriterion crit;
     ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
-    RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
+    RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
     scrap->getTags().clear();
 
     //delete any multipoly members
@@ -376,15 +377,15 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
     boost::shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
     LOG_VART(result);
 
-    // likely create a filter that only matches buildings and building parts and pass that to the
-    DeletableBuildingPart filter;
+    // likely create a crit that only matches buildings and building parts and pass that to the
+    DeletableBuildingCriterion crit;
     for (size_t i = 0; i < toRemove.size(); i++)
     {
       if (map->containsElement(toRemove[i]))
       {
         ElementPtr willRemove = map->getElement(toRemove[i]);
         ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
-        RecursiveElementRemover(toRemove[i], &filter).apply(map);
+        RecursiveElementRemover(toRemove[i], &crit).apply(map);
         // just in case it wasn't removed (e.g. part of another relation)
         willRemove->getTags().clear();
       }

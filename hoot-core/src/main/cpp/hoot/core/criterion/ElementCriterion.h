@@ -24,12 +24,10 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTFILTER_H
-#define ELEMENTFILTER_H
+#ifndef ELEMENTCRITERION_H
+#define ELEMENTCRITERION_H
 
 #include <hoot/core/util/NotImplementedException.h>
-
-#include "Filter.h"
 
 namespace hoot
 {
@@ -59,12 +57,6 @@ public:
   virtual ~ElementCriterion() {}
 
   /**
-   * Provided for backwards compatibility with the old filter. This method should be avoided.
-   */
-  virtual bool isNotSatisfied(const boost::shared_ptr<const Element>& e) const
-  { return !isSatisfied(e); }
-
-  /**
    * Returns true if the element satisfies the criterion.
    */
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const = 0;
@@ -88,33 +80,6 @@ public:
 
 typedef boost::shared_ptr<ElementCriterion> ElementCriterionPtr;
 
-/**
- * Much of the old (pre 6/24/2014) code is based around the concept of a filter as opposed to a
- * criterion. The criterion is more intuitive and consistent to me, so I've started transitioning
- * the code to the criterion. I haven't moved much of it, but the newer Criterion interface should
- * be favored over the older ElementFilter interface.
- */
-class BaseElementFilter : public ElementCriterion, public Filter
-{
-public:
-
-  static std::string className() { return "hoot::BaseElementFilter"; }
-
-  virtual ~BaseElementFilter() {}
-
-  /**
-   * Returns true if the element should be filtered (removed). Removed depends on the context. E.g.
-   * It may just remove the element from a list of returned elements.
-   */
-  virtual bool isFiltered(const boost::shared_ptr<const Element>& e) const { return isFiltered(*e); }
-
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const { return !isFiltered(e); }
-
-protected:
-
-  virtual bool isFiltered(const Element& /*e*/) const { throw NotImplementedException(); }
-};
-
 }
 
-#endif // ELEMENTFILTER_H
+#endif // ELEMENTCRITERION_H

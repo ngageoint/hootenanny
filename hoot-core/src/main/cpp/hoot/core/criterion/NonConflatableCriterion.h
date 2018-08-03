@@ -22,58 +22,49 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "TagContainsFilter.h"
+#ifndef NONCONFLATABLECRITERION_H
+#define NONCONFLATABLECRITERION_H
 
 // hoot
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
+
+#include "ElementCriterion.h"
 
 namespace hoot
 {
 
-TagContainsFilter::TagContainsFilter(FilterType type, QString key, QString valueSubstring)
+/**
+ * A filter that will remove elements that aren't conflatable by hootenanny.
+ * These are elements for which we have no matchers defined.
+ */
+class NonConflatableCriterion : public ElementCriterion, public Configurable
 {
-  _type = type;
-  _key.append(key);
-  _valueSubstring.append(valueSubstring);
-}
 
-TagContainsFilter::TagContainsFilter(FilterType type, QStringList keys, QStringList valueSubstrings)
-{
-  _type = type;
-  _key = keys;
-  _valueSubstring = valueSubstrings;
-}
+public:
 
-void TagContainsFilter::addPair(QString key, QString valueSubstring)
-{
-  _key.append(key);
-  _valueSubstring.append(valueSubstring);
-}
+  static std::string className() { return "hoot::NonConflatableCriterion"; }
 
-bool TagContainsFilter::isFiltered(const Element& e) const
-{
-  bool matches = false;
+  NonConflatableCriterion() { setConfiguration(conf()); }
 
-  for (int i = 0; i < _key.size(); i++)
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+
+  virtual void setConfiguration(const Settings& conf);
+
+  virtual ElementCriterionPtr clone()
   {
-    if (e.getTags().contains(_key[i]) && e.getTags()[_key[i]].contains(_valueSubstring[i]))
-    {
-      matches = true;
-      break;  //  Only one match is required
-    }
+    return ElementCriterionPtr(new NonConflatableCriterion());
   }
 
-  if (_type == KeepMatches)
-  {
-    return !matches;
-  }
-  else
-  {
-    return matches;
-  }
-}
+  virtual QString getDescription() const { return "Identifies features that are not conflatable by hootenanny"; }
+
+};
 
 }
+
+#endif // NONCONFLATABLECRITERION_H
