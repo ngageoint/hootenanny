@@ -112,7 +112,7 @@ private:
 
   void _applyOperator(const QString criterionClassName, OsmMapPtr map, const bool countFeaturesOnly)
   {
-    double total = 0;
+    int total = 0;
     boost::shared_ptr<ElementCountVisitor> elementCountVis(new ElementCountVisitor());
     boost::shared_ptr<FeatureCountVisitor> featureCountVis(new FeatureCountVisitor());
     if (criterionClassName.trimmed().isEmpty())
@@ -165,11 +165,11 @@ private:
       LOG_TRACE("Using criterion...");
       if (countFeaturesOnly)
       {
-        total = FilteredVisitor::getStat(crit, featureCountVis, map);
+        total = (int)FilteredVisitor::getStat(crit, featureCountVis, map);
       }
       else
       {
-        total = FilteredVisitor::getStat(crit, elementCountVis, map);
+        total = (int)FilteredVisitor::getStat(crit, elementCountVis, map);
       }
     }
     LOG_VART(total);

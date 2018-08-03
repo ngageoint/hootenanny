@@ -242,7 +242,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
           ConstElementVisitorPtr(new MatchCandidateCountVisitor(matchCreators))),
         matchCandidateCountsData);
     LOG_VARD(matchCreators.size());
-    SumNumericTagsVisitor tagSumVis(MetadataTags::HootPoiPolygonPoisMerged());
+    SumNumericTagsVisitor tagSumVis(QStringList(MetadataTags::HootPoiPolygonPoisMerged()));
     constMap->visitRo(tagSumVis);
     long poisMergedIntoPolys = tagSumVis.getStat();
     //we need to add any pois that may have been merged into polygons by poi/poly into the total

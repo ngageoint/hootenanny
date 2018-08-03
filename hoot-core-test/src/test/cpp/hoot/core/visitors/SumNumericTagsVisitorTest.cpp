@@ -51,10 +51,10 @@ public:
       false,
       Status::Unknown1);
 
-    SumNumericTagsVisitor uut("test1");
+    SumNumericTagsVisitor uut(QStringList("test1"));
     map->visitRo(uut);
-    const long sum = (int)uut.getStat();
-    CPPUNIT_ASSERT_EQUAL(11L, sum);
+    const int sum = (int)uut.getStat();
+    CPPUNIT_ASSERT_EQUAL(11, sum);
   }
 
 };
