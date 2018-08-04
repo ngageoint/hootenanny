@@ -43,7 +43,7 @@ namespace hoot
 /**
  * Sums numeric tag values with a specified key
  *
- * TODO: have this support substrings
+ * In the future, we may want to have this support substrings as well.
  */
 class AverageNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic,
   public Configurable
@@ -55,13 +55,14 @@ public:
   static unsigned int logWarnCount;
 
   AverageNumericTagsVisitor();
-  AverageNumericTagsVisitor(const QStringList keys);
+  explicit AverageNumericTagsVisitor(const QStringList keys);
 
   virtual ~AverageNumericTagsVisitor() {}
 
   /**
-   * Given a tag key and for all features having the tag, averages the values of those tags.  If
-   * the tag value cannot be converted to a number, a warning is logged and the tag is skipped.
+   * Given a set of tag keys and for all features having those tags, averages the numerical values of
+   * the tags.  If the tag value cannot be converted to a number, a warning is logged and the tag
+   * is skipped.
    *
    * @param e element to check for tag on
    */
@@ -70,7 +71,7 @@ public:
   virtual double getStat() const;
 
   virtual QString getDescription() const
-  { return "Averages numeric tag values with a specified key"; }
+  { return "Averages numeric tag values with specified keys"; }
 
   virtual void setConfiguration(const Settings& conf);
 

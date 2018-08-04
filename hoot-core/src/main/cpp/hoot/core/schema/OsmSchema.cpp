@@ -1382,7 +1382,7 @@ private:
 
 };
 
-OsmSchema* OsmSchema::_theInstance = 0;
+boost::shared_ptr<OsmSchema> OsmSchema::_theInstance = NULL;
 
 OsmSchema::OsmSchema()
 {
@@ -1487,9 +1487,9 @@ const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const
 
 OsmSchema& OsmSchema::getInstance()
 {
-  if (_theInstance == 0)
+  if (_theInstance == NULL)
   {
-    _theInstance = new OsmSchema();
+    _theInstance.reset(new OsmSchema());
     _theInstance->loadDefault();
 
     //write this out to a temp file instead of to the log due to its size

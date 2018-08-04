@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Log.h"
@@ -47,7 +47,7 @@ namespace hoot
 QString Log::LOG_WARN_LIMIT_REACHED_MESSAGE = "Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...";
 unsigned int Log::_warnMessageLimit = 0;
 
-Log* Log::_theInstance = 0;
+boost::shared_ptr<Log> Log::_theInstance = NULL;
 
 void myLoggerFunction(QtMsgType type, const char* msg)
 {

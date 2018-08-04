@@ -41,7 +41,7 @@ void Method(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
 }
 
-JsRegistrar* JsRegistrar::_theInstance = 0;
+boost::shared_ptr<JsRegistrar> JsRegistrar::_theInstance = NULL;
 
 JsRegistrar::JsRegistrar()
 {
@@ -49,9 +49,9 @@ JsRegistrar::JsRegistrar()
 
 JsRegistrar& JsRegistrar::getInstance()
 {
-  if (_theInstance == 0)
+  if (_theInstance == NULL)
   {
-    _theInstance = new JsRegistrar();
+    _theInstance.reset(new JsRegistrar());
   }
   return *_theInstance;
 }
