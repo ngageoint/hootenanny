@@ -26,17 +26,22 @@
  */
 package hoot.services.controllers.grail;
 
-
-import java.io.File;
-import java.util.List;
+import java.lang.reflect.Constructor;
 
 import org.springframework.stereotype.Component;
 
 
 @Component
-class RunDiffCommandFactory {
+class GrailCommandFactory {
 
-    RunDiffCommand build(String jobId, File input1, File input2, File outputFile, String debugLevel, Class<?> caller) {
-        return new RunDiffCommand(jobId, input1, input2, outputFile, debugLevel, caller);
+    GrailCommand build(String jobId, GrailParams params, String debugLevel, Class<? extends GrailCommand> grailCommandClass, Class<?> caller) {
+        try {
+            Constructor<? extends GrailCommand> constuctor =
+                    grailCommandClass.getDeclaredConstructor(String.class, GrailParams.class, String.class, Class.class);
+            return constuctor.newInstance(jobId, params, debugLevel, caller);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to instantiate an instance of class: " + grailCommandClass.getName(), e);
+        }
     }
 }

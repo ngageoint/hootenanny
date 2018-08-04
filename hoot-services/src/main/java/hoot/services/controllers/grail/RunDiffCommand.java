@@ -40,11 +40,12 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
 
 
-class RunDiffCommand extends ExternalCommand {
+class RunDiffCommand extends GrailCommand {
     private static final Logger logger = LoggerFactory.getLogger(RunDiffCommand.class);
 
-    RunDiffCommand(String jobId, File input1, File input2, File outputFile, String debugLevel, Class<?> caller) {
-        super(jobId);
+    // RunDiffCommand(String jobId, File input1, File input2, File outputFile, String debugLevel, Class<?> caller) {
+    RunDiffCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
+        super(jobId,params);
 
         logger.info("Starting to run diff");
 
@@ -67,10 +68,13 @@ class RunDiffCommand extends ExternalCommand {
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
-        substitutionMap.put("INPUT1", input1.getAbsolutePath());
-        substitutionMap.put("INPUT2", input2.getAbsolutePath());
+        // substitutionMap.put("INPUT1", input1.getAbsolutePath());
+        // substitutionMap.put("INPUT2", input2.getAbsolutePath());
+        // substitutionMap.put("OUTPUT", outputFile.getAbsolutePath());
+        substitutionMap.put("INPUT1", params.getInput1());
+        substitutionMap.put("INPUT2", params.getInput2());
+        substitutionMap.put("OUTPUT", params.getOutput());
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("OUTPUT", outputFile.getAbsolutePath());
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
 
         String command = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --include-tags --separate-output";

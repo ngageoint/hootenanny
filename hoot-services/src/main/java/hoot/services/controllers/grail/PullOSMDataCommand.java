@@ -38,16 +38,31 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
 
 
-class PullOSMDataCommand extends ExternalCommand {
+class PullOSMDataCommand extends GrailCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullOSMDataCommand.class);
 
-    PullOSMDataCommand(String jobId, BoundingBox bbox, String apiUrl, File outputFile, Class<?> caller) {
-        super(jobId);
-            
-        String fullUrl = apiUrl + "/map?bbox=" + bbox.toServicesString();
+    // PullOSMDataCommand(String jobId, BoundingBox bbox, String apiUrl, File outputFile, Class<?> caller) {
+    PullOSMDataCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
+        super(jobId,params);
+
+        // logger.info("PullOSMCommand: " + params.toString());
+
+        BoundingBox boundingBox = new BoundingBox(params.getBounds());
+        double bboxArea = boundingBox.getArea();
+
+        // TODO:  Pull <area maximum="0.25"> from the capabilities of the OSM API DB's
+        // Also, pull the server status as well. Throw errors if they are not available.
+        double maxBboxArea = 0.25;
+
+        if (bboxArea > maxBboxArea) {
+            throw new IllegalArgumentException("The bounding box area (" + bboxArea + ") is too large. It must be less than " + maxBboxArea + " degrees");
+        }
+
+        String fullUrl = params.getPullUrl() + "/map?bbox=" + boundingBox.toServicesString();
 
         Map<String, Object> substitutionMap = new HashMap<>();
-        substitutionMap.put("OUTPUT_FILE", outputFile.getAbsolutePath());
+        // substitutionMap.put("OUTPUT_FILE", outputFile.getAbsolutePath());
+        substitutionMap.put("OUTPUT_FILE", params.getOutput());
         substitutionMap.put("API_URL", fullUrl);
 
         // wget -O <output.osm> "http://api.openstreetmap.org/api/0.6/map?bbox=$EXTENT"
