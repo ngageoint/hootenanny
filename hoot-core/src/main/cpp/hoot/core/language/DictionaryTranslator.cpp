@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "Translator.h"
+#include "DictionaryTranslator.h"
 
 // Hoot
 #include <hoot/core/util/ConfPath.h>
@@ -106,11 +106,9 @@ private:
   }
 };
 
+boost::shared_ptr<DictionaryTranslator> DictionaryTranslator::_theInstance = NULL;
 
-
-Translator* Translator::_theInstance = 0;
-
-Translator::Translator()
+DictionaryTranslator::DictionaryTranslator()
 {
   // if this assertion isn't true then bad things will happen when converting between QString and
   // UnicodeString
@@ -120,22 +118,23 @@ Translator::Translator()
   _whiteSpace.setPattern("\\W+");
 }
 
-Translator::~Translator()
+DictionaryTranslator::~DictionaryTranslator()
 {
   delete _transliterator;
   delete _titler;
+  delete _buffer;
 }
 
-Translator& Translator::getInstance()
+DictionaryTranslator& DictionaryTranslator::getInstance()
 {
-  if (_theInstance == 0)
+  if (_theInstance == NULL)
   {
     QString dictionary = ConfPath::search("dictionary.json");
 
-    _theInstance = new Translator();
+    _theInstance.reset(new DictionaryTranslator());
     _theInstance->_bufferLength = 1024;
     _theInstance->_buffer = new char[_theInstance->_bufferLength + 1];
-    _theInstance->_dictionary = new JsonDictionary();
+    _theInstance->_dictionary.reset(new JsonDictionary());
     _theInstance->_dictionary->load(dictionary);
 
     _theInstance->_streetTypes.insert("street");
@@ -149,7 +148,7 @@ Translator& Translator::getInstance()
   return *_theInstance;
 }
 
-QString Translator::toEnglish(const QString& input)
+QString DictionaryTranslator::toEnglish(const QString& input) const
 {
   QStringList l = input.split(QRegExp("\\W+"), QString::SkipEmptyParts);
 
@@ -173,13 +172,13 @@ QString Translator::toEnglish(const QString& input)
   return result;
 }
 
-QStringList Translator::toEnglishAll(const QString& input)
+QStringList DictionaryTranslator::toEnglishAll(const QString& input) const
 {
   QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
   return toEnglishAll(l);
 }
 
-QStringList Translator::toEnglishAll(const QStringList& l)
+QStringList DictionaryTranslator::toEnglishAll(const QStringList& l) const
 {
   QStringList result;
   if (l.size() == 0)
@@ -255,7 +254,7 @@ QStringList Translator::toEnglishAll(const QStringList& l)
   return result;
 }
 
-QString Translator::toTitleCase(const QString& input)
+QString DictionaryTranslator::toTitleCase(const QString& input) const
 {
   if (_titler == 0)
   {
@@ -271,7 +270,7 @@ QString Translator::toTitleCase(const QString& input)
   return _transform(_titler, input);
 }
 
-QString Translator::translateStreet(const QString& input)
+QString DictionaryTranslator::translateStreet(const QString& input) const
 {
   QStringList l = input.split(QRegExp("\\W+"), QString::SkipEmptyParts);
 
@@ -302,12 +301,13 @@ QString Translator::translateStreet(const QString& input)
   return toTitleCase(result);
 }
 
-QString Translator::transliterateToLatin(const QString& input)
+QString DictionaryTranslator::transliterateToLatin(const QString& input) const
 {
   if (_transliterator == 0)
   {
     UErrorCode error = U_ZERO_ERROR;
-    _transliterator = Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error);
+    _transliterator =
+      Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error);
     if (_transliterator == NULL || error != U_ZERO_ERROR)
     {
       LOG_ERROR("transliterator error code: " << error);
@@ -326,7 +326,7 @@ QString Translator::transliterateToLatin(const QString& input)
   return result;
 }
 
-QString Translator::_transform(Transliterator* t, const QString& input)
+QString DictionaryTranslator::_transform(Transliterator* t, const QString& input) const
 {
   UnicodeString str((UChar*)input.constData(), input.size());
 
@@ -336,6 +336,11 @@ QString Translator::_transform(Transliterator* t, const QString& input)
   LOG_TRACE("from: " << input.toUtf8().data() << " to " << result.toUtf8().data());
 
   return result;
+}
+
+QString DictionaryTranslator::translate(const QString toTranslate) const
+{
+  return toEnglish(toTranslate);
 }
 
 }

@@ -37,7 +37,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/KskipBigramDistance.h>
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -124,7 +124,7 @@ public:
 
   QString te(const char* s)
   {
-    return Translator::getInstance().translateStreet(QString::fromUtf8(s));
+    return DictionaryTranslator::getInstance().translateStreet(QString::fromUtf8(s));
   }
 
   QString joinBigrams(QSet<QString> bigrams)

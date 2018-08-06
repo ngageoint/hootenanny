@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#ifndef DICTIONARY_TRANSLATOR_H
+#define DICTIONARY_TRANSLATOR_H
+
+// Hoot
+#include <hoot/core/language/ToEnglishTranslator.h>
 
 // Qt
 #include <QRegExp>
@@ -50,19 +53,20 @@ class JsonDictionary;
  * any concept of grammar. If the word is unknown it is assumed to be a pronoun and will be
  * transliterated into latin characters.
  */
-class Translator
+class DictionaryTranslator : public ToEnglishTranslator
 {
 public:
-  Translator();
 
-  ~Translator();
+  DictionaryTranslator();
 
-  static Translator& getInstance();
+  ~DictionaryTranslator();
+
+  static DictionaryTranslator& getInstance();
 
   /**
    * Translates the given input string into a translation & transliteration of the input.
    */
-  QString toEnglish(const QString& input);
+  QString toEnglish(const QString& input) const;
 
   /**
    * Converts the given input string into all possible known translations. E.g.
@@ -72,33 +76,38 @@ public:
    *   "hospital umum",
    *   "general hospital" }
    */
-  QStringList toEnglishAll(const QString& input);
+  QStringList toEnglishAll(const QString& input) const;
 
   /**
    * Similar to above, but the input has already been tokenized.
    */
-  QStringList toEnglishAll(const QStringList& l);
+  QStringList toEnglishAll(const QStringList& l) const;
 
-  QString toTitleCase(const QString& input);
+  QString toTitleCase(const QString& input) const;
 
-  QString transliterateToLatin(const QString& input);
+  QString transliterateToLatin(const QString& input) const;
 
-  QString translateStreet(const QString& input);
+  QString translateStreet(const QString& input) const;
+
+  virtual QString translate(const QString toTranslate) const;
+
+  virtual void setSourceLanguage(const QString /*langCode*/) {}
 
 private:
+
   char* _buffer;
   int _bufferLength;
   Tgs::LruCache<QString, QString> _cache;
-  static Translator* _theInstance;
-  JsonDictionary* _dictionary;
+  static boost::shared_ptr<Translator> _theInstance;
+  boost::shared_ptr<JsonDictionary> _dictionary;
   QSet<QString> _streetTypes;
   Transliterator* _transliterator;
   Transliterator* _titler;
   QRegExp _whiteSpace;
 
-  QString _transform(icu::Transliterator* t, const QString& input);
+  QString _transform(icu::Transliterator* t, const QString& input) const;
 };
 
 }
 
-#endif // TRANSLATOR_H
+#endif // DICTIONARY_TRANSLATOR_H

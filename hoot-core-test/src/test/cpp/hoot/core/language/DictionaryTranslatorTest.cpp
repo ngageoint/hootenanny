@@ -37,7 +37,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/Soundex.h>
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -46,9 +46,9 @@
 namespace hoot
 {
 
-class TranslatorTest : public HootTestFixture
+class DictionaryTranslatorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(TranslatorTest);
+  CPPUNIT_TEST_SUITE(DictionaryTranslatorTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -58,17 +58,17 @@ public:
   {
     QStringList result;
     result << "building";
-    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll("gedung"));
+    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll("gedung"));
 
     result.clear();
     result << "office building";
     result << "agency building";
     result << "bureau building";
-    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll("kantor gedung"));
+    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll("kantor gedung"));
 
     result.clear();
     result << "hospital";
-    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll("rumah sakit"));
+    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll("rumah sakit"));
 
     result.clear();
     result << "general hospital office";
@@ -77,24 +77,24 @@ public:
     result << "hospital office";
     result << "hospital agency";
     result << "hospital bureau";
-    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll("rumah sakit umum kantor"));
+    HOOT_STR_EQUALS(
+      result, DictionaryTranslator::getInstance().toEnglishAll("rumah sakit umum kantor"));
 
     result.clear();
     result << "ryba office bar";
     result << "ryba agency bar";
     result << "ryba bureau bar";
-    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll(
+    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll(
       QString::fromUtf8("рыба kantor bar")));
 
     result.clear();
     result << "embassy hungaria";
-    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll(
+    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll(
       QString::fromUtf8("Kedutaan Besar Hungaria")));
   }
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TranslatorTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TranslatorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DictionaryTranslatorTest, "quick");
 
 }

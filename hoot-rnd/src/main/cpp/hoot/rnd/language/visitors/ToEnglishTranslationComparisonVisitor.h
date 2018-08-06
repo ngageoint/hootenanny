@@ -1,6 +1,6 @@
 
-#ifndef LANGUAGE_TRANSLATION_COMPARISON_VISITOR_H
-#define LANGUAGE_TRANSLATION_COMPARISON_VISITOR_H
+#ifndef TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
+#define TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -16,24 +16,16 @@ namespace hoot
 /**
  * This is used to check hoot tag language translations against existing known (assumed?)
  * correct translations; e.g. compare hoot's English translation of a tag to that of name:en
- *
- * //TODO: move this to separate Joshua translator later
- * @article{post2015joshua,
-    Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
-    Journal = {The Prague Bulletin of Mathematical Linguistics},
-    Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
-    Year = {2015}
-  }
  */
-class LanguageTranslationComparisonVisitor : public ElementOsmMapVisitor, public Configurable
+class ToEnglishTranslationComparisonVisitor : public ElementOsmMapVisitor, public Configurable
 {
 
 public:
 
-  static std::string className() { return "hoot::LanguageTranslationComparisonVisitor"; }
+  static std::string className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
 
-  LanguageTranslationComparisonVisitor();
-  ~LanguageTranslationComparisonVisitor();
+  ToEnglishTranslationComparisonVisitor();
+  ~ToEnglishTranslationComparisonVisitor();
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
@@ -54,4 +46,4 @@ private:
 
 }
 
-#endif // LANGUAGE_TRANSLATION_COMPARISON_VISITOR_H
+#endif // TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H

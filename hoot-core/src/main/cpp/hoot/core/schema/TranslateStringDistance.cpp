@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
@@ -53,15 +53,15 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
   QStringList t2;
   if (_tokenize)
   {
-    t1 = Translator::getInstance().toEnglishAll(s1);
-    t2 = Translator::getInstance().toEnglishAll(s2);
+    t1 = DictionaryTranslator::getInstance().toEnglishAll(s1);
+    t2 = DictionaryTranslator::getInstance().toEnglishAll(s2);
   }
   else
   {
     t1.append(s1);
     t2.append(s2);
-    t1 = Translator::getInstance().toEnglishAll(t1);
-    t2 = Translator::getInstance().toEnglishAll(t2);
+    t1 = DictionaryTranslator::getInstance().toEnglishAll(t1);
+    t2 = DictionaryTranslator::getInstance().toEnglishAll(t2);
   }
 
   double bestScore = -1;

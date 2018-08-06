@@ -1249,15 +1249,7 @@ Port the server hosting the language translation service is listening on
 * Data Type: string
 * Default Value: `de`
 
-ISO-639 language code for the source language of the translation
-
-=== language.translation.target.language
-
-* Data Type: string
-* Default Value: `en`
-
-ISO-639 language code for the source language of the translation.  Currently only English (en) is
-supported.
+ISO-639 language code for the source language of the to English translation
 
 === levenshtein.distance.alpha
 

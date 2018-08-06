@@ -28,7 +28,7 @@
 #include "LevenshteinDistance.h"
 
 // Hoot
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
@@ -79,7 +79,7 @@ void LevenshteinDistance::setConfiguration(const Settings& conf)
 
 QString LevenshteinDistance::toEnglish(const QString& s)
 {
-  QString result = Translator::getInstance().toEnglish(s);
+  QString result = DictionaryTranslator::getInstance().toEnglish(s);
   return result;
 }
 

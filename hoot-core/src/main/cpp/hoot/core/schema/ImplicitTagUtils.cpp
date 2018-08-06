@@ -28,7 +28,7 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 
 namespace hoot
 {
@@ -77,7 +77,7 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
       LOG_VART(name);
       if (name != altName)
       {
-        const QString englishName = Translator::getInstance().toEnglish(name);
+        const QString englishName = DictionaryTranslator::getInstance().toEnglish(name);
         LOG_VART(englishName);
         filteredNames.append(englishName);
         break;
@@ -90,7 +90,7 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
         altName = altName.split(";")[0];
       }
       LOG_VART(altName);
-      const QString englishName = Translator::getInstance().toEnglish(altName);
+      const QString englishName = DictionaryTranslator::getInstance().toEnglish(altName);
       LOG_VART(englishName);
       filteredNames.append(englishName);
     }

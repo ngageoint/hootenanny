@@ -1,5 +1,5 @@
 
-#include "LanguageTranslationComparisonVisitor.h"
+#include "ToEnglishTranslationComparisonVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -14,13 +14,13 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, LanguageTranslationComparisonVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationComparisonVisitor)
 
-LanguageTranslationComparisonVisitor::LanguageTranslationComparisonVisitor()
+ToEnglishTranslationComparisonVisitor::ToEnglishTranslationComparisonVisitor()
 {
 }
 
-LanguageTranslationComparisonVisitor::~LanguageTranslationComparisonVisitor()
+ToEnglishTranslationComparisonVisitor::~ToEnglishTranslationComparisonVisitor()
 {
   //keeps complaining about already being disconnected already...
 //  _translationClient->disconnectFromHost();
@@ -28,7 +28,7 @@ LanguageTranslationComparisonVisitor::~LanguageTranslationComparisonVisitor()
 //  LOG_VARD(disconnected);
 }
 
-void LanguageTranslationComparisonVisitor::setConfiguration(const Settings& conf)
+void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
@@ -48,10 +48,6 @@ void LanguageTranslationComparisonVisitor::setConfiguration(const Settings& conf
   {
     throw HootException("Unsupported source translation language.");
   }
-  if (opts.getLanguageTranslationTargetLanguage().toLower() != "en")
-  {
-    throw HootException("Unsupported target translation language.");
-  }
 
   _translationClient.reset(new QTcpSocket());
   _translationClient->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
@@ -63,7 +59,7 @@ void LanguageTranslationComparisonVisitor::setConfiguration(const Settings& conf
   }
 }
 
-void LanguageTranslationComparisonVisitor::visit(const boost::shared_ptr<Element>& e)
+void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _preTranslatedTagKeys.size(); i++)
   {
@@ -71,9 +67,9 @@ void LanguageTranslationComparisonVisitor::visit(const boost::shared_ptr<Element
   }
 }
 
-void LanguageTranslationComparisonVisitor::_translate(Tags& tags,
-                                                      const QString preTranslatedNameKey,
-                                                      const QString toTranslateNameKey)
+void ToEnglishTranslationComparisonVisitor::_translate(Tags& tags,
+                                                       const QString preTranslatedNameKey,
+                                                       const QString toTranslateNameKey)
 {
   //only care about features that have both the pre-translated tag and the tag we want to compare
   //our translation to it with

@@ -36,7 +36,7 @@
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/util/Factory.h>
 
@@ -356,7 +356,7 @@ void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStri
 
   if (_translateAllNamesToEnglish)
   {
-    const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
+    const QString englishNameToken = DictionaryTranslator::getInstance().toEnglish(nameToken);
     nameToken = englishNameToken;
     LOG_VART(englishNameToken);
   }
