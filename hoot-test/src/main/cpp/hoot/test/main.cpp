@@ -78,15 +78,15 @@ typedef boost::shared_ptr<CppUnit::Test> TestPtr;
 
 enum _TestType
 {
-  CURRENT,
-  QUICK,
-  QUICK_ONLY,
-  SLOW,
-  SLOW_ONLY,
-  GLACIAL,
-  GLACIAL_ONLY,
-  SERIAL,
-  ALL
+  CURRENT       = 0x01,
+  QUICK_ONLY    = 0x02,
+  QUICK         = 0x03,
+  SLOW_ONLY     = 0x04,
+  SLOW          = 0x07,
+  GLACIAL_ONLY  = 0x08,
+  GLACIAL       = 0x0f,
+  SERIAL        = 0x10,
+  ALL           = 0x1f
 };
 
 enum _TimeOutValue
@@ -330,76 +330,44 @@ void runSingleTest(CppUnit::Test * pTest, QStringList &args, CppUnit::TextTestRe
 
 void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bool hideDisableTests = false)
 {
-  /** This section is a bit verbose but ordering is very important as the order must go as follows:
-   *  Default Registry
-   *  Script Tests
-   *  Named Registries (current, quick, etc.)
-   */
-  switch(t)
+  //  Current tests are included in CURRENT, QUICK, SLOW, and GLACIAL
+  //  Add current tests if the bit flag is set
+  if (t & CURRENT)
   {
-  default:
-  case CURRENT:
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
-    break;
-  case QUICK:
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
-    break;
-  case QUICK_ONLY:
+  }
+  //  Quick tests are included in QUICK, SLOW, and GLACIAL
+  //  Add quick tests if the bit flag is set
+  if (t & QUICK_ONLY)
+  {
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
-    break;
-  case SLOW:
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
-    break;
-  case SLOW_ONLY:
+  }
+  //  Slow tests are included in SLOW and GLACIAL
+  //  Add slow tests if the bit flag is set
+  if (t & SLOW_ONLY)
+  {
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
-    break;
-  case GLACIAL:
-  case ALL:
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest()));
-    break;
-  case GLACIAL_ONLY:
+  }
+  //  Add glacial tests if the bit flag is set
+  if (t & GLACIAL_ONLY)
+  {
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest()));
-    break;
-  case SERIAL:
+  }
+  //  Add serial tests if the bit flag is set
+  if (t == SERIAL)
+  {
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest()));
-    break;
   }
 }
 

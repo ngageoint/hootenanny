@@ -98,6 +98,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(WayMergeManipulationTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayMergeManipulationTest, "quick");
 
 }

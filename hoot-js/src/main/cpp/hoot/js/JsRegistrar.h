@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JSREGISTRAR_H
 #define JSREGISTRAR_H
@@ -88,7 +88,7 @@ public:
 private:
 
   std::vector<boost::shared_ptr<ClassInitializer> > _initializers;
-  static JsRegistrar* _theInstance;
+  static boost::shared_ptr<JsRegistrar> _theInstance;
 };
 
 template<class T>

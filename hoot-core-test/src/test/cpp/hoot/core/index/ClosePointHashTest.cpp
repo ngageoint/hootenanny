@@ -156,6 +156,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ClosePointHashTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ClosePointHashTest, "quick");
 
 }

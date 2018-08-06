@@ -116,6 +116,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(DividedHighwayManipulationTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DividedHighwayManipulationTest, "quick");
 
 }

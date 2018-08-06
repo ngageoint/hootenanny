@@ -94,7 +94,7 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(AttributeComparatorTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AttributeComparatorTest, "quick");
 
 }
 

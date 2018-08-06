@@ -583,7 +583,7 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(MaximalSublineStringMatcherTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalSublineStringMatcherTest, "quick");
 
 }
 

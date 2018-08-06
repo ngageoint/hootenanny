@@ -534,7 +534,7 @@ private:
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.
   OsmSchemaData* d;
-  static OsmSchema* _theInstance;
+  static boost::shared_ptr<OsmSchema> _theInstance;
   SchemaVertex _empty;
 
   /// Provide caching for isMetaData

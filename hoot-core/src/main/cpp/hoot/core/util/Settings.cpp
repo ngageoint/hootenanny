@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Settings.h"
@@ -128,7 +128,7 @@ private:
   }
 };
 
-Settings* Settings::_theInstance = NULL;
+boost::shared_ptr<Settings> Settings::_theInstance = NULL;
 
 Settings::Settings() :
   _dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
@@ -156,7 +156,7 @@ void Settings::_checkConvert(const QString& key, const QVariant& value, QVariant
 void Settings::clear()
 {
   // this can be very handy when determining why/when settings got cleared.
-  if (this == _theInstance)
+  if (this == _theInstance.get())
   {
     LOG_DEBUG("Clearing global settings.");
   }
@@ -254,7 +254,7 @@ Settings& Settings::getInstance()
 {
   if (_theInstance == NULL)
   {
-    _theInstance = new Settings();
+    _theInstance.reset(new Settings());
     _theInstance->loadDefaults();
   }
   return *_theInstance;

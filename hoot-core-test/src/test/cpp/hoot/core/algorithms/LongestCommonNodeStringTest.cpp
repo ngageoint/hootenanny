@@ -90,6 +90,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LongestCommonNodeStringTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LongestCommonNodeStringTest, "quick");
 
 }
