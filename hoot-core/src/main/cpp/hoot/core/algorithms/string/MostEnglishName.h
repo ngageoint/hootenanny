@@ -66,6 +66,7 @@ typedef boost::shared_ptr<MostEnglishName> MostEnglishNamePtr;
 class MostEnglishName : public Configurable
 {
 public:
+
   static std::string className() { return "hoot::MostEnglishName"; }
 
   static unsigned int logWarnCount;
@@ -81,6 +82,7 @@ public:
   void setConfiguration(const Settings& conf);
 
 private:
+
   static MostEnglishNamePtr _theInstance;
 
   QSet<QString> _englishWords;

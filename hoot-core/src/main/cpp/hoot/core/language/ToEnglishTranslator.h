@@ -16,7 +16,7 @@ class ToEnglishTranslator
 {
 public:
 
-  virtual QString translate(const QString toTranslate) const = 0;
+  virtual QString translate(const QString toTranslate) = 0;
   virtual void setSourceLanguage(const QString langCode);
 };
 

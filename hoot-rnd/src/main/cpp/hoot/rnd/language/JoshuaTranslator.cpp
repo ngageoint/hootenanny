@@ -23,12 +23,12 @@ JoshuaTranslator::~JoshuaTranslator()
 {
 }
 
-QString JoshuaTranslator::translate(const QString /*toTranslate*/) const
+QString JoshuaTranslator::translate(const QString /*toTranslate*/)
 {
   return "";
 }
 
-void JoshuaTranslator::setSourceLanguage(const QString langCode)
+void JoshuaTranslator::setSourceLanguage(const QString /*langCode*/)
 {
 }
 

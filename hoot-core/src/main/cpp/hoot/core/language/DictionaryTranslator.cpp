@@ -148,7 +148,7 @@ DictionaryTranslator& DictionaryTranslator::getInstance()
   return *_theInstance;
 }
 
-QString DictionaryTranslator::toEnglish(const QString& input) const
+QString DictionaryTranslator::toEnglish(const QString& input)
 {
   QStringList l = input.split(QRegExp("\\W+"), QString::SkipEmptyParts);
 
@@ -172,13 +172,13 @@ QString DictionaryTranslator::toEnglish(const QString& input) const
   return result;
 }
 
-QStringList DictionaryTranslator::toEnglishAll(const QString& input) const
+QStringList DictionaryTranslator::toEnglishAll(const QString& input)
 {
   QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
   return toEnglishAll(l);
 }
 
-QStringList DictionaryTranslator::toEnglishAll(const QStringList& l) const
+QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
 {
   QStringList result;
   if (l.size() == 0)
@@ -254,7 +254,7 @@ QStringList DictionaryTranslator::toEnglishAll(const QStringList& l) const
   return result;
 }
 
-QString DictionaryTranslator::toTitleCase(const QString& input) const
+QString DictionaryTranslator::toTitleCase(const QString& input)
 {
   if (_titler == 0)
   {
@@ -270,7 +270,7 @@ QString DictionaryTranslator::toTitleCase(const QString& input) const
   return _transform(_titler, input);
 }
 
-QString DictionaryTranslator::translateStreet(const QString& input) const
+QString DictionaryTranslator::translateStreet(const QString& input)
 {
   QStringList l = input.split(QRegExp("\\W+"), QString::SkipEmptyParts);
 
@@ -301,7 +301,7 @@ QString DictionaryTranslator::translateStreet(const QString& input) const
   return toTitleCase(result);
 }
 
-QString DictionaryTranslator::transliterateToLatin(const QString& input) const
+QString DictionaryTranslator::transliterateToLatin(const QString& input)
 {
   if (_transliterator == 0)
   {
@@ -338,7 +338,7 @@ QString DictionaryTranslator::_transform(Transliterator* t, const QString& input
   return result;
 }
 
-QString DictionaryTranslator::translate(const QString toTranslate) const
+QString DictionaryTranslator::translate(const QString toTranslate)
 {
   return toEnglish(toTranslate);
 }

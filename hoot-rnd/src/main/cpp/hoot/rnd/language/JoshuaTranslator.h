@@ -30,7 +30,7 @@ public:
   JoshuaTranslator();
   ~JoshuaTranslator();
 
-  virtual QString translate(const QString toTranslate) const;
+  virtual QString translate(const QString toTranslate);
   virtual void setSourceLanguage(const QString langCode);
 
 private:

@@ -66,7 +66,7 @@ public:
   /**
    * Translates the given input string into a translation & transliteration of the input.
    */
-  QString toEnglish(const QString& input) const;
+  QString toEnglish(const QString& input);
 
   /**
    * Converts the given input string into all possible known translations. E.g.
@@ -76,20 +76,20 @@ public:
    *   "hospital umum",
    *   "general hospital" }
    */
-  QStringList toEnglishAll(const QString& input) const;
+  QStringList toEnglishAll(const QString& input);
 
   /**
    * Similar to above, but the input has already been tokenized.
    */
-  QStringList toEnglishAll(const QStringList& l) const;
+  QStringList toEnglishAll(const QStringList& l);
 
-  QString toTitleCase(const QString& input) const;
+  QString toTitleCase(const QString& input);
 
-  QString transliterateToLatin(const QString& input) const;
+  QString transliterateToLatin(const QString& input);
 
-  QString translateStreet(const QString& input) const;
+  QString translateStreet(const QString& input);
 
-  virtual QString translate(const QString toTranslate) const;
+  virtual QString translate(const QString toTranslate);
 
   virtual void setSourceLanguage(const QString /*langCode*/) {}
 
@@ -98,7 +98,7 @@ private:
   char* _buffer;
   int _bufferLength;
   Tgs::LruCache<QString, QString> _cache;
-  static boost::shared_ptr<Translator> _theInstance;
+  static boost::shared_ptr<DictionaryTranslator> _theInstance;
   boost::shared_ptr<JsonDictionary> _dictionary;
   QSet<QString> _streetTypes;
   Transliterator* _transliterator;
