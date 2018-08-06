@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/criterion/RelationCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -46,6 +47,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/CriterionCountVisitor.h>
 
 // standard
 #include <algorithm>
@@ -180,6 +182,21 @@ MemChangesetProviderPtr DiffConflator::getTagDiff()
 
 void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 {
+  // Check map to make sure it contains only Unknown1 elements
+  ElementCriterionPtr pStatusCrit(new StatusCriterion(Status::Unknown2));
+  CriterionCountVisitor countVtor(pStatusCrit);
+  pMap->visitRo(countVtor);
+
+  if (countVtor.getCount() > 0)
+  {
+    // Not something a user can generally cause - more likely it's a misuse
+    // of this class.
+    LOG_ERROR("Map elements with Status::Unknown2 found when storing "
+              "original map for diff conflation. This can cause unpredictable "
+              "results. The original map should contain only Status::Unknown1 "
+              "elements. ");
+  }
+
   // Use the copy constructor
   _pOriginalMap.reset(new OsmMap(pMap));
 }
