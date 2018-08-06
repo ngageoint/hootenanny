@@ -7,6 +7,7 @@
 
 // Qt
 #include <QTcpSocket>
+#include <QByteArray>
 
 namespace hoot
 {
@@ -22,20 +23,36 @@ namespace hoot
     Year = {2015}
   }
  */
-class JoshuaTranslator : public ToEnglishTranslator
+class JoshuaTranslator : public QObject, public ToEnglishTranslator
 {
+  Q_OBJECT
 
 public:
 
-  JoshuaTranslator();
+  explicit JoshuaTranslator(const QString host, const int port, QObject* parent = 0);
   ~JoshuaTranslator();
 
-  virtual QString translate(const QString toTranslate);
   virtual void setSourceLanguage(const QString langCode);
+  virtual void translate(const QString textToTranslate);
+  virtual QString getTranslatedText() const { return _translatedText; }
+
+signals:
+
+  void translationComplete();
+
+public slots:
+
+  //void connected();
+  //void disconnected();
+  //void bytesWritten(qint64 bytes);
+  void readyRead();
+  void error(QAbstractSocket::SocketError error);
 
 private:
 
-  QString _sourceLang;
+  boost::shared_ptr<QTcpSocket> _client;
+  QByteArray _returnedData;
+  QString _translatedText;
 };
 
 }

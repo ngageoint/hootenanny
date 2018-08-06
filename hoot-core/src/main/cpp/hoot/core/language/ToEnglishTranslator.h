@@ -1,7 +1,7 @@
 
 
-#ifndef LANGUAGE_TRANSLATOR_H
-#define LANGUAGE_TRANSLATOR_H
+#ifndef TO_ENGLISH_TRANSLATOR_H
+#define TO_ENGLISH_TRANSLATOR_H
 
 // Qt
 #include <QString>
@@ -16,10 +16,13 @@ class ToEnglishTranslator
 {
 public:
 
-  virtual QString translate(const QString toTranslate) = 0;
-  virtual void setSourceLanguage(const QString langCode);
+  virtual ~ToEnglishTranslator() {}
+
+  virtual void setSourceLanguage(const QString langCode) = 0;
+  virtual void translate(const QString textToTranslate) = 0;
+  virtual QString getTranslatedText() const = 0;
 };
 
 }
 
-#endif // LANGUAGE_TRANSLATOR_H
+#endif // TO_ENGLISH_TRANSLATOR_H

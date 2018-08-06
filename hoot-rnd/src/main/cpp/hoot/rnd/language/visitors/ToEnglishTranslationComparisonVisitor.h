@@ -6,9 +6,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/StringDistance.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-
-// Qt
-#include <QTcpSocket>
+#include <hoot/rnd/language/JoshuaTranslator.h>
 
 namespace hoot
 {
@@ -17,8 +15,11 @@ namespace hoot
  * This is used to check hoot tag language translations against existing known (assumed?)
  * correct translations; e.g. compare hoot's English translation of a tag to that of name:en
  */
-class ToEnglishTranslationComparisonVisitor : public ElementOsmMapVisitor, public Configurable
+class ToEnglishTranslationComparisonVisitor : public QObject, public ElementOsmMapVisitor,
+   public Configurable
 {
+
+  Q_OBJECT
 
 public:
 
@@ -34,14 +35,23 @@ public:
   virtual QString getDescription() const
   { return "Scores tag language translations against known translated tags"; }
 
+private slots:
+
+  void _translationComplete();
+
 private:
 
   StringDistancePtr _translationScorer;
-  boost::shared_ptr<QTcpSocket> _translationClient;
+  boost::shared_ptr<JoshuaTranslator> _translationClient;
   QStringList _preTranslatedTagKeys;
   QStringList _toTranslateTagKeys;
+  QString _toTranslateVal;
+  QString _preTranslatedVal;
+  QString _toTranslateNameKey;
+  ElementPtr _element;
 
-  void _translate(Tags& tags, const QString preTranslatedNameKey, const QString toTranslateNameKey);
+  void _translate(const ElementPtr& e, const QString preTranslatedNameKey,
+                  const QString toTranslateNameKey);
 };
 
 }

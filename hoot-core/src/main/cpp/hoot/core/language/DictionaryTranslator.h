@@ -28,9 +28,6 @@
 #ifndef DICTIONARY_TRANSLATOR_H
 #define DICTIONARY_TRANSLATOR_H
 
-// Hoot
-#include <hoot/core/language/ToEnglishTranslator.h>
-
 // Qt
 #include <QRegExp>
 #include <QSet>
@@ -53,7 +50,7 @@ class JsonDictionary;
  * any concept of grammar. If the word is unknown it is assumed to be a pronoun and will be
  * transliterated into latin characters.
  */
-class DictionaryTranslator : public ToEnglishTranslator
+class DictionaryTranslator
 {
 public:
 
@@ -88,10 +85,6 @@ public:
   QString transliterateToLatin(const QString& input);
 
   QString translateStreet(const QString& input);
-
-  virtual QString translate(const QString toTranslate);
-
-  virtual void setSourceLanguage(const QString /*langCode*/) {}
 
 private:
 

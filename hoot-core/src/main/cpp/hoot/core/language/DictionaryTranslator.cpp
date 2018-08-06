@@ -338,9 +338,4 @@ QString DictionaryTranslator::_transform(Transliterator* t, const QString& input
   return result;
 }
 
-QString DictionaryTranslator::translate(const QString toTranslate)
-{
-  return toEnglish(toTranslate);
-}
-
 }
