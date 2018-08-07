@@ -74,6 +74,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.InternalCommand;
 // import hoot.services.command.common.ZIPDirectoryContentsCommand;
 // import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.osm.map.MapResource;
@@ -94,6 +95,9 @@ public class GrailResource {
 
     @Autowired
     private GrailCommandFactory grailCommandFactory;
+
+    @Autowired
+    private PullOsmosisCommandFactory OsmosisCommandFactory;
 
     public GrailResource() {}
 
@@ -261,11 +265,11 @@ public class GrailResource {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The main OSM API server is offline. Try again later").build();
         }
 
-        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-        logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
-        }
+        // APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
+        // logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
+        // if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
+        //     return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+        // }
 
         GrailParams params = new GrailParams();
         params.setBounds(bbox);
@@ -285,8 +289,11 @@ public class GrailResource {
             params.setOutput(internetOSMFile.getAbsolutePath());
             // params.setPullUrl(MAIN_OSMAPI_PULL_URL);
             params.setPullUrl(MAIN_OVERPASS_URL);
-            ExternalCommand getInternetOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            workflow.add(getInternetOSM);
+            // ExternalCommand getInternetOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
+            // workflow.add(getInternetOSM);
+
+            InternalCommand getOsmosisOSM = OsmosisCommandFactory.build(jobId,params,this.getClass());
+            workflow.add(getOsmosisOSM);
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
