@@ -6,6 +6,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/rnd/language/JoshuaTranslator.h>
+#include <hoot/core/algorithms/string/StringTokenizer.h>
 
 namespace hoot
 {
@@ -24,6 +25,7 @@ public:
   static std::string className() { return "hoot::ToEnglishTranslationVisitor"; }
 
   ToEnglishTranslationVisitor();
+  ~ToEnglishTranslationVisitor();
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
@@ -44,6 +46,9 @@ private:
   QString _toTranslateTagKey;
   ElementPtr _element;
   bool _skipPreTranslatedTags;
+  StringTokenizer _strTokenizer;
+  bool _skipWordsInEnglishDict;
+  long _numTranslations;
 
   void _translate(const ElementPtr& e, const QString toTranslateTagKey);
 };

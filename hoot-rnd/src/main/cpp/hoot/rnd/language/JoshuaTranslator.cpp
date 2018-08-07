@@ -43,7 +43,7 @@ void JoshuaTranslator::translate(const QString textToTranslate)
     throw HootException("Language translation client has no active connection to service.");
   }
 
-  LOG_VARD(textToTranslate);
+  LOG_VART(textToTranslate);
   _returnedData.clear();
   //joshua expects a newline at the end of what's passed in
   _client->write(QString(textToTranslate + "\n").toUtf8());
@@ -60,14 +60,14 @@ void JoshuaTranslator::_readyRead()
   {
     _returnedData.append(_client->readAll());
   }
-  LOG_VARD(_returnedData.size());
+  LOG_VART(_returnedData.size());
 
   //server returns a single line of translated text with a newline at the end
   if (_returnedData.endsWith('\n'))
   {
     //106 = UTF-8
     _translatedText = QTextCodec::codecForMib(106)->toUnicode(_returnedData).trimmed();
-    LOG_VARD(_translatedText);
+    LOG_VART(_translatedText);
     emit translationComplete();
   }
 }

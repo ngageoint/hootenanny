@@ -81,6 +81,10 @@ public:
 
   void setConfiguration(const Settings& conf);
 
+  bool isInDictionary(const QString word);
+
+  bool areAllInDictionary(const QStringList words);
+
 private:
 
   static MostEnglishNamePtr _theInstance;

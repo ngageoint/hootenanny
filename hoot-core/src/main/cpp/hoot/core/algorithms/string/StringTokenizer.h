@@ -40,6 +40,7 @@ namespace hoot
 class StringTokenizer : public Configurable
 {
 public:
+
   StringTokenizer(QString sepRegex);
 
   StringTokenizer();
@@ -49,6 +50,7 @@ public:
   QStringList tokenize(QString s) const;
 
 private:
+
   QRegExp _sep;
   bool _keepNonWords;
   int _minSize;

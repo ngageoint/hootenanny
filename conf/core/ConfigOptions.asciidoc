@@ -1223,11 +1223,20 @@ StringDistance implementation used to score translated tag values for comparison
 === language.translation.skip.pre.translated.tags
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 When performing to English translation with ToEnglishTranslationVisitor, the translator will skip
 the translation of any tags whose owning elements have a pre-translated English tag
 (key=<tag name>:en).
+
+=== language.translation.skip.words.in.english.dictionary
+
+* Data Type: bool
+* Default Value: `true`
+
+When performing to English translation with ToEnglishTranslationVisitor or
+ToEnglishTranslationComparisonVisitor, the translator will skip the translation of any tags whose
+value is in an English dictionary.
 
 === language.translation.to.translate.tag.keys
 

@@ -16,8 +16,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationComparisonVisitor)
 
-ToEnglishTranslationComparisonVisitor::ToEnglishTranslationComparisonVisitor()
+ToEnglishTranslationComparisonVisitor::ToEnglishTranslationComparisonVisitor() :
+_skipWordsInEnglishDict(true),
+_numTranslations(0)
 {
+}
+
+ToEnglishTranslationComparisonVisitor::~ToEnglishTranslationComparisonVisitor()
+{
+  LOG_INFO("Total number of to English tag value translations made: " << _numTranslations);
 }
 
 void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& conf)
@@ -36,6 +43,8 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
       QString("When preforming language translation comparison, the number of pre-translated ") +
       QString("tag keys must match that of the keys of the tags to be translated."));
   }
+
+  _skipWordsInEnglishDict = opts.getLanguageTranslationSkipWordsInEnglishDictionary();
 
   _translationClient.reset(
     new JoshuaTranslator(
@@ -71,9 +80,11 @@ void ToEnglishTranslationComparisonVisitor::_translate(const ElementPtr& e,
     _preTranslatedVal = _preTranslatedVal.replace("\n", "");
     LOG_VARD(_preTranslatedVal);
 
-    if (MostEnglishName::getInstance()->scoreName(_toTranslateVal) == 1.0)
+    if (_skipWordsInEnglishDict &&
+        MostEnglishName::getInstance()->scoreName(_toTranslateVal) == 1.0)
     {
-      LOG_DEBUG("Tag value to be translated determined to already be in English.");
+      LOG_DEBUG(
+        "Tag value to be translated determined to already be in English: " << _toTranslateVal);
       return;
     }
 
@@ -85,6 +96,7 @@ void ToEnglishTranslationComparisonVisitor::_translationComplete()
 {
   const QString translatedVal = _translationClient->getTranslatedText();
   LOG_VARD(translatedVal);
+  _numTranslations++;
   Tags& tags = _element->getTags();
   //not sure if locale is needed for the comparison yet
   //QLocale::setDefault(QLocale(QLocale::German, QLocale::Germany));

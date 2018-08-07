@@ -17,8 +17,15 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationVisitor)
 
 ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
-_skipPreTranslatedTags(true)
+_skipPreTranslatedTags(false),
+_skipWordsInEnglishDict(true),
+_numTranslations(0)
 {
+}
+
+ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
+{
+  LOG_INFO("Total number of to English tag value translations made: " << _numTranslations);
 }
 
 void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
@@ -33,6 +40,7 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   _translationClient->setSourceLanguage(opts.getLanguageTranslationSourceLanguage());
   _toTranslateTagKeys = opts.getLanguageTranslationToTranslateTagKeys();
   _skipPreTranslatedTags = opts.getLanguageTranslationSkipPreTranslatedTags();
+  _skipWordsInEnglishDict = opts.getLanguageTranslationSkipWordsInEnglishDictionary();
 }
 
 void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
@@ -53,12 +61,33 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     _toTranslateTagKey = toTranslateTagKey;
     _toTranslateVal = tags.get(toTranslateTagKey).trimmed();
     _toTranslateVal = _toTranslateVal.replace("\n", "");
-    LOG_VARD(_toTranslateVal);
+    LOG_VART(_toTranslateVal);
 
-    if (MostEnglishName::getInstance()->scoreName(_toTranslateVal) == 1.0)
+    if (_skipWordsInEnglishDict)
     {
-      LOG_DEBUG("Tag value to be translated determined to already be in English.");
-      return;
+      const double englishNameScore = MostEnglishName::getInstance()->scoreName(_toTranslateVal);
+      LOG_TRACE("English name score: " << englishNameScore << " for: " << _toTranslateVal);
+      //const bool valInEngDict = MostEnglishName::getInstance()->isInDictionary(_toTranslateVal);
+      //const bool valInEngDict =
+        //MostEnglishName::getInstance()->areAllInDictionary(_strTokenizer.tokenize(_toTranslateVal));
+  //    QString msg = "Tag value ";
+  //    if (valInEngDict)
+  //    {
+  //      msg += "in ";
+  //    }
+  //    else
+  //    {
+  //      msg += "not in ";
+  //    }
+  //    msg += "English dictionary; val: " + _toTranslateVal;
+  //    LOG_DEBUG(msg);
+      if (englishNameScore == 1.0)
+      //if (valInEngDict)
+      {
+        LOG_DEBUG(
+          "Tag value to be translated determined to already be in English: " << _toTranslateVal);
+        return;
+      }
     }
 
     const QString preTranslatedTagKey = _toTranslateTagKey + ":en";
@@ -68,7 +97,9 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     }
     else
     {
-      LOG_DEBUG("Skipping pre-translated tag: " << preTranslatedTagKey << "=" << _toTranslateVal);
+      LOG_DEBUG(
+        "Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" <<
+        _toTranslateVal);
     }
   }
 }
@@ -76,22 +107,21 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
 void ToEnglishTranslationVisitor::_translationComplete()
 {
   const QString translatedVal = _translationClient->getTranslatedText();
-  LOG_VARD(translatedVal);
-  //not sure if locale is needed for the comparison yet
-  //QLocale::setDefault(QLocale(QLocale::German, QLocale::Germany));
-  //QLocale::setDefault(QLocale(QLocale::German));
-  //const int nameComparison = translatedName.localeAwareCompare(name);
+  LOG_VART(translatedVal);
   const int strComparison = translatedVal.compare(_toTranslateVal, Qt::CaseInsensitive);
-  LOG_VARD(strComparison);
+  LOG_VART(strComparison);
   //If the translator merely returned the same string we passed in, then no point in recording
   //it.
   if (strComparison != 0)
   {
+    LOG_DEBUG("Translated: " << _toTranslateVal << " to: " << translatedVal);
     _element->getTags().appendValue("hoot:translated:" + _toTranslateTagKey + ":en", translatedVal);
+    _numTranslations++;
   }
   else
   {
-    LOG_DEBUG("Translator returned translation with same value as text passed in.");
+    LOG_DEBUG(
+      "Translator returned translation with same value as text passed in: " << translatedVal);
   }
 }
 

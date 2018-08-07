@@ -123,6 +123,23 @@ const QSet<QString>& MostEnglishName::_getWords()
   return _englishWords;
 }
 
+bool MostEnglishName::isInDictionary(const QString word)
+{
+  return _getWords().contains(word.toLower());
+}
+
+bool MostEnglishName::areAllInDictionary(const QStringList words)
+{
+  for (int i = 0; i < words.size(); i++)
+  {
+    if (!_getWords().contains(words.at(i).toLower()))
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 long MostEnglishName::_loadEnglishWords(QString path)
 {
   QFile fp(path);
