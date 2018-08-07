@@ -28,10 +28,6 @@ QObject(parent)
   }
 }
 
-JoshuaTranslator::~JoshuaTranslator()
-{
-}
-
 void JoshuaTranslator::setSourceLanguage(const QString langCode)
 {
   if (langCode.toLower() != "de")
@@ -40,7 +36,7 @@ void JoshuaTranslator::setSourceLanguage(const QString langCode)
   }
 }
 
-void JoshuaTranslator::translate(const QString /*textToTranslate*/)
+void JoshuaTranslator::translate(const QString textToTranslate)
 {
   if (_client->state() != QAbstractSocket::ConnectedState)
   {
@@ -52,7 +48,10 @@ void JoshuaTranslator::translate(const QString /*textToTranslate*/)
   //joshua expects a newline at the end of what's passed in
   _client->write(QString(textToTranslate + "\n").toUtf8());
   const bool readyRead = _client->waitForReadyRead(5000);
-  LOG_VARD(readyRead);
+  if (!readyRead)
+  {
+    throw HootException("Language translation server request timed out.");
+  }
 }
 
 void JoshuaTranslator::_readyRead()

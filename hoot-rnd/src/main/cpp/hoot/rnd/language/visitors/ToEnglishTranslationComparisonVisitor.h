@@ -26,7 +26,6 @@ public:
   static std::string className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
 
   ToEnglishTranslationComparisonVisitor();
-  ~ToEnglishTranslationComparisonVisitor();
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
@@ -47,11 +46,11 @@ private:
   QStringList _toTranslateTagKeys;
   QString _toTranslateVal;
   QString _preTranslatedVal;
-  QString _toTranslateNameKey;
+  QString _toTranslateTagKey;
   ElementPtr _element;
 
-  void _translate(const ElementPtr& e, const QString preTranslatedNameKey,
-                  const QString toTranslateNameKey);
+  void _translate(const ElementPtr& e, const QString preTranslatedTagKey,
+                  const QString toTranslateTagKey);
 };
 
 }

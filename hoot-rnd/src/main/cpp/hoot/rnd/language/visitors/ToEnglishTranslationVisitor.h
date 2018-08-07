@@ -4,11 +4,8 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/StringDistance.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-
-// Qt
-#include <QTcpSocket>
+#include <hoot/rnd/language/JoshuaTranslator.h>
 
 namespace hoot
 {
@@ -16,15 +13,17 @@ namespace hoot
 /**
  *
  */
-class ToEnglishTranslationVisitor : public ElementOsmMapVisitor, public Configurable
+class ToEnglishTranslationVisitor : public QObject, public ElementOsmMapVisitor,
+   public Configurable
 {
+
+  Q_OBJECT
 
 public:
 
   static std::string className() { return "hoot::ToEnglishTranslationVisitor"; }
 
   ToEnglishTranslationVisitor();
-  ~ToEnglishTranslationVisitor();
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
@@ -33,9 +32,20 @@ public:
   virtual QString getDescription() const
   { return "TODO"; }
 
+private slots:
+
+  void _translationComplete();
+
 private:
 
+  boost::shared_ptr<JoshuaTranslator> _translationClient;
+  QStringList _toTranslateTagKeys;
+  QString _toTranslateVal;
+  QString _toTranslateTagKey;
+  ElementPtr _element;
+  bool _skipPreTranslatedTags;
 
+  void _translate(const ElementPtr& e, const QString toTranslateTagKey);
 };
 
 }

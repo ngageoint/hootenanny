@@ -15,7 +15,6 @@ namespace hoot
 /**
  *
  *
- * //TODO: move this to separate Joshua translator later
  * @article{post2015joshua,
     Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
     Journal = {The Prague Bulletin of Mathematical Linguistics},
@@ -29,8 +28,7 @@ class JoshuaTranslator : public QObject, public ToEnglishTranslator
 
 public:
 
-  explicit JoshuaTranslator(const QString host, const int port, QObject* parent = 0);
-  ~JoshuaTranslator();
+  JoshuaTranslator(const QString host, const int port, QObject* parent = 0);
 
   virtual void setSourceLanguage(const QString langCode);
   virtual void translate(const QString textToTranslate);
@@ -42,9 +40,6 @@ signals:
 
 private slots:
 
-  void _connected();
-  void _disconnected();
-  void _bytesWritten(qint64 bytes);
   void _readyRead();
   void _error(QAbstractSocket::SocketError error);
 

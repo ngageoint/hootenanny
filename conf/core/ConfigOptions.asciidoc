@@ -1220,15 +1220,27 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 
 StringDistance implementation used to score translated tag values for comparison
 
-=== language.translation.comparison.to.translate.tag.keys
+=== language.translation.skip.pre.translated.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+When performing to English translation with ToEnglishTranslationVisitor, the translator will skip
+the translation of any tags whose owning elements have a pre-translated English tag
+(key=<tag name>:en).
+
+=== language.translation.to.translate.tag.keys
 
 * Data Type: list
 * Default Value:
 ** ``
 
-A list of tag keys for tag translation comparison against pre-translated tags.  The list ordering
-should correspond to that of language.translation.comparison.pretranslated.tag.keys.  Separate
-keys with a ';' and surround in quotes when passing in from the command line.
+A list of keys of tags whose values are to be translated to English when using the
+ToEnglishTranslationVisitor or the ToEnglishTranslationComparisonVisitor.  When using the
+ToEnglishTranslationComparisonVisitor, the translations of these tags are compared against
+the list of pre-translated tags in the option language.translation.comparison.pretranslated.tag.keys
+(list sizes should be equal to each other).  Separate keys with a ';' and surround in quotes when
+passing in from the command line.
 
 === language.translation.service.host
 
