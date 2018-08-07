@@ -30,6 +30,7 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
   _translationScorer.reset(
     Factory::getInstance().constructObject<StringDistance>(
       opts.getLanguageTranslationComparisonScorer()));
+
   _preTranslatedTagKeys = opts.getLanguageTranslationComparisonPretranslatedTagKeys();
   _toTranslateTagKeys = opts.getLanguageTranslationComparisonToTranslateTagKeys();
   if (_preTranslatedTagKeys.size() != _toTranslateTagKeys.size())

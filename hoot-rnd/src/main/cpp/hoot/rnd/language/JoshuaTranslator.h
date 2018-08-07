@@ -40,13 +40,13 @@ signals:
 
   void translationComplete();
 
-public slots:
+private slots:
 
-  //void connected();
-  //void disconnected();
-  //void bytesWritten(qint64 bytes);
-  void readyRead();
-  void error(QAbstractSocket::SocketError error);
+  void _connected();
+  void _disconnected();
+  void _bytesWritten(qint64 bytes);
+  void _readyRead();
+  void _error(QAbstractSocket::SocketError error);
 
 private:
 
