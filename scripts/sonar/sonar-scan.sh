@@ -84,6 +84,9 @@ OPTIONS=(
     "-Dsonar.exclusions=$SONAR_EXCLUSIONS"
     "-Dsonar.host.url=$SONAR_HOST_URL"
     "-Dsonar.sources=$SONAR_SOURCES"
+    "-Dsonar.issue.ignore.multicriteria=j1n1"
+    "-Dsonar.issue.ignore.multicriteria.j1n1.ruleKey=cpp:s106"
+    "-Dsonar.issue.ignore.multicriteria.j1n1.resourceKey=./hoot-core/src/main/cpp/hoot/core/cmd/*.cpp"
 )
 
 # Optional scan parameters based off parameters passed into script

@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/criterion/RelationCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -42,9 +43,11 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/CriterionCountVisitor.h>
 
 // standard
 #include <algorithm>
@@ -177,28 +180,25 @@ MemChangesetProviderPtr DiffConflator::getTagDiff()
   return _pTagChanges;
 }
 
-void DiffConflator::storeOriginalIDs(OsmMapPtr& pMap)
+void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 {
-  // Nodes
-  const NodeMap &nodes = pMap->getNodes();
-  for (HashMap<long, NodePtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  // Check map to make sure it contains only Unknown1 elements
+  ElementCriterionPtr pStatusCrit(new StatusCriterion(Status::Unknown2));
+  CriterionCountVisitor countVtor(pStatusCrit);
+  pMap->visitRo(countVtor);
+
+  if (countVtor.getCount() > 0)
   {
-    _originalIds.insert(ElementId(ElementType::Node, it->first));
+    // Not something a user can generally cause - more likely it's a misuse
+    // of this class.
+    LOG_ERROR("Map elements with Status::Unknown2 found when storing "
+              "original map for diff conflation. This can cause unpredictable "
+              "results. The original map should contain only Status::Unknown1 "
+              "elements. ");
   }
 
-  // Ways
-  const WayMap &ways = pMap->getWays();
-  for (HashMap<long, WayPtr>::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    _originalIds.insert(ElementId(ElementType::Way, it->first));
-  }
-
-  // Relations
-  const RelationMap &relations = pMap->getRelations();
-  for (HashMap<long, RelationPtr>::const_iterator it = relations.begin(); it != relations.end(); ++it)
-  {
-    _originalIds.insert(ElementId(ElementType::Relation, it->first));
-  }
+  // Use the copy constructor
+  _pOriginalMap.reset(new OsmMap(pMap));
 }
 
 void DiffConflator::_calcAndStoreTagChanges()
@@ -225,14 +225,14 @@ void DiffConflator::_calcAndStoreTagChanges()
       // the old element
       ConstElementPtr pOldElement;
       ConstElementPtr pNewElement;
-      if (_originalIds.end() != _originalIds.find(pit->first))
+      if (_pOriginalMap->containsElement(pit->first))
       {
-        pOldElement = _pMap->getElement(pit->first);
+        pOldElement = _pOriginalMap->getElement(pit->first);
         pNewElement = _pMap->getElement(pit->second);
       }
-      else if (_originalIds.end() != _originalIds.find(pit->second))
+      else if (_pOriginalMap->containsElement(pit->second))
       {
-        pOldElement = _pMap->getElement(pit->second);
+        pOldElement = _pOriginalMap->getElement(pit->second);
         pNewElement = _pMap->getElement(pit->first);
       }
       else
@@ -283,13 +283,16 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement,
   // This may seem a little weird, but we want something very specific here.
   // We want the old element as it was... with new tags.
 
-  // Copy the old one
+  // Copy the old one to get the geometry
   ElementPtr pChangeElement (pOldElement->clone());
 
   assert(pChangeElement->getId() == pOldElement->getId());
 
-  // Overwrite all old tags
-  pChangeElement->setTags(pNewElement->getTags());
+  // Need to merge tags into the new element
+  // Keeps all names, chooses tags1 in event of a conflict.
+  Tags newTags = TagComparator::getInstance().overwriteMerge(pNewElement->getTags(),
+                                                             pOldElement->getTags());
+  pChangeElement->setTags(newTags);
 
   // Create the change
   Change newChange(Change::Modify, pChangeElement);
