@@ -63,7 +63,7 @@ function usage() {
     echo " [-o <Sonar Organization, default: 'hootenanny'>]"
     echo " [-p <Sonar GitHub PR>]"
     echo " [-r <GitHub Repository, default: 'ngageoint/hootenanny'>]"
-    echo " [-s <Sonar Sources, default:'./hoot-core,./hoot-js,./hoot-rnd,./tbs,./tgs'>]"
+    echo " [-s <Sonar Sources, default: './hoot-core,./hoot-js,./hoot-rnd,./tbs,./tgs'>]"
     echo " [-t <Sonar Threads>]"
     exit 1
 }
