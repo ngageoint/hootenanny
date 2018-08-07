@@ -33,7 +33,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const
-  { return "Scores tag language translations against known translated tags"; }
+  { return "Scores selected tag value English translations against known translated tags"; }
 
 private slots:
 

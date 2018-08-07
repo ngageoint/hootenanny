@@ -27,7 +27,6 @@ QObject(parent)
 void JoshuaTranslator::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-
   _readServiceMappings(opts.getLanguageTranslationServiceMappingsFile());
 }
 
@@ -39,7 +38,7 @@ void JoshuaTranslator::setSourceLanguage(const QString langCode)
   }
 
   ServiceMapping serviceMapping = _serviceMappings[langCode.toLower()];
-  LOG_VARD(serviceMapping);
+  LOG_VART(serviceMapping);
 
   _client->connectToHost(serviceMapping.host, serviceMapping.port);
   if (!_client->waitForConnected(5000))
@@ -52,7 +51,7 @@ void JoshuaTranslator::setSourceLanguage(const QString langCode)
 
 void JoshuaTranslator::_readServiceMappings(const QString serviceMappingsFile)
 {
-  LOG_VARD(serviceMappingsFile);
+  LOG_VART(serviceMappingsFile);
   if (!serviceMappingsFile.trimmed().isEmpty())
   {
     QFile inputFile(serviceMappingsFile);
@@ -84,6 +83,7 @@ void JoshuaTranslator::_readServiceMappings(const QString serviceMappingsFile)
             "Invalid language service mappings config language code entry: " + lineParts[0]);
         }
         serviceMapping.langPackDir = lineParts[1].trimmed();
+        //TODO: should the dir name be validated?
         if (serviceMapping.langPackDir.isEmpty())
         {
           throw HootException(
@@ -98,7 +98,7 @@ void JoshuaTranslator::_readServiceMappings(const QString serviceMappingsFile)
             "Invalid language service mappings config port entry: " + lineParts[3]);
         }
         _serviceMappings[serviceMapping.langCode] = serviceMapping;
-        LOG_VARD(serviceMapping);
+        LOG_VART(serviceMapping);
       }
     }
     inputFile.close();
@@ -116,6 +116,7 @@ void JoshuaTranslator::translate(const QString textToTranslate)
   _returnedData.clear();
   //joshua expects a newline at the end of what's passed in
   _client->write(QString(textToTranslate + "\n").toUtf8());
+  //this makes the call blocking
   const bool readyRead = _client->waitForReadyRead(5000);
   if (!readyRead)
   {

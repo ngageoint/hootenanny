@@ -12,7 +12,7 @@ namespace hoot
 {
 
 /**
- *
+ * Translates tag values to English
  */
 class ToEnglishTranslationVisitor : public QObject, public ElementOsmMapVisitor,
    public Configurable
@@ -32,7 +32,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Translates selected tag values to English"; }
 
 private slots:
 

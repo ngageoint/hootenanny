@@ -14,7 +14,7 @@ namespace hoot
 {
 
 /**
- *
+ * Translates text from a single source language to English using Joshua.
  *
  * @article{post2015joshua,
     Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
