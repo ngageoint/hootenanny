@@ -43,12 +43,15 @@ private:
 
   StringDistancePtr _translationScorer;
   boost::shared_ptr<JoshuaTranslator> _translationClient;
+
   QStringList _preTranslatedTagKeys;
   QStringList _toTranslateTagKeys;
+
   QString _toTranslateVal;
   QString _preTranslatedVal;
   QString _toTranslateTagKey;
   ElementPtr _element;
+
   bool _skipWordsInEnglishDict;
   long _numTranslations;
 

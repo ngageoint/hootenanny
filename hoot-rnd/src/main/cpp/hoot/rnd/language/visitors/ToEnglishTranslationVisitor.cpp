@@ -8,9 +8,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
 
-// Qt
-//#include <QLocale>
-
 namespace hoot
 {
 
@@ -32,11 +29,10 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _translationClient.reset(
-    new JoshuaTranslator(
-      opts.getLanguageTranslationServiceHost(), opts.getLanguageTranslationServicePort(), this));
+  _translationClient.reset(new JoshuaTranslator(this));
   connect(_translationClient.get(), SIGNAL(translationComplete()), this,
           SLOT(_translationComplete()));
+  _translationClient->setConfiguration(conf);
   _translationClient->setSourceLanguage(opts.getLanguageTranslationSourceLanguage());
   _toTranslateTagKeys = opts.getLanguageTranslationToTranslateTagKeys();
   _skipPreTranslatedTags = opts.getLanguageTranslationSkipPreTranslatedTags();
@@ -67,22 +63,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     {
       const double englishNameScore = MostEnglishName::getInstance()->scoreName(_toTranslateVal);
       LOG_TRACE("English name score: " << englishNameScore << " for: " << _toTranslateVal);
-      //const bool valInEngDict = MostEnglishName::getInstance()->isInDictionary(_toTranslateVal);
-      //const bool valInEngDict =
-        //MostEnglishName::getInstance()->areAllInDictionary(_strTokenizer.tokenize(_toTranslateVal));
-  //    QString msg = "Tag value ";
-  //    if (valInEngDict)
-  //    {
-  //      msg += "in ";
-  //    }
-  //    else
-  //    {
-  //      msg += "not in ";
-  //    }
-  //    msg += "English dictionary; val: " + _toTranslateVal;
-  //    LOG_DEBUG(msg);
       if (englishNameScore == 1.0)
-      //if (valInEngDict)
       {
         LOG_DEBUG(
           "Tag value to be translated determined to already be in English: " << _toTranslateVal);

@@ -1220,6 +1220,13 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 
 StringDistance implementation used to score translated tag values for comparison
 
+=== language.translation.service.mappings.file
+
+* Data Type: string
+* Default Value: `conf/core/language-translation/languageServicePortMappings`
+
+Path to a file which contains information about available to English language translation services
+
 === language.translation.skip.pre.translated.tags
 
 * Data Type: bool
@@ -1251,26 +1258,13 @@ the list of pre-translated tags in the option language.translation.comparison.pr
 (list sizes should be equal to each other).  Separate keys with a ';' and surround in quotes when
 passing in from the command line.
 
-=== language.translation.service.host
-
-* Data Type: string
-* Default Value: `localhost`
-
-Server hosting the language translation service
-
-=== language.translation.service.port
-
-* Data Type: int
-* Default Value: `5674`
-
-Port the server hosting the language translation service is listening on
-
 === language.translation.source.language
 
 * Data Type: string
-* Default Value: `de`
+* Default Value: ``
 
-ISO-639 language code for the source language of the to English translation
+ISO-639-1 language code for the source language of the to English translation;
+https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 
 === levenshtein.distance.alpha
 

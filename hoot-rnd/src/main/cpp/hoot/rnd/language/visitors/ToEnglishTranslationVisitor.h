@@ -41,12 +41,15 @@ private slots:
 private:
 
   boost::shared_ptr<JoshuaTranslator> _translationClient;
+  StringTokenizer _strTokenizer;
+
   QStringList _toTranslateTagKeys;
+
   QString _toTranslateVal;
   QString _toTranslateTagKey;
   ElementPtr _element;
+
   bool _skipPreTranslatedTags;
-  StringTokenizer _strTokenizer;
   bool _skipWordsInEnglishDict;
   long _numTranslations;
 

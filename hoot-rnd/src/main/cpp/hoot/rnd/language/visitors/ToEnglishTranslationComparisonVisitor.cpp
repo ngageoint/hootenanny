@@ -8,9 +8,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
 
-// Qt
-//#include <QLocale>
-
 namespace hoot
 {
 
@@ -46,11 +43,10 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
 
   _skipWordsInEnglishDict = opts.getLanguageTranslationSkipWordsInEnglishDictionary();
 
-  _translationClient.reset(
-    new JoshuaTranslator(
-      opts.getLanguageTranslationServiceHost(), opts.getLanguageTranslationServicePort(), this));
+  _translationClient.reset(new JoshuaTranslator(this));
   connect(_translationClient.get(), SIGNAL(translationComplete()), this,
           SLOT(_translationComplete()));
+  _translationClient->setConfiguration(conf);
   _translationClient->setSourceLanguage(opts.getLanguageTranslationSourceLanguage());
 }
 
@@ -98,10 +94,6 @@ void ToEnglishTranslationComparisonVisitor::_translationComplete()
   LOG_VARD(translatedVal);
   _numTranslations++;
   Tags& tags = _element->getTags();
-  //not sure if locale is needed for the comparison yet
-  //QLocale::setDefault(QLocale(QLocale::German, QLocale::Germany));
-  //QLocale::setDefault(QLocale(QLocale::German));
-  //const int nameComparison = translatedName.localeAwareCompare(name);
   const int strComparison = translatedVal.compare(_toTranslateVal, Qt::CaseInsensitive);
   LOG_VARD(strComparison);
   tags.appendValue("hoot:translated:" + _toTranslateTagKey + ":en", translatedVal);

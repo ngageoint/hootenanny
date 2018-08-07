@@ -1,0 +1,7 @@
+# This is a mapping of to English language translation services to the ports they run on, one per line
+# format: <ISO-639-1 source language code>;<language pack directory>;<service host>;<service port number>
+# keep alphabetized by language code
+# See the language translation section of the Hootenanny Developer's Guide for more information on deploying a to English translation service.
+de;/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18;localhost;5674
+#es;/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18;localhost;5675
+

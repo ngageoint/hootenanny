@@ -4,6 +4,7 @@
 
 // hoot
 #include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QTcpSocket>
@@ -22,17 +23,32 @@ namespace hoot
     Year = {2015}
   }
  */
-class JoshuaTranslator : public QObject, public ToEnglishTranslator
+class JoshuaTranslator : public QObject, public ToEnglishTranslator, public Configurable
 {
   Q_OBJECT
 
 public:
 
-  JoshuaTranslator(const QString host, const int port, QObject* parent = 0);
+  typedef struct ServiceMapping
+  {
+    public:
+
+      QString langCode;
+      QString langPackDir;
+      QString host;
+      int port;
+
+      QString toString() const
+      { return langCode + ";" + langPackDir + ";" + host + ";" + QString::number(port); }
+  } ServiceMapping;
+
+  JoshuaTranslator(QObject* parent = 0);
 
   virtual void setSourceLanguage(const QString langCode);
   virtual void translate(const QString textToTranslate);
   virtual QString getTranslatedText() const { return _translatedText; }
+
+  virtual void setConfiguration(const Settings& conf);
 
 signals:
 
@@ -48,6 +64,9 @@ private:
   boost::shared_ptr<QTcpSocket> _client;
   QByteArray _returnedData;
   QString _translatedText;
+  QMap<QString, ServiceMapping> _serviceMappings;
+
+  void _readServiceMappings(const QString serviceMappingsFile);
 };
 
 }

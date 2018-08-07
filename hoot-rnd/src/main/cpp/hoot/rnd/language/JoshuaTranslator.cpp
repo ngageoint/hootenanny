@@ -4,14 +4,16 @@
 // hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QTextCodec>
+#include <QFile>
 
 namespace hoot
 {
 
-JoshuaTranslator::JoshuaTranslator(const QString host, const int port, QObject* parent) :
+JoshuaTranslator::JoshuaTranslator(QObject* parent) :
 QObject(parent)
 {
   _client.reset(new QTcpSocket(this));
@@ -20,19 +22,86 @@ QObject(parent)
   connect(_client.get(), SIGNAL(readyRead()), this, SLOT(_readyRead()));
   connect(_client.get(), SIGNAL(error(QAbstractSocket::SocketError)), this,
           SLOT(_error(QAbstractSocket::SocketError)));
+}
 
-  _client->connectToHost(host, port);
-  if (!_client->waitForConnected(5000))
-  {
-    throw HootException("Unable to connect to the language translation service.");
-  }
+void JoshuaTranslator::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts(conf);
+
+  _readServiceMappings(opts.getLanguageTranslationServiceMappingsFile());
 }
 
 void JoshuaTranslator::setSourceLanguage(const QString langCode)
 {
-  if (langCode.toLower() != "de")
+  if (!_serviceMappings.contains(langCode.toLower()))
   {
-    throw HootException("Unsupported source translation language.");
+    throw HootException("Unsupported source translation language: " + langCode);
+  }
+
+  ServiceMapping serviceMapping = _serviceMappings[langCode.toLower()];
+  LOG_VARD(serviceMapping);
+
+  _client->connectToHost(serviceMapping.host, serviceMapping.port);
+  if (!_client->waitForConnected(5000))
+  {
+    throw HootException(
+      "Unable to connect to the language translation service at host: " + serviceMapping.host +
+      " and port: " + QString::number(serviceMapping.port));
+  }
+}
+
+void JoshuaTranslator::_readServiceMappings(const QString serviceMappingsFile)
+{
+  LOG_VARD(serviceMappingsFile);
+  if (!serviceMappingsFile.trimmed().isEmpty())
+  {
+    QFile inputFile(serviceMappingsFile);
+    if (!inputFile.open(QIODevice::ReadOnly))
+    {
+      throw HootException(QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
+    }
+    while (!inputFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
+      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
+      {
+        const QStringList lineParts = line.split(";");
+        if (!lineParts.size() == 4)
+        {
+          throw HootException("Invalid language service mappings config entry: " + line);
+        }
+        ServiceMapping serviceMapping;
+        serviceMapping.host = lineParts[2].trimmed().toLower();
+        if (serviceMapping.host.isEmpty())
+        {
+          throw HootException(
+            "Invalid language service mappings config host entry: " + lineParts[2]);
+        }
+        serviceMapping.langCode = lineParts[0].trimmed().toLower();
+        if (serviceMapping.langCode.isEmpty())
+        {
+          throw HootException(
+            "Invalid language service mappings config language code entry: " + lineParts[0]);
+        }
+        serviceMapping.langPackDir = lineParts[1].trimmed();
+        if (serviceMapping.langPackDir.isEmpty())
+        {
+          throw HootException(
+            "Invalid language service mappings config language pack directory entry: " +
+            lineParts[1]);
+        }
+        bool ok = false;
+        serviceMapping.port = lineParts[3].trimmed().toInt(&ok);
+        if (!ok)
+        {
+          throw HootException(
+            "Invalid language service mappings config port entry: " + lineParts[3]);
+        }
+        _serviceMappings[serviceMapping.langCode] = serviceMapping;
+        LOG_VARD(serviceMapping);
+      }
+    }
+    inputFile.close();
   }
 }
 
