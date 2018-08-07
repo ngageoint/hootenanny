@@ -12,7 +12,7 @@ SONAR_HOST_URL="https://sonarcloud.io"
 SONAR_LOGIN=""
 SONAR_ORG="hootenanny"
 SONAR_PROJECT="hoot"
-SONAR_SOURCES="./hoot-core,./hoot-cmd,./hoot-test,./hoot-js,./hoot-rnd,./tbs,./tgs"
+SONAR_SOURCES="./hoot-core,./hoot-js,./hoot-rnd,./tbs,./tgs"
 SONAR_THREADS="$(nproc)"
 
 # Getting parameters from the command line.
@@ -63,7 +63,7 @@ function usage() {
     echo " [-o <Sonar Organization, default: 'hootenanny'>]"
     echo " [-p <Sonar GitHub PR>]"
     echo " [-r <GitHub Repository, default: 'ngageoint/hootenanny'>]"
-    echo " [-s <Sonar Sources, default: './hoot-core,./hoot-cmd,./hoot-test,./hoot-js,./hoot-rnd,./tbs,./tgs'>]"
+    echo " [-s <Sonar Sources, default:'./hoot-core,./hoot-js,./hoot-rnd,./tbs,./tgs'>]"
     echo " [-t <Sonar Threads>]"
     exit 1
 }
