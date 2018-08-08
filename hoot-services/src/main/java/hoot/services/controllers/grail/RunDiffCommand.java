@@ -26,7 +26,7 @@
  */
 package hoot.services.controllers.grail;
 
-import java.io.File;
+// import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,13 +37,12 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
-import hoot.services.geo.BoundingBox;
+// import hoot.services.geo.BoundingBox;
 
 
 class RunDiffCommand extends GrailCommand {
     private static final Logger logger = LoggerFactory.getLogger(RunDiffCommand.class);
 
-    // RunDiffCommand(String jobId, File input1, File input2, File outputFile, String debugLevel, Class<?> caller) {
     RunDiffCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId,params);
 

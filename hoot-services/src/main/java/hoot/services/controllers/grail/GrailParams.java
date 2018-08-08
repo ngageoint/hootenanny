@@ -54,6 +54,12 @@ public class GrailParams {
     @JsonProperty("pushUrl")
     private String pushUrl;
 
+    @JsonProperty("maxBBoxSize")
+    private Double maxSize;
+
+    @JsonProperty("capabilitiesUrl")
+    private String capabilitiesUrl;
+
 
     public String getBounds() {
         return bounds;
@@ -111,6 +117,22 @@ public class GrailParams {
         this.pullUrl = pullUrl;
     }
 
+    public Double getMaxBBoxSize() {
+        return (this.maxSize == null) ? 0.25 : maxSize;
+    }
+
+    public void setMaxBBoxSize(Double maxSize) {
+        this.maxSize = maxSize;
+    }
+
+    public String getCapabilitiesUrl() {
+        return capabilitiesUrl;
+    }
+
+    public void setCapabilitiesUrl(String capabilitiesUrl) {
+        this.capabilitiesUrl = capabilitiesUrl;
+    }
+
 
     @Override
     public String toString() {
@@ -122,6 +144,8 @@ public class GrailParams {
                 ", output='" + output + '\'' +
                 ", pushUrl='" + pushUrl + '\'' +
                 ", pullUrl='" + pullUrl + '\'' +
+                ", capabilitiesUrl='" + capabilitiesUrl + '\'' +
+                ", maxBBoxSize='" + maxSize + '\'' +
                 '}';
     }
 }
