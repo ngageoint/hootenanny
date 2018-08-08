@@ -44,8 +44,9 @@ void JoshuaTranslator::setSourceLanguage(const QString langCode)
   if (!_client->waitForConnected(5000))
   {
     throw HootException(
-      "Unable to connect to the language translation service at host: " + serviceMapping.host +
-      " and port: " + QString::number(serviceMapping.port));
+      "Unable to connect to the language translation service for language: " +
+      serviceMapping.langCode + " at " + serviceMapping.host + ":" +
+      QString::number(serviceMapping.port));
   }
 }
 
@@ -83,7 +84,8 @@ void JoshuaTranslator::_readServiceMappings(const QString serviceMappingsFile)
             "Invalid language service mappings config language code entry: " + lineParts[0]);
         }
         serviceMapping.langPackDir = lineParts[1].trimmed();
-        //TODO: should the dir name be validated?
+        //TODO: should the dir name be validated to match the Joshua lang pack dir naming
+        //convention?
         if (serviceMapping.langPackDir.isEmpty())
         {
           throw HootException(

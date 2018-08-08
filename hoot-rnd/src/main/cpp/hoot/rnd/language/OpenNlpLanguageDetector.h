@@ -9,7 +9,11 @@ namespace hoot
 {
 
 /**
+ * Detects source language for a given piece of text using Apache OpenNLP
  *
+ * http://opennlp.apache.org/
+ *
+ * TODO: may have to run as a service to avoid incurring model loading overhead
  */
 class OpenNlpLanguageDetector : public LanguageDetector
 {
@@ -19,6 +23,7 @@ public:
   static std::string className() { return "hoot::OpenNlpLanguageDetector"; }
 
   OpenNlpLanguageDetector();
+  ~OpenNlpLanguageDetector();
 
   virtual QString detect(const QString text);
 
@@ -28,6 +33,8 @@ private:
 
   QString _modelFile;
   QString _classPath;
+
+  long _numDetections;
 };
 
 }

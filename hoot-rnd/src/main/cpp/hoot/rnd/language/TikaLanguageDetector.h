@@ -9,7 +9,11 @@ namespace hoot
 {
 
 /**
+ * Detects source language for a given piece of text using Apache Tika
  *
+ * http://tika.apache.org/
+ *
+ * TODO: may have to run as a service to avoid incurring model loading overhead
  */
 class TikaLanguageDetector : public LanguageDetector
 {
@@ -19,6 +23,7 @@ public:
   static std::string className() { return "hoot::TikaLanguageDetector"; }
 
   TikaLanguageDetector();
+  ~TikaLanguageDetector();
 
   virtual QString detect(const QString text);
 
@@ -26,8 +31,9 @@ public:
 
 private:
 
-  //This will eventually go away.
   QString _classPath;
+
+  long _numDetections;
 };
 
 }

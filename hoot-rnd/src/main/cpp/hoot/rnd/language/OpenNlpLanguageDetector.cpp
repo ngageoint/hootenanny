@@ -16,8 +16,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(LanguageDetector, OpenNlpLanguageDetector)
 
-OpenNlpLanguageDetector::OpenNlpLanguageDetector()
+OpenNlpLanguageDetector::OpenNlpLanguageDetector() :
+_numDetections(0)
 {
+}
+
+OpenNlpLanguageDetector::~OpenNlpLanguageDetector()
+{
+  LOG_INFO("Number of language detections made: " << _numDetections);
 }
 
 void OpenNlpLanguageDetector::setConfiguration(const Settings& conf)
@@ -70,6 +76,9 @@ QString OpenNlpLanguageDetector::detect(const QString text)
     return "";
   }
 
+  _numDetections++;
+  //TODO: I think OpenNLP is returning ISO-639-2 or 3 instead of 1, so may need to map back to 1
+  //that Joshua uses.
   return process.readAllStandardOutput();
 }
 

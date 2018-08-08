@@ -30,8 +30,7 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
 
   _translator.reset(new JoshuaTranslator(this));
-  connect(_translator.get(), SIGNAL(translationComplete()), this,
-          SLOT(_translationComplete()));
+  connect(_translator.get(), SIGNAL(translationComplete()), this, SLOT(_translationComplete()));
   _translator->setConfiguration(conf);
   _translator->setSourceLanguage(opts.getLanguageTranslationSourceLanguage());
 
@@ -63,20 +62,22 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     _element = e;
     _toTranslateTagKey = toTranslateTagKey;
     _toTranslateVal = tags.get(toTranslateTagKey).trimmed();
+    //TODO: Should this be moved to JoshuaTranslator?
     _toTranslateVal = _toTranslateVal.replace("\n", "");
     LOG_VART(_toTranslateVal);
 
-//    //TODO: only detect langs when none or more than one have been specified
 //    const QString detectedLang = _langDetector->detect(_toTranslateVal);
 //    if (detectedLang.isEmpty())
 //    {
-//      LOG_DEBUG("Unable to detect language for: " << _toTranslateVal);
+//      LOG_DEBUG("Unable to detect language for text: " << _toTranslateVal);
 //    }
 //    else
 //    {
-//      LOG_DEBUG("Detected language: " << detectedLang << " for: " << _toTranslateVal);
+//      LOG_DEBUG("Detected language: " << detectedLang << " for text: " << _toTranslateVal);
 //    }
 
+    //TODO: should this be replaced with lang detect, or should the two be combined for this
+    //purpose?
     if (_skipWordsInEnglishDict)
     {
       const double englishNameScore = MostEnglishName::getInstance()->scoreName(_toTranslateVal);
@@ -109,8 +110,7 @@ void ToEnglishTranslationVisitor::_translationComplete()
   LOG_VART(translatedVal);
   const int strComparison = translatedVal.compare(_toTranslateVal, Qt::CaseInsensitive);
   LOG_VART(strComparison);
-  //If the translator merely returned the same string we passed in, then no point in recording
-  //it.
+  //If the translator merely returned the same string we passed in, then no point in using it.
   if (strComparison != 0)
   {
     LOG_DEBUG("Translated: " << _toTranslateVal << " to: " << translatedVal);

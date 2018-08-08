@@ -16,8 +16,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(LanguageDetector, TikaLanguageDetector)
 
-TikaLanguageDetector::TikaLanguageDetector()
+TikaLanguageDetector::TikaLanguageDetector() :
+_numDetections(0)
 {
+}
+
+TikaLanguageDetector::~TikaLanguageDetector()
+{
+  LOG_INFO("Number of language detections made: " << _numDetections);
 }
 
 void TikaLanguageDetector::setConfiguration(const Settings& conf)
@@ -61,6 +67,7 @@ QString TikaLanguageDetector::detect(const QString text)
     return "";
   }
 
+  _numDetections++;
   return process.readAllStandardOutput().trimmed();
 }
 
