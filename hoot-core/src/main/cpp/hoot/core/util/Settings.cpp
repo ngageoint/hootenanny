@@ -547,7 +547,7 @@ void Settings::parseCommonArguments(QStringList& args)
       }
       if (kvl.size() != 2)
       {
-        throw HootException("define must takes the form key=value.");
+        throw HootException("define must take the form key=value.");
       }
       if (!conf().hasKey(kvl[0]))
       {
