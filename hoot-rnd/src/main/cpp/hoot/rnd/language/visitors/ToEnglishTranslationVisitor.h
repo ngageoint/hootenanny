@@ -7,6 +7,7 @@
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/rnd/language/JoshuaTranslator.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
+#include <hoot/rnd/language/LanguageDetector.h>
 
 namespace hoot
 {
@@ -40,7 +41,8 @@ private slots:
 
 private:
 
-  boost::shared_ptr<JoshuaTranslator> _translationClient;
+  boost::shared_ptr<JoshuaTranslator> _translator;
+  boost::shared_ptr<LanguageDetector> _langDetector;
   StringTokenizer _strTokenizer;
 
   QStringList _toTranslateTagKeys;

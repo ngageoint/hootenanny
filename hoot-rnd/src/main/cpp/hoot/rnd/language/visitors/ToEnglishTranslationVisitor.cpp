@@ -29,14 +29,21 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _translationClient.reset(new JoshuaTranslator(this));
-  connect(_translationClient.get(), SIGNAL(translationComplete()), this,
+  _translator.reset(new JoshuaTranslator(this));
+  connect(_translator.get(), SIGNAL(translationComplete()), this,
           SLOT(_translationComplete()));
-  _translationClient->setConfiguration(conf);
-  _translationClient->setSourceLanguage(opts.getLanguageTranslationSourceLanguage());
+  _translator->setConfiguration(conf);
+  _translator->setSourceLanguage(opts.getLanguageTranslationSourceLanguage());
+
   _toTranslateTagKeys = opts.getLanguageTranslationToTranslateTagKeys();
   _skipPreTranslatedTags = opts.getLanguageTranslationSkipPreTranslatedTags();
   _skipWordsInEnglishDict = opts.getLanguageTranslationSkipWordsInEnglishDictionary();
+
+  LOG_VART(opts.getLanguageTranslationLanguageDetector());
+  _langDetector.reset(
+    Factory::getInstance().constructObject<LanguageDetector>(
+      opts.getLanguageTranslationLanguageDetector()));
+  _langDetector->setConfiguration(conf);
 }
 
 void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
@@ -59,6 +66,17 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     _toTranslateVal = _toTranslateVal.replace("\n", "");
     LOG_VART(_toTranslateVal);
 
+//    //TODO: only detect langs when none or more than one have been specified
+//    const QString detectedLang = _langDetector->detect(_toTranslateVal);
+//    if (detectedLang.isEmpty())
+//    {
+//      LOG_DEBUG("Unable to detect language for: " << _toTranslateVal);
+//    }
+//    else
+//    {
+//      LOG_DEBUG("Detected language: " << detectedLang << " for: " << _toTranslateVal);
+//    }
+
     if (_skipWordsInEnglishDict)
     {
       const double englishNameScore = MostEnglishName::getInstance()->scoreName(_toTranslateVal);
@@ -74,7 +92,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     const QString preTranslatedTagKey = _toTranslateTagKey + ":en";
     if (!_skipPreTranslatedTags || !tags.contains(preTranslatedTagKey))
     {
-      _translationClient->translate(_toTranslateVal);
+      _translator->translate(_toTranslateVal);
     }
     else
     {
@@ -87,7 +105,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
 
 void ToEnglishTranslationVisitor::_translationComplete()
 {
-  const QString translatedVal = _translationClient->getTranslatedText();
+  const QString translatedVal = _translator->getTranslatedText();
   LOG_VART(translatedVal);
   const int strComparison = translatedVal.compare(_toTranslateVal, Qt::CaseInsensitive);
   LOG_VART(strComparison);

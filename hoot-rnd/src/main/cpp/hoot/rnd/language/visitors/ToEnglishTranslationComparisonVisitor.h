@@ -42,7 +42,7 @@ private slots:
 private:
 
   StringDistancePtr _translationScorer;
-  boost::shared_ptr<JoshuaTranslator> _translationClient;
+  boost::shared_ptr<JoshuaTranslator> _translator;
 
   QStringList _preTranslatedTagKeys;
   QStringList _toTranslateTagKeys;

@@ -43,11 +43,11 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
 
   _skipWordsInEnglishDict = opts.getLanguageTranslationSkipWordsInEnglishDictionary();
 
-  _translationClient.reset(new JoshuaTranslator(this));
-  connect(_translationClient.get(), SIGNAL(translationComplete()), this,
+  _translator.reset(new JoshuaTranslator(this));
+  connect(_translator.get(), SIGNAL(translationComplete()), this,
           SLOT(_translationComplete()));
-  _translationClient->setConfiguration(conf);
-  _translationClient->setSourceLanguage(opts.getLanguageTranslationSourceLanguage());
+  _translator->setConfiguration(conf);
+  _translator->setSourceLanguage(opts.getLanguageTranslationSourceLanguage());
 }
 
 void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Element>& e)
@@ -84,13 +84,13 @@ void ToEnglishTranslationComparisonVisitor::_translate(const ElementPtr& e,
       return;
     }
 
-    _translationClient->translate(_toTranslateVal);
+    _translator->translate(_toTranslateVal);
   }
 }
 
 void ToEnglishTranslationComparisonVisitor::_translationComplete()
 {
-  const QString translatedVal = _translationClient->getTranslatedText();
+  const QString translatedVal = _translator->getTranslatedText();
   LOG_VARD(translatedVal);
   _numTranslations++;
   Tags& tags = _element->getTags();

@@ -1220,6 +1220,30 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 
 StringDistance implementation used to score translated tag values for comparison
 
+=== language.translation.language.detector
+
+* Data Type: string
+* Default Value: `hoot::TikaLanguageDetector`
+
+Language detector used by the ToEnglishTranslationVisitor
+
+=== language.translation.opennlp.library
+
+* Data Type: string
+* Default Value: `opennlp-tools-1.8.3.jar`
+
+Library used by OpenNlp language detection.  The file should exist in
+conf/core/language-translation/open-nlp.  This configuration option will likely be placed by a better
+build process solution in the future.
+
+=== language.translation.opennlp.model
+
+* Data Type: string
+* Default Value: `langdetect-183.bin`
+
+Model used by OpenNLP language detection.  The file should exist in
+conf/core/language-translation/open-nlp.
+
 === language.translation.service.mappings.file
 
 * Data Type: string
@@ -1244,6 +1268,15 @@ the translation of any tags whose owning elements have a pre-translated English 
 When performing to English translation with ToEnglishTranslationVisitor or
 ToEnglishTranslationComparisonVisitor, the translator will skip the translation of any tags whose
 value is in an English dictionary.
+
+=== language.translation.tika.library
+
+* Data Type: string
+* Default Value: `tika-app-1.18.jar`
+
+Library used by Tika language detection.  The file should exist in
+conf/core/language-translation/tika.  This configuration option will likely be placed by a better
+build process solution in the future.
 
 === language.translation.to.translate.tag.keys
 

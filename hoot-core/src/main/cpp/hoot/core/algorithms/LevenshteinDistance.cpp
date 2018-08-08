@@ -83,5 +83,4 @@ QString LevenshteinDistance::toEnglish(const QString& s)
   return result;
 }
 
-
 }
