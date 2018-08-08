@@ -186,14 +186,15 @@ int ConflateCmd::runSimple(QStringList args)
 
   // read input 1
   OsmMapPtr map(new OsmMap());
-  IoUtils::loadMap(
-    map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
+  IoUtils::loadMap(map, input1,
+                   ConfigOptions().getReaderConflateUseDataSourceIds1(),
+                   Status::Unknown1);
 
   DiffConflator diffConflator;
   if (isDiffConflate)
   {
     // Store original IDs for tag diff
-    diffConflator.storeOriginalIDs(map);
+    diffConflator.storeOriginalMap(map);
 
     // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
     Settings visitorConf;
@@ -206,8 +207,9 @@ int ConflateCmd::runSimple(QStringList args)
   // read input 2
   if (!input2.isEmpty())
   {
-    IoUtils::loadMap(
-      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+    IoUtils::loadMap(map, input2,
+                     ConfigOptions().getReaderConflateUseDataSourceIds2(),
+                     Status::Unknown2);
   }
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
