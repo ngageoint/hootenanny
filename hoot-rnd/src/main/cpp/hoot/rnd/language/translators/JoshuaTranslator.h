@@ -3,7 +3,7 @@
 #define JOSHUA_TRANSLATOR_H
 
 // hoot
-#include <hoot/rnd/language/ToEnglishTranslator.h>
+#include <hoot/rnd/language/translators/ToEnglishTranslator.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt

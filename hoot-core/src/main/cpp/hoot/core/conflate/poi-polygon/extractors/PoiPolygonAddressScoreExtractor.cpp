@@ -27,7 +27,7 @@
 #include "PoiPolygonAddressScoreExtractor.h"
 
 // hoot
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>

@@ -36,7 +36,7 @@
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/util/Factory.h>
 

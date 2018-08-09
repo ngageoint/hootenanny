@@ -3,7 +3,7 @@
 #define OPEN_NLP_LANGUAGE_DETECTOR_H
 
 // hoot
-#include <hoot/rnd/language/LanguageDetector.h>
+#include <hoot/rnd/language/detectors/LanguageDetector.h>
 
 namespace hoot
 {

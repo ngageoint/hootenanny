@@ -28,7 +28,7 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 
 namespace hoot
 {

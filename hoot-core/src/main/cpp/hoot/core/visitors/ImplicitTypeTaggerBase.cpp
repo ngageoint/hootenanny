@@ -32,7 +32,7 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 

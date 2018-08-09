@@ -28,7 +28,7 @@
 #include "LevenshteinDistance.h"
 
 // Hoot
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>

@@ -1272,7 +1272,8 @@ performance due to language detection cost.
 * Data Type: string
 * Default Value: `conf/core/language-translation/languageServicePortMappings`
 
-Path to a file which contains information about available to English language translation services
+Path to a file which contains information about available to English language translation services.
+This configuration option will be obsolete if language translation moves to hoot-services.
 
 === language.translation.skip.pre.translated.tags
 

@@ -5,9 +5,9 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/rnd/language/JoshuaTranslator.h>
+#include <hoot/rnd/language/translators/JoshuaTranslator.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
-#include <hoot/rnd/language/LanguageDetector.h>
+#include <hoot/rnd/language/detectors/LanguageDetector.h>
 
 namespace hoot
 {
