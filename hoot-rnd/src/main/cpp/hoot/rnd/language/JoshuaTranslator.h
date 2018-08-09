@@ -3,9 +3,8 @@
 #define JOSHUA_TRANSLATOR_H
 
 // hoot
-#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/rnd/language/ToEnglishTranslator.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/rnd/language/SupportedTranslationLanguages.h>
 
 // Qt
 #include <QTcpSocket>
@@ -52,12 +51,10 @@ public:
   virtual void translate(const QString sourceLangCode, const QString textToTranslate);
   virtual void translate(const QString textToTranslate);
   virtual QString getTranslatedText() const { return _translatedText; }
+  virtual boost::shared_ptr<SupportedTranslationLanguages> getSupportedLanguages() const
+  { return _supportedLangs; }
 
   virtual void setConfiguration(const Settings& conf);
-
-  virtual void setSupportedLanguages(
-    boost::shared_ptr<SupportedTranslationLanguages> supportedLangs)
-  { _supportedLangs = supportedLangs; }
 
 signals:
 

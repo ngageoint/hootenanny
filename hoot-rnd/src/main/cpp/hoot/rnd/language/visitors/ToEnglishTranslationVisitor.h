@@ -8,7 +8,6 @@
 #include <hoot/rnd/language/JoshuaTranslator.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/rnd/language/LanguageDetector.h>
-#include <hoot/rnd/language/SupportedTranslationLanguages.h>
 
 namespace hoot
 {
@@ -60,7 +59,6 @@ private:
 
   QList<boost::shared_ptr<LanguageDetector>> _langDetectors;
   StringTokenizer _strTokenizer;
-  boost::shared_ptr<SupportedTranslationLanguages> _supportedLangs;
 
   QString _toTranslateVal;
 

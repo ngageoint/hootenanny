@@ -43,23 +43,9 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _supportedLangs.reset(
-    new SupportedTranslationLanguages(opts.getLanguageTranslationSupportedLanguagesFile()));
-  const QStringList sourceLanguages = opts.getLanguageTranslationSourceLanguages();
-  for (int i = 0; i < sourceLanguages.size(); i++)
-  {
-    const QString langCode = sourceLanguages.at(i);
-    if (!_supportedLangs->isSupportedLanguage(langCode))
-    {
-      throw HootException("Specified unsupported language: " + langCode);
-    }
-  }
-
   _translator.reset(new JoshuaTranslator(this));
-  //connect(_translator.get(), SIGNAL(translationComplete()), this, SLOT(_translationComplete()));
   _translator->setConfiguration(conf);
-  _translator->setSourceLanguages(sourceLanguages);
-  _translator->setSupportedLanguages(_supportedLangs);
+  _translator->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
 
   _toTranslateTagKeys = opts.getLanguageTranslationToTranslateTagKeys();
   _skipPreTranslatedTags = opts.getLanguageTranslationSkipPreTranslatedTags();
@@ -147,7 +133,8 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
          itr != _langDetectors.end(); ++itr)
     {
       boost::shared_ptr<LanguageDetector> langDetector = *itr;
-      sourceLang = _supportedLangs->getIso6391Code(langDetector->detect(_toTranslateVal));
+      sourceLang =
+        _translator->getSupportedLanguages()->getIso6391Code(langDetector->detect(_toTranslateVal));
       if (!sourceLang.isEmpty())
       {
         break;
@@ -176,7 +163,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
              !specifiedSourceLangs.contains(sourceLang, Qt::CaseInsensitive))
     {
       QString msg =
-        "Detected language: " + _supportedLangs->getCountryName(sourceLang) +
+        "Detected language: " + _translator->getSupportedLanguages()->getCountryName(sourceLang) +
         " not in specified source languages: " + specifiedSourceLangs.join(";") + ".  ";
       if (_performExhaustiveSearch)
       {
@@ -191,7 +178,8 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
       else
       {
         LOG_DEBUG(
-          "Detected language: " << _supportedLangs->getCountryName(sourceLang) <<
+          "Detected language: " <<
+          _translator->getSupportedLanguages()->getCountryName(sourceLang) <<
           " not in specified source languages: " << specifiedSourceLangs.join(";") <<
           ".  Skipping translation; text: " << _toTranslateVal);
         return;
@@ -203,14 +191,16 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
       {
         assert(_detectedLangOverrides);
         LOG_DEBUG(
-          "Detected language: " << _supportedLangs->getCountryName(sourceLang) <<
+          "Detected language: " <<
+          _translator->getSupportedLanguages()->getCountryName(sourceLang) <<
           " overrides specified language(s) for text: " <<
           _toTranslateVal)
       }
       else
       {
         LOG_DEBUG(
-          "Detected language: " << _supportedLangs->getCountryName(sourceLang) << " for text: " <<
+          "Detected language: " <<
+          _translator->getSupportedLanguages()->getCountryName(sourceLang) << " for text: " <<
           _toTranslateVal);
       }
 
@@ -220,7 +210,9 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   else
   {
     sourceLang = specifiedSourceLangs.at(0);
-    LOG_DEBUG("Using specified language: " << _supportedLangs->getCountryName(sourceLang));
+    LOG_DEBUG(
+      "Using specified language: " <<
+      _translator->getSupportedLanguages()->getCountryName(sourceLang));
     _translator->translate(sourceLang, _toTranslateVal);
   }
 

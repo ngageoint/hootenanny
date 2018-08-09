@@ -44,11 +44,15 @@ JoshuaTranslator::~JoshuaTranslator()
 void JoshuaTranslator::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
+
+  _supportedLangs.reset(
+    new SupportedTranslationLanguages(opts.getLanguageTranslationSupportedLanguagesFile()));
+
   _readServiceMappings(opts.getLanguageTranslationServiceMappingsFile());
 }
 
 void JoshuaTranslator::setSourceLanguages(const QStringList langCodes)
-{
+{    
   if (langCodes.contains("detect", Qt::CaseInsensitive))
   {
     if (langCodes.size() != 1)
@@ -62,9 +66,14 @@ void JoshuaTranslator::setSourceLanguages(const QStringList langCodes)
     for (int i = 0; i < langCodes.size(); i++)
     {
       const QString langCode = langCodes.at(i).toLower();
+      if (!_supportedLangs->isSupportedLanguage(langCode))
+      {
+        throw HootException("Specified unsupported source translation language: " + langCode);
+      }
       if (!_serviceMappings.contains(langCode))
       {
-        throw HootException("Unsupported source translation language: " + langCode);
+        throw HootException(
+          "No service mapping for specified source translation language: " + langCode);
       }
 
       boost::shared_ptr<QTcpSocket> client(new QTcpSocket(this));
