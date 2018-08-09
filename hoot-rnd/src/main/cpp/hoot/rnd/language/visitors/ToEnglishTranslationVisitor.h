@@ -8,6 +8,7 @@
 #include <hoot/rnd/language/JoshuaTranslator.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/rnd/language/LanguageDetector.h>
+#include <hoot/rnd/language/SupportedTranslationLanguages.h>
 
 namespace hoot
 {
@@ -44,6 +45,7 @@ private:
   boost::shared_ptr<JoshuaTranslator> _translator;
   boost::shared_ptr<LanguageDetector> _langDetector;
   StringTokenizer _strTokenizer;
+  boost::shared_ptr<SupportedTranslationLanguages> _supportedLangs;
 
   QStringList _toTranslateTagKeys;
 
@@ -53,7 +55,11 @@ private:
 
   bool _skipPreTranslatedTags;
   bool _skipWordsInEnglishDict;
-  long _numTranslations;
+  bool _detectedLangOverrides;
+  bool _performExhaustiveSearch;
+  long _numTranslationsMade;
+  long _numTotalElements;
+  long _numProcessedElements;
 
   void _translate(const ElementPtr& e, const QString toTranslateTagKey);
 };

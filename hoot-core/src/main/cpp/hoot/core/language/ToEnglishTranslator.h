@@ -17,17 +17,27 @@ class ToEnglishTranslator
 public:
 
   /**
+   * Returns the translators source languages
+   *
+   * @return list of ISO-639-1 language codes
+   */
+  virtual QStringList getSourceLanguages() const = 0;
+
+  /**
    * Set the source language for the translator
    *
    * @param langCode an ISO-639-1 language code
    */
-  virtual void setSourceLanguage(const QString langCode) = 0;
+  virtual void setSourceLanguages(const QStringList langCodes) = 0;
 
   /**
    * Translates text to English
    *
+   * @param sourceLanguage ISO-639-1 language code for the language to translate from
    * @param textToTranslate the text to translate
    */
+  virtual void translate(const QString sourceLangCode, const QString textToTranslate) = 0;
+
   virtual void translate(const QString textToTranslate) = 0;
 
   /**

@@ -46,8 +46,14 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
   _translator.reset(new JoshuaTranslator(this));
   connect(_translator.get(), SIGNAL(translationComplete()), this,
           SLOT(_translationComplete()));
-  _translator->setConfiguration(conf);
-  _translator->setSourceLanguage(opts.getLanguageTranslationSourceLanguage());
+  if (opts.getLanguageTranslationSourceLanguages().size() > 1 ||
+      opts.getLanguageTranslationSourceLanguages().contains("detect", Qt::CaseInsensitive))
+  {
+    throw HootException(
+      QString("ToEnglishTranslationComparisonVisitor supports only one source language ") +
+      QString("and does not support detect mode."));
+  }
+  _translator->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
 }
 
 void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Element>& e)

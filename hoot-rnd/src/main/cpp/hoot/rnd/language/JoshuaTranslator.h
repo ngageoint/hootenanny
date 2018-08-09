@@ -9,6 +9,7 @@
 // Qt
 #include <QTcpSocket>
 #include <QByteArray>
+#include <QFile>
 
 namespace hoot
 {
@@ -43,8 +44,11 @@ public:
   } ServiceMapping;
 
   JoshuaTranslator(QObject* parent = 0);
+  ~JoshuaTranslator();
 
-  virtual void setSourceLanguage(const QString langCode);
+  virtual QStringList getSourceLanguages() const { return _sourceLangs; }
+  virtual void setSourceLanguages(const QStringList langCodes);
+  virtual void translate(const QString sourceLangCode, const QString textToTranslate);
   virtual void translate(const QString textToTranslate);
   virtual QString getTranslatedText() const { return _translatedText; }
 
@@ -61,12 +65,16 @@ private slots:
 
 private:
 
-  boost::shared_ptr<QTcpSocket> _client;
   QByteArray _returnedData;
   QString _translatedText;
   QMap<QString, ServiceMapping> _serviceMappings;
+  QStringList _sourceLangs;
+  QMap<QString, boost::shared_ptr<QTcpSocket>> _clients;
+  boost::shared_ptr<QTcpSocket> _activeClient;
+  QFile _serviceMappingsFile;
 
   void _readServiceMappings(const QString serviceMappingsFile);
+  bool _inDetectMode() const;
 };
 
 }

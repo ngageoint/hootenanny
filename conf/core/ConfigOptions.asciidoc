@@ -1220,6 +1220,15 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 
 StringDistance implementation used to score translated tag values for comparison
 
+=== language.translation.detected.language.overrides.specified.source.languages
+
+* Data Type: bool
+* Default Value: `false`
+
+If source languages are specified that do not match the detected language for piece of text during
+translation, setting this to try allows the detected language to override the specified source
+languages.
+
 === language.translation.language.detector
 
 * Data Type: string
@@ -1243,6 +1252,16 @@ build process solution in the future.
 
 Model used by OpenNLP language detection.  The file should exist in
 conf/core/language-translation/open-nlp.
+
+=== language.translation.perform.exhaustive.search.with.no.detection
+
+* Data Type: bool
+* Default Value: `false`
+
+If more than one source language is specified for to English translation and the correct
+source language cannot be detected, translation attempts will be made against each specified
+languages until a translation is found.  Enabling this option can have a large impact on translation
+performance due to language detection cost.
 
 === language.translation.service.mappings.file
 
@@ -1269,6 +1288,13 @@ When performing to English translation with ToEnglishTranslationVisitor or
 ToEnglishTranslationComparisonVisitor, the translator will skip the translation of any tags whose
 value is in an English dictionary.
 
+=== language.translation.supported.languages.file
+
+* Data Type: string
+* Default Value: `conf/core/language-translation/supportedToEnglishTranslationLanguages`
+
+Path to a file which contains information about supported languages for to English translation
+
 === language.translation.tika.library
 
 * Data Type: string
@@ -1291,13 +1317,19 @@ the list of pre-translated tags in the option language.translation.comparison.pr
 (list sizes should be equal to each other).  Separate keys with a ';' and surround in quotes when
 passing in from the command line.
 
-=== language.translation.source.language
+=== language.translation.source.languages
 
-* Data Type: string
-* Default Value: ``
+* Data Type: list
+* Default Value:
+** ``
 
-ISO-639-1 language code for the source language of the to English translation;
-https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+ISO-639-1 language codes for the source languages of the to English translation done by
+ToEnglishTranslationVisitor and ToEnglishTranslationComparisonVisitor
+(https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).  Also, you can specify a single list item,
+"detect", to attempt to auto-detect the appropriate source language before translation.  Specifying
+multiple source languages can have a large impact on translation performance due to language
+detection cost.   Separate list items with a ';' and surround in quotes when passing them in from
+the command line.
 
 === levenshtein.distance.alpha
 

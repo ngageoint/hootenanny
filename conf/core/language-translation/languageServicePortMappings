@@ -3,5 +3,5 @@
 # keep alphabetized by language code
 # See the language translation section of the Hootenanny Developer's Guide for more information on deploying a to English translation service.
 de;/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18;localhost;5674
-#es;/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18;localhost;5675
+es;/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18;localhost;5675
 

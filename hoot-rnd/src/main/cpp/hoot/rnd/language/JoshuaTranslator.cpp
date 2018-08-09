@@ -16,12 +16,28 @@ namespace hoot
 JoshuaTranslator::JoshuaTranslator(QObject* parent) :
 QObject(parent)
 {
-  _client.reset(new QTcpSocket(this));
-  _client->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+}
 
-  connect(_client.get(), SIGNAL(readyRead()), this, SLOT(_readyRead()));
-  connect(_client.get(), SIGNAL(error(QAbstractSocket::SocketError)), this,
-          SLOT(_error(QAbstractSocket::SocketError)));
+JoshuaTranslator::~JoshuaTranslator()
+{
+  if (_serviceMappingsFile.isOpen())
+  {
+    _serviceMappingsFile.close();
+  }
+  //_clients
+  for (QMap<QString, boost::shared_ptr<QTcpSocket>>::const_iterator itr = _clients.begin();
+       itr != _clients.end(); ++itr)
+  {
+    boost::shared_ptr<QTcpSocket> client = *itr;
+    if (client->state() == QAbstractSocket::ConnectedState)
+    {
+      client->disconnect();
+    }
+    if (client->isOpen())
+    {
+      client->close();
+    }
+  }
 }
 
 void JoshuaTranslator::setConfiguration(const Settings& conf)
@@ -30,107 +46,150 @@ void JoshuaTranslator::setConfiguration(const Settings& conf)
   _readServiceMappings(opts.getLanguageTranslationServiceMappingsFile());
 }
 
-void JoshuaTranslator::setSourceLanguage(const QString langCode)
+void JoshuaTranslator::setSourceLanguages(const QStringList langCodes)
 {
-  if (!_serviceMappings.contains(langCode.toLower()))
+  if (langCodes.contains("detect", Qt::CaseInsensitive))
   {
-    throw HootException("Unsupported source translation language: " + langCode);
+    if (langCodes.size() != 1)
+    {
+      throw HootException(
+        "When specifying 'detect' in source languages, no other languages may be specified.");
+    }
   }
-
-  ServiceMapping serviceMapping = _serviceMappings[langCode.toLower()];
-  LOG_VART(serviceMapping);
-
-  _client->connectToHost(serviceMapping.host, serviceMapping.port);
-  if (!_client->waitForConnected(5000))
+  else
   {
-    throw HootException(
-      "Unable to connect to the language translation service for language: " +
-      serviceMapping.langCode + " at " + serviceMapping.host + ":" +
-      QString::number(serviceMapping.port));
+    for (int i = 0; i < langCodes.size(); i++)
+    {
+      const QString langCode = langCodes.at(i).toLower();
+      if (!_serviceMappings.contains(langCode))
+      {
+        throw HootException("Unsupported source translation language: " + langCode);
+      }
+
+      boost::shared_ptr<QTcpSocket> client(new QTcpSocket(this));
+      client->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+      connect(client.get(), SIGNAL(readyRead()), this, SLOT(_readyRead()));
+      connect(client.get(), SIGNAL(error(QAbstractSocket::SocketError)), this,
+              SLOT(_error(QAbstractSocket::SocketError)));
+
+      ServiceMapping serviceMapping = _serviceMappings[langCode];
+      LOG_VART(serviceMapping);
+      client->connectToHost(serviceMapping.host, serviceMapping.port);
+      if (!client->waitForConnected(5000))
+      {
+        throw HootException(
+          "Unable to connect to the language translation service for language: " +
+          serviceMapping.langCode + " at " + serviceMapping.host + ":" +
+          QString::number(serviceMapping.port));
+      }
+
+      _clients[langCode] = client;
+    }
   }
+  _sourceLangs = langCodes;
+}
+
+bool JoshuaTranslator::_inDetectMode() const
+{
+  return _sourceLangs.contains("detect", Qt::CaseInsensitive);
 }
 
 void JoshuaTranslator::_readServiceMappings(const QString serviceMappingsFile)
 {
   LOG_VART(serviceMappingsFile);
-  if (!serviceMappingsFile.trimmed().isEmpty())
+
+  _serviceMappingsFile.setFileName(serviceMappingsFile);
+  if (!_serviceMappingsFile.open(QIODevice::ReadOnly))
   {
-    QFile inputFile(serviceMappingsFile);
-    if (!inputFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
-    }
-    while (!inputFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
-      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
-      {
-        const QStringList lineParts = line.split(";");
-        if (!lineParts.size() == 4)
-        {
-          throw HootException("Invalid language service mappings config entry: " + line);
-        }
-        ServiceMapping serviceMapping;
-        serviceMapping.host = lineParts[2].trimmed().toLower();
-        if (serviceMapping.host.isEmpty())
-        {
-          throw HootException(
-            "Invalid language service mappings config host entry: " + lineParts[2]);
-        }
-        serviceMapping.langCode = lineParts[0].trimmed().toLower();
-        if (serviceMapping.langCode.isEmpty())
-        {
-          throw HootException(
-            "Invalid language service mappings config language code entry: " + lineParts[0]);
-        }
-        serviceMapping.langPackDir = lineParts[1].trimmed();
-        //TODO: should the dir name be validated to match the Joshua lang pack dir naming
-        //convention?
-        if (serviceMapping.langPackDir.isEmpty())
-        {
-          throw HootException(
-            "Invalid language service mappings config language pack directory entry: " +
-            lineParts[1]);
-        }
-        bool ok = false;
-        serviceMapping.port = lineParts[3].trimmed().toInt(&ok);
-        if (!ok)
-        {
-          throw HootException(
-            "Invalid language service mappings config port entry: " + lineParts[3]);
-        }
-        _serviceMappings[serviceMapping.langCode] = serviceMapping;
-        LOG_VART(serviceMapping);
-      }
-    }
-    inputFile.close();
+    throw HootException(
+      QObject::tr("Error opening %1 for writing.").arg(_serviceMappingsFile.fileName()));
   }
+  while (!_serviceMappingsFile.atEnd())
+  {
+    const QString line = QString::fromUtf8(_serviceMappingsFile.readLine().constData()).trimmed();
+    if (!line.trimmed().isEmpty() && !line.startsWith("#"))
+    {
+      const QStringList lineParts = line.split(";");
+      if (!lineParts.size() == 4)
+      {
+        throw HootException("Invalid language service mappings config entry: " + line);
+      }
+      ServiceMapping serviceMapping;
+      serviceMapping.host = lineParts[2].trimmed().toLower();
+      if (serviceMapping.host.isEmpty())
+      {
+        throw HootException(
+          "Invalid language service mappings config host entry: " + lineParts[2]);
+      }
+      serviceMapping.langCode = lineParts[0].trimmed().toLower();
+      if (serviceMapping.langCode.isEmpty())
+      {
+        throw HootException(
+          "Invalid language service mappings config language code entry: " + lineParts[0]);
+      }
+      serviceMapping.langPackDir = lineParts[1].trimmed();
+      //TODO: should the dir name be validated to match the Joshua lang pack dir naming
+      //convention?
+      if (serviceMapping.langPackDir.isEmpty())
+      {
+        throw HootException(
+          "Invalid language service mappings config language pack directory entry: " +
+          lineParts[1]);
+      }
+      bool ok = false;
+      serviceMapping.port = lineParts[3].trimmed().toInt(&ok);
+      if (!ok)
+      {
+        throw HootException(
+          "Invalid language service mappings config port entry: " + lineParts[3]);
+      }
+      _serviceMappings[serviceMapping.langCode] = serviceMapping;
+      LOG_VART(serviceMapping);
+    }
+  }
+  _serviceMappingsFile.close();
 }
 
-void JoshuaTranslator::translate(const QString textToTranslate)
+void JoshuaTranslator::translate(const QString sourceLangCode, const QString textToTranslate)
 {
-  if (_client->state() != QAbstractSocket::ConnectedState)
+  if (!_clients.contains(sourceLangCode))
+  {
+    throw HootException(
+      "No language translation service is available for language: " + sourceLangCode);
+  }
+  _activeClient = _clients[sourceLangCode];
+  if (_activeClient->state() != QAbstractSocket::ConnectedState)
   {
     throw HootException("Language translation client has no active connection to service.");
   }
 
-  LOG_VART(textToTranslate);
+  LOG_DEBUG("Translating from: " << sourceLangCode << " to English; text: " << textToTranslate);
   _returnedData.clear();
   //joshua expects a newline at the end of what's passed in
-  _client->write(QString(textToTranslate + "\n").toUtf8());
+  _activeClient->write(QString(textToTranslate + "\n").toUtf8());
   //this makes the call blocking
-  const bool readyRead = _client->waitForReadyRead(5000);
+  const bool readyRead = _activeClient->waitForReadyRead(5000);
   if (!readyRead)
   {
     throw HootException("Language translation server request timed out.");
   }
 }
 
+void JoshuaTranslator::translate(const QString textToTranslate)
+{
+  if (_sourceLangs.size() > 1)
+  {
+    throw HootException("Cannot determine source language.");
+  }
+
+  translate(_sourceLangs.at(0), textToTranslate);
+}
+
 void JoshuaTranslator::_readyRead()
 {
-  if (_client->bytesAvailable())
+  if (_activeClient->bytesAvailable())
   {
-    _returnedData.append(_client->readAll());
+    _returnedData.append(_activeClient->readAll());
   }
   LOG_VART(_returnedData.size());
 
