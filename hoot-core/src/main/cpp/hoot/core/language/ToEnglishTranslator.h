@@ -46,6 +46,9 @@ public:
    * @return translated text
    */
   virtual QString getTranslatedText() const = 0;
+
+  virtual void setSupportedLanguages(
+    boost::shared_ptr<SupportedTranslationLanguages> supportedLangs) = 0;
 };
 
 }

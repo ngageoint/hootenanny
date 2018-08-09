@@ -5,6 +5,7 @@
 // hoot
 #include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/rnd/language/SupportedTranslationLanguages.h>
 
 // Qt
 #include <QTcpSocket>
@@ -54,6 +55,10 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  virtual void setSupportedLanguages(
+    boost::shared_ptr<SupportedTranslationLanguages> supportedLangs)
+  { _supportedLangs = supportedLangs; }
+
 signals:
 
   void translationComplete();
@@ -72,6 +77,7 @@ private:
   QMap<QString, boost::shared_ptr<QTcpSocket>> _clients;
   boost::shared_ptr<QTcpSocket> _activeClient;
   QFile _serviceMappingsFile;
+  boost::shared_ptr<SupportedTranslationLanguages> _supportedLangs;
 
   void _readServiceMappings(const QString serviceMappingsFile);
   bool _inDetectMode() const;

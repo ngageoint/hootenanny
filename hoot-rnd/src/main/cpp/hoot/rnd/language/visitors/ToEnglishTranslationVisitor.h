@@ -36,32 +36,37 @@ public:
   virtual QString getDescription() const
   { return "Translates selected tag values to English"; }
 
-private slots:
+public slots:
 
-  void _translationComplete();
+  virtual void translationComplete();
 
-private:
+protected:
 
   boost::shared_ptr<JoshuaTranslator> _translator;
-  QList<boost::shared_ptr<LanguageDetector>> _langDetectors;
-  StringTokenizer _strTokenizer;
-  boost::shared_ptr<SupportedTranslationLanguages> _supportedLangs;
 
   QStringList _toTranslateTagKeys;
-
-  QString _toTranslateVal;
   QString _toTranslateTagKey;
   ElementPtr _element;
 
   bool _skipPreTranslatedTags;
-  bool _skipWordsInEnglishDict;
   bool _detectedLangOverrides;
   bool _performExhaustiveSearch;
-  long _numTranslationsMade;
+
   long _numTotalElements;
-  long _numProcessedElements;
 
   void _translate(const ElementPtr& e, const QString toTranslateTagKey);
+
+private:
+
+  QList<boost::shared_ptr<LanguageDetector>> _langDetectors;
+  StringTokenizer _strTokenizer;
+  boost::shared_ptr<SupportedTranslationLanguages> _supportedLangs;
+
+  QString _toTranslateVal;
+
+  bool _skipWordsInEnglishDict;
+  long _numTranslationsMade;
+  long _numProcessedElements;
 };
 
 }

@@ -16,6 +16,7 @@ namespace hoot
 JoshuaTranslator::JoshuaTranslator(QObject* parent) :
 QObject(parent)
 {
+  connect(this, SIGNAL(translationComplete()), parent, SLOT(translationComplete()));
 }
 
 JoshuaTranslator::~JoshuaTranslator()
@@ -163,7 +164,9 @@ void JoshuaTranslator::translate(const QString sourceLangCode, const QString tex
     throw HootException("Language translation client has no active connection to service.");
   }
 
-  LOG_DEBUG("Translating from: " << sourceLangCode << " to English; text: " << textToTranslate);
+  LOG_DEBUG(
+    "Translating from: " << _supportedLangs->getCountryName(sourceLangCode) <<
+    " to English; text: " << textToTranslate);
   _returnedData.clear();
   //joshua expects a newline at the end of what's passed in
   _activeClient->write(QString(textToTranslate + "\n").toUtf8());
