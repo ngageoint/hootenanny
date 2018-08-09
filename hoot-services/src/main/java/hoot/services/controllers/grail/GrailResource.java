@@ -147,13 +147,13 @@ public class GrailResource {
         try {
             APICapabilities mainOsmApiCapabilities = getCapabilities(MAIN_OSMAPI_CAPABILITIES_URL);
             logger.info("EverythingByBox: mainOSMAPI status = " + mainOsmApiCapabilities.getApiStatus());
-            if (mainOsmApiCapabilities.getApiStatus() == "offline" ) {
+            if (mainOsmApiCapabilities.getApiStatus() == "offline" | mainOsmApiCapabilities.getApiStatus() == null) {
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The main OSM API server is offline. Try again later").build();
             }
 
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
             logger.info("EverythingByBox: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-            if (railsPortCapabilities.getApiStatus() == "offline" ) {
+            if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
             }
 
@@ -257,13 +257,13 @@ public class GrailResource {
 
         APICapabilities mainOsmApiCapabilities = getCapabilities(MAIN_OSMAPI_CAPABILITIES_URL);
         logger.info("PullOSM: mainOSMAPI status = " + mainOsmApiCapabilities.getApiStatus());
-        if (mainOsmApiCapabilities.getApiStatus() == "offline" ) {
+        if (mainOsmApiCapabilities.getApiStatus() == "offline" | mainOsmApiCapabilities.getApiStatus() == null) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The main OSM API server is offline. Try again later").build();
         }
 
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == "offline" ) {
+        if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
         }
 
@@ -395,9 +395,9 @@ public class GrailResource {
     @Path("/runapply/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response runApply(@PathParam("jobId") String jobDir,
-                                @QueryParam("USER_ID") @DefaultValue("Hootenanny") String userId,
-                                @QueryParam("APPLY_TAGS") @DefaultValue("false") Boolean applyTags,
-                                @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+                                @QueryParam("USER_ID") String userId,
+                                @DefaultValue("false") @QueryParam("APPLY_TAGS") Boolean applyTags,
+                                @DefaultValue("info") @QueryParam("DEBUG_LEVEL") String debugLevel) {
 
         JSONObject json = new JSONObject();
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
@@ -409,7 +409,7 @@ public class GrailResource {
 
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("RunApply: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == "offline" ) {
+        if (railsPortCapabilities.getApiStatus() == "offline"  | railsPortCapabilities.getApiStatus() == null) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
         }
 
@@ -424,7 +424,7 @@ public class GrailResource {
 
             try {
                     String geomJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-                    json.put("jobid:geomapply",geomJobId);
+                    json.put("jobid:geometryapply",geomJobId);
 
                     ExternalCommand applyGeomChange = grailCommandFactory.build(geomJobId,params,debugLevel,ApplyChangesetCommand.class,this.getClass());
 
@@ -444,10 +444,11 @@ public class GrailResource {
         } // End GeomDiff
         else {
                 logger.error("RunApply: No diff.osc file in {}.", workDir.getAbsolutePath());
-                json.put("warning","No geometry diff file (diff.osc) in " + jobDir);
+                json.put("geometryapply","No geometry diff file (diff.osc) in " + jobDir);
         }
 
         File tagDiffFile = new File(workDir,"diff.tags.osc");
+
         if (applyTags) {
             if (tagDiffFile.exists()) {
                 params.setOutput(tagDiffFile.getAbsolutePath());
@@ -474,7 +475,7 @@ public class GrailResource {
             }
             else {
                     logger.error("RunApply: Requested APPLY_TAGS but no diff.tags.osc file in {}.", workDir.getAbsolutePath());
-                    json.put("warning","Requested APPLY_TAGS but no tag diff file (diff.tags.osc) in " + jobDir);
+                    json.put("tagapply","Requested APPLY_TAGS but no tag diff file (diff.tags.osc) in " + jobDir);
             }
         } 
 
@@ -668,7 +669,7 @@ public class GrailResource {
         }
         catch (IOException ioe)
         {
-            throw new WebApplicationException(ioe, Response.status(Response.Status.BAD_REQUEST).entity(ioe.getMessage()).build());
+            // throw new WebApplicationException(ioe, Response.status(Response.Status.BAD_REQUEST).entity(ioe.getMessage()).build());
             // ioe.printStackTrace();
         }
         catch (ParserConfigurationException e) {
