@@ -23,7 +23,6 @@ _numDetections(0)
 
 TikaLanguageDetector::~TikaLanguageDetector()
 {
-  LOG_INFO("Number of language detections made: " << _numDetections);
 }
 
 void TikaLanguageDetector::setConfiguration(const Settings& conf)
@@ -54,6 +53,8 @@ void TikaLanguageDetector::setConfiguration(const Settings& conf)
 
 QString TikaLanguageDetector::detect(const QString text)
 {
+  LOG_DEBUG("Detecting language for: " << text << "...");
+
   QProcess process;
   const QString cmd = QString("java -cp ") + _classPath + " TikaLanguageDetector \"" + text + "\"";
   LOG_VART(cmd);

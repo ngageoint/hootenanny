@@ -43,7 +43,7 @@ private slots:
 private:
 
   boost::shared_ptr<JoshuaTranslator> _translator;
-  boost::shared_ptr<LanguageDetector> _langDetector;
+  QList<boost::shared_ptr<LanguageDetector>> _langDetectors;
   StringTokenizer _strTokenizer;
   boost::shared_ptr<SupportedTranslationLanguages> _supportedLangs;
 

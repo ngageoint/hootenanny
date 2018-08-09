@@ -29,6 +29,8 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  virtual long getDetectionsMade() const { return _numDetections; }
+
 private:
 
   QString _classPath;

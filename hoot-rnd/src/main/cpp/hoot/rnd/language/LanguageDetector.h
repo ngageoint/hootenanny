@@ -28,6 +28,13 @@ public:
    * @return an ISO-639-1 language code (?)
    */
   virtual QString detect(const QString text) = 0;
+
+  /**
+   * Returns the number of language detections made by this detector
+   *
+   * @return number of language detections made
+   */
+  virtual long getDetectionsMade() const = 0;
 };
 
 }

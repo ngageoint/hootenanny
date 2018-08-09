@@ -23,7 +23,6 @@ _numDetections(0)
 
 OpenNlpLanguageDetector::~OpenNlpLanguageDetector()
 {
-  LOG_INFO("Number of language detections made: " << _numDetections);
 }
 
 void OpenNlpLanguageDetector::setConfiguration(const Settings& conf)
@@ -62,6 +61,8 @@ void OpenNlpLanguageDetector::setConfiguration(const Settings& conf)
 
 QString OpenNlpLanguageDetector::detect(const QString text)
 {
+  LOG_DEBUG("Detecting language for: " << text << "...");
+
   QProcess process;
   const QString cmd =
     QString("java -cp  ") + _modelFile + " " + _classPath + " OpenNlpLanguageDetector \"" +

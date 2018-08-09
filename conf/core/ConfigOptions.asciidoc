@@ -1229,12 +1229,15 @@ If source languages are specified that do not match the detected language for pi
 translation, setting this to try allows the detected language to override the specified source
 languages.
 
-=== language.translation.language.detector
+=== language.translation.language.detectors
 
-* Data Type: string
-* Default Value: `hoot::TikaLanguageDetector`
+* Data Type: list
+* Default Value:
+** `hoot::TikaLanguageDetector`
+** `hoot::OpenNlpLanguageDetector`
 
-Language detector used by the ToEnglishTranslationVisitor
+Language detectors used by the ToEnglishTranslationVisitor.  Separate keys with a ';' and surround
+in quotes when passing in from the command line.
 
 === language.translation.opennlp.library
 
@@ -1242,8 +1245,8 @@ Language detector used by the ToEnglishTranslationVisitor
 * Default Value: `opennlp-tools-1.8.3.jar`
 
 Library used by OpenNlp language detection.  The file should exist in
-conf/core/language-translation/open-nlp.  This configuration option will likely be placed by a better
-build process solution in the future.
+conf/core/language-translation/open-nlp.  This configuration option will be obsolete once language
+detection moves to hoot-services.
 
 === language.translation.opennlp.model
 
@@ -1251,7 +1254,8 @@ build process solution in the future.
 * Default Value: `langdetect-183.bin`
 
 Model used by OpenNLP language detection.  The file should exist in
-conf/core/language-translation/open-nlp.
+conf/core/language-translation/open-nlp.  This configuration option will be obsolete once language
+detection moves to hoot-services.
 
 === language.translation.perform.exhaustive.search.with.no.detection
 
@@ -1301,8 +1305,8 @@ Path to a file which contains information about supported languages for to Engli
 * Default Value: `tika-app-1.18.jar`
 
 Library used by Tika language detection.  The file should exist in
-conf/core/language-translation/tika.  This configuration option will likely be placed by a better
-build process solution in the future.
+conf/core/language-translation/tika.  This configuration option will be obsolete once language
+detection moves to hoot-services.
 
 === language.translation.to.translate.tag.keys
 

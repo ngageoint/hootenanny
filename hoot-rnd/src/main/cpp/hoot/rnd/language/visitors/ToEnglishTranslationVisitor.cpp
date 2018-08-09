@@ -26,6 +26,14 @@ _numProcessedElements(0)
 
 ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
 {
+  long numDetections = 0;
+  for (QList<boost::shared_ptr<LanguageDetector>>::const_iterator itr = _langDetectors.begin();
+       itr != _langDetectors.end(); ++itr)
+  {
+    boost::shared_ptr<LanguageDetector> langDetector = *itr;
+    numDetections += langDetector->getDetectionsMade();
+  }
+  LOG_INFO("Number of language detections made: " << numDetections);
   LOG_INFO("Total number of to English tag value translations made: " << _numTranslationsMade);
   LOG_INFO("Total number of elements processed: " << _numProcessedElements);
   LOG_INFO("Total number of elements encountered: " << _numTotalElements);
@@ -59,11 +67,16 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
     opts.getLanguageTranslationDetectedLanguageOverridesSpecifiedSourceLanguages();
   LOG_VARD(_detectedLangOverrides);
 
-  LOG_VART(opts.getLanguageTranslationLanguageDetector());
-  _langDetector.reset(
-    Factory::getInstance().constructObject<LanguageDetector>(
-      opts.getLanguageTranslationLanguageDetector()));
-  _langDetector->setConfiguration(conf);
+  const QStringList langDetectorClasses = opts.getLanguageTranslationLanguageDetectors();
+  LOG_VART(langDetectorClasses);
+  for (int i = 0; i < langDetectorClasses.size(); i++)
+  {
+    boost::shared_ptr<LanguageDetector> langDetector(
+      Factory::getInstance().constructObject<LanguageDetector>(langDetectorClasses.at(i)));
+    langDetector->setConfiguration(conf);
+    _langDetectors.append(langDetector);
+  }
+
   _performExhaustiveSearch = opts.getLanguageTranslationPerformExhaustiveSearchWithNoDetection();
 }
 
@@ -120,8 +133,18 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     if (specifiedSourceLangs.contains("detect", Qt::CaseInsensitive) ||
         specifiedSourceLangs.size() > 1)
     {
-      sourceLang = _supportedLangs->getIso6391Code(_langDetector->detect(_toTranslateVal));
-      if (sourceLang.isEmpty() || !specifiedSourceLangs.contains(sourceLang, Qt::CaseInsensitive))
+      for (QList<boost::shared_ptr<LanguageDetector>>::const_iterator itr = _langDetectors.begin();
+           itr != _langDetectors.end(); ++itr)
+      {
+        boost::shared_ptr<LanguageDetector> langDetector = *itr;
+        sourceLang = _supportedLangs->getIso6391Code(langDetector->detect(_toTranslateVal));
+        if (!sourceLang.isEmpty())
+        {
+          break;
+        }
+      }
+
+      if (sourceLang.isEmpty())
       {
         if (_performExhaustiveSearch)
         {
@@ -142,10 +165,27 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
       else if (!_detectedLangOverrides && specifiedSourceLangs.size() > 1 &&
                !specifiedSourceLangs.contains(sourceLang, Qt::CaseInsensitive))
       {
-        LOG_DEBUG(
-          "Detected language: " << sourceLang << " not in specified source languages: " <<
-          specifiedSourceLangs.join(";") << ".  Skipping translation; text: " << _toTranslateVal);
-        return;
+        QString msg =
+          "Detected language: " + _supportedLangs->getCountryName(sourceLang) +
+          " not in specified source languages: " + specifiedSourceLangs.join(";") + ".  ";
+        if (_performExhaustiveSearch)
+        {
+          msg +=
+            "Performing translation against each specified language until a translation is found...";
+          LOG_DEBUG(msg);
+          for (int i = 0; i < specifiedSourceLangs.size(); i++)
+          {
+            _translator->translate(specifiedSourceLangs.at(i), _toTranslateVal);
+          }
+        }
+        else
+        {
+          LOG_DEBUG(
+            "Detected language: " << _supportedLangs->getCountryName(sourceLang) <<
+            " not in specified source languages: " << specifiedSourceLangs.join(";") <<
+            ".  Skipping translation; text: " << _toTranslateVal);
+          return;
+        }
       }
       else
       {
@@ -153,12 +193,15 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
         {
           assert(_detectedLangOverrides);
           LOG_DEBUG(
-            "Detected language: " << sourceLang << " overrides specified language(s) for text: " <<
+            "Detected language: " << _supportedLangs->getCountryName(sourceLang) <<
+            " overrides specified language(s) for text: " <<
             _toTranslateVal)
         }
         else
         {
-          LOG_DEBUG("Detected language: " << sourceLang << " for text: " << _toTranslateVal);
+          LOG_DEBUG(
+            "Detected language: " << _supportedLangs->getCountryName(sourceLang) << " for text: " <<
+            _toTranslateVal);
         }
 
         _translator->translate(sourceLang, _toTranslateVal);
@@ -167,7 +210,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     else
     {
       sourceLang = specifiedSourceLangs.at(0);
-      LOG_VARD(sourceLang);
+      LOG_DEBUG("Using specified language: " << _supportedLangs->getCountryName(sourceLang));
       _translator->translate(sourceLang, _toTranslateVal);
     }
 
