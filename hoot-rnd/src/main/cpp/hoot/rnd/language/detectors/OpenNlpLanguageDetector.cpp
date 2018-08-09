@@ -78,8 +78,6 @@ QString OpenNlpLanguageDetector::detect(const QString text)
   }
 
   _numDetections++;
-  //TODO: I think OpenNLP is returning ISO-639-2 or 3 instead of 1, so may need to map back to 1
-  //that Joshua uses.
   return process.readAllStandardOutput();
 }
 
