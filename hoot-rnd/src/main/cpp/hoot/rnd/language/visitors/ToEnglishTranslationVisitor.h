@@ -5,9 +5,8 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/rnd/language/translators/JoshuaTranslator.h>
+#include <hoot/rnd/language/translators/ToEnglishTranslator.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
-#include <hoot/rnd/language/detectors/LanguageDetector.h>
 
 namespace hoot
 {
@@ -41,7 +40,7 @@ public slots:
 
 protected:
 
-  boost::shared_ptr<JoshuaTranslator> _translator;
+  boost::shared_ptr<ToEnglishTranslator> _translator;
 
   QStringList _toTranslateTagKeys;
   QString _toTranslateTagKey;
@@ -57,7 +56,6 @@ protected:
 
 private:
 
-  QList<boost::shared_ptr<LanguageDetector>> _langDetectors;
   StringTokenizer _strTokenizer;
 
   QString _toTranslateVal;

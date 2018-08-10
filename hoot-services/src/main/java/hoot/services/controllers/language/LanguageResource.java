@@ -40,6 +40,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * http://tika.apache.org/
  * http://opennlp.apache.org/
+
+@article{post2015joshua,
+    Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
+    Journal = {The Prague Bulletin of Mathematical Linguistics},
+    Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
+    Year = {2015} }
  */
 @Controller
 @Path("")
@@ -147,7 +153,7 @@ public class LanguageResource
     return Response.ok(entity.toJSONString()).build();
   }
 
-  @POST
+  /*@POST
   @Path("/translate")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
@@ -168,7 +174,7 @@ public class LanguageResource
   @Path("/translateWithDetect")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response translate(LanguageTranslateRequest request) 
+  public Response translate(LanguageTranslateWithDetectRequest request) 
   {
     String translatedText = "";
 
@@ -179,5 +185,5 @@ public class LanguageResource
     entity.put("sourceText", text);
     entity.put("translatedText", translatedText);
     return Response.ok(entity.toJSONString()).build();
-  }
+  }*/
 }

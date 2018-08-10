@@ -13,7 +13,7 @@ namespace hoot
 {
 
 /**
- * Simple interface for a to English language translator
+ * Interface for a to English language translator
  */
 class ToEnglishTranslator
 {

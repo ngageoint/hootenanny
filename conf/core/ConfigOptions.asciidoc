@@ -1218,7 +1218,7 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 * Data Type: string
 * Default Value: `hoot::LevenshteinDistance`
 
-StringDistance implementation used to score translated tag values for comparison
+StringDistance implementation used to score to English translated tag values
 
 === language.translation.detected.language.overrides.specified.source.languages
 
@@ -1229,33 +1229,24 @@ If source languages are specified that do not match the detected language for pi
 translation, setting this to try allows the detected language to override the specified source
 languages.
 
-=== language.translation.ensemble.detectors
+=== language.translation.hoot.services.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/translateWithDetect`
+
+Web service endpoint used by the HootServicesLanguageDetector
+
+=== language.translation.detectors
 
 * Data Type: list
 * Default Value:
 ** `tika`
 ** `opennlp`
 
-Language detectors used by the EnsembleLanguageDetector in order of entry.  Valid values are
-'tika' and 'opennlp'.  If no detectors are specified, then language detection will attempt to use
-as many detectors as needed to get a dection in a pre-determined order.  Separate values with a
-';' and surround in quotes when passing in from the command line.
-
-=== language.translation.ensemble.service.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/detect`
-
-Web service endpoint used by the EnsembleLanguageDetector
-
-=== language.translation.language.detectors
-
-* Data Type: list
-* Default Value:
-** `hoot::EnsembleLanguageDetector`
-
-Language detectors used by the ToEnglishTranslationVisitor.  Separate values with a ';' and surround
-in quotes when passing in from the command line.
+Language detectors used during language translation in order of entry.  Valid values are 'tika' and
+'opennlp'.  If no detectors are specified, then language translation will attempt to use as many
+detectors as needed, in a pre-determined order, to get a positive detection .  Separate values with
+a ';' and surround in quotes when passing in from the command line.
 
 === language.translation.perform.exhaustive.search.with.no.detection
 
@@ -1267,31 +1258,34 @@ source language cannot be detected, translation attempts will be made against ea
 languages until a translation is found.  Enabling this option can have a large impact on translation
 performance due to language detection cost.
 
-=== language.translation.service.mappings.file
-
-* Data Type: string
-* Default Value: `conf/core/language-translation/languageServicePortMappings`
-
-Path to a file which contains information about available to English language translation services.
-This configuration option will be obsolete if language translation moves to hoot-services.
-
 === language.translation.skip.pre.translated.tags
 
 * Data Type: bool
 * Default Value: `false`
 
-When performing to English translation with ToEnglishTranslationVisitor, the translator will skip
-the translation of any tags whose owning elements have a pre-translated English tag
-(key=<tag name>:en).
+When performing a to English translation , the translator will skip the translation of any tags
+whose owning elements have a pre-translated English tag (key=<tag name>:en).
 
 === language.translation.skip.words.in.english.dictionary
 
 * Data Type: bool
 * Default Value: `true`
 
-When performing to English translation with ToEnglishTranslationVisitor or
-ToEnglishTranslationComparisonVisitor, the translator will skip the translation of any tags whose
+When performing a to English translation, the translator will skip the translation of any tags whose
 value is in an English dictionary.
+
+=== language.translation.source.languages
+
+* Data Type: list
+* Default Value:
+** ``
+
+ISO-639-1 language codes for the source languages for to English translation
+(https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).  Also, you can specify a single list item,
+"detect", to attempt to auto-detect the appropriate source language before translation.  Specifying
+multiple source languages can have a large impact on translation performance due to language
+detection cost.   Separate list items with a ';' and surround in quotes when passing them in from
+the command line.
 
 === language.translation.supported.languages.file
 
@@ -1306,26 +1300,17 @@ Path to a file which contains information about supported languages for to Engli
 * Default Value:
 ** ``
 
-A list of keys of tags whose values are to be translated to English when using the
-ToEnglishTranslationVisitor or the ToEnglishTranslationComparisonVisitor.  When using the
-ToEnglishTranslationComparisonVisitor, the translations of these tags are compared against
-the list of pre-translated tags in the option language.translation.comparison.pretranslated.tag.keys
-(list sizes should be equal to each other).  Separate keys with a ';' and surround in quotes when
-passing in from the command line.
+A list of keys of tags whose values are to be translated to English.  The translations of these
+tags are compared against the list of pre-translated tags in the option
+language.translation.comparison.pretranslated.tag.keys (list sizes should be equal to each other).
+Separate keys with a ';' and surround in quotes when passing in from the command line.
 
-=== language.translation.source.languages
+=== language.translation.translator
 
-* Data Type: list
-* Default Value:
-** ``
+* Data Type: string
+* Default Value: `hoot::HootServicesTranslator`
 
-ISO-639-1 language codes for the source languages of the to English translation done by
-ToEnglishTranslationVisitor and ToEnglishTranslationComparisonVisitor
-(https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).  Also, you can specify a single list item,
-"detect", to attempt to auto-detect the appropriate source language before translation.  Specifying
-multiple source languages can have a large impact on translation performance due to language
-detection cost.   Separate list items with a ';' and surround in quotes when passing them in from
-the command line.
+ToEnglishTranslator implementation to use for to English translation
 
 === levenshtein.distance.alpha
 

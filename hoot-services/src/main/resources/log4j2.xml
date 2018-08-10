@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="INFO" monitorInterval="30" packages="hoot.services.log4j2" shutdownHook="disable">
+<Configuration status="DEBUG" monitorInterval="30" packages="hoot.services.log4j2" shutdownHook="disable">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}:%L - %m%n"/>
@@ -9,7 +9,7 @@
                      filePattern="/var/log/tomcat8/hoot-services-%d{MM-dd-yyyy}.log.gz"
                      append="true"
                      createOnDemand="true">
-            <BurstFilter level="INFO" rate="16" maxBurst="100"/>
+            <BurstFilter level="DEBUG" rate="16" maxBurst="100"/>
             <PatternLayout>
                 <pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}:%L - %m%n</pattern>
             </PatternLayout>
@@ -27,12 +27,12 @@
 
         <!-- Controls org.glassfish.jersey.filter.LoggingFilter's logging.  Set to 'info' for detailed
              logging of HTTP request/response messages received and sent by the Jersey Framework -->
-        <Logger name="hoot.services.HootServicesJerseyApplication" level="ERROR" additivity="false">
+        <Logger name="hoot.services.HootServicesJerseyApplication" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
 
         <!-- By default logs only exceptions. Set to 'debug' to reveal more detailed logging -->
-        <Logger name="hoot.services.JerseyEventLogger" level="INFO" additivity="false">
+        <Logger name="hoot.services.JerseyEventLogger" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
 
@@ -48,14 +48,14 @@
             <AppenderRef ref="Console"/>
         </Logger>
 
-        <Logger name="org.glassfish.jersey" level="INFO" additivity="false">
+        <Logger name="org.glassfish.jersey" level="DEBUG" additivity="false">
             <Filters>
                 <BrokenPipeFilter/>
             </Filters>
             <AppenderRef ref="Console"/>
         </Logger>
 
-        <Root level="INFO">
+        <Root level="DEBUG">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>

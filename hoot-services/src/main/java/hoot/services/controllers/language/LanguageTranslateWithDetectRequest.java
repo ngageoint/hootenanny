@@ -1,12 +1,12 @@
 
 package hoot.services.controllers.language;
 
-public class LanguageTranslateRequest 
+public class LanguageTranslateWithDetectRequest 
 {
   private String sourceLangCode;
   private String text;
 
-  public LanguageTranslateRequest() {}
+  public LanguageDetectRequest() {}
 
   public String getSourceLangCode() { return sourceLangCode; }
   public void setSourceLangCode(String[] sourceLangCode) { this.sourceLangCode = sourceLangCode; }
