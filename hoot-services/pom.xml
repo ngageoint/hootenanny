@@ -688,6 +688,25 @@
             <artifactId>antlr-runtime</artifactId>
             <version>${antlr-runtime.version}</version>
         </dependency>
+
+	<!-- language translation/detection -->
+	
+	<dependency>
+          <groupId>org.apache.tika</groupId>
+          <artifactId>tika-core</artifactId>
+          <version>1.18</version>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.tika</groupId>
+          <artifactId>tika-langdetect</artifactId>
+          <version>1.18</version>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.opennlp</groupId>
+          <artifactId>opennlp-tools</artifactId>
+          <version>1.8.3</version>
+        </dependency>
+
         <!-- test -->
 
         <!-- JUnit is the core testing framework -->

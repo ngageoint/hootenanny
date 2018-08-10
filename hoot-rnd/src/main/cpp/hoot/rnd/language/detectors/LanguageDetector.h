@@ -3,9 +3,6 @@
 #ifndef LANGUAGE_DETECTOR_H
 #define LANGUAGE_DETECTOR_H
 
-// Hoot
-#include <hoot/core/util/Configurable.h>
-
 // Qt
 #include <QString>
 
@@ -15,7 +12,7 @@ namespace hoot
 /**
  * Interface for classes who can detect a language based on sample text from that language
  */
-class LanguageDetector : public Configurable
+class LanguageDetector
 {
 public:
 

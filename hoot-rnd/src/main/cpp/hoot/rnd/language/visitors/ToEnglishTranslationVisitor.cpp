@@ -33,7 +33,7 @@ ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
     boost::shared_ptr<LanguageDetector> langDetector = *itr;
     numDetections += langDetector->getDetectionsMade();
   }
-  LOG_INFO("Number of language detections made: " << numDetections);
+  LOG_INFO("Number of language detections made: " << _langDetector);
   LOG_INFO("Total number of to English tag value translations made: " << _numTranslationsMade);
   LOG_INFO("Total number of elements processed: " << _numProcessedElements);
   LOG_INFO("Total number of elements encountered: " << _numTotalElements);
