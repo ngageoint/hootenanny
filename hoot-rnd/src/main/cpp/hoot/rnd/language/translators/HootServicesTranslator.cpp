@@ -92,7 +92,7 @@ bool HootServicesTranslator::_inDetectMode() const
   return _sourceLangs.contains("detect", Qt::CaseInsensitive);
 }
 
-void HootServicesTranslator::translate(const QString sourceLangCode, const QString textToTranslate)
+void HootServicesTranslator::translate(const QString /*sourceLangCode*/, const QString /*textToTranslate*/)
 {
 //  if (!_clients.contains(sourceLangCode))
 //  {

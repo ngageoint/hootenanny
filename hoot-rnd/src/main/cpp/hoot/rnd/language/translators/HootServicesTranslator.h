@@ -4,7 +4,6 @@
 
 // hoot
 #include <hoot/rnd/language/translators/ToEnglishTranslator.h>
-#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QTcpSocket>
@@ -18,7 +17,7 @@ namespace hoot
  * Translates text from a single source language to English using translation/detection
  * technologies integrated into the Hootenanny web services.
  */
-class HootServicesTranslator : public QObject, public ToEnglishTranslator, public Configurable
+class HootServicesTranslator : public QObject, public ToEnglishTranslator
 {
   Q_OBJECT
 

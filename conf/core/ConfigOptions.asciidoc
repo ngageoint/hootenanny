@@ -1236,17 +1236,26 @@ languages.
 
 Web service endpoint used by the HootServicesLanguageDetector
 
-=== language.translation.detectors
+=== language.translation.hoot.services.translator.detectors
 
 * Data Type: list
 * Default Value:
-** `tika`
-** `opennlp`
+** `TikaLanguageDetector`
+** `OpenNlpLanguageDetector`
 
-Language detectors used during language translation in order of entry.  Valid values are 'tika' and
-'opennlp'.  If no detectors are specified, then language translation will attempt to use as many
-detectors as needed, in a pre-determined order, to get a positive detection .  Separate values with
-a ';' and surround in quotes when passing in from the command line.
+Language detectors used during to English language translation in order of entry by
+HootServicesTranslator (hoot-services Java classes).  Valid values are 'TikaLanguageDetector'
+and 'OpenNlpLanguageDetector'.  If no detectors are specified, then language translation will
+attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection .
+Separate values with a ';' and surround in quotes when passing in from the command line.
+
+=== language.translation.hoot.services.translator.translator
+
+* Data Type: string
+* Default Value: `JoshuaLanguageTranslator`
+
+Language translator used during to English language translation by HootServicesTranslator
+(hoot-services Java class).  Valid values are 'joshua'.
 
 === language.translation.perform.exhaustive.search.with.no.detection
 

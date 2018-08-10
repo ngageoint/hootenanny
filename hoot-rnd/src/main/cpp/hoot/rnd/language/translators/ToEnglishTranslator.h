@@ -5,6 +5,7 @@
 
 // Hoot
 #include <hoot/rnd/language/SupportedTranslationLanguages.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QString>
@@ -15,7 +16,7 @@ namespace hoot
 /**
  * Interface for a to English language translator
  */
-class ToEnglishTranslator
+class ToEnglishTranslator : public Configurable
 {
 public:
 

@@ -46,7 +46,7 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   _translator.reset(
     Factory::getInstance().constructObject<ToEnglishTranslator>(
       opts.getLanguageTranslationTranslator()));
-  boost::shared_ptr<QObject> qObj = boost::dynamic_pointer_cast<Configurable>(_translator);
+  boost::shared_ptr<QObject> qObj = boost::dynamic_pointer_cast<QObject>(_translator);
   if (qObj.get())
   {
     qObj->setParent(this);
@@ -120,7 +120,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
 //  const QStringList specifiedSourceLangs = _translator->getSourceLanguages();
 //  assert(specifiedSourceLangs.size() > 0);
 //  LOG_VART(specifiedSourceLangs.size());
-//  QString sourceLang;
+  QString sourceLang;
 //  if (specifiedSourceLangs.contains("detect", Qt::CaseInsensitive) ||
 //      specifiedSourceLangs.size() > 1)
 //  {
