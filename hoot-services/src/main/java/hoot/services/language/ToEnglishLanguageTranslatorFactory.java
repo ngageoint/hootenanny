@@ -1,5 +1,5 @@
 
-package hoot.services.controllers.language;
+package hoot.services.language;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;

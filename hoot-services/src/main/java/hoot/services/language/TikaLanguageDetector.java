@@ -1,5 +1,5 @@
 
-package hoot.services.controllers.language;
+package hoot.services.language;
 
 import org.apache.tika.langdetect.OptimaizeLangDetector;
 import org.apache.tika.language.detect.LanguageResult;

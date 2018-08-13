@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 //import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 
@@ -25,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.language.LanguageDetectorFactory;
-import hoot.services.language.LanguageTranslatorFactory;
+import hoot.services.language.ToEnglishLanguageTranslatorFactory;
 
 /*
  * 
@@ -87,8 +88,23 @@ public class LanguageResource
     logger.debug(request.getSourceLangCode());
     logger.debug(request.getText());
 
-    String translatedText = ToEnglishLanguageTranslatorFactory.create(request.getTranslator()).translate(request.getText());
-
+    String translatedText = "";
+    try
+    {
+      translatedText = 
+        ToEnglishLanguageTranslatorFactory.create(request.getTranslator()).translate(request.getSourceLangCode(), request.getText());
+    }
+    catch (Exception e)
+    {
+      throw new WebApplicationException(
+      e, 
+      Response.status(Status.INTERNAL_SERVER_ERROR)
+        .entity(
+          "Error translating with translator: " + request.getTranslator() + " to language: " + request.getSourceLangCode() + "; text: " + 
+          request.getText())
+        .build());
+    }
+    
     JSONObject entity = new JSONObject();
     entity.put("sourceText", request.getText());
     entity.put("translatedText", translatedText);

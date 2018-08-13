@@ -1,5 +1,5 @@
 
-package hoot.services.controllers.language;
+package hoot.services.language;
 
 import opennlp.tools.langdetect.LanguageDetectorModel;
 import opennlp.tools.langdetect.LanguageDetectorME;

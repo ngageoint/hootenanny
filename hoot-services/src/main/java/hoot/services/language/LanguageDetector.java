@@ -1,5 +1,5 @@
 
-package hoot.services.controllers.language;
+package hoot.services.language;
 
 public interface LanguageDetector 
 {

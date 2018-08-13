@@ -1,7 +1,7 @@
 
-package hoot.services.controllers.language;
+package hoot.services.language;
 
 public interface ToEnglishLanguageTranslator 
 {
-  String translate(String sourceLanguage, String text);
+  String translate(String sourceLangCode, String text) throws Exception;
 }

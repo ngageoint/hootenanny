@@ -1,5 +1,5 @@
 
-package hoot.services.controllers.language;
+package hoot.services.language;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,14 +35,16 @@ public final class JoshuaLanguageTranslator implements ToEnglishLanguageTranslat
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaLanguageTranslator.class);
 
-  private final JoshuaConfiguration joshuaConfiguration;
+  private final JoshuaConfiguration joshuaConfiguration = new JoshuaConfiguration();
   private Map<String, Decoder> decoders = new HashMap<String, Decoder>();
   private static final Charset FILE_ENCODING = Charset.forName("UTF-8");
 
   private static JoshuaLanguageTranslator instance;
 
-  private JoshuaLanguageTranslator() //throws RuntimeException
+  private JoshuaLanguageTranslator() throws IOException
   {
+    joshuaConfiguration.sanityCheck();
+
     //TODO: read from config
     Map<String, String> langPacks = new HashMap<String, String>();    
     langPacks.put("de", "/home/bwitham/Downloads/apache-joshua-de-en-2016-11-18");
@@ -56,15 +58,13 @@ public final class JoshuaLanguageTranslator implements ToEnglishLanguageTranslat
       String lang = langPack.getKey();
       String langPackPath = langPack.getValue();    
       logger.info("Loading language model " + ctr + " / " + langPacks.size() + " for lang: " + lang + " from path: " + langPackPath + "...");  
-
-      joshuaConfiguration = new JoshuaConfiguration();
-      joshuaConfiguration.sanityCheck();
+      
       //change all model relative paths to absolute in the config
       String configPath = langPackPath + "/joshua.config";
       File configFile = new File(configPath);
       String configContent = FileUtils.readFileToString(configFile, FILE_ENCODING);
       configContent.replaceAll(" model/", " " + langPackPath + "/model/");
-      FileUtils.writeStringToFile(configContent, configFile);
+      FileUtils.writeStringToFile(configFile, configContent, FILE_ENCODING);
       
       Decoder decoder = new Decoder(joshuaConfiguration, configPath);
       decoders.put(lang, decoder);
@@ -75,7 +75,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishLanguageTranslat
     }
   }
 
-  public synchronized static JoshuaLanguageTranslator getInstance()
+  public synchronized static JoshuaLanguageTranslator getInstance() throws IOException
   {
     if (instance == null)
     { 
@@ -95,14 +95,20 @@ public final class JoshuaLanguageTranslator implements ToEnglishLanguageTranslat
     return StaticHolder.INSTANCE;
   }*/
 
-  public String translate(String sourceLanguage, String text)
+  public String translate(String sourceLangCode, String text) throws Exception
   {
+    if (!decoders.containsKey(sourceLangCode))
+    {
+      throw new Exception("No language translator available for language: " + sourceLangCode);
+    }
+
     long startTime = System.currentTimeMillis();
     logger.debug("Translating with " + getClass().getName() + "; text: " + text + "...");
 
     String translatedText = "";
     BufferedReader reader = new BufferedReader(new StringReader(text));
     TranslationRequestStream request = new TranslationRequestStream(reader, joshuaConfiguration);
+    Decoder decoder = decoders.get(sourceLangCode);
     TranslationResponseStream translationResponseStream = decoder.decodeAll(request);
     int numTranslations = 0;
     for (Translation translation: translationResponseStream) 
