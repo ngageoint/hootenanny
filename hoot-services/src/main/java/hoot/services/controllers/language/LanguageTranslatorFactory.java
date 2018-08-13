@@ -2,6 +2,7 @@
 package hoot.services.controllers.language;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.ConstructorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,9 @@ public class LanguageTranslatorFactory
   {
     try 
     {
-      return (LanguageTranslator)Class.forName(ClassUtils.getPackageName(LanguageDetectorFactory.class) + "." + translatorClass);
+      return 
+        (LanguageTranslator)ConstructorUtils.invokeConstructor(
+          Class.forName(ClassUtils.getPackageName(LanguageTranslatorFactory.class) + "." + translatorClass), new Object[]{});
     }
     catch (Exception e) 
     {

@@ -43,7 +43,7 @@ public final class OpenNlpLanguageDetector implements LanguageDetector
     }
   }
 
-  public synchronized static OpenNlpLanguageDetector getInstance()
+  public synchronized static OpenNlpLanguageDetector getInstance() throws IOException
   {
     if (instance == null)
     { 
