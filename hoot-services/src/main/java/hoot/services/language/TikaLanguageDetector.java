@@ -10,10 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-//no setters
-//all fields private and final
-//constructor inits all fields with a deep copy
-//Perform cloning of objects in the getter methods to return a copy rather than returning the actual object reference.
 /*
 http://tika.apache.org/
 */

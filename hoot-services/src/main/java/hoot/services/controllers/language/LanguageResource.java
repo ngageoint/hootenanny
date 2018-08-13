@@ -23,7 +23,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Controller;
-//import org.springframework.transaction.annotation.Transactional;
+
+import hoot.services.language.LanguageDetectorFactory;
+import hoot.services.language.LanguageTranslatorFactory;
 
 /*
  * 
@@ -37,6 +39,8 @@ public class LanguageResource
 
   public LanguageResource()
   {
+    //Joshua init takes a long time
+    //JoshuaLanguageTranslator.getInstance();
   }
 
   @POST
@@ -83,7 +87,7 @@ public class LanguageResource
     logger.debug(request.getSourceLangCode());
     logger.debug(request.getText());
 
-    String translatedText = LanguageTranslatorFactory.create(request.getTranslator()).translate(request.getText());
+    String translatedText = ToEnglishLanguageTranslatorFactory.create(request.getTranslator()).translate(request.getText());
 
     JSONObject entity = new JSONObject();
     entity.put("sourceText", request.getText());

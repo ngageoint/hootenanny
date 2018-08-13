@@ -689,7 +689,15 @@
             <version>${antlr-runtime.version}</version>
         </dependency>
 
-	<!-- language translation/detection -->
+        <!-- language translation -->
+
+        <dependency>
+          <groupId>org.apache.joshua</groupId>
+          <artifactId>joshua-incubating</artifactId>
+          <version>6.1</version>
+        </dependency>
+
+	<!-- language detection -->
 	
 	<dependency>
           <groupId>org.apache.tika</groupId>
