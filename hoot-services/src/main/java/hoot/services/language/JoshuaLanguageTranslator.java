@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
     Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
     Year = {2015} }
 */
-public final class JoshuaLanguageTranslator implements ToEnglishLanguageTranslator
+public final class JoshuaLanguageTranslator implements ToEnglishTranslator
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaLanguageTranslator.class);
 
@@ -47,8 +47,8 @@ public final class JoshuaLanguageTranslator implements ToEnglishLanguageTranslat
 
     //TODO: read from config
     Map<String, String> langPacks = new HashMap<String, String>();    
-    langPacks.put("de", "/home/bwitham/Downloads/apache-joshua-de-en-2016-11-18");
-    //langPacks.put("es", "/home/bwitham/Downloads/apache-joshua-es-en-2016-11-18");
+    langPacks.put("de", "/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18");
+    //langPacks.put("es", "/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
 
     int ctr = 1;
     for (Map.Entry<String, String> langPack : langPacks.entrySet()) 

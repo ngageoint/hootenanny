@@ -26,8 +26,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.language.LanguageDetectorFactory;
-import hoot.services.language.ToEnglishLanguageTranslatorFactory;
+import hoot.services.language.ToEnglishTranslatorFactory;
 import hoot.services.language.SupportedLanguagesReader;
+//import hoot.services.language.JoshuaLanguageTranslator;
 
 /*
  * 
@@ -38,9 +39,9 @@ public class LanguageResource
 {
   private static final Logger logger = LoggerFactory.getLogger(LanguageResource.class);
 
-  public LanguageResource()
+  public LanguageResource() throws IOException
   {
-    //Joshua init takes a long time
+    //Joshua init takes a long time - TODO: temp?
     //JoshuaLanguageTranslator.getInstance();
   }
 
@@ -101,7 +102,8 @@ public class LanguageResource
         e, 
         Response.status(Status.INTERNAL_SERVER_ERROR)
           .entity(
-            "Error detecting language with detector(s): " + String.join(",", request.getDetectors()) + "; text: " + request.getText())
+            "Error detecting language with detector(s): " + String.join(",", request.getDetectors()) + "; error: " + e.getMessage() + 
+            " text: " + request.getText())
           .build());
     }
   }
@@ -126,7 +128,7 @@ public class LanguageResource
       }
 
       translatedText = 
-        ToEnglishLanguageTranslatorFactory.create(request.getTranslator()).translate(request.getSourceLangCode(), request.getText());
+        ToEnglishTranslatorFactory.create(request.getTranslator()).translate(request.getSourceLangCode(), request.getText());
     }
     catch (Exception e)
     {
