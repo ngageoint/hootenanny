@@ -120,6 +120,8 @@ public final class HootProperties {
 
     public static final String MAIN_OSMAPI_PULL_URL;
     public static final String MAIN_OSMAPI_CAPABILITIES_URL;
+    
+    public static final String MAIN_OVERPASS_URL;
 
     public static final String RAILSPORT_PUSH_URL;
     public static final String RAILSPORT_PULL_URL;
@@ -267,6 +269,9 @@ public final class HootProperties {
         MAIN_OSMAPI_VERSION = "${MAIN_OSMAPI_VERSION}";
         MAIN_OSMAPI_PULL_URL = MAIN_OSMAPI_URL + "/api/" + MAIN_OSMAPI_VERSION;
         MAIN_OSMAPI_CAPABILITIES_URL = MAIN_OSMAPI_URL + "/api/capabilities";
+
+        // The URL for the main Overpass server
+        MAIN_OVERPASS_URL = "${MAIN_OVERPASS_URL}";
 
         // The OSM Rails Port that we are going to pull and push data to.
         RAILSPORT_USER = "${RAILSPORT_USER}";

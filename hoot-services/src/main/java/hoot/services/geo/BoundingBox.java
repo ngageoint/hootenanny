@@ -251,6 +251,15 @@ public class BoundingBox {
     }
 
     /**
+     * Converts the bounds into a format that the Overpass API can understand
+     * 
+     * @return a bounds string
+     */
+    public String toOverpassString() {
+        return minLat + "," + minLon + "," + maxLat + "," + maxLon;
+    }
+
+    /**
      * Creates a bounding box from an OSM XML bounds node
      * 
      * @return a bounding box

@@ -274,16 +274,17 @@ public class GrailResource {
             List<Command> workflow = new LinkedList<>();
 
             // Pull data from the local OSM API Db
-            File localOSMFile = new File(workDir,"local.osm");
-            params.setOutput(localOSMFile.getAbsolutePath());
-            params.setPullUrl(RAILSPORT_PULL_URL);
-            ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            workflow.add(getLocalOSM);
+            // File localOSMFile = new File(workDir,"local.osm");
+            // params.setOutput(localOSMFile.getAbsolutePath());
+            // params.setPullUrl(RAILSPORT_PULL_URL);
+            // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
+            // workflow.add(getLocalOSM);
 
             // Pull OSM data from the real, internet, OSM API Db
             File internetOSMFile = new File(workDir,"internet.osm");
             params.setOutput(internetOSMFile.getAbsolutePath());
-            params.setPullUrl(MAIN_OSMAPI_PULL_URL);
+            // params.setPullUrl(MAIN_OSMAPI_PULL_URL);
+            params.setPullUrl(MAIN_OVERPASS_URL);
             ExternalCommand getInternetOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
             workflow.add(getInternetOSM);
 
