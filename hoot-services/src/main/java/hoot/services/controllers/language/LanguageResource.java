@@ -27,6 +27,7 @@ import org.springframework.stereotype.Controller;
 
 import hoot.services.language.LanguageDetectorFactory;
 import hoot.services.language.ToEnglishTranslatorFactory;
+import hoot.services.language.ToEnglishTranslator;
 import hoot.services.language.SupportedLanguagesReader;
 //import hoot.services.language.JoshuaLanguageTranslator;
 
@@ -57,7 +58,9 @@ public class LanguageResource
     catch (Exception e)
     {
       throw new WebApplicationException(
-        e, Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error retrieving supported language information").build());
+        e, 
+        Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error retrieving supported language information.  Error: " + e.getMessage())
+          .build());
     }
   }
 
@@ -121,14 +124,15 @@ public class LanguageResource
     String translatedText = "";
     try
     {
-      if (!SupportedLanguagesReader.getInstance().isSupportedLanguage(request.getSourceLangCode()))
+      ToEnglishTranslator translator = ToEnglishTranslatorFactory.create(request.getTranslator());
+
+      if (!SupportedLanguagesReader.getInstance().isSupportedLanguage(request.getSourceLangCode().toLowerCase()))
       {
         throw new WebApplicationException(
           Response.status(Status.BAD_REQUEST).entity("Requested unsupported translation language: " + request.getSourceLangCode()).build());
       }
 
-      translatedText = 
-        ToEnglishTranslatorFactory.create(request.getTranslator()).translate(request.getSourceLangCode(), request.getText());
+      translatedText = translator.translate(request.getSourceLangCode(), request.getText());
     }
     catch (Exception e)
     {
@@ -145,8 +149,8 @@ public class LanguageResource
         e, 
         Response.status(status)
           .entity(
-            "Error translating with translator: " + request.getTranslator() + " to language: " + request.getSourceLangCode() + "; text: " + 
-            request.getText())
+            "Error translating with translator: " + request.getTranslator() + " to language: " + request.getSourceLangCode() + ".  Error: " + 
+            e.getMessage() + "; text: " + request.getText())
           .build());
     }
     

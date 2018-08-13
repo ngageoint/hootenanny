@@ -35,17 +35,17 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaLanguageTranslator.class);
 
-  private final JoshuaConfiguration joshuaConfiguration = new JoshuaConfiguration();
   private Map<String, Decoder> decoders = new HashMap<String, Decoder>();
+  private Map<String, JoshuaConfiguration> configs = new HashMap<String, JoshuaConfiguration>();
   private static final Charset FILE_ENCODING = Charset.forName("UTF-8");
 
   private static JoshuaLanguageTranslator instance;
 
   private JoshuaLanguageTranslator() throws IOException
   {
-    joshuaConfiguration.sanityCheck();
+    logger.error("Initializing Joshua...");
 
-    //TODO: read from config
+    //TODO: read from hoot services config
     Map<String, String> langPacks = new HashMap<String, String>();    
     langPacks.put("de", "/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18");
     //langPacks.put("es", "/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
@@ -57,20 +57,26 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
 
       String lang = langPack.getKey();
       String langPackPath = langPack.getValue();    
-      logger.info("Loading language model " + ctr + " / " + langPacks.size() + " for lang: " + lang + " from path: " + langPackPath + "...");  
+      logger.error("Loading language model " + ctr + " / " + langPacks.size() + " for lang: " + lang + " from path: " + langPackPath + "...");  
       
       //change all model relative paths to absolute in the config
       String configPath = langPackPath + "/joshua.config";
       File configFile = new File(configPath);
       String configContent = FileUtils.readFileToString(configFile, FILE_ENCODING);
-      configContent.replaceAll(" model/", " " + langPackPath + "/model/");
+      configContent = configContent.replaceAll(" model/", " " + langPackPath + "/model/");
       FileUtils.writeStringToFile(configFile, configContent, FILE_ENCODING);
+
+      JoshuaConfiguration config = new JoshuaConfiguration();
+      config.readConfigFile(configPath);
+      config.setConfigFilePath(new File(configPath).getCanonicalFile().getParent());
+      config.sanityCheck();
+      configs.put(lang, config);
       
-      Decoder decoder = new Decoder(joshuaConfiguration, configPath);
+      Decoder decoder = new Decoder(config, configPath);
       decoders.put(lang, decoder);
 
-      logger.info("Model loading for lang: " + lang + " took {} seconds", (System.currentTimeMillis() - startTime) / 1000);
-      logger.info("Memory used {} MB", ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000.0));
+      logger.error("Model loading for lang: " + lang + " took {} seconds", (System.currentTimeMillis() - startTime) / 1000);
+      logger.error("Memory used {} MB", ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000.0));
       ctr++;
     }
   }
@@ -97,40 +103,54 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
 
   public String translate(String sourceLangCode, String text) throws Exception
   {
+    sourceLangCode = sourceLangCode.toLowerCase();
     if (!decoders.containsKey(sourceLangCode))
     {
       throw new Exception("No language translator available for language: " + sourceLangCode);
     }
 
-    long startTime = System.currentTimeMillis();
-    logger.debug("Translating with " + getClass().getName() + "; text: " + text + "...");
-
     String translatedText = "";
-    BufferedReader reader = new BufferedReader(new StringReader(text));
-    TranslationRequestStream request = new TranslationRequestStream(reader, joshuaConfiguration);
-    Decoder decoder = decoders.get(sourceLangCode);
-    TranslationResponseStream translationResponseStream = decoder.decodeAll(request);
-    int numTranslations = 0;
-    for (Translation translation: translationResponseStream) 
+    Decoder decoder = null;
+    BufferedReader reader = null;
+    try
     {
-      translatedText = translation.toString();
-      numTranslations++;
-    }
-    if (numTranslations > 1)
-    {
-      reader.close();
-      throw new Exception("More than one translation: " + numTranslations);
-    }
-    reader.close();
-    
-    if (!translatedText.isEmpty() && !translatedText.equals(text))
-    {
-      logger.debug(getClass().getName() + " translated: " + text + " to: " + translatedText);
-    }
+      long startTime = System.currentTimeMillis();
+      logger.debug("Translating with " + getClass().getName() + "; text: " + text + "...");
 
-    logger.debug("Memory used {} MB", ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000.0));
-    decoder.cleanUp();
-    logger.debug("Total running time: {} seconds",  (System.currentTimeMillis() - startTime) / 1000);     
+      reader = new BufferedReader(new StringReader(text));
+      TranslationRequestStream request = new TranslationRequestStream(reader, configs.get(sourceLangCode));
+      decoder = decoders.get(sourceLangCode);
+      TranslationResponseStream translationResponseStream = decoder.decodeAll(request);
+      int numTranslations = 0;
+      for (Translation translation: translationResponseStream) 
+      {
+        translatedText = translation.toString();
+        numTranslations++;
+      }
+      if (numTranslations > 1)
+      {
+        throw new Exception("More than one translation found: " + numTranslations);
+      }
+    
+      if (!translatedText.isEmpty() && !translatedText.equals(text))
+      {
+        logger.debug(getClass().getName() + " translated: " + text + " to: " + translatedText);
+      }
+
+      logger.debug("Memory used {} MB", ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000.0));
+      logger.debug("Total running time: {} seconds",  (System.currentTimeMillis() - startTime) / 1000);
+    }
+    finally
+    {
+      if (reader != null)
+      { 
+        reader.close();
+      }
+      if (decoder != null)
+      { 
+        decoder.cleanUp();
+      }
+    }    
 
     return translatedText;
   }
