@@ -119,14 +119,29 @@ public class LanguageResource
     String translatedText = "";
     try
     {
+      if (!SupportedLanguagesReader.getInstance().isSupportedLanguage(request.getSourceLangCode()))
+      {
+        throw new WebApplicationException(
+          Response.status(Status.BAD_REQUEST).entity("Requested unsupported translation language: " + request.getSourceLangCode()).build());
+      }
+
       translatedText = 
         ToEnglishLanguageTranslatorFactory.create(request.getTranslator()).translate(request.getSourceLangCode(), request.getText());
     }
     catch (Exception e)
     {
+      Status status;
+      if (e.getMessage().startsWith("No language translator available"))
+      {
+        status = Status.BAD_REQUEST;
+      }
+      else
+      {
+        status = Status.INTERNAL_SERVER_ERROR;
+      } 
       throw new WebApplicationException(
         e, 
-        Response.status(Status.INTERNAL_SERVER_ERROR)
+        Response.status(status)
           .entity(
             "Error translating with translator: " + request.getTranslator() + " to language: " + request.getSourceLangCode() + "; text: " + 
             request.getText())
