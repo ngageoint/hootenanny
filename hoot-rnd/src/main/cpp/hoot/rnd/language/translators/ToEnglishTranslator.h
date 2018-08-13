@@ -4,7 +4,7 @@
 #define TO_ENGLISH_TRANSLATOR_H
 
 // Hoot
-#include <hoot/rnd/language/SupportedTranslationLanguages.h>
+//#include <hoot/rnd/language/SupportedTranslationLanguages.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt
@@ -51,7 +51,7 @@ public:
    */
   virtual QString getTranslatedText() const = 0;
 
-  virtual boost::shared_ptr<SupportedTranslationLanguages> getSupportedLanguages() const = 0;
+  //virtual boost::shared_ptr<SupportedTranslationLanguages> getSupportedLanguages() const = 0;
 };
 
 }

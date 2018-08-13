@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.xml.sax.SAXException;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Controller;
 
 import hoot.services.language.LanguageDetectorFactory;
 import hoot.services.language.ToEnglishLanguageTranslatorFactory;
+import hoot.services.language.SupportedLanguagesReader;
 
 /*
  * 
@@ -42,6 +44,14 @@ public class LanguageResource
   {
     //Joshua init takes a long time
     //JoshuaLanguageTranslator.getInstance();
+  }
+
+  @GET
+  @Path("/supportedLangs")
+  @Produces(MediaType.APPLICATION_JSON)
+  public SupportedTranslationLanguagesResponse getSupportedLangs()
+  {
+    return new SupportedTranslationLanguagesResponse(SupportedLanguagesReader.getInstance().getSupportedLanguages());
   }
 
   @POST

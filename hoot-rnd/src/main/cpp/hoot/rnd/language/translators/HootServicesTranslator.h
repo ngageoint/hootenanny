@@ -31,8 +31,8 @@ public:
   virtual void translate(const QString sourceLangCode, const QString textToTranslate);
   virtual void translate(const QString textToTranslate);
   virtual QString getTranslatedText() const { return _translatedText; }
-  virtual boost::shared_ptr<SupportedTranslationLanguages> getSupportedLanguages() const
-  { return _supportedLangs; }
+  //virtual boost::shared_ptr<SupportedTranslationLanguages> getSupportedLanguages() const
+  //{ return _supportedLangs; }
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -52,7 +52,7 @@ private:
   QStringList _sourceLangs;
   //QMap<QString, boost::shared_ptr<QTcpSocket>> _clients;
   //boost::shared_ptr<QTcpSocket> _activeClient;
-  boost::shared_ptr<SupportedTranslationLanguages> _supportedLangs;
+  //boost::shared_ptr<SupportedTranslationLanguages> _supportedLangs;
 
   bool _inDetectMode() const;
 };

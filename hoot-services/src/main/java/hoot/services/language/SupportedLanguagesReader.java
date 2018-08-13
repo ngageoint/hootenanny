@@ -1,0 +1,150 @@
+
+package hoot.services.language;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.BufferedReader;
+
+/*
+*/
+public final class SupportedLanguagesReader
+{
+  private static final Logger logger = LoggerFactory.getLogger(SupportedLanguagesReader.class);
+
+  //TODO: change to set
+  private List<SupportedLanguage> supportedLanguages = new ArrayList<SupportedLanguage>();
+
+  Map<String, String> iso6392To1 = new HashMap<String, String>();
+  Map<String, String> iso6391ToLang = new HashMap<String, String>();
+  Map<String, boolean> iso6391ToDetectable = new HashMap<String, String>();
+
+  private static SupportedLanguagesReader instance;
+
+  private SupportedLanguagesReader() throws RuntimeException
+  {
+    /*
+    try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            if (is != null) {                            
+                while ((str = reader.readLine()) != null) {    
+                    buf.append(str + "\n" );
+                }                
+            }
+        } finally {
+            try { is.close(); } catch (Throwable ignore) {}
+        }
+    */
+
+    InputStream configStrm = null;
+    try
+    {
+      //TODO: read path from config
+      configStrm = 
+        SupportedLanguagesReader.class.getClassLoader().getResourceAsStream("language-translation/supportedToEnglishTranslationLanguages"); 
+      readConfig(configStrm                
+    }
+    catch (IOException ioe) 
+    {
+      throw new RuntimeException("Error reading supported languages", ioe);
+    }
+    finally
+    {
+      if (configStrm != null)
+      {
+        configStrm.close();
+      }
+    }
+  }
+
+  public synchronized static SupportedLanguagesReader getInstance()
+  {
+    if (instance == null)
+    { 
+      instance = new SupportedLanguagesReader();
+    }
+    return instance;
+  }
+
+  //this may end up being faster
+  /*private static class StaticHolder 
+  {
+    static final SupportedLanguagesReader INSTANCE = new SupportedLanguagesReader();
+  }
+ 
+  public static SupportedLanguagesReader getInstance() 
+  {
+    return StaticHolder.INSTANCE;
+  }*/
+
+  public void readConfig(InputStream configStream)
+  { 
+    String line = null;
+    BufferedReader reader = new BufferedReader(new InputStreamReader(configStrm));                         
+    while ((line = reader.readLine()) != null) 
+    {    
+      line = line.trim();
+      if (!line.isEmpty() && !line.startsWith("#"))
+      {  
+        List<String> lineParts = line.split("\t");
+        if (!lineParts.size() == 4)
+        {
+          throw new IOException("Invalid supported languages config entry: " + line);
+        }
+
+        String iso6391 = lineParts.at(0);
+        String iso6392 = lineParts.at(1);
+        String lang = lineParts.at(2);
+        final boolean detectable = lineParts.at(3).toLower() == "yes" ? true : false;
+
+        SupportedLanguage supportedLanguage = new SupportedLanguage();
+        supportedLanguage.setIso6391Code(iso6391);
+        supportedLanguage.setIso6392Code(iso6392);
+        supportedLanguage.setLanguage(lang);
+        supportedLanguage.setDetectable(detectable);
+        supportedLanguages.add(supportedLanguage);
+
+        iso6392To1.put(iso6392, iso6391);
+        iso6391ToLang.put(iso6391, lang);
+        iso6391ToDetectable.put(iso6391, detectable);
+      }
+    }
+  }
+
+  public SupportedLanguage[] getSupportedLanguages() { return supportedLanguages.toArray(new SupportedLanguage[]{}); }
+
+  public boolean isSupportedLanguage(String iso6391Code)
+  {
+    return iso6391ToCountry.containsKey(iso6391Code);
+  }
+
+  public String getIso6391Code(String iso639Code)
+  {
+    if (iso6391ToLang.containsKey(iso639Code))
+    {
+      return iso639Code;
+    }
+    //TODO: don't think we need this check
+    if (iso6392To1.containsKey(iso639Code))
+    {
+      return iso6392To1.get(iso639Code);
+    }
+    return "";
+  }
+
+  public String getLanguageName(String iso6391Code)
+  { 
+    return iso6391ToLang.get(iso6391Code);
+  }
+
+  boolean isDetectableLanguage(String iso6391Code)
+  { 
+    return iso6391ToDetectable.get(iso6391Code);
+  } 
+}

@@ -35,11 +35,14 @@ public final class OpenNlpLanguageDetector implements LanguageDetector
     }
     catch (IOException ioe) 
     {
+      throw new RuntimeException("Error reading OpenNLP model as resource stream", ioe);
+    }
+    finally
+    { 
       if (modelStrm != null)
       {
         modelStrm.close();
       }
-      throw new RuntimeException("Error reading OpenNLP model as resource stream", ioe);
     }
   }
 
