@@ -40,8 +40,8 @@ void HootServicesTranslator::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _supportedLangs.reset(
-    new SupportedTranslationLanguages(opts.getLanguageTranslationSupportedLanguagesFile()));
+  //_supportedLangs.reset(
+    //new SupportedTranslationLanguages(opts.getLanguageTranslationSupportedLanguagesFile()));
 }
 
 void HootServicesTranslator::setSourceLanguages(const QStringList langCodes)
@@ -54,15 +54,16 @@ void HootServicesTranslator::setSourceLanguages(const QStringList langCodes)
         "When specifying 'detect' in source languages, no other languages may be specified.");
     }
   }
-  else
-  {
-    for (int i = 0; i < langCodes.size(); i++)
-    {
-      const QString langCode = langCodes.at(i).toLower();
-      if (!_supportedLangs->isSupportedLanguage(langCode))
-      {
-        throw HootException("Specified unsupported source translation language: " + langCode);
-      }
+  //TODO: should the supportlang check still be made here?
+//  else
+//  {
+//    for (int i = 0; i < langCodes.size(); i++)
+//    {
+//      const QString langCode = langCodes.at(i).toLower();
+//      if (!_supportedLangs->isSupportedLanguage(langCode))
+//      {
+//        throw HootException("Specified unsupported source translation language: " + langCode);
+//      }
 
 //      boost::shared_ptr<QTcpSocket> client(new QTcpSocket(this));
 //      client->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
@@ -82,8 +83,8 @@ void HootServicesTranslator::setSourceLanguages(const QStringList langCodes)
 //      }
 
 //      _clients[langCode] = client;
-    }
-  }
+//    }
+//  }
   _sourceLangs = langCodes;
 }
 

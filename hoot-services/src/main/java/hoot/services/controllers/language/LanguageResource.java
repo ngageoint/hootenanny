@@ -15,7 +15,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-//import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 
 import org.json.simple.JSONArray;
@@ -35,7 +34,6 @@ import hoot.services.language.SupportedLanguagesReader;
  */
 @Controller
 @Path("")
-//@Singleton
 public class LanguageResource 
 {
   private static final Logger logger = LoggerFactory.getLogger(LanguageResource.class);
@@ -51,41 +49,61 @@ public class LanguageResource
   @Produces(MediaType.APPLICATION_JSON)
   public SupportedTranslationLanguagesResponse getSupportedLangs()
   {
-    return new SupportedTranslationLanguagesResponse(SupportedLanguagesReader.getInstance().getSupportedLanguages());
+    try
+    {
+      return new SupportedTranslationLanguagesResponse(SupportedLanguagesReader.getInstance().getSupportedLanguages());
+    }
+    catch (Exception e)
+    {
+      throw new WebApplicationException(
+        e, Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error retrieving supported language information").build());
+    }
   }
 
   @POST
   @Path("/detect")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response detectLanguage(LanguageDetectRequest request) throws IOException, Exception
+  public Response detectLanguage(LanguageDetectRequest request)
   {
-    logger.debug(String.join(",", request.getDetectors()));
-    logger.debug(request.getText());
-
-    String detectedLang = "";
-    String detectingDetector = "";
-    List<String> detectors = Arrays.asList(request.getDetectors());
-    if (detectors.isEmpty())
+    try
     {
-      //TODO: add these with reflection
-      detectors.add("TikaLanguageDetector");
-      detectors.add("OpenNlpLanguageDetector");
-    }
+      logger.debug(String.join(",", request.getDetectors()));
+      logger.debug(request.getText());
 
-    for (String detector : detectors)
-    {
-      if (detectedLang.isEmpty())
+      String detectedLang = "";
+      String detectingDetector = "";
+      List<String> detectors = Arrays.asList(request.getDetectors());
+      if (detectors.isEmpty())
       {
-        detectedLang = LanguageDetectorFactory.create(detector).detect(request.getText());
+        //TODO: add these with reflection
+        detectors.add("TikaLanguageDetector");
+        detectors.add("OpenNlpLanguageDetector");
       }
-    }
 
-    JSONObject entity = new JSONObject();
-    entity.put("sourceText", request.getText());
-    entity.put("detectedLang", detectedLang);
-    entity.put("detectingDetector", detectingDetector);
-    return Response.ok(entity.toJSONString()).build();
+      for (String detector : detectors)
+      {
+        if (detectedLang.isEmpty())
+        {
+          detectedLang = LanguageDetectorFactory.create(detector).detect(request.getText());
+        }
+      }
+
+      JSONObject entity = new JSONObject();
+      entity.put("sourceText", request.getText());
+      entity.put("detectedLang", detectedLang);
+      entity.put("detectingDetector", detectingDetector);
+      return Response.ok(entity.toJSONString()).build();
+    }
+    catch (Exception e)
+    {
+      throw new WebApplicationException(
+        e, 
+        Response.status(Status.INTERNAL_SERVER_ERROR)
+          .entity(
+            "Error detecting language with detector(s): " + String.join(",", request.getDetectors()) + "; text: " + request.getText())
+          .build());
+    }
   }
 
   @POST
@@ -107,12 +125,12 @@ public class LanguageResource
     catch (Exception e)
     {
       throw new WebApplicationException(
-      e, 
-      Response.status(Status.INTERNAL_SERVER_ERROR)
-        .entity(
-          "Error translating with translator: " + request.getTranslator() + " to language: " + request.getSourceLangCode() + "; text: " + 
-          request.getText())
-        .build());
+        e, 
+        Response.status(Status.INTERNAL_SERVER_ERROR)
+          .entity(
+            "Error translating with translator: " + request.getTranslator() + " to language: " + request.getSourceLangCode() + "; text: " + 
+            request.getText())
+          .build());
     }
     
     JSONObject entity = new JSONObject();

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /*
 */
@@ -23,32 +25,26 @@ public final class SupportedLanguagesReader
 
   Map<String, String> iso6392To1 = new HashMap<String, String>();
   Map<String, String> iso6391ToLang = new HashMap<String, String>();
-  Map<String, boolean> iso6391ToDetectable = new HashMap<String, String>();
+  Map<String, Boolean> iso6391ToDetectable = new HashMap<String, Boolean>();
 
   private static SupportedLanguagesReader instance;
 
-  private SupportedLanguagesReader() throws RuntimeException
+  private SupportedLanguagesReader() throws IOException, RuntimeException
   {
-    /*
-    try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            if (is != null) {                            
-                while ((str = reader.readLine()) != null) {    
-                    buf.append(str + "\n" );
-                }                
-            }
-        } finally {
-            try { is.close(); } catch (Throwable ignore) {}
-        }
-    */
-
     InputStream configStrm = null;
     try
     {
       //TODO: read path from config
       configStrm = 
         SupportedLanguagesReader.class.getClassLoader().getResourceAsStream("language-translation/supportedToEnglishTranslationLanguages"); 
-      readConfig(configStrm                
+      if (configStrm != null)
+      {
+        readConfig(configStrm); 
+      }
+      else 
+      {
+        throw new IOException("");
+      }  
     }
     catch (IOException ioe) 
     {
@@ -63,7 +59,7 @@ public final class SupportedLanguagesReader
     }
   }
 
-  public synchronized static SupportedLanguagesReader getInstance()
+  public synchronized static SupportedLanguagesReader getInstance() throws IOException
   {
     if (instance == null)
     { 
@@ -83,7 +79,7 @@ public final class SupportedLanguagesReader
     return StaticHolder.INSTANCE;
   }*/
 
-  public void readConfig(InputStream configStream)
+  public void readConfig(InputStream configStrm) throws IOException
   { 
     String line = null;
     BufferedReader reader = new BufferedReader(new InputStreamReader(configStrm));                         
@@ -92,16 +88,16 @@ public final class SupportedLanguagesReader
       line = line.trim();
       if (!line.isEmpty() && !line.startsWith("#"))
       {  
-        List<String> lineParts = line.split("\t");
-        if (!lineParts.size() == 4)
+        String[] lineParts = line.split("\t");
+        if (lineParts.length != 4)
         {
           throw new IOException("Invalid supported languages config entry: " + line);
         }
 
-        String iso6391 = lineParts.at(0);
-        String iso6392 = lineParts.at(1);
-        String lang = lineParts.at(2);
-        final boolean detectable = lineParts.at(3).toLower() == "yes" ? true : false;
+        String iso6391 = lineParts[0];
+        String iso6392 = lineParts[1];
+        String lang = lineParts[2];
+        final boolean detectable = lineParts[3].toLowerCase() == "yes" ? true : false;
 
         SupportedLanguage supportedLanguage = new SupportedLanguage();
         supportedLanguage.setIso6391Code(iso6391);
@@ -121,7 +117,7 @@ public final class SupportedLanguagesReader
 
   public boolean isSupportedLanguage(String iso6391Code)
   {
-    return iso6391ToCountry.containsKey(iso6391Code);
+    return iso6391ToLang.containsKey(iso6391Code);
   }
 
   public String getIso6391Code(String iso639Code)

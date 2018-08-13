@@ -1,6 +1,8 @@
 
 package hoot.services.controllers.language;
 
+import hoot.services.language.SupportedLanguage;
+
 public class SupportedTranslationLanguagesResponse 
 {
   private SupportedLanguage[] supportedLanguages;

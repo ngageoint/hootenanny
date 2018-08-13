@@ -22,5 +22,5 @@ public final class SupportedLanguage
   public void setLanguage(String language) { this.language = language; }
 
   public boolean getDetectable() { return detectable; }
-  public void setDetectable(String detectable) { this.detectable = detectable; }
+  public void setDetectable(boolean detectable) { this.detectable = detectable; }
 }
