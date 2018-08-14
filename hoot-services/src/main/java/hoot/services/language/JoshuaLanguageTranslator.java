@@ -20,6 +20,7 @@ import org.apache.joshua.decoder.JoshuaConfiguration;
 import org.apache.joshua.decoder.Translation;
 import org.apache.joshua.decoder.TranslationResponseStream;
 import org.apache.joshua.decoder.io.TranslationRequestStream;
+import hoot.services.language.SupportedLanguages;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,35 +51,28 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     langPacks.put("de", "/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18");
     //langPacks.put("es", "/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
 
-    int ctr = 1;
+    int ctr = 0;
     for (Map.Entry<String, String> langPack : langPacks.entrySet()) 
     {
       long startTime = System.currentTimeMillis();
 
-      String lang = langPack.getKey();
-      String langPackPath = langPack.getValue();    
-      logger.error("Loading language model " + ctr + " / " + langPacks.size() + " for lang: " + lang + " from path: " + langPackPath + "...");  
+      String langCode = langPack.getKey();
+      String langPackPath = langPack.getValue();   
+      ctr++; 
+      logger.error(
+        "Loading language model " + ctr + " / " + langPacks.size() + " for lang: " + 
+        SupportedLanguages.getInstance().getLanguageName(langCode) + " from path: " + langPackPath + "...");  
       
-      //change all model relative paths to absolute in the config
       String configPath = langPackPath + "/joshua.config";
-      File configFile = new File(configPath);
-      String configContent = FileUtils.readFileToString(configFile, FILE_ENCODING);
-      configContent = configContent.replaceAll(" model/", " " + langPackPath + "/model/");
-      FileUtils.writeStringToFile(configFile, configContent, FILE_ENCODING);
+      convertConfigFileModelPathsToAbsolute(configPath, langPackPath);
+      decoders.put(langCode, new Decoder(initJoshuaConfig(configPath, langCode), configPath));
 
-      JoshuaConfiguration config = new JoshuaConfiguration();
-      config.readConfigFile(configPath);
-      config.setConfigFilePath(new File(configPath).getCanonicalFile().getParent());
-      config.sanityCheck();
-      configs.put(lang, config);
-      
-      Decoder decoder = new Decoder(config, configPath);
-      decoders.put(lang, decoder);
-
-      logger.error("Model loading for lang: " + lang + " took {} seconds", (System.currentTimeMillis() - startTime) / 1000);
-      logger.error("Memory used {} MB", ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000.0));
-      ctr++;
+      logger.error(
+        "Model loading for lang: " + SupportedLanguages.getInstance().getLanguageName(langCode) + " took {} seconds", 
+        (System.currentTimeMillis() - startTime) / 1000);
+      logger.error("Total memory used {} MB", ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000.0));
     }
+    logger.error("Finished initializing " + ctr + " language packs.");
   }
 
   public synchronized static JoshuaLanguageTranslator getInstance() throws IOException
@@ -100,6 +94,25 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
   {
     return StaticHolder.INSTANCE;
   }*/
+
+  private void convertConfigFileModelPathsToAbsolute(String configPath, String langPackPath) throws IOException
+  {
+    File configFile = new File(configPath);
+    String configContent = FileUtils.readFileToString(configFile, FILE_ENCODING);
+    //change all model relative paths to absolute in the config
+    configContent = configContent.replaceAll(" model/", " " + langPackPath + "/model/");
+    FileUtils.writeStringToFile(configFile, configContent, FILE_ENCODING);
+  }
+
+  private JoshuaConfiguration initJoshuaConfig(String configPath, String langCode) throws IOException
+  {
+    JoshuaConfiguration config = new JoshuaConfiguration();
+    config.readConfigFile(configPath);
+    config.setConfigFilePath(new File(configPath).getCanonicalFile().getParent());
+    config.sanityCheck();
+    configs.put(langCode, config);
+    return config;
+  }
 
   public String translate(String sourceLangCode, String text) throws Exception
   {
@@ -146,10 +159,10 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
       { 
         reader.close();
       }
-      if (decoder != null)
+      /*if (decoder != null)
       { 
         decoder.cleanUp();
-      }
+      }*/
     }    
 
     return translatedText;

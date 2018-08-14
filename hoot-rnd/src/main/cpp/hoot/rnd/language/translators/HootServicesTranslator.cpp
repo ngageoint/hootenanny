@@ -8,7 +8,6 @@
 
 // Qt
 #include <QTextCodec>
-#include <QFile>
 
 namespace hoot
 {
@@ -54,7 +53,7 @@ void HootServicesTranslator::setSourceLanguages(const QStringList langCodes)
         "When specifying 'detect' in source languages, no other languages may be specified.");
     }
   }
-  //TODO: should the supportlang check still be made here?
+  //TODO: get support langs from web service and check here
 //  else
 //  {
 //    for (int i = 0; i < langCodes.size(); i++)

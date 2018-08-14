@@ -3,12 +3,12 @@ package hoot.services.controllers.language;
 
 import hoot.services.language.SupportedLanguage;
 
-public class SupportedTranslationLanguagesResponse 
+public class SupportedLanguagesResponse 
 {
   private SupportedLanguage[] supportedLanguages;
 
-  public SupportedTranslationLanguagesResponse() {}
-  public SupportedTranslationLanguagesResponse(SupportedLanguage[] langs) 
+  public SupportedLanguagesResponse() {}
+  public SupportedLanguagesResponse(SupportedLanguage[] langs) 
   {
     this.supportedLanguages = langs;
   }

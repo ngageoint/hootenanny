@@ -28,8 +28,10 @@ import org.springframework.stereotype.Controller;
 import hoot.services.language.LanguageDetectorFactory;
 import hoot.services.language.ToEnglishTranslatorFactory;
 import hoot.services.language.ToEnglishTranslator;
-import hoot.services.language.SupportedLanguagesReader;
-//import hoot.services.language.JoshuaLanguageTranslator;
+import hoot.services.language.SupportedLanguages;
+
+import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 
 /*
  * 
@@ -40,20 +42,20 @@ public class LanguageResource
 {
   private static final Logger logger = LoggerFactory.getLogger(LanguageResource.class);
 
-  public LanguageResource() throws IOException
+  public LanguageResource() throws Exception
   {
-    //Joshua init takes a long time - TODO: temp?
-    //JoshuaLanguageTranslator.getInstance();
+    //The Joshua init can take a long time, so let's do it here vs having it happen the first time a translation is made (I think).
+    MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
   }
 
   @GET
-  @Path("/supportedLangs")
+  @Path("/supportedLanguages")
   @Produces(MediaType.APPLICATION_JSON)
-  public SupportedTranslationLanguagesResponse getSupportedLangs()
+  public SupportedLanguagesResponse getSupportedLangs()
   {
     try
     {
-      return new SupportedTranslationLanguagesResponse(SupportedLanguagesReader.getInstance().getSupportedLanguages());
+      return new SupportedLanguagesResponse(SupportedLanguages.getInstance().getSupportedLanguages());
     }
     catch (Exception e)
     {
@@ -126,7 +128,7 @@ public class LanguageResource
     {
       ToEnglishTranslator translator = ToEnglishTranslatorFactory.create(request.getTranslator());
 
-      if (!SupportedLanguagesReader.getInstance().isSupportedLanguage(request.getSourceLangCode().toLowerCase()))
+      if (!SupportedLanguages.getInstance().isSupportedLanguage(request.getSourceLangCode().toLowerCase()))
       {
         throw new WebApplicationException(
           Response.status(Status.BAD_REQUEST).entity("Requested unsupported translation language: " + request.getSourceLangCode()).build());

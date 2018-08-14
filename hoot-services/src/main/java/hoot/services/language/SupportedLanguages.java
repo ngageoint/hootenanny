@@ -16,9 +16,9 @@ import java.io.InputStreamReader;
 
 /*
 */
-public final class SupportedLanguagesReader
+public final class SupportedLanguages
 {
-  private static final Logger logger = LoggerFactory.getLogger(SupportedLanguagesReader.class);
+  private static final Logger logger = LoggerFactory.getLogger(SupportedLanguages.class);
 
   //TODO: change to set
   private List<SupportedLanguage> supportedLanguages = new ArrayList<SupportedLanguage>();
@@ -27,16 +27,16 @@ public final class SupportedLanguagesReader
   Map<String, String> iso6391ToLang = new HashMap<String, String>();
   Map<String, Boolean> iso6391ToDetectable = new HashMap<String, Boolean>();
 
-  private static SupportedLanguagesReader instance;
+  private static SupportedLanguages instance;
 
-  private SupportedLanguagesReader() throws IOException, RuntimeException
+  private SupportedLanguages() throws IOException, RuntimeException
   {
     InputStream configStrm = null;
     try
     {
       //TODO: read path from config
       configStrm = 
-        SupportedLanguagesReader.class.getClassLoader().getResourceAsStream("language-translation/supportedToEnglishTranslationLanguages"); 
+        SupportedLanguages.class.getClassLoader().getResourceAsStream("language-translation/supportedToEnglishTranslationLanguages"); 
       if (configStrm != null)
       {
         readConfig(configStrm); 
@@ -59,11 +59,11 @@ public final class SupportedLanguagesReader
     }
   }
 
-  public synchronized static SupportedLanguagesReader getInstance() throws IOException
+  public synchronized static SupportedLanguages getInstance() throws IOException
   {
     if (instance == null)
     { 
-      instance = new SupportedLanguagesReader();
+      instance = new SupportedLanguages();
     }
     return instance;
   }
@@ -71,10 +71,10 @@ public final class SupportedLanguagesReader
   //this may end up being faster
   /*private static class StaticHolder 
   {
-    static final SupportedLanguagesReader INSTANCE = new SupportedLanguagesReader();
+    static final SupportedLanguages INSTANCE = new SupportedLanguages();
   }
  
-  public static SupportedLanguagesReader getInstance() 
+  public static SupportedLanguages getInstance() 
   {
     return StaticHolder.INSTANCE;
   }*/
