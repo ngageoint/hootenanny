@@ -147,6 +147,7 @@ void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
   }
   OsmMapOperation* op = Factory::getInstance().constructObject<OsmMapOperation>(className);
   OsmMapOperationJs* obj = new OsmMapOperationJs(op);
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<OsmMapOperation>(op, args);

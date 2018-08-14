@@ -126,6 +126,7 @@ void FeatureExtractorJs::New(const FunctionCallbackInfo<Value>& args)
 
   FeatureExtractorPtr fe(Factory::getInstance().constructObject<FeatureExtractor>(className));
   FeatureExtractorJs* obj = new FeatureExtractorJs(fe);
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<FeatureExtractor>(fe.get(), args);
