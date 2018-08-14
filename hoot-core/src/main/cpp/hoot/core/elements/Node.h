@@ -118,7 +118,7 @@ public:
 
   void setY(double x);
 
-  virtual ElementType getElementType() const { return ElementType::Node; }
+  virtual ElementType getElementType() const { return ElementType(ElementType::Node); }
 
   geos::geom::Coordinate toCoordinate() const {
     return geos::geom::Coordinate(_nodeData.getX(), _nodeData.getY()); }
