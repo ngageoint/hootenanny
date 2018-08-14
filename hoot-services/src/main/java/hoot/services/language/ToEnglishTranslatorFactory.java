@@ -17,11 +17,19 @@ public class ToEnglishTranslatorFactory
 
   public static ToEnglishTranslator create(String className) throws Exception
   {
+    ToEnglishTranslator translator = null;
     String fullClassName = null;
     try 
     {
       fullClassName = ClassUtils.getPackageName(ToEnglishTranslatorFactory.class) + "." + className;
-      return (ToEnglishTranslator)MethodUtils.invokeStaticMethod(Class.forName(fullClassName), "getInstance", null);
+      try
+      {
+        translator = (ToEnglishTranslator)MethodUtils.invokeStaticMethod(Class.forName(fullClassName), "getInstance", null);
+      }
+      catch (NoSuchMethodException ex)
+      {
+        translator = (ToEnglishTranslator)Class.forName(fullClassName).newInstance();
+      }
     }
     catch (Exception e) 
     {

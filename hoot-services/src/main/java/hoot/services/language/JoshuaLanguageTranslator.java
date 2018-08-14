@@ -75,6 +75,10 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     logger.error("Finished initializing " + ctr + " language packs.");
   }
 
+  public void setConfig(Object config) {}
+
+  public String getDetectedLanguage() { return ""; }
+
   public synchronized static JoshuaLanguageTranslator getInstance() throws IOException
   {
     if (instance == null)
@@ -114,9 +118,13 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     return config;
   }
 
-  public String translate(String sourceLangCode, String text) throws Exception
+  public String translate(StringList sourceLangCodes, String text) throws Exception
   {
-    sourceLangCode = sourceLangCode.toLowerCase();
+    if (sourceLangCodes.size() > 1)
+    {
+      throw new Exception("Only one source language may be passed to this translator.");
+    }
+    sourceLangCode = sourceLangCodes.at(0).toLowerCase();
     if (!decoders.containsKey(sourceLangCode))
     {
       throw new Exception("No language translator available for language: " + sourceLangCode);

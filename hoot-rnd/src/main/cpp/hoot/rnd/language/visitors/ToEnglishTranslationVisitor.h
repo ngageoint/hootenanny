@@ -40,15 +40,13 @@ public slots:
 
 protected:
 
-  boost::shared_ptr<ToEnglishTranslator> _translator;
+  boost::shared_ptr<ToEnglishTranslator> _translatorClient;
 
   QStringList _toTranslateTagKeys;
   QString _toTranslateTagKey;
   ElementPtr _element;
 
   bool _skipPreTranslatedTags;
-  bool _detectedLangOverrides;
-  bool _performExhaustiveSearch;
 
   long _numTotalElements;
 
@@ -63,6 +61,7 @@ private:
   bool _skipWordsInEnglishDict;
   long _numTranslationsMade;
   long _numProcessedElements;
+  long _numDetectionsMade;
 };
 
 }

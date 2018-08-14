@@ -4,7 +4,6 @@
 #define TO_ENGLISH_TRANSLATOR_H
 
 // Hoot
-//#include <hoot/rnd/language/SupportedTranslationLanguages.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt
@@ -40,7 +39,7 @@ public:
    * @param sourceLanguage ISO-639-1 language code for the language to translate from
    * @param textToTranslate the text to translate
    */
-  virtual void translate(const QString sourceLangCode, const QString textToTranslate) = 0;
+  //virtual void translate(const QString sourceLangCode, const QString textToTranslate) = 0;
 
   virtual void translate(const QString textToTranslate) = 0;
 
@@ -51,7 +50,7 @@ public:
    */
   virtual QString getTranslatedText() const = 0;
 
-  //virtual boost::shared_ptr<SupportedTranslationLanguages> getSupportedLanguages() const = 0;
+  virtual bool detectionMade() const = 0;
 };
 
 }

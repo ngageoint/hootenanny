@@ -20,7 +20,6 @@ public final class SupportedLanguages
 {
   private static final Logger logger = LoggerFactory.getLogger(SupportedLanguages.class);
 
-  //TODO: change to set
   private List<SupportedLanguage> supportedLanguages = new ArrayList<SupportedLanguage>();
 
   Map<String, String> iso6392To1 = new HashMap<String, String>();
@@ -106,7 +105,15 @@ public final class SupportedLanguages
         supportedLanguage.setDetectable(detectable);
         supportedLanguages.add(supportedLanguage);
 
+        if (iso6392To1.containsKey(iso6392))
+        {
+          throw new Exception("Invalid supported languages configuration.  Duplicate ISO-6392-2 value: " + iso6392);
+        }
         iso6392To1.put(iso6392, iso6391);
+        if (iso6391ToLang.containsKey(iso6391))
+        {
+          throw new Exception("Invalid supported languages configuration.  Duplicate ISO-6392-1 value: " + iso6391);
+        }
         iso6391ToLang.put(iso6391, lang);
         iso6391ToDetectable.put(iso6391, detectable);
       }

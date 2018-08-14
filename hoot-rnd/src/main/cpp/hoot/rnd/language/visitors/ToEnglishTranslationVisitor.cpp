@@ -20,46 +20,37 @@ _performExhaustiveSearch(false),
 _numTotalElements(0),
 _skipWordsInEnglishDict(true),
 _numTranslationsMade(0),
-_numProcessedElements(0)
+_numProcessedElements(0),
+_numDetectionsMade(0)
 {
 }
 
 ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
 {
-//  long numDetections = 0;
-//  for (QList<boost::shared_ptr<LanguageDetector>>::const_iterator itr = _langDetectors.begin();
-//       itr != _langDetectors.end(); ++itr)
-//  {
-//    boost::shared_ptr<LanguageDetector> langDetector = *itr;
-//    numDetections += langDetector->getDetectionsMade();
-//  }
-//  LOG_INFO("Number of language detections made: " << _langDetector);
-//  LOG_INFO("Total number of to English tag value translations made: " << _numTranslationsMade);
-//  LOG_INFO("Total number of elements processed: " << _numProcessedElements);
-//  LOG_INFO("Total number of elements encountered: " << _numTotalElements);
+  LOG_INFO("Language detections made: " << _numDetectionsMade);
+  LOG_INFO("To English tag value translations made: " << _numTranslationsMade);
+  LOG_INFO("Elements processed: " << _numProcessedElements);
+  LOG_INFO("Elements encountered: " << _numTotalElements);
 }
 
 void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _translator.reset(
+  _translatorClient.reset(
     Factory::getInstance().constructObject<ToEnglishTranslator>(
-      opts.getLanguageTranslationTranslator()));
-  boost::shared_ptr<QObject> qObj = boost::dynamic_pointer_cast<QObject>(_translator);
+      opts.getLanguageTranslationTranslatorClient()));
+  boost::shared_ptr<QObject> qObj = boost::dynamic_pointer_cast<QObject>(_translatorClient);
   if (qObj.get())
   {
     qObj->setParent(this);
   }
-  _translator->setConfiguration(conf);
-  _translator->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
+  _translatorClient->setConfiguration(conf);
+  _translatorClient->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
 
   _toTranslateTagKeys = opts.getLanguageTranslationToTranslateTagKeys();
   _skipPreTranslatedTags = opts.getLanguageTranslationSkipPreTranslatedTags();
   _skipWordsInEnglishDict = opts.getLanguageTranslationSkipWordsInEnglishDictionary();
-  _detectedLangOverrides =
-    opts.getLanguageTranslationDetectedLanguageOverridesSpecifiedSourceLanguages();
-  _performExhaustiveSearch = opts.getLanguageTranslationPerformExhaustiveSearchWithNoDetection();
 }
 
 void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
@@ -89,7 +80,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   _toTranslateTagKey = toTranslateTagKey;
   _element = e;
   _toTranslateVal = tags.get(toTranslateTagKey).trimmed();
-  //TODO: Should this be moved to JoshuaTranslator?
+  //We're just translating single phrases, not entire texts, so remove newlines.
   _toTranslateVal = _toTranslateVal.replace("\n", "");
   LOG_VART(_toTranslateVal);
 
@@ -117,100 +108,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     }
   }
 
-//  const QStringList specifiedSourceLangs = _translator->getSourceLanguages();
-//  assert(specifiedSourceLangs.size() > 0);
-//  LOG_VART(specifiedSourceLangs.size());
-  QString sourceLang;
-//  if (specifiedSourceLangs.contains("detect", Qt::CaseInsensitive) ||
-//      specifiedSourceLangs.size() > 1)
-//  {
-//    for (QList<boost::shared_ptr<LanguageDetector>>::const_iterator itr = _langDetectors.begin();
-//         itr != _langDetectors.end(); ++itr)
-//    {
-//      boost::shared_ptr<LanguageDetector> langDetector = *itr;
-//      sourceLang =
-//        _translator->getSupportedLanguages()->getIso6391Code(langDetector->detect(_toTranslateVal));
-//      if (!sourceLang.isEmpty())
-//      {
-//        break;
-//      }
-//    }
-
-//    if (sourceLang.isEmpty())
-//    {
-//      if (_performExhaustiveSearch)
-//      {
-//        LOG_DEBUG(
-//          "Unable to detect language.  Performing translation against each specified " <<
-//          "language until a translation is found...");
-//        for (int i = 0; i < specifiedSourceLangs.size(); i++)
-//        {
-//          _translator->translate(specifiedSourceLangs.at(i), _toTranslateVal);
-//        }
-//      }
-//      else
-//      {
-//        LOG_DEBUG("Unable to detect language.  Skipping translation; " << _toTranslateVal);
-//        return;
-//      }
-//    }
-//    else if (!_detectedLangOverrides && specifiedSourceLangs.size() > 1 &&
-//             !specifiedSourceLangs.contains(sourceLang, Qt::CaseInsensitive))
-//    {
-//      QString msg =
-//        "Detected language: " + _translator->getSupportedLanguages()->getCountryName(sourceLang) +
-//        " not in specified source languages: " + specifiedSourceLangs.join(";") + ".  ";
-//      if (_performExhaustiveSearch)
-//      {
-//        msg +=
-//          "Performing translation against each specified language until a translation is found...";
-//        LOG_DEBUG(msg);
-//        for (int i = 0; i < specifiedSourceLangs.size(); i++)
-//        {
-//          _translator->translate(specifiedSourceLangs.at(i), _toTranslateVal);
-//        }
-//      }
-//      else
-//      {
-//        LOG_DEBUG(
-//          "Detected language: " <<
-//          _translator->getSupportedLanguages()->getCountryName(sourceLang) <<
-//          " not in specified source languages: " << specifiedSourceLangs.join(";") <<
-//          ".  Skipping translation; text: " << _toTranslateVal);
-//        return;
-//      }
-//    }
-//    else
-//    {
-//      if (!specifiedSourceLangs.contains(sourceLang, Qt::CaseInsensitive))
-//      {
-//        assert(_detectedLangOverrides);
-//        LOG_DEBUG(
-//          "Detected language: " <<
-//          _translator->getSupportedLanguages()->getCountryName(sourceLang) <<
-//          " overrides specified language(s) for text: " <<
-//          _toTranslateVal)
-//      }
-//      else
-//      {
-//        LOG_DEBUG(
-//          "Detected language: " <<
-//          _translator->getSupportedLanguages()->getCountryName(sourceLang) << " for text: " <<
-//          _toTranslateVal);
-//      }
-
-//      _translator->translate(sourceLang, _toTranslateVal);
-//    }
-//  }
-//  else
-//  {
-//    sourceLang = specifiedSourceLangs.at(0);
-//    LOG_DEBUG(
-//      "Using specified language: " <<
-//      _translator->getSupportedLanguages()->getCountryName(sourceLang));
-//    _translator->translate(sourceLang, _toTranslateVal);
-//  }
-  _translator->translate(sourceLang, _toTranslateVal);
+  _translatorClient->translate(_toTranslateVal);
 
   _numProcessedElements++;
   if (_numProcessedElements % 10 == 0)
@@ -221,8 +119,12 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
 
 void ToEnglishTranslationVisitor::translationComplete()
 {
-  const QString translatedVal = _translator->getTranslatedText();
+  const QString translatedVal = _translatorClient->getTranslatedText();
   LOG_VART(translatedVal);
+  if (_translatorClient->detectionMade())
+  {
+    _numDetectionsMade++;
+  }
   const int strComparison = translatedVal.compare(_toTranslateVal, Qt::CaseInsensitive);
   LOG_VART(strComparison);
   //If the translator merely returned the same string we passed in, then no point in using it.

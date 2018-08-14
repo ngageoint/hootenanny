@@ -1229,33 +1229,28 @@ If source languages are specified that do not match the detected language for pi
 translation, setting this to try allows the detected language to override the specified source
 languages.
 
-=== language.translation.hoot.services.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/translateWithDetect`
-
-Web service endpoint used by the HootServicesLanguageDetector
-
-=== language.translation.hoot.services.translator.detectors
+=== language.translation.hoot.services.detectors
 
 * Data Type: list
 * Default Value:
 ** `TikaLanguageDetector`
 ** `OpenNlpLanguageDetector`
 
-Language detectors used during to English language translation in order of entry by
-HootServicesTranslator (hoot-services Java classes).  Valid values are 'TikaLanguageDetector'
+When using 'HootServicesTranslatorClient' as the to English language translator, one or more
+hoot-services Java class names implementing LanguageDetector.  Language detectors used
+during a to English language translation in order of entry.  Valid values are 'TikaLanguageDetector'
 and 'OpenNlpLanguageDetector'.  If no detectors are specified, then language translation will
 attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection .
 Separate values with a ';' and surround in quotes when passing in from the command line.
 
-=== language.translation.hoot.services.translator.translator
+=== language.translation.hoot.services.translator
 
 * Data Type: string
-* Default Value: `JoshuaLanguageTranslator`
+* Default Value: `HootLanguageTranslator`
 
-Language translator used during to English language translation by HootServicesTranslator
-(hoot-services Java class).  Valid values are 'joshua'.
+When using 'HootServicesTranslatorClient' as the to English language translator, a hoot-services
+Java class names implementing ToEnglishTranslator.  Valid values are 'JoshuaLanguageTranslator' and
+'HootLanguageTranslator'.
 
 === language.translation.perform.exhaustive.search.with.no.detection
 
@@ -1266,6 +1261,13 @@ If more than one source language is specified for to English translation and the
 source language cannot be detected, translation attempts will be made against each specified
 languages until a translation is found.  Enabling this option can have a large impact on translation
 performance due to language detection cost.
+
+=== language.translation.hoot.services.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/translate`
+
+Web service endpoint used by the HootServicesTranslatorClient
 
 === language.translation.skip.pre.translated.tags
 
@@ -1296,13 +1298,6 @@ multiple source languages can have a large impact on translation performance due
 detection cost.   Separate list items with a ';' and surround in quotes when passing them in from
 the command line.
 
-=== language.translation.supported.languages.file
-
-* Data Type: string
-* Default Value: `conf/core/language-translation/supportedToEnglishTranslationLanguages`
-
-Path to a file which contains information about supported languages for to English translation
-
 === language.translation.to.translate.tag.keys
 
 * Data Type: list
@@ -1317,7 +1312,7 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 === language.translation.translator
 
 * Data Type: string
-* Default Value: `hoot::HootServicesTranslator`
+* Default Value: `hoot::HootServicesTranslatorClient`
 
 ToEnglishTranslator implementation to use for to English translation
 
