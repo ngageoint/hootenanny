@@ -81,6 +81,7 @@ void MostEnglishNameJs::New(const FunctionCallbackInfo<Value>& args)
 
   MostEnglishName* c = new MostEnglishName();
   MostEnglishNameJs* obj = new MostEnglishNameJs(MostEnglishNamePtr(c));
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<MostEnglishName>(c, args);
