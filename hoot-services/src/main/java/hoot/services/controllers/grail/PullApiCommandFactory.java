@@ -26,32 +26,13 @@
  */
 package hoot.services.controllers.grail;
 
-import java.util.HashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import hoot.services.command.ExternalCommand;
+import org.springframework.stereotype.Component;
 
 
-class GrailCommand extends ExternalCommand {
-    private static final Logger logger = LoggerFactory.getLogger(GrailCommand.class);
+@Component
+class PullApiCommandFactory {
 
-    private final GrailParams params;
-
-    GrailCommand(String jobId, GrailParams grailParams) {
-        super(jobId);
-        this.params = grailParams;
+    PullApiCommand build(String jobId, GrailParams params, Class<?> caller) {
+        return new PullApiCommand(params, jobId, caller);
     }
-
-    GrailCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
-        this(jobId, params);
-
-        java.util.Map<String, Object> substitutionMap = new HashMap<>();
-
-        String command = "echo Grail!!";
-
-        super.configureCommand(command, substitutionMap, caller);
-    }
-
 }

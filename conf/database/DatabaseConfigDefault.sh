@@ -18,6 +18,8 @@ export DB_PORT_OSMAPI=5432
 # export OSM_API_URL=https://api.openstreetmap.org/api/0.6
 export OSM_API_URL=https://api.openstreetmap.org
 export OSM_API_VERSION=0.6
+
+# The main internet Overpas URL
 export OVERPASS_API_URL=https://overpass-api.de
 
 

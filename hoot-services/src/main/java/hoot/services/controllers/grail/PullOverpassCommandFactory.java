@@ -30,9 +30,9 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-class PullOsmosisCommandFactory {
+class PullOverpassCommandFactory {
 
-    PullOsmosisCommand build(String jobId, GrailParams params, Class<?> caller) {
-        return new PullOsmosisCommand(params, jobId, caller);
+    PullOverpassCommand build(String jobId, GrailParams params, Class<?> caller) {
+        return new PullOverpassCommand(params, jobId, caller);
     }
 }

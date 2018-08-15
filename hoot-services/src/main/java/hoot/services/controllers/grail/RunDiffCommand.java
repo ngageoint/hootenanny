@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.grail;
 
-// import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +36,6 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
-// import hoot.services.geo.BoundingBox;
 
 
 class RunDiffCommand extends GrailCommand {
@@ -67,9 +65,6 @@ class RunDiffCommand extends GrailCommand {
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
-        // substitutionMap.put("INPUT1", input1.getAbsolutePath());
-        // substitutionMap.put("INPUT2", input2.getAbsolutePath());
-        // substitutionMap.put("OUTPUT", outputFile.getAbsolutePath());
         substitutionMap.put("INPUT1", params.getInput1());
         substitutionMap.put("INPUT2", params.getInput2());
         substitutionMap.put("OUTPUT", params.getOutput());

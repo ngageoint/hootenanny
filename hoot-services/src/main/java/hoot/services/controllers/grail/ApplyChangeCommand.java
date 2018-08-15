@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.grail;
 
-// import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,8 +53,6 @@ class ApplyChangesetCommand extends GrailCommand {
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
-        // substitutionMap.put("OSC_FILE", input.getAbsolutePath());
-        // substitutionMap.put("API_URL", apiUrl);
         substitutionMap.put("OSC_FILE", params.getOutput());
         substitutionMap.put("API_URL", params.getPushUrl());
         substitutionMap.put("HOOT_OPTIONS", hootOptions);

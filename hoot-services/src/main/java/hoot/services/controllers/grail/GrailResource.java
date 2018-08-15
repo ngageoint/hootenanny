@@ -75,13 +75,11 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
-// import hoot.services.command.common.ZIPDirectoryContentsCommand;
-// import hoot.services.command.common.ZIPFileCommand;
+
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
-// import hoot.services.utils.DbUtils;
-// import hoot.services.utils.XmlDocumentBuilder;
+
 
 
 @Controller
@@ -97,7 +95,10 @@ public class GrailResource {
     private GrailCommandFactory grailCommandFactory;
 
     @Autowired
-    private PullOsmosisCommandFactory OsmosisCommandFactory;
+    private PullOverpassCommandFactory OverpassCommandFactory;
+
+    @Autowired
+    private PullApiCommandFactory ApiCommandFactory;
 
     public GrailResource() {}
 
@@ -149,11 +150,11 @@ public class GrailResource {
         // IMPORTANT NOTE: This has NO incremental error checking!
         // It assumes that each step runs cleanly.
         try {
-            APICapabilities mainOsmApiCapabilities = getCapabilities(MAIN_OSMAPI_CAPABILITIES_URL);
-            logger.info("EverythingByBox: mainOSMAPI status = " + mainOsmApiCapabilities.getApiStatus());
-            if (mainOsmApiCapabilities.getApiStatus() == "offline" | mainOsmApiCapabilities.getApiStatus() == null) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The main OSM API server is offline. Try again later").build();
-            }
+            // APICapabilities mainOsmApiCapabilities = getCapabilities(MAIN_OSMAPI_CAPABILITIES_URL);
+            // logger.info("EverythingByBox: mainOSMAPI status = " + mainOsmApiCapabilities.getApiStatus());
+            // if (mainOsmApiCapabilities.getApiStatus() == "offline" | mainOsmApiCapabilities.getApiStatus() == null) {
+            //     return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The main OSM API server is offline. Try again later").build();
+            // }
 
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
             logger.info("EverythingByBox: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
@@ -163,19 +164,26 @@ public class GrailResource {
 
             // Pull OSM data from the local OSM API Db
             File localOSMFile = new File(workDir,"local.osm");
+            if (localOSMFile.exists()) localOSMFile.delete();
+            
             params.setOutput(localOSMFile.getAbsolutePath());
             params.setPullUrl(RAILSPORT_PULL_URL);
             
-            ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
+            // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
+            InternalCommand getLocalOSM = ApiCommandFactory.build(jobId,params,this.getClass());
             workflow.add(getLocalOSM);
 
-            // Pull OSM data from the real, internet, OSM API Db
+
+            // Pull OSM data from the real, internet, OSM Db using overpass
             File internetOSMFile = new File(workDir,"internet.osm");
+            if (internetOSMFile.exists()) internetOSMFile.delete();
+
             params.setOutput(internetOSMFile.getAbsolutePath());
-            params.setPullUrl(MAIN_OSMAPI_PULL_URL);
-            
-            ExternalCommand getInternetOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            workflow.add(getInternetOSM);
+            params.setPullUrl(MAIN_OVERPASS_URL);
+
+            InternalCommand getOverpassOSM = OverpassCommandFactory.build(jobId,params,this.getClass());
+            workflow.add(getOverpassOSM);
+
 
             // Run the diff command.
             // TODO: We could possibly use ConflateCommand.java for this. If we setup the params for it - especially the 35 bazillion Hoot Options 
@@ -183,6 +191,7 @@ public class GrailResource {
             params.setInput2(internetOSMFile.getAbsolutePath());
 
             File geomDiffFile = new File(workDir,"diff.osc");
+            if (geomDiffFile.exists()) geomDiffFile.delete();
             params.setOutput(geomDiffFile.getAbsolutePath());
             
             ExternalCommand makeDiff = grailCommandFactory.build(jobId,params,debugLevel,RunDiffCommand.class,this.getClass());
@@ -240,9 +249,7 @@ public class GrailResource {
      */
     @POST
     @Path("/pullosm")
-    // @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    // public Response pullOsmTst(GrailParams params,
     public Response pullOsm(@QueryParam("bbox") String bbox,
                             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
@@ -256,44 +263,54 @@ public class GrailResource {
         catch (IOException ioe) {
             logger.error("PullOSM: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
-            // throw new WebApplicationException(ioe, Response.status(Response.Status.BAD_REQUEST).entity(ioe.getMessage()).build());
         }
 
-        APICapabilities mainOsmApiCapabilities = getCapabilities(MAIN_OSMAPI_CAPABILITIES_URL);
-        logger.info("PullOSM: mainOSMAPI status = " + mainOsmApiCapabilities.getApiStatus());
-        if (mainOsmApiCapabilities.getApiStatus() == "offline" | mainOsmApiCapabilities.getApiStatus() == null) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The main OSM API server is offline. Try again later").build();
-        }
-
-        // APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-        // logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        // if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
-        //     return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+        // Not sure how to check if the main Overpass server is alive. 
+        // APICapabilities mainOsmApiCapabilities = getCapabilities(MAIN_OSMAPI_CAPABILITIES_URL);
+        // logger.info("PullOSM: mainOSMAPI status = " + mainOsmApiCapabilities.getApiStatus());
+        // if (mainOsmApiCapabilities.getApiStatus() == "offline" | mainOsmApiCapabilities.getApiStatus() == null) {
+        //     return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The main OSM API server is offline. Try again later").build();
         // }
 
-        GrailParams params = new GrailParams();
-        params.setBounds(bbox);
+        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
+        logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
+        if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+        }
+
+        GrailParams apiParams = new GrailParams();
+        GrailParams overpassParams = new GrailParams();
+
+        apiParams.setBounds(bbox);
+        apiParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
+        apiParams.setPullUrl(RAILSPORT_PULL_URL);
+
+        overpassParams.setBounds(bbox);
+        overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
+        overpassParams.setPullUrl(MAIN_OVERPASS_URL);
 
         try {
             List<Command> workflow = new LinkedList<>();
 
             // Pull data from the local OSM API Db
-            // File localOSMFile = new File(workDir,"local.osm");
-            // params.setOutput(localOSMFile.getAbsolutePath());
-            // params.setPullUrl(RAILSPORT_PULL_URL);
+            File localOSMFile = new File(workDir,"local.osm");
+            if (localOSMFile.exists()) localOSMFile.delete();
+
+            apiParams.setOutput(localOSMFile.getAbsolutePath());
             // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            // workflow.add(getLocalOSM);
+            InternalCommand getLocalOSM = ApiCommandFactory.build(jobId,apiParams,this.getClass());
+            workflow.add(getLocalOSM);
 
-            // Pull OSM data from the real, internet, OSM API Db
+
+
+            // Pull OSM data from the real, internet, OSM Db using overpass
             File internetOSMFile = new File(workDir,"internet.osm");
-            params.setOutput(internetOSMFile.getAbsolutePath());
-            // params.setPullUrl(MAIN_OSMAPI_PULL_URL);
-            params.setPullUrl(MAIN_OVERPASS_URL);
-            // ExternalCommand getInternetOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            // workflow.add(getInternetOSM);
+            if (internetOSMFile.exists()) internetOSMFile.delete();
 
-            InternalCommand getOsmosisOSM = OsmosisCommandFactory.build(jobId,params,this.getClass());
-            workflow.add(getOsmosisOSM);
+            overpassParams.setOutput(internetOSMFile.getAbsolutePath());
+
+            InternalCommand getOverpassOSM = OverpassCommandFactory.build(jobId,overpassParams,this.getClass());
+            workflow.add(getOverpassOSM);
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
@@ -304,7 +321,8 @@ public class GrailResource {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
-            String msg = "Error while getting OSM data! Params: " + params.toString();
+            // Fix This
+            String msg = "Error while getting OSM data! Params: " + apiParams.toString();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -353,6 +371,8 @@ public class GrailResource {
             GrailParams params = new GrailParams();
 
             File diffFile = new File(workDir,"diff.osc");
+            if (diffFile.exists()) diffFile.delete();
+
             params.setOutput(diffFile.getAbsolutePath());
             params.setInput1(localOSMFile.getAbsolutePath()); 
             params.setInput2(internetOSMFile.getAbsolutePath());
