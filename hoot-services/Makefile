@@ -13,9 +13,6 @@ endif
 
 default: build
 
-src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml.in ../conf/database/DatabaseConfig.sh
-	../scripts/ReplaceEnvironmentVariables.sh src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml.in src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml
-
 src/main/resources/db/db.properties: src/main/resources/db/db.properties.in ../conf/database/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/db/db.properties.in src/main/resources/db/db.properties
 
@@ -25,7 +22,7 @@ src/main/resources/conf/hoot-services.conf: src/main/resources/conf/hoot-service
 build-info:
 	../scripts/GenerateBuildInfoFiles.sh
 
-config: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml src/main/resources/db/db.properties src/main/resources/conf/hoot-services.conf
+config: src/main/resources/db/db.properties src/main/resources/conf/hoot-services.conf
 
 run-liquibase:
 	rm -f ./src/main/resources/db/liquibase.properties
