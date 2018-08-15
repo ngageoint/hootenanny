@@ -219,13 +219,17 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
         if (!pMap->containsNode(*it))
         {
           // Add a copy
-          pMap->addNode(NodePtr(new Node(*(_pOriginalMap->getNode(*it)))));
+          NodePtr pNewNode(new Node(*(_pOriginalMap->getNode(*it))));
+          pNewNode->setStatus(Status::TagChange);
+          pMap->addNode(pNewNode);
         }
       }
 
       // Add the changed way with merged tags
       ConstWayPtr pTempWay = boost::dynamic_pointer_cast<const Way>(c.getElement());
-      pMap->addWay(WayPtr(new Way(*pTempWay)));
+      WayPtr pNewWay(new Way(*pTempWay));
+      pNewWay->setStatus(Status::TagChange);
+      pMap->addWay(pNewWay);
     }
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {

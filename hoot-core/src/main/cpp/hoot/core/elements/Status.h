@@ -42,7 +42,9 @@ public:
     Invalid = 0,
     Unknown1,
     Unknown2,
-    Conflated
+    Conflated,
+    TagChange, // Tags have been changed, but not geometry
+    EnumEnd // Used for calculating multiary inputs
   } TypeEnum;
 
   typedef int Type;

@@ -51,7 +51,7 @@ Status Status::fromInput(int i)
   }
   else
   {
-    result._type = i - 1 + Conflated;
+    result._type = i - 1 + EnumEnd;
   }
 
   return result;
@@ -60,9 +60,9 @@ Status Status::fromInput(int i)
 int Status::getInput() const
 {
   int result;
-  if (_type > Conflated)
+  if (_type > EnumEnd)
   {
-    result = _type - Conflated + 1;
+    result = _type - EnumEnd + 1;
   }
   else
   {
@@ -84,7 +84,7 @@ int Status::getInput() const
 
 QString Status::toCompatString() const
 {
-  if (_type <= Conflated)
+  if (_type <= EnumEnd)
   {
     return QString::number(_type);
   }
@@ -96,9 +96,9 @@ QString Status::toCompatString() const
 
 QString Status::toString() const
 {
-  if (_type > Conflated)
+  if (_type > EnumEnd)
   {
-      int inputNum = _type - Conflated + 2;
+      int inputNum = _type - EnumEnd + 2;
       return QString("Input%1").arg(inputNum, 3, 10, QChar('0'));
   }
   else
@@ -113,6 +113,8 @@ QString Status::toString() const
       return MetadataTags::Unknown2();
     case Status::Conflated:
       return "Conflated";
+    case Status::TagChange:
+      return "TagChange";
     default:
       return QString("Unknown (%1)").arg(_type);
     }
@@ -121,7 +123,7 @@ QString Status::toString() const
 
 QString Status::toTextStatus() const
 {
-  if (_type > Conflated)
+  if (_type > EnumEnd)
   {
     return toString();
   }
@@ -137,6 +139,8 @@ QString Status::toTextStatus() const
       return "Input2";
     case Status::Conflated:
       return "Conflated";
+    case Status::TagChange:
+      return "TagChange";
     default:
       return QString("Unknown (%1)").arg(_type);
     }
@@ -154,21 +158,25 @@ Status::Type Status::fromString(QString typeString)
   {
     return rawNum;
   }
-  else if (typeString == "invalid" || typeString == "0")
+  else if (typeString == "invalid" || typeString == QString::number(Status::Invalid))
   {
     return Invalid;
   }
-  else if (typeString == "unknown1" || typeString == "input1" || typeString == "1")
+  else if (typeString == "unknown1" || typeString == "input1" || typeString == QString::number(Status::Unknown1))
   {
     return Unknown1;
   }
-  else if (typeString == "unknown2" || typeString == "input2" || typeString == "2")
+  else if (typeString == "unknown2" || typeString == "input2" || typeString == QString::number(Status::Unknown2))
   {
     return Unknown2;
   }
-  else if (typeString == "conflated" || typeString == "3")
+  else if (typeString == "conflated" || typeString == QString::number(Status::Conflated))
   {
     return Conflated;
+  }
+  else if (typeString == "TagChange" || typeString == QString::number(Status::TagChange))
+  {
+    return TagChange;
   }
   else if (typeString.startsWith("input"))
   {
@@ -180,11 +188,11 @@ Status::Type Status::fromString(QString typeString)
       }
       else
       {
-        // Input 1 and 2 are enumeration 1 and 2. After that the inputs start at Conflated + 1 and
+        // Input 1 and 2 are enumeration 1 and 2. After that the inputs start at EnumEnd + 1 and
         // go up.
         if (num > 2)
         {
-          num = (num - 2) + Conflated;
+          num = (num - 2) + EnumEnd;
         }
 
         return num;
