@@ -97,6 +97,6 @@ public class ErrorLogTest extends HootServicesJerseyTestAbstract {
 
         String theString = responseData.readEntity(String.class);
         assertFalse(theString.isEmpty());
-        assertEquals(282637, theString.length());
+        assertEquals(282397, theString.length());
     }
 }

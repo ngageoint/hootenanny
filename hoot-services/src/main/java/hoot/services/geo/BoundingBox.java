@@ -29,7 +29,7 @@ package hoot.services.geo;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -87,10 +87,10 @@ public class BoundingBox {
             BoundingBox objBounds = (BoundingBox) obj;
 
             // allowing for a small amount of error here
-            return MathUtils.equals(this.maxLat, objBounds.getMaxLat(), BOUNDS_ERROR)
-                    && MathUtils.equals(this.maxLon, objBounds.getMaxLon(), BOUNDS_ERROR)
-                    && MathUtils.equals(this.minLat, objBounds.getMinLat(), BOUNDS_ERROR)
-                    && MathUtils.equals(this.minLon, objBounds.getMinLon(), BOUNDS_ERROR);
+            return Precision.equals(this.maxLat, objBounds.getMaxLat(), BOUNDS_ERROR)
+                    && Precision.equals(this.maxLon, objBounds.getMaxLon(), BOUNDS_ERROR)
+                    && Precision.equals(this.minLat, objBounds.getMinLat(), BOUNDS_ERROR)
+                    && Precision.equals(this.minLon, objBounds.getMinLon(), BOUNDS_ERROR);
         }
         else {
             return false;
