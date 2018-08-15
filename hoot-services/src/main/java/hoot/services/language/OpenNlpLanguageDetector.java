@@ -68,12 +68,17 @@ public final class OpenNlpLanguageDetector implements LanguageDetector
 
   public String detect(String text)
   {
+    long startTime = System.currentTimeMillis();
+
     logger.debug("Detecting language with " + getClass().getName() + "; " + text + "...");
     String detectedLang = detector.predictLanguage(text).getLang();
     if (!detectedLang.isEmpty())
     {
       logger.debug(getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
     }
+
+    logger.error("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000); 
+
     return detectedLang;
   }
 }

@@ -76,7 +76,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     //TODO: read from hoot services config
     Map<String, String> langPacks = new HashMap<String, String>();    
     langPacks.put("de", "/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18");
-    //langPacks.put("es", "/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
+    langPacks.put("es", "/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
 
     int ctr = 0;
     configs.clear();
@@ -119,7 +119,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     JoshuaConfiguration config = new JoshuaConfiguration();
     config.readConfigFile(configPath);
     config.setConfigFilePath(new File(configPath).getCanonicalFile().getParent());
-    config.sanityCheck();
+    //config.sanityCheck();
     configs.put(langCode, config);
     return config;
   }
@@ -140,6 +140,8 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
 
   public String translate(String sourceLangCode, String text) throws Exception
   {
+    long startTime = System.currentTimeMillis();
+
     text = text.replaceAll("\n", "");
     logger.error("text: " + text);
     sourceLangCode = sourceLangCode.toLowerCase();
@@ -150,17 +152,14 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     }
 
     String translatedText = "";
-    Decoder decoder = null;
     BufferedReader reader = null;
     try
     {
-      long startTime = System.currentTimeMillis();
       logger.debug("Translating with " + getClass().getName() + "; text: " + text + "...");
 
       reader = new BufferedReader(new StringReader(text));
       TranslationRequestStream request = new TranslationRequestStream(reader, configs.get(sourceLangCode));
-      decoder = decoders.get(sourceLangCode);
-      TranslationResponseStream translationResponseStream = decoder.decodeAll(request);
+      TranslationResponseStream translationResponseStream = decoders.get(sourceLangCode).decodeAll(request);
       int numTranslations = 0;
       for (Translation translation: translationResponseStream) 
       {
@@ -172,13 +171,9 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
         throw new Exception("More than one translation found: " + numTranslations);
       }
     
-      if (!translatedText.isEmpty() && !translatedText.equals(text))
-      {
-        logger.error(getClass().getName() + " translated: " + text + " to: " + translatedText);
-      }
+      logger.error(getClass().getName() + " translated: " + text + " to: " + translatedText);
 
-      logger.debug("Memory used {} MB", ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000.0));
-      logger.debug("Total running time: {} seconds",  (System.currentTimeMillis() - startTime) / 1000);
+      logger.error("Translation took {} seconds", (System.currentTimeMillis() - startTime) / 1000);
     }
     finally
     {
@@ -192,7 +187,6 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
       }*/
     }    
 
-    logger.error("translatedText: " + translatedText);
     return translatedText;
   }
 }
