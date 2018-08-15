@@ -91,6 +91,7 @@ void StringDistanceJs::New(const FunctionCallbackInfo<Value>& args)
 
   StringDistance* c = Factory::getInstance().constructObject<StringDistance>(className);
   StringDistanceJs* obj = new StringDistanceJs(StringDistancePtr(c));
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<StringDistance>(c, args);

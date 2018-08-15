@@ -79,6 +79,7 @@ void WaySublineMatchStringJs::New(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   WaySublineMatchStringJs* obj = new WaySublineMatchStringJs();
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());

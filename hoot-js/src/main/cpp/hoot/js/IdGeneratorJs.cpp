@@ -101,6 +101,7 @@ void IdGeneratorJs::New(const FunctionCallbackInfo<Value>& args)
   {
     IdGenerator* idGen = Factory::getInstance().constructObject<IdGenerator>(className);
     IdGeneratorJs* obj = new IdGeneratorJs(IdGeneratorPtr(idGen));
+    //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
     obj->Wrap(args.This());
 
     PopulateConsumersJs::populateConsumers<IdGenerator>(idGen, args);

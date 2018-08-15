@@ -131,6 +131,7 @@ void NodeJs::New(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   NodeJs* obj = new NodeJs();
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());

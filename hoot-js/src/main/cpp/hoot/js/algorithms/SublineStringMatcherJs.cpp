@@ -211,6 +211,7 @@ void SublineStringMatcherJs::New(const FunctionCallbackInfo<Value>& args)
     Factory::getInstance().constructObject<SublineStringMatcher>(className));
   SublineStringMatcherJs* obj = new SublineStringMatcherJs(sm);
   PopulateConsumersJs::populateConsumers(sm.get(), args);
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());

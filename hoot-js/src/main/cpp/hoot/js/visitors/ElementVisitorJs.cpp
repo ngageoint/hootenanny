@@ -84,6 +84,7 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
 
   ConstElementVisitor* c = Factory::getInstance().constructObject<ConstElementVisitor>(className);
   ElementVisitorJs* obj = new ElementVisitorJs(c);
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<ConstElementVisitor>(c, args);
