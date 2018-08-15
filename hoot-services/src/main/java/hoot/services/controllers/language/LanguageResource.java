@@ -29,6 +29,8 @@ import hoot.services.language.LanguageDetectorFactory;
 import hoot.services.language.ToEnglishTranslatorFactory;
 import hoot.services.language.ToEnglishTranslator;
 import hoot.services.language.SupportedLanguages;
+import hoot.services.language.LanguageDetector;
+import hoot.services.language.LanguageDetectionConsumer;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 
@@ -65,6 +67,15 @@ public class LanguageResource
     }
   }
 
+  private String toDetectResponse(LanguageDetectRequest request, String detectedLang, String detectingDetector)
+  {
+    JSONObject entity = new JSONObject();
+    entity.put("sourceText", request.getText());
+    entity.put("detectedLanguage", detectedLang);
+    entity.put("detectorUsed", detectingDetector);
+    return entity.toJSONString();
+  }
+
   @POST
   @Path("/detect")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -73,9 +84,6 @@ public class LanguageResource
   {
     try
     {
-      logger.error(String.join(",", request.getDetectors()));
-      logger.error(request.getText());
-
       String detectedLang = "";
       String detectingDetector = "";
       List<String> detectors = Arrays.asList(request.getDetectors());
@@ -86,19 +94,17 @@ public class LanguageResource
         detectors.add("OpenNlpLanguageDetector");
       }
 
-      for (String detector : detectors)
+      for (String detectorName : detectors)
       {
         if (detectedLang.isEmpty())
         {
-          detectedLang = LanguageDetectorFactory.create(detector).detect(request.getText());
+          LanguageDetector detector = LanguageDetectorFactory.create(detectorName);
+          detectingDetector = detectorName;
+          detectedLang = detector.detect(request.getText());
         }
       }
 
-      JSONObject entity = new JSONObject();
-      entity.put("sourceText", request.getText());
-      entity.put("detectedLang", detectedLang);
-      entity.put("detectingDetector", detectingDetector);
-      return Response.ok(entity.toJSONString()).build();
+      return Response.ok(toDetectResponse(request, detectedLang, detectingDetector)).build();
     }
     catch (Exception e)
     {
@@ -112,36 +118,61 @@ public class LanguageResource
     }
   }
 
+  private String toTranslateResponse(LanguageTranslateRequest request, String translatedText, ToEnglishTranslator translator)
+  {
+    JSONObject entity = new JSONObject();
+    entity.put("sourceText", request.getText());
+    entity.put("sourceLangCodes", request.getSourceLangCodes());
+    entity.put("translatedText", translatedText);
+    entity.put("translator", request.getTranslator());
+    if (translator instanceof LanguageDetectionConsumer)
+    {
+      LanguageDetectionConsumer detectionConsumer = (LanguageDetectionConsumer)translator;
+      if (!detectionConsumer.getDetectedLanguage().isEmpty())
+      {
+        entity.put("detectedLanguage", detectionConsumer.getDetectedLanguage());
+        entity.put("detectorUsed", detectionConsumer.getDetectorUsed());
+      }
+    }
+    entity.put("detectedLanguageOverridesSpecifiedSourceLanguages", request.getDetectedLanguageOverridesSpecifiedSourceLanguages());
+    entity.put("performExhaustiveTranslationSearchWithNoDetection", request.getPerformExhaustiveTranslationSearchWithNoDetection());
+    return entity.toJSONString();
+  }
+
   @POST
   @Path("/translate")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response translate(LanguageTranslateRequest request) 
   {
-    logger.error("text: " + request.getText());
-    logger.error("detectors: " + String.join(",", request.getDetectors());
-    logger.error("sourceLangCodes: " + String.join(",", request.getSourceLangCodes());
-    logger.error("translator: " + request.getTranslator());
-    logger.error("detectedLanguageOverridesSpecifiedSourceLanguages: " + request.getDetectedLanguageOverridesSpecifiedSourceLanguages());
-    logger.error("performExhaustiveTranslationSearchWithNoDetection: " + request.getPerformExhaustiveTranslationSearchWithNoDetection());
-
-    if (!SupportedLanguages.getInstance().isSupportedLanguage(request.getSourceLangCode().toLowerCase()))
-    {
-      throw new WebApplicationException(
-        Response.status(Status.BAD_REQUEST).entity("Requested unsupported translation language: " + request.getSourceLangCode()).build());
-    }
-
     String translatedText = "";
+    ToEnglishTranslator translator = null;
     try
     {
-      ToEnglishTranslator translator = ToEnglishTranslatorFactory.create(request.getTranslator());
+      translator = ToEnglishTranslatorFactory.create(request.getTranslator());
+
+      for (int i = 0; i < request.getSourceLangCodes().length; i++)
+      {
+        String sourceLangCode = request.getSourceLangCodes()[i].toLowerCase();
+        if (!SupportedLanguages.getInstance().isSupportedLanguage(sourceLangCode))
+        {
+          throw new Exception("Requested unsupported translation language: " + sourceLangCode);
+        }
+        else if (!translator.isLanguageAvailable(sourceLangCode))
+        {
+          throw new Exception("Requested unavailable translation language: " + sourceLangCode);
+        }
+      } 
+
       translator.setConfig(request);
-      translatedText = translator.translate(request.getSourceLangCode(), request.getText());
+      translatedText = translator.translate(request.getSourceLangCodes(), request.getText());
     }
     catch (Exception e)
     {
       Status status;
-      if (e.getMessage().startsWith("No language translator available"))
+      //TODO: handle more exceptions
+      if (e.getMessage().startsWith("No language translator available") || 
+          e.getMessage().startsWith("Requested unsupported translation language"))
       {
         status = Status.BAD_REQUEST;
       }
@@ -153,22 +184,12 @@ public class LanguageResource
         e, 
         Response.status(status)
           .entity(
-            "Error translating with translator: " + request.getTranslator() + " to language: " + request.getSourceLangCode() + ".  Error: " + 
+            "Error translating with translator: " + request.getTranslator() + " to language (s): " + 
+            String.join(",", request.getSourceLangCodes()) + ".  Error: " + 
             e.getMessage() + "; text: " + request.getText())
           .build());
     }
     
-    JSONObject entity = new JSONObject();
-    entity.put("sourceText", request.getText());
-    entity.put("sourceLangCodes", request.getSourceLangCodes());
-    entity.put("translatedText", translatedText);
-    entity.put("translator", request.getTranslator());
-    if (!translator.getDetectedLanguage().isEmpty())
-    {
-      entity.put("detectedLanguage", translator.getDetectedLanguage());
-    }
-    entity.put("detectedLanguageOverridesSpecifiedSourceLanguages", request.getDetectedLanguageOverridesSpecifiedSourceLanguages());
-    entity.put("performExhaustiveTranslationSearchWithNoDetection", request.getPerformExhaustiveTranslationSearchWithNoDetections());
-    return Response.ok(entity.toJSONString()).build();
+    return Response.ok(toTranslateResponse(request, translatedText, translator)).build();
   }
 }

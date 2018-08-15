@@ -22,9 +22,9 @@ public class LanguageTranslateRequest
   public void setSourceLangCodes(String[] sourceLangCodes) { this.sourceLangCodes = sourceLangCodes; }
 
   public String getText() { return text; }
-  public void setText(boolean override) { this.detectedLanguageOverridesSpecifiedSourceLanguages = override; }
+  public void setText(String text) { this.text = text; }
 
-  public boolean getDetectedLanguageOverridesSpecifiedSourceLanguages() { return text; }
+  public boolean getDetectedLanguageOverridesSpecifiedSourceLanguages() { return detectedLanguageOverridesSpecifiedSourceLanguages; }
   public void setDetectedLanguageOverridesSpecifiedSourceLanguages(boolean override) 
   { this.detectedLanguageOverridesSpecifiedSourceLanguages = override; }
 

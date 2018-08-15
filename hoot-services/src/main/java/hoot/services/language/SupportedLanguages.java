@@ -28,7 +28,7 @@ public final class SupportedLanguages
 
   private static SupportedLanguages instance;
 
-  private SupportedLanguages() throws IOException, RuntimeException
+  private SupportedLanguages() throws Exception
   {
     InputStream configStrm = null;
     try
@@ -58,7 +58,7 @@ public final class SupportedLanguages
     }
   }
 
-  public synchronized static SupportedLanguages getInstance() throws IOException
+  public synchronized static SupportedLanguages getInstance() throws Exception
   {
     if (instance == null)
     { 
@@ -78,7 +78,7 @@ public final class SupportedLanguages
     return StaticHolder.INSTANCE;
   }*/
 
-  public void readConfig(InputStream configStrm) throws IOException
+  public void readConfig(InputStream configStrm) throws Exception
   { 
     String line = null;
     BufferedReader reader = new BufferedReader(new InputStreamReader(configStrm));                         
@@ -124,7 +124,7 @@ public final class SupportedLanguages
 
   public boolean isSupportedLanguage(String iso6391Code)
   {
-    return iso6391ToLang.containsKey(iso6391Code);
+    return iso6391ToLang.containsKey(iso6391Code.toLowerCase());
   }
 
   public String getIso6391Code(String iso639Code)

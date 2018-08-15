@@ -15,8 +15,6 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationVisitor)
 
 ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
 _skipPreTranslatedTags(false),
-_detectedLangOverrides(false),
-_performExhaustiveSearch(false),
 _numTotalElements(0),
 _skipWordsInEnglishDict(true),
 _numTranslationsMade(0),
@@ -39,7 +37,7 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 
   _translatorClient.reset(
     Factory::getInstance().constructObject<ToEnglishTranslator>(
-      opts.getLanguageTranslationTranslatorClient()));
+      opts.getLanguageTranslationTranslator()));
   boost::shared_ptr<QObject> qObj = boost::dynamic_pointer_cast<QObject>(_translatorClient);
   if (qObj.get())
   {

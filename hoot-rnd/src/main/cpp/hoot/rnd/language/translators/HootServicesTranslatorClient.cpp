@@ -88,7 +88,7 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
 
   LOG_DEBUG(
     "Translating to English with specified source languages: " <<
-     QStringList::join(",", _sourceLangs) << "; text: " << textToTranslate);
+     _sourceLangs.join(",") << "; text: " << textToTranslate);
 
   _detectionMade = false;
   //TODO: make translation call
@@ -115,9 +115,9 @@ void HootServicesTranslatorClient::_readyRead()
   //TODO: process translation response data
 }
 
-void HootServicesTranslatorClient::_error(QAbstractSocket::SocketError error)
-{
-  LOG_ERROR("error: " << error);
-}
+//void HootServicesTranslatorClient::_error(QAbstractSocket::SocketError error)
+//{
+//  LOG_ERROR("error: " << error);
+//}
 
 }

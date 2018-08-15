@@ -40,7 +40,7 @@ signals:
 private slots:
 
   void _readyRead();
-  void _error(QAbstractSocket::SocketError error);
+  //void _error(QAbstractSocket::SocketError error);
 
 private:
 

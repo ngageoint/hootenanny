@@ -5,7 +5,8 @@ public interface ToEnglishTranslator
 {
   void setConfig(Object config);
 
-  String translate(StringList sourceLangCodes, String text) throws Exception;
+  String translate(String[] sourceLangCodes, String text) throws Exception;
+  String translate(String sourceLangCode, String text) throws Exception;
 
-  String getDetectedLanguage();
+  boolean isLanguageAvailable(String langCode);
 }

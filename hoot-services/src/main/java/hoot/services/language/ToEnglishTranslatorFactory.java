@@ -44,5 +44,6 @@ public class ToEnglishTranslatorFactory
       }
       throw new Exception(msg + "; error: " + e.getMessage());
     }
+    return translator;
   }
 }

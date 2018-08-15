@@ -42,7 +42,34 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
 
   private static JoshuaLanguageTranslator instance;
 
-  private JoshuaLanguageTranslator() throws IOException
+  private JoshuaLanguageTranslator() throws Exception
+  {
+    initFromLangPacks();
+  }
+
+  public void setConfig(Object config) {}
+
+  public synchronized static JoshuaLanguageTranslator getInstance() throws Exception
+  {
+    if (instance == null)
+    { 
+      instance = new JoshuaLanguageTranslator();
+    }
+    return instance;
+  }
+
+  //this may end up being faster
+  /*private static class StaticHolder 
+  {
+    static final JoshuaLanguageTranslator INSTANCE = new JoshuaLanguageTranslator();
+  }
+ 
+  public static JoshuaLanguageTranslator getInstance() 
+  {
+    return StaticHolder.INSTANCE;
+  }*/
+
+  private void initFromLangPacks() throws Exception
   {
     logger.error("Initializing Joshua...");
 
@@ -52,6 +79,9 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     //langPacks.put("es", "/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
 
     int ctr = 0;
+    configs.clear();
+    decoders.clear();
+    //TODO: multi-thread this
     for (Map.Entry<String, String> langPack : langPacks.entrySet()) 
     {
       long startTime = System.currentTimeMillis();
@@ -75,30 +105,6 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     logger.error("Finished initializing " + ctr + " language packs.");
   }
 
-  public void setConfig(Object config) {}
-
-  public String getDetectedLanguage() { return ""; }
-
-  public synchronized static JoshuaLanguageTranslator getInstance() throws IOException
-  {
-    if (instance == null)
-    { 
-      instance = new JoshuaLanguageTranslator();
-    }
-    return instance;
-  }
-
-  //this may end up being faster
-  /*private static class StaticHolder 
-  {
-    static final JoshuaLanguageTranslator INSTANCE = new JoshuaLanguageTranslator();
-  }
- 
-  public static JoshuaLanguageTranslator getInstance() 
-  {
-    return StaticHolder.INSTANCE;
-  }*/
-
   private void convertConfigFileModelPathsToAbsolute(String configPath, String langPackPath) throws IOException
   {
     File configFile = new File(configPath);
@@ -118,13 +124,26 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     return config;
   }
 
-  public String translate(StringList sourceLangCodes, String text) throws Exception
+  public boolean isLanguageAvailable(String langCode)
   {
-    if (sourceLangCodes.size() > 1)
+    return decoders.containsKey(langCode.toLowerCase());
+  }
+
+  public String translate(String[] sourceLangCodes, String text) throws Exception
+  {
+    if (sourceLangCodes.length > 1)
     {
       throw new Exception("Only one source language may be passed to this translator.");
     }
-    sourceLangCode = sourceLangCodes.at(0).toLowerCase();
+    return translate(sourceLangCodes[0], text);
+  }
+
+  public String translate(String sourceLangCode, String text) throws Exception
+  {
+    text = text.replaceAll("\n", "");
+    logger.error("text: " + text);
+    sourceLangCode = sourceLangCode.toLowerCase();
+    logger.error("sourceLangCode: " + sourceLangCode);
     if (!decoders.containsKey(sourceLangCode))
     {
       throw new Exception("No language translator available for language: " + sourceLangCode);
@@ -155,7 +174,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     
       if (!translatedText.isEmpty() && !translatedText.equals(text))
       {
-        logger.debug(getClass().getName() + " translated: " + text + " to: " + translatedText);
+        logger.error(getClass().getName() + " translated: " + text + " to: " + translatedText);
       }
 
       logger.debug("Memory used {} MB", ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000.0));
@@ -173,6 +192,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
       }*/
     }    
 
+    logger.error("translatedText: " + translatedText);
     return translatedText;
   }
 }

@@ -31,16 +31,15 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
 
   ToEnglishTranslationVisitor::setConfiguration(conf);
 
-  if (_skipPreTranslatedTags || _detectedLangOverrides || _performExhaustiveSearch)
+  if (_skipPreTranslatedTags ||
+      opts.getLanguageTranslationDetectedLanguageOverridesSpecifiedSourceLanguages() ||
+      opts.getLanguageTranslationPerformExhaustiveSearchWithNoDetection())
   {
-    LOG_WARN(
-      "ToEnglishTranslationComparisonVisitor does not support one of the following options:\n"
+    throw IllegalArgumentException(
+      "ToEnglishTranslationComparisonVisitor does not support enabling any of the following options:\n"
       "language.translation.detected.language.overrides.specified.source.languages\n"
       "language.translation.perform.exhaustive.search.with.no.detection\n"
       "language.translation.skip.pre.translated.tags\nDisabling the options.");
-    _skipPreTranslatedTags = false;
-    _detectedLangOverrides = false;
-    _performExhaustiveSearch = false;
   }
 
   _translationScorer.reset(
@@ -85,7 +84,7 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
 
 void ToEnglishTranslationComparisonVisitor::translationComplete()
 {
-  const QString translatedVal = _translator->getTranslatedText();
+  const QString translatedVal = _translatorClient->getTranslatedText();
   LOG_VARD(translatedVal);
   Tags& tags = _element->getTags();
   tags.appendValue("hoot:translated:" + _toTranslateTagKey + ":en", translatedVal);
