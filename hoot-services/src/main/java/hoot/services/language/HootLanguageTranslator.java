@@ -28,7 +28,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   private boolean performExhaustiveTranslationSearchWithNoDetection;
   private String detectedLangCode;
   private String detectorUsed;
-  private ToEnglishTranslator translator = null;
+  private ToEnglishTranslator translator;
   
   public HootLanguageTranslator() throws Exception
   {
@@ -39,9 +39,14 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   public void setConfig(Object config)
   {
     LanguageTranslateRequest request = (LanguageTranslateRequest)config;
-    this.detectors = request.getDetectors();
-    this.detectedLanguageOverridesSpecifiedSourceLanguages = request.getDetectedLanguageOverridesSpecifiedSourceLanguages();
-    this.performExhaustiveTranslationSearchWithNoDetection = request.getPerformExhaustiveTranslationSearchWithNoDetection();
+    detectors = request.getDetectors();
+    if (detectors == null || detectors.length == 0)
+    {
+      //TODO: add these with reflection
+      detectors = new String[]{ "TikaLanguageDetector", "OpenNlpLanguageDetector" };
+    }
+    detectedLanguageOverridesSpecifiedSourceLanguages = request.getDetectedLanguageOverridesSpecifiedSourceLanguages();
+    performExhaustiveTranslationSearchWithNoDetection = request.getPerformExhaustiveTranslationSearchWithNoDetection();
   }
 
   public String getDetectedLangCode() { return detectedLangCode; }
@@ -71,27 +76,32 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
 
   public String translate(String[] sourceLangCodes, String text) throws Exception
   {
-    if (sourceLangCodes.length == 0)
+    if (sourceLangCodes == null || sourceLangCodes.length == 0)
     {
       throw new Exception("No source language codes or detect mode specified.");
     }
 
     logger.error("text: " + text);
-    List<String> specifiedSourceLangs = Arrays.asList(sourceLangCodes);
+    List<String> specifiedSourceLangs = Arrays.asList(sourceLangCodes);;
     logger.error("specifiedSourceLangs size: " + String.valueOf(specifiedSourceLangs.size()));
-    String sourceLangCode = null;
+    logger.error("performExhaustiveTranslationSearchWithNoDetection: " + performExhaustiveTranslationSearchWithNoDetection);
+    logger.error("detectedLanguageOverridesSpecifiedSourceLanguages: " + detectedLanguageOverridesSpecifiedSourceLanguages);
+
+    String sourceLangCode = "";
     String translatedText = "";
 
     for (String langCode : specifiedSourceLangs)
     {
-      if (!((SupportedLanguageConsumer)translator).isLanguageAvailable(langCode.toLowerCase()))
+      if (!langCode.toLowerCase().equals("detect") && 
+          !((SupportedLanguageConsumer)translator).isLanguageAvailable(langCode.toLowerCase()))
       {
         throw new Exception("Requested unavailable translation language: " + langCode);
       }
     }
 
-    if (specifiedSourceLangs.contains("detect") || specifiedSourceLangs.size() == 1) //TODO: case sens
+    if (specifiedSourceLangs.contains("detect") || specifiedSourceLangs.size() > 1) //TODO: case sens
     {
+      logger.error("detectors: " + String.join(",", detectors));
       for (int i = 0; i < detectors.length; i++)
       {
         String detectorName = detectors[i];
@@ -104,6 +114,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
           detectedLangCode = sourceLangCode;
           logger.error("detectedLangCode: " + detectedLangCode);
           detectorUsed = detector.getClass().getSimpleName();
+          logger.error("specifiedSourceLangs.contains(sourceLangCode): " + specifiedSourceLangs.contains(sourceLangCode));
           break;
         }
       }

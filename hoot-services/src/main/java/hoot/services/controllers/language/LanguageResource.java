@@ -218,17 +218,25 @@ public class LanguageResource
   {
     JSONObject entity = new JSONObject();
     entity.put("sourceText", request.getText());
-    entity.put("sourceLangCodes", request.getSourceLangCodes());
+    JSONArray sourceLangCodes = new JSONArray();
+    for (int i = 0; i < request.getSourceLangCodes().length; i++)
+    {
+      sourceLangCodes.add(request.getSourceLangCodes()[i]);
+    }
+    entity.put("sourceLangCodes", sourceLangCodes);
     entity.put("translatedText", translatedText);
     entity.put("translator", request.getTranslator());
     if (translator instanceof LanguageDetectionConsumer)
     {
       LanguageDetectionConsumer detectionConsumer = (LanguageDetectionConsumer)translator;
-      if (!detectionConsumer.getDetectedLangCode().isEmpty())
+      if (detectionConsumer.getDetectedLangCode() != null && !detectionConsumer.getDetectedLangCode().isEmpty())
       {
         entity.put("detectedLangCode", detectionConsumer.getDetectedLangCode());
         entity.put("detectedLang", ((SupportedLanguageConsumer)translator).getLanguageName(detectionConsumer.getDetectedLangCode()));
         entity.put("detectorUsed", detectionConsumer.getDetectorUsed());
+        entity.put(
+          "detectedLangAvailableForTranslation", 
+          ((SupportedLanguageConsumer)translator).isLanguageAvailable(detectionConsumer.getDetectedLangCode()));
       }
     }
     entity.put("detectedLanguageOverridesSpecifiedSourceLanguages", request.getDetectedLanguageOverridesSpecifiedSourceLanguages());
@@ -250,16 +258,6 @@ public class LanguageResource
     try
     {
       translator = ToEnglishTranslatorFactory.create(request.getTranslator());
-
-      for (int i = 0; i < request.getSourceLangCodes().length; i++)
-      {
-        String sourceLangCode = request.getSourceLangCodes()[i].toLowerCase();
-        if (!((SupportedLanguageConsumer)translator).isLanguageAvailable(sourceLangCode))
-        {
-          throw new Exception("Requested unavailable translation language: " + sourceLangCode);
-        }
-      } 
-
       translator.setConfig(request);
       translatedText = translator.translate(request.getSourceLangCodes(), request.getText());
     }
