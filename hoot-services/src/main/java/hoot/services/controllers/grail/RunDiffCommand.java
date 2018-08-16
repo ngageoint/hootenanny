@@ -44,7 +44,7 @@ class RunDiffCommand extends GrailCommand {
     RunDiffCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId,params);
 
-        logger.info("Starting to run diff");
+        logger.info("Params: " + params);
 
         // These are all of the non-default options from the UI
         List<String> options = new LinkedList<>();
