@@ -155,13 +155,20 @@ class ConflateCommand extends ExternalCommand {
             stats = "--stats";
         }
 
+        // Detect Differential Conflation
         String conflationCommand = params.getConflationCommand();
-        boolean isDifferentialConflate = false;
-        if (conflationCommand != null && conflationCommand.equals("conflate-differential"))
-        {
+        String diffTags = "";
+        String differential = "";
+        if (conflationCommand != null && conflationCommand.contains("differential-tags")){
           conflationCommand = "conflate";
-          isDifferentialConflate = true;
+          differential = "--differential";
+          diffTags = "--include-tags";
         }
+        else if (conflationCommand != null && conflationCommand.contains("differential")){
+          conflationCommand = "conflate";
+          differential = "--differential";
+        }
+
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);
@@ -170,14 +177,11 @@ class ConflateCommand extends ExternalCommand {
         substitutionMap.put("INPUT1", input1);
         substitutionMap.put("INPUT2", input2);
         substitutionMap.put("OUTPUT", output);
+        substitutionMap.put("DIFFERENTIAL", differential);
+        substitutionMap.put("DIFF_TAGS", diffTags);
         substitutionMap.put("STATS", stats);
 
-        String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
-        if (isDifferentialConflate)
-        {
-          command = command.replace("${STATS}", "--differential ${STATS}");
-        }
-
+        String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         super.configureCommand(command, substitutionMap, caller);
     }
 
