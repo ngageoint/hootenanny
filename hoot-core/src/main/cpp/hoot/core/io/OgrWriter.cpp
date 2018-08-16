@@ -87,7 +87,6 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
     return OFTInteger;
   case QVariant::LongLong:
     return OFTInteger64;
-//    throw HootException("LongLong is not supported by OGR");
   case QVariant::String:
     return OFTString;
   case QVariant::Double:
