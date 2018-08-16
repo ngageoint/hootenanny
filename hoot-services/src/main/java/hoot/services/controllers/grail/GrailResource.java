@@ -255,6 +255,7 @@ public class GrailResource {
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
         json.put("jobid", jobId);
+        json.put("BBox", bbox);
         json.put("User_ID", userId);
         json.put("Debug", debugLevel);
 
@@ -263,6 +264,7 @@ public class GrailResource {
         logger.info("User:" + userId);
         logger.info("applyTags:" + applyTags);
         logger.info("Debug_Level:" + debugLevel);
+        logger.info("json:" + json.toJSONString());
 
         return Response.ok(json.toJSONString()).build();
     }
