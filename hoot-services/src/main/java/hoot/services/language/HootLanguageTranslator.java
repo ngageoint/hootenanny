@@ -67,6 +67,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
       throw new Exception("No source language codes or detect mode specified.");
     }
 
+    logger.error("text: " + text);
     List<String> specifiedSourceLangs = Arrays.asList(sourceLangCodes);
     logger.error("specifiedSourceLangs size: " + String.valueOf(specifiedSourceLangs.size()));
     String sourceLangCode = null;
