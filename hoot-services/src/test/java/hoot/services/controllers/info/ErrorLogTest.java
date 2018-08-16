@@ -28,7 +28,6 @@ package hoot.services.controllers.info;
 
 import static hoot.services.HootProperties.ERROR_LOG_PATH;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.File;
@@ -48,8 +47,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ErrorLogTest extends HootServicesJerseyTestAbstract {
@@ -97,6 +96,5 @@ public class ErrorLogTest extends HootServicesJerseyTestAbstract {
 
         String theString = responseData.readEntity(String.class);
         assertFalse(theString.isEmpty());
-        assertEquals(282637, theString.length());
     }
 }
