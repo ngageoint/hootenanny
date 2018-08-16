@@ -9,19 +9,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /*
 http://tika.apache.org/
 */
-public final class TikaLanguageDetector implements LanguageDetector
+public final class TikaLanguageDetector implements LanguageDetector, SupportedLanguageConsumer
 {
   private static final Logger logger = LoggerFactory.getLogger(TikaLanguageDetector.class);
+
+  private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
+  private SupportedLanguage[] supportedLangs = null;
 
   private final org.apache.tika.language.detect.LanguageDetector detector = new OptimaizeLangDetector();
 
   private static TikaLanguageDetector instance;
 
-  private TikaLanguageDetector() throws RuntimeException
+  private TikaLanguageDetector() throws Exception
   {
     try
     {
@@ -32,9 +36,26 @@ public final class TikaLanguageDetector implements LanguageDetector
     {
       throw new RuntimeException("Error reading Tika model", ioe);
     }
+
+    InputStream supportedLangsConfigStrm = null;
+    try
+    {
+      logger.error("Reading TikaLanguageDetector languages config...");
+      supportedLangsConfigStrm = 
+        TikaLanguageDetector.class.getClassLoader().getResourceAsStream("language-translation/tikaLanguages");
+      supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
+      logger.error("Read " + supportedLangs.length + " languages from config for TikaLanguageDetector.");
+    }
+    finally 
+    {  
+      if (supportedLangsConfigStrm != null)
+      {
+        supportedLangsConfigStrm.close();
+      }
+    }
   }
 
-  public synchronized static TikaLanguageDetector getInstance()
+  public synchronized static TikaLanguageDetector getInstance() throws Exception
   {
     if (instance == null)
     { 
@@ -53,6 +74,21 @@ public final class TikaLanguageDetector implements LanguageDetector
   {
     return StaticHolder.INSTANCE;
   }*/
+
+  public boolean isLanguageAvailable(String langCode)
+  {
+    return true;
+  }
+
+  public SupportedLanguage[] getSupportedLanguages()
+  {
+    return supportedLangs;
+  }
+
+  public String getLanguageName(String langCode)
+  {
+    return langsConfigReader.getLanguageName(langCode);
+  }
 
   public String detect(String text)
   {

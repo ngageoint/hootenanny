@@ -7,6 +7,4 @@ public interface ToEnglishTranslator
 
   String translate(String[] sourceLangCodes, String text) throws Exception;
   String translate(String sourceLangCode, String text) throws Exception;
-
-  boolean isLanguageAvailable(String langCode);
 }

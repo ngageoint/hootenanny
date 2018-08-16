@@ -22,7 +22,6 @@ import org.apache.commons.exec.DaemonExecutor;
 import org.apache.commons.exec.ShutdownHookProcessDestroyer;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 
-import hoot.services.language.SupportedLanguages;
 import hoot.services.language.JoshuaServer;
 
 import org.slf4j.Logger;
@@ -71,10 +70,9 @@ public class JoshuaServersInitializer
       ctr++;
       JoshuaServer server = serverEntry.getValue();  
       server.setPort(serverPort); 
-      String langName = SupportedLanguages.getInstance().getLanguageName(server.getLanguageCode());
       logger.error(
-        "Launching language translation service " + ctr + " / " + servers.size() + " for lang: " + langName + " from path: " + 
-        server.getLanguagePackPath() + " to port: " + server.getPort() + "...");  
+        "Launching language translation service " + ctr + " / " + servers.size() + " for lang code: " + 
+        server.getLanguageCode() + " from path: " + server.getLanguagePackPath() + " to port: " + server.getPort() + "...");  
       
       String configPath = server.getLanguagePackPath() + "/joshua.config";
       convertConfigFileModelPathsToAbsolute(configPath, server.getLanguagePackPath());

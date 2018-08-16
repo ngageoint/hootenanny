@@ -5,14 +5,14 @@ import hoot.services.language.SupportedLanguage;
 
 public class SupportedLanguagesResponse 
 {
-  private SupportedLanguage[] supportedLanguages;
+  private SupportedLanguage[] languages;
 
   public SupportedLanguagesResponse() {}
   public SupportedLanguagesResponse(SupportedLanguage[] langs) 
   {
-    this.supportedLanguages = langs;
+    this.languages = langs;
   }
 
-  public SupportedLanguage[] getSupportedLanguages() { return supportedLanguages; }
-  public void setSupportedLanguages(SupportedLanguage[] langs) { this.supportedLanguages = langs; }
+  public SupportedLanguage[] getLanguages() { return languages; }
+  public void setLanguages(SupportedLanguage[] langs) { this.languages = langs; }
 }

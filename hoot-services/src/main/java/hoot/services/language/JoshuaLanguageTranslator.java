@@ -4,14 +4,12 @@ package hoot.services.language;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.Socket;
 import java.io.DataOutputStream;
 
 import java.util.Map;
 import java.util.HashMap;
-
-import hoot.services.language.JoshuaServersInitializer;
-import hoot.services.language.JoshuaServer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +21,12 @@ import org.slf4j.LoggerFactory;
     Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
     Year = {2015} }
 */
-public final class JoshuaLanguageTranslator implements ToEnglishTranslator
+public final class JoshuaLanguageTranslator implements ToEnglishTranslator, SupportedLanguageConsumer
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaLanguageTranslator.class);
 
+  private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
+  private SupportedLanguage[] supportedLangs = null;
   private Map<String, JoshuaServer> servers = null;
 
   private static JoshuaLanguageTranslator instance;
@@ -34,6 +34,23 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
   private JoshuaLanguageTranslator() throws Exception
   {
     servers = JoshuaServersInitializer.init();
+
+    InputStream supportedLangsConfigStrm = null;
+    try
+    {
+      logger.error("Reading JoshuaLanguageTranslator languages config...");
+      supportedLangsConfigStrm = 
+        JoshuaLanguageTranslator.class.getClassLoader().getResourceAsStream("language-translation/joshuaLanguages");
+      supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
+      logger.error("Read " + supportedLangs.length + " languages from config for JoshuaLanguageTranslator.");
+    }
+    finally 
+    {  
+      if (supportedLangsConfigStrm != null)
+      {
+        supportedLangsConfigStrm.close();
+      }
+    }
   }
 
   public void setConfig(Object config) {}
@@ -58,9 +75,19 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator
     return StaticHolder.INSTANCE;
   }*/
 
+  public SupportedLanguage[] getSupportedLanguages()
+  {
+    return supportedLangs;
+  }
+
   public boolean isLanguageAvailable(String langCode)
   {
     return servers.containsKey(langCode.toLowerCase());
+  }
+
+  public String getLanguageName(String langCode)
+  {
+    return langsConfigReader.getLanguageName(langCode);
   }
 
   public String translate(String[] sourceLangCodes, String text) throws Exception

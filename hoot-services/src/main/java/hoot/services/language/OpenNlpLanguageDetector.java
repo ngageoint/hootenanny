@@ -3,7 +3,6 @@ package hoot.services.language;
 
 import opennlp.tools.langdetect.LanguageDetectorModel;
 import opennlp.tools.langdetect.LanguageDetectorME;
-import opennlp.tools.langdetect.Language;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +13,12 @@ import java.io.InputStream;
 /*
 http://opennlp.apache.org/
 */
-public final class OpenNlpLanguageDetector implements LanguageDetector
+public final class OpenNlpLanguageDetector implements LanguageDetector, SupportedLanguageConsumer
 {
   private static final Logger logger = LoggerFactory.getLogger(OpenNlpLanguageDetector.class);
+
+  private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
+  private SupportedLanguage[] supportedLangs = null;
 
   private /*final*/ LanguageDetectorME detector = null;
   //TODO: move to config
@@ -24,29 +26,27 @@ public final class OpenNlpLanguageDetector implements LanguageDetector
 
   private static OpenNlpLanguageDetector instance;
 
-  private OpenNlpLanguageDetector() throws RuntimeException, IOException
+  private OpenNlpLanguageDetector() throws Exception
   {
-    InputStream modelStrm = null;
-    try 
+    InputStream supportedLangsConfigStrm = null;
+    try
     {
-      logger.debug("loading opennlp model...");
-      modelStrm = OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream(OPEN_NLP_MODEL); 
-      detector = new LanguageDetectorME(new LanguageDetectorModel(modelStrm));
+      logger.error("Reading OpenNlpLanguageDetector languages config...");
+      supportedLangsConfigStrm = 
+        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream("language-translation/openNlpLanguages");
+      supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
+      logger.error("Read " + supportedLangs.length + " languages from config for OpenNlpLanguageDetector.");
     }
-    catch (IOException ioe) 
-    {
-      throw new RuntimeException("Error reading OpenNLP model as resource stream", ioe);
-    }
-    finally
-    { 
-      if (modelStrm != null)
+    finally 
+    {  
+      if (supportedLangsConfigStrm != null)
       {
-        modelStrm.close();
+        supportedLangsConfigStrm.close();
       }
     }
   }
 
-  public synchronized static OpenNlpLanguageDetector getInstance() throws IOException
+  public synchronized static OpenNlpLanguageDetector getInstance() throws Exception
   {
     if (instance == null)
     { 
@@ -65,6 +65,21 @@ public final class OpenNlpLanguageDetector implements LanguageDetector
   {
     return StaticHolder.INSTANCE;
   }*/
+
+  public boolean isLanguageAvailable(String langCode)
+  {
+    return true;
+  }
+
+  public SupportedLanguage[] getSupportedLanguages()
+  {
+    return supportedLangs;
+  }
+
+  public String getLanguageName(String langCode)
+  {
+    return langsConfigReader.getLanguageName(langCode);
+  }
 
   public String detect(String text)
   {

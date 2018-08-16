@@ -7,8 +7,8 @@ public class LanguageTranslateRequest
   private String translator;
   private String[] sourceLangCodes;
   private String text;
-  private boolean detectedLanguageOverridesSpecifiedSourceLanguages;
-  private boolean performExhaustiveTranslationSearchWithNoDetection;
+  private boolean detectedLanguageOverridesSpecifiedSourceLanguages = false;
+  private boolean performExhaustiveTranslationSearchWithNoDetection = false;
 
   public LanguageTranslateRequest() {}
 

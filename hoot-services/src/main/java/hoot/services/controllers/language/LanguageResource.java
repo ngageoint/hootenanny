@@ -2,12 +2,15 @@
 package hoot.services.controllers.language;
 
 import java.io.IOException;
+
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.xml.sax.SAXException;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,11 +31,13 @@ import org.springframework.stereotype.Controller;
 import hoot.services.language.LanguageDetectorFactory;
 import hoot.services.language.ToEnglishTranslatorFactory;
 import hoot.services.language.ToEnglishTranslator;
-import hoot.services.language.SupportedLanguages;
 import hoot.services.language.LanguageDetector;
 import hoot.services.language.LanguageDetectionConsumer;
+import hoot.services.language.SupportedLanguage;
+import hoot.services.language.SupportedLanguageConsumer;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /*
  * 
@@ -45,35 +50,108 @@ public class LanguageResource
 
   public LanguageResource() throws Exception
   {
-    //The Joshua init can take a long time, so let's do it here vs having it happen the first time a translation is made (I think).
+    //The Joshua init can take a long time, so let's do it here vs having it happen the first time a translation is made.
     MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
   }
 
-  @GET
-  @Path("/supportedLanguages")
+  @POST
+  @Path("/detectable")
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public SupportedLanguagesResponse getSupportedLangs()
+  public SupportedLanguagesResponse getDetectableLangs(SupportedLanguagesRequest request)
   {
     try
     {
-      return new SupportedLanguagesResponse(SupportedLanguages.getInstance().getSupportedLanguages());
+      List<String> detectors = new ArrayList<String>();
+      if (request.getApps() != null && request.getApps().length > 0)
+      {  
+        detectors = Arrays.asList(request.getApps());
+      }
+      if (detectors.isEmpty())
+      {
+        //TODO: add these with reflection
+        detectors.add("TikaLanguageDetector");
+        detectors.add("OpenNlpLanguageDetector");
+      }
+      logger.error("Listing detectable languages for apps: " + String.join(",", detectors.toArray(new String[]{})) + "..."); 
+      return new SupportedLanguagesResponse(getAllAppSupportedLangs(detectors));
     }
     catch (Exception e)
     {
       throw new WebApplicationException(
         e, 
-        Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error retrieving supported language information.  Error: " + e.getMessage())
+        Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error retrieving detectable language information.  Error: " + e.getMessage())
           .build());
     }
   }
 
-  private String toDetectResponse(LanguageDetectRequest request, String detectedLang, String detectingDetector)
+  @POST
+  @Path("/translatable")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public SupportedLanguagesResponse getTranslatableLangs(SupportedLanguagesRequest request)
   {
-    JSONObject entity = new JSONObject();
-    entity.put("sourceText", request.getText());
-    entity.put("detectedLanguage", detectedLang);
-    entity.put("detectorUsed", detectingDetector);
-    return entity.toJSONString();
+    try
+    {
+      List<String> translators = new ArrayList<String>();
+      if (request.getApps() != null && request.getApps().length > 0)
+      {  
+        translators = Arrays.asList(request.getApps());
+      }
+      if (translators.isEmpty())
+      {
+        //TODO: add these with reflection
+        translators.add("JoshuaLanguageTranslator");
+        translators.add("HootLanguageTranslator");
+      }
+      logger.error("Listing translatable languages for apps: " + String.join(",", translators.toArray(new String[]{})) + "...");
+      return new SupportedLanguagesResponse(getAllAppSupportedLangs(translators));
+    }
+    catch (Exception e)
+    {
+      throw new WebApplicationException(
+        e, 
+        Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error retrieving translatable language information.  Error: " + e.getMessage())
+          .build());
+    }
+  }
+
+  private SupportedLanguage[] getAllAppSupportedLangs(List<String> apps) throws Exception
+  {
+    Set<String> parsedLangCodes = new HashSet<String>();
+    List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
+    for (String appName : apps)
+    {
+      logger.error("appName: " + appName);
+      SupportedLanguageConsumer langConsumer = null;
+      try
+      {
+        ToEnglishTranslator translator = ToEnglishTranslatorFactory.create(appName);
+        langConsumer = (SupportedLanguageConsumer)translator;
+      }
+      catch (Exception e)
+      {
+        LanguageDetector detector = LanguageDetectorFactory.create(appName);
+        langConsumer = (SupportedLanguageConsumer)detector;
+      }
+      assert(langConsumer != null);
+
+      SupportedLanguage[] consumerSupportedLangs = langConsumer.getSupportedLanguages();
+      logger.error("consumerSupportedLangs size: " + consumerSupportedLangs.length);
+      for (int i = 0; i < consumerSupportedLangs.length; i++)
+      {
+        SupportedLanguage lang = consumerSupportedLangs[i];
+        logger.error("lang code: " + lang.getIso6391code());
+        if (!parsedLangCodes.contains(lang.getIso6391code()))
+        {
+          parsedLangCodes.add(lang.getIso6391code());
+          lang.setAvailable(langConsumer.isLanguageAvailable(lang.getIso6391code()));
+          supportedLangs.add(lang);
+        }
+      }
+    }
+    logger.error("supportedLangs size: " + supportedLangs.size());
+    return supportedLangs.toArray(new SupportedLanguage[]{});
   }
 
   @POST
@@ -84,9 +162,15 @@ public class LanguageResource
   {
     try
     {
-      String detectedLang = "";
+      logger.error("Detecting language for text: " + StringUtils.left(request.getText(), 25) + "...");
+      String detectedLangCode = "";
       String detectingDetector = "";
-      List<String> detectors = Arrays.asList(request.getDetectors());
+      String detectedLangName = "";
+      List<String> detectors = new ArrayList<String>();
+      if (request.getDetectors() != null && request.getDetectors().length > 0)
+      {  
+        detectors = Arrays.asList(request.getDetectors());
+      }
       if (detectors.isEmpty())
       {
         //TODO: add these with reflection
@@ -96,15 +180,27 @@ public class LanguageResource
 
       for (String detectorName : detectors)
       {
-        if (detectedLang.isEmpty())
+        if (detectedLangCode.isEmpty())
         {
           LanguageDetector detector = LanguageDetectorFactory.create(detectorName);
           detectingDetector = detectorName;
-          detectedLang = detector.detect(request.getText());
+          detectedLangCode = detector.detect(request.getText());
+          if (!detectedLangCode.isEmpty())
+          {
+            detectedLangName = ((SupportedLanguageConsumer)detector).getLanguageName(detectedLangCode);
+          }
         }
       }
 
-      return Response.ok(toDetectResponse(request, detectedLang, detectingDetector)).build();
+      JSONObject entity = new JSONObject();
+      entity.put("sourceText", request.getText());
+      entity.put("detectedLangCode", detectedLangCode);
+      if (!detectedLangCode.isEmpty())
+      {
+        entity.put("detectedLang", detectedLangName);
+        entity.put("detectorUsed", detectingDetector);
+      } 
+      return Response.ok(entity.toJSONString()).build();
     }
     catch (Exception e)
     {
@@ -128,9 +224,10 @@ public class LanguageResource
     if (translator instanceof LanguageDetectionConsumer)
     {
       LanguageDetectionConsumer detectionConsumer = (LanguageDetectionConsumer)translator;
-      if (!detectionConsumer.getDetectedLanguage().isEmpty())
+      if (!detectionConsumer.getDetectedLangCode().isEmpty())
       {
-        entity.put("detectedLanguage", detectionConsumer.getDetectedLanguage());
+        entity.put("detectedLangCode", detectionConsumer.getDetectedLangCode());
+        entity.put("detectedLang", ((SupportedLanguageConsumer)translator).getLanguageName(detectionConsumer.getDetectedLangCode()));
         entity.put("detectorUsed", detectionConsumer.getDetectorUsed());
       }
     }
@@ -145,6 +242,9 @@ public class LanguageResource
   @Produces(MediaType.APPLICATION_JSON)
   public Response translate(LanguageTranslateRequest request) 
   {
+    logger.error(
+      "Translating language for text: " + StringUtils.left(request.getText(), 25) + " and source languages: " + 
+      String.join(",", request.getSourceLangCodes()) + "...");
     String translatedText = "";
     ToEnglishTranslator translator = null;
     try
@@ -154,11 +254,7 @@ public class LanguageResource
       for (int i = 0; i < request.getSourceLangCodes().length; i++)
       {
         String sourceLangCode = request.getSourceLangCodes()[i].toLowerCase();
-        if (!SupportedLanguages.getInstance().isSupportedLanguage(sourceLangCode))
-        {
-          throw new Exception("Requested unsupported translation language: " + sourceLangCode);
-        }
-        else if (!translator.isLanguageAvailable(sourceLangCode))
+        if (!((SupportedLanguageConsumer)translator).isLanguageAvailable(sourceLangCode))
         {
           throw new Exception("Requested unavailable translation language: " + sourceLangCode);
         }

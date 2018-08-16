@@ -3,6 +3,6 @@ package hoot.services.language;
 
 public interface LanguageDetectionConsumer 
 {
-  String getDetectedLanguage();
+  String getDetectedLangCode();
   String getDetectorUsed();
 }

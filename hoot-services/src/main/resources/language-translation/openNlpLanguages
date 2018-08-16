@@ -1,0 +1,111 @@
+# All languages detectable by OpenNlpLanguageDetector
+# 
+# format: ISO-639-1\tISO-639-2\tname
+#
+# listed alphabetically by ISO-639-1
+#
+# Last updated: 8/8/18
+
+af	afr	Afrikaans
+ar	ara	Arabic
+N/A	ast	Asturian
+az	aze	Azerbaijani
+ba	bak	Bashkir
+be	bel	Belarusian
+bg	bul	Bulgarian
+bn	ben	Bengali
+bs	bos	Bosnian
+br	bre	Breton
+ca	cat	Catalan
+N/A	ceb	Cebuano
+ce	che	Chechen
+cs	ces	Czech
+N/A	cmn	Mandarin Chinese
+cy	cym	Welsh
+da	dan	Danish
+de	deu	German
+N/A	ekk	Standard Estonian
+el	ell	Greek, Modern
+en	eng	English
+eo	epo	Esperanto
+es	spa	Spanish
+et	est	Estonian
+eu	eus	Basque
+fo	fao	Faroese
+fa	fas	Persian
+fi	fin	Finnish
+fr	fra	French
+fy	fry	Western Frisian
+ga	gle	Irish
+gl	glg	Galician
+N/A	gsw	Swiss German
+gu	guj	Gujarati
+he	heb	Hebrew
+hi	hin	Hindi
+hr	hrv	Croatian
+hu	hun	Hungarian
+hy	hye	Armenian
+id	ind	Indonesian
+is	isl	Icelandic
+it	ita	Italian
+ja	jpn	Japanese
+jv	jav	Javanese
+kn	kan	Kannada
+ka	kat	Georgian
+kk	kaz	Kazakh
+ko	kor	Korean
+ky	kir	Kirghiz
+la	lat	Latin
+lb	ltz	Luxembourgish
+li	lim	Limburgan
+lt	lit	Lithuanian
+lv	lav	Latvian
+N/A	lvs	Standard Latvian
+mi	mri	Maori
+mk	mkd	Macedonian
+ml	mal	Malayalam
+mn	mon	Mongolian
+mr	mar	Marathi
+N/A	min	Minangkabau
+ms	msa	Malay
+mt	mlt	Maltese
+N/A	nan	Min Nan Chinese
+N/A	nds	Low German
+nb	nob	Norwegian BokmÃ¥l
+ne	nep	Nepali
+nl	nld	Dutch
+nn	nno	Norwegian Nynorsk
+oc	oci	Occitan
+pa	pan	Panjabi
+N/A	pes	Iranian Persian
+N/A	plt	Plateau Malagasy
+N/A	pnb	Western Panjabi
+pl	pol	Polish
+ps	pus	Pushto
+pt	por	Portuguese
+ro	ron	Romanian
+ru	rus	Russian
+sa	san	Sanskrit
+si	sin	Sinhala
+sk	slk	Slovak
+sl	slv	Slovenian
+so	som	Somali
+sq	sqi	Albanian
+sr	srp	Serbian
+su	sun	Sundanese
+sv	swe	Swedish
+sw	swa	Swahili
+ta	tam	Tamil
+tt	tat	Tatar
+te	tel	Telugu
+tg	tgk	Tajik
+tl	tgl	Tagalog
+th	tha	Thai
+tr	tur	Turkish
+uk	ukr	Ukrainian
+ur	urd	Urdu
+uz	uzb	Uzbek
+vi	vie	Vietnamese
+vo	vol	VolapÃ¼k
+N/A	war	Waray
+zu	zul	Zulu

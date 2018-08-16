@@ -7,8 +7,8 @@ public final class SupportedLanguage
 {
   private String iso6391Code;
   private String iso6392Code;
-  private String language;
-  private boolean detectable;
+  private String name;
+  private boolean available = false;
 
   public SupportedLanguage() {}
 
@@ -18,9 +18,9 @@ public final class SupportedLanguage
   public String getIso6392code() { return iso6392Code; }
   public void setIso6392Code(String code) { this.iso6392Code = code; }
 
-  public String getLanguage() { return language; }
-  public void setLanguage(String language) { this.language = language; }
+  public String getName() { return name; }
+  public void setName(String name) { this.name = name; }
 
-  public boolean getDetectable() { return detectable; }
-  public void setDetectable(boolean detectable) { this.detectable = detectable; }
+  public boolean getAvailable() { return available; }
+  public void setAvailable(boolean available) { this.available = available; }
 }
