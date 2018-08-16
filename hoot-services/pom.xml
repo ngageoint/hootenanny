@@ -691,7 +691,12 @@
 
         <!-- language translation -->
 
-        <dependency>
+        <!-- Since Joshua translation servers have shared memory, we need to launch a service for each language as its own process.  
+             Therefore, these dependencies aren't needed right now, as we add the bundled Joshua jar included with each language pack 
+             to the classpath when we launch the processes.  If at some point we need to do Joshua development, the dependencies below
+             are what is needed. -->
+
+        <!-- dependency>
           <groupId>org.apache.joshua</groupId>
           <artifactId>joshua-incubating</artifactId>
           <version>6.1</version>
@@ -700,7 +705,7 @@
           <groupId>colt</groupId>
           <artifactId>colt</artifactId>
           <version>1.2.0</version>
-        </dependency>
+        </dependency -->
 
 	<!-- language detection -->
 	
