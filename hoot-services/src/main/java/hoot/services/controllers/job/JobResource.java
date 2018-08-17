@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -62,7 +62,7 @@ public class JobResource {
      * This service allows for tracking the status of Hootenanny jobs launched by other web services.
      *
      * GET hoot-services/job/status/{Job Id}
-     * 
+     *
      * @param jobId
      *            ID of the job to track.
      *
