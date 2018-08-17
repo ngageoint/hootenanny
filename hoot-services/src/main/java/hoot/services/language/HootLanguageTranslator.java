@@ -24,10 +24,10 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   private static final Logger logger = LoggerFactory.getLogger(HootLanguageTranslator.class);
 
   private String[] detectors;
-  private boolean detectedLanguageOverridesSpecifiedSourceLanguages;
-  private boolean performExhaustiveTranslationSearchWithNoDetection;
-  private String detectedLangCode;
-  private String detectorUsed;
+  private boolean detectedLanguageOverridesSpecifiedSourceLanguages = false;
+  private boolean performExhaustiveTranslationSearchWithNoDetection = false;
+  private String detectedLangCode = "";
+  private String detectorUsed = "";
   private ToEnglishTranslator translator;
   
   public HootLanguageTranslator() throws Exception
@@ -115,6 +115,15 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
           logger.error("detectedLangCode: " + detectedLangCode);
           detectorUsed = detector.getClass().getSimpleName();
           logger.error("specifiedSourceLangs.contains(sourceLangCode): " + specifiedSourceLangs.contains(sourceLangCode));
+
+          if (!((SupportedLanguageConsumer)translator).isLanguageAvailable(sourceLangCode))
+          {
+            logger.error(
+              "Language detector detected language code: " + sourceLangCode + ", but that language is not available for " +
+              "translation by the selected translator: " + translator.getClass().getName() + ". Disregarding the detected language.");
+            sourceLangCode = "";
+          }
+
           break;
         }
       }
@@ -129,7 +138,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
           {
             translatedText = translator.translate(langCode, text);
             logger.error("translatedText: " + translatedText);
-            if (!translatedText.isEmpty() && !translatedText.equals(text))
+            if (!translatedText.isEmpty() && !translatedText.toLowerCase().equals(text.toLowerCase()))
             {
               return translatedText;
             }
@@ -142,7 +151,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
         }
       }
       else if (!detectedLanguageOverridesSpecifiedSourceLanguages && specifiedSourceLangs.size() > 1 &&
-               !specifiedSourceLangs.contains(sourceLangCode)) //TODO: case sens
+               !specifiedSourceLangs.contains(sourceLangCode.toLowerCase()))
       {
         String msg =
           "Detected language code: " + sourceLangCode + " not in specified source languages: " + 
@@ -155,7 +164,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
           {
             translatedText = translator.translate(langCode, text);
             logger.error("translatedText: " + translatedText);
-            if (!translatedText.isEmpty() && !translatedText.equals(text))
+            if (!translatedText.isEmpty() && !translatedText.toLowerCase().equals(text.toLowerCase()))
             {
               return translatedText;
             }
@@ -171,7 +180,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
       }
       else
       {
-        if (!specifiedSourceLangs.contains(sourceLangCode)) //TODO: case sens
+        if (!specifiedSourceLangs.contains(sourceLangCode.toLowerCase()))
         {
           assert(detectedLanguageOverridesSpecifiedSourceLanguages);
           logger.error("Detected language code: " + sourceLangCode + " overrides specified language(s) for text: " + text);

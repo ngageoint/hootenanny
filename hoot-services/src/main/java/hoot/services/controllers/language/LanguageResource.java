@@ -195,7 +195,7 @@ public class LanguageResource
       JSONObject entity = new JSONObject();
       entity.put("sourceText", request.getText());
       entity.put("detectedLangCode", detectedLangCode);
-      if (!detectedLangCode.isEmpty())
+      if !detectedLangCode.isEmpty())
       {
         entity.put("detectedLang", detectedLangName);
         entity.put("detectorUsed", detectingDetector);
