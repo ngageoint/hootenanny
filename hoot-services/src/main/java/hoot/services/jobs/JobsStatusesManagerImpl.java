@@ -26,6 +26,7 @@
  */
 package hoot.services.jobs;
 
+import static hoot.services.job.JobStatus.RUNNING;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.utils.DbUtils.createQuery;
 
@@ -43,21 +44,20 @@ import hoot.services.models.db.JobStatus;
 @Component
 @Transactional(propagation = Propagation.REQUIRES_NEW) // Run inside of a new transaction.  This is intentional.
 public class JobsStatusesManagerImpl implements JobsStatusesManager {
-	private static final Logger logger = LoggerFactory.getLogger(JobsStatusesManagerImpl.class);
-	public JobsStatusesManagerImpl() {}
-	@Override
-	public List<JobStatus> getRecentJobs(int limit) {
-		long past12 = System.currentTimeMillis() - 43200000 /* 12 hours */;
-		List<JobStatus> recentJobs = createQuery()
-				.select(jobStatus)
-				.from(jobStatus)
-				.where(jobStatus.start.after(new Timestamp(past12)))
-				.orderBy(jobStatus.start.desc())
-				.limit(limit).fetch();
-		if(recentJobs.size() < 10) {
-			recentJobs = createQuery().select(jobStatus).from(jobStatus).orderBy(jobStatus.start.desc()).limit(limit).fetch();
-		}
-		return recentJobs;
-	}
+    public JobsStatusesManagerImpl() {}
+    @Override
+    public List<JobStatus> getRecentJobs(int limit) {
+        long past12 = System.currentTimeMillis() - 43200000 /* 12 hours */;
+        List<JobStatus> recentJobs = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where((jobStatus.start.after(new Timestamp(past12))).or(jobStatus.status.eq(RUNNING.ordinal())))
+                .orderBy(jobStatus.start.desc())
+                .fetch();
+        if(recentJobs.size() < limit) {
+            recentJobs = createQuery().select(jobStatus).from(jobStatus).orderBy(jobStatus.start.desc()).limit(limit).fetch();
+        }
+        return recentJobs;
+    }
 
 }

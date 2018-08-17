@@ -47,29 +47,29 @@ import hoot.services.models.db.JobStatus;
 @Path("")
 @Transactional
 public class JobsResource {
-	private static final Logger logger = LoggerFactory.getLogger(JobsResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobsResource.class);
     private static final int MAX_SIZE = 10;
-    
-	@Autowired
+
+    @Autowired
     private JobsStatusesManager jobsStatusesManager;
-	@Autowired
-	private JobStatusManager jobStatusManager;
-	
-	
-	public JobsResource() {}
-	
+    @Autowired
+    private JobStatusManager jobStatusManager;
+
+
+    public JobsResource() {}
+
     /**
      * This service allows for tracking the status of Hootenanny jobs launched by other web services.
      *
      * GET hoot-services/jobs/recent
-     * 
+     *
      * @return job status JSON
      */
     @GET
     @Path("/recent")
     @Produces(MediaType.APPLICATION_JSON)
     public List<JobStatus> getJobStatus() {
-    	return this.jobsStatusesManager.getRecentJobs(MAX_SIZE);
+        return this.jobsStatusesManager.getRecentJobs(MAX_SIZE);
     }
 
 }
