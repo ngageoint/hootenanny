@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.io.DataOutputStream;
 
+import java.nio.charset.Charset;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -28,6 +30,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
   private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
   private SupportedLanguage[] supportedLangs = null;
   private Map<String, JoshuaServer> servers = null;
+  public static final Charset ENCODING = Charset.forName("UTF-8");
 
   private static JoshuaLanguageTranslator instance;
 
@@ -119,6 +122,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
       throw new Exception("No language translator available for language code: " + sourceLangCode);
     }
 
+    //TODO: implement socket pooling
     String translatedText = "";
     BufferedReader reader = null;
     Socket clientSocket = null;
@@ -128,8 +132,10 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
       logger.error("port: " + servers.get(sourceLangCode).getPort());
       clientSocket = new Socket("localhost", servers.get(sourceLangCode).getPort());
       writer = new DataOutputStream(clientSocket.getOutputStream());
-      reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-      writer.writeBytes(textToSend);
+      reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), ENCODING));
+      byte[] bytes = textToSend.getBytes("UTF-8");
+      writer.write(bytes, 0, bytes.length);
+      writer.flush();
       translatedText = reader.readLine().trim();
     }
     finally

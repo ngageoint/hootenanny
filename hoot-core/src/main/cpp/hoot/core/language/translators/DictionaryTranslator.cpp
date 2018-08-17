@@ -55,10 +55,6 @@ using namespace std;
 namespace hoot
 {
 
-/**
- * JSON Spirit isn't a very well behaved header file so I'm only using it within the CPP file.
- * This avoids some conflicts with Boost.
- */
 class JsonDictionary
 {
 public:

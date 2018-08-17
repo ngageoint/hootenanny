@@ -25,10 +25,11 @@ _numDetectionsMade(0)
 
 ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
 {
+  LOG_INFO("Tag translations made: " << _numTranslationsMade);
   LOG_INFO("Language detections made: " << _numDetectionsMade);
-  LOG_INFO("To English tag value translations made: " << _numTranslationsMade);
-  LOG_INFO("Elements processed: " << _numProcessedElements);
-  LOG_INFO("Elements encountered: " << _numTotalElements);
+  LOG_INFO(
+    "Attempted to translate tags for : " << _numProcessedElements << " elements out of " <<
+    _numTotalElements << " elements encountered.");
 }
 
 void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
@@ -41,6 +42,7 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   boost::shared_ptr<QObject> qObj = boost::dynamic_pointer_cast<QObject>(_translatorClient);
   if (qObj.get())
   {
+    LOG_DEBUG("Setting parent on translator client...");
     qObj->setParent(this);
   }
   _translatorClient->setConfiguration(conf);
@@ -111,7 +113,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   _numProcessedElements++;
   if (_numProcessedElements % 10 == 0)
   {
-    LOG_VARD(_numProcessedElements);
+    PROGRESS_INFO("Processed " << _numProcessedElements << " elements.");
   }
 }
 
@@ -142,6 +144,11 @@ void ToEnglishTranslationVisitor::translationComplete()
       "Translator returned translation with same value as text passed in.  Discarding " <<
       "translation; text: " << translatedVal);
   }
+}
+
+void ToEnglishTranslationVisitor::translationError(QString textSent, QString message)
+{
+  LOG_ERROR("Error occurred during translation.  error: " + message + "; text sent: " + textSent);
 }
 
 }

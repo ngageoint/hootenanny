@@ -19,6 +19,8 @@ class ToEnglishTranslator : public Configurable
 {
 public:
 
+  static std::string className() { return "hoot::ToEnglishTranslator"; }
+
   /**
    * Returns the translators source languages
    *
@@ -36,11 +38,8 @@ public:
   /**
    * Translates text to English
    *
-   * @param sourceLanguage ISO-639-1 language code for the language to translate from
    * @param textToTranslate the text to translate
    */
-  //virtual void translate(const QString sourceLangCode, const QString textToTranslate) = 0;
-
   virtual void translate(const QString textToTranslate) = 0;
 
   /**

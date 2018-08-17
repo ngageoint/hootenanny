@@ -2,12 +2,16 @@
 package hoot.services.controllers.language;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
+
+import java.net.URLEncoder;
+import java.net.URLDecoder;
 
 import org.xml.sax.SAXException;
 
@@ -141,7 +145,7 @@ public class LanguageResource
       for (int i = 0; i < consumerSupportedLangs.length; i++)
       {
         SupportedLanguage lang = consumerSupportedLangs[i];
-        logger.error("lang code: " + lang.getIso6391code());
+        logger.trace("lang code: " + lang.getIso6391code());
         if (!parsedLangCodes.contains(lang.getIso6391code()))
         {
           parsedLangCodes.add(lang.getIso6391code());
@@ -160,9 +164,11 @@ public class LanguageResource
   @Produces(MediaType.APPLICATION_JSON)
   public Response detectLanguage(LanguageDetectRequest request)
   {
+    String requestText = null;
     try
     {
-      logger.error("Detecting language for text: " + StringUtils.left(request.getText(), 25) + "...");
+      requestText = URLDecoder.decode(request.getText(), "UTF-8");
+      logger.error("Detecting language for text: " + StringUtils.left(requestText, 25) + "...");
       String detectedLangCode = "";
       String detectingDetector = "";
       String detectedLangName = "";
@@ -184,7 +190,7 @@ public class LanguageResource
         {
           LanguageDetector detector = LanguageDetectorFactory.create(detectorName);
           detectingDetector = detectorName;
-          detectedLangCode = detector.detect(request.getText());
+          detectedLangCode = detector.detect(requestText);
           if (!detectedLangCode.isEmpty())
           {
             detectedLangName = ((SupportedLanguageConsumer)detector).getLanguageName(detectedLangCode);
@@ -193,9 +199,9 @@ public class LanguageResource
       }
 
       JSONObject entity = new JSONObject();
-      entity.put("sourceText", request.getText());
+      entity.put("sourceText", requestText);
       entity.put("detectedLangCode", detectedLangCode);
-      if !detectedLangCode.isEmpty())
+      if (!detectedLangCode.isEmpty())
       {
         entity.put("detectedLang", detectedLangName);
         entity.put("detectorUsed", detectingDetector);
@@ -214,7 +220,8 @@ public class LanguageResource
     }
   }
 
-  private String toTranslateResponse(LanguageTranslateRequest request, String translatedText, ToEnglishTranslator translator)
+  private String toTranslateResponse(LanguageTranslateRequest request, String translatedText, ToEnglishTranslator translator) 
+    throws UnsupportedEncodingException
   {
     JSONObject entity = new JSONObject();
     entity.put("sourceText", request.getText());
@@ -224,7 +231,8 @@ public class LanguageResource
       sourceLangCodes.add(request.getSourceLangCodes()[i]);
     }
     entity.put("sourceLangCodes", sourceLangCodes);
-    entity.put("translatedText", translatedText);
+    //TODO: replace is a hack
+    entity.put("translatedText", URLEncoder.encode(translatedText, "UTF-8").replace("+", "%20"));
     entity.put("translator", request.getTranslator());
     if (translator instanceof LanguageDetectionConsumer)
     {
@@ -250,16 +258,20 @@ public class LanguageResource
   @Produces(MediaType.APPLICATION_JSON)
   public Response translate(LanguageTranslateRequest request) 
   {
-    logger.error(
-      "Translating language for text: " + StringUtils.left(request.getText(), 25) + " and source languages: " + 
-      String.join(",", request.getSourceLangCodes()) + "...");
-    String translatedText = "";
-    ToEnglishTranslator translator = null;
+    String textToTranslate = null;
+    String responseStr = null;
     try
     {
-      translator = ToEnglishTranslatorFactory.create(request.getTranslator());
+      textToTranslate = URLDecoder.decode(request.getText(), "UTF-8");
+      logger.error(
+        "Translating language for text: " + StringUtils.left(textToTranslate, 25) + " and source languages: " + 
+        String.join(",", request.getSourceLangCodes()) + "...");
+
+      ToEnglishTranslator translator = ToEnglishTranslatorFactory.create(request.getTranslator());
       translator.setConfig(request);
-      translatedText = translator.translate(request.getSourceLangCodes(), request.getText());
+      String translatedText = translator.translate(request.getSourceLangCodes(), textToTranslate);
+
+      responseStr = toTranslateResponse(request, translatedText, translator);
     }
     catch (Exception e)
     {
@@ -280,10 +292,10 @@ public class LanguageResource
           .entity(
             "Error translating with translator: " + request.getTranslator() + " to language (s): " + 
             String.join(",", request.getSourceLangCodes()) + ".  Error: " + 
-            e.getMessage() + "; text: " + request.getText())
+            e.getMessage() + "; text: " + textToTranslate)
           .build());
     }
     
-    return Response.ok(toTranslateResponse(request, translatedText, translator)).build();
+    return Response.ok(responseStr).build();
   }
 }

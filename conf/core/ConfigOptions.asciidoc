@@ -1229,6 +1229,13 @@ If source languages are specified that do not match the detected language for pi
 translation, setting this to try allows the detected language to override the specified source
 languages.
 
+=== language.translation.hoot.services.detectable.languages.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/detectable`
+
+TODO
+
 === language.translation.hoot.services.detectors
 
 * Data Type: list
@@ -1242,6 +1249,20 @@ during a to English language translation in order of entry.  Valid values are 'T
 and 'OpenNlpLanguageDetector'.  If no detectors are specified, then language translation will
 attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection .
 Separate values with a ';' and surround in quotes when passing in from the command line.
+
+=== language.translation.hoot.services.translatable.languages.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/translatable`
+
+TODO
+
+=== language.translation.hoot.services.translation.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/translate`
+
+Web service endpoint used by the HootServicesTranslatorClient
 
 === language.translation.hoot.services.translator
 
@@ -1261,13 +1282,6 @@ If more than one source language is specified for to English translation and the
 source language cannot be detected, translation attempts will be made against each specified
 languages until a translation is found.  Enabling this option can have a large impact on translation
 performance due to language detection cost.
-
-=== language.translation.hoot.services.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/translate`
-
-Web service endpoint used by the HootServicesTranslatorClient
 
 === language.translation.skip.pre.translated.tags
 

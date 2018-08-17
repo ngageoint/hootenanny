@@ -22,8 +22,6 @@ import org.apache.commons.exec.DaemonExecutor;
 import org.apache.commons.exec.ShutdownHookProcessDestroyer;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 
-import hoot.services.language.JoshuaServer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +35,6 @@ import org.slf4j.LoggerFactory;
 public class JoshuaServersInitializer 
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaServersInitializer.class);
-
-  private static final Charset FILE_ENCODING = Charset.forName("UTF-8");
 
   public JoshuaServersInitializer() {}
 
@@ -116,9 +112,9 @@ public class JoshuaServersInitializer
   private static void convertConfigFileModelPathsToAbsolute(String configPath, String langPackPath) throws IOException
   {
     File configFile = new File(configPath);
-    String configContent = FileUtils.readFileToString(configFile, FILE_ENCODING);
+    String configContent = FileUtils.readFileToString(configFile, JoshuaLanguageTranslator.ENCODING);
     //change all model relative paths to absolute in the config
     configContent = configContent.replaceAll(" model/", " " + langPackPath + "/model/");
-    FileUtils.writeStringToFile(configFile, configContent, FILE_ENCODING);
+    FileUtils.writeStringToFile(configFile, configContent, JoshuaLanguageTranslator.ENCODING);
   }
 }

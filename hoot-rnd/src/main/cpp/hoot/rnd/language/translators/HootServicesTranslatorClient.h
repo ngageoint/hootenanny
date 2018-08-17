@@ -6,8 +6,8 @@
 #include <hoot/rnd/language/translators/ToEnglishTranslator.h>
 
 // Qt
-//#include <QByteArray>
-#include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 namespace hoot
 {
@@ -22,8 +22,9 @@ class HootServicesTranslatorClient : public QObject, public ToEnglishTranslator
 
 public:
 
-  HootServicesTranslatorClient(QObject* parent = 0);
-  ~HootServicesTranslatorClient();
+  static std::string className() { return "hoot::HootServicesTranslatorClient"; }
+
+  HootServicesTranslatorClient();
 
   virtual QStringList getSourceLanguages() const { return _sourceLangs; }
   virtual void setSourceLanguages(const QStringList langCodes);
@@ -36,24 +37,29 @@ public:
 signals:
 
   void translationComplete();
+  void translationError(QString textSent, QString message);
 
 private slots:
 
-  void _readyRead();
-  //void _error(QAbstractSocket::SocketError error);
+  void _translateReplyReceived(QNetworkReply* reply);
 
 private:
 
   QStringList _sourceLangs;
   QString _translator;
   QStringList _detectors;
-  QString _url;
+  QString _translationUrl;
+  QString _detectableUrl;
+  QString _translatableUrl;
   bool _detectedLangOverrides;
   bool _performExhaustiveSearch;
 
-  //QByteArray _returnedData;
   QString _translatedText;
   bool _detectionMade;
+
+  boost::shared_ptr<QNetworkAccessManager> _client;
+
+  void _checkLangsAvailable(const QString type);
 };
 
 }

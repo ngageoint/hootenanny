@@ -37,6 +37,7 @@ public:
 public slots:
 
   virtual void translationComplete();
+  virtual void translationError(QString textSent, QString message);
 
 protected:
 
