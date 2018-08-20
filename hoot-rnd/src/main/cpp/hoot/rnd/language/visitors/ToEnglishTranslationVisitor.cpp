@@ -26,8 +26,8 @@ _taskStatusUpdateInterval(10000)
 
 ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
 {
-  LOG_INFO("Tag translations made: " << _numTranslationsMade);
   LOG_INFO("Language detections made: " << _numDetectionsMade);
+  LOG_INFO("Successful tag translations made: " << _numTranslationsMade);
   LOG_INFO(
     "Attempted to translate tags for : " << _numProcessedElements << " elements out of " <<
     _numTotalElements << " elements encountered.");
@@ -116,7 +116,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   _numProcessedElements++;
   if (_numProcessedElements % 10 == 0)
   {
-    PROGRESS_INFO("Processed " << _numProcessedElements << " elements.");
+    PROGRESS_DEBUG("Processed " << _numProcessedElements << " elements.");
   }
 }
 
