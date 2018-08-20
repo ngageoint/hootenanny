@@ -1,7 +1,7 @@
 
 package hoot.services.controllers.language;
 
-import hoot.services.language.SupportedLanguage;
+import hoot.services.language.LanguageApp;
 
 public class LanguageAppsResponse 
 {

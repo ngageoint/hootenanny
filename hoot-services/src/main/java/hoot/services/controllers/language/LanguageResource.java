@@ -41,6 +41,7 @@ import hoot.services.language.LanguageDetectionConsumer;
 import hoot.services.language.SupportedLanguage;
 import hoot.services.language.SupportedLanguageConsumer;
 import hoot.services.language.LanguageAppInfo;
+import hoot.services.language.LanguageApp;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -65,17 +66,28 @@ public class LanguageResource
   @Produces(MediaType.APPLICATION_JSON)
   public LanguageAppsResponse getDetectors()
   {
-    List<String> appNames = new ArrayList<String>();
-    //TODO: get names with reflection
-    appNames.add("OpenNlpLanguageDetector");
-    appNames.add("TikaLanguageDetector");
-
-    List<LanguageApp> apps = new ArrayList<LanguageApp>();
-    for (String appName : appNames)
+    try
     {
-      apps.add(languageEntityToApp(appName));
+      List<String> appNames = new ArrayList<String>();
+      //TODO: get names with reflection
+      appNames.add("OpenNlpLanguageDetector");
+      appNames.add("TikaLanguageDetector");
+
+      List<LanguageApp> apps = new ArrayList<LanguageApp>();
+      for (String appName : appNames)
+      {
+        apps.add(languageEntityToApp(appName));
+      }
+      return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
     }
-    return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{});
+    catch (Exception e)
+    {
+      throw new WebApplicationException(
+        e, 
+        Response.status(Status.INTERNAL_SERVER_ERROR)
+         .entity("Error retrieving available language detector information.  Error: " + e.getMessage())
+         .build());
+    }
   }
 
   @GET
@@ -83,34 +95,48 @@ public class LanguageResource
   @Produces(MediaType.APPLICATION_JSON)
   public LanguageAppsResponse getTranslators()
   {
-    List<String> appNames = new ArrayList<String>();
-    //TODO: get names with reflection
-    appNames.add("JoshuaLanguageTranslator");
-    appNames.add("HootLanguageTranslator");
-
-    List<LanguageApp> apps = new ArrayList<LanguageApp>();
-    for (String appName : appNames)
+    try
     {
-      apps.add(languageEntityToApp(appName));
+      List<String> appNames = new ArrayList<String>();
+      //TODO: get names with reflection
+      appNames.add("JoshuaLanguageTranslator");
+      appNames.add("HootLanguageTranslator");
+
+      List<LanguageApp> apps = new ArrayList<LanguageApp>();
+      for (String appName : appNames)
+      {
+        apps.add(languageEntityToApp(appName));
+      }
+      return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
     }
-    return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{});
+    catch (Exception e)
+    {
+      throw new WebApplicationException(
+        e, 
+        Response.status(Status.INTERNAL_SERVER_ERROR)
+         .entity("Error retrieving available language translator information.  Error: " + e.getMessage())
+         .build());
+    }
   }
 
-  private LanguageApp languageEntityToApp(String appName)
+  private LanguageApp languageEntityToApp(String appName) throws Exception
   {
     LanguageAppInfo appInfo = null;
-    if (langEntity instanceof ToEnglishTranslator)
+    try
     {
       appInfo = (LanguageAppInfo)ToEnglishTranslatorFactory.create(appName);
     }
-    else
-    {   
+    catch (Exception e)
+    {
       appInfo = (LanguageAppInfo)LanguageDetectorFactory.create(appName);
     }
+    assert(appInfo != null);
+
     LanguageApp app = new LanguageApp();
     app.setName(appName);
     app.setDescription(appInfo.getDescription());
     app.setUrl(appInfo.getUrl());
+    return app;
   }
 
   @POST
@@ -185,13 +211,11 @@ public class LanguageResource
       SupportedLanguageConsumer langConsumer = null;
       try
       {
-        ToEnglishTranslator translator = ToEnglishTranslatorFactory.create(appName);
-        langConsumer = (SupportedLanguageConsumer)translator;
+        langConsumer = (SupportedLanguageConsumer)ToEnglishTranslatorFactory.create(appName);
       }
       catch (Exception e)
       {
-        LanguageDetector detector = LanguageDetectorFactory.create(appName);
-        langConsumer = (SupportedLanguageConsumer)detector;
+        langConsumer = (SupportedLanguageConsumer)LanguageDetectorFactory.create(appName);
       }
       assert(langConsumer != null);
 
