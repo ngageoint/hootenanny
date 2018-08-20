@@ -45,16 +45,17 @@ public class JoshuaServersInitializer
     Map<String, JoshuaServer> servers = new HashMap<String, JoshuaServer>();
 
     //TODO: read all of this from hoot services config
-    int serverPort = 5764;
    
     JoshuaServer server1 = new JoshuaServer();
     server1.setLanguageCode("de");
     server1.setLanguagePackPath("/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18");
+    server1.setPort(5764);
     servers.put(server1.getLanguageCode(), server1);
 
     JoshuaServer server2 = new JoshuaServer();
     server2.setLanguageCode("es");
     server2.setLanguagePackPath("/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
+    server2.setPort(5765);
     servers.put(server2.getLanguageCode(), server2);
 
     logger.error("servers size: " + servers.size());
@@ -65,7 +66,6 @@ public class JoshuaServersInitializer
 
       ctr++;
       JoshuaServer server = serverEntry.getValue();  
-      server.setPort(serverPort); 
       logger.error(
         "Launching language translation service " + ctr + " / " + servers.size() + " for lang code: " + 
         server.getLanguageCode() + " from path: " + server.getLanguagePackPath() + " to port: " + server.getPort() + "...");  
@@ -99,8 +99,6 @@ public class JoshuaServersInitializer
       executor.execute(cmdLine, new DefaultExecuteResultHandler());
       logger.error("stdout: " + stdout.toString());
       logger.error("stderr: " + stderr.toString());
-
-      serverPort++;
     }
     logger.error(
       "Finished launching Joshua translation services for " + ctr + " language packs.  The services may take a few minutes to " +

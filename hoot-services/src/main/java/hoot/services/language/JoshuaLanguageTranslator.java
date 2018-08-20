@@ -3,9 +3,8 @@ package hoot.services.language;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.InputStream;
 import java.net.Socket;
+import java.io.InputStream;
 import java.io.DataOutputStream;
 
 import java.nio.charset.Charset;
@@ -30,6 +29,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
   private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
   private SupportedLanguage[] supportedLangs = null;
   private Map<String, JoshuaServer> servers = null;
+  private JoshuaConnectionPool connectionPool = null;
   public static final Charset ENCODING = Charset.forName("UTF-8");
 
   private static JoshuaLanguageTranslator instance;
@@ -54,6 +54,9 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
         supportedLangsConfigStrm.close();
       }
     }
+
+    //TODO: read from config
+    connectionPool = new JoshuaConnectionPool(servers, 1000);
   }
 
   public void setConfig(Object config) {}
@@ -96,7 +99,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
   //Not really expecting these to change often...but if so, could move them to the props config.
   public String getUrl() { return "https://cwiki.apache.org/confluence/display/JOSHUA"; }
   public String getDescription() 
-  { return "A statistical machine translation decoder for phrase-based, hierarchical, and syntax-based machine translation, written in Java"; }
+  { return "A statistical machine translation decoder for phrase-based, hierarchical, and syntax-based machine translation"; }
 
   public String translate(String[] sourceLangCodes, String text) throws Exception
   {
@@ -127,41 +130,54 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
       throw new Exception("No language translator available for language code: " + sourceLangCode);
     }
 
-    //TODO: implement socket pooling
     String translatedText = "";
-    BufferedReader reader = null;
-    Socket clientSocket = null;
-    DataOutputStream writer = null;
+    //BufferedReader reader = null;
+    //Socket clientSocket = null;
+    //DataOutputStream writer = null;
+    JoshuaConnection connection = null;
     try
     {
-      logger.error("port: " + servers.get(sourceLangCode).getPort());
-      clientSocket = new Socket("localhost", servers.get(sourceLangCode).getPort());
-      writer = new DataOutputStream(clientSocket.getOutputStream());
-      reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), ENCODING));
+      logger.trace("port: " + servers.get(sourceLangCode).getPort());
+      //clientSocket = new Socket("localhost", servers.get(sourceLangCode).getPort());
+      //clientSocket = socketPool.get(sourceLangCode);
+      connection = connectionPool.borrowObject(sourceLangCode);
+      //writer = new DataOutputStream(clientSocket.getOutputStream());
+      //reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), ENCODING));
       byte[] bytes = textToSend.getBytes("UTF-8");
+      DataOutputStream writer = (DataOutputStream)connection.getWriter();
       writer.write(bytes, 0, bytes.length);
       writer.flush();
+      BufferedReader reader = (BufferedReader)connection.getReader();
       translatedText = reader.readLine().trim();
     }
     finally
     {
-      if (reader != null)
+      /*if (reader != null)
       {
         reader.close();
       }
       if (writer != null)
       {
         writer.close();
-      }
-      if (clientSocket != null)
+      }*/
+      /*if (clientSocket != null)
       {
         clientSocket.close();
-      }
+      }*/
+      connectionPool.returnObject(sourceLangCode, connection);
     }
 
     logger.error(getClass().getName() + " translated: " + text + " to: " + translatedText);
     logger.error("Translation took {} seconds", (System.currentTimeMillis() - startTime) / 1000);
 
     return translatedText;
+  }
+
+  public void close() throws Exception
+  {
+    if (connectionPool != null)
+    {
+      connectionPool.close();
+    }
   }
 }

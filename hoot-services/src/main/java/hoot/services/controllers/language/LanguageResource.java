@@ -46,6 +46,8 @@ import hoot.services.language.LanguageApp;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.PreDestroy;
+
 /*
  * 
  */
@@ -57,8 +59,36 @@ public class LanguageResource
 
   public LanguageResource() throws Exception
   {
-    //The Joshua init can take a long time, so let's do it here vs having it happen the very first time a translation is made.
-    MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
+    try
+    {
+      //The Joshua init can take a long time, so let's do it here vs having it happen the very first time a translation is made.
+      logger.error("Initializing Joshua...");
+      MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
+    }
+    catch (Exception e)
+    {
+      throw new Exception("Error initializing Joshua. error: " + e.getMessage());
+    }
+  }
+
+  @PreDestroy
+  public void preDestroy() throws Exception
+  {
+    try
+    {
+      logger.error("Closing Joshua...");
+      Object joshuaTranslator = 
+        MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
+      if (joshuaTranslator == null)
+      {
+        logger.error("joshuaTranslator null");
+      }
+      MethodUtils.invokeMethod(joshuaTranslator, "close");
+    }
+    catch (Exception e)
+    {
+      throw new Exception("Error closing Joshua. error: " + e.getMessage());
+    }
   }
 
   @GET
