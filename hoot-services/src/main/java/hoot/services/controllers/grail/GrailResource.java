@@ -287,7 +287,7 @@ public class GrailResource {
     @POST
     @Path("/pullosm")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response pullOsm(@QueryParam("bbox") String bbox,
+    public Response pullOsm(@QueryParam("BBOX") String bbox,
                             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
