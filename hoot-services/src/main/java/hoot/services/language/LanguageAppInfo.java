@@ -1,10 +1,8 @@
 
 package hoot.services.language;
 
-public interface LanguageDetector 
+public interface LanguageAppInfo 
 {
-  String detect(String text);
-
   String getUrl();
   String getDescription();
 }

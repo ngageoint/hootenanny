@@ -13,7 +13,7 @@ import java.io.InputStream;
 /*
 http://opennlp.apache.org/
 */
-public final class OpenNlpLanguageDetector implements LanguageDetector, SupportedLanguageConsumer
+public final class OpenNlpLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(OpenNlpLanguageDetector.class);
 
@@ -80,6 +80,11 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
   {
     return langsConfigReader.getLanguageName(langCode);
   }
+
+  //Not really expecting these to change often...but if so, could move them to the props config.
+  public String getUrl() { return "https://opennlp.apache.org/"; }
+  public String getDescription() 
+  { return "The language detector portion of a machine learning based toolkit for the processing of natural language text"; }
 
   public String detect(String text)
   {

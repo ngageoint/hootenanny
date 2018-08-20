@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
     Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
     Year = {2015} }
 */
-public final class JoshuaLanguageTranslator implements ToEnglishTranslator, SupportedLanguageConsumer
+public final class JoshuaLanguageTranslator implements ToEnglishTranslator, SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaLanguageTranslator.class);
 
@@ -92,6 +92,11 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
   {
     return langsConfigReader.getLanguageName(langCode);
   }
+
+  //Not really expecting these to change often...but if so, could move them to the props config.
+  public String getUrl() { return "https://cwiki.apache.org/confluence/display/JOSHUA"; }
+  public String getDescription() 
+  { return "A statistical machine translation decoder for phrase-based, hierarchical, and syntax-based machine translation, written in Java"; }
 
   public String translate(String[] sourceLangCodes, String text) throws Exception
   {

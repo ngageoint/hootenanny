@@ -14,7 +14,7 @@ import java.io.InputStream;
 /*
 http://tika.apache.org/
 */
-public final class TikaLanguageDetector implements LanguageDetector, SupportedLanguageConsumer
+public final class TikaLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(TikaLanguageDetector.class);
 
@@ -89,6 +89,11 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
   {
     return langsConfigReader.getLanguageName(langCode);
   }
+
+  //Not really expecting these to change often...but if so, could move them to the props config.
+  public String getUrl() { return "https://tika.apache.org/"; }
+  public String getDescription() 
+  { return "The language detection portion of a library which detects and extracts metadata and text from many different file types"; }
 
   public String detect(String text)
   {

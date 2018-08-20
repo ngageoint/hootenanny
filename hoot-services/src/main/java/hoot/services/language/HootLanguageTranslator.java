@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 /*
 */
-public final class HootLanguageTranslator implements ToEnglishTranslator, LanguageDetectionConsumer, SupportedLanguageConsumer
+public final class HootLanguageTranslator implements ToEnglishTranslator, LanguageDetectionConsumer, SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(HootLanguageTranslator.class);
 
@@ -67,6 +67,10 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   {
     return ((SupportedLanguageConsumer)translator).getLanguageName(langCode);
   }
+
+  public String getUrl() { return "N/A"; }
+  public String getDescription() 
+  { return "A custom translator that combines language detection into its workflow.  See the Hootenanny User Documentation for more details."; }
 
   public String translate(String sourceLangCode, String text) throws Exception
   {

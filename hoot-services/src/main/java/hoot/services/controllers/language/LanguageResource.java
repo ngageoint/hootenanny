@@ -15,6 +15,7 @@ import java.net.URLDecoder;
 
 import org.xml.sax.SAXException;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -39,6 +40,7 @@ import hoot.services.language.LanguageDetector;
 import hoot.services.language.LanguageDetectionConsumer;
 import hoot.services.language.SupportedLanguage;
 import hoot.services.language.SupportedLanguageConsumer;
+import hoot.services.language.LanguageAppInfo;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,8 +56,61 @@ public class LanguageResource
 
   public LanguageResource() throws Exception
   {
-    //The Joshua init can take a long time, so let's do it here vs having it happen the first time a translation is made.
+    //The Joshua init can take a long time, so let's do it here vs having it happen the very first time a translation is made.
     MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
+  }
+
+  @GET
+  @Path("/detectors")
+  @Produces(MediaType.APPLICATION_JSON)
+  public LanguageAppsResponse getDetectors()
+  {
+    List<String> appNames = new ArrayList<String>();
+    //TODO: get names with reflection
+    appNames.add("OpenNlpLanguageDetector");
+    appNames.add("TikaLanguageDetector");
+
+    List<LanguageApp> apps = new ArrayList<LanguageApp>();
+    for (String appName : appNames)
+    {
+      apps.add(languageEntityToApp(appName));
+    }
+    return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{});
+  }
+
+  @GET
+  @Path("/translators")
+  @Produces(MediaType.APPLICATION_JSON)
+  public LanguageAppsResponse getTranslators()
+  {
+    List<String> appNames = new ArrayList<String>();
+    //TODO: get names with reflection
+    appNames.add("JoshuaLanguageTranslator");
+    appNames.add("HootLanguageTranslator");
+
+    List<LanguageApp> apps = new ArrayList<LanguageApp>();
+    for (String appName : appNames)
+    {
+      apps.add(languageEntityToApp(appName));
+    }
+    return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{});
+  }
+
+  private LanguageApp languageEntityToApp(String appName)
+  {
+    LanguageAppInfo appInfo = null;
+    if (langEntity instanceof ToEnglishTranslator)
+    {
+      appInfo = (LanguageAppInfo)ToEnglishTranslatorFactory.create(appName);
+    }
+    else
+    {   
+      appInfo = (LanguageAppInfo)LanguageDetectorFactory.create(appName);
+    }
+    LanguageApp app = new LanguageApp();
+    app.setName(appName);
+    app.setDescription(appInfo.getDescription());
+    app.setUrl(appInfo.getUrl());
   }
 
   @POST
@@ -73,7 +128,7 @@ public class LanguageResource
       }
       if (detectors.isEmpty())
       {
-        //TODO: add these with reflection
+        //TODO: get names with reflection
         detectors.add("TikaLanguageDetector");
         detectors.add("OpenNlpLanguageDetector");
       }
@@ -104,7 +159,7 @@ public class LanguageResource
       }
       if (translators.isEmpty())
       {
-        //TODO: add these with reflection
+        //TODO: get names with reflection
         translators.add("JoshuaLanguageTranslator");
         translators.add("HootLanguageTranslator");
       }

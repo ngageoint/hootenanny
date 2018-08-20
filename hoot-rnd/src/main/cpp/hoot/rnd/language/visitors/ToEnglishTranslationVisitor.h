@@ -63,6 +63,7 @@ private:
   long _numTranslationsMade;
   long _numProcessedElements;
   long _numDetectionsMade;
+  int _taskStatusUpdateInterval;
 };
 
 }

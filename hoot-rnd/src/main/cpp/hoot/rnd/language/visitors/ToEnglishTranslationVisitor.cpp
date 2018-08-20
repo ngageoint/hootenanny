@@ -19,7 +19,8 @@ _numTotalElements(0),
 _skipWordsInEnglishDict(true),
 _numTranslationsMade(0),
 _numProcessedElements(0),
-_numDetectionsMade(0)
+_numDetectionsMade(0),
+_taskStatusUpdateInterval(10000)
 {
 }
 
@@ -51,6 +52,7 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   _toTranslateTagKeys = opts.getLanguageTranslationToTranslateTagKeys();
   _skipPreTranslatedTags = opts.getLanguageTranslationSkipPreTranslatedTags();
   _skipWordsInEnglishDict = opts.getLanguageTranslationSkipWordsInEnglishDictionary();
+  _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
 
 void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
@@ -67,9 +69,9 @@ void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
   }
 
   _numTotalElements++;
-  if (_numTotalElements % 10 == 0)
+  if (_numTotalElements % _taskStatusUpdateInterval == 0)
   {
-    LOG_VARD(_numTotalElements);
+    PROGRESS_INFO("Visited " << _numTotalElements << " elements.");
   }
 }
 
@@ -80,7 +82,8 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   _toTranslateTagKey = toTranslateTagKey;
   _element = e;
   _toTranslateVal = tags.get(toTranslateTagKey).trimmed();
-  //We're just translating single phrases, not entire texts, so remove newlines.
+  //We're just translating single phrases, not entire texts, so assume one line was passed in and
+  //remove the ending newline.
   _toTranslateVal = _toTranslateVal.replace("\n", "");
   LOG_VART(_toTranslateVal);
 
