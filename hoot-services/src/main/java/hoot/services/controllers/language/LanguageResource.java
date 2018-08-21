@@ -124,15 +124,11 @@ public class LanguageResource
   {
     try
     {
-      List<String> appNames = new ArrayList<String>();
-      //TODO: get names with reflection
-      appNames.add("OpenNlpLanguageDetector");
-      appNames.add("TikaLanguageDetector");
-
+      Set<String> detectorClassNames = LanguageDetectorFactory.getSimpleClassNames();
       List<LanguageApp> apps = new ArrayList<LanguageApp>();
-      for (String appName : appNames)
+      for (String detectorClassName : detectorClassNames)
       {
-        apps.add(languageEntityToApp(appName));
+        apps.add(languageEntityToApp(detectorClassName));
       }
       return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
     }
@@ -153,15 +149,11 @@ public class LanguageResource
   {
     try
     {
-      List<String> appNames = new ArrayList<String>();
-      //TODO: get names with reflection
-      appNames.add("JoshuaLanguageTranslator");
-      appNames.add("HootLanguageTranslator");
-
+      Set<String> translatorClassNames = ToEnglishTranslatorFactory.getSimpleClassNames();
       List<LanguageApp> apps = new ArrayList<LanguageApp>();
-      for (String appName : appNames)
+      for (String translatorClassName : translatorClassNames)
       {
-        apps.add(languageEntityToApp(appName));
+        apps.add(languageEntityToApp(translatorClassName));
       }
       return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
     }
@@ -203,19 +195,17 @@ public class LanguageResource
   {
     try
     {
-      List<String> detectors = new ArrayList<String>();
+      Set<String> detectorClassNames = new HashSet<String>();
       if (request.getApps() != null && request.getApps().length > 0)
       {  
-        detectors = Arrays.asList(request.getApps());
+        detectorClassNames = new HashSet<String>(Arrays.asList(request.getApps()));
       }
-      if (detectors.isEmpty())
+      if (detectorClassNames.isEmpty())
       {
-        //TODO: get names with reflection
-        detectors.add("TikaLanguageDetector");
-        detectors.add("OpenNlpLanguageDetector");
+        detectorClassNames = LanguageDetectorFactory.getSimpleClassNames();
       }
-      logger.error("Listing detectable languages for apps: " + String.join(",", detectors.toArray(new String[]{})) + "..."); 
-      return new SupportedLanguagesResponse(getAllAppSupportedLangs(detectors));
+      logger.error("Listing detectable languages for apps: " + String.join(",", detectorClassNames.toArray(new String[]{})) + "..."); 
+      return new SupportedLanguagesResponse(getAllAppSupportedLangs(detectorClassNames));
     }
     catch (Exception e)
     {
@@ -234,19 +224,17 @@ public class LanguageResource
   {
     try
     {
-      List<String> translators = new ArrayList<String>();
+      Set<String> translatorClassNames = new HashSet<String>();
       if (request.getApps() != null && request.getApps().length > 0)
       {  
-        translators = Arrays.asList(request.getApps());
+        translatorClassNames = new HashSet<String>(Arrays.asList(request.getApps()));
       }
-      if (translators.isEmpty())
+      if (translatorClassNames.isEmpty())
       {
-        //TODO: get names with reflection
-        translators.add("JoshuaLanguageTranslator");
-        translators.add("HootLanguageTranslator");
+        translatorClassNames = ToEnglishTranslatorFactory.getSimpleClassNames();
       }
-      logger.error("Listing translatable languages for apps: " + String.join(",", translators.toArray(new String[]{})) + "...");
-      return new SupportedLanguagesResponse(getAllAppSupportedLangs(translators));
+      logger.error("Listing translatable languages for apps: " + String.join(",", translatorClassNames.toArray(new String[]{})) + "...");
+      return new SupportedLanguagesResponse(getAllAppSupportedLangs(translatorClassNames));
     }
     catch (Exception e)
     {
@@ -257,7 +245,7 @@ public class LanguageResource
     }
   }
 
-  private SupportedLanguage[] getAllAppSupportedLangs(List<String> apps) throws Exception
+  private SupportedLanguage[] getAllAppSupportedLangs(Set<String> apps) throws Exception
   {
     Set<String> parsedLangCodes = new HashSet<String>();
     List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
@@ -307,24 +295,22 @@ public class LanguageResource
       String detectedLangCode = "";
       String detectingDetector = "";
       String detectedLangName = "";
-      List<String> detectors = new ArrayList<String>();
+      Set<String> detectorClassNames = new HashSet<String>();
       if (request.getDetectors() != null && request.getDetectors().length > 0)
       {  
-        detectors = Arrays.asList(request.getDetectors());
+        detectorClassNames = new HashSet<String>(Arrays.asList(request.getDetectors()));
       }
-      if (detectors.isEmpty())
+      if (detectorClassNames.isEmpty())
       {
-        //TODO: add these with reflection
-        detectors.add("TikaLanguageDetector");
-        detectors.add("OpenNlpLanguageDetector");
+        detectorClassNames = LanguageDetectorFactory.getSimpleClassNames();
       }
 
-      for (String detectorName : detectors)
+      for (String detectorClassName : detectorClassNames)
       {
         if (detectedLangCode.isEmpty())
         {
-          LanguageDetector detector = LanguageDetectorFactory.create(detectorName);
-          detectingDetector = detectorName;
+          LanguageDetector detector = LanguageDetectorFactory.create(detectorClassName);
+          detectingDetector = detectorClassName;
           detectedLangCode = detector.detect(requestText);
           if (!detectedLangCode.isEmpty())
           {
@@ -366,7 +352,7 @@ public class LanguageResource
       sourceLangCodes.add(request.getSourceLangCodes()[i]);
     }
     entity.put("sourceLangCodes", sourceLangCodes);
-    //TODO: replace is a hack
+    //TODO: replace of '+' here is a bit of a hack
     entity.put("translatedText", URLEncoder.encode(translatedText, "UTF-8").replace("+", "%20"));
     entity.put("translator", request.getTranslator());
     if (translator instanceof LanguageDetectionConsumer)

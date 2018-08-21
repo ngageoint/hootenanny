@@ -37,8 +37,6 @@ import java.util.List;
 import java.util.Arrays;
 
 import hoot.services.controllers.language.LanguageTranslateRequest;
-import hoot.services.language.ToEnglishTranslatorFactory;
-import hoot.services.language.LanguageDetectionConsumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +57,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   
   public HootLanguageTranslator() throws Exception
   {
-    //TODO: decouple this
+    //TODO: put in config
     translator = ToEnglishTranslatorFactory.create("JoshuaLanguageTranslator");
   }
 
@@ -69,8 +67,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
     detectors = request.getDetectors();
     if (detectors == null || detectors.length == 0)
     {
-      //TODO: add these with reflection
-      detectors = new String[]{ "TikaLanguageDetector", "OpenNlpLanguageDetector" };
+      detectors = LanguageDetectorFactory.getSimpleClassNames().toArray(new String[]{});
     }
     detectedLanguageOverridesSpecifiedSourceLanguages = request.getDetectedLanguageOverridesSpecifiedSourceLanguages();
     performExhaustiveTranslationSearchWithNoDetection = request.getPerformExhaustiveTranslationSearchWithNoDetection();

@@ -29,12 +29,16 @@ package hoot.services.language;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.reflections.Reflections;
 
 import hoot.services.utils.ReflectUtils;
 
@@ -43,6 +47,7 @@ public class ToEnglishTranslatorFactory
   private static final Logger logger = LoggerFactory.getLogger(ToEnglishTranslatorFactory.class);
 
   private static Map<String, String> classNamesToFullClassNamesCache = new HashMap<String, String>();
+  private static Set<String> simpleClassNames = null;
 
   private ToEnglishTranslatorFactory()
   {
@@ -87,5 +92,22 @@ public class ToEnglishTranslatorFactory
       throw new Exception(msg + "; error: " + e.getMessage());
     }
     return translator;
+  }
+
+  //really wanted to make this a generic method in ReflectUtils, just haven't quite figured out how yet
+  public static Set<String> getSimpleClassNames()
+  {
+    if (simpleClassNames == null)
+    {
+      Set<String> classNames = new HashSet<String>();
+      Set<Class<? extends ToEnglishTranslator>> classes = 
+        (new Reflections("hoot.services.language")).getSubTypesOf(ToEnglishTranslator.class);
+      for (Class<? extends ToEnglishTranslator> clazz : classes)
+      {
+        classNames.add(clazz.getSimpleName());
+      }
+      simpleClassNames = classNames;
+    }
+    return simpleClassNames;
   }
 }

@@ -40,7 +40,7 @@
         <xalan.version>2.7.1</xalan.version>
         <xercesImpl.version>2.9.1</xercesImpl.version>
         <json-simple.version>1.1.1</json-simple.version>
-        <guava.version>18.0</guava.version>
+        <guava.version>20.0</guava.version>
         <rhino.version>1.7R4</rhino.version>
         <!--<osmosis-core.version>0.43-RELEASE</osmosis-core.version>-->
         <antlr-runtime.version>3.4</antlr-runtime.version>
@@ -458,7 +458,7 @@
             <version>${apache.commons.io.version}</version>
         </dependency>
 
-        <!-- Postgresql database driver -->
+        <!-- Postgres -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -485,14 +485,14 @@
             <version>${xercesImpl.version}</version>
         </dependency>
 
-        <!-- JSON processing -->
+        <!-- JSON -->
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>${json-simple.version}</version>
         </dependency>
 
-        <!-- QueryDsl Dependency -->
+        <!-- QueryDsl -->
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-sql</artifactId>
@@ -508,11 +508,6 @@
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-sql-spring</artifactId>
             <version>${querydsl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
         </dependency>
 
         <!-- Javascript Support -->
@@ -723,6 +718,20 @@
           <groupId>org.apache.opennlp</groupId>
           <artifactId>opennlp-tools</artifactId>
           <version>1.8.3</version>
+        </dependency>
+
+       <!-- reflection -->
+
+        <dependency>
+          <groupId>org.reflections</groupId>
+          <artifactId>reflections</artifactId>
+          <version>0.9.11</version>
+        </dependency>
+       <!-- org.reflections should be pulling this version of guava down but isn't -->
+        <dependency>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+          <version>${guava.version}</version>
         </dependency>
 
         <!-- test -->
