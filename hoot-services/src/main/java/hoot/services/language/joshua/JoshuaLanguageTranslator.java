@@ -54,7 +54,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
 
   private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
   private SupportedLanguage[] supportedLangs = null;
-  private Map<String, JoshuaServer> servers = null;
+  private Map<String, JoshuaServiceInfo> services = null;
   private JoshuaConnectionPool connectionPool = null;
   public static final Charset ENCODING = Charset.forName("UTF-8");
 
@@ -62,7 +62,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
 
   private JoshuaLanguageTranslator() throws Exception
   {
-    servers = JoshuaServersInitializer.init();
+    services = JoshuaServicesInitializer.init();
 
     InputStream supportedLangsConfigStrm = null;
     try
@@ -82,7 +82,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     }
 
     //TODO: read from config
-    connectionPool = new JoshuaConnectionPool(servers, 1000);
+    connectionPool = new JoshuaConnectionPool(services, 100);
   }
 
   public void setConfig(Object config) {}
@@ -114,7 +114,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
 
   public boolean isLanguageAvailable(String langCode)
   {
-    return servers.containsKey(langCode.toLowerCase());
+    return services.containsKey(langCode.toLowerCase());
   }
 
   public String getLanguageName(String langCode)
@@ -160,7 +160,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     JoshuaConnection connection = null;
     try
     {
-      logger.trace("port: " + servers.get(sourceLangCode).getPort());
+      logger.trace("port: " + services.get(sourceLangCode).getPort());
       connection = connectionPool.borrowObject(sourceLangCode);
       byte[] bytes = textToSend.getBytes("UTF-8");
       DataOutputStream writer = (DataOutputStream)connection.getWriter();

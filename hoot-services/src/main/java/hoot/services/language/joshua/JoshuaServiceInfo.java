@@ -27,13 +27,13 @@
 
 package hoot.services.language;
 
-public class JoshuaServer 
+public class JoshuaServiceInfo
 {
   private String languageCode;
   private String languagePackPath;
   private int port;
 
-  public JoshuaServer() {}
+  public JoshuaServiceInfo() {}
 
   public String getLanguageCode() { return languageCode; }
   public void setLanguageCode(String code) { this.languageCode = code; }

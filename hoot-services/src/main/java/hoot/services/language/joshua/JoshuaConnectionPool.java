@@ -45,19 +45,19 @@ public class JoshuaConnectionPool
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaConnectionPool.class);
 
-  private Map<String, JoshuaServer> servers = null;
+  private Map<String, JoshuaServiceInfo> services = null;
   private Map<String, GenericObjectPool<JoshuaConnection>> connectionPools = new HashMap<String, GenericObjectPool<JoshuaConnection>>();
   private int maxPoolSize = 100;
 
-  public JoshuaConnectionPool(Map<String, JoshuaServer> servers, int maxPoolSize) 
+  public JoshuaConnectionPool(Map<String, JoshuaServiceInfo> services, int maxPoolSize) 
   {
-    this.servers = servers;
+    this.services = services;
     this.maxPoolSize = maxPoolSize;
   }
 
   public synchronized JoshuaConnection borrowObject(String langCode) throws Exception
   {
-    if (!servers.containsKey(langCode))
+    if (!services.containsKey(langCode))
     {
       throw new Exception("No server exists for language code: " + langCode + ".");
     }
@@ -71,7 +71,7 @@ public class JoshuaConnectionPool
       //TODO: read from config
       connectionPool = 
         new GenericObjectPool<JoshuaConnection>(
-          new PoolableJoshuaConnectionFactory("localhost", servers.get(langCode).getPort(), 10000), maxPoolSize);
+          new PoolableJoshuaConnectionFactory("localhost", services.get(langCode).getPort(), 10000), maxPoolSize);
       connectionPool.setMaxWait(10000);
       connectionPool.setTestOnBorrow(true);
       connectionPool.setWhenExhaustedAction(GenericObjectPool.WHEN_EXHAUSTED_BLOCK);

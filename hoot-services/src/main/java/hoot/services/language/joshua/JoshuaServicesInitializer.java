@@ -52,56 +52,51 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /*
-@article{post2015joshua,
-    Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
-    Journal = {The Prague Bulletin of Mathematical Linguistics},
-    Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
-    Year = {2015} }
 */
-public class JoshuaServersInitializer 
+public class JoshuaServicesInitializer 
 {
-  private static final Logger logger = LoggerFactory.getLogger(JoshuaServersInitializer.class);
+  private static final Logger logger = LoggerFactory.getLogger(JoshuaServicesInitializer.class);
 
-  public JoshuaServersInitializer() {}
+  public JoshuaServicesInitializer() {}
 
-  public static Map<String, JoshuaServer> init() throws Exception
+  public static Map<String, JoshuaServiceInfo> init() throws Exception
   {
     logger.error("Initializing Joshua servers...");
 
-    Map<String, JoshuaServer> servers = new HashMap<String, JoshuaServer>();
+    Map<String, JoshuaServiceInfo> services = new HashMap<String, JoshuaServiceInfo>();
 
     //TODO: read all of this from hoot services config
    
-    JoshuaServer server1 = new JoshuaServer();
-    server1.setLanguageCode("de");
-    server1.setLanguagePackPath("/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18");
-    server1.setPort(5764);
-    servers.put(server1.getLanguageCode(), server1);
+    JoshuaServiceInfo service1 = new JoshuaServiceInfo();
+    service1.setLanguageCode("de");
+    service1.setLanguagePackPath("/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18");
+    service1.setPort(5764);
+    services.put(service1.getLanguageCode(), service1);
 
-    JoshuaServer server2 = new JoshuaServer();
-    server2.setLanguageCode("es");
-    server2.setLanguagePackPath("/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
-    server2.setPort(5765);
-    servers.put(server2.getLanguageCode(), server2);
+    JoshuaServiceInfo service2 = new JoshuaServiceInfo();
+    service2.setLanguageCode("es");
+    service2.setLanguagePackPath("/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
+    service2.setPort(5765);
+    services.put(service2.getLanguageCode(), service2);
 
-    logger.error("servers size: " + servers.size());
+    logger.error("servers size: " + services.size());
     int ctr = 0;
-    for (Map.Entry<String, JoshuaServer> serverEntry : servers.entrySet()) 
+    for (Map.Entry<String, JoshuaServiceInfo> serverEntry : services.entrySet()) 
     {
       long startTime = System.currentTimeMillis();
 
       ctr++;
-      JoshuaServer server = serverEntry.getValue();  
+      JoshuaServiceInfo service = serverEntry.getValue();  
       logger.error(
-        "Launching language translation service " + ctr + " / " + servers.size() + " for lang code: " + 
-        server.getLanguageCode() + " from path: " + server.getLanguagePackPath() + " to port: " + server.getPort() + "...");  
+        "Launching language translation service " + ctr + " / " + services.size() + " for lang code: " + 
+        service.getLanguageCode() + " from path: " + service.getLanguagePackPath() + " to port: " + service.getPort() + "...");  
       
-      String configPath = server.getLanguagePackPath() + "/joshua.config";
-      convertConfigFileModelPathsToAbsolute(configPath, server.getLanguagePackPath());
+      String configPath = service.getLanguagePackPath() + "/joshua.config";
+      convertConfigFileModelPathsToAbsolute(configPath, service.getLanguagePackPath());
       //TODO: read from config
       //not sure why a wildcard won't work here...
       //String classPath = server.getLanguagePackPath() + "/target/joshua-*-jar-with-dependencies.jar";
-      String classPath = server.getLanguagePackPath() + "/target/joshua-6.2-SNAPSHOT-jar-with-dependencies.jar";
+      String classPath = service.getLanguagePackPath() + "/target/joshua-6.2-SNAPSHOT-jar-with-dependencies.jar";
       //TODO: read from config
       //Under light use, I've seen the memory consumption for the largest language packs hit 9-10GB, so 16 is probably a safe value
       //for them.  Smaller ones may not need as much memory.
@@ -112,7 +107,7 @@ public class JoshuaServersInitializer
 
       String line = 
         "java -mx" + memoryGigs + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + classPath + 
-        " org.apache.joshua.decoder.JoshuaDecoder -c " + configPath + " -v 1 -server-port " + server.getPort() + " -server-type tcp";
+        " org.apache.joshua.decoder.JoshuaDecoder -c " + configPath + " -v 1 -server-port " + service.getPort() + " -server-type tcp";
       logger.error("command: " + line);
       CommandLine cmdLine = CommandLine.parse(line);
 
@@ -130,7 +125,7 @@ public class JoshuaServersInitializer
       "Finished launching Joshua translation services for " + ctr + " language packs.  The services may take a few minutes to " +
       "finish initializing.");
 
-    return servers;
+    return services;
   }
 
   private static void convertConfigFileModelPathsToAbsolute(String configPath, String langPackPath) throws IOException

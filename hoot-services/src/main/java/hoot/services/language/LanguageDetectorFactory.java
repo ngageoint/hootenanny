@@ -27,15 +27,22 @@
 
 package hoot.services.language;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.utils.ReflectUtils;
+
 public class LanguageDetectorFactory
 {
   private static final Logger logger = LoggerFactory.getLogger(LanguageDetectorFactory.class);
+
+  private static Map<String, String> classNamesToFullClassNamesCache = new HashMap<String, String>();
 
   private LanguageDetectorFactory()
   {
@@ -46,7 +53,16 @@ public class LanguageDetectorFactory
     String fullClassName = null;
     try 
     {
-      fullClassName = ClassUtils.getPackageName(LanguageDetectorFactory.class) + "." + className;
+      //full class name retrieval is expensive, so let's cache
+      if (!classNamesToFullClassNamesCache.containsKey(className))
+      {
+        fullClassName = ReflectUtils.getFullClassName(className, ClassUtils.getPackageName(LanguageDetectorFactory.class));
+        classNamesToFullClassNamesCache.put(className, fullClassName);
+      }
+      else
+      {
+        fullClassName = classNamesToFullClassNamesCache.get(className);
+      }
       return (LanguageDetector)MethodUtils.invokeStaticMethod(Class.forName(fullClassName), "getInstance", null);
     }
     catch (Exception e) 

@@ -45,7 +45,8 @@ import org.slf4j.LoggerFactory;
 
 /*
 */
-public final class HootLanguageTranslator implements ToEnglishTranslator, LanguageDetectionConsumer, SupportedLanguageConsumer, LanguageAppInfo
+public final class HootLanguageTranslator implements ToEnglishTranslator, LanguageDetectionConsumer, SupportedLanguageConsumer, 
+  LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(HootLanguageTranslator.class);
 
