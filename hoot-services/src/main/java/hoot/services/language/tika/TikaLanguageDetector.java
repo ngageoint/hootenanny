@@ -81,6 +81,9 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
     }
   }
 
+  //There's apparently a trick in recent Java where you can get a more performant singleton by using a static inner class instead
+  //of a synchronized method.  I haven't been able to figure out yet how to get that to work when the constructor throws an 
+  //exception, though.
   public synchronized static TikaLanguageDetector getInstance() throws Exception
   {
     if (instance == null)
@@ -89,17 +92,6 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
     }
     return instance;
   }
-
-  //this may end up being faster
-  /*private static class StaticHolder 
-  {
-    static final TikaLanguageDetector INSTANCE = new TikaLanguageDetector();
-  }
- 
-  public static TikaLanguageDetector getInstance() 
-  {
-    return StaticHolder.INSTANCE;
-  }*/
 
   public boolean isLanguageAvailable(String langCode)
   {

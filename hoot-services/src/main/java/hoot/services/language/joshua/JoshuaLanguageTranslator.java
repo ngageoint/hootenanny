@@ -88,6 +88,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
 
   public void setConfig(Object config) {}
 
+  //see singleton comment in TikaLanguageDetector::getInstance.
   public synchronized static JoshuaLanguageTranslator getInstance() throws Exception
   {
     if (instance == null)
@@ -96,17 +97,6 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     }
     return instance;
   }
-
-  //this may end up being faster
-  /*private static class StaticHolder 
-  {
-    static final JoshuaLanguageTranslator INSTANCE = new JoshuaLanguageTranslator();
-  }
- 
-  public static JoshuaLanguageTranslator getInstance() 
-  {
-    return StaticHolder.INSTANCE;
-  }*/
 
   public SupportedLanguage[] getSupportedLanguages()
   {

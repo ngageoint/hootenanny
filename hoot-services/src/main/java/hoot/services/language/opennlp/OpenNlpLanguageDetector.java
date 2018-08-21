@@ -48,7 +48,7 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
   private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
   private SupportedLanguage[] supportedLangs = null;
 
-  private /*final*/ LanguageDetectorME detector = null;
+  private LanguageDetectorME detector = null;
 
   private static OpenNlpLanguageDetector instance;
 
@@ -59,7 +59,7 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
     {
       logger.debug("Reading OpenNlpLanguageDetector languages config...");
       supportedLangsConfigStrm = 
-        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream(OPEN_NLP_LANGUAGE_DETECTION_MODEL);
+        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream("language-translation/openNlpLanguages");
       supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
       logger.debug("Read " + supportedLangs.length + " languages from config for OpenNlpLanguageDetector.");
     }
@@ -70,8 +70,25 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
         supportedLangsConfigStrm.close();
       }
     }
+    
+    InputStream modelConfigStrm = null;
+    try
+    {
+      logger.debug("Loading OpenNlpLanguageDetector model...");
+      modelConfigStrm = 
+        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream(OPEN_NLP_LANGUAGE_DETECTION_MODEL);
+      detector = new LanguageDetectorME(new LanguageDetectorModel(modelConfigStrm));
+    }
+    finally 
+    {  
+      if (modelConfigStrm != null)
+      {
+        modelConfigStrm.close();
+      }
+    }
   }
 
+  //see singleton comment in TikaLanguageDetector::getInstance.
   public synchronized static OpenNlpLanguageDetector getInstance() throws Exception
   {
     if (instance == null)
@@ -80,17 +97,6 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
     }
     return instance;
   }
-
-  //this may end up being faster
-  /*private static class StaticHolder 
-  {
-    static final OpenNlpLanguageDetector INSTANCE = new OpenNlpLanguageDetector();
-  }
- 
-  public static OpenNlpLanguageDetector getInstance() 
-  {
-    return StaticHolder.INSTANCE;
-  }*/
 
   public boolean isLanguageAvailable(String langCode)
   {
