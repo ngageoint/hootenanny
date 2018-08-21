@@ -1213,6 +1213,7 @@ tds = {
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
+            ["t.communication == 'line'","t['cable:type'] = 'communication'"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
@@ -1589,6 +1590,14 @@ tds = {
             }
         } // End AP020 not Point
 
+        // Cables
+        if (tags.man_made == 'submarine_cable')
+        {
+            delete tags.man_made;
+            tags.cable = 'yes';
+            tags.location = 'underwater';
+        }
+
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
         if (!(attrs.F_CODE) && tds.fcodeLookup)
@@ -1743,7 +1752,7 @@ tds = {
         {
             attrs.FFN = '921'; // Recreation
         }
-
+    
     }, // End applyToTdsPreProcessing
 
     applyToTdsPostProcessing : function (tags, attrs, geometryType, notUsedTags)
@@ -2016,6 +2025,19 @@ tds = {
                 } // End switch
             }
         } // End if religion & denomination
+
+        // Wetlands
+        // Normally, these go to Marsh
+        switch(tags.wetland)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'mangrove':
+                attrs.F_CODE = 'ED020'; // Swamp
+                attrs.VSP = '19'; // Mangrove
+                break;
+        } // End Wetlands
 
     }, // End applyToTdsPostProcessing
 
@@ -2333,7 +2355,8 @@ tds = {
 
 
             // Convert all of the Tags to a string so we can jam it into an attribute
-            var str = JSON.stringify(tags);
+            // var str = JSON.stringify(tags);
+            var str = JSON.stringify(tags,Object.keys(tags).sort());
 
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.

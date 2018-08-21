@@ -1219,6 +1219,7 @@ tds61 = {
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
+            ["t.communication == 'line'","t['cable:type'] = 'communication'"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
@@ -1499,8 +1500,11 @@ tds61 = {
                 case 'neighbourhood':
                 case 'quarter':
                 case 'village':
-                    attrs.F_CODE = 'AL020'; // Built Up Area
-                    delete tags.place;
+                    if (geometryType == 'Point')
+                    {
+                        attrs.F_CODE = 'AL020'; // Built Up Area
+                        delete tags.place;                        
+                    }
                     break;
 
                 case 'hamlet':
@@ -1592,6 +1596,14 @@ tds61 = {
                 delete tags.junction;
             }
         } // End AP020 not Point
+
+        // Cables
+        if (tags.man_made == 'submarine_cable')
+        {
+            delete tags.man_made;
+            tags.cable = 'yes';
+            tags.location = 'underwater';
+        }
 
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
@@ -1811,6 +1823,7 @@ tds61 = {
                 } // End switch
             }
         } // End if religion & denomination
+
 
     }, // End applyToTdsPreProcessing
 
@@ -2097,6 +2110,19 @@ tds61 = {
             attrs.FFN = '921'; // Recreation
         }
 
+        // Wetlands
+        // Normally, these go to Marsh
+        switch(tags.wetland)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'mangrove':
+                attrs.F_CODE = 'ED020'; // Swamp
+                attrs.VSP = '19'; // Mangrove
+                break;
+        } // End Wetlands
+
     }, // End applyToTdsPostProcessing
 
 // #####################################################################################################
@@ -2377,6 +2403,13 @@ tds61 = {
 
         // one 2 one: we call the version that knows about the OTH field
         // NOTE: This deletes tags as they are used
+        if (tds61.configOut.OgrDebugDumptags == 'true')
+        {
+            print('Before fcodelookup');
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+        }
+
         translate.applyTdsOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
 
         // Post Processing.
@@ -2441,7 +2474,8 @@ tds61 = {
             }
 
             // Convert all of the Tags to a string so we can jam it into an attribute
-            var str = JSON.stringify(tags);
+            // var str = JSON.stringify(tags);
+            var str = JSON.stringify(tags,Object.keys(tags).sort());
 
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
