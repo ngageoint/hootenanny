@@ -66,11 +66,11 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
     InputStream supportedLangsConfigStrm = null;
     try
     {
-      logger.error("Reading TikaLanguageDetector languages config...");
+      logger.debug("Reading TikaLanguageDetector languages config...");
       supportedLangsConfigStrm = 
         TikaLanguageDetector.class.getClassLoader().getResourceAsStream("language-translation/tikaLanguages");
       supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
-      logger.error("Read " + supportedLangs.length + " languages from config for TikaLanguageDetector.");
+      logger.debug("Read " + supportedLangs.length + " languages from config for TikaLanguageDetector.");
     }
     finally 
     {  
@@ -132,7 +132,7 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
       logger.debug(getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
     }
 
-    logger.error("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000);    
+    logger.trace("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000);    
 
     return detectedLang;
   }

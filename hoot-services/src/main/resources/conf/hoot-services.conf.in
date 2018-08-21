@@ -145,3 +145,6 @@ joshuaLibrary=joshua-6.2-SNAPSHOT-jar-with-dependencies.jar
 
 # maximum amount of memory in gigabytes that may be consumed by a Joshua service for a single language
 joshuaMaxMemory=16
+
+# path to downloaded language detection model for OpenNlp relative to resources directory
+openNlpLanguageDetectionModel=language-translation/langdetect-183.bin

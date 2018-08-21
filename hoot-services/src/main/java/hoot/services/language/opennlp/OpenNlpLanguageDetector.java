@@ -27,6 +27,8 @@
 
 package hoot.services.language;
 
+import static hoot.services.HootProperties.*;
+
 import opennlp.tools.langdetect.LanguageDetectorModel;
 import opennlp.tools.langdetect.LanguageDetectorME;
 
@@ -47,8 +49,6 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
   private SupportedLanguage[] supportedLangs = null;
 
   private /*final*/ LanguageDetectorME detector = null;
-  //TODO: move to config
-  private static final String OPEN_NLP_MODEL = "language-translation/langdetect-183.bin";
 
   private static OpenNlpLanguageDetector instance;
 
@@ -57,11 +57,11 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
     InputStream supportedLangsConfigStrm = null;
     try
     {
-      logger.error("Reading OpenNlpLanguageDetector languages config...");
+      logger.debug("Reading OpenNlpLanguageDetector languages config...");
       supportedLangsConfigStrm = 
-        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream("language-translation/openNlpLanguages");
+        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream(OPEN_NLP_LANGUAGE_DETECTION_MODEL);
       supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
-      logger.error("Read " + supportedLangs.length + " languages from config for OpenNlpLanguageDetector.");
+      logger.debug("Read " + supportedLangs.length + " languages from config for OpenNlpLanguageDetector.");
     }
     finally 
     {  
@@ -123,7 +123,7 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
       logger.debug(getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
     }
 
-    logger.error("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000); 
+    logger.trace("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000); 
 
     return detectedLang;
   }

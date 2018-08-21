@@ -110,11 +110,11 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
       throw new Exception("No source language codes or detect mode specified.");
     }
 
-    logger.error("text: " + text);
+    logger.trace("text: " + text);
     List<String> specifiedSourceLangs = Arrays.asList(sourceLangCodes);;
-    logger.error("specifiedSourceLangs size: " + String.valueOf(specifiedSourceLangs.size()));
-    logger.error("performExhaustiveTranslationSearchWithNoDetection: " + performExhaustiveTranslationSearchWithNoDetection);
-    logger.error("detectedLanguageOverridesSpecifiedSourceLanguages: " + detectedLanguageOverridesSpecifiedSourceLanguages);
+    logger.trace("specifiedSourceLangs size: " + String.valueOf(specifiedSourceLangs.size()));
+    logger.trace("performExhaustiveTranslationSearchWithNoDetection: " + performExhaustiveTranslationSearchWithNoDetection);
+    logger.trace("detectedLanguageOverridesSpecifiedSourceLanguages: " + detectedLanguageOverridesSpecifiedSourceLanguages);
 
     String sourceLangCode = "";
     String translatedText = "";
@@ -131,24 +131,24 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
     final boolean containsDetect = specifiedSourceLangs.stream().anyMatch("detect"::equalsIgnoreCase);
     if (containsDetect || specifiedSourceLangs.size() > 1)
     {
-      logger.error("detectors: " + String.join(",", detectors));
+      logger.trace("detectors: " + String.join(",", detectors));
       for (int i = 0; i < detectors.length; i++)
       {
         String detectorName = detectors[i];
-        logger.error("detectorName: " + detectorName);
+        logger.trace("detectorName: " + detectorName);
         LanguageDetector detector = LanguageDetectorFactory.create(detectorName);
         sourceLangCode = detector.detect(text);
-        logger.error("sourceLangCode: " + sourceLangCode);
+        logger.trace("sourceLangCode: " + sourceLangCode);
         if (!sourceLangCode.isEmpty())
         {
           detectedLangCode = sourceLangCode;
-          logger.error("detectedLangCode: " + detectedLangCode);
+          logger.trace("detectedLangCode: " + detectedLangCode);
           detectorUsed = detector.getClass().getSimpleName();
-          logger.error("specifiedSourceLangs.contains(sourceLangCode): " + specifiedSourceLangs.contains(sourceLangCode));
+          logger.trace("specifiedSourceLangs.contains(sourceLangCode): " + specifiedSourceLangs.contains(sourceLangCode));
 
           if (!((SupportedLanguageConsumer)translator).isLanguageAvailable(sourceLangCode))
           {
-            logger.error(
+            logger.debug(
               "Language detector detected language code: " + sourceLangCode + ", but that language is not available for " +
               "translation by the selected translator: " + translator.getClass().getName() + ". Disregarding the detected language.");
             sourceLangCode = "";
@@ -162,12 +162,12 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
       {
         if (performExhaustiveTranslationSearchWithNoDetection)
         {
-          logger.error("Unable to detect language.  Performing translation against each specified " +
+          logger.debug("Unable to detect language.  Performing translation against each specified " +
                        "language until a translation is found...");
           for (String langCode : specifiedSourceLangs)
           {
             translatedText = translator.translate(langCode, text);
-            logger.error("translatedText: " + translatedText);
+            logger.trace("translatedText: " + translatedText);
             if (!translatedText.isEmpty() && !translatedText.toLowerCase().equals(text.toLowerCase()))
             {
               return translatedText;
@@ -176,7 +176,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
         }
         else
         {
-          logger.error("Unable to detect language.  Skipping translation for: " + text);
+          logger.debug("Unable to detect language.  Skipping translation for: " + text);
           return "";
         }
       }
@@ -189,11 +189,11 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
         if (performExhaustiveTranslationSearchWithNoDetection)
         {
           msg += "Performing translation against each specified language until a translation is found...";
-          logger.error(msg);
+          logger.debug(msg);
           for (String langCode : specifiedSourceLangs)
           {
             translatedText = translator.translate(langCode, text);
-            logger.error("translatedText: " + translatedText);
+            logger.trace("translatedText: " + translatedText);
             if (!translatedText.isEmpty() && !translatedText.toLowerCase().equals(text.toLowerCase()))
             {
               return translatedText;
@@ -202,7 +202,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
         }
         else
         {
-          logger.error(
+          logger.debug(
             "Detected language code: " + sourceLangCode + " not in specified source languages: " + 
             String.join(",", sourceLangCodes) + ".  Skipping translation; text: " + text);
           return "";
@@ -213,24 +213,24 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
         if (!specifiedSourceLangs.contains(sourceLangCode.toLowerCase()))
         {
           assert(detectedLanguageOverridesSpecifiedSourceLanguages);
-          logger.error("Detected language code: " + sourceLangCode + " overrides specified language(s) for text: " + text);
+          logger.debug("Detected language code: " + sourceLangCode + " overrides specified language(s) for text: " + text);
         }
         else
         {
-          logger.error("Detected language code: " + sourceLangCode + " for text: " + text);
+          logger.debug("Detected language code: " + sourceLangCode + " for text: " + text);
         }
 
         translatedText = translator.translate(sourceLangCode, text);
-        logger.error("translatedText: " + translatedText);
+        logger.debug("translatedText: " + translatedText);
       }
     }
     else
     {
       sourceLangCode = specifiedSourceLangs.get(0);
-      logger.error("sourceLangCode: " + sourceLangCode);
-      logger.error("Using specified language code: " + sourceLangCode);
+      logger.trace("sourceLangCode: " + sourceLangCode);
+      logger.trace("Using specified language code: " + sourceLangCode);
       translatedText = translator.translate(sourceLangCode, text);
-      logger.error("translatedText: " + translatedText);
+      logger.debug("translatedText: " + translatedText);
     }
 
     return translatedText;

@@ -117,6 +117,7 @@ public final class HootProperties {
     public static final String JOSHUA_CONNECTION_MAX_WAIT;
     public static final String JOSHUA_LIBRARY;
     public static final String JOSHUA_MAX_MEMORY;
+    public static final String OPEN_NLP_LANGUAGE_DETECTION_MODEL;
 
     private static final String USERFILES_FOLDER;
     private static final String OSMAPI_DB_USER;
@@ -219,6 +220,7 @@ public final class HootProperties {
         JOSHUA_CONNECTION_MAX_WAIT= getProperty("joshuaConnectionMaxWait");
 	JOSHUA_LIBRARY = getProperty("joshuaLibrary");
 	JOSHUA_MAX_MEMORY = getProperty("joshuaMaxMemory");
+	OPEN_NLP_LANGUAGE_DETECTION_MODEL = getProperty("openNlpLanguageDetectionModel");
 
         // Root folder of tomcat writable locations
         USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";

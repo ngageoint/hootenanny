@@ -64,17 +64,17 @@ public class JoshuaServicesInitializer
 
   public static Map<String, JoshuaServiceInfo> init() throws Exception
   {
-    logger.error("Initializing Joshua services...");
+    logger.info("Initializing Joshua services...");
 
     JoshuaServiceInfo[] servicesTmp = null;
     InputStream configStrm = null;
     try
     {
-      logger.error("Reading Joshua services config...");
+      logger.debug("Reading Joshua services config...");
       configStrm = 
         JoshuaServicesInitializer.class.getClassLoader().getResourceAsStream("language-translation/joshuaServices");
       servicesTmp = JoshuaServicesConfigReader.readConfig(configStrm);
-      logger.error("Read " + servicesTmp.length + " services from config.");
+      logger.debug("Read " + servicesTmp.length + " services from config.");
     }
     finally 
     {  
@@ -88,7 +88,7 @@ public class JoshuaServicesInitializer
     {
       services.put(service.getLanguageCode(), service);
     }
-    logger.error("services size: " + services.size());
+    logger.trace("services size: " + services.size());
 
     int ctr = 0;
     for (Map.Entry<String, JoshuaServiceInfo> serverEntry : services.entrySet()) 
@@ -97,7 +97,7 @@ public class JoshuaServicesInitializer
 
       ctr++;
       JoshuaServiceInfo service = serverEntry.getValue();  
-      logger.error(
+      logger.debug(
         "Launching language translation service " + ctr + " / " + services.size() + " for lang code: " + 
         service.getLanguageCode() + " from path: " + service.getLanguagePackPath() + " to port: " + service.getPort() + "...");  
       
@@ -125,14 +125,14 @@ public class JoshuaServicesInitializer
       String stdErrStr = stderr.toString();
       if (!stdOutStr.isEmpty())
       {
-        logger.info("JoshuaServicesInitializer stdout: " + stdOutStr);
+        logger.debug("JoshuaServicesInitializer stdout: " + stdOutStr);
       }
       if (!stdErrStr.isEmpty())
       {
         logger.error("JoshuaServicesInitializer stderr: " + stdErrStr);
       }
     }
-    logger.error(
+    logger.debug(
       "Finished launching Joshua translation services for " + ctr + " language packs.  The services may take up to several minutes to " +
       "finish initializing.");
 

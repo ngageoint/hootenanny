@@ -69,11 +69,11 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     InputStream supportedLangsConfigStrm = null;
     try
     {
-      logger.error("Reading JoshuaLanguageTranslator languages config...");
+      logger.debug("Reading JoshuaLanguageTranslator languages config...");
       supportedLangsConfigStrm = 
         JoshuaLanguageTranslator.class.getClassLoader().getResourceAsStream("language-translation/joshuaLanguages");
       supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
-      logger.error("Read " + supportedLangs.length + " languages from config for JoshuaLanguageTranslator.");
+      logger.debug("Read " + supportedLangs.length + " languages from config for JoshuaLanguageTranslator.");
     }
     finally 
     {  
@@ -141,17 +141,17 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
   {
     long startTime = System.currentTimeMillis();
 
-    logger.error("text: " + text);
+    logger.debug("text: " + text);
     //joshua expects a newline at the end of what's passed in
     String textToSend = null;
     if (!text.endsWith("\n"))
     {
       textToSend = text + "\n";
     }
-    logger.error("textToSend: " + textToSend);
+    logger.trace("textToSend: " + textToSend);
     sourceLangCode = sourceLangCode.toLowerCase();
-    logger.error("sourceLangCode: " + sourceLangCode);
-    logger.error("language is available: " + isLanguageAvailable(sourceLangCode));
+    logger.trace("sourceLangCode: " + sourceLangCode);
+    logger.trace("language is available: " + isLanguageAvailable(sourceLangCode));
     if (!isLanguageAvailable(sourceLangCode))
     {
       throw new Exception("No language translator available for language code: " + sourceLangCode);
@@ -175,8 +175,8 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
       connectionPool.returnObject(sourceLangCode, connection);
     }
 
-    logger.error(getClass().getName() + " translated: " + text + " to: " + translatedText);
-    logger.error("Translation took {} seconds", (System.currentTimeMillis() - startTime) / 1000);
+    logger.debug(getClass().getName() + " translated: " + text + " to: " + translatedText);
+    logger.trace("Translation took {} seconds", (System.currentTimeMillis() - startTime) / 1000);
 
     return translatedText;
   }

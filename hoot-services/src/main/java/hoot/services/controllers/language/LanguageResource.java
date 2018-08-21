@@ -88,7 +88,7 @@ public class LanguageResource
     try
     {
       //The Joshua init can take a long time, so let's do it here vs having it happen the very first time a translation is made.
-      logger.error("Initializing Joshua...");
+      logger.info("Initializing Joshua...");
       MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
     }
     catch (Exception e)
@@ -102,13 +102,9 @@ public class LanguageResource
   {
     try
     {
-      logger.error("Closing Joshua...");
+      logger.info("Closing Joshua...");
       Object joshuaTranslator = 
         MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
-      if (joshuaTranslator == null)
-      {
-        logger.error("joshuaTranslator null");
-      }
       MethodUtils.invokeMethod(joshuaTranslator, "close");
     }
     catch (Exception e)
@@ -204,7 +200,7 @@ public class LanguageResource
       {
         detectorClassNames = LanguageDetectorFactory.getSimpleClassNames();
       }
-      logger.error("Listing detectable languages for apps: " + String.join(",", detectorClassNames.toArray(new String[]{})) + "..."); 
+      logger.trace("Listing detectable languages for apps: " + String.join(",", detectorClassNames.toArray(new String[]{})) + "..."); 
       return new SupportedLanguagesResponse(getAllAppSupportedLangs(detectorClassNames));
     }
     catch (Exception e)
@@ -244,7 +240,7 @@ public class LanguageResource
       {
         translatorClassNames = ToEnglishTranslatorFactory.getSimpleClassNames();
       }
-      logger.error("Listing translatable languages for apps: " + String.join(",", translatorClassNames.toArray(new String[]{})) + "...");
+      logger.trace("Listing translatable languages for apps: " + String.join(",", translatorClassNames.toArray(new String[]{})) + "...");
       return new SupportedLanguagesResponse(getAllAppSupportedLangs(translatorClassNames));
     }
     catch (Exception e)
@@ -273,7 +269,7 @@ public class LanguageResource
     List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
     for (String appName : apps)
     {
-      logger.error("appName: " + appName);
+      logger.trace("appName: " + appName);
       SupportedLanguageConsumer langConsumer = null;
       try
       {
@@ -286,7 +282,7 @@ public class LanguageResource
       assert(langConsumer != null);
 
       SupportedLanguage[] consumerSupportedLangs = langConsumer.getSupportedLanguages();
-      logger.error("consumerSupportedLangs size: " + consumerSupportedLangs.length);
+      logger.trace("consumerSupportedLangs size: " + consumerSupportedLangs.length);
       for (int i = 0; i < consumerSupportedLangs.length; i++)
       {
         SupportedLanguage lang = consumerSupportedLangs[i];
@@ -299,7 +295,7 @@ public class LanguageResource
         }
       }
     }
-    logger.error("supportedLangs size: " + supportedLangs.size());
+    logger.trace("supportedLangs size: " + supportedLangs.size());
     return supportedLangs.toArray(new SupportedLanguage[]{});
   }
 
@@ -313,7 +309,7 @@ public class LanguageResource
     try
     {
       requestText = URLDecoder.decode(request.getText(), "UTF-8");
-      logger.error("Detecting language for text: " + StringUtils.left(requestText, 25) + "...");
+      logger.debug("Detecting language for text: " + StringUtils.left(requestText, 25) + "...");
       String detectedLangCode = "";
       String detectingDetector = "";
       String detectedLangName = "";
@@ -406,7 +402,7 @@ public class LanguageResource
     try
     {
       textToTranslate = URLDecoder.decode(request.getText(), "UTF-8");
-      logger.error(
+      logger.debug(
         "Translating language for text: " + StringUtils.left(textToTranslate, 25) + " and source languages: " + 
         String.join(",", request.getSourceLangCodes()) + "...");
 

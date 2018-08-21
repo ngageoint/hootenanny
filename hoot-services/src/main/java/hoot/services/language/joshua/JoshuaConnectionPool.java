@@ -67,7 +67,7 @@ public class JoshuaConnectionPool
     GenericObjectPool<JoshuaConnection> connectionPool = connectionPools.get(langCode);
     if (connectionPool == null)
     {
-      logger.error("Creating Joshua connection pool for language code: " + langCode + "...");
+      logger.debug("Creating Joshua connection pool for language code: " + langCode + "...");
       //assuming joshua tcp server is always running local with the hoot services; if it ever needed to be run on another 
       //server, then we'd probably run it as an http server anyway which would involve some refactoring
       connectionPool = 
@@ -99,7 +99,7 @@ public class JoshuaConnectionPool
 
   public synchronized void close() throws Exception
   {
-    logger.error("Closing Joshua connection pool...");
+    logger.debug("Closing Joshua connection pool...");
 
     boolean errorEncountered = false;
     List<String> errorLangCodes = new ArrayList<String>();
