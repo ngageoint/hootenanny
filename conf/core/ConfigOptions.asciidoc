@@ -1234,7 +1234,7 @@ languages.
 * Data Type: string
 * Default Value: `http://localhost:8080/hoot-services/language/detectable`
 
-TODO
+Service endpoint for retrieving detectable languages supported by HootServicesTranslatorClient
 
 === language.translation.hoot.services.detectors
 
@@ -1255,14 +1255,14 @@ Separate values with a ';' and surround in quotes when passing in from the comma
 * Data Type: string
 * Default Value: `http://localhost:8080/hoot-services/language/translatable`
 
-TODO
+Service endpoint for retrieving translatable languages supported by HootServicesTranslatorClient
 
 === language.translation.hoot.services.translation.endpoint
 
 * Data Type: string
 * Default Value: `http://localhost:8080/hoot-services/language/translate`
 
-Web service endpoint used by the HootServicesTranslatorClient
+Web service translation endpoint used by the HootServicesTranslatorClient
 
 === language.translation.hoot.services.translator
 

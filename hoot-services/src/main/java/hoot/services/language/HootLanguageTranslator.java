@@ -127,7 +127,8 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
       }
     }
 
-    if (specifiedSourceLangs.contains("detect") || specifiedSourceLangs.size() > 1) //TODO: case sens
+    final boolean containsDetect = specifiedSourceLangs.stream().anyMatch("detect"::equalsIgnoreCase);
+    if (containsDetect || specifiedSourceLangs.size() > 1)
     {
       logger.error("detectors: " + String.join(",", detectors));
       for (int i = 0; i < detectors.length; i++)

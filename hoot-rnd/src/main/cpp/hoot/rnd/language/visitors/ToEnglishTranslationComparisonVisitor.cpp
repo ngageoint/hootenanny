@@ -93,7 +93,8 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
     if ((tags.contains(toTranslateTagKey) && tags.contains(preTranslatedTagKey)))
     {
       _preTranslatedVal = tags.get(preTranslatedTagKey).trimmed();
-      //TODO: Should this be moved to JoshuaTranslator?
+      //We're just translating single phrases, not entire texts, so assume one line was passed in and
+      //remove the ending newline.
       _preTranslatedVal = _preTranslatedVal.replace("\n", "");
       LOG_VARD(_preTranslatedVal);
 
