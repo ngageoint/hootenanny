@@ -1,0 +1,42 @@
+== languages
+
+The +languages+ command displays information about Hootenanny language translation/detection capabilities.  It makes use of the configuration
+options named language.translation.* and requires that both the hoot-rnd and hoot-services libraries be loaded.  
+
+Only one of the following options can be passed to the command:
+
+* +--detectable+    - Prints all spoken languages that Hootenanny can detect and the detectors that can detect them
+* +--translatable+  - Prints all spoken languages that Hootenanny translate from to English and the translators that can translate them
+
+=== Detectable Languages
+
+The +--detectable+ option prints out spoken languages which Hootenanny can detect when using the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+languages --detectable
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot languages --detectable
+--------------------------------------
+
+=== Translatable Languages
+
+The +--translatable+ option prints out spoken languages which Hootenanny can translate from to English when using the Hootenanny web 
+services.
+
+==== Usage
+
+--------------------------------------
+languages --translatable
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot languages --translatable
+--------------------------------------

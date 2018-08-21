@@ -25,69 +25,46 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef HOOT_SERVICES_TRANSLATOR_CLIENT_H
-#define HOOT_SERVICES_TRANSLATOR_CLIENT_H
+#ifndef HOOT_SERVICES_TRANSLATION_INFO_CLIENT_H
+#define HOOT_SERVICES_TRANSLATION_INFO_CLIENT_H
 
 // hoot
 #include <hoot/rnd/language/translators/ToEnglishTranslator.h>
-#include <hoot/rnd/language/translators/HootServicesTranslationInfoClient.h>
 
 // Qt
+#include <QStringList>
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
+
+// Boost
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
 
 namespace hoot
 {
 
 /**
- * Translates text from a single source language to English using translation/detection
- * technologies integrated into the Hootenanny web services.
+ *
  */
-class HootServicesTranslatorClient : public QObject, public ToEnglishTranslator
+class HootServicesTranslationInfoClient : public Configurable
 {
-  Q_OBJECT
-
 public:
 
-  static std::string className() { return "hoot::HootServicesTranslatorClient"; }
-
-  HootServicesTranslatorClient();
-
-  virtual QStringList getSourceLanguages() const { return _sourceLangs; }
-  virtual void setSourceLanguages(const QStringList langCodes);
-  virtual void translate(const QString textToTranslate);
-  virtual QString getTranslatedText() const { return _translatedText; }
-  virtual bool detectionMade() const { return _detectionMade; }
+  HootServicesTranslationInfoClient();
 
   virtual void setConfiguration(const Settings& conf);
 
-signals:
-
-  void translationComplete();
-  void translationError(QString textSent, QString message);
-
-private slots:
-
-  void _translateReplyReceived(QNetworkReply* reply);
+  boost::property_tree::ptree getAvailableLanguages(const QString type);
 
 private:
 
-  QStringList _sourceLangs;
   QString _translator;
   QStringList _detectors;
-  QString _translationUrl;
-  bool _detectedLangOverrides;
-  bool _performExhaustiveSearch;
-
-  QString _translatedText;
-  bool _detectionMade;
+  QString _detectableUrl;
+  QString _translatableUrl;
 
   boost::shared_ptr<QNetworkAccessManager> _client;
-  boost::shared_ptr<HootServicesTranslationInfoClient> _infoClient;
-
-  void _checkLangsAvailable(const QString type);
 };
 
 }
 
-#endif // HOOT_SERVICES_TRANSLATOR_CLIENT_H
+#endif // HOOT_SERVICES_TRANSLATION_INFO_CLIENT_H

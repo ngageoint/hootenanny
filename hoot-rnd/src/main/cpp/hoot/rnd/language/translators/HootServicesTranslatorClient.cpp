@@ -70,13 +70,14 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
   _translator = opts.getLanguageTranslationHootServicesTranslator();
   _detectors = opts.getLanguageTranslationHootServicesDetectors();
   _translationUrl = opts.getLanguageTranslationHootServicesTranslationEndpoint();
-  _detectableUrl = opts.getLanguageTranslationHootServicesDetectableLanguagesEndpoint();
-  _translatableUrl = opts.getLanguageTranslationHootServicesTranslatableLanguagesEndpoint();
 
   connect(this, SIGNAL(translationComplete()), parent(), SLOT(translationComplete()));
   connect(
     this, SIGNAL(translationError(QString, QString)), parent(),
     SLOT(translationError(QString, QString)));
+
+  _infoClient.reset(new HootServicesTranslationInfoClient());
+  _infoClient->setConfiguration(conf);
 }
 
 void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCodes)
@@ -97,82 +98,23 @@ void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCode
     }
   }
 
-  _checkLangsAvailable("detect");
-  _checkLangsAvailable("translate");
+  _checkLangsAvailable("detectable");
+  _checkLangsAvailable("translatable");
 }
 
 void HootServicesTranslatorClient::_checkLangsAvailable(const QString type)
 {
-  LOG_DEBUG("Checking languages available for: " << type << "...");
-
-  QString urlStr;
-  QStringList apps;
-  if (type == "translate")
-  {
-    urlStr = _translatableUrl;
-    apps = QStringList(_translator);
-  }
-  else
-  {
-    urlStr = _detectableUrl;
-    apps = _detectors;
-  }
-
-  QUrl url(urlStr);
-  QNetworkRequest request(url);
-  request.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
-
-  boost::property_tree::ptree requestObj;
-  boost::property_tree::ptree appsObj;
-  for (int i = 0; i < apps.size(); i++)
-  {
-    boost::property_tree::ptree appObj;
-    appObj.put("", apps.at(i).toStdString());
-    appsObj.push_back(std::make_pair("", appObj));
-  }
-  requestObj.add_child("apps", appsObj);
-  std::stringstream requestStrStrm;
-  boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
-  LOG_VART(requestStrStrm.str());
-
-  QNetworkReply* reply =
-    _client->post(request, QString::fromStdString(requestStrStrm.str()).toUtf8());
-  QEventLoop loop;
-  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-  loop.exec();
-
-  QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-  LOG_VARD(status.isValid());
-  LOG_VARD(status.toInt());
-  if (reply->error() != QNetworkReply::NoError)
-  {
-    emit translationError("Supported languages request error", reply->errorString());
-    return;
-  }
-
-  QString replyData(reply->readAll());
-  LOG_VART(replyData);
-  std::stringstream replyStrStrm(replyData.toUtf8().constData(), std::ios::in);
-  if (!replyStrStrm.good())
-  {
-    throw HootException(QString("Error reading from reply string:\n%1").arg(replyData));
-  }
   boost::property_tree::ptree replyObj;
   try
   {
-    boost::property_tree::read_json(replyStrStrm, replyObj);
+    replyObj = _infoClient->getAvailableLanguages(type);
   }
-  catch (boost::property_tree::json_parser::json_parser_error& e)
+  catch (const HootException& e)
   {
-    QString reason = QString::fromStdString(e.message());
-    QString line = QString::number(e.line());
-    throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
+    emit translationError("Supported languages request error", e.getWhat());
+    return;
   }
-  catch (const std::exception& e)
-  {
-    QString reason = e.what();
-    throw HootException("Error parsing JSON " + reason);
-  }
+
   QMap<QString, bool> returnedLangs;
   BOOST_FOREACH (boost::property_tree::ptree::value_type& language, replyObj.get_child("languages"))
   {
@@ -190,10 +132,8 @@ void HootServicesTranslatorClient::_checkLangsAvailable(const QString type)
     LOG_VART(sourceLangCode);
     if (!returnedLangs[sourceLangCode])
     {
-      QString msg =
-        "Requested source language code: " + sourceLangCode + " not available for apps: " +
-        apps.join(",");
-      if (type == "translate")
+      QString msg = "Requested source language code: " + sourceLangCode + " not available.";
+      if (type == "translatable")
       {
         throw HootException(msg);
       }

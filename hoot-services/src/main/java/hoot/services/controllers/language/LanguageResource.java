@@ -291,6 +291,8 @@ public class LanguageResource
         {
           parsedLangCodes.add(lang.getIso6391code());
           lang.setAvailable(langConsumer.isLanguageAvailable(lang.getIso6391code()));
+          //TODO: replace of '+' here is a bit of a hack
+          lang.setName(URLEncoder.encode(lang.getName(), "UTF-8").replace("+", "%20"));
           supportedLangs.add(lang);
         }
       }
