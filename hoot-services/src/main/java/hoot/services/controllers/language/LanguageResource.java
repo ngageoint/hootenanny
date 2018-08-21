@@ -209,9 +209,20 @@ public class LanguageResource
     }
     catch (Exception e)
     {
+      Status status;
+      if (e.getMessage().startsWith("Error creating"))
+      {
+        status = Status.BAD_REQUEST;
+      }
+      else
+      {
+        status = Status.INTERNAL_SERVER_ERROR;
+      } 
       throw new WebApplicationException(
         e, 
-        Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error retrieving detectable language information.  Error: " + e.getMessage())
+        Response.status(status)
+          .entity("Error retrieving detectable language information for apps: " + String.join(",", request.getApps()) + ".  Error: " + 
+                  e.getMessage())
           .build());
     }
   }
@@ -238,9 +249,20 @@ public class LanguageResource
     }
     catch (Exception e)
     {
+      Status status;
+      if (e.getMessage().startsWith("Error creating"))
+      {
+        status = Status.BAD_REQUEST;
+      }
+      else
+      {
+        status = Status.INTERNAL_SERVER_ERROR;
+      } 
       throw new WebApplicationException(
         e, 
-        Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error retrieving translatable language information.  Error: " + e.getMessage())
+        Response.status(status)
+          .entity("Error retrieving detectable language information for apps: " + String.join(",", request.getApps()) + ".  Error: " + 
+                  e.getMessage())
           .build());
     }
   }
@@ -397,9 +419,9 @@ public class LanguageResource
     catch (Exception e)
     {
       Status status;
-      //TODO: handle more exceptions
       if (e.getMessage().startsWith("No language translator available") || 
-          e.getMessage().startsWith("Requested unsupported translation language"))
+          e.getMessage().startsWith("Requested unavilable translation language") ||
+          e.getMessage().startsWith("No source language codes or detect mode specified"))
       {
         status = Status.BAD_REQUEST;
       }
