@@ -157,18 +157,11 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     }
 
     String translatedText = "";
-    //BufferedReader reader = null;
-    //Socket clientSocket = null;
-    //DataOutputStream writer = null;
     JoshuaConnection connection = null;
     try
     {
       logger.trace("port: " + servers.get(sourceLangCode).getPort());
-      //clientSocket = new Socket("localhost", servers.get(sourceLangCode).getPort());
-      //clientSocket = socketPool.get(sourceLangCode);
       connection = connectionPool.borrowObject(sourceLangCode);
-      //writer = new DataOutputStream(clientSocket.getOutputStream());
-      //reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), ENCODING));
       byte[] bytes = textToSend.getBytes("UTF-8");
       DataOutputStream writer = (DataOutputStream)connection.getWriter();
       writer.write(bytes, 0, bytes.length);
@@ -178,18 +171,6 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     }
     finally
     {
-      /*if (reader != null)
-      {
-        reader.close();
-      }
-      if (writer != null)
-      {
-        writer.close();
-      }*/
-      /*if (clientSocket != null)
-      {
-        clientSocket.close();
-      }*/
       connectionPool.returnObject(sourceLangCode, connection);
     }
 
