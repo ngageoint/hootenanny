@@ -53,7 +53,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  boost::property_tree::ptree getAvailableLanguages(const QString type);
+  boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type);
 
 private:
 

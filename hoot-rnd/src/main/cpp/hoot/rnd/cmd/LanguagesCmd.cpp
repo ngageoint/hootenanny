@@ -58,12 +58,12 @@ public:
     const QString type = args[0].replace("--", "");
     HootServicesTranslationInfoClient client;
     client.setConfiguration(conf());
-    boost::property_tree::ptree replyObj = client.getAvailableLanguages(type);
+     boost::shared_ptr<boost::property_tree::ptree> replyObj = client.getAvailableLanguages(type);
 
     std::cout << type << " languages: " << std::endl << std::endl;
     int langCtr = 0;
     int availableCtr = 0;
-    BOOST_FOREACH (boost::property_tree::ptree::value_type& language, replyObj.get_child("languages"))
+    BOOST_FOREACH (boost::property_tree::ptree::value_type& language, replyObj->get_child("languages"))
     {
       const QString langName =
         QUrl::fromPercentEncoding(
@@ -82,8 +82,13 @@ public:
       }
     }
 
-    std::cout << QString::number(langCtr) << " languages are supported for " << type << ".  " << std::endl;
-    std::cout << QString::number(availableCtr) << " of those languages are currently available for " << type << ".  " << std::endl;
+    QString descriptor = "translation";
+    if (type != "translatable")
+    {
+      descriptor = "detection";
+    }
+    std::cout << QString::number(langCtr) << " languages are supported for " << descriptor << ".  " << std::endl;
+    std::cout << "Currently, " << QString::number(availableCtr) << " of those languages are available for " << descriptor << ".  " << std::endl;
 
     return 0;
   }

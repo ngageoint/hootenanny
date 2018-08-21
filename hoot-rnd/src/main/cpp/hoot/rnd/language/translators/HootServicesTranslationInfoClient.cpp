@@ -60,8 +60,7 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   _translatableUrl = opts.getLanguageTranslationHootServicesTranslatableLanguagesEndpoint();
 }
 
-//TODO: return as pointer?
-boost::property_tree::ptree HootServicesTranslationInfoClient::getAvailableLanguages(
+ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableLanguages(
   const QString type)
 {
   LOG_DEBUG("Checking languages available for: " << type << "...");
@@ -119,10 +118,10 @@ boost::property_tree::ptree HootServicesTranslationInfoClient::getAvailableLangu
   {
     throw HootException(QString("Error reading from reply string:\n%1").arg(replyData));
   }
-  boost::property_tree::ptree replyObj;
+  boost::shared_ptr<boost::property_tree::ptree> replyObj(new boost::property_tree::ptree());
   try
   {
-    boost::property_tree::read_json(replyStrStrm, replyObj);
+    boost::property_tree::read_json(replyStrStrm, *replyObj);
   }
   catch (boost::property_tree::json_parser::json_parser_error& e)
   {

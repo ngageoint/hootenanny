@@ -104,7 +104,7 @@ void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCode
 
 void HootServicesTranslatorClient::_checkLangsAvailable(const QString type)
 {
-  boost::property_tree::ptree replyObj;
+   boost::shared_ptr<boost::property_tree::ptree> replyObj;
   try
   {
     replyObj = _infoClient->getAvailableLanguages(type);
@@ -116,7 +116,7 @@ void HootServicesTranslatorClient::_checkLangsAvailable(const QString type)
   }
 
   QMap<QString, bool> returnedLangs;
-  BOOST_FOREACH (boost::property_tree::ptree::value_type& language, replyObj.get_child("languages"))
+  BOOST_FOREACH (boost::property_tree::ptree::value_type& language, replyObj->get_child("languages"))
   {
     const QString sourceLangCode =
       QString::fromStdString(language.second.get<std::string>("iso6391code"));
