@@ -311,9 +311,6 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
       _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
     while (wayItr->next())
     {
-      //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
-      //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
-      //the problem yet with test data, but will continue to keep an eye on it.
       WayPtr way = _resultToWay(*wayItr, *map);
       map->addElement(way);
       LOG_VART(way);
@@ -381,12 +378,10 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   {
     if (nodeIds.size() > 0)
     {
-////////////////////////////
       QSet<QString> wayIds;
       QSet<QString> additionalWayNodeIds;
       _readWaysByNodeIds(map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
       nodeIds.unite(additionalWayNodeIds);
-/////////////////////////////////
       LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
       QSet<QString> relationIds;
       assert(nodeIds.size() > 0);
@@ -409,7 +404,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         }
       }
       LOG_VARD(relationIds.size());
-
+      //  Iterate all relations (and sub-relations) that are "within" the bounds
       QSet<QString> completedRelationIds;
       while (relationIds.size() > 0)
       {
@@ -424,6 +419,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           RelationPtr relation = _resultToRelation(*relationItr, *map);
           map->addElement(relation);
           const vector<RelationData::Entry>& members = relation->getMembers();
+          //  Iterate all members so that they can be retrieved later
           for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
           {
             ElementType type = it->getElementId().getType();
@@ -441,9 +437,12 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           }
           LOG_VART(relation);
           boundedRelationCount++;
+          //  Keep track of all relations that have been added to the map so we don't try them again
           completedRelationIds.insert(QString::number(relation->getId()));
         }
+        //  Clear the relations that we are iterating on, it is then filled with new relations later
         relationIds.clear();
+        //  Iterate any new nodes that are members of relations that need to be queried
         newNodes = newNodes.subtract(nodeIds);
         if (newNodes.size() > 0)
         {
@@ -455,13 +454,12 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
             LOG_VART(node);
             map->addElement(node);
             boundedNodeCount++;
-            //Don't use the mapped id from the node object here, b/c we want don't want to use mapped ids
-            //with any queries.  Mapped ids may not exist yet.
             const long nodeId = resultIterator.value(0).toLongLong();
             LOG_VART(ElementId(ElementType::Node, nodeId));
             nodeIds.insert( QString::number(nodeId));
           }
         }
+        //  Iterate any new ways that are members of relations that need to be queried
         newWays = newWays.subtract(wayIds);
         if (newWays.size() > 0)
         {
@@ -508,7 +506,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
             }
           }
         }
-        newRelations.subtract(completedRelationIds);
+        //  Get the set of new relations found minus anything that has already been completed
+        relationIds = newRelations.subtract(completedRelationIds);
       }
     }
   }
