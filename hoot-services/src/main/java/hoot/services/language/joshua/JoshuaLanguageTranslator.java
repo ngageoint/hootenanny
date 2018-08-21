@@ -27,6 +27,8 @@
 
 package hoot.services.language;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.Socket;
@@ -81,8 +83,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
       }
     }
 
-    //TODO: read from config
-    connectionPool = new JoshuaConnectionPool(services, 100);
+    connectionPool = new JoshuaConnectionPool(services, Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
   }
 
   public void setConfig(Object config) {}

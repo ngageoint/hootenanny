@@ -27,6 +27,8 @@
 
 package hoot.services.language;
 
+import static hoot.services.HootProperties.*;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -68,11 +70,11 @@ public class JoshuaConnectionPool
       logger.error("Creating Joshua connection pool for language code: " + langCode + "...");
       //assuming joshua tcp server is always running local with the hoot services; if it ever needed to be run on another 
       //server, then we'd probably run it as an http server anyway which would involve some refactoring
-      //TODO: read from config
       connectionPool = 
         new GenericObjectPool<JoshuaConnection>(
-          new PoolableJoshuaConnectionFactory("localhost", services.get(langCode).getPort(), 10000), maxPoolSize);
-      connectionPool.setMaxWait(10000);
+          new PoolableJoshuaConnectionFactory(
+            "localhost", services.get(langCode).getPort(), Integer.parseInt(JOSHUA_CONNECTION_TIMEOUT)), maxPoolSize);
+      connectionPool.setMaxWait(Integer.parseInt(JOSHUA_CONNECTION_MAX_WAIT));
       connectionPool.setTestOnBorrow(true);
       connectionPool.setWhenExhaustedAction(GenericObjectPool.WHEN_EXHAUSTED_BLOCK);
       connectionPools.put(langCode, connectionPool);

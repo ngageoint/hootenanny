@@ -124,3 +124,24 @@ ElementMergeServerThreadCount=0
 
 # Element merge Server Script in scripts folder
 ElementMergeServerScript=/plugins/ElementMergeServer.js
+
+# LANGUAGE TRANSLATION/DETECTION
+
+# simple class name of the translator wrapped by HootLanguageTranslator
+hootLanguageTranslatorApp=JoshuaLanguageTranslator
+
+# maximum size of the pooled Joshua service connection
+joshuaConnectionPoolMaxSize=100
+
+# time in ms a joshua connection remains alive after initialization
+joshuaConnectionTimeout=10000
+
+# maximum amount of time in ms the joshua client will wait for a connection from the pool
+joshuaConnectionMaxWait=10000
+
+# Joshua library name found in the language pack target folder; needed since Joshua is launched as an external service
+# TODO: not sure why this won't work: joshua-*-jar-with-dependencies.jar; also, may be able to simply get rid of this
+joshuaLibrary=joshua-6.2-SNAPSHOT-jar-with-dependencies.jar
+
+# maximum amount of memory in gigabytes that may be consumed by a Joshua service for a single language
+joshuaMaxMemory=16

@@ -27,10 +27,13 @@
 
 package hoot.services.language;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -61,25 +64,32 @@ public class JoshuaServicesInitializer
 
   public static Map<String, JoshuaServiceInfo> init() throws Exception
   {
-    logger.error("Initializing Joshua servers...");
+    logger.error("Initializing Joshua services...");
 
+    JoshuaServiceInfo[] servicesTmp = null;
+    InputStream configStrm = null;
+    try
+    {
+      logger.error("Reading Joshua services config...");
+      configStrm = 
+        JoshuaServicesInitializer.class.getClassLoader().getResourceAsStream("language-translation/joshuaServices");
+      servicesTmp = JoshuaServicesConfigReader.readConfig(configStrm);
+      logger.error("Read " + servicesTmp.length + " services from config.");
+    }
+    finally 
+    {  
+      if (configStrm != null)
+      {
+        configStrm.close();
+      }
+    }
     Map<String, JoshuaServiceInfo> services = new HashMap<String, JoshuaServiceInfo>();
+    for (JoshuaServiceInfo service : servicesTmp)
+    {
+      services.put(service.getLanguageCode(), service);
+    }
+    logger.error("services size: " + services.size());
 
-    //TODO: read all of this from hoot services config
-   
-    JoshuaServiceInfo service1 = new JoshuaServiceInfo();
-    service1.setLanguageCode("de");
-    service1.setLanguagePackPath("/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18");
-    service1.setPort(5764);
-    services.put(service1.getLanguageCode(), service1);
-
-    JoshuaServiceInfo service2 = new JoshuaServiceInfo();
-    service2.setLanguageCode("es");
-    service2.setLanguagePackPath("/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18");
-    service2.setPort(5765);
-    services.put(service2.getLanguageCode(), service2);
-
-    logger.error("servers size: " + services.size());
     int ctr = 0;
     for (Map.Entry<String, JoshuaServiceInfo> serverEntry : services.entrySet()) 
     {
@@ -93,24 +103,17 @@ public class JoshuaServicesInitializer
       
       String configPath = service.getLanguagePackPath() + "/joshua.config";
       convertConfigFileModelPathsToAbsolute(configPath, service.getLanguagePackPath());
-      //TODO: read from config
-      //not sure why a wildcard won't work here...
-      //String classPath = server.getLanguagePackPath() + "/target/joshua-*-jar-with-dependencies.jar";
-      String classPath = service.getLanguagePackPath() + "/target/joshua-6.2-SNAPSHOT-jar-with-dependencies.jar";
-      //TODO: read from config
+      String classPath = service.getLanguagePackPath() + "/target/" + JOSHUA_LIBRARY;
       //Under light use, I've seen the memory consumption for the largest language packs hit 9-10GB, so 16 is probably a safe value
       //for them.  Smaller ones may not need as much memory.
-      final int memoryGigs = 16;
-
-      OutputStream stdout = new ByteArrayOutputStream();
-      OutputStream stderr = new ByteArrayOutputStream();
-
       String line = 
-        "java -mx" + memoryGigs + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + classPath + 
+        "java -mx" + JOSHUA_MAX_MEMORY + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + classPath + 
         " org.apache.joshua.decoder.JoshuaDecoder -c " + configPath + " -v 1 -server-port " + service.getPort() + " -server-type tcp";
       logger.error("command: " + line);
       CommandLine cmdLine = CommandLine.parse(line);
 
+      OutputStream stdout = new ByteArrayOutputStream();
+      OutputStream stderr = new ByteArrayOutputStream();
       ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);
       Executor executor = new DaemonExecutor();
       ExecuteWatchdog watchDog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
@@ -118,11 +121,19 @@ public class JoshuaServicesInitializer
       executor.setStreamHandler(executeStreamHandler);
       executor.setProcessDestroyer(new ShutdownHookProcessDestroyer());
       executor.execute(cmdLine, new DefaultExecuteResultHandler());
-      logger.error("stdout: " + stdout.toString());
-      logger.error("stderr: " + stderr.toString());
+      String stdOutStr = stdout.toString();
+      String stdErrStr = stderr.toString();
+      if (!stdOutStr.isEmpty())
+      {
+        logger.info("JoshuaServicesInitializer stdout: " + stdOutStr);
+      }
+      if (!stdErrStr.isEmpty())
+      {
+        logger.error("JoshuaServicesInitializer stderr: " + stdErrStr);
+      }
     }
     logger.error(
-      "Finished launching Joshua translation services for " + ctr + " language packs.  The services may take a few minutes to " +
+      "Finished launching Joshua translation services for " + ctr + " language packs.  The services may take up to several minutes to " +
       "finish initializing.");
 
     return services;

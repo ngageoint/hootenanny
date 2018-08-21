@@ -1,0 +1,8 @@
+# List of Joshua language translation services to be launched by hoot-services.  List a separate entry for each language, keep the 
+# entries in alphabetical order by language code, and the language pack must have already been downloaded and extracted.  See the Hootenanny 
+# install documentation for information on installing language packs.
+#
+# format: ISO-639-1\tlanguage pack absolute path\tservice port
+
+de	/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18	5764
+es	/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18	5765

@@ -27,6 +27,8 @@
 
 package hoot.services.language;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -57,8 +59,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   
   public HootLanguageTranslator() throws Exception
   {
-    //TODO: put in config
-    translator = ToEnglishTranslatorFactory.create("JoshuaLanguageTranslator");
+    translator = ToEnglishTranslatorFactory.create(HOOT_LANGUAGE_TRANSLATOR_APP);
   }
 
   public void setConfig(Object config)
