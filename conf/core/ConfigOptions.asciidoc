@@ -1250,6 +1250,14 @@ and 'OpenNlpLanguageDetector'.  If no detectors are specified, then language tra
 attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection .
 Separate values with a ';' and surround in quotes when passing in from the command line.
 
+=== language.translation.hoot.services.detectors.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/detectors`
+
+Service endpoint for retrieving available detector implementations supported by
+HootServicesTranslatorClient
+
 === language.translation.hoot.services.translatable.languages.endpoint
 
 * Data Type: string
@@ -1272,6 +1280,14 @@ Web service translation endpoint used by the HootServicesTranslatorClient
 When using 'HootServicesTranslatorClient' as the to English language translator, a hoot-services
 Java class names implementing ToEnglishTranslator.  Valid values are 'JoshuaLanguageTranslator' and
 'HootLanguageTranslator'.
+
+=== language.translation.hoot.services.translators.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/translators`
+
+Service endpoint for retrieving available translator implementations supported by
+HootServicesTranslatorClient
 
 === language.translation.perform.exhaustive.search.with.no.detection
 

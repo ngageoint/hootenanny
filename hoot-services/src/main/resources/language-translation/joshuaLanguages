@@ -1,5 +1,7 @@
 # All languages supported by JoshuaLanguageTranslator
 #
+# https://cwiki.apache.org/confluence/display/JOSHUA
+#
 # Note: no entry for English, since Hootenanny only translates to English and not from it
 # 
 # format: ISO-639-1\tISO-639-2\tname

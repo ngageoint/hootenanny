@@ -54,6 +54,14 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
+   * Retrieves available language apps
+   *
+   * @param type type of app to retrieve; "translator" or "detector"
+   * @return a property tree containing the language app information
+   */
+  boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type);
+
+  /**
    * Retrieves translation available languages info
    *
    * @param type type of language information to retrieve; "translatable" or "detectable"
@@ -68,8 +76,11 @@ private:
   //detectors used to determine what detectable languages are supported; if left empty, then
   //all language detectors will be used by the service
   QStringList _detectors;
+
   QString _detectableUrl;
   QString _translatableUrl;
+  QString _detectorsUrl;
+  QString _translatorsUrl;
 
   boost::shared_ptr<QNetworkAccessManager> _client;
 };

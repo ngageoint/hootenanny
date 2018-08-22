@@ -6,7 +6,41 @@ options named language.translation.* and requires that both the hoot-rnd and hoo
 Only one of the following options can be passed to the command:
 
 * +--detectable+    - Prints all spoken languages that Hootenanny can detect and the detectors that can detect them
+* +--detectors+     - Prints all available language detector implementations for the translation service
 * +--translatable+  - Prints all spoken languages that Hootenanny translate from to English and the translators that can translate them
+* +--translators+   - Prints all available language translator implementations for the translation service
+
+=== Detectors
+
+The +--detectors+ option prints out all available language detectors that can be used with the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+languages --detectors
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot languages --detectors
+--------------------------------------
+
+=== Translators
+
+The +--translators+ option prints out all available language translators that can be used with the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+languages --translators
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot languages --translators
+--------------------------------------
 
 === Detectable Languages
 

@@ -132,7 +132,7 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
    *
    * Not really expecting this to change often...but if so, could move it to the props config.
    */
-  public String getUrl() { return "https://opennlp.apache.org/"; }
+  public String getUrl() { return "https://opennlp.apache.org"; }
 
   /**
    * @see LanguageAppInfo

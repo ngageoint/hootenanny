@@ -126,7 +126,7 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
    *
    * Not really expecting this to change often...but if so, could move it to the props config.
    */
-  public String getUrl() { return "https://tika.apache.org/"; }
+  public String getUrl() { return "https://tika.apache.org"; }
 
   /**
    * @see LanguageAppInfo

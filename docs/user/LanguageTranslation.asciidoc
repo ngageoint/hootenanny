@@ -2,4 +2,101 @@
 [[LanguageTranslation]]
 == Language Translation
 
-TODO
+Hootenanny supports translating tag values to English.  At the time of this writing, translation is available only via the command line 
+(alternatively you could write your own translation client), you must have both the Hootenanny web services the Hootenanny 
+RND library enabled, and you must manually install files for each language to be translated from.
+
+First, determine what languages are available for translation.  This will list them:
+-----------------------
+hoot languages --translatable
+-----------------------
+
+If the language you wish to translate to English from is not in the list of returned languages, then it is not currently supported.  Talk
+to the Hootenanny team about the possibility of adding your language to the list.  If your language is in the list of returned languages,
+see whether it is marked "available" or not.  If it is not marked "available", then you will need to have the language installed.  See
+the Installation Guide for details on installing a language pack.
+
+Once you've determined your language is available for translation, you can start translating with the default translation configuration.  
+The following will translate all "name" and "alt_name" tags for elements from German to English:
+-------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de" -D language.translation.to.translate.tag.keys="name;alt_name" -D task.status.update.interval=100 input.osm output.osm
+------------------- 
+
+Note that source languages are specified by their ISO-6391-1 code.  When you listed the translatable languages earlier, the codes were
+printed along with the language names.
+
+The default translator has language detection built in.  So if you don't know the source language of your text, you can have the translator
+attempt to auto-detect it by providing "detect" as the source language:
+-------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="detect" -D language.translation.to.translate.tag.keys="name" -D task.status.update.interval=100 input.osm output.osm
+------------------- 
+
+Note that language detection is expensive and can slow down translation quite a bit.
+
+Alternatively, if your text has mixed languages and you know what the languages are, you can specify multiple source languages.  This tells
+the translator to try to detect either German or Spanish as a source language:
+-------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de;es" -D language.translation.to.translate.tag.keys="name" -D task.status.update.interval=100 input.osm output.osm
+------------------- 
+
+If you want to allow the translator to use a detected language for translation that isn't among one of your specified source languages, 
+you can do this:
+-------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de;es" -D language.translation.to.translate.tag.keys="name" -D task.status.update.interval=100 -D language.translation.detected.language.overrides.specified.source.languages=true input.osm output.osm
+------------------- 
+
+If you want the translator to try translating from every language it supports when no language detection can be made, you can execute the following command.  Obviously, this can be very slow when many languages are supported by the translation service:
+-------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de;es" -D language.translation.to.translate.tag.keys="name" -D task.status.update.interval=100 -D language.translation.perform.exhaustive.search.with.no.detection=true input.osm output.osm
+------------------- 
+
+Sometimes OSM pre-translated English tags (*:en) aren't translated very well or are merely copies of the foreign language tag.  For this reason,
+by default Hootenanny translates those tags anyway.  However, to enable the skipping of tags that are pre-translated, do this:
+-------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de" -D language.translation.to.translate.tag.keys="name;alt_name" -D task.status.update.interval=100 -D language.translation.skip.pre.translated.tags=true input.osm output.osm
+------------------- 
+
+Hootenanny uses a local English word dictionary to attempt to detect a word as English before trying to translating it.  Doing this can increase
+translation performance, as less requests are sent to the translation service.  However, sometimes using the dictionary is not desirable.  To
+disable it:
+-------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de" -D language.translation.to.translate.tag.keys="name;alt_name" -D task.status.update.interval=100 -D language.translation.skip.words.in.english.dictionary=false input.osm output.osm
+------------------- 
+
+All of the previous examples were done with the default service translator, HootLanguageTranslator.  At the time of this writing, the
+only other hoot services language translator available is JoshuaLanguageTranslator.  Since HootLanguageTranslator by default uses 
+JoshuaLanguageTranslator internally for its translation and adds detection on top of that, you won't gain to much by switching over to 
+JoshuaLanguageTranslator.  However, if additional translators become available at any time, you can list them with this:
+-----------------------
+hoot languages --translators
+-----------------------
+
+Then, to use a different service translator you can do this (only one translator may be specified):
+-----------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de" -D language.translation.to.translate.tag.keys="name;alt_name" -D task.status.update.interval=100 -D language.translation.hoot.services.translator=MyTranslator input.osm output.osm
+-----------------------
+
+Service language detectors are configurable in a similar fashion to translators.  By default when language detection is used, translators attempt
+to deploy all available language detectors until a detection is made.  To list available language detectors:
+-----------------------
+hoot languages --detectors
+-----------------------
+
+Then, you can modify which service detectors are used with this (multiple detectors may be specified):
+-----------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de" -D language.translation.to.translate.tag.keys="name;alt_name" -D task.status.update.interval=100 -D language.translation.hoot.services.detectors="MyDetector1;MyDetector2" input.osm output.osm
+-----------------------
+
+At the time of this writing, all translation is done via the Hootenanny web services.  It is possible to integrate new translation technologies
+with Hootenanny and use them by specifying a new client side, core translator implementation like this:
+-------------------
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de" -D language.translation.to.translate.tag.keys="name;alt_name" -D task.status.update.interval=100 -D language.translation.translator=MyTranslator input.osm output.osm
+------------------- 
+
+Note that the translator used must implement the ToEnglishTranslator interface.
+
+Finally, there are several language translation configuration options available not described here.  To list all of them:
+-------------------
+hoot info --config-options language.translation --option-details
+-------------------
+

@@ -1,5 +1,7 @@
 # All languages detectable by OpenNlpLanguageDetector
 # 
+# https://opennlp.apache.org
+#
 # format: ISO-639-1\tISO-639-2\tname
 #
 # listed alphabetically by ISO-639-1
