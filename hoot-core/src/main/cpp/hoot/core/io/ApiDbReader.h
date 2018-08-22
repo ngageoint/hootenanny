@@ -151,7 +151,8 @@ protected:
    * This is the same logic as in the Map.java query method.
    */
   virtual void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
-
+  void _readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds, QSet<QString>& wayIds,
+                          QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount);
   void _updateMetadataOnElement(ElementPtr element);
 
   static bool _isValidBounds(const geos::geom::Envelope& bounds);
