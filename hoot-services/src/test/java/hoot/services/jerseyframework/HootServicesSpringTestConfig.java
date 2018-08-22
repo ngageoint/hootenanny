@@ -29,7 +29,7 @@ package hoot.services.jerseyframework;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -80,10 +80,11 @@ public class HootServicesSpringTestConfig {
         dataSource.setUsername(env.getProperty("HOOTAPI_DB_USER"));
         dataSource.setPassword(env.getProperty("HOOTAPI_DB_PASSWORD"));
         dataSource.setInitialSize(5);
-        dataSource.setMaxActive(10);
+        dataSource.setMaxTotal(10);
         dataSource.setMaxIdle(2);
         dataSource.setDefaultAutoCommit(false);
-        dataSource.setRemoveAbandoned(true);
+        dataSource.setRemoveAbandonedOnBorrow(true);
+        dataSource.setRemoveAbandonedOnMaintenance(true);
         dataSource.setLogAbandoned(true);
         return dataSource;
     }

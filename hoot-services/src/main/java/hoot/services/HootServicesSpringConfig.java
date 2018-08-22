@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -69,10 +69,11 @@ public class HootServicesSpringConfig {
         dataSource.setUsername(env.getProperty("HOOTAPI_DB_USER"));
         dataSource.setPassword(env.getProperty("HOOTAPI_DB_PASSWORD"));
         dataSource.setInitialSize(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_INITIAL_SIZE")));
-        dataSource.setMaxActive(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_MAX_ACTIVE")));
+        dataSource.setMaxTotal(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_MAX_ACTIVE")));
         dataSource.setMaxIdle(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_MAX_IDLE")));
         dataSource.setDefaultAutoCommit(false);
-        dataSource.setRemoveAbandoned(true);
+        dataSource.setRemoveAbandonedOnBorrow(true);
+        dataSource.setRemoveAbandonedOnMaintenance(true);
         dataSource.setLogAbandoned(true);
 
         return dataSource;

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.db;
 
+import java.util.List;
+
 import javax.annotation.Generated;
+
+import hoot.services.controllers.job.JobStatusResponse;
+import hoot.services.job.JobStatusManager;
 
 /**
  * JobStatus is a Querydsl bean type
@@ -92,6 +97,21 @@ public class JobStatus {
 
     public void setStatusDetail(String statusDetail) {
         this.statusDetail = statusDetail;
+    }
+    public JobStatusResponse toJobStatusResponse() {
+    	JobStatusResponse response = new JobStatusResponse();
+        response.setJobId(jobId);
+        response.setStatus(hoot.services.job.JobStatus.fromInteger(this.getStatus()).toString());
+        response.setStatusDetail(this.getStatusDetail());
+        response.setPercentComplete(this.getPercentComplete());
+        response.setLastText(this.getStatusDetail());
+        return response;
+    }
+    public JobStatusResponse toJobStatusResponse(JobStatusManager jobStatusManager) {
+    	JobStatusResponse response = this.toJobStatusResponse();
+        List<CommandStatus> commandDetail = jobStatusManager.getCommandDetail(jobId);
+        response.setCommandDetail(commandDetail);
+        return response;
     }
 
 }

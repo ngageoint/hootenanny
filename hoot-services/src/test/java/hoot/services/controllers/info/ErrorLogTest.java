@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -97,6 +97,5 @@ public class ErrorLogTest extends HootServicesJerseyTestAbstract {
 
         String theString = responseData.readEntity(String.class);
         assertFalse(theString.isEmpty());
-        assertEquals(282637, theString.length());
     }
 }
