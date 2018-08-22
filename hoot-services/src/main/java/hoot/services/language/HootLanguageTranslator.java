@@ -144,7 +144,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   {
     if (sourceLangCodes == null || sourceLangCodes.length == 0)
     {
-      throw new Exception("No source language codes or detect mode specified.");
+      throw new IllegalArgumentException("No source language codes or detect mode specified.");
     }
 
     logger.trace("text: " + text);
@@ -162,7 +162,7 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
       if (!langCode.toLowerCase().equals("detect") && 
           !((SupportedLanguageConsumer)translator).isLanguageAvailable(langCode.toLowerCase()))
       {
-        throw new Exception("Requested unavailable translation language: " + langCode);
+        throw new IllegalArgumentException("Requested unavailable translation language: " + langCode);
       }
     }
 

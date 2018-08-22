@@ -98,7 +98,7 @@ public class ToEnglishTranslatorFactory
       {
         msg += className;
       }
-      throw new Exception(msg + "; error: " + e.getMessage());
+      throw new IllegalArgumentException(msg + "; error: " + e.getMessage());
     }
     return translator;
   }

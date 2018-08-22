@@ -77,7 +77,8 @@ import javax.annotation.PreDestroy;
 /**
  * Web endpoint for language translation and detection
 
-   @note For text returned URL encoded the replace of '+' is a bit of a hack, but not sure how better to handle it yet.
+   * For text returned URL encoded the replace of '+' is a bit of a hack, but not sure how better to handle it yet.
+   * Not doing any extensive request param validation yet
  */
 @Controller
 @Path("")
@@ -211,8 +212,9 @@ public class LanguageResource
   /**
    * Returns information about detectable languages given a set of language detectors.  
 
-     If no language detectors are specified, then all available language detectors are used to create the detectable language 
-     information.  Language names are returned URL encoded and in UTF-8.
+     * If no language detectors are specified, then all available language detectors are used to create the detectable language 
+     information.  
+     * Language names are returned URL encoded and in UTF-8.
 
      curl -X POST -H "Content-Type: application/json" -d '{}' localhost:8080/hoot-services/language/detectable
      curl -X POST -H "Content-Type: application/json" -d '{ "apps": ["TikaLanguageDetector"]}' localhost:8080/hoot-services/language/detectable
@@ -258,7 +260,7 @@ public class LanguageResource
     catch (Exception e)
     {
       Status status;
-      if (e.getMessage().startsWith("Error creating"))
+      if (e instanceof IllegalArgumentException)
       {
         status = Status.BAD_REQUEST;
       }
@@ -278,8 +280,9 @@ public class LanguageResource
   /**
    * Returns information about translatable languages given a set of language translators.  
 
-     If no language translators are specified, then all available language translators are used to create the translatable 
-     language information.  Language names are returned URL encoded and in UTF-8.
+     * If no language translators are specified, then all available language translators are used to create the translatable 
+     language information.  
+     * Language names are returned URL encoded and in UTF-8.
 
      curl -X POST -H "Content-Type: application/json" -d '{}' localhost:8080/hoot-services/language/translatable
      curl -X POST -H "Content-Type: application/json" -d '{ "apps": ["JoshuaLanguageTranslator"]}' 
@@ -326,7 +329,7 @@ public class LanguageResource
     catch (Exception e)
     {
       Status status;
-      if (e.getMessage().startsWith("Error creating"))
+      if (e instanceof IllegalArgumentException)
       {
         status = Status.BAD_REQUEST;
       }
@@ -346,11 +349,12 @@ public class LanguageResource
   /**
    * Detects a spoken language given text and a set of language detectors.  
 
-     If no language detectors are specified, then as many language detectors as needed are used to perform the detection.  The text
-     sent in should be URL encoded and in UTF-8.  Language names are returned URL encoded and in UTF-8.
+     * If no language detectors are specified, then as many language detectors as needed are used to perform the detection.  
+     * The text sent in for translation should be URL encoded and in UTF-8.  
+     * Language names are returned URL encoded and in UTF-8.
 
      curl -X POST -H "Content-Type: application/json" -d '{ "text": "wie alt bist du" }' localhost:8080/hoot-services/language/detect
-     curl -X POST -H "Content-Type: application/json" -d '{ "detectors": ["TikaLanguageDetector"], "text": "wie alt bist du" }' 
+     curl -X POST -H "Content-Type: application/json" -d '{ "detectors": ["TikaLanguageDetector"], "text": "wie%20alt%20bist%20du" }' 
        localhost:8080/hoot-services/language/detect
 
      {
@@ -410,6 +414,15 @@ public class LanguageResource
     }
     catch (Exception e)
     {
+      Status status;
+      if (e instanceof IllegalArgumentException)
+      {
+        status = Status.BAD_REQUEST;
+      }
+      else
+      {
+        status = Status.INTERNAL_SERVER_ERROR;
+      } 
       throw new WebApplicationException(
         e, 
         Response.status(Status.INTERNAL_SERVER_ERROR)
@@ -423,12 +436,16 @@ public class LanguageResource
   /**
    * Translates a single line of text given a specified language translator and one or more source languages.  
 
-     In place of language codes, some translators support specifying "detect", which will cause the translator to attempt to 
-     detect the language before translating (e.g. HootLanguageTranslator).  The text sent in should be URL encoded and in UTF-8.  
-     The translated text is returned URL encoded and in UTF-8.
+     * When using JoshuaLanguageTranslator, an associated translation service must be running for each specified source language.
+       See the Install Guide for more details.
+     * In place of language codes, some translators support specifying "detect", which will cause the translator to attempt to 
+     detect the language before translating (e.g. HootLanguageTranslator).  
+     * The text sent in for translation should be URL encoded and in UTF-8.  
+     * The translated text is returned URL encoded and in UTF-8.  
+     * If the specified translator does not support detection, then any request parameters related to detection will be ignored.
 
      curl -X POST -H "Content-Type: application/json" -d '{ "translator": "JoshuaLanguageTranslator", "sourceLangCodes": ["de"], 
-       "text": "wie alt bist du" }' localhost:8080/hoot-services/language/translate
+       "text": "wie%20alt%20bist%20du" }' localhost:8080/hoot-services/language/translate
 
      {
        "translatedText":"How%20old%20are%20you",
@@ -447,11 +464,69 @@ public class LanguageResource
   @Produces(MediaType.APPLICATION_JSON)
   public Response translate(LanguageTranslateRequest request) 
   {
+    return translate(request, false);
+  }
+
+  /**
+   * Translates multiple lines of text in batch given a specified language translator and one or more source languages.  
+
+     * Only a single source language is supported.
+     * When using JoshuaLanguageTranslator, an associated translation service must be the specified source language.
+       See the Install Guide for more details.
+     * No translator may be used that is integrated with language detection when translating in batch (e.g. HootLanguageTranslator).  
+     * The text sent in for translation should have one line for each piece of text to be translated with all of text URL encoded 
+       and in UTF-8.  
+     * The translated text is returned translated line by line, URL encoded, and in UTF-8.  
+     * An error will be thrown if a translator is specified that supports language detection.
+
+     curl -X POST -H "Content-Type: application/json" -d '{ "translator": "JoshuaLanguageTranslator", "sourceLangCodes": ["de"], 
+       "text": "wie%20alt%20bist%20du\nwie%20heissen%20sie" }' localhost:8080/hoot-services/language/translateBatch
+
+     {
+       "translatedText":"How%20old%20are%20you%0AWhat%27s%20your%20name%0A",
+       "performExhaustiveTranslationSearchWithNoDetection":false,
+       "sourceLangCodes":[
+         "de"
+       ],
+       "translator":"JoshuaLanguageTranslator",
+       "sourceText":"wie%20alt%20bist%20du\nwie%20heissen%20sie",
+       "detectedLanguageOverridesSpecifiedSourceLanguages":false
+     }
+   */
+  @POST
+  @Path("/translateBatch")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response translateBatch(LanguageTranslateRequest request) 
+  {
+    return translate(request, true);
+  }
+
+  private Response translate(LanguageTranslateRequest request, boolean batch)
+  {
     String textToTranslate = null;
     String responseStr = null;
+    boolean badRequest = false;
     try
     {
+      //could make this check more robust if many translators are added
+      if (batch && request.getTranslator().toLowerCase().equals("hootlanguagetranslator"))
+      {
+        badRequest = true;
+        throw new Exception("HootLanguageTranslator may not be used in batch translation.");
+      }
+      if (batch && request.getSourceLangCodes().length > 1)
+      {
+        badRequest = true;
+        throw new Exception("Batch translation only supports one source language.");
+      }
+
       textToTranslate = URLDecoder.decode(request.getText(), "UTF-8");
+      if (!batch)
+      {
+        //This isn't batch translation, so remove all newlines and translate this as a single piece of text.
+        textToTranslate = textToTranslate.replaceAll("\n", "");
+      }
       logger.debug(
         "Translating language for text: " + StringUtils.left(textToTranslate, 25) + " and source languages: " + 
         String.join(",", request.getSourceLangCodes()) + "...");
@@ -459,15 +534,12 @@ public class LanguageResource
       ToEnglishTranslator translator = ToEnglishTranslatorFactory.create(request.getTranslator());
       translator.setConfig(request);
       String translatedText = translator.translate(request.getSourceLangCodes(), textToTranslate);
-
       responseStr = toTranslateResponse(request, translatedText, translator);
     }
     catch (Exception e)
     {
       Status status;
-      if (e.getMessage().startsWith("No language translator available") || 
-          e.getMessage().startsWith("Requested unavilable translation language") ||
-          e.getMessage().startsWith("No source language codes or detect mode specified"))
+      if (badRequest || e instanceof IllegalArgumentException)
       {
         status = Status.BAD_REQUEST;
       }
@@ -480,8 +552,7 @@ public class LanguageResource
         Response.status(status)
           .entity(
             "Error translating with translator: " + request.getTranslator() + " to language (s): " + 
-            String.join(",", request.getSourceLangCodes()) + ".  Error: " + 
-            e.getMessage() + "; text: " + textToTranslate)
+            String.join(",", request.getSourceLangCodes()) + ".  Error: " + e.getMessage() + "; text: " + textToTranslate)
           .build());
     }
     

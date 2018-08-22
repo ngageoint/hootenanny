@@ -110,7 +110,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   _toTranslateVal = tags.get(toTranslateTagKey).trimmed();
   //We're just translating single phrases, not entire texts, so assume just one line was passed
   //in and remove the ending newline.
-  _toTranslateVal = _toTranslateVal.replace("\n", "");
+  //_toTranslateVal = _toTranslateVal.replace("\n", "");
   LOG_VART(_toTranslateVal);
 
   //making skipping tags that already have an english translated tag optional, b/c a many of the

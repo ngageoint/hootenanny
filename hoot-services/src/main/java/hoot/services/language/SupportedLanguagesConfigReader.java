@@ -94,12 +94,12 @@ public final class SupportedLanguagesConfigReader
 
         if (iso6392To1.containsKey(iso6392))
         {
-          throw new Exception("Invalid supported languages configuration.  Duplicate ISO-6392-2 value: " + iso6392);
+          throw new IOException("Invalid supported languages configuration.  Duplicate ISO-6392-2 value: " + iso6392);
         }
         iso6392To1.put(iso6392, iso6391);
         if (iso6391ToLangName.containsKey(iso6391))
         {
-          throw new Exception("Invalid supported languages configuration.  Duplicate ISO-6392-1 value: " + iso6391);
+          throw new IOException("Invalid supported languages configuration.  Duplicate ISO-6392-1 value: " + iso6391);
         }
         iso6391ToLangName.put(iso6391, langName);
       }

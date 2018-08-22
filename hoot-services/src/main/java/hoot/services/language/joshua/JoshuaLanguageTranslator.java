@@ -43,6 +43,8 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.commons.lang3.StringUtils;
+
 /*
  * Performs to English translations using a Joshua service
 
@@ -153,7 +155,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
   {
     if (sourceLangCodes.length > 1)
     {
-      throw new Exception("Only one source language may be passed to this translator.");
+      throw new IllegalArgumentException("Only one source language may be passed to this translator.");
     }
     return translate(sourceLangCodes[0], text);
   }
@@ -165,20 +167,23 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
   {
     long startTime = System.currentTimeMillis();
 
-    logger.debug("text: " + text);
+    logger.trace("text: " + text);
     //joshua expects a newline at the end of what's passed in
-    String textToSend = null;
-    if (!text.endsWith("\n"))
+    String textToSend = text;
+    if (!textToSend.endsWith("\n"))
     {
-      textToSend = text + "\n";
+      textToSend += "\n";
     }
     logger.trace("textToSend: " + textToSend);
+    final int numLines = textToSend.split("\n").length;
+    logger.trace("numLines: " + numLines);
+
     sourceLangCode = sourceLangCode.toLowerCase();
     logger.trace("sourceLangCode: " + sourceLangCode);
     logger.trace("language is available: " + isLanguageAvailable(sourceLangCode));
     if (!isLanguageAvailable(sourceLangCode))
     {
-      throw new Exception("No language translator available for language code: " + sourceLangCode);
+      throw new IllegalArgumentException("No language translator available for language code: " + sourceLangCode);
     }
 
     String translatedText = "";
@@ -192,14 +197,27 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
       writer.write(bytes, 0, bytes.length);
       writer.flush();
       BufferedReader reader = (BufferedReader)connection.getReader();
-      translatedText = reader.readLine().trim();
+
+      String line = "";
+      //Joshua isn't newline terminating the last piece of text when translating multiple lines, so a while loop checking
+      //for a null line won't work here as the reader will block forever waiting for the last newline.
+      for (int i = 0; i < numLines; i++) 
+      {
+        line = StringUtils.trimToNull(reader.readLine());
+        logger.trace("line: " + line);
+        if (line != null)
+        {
+          translatedText += line + "\n";
+          logger.trace("translatedText: " + translatedText);
+        }
+      }
     }
     finally
     {
       connectionPool.returnObject(sourceLangCode, connection);
     }
 
-    logger.debug(getClass().getName() + " translated: " + text + " to: " + translatedText);
+    logger.trace(getClass().getSimpleName() + " translated: " + text + " to: " + translatedText);
     logger.trace("Translation took {} seconds", (System.currentTimeMillis() - startTime) / 1000);
 
     return translatedText;

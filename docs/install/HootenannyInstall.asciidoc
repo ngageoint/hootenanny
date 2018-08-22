@@ -99,3 +99,7 @@ To manually configure the available base maps shown in the iD editor:
 .. specify a min and max scale extent for the base map that defines at what zoom level range it will be visible in the "scaleExtent" attribute
 .. specify whether the base map should be selected by default by setting the "default" attribute to "true" or "false
 
+== Installing a Joshua Language Translation Service
+
+
+
