@@ -109,6 +109,12 @@ private:
    * results in an error
    */
   void _checkLangsAvailable(const QString type);
+
+  boost::shared_ptr<QNetworkRequest> _getTranslateRequest(const QString text,
+                                                          std::stringstream& requestStrStrm);
+  void _parseTranslateResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
+  void _validateAvailableLangs(boost::shared_ptr<boost::property_tree::ptree> replyObj,
+                               const QString type);
 };
 
 }

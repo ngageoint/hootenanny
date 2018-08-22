@@ -31,6 +31,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/NetUtils.h>
 
 // Qt
 #include <QEventLoop>
@@ -89,40 +90,10 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  loop.exec();
 
  //check for a response error
- QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
- LOG_VARD(status.isValid());
- LOG_VARD(status.toInt());
- if (reply->error() != QNetworkReply::NoError)
- {
-   throw HootException(QString("Languages reply error:\n%1").arg(reply->error()));
- }
+ NetUtils::checkWebReplyForError(reply);
 
- //parse the response
- QString replyData(reply->readAll());
- LOG_VART(replyData);
- std::stringstream replyStrStrm(replyData.toUtf8().constData(), std::ios::in);
- if (!replyStrStrm.good())
- {
-   throw HootException(QString("Error reading from reply string:\n%1").arg(replyData));
- }
- boost::shared_ptr<boost::property_tree::ptree> replyObj(new boost::property_tree::ptree());
- try
- {
-   boost::property_tree::read_json(replyStrStrm, *replyObj);
- }
- catch (boost::property_tree::json_parser::json_parser_error& e)
- {
-   QString reason = QString::fromStdString(e.message());
-   QString line = QString::number(e.line());
-   throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
- }
- catch (const std::exception& e)
- {
-   QString reason = e.what();
-   throw HootException("Error parsing JSON " + reason);
- }
-
- return replyObj;
+ //parse and return the response
+ return NetUtils::replyToPropTree(reply);
 }
 
  boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableLanguages(
@@ -146,9 +117,31 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
   LOG_VARD(apps);
 
   //create the request
+  std::stringstream requestStrStrm;
+  boost::shared_ptr<QNetworkRequest> request =
+    _getAvailableLanguagesRequest(urlStr, apps, requestStrStrm);
+
+  //send the request and wait for a response
+  QNetworkReply* reply =
+    _client->post(*request, QString::fromStdString(requestStrStrm.str()).toUtf8());
+  QEventLoop loop;
+  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+  loop.exec();
+
+  //check for a response error
+  NetUtils::checkWebReplyForError(reply);
+
+  //parse and return the response
+  return NetUtils::replyToPropTree(reply);
+}
+
+boost::shared_ptr<QNetworkRequest> HootServicesTranslationInfoClient::_getAvailableLanguagesRequest(
+  const QString urlStr, const QStringList apps, std::stringstream& requestStrStrm)
+{
   QUrl url(urlStr);
-  QNetworkRequest request(url);
-  request.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
+  boost::shared_ptr<QNetworkRequest> request(new QNetworkRequest(url));
+
+  request->setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
   boost::property_tree::ptree requestObj;
   boost::property_tree::ptree appsObj;
   for (int i = 0; i < apps.size(); i++)
@@ -158,52 +151,10 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
     appsObj.push_back(std::make_pair("", appObj));
   }
   requestObj.add_child("apps", appsObj);
-  std::stringstream requestStrStrm;
   boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
   LOG_VART(requestStrStrm.str());
 
-  //send the request and wait for a response
-  QNetworkReply* reply =
-    _client->post(request, QString::fromStdString(requestStrStrm.str()).toUtf8());
-  QEventLoop loop;
-  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-  loop.exec();
-
-  //check for a response error
-  QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-  LOG_VARD(status.isValid());
-  LOG_VARD(status.toInt());
-  if (reply->error() != QNetworkReply::NoError)
-  {
-    throw HootException(QString("Languages reply error:\n%1").arg(reply->error()));
-  }
-
-  //parse the response
-  QString replyData(reply->readAll());
-  LOG_VART(replyData);
-  std::stringstream replyStrStrm(replyData.toUtf8().constData(), std::ios::in);
-  if (!replyStrStrm.good())
-  {
-    throw HootException(QString("Error reading from reply string:\n%1").arg(replyData));
-  }
-  boost::shared_ptr<boost::property_tree::ptree> replyObj(new boost::property_tree::ptree());
-  try
-  {
-    boost::property_tree::read_json(replyStrStrm, *replyObj);
-  }
-  catch (boost::property_tree::json_parser::json_parser_error& e)
-  {
-    QString reason = QString::fromStdString(e.message());
-    QString line = QString::number(e.line());
-    throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
-  }
-  catch (const std::exception& e)
-  {
-    QString reason = e.what();
-    throw HootException("Error parsing JSON " + reason);
-  }
-
-  return replyObj;
+  return request;
 }
 
 }

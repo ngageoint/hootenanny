@@ -83,6 +83,10 @@ private:
   QString _translatorsUrl;
 
   boost::shared_ptr<QNetworkAccessManager> _client;
+
+  boost::shared_ptr<QNetworkRequest> _getAvailableLanguagesRequest(const QString urlStr,
+                                                                   const QStringList apps,
+                                                                   std::stringstream& requestStrStrm);
 };
 
 }

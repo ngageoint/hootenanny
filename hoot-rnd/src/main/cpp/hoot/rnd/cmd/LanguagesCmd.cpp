@@ -63,64 +63,22 @@ public:
 
     const QString type = args[0].replace("--", "").toLower();
 
-    HootServicesTranslationInfoClient client;
-    client.setConfiguration(conf());
+    _client.setConfiguration(conf());
     if (type == "translatable" || type == "detectable")
     {
-      boost::shared_ptr<boost::property_tree::ptree> replyObj = client.getAvailableLanguages(type);
-
-      std::cout << type << " languages: " << std::endl << std::endl;
-      int langCtr = 0;
-      int availableCtr = 0;
-      BOOST_FOREACH (boost::property_tree::ptree::value_type& language, replyObj->get_child("languages"))
-      {
-        const QString name =
-          QUrl::fromPercentEncoding(
-            QString::fromStdString(language.second.get<std::string>("name")).toUtf8());
-        const bool available = language.second.get<bool>("available");
-        const QString availableStr = available ? "yes" : "no";
-
-        std::cout << "Code: " << QString::fromStdString(language.second.get<std::string>("iso6391code")) << std::endl;
-        std::cout << "Name: " << name << std::endl;
-        std::cout << "Available: " << availableStr << std::endl;
-        std::cout << std::endl;
-        langCtr++;
-        if (available)
-        {
-          availableCtr++;
-        }
-      }
-
-      QString descriptor = "translation";
-      if (type != "translatable")
-      {
-        descriptor = "detection";
-      }
-      std::cout << QString::number(langCtr) << " languages are supported for " << descriptor << ".  " << std::endl;
-      std::cout << "Currently, " << QString::number(availableCtr) << " of those languages are available for " << descriptor << ".  " << std::endl;
+      _printAvailableLanguages(type);
     }
     else
     {
-      boost::shared_ptr<boost::property_tree::ptree> replyObj = client.getAvailableApps(type);
-
-      std::cout << "Available anguage detectors: " << typePrependString << std::endl << std::endl;
-      int appCtr = 0;
-      BOOST_FOREACH (boost::property_tree::ptree::value_type& app, replyObj->get_child("apps"))
-      {
-        std::cout << "Name: " << QString::fromStdString(app.second.get<std::string>("name")) << std::endl;
-        std::cout << "Description: " << QString::fromStdString(app.second.get<std::string>("description")) << std::endl;
-        std::cout << "URL: " << QString::fromStdString(app.second.get<std::string>("url")) << std::endl;
-        std::cout << std::endl;
-        appCtr++;
-      }
-
-      std::cout << QString::number(appCtr) << " " << type << " are available.  " << std::endl;
+      _printAvailableApps(type);
     }
 
     return 0;
   }
 
 private:
+
+  HootServicesTranslationInfoClient _client;
 
   QStringList _getSupportedOptions() const
   {
@@ -130,6 +88,59 @@ private:
     options.append("--translatable");
     options.append("--translators");
     return options;
+  }
+
+  void _printAvailableLanguages(const QString type)
+  {
+    boost::shared_ptr<boost::property_tree::ptree> replyObj = _client.getAvailableLanguages(type);
+
+    std::cout << type << " languages: " << std::endl << std::endl;
+    int langCtr = 0;
+    int availableCtr = 0;
+    BOOST_FOREACH (boost::property_tree::ptree::value_type& language, replyObj->get_child("languages"))
+    {
+      const QString name =
+        QUrl::fromPercentEncoding(
+          QString::fromStdString(language.second.get<std::string>("name")).toUtf8());
+      const bool available = language.second.get<bool>("available");
+      const QString availableStr = available ? "yes" : "no";
+
+      std::cout << "Code: " << QString::fromStdString(language.second.get<std::string>("iso6391code")) << std::endl;
+      std::cout << "Name: " << name << std::endl;
+      std::cout << "Available: " << availableStr << std::endl;
+      std::cout << std::endl;
+      langCtr++;
+      if (available)
+      {
+        availableCtr++;
+      }
+    }
+
+    QString descriptor = "translation";
+    if (type != "translatable")
+    {
+      descriptor = "detection";
+    }
+    std::cout << QString::number(langCtr) << " languages are supported for " << descriptor << ".  " << std::endl;
+    std::cout << "Currently, " << QString::number(availableCtr) << " of those languages are available for " << descriptor << ".  " << std::endl;
+  }
+
+  void _printAvailableApps(const QString type)
+  {
+    boost::shared_ptr<boost::property_tree::ptree> replyObj = _client.getAvailableApps(type);
+
+    std::cout << "Available language detectors: " << std::endl << std::endl;
+    int appCtr = 0;
+    BOOST_FOREACH (boost::property_tree::ptree::value_type& app, replyObj->get_child("apps"))
+    {
+      std::cout << "Name: " << QString::fromStdString(app.second.get<std::string>("name")) << std::endl;
+      std::cout << "Description: " << QString::fromStdString(app.second.get<std::string>("description")) << std::endl;
+      std::cout << "URL: " << QString::fromStdString(app.second.get<std::string>("url")) << std::endl;
+      std::cout << std::endl;
+      appCtr++;
+    }
+
+    std::cout << QString::number(appCtr) << " " << type << " are available.  " << std::endl;
   }
 };
 

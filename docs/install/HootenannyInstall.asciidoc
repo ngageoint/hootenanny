@@ -109,15 +109,19 @@ hoot-services/src/main/resources/hoot-services.conf.in allows for setting an upp
 
 2) Download the version 2 language pack from here: https://cwiki.apache.org/confluence/display/JOSHUA/Language+Packs
 
-3) Extract the file to a desired location
+3) Extract the file to a desired location.  Within the extracted root folder at a minimum you should see the folders: "model" and 
+"target".  "model" contains the language translation model and "target" contains the executable Joshua jar.  There should also be in 
+the root directory a script, "joshua" and a config file "joshua.config".  The script is used to run Joshua as an external process by 
+the Hootenanny Translation Web Service
 
 4) Add an entry for your translation service to hoot-services/src/main/resources/language-translation/joshuaServices.  The file is 
 pre-configured with entries for all available version 2 language (at the time of this writing), so you can uncomment and update the
 appropriate entry.
 
-5) Restart the Tomcat server for the Translation Web Service to redeploy all configured Joshua services.  This will take some time (at 
-least a few minutes).  In the future, a less intrusive deployment scenario could involve running the Translation Web Service from a servlet
-separate from hoot-services.  That way a language service update would not interrupt the operation of the rest of hoot-services.
+5) Restart the Tomcat server for the Hootenanny Translation Web Service to redeploy all configured Joshua services.  This will take 
+some time (at least a few minutes).  In the future, a less intrusive deployment scenario could involve running the Translation Web 
+Service from a servlet separate from hoot-services.  That way a language service update would not interrupt the operation of the 
+rest of hoot-services.
 
 6) For debugging purposes, you can check the Tomcat logs looking for entries from 'JoshuaServicesInitializer'.
 
