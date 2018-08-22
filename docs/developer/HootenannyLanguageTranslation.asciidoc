@@ -18,8 +18,10 @@ prevents unnecessary web requests that would occur if the two were separated.
 The service provides separate endpoints for translation and detection, for those who need to use it in that fashion.  It also provides a
 capability to translate large texts within on translation request, however, language detection is not integrated with that capability.
 
-The translation service runs within its own servlet separate from the rest of the Hootenanny web services.  This allows it to be updated
-with new languages without the need to restart all of the web services.
+Currently, the translation service runs in the hoot-services servlet.  This means that any time a language needs to be added (see Joshua
+section below), the entire set of services must be restarted.  Eventually, the translation service should run within its own servlet 
+separate from the rest of the Hootenanny web services.  This would allows it to be updated with new languages without the need to restart 
+all of the web services.
 
 Note that the language translation client (described in the next section) is implemented as a prototype in hoot-rnd.  However, the
 aforementioned service runs regardless of hoot-rnd being enabled and therefore is not actually a prototype.  There is no simple way 
