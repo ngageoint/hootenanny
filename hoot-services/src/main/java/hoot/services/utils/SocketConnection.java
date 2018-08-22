@@ -36,6 +36,9 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A class encapsulating a readable/writable socket
+ */
 public abstract class SocketConnection implements Closeable
 {
   private static final Logger logger = LoggerFactory.getLogger(SocketConnection.class);
@@ -55,6 +58,9 @@ public abstract class SocketConnection implements Closeable
   public Reader getReader() { return reader; }
   public OutputStream getWriter() { return writer; }
 
+  /**
+   * Closes the socket and all of its resources
+   */
   public void close() throws IOException, SocketException 
   {
     logger.trace("Closing connection...");

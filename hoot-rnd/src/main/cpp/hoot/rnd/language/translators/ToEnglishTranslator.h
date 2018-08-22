@@ -75,6 +75,11 @@ public:
    */
   virtual QString getTranslatedText() const = 0;
 
+  /**
+   * Determines if a language detection was made by this translator before translation
+   *
+   * @return true if a language detection was made; false otherwise
+   */
   virtual bool detectionMade() const = 0;
 };
 

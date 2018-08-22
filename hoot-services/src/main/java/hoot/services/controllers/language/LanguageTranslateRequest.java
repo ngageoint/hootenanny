@@ -27,6 +27,9 @@
 
 package hoot.services.controllers.language;
 
+/**
+ * A language translation request
+ */
 public class LanguageTranslateRequest 
 {
   private String[] detectors;

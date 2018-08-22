@@ -27,8 +27,22 @@
 
 package hoot.services.language;
 
+/**
+ * Interface for language apps to share their descriptive info (e.g. translator, detector)
+ */
 public interface LanguageAppInfo 
 {
+  /**
+   * Return the URL for the app
+   *
+   * @return a URL string
+   */
   String getUrl();
+
+  /**
+   * Return a brief description of the app
+   * 
+   * @return descriptive text
+   */
   String getDescription();
 }

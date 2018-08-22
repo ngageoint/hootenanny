@@ -38,9 +38,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
-/*
-http://opennlp.apache.org/
-*/
+/**
+ * Detects languages using OpenNLP
+ *
+ * http://opennlp.apache.org/
+ */
 public final class OpenNlpLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(OpenNlpLanguageDetector.class);
@@ -50,10 +52,12 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
 
   private LanguageDetectorME detector = null;
 
+  //init is expensive, so running as singleton
   private static OpenNlpLanguageDetector instance;
 
   private OpenNlpLanguageDetector() throws Exception
   {
+    //which langs are supported is read from a hoot managed config file
     InputStream supportedLangsConfigStrm = null;
     try
     {
@@ -71,6 +75,7 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
       }
     }
     
+    //load the detection model
     InputStream modelConfigStrm = null;
     try
     {
@@ -98,26 +103,50 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
     return instance;
   }
 
+  /**
+   * @see SupportedLanguageConsumer
+   */
   public boolean isLanguageAvailable(String langCode)
   {
     return true;
   }
 
+  /**
+   * @see SupportedLanguageConsumer
+   */
   public SupportedLanguage[] getSupportedLanguages()
   {
     return supportedLangs;
   }
 
+  /**
+   * @see SupportedLanguageConsumer
+   */
   public String getLanguageName(String langCode)
   {
     return langsConfigReader.getLanguageName(langCode);
   }
 
-  //Not really expecting these to change often...but if so, could move them to the props config.
+  /**
+   * @see LanguageAppInfo
+   *
+   * Not really expecting this to change often...but if so, could move it to the props config.
+   */
   public String getUrl() { return "https://opennlp.apache.org/"; }
+
+  /**
+   * @see LanguageAppInfo
+   *
+   * Not really expecting this to change often...but if so, could move it to the props config.
+   */
   public String getDescription() 
   { return "The language detector portion of a machine learning based toolkit for the processing of natural language text"; }
 
+  /**
+   * Detects the language of the provided text
+   *
+   * @param text text for which to detect a language
+   */
   public String detect(String text)
   {
     long startTime = System.currentTimeMillis();

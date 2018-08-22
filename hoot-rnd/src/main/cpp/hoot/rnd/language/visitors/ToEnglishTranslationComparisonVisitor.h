@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * This is used to check hoot tag language translations against existing known (assumed?)
+ * This is used to check hoot tag English translations against existing known (assumed)
  * correct translations; e.g. compare hoot's English translation of a tag to that of name:en
  */
 class ToEnglishTranslationComparisonVisitor : public ToEnglishTranslationVisitor
@@ -57,15 +57,26 @@ public:
 
 public slots:
 
+  /**
+   * Performs post translation tasks
+   */
   virtual void translationComplete();
 
 private:
 
+  //scores the similarity of the pre-translated and translated texts
   StringDistancePtr _translationScorer;
 
   QStringList _preTranslatedTagKeys;
   QString _preTranslatedVal;
 
+  /**
+   * @brief _translate
+   * @param e element containing the tag to translate
+   * @param preTranslatedTagKey the key of the tag whose value is known (assumed) to have already
+   * been translated
+   * @param toTranslateTagKey the key of the tag whose value is to be translated
+   */
   void _translate(const ElementPtr& e, const QString preTranslatedTagKey,
                   const QString toTranslateTagKey);
 };

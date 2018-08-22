@@ -140,7 +140,7 @@ joshuaConnectionTimeout=10000
 joshuaConnectionMaxWait=10000
 
 # Joshua library name found in the language pack target folder; needed since Joshua is launched as an external service
-# TODO: not sure why this won't work: joshua-*-jar-with-dependencies.jar; also, may be able to simply get rid of this
+# not sure why this won't work: joshua-*-jar-with-dependencies.jar; however, may be able to simply get rid of this setting completely
 joshuaLibrary=joshua-6.2-SNAPSHOT-jar-with-dependencies.jar
 
 # maximum amount of memory in gigabytes that may be consumed by a Joshua service for a single language

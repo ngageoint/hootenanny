@@ -29,6 +29,9 @@ package hoot.services.controllers.language;
 
 import hoot.services.language.LanguageApp;
 
+/**
+ * Response to a request for information about available language applications
+ */
 public class LanguageAppsResponse 
 {
   private LanguageApp[] apps;

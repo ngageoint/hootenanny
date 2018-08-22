@@ -42,6 +42,9 @@ import org.reflections.Reflections;
 
 import hoot.services.utils.ReflectUtils;
 
+/**
+ * Creates language translators
+ */
 public class ToEnglishTranslatorFactory
 {
   private static final Logger logger = LoggerFactory.getLogger(ToEnglishTranslatorFactory.class);
@@ -53,6 +56,12 @@ public class ToEnglishTranslatorFactory
   {
   }
 
+  /**
+   * Creates a language translator
+   *
+   * @param className the simple class name of the translator
+   * @return a language translator
+   */
   public static ToEnglishTranslator create(String className) throws Exception
   {
     ToEnglishTranslator translator = null;
@@ -94,9 +103,14 @@ public class ToEnglishTranslatorFactory
     return translator;
   }
 
-  //really wanted to make this a generic method in ReflectUtils, just haven't quite figured out how yet
+  /**
+   * Returns all available detector names
+   */
   public static Set<String> getSimpleClassNames()
   {
+    //really wanted to make this a generic method in ReflectUtils, just haven't quite figured out how yet; see the source history of 
+    //ReflectUtils for a not quite working example
+
     if (simpleClassNames == null)
     {
       Set<String> classNames = new HashSet<String>();

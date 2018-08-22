@@ -44,7 +44,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /*
-@article{post2015joshua,
+ * Performs to English translations using a Joshua service
+
+  @article{post2015joshua,
     Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
     Journal = {The Prague Bulletin of Mathematical Linguistics},
     Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
@@ -54,18 +56,23 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaLanguageTranslator.class);
 
+  //this reads a hoot managed config that determines what languages Joshua supports
   private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
   private SupportedLanguage[] supportedLangs = null;
+  //which services we have running; one for each language
   private Map<String, JoshuaServiceInfo> services = null;
   private JoshuaConnectionPool connectionPool = null;
   public static final Charset ENCODING = Charset.forName("UTF-8");
 
+  //startup costs are costly, so running as Singleton
   private static JoshuaLanguageTranslator instance;
 
   private JoshuaLanguageTranslator() throws Exception
   {
+    //launch all of our services
     services = JoshuaServicesInitializer.init();
 
+    //determine which languages we support (can be a superset of the languages made available by the running services)
     InputStream supportedLangsConfigStrm = null;
     try
     {
@@ -83,6 +90,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
       }
     }
 
+    //init our connection pool to the services
     connectionPool = new JoshuaConnectionPool(services, Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
   }
 
@@ -98,26 +106,49 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     return instance;
   }
 
+  /**
+   * @see SupportedLanguageConsumer
+   */
   public SupportedLanguage[] getSupportedLanguages()
   {
     return supportedLangs;
   }
 
+  /**
+   * @see SupportedLanguageConsumer
+   */
   public boolean isLanguageAvailable(String langCode)
   {
     return services.containsKey(langCode.toLowerCase());
   }
 
+  /**
+   * @see SupportedLanguageConsumer
+   */
   public String getLanguageName(String langCode)
   {
     return langsConfigReader.getLanguageName(langCode);
   }
 
-  //Not really expecting these to change often...but if so, could move them to the props config.
+  /**
+   * @see LanguageAppInfo
+   *
+   * Not really expecting this to change often...but if so, could move it to the props config.
+   */
   public String getUrl() { return "https://cwiki.apache.org/confluence/display/JOSHUA"; }
+
+  /**
+   * @see LanguageAppInfo
+   *
+   * Not really expecting these to change often...but if so, could move it to the props config.
+   */
   public String getDescription() 
   { return "A statistical machine translation decoder for phrase-based, hierarchical, and syntax-based machine translation"; }
 
+  /**
+   * @see ToEnglishTranslator
+   * @note sourceLangCodes must contain at least one code
+   */
   public String translate(String[] sourceLangCodes, String text) throws Exception
   {
     if (sourceLangCodes.length > 1)
@@ -127,6 +158,9 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     return translate(sourceLangCodes[0], text);
   }
 
+  /**
+   * @see ToEnglishTranslator
+   */
   public String translate(String sourceLangCode, String text) throws Exception
   {
     long startTime = System.currentTimeMillis();
@@ -171,6 +205,9 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     return translatedText;
   }
 
+  /**
+   * Closes the connection pool
+   */
   public void close() throws Exception
   {
     if (connectionPool != null)

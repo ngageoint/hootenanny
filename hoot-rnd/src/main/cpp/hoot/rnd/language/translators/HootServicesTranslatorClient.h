@@ -63,20 +63,36 @@ public:
 
 signals:
 
+  /**
+   * Fired when the translation service completes a translation
+   */
   void translationComplete();
+
+  /**
+   * Fired when an error is received from the translation service
+   *
+   * @param textSent text sent for translation
+   * @param message error message
+   */
   void translationError(QString textSent, QString message);
-
-private slots:
-
-  void _translateReplyReceived(QNetworkReply* reply);
 
 private:
 
+  //the source languages to tell the translator which languages to translate to English from; at
+  //least one must be populated, or use "detect" to force the service to try to detect the language
+  //(can be expensive)
   QStringList _sourceLangs;
+  //translator implementation to use server side
   QString _translator;
+  //detector implementations to use server side; if left empty, the server will try to use as many
+  //of them as necessary to detect the language
   QStringList _detectors;
   QString _translationUrl;
+  //if true and a detected lang doesn't match a specified lang, then the detected lang takes
+  //priority
   bool _detectedLangOverrides;
+  //if true and no lang can be detected, an exhaustive search for the correct translation is made
+  //against all available translatable languages (expensive)
   bool _performExhaustiveSearch;
 
   QString _translatedText;
@@ -85,6 +101,13 @@ private:
   boost::shared_ptr<QNetworkAccessManager> _client;
   boost::shared_ptr<HootServicesTranslationInfoClient> _infoClient;
 
+  /**
+   * Verifies that every language specified for this translator is supported by the server
+   *
+   * @param type type of check; either "detectable" or "translatable"; a failure to verify a
+   * detectable language results in a warning, while a failure to verify a translatable language
+   * results in an error
+   */
   void _checkLangsAvailable(const QString type);
 };
 

@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- * Translates tag values to English
+ * Translates selected tag values to English
  */
 class ToEnglishTranslationVisitor : public QObject, public ElementOsmMapVisitor,
    public Configurable
@@ -62,7 +62,17 @@ public:
 
 public slots:
 
+  /**
+   * Performs post translation tasks
+   */
   virtual void translationComplete();
+
+  /**
+   * Handles an error thrown by the translator
+   *
+   * @param textSent text sent for translation
+   * @param message error message
+   */
   virtual void translationError(QString textSent, QString message);
 
 protected:
@@ -77,6 +87,12 @@ protected:
 
   long _numTotalElements;
 
+  /**
+   * Translates a tag for an element
+   *
+   * @param e element containing the tag to translate
+   * @param toTranslateTagKey the key of the tag whose value is to be translated
+   */
   void _translate(const ElementPtr& e, const QString toTranslateTagKey);
 
 private:

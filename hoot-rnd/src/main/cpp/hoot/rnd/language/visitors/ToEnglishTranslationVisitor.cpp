@@ -108,11 +108,14 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   _toTranslateTagKey = toTranslateTagKey;
   _element = e;
   _toTranslateVal = tags.get(toTranslateTagKey).trimmed();
-  //We're just translating single phrases, not entire texts, so assume one line was passed in and
-  //remove the ending newline.
+  //We're just translating single phrases, not entire texts, so assume just one line was passed
+  //in and remove the ending newline.
   _toTranslateVal = _toTranslateVal.replace("\n", "");
   LOG_VART(_toTranslateVal);
 
+  //making skipping tags that already have an english translated tag optional, b/c a many of the
+  //OSM english translations I've seen are either just copies of the foreign language text or are
+  //not very good translation
   const QString preTranslatedTagKey = _toTranslateTagKey + ":en";
   if (_skipPreTranslatedTags && tags.contains(preTranslatedTagKey))
   {
@@ -122,8 +125,9 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     return;
   }
 
-  //TODO: should this be replaced with lang detect, or should the two be combined for this
-  //purpose?
+  //This is an attempt to cut back on translation service requests for text that may already
+  //in English.  Leaving it optional, b/c MostEnglishName's ability to determine if a word is
+  //English is still a little suspect at this point.
   if (_skipWordsInEnglishDict)
   {
     const double englishNameScore = MostEnglishName::getInstance()->scoreName(_toTranslateVal);
@@ -156,7 +160,8 @@ void ToEnglishTranslationVisitor::translationComplete()
   }
   const int strComparison = translatedVal.compare(_toTranslateVal, Qt::CaseInsensitive);
   LOG_VART(strComparison);
-  //If the translator merely returned the same string we passed in, then no point in using it.
+  //If the translator merely returned the same string we passed in as the translated text, then
+  //no point in using it.
   if (strComparison != 0)
   {
     LOG_DEBUG("Translated: " << _toTranslateVal << " to: " << translatedVal);

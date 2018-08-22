@@ -160,7 +160,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
 
-    //TODO: this is temp for testing until it gets fixed with a translation
+    //TODO: this is temp for testing until it gets fixed with a schema translation
     if (e->getTags().get("gnis:feature_type").toLower() == "mine")
     {
       LOG_TRACE("Using custom tagging rule...");

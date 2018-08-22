@@ -8,16 +8,22 @@ import java.util.HashSet;
 import com.google.common.reflect.ClassPath;
 import com.google.common.collect.ImmutableSet;
 
-//import org.reflections.Reflections;
-
 /**
- * 
+ * Various utilities for obtaining reflective information about classes
  */
 public class ReflectUtils 
 {
-  //given "JoshuaTranslator" and "hoot.services.language", returns "hoot.services.language.joshua.JoshuaTranslator"
-  //This can be expensive, so you may want to cache results if possible.
-  //This could be redone with Reflections in place of guava.
+  /**
+   * Retrieves a full class name for a class
+   * 
+   * e.g. given "JoshuaTranslator" and "hoot.services.language", returns "hoot.services.language.joshua.JoshuaTranslator"
+   *
+   * This can be expensive, so you may want to cache results if possible.
+   *
+   * @param className simple class name
+   * @param topLevelPackage package the class is known to be under (doesn't have to be directly under it)
+   * @return the full class name of the class, if found; null otherwise
+   */
   public static String getFullClassName(String className, String topLevelPackage) throws IOException
   {
     ImmutableSet<ClassPath.ClassInfo> classInfos = 
@@ -32,16 +38,4 @@ public class ReflectUtils
     }
     return null;
   }
-
-  //TODO: any way to make this work?
-  /*public static <T> Set<String> getSimpleClassNames(String topLevelPackage)
-  {
-    Set<String> classNames = new HashSet<String>();
-    Set<Class<? extends T>> classes = (new Reflections(topLevelPackage)).getSubTypesOf(T.class);
-    for (Class<? extends T> clazz : classes)
-    {
-      classNames.add(clazz.getSimpleName());
-    }
-    return classNames;
-  }*/
 }

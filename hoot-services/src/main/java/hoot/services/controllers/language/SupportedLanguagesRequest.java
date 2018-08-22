@@ -27,6 +27,9 @@
 
 package hoot.services.controllers.language;
 
+/**
+ * A request for information about supported language for a set of language applications
+ */
 public class SupportedLanguagesRequest 
 {
   private String[] apps;

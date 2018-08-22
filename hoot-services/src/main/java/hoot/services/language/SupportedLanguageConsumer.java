@@ -27,11 +27,30 @@
 
 package hoot.services.language;
 
+/**
+ * Interface for a language app that has supported languages
+ */
 public interface SupportedLanguageConsumer 
 {
+  /**
+   * Return all languages supported by this app
+   *
+   * @return an array of supported languages
+   */
   SupportedLanguage[] getSupportedLanguages();
 
+  /**
+   * Determines whether this language available for the given app (has it been activated; subset of supported)
+   *
+   * @return true if the language is supported; false otherwise
+   */
   boolean isLanguageAvailable(String langCode);
 
+  /**
+   * Determines the language name given an ISO-639-1 code
+   *
+   * @param an ISO-639-1 code
+   * @return a language name
+   */
   String getLanguageName(String langCode);
 }

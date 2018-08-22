@@ -54,8 +54,18 @@ import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
-*/
+/**
+ * Launches specified Joshua services.  The language packs for the services are assumed to have already been downloaded and extracted.  
+ * Joshua services are launched as external server processes, one per language pack.  This is necessary due to the fact that Joshua
+ * keeps some configuration information global, which can't be shared across multiple languages, requiring separate processes.  Joshua
+ * services are quite memory hungry and take awhile to initialize.
+ * 
+ * @article{post2015joshua,
+    Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
+    Journal = {The Prague Bulletin of Mathematical Linguistics},
+    Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
+    Year = {2015} }
+ */
 public class JoshuaServicesInitializer 
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaServicesInitializer.class);
@@ -66,6 +76,7 @@ public class JoshuaServicesInitializer
   {
     logger.info("Initializing Joshua services...");
 
+    //read the services configuration file
     JoshuaServiceInfo[] servicesTmp = null;
     InputStream configStrm = null;
     try
@@ -90,6 +101,7 @@ public class JoshuaServicesInitializer
     }
     logger.trace("services size: " + services.size());
 
+    //launch the services asynchronously as external processes that listen on a port, one by one, one for each language
     int ctr = 0;
     for (Map.Entry<String, JoshuaServiceInfo> serverEntry : services.entrySet()) 
     {
@@ -112,6 +124,7 @@ public class JoshuaServicesInitializer
       logger.error("command: " + line);
       CommandLine cmdLine = CommandLine.parse(line);
 
+      //The service is set up to write stdout/stderr and will auto destroy itself when the web server shuts down.
       OutputStream stdout = new ByteArrayOutputStream();
       OutputStream stderr = new ByteArrayOutputStream();
       ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);

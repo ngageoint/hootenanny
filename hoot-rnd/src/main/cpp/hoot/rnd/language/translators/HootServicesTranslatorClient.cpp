@@ -104,7 +104,8 @@ void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCode
 
 void HootServicesTranslatorClient::_checkLangsAvailable(const QString type)
 {
-   boost::shared_ptr<boost::property_tree::ptree> replyObj;
+  //request the supported langs info from the service
+  boost::shared_ptr<boost::property_tree::ptree> replyObj;
   try
   {
     replyObj = _infoClient->getAvailableLanguages(type);
@@ -115,6 +116,7 @@ void HootServicesTranslatorClient::_checkLangsAvailable(const QString type)
     return;
   }
 
+  //check the supported langs against our specified langs
   QMap<QString, bool> returnedLangs;
   BOOST_FOREACH (boost::property_tree::ptree::value_type& language, replyObj->get_child("languages"))
   {
@@ -163,6 +165,7 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
     "Translating to English with specified source languages: " <<
      _sourceLangs.join(",") << "; text: " << textToTranslate);
 
+  //create the request
   QUrl url(_translationUrl);
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -196,11 +199,13 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
   boost::property_tree::json_parser::write_json(ss, requestObj);
   LOG_VART(ss.str());
 
+  //send the request and wait for the response
   QNetworkReply* reply = _client->post(request, QString::fromStdString(ss.str()).toUtf8());
   QEventLoop loop;
   QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
   loop.exec();
 
+  //check for a response error
   QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
   LOG_VARD(status.isValid());
   LOG_VARD(status.toInt());
@@ -210,6 +215,7 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
     return;
   }
 
+  //parse the response
   QString replyData(reply->readAll());
   LOG_VART(replyData);
   std::stringstream replyStrStrm(replyData.toUtf8().constData(), std::ios::in);

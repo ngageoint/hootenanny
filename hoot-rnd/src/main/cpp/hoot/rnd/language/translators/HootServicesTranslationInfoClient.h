@@ -43,7 +43,7 @@ namespace hoot
 {
 
 /**
- *
+ * Retrieves information from the Hootenanny web translation service about available languages
  */
 class HootServicesTranslationInfoClient : public Configurable
 {
@@ -53,11 +53,20 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  /**
+   * Retrieves translation available languages info
+   *
+   * @param type type of language information to retrieve; "translatable" or "detectable"
+   * @return a property tree containing the language information
+   */
   boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type);
 
 private:
 
+  //a single translator used to determine what translatable languages are supported
   QString _translator;
+  //detectors used to determine what detectable languages are supported; if left empty, then
+  //all language detectors will be used by the service
   QStringList _detectors;
   QString _detectableUrl;
   QString _translatableUrl;

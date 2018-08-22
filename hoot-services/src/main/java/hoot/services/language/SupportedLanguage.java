@@ -27,8 +27,9 @@
 
 package hoot.services.language;
 
-/*
-*/
+/**
+ * Information about a language supported by a language app
+ */
 public final class SupportedLanguage
 {
   private String iso6391Code;

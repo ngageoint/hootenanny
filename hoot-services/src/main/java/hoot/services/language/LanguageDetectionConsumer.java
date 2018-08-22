@@ -27,8 +27,22 @@
 
 package hoot.services.language;
 
+/**
+ * Interface for any class making use of a language detector
+ */
 public interface LanguageDetectionConsumer 
 {
+  /**
+   * Returns the ISO-639-1 language code of the language detected by the detector used
+   *
+   * @return a language code
+   */
   String getDetectedLangCode();
+
+  /**
+   * Return the class name of the detector used
+   *
+   * @return a class name
+   */
   String getDetectorUsed();
 }

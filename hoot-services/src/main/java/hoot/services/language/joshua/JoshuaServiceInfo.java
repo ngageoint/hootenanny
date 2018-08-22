@@ -27,6 +27,15 @@
 
 package hoot.services.language;
 
+/**
+ * Information about a running Joshua translation service
+ *
+ * @article{post2015joshua,
+    Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
+    Journal = {The Prague Bulletin of Mathematical Linguistics},
+    Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
+    Year = {2015} }
+ */
 public class JoshuaServiceInfo
 {
   private String languageCode;

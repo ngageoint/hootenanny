@@ -40,8 +40,15 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/*
-*/
+/**
+ * Reads a hoot managed config file that determines which Joshua services to launch.  
+ *
+ * @article{post2015joshua,
+    Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
+    Journal = {The Prague Bulletin of Mathematical Linguistics},
+    Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
+    Year = {2015} }
+ */
 public final class JoshuaServicesConfigReader
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaServicesConfigReader.class);
@@ -50,6 +57,11 @@ public final class JoshuaServicesConfigReader
   {
   }
 
+  /**
+   * Reads a Joshua services configuration input stream and returns the information
+   * 
+   * @param configStrm configuration file input stream
+   */
   public static JoshuaServiceInfo[] readConfig(InputStream configStrm) throws Exception
   { 
     String line = null;

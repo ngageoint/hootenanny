@@ -27,13 +27,31 @@
 
 package hoot.services.language;
 
+/**
+ * Interface for language translators
+ */
 public interface ToEnglishTranslator 
 {
+  /**
+   * Sets a configuration
+   *
+   * @param config a configuration object
+   */
   void setConfig(Object config);
 
+  /**
+   * Translates text to English
+   *
+   * @param sourceLangCodes the specified source languages to attempt to translate from
+   * @param text the text to translate
+   */
   String translate(String[] sourceLangCodes, String text) throws Exception;
-  String translate(String sourceLangCode, String text) throws Exception;
 
-  String getUrl();
-  String getDescription();
+  /**
+   * Translates text to English
+   *
+   * @param sourceLangCodes the specified source language to attempt to translate from
+   * @param text the text to translate
+   */
+  String translate(String sourceLangCode, String text) throws Exception;
 }

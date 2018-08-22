@@ -34,6 +34,11 @@ import org.apache.commons.pool.PoolableObjectFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Abstract class for dealing with creating poolable socket objects
+ * 
+ * @see Apache Commons Pool
+ */
 public abstract class PoolableSocketConnectionFactory implements PoolableObjectFactory
 {
   private static final Logger logger = LoggerFactory.getLogger(PoolableSocketConnectionFactory.class);

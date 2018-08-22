@@ -41,13 +41,22 @@ import org.apache.commons.pool.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
-*/
+/**
+ * Pools Joshua connections to multiple services
+ *
+ * @see Apache Commons Pool
+   @article{post2015joshua,
+    Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
+    Journal = {The Prague Bulletin of Mathematical Linguistics},
+    Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
+    Year = {2015} }
+ */
 public class JoshuaConnectionPool
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaConnectionPool.class);
 
   private Map<String, JoshuaServiceInfo> services = null;
+  //one pool exists for each server, keyed by the language code of the language it supports
   private Map<String, GenericObjectPool<JoshuaConnection>> connectionPools = new HashMap<String, GenericObjectPool<JoshuaConnection>>();
   private int maxPoolSize = 100;
 

@@ -27,8 +27,9 @@
 
 package hoot.services.language;
 
-/*
-*/
+/**
+ * Encapsulates information about an app dealing with languages (e.g. translator, detector)
+ */
 public final class LanguageApp
 {
   private String name;

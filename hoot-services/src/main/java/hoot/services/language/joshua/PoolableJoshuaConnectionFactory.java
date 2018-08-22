@@ -33,6 +33,15 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.utils.PoolableSocketConnectionFactory;
 
+/**
+ * Allows for creating poolable Joshua connections 
+ *
+   @article{post2015joshua,
+    Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
+    Journal = {The Prague Bulletin of Mathematical Linguistics},
+    Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
+    Year = {2015} }
+ */
 public class PoolableJoshuaConnectionFactory extends PoolableSocketConnectionFactory
 {
   private static final Logger logger = LoggerFactory.getLogger(PoolableJoshuaConnectionFactory.class);

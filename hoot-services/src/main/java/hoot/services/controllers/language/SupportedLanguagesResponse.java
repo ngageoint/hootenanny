@@ -29,6 +29,9 @@ package hoot.services.controllers.language;
 
 import hoot.services.language.SupportedLanguage;
 
+/**
+ * A response containing information about supported languages for language applications
+ */
 public class SupportedLanguagesResponse 
 {
   private SupportedLanguage[] languages;

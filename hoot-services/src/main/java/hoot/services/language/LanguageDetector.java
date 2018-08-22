@@ -27,10 +27,16 @@
 
 package hoot.services.language;
 
+/**
+ * Interface for language detectors
+ */
 public interface LanguageDetector 
 {
+  /**
+   * Detects the language of the provided text
+   *
+   * @param text text for which to detect a language
+   * @return an ISO-639-1 code
+   */
   String detect(String text);
-
-  String getUrl();
-  String getDescription();
 }

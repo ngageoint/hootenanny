@@ -74,8 +74,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.PreDestroy;
 
-/*
- * 
+/**
+ * Web endpoint for language translation and detection
+
+   @note For text returned URL encoded the replace of '+' is a bit of a hack, but not sure how better to handle it yet.
  */
 @Controller
 @Path("")
@@ -97,6 +99,9 @@ public class LanguageResource
     }
   }
 
+  /**
+   * This occurs just before the web server shuts down.
+   */
   @PreDestroy
   public void preDestroy() throws Exception
   {
@@ -113,6 +118,26 @@ public class LanguageResource
     }
   }
 
+  /**
+   * Returns the available language detectors
+   *
+   * curl localhost:8080/hoot-services/language/detectors
+   *
+   * {
+      "apps":[
+      {
+         "name":"TikaLanguageDetector",
+         "description":"The language detection portion of a library which detects and extracts metadata and text from many different file types",
+         "url":"https://tika.apache.org/"
+      },
+      {
+         "name":"OpenNlpLanguageDetector",
+         "description":"The language detector portion of a machine learning based toolkit for the processing of natural language text",
+         "url":"https://opennlp.apache.org/"
+      }
+     ]
+    }
+   */
   @GET
   @Path("/detectors")
   @Produces(MediaType.APPLICATION_JSON)
@@ -138,6 +163,26 @@ public class LanguageResource
     }
   }
 
+  /**
+   * Returns the available language translators
+   *
+   * curl localhost:8080/hoot-services/language/translators
+   *
+   * {
+   "apps":[
+      {
+         "name":"JoshuaLanguageTranslator",
+         "description":"A statistical machine translation decoder for phrase-based, hierarchical, and syntax-based machine translation",
+         "url":"https://cwiki.apache.org/confluence/display/JOSHUA"
+      },
+      {
+         "name":"HootLanguageTranslator",
+         "description":"A custom translator that combines language detection into its workflow.  See the Hootenanny User Documentation for more details.",
+         "url":"N/A"
+      }
+     ]
+    }
+   */
   @GET
   @Path("/translators")
   @Produces(MediaType.APPLICATION_JSON)
@@ -163,26 +208,33 @@ public class LanguageResource
     }
   }
 
-  private LanguageApp languageEntityToApp(String appName) throws Exception
-  {
-    LanguageAppInfo appInfo = null;
-    try
-    {
-      appInfo = (LanguageAppInfo)ToEnglishTranslatorFactory.create(appName);
-    }
-    catch (Exception e)
-    {
-      appInfo = (LanguageAppInfo)LanguageDetectorFactory.create(appName);
-    }
-    assert(appInfo != null);
+  /**
+   * Returns information about detectable languages given a set of language detectors.  
 
-    LanguageApp app = new LanguageApp();
-    app.setName(appName);
-    app.setDescription(appInfo.getDescription());
-    app.setUrl(appInfo.getUrl());
-    return app;
-  }
+     If no language detectors are specified, then all available language detectors are used to create the detectable language 
+     information.  Language names are returned URL encoded and in UTF-8.
 
+     curl -X POST -H "Content-Type: application/json" -d '{}' localhost:8080/hoot-services/language/detectable
+     curl -X POST -H "Content-Type: application/json" -d '{ "apps": ["TikaLanguageDetector"]}' localhost:8080/hoot-services/language/detectable
+
+     {  
+      "languages":[  
+      {  
+         "name":"Danish",
+         "available":true,
+         "iso6391code":"da",
+         "iso6392code":"dan"
+      },
+      {  
+         "name":"German",
+         "available":true,
+         "iso6391code":"de",
+         "iso6392code":"deu"
+      },
+     ...
+     ]
+    }
+   */
   @POST
   @Path("/detectable")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -223,6 +275,34 @@ public class LanguageResource
     }
   }
 
+  /**
+   * Returns information about translatable languages given a set of language translators.  
+
+     If no language translators are specified, then all available language translators are used to create the translatable 
+     language information.  Language names are returned URL encoded and in UTF-8.
+
+     curl -X POST -H "Content-Type: application/json" -d '{}' localhost:8080/hoot-services/language/translatable
+     curl -X POST -H "Content-Type: application/json" -d '{ "apps": ["JoshuaLanguageTranslator"]}' 
+       localhost:8080/hoot-services/language/translatable
+
+     {  
+      "languages":[  
+      {  
+         "name":"Danish",
+         "available":false,
+         "iso6391code":"da",
+         "iso6392code":"dan"
+      },
+      {  
+         "name":"German",
+         "available":true,
+         "iso6391code":"de",
+         "iso6392code":"deu"
+      },
+     ...
+     ]
+    }
+   */
   @POST
   @Path("/translatable")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -263,44 +343,23 @@ public class LanguageResource
     }
   }
 
-  private SupportedLanguage[] getAllAppSupportedLangs(Set<String> apps) throws Exception
-  {
-    Set<String> parsedLangCodes = new HashSet<String>();
-    List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
-    for (String appName : apps)
-    {
-      logger.trace("appName: " + appName);
-      SupportedLanguageConsumer langConsumer = null;
-      try
-      {
-        langConsumer = (SupportedLanguageConsumer)ToEnglishTranslatorFactory.create(appName);
-      }
-      catch (Exception e)
-      {
-        langConsumer = (SupportedLanguageConsumer)LanguageDetectorFactory.create(appName);
-      }
-      assert(langConsumer != null);
+  /**
+   * Detects a spoken language given text and a set of language detectors.  
 
-      SupportedLanguage[] consumerSupportedLangs = langConsumer.getSupportedLanguages();
-      logger.trace("consumerSupportedLangs size: " + consumerSupportedLangs.length);
-      for (int i = 0; i < consumerSupportedLangs.length; i++)
-      {
-        SupportedLanguage lang = consumerSupportedLangs[i];
-        logger.trace("lang code: " + lang.getIso6391code());
-        if (!parsedLangCodes.contains(lang.getIso6391code()))
-        {
-          parsedLangCodes.add(lang.getIso6391code());
-          lang.setAvailable(langConsumer.isLanguageAvailable(lang.getIso6391code()));
-          //TODO: replace of '+' here is a bit of a hack
-          lang.setName(URLEncoder.encode(lang.getName(), "UTF-8").replace("+", "%20"));
-          supportedLangs.add(lang);
-        }
-      }
-    }
-    logger.trace("supportedLangs size: " + supportedLangs.size());
-    return supportedLangs.toArray(new SupportedLanguage[]{});
-  }
+     If no language detectors are specified, then as many language detectors as needed are used to perform the detection.  The text
+     sent in should be URL encoded and in UTF-8.  Language names are returned URL encoded and in UTF-8.
 
+     curl -X POST -H "Content-Type: application/json" -d '{ "text": "wie alt bist du" }' localhost:8080/hoot-services/language/detect
+     curl -X POST -H "Content-Type: application/json" -d '{ "detectors": ["TikaLanguageDetector"], "text": "wie alt bist du" }' 
+       localhost:8080/hoot-services/language/detect
+
+     {
+       "detectorUsed":"TikaLanguageDetector",
+       "detectedLangCode":"de",
+       "sourceText":"wie%20alt%20bist%20du",
+       "detectedLang":"German"
+     }
+   */
   @POST
   @Path("/detect")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -344,7 +403,7 @@ public class LanguageResource
       entity.put("detectedLangCode", detectedLangCode);
       if (!detectedLangCode.isEmpty())
       {
-        entity.put("detectedLang", detectedLangName);
+        entity.put("detectedLang", URLEncoder.encode(detectedLangName, "UTF-8").replace("+", "%20"));
         entity.put("detectorUsed", detectingDetector);
       } 
       return Response.ok(entity.toJSONString()).build();
@@ -361,38 +420,27 @@ public class LanguageResource
     }
   }
 
-  private String toTranslateResponse(LanguageTranslateRequest request, String translatedText, ToEnglishTranslator translator) 
-    throws UnsupportedEncodingException
-  {
-    JSONObject entity = new JSONObject();
-    entity.put("sourceText", request.getText());
-    JSONArray sourceLangCodes = new JSONArray();
-    for (int i = 0; i < request.getSourceLangCodes().length; i++)
-    {
-      sourceLangCodes.add(request.getSourceLangCodes()[i]);
-    }
-    entity.put("sourceLangCodes", sourceLangCodes);
-    //TODO: replace of '+' here is a bit of a hack
-    entity.put("translatedText", URLEncoder.encode(translatedText, "UTF-8").replace("+", "%20"));
-    entity.put("translator", request.getTranslator());
-    if (translator instanceof LanguageDetectionConsumer)
-    {
-      LanguageDetectionConsumer detectionConsumer = (LanguageDetectionConsumer)translator;
-      if (detectionConsumer.getDetectedLangCode() != null && !detectionConsumer.getDetectedLangCode().isEmpty())
-      {
-        entity.put("detectedLangCode", detectionConsumer.getDetectedLangCode());
-        entity.put("detectedLang", ((SupportedLanguageConsumer)translator).getLanguageName(detectionConsumer.getDetectedLangCode()));
-        entity.put("detectorUsed", detectionConsumer.getDetectorUsed());
-        entity.put(
-          "detectedLangAvailableForTranslation", 
-          ((SupportedLanguageConsumer)translator).isLanguageAvailable(detectionConsumer.getDetectedLangCode()));
-      }
-    }
-    entity.put("detectedLanguageOverridesSpecifiedSourceLanguages", request.getDetectedLanguageOverridesSpecifiedSourceLanguages());
-    entity.put("performExhaustiveTranslationSearchWithNoDetection", request.getPerformExhaustiveTranslationSearchWithNoDetection());
-    return entity.toJSONString();
-  }
+  /**
+   * Translates a single line of text given a specified language translator and one or more source languages.  
 
+     In place of language codes, some translators support specifying "detect", which will cause the translator to attempt to 
+     detect the language before translating (e.g. HootLanguageTranslator).  The text sent in should be URL encoded and in UTF-8.  
+     The translated text is returned URL encoded and in UTF-8.
+
+     curl -X POST -H "Content-Type: application/json" -d '{ "translator": "JoshuaLanguageTranslator", "sourceLangCodes": ["de"], 
+       "text": "wie alt bist du" }' localhost:8080/hoot-services/language/translate
+
+     {
+       "translatedText":"How%20old%20are%20you",
+       "performExhaustiveTranslationSearchWithNoDetection":false,
+       "sourceLangCodes":[
+         "de"
+       ],
+       "translator":"JoshuaLanguageTranslator",
+       "sourceText":"wie%20alt%20bist%20du",
+       "detectedLanguageOverridesSpecifiedSourceLanguages":false
+     }
+   */
   @POST
   @Path("/translate")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -438,5 +486,93 @@ public class LanguageResource
     }
     
     return Response.ok(responseStr).build();
+  }
+
+  private LanguageApp languageEntityToApp(String appName) throws Exception
+  {
+    LanguageAppInfo appInfo = null;
+    try
+    {
+      appInfo = (LanguageAppInfo)ToEnglishTranslatorFactory.create(appName);
+    }
+    catch (Exception e)
+    {
+      appInfo = (LanguageAppInfo)LanguageDetectorFactory.create(appName);
+    }
+    assert(appInfo != null);
+
+    LanguageApp app = new LanguageApp();
+    app.setName(appName);
+    app.setDescription(appInfo.getDescription());
+    app.setUrl(appInfo.getUrl());
+    return app;
+  }
+
+  private SupportedLanguage[] getAllAppSupportedLangs(Set<String> apps) throws Exception
+  {
+    Set<String> parsedLangCodes = new HashSet<String>();
+    List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
+    for (String appName : apps)
+    {
+      logger.trace("appName: " + appName);
+      SupportedLanguageConsumer langConsumer = null;
+      try
+      {
+        langConsumer = (SupportedLanguageConsumer)ToEnglishTranslatorFactory.create(appName);
+      }
+      catch (Exception e)
+      {
+        langConsumer = (SupportedLanguageConsumer)LanguageDetectorFactory.create(appName);
+      }
+      assert(langConsumer != null);
+
+      SupportedLanguage[] consumerSupportedLangs = langConsumer.getSupportedLanguages();
+      logger.trace("consumerSupportedLangs size: " + consumerSupportedLangs.length);
+      for (int i = 0; i < consumerSupportedLangs.length; i++)
+      {
+        SupportedLanguage lang = consumerSupportedLangs[i];
+        logger.trace("lang code: " + lang.getIso6391code());
+        if (!parsedLangCodes.contains(lang.getIso6391code()))
+        {
+          parsedLangCodes.add(lang.getIso6391code());
+          lang.setAvailable(langConsumer.isLanguageAvailable(lang.getIso6391code()));
+          lang.setName(URLEncoder.encode(lang.getName(), "UTF-8").replace("+", "%20"));
+          supportedLangs.add(lang);
+        }
+      }
+    }
+    logger.trace("supportedLangs size: " + supportedLangs.size());
+    return supportedLangs.toArray(new SupportedLanguage[]{});
+  }
+
+  private String toTranslateResponse(LanguageTranslateRequest request, String translatedText, ToEnglishTranslator translator) 
+    throws UnsupportedEncodingException
+  {
+    JSONObject entity = new JSONObject();
+    entity.put("sourceText", request.getText());
+    JSONArray sourceLangCodes = new JSONArray();
+    for (int i = 0; i < request.getSourceLangCodes().length; i++)
+    {
+      sourceLangCodes.add(request.getSourceLangCodes()[i]);
+    }
+    entity.put("sourceLangCodes", sourceLangCodes);
+    entity.put("translatedText", URLEncoder.encode(translatedText, "UTF-8").replace("+", "%20"));
+    entity.put("translator", request.getTranslator());
+    if (translator instanceof LanguageDetectionConsumer)
+    {
+      LanguageDetectionConsumer detectionConsumer = (LanguageDetectionConsumer)translator;
+      if (detectionConsumer.getDetectedLangCode() != null && !detectionConsumer.getDetectedLangCode().isEmpty())
+      {
+        entity.put("detectedLangCode", detectionConsumer.getDetectedLangCode());
+        entity.put("detectedLang", ((SupportedLanguageConsumer)translator).getLanguageName(detectionConsumer.getDetectedLangCode()));
+        entity.put("detectorUsed", detectionConsumer.getDetectorUsed());
+        entity.put(
+          "detectedLangAvailableForTranslation", 
+          ((SupportedLanguageConsumer)translator).isLanguageAvailable(detectionConsumer.getDetectedLangCode()));
+      }
+    }
+    entity.put("detectedLanguageOverridesSpecifiedSourceLanguages", request.getDetectedLanguageOverridesSpecifiedSourceLanguages());
+    entity.put("performExhaustiveTranslationSearchWithNoDetection", request.getPerformExhaustiveTranslationSearchWithNoDetection());
+    return entity.toJSONString();
   }
 }

@@ -84,6 +84,7 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
 
+  //create the request
   boost::property_tree::ptree requestObj;
   boost::property_tree::ptree appsObj;
   for (int i = 0; i < apps.size(); i++)
@@ -97,12 +98,14 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
   LOG_VART(requestStrStrm.str());
 
+  //send the request and wait for a response
   QNetworkReply* reply =
     _client->post(request, QString::fromStdString(requestStrStrm.str()).toUtf8());
   QEventLoop loop;
   QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
   loop.exec();
 
+  //check for a response error
   QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
   LOG_VARD(status.isValid());
   LOG_VARD(status.toInt());
@@ -111,6 +114,7 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
     throw HootException(QString("Languages reply error:\n%1").arg(reply->error()));
   }
 
+  //parse the response
   QString replyData(reply->readAll());
   LOG_VART(replyData);
   std::stringstream replyStrStrm(replyData.toUtf8().constData(), std::ios::in);

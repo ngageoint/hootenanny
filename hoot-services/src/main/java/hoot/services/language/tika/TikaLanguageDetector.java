@@ -37,9 +37,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
-/*
-http://tika.apache.org/
-*/
+/**
+ * Detects languages using Tika
+ *
+ * http://tika.apache.org/
+ */
 public final class TikaLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(TikaLanguageDetector.class);
@@ -53,16 +55,7 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
 
   private TikaLanguageDetector() throws Exception
   {
-    try
-    {
-      logger.debug("loading tika model...");
-      detector.loadModels();
-    }
-    catch (IOException ioe) 
-    {
-      throw new RuntimeException("Error reading Tika model", ioe);
-    }
-
+    //which languages are supported are read from a hoot managed config file
     InputStream supportedLangsConfigStrm = null;
     try
     {
@@ -79,6 +72,17 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
         supportedLangsConfigStrm.close();
       }
     }
+
+    //load the language detection model
+    try
+    {
+      logger.debug("loading tika model...");
+      detector.loadModels();
+    }
+    catch (IOException ioe) 
+    {
+      throw new RuntimeException("Error reading Tika model", ioe);
+    }
   }
 
   //There's apparently a trick in recent Java where you can get a more performant singleton by using a static inner class instead
@@ -93,26 +97,50 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
     return instance;
   }
 
+  /**
+   * @see SupportedLanguageConsumer
+   */
   public boolean isLanguageAvailable(String langCode)
   {
     return true;
   }
 
+  /**
+   * @see SupportedLanguageConsumer
+   */
   public SupportedLanguage[] getSupportedLanguages()
   {
     return supportedLangs;
   }
 
+  /**
+   * @see SupportedLanguageConsumer
+   */
   public String getLanguageName(String langCode)
   {
     return langsConfigReader.getLanguageName(langCode);
   }
 
-  //Not really expecting these to change often...but if so, could move them to the props config.
+  /**
+   * @see LanguageAppInfo
+   *
+   * Not really expecting this to change often...but if so, could move it to the props config.
+   */
   public String getUrl() { return "https://tika.apache.org/"; }
+
+  /**
+   * @see LanguageAppInfo
+   *
+   * Not really expecting this to change often...but if so, could move it to the props config.
+   */
   public String getDescription() 
   { return "The language detection portion of a library which detects and extracts metadata and text from many different file types"; }
 
+  /**
+   * Detects the language of the provided text
+   *
+   * @param text text for which to detect a language
+   */
   public String detect(String text)
   {
     long startTime = System.currentTimeMillis();

@@ -40,8 +40,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/*
-*/
+/**
+ * Loads information from a supported languages configuration file
+ */
 public final class SupportedLanguagesConfigReader
 {
   private static final Logger logger = LoggerFactory.getLogger(SupportedLanguagesConfigReader.class);
@@ -53,6 +54,12 @@ public final class SupportedLanguagesConfigReader
   {
   }
 
+  /**
+   * Reads a supported languages config file
+   *
+   * @param configStrm config input stream
+   * @return an array of supported languages
+   */
   public SupportedLanguage[] readConfig(InputStream configStrm) throws Exception
   { 
     String line = null;
@@ -74,7 +81,8 @@ public final class SupportedLanguagesConfigReader
         String langName = lineParts[2];
 
         SupportedLanguage supportedLanguage = new SupportedLanguage();
-        //TODO: this isn't the best way to handle this
+        //This probably isn't the best way to handle this.  Only a small number of the languages we're working with don't have
+        //1 codes and only have 2 codes...works for now, though.
         if (iso6391.toUpperCase().equals("N/A"))
         {
           iso6391 = iso6392;
@@ -99,18 +107,29 @@ public final class SupportedLanguagesConfigReader
     return supportedLangs.toArray(new SupportedLanguage[]{});
   }
 
+  /**
+   * Determines if a language is supported
+   *
+   * @param iso6391Code language code
+   * @return true if the language is supported; false otherwise
+   */
   public boolean isSupportedLanguage(String iso6391Code)
   {
     return iso6391ToLangName.containsKey(iso6391Code.toLowerCase());
   }
 
+  /**
+   * Given a language code, retrieves the ISO-639-1 code
+   *
+   * @param iso639Code a language code
+   * @return a ISO-639-1 code; empty string if the code cannot be determined
+   */
   public String getIso6391Code(String iso639Code)
   {
     if (iso6391ToLangName.containsKey(iso639Code))
     {
       return iso639Code;
     }
-    //TODO: don't think we need this check
     if (iso6392To1.containsKey(iso639Code))
     {
       return iso6392To1.get(iso639Code);
