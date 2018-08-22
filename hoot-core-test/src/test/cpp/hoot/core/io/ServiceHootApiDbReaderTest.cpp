@@ -602,17 +602,16 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
 
-    reader.setBoundingBox(
-      "-78.02265434416296,38.90089748801109,-77.9224564416296,39.00085678801109");
+    reader.setBoundingBox("-88.1,28.91,-88.0,28.89");
     reader.read(map);
 
     //quick check to see if the element counts are off...consult the test output for more detail
 
     //See explanations for these assertions in ServiceOsmApiDbReaderTest::runReadByBoundsTest
     //(exact same input data)
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
 
     //We need to drop to set all the element changeset tags here to empty, which will cause them
     //to be dropped from the file output.  If they aren't dropped, they will increment with each

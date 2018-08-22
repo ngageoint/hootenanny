@@ -174,23 +174,22 @@ public:
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     OsmMapPtr map(new OsmMap());
 
-    reader.setBoundingBox(
-      "-78.02265434416296,38.90089748801109,-77.9224564416296,39.00085678801109");
+    reader.setBoundingBox("-88.1,28.91,-88.0,28.89");
     reader.read(map);
 
     //quick check to see if the element counts are off...consult the test output for more detail
 
-    //All but one of the seven nodes should be returned.  There are two nodes outside of the
-    //requested bounds, but one of them is referenced by a way within the bounds and the other by a
-    //relation within the bounds.  The node not returned is outside of the requested bounds and not
+    //All but two of the seven nodes should be returned.  There are five nodes outside of the
+    //requested bounds, one of them is referenced by a way within the bounds and the other three by a
+    //relation within the bounds.  The nodes not returned is outside of the requested bounds and not
     //reference by any other element.
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
-    //All but one of the five ways should be returned.  The way not returned contains all nodes
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
+    //Two of the five ways should be returned.  The ways not returned contain nodes
     //that are out of bounds.
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-    //All but one of the six relations should be returned.  The relation not returned contains all
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    //Two of the six relations should be returned.  The relations not returned contain all
     //members that are out of bounds.
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
 
     // Verify timestamps look OK
     WayPtr pWay = map->getWays().begin()->second;
