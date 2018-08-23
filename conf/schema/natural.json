@@ -104,6 +104,15 @@
     },
     {
         "geometries": [
+            "node"
+        ],
+        "categories": [],
+        "isA": "natural",
+        "name": "natural=tree",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
             "node",
             "area"
         ],

@@ -48,6 +48,9 @@ public class GrailParams {
     @JsonProperty("output")
     private String output;
 
+    @JsonProperty("folder")
+    private String folder;
+
     @JsonProperty("pullUrl")
     private String pullUrl;
 
@@ -101,6 +104,14 @@ public class GrailParams {
         this.output = output;
     }
 
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
+
     public String getPushUrl() {
         return pushUrl;
     }
@@ -136,12 +147,13 @@ public class GrailParams {
 
     @Override
     public String toString() {
-        return "ExportParams{" +
+        return "GrailParams{" +
                 "BBOX='" + bounds + '\'' +
                 ", USER_ID='" + userId + '\'' +
                 ", input1='" + input1 + '\'' +
                 ", input2='" + input2 + '\'' +
                 ", output='" + output + '\'' +
+                ", folder='" + folder + '\'' +
                 ", pushUrl='" + pushUrl + '\'' +
                 ", pullUrl='" + pullUrl + '\'' +
                 ", capabilitiesUrl='" + capabilitiesUrl + '\'' +

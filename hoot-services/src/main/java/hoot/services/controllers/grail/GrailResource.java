@@ -96,10 +96,14 @@ public class GrailResource {
     private GrailCommandFactory grailCommandFactory;
 
     @Autowired
-    private PullOverpassCommandFactory OverpassCommandFactory;
+    private PullOverpassCommandFactory overpassCommandFactory;
 
     @Autowired
-    private PullApiCommandFactory ApiCommandFactory;
+    private PullApiCommandFactory apiCommandFactory;
+
+    @Autowired
+    private UpdateDbCommandFactory updateDbCommandFactory;
+
 
     public GrailResource() {}
 
@@ -179,7 +183,7 @@ public class GrailResource {
             String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
             json.put("jobid:LocalOSM", jobId);
             // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            InternalCommand getLocalOSM = ApiCommandFactory.build(jobId,apiParams,this.getClass());
+            InternalCommand getLocalOSM = apiCommandFactory.build(jobId,apiParams,this.getClass());
             workflow.add(getLocalOSM);
 
 
@@ -195,7 +199,7 @@ public class GrailResource {
 
             jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
             json.put("jobid:InternetOSM", jobId);
-            InternalCommand getOverpassOSM = OverpassCommandFactory.build(jobId,overpassParams,this.getClass());
+            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId,overpassParams,this.getClass());
             workflow.add(getOverpassOSM);
 
 
@@ -270,6 +274,93 @@ public class GrailResource {
     }
 
 
+    @POST
+    @Path("/conflatepush")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response conflatePush(@QueryParam("INPUT1") String input1,
+                        @QueryParam("INPUT2") String input2,
+                        @QueryParam("USER_ID") @DefaultValue("Hootenanny") String userId,
+                        @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        JSONObject json = new JSONObject();
+        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        json.put("jobid", mainJobId);
+
+        List<Command> workflow = new LinkedList<>();
+
+        File workDir = new File(TEMP_OUTPUT_PATH, mainJobId);
+        try {
+            FileUtils.forceMkdir(workDir);
+        }
+        catch (IOException ioe) {
+            logger.error("GrailConflate: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
+        }
+
+        GrailParams params = new GrailParams();
+        params.setUserId(userId);
+
+        try {
+            // Run changeset-derive
+            params.setInput1(HOOTAPI_DB_URL + "/" + input1);
+            params.setInput2(HOOTAPI_DB_URL + "/" + input2);
+
+            File changeSet = new File(workDir,"diff.osc");
+            if (changeSet.exists()) changeSet.delete();
+            params.setOutput(changeSet.getAbsolutePath());
+            ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId,params,debugLevel,DeriveChangesetCommand.class,this.getClass());
+            workflow.add(makeChangeset);
+
+            // Apply changeset
+            params.setPushUrl(RAILSPORT_PUSH_URL);
+            ExternalCommand applyChange = grailCommandFactory.build(mainJobId,params,debugLevel,ApplyChangesetCommand.class,this.getClass());
+            workflow.add(applyChange);
+
+            // Now roll the dice and run everything.....
+            jobProcessor.submitAsync(new Job(mainJobId, workflow.toArray(new Command[workflow.size()])));
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+        }
+        catch (Exception e) {
+            String msg = "Error during grail conflate! Params: " + params;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        return Response.ok(json.toJSONString()).build();
+    }
+
+
+    @POST
+    @Path("/conflatetest")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response conflateTest(@QueryParam("INPUT1") String input1,
+                        @QueryParam("INPUT2") String input2,
+                        @QueryParam("USER_ID") @DefaultValue("Hootenanny") String userId,
+                        @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        JSONObject json = new JSONObject();
+        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+
+        json.put("jobid", jobId);
+        json.put("Input1", input1);
+        json.put("Input2", input2);
+        json.put("User_ID", userId);
+        json.put("Debug", debugLevel);
+
+
+        logger.info("User:" + userId);
+        logger.info("Input1:" + input1);
+        logger.info("Input2:" + input2);
+        logger.info("Debug_Level:" + debugLevel);
+        logger.info("json:" + json.toJSONString());
+
+        return Response.ok(json.toJSONString()).build();
+    }
+
     /**
      * Pull the OSM data for a bounding box.
      *
@@ -292,7 +383,9 @@ public class GrailResource {
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, jobId);
+
         JSONObject json = new JSONObject();
+        json.put("jobid", jobId);
 
         try {
             FileUtils.forceMkdir(workDir);
@@ -326,19 +419,17 @@ public class GrailResource {
         overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
         overpassParams.setPullUrl(MAIN_OVERPASS_URL);
 
-        try {
-            List<Command> workflow = new LinkedList<>();
+        List<Command> workflow = new LinkedList<>();
 
+        try {
             // Pull data from the local OSM API Db
             File localOSMFile = new File(workDir,"local.osm");
             if (localOSMFile.exists()) localOSMFile.delete();
 
             apiParams.setOutput(localOSMFile.getAbsolutePath());
             // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            InternalCommand getLocalOSM = ApiCommandFactory.build(jobId,apiParams,this.getClass());
+            InternalCommand getLocalOSM = apiCommandFactory.build(jobId,apiParams,this.getClass());
             workflow.add(getLocalOSM);
-
-
 
             // Pull OSM data from the real, internet, OSM Db using overpass
             File internetOSMFile = new File(workDir,"internet.osm");
@@ -346,7 +437,7 @@ public class GrailResource {
 
             overpassParams.setOutput(internetOSMFile.getAbsolutePath());
 
-            InternalCommand getOverpassOSM = OverpassCommandFactory.build(jobId,overpassParams,this.getClass());
+            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId,overpassParams,this.getClass());
             workflow.add(getOverpassOSM);
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
@@ -363,16 +454,224 @@ public class GrailResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        json.put("jobid", jobId);
-
         return Response.ok(json.toJSONString()).build();
+    }
+
+
+    /**
+     * Push OSM files to the Hoot DB
+     *
+     * POST hoot-services/grail/pushtodb/[JobId]?DEBUG_LEVEL=<error,info,debug,verbose,trace>
+     *
+     * @param jobId
+     *            Internally, this is the directory that the files are kept in. We expect that the directory
+     *            has local.osm & internet.osm files to run the diff with.
+     *
+     * @return Job ID
+     *            This is the id for the processing job. NOT the directory that the data is stored in.
+     */
+    @POST
+    @Path("/pushtodb/{jobId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response pushtodb(@PathParam("jobId") String jobDir,
+                                @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+        Response response;
+        JSONObject json = new JSONObject();
+
+        File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
+        File localOSMFile = new File(workDir,"local.osm");
+        File internetOSMFile = new File(workDir,"internet.osm");
+
+        // the first 10 digits of a random UUID _should_ be unique....
+        String randomString = "_" + StringUtils.left(UUID.randomUUID().toString().replace("-", ""),10);
+        String localDbFile = "local" + randomString;
+        String internetDbFile = "internet" + randomString;
+
+        GrailParams apiParams = new GrailParams();
+        GrailParams overpassParams = new GrailParams();
+        GrailParams linkParams = new GrailParams();
+
+        List<Command> workflow = new LinkedList<>();
+
+        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        json.put("jobId", mainJobId);
+
+        try {
+            if (!workDir.exists()) {
+                logger.error("PushToDb: jobDir {} does not exist.", workDir.getAbsolutePath());
+                return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
+                }
+    
+            if (!localOSMFile.exists() || !internetOSMFile.exists()) {
+                logger.error("PushToDb: Missing OSM files in {} ", workDir.getAbsolutePath());
+                return Response.status(Response.Status.BAD_REQUEST).entity("Missing OSM files in " + jobDir + ". Did you run pullosm?").build();
+            }
+
+            // We could use the existing Import Command to push the OSM files to the DB BUT it will delete the import directory
+            // Till I figure out a better way to do this, we will use our version. 
+            apiParams.setInput1(localOSMFile.getAbsolutePath()); 
+            apiParams.setOutput(localDbFile);
+            ExternalCommand pushApi = grailCommandFactory.build(mainJobId,apiParams,debugLevel,PushToDbCommand.class,this.getClass());
+            workflow.add(pushApi);
+
+            overpassParams.setInput1(internetOSMFile.getAbsolutePath());
+            overpassParams.setOutput(internetDbFile);
+            ExternalCommand pushOverpass = grailCommandFactory.build(mainJobId,overpassParams,debugLevel,PushToDbCommand.class,this.getClass());
+            workflow.add(pushOverpass);
+
+            // Now create a folder and link the uploaded layers to it
+            linkParams.setFolder(jobDir);
+            linkParams.setInput1(localDbFile);
+            linkParams.setInput2(internetDbFile);
+            InternalCommand updateDb = updateDbCommandFactory.build(mainJobId,linkParams,this.getClass());
+            workflow.add(updateDb);
+
+            jobProcessor.submitAsync(new Job(mainJobId, workflow.toArray(new Command[workflow.size()])));
+        
+            ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
+            response = responseBuilder.build();
+        }
+        catch (WebApplicationException e) {
+            throw e;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+        }
+        catch (Exception e) {
+            throw new WebApplicationException(e);
+        }
+
+        return response;
+    }
+
+    /**
+     * Pull the OSM data for a bounding box.abd put it in the DB
+     *
+     * This is not good but it works for a proof of concept
+     *
+     * POST hoot-services/grail/pullosmtodb?BBOX=left,bottom,right,top&DEBUG_LEVEL=<error,info,debug,verbose,trace>
+     *        left is the longitude of the left (west) side of the bounding box  
+     *        bottom is the latitude of the bottom (south) side of the bounding box  
+     *        right is the longitude of the right (east) side of the bounding box  
+     *        top is the latitude of the top (north) side of the bounding box  
+     *
+     * @param params
+     *
+     * @return Job ID
+     *            Internally, this is the directory that the files are kept in
+     */
+    @POST
+    @Path("/pullosmtodb")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response pullOsmToDb(@QueryParam("BBOX") String bbox,
+                            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        File workDir = new File(TEMP_OUTPUT_PATH, jobId);
+
+        Response response;
+
+        JSONObject json = new JSONObject();
+        json.put("jobId", jobId);
+
+        try {
+            FileUtils.forceMkdir(workDir);
+        }
+        catch (IOException ioe) {
+            logger.error("PullOsmToDb: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
+        }
+
+        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
+        logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
+        if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+        }
+
+        GrailParams apiParams = new GrailParams();
+        GrailParams overpassParams = new GrailParams();
+
+        apiParams.setBounds(bbox);
+        apiParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
+        apiParams.setPullUrl(RAILSPORT_PULL_URL);
+
+        overpassParams.setBounds(bbox);
+        overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
+        overpassParams.setPullUrl(MAIN_OVERPASS_URL);
+
+        List<Command> workflow = new LinkedList<>();
+
+        try {
+            // Pull data from the local OSM API Db
+            File localOSMFile = new File(workDir,"local.osm");
+            if (localOSMFile.exists()) localOSMFile.delete();
+
+            apiParams.setOutput(localOSMFile.getAbsolutePath());
+            // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
+            InternalCommand getLocalOSM = apiCommandFactory.build(jobId,apiParams,this.getClass());
+            workflow.add(getLocalOSM);
+
+            // Pull OSM data from the real, internet, OSM Db using overpass
+            File internetOSMFile = new File(workDir,"internet.osm");
+            if (internetOSMFile.exists()) internetOSMFile.delete();
+
+            overpassParams.setOutput(internetOSMFile.getAbsolutePath());
+
+            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId,overpassParams,this.getClass());
+            workflow.add(getOverpassOSM);
+
+            // Now we paste in the "pushtodb"
+            // the first 10 digits of a random UUID _should_ be unique....
+            String randomString = "_" + StringUtils.left(UUID.randomUUID().toString().replace("-", ""),10);
+            String localDbFile = "local" + randomString;
+            String internetDbFile = "internet" + randomString;
+
+            GrailParams apiPushParams = new GrailParams();
+            GrailParams overpassPushParams = new GrailParams();
+            GrailParams linkParams = new GrailParams();
+
+            // We could use the existing Import Command to push the OSM files to the DB BUT it will delete the import directory
+            // Till I figure out a better way to do this, we will use our version. 
+            apiPushParams.setInput1(localOSMFile.getAbsolutePath()); 
+            apiPushParams.setOutput(localDbFile);
+            ExternalCommand pushApi = grailCommandFactory.build(jobId,apiPushParams,debugLevel,PushToDbCommand.class,this.getClass());
+            workflow.add(pushApi);
+
+            overpassPushParams.setInput1(internetOSMFile.getAbsolutePath());
+            overpassPushParams.setOutput(internetDbFile);
+            ExternalCommand pushOverpass = grailCommandFactory.build(jobId,overpassPushParams,debugLevel,PushToDbCommand.class,this.getClass());
+            workflow.add(pushOverpass);
+
+            // Now create a folder and link the uploaded layers to it
+            linkParams.setFolder(jobId);
+            linkParams.setInput1(localDbFile);
+            linkParams.setInput2(internetDbFile);
+            InternalCommand updateDb = updateDbCommandFactory.build(jobId,linkParams,this.getClass());
+            workflow.add(updateDb);
+
+            jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
+        
+            ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
+            response = responseBuilder.build();
+        }
+        catch (WebApplicationException e) {
+            throw e;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+        }
+        catch (Exception e) {
+            throw new WebApplicationException(e);
+        }
+
+        return response;
     }
 
 
     /**
      * Run Hootenanny differential conflation
      *
-     * POST hoot-services/grail/runndiff/[JobId]?DEBUG_LEVEL=<error,info,debug,verbose,trace>
+     * POST hoot-services/grail/rundiff/[JobId]?DEBUG_LEVEL=<error,info,debug,verbose,trace>
      *
      * @param jobId
      *            Internally, this is the directory that the files are kept in. We expect that the directory

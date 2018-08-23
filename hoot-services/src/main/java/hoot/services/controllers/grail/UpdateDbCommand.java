@@ -1,0 +1,222 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+package hoot.services.controllers.grail;
+
+// import static hoot.services.HootProperties.*;
+import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
+import static hoot.services.models.db.QFolders.folders;
+import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.utils.DbUtils.createQuery;
+
+import java.io.File;
+import java.net.URL;
+import java.net.SocketException;
+import java.util.List;
+import java.time.LocalDateTime;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import hoot.services.command.CommandResult;
+import hoot.services.command.InternalCommand;
+
+import java.sql.Timestamp;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.sql.SQLQuery;
+import hoot.services.models.osm.Map;
+import hoot.services.models.osm.MapLayer;
+import hoot.services.models.osm.MapLayers;
+import hoot.services.utils.DbUtils;
+import hoot.services.models.db.FolderMapMappings;
+import hoot.services.models.db.Folders;
+import hoot.services.models.db.Maps;
+
+
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.WebApplicationException;
+
+
+class UpdateDbCommand implements InternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(UpdateDbCommand.class);
+
+    private final GrailParams params;
+    private final String jobId;
+    private final Class<?> caller;
+
+    UpdateDbCommand(GrailParams params, String jobId, Class<?> caller) {
+        this.params = params;
+        this.jobId = jobId;
+        this.caller = caller;
+
+        logger.info("Params: "+ params.toString());
+    }
+
+    @Override
+    public CommandResult execute() {
+        CommandResult commandResult = new CommandResult();
+        commandResult.setJobId(jobId);
+        commandResult.setCommand("[Update DB] for " + params.getOutput());
+        commandResult.setStart(LocalDateTime.now());
+        commandResult.setCaller(caller.getName());
+
+        updateDb();
+
+        commandResult.setFinish(LocalDateTime.now());
+        commandResult.setExitCode(CommandResult.SUCCESS);
+
+        return commandResult;
+    }
+
+    private void updateDb() {
+        logger.info("Params: " + params);
+
+        // NOTE: This is just functions taken from MapResource.java with some tweaking
+        // Make a new folder
+        Long folderId = -1L;
+        Long parentId = 0L;  // 0 == The root folder
+
+        try {
+            folderId = createQuery()
+                    .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
+                    .from()
+                    .fetchOne();
+
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+
+            long userId = 1;
+            createQuery().insert(folders)
+                    .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
+                            folders.parentId)
+                    .values(folderId, now, params.getFolder(), true, userId, parentId)
+                    .execute();
+        }
+        catch (Exception e) {
+            handleError(e, null, null);
+        }
+
+        // Find the mapId's for the input file(s)
+        MapLayers mapLayers = null;
+        try {
+            List<Maps> mapLayerRecords = createQuery().select(maps).from(maps).orderBy(maps.displayName.asc()).fetch();
+            mapLayers = Map.mapLayerRecordsToLayers(mapLayerRecords);
+        }
+        catch (Exception e) {
+            handleError(e, null, null);
+        }
+
+        Long apiMapId = findMapId(mapLayers, params.getInput1());
+        if (apiMapId == -1) {
+                throw new IllegalArgumentException("Cannot find a mapId for " + params.getInput1());
+            }
+
+        updateFolder(apiMapId,folderId);
+
+        Long overpassMapId = findMapId(mapLayers, params.getInput2());
+        if (overpassMapId == -1) {
+                throw new IllegalArgumentException("Cannot find a mapId for " + params.getInput2());
+            }
+        updateFolder(overpassMapId,folderId);
+    } 
+
+    private Long findMapId (MapLayers mapLayers, String layerName) {
+        Long mapId = -1L;
+
+        for (MapLayer tLayer : mapLayers.getLayers()) {
+            if (layerName.equals(tLayer.getName())) {
+                mapId = tLayer.getId();
+                break;
+            }
+        }
+
+        return mapId;
+    }
+
+    private void updateFolder (Long mapId, Long folderId) {
+        try {
+            // Delete any existing to avoid duplicate entries
+            createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
+
+            Long newId = createQuery()
+                    .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
+                    .from()
+                    .fetchOne();
+
+            createQuery().insert(folderMapMappings)
+                    .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
+                    .values(newId, mapId, folderId)
+                    .execute();
+        }
+        catch (Exception e) {
+            handleError(e, null, null);
+        }
+    }
+
+
+    // Taken directly from MapResource.java
+    private static void handleError(Exception e, String mapId, String requestSnippet) {
+        if ((e instanceof SocketException) && e.getMessage().toLowerCase().contains("broken pipe")) {
+            // This occurs when iD aborts a tile request before it is finished.
+            // This happens quite frequently but is acceptable, so let's catch this and just logger as
+            // debug rather than an error to make the logs cleaner.
+            logger.debug(e.getMessage());
+        }
+        else if (!StringUtils.isEmpty(e.getMessage())) {
+            if (e.getMessage().startsWith("Multiple records exist") ||
+                    e.getMessage().startsWith("No record exists")) {
+                String msg = e.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
+                throw new WebApplicationException(e, Response.status(Response.Status.NOT_FOUND).entity(msg).build());
+            }
+            else if (e.getMessage().startsWith("Map is empty")) {
+                String msg = e.getMessage();
+                throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(msg).build());
+            }
+            else if (e.getMessage().startsWith("Error parsing bounding box from bbox param") ||
+                    e.getMessage().contains("The maximum bbox size is") ||
+                    e.getMessage().contains("The maximum number of nodes that may be returned in a map query")) {
+                String msg = e.getMessage();
+                throw new WebApplicationException(e, Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
+            }
+        }
+        else {
+            if (mapId != null) {
+                String msg = "Error querying map with ID: " + mapId + " - data: " + requestSnippet;
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            }
+            else {
+                String msg = "Error listing layers for map - data: " + requestSnippet;
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            }
+        }
+
+        String msg = e.getMessage();
+        throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+    }
+}
