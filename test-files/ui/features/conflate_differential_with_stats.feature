@@ -15,7 +15,7 @@ Feature: Conflate differential with stats
     Then I should see "Conflate"
     And I press "Conflate"
     And I fill "saveAs" input with "DiffConflateCucumber"
-    And I select the "Differential" option in "#containerofConfType"
+    And I select the exact "Differential" option in "#containerofConfType"
     And I select the "true" option in "#containerofisCollectStats"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"

@@ -347,6 +347,12 @@ When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
   page.find('div.combobox').find('a', :text=> opt).click
 end
 
+When(/^I select the exact "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt, exact_text: true).click
+end
+
 When(/^The value of "([^"]*)" option in "([^"]*)"$/) do |opt, el|
   combobox = page.find(el)
   combobox.find('.combobox-caret').click
