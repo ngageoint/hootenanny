@@ -39,6 +39,7 @@
         <xalan.version>2.7.1</xalan.version>
         <xercesImpl.version>2.9.1</xercesImpl.version>
         <json-simple.version>1.1.1</json-simple.version>
+        <guava.version>18.0</guava.version>
         <rhino.version>1.7R4</rhino.version>
         <fasterxml-jackson.version>2.5.4</fasterxml-jackson.version>
         <!--<osmosis-core.version>0.43-RELEASE</osmosis-core.version>-->
@@ -494,6 +495,7 @@
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-dbcp2</artifactId>
 		    <version>2.5.0</version>
+		    <scope>test</scope>
 		</dependency>
 
         <!-- XML processing -->
@@ -564,6 +566,11 @@
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-sql-spring</artifactId>
             <version>${querydsl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
         <!-- Javascript Support -->

@@ -28,7 +28,6 @@ package hoot.services;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,26 +56,6 @@ public class HootServicesSpringConfig {
     @Bean
     public ApplicationContextUtils applicationContextUtils() {
         return new ApplicationContextUtils();
-    }
-
-    @Bean(name = "dataSource")
-    public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://" + env.getProperty("HOOTAPI_DB_HOST") + ":" +
-                                                 env.getProperty("HOOTAPI_DB_PORT") + "/" +
-                                                 env.getProperty("HOOTAPI_DB_NAME"));
-        dataSource.setUsername(env.getProperty("HOOTAPI_DB_USER"));
-        dataSource.setPassword(env.getProperty("HOOTAPI_DB_PASSWORD"));
-        dataSource.setInitialSize(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_INITIAL_SIZE")));
-        dataSource.setMaxTotal(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_MAX_ACTIVE")));
-        dataSource.setMaxIdle(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_MAX_IDLE")));
-        dataSource.setDefaultAutoCommit(false);
-        dataSource.setRemoveAbandonedOnBorrow(true);
-        dataSource.setRemoveAbandonedOnMaintenance(true);
-        dataSource.setLogAbandoned(true);
-
-        return dataSource;
     }
 
     @Bean(name = "transactionManager")

@@ -60,6 +60,16 @@ if ! grep -i --quiet 'ingest/processed' ${TOMCAT_CONFIG}/server.xml; then
     sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/userfiles\/ingest\/processed\" path=\"\/static\" \/>\n      &@' ${TOMCAT_CONFIG}/server.xml
 fi
 
+echo "Adding Tomcat JNDI Postgresql Connection Pool..."
+cp $HOOT_HOME/scripts/tomcat/centos7/context.xml ${TOMCAT_CONFIG}/context.xml
+
+if [ -z "$TOMCAT8_HOME" ]; then
+    echo "TOMCAT8_HOME not defined, check environment"
+fi
+# Match Version to hoot-services/pom.xml :: postgresql.version
+# and java version https://jdbc.postgresql.org/download.html
+wget "https://jdbc.postgresql.org/download/postgresql-42.2.4.jar" -O $TOMCAT8_HOME/lib/postgresql-42.2.4.jar
+
 # Note: tomcat8 package already has `allowLinking=true` set in:
 #  ${TOMCAT_CONFIG}/context.xml
 
