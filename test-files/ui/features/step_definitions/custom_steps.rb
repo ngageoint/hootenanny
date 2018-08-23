@@ -483,6 +483,13 @@ When(/^I scroll "([^"]*)" element into view and press it$/) do |txt|
   end
 end
 
+When("I click toggle menu item {string}") do |txt|
+  include_hidden_fields do
+    element = find('a.hide-toggle', :text=> txt);
+    element.click
+  end
+end
+
 When(/^I press "([^"]*)" big loud link$/) do |cls|
   find('a.big.loud.' + cls).click
 end
