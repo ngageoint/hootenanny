@@ -75,6 +75,14 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     services = JoshuaServicesInitializer.init();
 
     //determine which languages we support (can be a superset of the languages made available by the running services)
+    readSupportedLangsConfig();
+
+    //init our connection pool to the services
+    connectionPool = new JoshuaConnectionPool(services, Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
+  }
+
+  private void readSupportedLangsConfig() throws Exception
+  {
     InputStream supportedLangsConfigStrm = null;
     try
     {
@@ -91,9 +99,6 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
         supportedLangsConfigStrm.close();
       }
     }
-
-    //init our connection pool to the services
-    connectionPool = new JoshuaConnectionPool(services, Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
   }
 
   public void setConfig(Object config) {}
@@ -175,8 +180,8 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
       textToSend += "\n";
     }
     logger.trace("textToSend: " + textToSend);
-    final int numLines = textToSend.split("\n").length;
-    logger.trace("numLines: " + numLines);
+    final int numTextLines = textToSend.split("\n").length;
+    logger.trace("numTextLines: " + numTextLines);
 
     sourceLangCode = sourceLangCode.toLowerCase();
     logger.trace("sourceLangCode: " + sourceLangCode);
@@ -185,32 +190,14 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     {
       throw new IllegalArgumentException("No language translator available for language code: " + sourceLangCode);
     }
+    logger.trace("port: " + services.get(sourceLangCode).getPort());
 
     String translatedText = "";
     JoshuaConnection connection = null;
     try
     {
-      logger.trace("port: " + services.get(sourceLangCode).getPort());
-      connection = connectionPool.borrowObject(sourceLangCode);
-      byte[] bytes = textToSend.getBytes("UTF-8");
-      DataOutputStream writer = (DataOutputStream)connection.getWriter();
-      writer.write(bytes, 0, bytes.length);
-      writer.flush();
-      BufferedReader reader = (BufferedReader)connection.getReader();
-
-      String line = "";
-      //Joshua isn't newline terminating the last piece of text when translating multiple lines, so a while loop checking
-      //for a null line won't work here as the reader will block forever waiting for the last newline.
-      for (int i = 0; i < numLines; i++) 
-      {
-        line = StringUtils.trimToNull(reader.readLine());
-        logger.trace("line: " + line);
-        if (line != null)
-        {
-          translatedText += line + "\n";
-          logger.trace("translatedText: " + translatedText);
-        }
-      }
+      connection = sendRequest(textToSend, sourceLangCode);
+      translatedText = parseResponse(connection, numTextLines);
     }
     finally
     {
@@ -221,6 +208,38 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     logger.trace("Translation took {} seconds", (System.currentTimeMillis() - startTime) / 1000);
 
     return translatedText;
+  }
+
+  private String parseResponse(JoshuaConnection connection, final int numTextLines) throws IOException
+  {
+    String translatedText = "";
+    BufferedReader reader = (BufferedReader)connection.getReader();
+
+    String line = "";
+    //Joshua isn't newline terminating the last piece of text when translating multiple lines, so a while loop checking
+    //for a null line won't work here as the reader will block forever waiting for the last newline.
+    for (int i = 0; i < numTextLines; i++) 
+    {
+      line = StringUtils.trimToNull(reader.readLine());
+      logger.trace("line: " + line);
+      if (line != null)
+      {
+        translatedText += line + "\n";
+        logger.trace("translatedText: " + translatedText);
+      }
+    }
+
+    return translatedText.trim();
+  }
+
+  private JoshuaConnection sendRequest(String textToSend, String sourceLangCode) throws Exception
+  {
+    JoshuaConnection connection = connectionPool.borrowObject(sourceLangCode);
+    byte[] bytes = textToSend.getBytes("UTF-8");
+    DataOutputStream writer = (DataOutputStream)connection.getWriter();
+    writer.write(bytes, 0, bytes.length);
+    writer.flush();
+    return connection;
   }
 
   /**

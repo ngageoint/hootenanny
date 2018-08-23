@@ -50,6 +50,7 @@ import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.DaemonExecutor;
 import org.apache.commons.exec.ShutdownHookProcessDestroyer;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.ExecuteException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +78,64 @@ public class JoshuaServicesInitializer
     logger.info("Initializing Joshua services...");
 
     //read the services configuration file
+    Map<String, JoshuaServiceInfo> services = readServicesConfig();
+
+    //launch the services asynchronously as external processes that listen on a port, one by one, one for each language
+    int ctr = 0;
+    for (Map.Entry<String, JoshuaServiceInfo> serverEntry : services.entrySet()) 
+    {
+      JoshuaServiceInfo serviceInfo = serverEntry.getValue();
+      ctr++;
+      logger.debug(
+        "Launching language translation service " + ctr + " / " + services.size() + " for lang code: " + 
+        serviceInfo.getLanguageCode() + " from path: " + serviceInfo.getLanguagePackPath() + " to port: " + serviceInfo.getPort() + "...");
+      launchService(serviceInfo);
+    }
+    logger.debug(
+      "Finished launching Joshua translation services for " + ctr + " language packs.  The services may take up to several minutes to " +
+      "finish initializing.");
+
+    return services;
+  }
+
+  private static CommandLine getProcessExecCommand(JoshuaServiceInfo serviceInfo) throws IOException
+  {
+    String configPath = serviceInfo.getLanguagePackPath() + "/joshua.config";
+    convertConfigFileModelPathsToAbsolute(configPath, serviceInfo.getLanguagePackPath());
+    String classPath = serviceInfo.getLanguagePackPath() + "/target/" + JOSHUA_LIBRARY;
+    String line = 
+      "java -mx" + JOSHUA_MAX_MEMORY + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + classPath + 
+      " org.apache.joshua.decoder.JoshuaDecoder -c " + configPath + " -v 1 -server-port " + serviceInfo.getPort() + " -server-type tcp";
+    logger.error("command: " + line);
+    return CommandLine.parse(line);
+  }
+
+  private static void launchService(JoshuaServiceInfo serviceInfo) throws IOException, ExecuteException
+  {   
+    //The service is set up to write stdout/stderr and will auto destroy itself when the web server shuts down.
+    OutputStream stdout = new ByteArrayOutputStream();
+    OutputStream stderr = new ByteArrayOutputStream();
+    Executor executor = new DaemonExecutor();
+    executor.setWatchdog(new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT));
+    executor.setStreamHandler(new PumpStreamHandler(stdout, stderr));
+    executor.setProcessDestroyer(new ShutdownHookProcessDestroyer());
+
+    executor.execute(getProcessExecCommand(serviceInfo), new DefaultExecuteResultHandler());
+
+    String stdOutStr = stdout.toString();
+    String stdErrStr = stderr.toString();
+    if (!stdOutStr.isEmpty())
+    {
+      logger.debug("JoshuaServicesInitializer stdout: " + stdOutStr);
+    }
+    if (!stdErrStr.isEmpty())
+    {
+      logger.error("JoshuaServicesInitializer stderr: " + stdErrStr);
+    }
+  }
+
+  private static Map<String, JoshuaServiceInfo> readServicesConfig() throws Exception
+  {
     JoshuaServiceInfo[] servicesTmp = null;
     InputStream configStrm = null;
     try
@@ -100,54 +159,6 @@ public class JoshuaServicesInitializer
       services.put(service.getLanguageCode(), service);
     }
     logger.trace("services size: " + services.size());
-
-    //launch the services asynchronously as external processes that listen on a port, one by one, one for each language
-    int ctr = 0;
-    for (Map.Entry<String, JoshuaServiceInfo> serverEntry : services.entrySet()) 
-    {
-      long startTime = System.currentTimeMillis();
-
-      ctr++;
-      JoshuaServiceInfo service = serverEntry.getValue();  
-      logger.debug(
-        "Launching language translation service " + ctr + " / " + services.size() + " for lang code: " + 
-        service.getLanguageCode() + " from path: " + service.getLanguagePackPath() + " to port: " + service.getPort() + "...");  
-      
-      String configPath = service.getLanguagePackPath() + "/joshua.config";
-      convertConfigFileModelPathsToAbsolute(configPath, service.getLanguagePackPath());
-      String classPath = service.getLanguagePackPath() + "/target/" + JOSHUA_LIBRARY;
-      //Under light use, I've seen the memory consumption for the largest language packs hit 9-10GB, so 16 is probably a safe value
-      //for them.  Smaller ones may not need as much memory.
-      String line = 
-        "java -mx" + JOSHUA_MAX_MEMORY + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + classPath + 
-        " org.apache.joshua.decoder.JoshuaDecoder -c " + configPath + " -v 1 -server-port " + service.getPort() + " -server-type tcp";
-      logger.error("command: " + line);
-      CommandLine cmdLine = CommandLine.parse(line);
-
-      //The service is set up to write stdout/stderr and will auto destroy itself when the web server shuts down.
-      OutputStream stdout = new ByteArrayOutputStream();
-      OutputStream stderr = new ByteArrayOutputStream();
-      ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);
-      Executor executor = new DaemonExecutor();
-      ExecuteWatchdog watchDog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
-      executor.setWatchdog(watchDog);
-      executor.setStreamHandler(executeStreamHandler);
-      executor.setProcessDestroyer(new ShutdownHookProcessDestroyer());
-      executor.execute(cmdLine, new DefaultExecuteResultHandler());
-      String stdOutStr = stdout.toString();
-      String stdErrStr = stderr.toString();
-      if (!stdOutStr.isEmpty())
-      {
-        logger.debug("JoshuaServicesInitializer stdout: " + stdOutStr);
-      }
-      if (!stdErrStr.isEmpty())
-      {
-        logger.error("JoshuaServicesInitializer stderr: " + stdErrStr);
-      }
-    }
-    logger.debug(
-      "Finished launching Joshua translation services for " + ctr + " language packs.  The services may take up to several minutes to " +
-      "finish initializing.");
 
     return services;
   }

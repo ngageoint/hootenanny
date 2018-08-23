@@ -27,20 +27,15 @@
 
 package hoot.services.language;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.reflections.Reflections;
-
-import hoot.services.utils.ReflectUtils;
 
 /**
  * Creates language translators
@@ -49,7 +44,6 @@ public class ToEnglishTranslatorFactory
 {
   private static final Logger logger = LoggerFactory.getLogger(ToEnglishTranslatorFactory.class);
 
-  private static Map<String, String> classNamesToFullClassNamesCache = new HashMap<String, String>();
   private static Set<String> simpleClassNames = null;
 
   private ToEnglishTranslatorFactory()
@@ -68,16 +62,7 @@ public class ToEnglishTranslatorFactory
     String fullClassName = null;
     try 
     {
-      //full class name retrieval is expensive, so let's cache
-      if (!classNamesToFullClassNamesCache.containsKey(className))
-      {
-        fullClassName = ReflectUtils.getFullClassName(className, ClassUtils.getPackageName(ToEnglishTranslatorFactory.class));
-        classNamesToFullClassNamesCache.put(className, fullClassName);
-      }
-      else
-      {
-        fullClassName = classNamesToFullClassNamesCache.get(className);
-      }
+      fullClassName = LanguageUtils.getFullClassName(className);
       if (MethodUtils.getAccessibleMethod(Class.forName(fullClassName), "getInstance", null) != null)
       {
         translator = (ToEnglishTranslator)MethodUtils.invokeStaticMethod(Class.forName(fullClassName), "getInstance", null);

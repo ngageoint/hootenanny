@@ -82,7 +82,16 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
       logger.debug("Loading OpenNlpLanguageDetector model...");
       modelConfigStrm = 
         OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream(OPEN_NLP_LANGUAGE_DETECTION_MODEL);
-      detector = new LanguageDetectorME(new LanguageDetectorModel(modelConfigStrm));
+      if (modelConfigStrm == null)
+      {
+        logger.warn(
+          "No OpenNLP language detection model available at: " + OPEN_NLP_LANGUAGE_DETECTION_MODEL + 
+        ".  Disabling OpenNLP language detection.");
+      }
+      else
+      {
+        detector = new LanguageDetectorME(new LanguageDetectorModel(modelConfigStrm));
+      }
     }
     finally 
     {  
@@ -108,6 +117,10 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
    */
   public boolean isLanguageAvailable(String langCode)
   {
+    if (detector == null)
+    {
+      return false;
+    }
     return true;
   }
 

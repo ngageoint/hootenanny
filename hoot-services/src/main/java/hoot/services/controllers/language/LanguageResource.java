@@ -167,6 +167,8 @@ public class LanguageResource
   /**
    * Returns the available language translators
    *
+   * @todo may want to specify whether a translator supports detection in the response
+   *
    * curl localhost:8080/hoot-services/language/translators
    *
    * {
@@ -210,7 +212,7 @@ public class LanguageResource
   }
 
   /**
-   * Returns information about detectable languages given a set of language detectors.  
+   * Returns information about detectable languages given a collection of language detectors.  
 
      * If no language detectors are specified, then all available language detectors are used to create the detectable language 
      information.  
@@ -245,15 +247,7 @@ public class LanguageResource
   {
     try
     {
-      Set<String> detectorClassNames = new HashSet<String>();
-      if (request.getApps() != null && request.getApps().length > 0)
-      {  
-        detectorClassNames = new HashSet<String>(Arrays.asList(request.getApps()));
-      }
-      if (detectorClassNames.isEmpty())
-      {
-        detectorClassNames = LanguageDetectorFactory.getSimpleClassNames();
-      }
+      List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
       logger.trace("Listing detectable languages for apps: " + String.join(",", detectorClassNames.toArray(new String[]{})) + "..."); 
       return new SupportedLanguagesResponse(getAllAppSupportedLangs(detectorClassNames));
     }
@@ -278,7 +272,7 @@ public class LanguageResource
   }
 
   /**
-   * Returns information about translatable languages given a set of language translators.  
+   * Returns information about translatable languages given a collection of language translators.  
 
      * If no language translators are specified, then all available language translators are used to create the translatable 
      language information.  
@@ -314,15 +308,7 @@ public class LanguageResource
   {
     try
     {
-      Set<String> translatorClassNames = new HashSet<String>();
-      if (request.getApps() != null && request.getApps().length > 0)
-      {  
-        translatorClassNames = new HashSet<String>(Arrays.asList(request.getApps()));
-      }
-      if (translatorClassNames.isEmpty())
-      {
-        translatorClassNames = ToEnglishTranslatorFactory.getSimpleClassNames();
-      }
+      List<String> translatorClassNames = getAppClassNamesFromRequest(request, "translator");
       logger.trace("Listing translatable languages for apps: " + String.join(",", translatorClassNames.toArray(new String[]{})) + "...");
       return new SupportedLanguagesResponse(getAllAppSupportedLangs(translatorClassNames));
     }
@@ -347,9 +333,11 @@ public class LanguageResource
   }
 
   /**
-   * Detects a spoken language given text and a set of language detectors.  
+   * Detects a spoken language given text and a collection of language detectors.  
 
-     * If no language detectors are specified, then as many language detectors as needed are used to perform the detection.  
+     * Detectors will be used in the order specified.  If no language detectors are specified, then as many language detectors as 
+       needed are used to perform the detection.  Some detectors may perform better for certain languages than others so there can be
+       an advantage to specifying them.
      * The text sent in for translation should be URL encoded and in UTF-8.  
      * Language names are returned URL encoded and in UTF-8.
 
@@ -378,16 +366,8 @@ public class LanguageResource
       String detectedLangCode = "";
       String detectingDetector = "";
       String detectedLangName = "";
-      Set<String> detectorClassNames = new HashSet<String>();
-      if (request.getDetectors() != null && request.getDetectors().length > 0)
-      {  
-        detectorClassNames = new HashSet<String>(Arrays.asList(request.getDetectors()));
-      }
-      if (detectorClassNames.isEmpty())
-      {
-        detectorClassNames = LanguageDetectorFactory.getSimpleClassNames();
-      }
 
+      List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
       for (String detectorClassName : detectorClassNames)
       {
         if (detectedLangCode.isEmpty())
@@ -437,11 +417,14 @@ public class LanguageResource
    * Translates a single line of text given a specified language translator and one or more source languages.  
 
      * When using JoshuaLanguageTranslator, an associated translation service must be running for each specified source language.
-       See the Install Guide for more details.
+       See the Installation Guide for more details.
      * In place of language codes, some translators support specifying "detect", which will cause the translator to attempt to 
      detect the language before translating (e.g. HootLanguageTranslator).  
      * The text sent in for translation should be URL encoded and in UTF-8.  
      * The translated text is returned URL encoded and in UTF-8.  
+     * For translators that support detection, detectors will be used in the order specified.  If no language detectors are specified, 
+       then as many language detectors as needed are used to perform the detection.  Some detectors may perform better for certain 
+       languages than others so there can be an advantage to specifying them.
      * If the specified translator does not support detection, then any request parameters related to detection will be ignored.
 
      curl -X POST -H "Content-Type: application/json" -d '{ "translator": "JoshuaLanguageTranslator", "sourceLangCodes": ["de"], 
@@ -472,11 +455,14 @@ public class LanguageResource
 
      * Only a single source language is supported.
      * When using JoshuaLanguageTranslator, an associated translation service must be the specified source language.
-       See the Install Guide for more details.
+       See the Installation Guide for more details.
      * No translator may be used that is integrated with language detection when translating in batch (e.g. HootLanguageTranslator).  
      * The text sent in for translation should have one line for each piece of text to be translated with all of text URL encoded 
        and in UTF-8.  
-     * The translated text is returned translated line by line, URL encoded, and in UTF-8.  
+     * The translated text is returned translated line by line, URL encoded, and in UTF-8. 
+     * For translators that support detection, detectors will be used in the order specified.  If no language detectors are specified, 
+       then as many language detectors as needed are used to perform the detection.  Some detectors may perform better for certain 
+       languages than others so there can be an advantage to specifying them. 
      * An error will be thrown if a translator is specified that supports language detection.
 
      curl -X POST -H "Content-Type: application/json" -d '{ "translator": "JoshuaLanguageTranslator", "sourceLangCodes": ["de"], 
@@ -559,6 +545,9 @@ public class LanguageResource
     return Response.ok(responseStr).build();
   }
 
+  /*
+   * Instantiates a language app
+   */
   private LanguageApp languageEntityToApp(String appName) throws Exception
   {
     LanguageAppInfo appInfo = null;
@@ -579,7 +568,10 @@ public class LanguageResource
     return app;
   }
 
-  private SupportedLanguage[] getAllAppSupportedLangs(Set<String> apps) throws Exception
+  /*
+   * Returns all unique supported languages, given the set of specified apps
+   */
+  private SupportedLanguage[] getAllAppSupportedLangs(List<String> apps) throws Exception
   {
     Set<String> parsedLangCodes = new HashSet<String>();
     List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
@@ -645,5 +637,51 @@ public class LanguageResource
     entity.put("detectedLanguageOverridesSpecifiedSourceLanguages", request.getDetectedLanguageOverridesSpecifiedSourceLanguages());
     entity.put("performExhaustiveTranslationSearchWithNoDetection", request.getPerformExhaustiveTranslationSearchWithNoDetection());
     return entity.toJSONString();
+  }
+
+  /*
+   * Given a request that specifies an app (detector, translator, etc.) and returns all classes of that type of app.  We want to 
+   * preserve the order of the apps passed in 
+   */
+  private List<String> getAppClassNamesFromRequest(Object request, String type) throws Exception
+  {
+    List<String> appClassNames = new ArrayList<String>();
+
+    //this could maybe be simplified with some refactoring
+    if (request instanceof SupportedLanguagesRequest)
+    {
+      SupportedLanguagesRequest supportedLangsRequest = (SupportedLanguagesRequest)request;
+      if (supportedLangsRequest.getApps() != null && supportedLangsRequest.getApps().length > 0)
+      {  
+        appClassNames = Arrays.asList(supportedLangsRequest.getApps());
+      }
+    }
+    else if (request instanceof LanguageDetectRequest)
+    {
+      LanguageDetectRequest langDetectRequest = (LanguageDetectRequest)request;
+      if (langDetectRequest.getDetectors() != null && langDetectRequest.getDetectors().length > 0)
+      {  
+        appClassNames = Arrays.asList(langDetectRequest.getDetectors());
+      }
+    }
+    else
+    {
+      throw new Exception("Invalid request type.");
+    }
+    
+    //If no apps were specified, the returned app ordering is at the mercy of the reflection.
+    if (appClassNames.isEmpty())
+    {
+      if (type.equals("detector"))
+      {
+        appClassNames.addAll(LanguageDetectorFactory.getSimpleClassNames());
+      }
+      else
+      {
+        appClassNames.addAll(ToEnglishTranslatorFactory.getSimpleClassNames());
+      }
+    }
+
+    return appClassNames;
   }
 }

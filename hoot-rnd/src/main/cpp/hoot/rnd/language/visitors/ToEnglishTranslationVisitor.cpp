@@ -43,7 +43,9 @@ ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
 _skipPreTranslatedTags(false),
 _numTotalElements(0),
 _skipWordsInEnglishDict(true),
-_numTranslationsMade(0),
+_currentElementHasSuccessfulTagTranslation(false),
+_numTagTranslationsMade(0),
+_numElementsWithSuccessfulTagTranslation(0),
 _numProcessedElements(0),
 _numDetectionsMade(0),
 _taskStatusUpdateInterval(10000)
@@ -52,10 +54,18 @@ _taskStatusUpdateInterval(10000)
 
 ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
 {
+  //check the last element parsed to see if it had any successful tag translations
+  if (_currentElementHasSuccessfulTagTranslation)
+  {
+    _numElementsWithSuccessfulTagTranslation++;
+  }
+
   LOG_INFO("Language detections made: " << _numDetectionsMade);
-  LOG_INFO("Successful tag translations made: " << _numTranslationsMade);
   LOG_INFO(
-    "Attempted to translate tags for : " << _numProcessedElements << " elements out of " <<
+    _numTagTranslationsMade << " successful tag translations made on " <<
+    _numElementsWithSuccessfulTagTranslation << " different elements.");
+  LOG_INFO(
+    "Attempted to translate tags for " << _numProcessedElements << " elements out of " <<
     _numTotalElements << " elements encountered.");
 }
 
@@ -84,6 +94,14 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   LOG_VART(e);
+
+  //if this var was set while parsing the previous element, increment the counter now
+  if (_currentElementHasSuccessfulTagTranslation)
+  {
+    _numElementsWithSuccessfulTagTranslation++;
+  }
+  _currentElementHasSuccessfulTagTranslation = false;
+
   const Tags& tags = e->getTags();
   for (int i = 0; i < _toTranslateTagKeys.size(); i++)
   {
@@ -149,7 +167,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
 
 void ToEnglishTranslationVisitor::translationComplete()
 {
-  const QString translatedVal = _translatorClient->getTranslatedText();
+  const QString translatedVal = _translatorClient->getTranslatedText().trimmed();
   LOG_VART(translatedVal);
   if (_translatorClient->detectionMade())
   {
@@ -163,11 +181,12 @@ void ToEnglishTranslationVisitor::translationComplete()
   {
     LOG_DEBUG("Translated: " << _toTranslateVal << " to: " << translatedVal);
     _element->getTags().appendValue("hoot:translated:" + _toTranslateTagKey + ":en", translatedVal);
-    _numTranslationsMade++;
-    if (_numTranslationsMade % 10 == 0)
+    _numTagTranslationsMade++;
+    if (_numTagTranslationsMade % 10 == 0)
     {
-      LOG_VARD(_numTranslationsMade);
+      LOG_VARD(_numTagTranslationsMade);
     }
+    _currentElementHasSuccessfulTagTranslation = true;
   }
   else
   {
