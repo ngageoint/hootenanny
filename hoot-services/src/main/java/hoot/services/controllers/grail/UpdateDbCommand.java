@@ -76,7 +76,7 @@ class UpdateDbCommand implements InternalCommand {
         this.jobId = jobId;
         this.caller = caller;
 
-        logger.info("Params: "+ params.toString());
+        // logger.info("Params: "+ params.toString());
     }
 
     @Override
