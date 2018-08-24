@@ -38,14 +38,12 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.language.joshua.JoshuaServicesConfigReader;
-import hoot.services.language.joshua.JoshuaServiceInfo;
 
 public class JoshuaServicesConfigReaderTest  
 {
   @Test
   @Category(UnitTest.class)
-  public void testRead()
+  public void testRead() throws Exception
   {
     JoshuaServiceInfo[] serviceInfos = 
       JoshuaServicesConfigReader.readConfig(

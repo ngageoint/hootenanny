@@ -32,24 +32,19 @@ import static org.junit.Assert.assertTrue;
 import static hoot.services.HootProperties.*;
 
 import java.util.Map;
+import java.lang.reflect.Method;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import org.apache.commons.exec.CommandLine;
 
-import hoot.services.lang.opennlp.OpenNlpLangageDetector;
 import hoot.services.UnitTest;
-import hoot.services.language.joshua.JoshuaServiceInfo;
-import hoot.services.language.joshua.JoshuaServicesInitializer;
-import hoot.services.language.joshua.JoshuaLanguageTranslator;
-import hoot.services.language.joshua.JoshuaServicesConfigReader;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ JoshuaServicesConfigReader.class })
@@ -57,7 +52,7 @@ public class JoshuaServicesInitializerTest
 {
   @Test
   @Category(UnitTest.class)
-  public void testGetCommand()
+  public void testGetCommand() throws Exception
   {
     JoshuaServiceInfo serviceInfo = new JoshuaServiceInfo();
     serviceInfo.setLanguagePackPath("/my/path");
@@ -79,7 +74,7 @@ public class JoshuaServicesInitializerTest
 
   @Test
   @Category(UnitTest.class)
-  public void testReadConfig()
+  public void testReadConfig() throws Exception
   {
     JoshuaServiceInfo[] serviceInfos = new JoshuaServiceInfo[2];
     JoshuaServiceInfo serviceInfo1 = new JoshuaServiceInfo();
@@ -102,14 +97,14 @@ public class JoshuaServicesInitializerTest
     Map<String, JoshuaServiceInfo> services = 
       (Map<String, JoshuaServiceInfo>)readConfigMethod.invoke(null, null);
 
-    Assert.assertEquals(2, servers.size());
+    Assert.assertEquals(2, services.size());
     
-    Assert.assertEquals("de", servers["de"].getLanguageCode());
-    Assert.assertEquals("/my/path1", servers["de"].getLanguagePackPath());
-    Assert.assertEquals(1, servers["de"].getPort());
+    Assert.assertEquals("de", services.get("de").getLanguageCode());
+    Assert.assertEquals("/my/path1", services.get("de").getLanguagePackPath());
+    Assert.assertEquals(1, services.get("de").getPort());
 
-    Assert.assertEquals("es", servers["es"].getLanguageCode());
-    Assert.assertEquals("/my/path2", servers["es"].getLanguagePackPath());
-    Assert.assertEquals(2, servers["es"].getPort());
+    Assert.assertEquals("es", services.get("es").getLanguageCode());
+    Assert.assertEquals("/my/path2", services.get("es").getLanguagePackPath());
+    Assert.assertEquals(2, services.get("es").getPort());
   }
 }

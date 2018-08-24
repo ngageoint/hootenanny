@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-package hoot.services.language;
+package hoot.services.language.opennlp;
 
 import static hoot.services.HootProperties.*;
 
@@ -37,6 +37,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import hoot.services.language.LanguageDetector;
+import hoot.services.language.SupportedLanguageConsumer;
+import hoot.services.language.LanguageAppInfo;
+import hoot.services.language.SupportedLanguagesConfigReader;
+import hoot.services.language.SupportedLanguage;
 
 /**
  * Detects languages using OpenNLP

@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-package hoot.services.language;
+package hoot.services.language.joshua;
 
 import java.net.Socket;
 import java.io.DataOutputStream;

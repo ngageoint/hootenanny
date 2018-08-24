@@ -34,29 +34,23 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import hoot.services.lang.tika.TikaLangageDetector;
 import hoot.services.UnitTest;
 
-public class TikaLanguageDetectorTest  
+public class TikaLanguageDetectorTest
 {
-  private static final TikaLanguageDetector detector = TikaLanguageDetector.getInstance();
+  private TikaLanguageDetector detector = null;
 
-  /*@BeforeClass
-  public static void oneTimeSetup()
+  public TikaLanguageDetectorTest() throws Exception 
   {
+    detector = TikaLanguageDetector.getInstance();
   }
-
-  @AfterClass
-  public static void afterClass()
-  {
-  }*/
 
   @Test
   @Category(UnitTest.class)
-  public void testAll() 
+  public void testAll() throws Exception 
   {
-    Assert.assertTrue(detector.isLanguageAvailable("de");
-    Assert.assertTrue(detector.getSupportedLanguages().size() > 0);
+    Assert.assertTrue(detector.isLanguageAvailable("de"));
+    Assert.assertTrue(detector.getSupportedLanguages().length > 0);
     Assert.assertEquals("German", detector.getLanguageName("de"));
     Assert.assertEquals("https://tika.apache.org", detector.getUrl());
     Assert.assertTrue(!detector.getDescription().isEmpty());

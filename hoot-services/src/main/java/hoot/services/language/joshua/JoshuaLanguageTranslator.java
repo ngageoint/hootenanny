@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-package hoot.services.language;
+package hoot.services.language.joshua;
 
 import static hoot.services.HootProperties.*;
 
@@ -44,6 +44,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.commons.lang3.StringUtils;
+
+import hoot.services.language.ToEnglishTranslator;
+import hoot.services.language.SupportedLanguage;
+import hoot.services.language.SupportedLanguageConsumer;
+import hoot.services.language.LanguageAppInfo;
+import hoot.services.language.SupportedLanguagesConfigReader;
 
 /*
  * Performs to English translations using a Joshua service

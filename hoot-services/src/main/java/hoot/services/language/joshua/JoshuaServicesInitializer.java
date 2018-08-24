@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-package hoot.services.language;
+package hoot.services.language.joshua;
 
 import static hoot.services.HootProperties.*;
 
@@ -115,7 +115,7 @@ public class JoshuaServicesInitializer
     return CommandLine.parse(line);
   }
 
-  private static void launchService(JoshuaServiceInfo serviceInfo) throws IOException, 
+  private static void launchService(JoshuaServiceInfo serviceInfo, String configPath) throws IOException, 
     ExecuteException
   {   
     //The service is set up to write stdout/stderr and will auto destroy itself when the web 
@@ -127,7 +127,7 @@ public class JoshuaServicesInitializer
     executor.setStreamHandler(new PumpStreamHandler(stdout, stderr));
     executor.setProcessDestroyer(new ShutdownHookProcessDestroyer());
 
-    executor.execute(getProcessExecCommand(serviceInfo), new DefaultExecuteResultHandler());
+    executor.execute(getProcessExecCommand(serviceInfo, configPath), new DefaultExecuteResultHandler());
 
     String stdOutStr = stdout.toString();
     String stdErrStr = stderr.toString();
