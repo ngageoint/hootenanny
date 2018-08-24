@@ -41,8 +41,11 @@ HOOT_FACTORY_REGISTER(ToEnglishTranslator, HootServicesTranslatorMockClient)
 HootServicesTranslatorMockClient::HootServicesTranslatorMockClient() :
 HootServicesTranslatorClient()
 {
-  _mockTranslations["wie alt bist du"] = "how old are you;German";
-  _mockTranslations["buenos noches"] = "good night;Spanish";
+  _mockTranslations["wie alt bist du"] = QString::fromUtf8("how old are you;German");
+  _mockTranslations["wie heissen sie"] = QString::fromUtf8("what's your name;German");
+  _mockTranslations["buenos noches"] = QString::fromUtf8("good night;Spanish");
+  _mockTranslations["buenos días"] = QString::fromUtf8("good morning;Spanish");
+  _mockTranslations["computer store"] = QString::fromUtf8("computer store;English");
 }
 
 void HootServicesTranslatorMockClient::translate(const QString textToTranslate)
@@ -61,13 +64,10 @@ void HootServicesTranslatorMockClient::translate(const QString textToTranslate)
      _sourceLangs.join(",") << "; text: " << textToTranslate);
 
   _translatedText = _mockTranslations[textToTranslate].split(";")[0];
-  if (_sourceLangs.size() > 1)
-  {
-    _detectedLang = _mockTranslations[textToTranslate].split(";")[1];
-    _detectionMade = true;
-    _detectorUsed = "TikaLanguageDetector";
-    _detectedLangAvailableForTranslation = true;
-  }
+  _detectedLang = _mockTranslations[textToTranslate].split(";")[1];
+  _detectionMade = true;
+  _detectorUsed = "TikaLanguageDetector";
+  _detectedLangAvailableForTranslation = true;
 
   emit translationComplete();
 }

@@ -25,14 +25,9 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-package hoot.services.controllers.language;
+package hoot.services.language;
 
 import static org.junit.Assert.assertEquals;
-
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,46 +35,13 @@ import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
 
-
-public class LanguageResourceTest  
+public class HootLanguageTranslatorTest  
 {
   @Test
   //@Test(expected = NotFoundException.class)
   @Category(UnitTest.class)
-  public void test() throws Exception 
+  public void test() /*throws Exception*/ 
   {
-    /*ReviewResolverResponse response =
-        target("/review/resolveall")
-          .request(MediaType.APPLICATION_JSON)
-          .put(Entity.json(new ReviewResolverRequest(String.valueOf(mapId))),
-          ReviewResolverResponse.class);*/
-
-        
+    
   }
-
-  /*void runDetectedLangOverrideTest()
-  {
-    const QString testName = "runDetectedLangOverrideTest";
-    Settings conf = _getDefaultConfig();
-    //...
-    _runTranslationTest(
-      conf(),
-      testInputRoot + "/" + testName + ".osm",
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot + "/" + testName + "-gold.osm");
-  }
-
-  void runExhaustiveTranslationTest()
-  {
-    const QString testName = "runExhaustiveTranslationTest";
-    Settings conf = _getDefaultConfig();
-    //...
-    _runTranslationTest(
-      conf(),
-      testInputRoot + "/" + testName + ".osm",
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot + "/" + testName + "-gold.osm");
-  }*/
-
-//multiple source langes and detect test
 }
