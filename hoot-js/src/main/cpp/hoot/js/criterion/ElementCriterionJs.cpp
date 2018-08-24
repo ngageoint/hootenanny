@@ -133,6 +133,7 @@ void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
 
   ElementCriterion* c = Factory::getInstance().constructObject<ElementCriterion>(className);
   ElementCriterionJs* obj = new ElementCriterionJs(c);
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<ElementCriterion>(c, args);

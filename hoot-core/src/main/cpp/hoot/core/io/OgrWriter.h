@@ -142,6 +142,7 @@ protected:
   QString _scriptPath;
   mutable boost::shared_ptr<ScriptToOgrTranslator> _translator;
   boost::shared_ptr<GDALDataset> _ds;
+  /** Hash of layer names and corresponding layer objects that are owned by the GDALDataset */
   QHash<QString, OGRLayer*> _layers;
   QString _prependLayerName;
   boost::shared_ptr<const Schema> _schema;
