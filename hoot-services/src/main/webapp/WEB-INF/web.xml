@@ -13,6 +13,7 @@
 		<param-value>
 			classpath:applicationContext.xml
 			classpath:security-applicationContext.xml
+			/WEB-INF/spring/*.xml
         </param-value>
 	</context-param>
 	<context-param>
@@ -45,7 +46,16 @@
 		<dispatcher>INCLUDE</dispatcher>
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
-
+	<filter>
+		<filter-name>springSessionRepositoryFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSessionRepositoryFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
 	<!-- Security Filter -->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -59,6 +69,7 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
 
 	<servlet>
 		<servlet-name>hoot-services</servlet-name>
