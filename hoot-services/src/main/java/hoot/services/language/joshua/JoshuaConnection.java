@@ -50,7 +50,9 @@ public class JoshuaConnection extends SocketConnection
   public JoshuaConnection(Socket socket, int timeout) throws SocketException, IOException
   {
     super(socket, timeout);
-    this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), JoshuaLanguageTranslator.ENCODING));
+    this.reader = 
+      new BufferedReader(
+        new InputStreamReader(this.socket.getInputStream(), JoshuaLanguageTranslator.ENCODING));
     this.writer = new DataOutputStream(this.socket.getOutputStream());
   }
 }

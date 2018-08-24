@@ -44,7 +44,8 @@ import hoot.services.utils.PoolableSocketConnectionFactory;
  */
 public class PoolableJoshuaConnectionFactory extends PoolableSocketConnectionFactory
 {
-  private static final Logger logger = LoggerFactory.getLogger(PoolableJoshuaConnectionFactory.class);
+  private static final Logger logger = 
+    LoggerFactory.getLogger(PoolableJoshuaConnectionFactory.class);
 
   public PoolableJoshuaConnectionFactory(String host, int port, int timeout)
   {

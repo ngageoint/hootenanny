@@ -54,12 +54,14 @@ import org.apache.commons.lang3.StringUtils;
     Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
     Year = {2015} }
 */
-public final class JoshuaLanguageTranslator implements ToEnglishTranslator, SupportedLanguageConsumer, LanguageAppInfo
+public final class JoshuaLanguageTranslator implements ToEnglishTranslator, 
+  SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaLanguageTranslator.class);
 
   //this reads a hoot managed config that determines what languages Joshua supports
-  private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
+  private SupportedLanguagesConfigReader langsConfigReader = 
+    new SupportedLanguagesConfigReader();
   private SupportedLanguage[] supportedLangs = null;
   //which services we have running; one for each language
   private Map<String, JoshuaServiceInfo> services = null;
@@ -74,11 +76,13 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     //launch all of our services
     services = JoshuaServicesInitializer.init();
 
-    //determine which languages we support (can be a superset of the languages made available by the running services)
+    //determine which languages we support (can be a superset of the languages made available by 
+    //the running services)
     readSupportedLangsConfig();
 
     //init our connection pool to the services
-    connectionPool = new JoshuaConnectionPool(services, Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
+    connectionPool = 
+      new JoshuaConnectionPool(services, Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
   }
 
   private void readSupportedLangsConfig() throws Exception
@@ -88,9 +92,11 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     {
       logger.debug("Reading JoshuaLanguageTranslator languages config...");
       supportedLangsConfigStrm = 
-        JoshuaLanguageTranslator.class.getClassLoader().getResourceAsStream("language-translation/joshuaLanguages");
+        JoshuaLanguageTranslator.class.getClassLoader().getResourceAsStream(
+          "language-translation/joshuaLanguages");
       supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
-      logger.debug("Read " + supportedLangs.length + " languages from config for JoshuaLanguageTranslator.");
+      logger.debug(
+        "Read " + supportedLangs.length + " languages from config for JoshuaLanguageTranslator.");
     }
     finally 
     {  
@@ -150,7 +156,11 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
    * Not really expecting these to change often...but if so, could move it to the props config.
    */
   public String getDescription() 
-  { return "A statistical machine translation decoder for phrase-based, hierarchical, and syntax-based machine translation"; }
+  { 
+    return 
+      "A statistical machine translation decoder for phrase-based, hierarchical, and " +
+      "syntax-based machine translation"; 
+  }
 
   /**
    * @see ToEnglishTranslator
@@ -160,7 +170,8 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
   {
     if (sourceLangCodes.length > 1)
     {
-      throw new IllegalArgumentException("Only one source language may be passed to this translator.");
+      throw new IllegalArgumentException(
+        "Only one source language may be passed to this translator.");
     }
     return translate(sourceLangCodes[0], text);
   }
@@ -188,7 +199,8 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     logger.trace("language is available: " + isLanguageAvailable(sourceLangCode));
     if (!isLanguageAvailable(sourceLangCode))
     {
-      throw new IllegalArgumentException("No language translator available for language code: " + sourceLangCode);
+      throw new IllegalArgumentException(
+        "No language translator available for language code: " + sourceLangCode);
     }
     logger.trace("port: " + services.get(sourceLangCode).getPort());
 
@@ -216,8 +228,9 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator, Supp
     BufferedReader reader = (BufferedReader)connection.getReader();
 
     String line = "";
-    //Joshua isn't newline terminating the last piece of text when translating multiple lines, so a while loop checking
-    //for a null line won't work here as the reader will block forever waiting for the last newline.
+    //Joshua isn't newline terminating the last piece of text when translating multiple 
+    //lines, so a while loop checking for a null line won't work here as the reader will block 
+    //forever waiting for the last newline.
     for (int i = 0; i < numTextLines; i++) 
     {
       line = StringUtils.trimToNull(reader.readLine());

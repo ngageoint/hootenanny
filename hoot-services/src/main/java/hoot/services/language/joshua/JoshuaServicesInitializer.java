@@ -56,10 +56,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Launches specified Joshua services.  The language packs for the services are assumed to have already been downloaded and extracted.  
- * Joshua services are launched as external server processes, one per language pack.  This is necessary due to the fact that Joshua
- * keeps some configuration information global, which can't be shared across multiple languages, requiring separate processes.  Joshua
- * services are quite memory hungry and take awhile to initialize.
+ * Launches specified Joshua services.  The language packs for the services are assumed to have 
+   already been downloaded and extracted.  Joshua services are launched as external server processes, 
+   one per language pack.  This is necessary due to the fact that Joshua keeps some configuration 
+   information global, which can't be shared across multiple languages, requiring separate processes.  
+   Joshua services are quite memory hungry and take awhile to initialize.
  * 
  * @article{post2015joshua,
     Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
@@ -80,7 +81,8 @@ public class JoshuaServicesInitializer
     //read the services configuration file
     Map<String, JoshuaServiceInfo> services = readServicesConfig();
 
-    //launch the services asynchronously as external processes that listen on a port, one by one, one for each language
+    //launch the services asynchronously as external processes that listen on a port, one by one, 
+    //one for each language
     int ctr = 0;
     for (Map.Entry<String, JoshuaServiceInfo> serverEntry : services.entrySet()) 
     {
@@ -88,31 +90,36 @@ public class JoshuaServicesInitializer
       ctr++;
       logger.debug(
         "Launching language translation service " + ctr + " / " + services.size() + " for lang code: " + 
-        serviceInfo.getLanguageCode() + " from path: " + serviceInfo.getLanguagePackPath() + " to port: " + serviceInfo.getPort() + "...");
+        serviceInfo.getLanguageCode() + " from path: " + serviceInfo.getLanguagePackPath() + 
+        " to port: " + serviceInfo.getPort() + "...");
       launchService(serviceInfo);
     }
     logger.debug(
-      "Finished launching Joshua translation services for " + ctr + " language packs.  The services may take up to several minutes to " +
-      "finish initializing.");
+      "Finished launching Joshua translation services for " + ctr + " language packs.  The services " + 
+      "may take up to several minutes to finish initializing.");
 
     return services;
   }
 
-  private static CommandLine getProcessExecCommand(JoshuaServiceInfo serviceInfo) throws IOException
+  private static CommandLine getProcessExecCommand(JoshuaServiceInfo serviceInfo) 
+    throws IOException
   {
     String configPath = serviceInfo.getLanguagePackPath() + "/joshua.config";
     convertConfigFileModelPathsToAbsolute(configPath, serviceInfo.getLanguagePackPath());
     String classPath = serviceInfo.getLanguagePackPath() + "/target/" + JOSHUA_LIBRARY;
     String line = 
-      "java -mx" + JOSHUA_MAX_MEMORY + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + classPath + 
-      " org.apache.joshua.decoder.JoshuaDecoder -c " + configPath + " -v 1 -server-port " + serviceInfo.getPort() + " -server-type tcp";
+      "java -mx" + JOSHUA_MAX_MEMORY + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + 
+      classPath + " org.apache.joshua.decoder.JoshuaDecoder -c " + configPath + 
+      " -v 1 -server-port " + serviceInfo.getPort() + " -server-type tcp";
     logger.error("command: " + line);
     return CommandLine.parse(line);
   }
 
-  private static void launchService(JoshuaServiceInfo serviceInfo) throws IOException, ExecuteException
+  private static void launchService(JoshuaServiceInfo serviceInfo) throws IOException, 
+    ExecuteException
   {   
-    //The service is set up to write stdout/stderr and will auto destroy itself when the web server shuts down.
+    //The service is set up to write stdout/stderr and will auto destroy itself when the web 
+    //server shuts down.
     OutputStream stdout = new ByteArrayOutputStream();
     OutputStream stderr = new ByteArrayOutputStream();
     Executor executor = new DaemonExecutor();
@@ -142,7 +149,8 @@ public class JoshuaServicesInitializer
     {
       logger.debug("Reading Joshua services config...");
       configStrm = 
-        JoshuaServicesInitializer.class.getClassLoader().getResourceAsStream("language-translation/joshuaServices");
+        JoshuaServicesInitializer.class.getClassLoader().getResourceAsStream(
+          "language-translation/joshuaServices");
       servicesTmp = JoshuaServicesConfigReader.readConfig(configStrm);
       logger.debug("Read " + servicesTmp.length + " services from config.");
     }
@@ -163,10 +171,12 @@ public class JoshuaServicesInitializer
     return services;
   }
 
-  private static void convertConfigFileModelPathsToAbsolute(String configPath, String langPackPath) throws IOException
+  private static void convertConfigFileModelPathsToAbsolute(String configPath, String langPackPath) 
+    throws IOException
   {
     File configFile = new File(configPath);
-    String configContent = FileUtils.readFileToString(configFile, JoshuaLanguageTranslator.ENCODING);
+    String configContent = 
+      FileUtils.readFileToString(configFile, JoshuaLanguageTranslator.ENCODING);
     //change all model relative paths to absolute in the config
     configContent = configContent.replaceAll(" model/", " " + langPackPath + "/model/");
     FileUtils.writeStringToFile(configFile, configContent, JoshuaLanguageTranslator.ENCODING);

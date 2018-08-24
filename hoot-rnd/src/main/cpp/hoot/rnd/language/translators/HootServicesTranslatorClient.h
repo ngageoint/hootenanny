@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/rnd/language/translators/ToEnglishTranslator.h>
-#include <hoot/rnd/language/translators/HootServicesTranslationInfoClient.h>
+#include <hoot/rnd/language/translators/TranslationInfoProvider.h>
 
 // Qt
 #include <QNetworkAccessManager>
@@ -76,12 +76,25 @@ signals:
    */
   void translationError(QString textSent, QString message);
 
-private:
+protected:
 
   //the source languages to tell the translator which languages to translate to English from; at
   //least one must be populated, or use "detect" to force the service to try to detect the language
   //(can be expensive)
   QStringList _sourceLangs;
+
+  QString _translatedText;
+  bool _detectionMade;
+  QString _detectedLang;
+  QString _detectorUsed;
+  bool _detectedLangAvailableForTranslation;
+
+  boost::shared_ptr<TranslationInfoProvider> _infoClient;
+
+private:
+
+  friend class HootServicesTranslatorClientTest;
+
   //translator implementation to use server side
   QString _translator;
   //detector implementations to use server side; if left empty, the server will try to use as many
@@ -95,11 +108,7 @@ private:
   //against all available translatable languages (expensive)
   bool _performExhaustiveSearch;
 
-  QString _translatedText;
-  bool _detectionMade;
-
   boost::shared_ptr<QNetworkAccessManager> _client;
-  boost::shared_ptr<HootServicesTranslationInfoClient> _infoClient;
 
   /**
    * Verifies that every language specified for this translator is supported by the server
@@ -110,11 +119,12 @@ private:
    */
   void _checkLangsAvailable(const QString type);
 
+  void _validateAvailableLangs(boost::shared_ptr<boost::property_tree::ptree> replyObj,
+                               const QString type);
+
   boost::shared_ptr<QNetworkRequest> _getTranslateRequest(const QString text,
                                                           std::stringstream& requestStrStrm);
   void _parseTranslateResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
-  void _validateAvailableLangs(boost::shared_ptr<boost::property_tree::ptree> replyObj,
-                               const QString type);
 };
 
 }

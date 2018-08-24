@@ -69,16 +69,6 @@ private:
 
   QStringList _preTranslatedTagKeys;
   QString _preTranslatedVal;
-
-  /**
-   * @brief _translate
-   * @param e element containing the tag to translate
-   * @param preTranslatedTagKey the key of the tag whose value is known (assumed) to have already
-   * been translated
-   * @param toTranslateTagKey the key of the tag whose value is to be translated
-   */
-  void _translate(const ElementPtr& e, const QString preTranslatedTagKey,
-                  const QString toTranslateTagKey);
 };
 
 }

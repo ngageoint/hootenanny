@@ -1346,6 +1346,14 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 
 ToEnglishTranslator implementation to use for to English translation
 
+=== language.translation.info.provider
+
+* Data Type: string
+* Default Value: `hoot::HootServicesTranslationInfoClient`
+
+TranslationInfoProvider implementation to use for determining language information needed by to
+English translation
+
 === levenshtein.distance.alpha
 
 * Data Type: double

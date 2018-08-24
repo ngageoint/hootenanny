@@ -77,7 +77,8 @@ import javax.annotation.PreDestroy;
 /**
  * Web endpoint for language translation and detection
 
-   * For text returned URL encoded the replace of '+' is a bit of a hack, but not sure how better to handle it yet.
+   * For text returned URL encoded the replace of '+' is a bit of a hack, but not sure how better 
+     to handle it yet.
    * Not doing any extensive request param validation yet
  */
 @Controller
@@ -90,9 +91,11 @@ public class LanguageResource
   {
     try
     {
-      //The Joshua init can take a long time, so let's do it here vs having it happen the very first time a translation is made.
+      //The Joshua init can take a long time, so let's do it here vs having it happen the very 
+      //first time a translation is made.
       logger.info("Initializing Joshua...");
-      MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
+      MethodUtils.invokeStaticMethod(
+        Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
     }
     catch (Exception e)
     {
@@ -110,7 +113,8 @@ public class LanguageResource
     {
       logger.info("Closing Joshua...");
       Object joshuaTranslator = 
-        MethodUtils.invokeStaticMethod(Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
+        MethodUtils.invokeStaticMethod(
+          Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
       MethodUtils.invokeMethod(joshuaTranslator, "close");
     }
     catch (Exception e)
@@ -206,7 +210,8 @@ public class LanguageResource
       throw new WebApplicationException(
         e, 
         Response.status(Status.INTERNAL_SERVER_ERROR)
-         .entity("Error retrieving available language translator information.  Error: " + e.getMessage())
+         .entity(
+           "Error retrieving available language translator information.  Error: " + e.getMessage())
          .build());
     }
   }
@@ -248,7 +253,9 @@ public class LanguageResource
     try
     {
       List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
-      logger.trace("Listing detectable languages for apps: " + String.join(",", detectorClassNames.toArray(new String[]{})) + "..."); 
+      logger.trace(
+        "Listing detectable languages for apps: " + 
+        String.join(",", detectorClassNames.toArray(new String[]{})) + "..."); 
       return new SupportedLanguagesResponse(getAllAppSupportedLangs(detectorClassNames));
     }
     catch (Exception e)
@@ -265,8 +272,9 @@ public class LanguageResource
       throw new WebApplicationException(
         e, 
         Response.status(status)
-          .entity("Error retrieving detectable language information for apps: " + String.join(",", request.getApps()) + ".  Error: " + 
-                  e.getMessage())
+          .entity(
+            "Error retrieving detectable language information for apps: " + 
+            String.join(",", request.getApps()) + ".  Error: " + e.getMessage())
           .build());
     }
   }
@@ -309,7 +317,9 @@ public class LanguageResource
     try
     {
       List<String> translatorClassNames = getAppClassNamesFromRequest(request, "translator");
-      logger.trace("Listing translatable languages for apps: " + String.join(",", translatorClassNames.toArray(new String[]{})) + "...");
+      logger.trace(
+        "Listing translatable languages for apps: " + 
+        String.join(",", translatorClassNames.toArray(new String[]{})) + "...");
       return new SupportedLanguagesResponse(getAllAppSupportedLangs(translatorClassNames));
     }
     catch (Exception e)
@@ -326,8 +336,9 @@ public class LanguageResource
       throw new WebApplicationException(
         e, 
         Response.status(status)
-          .entity("Error retrieving detectable language information for apps: " + String.join(",", request.getApps()) + ".  Error: " + 
-                  e.getMessage())
+          .entity(
+            "Error retrieving detectable language information for apps: " + 
+            String.join(",", request.getApps()) + ".  Error: " + e.getMessage())
           .build());
     }
   }
@@ -377,7 +388,8 @@ public class LanguageResource
           detectedLangCode = detector.detect(requestText);
           if (!detectedLangCode.isEmpty())
           {
-            detectedLangName = ((SupportedLanguageConsumer)detector).getLanguageName(detectedLangCode);
+            detectedLangName = 
+              ((SupportedLanguageConsumer)detector).getLanguageName(detectedLangCode);
           }
         }
       }
@@ -387,7 +399,8 @@ public class LanguageResource
       entity.put("detectedLangCode", detectedLangCode);
       if (!detectedLangCode.isEmpty())
       {
-        entity.put("detectedLang", URLEncoder.encode(detectedLangName, "UTF-8").replace("+", "%20"));
+        entity.put(
+          "detectedLang", URLEncoder.encode(detectedLangName, "UTF-8").replace("+", "%20"));
         entity.put("detectorUsed", detectingDetector);
       } 
       return Response.ok(entity.toJSONString()).build();
@@ -407,25 +420,30 @@ public class LanguageResource
         e, 
         Response.status(Status.INTERNAL_SERVER_ERROR)
           .entity(
-            "Error detecting language with detector(s): " + String.join(",", request.getDetectors()) + "; error: " + e.getMessage() + 
+            "Error detecting language with detector(s): " + 
+            String.join(",", request.getDetectors()) + "; error: " + e.getMessage() + 
             " text: " + request.getText())
           .build());
     }
   }
 
   /**
-   * Translates a single line of text given a specified language translator and one or more source languages.  
+   * Translates a single line of text given a specified language translator and one or more 
+     source languages.  
 
-     * When using JoshuaLanguageTranslator, an associated translation service must be running for each specified source language.
-       See the Installation Guide for more details.
-     * In place of language codes, some translators support specifying "detect", which will cause the translator to attempt to 
-     detect the language before translating (e.g. HootLanguageTranslator).  
+     * When using JoshuaLanguageTranslator, an associated translation service must be running 
+       for each specified source language.  See the Installation Guide for more details.
+     * In place of language codes, some translators support specifying "detect", which will 
+       cause the translator to attempt to detect the language before translating 
+       (e.g. HootLanguageTranslator).  
      * The text sent in for translation should be URL encoded and in UTF-8.  
      * The translated text is returned URL encoded and in UTF-8.  
-     * For translators that support detection, detectors will be used in the order specified.  If no language detectors are specified, 
-       then as many language detectors as needed are used to perform the detection.  Some detectors may perform better for certain 
+     * For translators that support detection, detectors will be used in the order 
+       specified.  If no language detectors are specified, then as many language detectors as 
+       needed are used to perform the detection.  Some detectors may perform better for certain 
        languages than others so there can be an advantage to specifying them.
-     * If the specified translator does not support detection, then any request parameters related to detection will be ignored.
+     * If the specified translator does not support detection, then any request parameters 
+       related to detection will be ignored.
 
      curl -X POST -H "Content-Type: application/json" -d '{ "translator": "JoshuaLanguageTranslator", "sourceLangCodes": ["de"], 
        "text": "wie%20alt%20bist%20du" }' localhost:8080/hoot-services/language/translate
@@ -451,18 +469,21 @@ public class LanguageResource
   }
 
   /**
-   * Translates multiple lines of text in batch given a specified language translator and one or more source languages.  
+   * Translates multiple lines of text in batch given a specified language translator and one or more 
+     source languages.  
 
      * Only a single source language is supported.
-     * When using JoshuaLanguageTranslator, an associated translation service must be the specified source language.
-       See the Installation Guide for more details.
-     * No translator may be used that is integrated with language detection when translating in batch (e.g. HootLanguageTranslator).  
-     * The text sent in for translation should have one line for each piece of text to be translated with all of text URL encoded 
-       and in UTF-8.  
+     * When using JoshuaLanguageTranslator, an associated translation service must be the 
+       specified source language.  See the Installation Guide for more details.
+     * No translator may be used that is integrated with language detection when translating in 
+       batch (e.g. HootLanguageTranslator).  
+     * The text sent in for translation should have one line for each piece of text to be translated 
+       with all of text URL encoded and in UTF-8.  
      * The translated text is returned translated line by line, URL encoded, and in UTF-8. 
-     * For translators that support detection, detectors will be used in the order specified.  If no language detectors are specified, 
-       then as many language detectors as needed are used to perform the detection.  Some detectors may perform better for certain 
-       languages than others so there can be an advantage to specifying them. 
+     * For translators that support detection, detectors will be used in the order specified.  If 
+       no language detectors are specified, then as many language detectors as needed are used to 
+       perform the detection.  Some detectors may perform better for certain languages than others 
+       so there can be an advantage to specifying them. 
      * An error will be thrown if a translator is specified that supports language detection.
 
      curl -X POST -H "Content-Type: application/json" -d '{ "translator": "JoshuaLanguageTranslator", "sourceLangCodes": ["de"], 
@@ -510,12 +531,13 @@ public class LanguageResource
       textToTranslate = URLDecoder.decode(request.getText(), "UTF-8");
       if (!batch)
       {
-        //This isn't batch translation, so remove all newlines and translate this as a single piece of text.
+        //This isn't batch translation, so remove all newlines and translate this as a single 
+        //piece of text.
         textToTranslate = textToTranslate.replaceAll("\n", "");
       }
       logger.debug(
-        "Translating language for text: " + StringUtils.left(textToTranslate, 25) + " and source languages: " + 
-        String.join(",", request.getSourceLangCodes()) + "...");
+        "Translating language for text: " + StringUtils.left(textToTranslate, 25) + 
+        " and source languages: " + String.join(",", request.getSourceLangCodes()) + "...");
 
       ToEnglishTranslator translator = ToEnglishTranslatorFactory.create(request.getTranslator());
       translator.setConfig(request);
@@ -538,7 +560,8 @@ public class LanguageResource
         Response.status(status)
           .entity(
             "Error translating with translator: " + request.getTranslator() + " to language (s): " + 
-            String.join(",", request.getSourceLangCodes()) + ".  Error: " + e.getMessage() + "; text: " + textToTranslate)
+            String.join(",", request.getSourceLangCodes()) + ".  Error: " + e.getMessage() + 
+            "; text: " + textToTranslate)
           .build());
     }
     
@@ -608,8 +631,8 @@ public class LanguageResource
     return supportedLangs.toArray(new SupportedLanguage[]{});
   }
 
-  private String toTranslateResponse(LanguageTranslateRequest request, String translatedText, ToEnglishTranslator translator) 
-    throws UnsupportedEncodingException
+  private String toTranslateResponse(LanguageTranslateRequest request, String translatedText, 
+    ToEnglishTranslator translator) throws UnsupportedEncodingException
   {
     JSONObject entity = new JSONObject();
     entity.put("sourceText", request.getText());
@@ -624,24 +647,33 @@ public class LanguageResource
     if (translator instanceof LanguageDetectionConsumer)
     {
       LanguageDetectionConsumer detectionConsumer = (LanguageDetectionConsumer)translator;
-      if (detectionConsumer.getDetectedLangCode() != null && !detectionConsumer.getDetectedLangCode().isEmpty())
+      if (detectionConsumer.getDetectedLangCode() != null && 
+          !detectionConsumer.getDetectedLangCode().isEmpty())
       {
         entity.put("detectedLangCode", detectionConsumer.getDetectedLangCode());
-        entity.put("detectedLang", ((SupportedLanguageConsumer)translator).getLanguageName(detectionConsumer.getDetectedLangCode()));
+        entity.put(
+          "detectedLang", 
+          ((SupportedLanguageConsumer)translator).getLanguageName(
+            detectionConsumer.getDetectedLangCode()));
         entity.put("detectorUsed", detectionConsumer.getDetectorUsed());
         entity.put(
           "detectedLangAvailableForTranslation", 
-          ((SupportedLanguageConsumer)translator).isLanguageAvailable(detectionConsumer.getDetectedLangCode()));
+          ((SupportedLanguageConsumer)translator).isLanguageAvailable(
+            detectionConsumer.getDetectedLangCode()));
       }
     }
-    entity.put("detectedLanguageOverridesSpecifiedSourceLanguages", request.getDetectedLanguageOverridesSpecifiedSourceLanguages());
-    entity.put("performExhaustiveTranslationSearchWithNoDetection", request.getPerformExhaustiveTranslationSearchWithNoDetection());
+    entity.put(
+      "detectedLanguageOverridesSpecifiedSourceLanguages", 
+      request.getDetectedLanguageOverridesSpecifiedSourceLanguages());
+    entity.put(
+      "performExhaustiveTranslationSearchWithNoDetection", 
+      request.getPerformExhaustiveTranslationSearchWithNoDetection());
     return entity.toJSONString();
   }
 
   /*
-   * Given a request that specifies an app (detector, translator, etc.) and returns all classes of that type of app.  We want to 
-   * preserve the order of the apps passed in 
+   * Given a request that specifies an app (detector, translator, etc.) and returns all classes 
+     of that type of app.  We want to preserve the order of the apps passed in 
    */
   private List<String> getAppClassNamesFromRequest(Object request, String type) throws Exception
   {

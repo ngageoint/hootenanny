@@ -43,7 +43,8 @@ import java.io.InputStream;
  *
  * http://opennlp.apache.org/
  */
-public final class OpenNlpLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, LanguageAppInfo
+public final class OpenNlpLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, 
+  LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(OpenNlpLanguageDetector.class);
 
@@ -63,9 +64,11 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
     {
       logger.debug("Reading OpenNlpLanguageDetector languages config...");
       supportedLangsConfigStrm = 
-        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream("language-translation/openNlpLanguages");
+        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream(
+          "language-translation/openNlpLanguages");
       supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
-      logger.debug("Read " + supportedLangs.length + " languages from config for OpenNlpLanguageDetector.");
+      logger.debug(
+        "Read " + supportedLangs.length + " languages from config for OpenNlpLanguageDetector.");
     }
     finally 
     {  
@@ -81,7 +84,8 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
     {
       logger.debug("Loading OpenNlpLanguageDetector model...");
       modelConfigStrm = 
-        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream(OPEN_NLP_LANGUAGE_DETECTION_MODEL);
+        OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream(
+          OPEN_NLP_LANGUAGE_DETECTION_MODEL);
       if (modelConfigStrm == null)
       {
         logger.warn(
@@ -153,7 +157,11 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
    * Not really expecting this to change often...but if so, could move it to the props config.
    */
   public String getDescription() 
-  { return "The language detector portion of a machine learning based toolkit for the processing of natural language text"; }
+  { 
+    return 
+      "The language detector portion of a machine learning based toolkit for the processing of " +
+      "natural language text"; 
+  }
 
   /**
    * Detects the language of the provided text
@@ -168,7 +176,8 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
     String detectedLang = detector.predictLanguage(text).getLang();
     if (!detectedLang.isEmpty())
     {
-      logger.debug(getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
+      logger.debug(
+        getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
     }
 
     logger.trace("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000); 

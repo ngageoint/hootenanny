@@ -40,7 +40,8 @@ public interface SupportedLanguageConsumer
   SupportedLanguage[] getSupportedLanguages();
 
   /**
-   * Determines whether this language available for the given app (has it been activated; subset of supported)
+   * Determines whether this language available for the given app (has it been activated; 
+     subset of supported)
    *
    * @return true if the language is supported; false otherwise
    */

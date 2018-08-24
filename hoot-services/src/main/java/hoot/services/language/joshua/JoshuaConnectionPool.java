@@ -57,7 +57,8 @@ public class JoshuaConnectionPool
 
   private Map<String, JoshuaServiceInfo> services = null;
   //one pool exists for each server, keyed by the language code of the language it supports
-  private Map<String, GenericObjectPool<JoshuaConnection>> connectionPools = new HashMap<String, GenericObjectPool<JoshuaConnection>>();
+  private Map<String, GenericObjectPool<JoshuaConnection>> connectionPools = 
+    new HashMap<String, GenericObjectPool<JoshuaConnection>>();
   private int maxPoolSize = 100;
 
   public JoshuaConnectionPool(Map<String, JoshuaServiceInfo> services, int maxPoolSize) 
@@ -77,12 +78,14 @@ public class JoshuaConnectionPool
     if (connectionPool == null)
     {
       logger.debug("Creating Joshua connection pool for language code: " + langCode + "...");
-      //assuming joshua tcp server is always running local with the hoot services; if it ever needed to be run on another 
-      //server, then we'd probably run it as an http server anyway which would involve some refactoring
+      //assuming joshua tcp server is always running local with the hoot services; if it ever 
+      //needed to be run on another server, then we'd probably run it as an http server anyway 
+      //which would involve some refactoring
       connectionPool = 
         new GenericObjectPool<JoshuaConnection>(
           new PoolableJoshuaConnectionFactory(
-            "localhost", services.get(langCode).getPort(), Integer.parseInt(JOSHUA_CONNECTION_TIMEOUT)), maxPoolSize);
+            "localhost", services.get(langCode).getPort(), 
+            Integer.parseInt(JOSHUA_CONNECTION_TIMEOUT)), maxPoolSize);
       connectionPool.setMaxWait(Integer.parseInt(JOSHUA_CONNECTION_MAX_WAIT));
       connectionPool.setTestOnBorrow(true);
       connectionPool.setWhenExhaustedAction(GenericObjectPool.WHEN_EXHAUSTED_BLOCK);
@@ -96,12 +99,15 @@ public class JoshuaConnectionPool
     }
     catch (Exception e)
     {
-      throw new Exception("Error retrieving connection from pool for language code: " + langCode + ".  error: " + e.getMessage());
+      throw new Exception(
+        "Error retrieving connection from pool for language code: " + langCode + ".  error: " + 
+        e.getMessage());
     }
     return connection;
   }
 
-  public synchronized void returnObject(String langCode, JoshuaConnection connection) throws Exception
+  public synchronized void returnObject(String langCode, JoshuaConnection connection) 
+    throws Exception
   {
     connectionPools.get(langCode).returnObject(connection);
   }

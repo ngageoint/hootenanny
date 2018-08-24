@@ -32,6 +32,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/NetUtils.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QEventLoop>
@@ -45,6 +47,8 @@
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(TranslationInfoProvider, HootServicesTranslationInfoClient)
 
 HootServicesTranslationInfoClient::HootServicesTranslationInfoClient()
 {
@@ -93,7 +97,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  NetUtils::checkWebReplyForError(reply);
 
  //parse and return the response
- return NetUtils::replyToPropTree(reply);
+ return StringUtils::jsonStringToPropTree(reply->readAll());
 }
 
  boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableLanguages(
@@ -132,7 +136,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
   NetUtils::checkWebReplyForError(reply);
 
   //parse and return the response
-  return NetUtils::replyToPropTree(reply);
+  return StringUtils::jsonStringToPropTree(reply->readAll());
 }
 
 boost::shared_ptr<QNetworkRequest> HootServicesTranslationInfoClient::_getAvailableLanguagesRequest(

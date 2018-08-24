@@ -42,14 +42,16 @@ import java.io.InputStream;
  *
  * http://tika.apache.org/
  */
-public final class TikaLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, LanguageAppInfo
+public final class TikaLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, 
+  LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(TikaLanguageDetector.class);
 
   private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
   private SupportedLanguage[] supportedLangs = null;
 
-  private final org.apache.tika.language.detect.LanguageDetector detector = new OptimaizeLangDetector();
+  private final org.apache.tika.language.detect.LanguageDetector detector = 
+    new OptimaizeLangDetector();
 
   private static TikaLanguageDetector instance;
 
@@ -61,9 +63,11 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
     {
       logger.debug("Reading TikaLanguageDetector languages config...");
       supportedLangsConfigStrm = 
-        TikaLanguageDetector.class.getClassLoader().getResourceAsStream("language-translation/tikaLanguages");
+        TikaLanguageDetector.class.getClassLoader().getResourceAsStream(
+          "language-translation/tikaLanguages");
       supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
-      logger.debug("Read " + supportedLangs.length + " languages from config for TikaLanguageDetector.");
+      logger.debug(
+        "Read " + supportedLangs.length + " languages from config for TikaLanguageDetector.");
     }
     finally 
     {  
@@ -85,9 +89,9 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
     }
   }
 
-  //There's apparently a trick in recent Java where you can get a more performant singleton by using a static inner class instead
-  //of a synchronized method.  I haven't been able to figure out yet how to get that to work when the constructor throws an 
-  //exception, though.
+  //There's apparently a trick in recent Java where you can get a more performant singleton 
+  //by using a static inner class instead of a synchronized method.  I haven't been able to 
+  //figure out yet how to get that to work when the constructor throws an exception, though.
   public synchronized static TikaLanguageDetector getInstance() throws Exception
   {
     if (instance == null)
@@ -134,7 +138,11 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
    * Not really expecting this to change often...but if so, could move it to the props config.
    */
   public String getDescription() 
-  { return "The language detection portion of a library which detects and extracts metadata and text from many different file types"; }
+  { 
+    return 
+      "The language detection portion of a library which detects and extracts metadata and text " +
+      "from many different file types"; 
+  }
 
   /**
    * Detects the language of the provided text
@@ -149,7 +157,8 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
     String detectedLang = detector.detect(text).getLanguage();
     if (!detectedLang.isEmpty())
     {
-      logger.debug(getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
+      logger.debug(
+        getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
     }
 
     logger.trace("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000);    

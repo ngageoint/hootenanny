@@ -48,12 +48,13 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * A translator using a customized translation workflow that makes use of language detection and other options
  */
-public final class HootLanguageTranslator implements ToEnglishTranslator, LanguageDetectionConsumer, SupportedLanguageConsumer, 
-  LanguageAppInfo
+public final class HootLanguageTranslator implements ToEnglishTranslator, LanguageDetectionConsumer, 
+  SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(HootLanguageTranslator.class);
 
-  //detectors to use for language detection; default behavior is to continue using them, in order, until a detection is made
+  //detectors to use for language detection; default behavior is to continue using them, in order, 
+  //until a detection is made
   private String[] detectors;
 
   //if true and a detected lang doesn't match a specified lang, then the detected lang takes priority
@@ -76,15 +77,18 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
 
   public void setConfig(Object config)
   {
-    //don't like giving this translator class knowledge about LanguageTranslateRequest, a web class, but will do for now
+    //don't like giving this translator class knowledge about LanguageTranslateRequest, a web class, but 
+    //it will do for now
     LanguageTranslateRequest request = (LanguageTranslateRequest)config;
     detectors = request.getDetectors();
     if (detectors == null || detectors.length == 0)
     {
       detectors = LanguageDetectorFactory.getSimpleClassNames().toArray(new String[]{});
     }
-    detectedLanguageOverridesSpecifiedSourceLanguages = request.getDetectedLanguageOverridesSpecifiedSourceLanguages();
-    performExhaustiveTranslationSearchWithNoDetection = request.getPerformExhaustiveTranslationSearchWithNoDetection();
+    detectedLanguageOverridesSpecifiedSourceLanguages = 
+      request.getDetectedLanguageOverridesSpecifiedSourceLanguages();
+    performExhaustiveTranslationSearchWithNoDetection = 
+      request.getPerformExhaustiveTranslationSearchWithNoDetection();
   }
 
   /**
@@ -134,7 +138,8 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   public String getDescription() 
   { 
     return 
-      "A custom translator that combines language detection into its workflow.  See the Hootenanny User Documentation for more details.";
+      "A custom translator that combines language detection into its workflow.  See the Hootenanny User " +
+      "Documentation for more details.";
   }
 
   /**
@@ -172,7 +177,8 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   /*
    * Attempts to use all available translators for the specified language to get a translation
    */
-  private String performExhaustiveTranslation(String text, List<String> specifiedSourceLangs) throws Exception
+  private String performExhaustiveTranslation(String text, List<String> specifiedSourceLangs) 
+    throws Exception
   {
     String translatedText = "";
     for (String langCode : specifiedSourceLangs)
@@ -203,8 +209,12 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
     logger.trace("text: " + text);
     List<String> specifiedSourceLangs = Arrays.asList(sourceLangCodes);;
     logger.trace("specifiedSourceLangs size: " + String.valueOf(specifiedSourceLangs.size()));
-    logger.trace("performExhaustiveTranslationSearchWithNoDetection: " + performExhaustiveTranslationSearchWithNoDetection);
-    logger.trace("detectedLanguageOverridesSpecifiedSourceLanguages: " + detectedLanguageOverridesSpecifiedSourceLanguages);
+    logger.trace(
+      "performExhaustiveTranslationSearchWithNoDetection: " + 
+      performExhaustiveTranslationSearchWithNoDetection);
+    logger.trace(
+      "detectedLanguageOverridesSpecifiedSourceLanguages: " + 
+      detectedLanguageOverridesSpecifiedSourceLanguages);
 
     String sourceLangCode = "";
     String translatedText = "";
@@ -230,21 +240,26 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
     }
     else
     {
-      //In this workflow, we'll try to detect the language before translating since either no source languages or more than one source
-      //language was specified, and we don't know for sure what the source language should be.
+      //In this workflow, we'll try to detect the language before translating since either no source 
+      //languages or more than one source language was specified, and we don't know for sure what the 
+      //source language should be.
 
-      //If "detect" mode was specified or more than one language was specified, then we'll have to try to detect the language
-      //that needs to be used for translation.
+      //If "detect" mode was specified or more than one language was specified, then we'll have to try 
+      //to detect the language that needs to be used for translation.
       detectedLangCode = detectLanguage(text, specifiedSourceLangs);
-      logger.trace("specifiedSourceLangs.contains(detectedLangCode): " + specifiedSourceLangs.contains(detectedLangCode));
+      logger.trace(
+        "specifiedSourceLangs.contains(detectedLangCode): " + 
+        specifiedSourceLangs.contains(detectedLangCode));
       //If the language detected isn't one we can translate from, we'll just have to ignore it. 
       if (!((SupportedLanguageConsumer)translator).isLanguageAvailable(detectedLangCode))
       {
-        //Technically, if we detected an unsupported lang we could assume maybe the detected lang was incorrect and keep trying other 
-        //detectors to see if one of them came up with something correct that we supported...but I don't think that's necessary.
+        //Technically, if we detected an unsupported lang we could assume maybe the detected lang 
+        //was incorrect and keep trying other detectors to see if one of them came up with something 
+        //correct that we supported...but I don't think that's necessary.
         logger.debug(
-          "Language detector detected language code: " + detectedLangCode + ", but that language is not available for " +
-          "translation by the selected translator: " + translator.getClass().getName() + ". Disregarding the detected language.");
+          "Language detector detected language code: " + detectedLangCode + 
+          ", but that language is not available for translation by the selected translator: " + 
+          translator.getClass().getName() + ". Disregarding the detected language.");
       }
       else
       {
@@ -270,8 +285,9 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
       else if (!detectedLanguageOverridesSpecifiedSourceLanguages && specifiedSourceLangs.size() > 1 &&
                !specifiedSourceLangs.contains(sourceLangCode.toLowerCase()))
       {
-        //If we've gotten to here, we have a detected lang but it doesn't match any of the langs we specified.  Since we're being strict
-        //that it must match one of them, we'll have to either try an exhaustive search or give up.
+        //If we've gotten to here, we have a detected lang but it doesn't match any of the langs we 
+        //specified.  Since we're being strict that it must match one of them, we'll have to either try an 
+        //exhaustive search or give up.
 
         String msg =
           "Detected language code: " + sourceLangCode + " not in specified source languages: " + 
@@ -297,10 +313,12 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
         
         if (!specifiedSourceLangs.contains(sourceLangCode.toLowerCase()))
         {
-          //Even though the lang we detected wasn't one that was specified, we're allowing the detected lang to be used since we
-          //support translating from it.
+          //Even though the lang we detected wasn't one that was specified, we're allowing the detected 
+          //lang to be used since we support translating from it.
           assert(detectedLanguageOverridesSpecifiedSourceLanguages);
-          logger.debug("Detected language code: " + sourceLangCode + " overrides specified language(s) for text: " + text);
+          logger.debug(
+            "Detected language code: " + sourceLangCode + " overrides specified language(s) for text: " + 
+            text);
         }
         else
         {
@@ -320,7 +338,8 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
     else if (translatedText.equals(text))
     {
       logger.debug(
-        "Translated text matches source text: " + StringUtils.left(text, 25) + " for source language: " + sourceLangCode);
+        "Translated text matches source text: " + StringUtils.left(text, 25) + " for source language: " + 
+        sourceLangCode);
     }
     else
     {

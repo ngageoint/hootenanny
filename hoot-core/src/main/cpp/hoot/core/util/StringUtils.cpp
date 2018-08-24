@@ -27,6 +27,9 @@
 
 #include "StringUtils.h"
 
+// Hoot
+#include <hoot/core/util/HootException.h>
+
 // Qt
 #include <QLocale>
 
@@ -74,6 +77,33 @@ bool StringUtils::hasAlphabeticCharacter(const QString input)
     }
   }
   return false;
+}
+
+boost::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(QString jsonStr)
+{
+  LOG_VART(jsonStr);
+  std::stringstream strStrm(jsonStr.toUtf8().constData(), std::ios::in);
+  if (!strStrm.good())
+  {
+    throw HootException(QString("Error reading from reply string:\n%1").arg(jsonStr));
+  }
+  boost::shared_ptr<boost::property_tree::ptree> jsonObj(new boost::property_tree::ptree());
+  try
+  {
+    boost::property_tree::read_json(strStrm, *jsonObj);
+  }
+  catch (boost::property_tree::json_parser::json_parser_error& e)
+  {
+    QString reason = QString::fromStdString(e.message());
+    QString line = QString::number(e.line());
+    throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
+  }
+  catch (const std::exception& e)
+  {
+    QString reason = e.what();
+    throw HootException("Error parsing JSON " + reason);
+  }
+  return jsonObj;
 }
 
 }

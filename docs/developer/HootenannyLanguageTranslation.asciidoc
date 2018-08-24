@@ -10,10 +10,10 @@ also detect them.  The decision was made to only support translations to English
 other language.  
 
 The translation capabilities are hosted as a web service running within the Hootenanny Java web services tier.  The decision to run 
-translation as a service was made because 1) tool initialization can be expensive (model loading), 2) all the open source tools were 
-written in Java, which made for easier integration directly with Hootenanny web services than Hootenanny core C++ code, and 3) combining 
-language translation with language detection is useful when the source language is not known and running both tools in the same service 
-prevents unnecessary web requests that would occur if the two were separated.
+translation as a service was made because 1) language translation/detection tool initialization can be expensive (model loading), 
+2) all the open source tools were written in Java, which made for easier integration directly with Hootenanny web services than 
+Hootenanny core C++ code, and 3) combining language translation with language detection is useful when the source language is not 
+known and running both tools in the same service prevents unnecessary web requests that would occur if the two were separated.
 
 The service provides separate endpoints for translation and detection, for those who need to use it in that fashion.  It also provides a
 capability to translate large texts within on translation request, however, language detection is not integrated with that capability.
@@ -57,13 +57,14 @@ Access to Joshua occurs via one or more externally launched server processes, on
 the Hootenanny web services when configured from the joshuaServices configuration file.  Each Joshua language translation service must 
 run as a separate process due to the fact that Joshua has internal global configuration variables which cannot be shared among multiple 
 languages.  Otherwise, it would have been much simpler and more efficient to call the Joshua library directly from within the 
-translation service.  Joshua services are disabled by default because they each require a very large language pack that must be 
-downloaded and they consume quite a bit of memory when launched.  For more details on installing a language pack, see the Installation Guide.
+translation service.  Joshua services listen on a TCP socket and can handle a configurable number of concurrent threads.
 
-The list of languages supported by Joshua are manually maintained in the joshuaLanguages configuration file and correspond directly with 
-the avilable language packs.  The Hootenanny translation service only works with Joshua language packs version 2.
+Joshua services are disabled by default because they each require a very large language pack that must be downloaded and they consume 
+quite a bit of memory when launched.  For more details on installing a language pack, see the Installation Guide.  The list of languages 
+supported by Joshua are manually maintained in the joshuaLanguages configuration file and correspond directly with the avilable language 
+packs.  The Hootenanny translation service only works with Joshua language packs version 2.
 
-No real metrics have obtained yet on how well Joshua translation performs for Hootenanny.
+No real metrics have obtained yet on the accuracy of Joshua translation run from Hootenanny.
 
 === Detection Technologies
 

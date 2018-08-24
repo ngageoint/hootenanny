@@ -81,8 +81,8 @@ public final class SupportedLanguagesConfigReader
         String langName = lineParts[2];
 
         SupportedLanguage supportedLanguage = new SupportedLanguage();
-        //This probably isn't the best way to handle this.  Only a small number of the languages we're working with don't have
-        //1 codes and only have 2 codes...works for now, though.
+        //This probably isn't the best way to handle this.  Only a small number of the languages 
+        //we're working with don't have 1 codes and only have 2 codes...works for now, though.
         if (iso6391.toUpperCase().equals("N/A"))
         {
           iso6391 = iso6392;
@@ -94,12 +94,14 @@ public final class SupportedLanguagesConfigReader
 
         if (iso6392To1.containsKey(iso6392))
         {
-          throw new IOException("Invalid supported languages configuration.  Duplicate ISO-6392-2 value: " + iso6392);
+          throw new IOException(
+            "Invalid supported languages configuration.  Duplicate ISO-6392-2 value: " + iso6392);
         }
         iso6392To1.put(iso6392, iso6391);
         if (iso6391ToLangName.containsKey(iso6391))
         {
-          throw new IOException("Invalid supported languages configuration.  Duplicate ISO-6392-1 value: " + iso6391);
+          throw new IOException(
+            "Invalid supported languages configuration.  Duplicate ISO-6392-1 value: " + iso6391);
         }
         iso6391ToLangName.put(iso6391, langName);
       }

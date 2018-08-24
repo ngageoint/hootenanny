@@ -62,7 +62,9 @@ public class LanguageDetectorFactory
     try 
     {
       fullClassName = LanguageUtils.getFullClassName(className);
-      return (LanguageDetector)MethodUtils.invokeStaticMethod(Class.forName(fullClassName), "getInstance", null);
+      return 
+        (LanguageDetector)
+          MethodUtils.invokeStaticMethod(Class.forName(fullClassName), "getInstance", null);
     }
     catch (Exception e) 
     {

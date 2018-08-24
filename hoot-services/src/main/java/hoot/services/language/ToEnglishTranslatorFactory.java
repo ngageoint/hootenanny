@@ -65,7 +65,9 @@ public class ToEnglishTranslatorFactory
       fullClassName = LanguageUtils.getFullClassName(className);
       if (MethodUtils.getAccessibleMethod(Class.forName(fullClassName), "getInstance", null) != null)
       {
-        translator = (ToEnglishTranslator)MethodUtils.invokeStaticMethod(Class.forName(fullClassName), "getInstance", null);
+        translator = 
+          (ToEnglishTranslator)
+            MethodUtils.invokeStaticMethod(Class.forName(fullClassName), "getInstance", null);
       }
       else
       {
@@ -93,8 +95,8 @@ public class ToEnglishTranslatorFactory
    */
   public static Set<String> getSimpleClassNames()
   {
-    //really wanted to make this a generic method in ReflectUtils, just haven't quite figured out how yet; see the source history of 
-    //ReflectUtils for a not quite working example
+    //really wanted to make this a generic method in ReflectUtils, just haven't quite figured out 
+    //how yet; see the source history of ReflectUtils for a not quite working example
 
     if (simpleClassNames == null)
     {

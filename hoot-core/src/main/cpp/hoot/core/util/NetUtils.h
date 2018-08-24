@@ -4,11 +4,6 @@
 
 // Qt
 #include <QNetworkReply>
-#include <QString>
-
-// Boost
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 
 namespace hoot
 {
@@ -27,14 +22,6 @@ public:
    * @param reply reply to check
    */
   static void checkWebReplyForError(QNetworkReply* reply);
-
-  /**
-   * Converts a JSON net reply to a Boost property tree
-   *
-   * @param reply the reply to convert
-   * @return a Boost property tree
-   */
-  static boost::shared_ptr<boost::property_tree::ptree> replyToPropTree(QNetworkReply* reply);
 };
 
 }

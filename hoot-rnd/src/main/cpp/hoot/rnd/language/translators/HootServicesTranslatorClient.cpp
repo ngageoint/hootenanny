@@ -33,6 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/NetUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QByteArray>
@@ -55,6 +56,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ToEnglishTranslator, HootServicesTranslatorClient)
 
 HootServicesTranslatorClient::HootServicesTranslatorClient() :
+_detectedLangAvailableForTranslation(false),
 _detectedLangOverrides(false),
 _performExhaustiveSearch(false)
 {
@@ -77,7 +79,9 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
     this, SIGNAL(translationError(QString, QString)), parent(),
     SLOT(translationError(QString, QString)));
 
-  _infoClient.reset(new HootServicesTranslationInfoClient());
+  _infoClient.reset(
+    Factory::getInstance().constructObject<TranslationInfoProvider>(
+      opts.getLanguageTranslationInfoProvider()));
   _infoClient->setConfiguration(conf);
 }
 
@@ -206,18 +210,16 @@ void HootServicesTranslatorClient::_parseTranslateResponse(
     QUrl::fromPercentEncoding(
       QString::fromStdString(replyObj->get<std::string>("translatedText")).toUtf8());
   LOG_VARD(_translatedText);
-  const QString detectedLang =
-    QString::fromStdString(replyObj->get<std::string>("detectedLang"));
-  if (!detectedLang.isEmpty())
+  _detectedLang = QString::fromStdString(replyObj->get<std::string>("detectedLang"));
+  if (!_detectedLang.isEmpty())
   {
     _detectionMade = true;
-    LOG_VARD(detectedLang);
-    const QString detectorUsed =
-      QString::fromStdString(replyObj->get<std::string>("detectorUsed"));
-    LOG_VARD(detectorUsed);
-    const bool detectedLangAvailableForTranslation =
+    LOG_VARD(_detectedLang);
+    _detectorUsed = QString::fromStdString(replyObj->get<std::string>("detectorUsed"));
+    LOG_VARD(_detectorUsed);
+    _detectedLangAvailableForTranslation =
       replyObj->get<bool>("detectedLangAvailableForTranslation");
-    LOG_VARD(detectedLangAvailableForTranslation);
+    LOG_VARD(_detectedLangAvailableForTranslation);
   }
 
   emit translationComplete();
@@ -236,7 +238,8 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
 
   //create the request
   std::stringstream requestStrStrm;
-  boost::shared_ptr<QNetworkRequest> request = _getTranslateRequest(textToTranslate, requestStrStrm);
+  boost::shared_ptr<QNetworkRequest> request =
+    _getTranslateRequest(textToTranslate, requestStrStrm);
 
   //send the request and wait for the response
   QNetworkReply* reply =
@@ -257,7 +260,7 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
   }
 
   //get and parse the response data
-  _parseTranslateResponse(NetUtils::replyToPropTree(reply));
+  _parseTranslateResponse(StringUtils::jsonStringToPropTree(reply->readAll()));
 }
 
 }

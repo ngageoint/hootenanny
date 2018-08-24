@@ -43,6 +43,7 @@ class StringUtilsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(StringUtilsTest);
   CPPUNIT_TEST(runHasAlphabeticCharTest);
+  CPPUNIT_TEST(jsonParseTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -58,6 +59,17 @@ public:
     CPPUNIT_ASSERT(StringUtils::hasAlphabeticCharacter(" か しきあん"));
     CPPUNIT_ASSERT(!StringUtils::hasAlphabeticCharacter(""));
     CPPUNIT_ASSERT(!StringUtils::hasAlphabeticCharacter("  "));
+  }
+
+  void jsonParseTest()
+  {
+    const QString jsonInput =
+      "{\"apps\":[{\"name\":\"TikaLanguageDetector\",\"description\":\"The language detection portion of a library which detects and extracts metadata and text from many different file types\",\"url\":\"https://tika.apache.org\"},{\"name\":\"OpenNlpLanguageDetector\",\"description\":\"The language detector portion of a machine learning based toolkit for the processing of natural language text\",\"url\":\"https://opennlp.apache.org\"}]}";
+    boost::shared_ptr<boost::property_tree::ptree> propTree =
+      StringUtils::jsonStringToPropTree(jsonInput);
+    std::stringstream outputStrStream;
+    boost::property_tree::json_parser::write_json(outputStrStream, *propTree);
+    HOOT_STR_EQUALS(jsonInput, outputStrStream.str());
   }
 };
 

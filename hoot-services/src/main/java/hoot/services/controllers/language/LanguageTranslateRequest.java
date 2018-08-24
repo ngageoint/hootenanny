@@ -48,16 +48,19 @@ public class LanguageTranslateRequest
   public void setTranslator(String translator) { this.translator = translator; }
 
   public String[] getSourceLangCodes() { return sourceLangCodes; }
-  public void setSourceLangCodes(String[] sourceLangCodes) { this.sourceLangCodes = sourceLangCodes; }
+  public void setSourceLangCodes(String[] sourceLangCodes) 
+  { this.sourceLangCodes = sourceLangCodes; }
 
   public String getText() { return text; }
   public void setText(String text) { this.text = text; }
 
-  public boolean getDetectedLanguageOverridesSpecifiedSourceLanguages() { return detectedLanguageOverridesSpecifiedSourceLanguages; }
+  public boolean getDetectedLanguageOverridesSpecifiedSourceLanguages() 
+  { return detectedLanguageOverridesSpecifiedSourceLanguages; }
   public void setDetectedLanguageOverridesSpecifiedSourceLanguages(boolean override) 
   { this.detectedLanguageOverridesSpecifiedSourceLanguages = override; }
 
-  public boolean getPerformExhaustiveTranslationSearchWithNoDetection() { return performExhaustiveTranslationSearchWithNoDetection; }
+  public boolean getPerformExhaustiveTranslationSearchWithNoDetection() 
+  { return performExhaustiveTranslationSearchWithNoDetection; }
   public void setPerformExhaustiveTranslationSearchWithNoDetection(boolean performExhaustiveSearch) 
   { this.performExhaustiveTranslationSearchWithNoDetection = performExhaustiveSearch; }
 }

@@ -29,15 +29,11 @@
 #define HOOT_SERVICES_TRANSLATION_INFO_CLIENT_H
 
 // hoot
-#include <hoot/rnd/language/translators/ToEnglishTranslator.h>
+#include <hoot/rnd/language/translators/TranslationInfoProvider.h>
 
 // Qt
 #include <QStringList>
 #include <QNetworkAccessManager>
-
-// Boost
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 
 namespace hoot
 {
@@ -45,31 +41,27 @@ namespace hoot
 /**
  * Retrieves information from the Hootenanny web translation service about available languages
  */
-class HootServicesTranslationInfoClient : public Configurable
+class HootServicesTranslationInfoClient : public TranslationInfoProvider
 {
 public:
+
+  static std::string className() { return "hoot::HootServicesTranslationInfoClient"; }
 
   HootServicesTranslationInfoClient();
 
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * Retrieves available language apps
-   *
-   * @param type type of app to retrieve; "translator" or "detector"
-   * @return a property tree containing the language app information
+   * @see TranslationInfoProvider
    */
-  boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type);
+  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type);
 
   /**
-   * Retrieves translation available languages info
-   *
-   * @param type type of language information to retrieve; "translatable" or "detectable"
-   * @return a property tree containing the language information
+   * @see TranslationInfoProvider
    */
-  boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type);
+  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type);
 
-private:
+protected:
 
   //a single translator used to determine what translatable languages are supported
   QString _translator;
@@ -81,6 +73,10 @@ private:
   QString _translatableUrl;
   QString _detectorsUrl;
   QString _translatorsUrl;
+
+private:
+
+  friend class HootServicesTranslationInfoClientTest;
 
   boost::shared_ptr<QNetworkAccessManager> _client;
 
