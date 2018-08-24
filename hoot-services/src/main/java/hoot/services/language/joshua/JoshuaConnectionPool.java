@@ -44,6 +44,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Pools Joshua connections to multiple services
  *
+ * @todo need a good way to test this with mock
+ *
  * @see Apache Commons Pool
    @article{post2015joshua,
     Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},

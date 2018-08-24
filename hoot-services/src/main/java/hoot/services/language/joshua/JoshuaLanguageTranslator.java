@@ -48,6 +48,8 @@ import org.apache.commons.lang3.StringUtils;
 /*
  * Performs to English translations using a Joshua service
 
+  @todo need a good way to test this with mock
+
   @article{post2015joshua,
     Author = {Post, Matt and Cao, Yuan and Kumar, Gaurav},
     Journal = {The Prague Bulletin of Mathematical Linguistics},

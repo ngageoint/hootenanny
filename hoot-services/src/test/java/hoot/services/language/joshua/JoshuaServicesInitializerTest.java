@@ -28,20 +28,88 @@
 package hoot.services.language.joshua;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static hoot.services.HootProperties.*;
+
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import org.apache.commons.exec.CommandLine;
+
+import hoot.services.lang.opennlp.OpenNlpLangageDetector;
 import hoot.services.UnitTest;
+import hoot.services.language.joshua.JoshuaServiceInfo;
+import hoot.services.language.joshua.JoshuaServicesInitializer;
+import hoot.services.language.joshua.JoshuaLanguageTranslator;
+import hoot.services.language.joshua.JoshuaServicesConfigReader;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ JoshuaServicesConfigReader.class })
 public class JoshuaServicesInitializerTest  
 {
   @Test
-  //@Test(expected = NotFoundException.class)
   @Category(UnitTest.class)
-  public void test() /*throws Exception*/ 
+  public void testGetCommand()
   {
+    JoshuaServiceInfo serviceInfo = new JoshuaServiceInfo();
+    serviceInfo.setLanguagePackPath("/my/path");
+    serviceInfo.setPort(1);
+    serviceInfo.setLanguageCode("de");
     
+    Method getCommandMethod = 
+     JoshuaServicesInitializer.class.getDeclaredMethod("getProcessExecCommand", JoshuaServiceInfo.class);
+    getCommandMethod.setAccessible(true);
+    CommandLine command = (CommandLine)getCommandMethod.invoke(null, serviceInfo);
+
+    Assert.assertEquals(
+      "java -mx " + JOSHUA_MAX_MEMORY + " -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + 
+      serviceInfo.getLanguagePackPath() + "/target/" + JOSHUA_LIBRARY + 
+      " org.apache.joshua.decoder.JoshuaDecoder -c " + serviceInfo.getLanguagePackPath() + 
+      "/joshua.config -v 1 -server-port 1 -server-type tcp", 
+      command.toString()); 
+  }
+
+  @Test
+  @Category(UnitTest.class)
+  public void testReadConfig()
+  {
+    JoshuaServiceInfo[] serviceInfos = new JoshuaServiceInfo[2];
+    JoshuaServiceInfo serviceInfo1 = new JoshuaServiceInfo();
+    serviceInfo1.setLanguagePackPath("/my/path1");
+    serviceInfo1.setPort(1);
+    serviceInfo1.setLanguageCode("de");
+    serviceInfos[0] = serviceInfo1;
+    JoshuaServiceInfo serviceInfo2 = new JoshuaServiceInfo();
+    serviceInfo2.setLanguagePackPath("/my/path2");
+    serviceInfo2.setPort(2);
+    serviceInfo2.setLanguageCode("es");
+    serviceInfos[1] = serviceInfo2;
+
+    PowerMockito.mockStatic(JoshuaServicesConfigReader.class);
+    PowerMockito.when(JoshuaServicesConfigReader.readConfig(null)).thenReturn(serviceInfos);
+    
+    Method readConfigMethod = 
+     JoshuaServicesInitializer.class.getDeclaredMethod("readServicesConfig", null);
+    readConfigMethod.setAccessible(true);
+    Map<String, JoshuaServiceInfo> services = 
+      (Map<String, JoshuaServiceInfo>)readConfigMethod.invoke(null, null);
+
+    Assert.assertEquals(2, servers.size());
+    
+    Assert.assertEquals("de", servers["de"].getLanguageCode());
+    Assert.assertEquals("/my/path1", servers["de"].getLanguagePackPath());
+    Assert.assertEquals(1, servers["de"].getPort());
+
+    Assert.assertEquals("es", servers["es"].getLanguageCode());
+    Assert.assertEquals("/my/path2", servers["es"].getLanguagePackPath());
+    Assert.assertEquals(2, servers["es"].getPort());
   }
 }

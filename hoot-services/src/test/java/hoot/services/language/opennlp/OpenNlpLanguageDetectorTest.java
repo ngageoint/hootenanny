@@ -28,20 +28,29 @@
 package hoot.services.language.opennlp;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import hoot.services.lang.opennlp.OpenNlpLangageDetector;
 import hoot.services.UnitTest;
 
 public class OpenNlpLanguageDetectorTest  
 {
+  private static final OpenNlpLangageDetector detector = OpenNlpLangageDetector.getInstance();
+
   @Test
-  //@Test(expected = NotFoundException.class)
   @Category(UnitTest.class)
-  public void test() /*throws Exception*/ 
+  public void testAll() 
   {
-    
+    Assert.assertTrue(detector.isLanguageAvailable("de");
+    Assert.assertTrue(detector.getSupportedLanguages().size() > 0);
+    Assert.assertEquals("German", detector.getLanguageName("de"));
+    Assert.assertEquals("https://opennlp.apache.org", detector.getUrl());
+    Assert.assertTrue(!detector.getDescription().isEmpty());
+    Assert.assertEquals("de", detector.detect("wie alt bist du"));
+    Assert.assertEquals("es", detector.detect("buenos noches"));
   }
 }

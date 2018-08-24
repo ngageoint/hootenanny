@@ -28,20 +28,38 @@
 package hoot.services.language.joshua;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static hoot.services.HootProperties.*;
+
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
+import hoot.services.language.joshua.JoshuaServicesConfigReader;
+import hoot.services.language.joshua.JoshuaServiceInfo;
 
-public class JoshuaLanguageTranslatorTest  
+public class JoshuaServicesConfigReaderTest  
 {
   @Test
-  //@Test(expected = NotFoundException.class)
   @Category(UnitTest.class)
-  public void test() /*throws Exception*/ 
+  public void testRead()
   {
+    JoshuaServiceInfo[] serviceInfos = 
+      JoshuaServicesConfigReader.readConfig(
+        JoshuaServicesConfigReaderTest.class.getClassLoader().getResourceAsStream(
+          "hoot/services/language/joshua/joshuaServices"));
     
+    Assert.assertEquals(2, serviceInfos.length);
+    
+    Assert.assertEquals("de", serviceInfos[0].getLanguageCode());
+    Assert.assertEquals("/my/path1", serviceInfos[0].getLanguagePackPath());
+    Assert.assertEquals(1, serviceInfos[0].getPort());
+
+    Assert.assertEquals("es", serviceInfos[1].getLanguageCode());
+    Assert.assertEquals("/my/path2", serviceInfos[1].getLanguagePackPath());
+    Assert.assertEquals(2, serviceInfos[1].getPort());
   }
 }

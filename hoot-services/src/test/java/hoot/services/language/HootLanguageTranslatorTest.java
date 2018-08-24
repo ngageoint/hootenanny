@@ -35,6 +35,7 @@ import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
 
+//on JoshuaLanguageTranslator mock: JoshuaServicesInitializer.init(), langsConfigReader.readConfig, connectionPool, sendRequest, parseResponse
 public class HootLanguageTranslatorTest  
 {
   @Test

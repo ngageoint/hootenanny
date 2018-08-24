@@ -92,7 +92,9 @@ public class JoshuaServicesInitializer
         "Launching language translation service " + ctr + " / " + services.size() + " for lang code: " + 
         serviceInfo.getLanguageCode() + " from path: " + serviceInfo.getLanguagePackPath() + 
         " to port: " + serviceInfo.getPort() + "...");
-      launchService(serviceInfo);
+      String configPath = serviceInfo.getLanguagePackPath() + "/joshua.config";
+      convertConfigFileModelPathsToAbsolute(configPath, serviceInfo.getLanguagePackPath());
+      launchService(serviceInfo, configPath);
     }
     logger.debug(
       "Finished launching Joshua translation services for " + ctr + " language packs.  The services " + 
@@ -101,11 +103,9 @@ public class JoshuaServicesInitializer
     return services;
   }
 
-  private static CommandLine getProcessExecCommand(JoshuaServiceInfo serviceInfo) 
+  private static CommandLine getProcessExecCommand(JoshuaServiceInfo serviceInfo, String configPath) 
     throws IOException
   {
-    String configPath = serviceInfo.getLanguagePackPath() + "/joshua.config";
-    convertConfigFileModelPathsToAbsolute(configPath, serviceInfo.getLanguagePackPath());
     String classPath = serviceInfo.getLanguagePackPath() + "/target/" + JOSHUA_LIBRARY;
     String line = 
       "java -mx" + JOSHUA_MAX_MEMORY + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + 
