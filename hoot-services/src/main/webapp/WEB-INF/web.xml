@@ -6,10 +6,14 @@
 	id="WebApp_ID" version="2.5">
 	<display-name>hoot-services</display-name>
 
-    <!--contextConfigLocation has to be explicitly specified to successfully integrate Jersey and Spring -->
+	<!--contextConfigLocation has to be explicitly specified to successfully 
+		integrate Jersey and Spring -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:applicationContext.xml</param-value>
+		<param-value>
+			classpath:applicationContext.xml
+			classpath:security-applicationContext.xml
+        </param-value>
 	</context-param>
 	<context-param>
 		<param-name>spring.profiles.active</param-name>
@@ -32,6 +36,7 @@
 		<filter-name>log4jServletFilter</filter-name>
 		<filter-class>org.apache.logging.log4j.web.Log4jServletFilter</filter-class>
 	</filter>
+
 	<filter-mapping>
 		<filter-name>log4jServletFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -39,6 +44,20 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
 		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+
+	<!-- Security Filter -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>contextAttribute</param-name>
+			<param-value>org.springframework.web.context.WebApplicationContext.ROOT</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
 	<servlet>
@@ -54,13 +73,15 @@
 		<servlet-name>hoot-services</servlet-name>
 		<url-pattern>/osm/*</url-pattern>
 		<url-pattern>/job/*</url-pattern>
+		<url-pattern>/jobs/*</url-pattern>
+		<url-pattern>/auth/*</url-pattern>
 		<url-pattern>/info/*</url-pattern>
 		<url-pattern>/ogr/*</url-pattern>
 		<url-pattern>/ingest/*</url-pattern>
 	</servlet-mapping>
 
-    <!-- EVWHS - DG's imagery service for non-commercial clients.
-         As of 05/17/2017 this proxy is still needed by the GUI tier. -->
+	<!-- EVWHS - DG's imagery service for non-commercial clients. As of 05/17/2017 
+		this proxy is still needed by the GUI tier. -->
 	<servlet>
 		<servlet-name>evwhs</servlet-name>
 		<servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
@@ -77,12 +98,10 @@
 		<servlet-name>evwhs</servlet-name>
 		<url-pattern>/evwhs/*</url-pattern>
 	</servlet-mapping>
-
 	<resource-ref>
 		<description>DB Connection</description>
 		<res-ref-name>jdbc/postgres</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>
 		<res-auth>Container</res-auth>
 	</resource-ref>
-
 </web-app>
