@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.6" generator="hootenanny">
     <modify>
+        <way id="2" version="1" timestamp="2018-06-11T16:49:01Z">
+            <nd ref="9"/>
+            <nd ref="61"/>
+            <nd ref="62"/>
+            <nd ref="63"/>
+            <nd ref="64"/>
+            <nd ref="65"/>
+            <nd ref="66"/>
+            <nd ref="16"/>
+            <nd ref="67"/>
+            <nd ref="68"/>
+            <nd ref="69"/>
+            <nd ref="70"/>
+            <nd ref="71"/>
+            <nd ref="72"/>
+            <nd ref="73"/>
+            <nd ref="17"/>
+            <nd ref="75"/>
+            <nd ref="18"/>
+            <nd ref="74"/>
+            <nd ref="76"/>
+            <nd ref="77"/>
+            <nd ref="78"/>
+            <nd ref="79"/>
+            <nd ref="19"/>
+            <nd ref="80"/>
+            <nd ref="81"/>
+            <nd ref="82"/>
+            <nd ref="83"/>
+            <nd ref="20"/>
+            <nd ref="84"/>
+            <nd ref="85"/>
+            <nd ref="86"/>
+            <nd ref="87"/>
+            <nd ref="88"/>
+            <nd ref="89"/>
+            <nd ref="21"/>
+            <nd ref="90"/>
+            <nd ref="91"/>
+            <nd ref="92"/>
+            <nd ref="93"/>
+            <nd ref="94"/>
+            <nd ref="95"/>
+            <nd ref="96"/>
+            <nd ref="97"/>
+            <nd ref="98"/>
+            <nd ref="22"/>
+            <nd ref="99"/>
+            <nd ref="100"/>
+            <nd ref="101"/>
+            <nd ref="102"/>
+            <nd ref="103"/>
+            <nd ref="23"/>
+            <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+            <tag k="source:imagery" v="Unknown"/>
+            <tag k="source" v="osm"/>
+            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{1b31ba72-0a8f-4731-8dba-5a66a55bcec4}"/>
+            <tag k="name" v="Yellow Brick Road"/>
+            <tag k="attribution" v="osm"/>
+            <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
+            <tag k="highway" v="primary"/>
+            <tag k="surface" v="cobblestone"/>
+            <tag k="error:circular" v="15"/>
+        </way>
         <way id="1" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="1"/>
             <nd ref="2"/>
@@ -71,70 +135,6 @@
             <tag k="source:imagery" v="Unknown"/>
             <tag k="source" v="osm"/>
             <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{2fd871c5-751e-40d1-9749-afcf31df94c9}"/>
-            <tag k="name" v="Yellow Brick Road"/>
-            <tag k="attribution" v="osm"/>
-            <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
-            <tag k="highway" v="primary"/>
-            <tag k="surface" v="cobblestone"/>
-            <tag k="error:circular" v="15"/>
-        </way>
-        <way id="2" version="1" timestamp="2018-06-11T16:49:01Z">
-            <nd ref="9"/>
-            <nd ref="61"/>
-            <nd ref="62"/>
-            <nd ref="63"/>
-            <nd ref="64"/>
-            <nd ref="65"/>
-            <nd ref="66"/>
-            <nd ref="16"/>
-            <nd ref="67"/>
-            <nd ref="68"/>
-            <nd ref="69"/>
-            <nd ref="70"/>
-            <nd ref="71"/>
-            <nd ref="72"/>
-            <nd ref="73"/>
-            <nd ref="17"/>
-            <nd ref="75"/>
-            <nd ref="18"/>
-            <nd ref="74"/>
-            <nd ref="76"/>
-            <nd ref="77"/>
-            <nd ref="78"/>
-            <nd ref="79"/>
-            <nd ref="19"/>
-            <nd ref="80"/>
-            <nd ref="81"/>
-            <nd ref="82"/>
-            <nd ref="83"/>
-            <nd ref="20"/>
-            <nd ref="84"/>
-            <nd ref="85"/>
-            <nd ref="86"/>
-            <nd ref="87"/>
-            <nd ref="88"/>
-            <nd ref="89"/>
-            <nd ref="21"/>
-            <nd ref="90"/>
-            <nd ref="91"/>
-            <nd ref="92"/>
-            <nd ref="93"/>
-            <nd ref="94"/>
-            <nd ref="95"/>
-            <nd ref="96"/>
-            <nd ref="97"/>
-            <nd ref="98"/>
-            <nd ref="22"/>
-            <nd ref="99"/>
-            <nd ref="100"/>
-            <nd ref="101"/>
-            <nd ref="102"/>
-            <nd ref="103"/>
-            <nd ref="23"/>
-            <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="source:imagery" v="Unknown"/>
-            <tag k="source" v="osm"/>
-            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{1b31ba72-0a8f-4731-8dba-5a66a55bcec4}"/>
             <tag k="name" v="Yellow Brick Road"/>
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
