@@ -415,6 +415,14 @@
                 "name":"Preserve element ids from the Reference layer during conflation",
                 "hoot_key":"reader.conflate.use.data.source.ids.1"
             },
+            {
+                "id":"reader_conflate_use_data_source_ids_2",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"Determines whether the reader used by the conflate command to read the second input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
+                "name":"Preserve element ids from the Secondary layer during conflation",
+                "hoot_key":"reader.conflate.use.data.source.ids.2"
+            },
 	    {
             	"id":"weighted_metric_distance_extractor_search_radius",
                 "minvalue":"-1.0",

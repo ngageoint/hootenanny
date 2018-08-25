@@ -25,6 +25,7 @@ export OVERPASS_API_URL=https://overpass-api.de
 
 # Setup access to an OSM API Rails Port.
 # Override this in the Local config
+# NOTE: Put "XXX" for port if you dont need to specify one
 export RAILS_HOST=localhost
 export RAILS_PORT=3000
 export RAILS_USER=hoot

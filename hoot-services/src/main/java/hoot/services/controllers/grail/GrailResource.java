@@ -572,7 +572,7 @@ public class GrailResource {
         Response response;
 
         JSONObject json = new JSONObject();
-        json.put("jobId", jobId);
+        json.put("jobid", jobId);
 
         try {
             FileUtils.forceMkdir(workDir);
