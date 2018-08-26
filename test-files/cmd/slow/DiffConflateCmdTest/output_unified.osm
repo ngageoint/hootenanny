@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="8.5975706074" minlon="28.080559452" maxlat="8.6915819319" maxlon="28.20331244028"/>
-    <node visible="true" id="-45914" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6548851891999998" lon="28.1463268213400006">
+    <node visible="true" id="-45262" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6548851891999981" lon="28.1463268213400006">
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="building" v="retail"/>
         <tag k="source" v="Unknown;osm"/>
@@ -10,299 +10,310 @@
         <tag k="attribution" v="osm"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-45912" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6541474185900018" lon="28.1392570135799929"/>
-    <node visible="true" id="-45911" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6548074607699963" lon="28.1410811127400002"/>
-    <node visible="true" id="-45910" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6552082001000006" lon="28.1408903572699991"/>
-    <node visible="true" id="-45909" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6544538668900017" lon="28.1391020247700006"/>
-    <node visible="true" id="-45904" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6429273889299978" lon="28.1463070570099987"/>
-    <node visible="true" id="-45903" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6428275656700020" lon="28.1460930009300014"/>
-    <node visible="true" id="-45902" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6426718413400003" lon="28.1458749060599978"/>
-    <node visible="true" id="-45901" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6425600392100019" lon="28.1456568111799932"/>
-    <node visible="true" id="-45900" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6423923359600021" lon="28.1453175524800017"/>
-    <node visible="true" id="-45899" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6422885196300001" lon="28.1450025265499981"/>
-    <node visible="true" id="-45898" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6422326185100040" lon="28.1448490523799926"/>
-    <node visible="true" id="-45897" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6421367880099993" lon="28.1445744143900001"/>
-    <node visible="true" id="-45896" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6420369645500017" lon="28.1443522807199997"/>
-    <node visible="true" id="-45895" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6419690845700021" lon="28.1440493711699986"/>
-    <node visible="true" id="-45894" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6419012045899990" lon="28.1437464616199939"/>
-    <node visible="true" id="-45893" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6417814163499997" lon="28.1434637460399983"/>
-    <node visible="true" id="-45892" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6416656210199960" lon="28.1431487201099912"/>
-    <node visible="true" id="-45891" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6415697903799984" lon="28.1428902372900005"/>
-    <node visible="true" id="-45890" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6414699667599990" lon="28.1425752113600005"/>
-    <node visible="true" id="-45889" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6413062559699991" lon="28.1422965345800016"/>
-    <node visible="true" id="-45888" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6412463617599968" lon="28.1419976638199998"/>
-    <node visible="true" id="-45887" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6412343829199969" lon="28.1417068706500011"/>
-    <node visible="true" id="-45886" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6411944534400025" lon="28.1413272240199994"/>
-    <node visible="true" id="-45885" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6411545239599974" lon="28.1409354610000015"/>
-    <node visible="true" id="-45884" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6411225803700003" lon="28.1406567842100017"/>
-    <node visible="true" id="-45883" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6411265733199993" lon="28.1402650212000012"/>
-    <node visible="true" id="-45882" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6410586931799998" lon="28.1398490254100011"/>
-    <node visible="true" id="-45881" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6502663223000020" lon="28.1437908883500008"/>
-    <node visible="true" id="-45880" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6501305653100005" lon="28.1435283667400000"/>
-    <node visible="true" id="-45879" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6499868225599990" lon="28.1431608364900008"/>
-    <node visible="true" id="-45878" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6498111369000004" lon="28.1428902372900005"/>
-    <node visible="true" id="-45877" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6496993368900004" lon="28.1426236768900004"/>
-    <node visible="true" id="-45876" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6495516011200024" lon="28.1423328837200017"/>
-    <node visible="true" id="-45875" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6493878938400020" lon="28.1420461293499926"/>
-    <node visible="true" id="-45874" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6491802650000000" lon="28.1416341723599999"/>
-    <node visible="true" id="-45873" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6490485004799975" lon="28.1413797283399987"/>
-    <node visible="true" id="-45872" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6489327073899993" lon="28.1411212455200008"/>
-    <node visible="true" id="-45871" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6487809784399978" lon="28.1407941032099984"/>
-    <node visible="true" id="-45870" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6486132779599956" lon="28.1405235040099981"/>
-    <node visible="true" id="-45869" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6484695346299993" lon="28.1402286720500001"/>
-    <node visible="true" id="-45868" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6483138126300023" lon="28.1399015297399977"/>
-    <node visible="true" id="-45867" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6481660763200043" lon="28.1396107365699990"/>
-    <node visible="true" id="-45866" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6479145251600027" lon="28.1391705080200012"/>
-    <node visible="true" id="-45865" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6477428314099942" lon="28.1388554820900012"/>
-    <node visible="true" id="-45864" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6475551660700010" lon="28.1383748656099932"/>
-    <node visible="true" id="-45863" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6474154152199940" lon="28.1380154129399962"/>
-    <node visible="true" id="-45862" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6472676785500013" lon="28.1376155723299988"/>
-    <node visible="true" id="-45861" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6328590822100004" lon="28.1300246590199947"/>
-    <node visible="true" id="-45860" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6330347757699979" lon="28.1303073746000010"/>
-    <node visible="true" id="-45859" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6333701905100035" lon="28.1306708660600009"/>
-    <node visible="true" id="-45858" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6337535212900001" lon="28.1313736162099985"/>
-    <node visible="true" id="-45857" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6339931028199963" lon="28.1318825042599983"/>
-    <node visible="true" id="-45856" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6342806004600021" lon="28.1326983406400011"/>
-    <node visible="true" id="-45855" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6345361537399992" lon="28.1331264528100000"/>
-    <node visible="true" id="-45854" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6346799023799985" lon="28.1333526252699997"/>
-    <node visible="true" id="-45853" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6349035112700019" lon="28.1337484270800005"/>
-    <node visible="true" id="-45852" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6351989942400031" lon="28.1342734702999984"/>
-    <node visible="true" id="-45851" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6353906587499978" lon="28.1347985135199927"/>
-    <node visible="true" id="-45850" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6356062811999976" lon="28.1351216170399994"/>
-    <node visible="true" id="-45849" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6359337076500022" lon="28.1356870482000012"/>
-    <node visible="true" id="-45848" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6360215537200009" lon="28.1361393931300015"/>
-    <node visible="true" id="-45847" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6362212038099990" lon="28.1365917380600017"/>
-    <node visible="true" id="-45846" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6364607837800023" lon="28.1371087036900001"/>
-    <node visible="true" id="-45845" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6365646017200000" lon="28.1375448934400012"/>
-    <node visible="true" id="-45844" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6368441114099994" lon="28.1380295487199952"/>
-    <node visible="true" id="-45843" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6369958451600031" lon="28.1385465143500006"/>
-    <node visible="true" id="-45842" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6373232704100023" lon="28.1392654196800009"/>
-    <node visible="true" id="-45841" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6398148873600018" lon="28.1296207796200015"/>
-    <node visible="true" id="-45840" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6398069014299992" lon="28.1298873400200016"/>
-    <node visible="true" id="-45839" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6399187043700003" lon="28.1303558401299938"/>
-    <node visible="true" id="-45838" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6400145354399989" lon="28.1308081850500002"/>
-    <node visible="true" id="-45837" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6402780707399991" lon="28.1312686075700000"/>
-    <node visible="true" id="-45836" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6403978594600019" lon="28.1316967197299981"/>
-    <node visible="true" id="-45835" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6404936903999978" lon="28.1322136853699973"/>
-    <node visible="true" id="-45834" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6406613945000004" lon="28.1327306509999993"/>
-    <node visible="true" id="-45833" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6408370844199975" lon="28.1331102976300009"/>
-    <node visible="true" id="-45832" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6410846473499987" lon="28.1336918839699983"/>
-    <node visible="true" id="-45831" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6413960972699986" lon="28.1342977030699934"/>
-    <node visible="true" id="-45830" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6415158856300032" lon="28.1347662031699990"/>
-    <node visible="true" id="-45829" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6417075469200011" lon="28.1350893066899985"/>
-    <node visible="true" id="-45828" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6418992081200017" lon="28.1354527981499984"/>
-    <node visible="true" id="-45827" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6421707279799982" lon="28.1358485999599957"/>
-    <node visible="true" id="-45826" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6425300922100003" lon="28.1363171000600012"/>
-    <node visible="true" id="-45825" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6427856398900005" lon="28.1368744536400008"/>
-    <node visible="true" id="-45824" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6431929186599987" lon="28.1371814019800013"/>
-    <node visible="true" id="-45823" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6437119988000006" lon="28.1376741348499948"/>
-    <node visible="true" id="-45822" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6442869790499977" lon="28.1382234108300011"/>
-    <node visible="true" id="-45821" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6436321403600012" lon="28.1262443478400002"/>
-    <node visible="true" id="-45820" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6438238005799963" lon="28.1268501669399988"/>
-    <node visible="true" id="-45819" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6438238005799999" lon="28.1271490376899997"/>
-    <node visible="true" id="-45818" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6440474040499975" lon="28.1279244861399995"/>
-    <node visible="true" id="-45817" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6443907948300041" lon="28.1286918569999997"/>
-    <node visible="true" id="-45816" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6446143979600016" lon="28.1296773227400010"/>
-    <node visible="true" id="-45815" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6450136889299998" lon="28.1304285384199986"/>
-    <node visible="true" id="-45814" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6453570788300009" lon="28.1309212712899921"/>
-    <node visible="true" id="-45813" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6457244258199992" lon="28.1313897713900012"/>
-    <node visible="true" id="-45812" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6462594740500016" lon="28.1319875129000003"/>
-    <node visible="true" id="-45811" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6466667490599960" lon="28.1325287113000009"/>
-    <node visible="true" id="-45810" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6470580520899993" lon="28.1331102976300009"/>
-    <node visible="true" id="-45809" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6476410129900003" lon="28.1336434184399984"/>
-    <node visible="true" id="-45808" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6482080014899996" lon="28.1343704013599982"/>
-    <node visible="true" id="-45807" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6489586610100009" lon="28.1351296946299918"/>
-    <node visible="true" id="-45806" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6507314892599965" lon="28.1488777493899995"/>
-    <node visible="true" id="-45805" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6512585447000010" lon="28.1486434993400003"/>
-    <node visible="true" id="-45804" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6517376853699997" lon="28.1483446285799985"/>
-    <node visible="true" id="-45803" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6523845243000004" lon="28.1481426888800002"/>
-    <node visible="true" id="-45802" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6529674769599989" lon="28.1478761284800001"/>
-    <node visible="true" id="-45801" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6535424430700036" lon="28.1476741887799946"/>
-    <node visible="true" id="-45800" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6543729481399989" lon="28.1475045594300006"/>
-    <node visible="true" id="-45799" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6551794945699978" lon="28.1472056886799997"/>
-    <node visible="true" id="-45798" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6503162329399998" lon="28.1470522145099942"/>
-    <node visible="true" id="-45797" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6506915607900012" lon="28.1468179644500012"/>
-    <node visible="true" id="-45796" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6512345876500021" lon="28.1465190937000003"/>
-    <node visible="true" id="-45795" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6519772554699994" lon="28.1462202229399985"/>
-    <node visible="true" id="-45794" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6524004956200002" lon="28.1460748263599996"/>
-    <node visible="true" id="-45793" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6530393477700027" lon="28.1459051970099985"/>
-    <node visible="true" id="-45792" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6538618683199982" lon="28.1455901710799985"/>
-    <node visible="true" id="-45791" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545486316699982" lon="28.1453478434399962"/>
-    <node visible="true" id="-45790" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6499409047199993" lon="28.1449601192199950"/>
-    <node visible="true" id="-45789" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6503082472399981" lon="28.1447824122800014"/>
-    <node visible="true" id="-45788" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6509471029399982" lon="28.1445077742899912"/>
-    <node visible="true" id="-45787" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6516099145799998" lon="28.1442412138800009"/>
-    <node visible="true" id="-45786" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6522008540999984" lon="28.1439827310700004"/>
-    <node visible="true" id="-45785" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6528956061299986" lon="28.1437404034300016"/>
-    <node visible="true" id="-45784" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6534466154499938" lon="28.1436273172000000"/>
-    <node visible="true" id="-45783" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6541653220400008" lon="28.1434253775000016"/>
-    <node visible="true" id="-45782" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6418752504799983" lon="28.1225771228900001"/>
-    <node visible="true" id="-45781" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6420908692199987" lon="28.1224801918400011"/>
-    <node visible="true" id="-45780" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6425061346099969" lon="28.1224559590699990"/>
-    <node visible="true" id="-45779" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6431849328099979" lon="28.1226740539500000"/>
-    <node visible="true" id="-45778" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6437758855399984" lon="28.1230698557599972"/>
-    <node visible="true" id="-45777" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6443348940299991" lon="28.1235625886300014"/>
-    <node visible="true" id="-45776" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6449258449599977" lon="28.1237645283299997"/>
-    <node visible="true" id="-45775" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6455886671899993" lon="28.1236595196799932"/>
-    <node visible="true" id="-45774" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6464351613699986" lon="28.1235868213899991"/>
-    <node visible="true" id="-45773" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6418433069499958" lon="28.1196611136299985"/>
-    <node visible="true" id="-45772" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6421627421099974" lon="28.1198145877999970"/>
-    <node visible="true" id="-45771" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6426818236699994" lon="28.1201296137300005"/>
-    <node visible="true" id="-45770" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6432488196299992" lon="28.1206869672999993"/>
-    <node visible="true" id="-45769" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6436880412700035" lon="28.1210423811699997"/>
-    <node visible="true" id="-45768" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6441272623999996" lon="28.1212927864000015"/>
-    <node visible="true" id="-45767" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6449178591400013" lon="28.1213654846899992"/>
-    <node visible="true" id="-45766" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6455966530000001" lon="28.1213735622799987"/>
-    <node visible="true" id="-45765" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6462594740500016" lon="28.1213977950400000"/>
-    <node visible="true" id="-45764" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6471778386500002" lon="28.1215755019799971"/>
-    <node visible="true" id="-45763" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6421148268499994" lon="28.1177063373299987"/>
-    <node visible="true" id="-45762" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6424262759099975" lon="28.1179325097999921"/>
-    <node visible="true" id="-45761" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6429453571099994" lon="28.1184333202499914"/>
-    <node visible="true" id="-45760" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6434724234399951" lon="28.1188048893000015"/>
-    <node visible="true" id="-45759" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6440713615600000" lon="28.1190714497000016"/>
-    <node visible="true" id="-45758" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6448140434999967" lon="28.1192249238700001"/>
-    <node visible="true" id="-45757" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6455647097799986" lon="28.1191926135199992"/>
-    <node visible="true" id="-45756" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6463712750800017" lon="28.1191845359299997"/>
-    <node visible="true" id="-45755" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6469781943600026" lon="28.1192410790499920"/>
-    <node visible="true" id="-45754" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6476569845100020" lon="28.1192976221699986"/>
-    <node visible="true" id="-45753" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6614321671899983" lon="28.1405578337599991"/>
-    <node visible="true" id="-45752" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6611207338400025" lon="28.1402185750600005"/>
-    <node visible="true" id="-45751" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6604419679800007" lon="28.1398873939599987"/>
-    <node visible="true" id="-45750" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6595555777599991" lon="28.1395158249099993"/>
-    <node visible="true" id="-45749" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6588847945900032" lon="28.1391765662100006"/>
-    <node visible="true" id="-45748" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6583178221700017" lon="28.1387807643999999"/>
-    <node visible="true" id="-45747" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6575512102099985" lon="28.1382637987700015"/>
-    <node visible="true" id="-45746" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6568724378999971" lon="28.1375933589700011"/>
-    <node visible="true" id="-45745" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564012893399980" lon="28.1370602381600001"/>
-    <node visible="true" id="-45744" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6559061834400008" lon="28.1366402035800007"/>
-    <node visible="true" id="-45743" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6554190624899974" lon="28.1361070827800006"/>
-    <node visible="true" id="-45742" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6547482719400008" lon="28.1353800998600008"/>
-    <node visible="true" id="-45741" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6543250344300020" lon="28.1348469790499998"/>
-    <node visible="true" id="-45740" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6539337389599975" lon="28.1343542461799956"/>
-    <node visible="true" id="-45739" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6536302850400002" lon="28.1340230650800009"/>
-    <node visible="true" id="-45738" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6530553190599964" lon="28.1334576339199991"/>
-    <node visible="true" id="-45737" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6525442374499999" lon="28.1328356596399978"/>
-    <node visible="true" id="-45736" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6520491264699970" lon="28.1320925215499962"/>
-    <node visible="true" id="-45735" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6611686466799966" lon="28.1363897983599962"/>
-    <node visible="true" id="-45734" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6609131114700020" lon="28.1363090224799990"/>
-    <node visible="true" id="-45733" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6604499534600006" lon="28.1360909275999980"/>
-    <node visible="true" id="-45732" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6597711863799969" lon="28.1354931860899988"/>
-    <node visible="true" id="-45731" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6592680994099993" lon="28.1353720222699977"/>
-    <node visible="true" id="-45730" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6585653736099992" lon="28.1350327635699990"/>
-    <node visible="true" id="-45729" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6583337932299962" lon="28.1346208065900001"/>
-    <node visible="true" id="-45728" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6578307043300011" lon="28.1340876857799955"/>
-    <node visible="true" id="-45727" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6574793402600001" lon="28.1339422891999966"/>
-    <node visible="true" id="-45726" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6570800625000022" lon="28.1336918839699983"/>
-    <node visible="true" id="-45725" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564172604899969" lon="28.1331991511000012"/>
-    <node visible="true" id="-45724" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6559461113600005" lon="28.1324237026500015"/>
-    <node visible="true" id="-45723" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6556746014299986" lon="28.1318663490799992"/>
-    <node visible="true" id="-45722" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6554829472399977" lon="28.1312524523900009"/>
-    <node visible="true" id="-45721" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6551555377700016" lon="28.1304931591200003"/>
-    <node visible="true" id="-45720" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6547003582800013" lon="28.1300488917799925"/>
-    <node visible="true" id="-45719" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6542132357699995" lon="28.1297257882599965"/>
-    <node visible="true" id="-45718" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6537580551399955" lon="28.1294188399199996"/>
-    <node visible="true" id="-45717" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6533428021599992" lon="28.1291199691600013"/>
-    <node visible="true" id="-45716" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6528556778900025" lon="28.1287241673500006"/>
-    <node visible="true" id="-45715" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6526320796500009" lon="28.1283606758900007"/>
-    <node visible="true" id="-45714" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6587170986100013" lon="28.1332153062800003"/>
-    <node visible="true" id="-45713" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6588768090699997" lon="28.1327548837600006"/>
-    <node visible="true" id="-45712" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6591083891099974" lon="28.1322136853699973"/>
-    <node visible="true" id="-45711" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6592281718399988" lon="28.1316724869700003"/>
-    <node visible="true" id="-45710" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6591642877199995" lon="28.1309697368099982"/>
-    <node visible="true" id="-45709" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6589726353100041" lon="28.1305497022399997"/>
-    <node visible="true" id="-45708" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6585014893799990" lon="28.1302185211300007"/>
-    <node visible="true" id="-45707" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6579584730099999" lon="28.1298873400200016"/>
-    <node visible="true" id="-45706" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6573356003100042" lon="28.1294269175099920"/>
-    <node visible="true" id="-45705" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6568484812099964" lon="28.1290876588100005"/>
-    <node visible="true" id="-45704" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564172604899987" lon="28.1287484001199992"/>
-    <node visible="true" id="-45703" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6560259671899988" lon="28.1281748913699943"/>
-    <node visible="true" id="-45702" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6556506446599979" lon="28.1274721412099993"/>
-    <node visible="true" id="-45701" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6552833073500004" lon="28.1267290031200012"/>
-    <node visible="true" id="-45700" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6549319408999992" lon="28.1261635719599994"/>
-    <node visible="true" id="-45699" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545246748299984" lon="28.1256950718600010"/>
-    <node visible="true" id="-45698" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6492381615199978" lon="28.1238291490300014"/>
-    <node visible="true" id="-45697" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6492062186100007" lon="28.1245480543600017"/>
-    <node visible="true" id="-45696" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6493020473200044" lon="28.1252750372799945"/>
-    <node visible="true" id="-45695" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6494378046100007" lon="28.1260504857300013"/>
-    <node visible="true" id="-45694" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6497492476199991" lon="28.1266724600000018"/>
-    <node visible="true" id="-45693" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6502124187900034" lon="28.1273025118699991"/>
-    <node visible="true" id="-45692" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6506995464899976" lon="28.1278437102599952"/>
-    <node visible="true" id="-45691" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6510748739499999" lon="28.1282879775999994"/>
-    <node visible="true" id="-45690" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6516498429599995" lon="28.1290472708700001"/>
-    <node visible="true" id="-45689" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6496134904400019" lon="28.1183767771399999"/>
-    <node visible="true" id="-45688" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6495975190000038" lon="28.1188775875899992"/>
-    <node visible="true" id="-45687" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6495975190000021" lon="28.1194510963400006"/>
-    <node visible="true" id="-45686" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6497412618999991" lon="28.1200407602600002"/>
-    <node visible="true" id="-45685" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6499089618799960" lon="28.1206304241900007"/>
-    <node visible="true" id="-45684" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6500527046600002" lon="28.1211797001699999"/>
-    <node visible="true" id="-45683" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6502283901999988" lon="28.1217612865000000"/>
-    <node visible="true" id="-45682" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6504360184700051" lon="28.1223024849000005"/>
-    <node visible="true" id="-45681" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6508193318900002" lon="28.1227709849999989"/>
-    <node visible="true" id="-45680" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6512585447000010" lon="28.1232152523399961"/>
-    <node visible="true" id="-45679" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6517217140200025" lon="28.1236675972699999"/>
-    <node visible="true" id="-45678" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6520810691399994" lon="28.1240795542599997"/>
-    <node visible="true" id="-45677" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6523286246799991" lon="28.1245318991900000"/>
-    <node visible="true" id="-45676" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6526400652999964" lon="28.1250730975799996"/>
-    <node visible="true" id="-45675" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6529355343700018" lon="28.1255496752700012"/>
-    <node visible="true" id="-45674" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6534905364499988" lon="28.1166320181300016"/>
-    <node visible="true" id="-45673" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6535144933499986" lon="28.1169672380300000"/>
-    <node visible="true" id="-45672" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6535783784299998" lon="28.1173832338099992"/>
-    <node visible="true" id="-45671" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6536742060199963" lon="28.1177467252699920"/>
-    <node visible="true" id="-45670" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6538618683199982" lon="28.1180940615600008"/>
-    <node visible="true" id="-45669" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6540415448899992" lon="28.1184212038699997"/>
-    <node visible="true" id="-45668" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6541932717200005" lon="28.1188089280900009"/>
-    <node visible="true" id="-45667" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6543410056700036" lon="28.1191885747299963"/>
-    <node visible="true" id="-45666" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6544528042999982" lon="28.1196530360399990"/>
-    <node visible="true" id="-45665" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545047107900004" lon="28.1200528766399991"/>
-    <node visible="true" id="-45664" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545047107900004" lon="28.1205092603699995"/>
-    <node visible="true" id="-45663" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6544887395600014" lon="28.1209252561499987"/>
-    <node visible="true" id="-45662" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6544607899099990" lon="28.1214704933399986"/>
-    <node visible="true" id="-45661" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545047107900004" lon="28.1220157305299985"/>
-    <node visible="true" id="-45660" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545566172799990" lon="28.1225407737499999"/>
-    <node visible="true" id="-45659" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6547123366999994" lon="28.1230738945500001"/>
-    <node visible="true" id="-45658" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6549239552899984" lon="28.1235989377700015"/>
-    <node visible="true" id="-45657" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6566328709099984" lon="28.1195641825699987"/>
-    <node visible="true" id="-45656" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6565610007800018" lon="28.1191118376399984"/>
-    <node visible="true" id="-45655" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567606399899990" lon="28.1200973033799997"/>
-    <node visible="true" id="-45654" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567486616400000" lon="28.1198913248800011"/>
-    <node visible="true" id="-45653" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6565530152099992" lon="28.1186998806599995"/>
-    <node visible="true" id="-45652" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564611811399974" lon="28.1178759666799998"/>
-    <node visible="true" id="-45651" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564412172099985" lon="28.1173428458699988"/>
-    <node visible="true" id="-45650" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564412172099985" lon="28.1167652983299945"/>
-    <node visible="true" id="-45649" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567726183399980" lon="28.1204769500100014"/>
-    <node visible="true" id="-45648" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567806038999962" lon="28.1207475492100016"/>
-    <node visible="true" id="-45647" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567885894699987" lon="28.1210464199699999"/>
-    <node visible="true" id="-45646" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6568165389500020" lon="28.1214381829800004"/>
-    <node visible="true" id="-45645" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6568684451200024" lon="28.1218178296199994"/>
-    <node visible="true" id="-45644" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6569722574299988" lon="28.1222015150499942"/>
-    <node visible="true" id="-45643" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6570960336200002" lon="28.1225326961599933"/>
-    <node visible="true" id="-45642" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6572956725400001" lon="28.1228356057099980"/>
-    <node visible="true" id="-45641" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6475176963700005" lon="28.1236344124400013"/>
-    <node visible="true" id="-45640" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6476609791599994" lon="28.1217038614900012"/>
-    <node visible="true" id="-45639" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6481166451299956" lon="28.1193993315499995"/>
-    <node visible="true" id="-45638" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6559335454799999" lon="28.1469221196499966"/>
-    <node visible="true" id="-45637" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6553242307100025" lon="28.1451379938399953"/>
-    <node visible="true" id="-45628" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6546846287000001" lon="28.1432651875200008"/>
-    <node visible="true" id="-45626" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6410316365500002" lon="28.1395330008400002"/>
-    <node visible="true" id="-45625" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6471713913100015" lon="28.1373549573899986"/>
-    <node visible="true" id="-45624" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6520670543500007" lon="28.1295520624999931"/>
-    <node visible="true" id="-45623" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6532603911799999" lon="28.1260864957899983"/>
-    <node visible="true" id="-45622" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6575133124299981" lon="28.1230948905699947"/>
-    <node visible="true" id="-45621" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6540445117899996" lon="28.1252075383199980"/>
-    <node visible="true" id="-45617" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6376175892599978" lon="28.1398700865000002"/>
-    <node visible="true" id="-45613" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6447289496399993" lon="28.1386041166299989"/>
-    <node visible="true" id="-45610" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6493939291599986" lon="28.1356693682899994"/>
-    <node visible="true" id="-45606" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6516979526199993" lon="28.1316412823300013"/>
-    <node visible="true" id="-45604" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6523806235300000" lon="28.1277282845499990"/>
-    <node visible="true" id="-45601" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6551112947800011" lon="28.1240454631100008"/>
-    <node visible="true" id="-45580" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6361797629499968" lon="28.1413633341699914"/>
-    <node visible="true" id="-45579" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6351058292400005" lon="28.1414032697699987"/>
-    <node visible="true" id="-45578" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6351374155700036" lon="28.1399416268099998"/>
-    <node visible="true" id="-45577" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6362192457500022" lon="28.1399416268099998"/>
-    <node visible="true" id="-45558" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6549183591500007" lon="28.1316684559300008"/>
-    <node visible="true" id="-45557" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6550831274700002" lon="28.1322584015600015"/>
-    <node visible="true" id="-45556" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6555420662899998" lon="28.1321272526199984"/>
-    <node visible="true" id="-45555" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6553772981700003" lon="28.1315373069900012"/>
+    <node visible="true" id="-45260" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6541474185900018" lon="28.1392570135799929"/>
+    <node visible="true" id="-45259" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6548074607699945" lon="28.1410811127400002"/>
+    <node visible="true" id="-45258" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6552082000999970" lon="28.1408903572699991"/>
+    <node visible="true" id="-45257" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6544538668900035" lon="28.1391020247700006"/>
+    <node visible="true" id="-45252" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6429273889300013" lon="28.1463070570099987"/>
+    <node visible="true" id="-45251" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6428275656700002" lon="28.1460930009300014"/>
+    <node visible="true" id="-45250" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6426718413400003" lon="28.1458749060599978"/>
+    <node visible="true" id="-45249" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6425600392100019" lon="28.1456568111799932"/>
+    <node visible="true" id="-45248" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6423923359600003" lon="28.1453175524800017"/>
+    <node visible="true" id="-45247" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6422885196300019" lon="28.1450025265499981"/>
+    <node visible="true" id="-45246" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6422326185100022" lon="28.1448490523799926"/>
+    <node visible="true" id="-45245" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6421367880099975" lon="28.1445744143900001"/>
+    <node visible="true" id="-45244" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6420369645500035" lon="28.1443522807199997"/>
+    <node visible="true" id="-45243" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6419690845700003" lon="28.1440493711699986"/>
+    <node visible="true" id="-45242" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6419012045899990" lon="28.1437464616199939"/>
+    <node visible="true" id="-45241" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6417814163500015" lon="28.1434637460399983"/>
+    <node visible="true" id="-45240" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6416656210199978" lon="28.1431487201099912"/>
+    <node visible="true" id="-45239" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6415697903800002" lon="28.1428902372900005"/>
+    <node visible="true" id="-45238" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6414699667599990" lon="28.1425752113600005"/>
+    <node visible="true" id="-45237" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6413062559700009" lon="28.1422965345800016"/>
+    <node visible="true" id="-45236" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6412463617599968" lon="28.1419976638199998"/>
+    <node visible="true" id="-45235" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6412343829199987" lon="28.1417068706500011"/>
+    <node visible="true" id="-45234" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6411944534400007" lon="28.1413272240199994"/>
+    <node visible="true" id="-45233" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6411545239599974" lon="28.1409354610000015"/>
+    <node visible="true" id="-45232" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6411225803700020" lon="28.1406567842100017"/>
+    <node visible="true" id="-45231" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6411265733199976" lon="28.1402650212000012"/>
+    <node visible="true" id="-45230" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6410586931800015" lon="28.1398490254100011"/>
+    <node visible="true" id="-45229" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6502663223000020" lon="28.1437908883500008"/>
+    <node visible="true" id="-45228" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6501305653100005" lon="28.1435283667400000"/>
+    <node visible="true" id="-45227" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6499868225599990" lon="28.1431608364900008"/>
+    <node visible="true" id="-45226" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6498111369000004" lon="28.1428902372900005"/>
+    <node visible="true" id="-45225" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6496993368899986" lon="28.1426236768900004"/>
+    <node visible="true" id="-45224" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6495516011200024" lon="28.1423328837200017"/>
+    <node visible="true" id="-45223" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6493878938399984" lon="28.1420461293499926"/>
+    <node visible="true" id="-45222" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6491802650000018" lon="28.1416341723599999"/>
+    <node visible="true" id="-45221" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6490485004799993" lon="28.1413797283399987"/>
+    <node visible="true" id="-45220" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6489327073899993" lon="28.1411212455200008"/>
+    <node visible="true" id="-45219" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6487809784399978" lon="28.1407941032099984"/>
+    <node visible="true" id="-45218" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6486132779599973" lon="28.1405235040099981"/>
+    <node visible="true" id="-45217" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6484695346299993" lon="28.1402286720500001"/>
+    <node visible="true" id="-45216" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6483138126300041" lon="28.1399015297399977"/>
+    <node visible="true" id="-45215" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6481660763200026" lon="28.1396107365699990"/>
+    <node visible="true" id="-45214" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6479145251600027" lon="28.1391705080200012"/>
+    <node visible="true" id="-45213" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6477428314099978" lon="28.1388554820900012"/>
+    <node visible="true" id="-45212" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6475551660700027" lon="28.1383748656099932"/>
+    <node visible="true" id="-45211" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6474154152199976" lon="28.1380154129399962"/>
+    <node visible="true" id="-45210" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6472676785500031" lon="28.1376155723299988"/>
+    <node visible="true" id="-45209" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6328590822100004" lon="28.1300246590199947"/>
+    <node visible="true" id="-45208" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6330347757699997" lon="28.1303073746000010"/>
+    <node visible="true" id="-45207" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6333701905100018" lon="28.1306708660600009"/>
+    <node visible="true" id="-45206" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6337535212900018" lon="28.1313736162099985"/>
+    <node visible="true" id="-45205" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6339931028199999" lon="28.1318825042599983"/>
+    <node visible="true" id="-45204" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6342806004600039" lon="28.1326983406400011"/>
+    <node visible="true" id="-45203" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6345361537399992" lon="28.1331264528100000"/>
+    <node visible="true" id="-45202" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6346799023799985" lon="28.1333526252699997"/>
+    <node visible="true" id="-45201" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6349035112700019" lon="28.1337484270800005"/>
+    <node visible="true" id="-45200" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6351989942400014" lon="28.1342734702999984"/>
+    <node visible="true" id="-45199" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6353906587500013" lon="28.1347985135199927"/>
+    <node visible="true" id="-45198" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6356062811999994" lon="28.1351216170399994"/>
+    <node visible="true" id="-45197" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6359337076500022" lon="28.1356870482000012"/>
+    <node visible="true" id="-45196" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6360215537200009" lon="28.1361393931300015"/>
+    <node visible="true" id="-45195" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6362212038099972" lon="28.1365917380600017"/>
+    <node visible="true" id="-45194" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6364607837800023" lon="28.1371087036900001"/>
+    <node visible="true" id="-45193" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6365646017200000" lon="28.1375448934400012"/>
+    <node visible="true" id="-45192" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6368441114100012" lon="28.1380295487199952"/>
+    <node visible="true" id="-45191" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6369958451600048" lon="28.1385465143500006"/>
+    <node visible="true" id="-45190" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6373232704100040" lon="28.1392654196800009"/>
+    <node visible="true" id="-45189" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6398148873600071" lon="28.1296207796200015"/>
+    <node visible="true" id="-45188" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6398069014299992" lon="28.1298873400200016"/>
+    <node visible="true" id="-45187" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6399187043699968" lon="28.1303558401299938"/>
+    <node visible="true" id="-45186" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6400145354400006" lon="28.1308081850500002"/>
+    <node visible="true" id="-45185" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6402780707399991" lon="28.1312686075700000"/>
+    <node visible="true" id="-45184" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6403978594600002" lon="28.1316967197299981"/>
+    <node visible="true" id="-45183" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6404936903999978" lon="28.1322136853699973"/>
+    <node visible="true" id="-45182" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6406613945000039" lon="28.1327306509999993"/>
+    <node visible="true" id="-45181" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6408370844199975" lon="28.1331102976300009"/>
+    <node visible="true" id="-45180" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6410846473499987" lon="28.1336918839699983"/>
+    <node visible="true" id="-45179" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6413960972700021" lon="28.1342977030699934"/>
+    <node visible="true" id="-45178" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6415158856300032" lon="28.1347662031699990"/>
+    <node visible="true" id="-45177" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6417075469200011" lon="28.1350893066899985"/>
+    <node visible="true" id="-45176" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6418992081200017" lon="28.1354527981499984"/>
+    <node visible="true" id="-45175" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6421707279799964" lon="28.1358485999599957"/>
+    <node visible="true" id="-45174" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6425300922100003" lon="28.1363171000600012"/>
+    <node visible="true" id="-45173" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6427856398900005" lon="28.1368744536400008"/>
+    <node visible="true" id="-45172" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6431929186600005" lon="28.1371814019800013"/>
+    <node visible="true" id="-45171" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6437119988000006" lon="28.1376741348499948"/>
+    <node visible="true" id="-45170" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6442869790499994" lon="28.1382234108300011"/>
+    <node visible="true" id="-45169" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6436321403600012" lon="28.1262443478400002"/>
+    <node visible="true" id="-45168" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6438238005799963" lon="28.1268501669399988"/>
+    <node visible="true" id="-45167" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6438238005799963" lon="28.1271490376899997"/>
+    <node visible="true" id="-45166" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6440474040499975" lon="28.1279244861399995"/>
+    <node visible="true" id="-45165" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6443907948300041" lon="28.1286918569999997"/>
+    <node visible="true" id="-45164" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6446143979600016" lon="28.1296773227400010"/>
+    <node visible="true" id="-45163" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6450136889299998" lon="28.1304285384199986"/>
+    <node visible="true" id="-45162" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6453570788300027" lon="28.1309212712899921"/>
+    <node visible="true" id="-45161" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6457244258199992" lon="28.1313897713900012"/>
+    <node visible="true" id="-45160" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6462594740500016" lon="28.1319875129000003"/>
+    <node visible="true" id="-45159" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6466667490599978" lon="28.1325287113000009"/>
+    <node visible="true" id="-45158" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6470580520900011" lon="28.1331102976300009"/>
+    <node visible="true" id="-45157" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6476410129900021" lon="28.1336434184399984"/>
+    <node visible="true" id="-45156" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6482080014899978" lon="28.1343704013599982"/>
+    <node visible="true" id="-45155" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6489586610100009" lon="28.1351296946299918"/>
+    <node visible="true" id="-45154" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6507314892599965" lon="28.1488777493899995"/>
+    <node visible="true" id="-45153" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6512585447000028" lon="28.1486434993400003"/>
+    <node visible="true" id="-45152" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6517376853699997" lon="28.1483446285799985"/>
+    <node visible="true" id="-45151" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6523845243000022" lon="28.1481426888800002"/>
+    <node visible="true" id="-45150" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6529674769600007" lon="28.1478761284800001"/>
+    <node visible="true" id="-45149" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6535424430700019" lon="28.1476741887799946"/>
+    <node visible="true" id="-45148" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6543729481400007" lon="28.1475045594300006"/>
+    <node visible="true" id="-45147" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6551794945699996" lon="28.1472056886799997"/>
+    <node visible="true" id="-45146" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6503162329399998" lon="28.1470522145099942"/>
+    <node visible="true" id="-45145" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6506915607900012" lon="28.1468179644500012"/>
+    <node visible="true" id="-45144" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6512345876500003" lon="28.1465190937000003"/>
+    <node visible="true" id="-45143" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6519772554700030" lon="28.1462202229399985"/>
+    <node visible="true" id="-45142" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6524004956200002" lon="28.1460748263599996"/>
+    <node visible="true" id="-45141" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6530393477700027" lon="28.1459051970099985"/>
+    <node visible="true" id="-45140" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6538618683199999" lon="28.1455901710799985"/>
+    <node visible="true" id="-45139" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545486316700000" lon="28.1453478434399962"/>
+    <node visible="true" id="-45138" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6499409047199975" lon="28.1449601192199950"/>
+    <node visible="true" id="-45137" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6503082472399999" lon="28.1447824122800014"/>
+    <node visible="true" id="-45136" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6509471029399982" lon="28.1445077742899912"/>
+    <node visible="true" id="-45135" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6516099145799998" lon="28.1442412138800009"/>
+    <node visible="true" id="-45134" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6522008541000019" lon="28.1439827310700004"/>
+    <node visible="true" id="-45133" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6528956061299986" lon="28.1437404034300016"/>
+    <node visible="true" id="-45132" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6534466154499956" lon="28.1436273172000000"/>
+    <node visible="true" id="-45131" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6541653220399990" lon="28.1434253775000016"/>
+    <node visible="true" id="-45130" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6418752504800018" lon="28.1225771228900001"/>
+    <node visible="true" id="-45129" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6420908692200005" lon="28.1224801918400011"/>
+    <node visible="true" id="-45128" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6425061346099987" lon="28.1224559590699990"/>
+    <node visible="true" id="-45127" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6431849328100014" lon="28.1226740539500000"/>
+    <node visible="true" id="-45126" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6437758855399984" lon="28.1230698557599972"/>
+    <node visible="true" id="-45125" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6443348940300027" lon="28.1235625886300014"/>
+    <node visible="true" id="-45124" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6449258449599977" lon="28.1237645283299997"/>
+    <node visible="true" id="-45123" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6455886671899993" lon="28.1236595196799932"/>
+    <node visible="true" id="-45122" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6464351613699968" lon="28.1235868213899991"/>
+    <node visible="true" id="-45121" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6418433069499994" lon="28.1196611136299985"/>
+    <node visible="true" id="-45120" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6421627421099956" lon="28.1198145877999970"/>
+    <node visible="true" id="-45119" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6426818236700012" lon="28.1201296137300005"/>
+    <node visible="true" id="-45118" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6432488196300010" lon="28.1206869672999993"/>
+    <node visible="true" id="-45117" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6436880412700017" lon="28.1210423811699997"/>
+    <node visible="true" id="-45116" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6441272624000014" lon="28.1212927864000015"/>
+    <node visible="true" id="-45115" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6449178591400013" lon="28.1213654846899992"/>
+    <node visible="true" id="-45114" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6455966530000001" lon="28.1213735622799987"/>
+    <node visible="true" id="-45113" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6462594740499981" lon="28.1213977950400000"/>
+    <node visible="true" id="-45112" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6471778386500002" lon="28.1215755019799971"/>
+    <node visible="true" id="-45111" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6421148268499994" lon="28.1177063373299987"/>
+    <node visible="true" id="-45110" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6424262759099992" lon="28.1179325097999921"/>
+    <node visible="true" id="-45109" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6429453571099977" lon="28.1184333202499914"/>
+    <node visible="true" id="-45108" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6434724234399969" lon="28.1188048893000015"/>
+    <node visible="true" id="-45107" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6440713615600000" lon="28.1190714497000016"/>
+    <node visible="true" id="-45106" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6448140435000020" lon="28.1192249238700001"/>
+    <node visible="true" id="-45105" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6455647097800004" lon="28.1191926135199992"/>
+    <node visible="true" id="-45104" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6463712750800017" lon="28.1191845359299997"/>
+    <node visible="true" id="-45103" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6469781943600008" lon="28.1192410790499920"/>
+    <node visible="true" id="-45102" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6476569845100002" lon="28.1192976221699986"/>
+    <node visible="true" id="-45101" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6614321671900001" lon="28.1405578337599991"/>
+    <node visible="true" id="-45100" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6611207338400025" lon="28.1402185750600005"/>
+    <node visible="true" id="-45099" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6604419679800007" lon="28.1398873939599987"/>
+    <node visible="true" id="-45098" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6595555777599973" lon="28.1395158249099993"/>
+    <node visible="true" id="-45097" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6588847945900032" lon="28.1391765662100006"/>
+    <node visible="true" id="-45096" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6583178221700035" lon="28.1387807643999999"/>
+    <node visible="true" id="-45095" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6575512102100003" lon="28.1382637987700015"/>
+    <node visible="true" id="-45094" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6568724378999971" lon="28.1375933589700011"/>
+    <node visible="true" id="-45093" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564012893399997" lon="28.1370602381600001"/>
+    <node visible="true" id="-45092" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6559061834400008" lon="28.1366402035800007"/>
+    <node visible="true" id="-45091" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6554190624900009" lon="28.1361070827800006"/>
+    <node visible="true" id="-45090" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6547482719399991" lon="28.1353800998600008"/>
+    <node visible="true" id="-45089" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6543250344300020" lon="28.1348469790499998"/>
+    <node visible="true" id="-45088" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6539337389599993" lon="28.1343542461799956"/>
+    <node visible="true" id="-45087" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6536302850400020" lon="28.1340230650800009"/>
+    <node visible="true" id="-45086" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6530553190599964" lon="28.1334576339199991"/>
+    <node visible="true" id="-45085" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6525442374499999" lon="28.1328356596399978"/>
+    <node visible="true" id="-45084" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6520491264700006" lon="28.1320925215499962"/>
+    <node visible="true" id="-45083" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6611686466799984" lon="28.1363897983599962"/>
+    <node visible="true" id="-45082" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6609131114700020" lon="28.1363090224799990"/>
+    <node visible="true" id="-45081" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6604499534600023" lon="28.1360909275999980"/>
+    <node visible="true" id="-45080" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6597711863799987" lon="28.1354931860899988"/>
+    <node visible="true" id="-45079" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6592680994099993" lon="28.1353720222699977"/>
+    <node visible="true" id="-45078" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6585653736099992" lon="28.1350327635699990"/>
+    <node visible="true" id="-45077" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6583337932299997" lon="28.1346208065900001"/>
+    <node visible="true" id="-45076" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6578307043300011" lon="28.1340876857799955"/>
+    <node visible="true" id="-45075" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6574793402600001" lon="28.1339422891999966"/>
+    <node visible="true" id="-45074" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6570800625000004" lon="28.1336918839699983"/>
+    <node visible="true" id="-45073" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564172604899969" lon="28.1331991511000012"/>
+    <node visible="true" id="-45072" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6559461113600005" lon="28.1324237026500015"/>
+    <node visible="true" id="-45071" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6556746014299968" lon="28.1318663490799992"/>
+    <node visible="true" id="-45070" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6554829472399959" lon="28.1312524523900009"/>
+    <node visible="true" id="-45069" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6551555377699998" lon="28.1304931591200003"/>
+    <node visible="true" id="-45068" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6547003582799995" lon="28.1300488917799925"/>
+    <node visible="true" id="-45067" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6542132357699977" lon="28.1297257882599965"/>
+    <node visible="true" id="-45066" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6537580551399991" lon="28.1294188399199996"/>
+    <node visible="true" id="-45065" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6533428021600027" lon="28.1291199691600013"/>
+    <node visible="true" id="-45064" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6528556778900025" lon="28.1287241673500006"/>
+    <node visible="true" id="-45063" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6526320796500009" lon="28.1283606758900007"/>
+    <node visible="true" id="-45062" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6587170986100013" lon="28.1332153062800003"/>
+    <node visible="true" id="-45061" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6588768090700015" lon="28.1327548837600006"/>
+    <node visible="true" id="-45060" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6591083891099974" lon="28.1322136853699973"/>
+    <node visible="true" id="-45059" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6592281718399988" lon="28.1316724869700003"/>
+    <node visible="true" id="-45058" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6591642877199977" lon="28.1309697368099982"/>
+    <node visible="true" id="-45057" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6589726353100041" lon="28.1305497022399997"/>
+    <node visible="true" id="-45056" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6585014893799990" lon="28.1302185211300007"/>
+    <node visible="true" id="-45055" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6579584730099999" lon="28.1298873400200016"/>
+    <node visible="true" id="-45054" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6573356003100006" lon="28.1294269175099920"/>
+    <node visible="true" id="-45053" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6568484812099982" lon="28.1290876588100005"/>
+    <node visible="true" id="-45052" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564172604899987" lon="28.1287484001199992"/>
+    <node visible="true" id="-45051" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6560259671900006" lon="28.1281748913699943"/>
+    <node visible="true" id="-45050" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6556506446599997" lon="28.1274721412099993"/>
+    <node visible="true" id="-45049" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6552833073500004" lon="28.1267290031200012"/>
+    <node visible="true" id="-45048" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6549319408999992" lon="28.1261635719599994"/>
+    <node visible="true" id="-45047" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545246748300002" lon="28.1256950718600010"/>
+    <node visible="true" id="-45046" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6492381615199996" lon="28.1238291490300014"/>
+    <node visible="true" id="-45045" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6492062186099989" lon="28.1245480543600017"/>
+    <node visible="true" id="-45044" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6493020473200026" lon="28.1252750372799945"/>
+    <node visible="true" id="-45043" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6494378046100042" lon="28.1260504857300013"/>
+    <node visible="true" id="-45042" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6497492476200026" lon="28.1266724600000018"/>
+    <node visible="true" id="-45041" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6502124187900016" lon="28.1273025118699991"/>
+    <node visible="true" id="-45040" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6506995464899976" lon="28.1278437102599952"/>
+    <node visible="true" id="-45039" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6510748739499999" lon="28.1282879775999994"/>
+    <node visible="true" id="-45038" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6516498429599977" lon="28.1290472708700001"/>
+    <node visible="true" id="-45037" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6496134904400019" lon="28.1183767771399999"/>
+    <node visible="true" id="-45036" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6495975190000038" lon="28.1188775875899992"/>
+    <node visible="true" id="-45035" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6495975190000038" lon="28.1194510963400006"/>
+    <node visible="true" id="-45034" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6497412619000009" lon="28.1200407602600002"/>
+    <node visible="true" id="-45033" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6499089618799996" lon="28.1206304241900007"/>
+    <node visible="true" id="-45032" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6500527046600002" lon="28.1211797001699999"/>
+    <node visible="true" id="-45031" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6502283902000006" lon="28.1217612865000000"/>
+    <node visible="true" id="-45030" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6504360184700051" lon="28.1223024849000005"/>
+    <node visible="true" id="-45029" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6508193318899966" lon="28.1227709849999989"/>
+    <node visible="true" id="-45028" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6512585446999992" lon="28.1232152523399961"/>
+    <node visible="true" id="-45027" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6517217140200025" lon="28.1236675972699999"/>
+    <node visible="true" id="-45026" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6520810691399994" lon="28.1240795542599997"/>
+    <node visible="true" id="-45025" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6523286246799991" lon="28.1245318991900000"/>
+    <node visible="true" id="-45024" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6526400652999982" lon="28.1250730975799996"/>
+    <node visible="true" id="-45023" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6529355343700018" lon="28.1255496752700012"/>
+    <node visible="true" id="-45022" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6534905364500005" lon="28.1166320181300016"/>
+    <node visible="true" id="-45021" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6535144933499968" lon="28.1169672380300000"/>
+    <node visible="true" id="-45020" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6535783784299998" lon="28.1173832338099992"/>
+    <node visible="true" id="-45019" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6536742060199980" lon="28.1177467252699920"/>
+    <node visible="true" id="-45018" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6538618683199999" lon="28.1180940615600008"/>
+    <node visible="true" id="-45017" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6540415448900010" lon="28.1184212038699997"/>
+    <node visible="true" id="-45016" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6541932717200005" lon="28.1188089280900009"/>
+    <node visible="true" id="-45015" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6543410056700019" lon="28.1191885747299963"/>
+    <node visible="true" id="-45014" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6544528042999982" lon="28.1196530360399990"/>
+    <node visible="true" id="-45013" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545047107900022" lon="28.1200528766399991"/>
+    <node visible="true" id="-45012" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545047107900022" lon="28.1205092603699995"/>
+    <node visible="true" id="-45011" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6544887395600032" lon="28.1209252561499987"/>
+    <node visible="true" id="-45010" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6544607899099972" lon="28.1214704933399986"/>
+    <node visible="true" id="-45009" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545047107900004" lon="28.1220157305299985"/>
+    <node visible="true" id="-45008" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6545566172799990" lon="28.1225407737499999"/>
+    <node visible="true" id="-45007" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6547123366999976" lon="28.1230738945500001"/>
+    <node visible="true" id="-45006" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6549239552900019" lon="28.1235989377700015"/>
+    <node visible="true" id="-45005" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6566328709099984" lon="28.1195641825699987"/>
+    <node visible="true" id="-45004" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6565610007799982" lon="28.1191118376399984"/>
+    <node visible="true" id="-45003" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567606399899990" lon="28.1200973033799997"/>
+    <node visible="true" id="-45002" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567486616400000" lon="28.1198913248800011"/>
+    <node visible="true" id="-45001" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6565530152099992" lon="28.1186998806599995"/>
+    <node visible="true" id="-45000" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564611811399992" lon="28.1178759666799998"/>
+    <node visible="true" id="-44999" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564412172099985" lon="28.1173428458699988"/>
+    <node visible="true" id="-44998" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6564412172099985" lon="28.1167652983299945"/>
+    <node visible="true" id="-44997" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567726183399980" lon="28.1204769500100014"/>
+    <node visible="true" id="-44996" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567806038999979" lon="28.1207475492100016"/>
+    <node visible="true" id="-44995" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6567885894700023" lon="28.1210464199699999"/>
+    <node visible="true" id="-44994" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6568165389500020" lon="28.1214381829800004"/>
+    <node visible="true" id="-44993" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6568684451200024" lon="28.1218178296199994"/>
+    <node visible="true" id="-44992" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6569722574300005" lon="28.1222015150499942"/>
+    <node visible="true" id="-44991" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6570960336200020" lon="28.1225326961599933"/>
+    <node visible="true" id="-44990" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6572956725400019" lon="28.1228356057099980"/>
+    <node visible="true" id="-44989" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6475176963700005" lon="28.1236344124400013"/>
+    <node visible="true" id="-44988" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6476609791599994" lon="28.1217038614900012"/>
+    <node visible="true" id="-44987" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6481166451299991" lon="28.1193993315499995"/>
+    <node visible="true" id="-44986" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6559335454799999" lon="28.1469221196499966"/>
+    <node visible="true" id="-44985" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6553242307100007" lon="28.1451379938399953"/>
+    <node visible="true" id="-44976" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6546846287000001" lon="28.1432651875200008"/>
+    <node visible="true" id="-44974" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6410316365500002" lon="28.1395330008400002"/>
+    <node visible="true" id="-44973" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6471713913100015" lon="28.1373549573899986"/>
+    <node visible="true" id="-44972" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6520670543500025" lon="28.1295520624999931"/>
+    <node visible="true" id="-44971" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6532603911800017" lon="28.1260864957899983"/>
+    <node visible="true" id="-44970" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6575133124299981" lon="28.1230948905699947"/>
+    <node visible="true" id="-44969" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6540445117899996" lon="28.1252075383199980"/>
+    <node visible="true" id="-44965" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6376175892599996" lon="28.1398700865000002"/>
+    <node visible="true" id="-44961" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6447289496399975" lon="28.1386041166299989"/>
+    <node visible="true" id="-44958" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6493939291599986" lon="28.1356693682899994"/>
+    <node visible="true" id="-44954" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6516979526199993" lon="28.1316412823300013"/>
+    <node visible="true" id="-44952" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6523806235299983" lon="28.1277282845499990"/>
+    <node visible="true" id="-44949" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540" lat="8.6551112947800011" lon="28.1240454631100008"/>
+    <node visible="true" id="-44945" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6662151928999975" lon="28.1452013279100015"/>
+    <node visible="true" id="-44944" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6661399642799992" lon="28.1447066946900009"/>
+    <node visible="true" id="-44943" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6661324414199985" lon="28.1441283543000011"/>
+    <node visible="true" id="-44942" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6662979443600001" lon="28.1433293313899995"/>
+    <node visible="true" id="-44941" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6663430815100035" lon="28.1427433812600007"/>
+    <node visible="true" id="-44940" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6662828986400005" lon="28.1422944064899987"/>
+    <node visible="true" id="-44939" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6662828986400005" lon="28.1417769440400001"/>
+    <node visible="true" id="-44938" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6662979443600019" lon="28.1413203595200017"/>
+    <node visible="true" id="-44937" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6662528071999994" lon="28.1410387990699995"/>
+    <node visible="true" id="-44923" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6049038497099986" lon="28.1809191152700009"/>
+    <node visible="true" id="-44922" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6085682587499974" lon="28.1806922084500009"/>
+    <node visible="true" id="-44921" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6126813286699999" lon="28.1797845811800016"/>
+    <node visible="true" id="-44920" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6151491491599987" lon="28.1785744114799996"/>
+    <node visible="true" id="-44919" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6176169535400025" lon="28.1766835213299984"/>
+    <node visible="true" id="-44918" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6197856168199998" lon="28.1744144531499998"/>
+    <node visible="true" id="-44898" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6361797629499986" lon="28.1413633341699914"/>
+    <node visible="true" id="-44897" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6351058292400005" lon="28.1414032697699987"/>
+    <node visible="true" id="-44896" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6351374155700018" lon="28.1399416268099998"/>
+    <node visible="true" id="-44895" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6362192457500022" lon="28.1399416268099998"/>
     <node visible="true" id="1" timestamp="2018-06-11T16:49:01Z" version="1" changeset="539" lat="8.6915819319000001" lon="28.1245758336599998"/>
     <node visible="true" id="2" timestamp="2018-06-11T16:49:01Z" version="1" changeset="539" lat="8.6873156635199997" lon="28.1255540830999990"/>
     <node visible="true" id="3" timestamp="2018-06-11T16:49:01Z" version="1" changeset="539" lat="8.6832484424899992" lon="28.1261582959999998"/>
@@ -410,12 +421,12 @@
     <node visible="true" id="109" timestamp="2018-06-11T16:49:01Z" version="1" changeset="539" lat="8.6536942364799998" lon="28.1441155115299999"/>
     <node visible="true" id="110" timestamp="2018-06-11T16:49:01Z" version="1" changeset="539" lat="8.6539715819699996" lon="28.1448581155699991"/>
     <node visible="true" id="111" timestamp="2018-06-11T16:49:01Z" version="1" changeset="539" lat="8.6547709884100001" lon="28.1445775762699988"/>
-    <way visible="true" id="-45580" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45909"/>
-        <nd ref="-45910"/>
-        <nd ref="-45911"/>
-        <nd ref="-45912"/>
-        <nd ref="-45909"/>
+    <way visible="true" id="-44892" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-45257"/>
+        <nd ref="-45258"/>
+        <nd ref="-45259"/>
+        <nd ref="-45260"/>
+        <nd ref="-45257"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="building" v="cowshed"/>
         <tag k="source" v="Unknown;osm"/>
@@ -425,31 +436,31 @@
         <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45578" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45626"/>
-        <nd ref="-45882"/>
-        <nd ref="-45883"/>
-        <nd ref="-45884"/>
-        <nd ref="-45885"/>
-        <nd ref="-45886"/>
-        <nd ref="-45887"/>
-        <nd ref="-45888"/>
-        <nd ref="-45889"/>
-        <nd ref="-45890"/>
-        <nd ref="-45891"/>
-        <nd ref="-45892"/>
-        <nd ref="-45893"/>
-        <nd ref="-45894"/>
-        <nd ref="-45895"/>
-        <nd ref="-45896"/>
-        <nd ref="-45897"/>
-        <nd ref="-45898"/>
-        <nd ref="-45899"/>
-        <nd ref="-45900"/>
-        <nd ref="-45901"/>
-        <nd ref="-45902"/>
-        <nd ref="-45903"/>
-        <nd ref="-45904"/>
+    <way visible="true" id="-44890" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44974"/>
+        <nd ref="-45230"/>
+        <nd ref="-45231"/>
+        <nd ref="-45232"/>
+        <nd ref="-45233"/>
+        <nd ref="-45234"/>
+        <nd ref="-45235"/>
+        <nd ref="-45236"/>
+        <nd ref="-45237"/>
+        <nd ref="-45238"/>
+        <nd ref="-45239"/>
+        <nd ref="-45240"/>
+        <nd ref="-45241"/>
+        <nd ref="-45242"/>
+        <nd ref="-45243"/>
+        <nd ref="-45244"/>
+        <nd ref="-45245"/>
+        <nd ref="-45246"/>
+        <nd ref="-45247"/>
+        <nd ref="-45248"/>
+        <nd ref="-45249"/>
+        <nd ref="-45250"/>
+        <nd ref="-45251"/>
+        <nd ref="-45252"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{e7522392-3887-4ebd-9ddc-ab3e16c6b8ab}"/>
@@ -458,28 +469,28 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45577" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45625"/>
-        <nd ref="-45862"/>
-        <nd ref="-45863"/>
-        <nd ref="-45864"/>
-        <nd ref="-45865"/>
-        <nd ref="-45866"/>
-        <nd ref="-45867"/>
-        <nd ref="-45868"/>
-        <nd ref="-45869"/>
-        <nd ref="-45870"/>
-        <nd ref="-45871"/>
-        <nd ref="-45872"/>
-        <nd ref="-45873"/>
-        <nd ref="-45874"/>
-        <nd ref="-45875"/>
-        <nd ref="-45876"/>
-        <nd ref="-45877"/>
-        <nd ref="-45878"/>
-        <nd ref="-45879"/>
-        <nd ref="-45880"/>
-        <nd ref="-45881"/>
+    <way visible="true" id="-44889" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44973"/>
+        <nd ref="-45210"/>
+        <nd ref="-45211"/>
+        <nd ref="-45212"/>
+        <nd ref="-45213"/>
+        <nd ref="-45214"/>
+        <nd ref="-45215"/>
+        <nd ref="-45216"/>
+        <nd ref="-45217"/>
+        <nd ref="-45218"/>
+        <nd ref="-45219"/>
+        <nd ref="-45220"/>
+        <nd ref="-45221"/>
+        <nd ref="-45222"/>
+        <nd ref="-45223"/>
+        <nd ref="-45224"/>
+        <nd ref="-45225"/>
+        <nd ref="-45226"/>
+        <nd ref="-45227"/>
+        <nd ref="-45228"/>
+        <nd ref="-45229"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{2264796f-c585-4f5c-a4b0-251b32c0f621}"/>
@@ -488,28 +499,28 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45576" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45617"/>
-        <nd ref="-45842"/>
-        <nd ref="-45843"/>
-        <nd ref="-45844"/>
-        <nd ref="-45845"/>
-        <nd ref="-45846"/>
-        <nd ref="-45847"/>
-        <nd ref="-45848"/>
-        <nd ref="-45849"/>
-        <nd ref="-45850"/>
-        <nd ref="-45851"/>
-        <nd ref="-45852"/>
-        <nd ref="-45853"/>
-        <nd ref="-45854"/>
-        <nd ref="-45855"/>
-        <nd ref="-45856"/>
-        <nd ref="-45857"/>
-        <nd ref="-45858"/>
-        <nd ref="-45859"/>
-        <nd ref="-45860"/>
-        <nd ref="-45861"/>
+    <way visible="true" id="-44888" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44965"/>
+        <nd ref="-45190"/>
+        <nd ref="-45191"/>
+        <nd ref="-45192"/>
+        <nd ref="-45193"/>
+        <nd ref="-45194"/>
+        <nd ref="-45195"/>
+        <nd ref="-45196"/>
+        <nd ref="-45197"/>
+        <nd ref="-45198"/>
+        <nd ref="-45199"/>
+        <nd ref="-45200"/>
+        <nd ref="-45201"/>
+        <nd ref="-45202"/>
+        <nd ref="-45203"/>
+        <nd ref="-45204"/>
+        <nd ref="-45205"/>
+        <nd ref="-45206"/>
+        <nd ref="-45207"/>
+        <nd ref="-45208"/>
+        <nd ref="-45209"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{21c4ddf3-5098-47ed-b444-bc12fc96afdb}"/>
@@ -518,28 +529,28 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45575" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45613"/>
-        <nd ref="-45822"/>
-        <nd ref="-45823"/>
-        <nd ref="-45824"/>
-        <nd ref="-45825"/>
-        <nd ref="-45826"/>
-        <nd ref="-45827"/>
-        <nd ref="-45828"/>
-        <nd ref="-45829"/>
-        <nd ref="-45830"/>
-        <nd ref="-45831"/>
-        <nd ref="-45832"/>
-        <nd ref="-45833"/>
-        <nd ref="-45834"/>
-        <nd ref="-45835"/>
-        <nd ref="-45836"/>
-        <nd ref="-45837"/>
-        <nd ref="-45838"/>
-        <nd ref="-45839"/>
-        <nd ref="-45840"/>
-        <nd ref="-45841"/>
+    <way visible="true" id="-44887" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44961"/>
+        <nd ref="-45170"/>
+        <nd ref="-45171"/>
+        <nd ref="-45172"/>
+        <nd ref="-45173"/>
+        <nd ref="-45174"/>
+        <nd ref="-45175"/>
+        <nd ref="-45176"/>
+        <nd ref="-45177"/>
+        <nd ref="-45178"/>
+        <nd ref="-45179"/>
+        <nd ref="-45180"/>
+        <nd ref="-45181"/>
+        <nd ref="-45182"/>
+        <nd ref="-45183"/>
+        <nd ref="-45184"/>
+        <nd ref="-45185"/>
+        <nd ref="-45186"/>
+        <nd ref="-45187"/>
+        <nd ref="-45188"/>
+        <nd ref="-45189"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{a26a619d-8667-4213-8baa-5e2c45a3f5bf}"/>
@@ -548,23 +559,23 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45574" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45610"/>
-        <nd ref="-45807"/>
-        <nd ref="-45808"/>
-        <nd ref="-45809"/>
-        <nd ref="-45810"/>
-        <nd ref="-45811"/>
-        <nd ref="-45812"/>
-        <nd ref="-45813"/>
-        <nd ref="-45814"/>
-        <nd ref="-45815"/>
-        <nd ref="-45816"/>
-        <nd ref="-45817"/>
-        <nd ref="-45818"/>
-        <nd ref="-45819"/>
-        <nd ref="-45820"/>
-        <nd ref="-45821"/>
+    <way visible="true" id="-44886" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44958"/>
+        <nd ref="-45155"/>
+        <nd ref="-45156"/>
+        <nd ref="-45157"/>
+        <nd ref="-45158"/>
+        <nd ref="-45159"/>
+        <nd ref="-45160"/>
+        <nd ref="-45161"/>
+        <nd ref="-45162"/>
+        <nd ref="-45163"/>
+        <nd ref="-45164"/>
+        <nd ref="-45165"/>
+        <nd ref="-45166"/>
+        <nd ref="-45167"/>
+        <nd ref="-45168"/>
+        <nd ref="-45169"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{e32f5297-905f-4642-bb1d-cfb0d20317aa}"/>
@@ -573,16 +584,16 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45573" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45638"/>
-        <nd ref="-45799"/>
-        <nd ref="-45800"/>
-        <nd ref="-45801"/>
-        <nd ref="-45802"/>
-        <nd ref="-45803"/>
-        <nd ref="-45804"/>
-        <nd ref="-45805"/>
-        <nd ref="-45806"/>
+    <way visible="true" id="-44885" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44986"/>
+        <nd ref="-45147"/>
+        <nd ref="-45148"/>
+        <nd ref="-45149"/>
+        <nd ref="-45150"/>
+        <nd ref="-45151"/>
+        <nd ref="-45152"/>
+        <nd ref="-45153"/>
+        <nd ref="-45154"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{aeb6e690-2363-4822-9ed8-c9490e0b613c}"/>
@@ -591,16 +602,16 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45572" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45637"/>
-        <nd ref="-45791"/>
-        <nd ref="-45792"/>
-        <nd ref="-45793"/>
-        <nd ref="-45794"/>
-        <nd ref="-45795"/>
-        <nd ref="-45796"/>
-        <nd ref="-45797"/>
-        <nd ref="-45798"/>
+    <way visible="true" id="-44884" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44985"/>
+        <nd ref="-45139"/>
+        <nd ref="-45140"/>
+        <nd ref="-45141"/>
+        <nd ref="-45142"/>
+        <nd ref="-45143"/>
+        <nd ref="-45144"/>
+        <nd ref="-45145"/>
+        <nd ref="-45146"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{f873302e-09c8-4f54-9c01-daed4e8dedd2}"/>
@@ -609,16 +620,16 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45571" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45628"/>
-        <nd ref="-45783"/>
-        <nd ref="-45784"/>
-        <nd ref="-45785"/>
-        <nd ref="-45786"/>
-        <nd ref="-45787"/>
-        <nd ref="-45788"/>
-        <nd ref="-45789"/>
-        <nd ref="-45790"/>
+    <way visible="true" id="-44883" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44976"/>
+        <nd ref="-45131"/>
+        <nd ref="-45132"/>
+        <nd ref="-45133"/>
+        <nd ref="-45134"/>
+        <nd ref="-45135"/>
+        <nd ref="-45136"/>
+        <nd ref="-45137"/>
+        <nd ref="-45138"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{2a2df218-8328-4365-9fa0-6def406348a4}"/>
@@ -627,17 +638,17 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45570" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45641"/>
-        <nd ref="-45774"/>
-        <nd ref="-45775"/>
-        <nd ref="-45776"/>
-        <nd ref="-45777"/>
-        <nd ref="-45778"/>
-        <nd ref="-45779"/>
-        <nd ref="-45780"/>
-        <nd ref="-45781"/>
-        <nd ref="-45782"/>
+    <way visible="true" id="-44882" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44989"/>
+        <nd ref="-45122"/>
+        <nd ref="-45123"/>
+        <nd ref="-45124"/>
+        <nd ref="-45125"/>
+        <nd ref="-45126"/>
+        <nd ref="-45127"/>
+        <nd ref="-45128"/>
+        <nd ref="-45129"/>
+        <nd ref="-45130"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{c647f086-6340-4536-82e9-f314197d7112}"/>
@@ -646,18 +657,18 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45569" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45640"/>
-        <nd ref="-45764"/>
-        <nd ref="-45765"/>
-        <nd ref="-45766"/>
-        <nd ref="-45767"/>
-        <nd ref="-45768"/>
-        <nd ref="-45769"/>
-        <nd ref="-45770"/>
-        <nd ref="-45771"/>
-        <nd ref="-45772"/>
-        <nd ref="-45773"/>
+    <way visible="true" id="-44881" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44988"/>
+        <nd ref="-45112"/>
+        <nd ref="-45113"/>
+        <nd ref="-45114"/>
+        <nd ref="-45115"/>
+        <nd ref="-45116"/>
+        <nd ref="-45117"/>
+        <nd ref="-45118"/>
+        <nd ref="-45119"/>
+        <nd ref="-45120"/>
+        <nd ref="-45121"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{ba8c54d0-f868-4563-bc0c-25f924120578}"/>
@@ -666,18 +677,18 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45568" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45639"/>
-        <nd ref="-45754"/>
-        <nd ref="-45755"/>
-        <nd ref="-45756"/>
-        <nd ref="-45757"/>
-        <nd ref="-45758"/>
-        <nd ref="-45759"/>
-        <nd ref="-45760"/>
-        <nd ref="-45761"/>
-        <nd ref="-45762"/>
-        <nd ref="-45763"/>
+    <way visible="true" id="-44880" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44987"/>
+        <nd ref="-45102"/>
+        <nd ref="-45103"/>
+        <nd ref="-45104"/>
+        <nd ref="-45105"/>
+        <nd ref="-45106"/>
+        <nd ref="-45107"/>
+        <nd ref="-45108"/>
+        <nd ref="-45109"/>
+        <nd ref="-45110"/>
+        <nd ref="-45111"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{6e82b20c-fba5-46dc-a8ca-a5b1a87cb667}"/>
@@ -686,26 +697,26 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45567" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45606"/>
-        <nd ref="-45736"/>
-        <nd ref="-45737"/>
-        <nd ref="-45738"/>
-        <nd ref="-45739"/>
-        <nd ref="-45740"/>
-        <nd ref="-45741"/>
-        <nd ref="-45742"/>
-        <nd ref="-45743"/>
-        <nd ref="-45744"/>
-        <nd ref="-45745"/>
-        <nd ref="-45746"/>
-        <nd ref="-45747"/>
-        <nd ref="-45748"/>
-        <nd ref="-45749"/>
-        <nd ref="-45750"/>
-        <nd ref="-45751"/>
-        <nd ref="-45752"/>
-        <nd ref="-45753"/>
+    <way visible="true" id="-44879" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44954"/>
+        <nd ref="-45084"/>
+        <nd ref="-45085"/>
+        <nd ref="-45086"/>
+        <nd ref="-45087"/>
+        <nd ref="-45088"/>
+        <nd ref="-45089"/>
+        <nd ref="-45090"/>
+        <nd ref="-45091"/>
+        <nd ref="-45092"/>
+        <nd ref="-45093"/>
+        <nd ref="-45094"/>
+        <nd ref="-45095"/>
+        <nd ref="-45096"/>
+        <nd ref="-45097"/>
+        <nd ref="-45098"/>
+        <nd ref="-45099"/>
+        <nd ref="-45100"/>
+        <nd ref="-45101"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{86cac9dc-fe53-42bc-87d1-8da997cf2794}"/>
@@ -714,29 +725,29 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45566" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45604"/>
-        <nd ref="-45715"/>
-        <nd ref="-45716"/>
-        <nd ref="-45717"/>
-        <nd ref="-45718"/>
-        <nd ref="-45719"/>
-        <nd ref="-45720"/>
-        <nd ref="-45721"/>
-        <nd ref="-45722"/>
-        <nd ref="-45723"/>
-        <nd ref="-45724"/>
-        <nd ref="-45725"/>
-        <nd ref="-45726"/>
-        <nd ref="-45727"/>
-        <nd ref="-45728"/>
-        <nd ref="-45729"/>
-        <nd ref="-45730"/>
-        <nd ref="-45731"/>
-        <nd ref="-45732"/>
-        <nd ref="-45733"/>
-        <nd ref="-45734"/>
-        <nd ref="-45735"/>
+    <way visible="true" id="-44878" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44952"/>
+        <nd ref="-45063"/>
+        <nd ref="-45064"/>
+        <nd ref="-45065"/>
+        <nd ref="-45066"/>
+        <nd ref="-45067"/>
+        <nd ref="-45068"/>
+        <nd ref="-45069"/>
+        <nd ref="-45070"/>
+        <nd ref="-45071"/>
+        <nd ref="-45072"/>
+        <nd ref="-45073"/>
+        <nd ref="-45074"/>
+        <nd ref="-45075"/>
+        <nd ref="-45076"/>
+        <nd ref="-45077"/>
+        <nd ref="-45078"/>
+        <nd ref="-45079"/>
+        <nd ref="-45080"/>
+        <nd ref="-45081"/>
+        <nd ref="-45082"/>
+        <nd ref="-45083"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{35122dc3-f42d-4279-b49e-03dcb520df42}"/>
@@ -745,24 +756,24 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45565" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45621"/>
-        <nd ref="-45699"/>
-        <nd ref="-45700"/>
-        <nd ref="-45701"/>
-        <nd ref="-45702"/>
-        <nd ref="-45703"/>
-        <nd ref="-45704"/>
-        <nd ref="-45705"/>
-        <nd ref="-45706"/>
-        <nd ref="-45707"/>
-        <nd ref="-45708"/>
-        <nd ref="-45709"/>
-        <nd ref="-45710"/>
-        <nd ref="-45711"/>
-        <nd ref="-45712"/>
-        <nd ref="-45713"/>
-        <nd ref="-45714"/>
+    <way visible="true" id="-44877" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44969"/>
+        <nd ref="-45047"/>
+        <nd ref="-45048"/>
+        <nd ref="-45049"/>
+        <nd ref="-45050"/>
+        <nd ref="-45051"/>
+        <nd ref="-45052"/>
+        <nd ref="-45053"/>
+        <nd ref="-45054"/>
+        <nd ref="-45055"/>
+        <nd ref="-45056"/>
+        <nd ref="-45057"/>
+        <nd ref="-45058"/>
+        <nd ref="-45059"/>
+        <nd ref="-45060"/>
+        <nd ref="-45061"/>
+        <nd ref="-45062"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{e16cdb69-37c9-4244-868c-e9ba32cb002a}"/>
@@ -771,17 +782,17 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45564" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45624"/>
-        <nd ref="-45690"/>
-        <nd ref="-45691"/>
-        <nd ref="-45692"/>
-        <nd ref="-45693"/>
-        <nd ref="-45694"/>
-        <nd ref="-45695"/>
-        <nd ref="-45696"/>
-        <nd ref="-45697"/>
-        <nd ref="-45698"/>
+    <way visible="true" id="-44876" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44972"/>
+        <nd ref="-45038"/>
+        <nd ref="-45039"/>
+        <nd ref="-45040"/>
+        <nd ref="-45041"/>
+        <nd ref="-45042"/>
+        <nd ref="-45043"/>
+        <nd ref="-45044"/>
+        <nd ref="-45045"/>
+        <nd ref="-45046"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{787eb69d-3b19-42fe-b043-798290c16dab}"/>
@@ -790,23 +801,23 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45563" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45623"/>
-        <nd ref="-45675"/>
-        <nd ref="-45676"/>
-        <nd ref="-45677"/>
-        <nd ref="-45678"/>
-        <nd ref="-45679"/>
-        <nd ref="-45680"/>
-        <nd ref="-45681"/>
-        <nd ref="-45682"/>
-        <nd ref="-45683"/>
-        <nd ref="-45684"/>
-        <nd ref="-45685"/>
-        <nd ref="-45686"/>
-        <nd ref="-45687"/>
-        <nd ref="-45688"/>
-        <nd ref="-45689"/>
+    <way visible="true" id="-44875" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44971"/>
+        <nd ref="-45023"/>
+        <nd ref="-45024"/>
+        <nd ref="-45025"/>
+        <nd ref="-45026"/>
+        <nd ref="-45027"/>
+        <nd ref="-45028"/>
+        <nd ref="-45029"/>
+        <nd ref="-45030"/>
+        <nd ref="-45031"/>
+        <nd ref="-45032"/>
+        <nd ref="-45033"/>
+        <nd ref="-45034"/>
+        <nd ref="-45035"/>
+        <nd ref="-45036"/>
+        <nd ref="-45037"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{2523d0e3-0802-42c5-ad5b-671ab3601071}"/>
@@ -815,25 +826,25 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45562" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45601"/>
-        <nd ref="-45658"/>
-        <nd ref="-45659"/>
-        <nd ref="-45660"/>
-        <nd ref="-45661"/>
-        <nd ref="-45662"/>
-        <nd ref="-45663"/>
-        <nd ref="-45664"/>
-        <nd ref="-45665"/>
-        <nd ref="-45666"/>
-        <nd ref="-45667"/>
-        <nd ref="-45668"/>
-        <nd ref="-45669"/>
-        <nd ref="-45670"/>
-        <nd ref="-45671"/>
-        <nd ref="-45672"/>
-        <nd ref="-45673"/>
-        <nd ref="-45674"/>
+    <way visible="true" id="-44874" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44949"/>
+        <nd ref="-45006"/>
+        <nd ref="-45007"/>
+        <nd ref="-45008"/>
+        <nd ref="-45009"/>
+        <nd ref="-45010"/>
+        <nd ref="-45011"/>
+        <nd ref="-45012"/>
+        <nd ref="-45013"/>
+        <nd ref="-45014"/>
+        <nd ref="-45015"/>
+        <nd ref="-45016"/>
+        <nd ref="-45017"/>
+        <nd ref="-45018"/>
+        <nd ref="-45019"/>
+        <nd ref="-45020"/>
+        <nd ref="-45021"/>
+        <nd ref="-45022"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{04c74d80-ae4c-45bb-b623-13a61329dde5}"/>
@@ -842,24 +853,24 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45561" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
-        <nd ref="-45622"/>
-        <nd ref="-45642"/>
-        <nd ref="-45643"/>
-        <nd ref="-45644"/>
-        <nd ref="-45645"/>
-        <nd ref="-45646"/>
-        <nd ref="-45647"/>
-        <nd ref="-45648"/>
-        <nd ref="-45649"/>
-        <nd ref="-45655"/>
-        <nd ref="-45654"/>
-        <nd ref="-45657"/>
-        <nd ref="-45656"/>
-        <nd ref="-45653"/>
-        <nd ref="-45652"/>
-        <nd ref="-45651"/>
-        <nd ref="-45650"/>
+    <way visible="true" id="-44873" timestamp="2018-06-11T16:50:55Z" version="1" changeset="540">
+        <nd ref="-44970"/>
+        <nd ref="-44990"/>
+        <nd ref="-44991"/>
+        <nd ref="-44992"/>
+        <nd ref="-44993"/>
+        <nd ref="-44994"/>
+        <nd ref="-44995"/>
+        <nd ref="-44996"/>
+        <nd ref="-44997"/>
+        <nd ref="-45003"/>
+        <nd ref="-45002"/>
+        <nd ref="-45005"/>
+        <nd ref="-45004"/>
+        <nd ref="-45001"/>
+        <nd ref="-45000"/>
+        <nd ref="-44999"/>
+        <nd ref="-44998"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm"/>
         <tag k="uuid" v="{a82d8db0-9b03-498d-b90b-738aefc26dc6}"/>
@@ -868,30 +879,44 @@
         <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-45556" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-45577"/>
-        <nd ref="-45578"/>
-        <nd ref="-45579"/>
-        <nd ref="-45580"/>
-        <nd ref="-45577"/>
+    <way visible="true" id="-44870" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-44937"/>
+        <nd ref="-44938"/>
+        <nd ref="-44939"/>
+        <nd ref="-44940"/>
+        <nd ref="-44941"/>
+        <nd ref="-44942"/>
+        <nd ref="-44943"/>
+        <nd ref="-44944"/>
+        <nd ref="-44945"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="power" v="line"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-44868" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-44918"/>
+        <nd ref="-44919"/>
+        <nd ref="-44920"/>
+        <nd ref="-44921"/>
+        <nd ref="-44922"/>
+        <nd ref="-44923"/>
+        <tag k="operator" v="Polar Express Industries, Ltd."/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="railway" v="rail"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-44865" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-44895"/>
+        <nd ref="-44896"/>
+        <nd ref="-44897"/>
+        <nd ref="-44898"/>
+        <nd ref="-44895"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Fred's Parking"/>
         <tag k="amenity" v="parking"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-45554" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-45555"/>
-        <nd ref="-45556"/>
-        <nd ref="-45557"/>
-        <nd ref="-45558"/>
-        <nd ref="-45555"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="building" v="yes"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="name" v="New Name"/>
-        <tag k="amenity" v="bicycle_rental"/>
-        <tag k="addr:postcode" v="12345"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="1" timestamp="2018-06-11T16:49:01Z" version="1" changeset="539">
