@@ -402,58 +402,114 @@
     <tag k='source' v='Unknown;osm' />
     <tag k='uuid' v='{dd5f81c2-e249-467e-985a-914a76ef121e}' />
   </node>
-  <way id='-39450' action='modify'>
-    <nd ref='-39448' />
-    <nd ref='-39449' />
-    <nd ref='-39451' />
-    <nd ref='-39453' />
-    <nd ref='-39455' />
-    <nd ref='-39457' />
-    <nd ref='-39459' />
-    <nd ref='-39461' />
-    <nd ref='-39463' />
-    <nd ref='-39465' />
-    <nd ref='-39467' />
-    <nd ref='-39469' />
-    <nd ref='-39471' />
-    <nd ref='-39473' />
-    <nd ref='-39475' />
-    <nd ref='-39477' />
-    <nd ref='-39479' />
-    <nd ref='-39481' />
-    <nd ref='-39448' />
+  <way id='-42581' action='modify'>
+    <nd ref='-42170' />
+    <nd ref='-42172' />
+    <nd ref='-42174' />
+    <nd ref='-42176' />
+    <nd ref='-42178' />
+    <nd ref='-42180' />
+    <nd ref='-42182' />
+    <nd ref='-42184' />
+    <nd ref='-42186' />
+    <nd ref='-42188' />
+    <nd ref='-42190' />
+    <nd ref='-42192' />
+    <nd ref='-42194' />
+    <nd ref='-42196' />
+    <nd ref='-42198' />
+    <nd ref='-42200' />
+    <nd ref='-42202' />
+    <nd ref='-42204' />
+    <nd ref='-42170' />
     <tag k='area' v='yes' />
     <tag k='leisure' v='park' />
     <tag k='name' v='Duck Park' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
   </way>
-  <way id='-39851' action='modify'>
-    <nd ref='-39849' />
-    <nd ref='-39850' />
-    <nd ref='-39852' />
-    <nd ref='-39854' />
-    <nd ref='-39849' />
+  <way id='-42583' action='modify'>
+    <nd ref='-42206' />
+    <nd ref='-42208' />
+    <nd ref='-42210' />
+    <nd ref='-42212' />
+    <nd ref='-42206' />
     <tag k='amenity' v='parking' />
     <tag k='name' v='Fred&apos;s Parking' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
   </way>
-  <way id='-39958' action='modify'>
-    <nd ref='-39959' />
-    <nd ref='-39960' />
-    <nd ref='-39961' />
-    <nd ref='-39962' />
-    <nd ref='-39963' />
-    <nd ref='-39964' />
-    <nd ref='-39965' />
-    <nd ref='-39966' />
-    <nd ref='-39967' />
-    <nd ref='-39968' />
-    <nd ref='-39969' />
-    <nd ref='-39970' />
-    <nd ref='-39971' />
+  <way id='-42585' action='modify'>
+    <nd ref='-42214' />
+    <nd ref='-42216' />
+    <nd ref='-42218' />
+    <nd ref='-42220' />
+    <nd ref='-42222' />
+    <nd ref='-42224' />
+    <nd ref='-42226' />
+    <nd ref='-42228' />
+    <nd ref='-42230' />
+    <nd ref='-42232' />
+    <nd ref='-42234' />
+    <nd ref='-42236' />
+    <nd ref='-42238' />
     <tag k='barrier' v='retaining_wall' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
+  </way>
+  <way id='-42587' action='modify'>
+    <nd ref='-42240' />
+    <nd ref='-42242' />
+    <nd ref='-42244' />
+    <nd ref='-42246' />
+    <nd ref='-42248' />
+    <nd ref='-42250' />
+    <tag k='operator' v='BNSF' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
+  </way>
+  <way id='-42589' action='modify'>
+    <nd ref='-42252' />
+    <nd ref='-42254' />
+    <nd ref='-42256' />
+    <nd ref='-42258' />
+    <nd ref='-42260' />
+    <nd ref='-42262' />
+    <tag k='operator' v='Polar Express Industries, Ltd.' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
+  </way>
+  <way id='-44818' action='modify'>
+    <nd ref='-44816' />
+    <nd ref='-44817' />
+    <nd ref='-44819' />
+    <nd ref='-44821' />
+    <nd ref='-44823' />
+    <nd ref='-44825' />
+    <nd ref='-44827' />
+    <nd ref='-44829' />
+    <nd ref='-44831' />
+    <nd ref='-44833' />
+    <nd ref='-44835' />
+    <nd ref='-44837' />
+    <nd ref='-44839' />
+    <tag k='power' v='line' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
+  </way>
+  <way id='-44902' action='modify'>
+    <nd ref='-44900' />
+    <nd ref='-44901' />
+    <nd ref='-44903' />
+    <nd ref='-44905' />
+    <nd ref='-44907' />
+    <nd ref='-44909' />
+    <nd ref='-44911' />
+    <nd ref='-44913' />
+    <nd ref='-44915' />
+    <tag k='power' v='line' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
   </way>

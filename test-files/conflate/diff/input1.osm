@@ -170,34 +170,34 @@
   <node id='109' timestamp='2018-06-11T16:49:01Z' version='1' changeset='539' lat='8.65369423648' lon='28.14411551153' />
   <node id='110' timestamp='2018-06-11T16:49:01Z' version='1' changeset='539' lat='8.65397158197' lon='28.14485811557' />
   <node id='111' timestamp='2018-06-11T16:49:01Z' version='1' changeset='539' lat='8.65477098841' lon='28.14457757627' />
-  <way id='-39544' action='modify'>
-    <nd ref='-39541' />
-    <nd ref='-39542' />
-    <nd ref='-39545' />
-    <nd ref='-39546' />
-    <nd ref='-39547' />
-    <nd ref='-39666' />
-    <nd ref='-39696' />
-    <nd ref='-39529' />
-    <nd ref='-39717' />
-    <nd ref='-39530' />
-    <nd ref='-39753' />
-    <nd ref='-39531' />
-    <nd ref='-39532' />
-    <nd ref='-39784' />
-    <nd ref='-39533' />
-    <nd ref='-39840' />
-    <nd ref='-39534' />
-    <nd ref='-39637' />
-    <nd ref='-39535' />
-    <nd ref='-39536' />
-    <nd ref='-39537' />
-    <nd ref='-39538' />
-    <nd ref='-39611' />
-    <nd ref='-39539' />
-    <nd ref='-39540' />
-    <nd ref='-39584' />
-    <nd ref='-39541' />
+  <way id='-43492' action='modify'>
+    <nd ref='-43315' />
+    <nd ref='-43317' />
+    <nd ref='-43319' />
+    <nd ref='-43321' />
+    <nd ref='-43323' />
+    <nd ref='-43331' />
+    <nd ref='-43333' />
+    <nd ref='-43291' />
+    <nd ref='-43335' />
+    <nd ref='-43293' />
+    <nd ref='-43337' />
+    <nd ref='-43295' />
+    <nd ref='-43297' />
+    <nd ref='-43339' />
+    <nd ref='-43299' />
+    <nd ref='-43341' />
+    <nd ref='-43301' />
+    <nd ref='-43329' />
+    <nd ref='-43303' />
+    <nd ref='-43305' />
+    <nd ref='-43307' />
+    <nd ref='-43309' />
+    <nd ref='-43327' />
+    <nd ref='-43311' />
+    <nd ref='-43313' />
+    <nd ref='-43325' />
+    <nd ref='-43315' />
     <tag k='area' v='yes' />
     <tag k='leisure' v='park' />
     <tag k='name' v='Duck Park' />
@@ -219,6 +219,36 @@
     <nd ref='-43365' />
     <nd ref='-43367' />
     <tag k='barrier' v='retaining_wall' />
+  </way>
+  <way id='-43496' action='modify'>
+    <nd ref='-43369' />
+    <nd ref='-43371' />
+    <nd ref='-43373' />
+    <nd ref='-43375' />
+    <nd ref='-43377' />
+    <nd ref='-43379' />
+    <tag k='operator' v='BNSF' />
+    <tag k='railway' v='rail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
+  </way>
+  <way id='-44863' action='modify'>
+    <nd ref='-44864' />
+    <nd ref='-44865' />
+    <nd ref='-44866' />
+    <nd ref='-44867' />
+    <nd ref='-44868' />
+    <nd ref='-44869' />
+    <nd ref='-44870' />
+    <nd ref='-44871' />
+    <nd ref='-44872' />
+    <nd ref='-44873' />
+    <nd ref='-44874' />
+    <nd ref='-44875' />
+    <nd ref='-44876' />
+    <tag k='power' v='line' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
   </way>
   <way id='1' timestamp='2018-06-11T16:49:01Z' version='1' changeset='539'>
     <nd ref='1' />
