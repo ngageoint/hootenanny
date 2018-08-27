@@ -76,7 +76,7 @@ public class JoshuaServicesInitializer
 
   public static Map<String, JoshuaServiceInfo> init() throws Exception
   {
-    logger.info("Initializing Joshua services...");
+    logger.debug("Initializing Joshua services...");
 
     //read the services configuration file
     Map<String, JoshuaServiceInfo> services = readServicesConfig();
@@ -111,7 +111,7 @@ public class JoshuaServicesInitializer
       "java -mx" + JOSHUA_MAX_MEMORY + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + 
       classPath + " org.apache.joshua.decoder.JoshuaDecoder -c " + configPath + 
       " -v 1 -server-port " + serviceInfo.getPort() + " -server-type tcp";
-    logger.error("command: " + line);
+    logger.trace("command: " + line);
     return CommandLine.parse(line);
   }
 

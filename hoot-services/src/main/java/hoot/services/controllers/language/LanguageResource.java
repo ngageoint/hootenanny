@@ -95,7 +95,7 @@ public class LanguageResource
       //first time a translation is made.
       logger.info("Initializing Joshua...");
       MethodUtils.invokeStaticMethod(
-        Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
+        Class.forName("hoot.services.language.joshua.JoshuaLanguageTranslator"), "getInstance", null);
     }
     catch (Exception e)
     {
@@ -114,7 +114,7 @@ public class LanguageResource
       logger.info("Closing Joshua...");
       Object joshuaTranslator = 
         MethodUtils.invokeStaticMethod(
-          Class.forName("hoot.services.language.JoshuaLanguageTranslator"), "getInstance", null);
+          Class.forName("hoot.services.language.joshua.JoshuaLanguageTranslator"), "getInstance", null);
       MethodUtils.invokeMethod(joshuaTranslator, "close");
     }
     catch (Exception e)

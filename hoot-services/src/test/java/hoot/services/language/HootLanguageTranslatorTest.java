@@ -49,14 +49,14 @@ public class HootLanguageTranslatorTest
   public static void beforeClass()
   {
     //assuming two Joshua services are running, one for German and one for Spanish
-    /*JoshuaLanguageTranslator wrappedTranslator = Mockito.mock(JoshuaLanguageTranslator.class);
-    when(wrappedTranslator.translate(any(), "DB Reisezentrum").thenReturn("DB Tickets"));
-    when(wrappedTranslator.translate(any(), "Buenos días").thenReturn("Good morning"));
-    when(wrappedTranslator.translate(any(), "Fahrschule Weiß").thenReturn("Driving School Weiss"));
-    when(wrappedTranslator.translate(any(), "Carte de crédit").thenReturn(""));
-    when(wrappedTranslator.translate(any(), "TC IT Service").thenReturn("TC IT Service"));
+    /*JoshuaLanguageTranslator wrappedTranslator = mock(JoshuaLanguageTranslator.class);
+    when(wrappedTranslator.translate(anyString(), "DB Reisezentrum").thenReturn("DB Tickets"));
+    when(wrappedTranslator.translate(anyString(), "Buenos días").thenReturn("Good morning"));
+    when(wrappedTranslator.translate(anyString(), "Fahrschule Weiß").thenReturn("Driving School Weiss"));
+    when(wrappedTranslator.translate(anyString(), "Carte de crédit").thenReturn(""));
+    when(wrappedTranslator.translate(anyString(), "TC IT Service").thenReturn("TC IT Service"));
 
-    TikaLanguageDetector detector = Mockito.mock(TikaLanguageDetector.class);
+    TikaLanguageDetector detector = mock(TikaLanguageDetector.class);
     when(detector.detect("DB Reisezentrum").thenReturn("de"));
     when(detector.detect("Buenos días").thenReturn("es"));
     when(detector.detect("Fahrschule Weiß").thenReturn("de"));
@@ -66,9 +66,9 @@ public class HootLanguageTranslatorTest
 
   @Test
   @Category(UnitTest.class)
-  public void testTranslate()
+  public void testTranslate() throws Exception
   {
-    /*HootCustomPropertiesSetter.setProperty(HOOT_LANGUAGE_TRANSLATOR_APP, "JoshuaLanguageTranslator");
+    HootCustomPropertiesSetter.setProperty(HOOT_LANGUAGE_TRANSLATOR_APP, "JoshuaLanguageTranslator");
     HootLanguageTranslator translator = new HootLanguageTranslator();
 
     LanguageTranslateRequest config = new LanguageTranslateRequest();
@@ -78,7 +78,7 @@ public class HootLanguageTranslatorTest
     translator.setConfig(config);
 
     Assert.assertEquals("DB Tickets", translator.translate(new String[]{ "de"}, "DB Reisezentrum"));
-    Assert.assertEquals("Good morning", translator.translate(new String[]{ "es"}, "Buenos días"));*/
+    Assert.assertEquals("Good morning", translator.translate(new String[]{ "es"}, "Buenos días"));
   }
 
   @Test

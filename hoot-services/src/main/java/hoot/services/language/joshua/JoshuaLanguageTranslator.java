@@ -88,30 +88,11 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
     //the running services)
     readSupportedLangsConfig();
 
-    //init our connection pool to the services
-    connectionPool = 
-      new JoshuaConnectionPool(services, Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
-  }
-
-  private void readSupportedLangsConfig() throws Exception
-  {
-    InputStream supportedLangsConfigStrm = null;
-    try
+    if (services.size() > 0)
     {
-      logger.debug("Reading JoshuaLanguageTranslator languages config...");
-      supportedLangsConfigStrm = 
-        JoshuaLanguageTranslator.class.getClassLoader().getResourceAsStream(
-          "language-translation/joshuaLanguages");
-      supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
-      logger.debug(
-        "Read " + supportedLangs.length + " languages from config for JoshuaLanguageTranslator.");
-    }
-    finally 
-    {  
-      if (supportedLangsConfigStrm != null)
-      {
-        supportedLangsConfigStrm.close();
-      }
+      //init our connection pool to the services
+      connectionPool = 
+        new JoshuaConnectionPool(services, Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
     }
   }
 
@@ -168,6 +149,28 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
     return 
       "A statistical machine translation decoder for phrase-based, hierarchical, and " +
       "syntax-based machine translation"; 
+  }
+
+  private void readSupportedLangsConfig() throws Exception
+  {
+    InputStream supportedLangsConfigStrm = null;
+    try
+    {
+      logger.debug("Reading JoshuaLanguageTranslator languages config...");
+      supportedLangsConfigStrm = 
+        JoshuaLanguageTranslator.class.getClassLoader().getResourceAsStream(
+          "language-translation/joshuaLanguages");
+      supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
+      logger.debug(
+        "Read " + supportedLangs.length + " languages from config for JoshuaLanguageTranslator.");
+    }
+    finally 
+    {  
+      if (supportedLangsConfigStrm != null)
+      {
+        supportedLangsConfigStrm.close();
+      }
+    }
   }
 
   /**
