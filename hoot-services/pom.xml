@@ -37,13 +37,15 @@
         <jersey.version>2.23.1</jersey.version>
         <json-simple.version>1.1.1</json-simple.version>
         <log4j2.version>2.7</log4j2.version>
-         <!--<osmosis-core.version>0.43-RELEASE</osmosis-core.version>-->
+        <opennlp.version>1.8.3</opennlp.version>
         <postgresql.version>9.4.1208.jre7</postgresql.version>
         <querydsl.version>4.1.0</querydsl.version>
+        <reflections.version>0.9.11</reflections.version>
         <rhino.version>1.7R4</rhino.version>
         <slf4j.version>1.7.21</slf4j.version>
         <smiley-http-proxy-servlet.version>1.6</smiley-http-proxy-servlet.version>
         <spring.version>4.2.6.RELEASE</spring.version> 
+        <tika.version>1.18</tika.version>
         <xalan.version>2.7.1</xalan.version>
         <xercesImpl.version>2.9.1</xercesImpl.version>
 
@@ -520,25 +522,6 @@
             <version>${rhino.version}</version>
         </dependency>
 
-        <!--  OSM Parsing Support -->
-<!--
-        <dependency>
-            <groupId>org.openstreetmap.osmosis</groupId>
-            <artifactId>osmosis-core</artifactId>
-            <version>${osmosis-core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openstreetmap.osmosis</groupId>
-            <artifactId>osmosis-testutil</artifactId>
-            <version>${osmosis-core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openstreetmap.osmosis</groupId>
-            <artifactId>osmosis-xml</artifactId>
-            <version>${osmosis-core.version}</version>
-        </dependency>
--->
-
         <!-- Spring framework provides dependency injection, transaction management, and a hook
         into db connection pooling via commons dbcp -->
         <dependency>
@@ -687,40 +670,22 @@
             <version>${antlr-runtime.version}</version>
         </dependency>
 
-        <!-- language translation -->
-
-        <!-- Since Joshua translation servers have shared memory, we need to launch a service for each language as its own process.  
-             Therefore, these dependencies aren't needed right now, as we add the bundled Joshua jar included with each language pack 
-             to the classpath when we launch the processes.  If at some point we need to do Joshua development, the dependencies below
-             are what is needed. -->
-
-        <!-- dependency>
-          <groupId>org.apache.joshua</groupId>
-          <artifactId>joshua-incubating</artifactId>
-          <version>6.1</version>
-        </dependency>
-        <dependency>
-          <groupId>colt</groupId>
-          <artifactId>colt</artifactId>
-          <version>1.2.0</version>
-        </dependency -->
-
 	<!-- language detection -->
 	
 	<dependency>
           <groupId>org.apache.tika</groupId>
           <artifactId>tika-core</artifactId>
-          <version>1.18</version>
+          <version>${tika.version}</version>
         </dependency>
         <dependency>
           <groupId>org.apache.tika</groupId>
           <artifactId>tika-langdetect</artifactId>
-          <version>1.18</version>
+          <version>${tika.version}</version>
         </dependency>
         <dependency>
           <groupId>org.apache.opennlp</groupId>
           <artifactId>opennlp-tools</artifactId>
-          <version>1.8.3</version>
+          <version>${opennlp.version}</version>
         </dependency>
 
        <!-- reflection -->
@@ -728,7 +693,7 @@
         <dependency>
           <groupId>org.reflections</groupId>
           <artifactId>reflections</artifactId>
-          <version>0.9.11</version>
+          <version>${reflections.version}</version>
         </dependency>
        <!-- org.reflections should be pulling this version of guava down but isn't -->
         <dependency>
