@@ -1,5 +1,7 @@
 package hoot.services.controllers.auth;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
@@ -8,12 +10,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth.consumer.OAuthConsumerSupport;
 import org.springframework.security.oauth.consumer.OAuthConsumerToken;
+import org.springframework.security.oauth.consumer.OAuthRequestFailedException;
 import org.springframework.security.oauth.consumer.OAuthSecurityContext;
 import org.springframework.security.oauth.consumer.OAuthSecurityContextHolder;
 import org.springframework.security.oauth.consumer.ProtectedResourceDetails;
@@ -21,6 +25,7 @@ import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.xml.sax.SAXException;
 
 @Controller
 @Path("")
@@ -31,6 +36,9 @@ public class OAuth1Resource {
     private OAuthRestTemplate oauthRestTemplate;
     @Autowired
     private OAuthConsumerTokenServices tokenServices;
+    @Autowired
+    private UserManager userManager;
+
 
     @GET
     @Path("/oauth1/verify")
@@ -49,8 +57,16 @@ public class OAuth1Resource {
         OAuthSecurityContext context = OAuthSecurityContextHolder.getContext();
         context.getAccessTokens().put(r.getId(), accessToken);
 
-        String profile = oauthRestTemplate.getForObject("https://api.openstreetmap.org/api/0.6/user/details", String.class);
-        logger.info(profile);
+        String response = oauthRestTemplate.getForObject("https://api.openstreetmap.org/api/0.6/user/details", String.class);
+        try {
+            userManager.upsert(response);
+        } catch (InvalidUserProfileException | SAXException | IOException | ParserConfigurationException e) {
+            logger.error("Failed to read user profile from oauth provider", e);
+            return Response.status(502).build();
+        } catch (Exception e) {
+            logger.error("Failed to store user during oauth verification", e);
+            return Response.status(500).build();
+        }
 
         return Response.status(200).entity("{}").type(MediaType.APPLICATION_JSON).build();
     }
@@ -58,13 +74,22 @@ public class OAuth1Resource {
     @GET
     @Path("/oauth1/request")
     @Produces(MediaType.TEXT_PLAIN)
-    public String request() {
+    public Response request() {
         OAuthConsumerSupport s = oauthRestTemplate.getSupport();
         ProtectedResourceDetails r = oauthRestTemplate.getResource();
+        OAuthConsumerToken requestToken = null;
+        try {
+            requestToken = s.getUnauthorizedRequestToken(r, "http://host.local/hoot-services/auth/oauth1");
+        } catch (OAuthRequestFailedException e) {
+            logger.error("Failed to obtain request token", e);
+            return Response.status(502).build();
+        } catch (Exception e) {
+            logger.error("Failed to execute request for token.", e);
+            return Response.status(500).build();
+        }
 
-        OAuthConsumerToken requestToken = s.getUnauthorizedRequestToken(r, "http://host.local/hoot-services/auth/oauth1");
         tokenServices.storeToken(r.getId(), requestToken);
-        return r.getUserAuthorizationURL() + "?oauth_token=" + requestToken.getValue();
+        return Response.ok().entity(r.getUserAuthorizationURL() + "?oauth_token=" + requestToken.getValue()).type(MediaType.TEXT_PLAIN).build();
     }
 
     protected HttpSession getSession() {

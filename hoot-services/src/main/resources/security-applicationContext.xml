@@ -44,8 +44,8 @@
 	<oauth:resource-details-service
 		id="resourceDetails">
 		<oauth:resource id="openStreetMap"
-			key="8DPgaEQojRH1IM9YiYDDwN80CUP0EczNjVLACXFR"
-			secret="AXRigfnL0iFPtD2RKueq6LykS2W0UbHKBj15WsIx"
+			key="z7KJ3uI5tM7YiFECP6RevCRGCPwkbwjUEz6DoGWM"
+			secret="MD2grIFGvBx5c5Djo7hxTlAELxoUC67cMwEiPwzX"
 			request-token-url="https://www.openstreetmap.org/oauth/request_token"
 			user-authorization-url="https://www.openstreetmap.org/oauth/authorize"
 			access-token-url="https://www.openstreetmap.org/oauth/access_token"
