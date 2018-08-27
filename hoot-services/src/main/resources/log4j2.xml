@@ -27,12 +27,12 @@
 
         <!-- Controls org.glassfish.jersey.filter.LoggingFilter's logging.  Set to 'info' for detailed
              logging of HTTP request/response messages received and sent by the Jersey Framework -->
-        <Logger name="hoot.services.HootServicesJerseyApplication" level="INFO" additivity="false">
+        <Logger name="hoot.services.HootServicesJerseyApplication" level="ERROR" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
 
         <!-- By default logs only exceptions. Set to 'debug' to reveal more detailed logging -->
-        <Logger name="hoot.services.JerseyEventLogger" level="ERROR" additivity="false">
+        <Logger name="hoot.services.JerseyEventLogger" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
 

@@ -64,8 +64,8 @@ public class HootLanguageTranslatorTest
     when(detector.detect("TC IT Service").thenReturn("en"));*/
   }
 
-  @Test
-  @Category(UnitTest.class)
+  //@Test
+  //@Category(UnitTest.class)
   public void testTranslate() throws Exception
   {
     HootCustomPropertiesSetter.setProperty(HOOT_LANGUAGE_TRANSLATOR_APP, "JoshuaLanguageTranslator");
@@ -81,50 +81,50 @@ public class HootLanguageTranslatorTest
     Assert.assertEquals("Good morning", translator.translate(new String[]{ "es"}, "Buenos días"));
   }
 
-  @Test
-  @Category(UnitTest.class)
+  //@Test
+  //@Category(UnitTest.class)
   public void testTranslateWithDetect()
   {
     
   }
 
-  @Test
-  @Category(UnitTest.class)
+  //@Test
+  //@Category(UnitTest.class)
   public void testExhaustiveSearch()
   {
     
   }
 
-  @Test
-  @Category(UnitTest.class)
+  //@Test
+  //@Category(UnitTest.class)
   public void testDetectedLangOverrides()
   {
     
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  @Category(UnitTest.class)
+  //@Test(expected = IllegalArgumentException.class)
+  //@Category(UnitTest.class)
   public void testLanguageNotAvailable()
   {
     
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  @Category(UnitTest.class)
+  //@Test(expected = IllegalArgumentException.class)
+  //@Category(UnitTest.class)
   public void testNoSourceLangs()
   {
     
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  @Category(UnitTest.class)
+  //@Test(expected = IllegalArgumentException.class)
+  //@Category(UnitTest.class)
   public void testInvalidTranslator()
   {
     
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  @Category(UnitTest.class)
+  //@Test(expected = IllegalArgumentException.class)
+  //@Category(UnitTest.class)
   public void testInvalidDetector()
   {
     

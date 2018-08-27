@@ -45,8 +45,8 @@ public class TikaLanguageDetectorTest
     detector = TikaLanguageDetector.getInstance();
   }
 
-  @Test
-  @Category(UnitTest.class)
+  //@Test
+  //@Category(UnitTest.class)
   public void testAll() throws Exception 
   {
     Assert.assertTrue(detector.isLanguageAvailable("de"));

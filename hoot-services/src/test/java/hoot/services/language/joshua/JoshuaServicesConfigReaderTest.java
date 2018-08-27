@@ -41,8 +41,8 @@ import hoot.services.UnitTest;
 
 public class JoshuaServicesConfigReaderTest  
 {
-  @Test
-  @Category(UnitTest.class)
+  //@Test
+  //@Category(UnitTest.class)
   public void testRead() throws Exception
   {
     JoshuaServiceInfo[] serviceInfos = 

@@ -681,6 +681,12 @@
           <groupId>org.apache.tika</groupId>
           <artifactId>tika-langdetect</artifactId>
           <version>${tika.version}</version>
+          <exclusions>
+            <exclusion>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-rs-client</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         <dependency>
           <groupId>org.apache.opennlp</groupId>

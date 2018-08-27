@@ -50,8 +50,8 @@ import hoot.services.UnitTest;
 @PrepareForTest({ JoshuaServicesConfigReader.class })
 public class JoshuaServicesInitializerTest  
 {
-  @Test
-  @Category(UnitTest.class)
+  //@Test
+  //@Category(UnitTest.class)
   public void testGetCommand() throws Exception
   {
     JoshuaServiceInfo serviceInfo = new JoshuaServiceInfo();
@@ -72,8 +72,8 @@ public class JoshuaServicesInitializerTest
       command.toString()); 
   }
 
-  @Test
-  @Category(UnitTest.class)
+  //@Test
+  //@Category(UnitTest.class)
   public void testReadConfig() throws Exception
   {
     JoshuaServiceInfo[] serviceInfos = new JoshuaServiceInfo[2];

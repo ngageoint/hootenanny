@@ -43,9 +43,9 @@ import hoot.services.UnitTest;
 
 public class LanguageResourceTest  
 {
-  @Test
+  //@Test
   //@Test(expected = NotFoundException.class)
-  @Category(UnitTest.class)
+  //@Category(UnitTest.class)
   public void test() throws Exception 
   {
     /*ReviewResolverResponse response =
