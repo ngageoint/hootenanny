@@ -41,6 +41,11 @@
 namespace hoot
 {
 
+static const QString testInputRoot =
+  "test-files/language/visitors/ToEnglishTranslationVisitorTest";
+static const QString testOutputRoot =
+  "test-files/language/visitors/ToEnglishTranslationComparisonVisitorTest";
+
 class ToEnglishTranslationComparisonVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ToEnglishTranslationComparisonVisitorTest);
@@ -49,16 +54,8 @@ class ToEnglishTranslationComparisonVisitorTest : public HootTestFixture
 
 public:
 
-  static QString testInputRoot;
-  static QString testOutputRoot;
-
   ToEnglishTranslationComparisonVisitorTest()
   {
-    testInputRoot =
-      "test-files/language/visitors/ToEnglishTranslationVisitorTest";
-    testOutputRoot =
-      "test-files/language/visitors/ToEnglishTranslationComparisonVisitorTest";
-
     setResetType(ResetBasic);
     TestUtils::mkpath(testOutputRoot);
   }

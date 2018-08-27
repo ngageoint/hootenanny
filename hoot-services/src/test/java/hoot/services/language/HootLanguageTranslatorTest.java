@@ -28,20 +28,104 @@
 package hoot.services.language;
 
 import static org.junit.Assert.assertEquals;
+import static hoot.services.HootProperties.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.BeforeClass;
 
 import hoot.services.UnitTest;
+import hoot.services.language.joshua.JoshuaLanguageTranslator;
+import hoot.services.language.tika.TikaLanguageDetector;
+import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.language.HootLanguageTranslator;
+import hoot.services.controllers.language.LanguageTranslateRequest;
 
-//on JoshuaLanguageTranslator mock: JoshuaServicesInitializer.init(), langsConfigReader.readConfig, connectionPool, sendRequest, parseResponse
 public class HootLanguageTranslatorTest  
 {
+  @BeforeClass
+  public static void beforeClass()
+  {
+    //assuming two Joshua services are running, one for German and one for Spanish
+    /*JoshuaLanguageTranslator wrappedTranslator = Mockito.mock(JoshuaLanguageTranslator.class);
+    when(wrappedTranslator.translate(any(), "DB Reisezentrum").thenReturn("DB Tickets"));
+    when(wrappedTranslator.translate(any(), "Buenos días").thenReturn("Good morning"));
+    when(wrappedTranslator.translate(any(), "Fahrschule Weiß").thenReturn("Driving School Weiss"));
+    when(wrappedTranslator.translate(any(), "Carte de crédit").thenReturn(""));
+    when(wrappedTranslator.translate(any(), "TC IT Service").thenReturn("TC IT Service"));
+
+    TikaLanguageDetector detector = Mockito.mock(TikaLanguageDetector.class);
+    when(detector.detect("DB Reisezentrum").thenReturn("de"));
+    when(detector.detect("Buenos días").thenReturn("es"));
+    when(detector.detect("Fahrschule Weiß").thenReturn("de"));
+    when(detector.detect("Carte de crédit").thenReturn("fr"));
+    when(detector.detect("TC IT Service").thenReturn("en"));*/
+  }
+
   @Test
-  //@Test(expected = NotFoundException.class)
   @Category(UnitTest.class)
-  public void test() /*throws Exception*/ 
+  public void testTranslate()
+  {
+    /*HootCustomPropertiesSetter.setProperty(HOOT_LANGUAGE_TRANSLATOR_APP, "JoshuaLanguageTranslator");
+    HootLanguageTranslator translator = new HootLanguageTranslator();
+
+    LanguageTranslateRequest config = new LanguageTranslateRequest();
+    config.setDetectors(new String[]{ "TikaLanguageDetector" });
+    config.setDetectedLanguageOverridesSpecifiedSourceLanguages(false);
+    config.setPerformExhaustiveTranslationSearchWithNoDetection(false);
+    translator.setConfig(config);
+
+    Assert.assertEquals("DB Tickets", translator.translate(new String[]{ "de"}, "DB Reisezentrum"));
+    Assert.assertEquals("Good morning", translator.translate(new String[]{ "es"}, "Buenos días"));*/
+  }
+
+  @Test
+  @Category(UnitTest.class)
+  public void testTranslateWithDetect()
+  {
+    
+  }
+
+  @Test
+  @Category(UnitTest.class)
+  public void testExhaustiveSearch()
+  {
+    
+  }
+
+  @Test
+  @Category(UnitTest.class)
+  public void testDetectedLangOverrides()
+  {
+    
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  @Category(UnitTest.class)
+  public void testLanguageNotAvailable()
+  {
+    
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  @Category(UnitTest.class)
+  public void testNoSourceLangs()
+  {
+    
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  @Category(UnitTest.class)
+  public void testInvalidTranslator()
+  {
+    
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  @Category(UnitTest.class)
+  public void testInvalidDetector()
   {
     
   }

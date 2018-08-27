@@ -41,6 +41,9 @@
 namespace hoot
 {
 
+static const QString testInputRoot =
+  "test-files/language/translators/HootServicesTranslatorClientTest";
+
 class HootServicesTranslatorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesTranslatorClientTest);
@@ -50,11 +53,8 @@ class HootServicesTranslatorClientTest : public HootTestFixture
 
 public:
 
-  static QString testInputRoot;
-
   HootServicesTranslatorClientTest()
   {
-    testInputRoot = "test-files/language/translators/HootServicesTranslatorClientTest";
   }
 
   void runBuildRequestTest()

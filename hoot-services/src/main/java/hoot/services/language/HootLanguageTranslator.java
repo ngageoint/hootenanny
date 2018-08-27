@@ -46,9 +46,10 @@ import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * A translator using a customized translation workflow that makes use of language detection and other options
+ * A translator using a customized translation workflow that makes use of language detection and 
+   other options
  */
-public final class HootLanguageTranslator implements ToEnglishTranslator, LanguageDetectionConsumer, 
+public class HootLanguageTranslator implements ToEnglishTranslator, LanguageDetectionConsumer, 
   SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(HootLanguageTranslator.class);
@@ -72,7 +73,15 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
   
   public HootLanguageTranslator() throws Exception
   {
-    translator = ToEnglishTranslatorFactory.create(HOOT_LANGUAGE_TRANSLATOR_APP);
+    try
+    {
+      translator = ToEnglishTranslatorFactory.create(HOOT_LANGUAGE_TRANSLATOR_APP);
+    }
+    catch (Exception e)
+    {
+      throw new IllegalArgumentException(
+        "Error creating translator: " + HOOT_LANGUAGE_TRANSLATOR_APP + "; error: " + e.getMessage());
+    }
   }
 
   public void setConfig(Object config)
@@ -142,14 +151,6 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
       "Documentation for more details.";
   }
 
-  /**
-   * @see ToEnglishTranslator
-   */
-  public String translate(String sourceLangCode, String text) throws Exception
-  {
-    return translate(new String[] { sourceLangCode }, text);
-  }
-
   private String detectLanguage(String text, List<String> specifiedSourceLangs) throws Exception
   {
     String detLangCode = "";
@@ -158,7 +159,16 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
     {
       String detectorName = detectors[i];
       logger.trace("detectorName: " + detectorName);
-      LanguageDetector detector = LanguageDetectorFactory.create(detectorName);
+      LanguageDetector detector = null;
+      try
+      {
+        detector = LanguageDetectorFactory.create(detectorName);
+      }
+      catch (Exception e)
+      {
+        throw new IllegalArgumentException(
+          "Error creating detector: " + detectorName + "; error: " + e.getMessage());
+      }
       detLangCode = detector.detect(text);
       logger.trace("detLangCode: " + detLangCode);
       if (!detLangCode.isEmpty())
@@ -193,6 +203,14 @@ public final class HootLanguageTranslator implements ToEnglishTranslator, Langua
       }
     }
     return "";
+  }
+
+  /**
+   * @see ToEnglishTranslator
+   */
+  public String translate(String sourceLangCode, String text) throws Exception
+  {
+    return translate(new String[] { sourceLangCode }, text);
   }
 
   /**
