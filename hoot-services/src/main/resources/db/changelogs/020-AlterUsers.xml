@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="arni.sumarlidason" id="20"
+		context="default">
+		<comment>Alter user table to implement user session management</comment>
+		<addColumn tableName="users">
+			<column name="provider_access_key" type="varchar(255)" />
+			<column name="provider_access_token" type="varchar(255)" />
+			<column name="session_id" type="character(36)" />
+			<column name="hootservices_last_authorize" type="timestamp" />
+			<column name="hootservices_created_at" type="timestamp"
+				defaultValueComputed="now()" />
+			<column name="provider_created_at" type="timestamp"
+				remarks="Timestamp of user creation @ the oAuth Provider" />
+		</addColumn>
+		<rollback>
+			<dropColumn columnName="provider_access_key"
+				tableName="users" />
+			<dropColumn columnName="provider_access_token"
+				tableName="users" />
+			<dropColumn columnName="session_id" tableName="users" />
+			<dropColumn columnName="hootservices_last_authorize"
+				tableName="users" />
+			<dropColumn columnName="hootservices_created_at"
+				tableName="users" />
+			<dropColumn columnName="provider_created_at"
+				tableName="users" />
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

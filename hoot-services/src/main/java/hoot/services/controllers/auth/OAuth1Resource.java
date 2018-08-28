@@ -46,6 +46,7 @@ public class OAuth1Resource {
     public Response verify(@QueryParam("oauth_token") String oauth_token, @QueryParam("oauth_verifier") String oauth_verifier) {
         OAuthConsumerSupport s = oauthRestTemplate.getSupport();
         ProtectedResourceDetails r = oauthRestTemplate.getResource();
+        HttpSession sess = getSession();
 
         OAuthConsumerToken requestToken = tokenServices.getToken(r.getId());
         OAuthConsumerToken accessToken = s.getAccessToken(r /* <== Specifying this was important [!] */, requestToken, oauth_verifier);
@@ -59,7 +60,7 @@ public class OAuth1Resource {
 
         String response = oauthRestTemplate.getForObject("https://api.openstreetmap.org/api/0.6/user/details", String.class);
         try {
-            userManager.upsert(response);
+            userManager.upsert(response, accessToken, sess.getId());
         } catch (InvalidUserProfileException | SAXException | IOException | ParserConfigurationException e) {
             logger.error("Failed to read user profile from oauth provider", e);
             return Response.status(502).build();
@@ -90,6 +91,23 @@ public class OAuth1Resource {
 
         tokenServices.storeToken(r.getId(), requestToken);
         return Response.ok().entity(r.getUserAuthorizationURL() + "?oauth_token=" + requestToken.getValue()).type(MediaType.TEXT_PLAIN).build();
+    }
+    @GET
+    @Path("/oauth1/logout")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response logout() {
+
+        ProtectedResourceDetails r = oauthRestTemplate.getResource();
+        tokenServices.removeToken(r.getId());
+
+        OAuthSecurityContext context = OAuthSecurityContextHolder.getContext();
+        context.getAccessTokens().remove(r.getId());
+
+        // Invalidate HTTP Session
+        HttpSession sess = getSession();
+        sess.invalidate();
+
+        return Response.ok().build();
     }
 
     protected HttpSession getSession() {
