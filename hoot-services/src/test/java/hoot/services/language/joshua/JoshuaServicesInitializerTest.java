@@ -30,6 +30,7 @@ package hoot.services.language.joshua;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static hoot.services.HootProperties.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Map;
 import java.lang.reflect.Method;
@@ -38,50 +39,68 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
+
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 
 import org.apache.commons.exec.CommandLine;
 
 import hoot.services.UnitTest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ JoshuaServicesConfigReader.class })
+@PowerMockIgnore("javax.management.*")
 public class JoshuaServicesInitializerTest  
 {
-  //@Test
-  //@Category(UnitTest.class)
+  private static final Logger logger = LoggerFactory.getLogger(JoshuaServicesInitializerTest.class);
+
+  @Test
+  @Category(UnitTest.class)
   public void testGetCommand() throws Exception
   {
     JoshuaServiceInfo serviceInfo = new JoshuaServiceInfo();
     serviceInfo.setLanguagePackPath("/my/path");
     serviceInfo.setPort(1);
     serviceInfo.setLanguageCode("de");
+    String configPath = serviceInfo.getLanguagePackPath() + "/joshua.config";
     
     Method getCommandMethod = 
-     JoshuaServicesInitializer.class.getDeclaredMethod("getProcessExecCommand", JoshuaServiceInfo.class);
+     JoshuaServicesInitializer.class.getDeclaredMethod(
+       "getProcessExecCommand", JoshuaServiceInfo.class, String.class);
     getCommandMethod.setAccessible(true);
-    CommandLine command = (CommandLine)getCommandMethod.invoke(null, serviceInfo);
+    CommandLine command = (CommandLine)getCommandMethod.invoke(null, serviceInfo, configPath);
+    //logger.debug(command.toString());
 
-    Assert.assertEquals(
-      "java -mx " + JOSHUA_MAX_MEMORY + " -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + 
+    String expectedCmd = 
+      "java -mx" + JOSHUA_MAX_MEMORY + "g -Dfile.encoding=utf8 -Djava.library.path=./lib -cp " + 
       serviceInfo.getLanguagePackPath() + "/target/" + JOSHUA_LIBRARY + 
-      " org.apache.joshua.decoder.JoshuaDecoder -c " + serviceInfo.getLanguagePackPath() + 
-      "/joshua.config -v 1 -server-port 1 -server-type tcp", 
-      command.toString()); 
+      " org.apache.joshua.decoder.JoshuaDecoder -c " + configPath + 
+      " -v 1 -server-port 1 -server-type tcp";
+    Assert.assertEquals(
+      expectedCmd, 
+      command.toString()
+        .replaceAll(",", "")
+        .replaceAll("\\[", "")
+        .replaceAll("\\]", "")); 
   }
 
-  //@Test
-  //@Category(UnitTest.class)
+  @Test
+  @Category(UnitTest.class)
   public void testReadConfig() throws Exception
   {
     JoshuaServiceInfo[] serviceInfos = new JoshuaServiceInfo[2];
+
     JoshuaServiceInfo serviceInfo1 = new JoshuaServiceInfo();
     serviceInfo1.setLanguagePackPath("/my/path1");
     serviceInfo1.setPort(1);
     serviceInfo1.setLanguageCode("de");
     serviceInfos[0] = serviceInfo1;
+
     JoshuaServiceInfo serviceInfo2 = new JoshuaServiceInfo();
     serviceInfo2.setLanguagePackPath("/my/path2");
     serviceInfo2.setPort(2);
@@ -89,7 +108,7 @@ public class JoshuaServicesInitializerTest
     serviceInfos[1] = serviceInfo2;
 
     PowerMockito.mockStatic(JoshuaServicesConfigReader.class);
-    PowerMockito.when(JoshuaServicesConfigReader.readConfig(null)).thenReturn(serviceInfos);
+    PowerMockito.when(JoshuaServicesConfigReader.readConfig(any())).thenReturn(serviceInfos);
     
     Method readConfigMethod = 
      JoshuaServicesInitializer.class.getDeclaredMethod("readServicesConfig", null);

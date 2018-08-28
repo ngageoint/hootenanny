@@ -65,7 +65,7 @@ public class OpenNlpLanguageDetectorTest
     Assert.assertEquals("German", detector.getLanguageName("de"));
     Assert.assertEquals("https://opennlp.apache.org", detector.getUrl());
     Assert.assertTrue(!detector.getDescription().isEmpty());
-    //logger.error(detector.detect("wie alt bist du"));
+    //logger.debug(detector.detect("wie alt bist du"));
     Assert.assertEquals("deu", detector.detect("wie alt bist du"));
   }
 }
