@@ -5,10 +5,6 @@
     <tag k="name:en" v="how old are you"/>
     <tag k="alt_name" v="wie alt bist du"/>
   </node>
-  <node id="5801935555" lat="48.1400416" lon="11.5303757">
-    <tag k="name" v="Buenos días"/>
-    <tag k="alt_name" v="buenos días"/>
-  </node>
   <node id="5794174454" lat="48.8023512" lon="9.7977350">
     <tag k="name" v="wie heissen sie"/>
   </node>

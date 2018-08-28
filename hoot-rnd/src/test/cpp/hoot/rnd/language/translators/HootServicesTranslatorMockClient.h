@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- *
+ * This is used to mock the behavior of the translator that makes calls to hoot services.
  */
 class HootServicesTranslatorMockClient : public HootServicesTranslatorClient
 {
@@ -50,6 +50,7 @@ public:
   HootServicesTranslatorMockClient();
 
   virtual void translate(const QString textToTranslate);
+  virtual void setSourceLanguages(const QStringList langCodes);
 
 private:
 

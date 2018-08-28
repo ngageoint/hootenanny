@@ -39,7 +39,7 @@ QString HootServicesTranslationInfoResponseParser::parseAvailableLanguagesRespon
 {
   QString displayStr;
 
-  std::cout << type << " languages: " << std::endl << std::endl;
+  displayStr += type + " languages:\n\n";
   int langCtr = 0;
   int availableCtr = 0;
   BOOST_FOREACH (boost::property_tree::ptree::value_type& language, response->get_child("languages"))
@@ -72,14 +72,15 @@ QString HootServicesTranslationInfoResponseParser::parseAvailableLanguagesRespon
     "Currently, " + QString::number(availableCtr) +
     " of those languages are available for " + descriptor + ".";
 
-  return displayStr;
+  return displayStr.trimmed();
 }
 
 QString HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(const QString type,
   boost::shared_ptr<boost::property_tree::ptree> response)
 {
   QString displayStr;
-  std::cout << "Available language detectors: " << std::endl << std::endl;
+
+  displayStr += "Available language detectors:\n\n";
   int appCtr = 0;
   BOOST_FOREACH (boost::property_tree::ptree::value_type& app, response->get_child("apps"))
   {
@@ -90,9 +91,9 @@ QString HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(co
     appCtr++;
   }
 
-  displayStr += QString::number(appCtr) + " " + type + " are available.  " + "\n";
+  displayStr += QString::number(appCtr) + " " + type + " are available.";
 
-  return displayStr;
+  return displayStr.trimmed();
 }
 
 }

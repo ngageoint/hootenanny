@@ -32,7 +32,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/NetUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -74,10 +73,19 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
   _detectors = opts.getLanguageTranslationHootServicesDetectors();
   _translationUrl = opts.getLanguageTranslationHootServicesTranslationEndpoint();
 
-  connect(this, SIGNAL(translationComplete()), parent(), SLOT(translationComplete()));
-  connect(
-    this, SIGNAL(translationError(QString, QString)), parent(),
-    SLOT(translationError(QString, QString)));
+  //allowing null here is primarily for testing purposes; a null parent will cause runtime errors
+  //outside of tests anyway
+  if (parent() != NULL)
+  {
+    connect(this, SIGNAL(translationComplete()), parent(), SLOT(translationComplete()));
+    connect(
+      this, SIGNAL(translationError(QString, QString)), parent(),
+      SLOT(translationError(QString, QString)));
+  }
+  else
+  {
+    LOG_DEBUG("HootServicesTranslatorClient parent null.")
+  }
 
   _infoClient.reset(
     Factory::getInstance().constructObject<TranslationInfoProvider>(
@@ -249,11 +257,7 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
   loop.exec();
 
   //check for a response error
-  try
-  {
-    NetUtils::checkWebReplyForError(reply);
-  }
-  catch (const HootException& e)
+  if (reply->error() != QNetworkReply::NoError)
   {
     emit translationError(textToTranslate, reply->errorString());
     return;

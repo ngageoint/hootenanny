@@ -41,7 +41,7 @@ namespace hoot
 {
 
 static const QString testInputRoot =
-  "test-files/language/translators/HootServicesTranslatorResponseParserTest";
+  "test-files/language/translators/HootServicesTranslationInfoResponseParserTest";
 
 class HootServicesTranslationInfoResponseParserTest : public HootTestFixture
 {
@@ -52,41 +52,51 @@ class HootServicesTranslationInfoResponseParserTest : public HootTestFixture
 
 public:
 
-  HootServicesTranslationInfoResponseParserTest()
-  {
-  }
-
   void runParseLangsResponseTest()
   {
     const QString jsonStr = "{\"languages\":[{\"name\":\"Arabic\",\"available\":false,\"iso6391code\":\"ar\",\"iso6392code\":\"ara\"},{\"name\":\"Amharic\",\"available\":false,\"iso6391code\":\"am\",\"iso6392code\":\"afr\"}]}";
     boost::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(jsonStr);
 
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runPrintLangsTest-detectable"),
+    QString responseStr =
       HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
-        "detectable", response));
+        "detectable", response);
+    //LOG_VARD(responseStr);
     HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runPrintLangsTest-translatable"),
+      FileUtils::readFully(testInputRoot + "/runParseLangsResponseTest-detectable").trimmed(),
+      responseStr.trimmed());
+
+    responseStr =
       HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
-        "translatable", response));
+        "translatable", response);
+    //LOG_VARD(responseStr);
+    HOOT_STR_EQUALS(
+      FileUtils::readFully(testInputRoot + "/runParseLangsResponseTest-translatable").trimmed(),
+      responseStr.trimmed());
   }
 
   void runParseAppsResponseTest()
   {
     const QString jsonStr =
-      "{\"apps\":[{\"name\":\"TikaLanguageDetector\",\"description\":\"The language detection portion of a library which detects and extracts metadata and text from many different file types\",\"url\":\"https://tika.apache.org\"},{\"name\":\"OpenNlpLanguageDetector\",\"description\":\"The language detector portion of a machine learning based toolkit for the processing of natural language text\",\"url\":\"https://opennlp.apache.org\"}]}";
+      "{\"apps\":[{\"name\":\"TikaLanguageDetector\",\"description\":\"blah\",\"url\":\"https://tika.apache.org\"},{\"name\":\"OpenNlpLanguageDetector\",\"description\":\"more blah\",\"url\":\"https://opennlp.apache.org\"}]}";
     boost::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(jsonStr);
 
+    QString responseStr =
+      HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(
+        "detectors", response);
+    //LOG_VARD(responseStr);
     HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runPrintAppsTest-detectors"),
-      HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
-        "detectors", response));
+      FileUtils::readFully(testInputRoot + "/runParseAppsResponseTest-detectors").trimmed(),
+      responseStr.trimmed());
+
+    responseStr =
+      HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(
+        "translators", response);
+    //LOG_VARD(responseStr);
     HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runPrintAppsTest-translators"),
-      HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
-        "translators", response));
+      FileUtils::readFully(testInputRoot + "/runParseAppsResponseTest-translators").trimmed(),
+      responseStr.trimmed());
   }
 };
 

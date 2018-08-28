@@ -44,7 +44,7 @@ namespace hoot
 static const QString testInputRoot =
   "test-files/language/visitors/ToEnglishTranslationVisitorTest";
 static const QString testOutputRoot =
-  "test-files/language/visitors/ToEnglishTranslationVisitorTest";
+  "test-output/language/visitors/ToEnglishTranslationVisitorTest";
 
 class ToEnglishTranslationVisitorTest : public HootTestFixture
 {
@@ -52,7 +52,6 @@ class ToEnglishTranslationVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runTranslateTest);
   CPPUNIT_TEST(runNoSourceLangsTest);
   CPPUNIT_TEST(runSkipPreTranslatedTagsTest);
-  CPPUNIT_TEST(runSkipWordsInEnglishDictTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -98,17 +97,6 @@ public:
     const QString testName = "runSkipPreTranslatedTagsTest";
     Settings conf = _getDefaultConfig();
     conf.set("language.translation.skip.pre.translated.tags", true);
-    _runTranslationTest(
-      conf,
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot + "/" + testName + "-gold.osm");
-  }
-
-  void runSkipWordsInEnglishDictTest()
-  {
-    const QString testName = "runSkipWordsInEnglishDictTest";
-    Settings conf = _getDefaultConfig();
-    conf.set("language.translation.skip.words.in.english.dictionary", false);
     _runTranslationTest(
       conf,
       testOutputRoot + "/" + testName + ".osm",

@@ -49,57 +49,87 @@ class HootServicesTranslatorClientTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(HootServicesTranslatorClientTest);
   CPPUNIT_TEST(runBuildRequestTest);
   CPPUNIT_TEST(runParseResponseTest);
+  CPPUNIT_TEST(runInvalidLangDetectConfigTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  HootServicesTranslatorClientTest()
-  {
-  }
-
   void runBuildRequestTest()
   {
-    HootServicesTranslatorClient uut;
-    uut.setConfiguration(_getSettings());
+    boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
     std::stringstream requestStrStrm;
     boost::shared_ptr<QNetworkRequest> request =
-      uut._getTranslateRequest("text to translate", requestStrStrm);
+      uut->_getTranslateRequest("text to translate", requestStrStrm);
 
     HOOT_STR_EQUALS("http://localhost/test", request->url().toString());
     HOOT_STR_EQUALS(
       "application/json", request->header(QNetworkRequest::ContentTypeHeader).toString());
-    HOOT_STR_EQUALS("", requestStrStrm.str());
+    LOG_VARD(requestStrStrm.str());
+    HOOT_STR_EQUALS(
+      FileUtils::readFully(testInputRoot + "/runBuildRequestTest").trimmed(),
+      QString::fromStdString(requestStrStrm.str()).trimmed());
   }
 
   void runParseResponseTest()
   {
-    HootServicesTranslatorClient uut;
-    uut.setConfiguration(_getSettings());
+    boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
-    const QString jsonStr = "{\"translatedText\":\"How%20old%20are%20you\",\"performExhaustiveTranslationSearchWithNoDetection\":false,\"detectorUsed\":\"TikaLanguageDetector\",\"sourceLangCodes\":[\"de\",\"es\"],\"detectedLangCode\":\"de\",\"detectedLangAvailableForTranslation\":true,\"translator\":\"HootLanguageTranslator\",\"sourceText\":\"wie alt bist du\",\"detectedLang\":\"German\",\"detectedLanguageOverridesSpecifiedSourceLanguages\":false}";
+    //see comment in StringUtilsTest::jsonParseTest about the formatting of this string
+    const QString jsonStr = "{ \"translatedText\": \"How%20old%20are%20you\", \"performExhaustiveTranslationSearchWithNoDetection\": false, \"detectorUsed\": \"TikaLanguageDetector\", \"sourceLangCodes\": [ \"de\",\"es\" ], \"detectedLangCode\": \"de\", \"detectedLangAvailableForTranslation\": true, \"translator\": \"HootLanguageTranslator\", \"sourceText\": \"wie alt bist du\", \"detectedLang\": \"German\", \"detectedLanguageOverridesSpecifiedSourceLanguages\": false }";
     boost::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(jsonStr);
-    uut._parseTranslateResponse(response);
+    uut->_parseTranslateResponse(response);
 
-    HOOT_STR_EQUALS("How old are you", uut.getTranslatedText());
-    CPPUNIT_ASSERT(uut.detectionMade());
-    HOOT_STR_EQUALS("German", uut._detectedLang);
-    HOOT_STR_EQUALS("TikaLanguageDetector", uut._detectorUsed);
-    CPPUNIT_ASSERT(uut._detectedLangAvailableForTranslation);
+    HOOT_STR_EQUALS("How old are you", uut->getTranslatedText());
+    CPPUNIT_ASSERT(uut->detectionMade());
+    HOOT_STR_EQUALS("German", uut->_detectedLang);
+    HOOT_STR_EQUALS("TikaLanguageDetector", uut->_detectorUsed);
+    CPPUNIT_ASSERT(uut->_detectedLangAvailableForTranslation);
+  }
+
+  void runInvalidLangDetectConfigTest()
+  {
+    HootServicesTranslatorClient client;
+    QStringList sourceLangs;
+    sourceLangs.append("detect");
+    sourceLangs.append("es");
+
+    QString exceptionMsg("");
+    try
+    {
+      client.setSourceLanguages(sourceLangs);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("When specifying 'detect' in source languages, no other languages may be specified.")
+        .toStdString(),
+      exceptionMsg.toStdString());
   }
 
 private:
 
-  Settings _getSettings()
+  boost::shared_ptr<HootServicesTranslatorClient> _getClient()
   {
+    boost::shared_ptr<HootServicesTranslatorClient> client(new HootServicesTranslatorClient());
+
     Settings conf;
     conf.set("language.translation.hoot.services.translation.endpoint", "http://localhost/test");
     conf.set("language.translation.hoot.services.translator", "HootLanguageTranslator");
     conf.set("language.translation.hoot.services.detectors", QStringList("TikaLanguageDetector"));
     conf.set("language.translation.detected.language.overrides.specified.source.languages", false);
     conf.set("language.translation.perform.exhaustive.search.with.no.detection", true);
-    return conf;
+    client->setConfiguration(conf);
+
+    QStringList sourceLangs;
+    sourceLangs.append("de");
+    sourceLangs.append("es");
+    client->setSourceLanguages(sourceLangs);
+
+    return client;
   }
 };
 

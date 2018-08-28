@@ -31,7 +31,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/NetUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 
@@ -93,8 +92,11 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
  loop.exec();
 
- //check for a response error
- NetUtils::checkWebReplyForError(reply);
+ //check for a response error;
+ if (reply->error() != QNetworkReply::NoError)
+ {
+   throw HootException(QString("Reply error:\n%1").arg(reply->error()));
+ }
 
  //parse and return the response
  return StringUtils::jsonStringToPropTree(reply->readAll());
@@ -133,7 +135,10 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
   loop.exec();
 
   //check for a response error
-  NetUtils::checkWebReplyForError(reply);
+  if (reply->error() != QNetworkReply::NoError)
+  {
+    throw HootException(QString("Reply error:\n%1").arg(reply->error()));
+  }
 
   //parse and return the response
   return StringUtils::jsonStringToPropTree(reply->readAll());

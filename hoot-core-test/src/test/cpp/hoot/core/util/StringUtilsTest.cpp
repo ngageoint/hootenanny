@@ -63,13 +63,18 @@ public:
 
   void jsonParseTest()
   {
+    //The json string output from the prop tree will come back formatted with newlines and
+    //indenting, so leaving spaces between items here to match the output string after its
+    //simplified.
     const QString jsonInput =
-      "{\"apps\":[{\"name\":\"TikaLanguageDetector\",\"description\":\"The language detection portion of a library which detects and extracts metadata and text from many different file types\",\"url\":\"https://tika.apache.org\"},{\"name\":\"OpenNlpLanguageDetector\",\"description\":\"The language detector portion of a machine learning based toolkit for the processing of natural language text\",\"url\":\"https://opennlp.apache.org\"}]}";
+      "{ \"apps\": [ { \"name\": \"TikaLanguageDetector\", \"description\": \"blah\", \"url\": \"https://tika.apache.org\" }, { \"name\": \"OpenNlpLanguageDetector\", \"description\": \"more blah\", \"url\": \"https://opennlp.apache.org\" } ] }";
     boost::shared_ptr<boost::property_tree::ptree> propTree =
       StringUtils::jsonStringToPropTree(jsonInput);
     std::stringstream outputStrStream;
     boost::property_tree::json_parser::write_json(outputStrStream, *propTree);
-    HOOT_STR_EQUALS(jsonInput, outputStrStream.str());
+    QString outputStr = QString::fromStdString(outputStrStream.str()).simplified();
+    outputStr.replace("\\/", "/").trimmed();
+    HOOT_STR_EQUALS(jsonInput, outputStr);
   }
 };
 

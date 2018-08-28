@@ -30,9 +30,12 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(TranslationInfoProvider, HootServicesTranslationInfoMockClient)
 
 HootServicesTranslationInfoMockClient::HootServicesTranslationInfoMockClient() :
 HootServicesTranslationInfoClient()

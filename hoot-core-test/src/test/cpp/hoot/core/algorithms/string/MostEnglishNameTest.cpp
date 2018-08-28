@@ -64,10 +64,10 @@ public:
     t["alt_name"] = QString::fromUtf8("улица Ильинка;street Ilinka");
     HOOT_STR_EQUALS("street Ilinka", MostEnglishName::getInstance()->getMostEnglishName(t));
 
-    CPPUNIT_ASSERT(MostEnglishName::getInstance()->isInDictionary("Disney World"));
+    CPPUNIT_ASSERT(MostEnglishName::getInstance()->isInDictionary("the"));
 
     QStringList words;
-    words.append("Disney World");
+    words.append("the");
     words.append("street");
     CPPUNIT_ASSERT(MostEnglishName::getInstance()->areAllInDictionary(words));
   }

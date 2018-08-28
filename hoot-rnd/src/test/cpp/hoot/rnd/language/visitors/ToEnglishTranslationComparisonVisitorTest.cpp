@@ -43,13 +43,17 @@ namespace hoot
 
 static const QString testInputRoot =
   "test-files/language/visitors/ToEnglishTranslationVisitorTest";
-static const QString testOutputRoot =
+static const QString goldInputRoot =
   "test-files/language/visitors/ToEnglishTranslationComparisonVisitorTest";
+static const QString testOutputRoot =
+  "test-output/language/visitors/ToEnglishTranslationComparisonVisitorTest";
 
 class ToEnglishTranslationComparisonVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ToEnglishTranslationComparisonVisitorTest);
-  CPPUNIT_TEST(runTest);
+  //CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runInvalidSourceLangsTest);
+  //CPPUNIT_TEST(runInvalidSourceLangsTest2);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -71,11 +75,57 @@ public:
 
     map->visitRw(visitor);
 
-    const QString outputFile = testOutputRoot + "/ToEnglishTranslationComparisonVisitorTest.osm";
+    const QString outputFile = testOutputRoot + "/runTest.osm";
     OsmMapWriterFactory::getInstance().write(map, outputFile);
 
-    HOOT_FILE_EQUALS(
-      testInputRoot + "/ToEnglishTranslationComparisonVisitorTest-gold.osm", outputFile);
+    HOOT_FILE_EQUALS(goldInputRoot + "/runTest-gold.osm", outputFile);
+  }
+
+  void runInvalidSourceLangsTest()
+  {
+    ToEnglishTranslationComparisonVisitor visitor;
+    Settings conf;
+    QStringList sourceLangs;
+    sourceLangs.append("de");
+    sourceLangs.append("es");
+    conf.set("language.translation.source.languages", sourceLangs);
+
+    QString exceptionMsg("");
+    try
+    {
+      visitor.setConfiguration(conf);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("ToEnglishTranslationComparisonVisitor supports only one source language and does not support detect mode.")
+        .toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runInvalidSourceLangsTest2()
+  {
+    ToEnglishTranslationComparisonVisitor visitor;
+    Settings conf;
+    QStringList sourceLangs;
+    sourceLangs.append("detect");
+    conf.set("language.translation.source.languages", sourceLangs);
+
+    QString exceptionMsg("");
+    try
+    {
+      visitor.setConfiguration(conf);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("ToEnglishTranslationComparisonVisitor supports only one source language and does not support detect mode.")
+        .toStdString(),
+      exceptionMsg.toStdString());
   }
 
 private:
@@ -88,7 +138,6 @@ private:
     conf.set("language.translation.skip.pre.translated.tags", false);
     QStringList sourceLangs;
     sourceLangs.append("de");
-    sourceLangs.append("es");
     conf.set("language.translation.source.languages", sourceLangs);
     QStringList preTranslateTagKeys;
     preTranslateTagKeys.append("name:en");

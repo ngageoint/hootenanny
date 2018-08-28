@@ -64,7 +64,10 @@ public:
     HOOT_STR_EQUALS("http://localhost/test", request->url().toString());
     HOOT_STR_EQUALS(
       "application/json", request->header(QNetworkRequest::ContentTypeHeader).toString());
-    HOOT_STR_EQUALS("", requestStrStrm.str());
+    //see comment in StringUtilsTest::jsonParseTest about the formatting of the expected string
+    HOOT_STR_EQUALS(
+      "{ \"apps\": [ \"TikaLanguageDetector\" ] }",
+      QString::fromStdString(requestStrStrm.str()).simplified());
   }
 };
 
