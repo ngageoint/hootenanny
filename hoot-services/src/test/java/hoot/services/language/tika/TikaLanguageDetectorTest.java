@@ -45,8 +45,8 @@ public class TikaLanguageDetectorTest
     detector = TikaLanguageDetector.getInstance();
   }
 
-  //@Test
-  //@Category(UnitTest.class)
+  @Test
+  @Category(UnitTest.class)
   public void testAll() throws Exception 
   {
     Assert.assertTrue(detector.isLanguageAvailable("de"));
@@ -55,6 +55,5 @@ public class TikaLanguageDetectorTest
     Assert.assertEquals("https://tika.apache.org", detector.getUrl());
     Assert.assertTrue(!detector.getDescription().isEmpty());
     Assert.assertEquals("de", detector.detect("wie alt bist du"));
-    Assert.assertEquals("es", detector.detect("buenos noches"));
   }
 }
