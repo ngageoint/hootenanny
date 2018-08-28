@@ -77,6 +77,7 @@ public class LanguageDetectorFactory
       {
         msg += className;
       }
+      logger.error(e.getMessage());
       throw new IllegalArgumentException(msg + "; error: " + e.getMessage());
     }
   }

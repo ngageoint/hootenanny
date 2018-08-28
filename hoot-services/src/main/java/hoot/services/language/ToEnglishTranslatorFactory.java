@@ -63,6 +63,7 @@ public class ToEnglishTranslatorFactory
     try 
     {
       fullClassName = LanguageUtils.getFullClassName(className);
+      logger.trace("fullClassName: " + fullClassName);
       if (MethodUtils.getAccessibleMethod(Class.forName(fullClassName), "getInstance", null) != null)
       {
         translator = 

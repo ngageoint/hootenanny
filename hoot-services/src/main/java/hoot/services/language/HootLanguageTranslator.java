@@ -70,6 +70,12 @@ public class HootLanguageTranslator implements ToEnglishTranslator, LanguageDete
 
   //wrapped translator app
   private ToEnglishTranslator translator;
+
+  public boolean getDetectedLanguageOverridesSpecifiedSourceLanguages() 
+  { return detectedLanguageOverridesSpecifiedSourceLanguages; }
+
+  public boolean getPerformExhaustiveTranslationSearchWithNoDetection() 
+  { return performExhaustiveTranslationSearchWithNoDetection; }
   
   public HootLanguageTranslator() throws Exception
   {
@@ -225,7 +231,7 @@ public class HootLanguageTranslator implements ToEnglishTranslator, LanguageDete
     }
 
     logger.trace("text: " + text);
-    List<String> specifiedSourceLangs = Arrays.asList(sourceLangCodes);;
+    List<String> specifiedSourceLangs = Arrays.asList(sourceLangCodes);
     logger.trace("specifiedSourceLangs size: " + String.valueOf(specifiedSourceLangs.size()));
     logger.trace(
       "performExhaustiveTranslationSearchWithNoDetection: " + 
@@ -240,6 +246,7 @@ public class HootLanguageTranslator implements ToEnglishTranslator, LanguageDete
     //make sure we have translators available for each of the requested languages
     for (String langCode : specifiedSourceLangs)
     {
+      logger.trace("langCode: " + langCode);
       if (!langCode.toLowerCase().equals("detect") && 
           !((SupportedLanguageConsumer)translator).isLanguageAvailable(langCode.toLowerCase()))
       {
