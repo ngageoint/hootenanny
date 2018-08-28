@@ -16,14 +16,15 @@
 	<http use-expressions="true"
 		entry-point-ref="authenticationEntryPoint">
 		<intercept-url pattern="/**" access="permitAll()" />
+		<csrf disabled="true" />
 	</http>
 
 	<b:bean id="authenticationEntryPoint"
 		class="hoot.services.AuthenticationEntryPointImpl" />
 	<b:bean id="hootAccessDeniedHandler"
 		class="hoot.services.HootAccessDeniedHandler" />
-	<!-- <b:bean id="hootOAuthConsumerTokenServices" class="hoot.services.HootOAuthConsumerTokenServices" 
-		/> -->
+	<b:bean id="hootInvalidsessionStrategy"
+		class="hoot.services.HootInvalidSessionStrategy" />
 	<b:bean id="httpSessionBasedTokenServices"
 		class="org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices" />
 	<authentication-manager
@@ -36,16 +37,23 @@
 	<oauth:consumer
 		resource-details-service-ref="resourceDetails"
 		requireAuthenticated="false"
+		redirect-strategy-ref="hootInvalidsessionStrategy"
 		failure-handler-ref="hootAccessDeniedHandler"
 		token-services-ref="httpSessionBasedTokenServices">
+		<oauth:url pattern="/osm/**" resources="openStreetMap" />
 		<oauth:url pattern="/job/**" resources="openStreetMap" />
+		<oauth:url pattern="/jobs/**" resources="openStreetMap" />
+		<oauth:url pattern="/info/**" resources="openStreetMap" />
+		<oauth:url pattern="/ogr/**" resources="openStreetMap" />
+		<oauth:url pattern="/ingest/**" resources="openStreetMap" />
+		<!--  pattern="/auth/**" not listed intentionally -->
 	</oauth:consumer>
 
 	<oauth:resource-details-service
 		id="resourceDetails">
 		<oauth:resource id="openStreetMap"
-			key="z7KJ3uI5tM7YiFECP6RevCRGCPwkbwjUEz6DoGWM"
-			secret="MD2grIFGvBx5c5Djo7hxTlAELxoUC67cMwEiPwzX"
+			key="4aiqf3gHIWVcKDu0V8Xx6h6I2QYfJ7ClCK8xhj2Z"
+			secret="glOzMrdYh86WbLbMsPP6uXC4gWR4ccDrDdY5LBwj"
 			request-token-url="https://www.openstreetmap.org/oauth/request_token"
 			user-authorization-url="https://www.openstreetmap.org/oauth/authorize"
 			access-token-url="https://www.openstreetmap.org/oauth/access_token"

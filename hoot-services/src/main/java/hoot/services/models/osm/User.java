@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,11 +26,13 @@
  */
 package hoot.services.models.osm;
 
+import java.util.Date;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import hoot.services.controllers.auth.UserManagerImpl;
 import hoot.services.models.db.Users;
-
 
 /**
  * Represents the model for an OSM user
@@ -41,13 +43,21 @@ public class User extends Users {
         setDisplayName(user.getDisplayName());
         setEmail(user.getEmail());
         setId(user.getId());
+
+        setProviderAccessToken(user.getProviderAccessToken());
+        setProviderAccessKey(user.getProviderAccessKey());
+        setProviderCreatedAt(user.getProviderCreatedAt());
+
+        setHootservicesCreatedAt(user.getHootservicesCreatedAt());
+        setHootservicesLastAuthorize(user.getHootservicesLastAuthorize());
+
+        setSessionId(user.getSessionId());
     }
 
     /**
      * Returns an XML representation of the user's details
      *
-     * @param parentXml
-     *            XML node this node should be attached under
+     * @param parentXml XML node this node should be attached under
      * @return an XML node
      */
     private Element detailsToXml(Element parentXml, long changesetsCount) {
@@ -56,7 +66,19 @@ public class User extends Users {
         Element userElement = doc.createElement("user");
         userElement.setAttribute("id", String.valueOf(getId()));
         userElement.setAttribute("display_name", getDisplayName());
-        // account_created attribute not supported yet
+        userElement.setAttribute("email", getEmail());
+
+        userElement.setAttribute("provider_access_token", getProviderAccessToken());
+        userElement.setAttribute("provider_access_key", getProviderAccessKey());
+        userElement.setAttribute("provider_created_at_epoch", Long.toString(getProviderCreatedAt().getTime()));
+        userElement.setAttribute("provider_created_at", UserManagerImpl.DATE_FORMAT.format(new Date(getProviderCreatedAt().getTime())));
+
+        userElement.setAttribute("hootservices_created_at_epoch", Long.toString(getHootservicesCreatedAt().getTime()));
+        userElement.setAttribute("hootservices_created_at", UserManagerImpl.DATE_FORMAT.format(new Date(getHootservicesCreatedAt().getTime())));
+        userElement.setAttribute("hootservices_last_authorize_epoch", Long.toString(getHootservicesLastAuthorize().getTime()));
+        userElement.setAttribute("hootservices_last_authorize", UserManagerImpl.DATE_FORMAT.format(new Date(getHootservicesLastAuthorize().getTime())));
+
+        userElement.setAttribute("session_id", getSessionId());
 
         // img element not supported
         // roles element not supported
@@ -78,8 +100,7 @@ public class User extends Users {
     /**
      * Returns an XML representation of the user
      *
-     * @param parentXml
-     *            XML node this node should be attached under
+     * @param parentXml XML node this node should be attached under
      * @return an XML node
      */
     public Element toXml(Element parentXml, long changesetsCount) {

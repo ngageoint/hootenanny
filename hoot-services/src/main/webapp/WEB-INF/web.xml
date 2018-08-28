@@ -89,6 +89,7 @@
 		<url-pattern>/info/*</url-pattern>
 		<url-pattern>/ogr/*</url-pattern>
 		<url-pattern>/ingest/*</url-pattern>
+		<!-- [!] new url-pattern's added here should be considered for security-applicationContext.xml [!] -->
 	</servlet-mapping>
 
 	<!-- EVWHS - DG's imagery service for non-commercial clients. As of 05/17/2017 
