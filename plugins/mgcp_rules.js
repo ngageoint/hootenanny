@@ -128,6 +128,7 @@ mgcp.rules = {
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
     ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
     ['F_CODE','FA015','man_made','shooting_range'], // Firing Range
     ['F_CODE','GB485','aeroway','approach_light'], // From OSM
