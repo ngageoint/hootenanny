@@ -26,7 +26,7 @@ Feature: Conflate differential with stats
     And I should see stats "diffstats" "POIs" "new" "1"
     And I should see stats "diffstats" "Buildings" "new" "1"
     And I should see stats "diffstats" "Km of Road" "new" "16.91"
-    When I click toggle menu item "Download"
+    When I press "Download"
     And I wait 30 seconds
     Then the download file "DiffConflateCucumber-stats.tsv" should exist
     Then I click the "trash" button
