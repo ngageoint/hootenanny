@@ -82,7 +82,7 @@ import javax.annotation.PreDestroy;
    * Not doing any extensive request param validation yet
  */
 @Controller
-@Path("")
+@Path("/language")
 public class LanguageResource 
 {
   private static final Logger logger = LoggerFactory.getLogger(LanguageResource.class);
@@ -99,7 +99,9 @@ public class LanguageResource
     }
     catch (Exception e)
     {
-      throw new Exception("Error initializing Joshua. error: " + e.getMessage());
+      String msg = "Error initializing Joshua. error: " + e.getMessage();
+      logger.error(msg);
+      throw new Exception(msg);
     }
   }
 
@@ -119,7 +121,9 @@ public class LanguageResource
     }
     catch (Exception e)
     {
-      throw new Exception("Error closing Joshua. error: " + e.getMessage());
+      String msg = "Error closing Joshua. error: " + e.getMessage();
+      logger.error(msg);
+      throw new Exception(msg);
     }
   }
 
@@ -151,20 +155,22 @@ public class LanguageResource
     try
     {
       Set<String> detectorClassNames = LanguageDetectorFactory.getSimpleClassNames();
+      logger.trace("detectorClassNames.size(): " + detectorClassNames.size());
       List<LanguageApp> apps = new ArrayList<LanguageApp>();
       for (String detectorClassName : detectorClassNames)
       {
+        logger.trace("detectorClassName: " + detectorClassName);
         apps.add(languageEntityToApp(detectorClassName));
       }
       return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
     }
     catch (Exception e)
     {
+      String msg = 
+        "Error retrieving available language detector information.  Error: " + e.getMessage();
+      logger.error(msg);
       throw new WebApplicationException(
-        e, 
-        Response.status(Status.INTERNAL_SERVER_ERROR)
-         .entity("Error retrieving available language detector information.  Error: " + e.getMessage())
-         .build());
+        e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
     }
   }
 
@@ -198,21 +204,22 @@ public class LanguageResource
     try
     {
       Set<String> translatorClassNames = ToEnglishTranslatorFactory.getSimpleClassNames();
+      logger.trace("translatorClassNames.size(): " + translatorClassNames.size());
       List<LanguageApp> apps = new ArrayList<LanguageApp>();
       for (String translatorClassName : translatorClassNames)
       {
+        logger.trace("translatorClassName: " + translatorClassName);
         apps.add(languageEntityToApp(translatorClassName));
       }
       return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
     }
     catch (Exception e)
     {
+      String msg = 
+        "Error retrieving available language translator information.  Error: " + e.getMessage();
+      logger.error(msg);
       throw new WebApplicationException(
-        e, 
-        Response.status(Status.INTERNAL_SERVER_ERROR)
-         .entity(
-           "Error retrieving available language translator information.  Error: " + e.getMessage())
-         .build());
+        e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
     }
   }
 
@@ -253,13 +260,17 @@ public class LanguageResource
     try
     {
       List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
-      logger.trace(
+      logger.error(
         "Listing detectable languages for apps: " + 
         String.join(",", detectorClassNames.toArray(new String[]{})) + "..."); 
       return new SupportedLanguagesResponse(getAllAppSupportedLangs(detectorClassNames));
     }
     catch (Exception e)
     {
+      String msg = 
+        "Error retrieving detectable language information for apps: " + 
+        String.join(",", request.getApps()) + ".  Error: " + e.getMessage();
+      logger.error(msg);
       Status status;
       if (e instanceof IllegalArgumentException)
       {
@@ -270,12 +281,7 @@ public class LanguageResource
         status = Status.INTERNAL_SERVER_ERROR;
       } 
       throw new WebApplicationException(
-        e, 
-        Response.status(status)
-          .entity(
-            "Error retrieving detectable language information for apps: " + 
-            String.join(",", request.getApps()) + ".  Error: " + e.getMessage())
-          .build());
+        e, Response.status(status).entity(msg).build());
     }
   }
 
@@ -324,6 +330,10 @@ public class LanguageResource
     }
     catch (Exception e)
     {
+      String msg = 
+        "Error retrieving detectable language information for apps: " + 
+        String.join(",", request.getApps()) + ".  Error: " + e.getMessage();
+      logger.error(msg);
       Status status;
       if (e instanceof IllegalArgumentException)
       {
@@ -334,12 +344,7 @@ public class LanguageResource
         status = Status.INTERNAL_SERVER_ERROR;
       } 
       throw new WebApplicationException(
-        e, 
-        Response.status(status)
-          .entity(
-            "Error retrieving detectable language information for apps: " + 
-            String.join(",", request.getApps()) + ".  Error: " + e.getMessage())
-          .build());
+        e, Response.status(status).entity(msg).build());
     }
   }
 
@@ -407,6 +412,11 @@ public class LanguageResource
     }
     catch (Exception e)
     {
+      String msg = 
+        "Error detecting language with detector(s): " + 
+        String.join(",", request.getDetectors()) + "; error: " + e.getMessage() + 
+        " text: " + request.getText();
+      logger.error(msg);
       Status status;
       if (e instanceof IllegalArgumentException)
       {
@@ -417,13 +427,7 @@ public class LanguageResource
         status = Status.INTERNAL_SERVER_ERROR;
       } 
       throw new WebApplicationException(
-        e, 
-        Response.status(Status.INTERNAL_SERVER_ERROR)
-          .entity(
-            "Error detecting language with detector(s): " + 
-            String.join(",", request.getDetectors()) + "; error: " + e.getMessage() + 
-            " text: " + request.getText())
-          .build());
+        e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
     }
   }
 
@@ -546,6 +550,11 @@ public class LanguageResource
     }
     catch (Exception e)
     {
+      String msg = 
+        "Error translating with translator: " + request.getTranslator() + " to language (s): " + 
+        String.join(",", request.getSourceLangCodes()) + ".  Error: " + e.getMessage() + 
+        "; text: " + textToTranslate;
+      logger.error(msg);
       Status status;
       if (badRequest || e instanceof IllegalArgumentException)
       {
@@ -556,13 +565,7 @@ public class LanguageResource
         status = Status.INTERNAL_SERVER_ERROR;
       } 
       throw new WebApplicationException(
-        e, 
-        Response.status(status)
-          .entity(
-            "Error translating with translator: " + request.getTranslator() + " to language (s): " + 
-            String.join(",", request.getSourceLangCodes()) + ".  Error: " + e.getMessage() + 
-            "; text: " + textToTranslate)
-          .build());
+        e, Response.status(status).entity(msg).build());
     }
     
     return Response.ok(responseStr).build();
@@ -583,6 +586,10 @@ public class LanguageResource
       appInfo = (LanguageAppInfo)LanguageDetectorFactory.create(appName);
     }
     assert(appInfo != null);
+    if (appInfo != null)
+    {
+      logger.error(appInfo.getUrl());
+    }
 
     LanguageApp app = new LanguageApp();
     app.setName(appName);
@@ -600,7 +607,7 @@ public class LanguageResource
     List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
     for (String appName : apps)
     {
-      logger.trace("appName: " + appName);
+      logger.error("appName: " + appName);
       SupportedLanguageConsumer langConsumer = null;
       try
       {
@@ -613,21 +620,21 @@ public class LanguageResource
       assert(langConsumer != null);
 
       SupportedLanguage[] consumerSupportedLangs = langConsumer.getSupportedLanguages();
-      logger.trace("consumerSupportedLangs size: " + consumerSupportedLangs.length);
+      logger.error("consumerSupportedLangs size: " + consumerSupportedLangs.length);
       for (int i = 0; i < consumerSupportedLangs.length; i++)
       {
         SupportedLanguage lang = consumerSupportedLangs[i];
-        logger.trace("lang code: " + lang.getIso6391code());
-        if (!parsedLangCodes.contains(lang.getIso6391code()))
+        logger.error("lang code: " + lang.getIso6391Code());
+        if (!parsedLangCodes.contains(lang.getIso6391Code()))
         {
-          parsedLangCodes.add(lang.getIso6391code());
-          lang.setAvailable(langConsumer.isLanguageAvailable(lang.getIso6391code()));
+          parsedLangCodes.add(lang.getIso6391Code());
+          lang.setAvailable(langConsumer.isLanguageAvailable(lang.getIso6391Code()));
           lang.setName(URLEncoder.encode(lang.getName(), "UTF-8").replace("+", "%20"));
           supportedLangs.add(lang);
         }
       }
     }
-    logger.trace("supportedLangs size: " + supportedLangs.size());
+    logger.error("supportedLangs size: " + supportedLangs.size());
     return supportedLangs.toArray(new SupportedLanguage[]{});
   }
 

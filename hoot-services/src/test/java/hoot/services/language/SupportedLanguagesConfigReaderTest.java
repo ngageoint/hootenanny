@@ -56,19 +56,19 @@ public class SupportedLanguagesConfigReaderTest
     
     Assert.assertEquals(2, supportedLangs.length);
     
-    Assert.assertEquals("de", supportedLangs[0].getIso6391code());
-    Assert.assertEquals("deu", supportedLangs[0].getIso6392code());
+    Assert.assertEquals("de", supportedLangs[0].getIso6391Code());
+    Assert.assertEquals("deu", supportedLangs[0].getIso6392Code());
     Assert.assertEquals("German", supportedLangs[0].getName());
     Assert.assertFalse(supportedLangs[0].getAvailable());
-    Assert.assertTrue(configReader.isSupportedLanguage(supportedLangs[0].getIso6391code()));
+    Assert.assertTrue(configReader.isSupportedLanguage(supportedLangs[0].getIso6391Code()));
     Assert.assertEquals("de", configReader.getIso6391Code("de"));
     Assert.assertEquals("German", configReader.getLanguageName("de"));
 
-    Assert.assertEquals("es", supportedLangs[1].getIso6391code());
-    Assert.assertEquals("spa", supportedLangs[1].getIso6392code());
+    Assert.assertEquals("es", supportedLangs[1].getIso6391Code());
+    Assert.assertEquals("spa", supportedLangs[1].getIso6392Code());
     Assert.assertEquals("Spanish", supportedLangs[1].getName());
     Assert.assertFalse(supportedLangs[1].getAvailable());
-    Assert.assertTrue(configReader.isSupportedLanguage(supportedLangs[0].getIso6391code()));
+    Assert.assertTrue(configReader.isSupportedLanguage(supportedLangs[0].getIso6391Code()));
     Assert.assertEquals("es", configReader.getIso6391Code("es"));
     Assert.assertEquals("Spanish", configReader.getLanguageName("es"));
 

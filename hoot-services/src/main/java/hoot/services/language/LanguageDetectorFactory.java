@@ -28,7 +28,7 @@
 package hoot.services.language;
 
 import java.util.Set;
-import java.util.HashSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 
@@ -91,7 +91,7 @@ public class LanguageDetectorFactory
   {
     if (simpleClassNames == null)
     {
-      Set<String> classNames = new HashSet<String>();
+      Set<String> classNames = new TreeSet<String>();
       Set<Class<? extends LanguageDetector>> classes = 
         (new Reflections("hoot.services.language")).getSubTypesOf(LanguageDetector.class);
       for (Class<? extends LanguageDetector> clazz : classes)

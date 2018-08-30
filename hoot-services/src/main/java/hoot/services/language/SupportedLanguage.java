@@ -39,10 +39,10 @@ public final class SupportedLanguage
 
   public SupportedLanguage() {}
 
-  public String getIso6391code() { return iso6391Code; }
+  public String getIso6391Code() { return iso6391Code; }
   public void setIso6391Code(String code) { this.iso6391Code = code; }
 
-  public String getIso6392code() { return iso6392Code; }
+  public String getIso6392Code() { return iso6392Code; }
   public void setIso6392Code(String code) { this.iso6392Code = code; }
 
   public String getName() { return name; }

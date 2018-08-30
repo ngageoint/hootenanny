@@ -27,7 +27,6 @@
 
 package hoot.services.language;
 
-import static org.junit.Assert.assertEquals;
 import static hoot.services.HootProperties.*;
 import static org.mockito.Mockito.*;
 
@@ -76,95 +75,14 @@ public class HootLanguageTranslatorTest
     //HootCustomPropertiesSetter.setProperty("hootLanguageTranslatorApp", "JoshuaLanguageTranslator");
   }
 
-  private void mockJoshua() throws Exception
-  {
-    //assuming two Joshua services are running, one for German and one for Spanish
-
-    JoshuaLanguageTranslator wrappedTranslator = PowerMockito.mock(JoshuaLanguageTranslator.class);
-
-    SupportedLanguage[] langs = new SupportedLanguage[2];
-
-    SupportedLanguage lang1 = new SupportedLanguage();
-    lang1.setIso6391Code("de");
-    lang1.setIso6392Code("deu");
-    lang1.setName("German");
-    lang1.setAvailable(true);
-    langs[0] = lang1;
-
-    SupportedLanguage lang2 = new SupportedLanguage();
-    lang2.setIso6391Code("es");
-    lang2.setIso6392Code("spa");
-    lang2.setName("Spanish");
-    lang2.setAvailable(true);
-    langs[1] = lang2;
-
-    PowerMockito.when(wrappedTranslator.getSupportedLanguages()).thenReturn(langs);
-
-    PowerMockito.when(wrappedTranslator.isLanguageAvailable("de")).thenReturn(true);
-    PowerMockito.when(wrappedTranslator.isLanguageAvailable("es")).thenReturn(true);
-    PowerMockito.when(wrappedTranslator.isLanguageAvailable("fr")).thenReturn(false);
-    PowerMockito.when(wrappedTranslator.isLanguageAvailable("detect")).thenReturn(true);
-
-    PowerMockito.when(wrappedTranslator.getLanguageName("de")).thenReturn("German");
-    PowerMockito.when(wrappedTranslator.getLanguageName("es")).thenReturn("Spanish");
-    PowerMockito.when(wrappedTranslator.getLanguageName("fr")).thenReturn(null);
-
-    PowerMockito
-      .when(wrappedTranslator.translate("de", "DB Reisezentrum"))
-      .thenReturn("DB Tickets");
-    PowerMockito
-      .when(wrappedTranslator.translate("es", "Buenos días"))
-      .thenReturn("Good morning");
-    PowerMockito
-      .when(wrappedTranslator.translate("de", "Fahrschule Weiß"))
-      .thenReturn("Driving School Weiss");
-    //no French service, so return empty string
-    PowerMockito.when(wrappedTranslator.translate("de", "Carte de crédit")).thenReturn(""); 
-    PowerMockito.when(wrappedTranslator.translate("es", "Carte de crédit")).thenReturn(""); 
-    //This is already in English, so return the same as input.
-    PowerMockito
-      .when(wrappedTranslator.translate("de", "TC IT Service"))
-      .thenReturn("TC IT Service");
-    PowerMockito
-      .when(wrappedTranslator.translate("es", "TC IT Service"))
-      .thenReturn("TC IT Service");
-
-    PowerMockito
-      .whenNew(JoshuaLanguageTranslator.class).withAnyArguments()
-      .thenReturn(wrappedTranslator);
-
-    PowerMockito.mockStatic(ToEnglishTranslatorFactory.class);
-    PowerMockito
-      .when(ToEnglishTranslatorFactory
-      .create("JoshuaLanguageTranslator"))
-      .thenReturn(wrappedTranslator); 
-  }
- 
-  private void mockTika() throws Exception
-  {
-    TikaLanguageDetector detector = PowerMockito.mock(TikaLanguageDetector.class);
-
-    PowerMockito.when(detector.detect("DB Reisezentrum")).thenReturn("de");
-    PowerMockito.when(detector.detect("Buenos días")).thenReturn("es");
-    PowerMockito.when(detector.detect("Fahrschule Weiß")).thenReturn("de");
-    PowerMockito.when(detector.detect("Carte de crédit")).thenReturn("fr");
-    PowerMockito.when(detector.detect("TC IT Service")).thenReturn("en");
-
-    PowerMockito.mockStatic(LanguageDetectorFactory.class);
-    PowerMockito
-      .when(LanguageDetectorFactory
-      .create("TikaLanguageDetector"))
-      .thenReturn(detector);
-  }
-
   @Before
   public void beforeTest() throws Exception
   {
     //mocking Joshua b/c its too expensive to bring up during tests with any of the default lang packs; in the future we
     //could maybe create small test lang pack; Tika isn't that expensive to instantiate, but we'll mock it for
     //consistency's sake
-    mockJoshua();
-    mockTika();
+    LanguageTestUtils.mockJoshua();
+    LanguageTestUtils.mockTika();
   }
 
   @AfterClass

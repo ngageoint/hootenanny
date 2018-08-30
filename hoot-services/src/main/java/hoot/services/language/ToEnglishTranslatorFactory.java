@@ -28,7 +28,7 @@
 package hoot.services.language;
 
 import java.util.Set;
-import java.util.HashSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 
@@ -101,7 +101,7 @@ public class ToEnglishTranslatorFactory
 
     if (simpleClassNames == null)
     {
-      Set<String> classNames = new HashSet<String>();
+      Set<String> classNames = new TreeSet<String>();
       Set<Class<? extends ToEnglishTranslator>> classes = 
         (new Reflections("hoot.services.language")).getSubTypesOf(ToEnglishTranslator.class);
       for (Class<? extends ToEnglishTranslator> clazz : classes)
