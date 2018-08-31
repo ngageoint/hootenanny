@@ -215,7 +215,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
 
     LanguageDetectRequest request = new LanguageDetectRequest();
     request.setDetectors(new String[] { "TikaLanguageDetector" });
-    request.setText(URLEncoder.encode("Buenos días", "UTF-8").replace("+", "%20"));
+    request.setText(LanguageResource.encodeText("Buenos días"));
 
     String response =
       target("language/detect")
@@ -239,7 +239,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
 
     LanguageTranslateRequest request = new LanguageTranslateRequest();
     request.setDetectors(new String[] { "TikaLanguageDetector" });
-    request.setText(URLEncoder.encode("Buenos días", "UTF-8").replace("+", "%20"));
+    request.setText(LanguageResource.encodeText("Buenos días"));
     request.setTranslator("JoshuaLanguageTranslator");
     String[] sourceLangCodes = new String[] { "es" };
     request.setSourceLangCodes(sourceLangCodes);
@@ -276,7 +276,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
 
     LanguageTranslateRequest request = new LanguageTranslateRequest();
     request.setDetectors(new String[] { "TikaLanguageDetector" });
-    request.setText(URLEncoder.encode("Buenos días\nBuenos noches", "UTF-8").replace("+", "%20"));
+    request.setText(LanguageResource.encodeText("Buenos días\nBuenos noches"));
     request.setTranslator("JoshuaLanguageTranslator");
     String[] sourceLangCodes = new String[] { "es" };
     request.setSourceLangCodes(sourceLangCodes);

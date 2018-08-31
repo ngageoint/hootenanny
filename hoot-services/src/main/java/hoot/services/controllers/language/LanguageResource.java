@@ -409,8 +409,7 @@ public class LanguageResource
       entity.put("detectedLangCode", detectedLangCode);
       if (!detectedLangCode.isEmpty())
       {
-        entity.put(
-          "detectedLang", URLEncoder.encode(detectedLangName, "UTF-8").replace("+", "%20"));
+        entity.put("detectedLang", encodeText(detectedLangName));
         entity.put("detectorUsed", detectingDetector);
       } 
       logger.trace(entity.toJSONString());
@@ -633,7 +632,7 @@ public class LanguageResource
         {
           parsedLangCodes.add(lang.getIso6391Code());
           lang.setAvailable(langConsumer.isLanguageAvailable(lang.getIso6391Code()));
-          lang.setName(URLEncoder.encode(lang.getName(), "UTF-8").replace("+", "%20"));
+          lang.setName(encodeText(lang.getName()));
           supportedLangs.add(lang);
         }
       }
@@ -653,7 +652,7 @@ public class LanguageResource
       sourceLangCodes.add(request.getSourceLangCodes()[i]);
     }
     entity.put("sourceLangCodes", sourceLangCodes);
-    entity.put("translatedText", URLEncoder.encode(translatedText, "UTF-8").replace("+", "%20"));
+    entity.put("translatedText", encodeText(translatedText));
     entity.put("translator", request.getTranslator());
     if (translator instanceof LanguageDetectionConsumer)
     {
@@ -726,5 +725,11 @@ public class LanguageResource
     }
 
     return appClassNames;
+  }
+
+  public static String encodeText(String text) throws UnsupportedEncodingException
+  { 
+    //the replace here is a bit of a hack...
+    return URLEncoder.encode(text, "UTF-8").replace("+", "%20");
   }
 }
