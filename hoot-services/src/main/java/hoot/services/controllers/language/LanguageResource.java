@@ -80,7 +80,7 @@ import javax.annotation.PreDestroy;
    @todo possibly some more extensive request param validation
  */
 @Controller
-@Path("/language")
+@Path("toEnglishTranslation")
 public class LanguageResource 
 {
   private static final Logger logger = LoggerFactory.getLogger(LanguageResource.class);

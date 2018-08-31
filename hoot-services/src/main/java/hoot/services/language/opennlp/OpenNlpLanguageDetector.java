@@ -48,16 +48,19 @@ import hoot.services.language.SupportedLanguage;
  * Detects languages using OpenNLP
  *
  * http://opennlp.apache.org/
+
+ * Keep this class immutable for thread safety purposes, since its a Singleton.
  */
 public final class OpenNlpLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, 
   LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(OpenNlpLanguageDetector.class);
 
-  private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
-  private SupportedLanguage[] supportedLangs = null;
+  //reads the langs that OpenNLP supports
+  private final SupportedLanguagesConfigReader langsConfigReader =
+    new SupportedLanguagesConfigReader();
 
-  private LanguageDetectorME detector = null;
+  private final LanguageDetectorME detector;
 
   //init is expensive, so running as singleton
   private static OpenNlpLanguageDetector instance;
@@ -72,9 +75,10 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
       supportedLangsConfigStrm = 
         OpenNlpLanguageDetector.class.getClassLoader().getResourceAsStream(
           "language-translation/openNlpLanguages");
-      supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
+      langsConfigReader.readConfig(supportedLangsConfigStrm);
       logger.debug(
-        "Read " + supportedLangs.length + " languages from config for OpenNlpLanguageDetector.");
+        "Read " + langsConfigReader.getSupportedLanguages().length + 
+      " languages from config for OpenNlpLanguageDetector.");
     }
     finally 
     {  
@@ -96,7 +100,8 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
       {
         logger.warn(
           "No OpenNLP language detection model available at: " + OPEN_NLP_LANGUAGE_DETECTION_MODEL + 
-        ".  Disabling OpenNLP language detection.");
+          ".  Disabling OpenNLP language detection.");
+        detector = null;
       }
       else
       {
@@ -139,7 +144,7 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
    */
   public SupportedLanguage[] getSupportedLanguages()
   {
-    return supportedLangs;
+    return langsConfigReader.getSupportedLanguages().clone();
   }
 
   /**

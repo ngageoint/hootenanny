@@ -140,7 +140,7 @@ void HootServicesTranslatorClient::_validateAvailableLangs(
   BOOST_FOREACH (boost::property_tree::ptree::value_type& language, replyObj->get_child("languages"))
   {
     const QString sourceLangCode =
-      QString::fromStdString(language.second.get<std::string>("iso6391code"));
+      QString::fromStdString(language.second.get<std::string>("iso6391Code"));
     LOG_VART(sourceLangCode);
     const bool available = language.second.get<bool>("available");
     LOG_VART(available);

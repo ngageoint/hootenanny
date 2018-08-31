@@ -98,7 +98,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/TikaLanguageDetector");
 
     LanguageAppsResponse response =
-      target("language/detectors")
+      target("toEnglishTranslation/detectors")
         .request(MediaType.APPLICATION_JSON)
         .get(LanguageAppsResponse.class);
     LanguageApp[] apps = response.getApps();
@@ -123,7 +123,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/JoshuaLanguageTranslator");
 
     LanguageAppsResponse response =
-      target("language/translators")
+      target("toEnglishTranslation/translators")
         .request(MediaType.APPLICATION_JSON)
         .get(LanguageAppsResponse.class);
     LanguageApp[] apps = response.getApps();
@@ -151,7 +151,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     request.setApps(new String[] { "TikaLanguageDetector" });
 
     SupportedLanguagesResponse response =
-      target("language/detectable")
+      target("toEnglishTranslation/detectable")
         .request(MediaType.APPLICATION_JSON)
         .post(Entity.json(request), SupportedLanguagesResponse.class);
     
@@ -181,7 +181,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     request.setApps(new String[] { "JoshuaLanguageTranslator" });
 
     SupportedLanguagesResponse response =
-      target("language/translatable")
+      target("toEnglishTranslation/translatable")
         .request(MediaType.APPLICATION_JSON)
         .post(Entity.json(request), SupportedLanguagesResponse.class);
     
@@ -218,7 +218,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     request.setText(LanguageResource.encodeText("Buenos días"));
 
     String response =
-      target("language/detect")
+      target("toEnglishTranslation/detect")
         .request(MediaType.APPLICATION_JSON)
         .post(Entity.json(request), String.class);
     JSONObject responseObj = (JSONObject)(new JSONParser()).parse(response);  
@@ -247,7 +247,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     request.setPerformExhaustiveTranslationSearchWithNoDetection(false);
 
     String response =
-      target("language/translate")
+      target("toEnglishTranslation/translate")
         .request(MediaType.APPLICATION_JSON)
         .post(Entity.json(request), String.class);
     JSONObject responseObj = (JSONObject)(new JSONParser()).parse(response);
@@ -284,7 +284,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     request.setPerformExhaustiveTranslationSearchWithNoDetection(false);
 
     String response =
-      target("language/translateBatch")
+      target("toEnglishTranslation/translateBatch")
         .request(MediaType.APPLICATION_JSON)
         .post(Entity.json(request), String.class);
     JSONObject responseObj = (JSONObject)(new JSONParser()).parse(response);

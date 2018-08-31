@@ -49,6 +49,7 @@ public final class SupportedLanguagesConfigReader
 
   private Map<String, String> iso6392To1 = new HashMap<String, String>();
   private Map<String, String> iso6391ToLangName = new HashMap<String, String>();
+  private SupportedLanguage[] langs = null;
 
   public SupportedLanguagesConfigReader()
   {
@@ -60,7 +61,7 @@ public final class SupportedLanguagesConfigReader
    * @param configStrm config input stream
    * @return an array of supported languages
    */
-  public SupportedLanguage[] readConfig(InputStream configStrm) throws Exception
+  public void readConfig(InputStream configStrm) throws Exception
   { 
     String line = null;
     List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
@@ -106,8 +107,10 @@ public final class SupportedLanguagesConfigReader
         iso6391ToLangName.put(iso6391, langName);
       }
     }
-    return supportedLangs.toArray(new SupportedLanguage[]{});
+    langs = supportedLangs.toArray(new SupportedLanguage[]{});
   }
+
+  public SupportedLanguage[] getSupportedLanguages() { return langs; }
 
   /**
    * Determines if a language is supported

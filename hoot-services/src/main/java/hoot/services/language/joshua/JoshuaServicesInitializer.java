@@ -72,14 +72,19 @@ public class JoshuaServicesInitializer
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaServicesInitializer.class);
 
+  //which services we have running; one for each language
+  private Map<String, JoshuaServiceInfo> services = null;
+
   public JoshuaServicesInitializer() {}
 
-  public static Map<String, JoshuaServiceInfo> init() throws Exception
+  public Map<String, JoshuaServiceInfo> getServices() { return services; }
+
+  public void init() throws Exception
   {
     logger.debug("Initializing Joshua services...");
 
     //read the services configuration file
-    Map<String, JoshuaServiceInfo> services = readServicesConfig();
+    services = readServicesConfig();
 
     //launch the services asynchronously as external processes that listen on a port, one by one, 
     //one for each language
@@ -99,8 +104,6 @@ public class JoshuaServicesInitializer
     logger.debug(
       "Finished launching Joshua translation services for " + ctr + " language packs.  The services " + 
       "may take up to several minutes to finish initializing.");
-
-    return services;
   }
 
   private static CommandLine getProcessExecCommand(JoshuaServiceInfo serviceInfo, String configPath) 

@@ -47,14 +47,17 @@ import hoot.services.language.SupportedLanguage;
  * Detects languages using Tika
  *
  * http://tika.apache.org/
+
+ * Keep this class immutable for thread safety purposes, since its a Singleton.
  */
 public final class TikaLanguageDetector implements LanguageDetector, SupportedLanguageConsumer, 
   LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(TikaLanguageDetector.class);
 
-  private SupportedLanguagesConfigReader langsConfigReader = new SupportedLanguagesConfigReader();
-  private SupportedLanguage[] supportedLangs = null;
+  //reads the langs that Tika supports
+  private final SupportedLanguagesConfigReader langsConfigReader = 
+    new SupportedLanguagesConfigReader();
 
   private final org.apache.tika.language.detect.LanguageDetector detector = 
     new OptimaizeLangDetector();
@@ -71,9 +74,10 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
       supportedLangsConfigStrm = 
         TikaLanguageDetector.class.getClassLoader().getResourceAsStream(
           "language-translation/tikaLanguages");
-      supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
+      langsConfigReader.readConfig(supportedLangsConfigStrm);
       logger.debug(
-        "Read " + supportedLangs.length + " languages from config for TikaLanguageDetector.");
+        "Read " + langsConfigReader.getSupportedLanguages().length + 
+        " languages from config for TikaLanguageDetector.");
     }
     finally 
     {  
@@ -120,7 +124,7 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
    */
   public SupportedLanguage[] getSupportedLanguages()
   {
-    return supportedLangs;
+    return langsConfigReader.getSupportedLanguages().clone();
   }
 
   /**

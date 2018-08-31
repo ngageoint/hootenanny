@@ -1232,7 +1232,7 @@ languages.
 === language.translation.hoot.services.detectable.languages.endpoint
 
 * Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/detectable`
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectable`
 
 Service endpoint for retrieving detectable languages supported by HootServicesTranslatorClient
 
@@ -1253,7 +1253,7 @@ Separate values with a ';' and surround in quotes when passing in from the comma
 === language.translation.hoot.services.detectors.endpoint
 
 * Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/detectors`
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectors`
 
 Service endpoint for retrieving available detector implementations supported by
 HootServicesTranslatorClient
@@ -1261,14 +1261,14 @@ HootServicesTranslatorClient
 === language.translation.hoot.services.translatable.languages.endpoint
 
 * Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/translatable`
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translatable`
 
 Service endpoint for retrieving translatable languages supported by HootServicesTranslatorClient
 
 === language.translation.hoot.services.translation.endpoint
 
 * Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/translate`
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translate`
 
 Web service translation endpoint used by the HootServicesTranslatorClient
 
@@ -1284,7 +1284,7 @@ Java class names implementing ToEnglishTranslator.  Valid values are 'JoshuaLang
 === language.translation.hoot.services.translators.endpoint
 
 * Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/translators`
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translators`
 
 Service endpoint for retrieving available translator implementations supported by
 HootServicesTranslatorClient

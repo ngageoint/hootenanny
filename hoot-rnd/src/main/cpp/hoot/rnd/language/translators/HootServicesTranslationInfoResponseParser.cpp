@@ -51,7 +51,7 @@ QString HootServicesTranslationInfoResponseParser::parseAvailableLanguagesRespon
     const QString availableStr = available ? "yes" : "no";
 
     displayStr += "Code: " +
-      QString::fromStdString(language.second.get<std::string>("iso6391code")) + "\n";
+      QString::fromStdString(language.second.get<std::string>("iso6391Code")) + "\n";
     displayStr += "Name: " + name + "\n";
     displayStr += "Available: " + availableStr + "\n";
     displayStr += "\n";

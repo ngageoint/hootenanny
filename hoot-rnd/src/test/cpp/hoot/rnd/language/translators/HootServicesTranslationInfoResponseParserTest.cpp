@@ -54,7 +54,7 @@ public:
 
   void runParseLangsResponseTest()
   {
-    const QString jsonStr = "{\"languages\":[{\"name\":\"Arabic\",\"available\":false,\"iso6391code\":\"ar\",\"iso6392code\":\"ara\"},{\"name\":\"Amharic\",\"available\":false,\"iso6391code\":\"am\",\"iso6392code\":\"afr\"}]}";
+    const QString jsonStr = "{\"languages\":[{\"name\":\"Arabic\",\"available\":false,\"iso6391Code\":\"ar\",\"iso6392Code\":\"ara\"},{\"name\":\"Amharic\",\"available\":false,\"iso6391Code\":\"am\",\"iso6392Code\":\"afr\"}]}";
     boost::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(jsonStr);
 

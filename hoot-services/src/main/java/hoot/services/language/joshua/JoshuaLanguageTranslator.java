@@ -61,19 +61,25 @@ import hoot.services.language.SupportedLanguagesConfigReader;
     Journal = {The Prague Bulletin of Mathematical Linguistics},
     Title = {Joshua 6: A phrase-based and hierarchical statistical machine translation system},
     Year = {2015} }
+
+ * Keep this class immutable for thread safety purposes, since its a Singleton.
 */
 public final class JoshuaLanguageTranslator implements ToEnglishTranslator, 
   SupportedLanguageConsumer, LanguageAppInfo
 {
   private static final Logger logger = LoggerFactory.getLogger(JoshuaLanguageTranslator.class);
 
-  //this reads a hoot managed config that determines what languages Joshua supports
-  private SupportedLanguagesConfigReader langsConfigReader = 
+  //launches the Joshua TCP services
+  private final JoshuaServicesInitializer servicesInitializer = 
+    new JoshuaServicesInitializer();
+
+  //reads a hoot managed config that determines what languages Joshua supports
+  private final SupportedLanguagesConfigReader langsConfigReader = 
     new SupportedLanguagesConfigReader();
-  private SupportedLanguage[] supportedLangs = null;
-  //which services we have running; one for each language
-  private Map<String, JoshuaServiceInfo> services = null;
-  private JoshuaConnectionPool connectionPool = null;
+
+  //manages connection resources to the Joshua services
+  private final JoshuaConnectionPool connectionPool;
+
   public static final Charset ENCODING = Charset.forName("UTF-8");
 
   //startup costs are costly, so running as Singleton
@@ -82,17 +88,23 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
   private JoshuaLanguageTranslator() throws Exception
   {
     //launch all of our services
-    services = JoshuaServicesInitializer.init();
+    
+    servicesInitializer.init();
 
     //determine which languages we support (can be a superset of the languages made available by 
     //the running services)
     readSupportedLangsConfig();
 
-    if (services.size() > 0)
+    if (servicesInitializer.getServices().size() > 0)
     {
       //init our connection pool to the services
       connectionPool = 
-        new JoshuaConnectionPool(services, Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
+        new JoshuaConnectionPool(
+          servicesInitializer.getServices(), Integer.parseInt(JOSHUA_CONNECTION_POOL_MAX_SIZE));
+    }
+    else
+    {
+      connectionPool = null;
     }
   }
 
@@ -113,7 +125,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
    */
   public SupportedLanguage[] getSupportedLanguages()
   {
-    return supportedLangs;
+    return langsConfigReader.getSupportedLanguages().clone();
   }
 
   /**
@@ -121,7 +133,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
    */
   public boolean isLanguageAvailable(String langCode)
   {
-    return services.containsKey(langCode.toLowerCase());
+    return servicesInitializer.getServices().containsKey(langCode.toLowerCase());
   }
 
   /**
@@ -160,9 +172,10 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
       supportedLangsConfigStrm = 
         JoshuaLanguageTranslator.class.getClassLoader().getResourceAsStream(
           "language-translation/joshuaLanguages");
-      supportedLangs = langsConfigReader.readConfig(supportedLangsConfigStrm);
+      langsConfigReader.readConfig(supportedLangsConfigStrm);
       logger.debug(
-        "Read " + supportedLangs.length + " languages from config for JoshuaLanguageTranslator.");
+        "Read " + langsConfigReader.getSupportedLanguages().length + 
+        " languages from config for JoshuaLanguageTranslator.");
     }
     finally 
     {  
@@ -213,7 +226,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
       throw new IllegalArgumentException(
         "No language translator available for language code: " + sourceLangCode);
     }
-    logger.trace("port: " + services.get(sourceLangCode).getPort());
+    logger.trace("port: " + servicesInitializer.getServices().get(sourceLangCode).getPort());
 
     String translatedText = "";
     JoshuaConnection connection = null;

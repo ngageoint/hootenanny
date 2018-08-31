@@ -49,10 +49,10 @@ public class SupportedLanguagesConfigReaderTest
   public void testRead() throws Exception
   {
     SupportedLanguagesConfigReader configReader = new SupportedLanguagesConfigReader();
-    SupportedLanguage[] supportedLangs = 
-      configReader.readConfig(
-        SupportedLanguagesConfigReaderTest.class.getClassLoader().getResourceAsStream(
-          "hoot/services/language/supportedLanguages"));
+    configReader.readConfig(
+      SupportedLanguagesConfigReaderTest.class.getClassLoader().getResourceAsStream(
+        "hoot/services/language/supportedLanguages"));
+    SupportedLanguage[] supportedLangs = configReader.getSupportedLanguages();
     
     Assert.assertEquals(2, supportedLangs.length);
     
