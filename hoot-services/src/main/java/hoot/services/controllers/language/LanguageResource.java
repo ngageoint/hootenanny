@@ -260,7 +260,7 @@ public class LanguageResource
     try
     {
       List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
-      logger.error(
+      logger.trace(
         "Listing detectable languages for apps: " + 
         String.join(",", detectorClassNames.toArray(new String[]{})) + "..."); 
       return new SupportedLanguagesResponse(getAllAppSupportedLangs(detectorClassNames));
@@ -355,7 +355,7 @@ public class LanguageResource
        needed are used to perform the detection.  Some detectors may perform better for certain languages than others so there can be
        an advantage to specifying them.
      * The text sent in for translation should be URL encoded and in UTF-8.  
-     * Language names are returned URL encoded and in UTF-8.
+     * Language names and the original source text are returned URL encoded and in UTF-8.
 
      curl -X POST -H "Content-Type: application/json" -d '{ "text": "wie alt bist du" }' localhost:8080/hoot-services/language/detect
      curl -X POST -H "Content-Type: application/json" -d '{ "detectors": ["TikaLanguageDetector"], "text": "wie%20alt%20bist%20du" }' 
@@ -378,7 +378,7 @@ public class LanguageResource
     try
     {
       requestText = URLDecoder.decode(request.getText(), "UTF-8");
-      logger.debug("Detecting language for text: " + StringUtils.left(requestText, 25) + "...");
+      logger.trace("Detecting language for text: " + StringUtils.left(requestText, 25) + "...");
       String detectedLangCode = "";
       String detectingDetector = "";
       String detectedLangName = "";
@@ -386,6 +386,7 @@ public class LanguageResource
       List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
       for (String detectorClassName : detectorClassNames)
       {
+        logger.trace("detectorClassName: " + detectorClassName);
         if (detectedLangCode.isEmpty())
         {
           LanguageDetector detector = LanguageDetectorFactory.create(detectorClassName);
@@ -395,12 +396,16 @@ public class LanguageResource
           {
             detectedLangName = 
               ((SupportedLanguageConsumer)detector).getLanguageName(detectedLangCode);
+
+            logger.trace("detectingDetector: " + detectorClassName);
+            logger.trace("detectedLangCode: " + detectedLangCode);
+            logger.trace("detectedLangName: " + detectedLangName);
           }
         }
       }
 
       JSONObject entity = new JSONObject();
-      entity.put("sourceText", requestText);
+      entity.put("sourceText", request.getText());
       entity.put("detectedLangCode", detectedLangCode);
       if (!detectedLangCode.isEmpty())
       {
@@ -408,6 +413,7 @@ public class LanguageResource
           "detectedLang", URLEncoder.encode(detectedLangName, "UTF-8").replace("+", "%20"));
         entity.put("detectorUsed", detectingDetector);
       } 
+      logger.trace(entity.toJSONString());
       return Response.ok(entity.toJSONString()).build();
     }
     catch (Exception e)
@@ -551,7 +557,7 @@ public class LanguageResource
     catch (Exception e)
     {
       String msg = 
-        "Error translating with translator: " + request.getTranslator() + " to language (s): " + 
+        "Error translating with translator: " + request.getTranslator() + " to language(s): " + 
         String.join(",", request.getSourceLangCodes()) + ".  Error: " + e.getMessage() + 
         "; text: " + textToTranslate;
       logger.error(msg);
@@ -586,10 +592,8 @@ public class LanguageResource
       appInfo = (LanguageAppInfo)LanguageDetectorFactory.create(appName);
     }
     assert(appInfo != null);
-    if (appInfo != null)
-    {
-      logger.error(appInfo.getUrl());
-    }
+    logger.trace(appInfo.getDescription());
+    logger.trace(appInfo.getUrl());
 
     LanguageApp app = new LanguageApp();
     app.setName(appName);
@@ -607,7 +611,7 @@ public class LanguageResource
     List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
     for (String appName : apps)
     {
-      logger.error("appName: " + appName);
+      logger.trace("appName: " + appName);
       SupportedLanguageConsumer langConsumer = null;
       try
       {
@@ -620,11 +624,11 @@ public class LanguageResource
       assert(langConsumer != null);
 
       SupportedLanguage[] consumerSupportedLangs = langConsumer.getSupportedLanguages();
-      logger.error("consumerSupportedLangs size: " + consumerSupportedLangs.length);
+      logger.trace("consumerSupportedLangs size: " + consumerSupportedLangs.length);
       for (int i = 0; i < consumerSupportedLangs.length; i++)
       {
         SupportedLanguage lang = consumerSupportedLangs[i];
-        logger.error("lang code: " + lang.getIso6391Code());
+        logger.trace("lang code: " + lang.getIso6391Code());
         if (!parsedLangCodes.contains(lang.getIso6391Code()))
         {
           parsedLangCodes.add(lang.getIso6391Code());
@@ -634,7 +638,7 @@ public class LanguageResource
         }
       }
     }
-    logger.error("supportedLangs size: " + supportedLangs.size());
+    logger.trace("supportedLangs size: " + supportedLangs.size());
     return supportedLangs.toArray(new SupportedLanguage[]{});
   }
 

@@ -46,11 +46,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response;
 
+import java.net.URLEncoder;
+import java.net.URLDecoder;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 
 import hoot.services.UnitTest;
@@ -67,6 +71,10 @@ import hoot.services.controllers.language.LanguageDetectRequest;
 import hoot.services.controllers.language.LanguageTranslateRequest;
 import hoot.services.language.LanguageTestUtils;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.language.LanguageAppInfo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(
@@ -75,6 +83,8 @@ import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 @PowerMockIgnore("javax.management.*")
 public class LanguageResourceTest extends HootServicesJerseyTestAbstract
 {
+  private static final Logger logger = LoggerFactory.getLogger(LanguageResourceTest.class);
+
   @Before
   public void beforeTest() throws Exception
   {
@@ -97,12 +107,19 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     //to be updated if new apps are added.
     Assert.assertEquals(1, apps.length);
     Assert.assertEquals("TikaLanguageDetector", apps[0].getName());
+    Assert.assertEquals("blah2", apps[0].getDescription());
+    Assert.assertEquals("http://localhost/TikaLanguageDetector", apps[0].getUrl());
   }
 
   //@Test
   //@Category(UnitTest.class)
   public void testGetTranslators() throws Exception 
   {
+    //JoshuaLanguageTranslator translator = (JoshuaLanguageTranslator)LanguageTestUtils.mockJoshua();
+    //LanguageAppInfo appInfo = (LanguageAppInfo)translator;
+    //PowerMockito.when(appInfo.getDescription()).thenReturn("blah1");
+    //PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/JoshuaLanguageTranslator");
+
     LanguageAppsResponse response =
       target("language/translators")
         .request(MediaType.APPLICATION_JSON)
@@ -113,13 +130,14 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     //to be updated if new apps are added.
     Assert.assertEquals(1, apps.length);
     Assert.assertEquals("JoshuaLanguageTranslator", apps[0].getName());
+    Assert.assertEquals("blah1", apps[0].getDescription());
+    Assert.assertEquals("http://localhost/JoshuaLanguageTranslator", apps[0].getUrl());
   }
 
   //@Test
   //@Category(UnitTest.class)
   public void testGetDetectableLangs() throws Exception 
-  {
-    SupportedLanguagesRequest request = new SupportedLanguagesRequest();
+  {    SupportedLanguagesRequest request = new SupportedLanguagesRequest();
     request.setApps(new String[] { "TikaLanguageDetector" });
 
     SupportedLanguagesResponse response =
@@ -171,138 +189,95 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     }
   }
 
-  //@Test
-  //@Category(UnitTest.class)
+  @Test
+  @Category(UnitTest.class)
   public void testDetectLanguage() throws Exception 
   {
     LanguageDetectRequest request = new LanguageDetectRequest();
     request.setDetectors(new String[] { "TikaLanguageDetector" });
-    request.setText("Buenos días");
+    request.setText(URLEncoder.encode("Buenos días", "UTF-8").replace("+", "%20"));
 
-    Response response =
+    String response =
       target("language/detect")
         .request(MediaType.APPLICATION_JSON)
-        .post(Entity.json(request));
-    JSONObject responseObj = 
-      (JSONObject)(new JSONParser()).parse(response.getEntity().toString());  
+        .post(Entity.json(request), String.class);
+    JSONObject responseObj = (JSONObject)(new JSONParser()).parse(response);  
   
-    Assert.assertEquals("Buenos días", responseObj.get("sourceText").toString());
+    Assert.assertEquals(
+      "Buenos días", URLDecoder.decode(responseObj.get("sourceText").toString()));
     Assert.assertEquals("es", responseObj.get("detectedLangCode").toString());
-    Assert.assertEquals("Spanish", responseObj.get("detectedLang").toString());
+    Assert.assertEquals(
+      "Spanish", URLDecoder.decode(responseObj.get("detectedLang").toString()));
     Assert.assertEquals("TikaLanguageDetector", responseObj.get("detectorUsed").toString());
   }
 
-  //@Test
-  //@Category(UnitTest.class)
+  @Test
+  @Category(UnitTest.class)
   public void testTranslate() throws Exception 
   {
     LanguageTranslateRequest request = new LanguageTranslateRequest();
     request.setDetectors(new String[] { "TikaLanguageDetector" });
-    request.setText("Buenos días");
+    request.setText(URLEncoder.encode("Buenos días", "UTF-8").replace("+", "%20"));
     request.setTranslator("JoshuaLanguageTranslator");
     String[] sourceLangCodes = new String[] { "es" };
     request.setSourceLangCodes(sourceLangCodes);
     request.setDetectedLanguageOverridesSpecifiedSourceLanguages(false);
     request.setPerformExhaustiveTranslationSearchWithNoDetection(false);
 
-    Response response =
+    String response =
       target("language/translate")
         .request(MediaType.APPLICATION_JSON)
-        .post(Entity.json(request));
-    JSONObject responseObj = 
-      (JSONObject)(new JSONParser()).parse(response.getEntity().toString());
+        .post(Entity.json(request), String.class);
+    JSONObject responseObj = (JSONObject)(new JSONParser()).parse(response);
 
-    Assert.assertEquals("Buenos días", responseObj.get("sourceText").toString());
-    Assert.assertEquals("Good morning", responseObj.get("translatedText").toString());
-    String[] responseSourceLangCodes = (String[])responseObj.get("sourceLangCodes");
-    Assert.assertEquals(sourceLangCodes.length, responseSourceLangCodes.length);
-    Assert.assertEquals(sourceLangCodes[0], responseSourceLangCodes[0]);
+    Assert.assertEquals(
+      "Buenos días", URLDecoder.decode(responseObj.get("sourceText").toString()));
+    Assert.assertEquals(
+      "Good morning", URLDecoder.decode(responseObj.get("translatedText").toString()));
+    JSONArray responseSourceLangCodes = (JSONArray)responseObj.get("sourceLangCodes");
+    Assert.assertEquals(sourceLangCodes.length, responseSourceLangCodes.size());
+    Assert.assertEquals(sourceLangCodes[0], responseSourceLangCodes.get(0));
     Assert.assertEquals("JoshuaLanguageTranslator", responseObj.get("translator").toString());
     Assert.assertEquals(
       false, 
-      Boolean.parseBoolean(
-        (String)responseObj.get("detectedLanguageOverridesSpecifiedSourceLanguages")));
+      (Boolean)responseObj.get("detectedLanguageOverridesSpecifiedSourceLanguages"));
     Assert.assertEquals(
       false, 
-      Boolean.parseBoolean(
-        (String)responseObj.get("performExhaustiveTranslationSearchWithNoDetection")));
+      (Boolean)responseObj.get("performExhaustiveTranslationSearchWithNoDetection"));
   }
 
-  //@Test
-  //@Category(UnitTest.class)
-  public void testTranslate2() throws Exception 
-  {
-    LanguageTranslateRequest request = new LanguageTranslateRequest();
-    request.setDetectors(new String[] { "TikaLanguageDetector" });
-    request.setText("Buenos días");
-    request.setTranslator("JoshuaLanguageTranslator");
-    String[] sourceLangCodes = new String[] { "detect" };
-    request.setSourceLangCodes(sourceLangCodes);
-    request.setDetectedLanguageOverridesSpecifiedSourceLanguages(false);
-    request.setPerformExhaustiveTranslationSearchWithNoDetection(false);
-
-    Response response =
-      target("language/translate")
-        .request(MediaType.APPLICATION_JSON)
-        .post(Entity.json(request));
-    JSONObject responseObj = 
-      (JSONObject)(new JSONParser()).parse(response.getEntity().toString());
-
-    Assert.assertEquals("Buenos días", responseObj.get("sourceText").toString());
-    Assert.assertEquals("es", responseObj.get("detectedLangCode").toString());
-    Assert.assertEquals(
-      true, 
-      Boolean.parseBoolean(
-        (String)responseObj.get("detectedLangAvailableForTranslation")));
-    Assert.assertEquals("Spanish", responseObj.get("detectedLang").toString());
-    Assert.assertEquals("Good morning", responseObj.get("translatedText").toString());
-    String[] responseSourceLangCodes = (String[])responseObj.get("sourceLangCodes");
-    Assert.assertEquals(sourceLangCodes.length, responseSourceLangCodes.length);
-    Assert.assertEquals(sourceLangCodes[0], responseSourceLangCodes[0]);
-    Assert.assertEquals("JoshuaLanguageTranslator", responseObj.get("translator").toString());
-    Assert.assertEquals(
-      false, 
-      Boolean.parseBoolean(
-        (String)responseObj.get("detectedLanguageOverridesSpecifiedSourceLanguages")));
-    Assert.assertEquals(
-      false, 
-      Boolean.parseBoolean(
-        (String)responseObj.get("performExhaustiveTranslationSearchWithNoDetection")));
-  }
-
-  //@Test
-  //@Category(UnitTest.class)
+  @Test
+  @Category(UnitTest.class)
   public void testGetTranslateBatch() throws Exception 
   {
     LanguageTranslateRequest request = new LanguageTranslateRequest();
     request.setDetectors(new String[] { "TikaLanguageDetector" });
-    request.setText("Buenos días\nBuenos noches");
+    request.setText(URLEncoder.encode("Buenos días\nBuenos noches", "UTF-8").replace("+", "%20"));
     request.setTranslator("JoshuaLanguageTranslator");
     String[] sourceLangCodes = new String[] { "es" };
     request.setSourceLangCodes(sourceLangCodes);
     request.setDetectedLanguageOverridesSpecifiedSourceLanguages(false);
     request.setPerformExhaustiveTranslationSearchWithNoDetection(false);
 
-    Response response =
+    String response =
       target("language/translateBatch")
         .request(MediaType.APPLICATION_JSON)
-        .post(Entity.json(request));
-    JSONObject responseObj = 
-      (JSONObject)(new JSONParser()).parse(response.getEntity().toString());
+        .post(Entity.json(request), String.class);
+    JSONObject responseObj = (JSONObject)(new JSONParser()).parse(response);
 
-    Assert.assertEquals("Buenos días\nBuenos noches", responseObj.get("sourceText").toString());
-    Assert.assertEquals("Good morning\nGood night", responseObj.get("translatedText").toString());
-    String[] responseSourceLangCodes = (String[])responseObj.get("sourceLangCodes");
-    Assert.assertEquals(sourceLangCodes.length, responseSourceLangCodes.length);
-    Assert.assertEquals(sourceLangCodes[0], responseSourceLangCodes[0]);
+    Assert.assertEquals(
+      "Buenos días\nBuenos noches", URLDecoder.decode(responseObj.get("sourceText").toString()));
+    Assert.assertEquals(
+      "Good morning\nGood night", URLDecoder.decode(responseObj.get("translatedText").toString()));
+    JSONArray responseSourceLangCodes = (JSONArray)responseObj.get("sourceLangCodes");
+    Assert.assertEquals(sourceLangCodes.length, responseSourceLangCodes.size());
+    Assert.assertEquals(sourceLangCodes[0], responseSourceLangCodes.get(0));
     Assert.assertEquals("JoshuaLanguageTranslator", responseObj.get("translator").toString());
     Assert.assertEquals(
       false, 
-      Boolean.parseBoolean(
-        (String)responseObj.get("detectedLanguageOverridesSpecifiedSourceLanguages")));
+      (Boolean)responseObj.get("detectedLanguageOverridesSpecifiedSourceLanguages"));
     Assert.assertEquals(
       false, 
-      Boolean.parseBoolean(
-        (String)responseObj.get("performExhaustiveTranslationSearchWithNoDetection")));
+      (Boolean)responseObj.get("performExhaustiveTranslationSearchWithNoDetection"));
   }
 }

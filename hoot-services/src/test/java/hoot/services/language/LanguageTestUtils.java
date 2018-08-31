@@ -39,6 +39,7 @@ import hoot.services.language.LanguageDetectorFactory;
 import hoot.services.language.joshua.JoshuaLanguageTranslator;
 import hoot.services.language.tika.TikaLanguageDetector;
 import hoot.services.language.SupportedLanguage;
+import hoot.services.language.SupportedLanguageConsumer;
 
 /**
  * Various general test utilities for language detection/translation
@@ -72,7 +73,6 @@ public class LanguageTestUtils
     PowerMockito.when(wrappedTranslator.isLanguageAvailable("de")).thenReturn(true);
     PowerMockito.when(wrappedTranslator.isLanguageAvailable("es")).thenReturn(true);
     PowerMockito.when(wrappedTranslator.isLanguageAvailable("fr")).thenReturn(false);
-    PowerMockito.when(wrappedTranslator.isLanguageAvailable("detect")).thenReturn(true);
 
     PowerMockito.when(wrappedTranslator.getLanguageName("de")).thenReturn("German");
     PowerMockito.when(wrappedTranslator.getLanguageName("es")).thenReturn("Spanish");
@@ -85,21 +85,11 @@ public class LanguageTestUtils
       .when(wrappedTranslator.translate("es", "Buenos días"))
       .thenReturn("Good morning");
     PowerMockito
-      .when(wrappedTranslator.translate("de", "Fahrschule Weiß"))
-      .thenReturn("Driving School Weiss");
-    //no French service, so return empty string
-    PowerMockito.when(wrappedTranslator.translate("de", "Carte de crédit")).thenReturn(""); 
-    PowerMockito.when(wrappedTranslator.translate("es", "Carte de crédit")).thenReturn(""); 
-    //This is already in English, so return the same as input.
-    PowerMockito
-      .when(wrappedTranslator.translate("de", "TC IT Service"))
-      .thenReturn("TC IT Service");
-    PowerMockito
-      .when(wrappedTranslator.translate("es", "TC IT Service"))
-      .thenReturn("TC IT Service");
+      .when(wrappedTranslator.translate(new String[] { "es" }, "Buenos días"))
+      .thenReturn("Good morning");
     //batch translate
     PowerMockito
-      .when(wrappedTranslator.translate("es", "Buenos días\nBuenos noches"))
+      .when(wrappedTranslator.translate(new String[] { "es" }, "Buenos días\nBuenos noches"))
       .thenReturn("Good morning\nGood night");
 
     PowerMockito
@@ -110,13 +100,15 @@ public class LanguageTestUtils
     PowerMockito
       .when(ToEnglishTranslatorFactory.create("JoshuaLanguageTranslator"))
       .thenReturn(wrappedTranslator); 
-    //getSimpleClassNames doesn't work for tests due to it being called 
-    //from the test namespace (?), so mock this
-    Set<String> translators = new TreeSet<String>();
-    translators.add("JoshuaLanguageTranslator");
+    Set<String> classNames = new TreeSet<String>();
+    classNames.add("JoshuaLanguageTranslator");
     PowerMockito
       .when(ToEnglishTranslatorFactory.getSimpleClassNames())
-      .thenReturn(translators);
+      .thenReturn(classNames);
+
+    LanguageAppInfo appInfo = (LanguageAppInfo)wrappedTranslator;
+    PowerMockito.when(appInfo.getDescription()).thenReturn("blah1");
+    PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/JoshuaLanguageTranslator");
   }
  
   public static void mockTika() throws Exception
@@ -125,19 +117,22 @@ public class LanguageTestUtils
 
     PowerMockito.when(detector.detect("DB Reisezentrum")).thenReturn("de");
     PowerMockito.when(detector.detect("Buenos días")).thenReturn("es");
-    PowerMockito.when(detector.detect("Fahrschule Weiß")).thenReturn("de");
-    PowerMockito.when(detector.detect("Carte de crédit")).thenReturn("fr");
-    PowerMockito.when(detector.detect("TC IT Service")).thenReturn("en");
 
     PowerMockito.mockStatic(LanguageDetectorFactory.class);
     PowerMockito
       .when(LanguageDetectorFactory.create("TikaLanguageDetector"))
       .thenReturn(detector);
-    //see note about getSimpleClassNames above
-    Set<String> detectors = new TreeSet<String>();
-    detectors.add("TikaLanguageDetector");
+    Set<String> classNames = new TreeSet<String>();
+    classNames.add("TikaLanguageDetector");
     PowerMockito
       .when(LanguageDetectorFactory.getSimpleClassNames())
-      .thenReturn(detectors);
+      .thenReturn(classNames);
+
+    SupportedLanguageConsumer langConsumer = (SupportedLanguageConsumer)detector;
+    PowerMockito.when(langConsumer.getLanguageName("es")).thenReturn("Spanish");
+
+    LanguageAppInfo appInfo = (LanguageAppInfo)detector;
+    PowerMockito.when(appInfo.getDescription()).thenReturn("blah2");
+    PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/TikaLanguageDetector");
   }
 }
