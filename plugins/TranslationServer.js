@@ -208,6 +208,9 @@ function handleInputs(params) {
         case '/capabilities':
             result = getCapabilities(params);
             break;
+        case '/supportedGeometries':
+            result = getSupportedGeometries(params);
+            break;
         case '/translations':
             result = getTranslations(params);
             break;
@@ -219,6 +222,21 @@ function handleInputs(params) {
     }
     return result;
 };
+
+var getSupportedGeometries = function(params) {
+    if (params.method === 'GET') {
+        // get fields!
+        var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
+        var fcode = params.fcode;
+        var geoms = schema.reduce(function(geoms, d) {
+            if (d.fcode === fcode) geoms.push(d.geom);
+            return geoms;
+        }, []);
+        return geoms;
+    } else {
+        throw new Error('Unsupported method');
+    }
+}
 
 var getCapabilities = function(params) {
     if (params.method === 'GET'){
