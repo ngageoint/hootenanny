@@ -46,7 +46,7 @@ import hoot.services.language.SupportedLanguageConsumer;
  */
 public class LanguageTestUtils 
 {
-  private static SupportedLanguage[] getSupportedLanguages()
+  public static SupportedLanguage[] getSupportedLanguages()
   {
     SupportedLanguage[] langs = new SupportedLanguage[2];
 
@@ -71,52 +71,62 @@ public class LanguageTestUtils
   {
     //assuming two Joshua services are running, one for German and one for Spanish
 
-    JoshuaLanguageTranslator wrappedTranslator = PowerMockito.mock(JoshuaLanguageTranslator.class);
+    JoshuaLanguageTranslator translator = PowerMockito.mock(JoshuaLanguageTranslator.class);
 
-    PowerMockito.when(wrappedTranslator.getSupportedLanguages()).thenReturn(getSupportedLanguages());
+    PowerMockito.when(translator.getSupportedLanguages()).thenReturn(getSupportedLanguages());
 
-    PowerMockito.when(wrappedTranslator.isLanguageAvailable("de")).thenReturn(true);
-    PowerMockito.when(wrappedTranslator.isLanguageAvailable("es")).thenReturn(true);
-    PowerMockito.when(wrappedTranslator.isLanguageAvailable("fr")).thenReturn(false);
+    PowerMockito.when(translator.isLanguageAvailable("de")).thenReturn(true);
+    PowerMockito.when(translator.isLanguageAvailable("es")).thenReturn(true);
+    PowerMockito.when(translator.isLanguageAvailable("fr")).thenReturn(false);
 
-    PowerMockito.when(wrappedTranslator.getLanguageName("de")).thenReturn("German");
-    PowerMockito.when(wrappedTranslator.getLanguageName("es")).thenReturn("Spanish");
-    PowerMockito.when(wrappedTranslator.getLanguageName("fr")).thenReturn(null);
+    PowerMockito.when(translator.getLanguageName("de")).thenReturn("German");
+    PowerMockito.when(translator.getLanguageName("es")).thenReturn("Spanish");
+    PowerMockito.when(translator.getLanguageName("fr")).thenReturn(null);
 
     PowerMockito
-      .when(wrappedTranslator.translate("de", "DB Reisezentrum"))
+      .when(translator.translate("de", "DB Reisezentrum"))
       .thenReturn("DB Tickets");
     PowerMockito
-      .when(wrappedTranslator.translate("es", "Buenos días"))
+      .when(translator.translate("es", "Buenos días"))
       .thenReturn("Good morning");
     PowerMockito
-      .when(wrappedTranslator.translate(new String[] { "es" }, "Buenos días"))
+      .when(translator.translate(new String[] { "es" }, "Buenos días"))
       .thenReturn("Good morning");
     //batch translate
     PowerMockito
-      .when(wrappedTranslator.translate(new String[] { "es" }, "Buenos días\nBuenos noches"))
+      .when(translator.translate(new String[] { "es" }, "Buenos días\nBuenos noches"))
       .thenReturn("Good morning\nGood night");
 
     PowerMockito
       .whenNew(JoshuaLanguageTranslator.class).withAnyArguments()
-      .thenReturn(wrappedTranslator);
+      .thenReturn(translator);
 
     PowerMockito.mockStatic(ToEnglishTranslatorFactory.class);
     PowerMockito
       .when(ToEnglishTranslatorFactory.create("JoshuaLanguageTranslator"))
-      .thenReturn(wrappedTranslator); 
+      .thenReturn(translator); 
     Set<String> classNames = new TreeSet<String>();
     classNames.add("JoshuaLanguageTranslator");
     PowerMockito
       .when(ToEnglishTranslatorFactory.getSimpleClassNames())
       .thenReturn(classNames);
 
-    return wrappedTranslator;
+    return translator;
   }
  
   public static LanguageDetector mockTika() throws Exception
   {
     TikaLanguageDetector detector = PowerMockito.mock(TikaLanguageDetector.class);
+
+    PowerMockito.when(detector.getSupportedLanguages()).thenReturn(getSupportedLanguages());
+
+    PowerMockito.when(detector.isLanguageAvailable("de")).thenReturn(true);
+    PowerMockito.when(detector.isLanguageAvailable("es")).thenReturn(true);
+    PowerMockito.when(detector.isLanguageAvailable("fr")).thenReturn(false);
+
+    PowerMockito.when(detector.getLanguageName("de")).thenReturn("German");
+    PowerMockito.when(detector.getLanguageName("es")).thenReturn("Spanish");
+    PowerMockito.when(detector.getLanguageName("fr")).thenReturn(null);
 
     PowerMockito.when(detector.detect("DB Reisezentrum")).thenReturn("de");
     PowerMockito.when(detector.detect("Buenos días")).thenReturn("es");

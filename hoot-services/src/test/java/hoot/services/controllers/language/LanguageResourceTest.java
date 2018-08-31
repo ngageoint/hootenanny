@@ -136,15 +136,16 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     Assert.assertEquals("http://localhost/JoshuaLanguageTranslator", apps[0].getUrl());
   }
 
-  //@Test
-  //@Category(UnitTest.class)
+  @Test
+  @Category(UnitTest.class)
   public void testGetDetectableLangs() throws Exception 
   {    
     //This has to be mocked separately within this test since there we're testing multiple types of 
     //SupportedLanguageConsumer implementations.
-    /*SupportedLanguageConsumer langConsumer = (SupportedLanguageConsumer)LanguageTestUtils.mockTika();
-    PowerMockito.when(langConsumer.getLanguageName("es")).thenReturn("Spanish");
-    PowerMockito.when(langConsumer.getSupportedLanguages()).thenReturn(getSupportedLanguages());*/
+    SupportedLanguageConsumer langConsumer = (SupportedLanguageConsumer)LanguageTestUtils.mockTika();
+    PowerMockito.when(langConsumer.getSupportedLanguages()).thenReturn(LanguageTestUtils.getSupportedLanguages());
+    PowerMockito.when(langConsumer.isLanguageAvailable("de")).thenReturn(true);
+    PowerMockito.when(langConsumer.isLanguageAvailable("es")).thenReturn(true);
  
     SupportedLanguagesRequest request = new SupportedLanguagesRequest();
     request.setApps(new String[] { "TikaLanguageDetector" });
@@ -154,9 +155,8 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
         .request(MediaType.APPLICATION_JSON)
         .post(Entity.json(request), SupportedLanguagesResponse.class);
     
-    //This may need to be updated as Tika gets updated.
     SupportedLanguage[] langs = response.getLanguages();
-    Assert.assertEquals(14, langs.length);
+    Assert.assertEquals(2, langs.length);
     for (int i = 0; i < langs.length; i++)
     {
       SupportedLanguage lang = langs[i];
@@ -166,27 +166,27 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     }
   }
 
-  //@Test
-  //@Category(UnitTest.class)
+  @Test
+  @Category(UnitTest.class)
   public void testGetTranslatableLangs() throws Exception 
   {
     //This has to be mocked separately within this test since there we're testing multiple types of 
     //SupportedLanguageConsumer implementations.
-    /*SupportedLanguageConsumer langConsumer = (SupportedLanguageConsumer)LanguageTestUtils.mockJoshua();
-    PowerMockito.when(langConsumer.getLanguageName("es")).thenReturn("Spanish");
-    PowerMockito.when(langConsumer.getSupportedLanguages()).thenReturn(getSupportedLanguages());*/
+    SupportedLanguageConsumer langConsumer = (SupportedLanguageConsumer)LanguageTestUtils.mockJoshua();
+    PowerMockito.when(langConsumer.getSupportedLanguages()).thenReturn(LanguageTestUtils.getSupportedLanguages());
+    PowerMockito.when(langConsumer.isLanguageAvailable("de")).thenReturn(true);
+    PowerMockito.when(langConsumer.isLanguageAvailable("es")).thenReturn(true);
 
     SupportedLanguagesRequest request = new SupportedLanguagesRequest();
-    request.setApps(new String[] { "JoshuaLanguageDetector" });
+    request.setApps(new String[] { "JoshuaLanguageTranslator" });
 
     SupportedLanguagesResponse response =
       target("language/translatable")
         .request(MediaType.APPLICATION_JSON)
         .post(Entity.json(request), SupportedLanguagesResponse.class);
     
-    //This may need to be updated as Joshua gets updated.
     SupportedLanguage[] langs = response.getLanguages();
-    Assert.assertEquals(58, langs.length);
+    Assert.assertEquals(2, langs.length);
     for (int i = 0; i < langs.length; i++)
     {
       SupportedLanguage lang = langs[i];
@@ -208,6 +208,8 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
   @Category(UnitTest.class)
   public void testDetectLanguage() throws Exception 
   {
+    //This has to be mocked separately within this test since there we're testing multiple types of 
+    //SupportedLanguageConsumer implementations.
     SupportedLanguageConsumer langConsumer = (SupportedLanguageConsumer)LanguageTestUtils.mockTika();
     PowerMockito.when(langConsumer.getLanguageName("es")).thenReturn("Spanish");
 
