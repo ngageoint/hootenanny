@@ -61,7 +61,7 @@ public:
     QString responseStr =
       HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
         "detectable", response);
-    //LOG_VARD(responseStr);
+    LOG_VART(responseStr);
     HOOT_STR_EQUALS(
       FileUtils::readFully(testInputRoot + "/runParseLangsResponseTest-detectable").trimmed(),
       responseStr.trimmed());
@@ -69,7 +69,7 @@ public:
     responseStr =
       HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
         "translatable", response);
-    //LOG_VARD(responseStr);
+    LOG_VART(responseStr);
     HOOT_STR_EQUALS(
       FileUtils::readFully(testInputRoot + "/runParseLangsResponseTest-translatable").trimmed(),
       responseStr.trimmed());
@@ -85,7 +85,7 @@ public:
     QString responseStr =
       HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(
         "detectors", response);
-    //LOG_VARD(responseStr);
+    LOG_VART(responseStr);
     HOOT_STR_EQUALS(
       FileUtils::readFully(testInputRoot + "/runParseAppsResponseTest-detectors").trimmed(),
       responseStr.trimmed());
@@ -93,7 +93,7 @@ public:
     responseStr =
       HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(
         "translators", response);
-    //LOG_VARD(responseStr);
+    LOG_VART(responseStr);
     HOOT_STR_EQUALS(
       FileUtils::readFully(testInputRoot + "/runParseAppsResponseTest-translators").trimmed(),
       responseStr.trimmed());

@@ -32,7 +32,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/rnd/language/translators/ToEnglishTranslator.h>
-#include <hoot/core/algorithms/string/StringTokenizer.h>
 
 namespace hoot
 {
@@ -96,8 +95,6 @@ protected:
   void _translate(const ElementPtr& e, const QString toTranslateTagKey);
 
 private:
-
-  StringTokenizer _strTokenizer;
 
   QString _toTranslateVal;
 

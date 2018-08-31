@@ -61,7 +61,9 @@ public:
    */
   virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type);
 
-protected:
+private:
+
+  friend class HootServicesTranslationInfoClientTest;
 
   //a single translator used to determine what translatable languages are supported
   QString _translator;
@@ -73,10 +75,6 @@ protected:
   QString _translatableUrl;
   QString _detectorsUrl;
   QString _translatorsUrl;
-
-private:
-
-  friend class HootServicesTranslationInfoClientTest;
 
   boost::shared_ptr<QNetworkAccessManager> _client;
 

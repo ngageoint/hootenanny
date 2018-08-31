@@ -98,11 +98,6 @@ boost::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree
     QString line = QString::number(e.line());
     throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
   }
-  catch (const std::exception& e)
-  {
-    QString reason = e.what();
-    throw HootException("Error parsing JSON " + reason);
-  }
   return jsonObj;
 }
 
