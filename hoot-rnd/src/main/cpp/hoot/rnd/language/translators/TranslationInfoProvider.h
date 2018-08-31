@@ -43,7 +43,7 @@ namespace hoot
 {
 
 /**
- *
+ * Interface for providing info about available to English translation capabilities
  */
 class TranslationInfoProvider : public Configurable
 {

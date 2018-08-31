@@ -77,9 +77,7 @@ import javax.annotation.PreDestroy;
 /**
  * Web endpoint for language translation and detection
 
-   * For text returned URL encoded the replace of '+' is a bit of a hack, but not sure how better 
-     to handle it yet.
-   * Not doing any extensive request param validation yet
+   @todo possibly some more extensive request param validation
  */
 @Controller
 @Path("/language")

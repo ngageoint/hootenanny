@@ -71,9 +71,9 @@ public:
   static bool hasAlphabeticCharacter(const QString input);
 
   /**
-   * Converts a JSON net reply to a Boost property tree
+   * Converts a JSON string to a Boost property tree
    *
-   * @param reply the reply to convert
+   * @param jsonStr the string to convert
    * @return a Boost property tree
    */
   static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
