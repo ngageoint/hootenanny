@@ -72,6 +72,7 @@ import hoot.services.controllers.language.LanguageTranslateRequest;
 import hoot.services.language.LanguageTestUtils;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 import hoot.services.language.LanguageAppInfo;
+import hoot.services.language.SupportedLanguageConsumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,18 +86,17 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
 {
   private static final Logger logger = LoggerFactory.getLogger(LanguageResourceTest.class);
 
-  @Before
-  public void beforeTest() throws Exception
-  {
-    //see comments in HootLanguageTranslatorTest::beforeTest
-    LanguageTestUtils.mockJoshua();
-    LanguageTestUtils.mockTika();
-  }
-
-  //@Test
-  //@Category(UnitTest.class)
+  @Test
+  @Category(UnitTest.class)
   public void testGetDetectors() throws Exception 
   {
+    //This has to be mocked separately within this test since there we're testing multiple types of 
+    //LanguageAppInfo implementations.
+    TikaLanguageDetector detector = (TikaLanguageDetector)LanguageTestUtils.mockTika();
+    LanguageAppInfo appInfo = (LanguageAppInfo)detector;
+    PowerMockito.when(appInfo.getDescription()).thenReturn("blah1");
+    PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/TikaLanguageDetector");
+
     LanguageAppsResponse response =
       target("language/detectors")
         .request(MediaType.APPLICATION_JSON)
@@ -107,18 +107,20 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     //to be updated if new apps are added.
     Assert.assertEquals(1, apps.length);
     Assert.assertEquals("TikaLanguageDetector", apps[0].getName());
-    Assert.assertEquals("blah2", apps[0].getDescription());
+    Assert.assertEquals("blah1", apps[0].getDescription());
     Assert.assertEquals("http://localhost/TikaLanguageDetector", apps[0].getUrl());
   }
 
-  //@Test
-  //@Category(UnitTest.class)
+  @Test
+  @Category(UnitTest.class)
   public void testGetTranslators() throws Exception 
   {
-    //JoshuaLanguageTranslator translator = (JoshuaLanguageTranslator)LanguageTestUtils.mockJoshua();
-    //LanguageAppInfo appInfo = (LanguageAppInfo)translator;
-    //PowerMockito.when(appInfo.getDescription()).thenReturn("blah1");
-    //PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/JoshuaLanguageTranslator");
+    //This has to be mocked separately within this test since there we're testing multiple types of 
+    //LanguageAppInfo implementations.
+    JoshuaLanguageTranslator translator = (JoshuaLanguageTranslator)LanguageTestUtils.mockJoshua();
+    LanguageAppInfo appInfo = (LanguageAppInfo)translator;
+    PowerMockito.when(appInfo.getDescription()).thenReturn("blah2");
+    PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/JoshuaLanguageTranslator");
 
     LanguageAppsResponse response =
       target("language/translators")
@@ -130,14 +132,21 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     //to be updated if new apps are added.
     Assert.assertEquals(1, apps.length);
     Assert.assertEquals("JoshuaLanguageTranslator", apps[0].getName());
-    Assert.assertEquals("blah1", apps[0].getDescription());
+    Assert.assertEquals("blah2", apps[0].getDescription());
     Assert.assertEquals("http://localhost/JoshuaLanguageTranslator", apps[0].getUrl());
   }
 
   //@Test
   //@Category(UnitTest.class)
   public void testGetDetectableLangs() throws Exception 
-  {    SupportedLanguagesRequest request = new SupportedLanguagesRequest();
+  {    
+    //This has to be mocked separately within this test since there we're testing multiple types of 
+    //SupportedLanguageConsumer implementations.
+    /*SupportedLanguageConsumer langConsumer = (SupportedLanguageConsumer)LanguageTestUtils.mockTika();
+    PowerMockito.when(langConsumer.getLanguageName("es")).thenReturn("Spanish");
+    PowerMockito.when(langConsumer.getSupportedLanguages()).thenReturn(getSupportedLanguages());*/
+ 
+    SupportedLanguagesRequest request = new SupportedLanguagesRequest();
     request.setApps(new String[] { "TikaLanguageDetector" });
 
     SupportedLanguagesResponse response =
@@ -161,6 +170,12 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
   //@Category(UnitTest.class)
   public void testGetTranslatableLangs() throws Exception 
   {
+    //This has to be mocked separately within this test since there we're testing multiple types of 
+    //SupportedLanguageConsumer implementations.
+    /*SupportedLanguageConsumer langConsumer = (SupportedLanguageConsumer)LanguageTestUtils.mockJoshua();
+    PowerMockito.when(langConsumer.getLanguageName("es")).thenReturn("Spanish");
+    PowerMockito.when(langConsumer.getSupportedLanguages()).thenReturn(getSupportedLanguages());*/
+
     SupportedLanguagesRequest request = new SupportedLanguagesRequest();
     request.setApps(new String[] { "JoshuaLanguageDetector" });
 
@@ -193,6 +208,9 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
   @Category(UnitTest.class)
   public void testDetectLanguage() throws Exception 
   {
+    SupportedLanguageConsumer langConsumer = (SupportedLanguageConsumer)LanguageTestUtils.mockTika();
+    PowerMockito.when(langConsumer.getLanguageName("es")).thenReturn("Spanish");
+
     LanguageDetectRequest request = new LanguageDetectRequest();
     request.setDetectors(new String[] { "TikaLanguageDetector" });
     request.setText(URLEncoder.encode("Buenos días", "UTF-8").replace("+", "%20"));
@@ -215,6 +233,8 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
   @Category(UnitTest.class)
   public void testTranslate() throws Exception 
   {
+    LanguageTestUtils.mockJoshua();
+
     LanguageTranslateRequest request = new LanguageTranslateRequest();
     request.setDetectors(new String[] { "TikaLanguageDetector" });
     request.setText(URLEncoder.encode("Buenos días", "UTF-8").replace("+", "%20"));
@@ -250,6 +270,8 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
   @Category(UnitTest.class)
   public void testGetTranslateBatch() throws Exception 
   {
+    LanguageTestUtils.mockJoshua();
+
     LanguageTranslateRequest request = new LanguageTranslateRequest();
     request.setDetectors(new String[] { "TikaLanguageDetector" });
     request.setText(URLEncoder.encode("Buenos días\nBuenos noches", "UTF-8").replace("+", "%20"));

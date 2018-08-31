@@ -162,6 +162,7 @@ public class LanguageResource
         logger.trace("detectorClassName: " + detectorClassName);
         apps.add(languageEntityToApp(detectorClassName));
       }
+      logger.trace("apps.size(): " + apps.size());
       return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
     }
     catch (Exception e)
@@ -260,7 +261,7 @@ public class LanguageResource
     try
     {
       List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
-      logger.trace(
+      logger.error(
         "Listing detectable languages for apps: " + 
         String.join(",", detectorClassNames.toArray(new String[]{})) + "..."); 
       return new SupportedLanguagesResponse(getAllAppSupportedLangs(detectorClassNames));
@@ -391,14 +392,13 @@ public class LanguageResource
         {
           LanguageDetector detector = LanguageDetectorFactory.create(detectorClassName);
           detectingDetector = detectorClassName;
+          logger.trace("detectingDetector: " + detectorClassName);
           detectedLangCode = detector.detect(requestText);
+          logger.trace("detectedLangCode: " + detectedLangCode);
           if (!detectedLangCode.isEmpty())
           {
             detectedLangName = 
               ((SupportedLanguageConsumer)detector).getLanguageName(detectedLangCode);
-
-            logger.trace("detectingDetector: " + detectorClassName);
-            logger.trace("detectedLangCode: " + detectedLangCode);
             logger.trace("detectedLangName: " + detectedLangName);
           }
         }
@@ -583,11 +583,11 @@ public class LanguageResource
   private LanguageApp languageEntityToApp(String appName) throws Exception
   {
     LanguageAppInfo appInfo = null;
-    try
+    if (ToEnglishTranslatorFactory.getSimpleClassNames().contains(appName))
     {
       appInfo = (LanguageAppInfo)ToEnglishTranslatorFactory.create(appName);
     }
-    catch (Exception e)
+    else
     {
       appInfo = (LanguageAppInfo)LanguageDetectorFactory.create(appName);
     }
@@ -611,24 +611,24 @@ public class LanguageResource
     List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
     for (String appName : apps)
     {
-      logger.trace("appName: " + appName);
+      logger.error("appName: " + appName);
       SupportedLanguageConsumer langConsumer = null;
-      try
+      if (ToEnglishTranslatorFactory.getSimpleClassNames().contains(appName))
       {
         langConsumer = (SupportedLanguageConsumer)ToEnglishTranslatorFactory.create(appName);
       }
-      catch (Exception e)
+      else
       {
         langConsumer = (SupportedLanguageConsumer)LanguageDetectorFactory.create(appName);
       }
       assert(langConsumer != null);
 
       SupportedLanguage[] consumerSupportedLangs = langConsumer.getSupportedLanguages();
-      logger.trace("consumerSupportedLangs size: " + consumerSupportedLangs.length);
+      logger.error("consumerSupportedLangs size: " + consumerSupportedLangs.length);
       for (int i = 0; i < consumerSupportedLangs.length; i++)
       {
         SupportedLanguage lang = consumerSupportedLangs[i];
-        logger.trace("lang code: " + lang.getIso6391Code());
+        logger.error("lang code: " + lang.getIso6391Code());
         if (!parsedLangCodes.contains(lang.getIso6391Code()))
         {
           parsedLangCodes.add(lang.getIso6391Code());
@@ -638,7 +638,7 @@ public class LanguageResource
         }
       }
     }
-    logger.trace("supportedLangs size: " + supportedLangs.size());
+    logger.error("supportedLangs size: " + supportedLangs.size());
     return supportedLangs.toArray(new SupportedLanguage[]{});
   }
 
