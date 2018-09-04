@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/language/translators/HootServicesTranslatorClient.h>
+#include <hoot/rnd/language/translators/HootServicesTranslatorMockClient.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
@@ -65,7 +65,6 @@ public:
     HOOT_STR_EQUALS("http://localhost/test", request->url().toString());
     HOOT_STR_EQUALS(
       "application/json", request->header(QNetworkRequest::ContentTypeHeader).toString());
-    LOG_VARD(requestStrStrm.str());
     HOOT_STR_EQUALS(
       FileUtils::readFully(testInputRoot + "/runBuildRequestTest").trimmed(),
       QString::fromStdString(requestStrStrm.str()).trimmed());
@@ -114,7 +113,7 @@ private:
 
   boost::shared_ptr<HootServicesTranslatorClient> _getClient()
   {
-    boost::shared_ptr<HootServicesTranslatorClient> client(new HootServicesTranslatorClient());
+    boost::shared_ptr<HootServicesTranslatorClient> client(new HootServicesTranslatorMockClient());
 
     Settings conf;
     conf.set("language.translation.hoot.services.translation.endpoint", "http://localhost/test");
