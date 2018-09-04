@@ -54,9 +54,10 @@ public class OpenNlpLanguageDetectorTest
   @Category(UnitTest.class)
   public void testAll() throws Exception
   {
-    //temp until the build system parts are worked out
     if (!detector.isLanguageAvailable("de"))
     {
+      logger.warn(
+        "No OpenNLP language detection model available.  Skipping OpenNlpLanguageDetectorTest...");
       return;
     }
 
