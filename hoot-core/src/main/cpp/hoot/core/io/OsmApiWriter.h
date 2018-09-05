@@ -29,10 +29,10 @@
 #define OSM_API_WRITER_H
 
 //  hoot
+#include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/OsmApiCapabilites.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
-#include <hoot/core/io/OsmApiNetworkRequest.h>
 #include <hoot/core/ops/stats/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -101,14 +101,14 @@ public:
    * @param request - Network request object initialized with OSM API URL
    * @return successful query and parse of data
    */
-  bool queryCapabilities(OsmApiNetworkRequestPtr request);
+  bool queryCapabilities(HootNetworkRequestPtr request);
   /**
    * @brief validatePermissions Check the permissions of the current user against the current OSM API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
    * @param request - Network request object initialized with OSM API URL
    * @return true if the current user has write permission for the OSM API
    */
-  bool validatePermissions(OsmApiNetworkRequestPtr request);
+  bool validatePermissions(HootNetworkRequestPtr request);
   /**
    * @brief getStats Get the stats object
    * @return
@@ -128,14 +128,14 @@ private:
    * @param description - Text description of the changeset to create
    * @return ID of the changeset that was created on the server
    */
-  long _createChangeset(OsmApiNetworkRequestPtr request, const QString& description);
+  long _createChangeset(HootNetworkRequestPtr request, const QString& description);
   /**
    * @brief _closeChangeset End the changeset
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
    * @param request - Network request object initialized with OSM API URL
    * @param id - ID of the changeset to close
    */
-  void _closeChangeset(OsmApiNetworkRequestPtr request, long id);
+  void _closeChangeset(HootNetworkRequestPtr request, long id);
   /**
    * @brief _uploadChangeset Upload a changeset to the OSM API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
@@ -144,7 +144,7 @@ private:
    * @param changeset - Atomic changeset to upload
    * @return true if the changeset was uploaded correctly
    */
-  bool _uploadChangeset(OsmApiNetworkRequestPtr request, long id, const QString& changeset);
+  bool _uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset);
   /**
    * @brief _parseCapabilities Parse the OSM API capabilities
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
