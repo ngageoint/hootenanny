@@ -92,7 +92,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
  loop.exec();
 
- //check for a response error;
+ //check for a response error
  if (reply->error() != QNetworkReply::NoError)
  {
    throw HootException(QString("Reply error:\n%1").arg(reply->error()));

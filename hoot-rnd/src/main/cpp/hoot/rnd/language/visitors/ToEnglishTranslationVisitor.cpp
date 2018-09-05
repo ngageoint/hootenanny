@@ -106,7 +106,7 @@ void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
   for (int i = 0; i < _toTranslateTagKeys.size(); i++)
   {
     const QString toTranslateTagKey = _toTranslateTagKeys.at(i);
-    if ((tags.contains(toTranslateTagKey)))
+    if (tags.contains(toTranslateTagKey))
     {
       _translate(e, toTranslateTagKey);
     }

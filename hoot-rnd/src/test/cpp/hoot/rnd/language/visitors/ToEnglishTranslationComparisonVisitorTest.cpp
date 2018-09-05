@@ -51,9 +51,9 @@ static const QString testOutputRoot =
 class ToEnglishTranslationComparisonVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ToEnglishTranslationComparisonVisitorTest);
-  //CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runInvalidSourceLangsTest);
-  //CPPUNIT_TEST(runInvalidSourceLangsTest2);
+  CPPUNIT_TEST(runInvalidSourceLangsTest2);
   CPPUNIT_TEST_SUITE_END();
 
 public:
