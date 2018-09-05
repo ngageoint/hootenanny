@@ -42,7 +42,9 @@ namespace hoot
 {
 
 /**
- * Class description
+ * Implements the ElementCache interface, where the least-recently-used
+ * items get pushed out of the cache when it is full. Element insert,
+ * retrieval, and expiration are all constant-time operations.
  */
 class ElementCacheLRU : public ElementCache
 {
@@ -132,6 +134,10 @@ public:
 
   virtual unsigned long getRelationCacheSize() { return _maxRelationCount; }
 
+  // For testing - gets a comma-seperated list of IDs of the Least Recently Used
+  // cache items, from most recent to least recent.
+  std::string getLRUString(const ElementType::Type type);
+
 protected:
 
   unsigned long _maxNodeCount;
@@ -140,26 +146,41 @@ protected:
 
   boost::shared_ptr<OGRSpatialReference> _projection;
 
-  /// Nodes in the cache (key is node ID, then value is pair for node and its access time)
-  std::map<long, std::pair<ConstNodePtr, boost::posix_time::ptime> >      _nodes;
+  // List used to keep track of least-recently used nodes
+  std::list<long> _nodeList;
 
-  /// Iterator used to walk nodes in cache
-  std::map<long, std::pair<ConstNodePtr, boost::posix_time::ptime> >::iterator _nodesIter;
+  // Nodes in the cache (key is node ID, then value is pair for node and its pos in the nodeList)
+  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator> > _nodes;
 
-  /// Ways in the cache (key is way ID, then value is pair for way and its access time)
-  std::map<long, std::pair<ConstWayPtr, boost::posix_time::ptime> >       _ways;
+  // Iterator used to walk nodes in cache
+  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator> >::iterator _nodesIter;
 
-  /// Iterator used to walk ways in cache
-  std::map<long, std::pair<ConstWayPtr, boost::posix_time::ptime> >::iterator _waysIter;
+  // List used to keep track of least-recently used nodes
+  std::list<long> _wayList;
 
-  /// Relations in the cache (key is relation ID, then value is pair for relation and access time)
-  std::map<long, std::pair<ConstRelationPtr, boost::posix_time::ptime> >  _relations;
+  // Ways in the cache (key is way ID, then value is pair for way and its pos in the wayList)
+  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator> > _ways;
 
-  /// Iterator used to walk relations in cache
-  std::map<long,
-    std::pair<ConstRelationPtr, boost::posix_time::ptime> >::iterator _relationsIter;
+  // Iterator used to walk ways in cache
+  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator> >::iterator _waysIter;
 
+  // List used to keep track of least-recently used nodes
+  std::list<long> _relationList;
+
+  // Relations in the cache (key is relation ID, then value is pair for relation and access time)
+  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator> >  _relations;
+
+  // Iterator used to walk relations in cache
+  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator> >::iterator _relationsIter;
+
+  // Removes the least recently used item from the cache
   void _removeOldest(const ElementType::Type typeToRemove);
+
+  // These functions update the lists that keep the order of when items
+  // were last used/accessed
+  void _updateNodeAccess(long id);
+  void _updateWayAccess(long id);
+  void _updateRelationAccess(long id);
 };
 
 typedef boost::shared_ptr<ElementCacheLRU> ElementCacheLRUPtr;
