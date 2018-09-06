@@ -27,7 +27,7 @@
 #ifndef MEMCHANGESETPROVIDER_H
 #define MEMCHANGESETPROVIDER_H
 
-#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 
 namespace hoot
 {

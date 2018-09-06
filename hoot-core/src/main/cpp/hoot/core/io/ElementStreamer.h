@@ -41,9 +41,35 @@ class ElementStreamer
 
 public:
 
+  /**
+   *
+   *
+   * @param in
+   * @param out
+   * @param convertOps
+   */
   static void stream(const QString in, const QString out,
                      const QStringList convertOps = QStringList());
 
+  /**
+   *
+   *
+   * @param input
+   * @param output
+   * @return
+   */
+  static bool isStreamableIo(const QString input, const QString output);
+
+  /**
+   * Return true if all the specified operations are valid streaming operations.
+   *
+   * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
+   * nodes). These operations are not applicable for streaming.
+   *
+   * @param ops
+   * @return
+   */
+  static bool areValidStreamingOps(const QStringList ops);
 };
 
 }

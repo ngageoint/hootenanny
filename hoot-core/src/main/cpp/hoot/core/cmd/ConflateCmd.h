@@ -31,7 +31,7 @@
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/ChangesetDeriver.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 
 // Standard
 #include <fstream>

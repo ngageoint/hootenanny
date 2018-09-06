@@ -22,33 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MULTIPLECHANGESETPROVIDER_H
-#define MULTIPLECHANGESETPROVIDER_H
+#ifndef CHANGESETDERIVER_H
+#define CHANGESETDERIVER_H
 
-#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/algorithms/changeset/ElementComparer.h>
 
 namespace hoot
 {
 
 /**
- * This is essentially a changeset provider container, allowing multiple
- * changeset providers to be chained together
+ * Calculates the changeset difference between a source and target map.  This logic is based on
+ * the same logic used in Osmosis.
  */
-class MultipleChangesetProvider : public ChangesetProvider
+class ChangesetDeriver : public ChangesetProvider
 {
 
 public:
 
-  explicit MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
+  ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to);
 
   /**
-   * @todo: is this even used?
+   * @see ChangeSetProvider
    */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  virtual ~MultipleChangesetProvider();
+  virtual ~ChangesetDeriver();
 
   /**
    * @see ChangeSetProvider
@@ -65,17 +67,27 @@ public:
    */
   virtual Change readNextChange();
 
-  void addChangesetProvider(ChangesetProviderPtr newChangeset);
-
-  size_t getNumChangesets();
+  long getNumFromElementsParsed() const { return _numFromElementsParsed; }
+  long getNumToElementsParsed() const { return _numToElementsParsed; }
 
 private:
-  boost::shared_ptr<OGRSpatialReference> _projection;
-  std::list<ChangesetProviderPtr> _changesets;
+
+  Change _nextChange();
+
+  ElementInputStreamPtr _from;
+  ElementInputStreamPtr _to;
+  Change _next;
+  ElementPtr _fromE, _toE;
+  ElementComparer _elementComparer;
+
+  long _numFromElementsParsed;
+  long _numToElementsParsed;
+  bool _allowDeletingReferenceFeatures;
+
 };
 
-typedef boost::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
+typedef boost::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
 
 }
 
-#endif // MULTIPLECHANGESETPROVIDER_H
+#endif // CHANGESETDERIVER_H

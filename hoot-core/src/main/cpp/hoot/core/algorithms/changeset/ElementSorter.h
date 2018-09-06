@@ -41,7 +41,10 @@ namespace hoot
 
 /**
  * An element stream that returns elements in the order of node, way, then relation, sorted by
- * element ID
+ * element ID; memory bound as it requires the entire map be passed in to sort the IDs
+ *
+ * Eventually, this could be completely replaced by NonMemoryBoundElementSorter.  However, it
+ * would be better to wait until #2596 is completed to do that.
  */
 class ElementSorter : public ElementInputStream
 {

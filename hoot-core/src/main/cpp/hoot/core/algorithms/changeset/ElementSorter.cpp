@@ -41,30 +41,33 @@ ElementSorter::ElementSorter(ConstOsmMapPtr source) :
   _wayIndex(0),
   _relationIndex(0)
 {
-  LOG_DEBUG(
-    "Sorting elements by element type for map with element count: " << source->getElementCount());
-
-  _source = source;
-
-  for (NodeMap::const_iterator it = _source->getNodes().begin();
-    it != _source->getNodes().end(); ++it)
+  if (source)
   {
-    _nodeIds.push_back(it->first);
-  }
-  for (WayMap::const_iterator it = _source->getWays().begin();
-    it != _source->getWays().end(); ++it)
-  {
-    _wayIds.push_back(it->first);
-  }
-  for (RelationMap::const_iterator it = _source->getRelations().begin();
-    it != _source->getRelations().end(); ++it)
-  {
-    _relationIds.push_back(it->first);
-  }
+    LOG_DEBUG(
+      "Sorting elements by element type for map with element count: " << source->getElementCount());
 
-  sort(_nodeIds.begin(), _nodeIds.end());
-  sort(_wayIds.begin(), _wayIds.end());
-  sort(_relationIds.begin(), _relationIds.end());
+    _source = source;
+
+    for (NodeMap::const_iterator it = _source->getNodes().begin();
+      it != _source->getNodes().end(); ++it)
+    {
+      _nodeIds.push_back(it->first);
+    }
+    for (WayMap::const_iterator it = _source->getWays().begin();
+      it != _source->getWays().end(); ++it)
+    {
+      _wayIds.push_back(it->first);
+    }
+    for (RelationMap::const_iterator it = _source->getRelations().begin();
+      it != _source->getRelations().end(); ++it)
+    {
+      _relationIds.push_back(it->first);
+    }
+
+    sort(_nodeIds.begin(), _nodeIds.end());
+    sort(_wayIds.begin(), _wayIds.end());
+    sort(_relationIds.begin(), _relationIds.end());
+  }
 }
 
 boost::shared_ptr<OGRSpatialReference> ElementSorter::getProjection() const

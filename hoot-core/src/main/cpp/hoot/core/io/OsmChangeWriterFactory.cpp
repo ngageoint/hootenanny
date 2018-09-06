@@ -83,4 +83,9 @@ boost::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString 
   return writer;
 }
 
+bool OsmChangeWriterFactory::isSupported(const QString output)
+{
+  return output.endsWith(".xml") || output.endsWith(".json");
+}
+
 }

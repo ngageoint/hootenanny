@@ -27,7 +27,7 @@
 #include "MultiaryIngester.h"
 
 // hoot
-#include <hoot/core/io/ChangesetDeriver.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/rnd/io/SparkChangesetWriter.h>
@@ -42,6 +42,7 @@
 #include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 #include <hoot/core/io/OsmFileSorter.h>
 #include <hoot/core/io/OgrReader.h>
+#include <hoot/core/io/ElementStreamer.h>
 
 // tgs
 #include <tgs/System/Time.h>
@@ -156,29 +157,40 @@ void MultiaryIngester::ingest(const QString newInput, const QString translationS
   }
 }
 
-void MultiaryIngester::_sortInputFile(const QString input)
+void MultiaryIngester::_sortInputFile(QString input)
 {
   _timer.restart();
   LOG_INFO("Sorting " << input << " by POI ID...");
 
   //sort incoming data by POI id, if necessary, for changeset derivation
   const QString sortTempFileBaseName = "multiary-ingest-sort-temp-XXXXXX";
-  if (!OgrReader().isSupported(input))
+  if (OgrReader().isSupported(input))
   {
-    QFileInfo newInputFileInfo(input);
-      _sortTempFile.reset(
-        new QTemporaryFile(
-          ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName + "." +
-          newInputFileInfo.completeSuffix()));
-  }
-  else
-  {
-    //OGR formats have to be converted to PBF before sorting
-    _sortTempFile.reset(
+    //Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
+    //to first write it to a sortable format.
+    LOG_WARN("OGR inputs must be converted to the OSM format before sorting by node ID.");
+    LOG_WARN("Converting input to OSM format...");
+
+    boost::shared_ptr<QTemporaryFile> pbfTemp(
       new QTemporaryFile(
-        ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName +
-        ".osm.pbf"));
+        ConfigOptions().getApidbBulkInserterTempFileDir() +
+        "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
+    //for debugging only
+    //pbfTemp->setAutoRemove(false);
+    if (!pbfTemp->open())
+    {
+      throw HootException("Unable to open sort temp file: " + pbfTemp->fileName() + ".");
+    }
+
+    ElementStreamer::stream(input, pbfTemp->fileName());
+    input = pbfTemp->fileName();
   }
+
+  QFileInfo newInputFileInfo(input);
+  _sortTempFile.reset(
+    new QTemporaryFile(
+      ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName + "." +
+      newInputFileInfo.completeSuffix()));
   //for debugging only
   //sortTempFile->setAutoRemove(false);
   if (!_sortTempFile->open())

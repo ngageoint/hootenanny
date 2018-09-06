@@ -52,9 +52,9 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/io/ElementSorter.h>
+#include <hoot/core/algorithms/changeset/ElementSorter.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
-#include <hoot/core/io/MultipleChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 
 // Standard
 #include <fstream>

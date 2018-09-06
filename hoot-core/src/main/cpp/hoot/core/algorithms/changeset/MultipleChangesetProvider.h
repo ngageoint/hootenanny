@@ -22,35 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CHANGESETDERIVER_H
-#define CHANGESETDERIVER_H
+#ifndef MULTIPLECHANGESETPROVIDER_H
+#define MULTIPLECHANGESETPROVIDER_H
 
-#include <hoot/core/io/ChangesetProvider.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/ElementComparer.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 
 namespace hoot
 {
 
 /**
- * Calculates the changeset difference between a source and target map.  This logic is based on
- * the same logic used in Osmosis.
+ * This is essentially a changeset provider container, allowing multiple
+ * changeset providers to be chained together
  */
-class ChangesetDeriver : public ChangesetProvider
+class MultipleChangesetProvider : public ChangesetProvider
 {
 
 public:
 
-  ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to);
+  explicit MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
 
   /**
-   * @see ChangeSetProvider
+   * @todo: is this even used?
    */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  virtual ~ChangesetDeriver();
+  virtual ~MultipleChangesetProvider();
 
   /**
    * @see ChangeSetProvider
@@ -67,27 +65,17 @@ public:
    */
   virtual Change readNextChange();
 
-  long getNumFromElementsParsed() const { return _numFromElementsParsed; }
-  long getNumToElementsParsed() const { return _numToElementsParsed; }
+  void addChangesetProvider(ChangesetProviderPtr newChangeset);
+
+  size_t getNumChangesets();
 
 private:
-
-  Change _nextChange();
-
-  ElementInputStreamPtr _from;
-  ElementInputStreamPtr _to;
-  Change _next;
-  ElementPtr _fromE, _toE;
-  ElementComparer _elementComparer;
-
-  long _numFromElementsParsed;
-  long _numToElementsParsed;
-  bool _allowDeletingReferenceFeatures;
-
+  boost::shared_ptr<OGRSpatialReference> _projection;
+  std::list<ChangesetProviderPtr> _changesets;
 };
 
-typedef boost::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
+typedef boost::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
 
 }
 
-#endif // CHANGESETDERIVER_H
+#endif // MULTIPLECHANGESETPROVIDER_H

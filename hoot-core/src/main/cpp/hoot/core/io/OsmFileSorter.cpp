@@ -32,7 +32,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/GeoNamesReader.h>
-#include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
@@ -69,6 +68,9 @@ void OsmFileSorter::sort(const QString input, const QString output)
         "OSM PBF input file: " << input << " is marked as sorted by node ID, as " <<
         "indicated by its header, yet Hootenanny was instructed to sort the file.");
     }
+
+    _checkForOsmosis();
+
     _sortPbf(input, output);
   }
   else if (OsmXmlReader().isSupported(input))
@@ -82,19 +84,6 @@ void OsmFileSorter::sort(const QString input, const QString output)
     {
       throw HootException("Unable to sort OSM XML file.");
     }
-  }
-  else if (OgrReader().isSupported(input))
-  {
-    if (!OsmPbfWriter().isSupported(output))
-    {
-      throw HootException("OGR files must be output to OSM PBF format during sorting.");
-    }
-
-    //Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
-    //to first write it to a sortable format.
-    LOG_WARN("OGR inputs must be converted to the OSM format before sorting by node ID.");
-    LOG_WARN("Converting input to OSM format...");
-    _sortPbf(_ogrToPbfTemp(input)->fileName(), output);
   }
   else
   {
@@ -114,8 +103,6 @@ void OsmFileSorter::_checkForOsmosis()
 
 void OsmFileSorter::_sortPbf(const QString input, const QString output)
 {
-  _checkForOsmosis();
-
   const QString cmd =
     "osmosis -q --read-pbf file=\"" + input + "\" --sort --write-pbf " +
     "omitmetadata=true file=\"" + output + "\" > /dev/null";
@@ -128,22 +115,11 @@ void OsmFileSorter::_sortPbf(const QString input, const QString output)
   //OsmPbfWriter::updateSorted(output, true);
 }
 
-boost::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString input)
+bool OsmFileSorter::isSupportedInputFormat(const QString input)
 {
-  boost::shared_ptr<QTemporaryFile> pbfTemp(
-    new QTemporaryFile(
-      ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
-  //for debugging only
-  //pbfTemp->setAutoRemove(false);
-  if (!pbfTemp->open())
-  {
-    throw HootException("Unable to open sort temp file: " + pbfTemp->fileName() + ".");
-  }
-
-  ElementStreamer::stream(input, pbfTemp->fileName());
-
-  return pbfTemp;
+  return
+    GeoNamesReader().isSupported(input) || OsmPbfReader().isSupported(input) ||
+    OsmXmlReader().isSupported(input);
 }
 
 }

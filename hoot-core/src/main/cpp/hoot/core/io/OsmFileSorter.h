@@ -35,15 +35,19 @@ namespace hoot
 {
 
 /**
- * Sorts OSM files by element type, then element ID.  Supports OSM XML, OSM PBF, OGR, and GeoNames
- * formats.
+ * Sorts OSM files by element type, then element ID and is not memory bound.  Supports OSM XML,
+ * OSM PBF, OGR, and GeoNames formats.
  *
  * This class uses the Unix sort command to sort the geonames input, which is possible due to the
- * single line records.  Osmosis is used for sorting OSM files.  Osmosis could be replaced with a
- * custom file based merge sort routine in the future to reduce the dependency on it, but
- * for now, using it is the best solution.  There is no good solution yet for sorting OGR inputs.
- * Those inputs must be converted to an OSM format before sorting, which unfortunately roughly
- * doubles the input parsing time.
+ * single line records.  The call to that command could be replaced by an internal parallel sort
+ * in the future.
+ *
+ * Osmosis is used for sorting OSM files.  Osmosis could be replaced with a custom file based merge
+ * sort routine in the future to reduce the dependency on it.  There is currently no good solution
+ * for sorting OGR inputs.  Those inputs must be converted to an OSM format before sorting, which
+ * unfortunately roughly doubles the input parsing time.
+ *
+ * See #2596
  */
 class OsmFileSorter
 {
@@ -58,6 +62,8 @@ public:
    * match; for OGR inputs, the output format must be OSM PBF
    */
   static void sort(const QString input, const QString output);
+
+  static bool isSupportedInputFormat(const QString input);
 
 private:
 

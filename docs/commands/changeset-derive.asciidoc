@@ -27,7 +27,7 @@ dataset and the second should be the newer dataset.
 changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--stats]
 --------------------------------------
 
-==== Examples
+=== Examples
 
 --------------------------------------
 hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc

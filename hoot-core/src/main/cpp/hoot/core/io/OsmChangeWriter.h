@@ -28,7 +28,7 @@
 #define OSMCHANGEWRITER_H
 
 // hoot
-#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 
 namespace hoot
 {

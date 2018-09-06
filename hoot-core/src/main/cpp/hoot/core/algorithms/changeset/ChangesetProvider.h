@@ -32,7 +32,7 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/io/Change.h>
+#include <hoot/core/algorithms/changeset/Change.h>
 
 namespace hoot
 {

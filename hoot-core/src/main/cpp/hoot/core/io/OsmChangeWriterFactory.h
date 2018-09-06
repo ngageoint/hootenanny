@@ -46,6 +46,8 @@ public:
   boost::shared_ptr<OsmChangeWriter> createWriter(
     QString url, QString elementPayloadFormat = "json");
 
+  bool isSupported(const QString output);
+
   static OsmChangeWriterFactory& getInstance();
 
 private:
