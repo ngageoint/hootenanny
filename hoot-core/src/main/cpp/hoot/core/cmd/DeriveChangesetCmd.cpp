@@ -47,6 +47,7 @@
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/visitors/AddAttributesVisitor.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -54,6 +55,7 @@
 // Qt
 #include <QUrl>
 #include <QDateTime>
+#include <QFileInfo>
 
 using namespace std;
 
@@ -126,7 +128,7 @@ public:
     //try to stream the changeset to avoid memory issues
     //This element sorter implementation check is here temporarily during initial testing so that
     //ElementExternalMergeSorter can be manually turned off until any issues are worked through.
-    if (ConfigOptions().getChangesetElementSorter() == "hoot::NonMemoryBoundElementSorter" &&
+    if (ConfigOptions().getChangesetElementSorter() == "hoot::ElementExternalMergeSorter" &&
         _inputFormatsStreamable(input1, input2))
     {
       _streamChangesets(input1, input2, outputs);
@@ -180,14 +182,6 @@ private:
     msg += " to " + outputs.join(",").right(50);
     LOG_INFO(msg);
 
-    ElementSorterPtr sorted1;
-    ElementSorterPtr sorted2;
-    sorted1.reset(new ElementExternalMergeSorter(input1));
-    if (!singleInput)
-    {
-      sorted2.reset(new ElementExternalMergeSorter(input2));
-    }
-
     QList<ElementVisitorPtr> visitors;
     //we don't want to include review relations
     boost::shared_ptr<ElementCriterion> elementCriterion(
@@ -197,21 +191,42 @@ private:
     //node comparisons require hashes be present on the elements
     visitors.append(boost::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
 
-    boost::shared_ptr<ElementInputStream> filteredSortedInputStream1(
-      new ElementCriterionVisitorInputStream(sorted1, elementCriterion, visitors));
-    boost::shared_ptr<ElementInputStream> filteredSortedInputStream2;
+    boost::shared_ptr<PartialOsmMapReader> reader1 =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(input1));
+    reader1->setUseDataSourceIds(true);
+    reader1->open(input1);
+    ElementInputStreamPtr inputStream1 = boost::dynamic_pointer_cast<ElementInputStream>(reader1);
+    ElementInputStreamPtr filteredSortedInputStream1(
+      new ElementCriterionVisitorInputStream(inputStream1, elementCriterion, visitors));
+
+    ElementSorterPtr sorted1;
+    ElementSorterPtr sorted2;
+    QFileInfo inputFileInfo1(input1);
+    sorted1.reset(
+      new ElementExternalMergeSorter(filteredSortedInputStream1, inputFileInfo1.completeSuffix()));
     if (!singleInput)
     {
-      filteredSortedInputStream2.reset(
-        new ElementCriterionVisitorInputStream(sorted2, elementCriterion, visitors));
+      boost::shared_ptr<PartialOsmMapReader> reader2 =
+        boost::dynamic_pointer_cast<PartialOsmMapReader>(
+          OsmMapReaderFactory::getInstance().createReader(input2));
+      reader2->setUseDataSourceIds(true);
+      reader2->open(input2);
+      ElementInputStreamPtr inputStream2 = boost::dynamic_pointer_cast<ElementInputStream>(reader2);
+      ElementInputStreamPtr filteredSortedInputStream2(
+        new ElementCriterionVisitorInputStream(inputStream2, elementCriterion, visitors));
+
+      QFileInfo inputFileInfo2(input2);
+      sorted2.reset(
+        new ElementExternalMergeSorter(
+          filteredSortedInputStream2, inputFileInfo2.completeSuffix()));
     }
 
     //Eventually this could be cleaned up to use OsmChangeWriterFactory and the OsmChange interface
     //instead.
     _writeOutputs(
       outputs,
-      boost::shared_ptr<ChangesetDeriver>(
-        new ChangesetDeriver(filteredSortedInputStream1, filteredSortedInputStream2)));
+      boost::shared_ptr<ChangesetDeriver>(new ChangesetDeriver(sorted1, sorted2)));
   }
 
   /*

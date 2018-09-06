@@ -29,8 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-
-#include "ElementInputStream.h"
+#include <hoot/core/io/ElementInputStream.h>
 
 // Qt
 #include <QFile>

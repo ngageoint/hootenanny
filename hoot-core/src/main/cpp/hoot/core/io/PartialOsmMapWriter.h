@@ -83,7 +83,6 @@ public:
   void writePartial(const RelationPtr& r) { writePartial((const ConstRelationPtr)r); }
 
   virtual void writeElement(ElementPtr& element);
-
 };
 
 }

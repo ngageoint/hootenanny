@@ -13,14 +13,30 @@ namespace hoot
 {
 
 /**
-
+  Very much influenced by http://www.techiedelight.com/external-merge-sort
  */
 class ElementExternalMergeSorter : public ElementSorter
 {
 
 public:
 
-  ElementExternalMergeSorter(const QString input);
+  struct ElementCompare
+  {
+    bool operator()(const ConstElementPtr& e1, const ConstElementPtr& e2) const
+    {
+      if (e1->getElementType().getEnum() < e2->getElementType().getEnum())
+      {
+        return true;
+      }
+      else if (e1->getElementType().getEnum() < e2->getElementType().getEnum())
+      {
+        return false;
+      }
+      return e1->getId() < e2->getId();
+    }
+  };
+
+  ElementExternalMergeSorter(ElementInputStreamPtr input, const QString inputFileExtension);
 
   /**
    * @see ElementInputStream
@@ -44,9 +60,13 @@ public:
 private:
 
   boost::shared_ptr<QTemporaryFile> _sortTempFile;
-  boost::shared_ptr<ElementInputStream> _inputStream;
+  ElementInputStreamPtr _sortedElements;
+  QString _inputFileExtension;
+  int _maxElementsPerFile;
 
-  void _sort(QString input);
+  void _sort(ElementInputStreamPtr input);
+  QList<boost::shared_ptr<QTemporaryFile>> _createSortedFileOutputs(ElementInputStreamPtr input);
+  void _mergeFiles(QList<boost::shared_ptr<QTemporaryFile>> tempOutputFiles);
 };
 
 }
