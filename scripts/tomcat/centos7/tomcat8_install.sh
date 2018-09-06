@@ -6,6 +6,7 @@ set -euo pipefail
 if [ -z "$HOOT_HOME" ]; then
     HOOT_HOME=~/hoot
 fi
+TOMCAT_HOME=/usr/share/tomcat8
 TOMCAT_NAME=tomcat8
 TOMCAT_LEGACY_SYSTEMD=/etc/systemd/system/${TOMCAT_NAME}.service
 TOMCAT_SYSTEMD=/usr/lib/systemd/system/${TOMCAT_NAME}.service
@@ -63,13 +64,14 @@ fi
 echo "Adding Tomcat JNDI Postgresql Connection Pool..."
 sudo cp $HOOT_HOME/scripts/tomcat/centos7/context.xml ${TOMCAT_CONFIG}/context.xml
 
-if [ -z "$TOMCAT8_HOME" ]; then
-    echo "TOMCAT8_HOME not defined, check environment"
-    exit 1
+# Download JDBC version specified in hoot-services/pom.xml from
+# https://jdbc.postgresql.org/download.html
+JDBC_VERSION="$(grep '<postgresql\.version>.*</postgresql\.version>' < $HOOT_HOME/hoot-services/pom.xml | sed -e 's|</\?postgresql.version>||g' | tr -d '[:blank:]')"
+JDBC_JAR="$TOMCAT_HOME/lib/postgresql-$JDBC_VERSION.jar"
+if [ ! -f "$JDBC_JAR" ]; then
+    echo "Downloading PostgreSQL JDBC v$JDBC_VERSION..."
+    sudo curl -sSL -o "$JDBC_JAR" "https://jdbc.postgresql.org/download/postgresql-$JDBC_VERSION.jar"
 fi
-# Match Version to hoot-services/pom.xml :: postgresql.version
-# and java version https://jdbc.postgresql.org/download.html
-sudo wget "https://jdbc.postgresql.org/download/postgresql-42.2.4.jar" -O $TOMCAT8_HOME/lib/postgresql-42.2.4.jar
 
 # Note: tomcat8 package already has `allowLinking=true` set in:
 #  ${TOMCAT_CONFIG}/context.xml
