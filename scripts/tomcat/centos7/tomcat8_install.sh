@@ -61,8 +61,10 @@ if ! grep -i --quiet 'ingest/processed' ${TOMCAT_CONFIG}/server.xml; then
     sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/userfiles\/ingest\/processed\" path=\"\/static\" \/>\n      &@' ${TOMCAT_CONFIG}/server.xml
 fi
 
-echo "Adding Tomcat JNDI Postgresql Connection Pool..."
-sudo cp $HOOT_HOME/scripts/tomcat/centos7/context.xml ${TOMCAT_CONFIG}/context.xml
+if ! grep -i --quiet 'jdbc/postgres' "$TOMCAT_CONFIG/context.xml"; then
+    echo "Adding Tomcat JNDI Postgresql Connection Pool..."
+    sudo sed -i.bak 's@<\/Context>@\n    <Resource name=\"jdbc/postgres"\n      auth="Container"\n      type="javax.sql.DataSource"\n      driverClassName="org.postgresql.Driver"\n      url="jdbc:postgresql://'"$DB_HOST:$DB_PORT/$DB_NAME"'"\n      username="'"$DB_USER"'" password="'"$DB_PASSWORD"'"\n      maxActive="90"\n      initialSize="25"\n      minIdle="0"\n      maxIdle="30"\n      maxWait="10000"\n      timeBetweenEvictionRunsMillis="30000"\n      minEvictableIdleTimeMillis="60000"\n      testWhileIdle="true"\n      validationQuery="SELECT 1" />\n\n&@' "$TOMCAT_CONFIG/context.xml"
+fi
 
 # Download JDBC version specified in hoot-services/pom.xml from
 # https://jdbc.postgresql.org/download.html
