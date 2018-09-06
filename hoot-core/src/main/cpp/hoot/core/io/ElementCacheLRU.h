@@ -138,7 +138,7 @@ public:
   // cache items, from most recent to least recent.
   std::string getLRUString(const ElementType::Type type);
 
-protected:
+private:
 
   unsigned long _maxNodeCount;
   unsigned long _maxWayCount;

@@ -350,10 +350,10 @@ ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
 }
 
 // This const function kind of defeats the purpose of the LRU cache,
-// but it's necessary to conform to the interface
+// but it's necessary to conform to the interface. It should call
+// _updateNodeAccess(id) - but can't because of const
 const ConstNodePtr ElementCacheLRU::getNode(long id) const
 {
-  // _updateNodeAccess(id);
   return _nodes.find(id)->second.first;
 }
 
@@ -364,10 +364,10 @@ const NodePtr ElementCacheLRU::getNode(long id)
 }
 
 // This const function kind of defeats the purpose of the LRU cache,
-// but it's necessary to conform to the interface
+// but it's necessary to conform to the interface. It should call
+// _updateWayAccess - but can't because of const
 const ConstWayPtr ElementCacheLRU::getWay(long id) const
 {
-  // _updateNodeAccess(id);
   return _ways.find(id)->second.first;
 }
 
@@ -378,10 +378,10 @@ const WayPtr ElementCacheLRU::getWay(long id)
 }
 
 // This const function kind of defeats the purpose of the LRU cache,
-// but it's necessary to conform to the interface
+// but it's necessary to conform to the interface. It should call
+// _updateRelationAccess - but can't becuase of const
 const ConstRelationPtr ElementCacheLRU::getRelation(long id) const
 {
-  // _updateRelationAccess(id);
   return _relations.find(id)->second.first;
 }
 
