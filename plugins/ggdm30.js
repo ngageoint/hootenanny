@@ -1089,6 +1089,7 @@ ggdm30 = {
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
+            ["t.communication == 'line'","t['cable:type'] = 'communication'"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
@@ -1292,8 +1293,11 @@ ggdm30 = {
                 case 'suburb':
                 case 'quarter':
                 case 'village':
-                    attrs.F_CODE = 'AL020'; // Built Up Area
-                    delete tags.place;
+                    if (geometryType == 'Point')
+                    {
+                        attrs.F_CODE = 'AL020'; // Built Up Area
+                        delete tags.place;                        
+                    }
                     break;
 
                 case 'hamlet':
@@ -1387,6 +1391,14 @@ ggdm30 = {
             }
         } // End AP020 not Point
 
+        // Cables
+        if (tags.man_made == 'submarine_cable')
+        {
+            delete tags.man_made;
+            tags.cable = 'yes';
+            tags.location = 'underwater';
+        }
+    
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
         if (!(attrs.F_CODE) && ggdm30.fcodeLookup)
@@ -1870,6 +1882,18 @@ ggdm30 = {
             }
         }
 
+        // Wetlands
+        // Normally, these go to Marsh
+        switch(tags.wetland)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'mangrove':
+                attrs.F_CODE = 'ED020'; // Swamp
+                attrs.VSP = '19'; // Mangrove
+                break;
+        } // End Wetlands
     }, // End applyToOgrPostProcessing
 
 // #####################################################################################################
@@ -2199,7 +2223,8 @@ ggdm30 = {
             }
 
             // Convert all of the Tags to a string so we can jam it into an attribute
-            var str = JSON.stringify(tags);
+            // var str = JSON.stringify(tags);
+            var str = JSON.stringify(tags,Object.keys(tags).sort());
 
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.

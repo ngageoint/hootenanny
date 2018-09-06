@@ -196,6 +196,7 @@ int ConflateCmd::runSimple(QStringList args)
                    Status::Unknown1);
 
   DiffConflator diffConflator;
+  ChangesetProviderPtr pTagChanges;
   if (isDiffConflate)
   {
     // Store original IDs for tag diff
@@ -257,6 +258,10 @@ int ConflateCmd::runSimple(QStringList args)
   {
     // call the diff conflator
     diffConflator.apply(result);
+    if (conflateTags)
+    {
+      pTagChanges = diffConflator.getTagDiff();
+    }
     stats.append(diffConflator.getStats());
     stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
   }
@@ -292,11 +297,6 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate && output.endsWith(".osc"))
   { // Write a changeset
     ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(result);
-    ChangesetProviderPtr pTagChanges;
-    if (conflateTags)
-    {
-      pTagChanges = diffConflator.getTagDiff();
-    }
 
     if (!conflateTags)
     { // only one changeset to write
@@ -325,6 +325,12 @@ int ConflateCmd::runSimple(QStringList args)
   }
   else
   { // Write a map
+
+    if (conflateTags)
+    {
+      // Add tag changes to our map
+      diffConflator.addChangesToMap(result, pTagChanges);
+    }
     IoUtils::saveMap(result, output);
   }
 
