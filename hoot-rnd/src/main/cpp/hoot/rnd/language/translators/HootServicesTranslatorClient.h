@@ -42,6 +42,8 @@ namespace hoot
 /**
  * Translates text from a single source language to English using translation/detection
  * technologies integrated into the Hootenanny web services.
+ *
+ * TODO: integrate with HootNetworkRequest (#2606)
  */
 class HootServicesTranslatorClient : public QObject, public ToEnglishTranslator
 {

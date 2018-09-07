@@ -1226,7 +1226,7 @@ StringDistance implementation used to score to English translated tag values
 * Default Value: `false`
 
 If source languages are specified that do not match the detected language for piece of text during
-translation, setting this to try allows the detected language to override the specified source
+translation, setting this to true allows the detected language to override the specified source
 languages.
 
 === language.translation.hoot.services.detectable.languages.endpoint
