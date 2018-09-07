@@ -52,7 +52,7 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/algorithms/changeset/ElementSorter.h>
+#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 
@@ -85,8 +85,9 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
 // Convenience function used when deriving a changeset
 boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
 {
-  ElementSorterPtr sorted1(new ElementSorter(pMap1));
-  ElementSorterPtr sorted2(new ElementSorter(pMap2));
+  //TODO: consolidate with logic in DeriveChangesetCmd
+  InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
+  InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
   boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
   return delta;
 }

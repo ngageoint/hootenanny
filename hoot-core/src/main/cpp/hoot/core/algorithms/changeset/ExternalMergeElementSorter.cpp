@@ -21,7 +21,6 @@ namespace hoot
 
 ExternalMergeElementSorter::ExternalMergeElementSorter(ElementInputStreamPtr input,
                                                        const QString inputFileExtension) :
-ElementSorter(ConstOsmMapPtr()),
 _inputFileExtension(inputFileExtension),
 _maxElementsPerFile(ConfigOptions().getElementSorterExternalMergeMaxElementSize())
 {
