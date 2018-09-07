@@ -6,11 +6,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/ElementStreamer.h>
-#include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-
-// std
-#include <queue>
 
 namespace hoot
 {
@@ -74,10 +70,10 @@ void ExternalMergeElementSorter::_sort(ElementInputStreamPtr input)
   LOG_INFO("Sorting input by element ID and type...");
 
   //if only one file was written, skip merging
-  _tempOutputFiles = _createSortedFileOutputs(input);
+  _createSortedFileOutputs(input);
   if (_tempOutputFiles.size() > 1)
   {
-    _mergeFiles(_tempOutputFiles);
+    _mergeSortedFiles();
   }
   else
   {
@@ -97,8 +93,8 @@ void ExternalMergeElementSorter::_initElementStream()
   _sortedElements = boost::dynamic_pointer_cast<ElementInputStream>(_sortedElementsReader);
 }
 
-bool ExternalMergeElementSorter::_elementCompare1(const ConstElementPtr& e1,
-                                                  const ConstElementPtr& e2)
+bool ExternalMergeElementSorter::_elementCompare(const ConstElementPtr& e1,
+                                                 const ConstElementPtr& e2)
 {
   const ElementType::Type type1 = e1->getElementType().getEnum();
   const ElementType::Type type2 = e2->getElementType().getEnum();
@@ -112,28 +108,11 @@ bool ExternalMergeElementSorter::_elementCompare1(const ConstElementPtr& e1,
   }
 }
 
-bool ExternalMergeElementSorter::_elementCompare2(const ConstElementPtr& e1,
-                                                  const ConstElementPtr& e2)
-{
-  const ElementType::Type type1 = e1->getElementType().getEnum();
-  const ElementType::Type type2 = e2->getElementType().getEnum();
-  if (type1 == type2)
-  {
-    return e1->getId() > e2->getId();
-  }
-  else
-  {
-    return type1 > type2;
-  }
-}
-
-QList<boost::shared_ptr<QTemporaryFile>> ExternalMergeElementSorter::_createSortedFileOutputs(
-  ElementInputStreamPtr input)
+void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr input)
 {
   LOG_DEBUG("Writing sorted file outputs...");
 
   long elementCtr = 0;
-  QList<boost::shared_ptr<QTemporaryFile>> tempOutputFiles;
   boost::shared_ptr<QTemporaryFile> tempOutputFile;
   boost::shared_ptr<PartialOsmMapWriter> writer;
   std::vector<ConstElementPtr> elements;
@@ -147,7 +126,7 @@ QList<boost::shared_ptr<QTemporaryFile>> ExternalMergeElementSorter::_createSort
     if ((elementCtr % _maxElementsPerFile == 0 && elementCtr != 0) || !input->hasMoreElements())
     {
       LOG_DEBUG("Sorting elements...");
-      std::sort(elements.begin(), elements.end(), _elementCompare1);
+      std::sort(elements.begin(), elements.end(), _elementCompare);
 
       LOG_DEBUG("Writing elements to temp file...");
 
@@ -165,7 +144,7 @@ QList<boost::shared_ptr<QTemporaryFile>> ExternalMergeElementSorter::_createSort
       {
         LOG_DEBUG("Opened temp file: " << tempOutputFile->fileName() << " for sorted output.");
       }
-      tempOutputFiles.append(tempOutputFile);
+      _tempOutputFiles.append(tempOutputFile);
 
       writer =
         boost::dynamic_pointer_cast<PartialOsmMapWriter>(
@@ -194,15 +173,75 @@ QList<boost::shared_ptr<QTemporaryFile>> ExternalMergeElementSorter::_createSort
   input->close();
   LOG_DEBUG("Finished writing sorted file outputs.");
   LOG_VART(elementCtr);
-  LOG_VART(tempOutputFiles.size());
-
-  return tempOutputFiles;
+  LOG_VART(_tempOutputFiles.size());
 }
 
-void ExternalMergeElementSorter::_mergeFiles(
-                                     QList<boost::shared_ptr<QTemporaryFile>> tempOutputFiles)
+void ExternalMergeElementSorter::_mergeSortedFiles()
 {
-  LOG_DEBUG("Merging " << tempOutputFiles.size() << " temporary files...");
+  LOG_DEBUG("Merging " << _tempOutputFiles.size() << " temporary files...");
+
+  QList<boost::shared_ptr<PartialOsmMapReader>> readers;
+  ElementPriorityQueue priorityQueue = _getInitializedPriorityQueue(readers);
+  boost::shared_ptr<PartialOsmMapWriter> writer = _getFinalOutputWriter();
+
+  _mergeSortedElements(priorityQueue, writer, readers);
+
+  writer->finalizePartial();
+  writer->close();
+
+  //for debugging only; this will only be useful if you temporarily turn off auto removal of the
+  //temp file
+  LOG_DEBUG("Sorted temp files: ");
+  for (int i = 0; i < _tempOutputFiles.size(); i++)
+  {
+    LOG_VARD(_tempOutputFiles.at(i)->fileName());
+  }
+}
+
+void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& priorityQueue,
+                                           boost::shared_ptr<PartialOsmMapWriter> writer,
+                                           QList<boost::shared_ptr<PartialOsmMapReader>> readers)
+{
+  LOG_DEBUG("Iterating through remaining elements in sorted order...");
+
+  int i = 0;
+  long elementPerFileCount = 0;
+  long pushesToPriorityQueue = 0;
+  while (i != readers.size())
+  {
+    ConstElementPtr rootElement = priorityQueue.top();
+    priorityQueue.pop();
+    if (rootElement->getId() != LONG_MAX)
+    {
+      LOG_TRACE("Writing element from priority queue: " << rootElement);
+      writer->writePartial(rootElement);
+      elementPerFileCount++;
+    }
+    if (readers.at(i)->hasMoreElements())
+    {
+      rootElement = readers.at(i)->readNextElement();
+      LOG_TRACE("Read new element: " << rootElement);
+    }
+    else
+    {
+      LOG_TRACE("No elements left in file.");
+      rootElement.reset(new Relation(Status::Invalid, LONG_MAX, 15.0));
+      LOG_VART(elementPerFileCount);
+      elementPerFileCount = 0;
+      i++;
+    }
+
+    LOG_TRACE("Pushing element to priority queue: " << rootElement);
+    priorityQueue.push(rootElement);
+    pushesToPriorityQueue++;
+  }
+  LOG_VART(priorityQueue.size());
+  LOG_VART(pushesToPriorityQueue);
+}
+
+boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutputWriter()
+{
+  LOG_DEBUG("Initializing final output...");
 
   _sortTempFile.reset(
     new QTemporaryFile(
@@ -219,20 +258,23 @@ void ExternalMergeElementSorter::_mergeFiles(
     LOG_DEBUG(
       "Opened temp final output file: " << _sortTempFile->fileName() << " for sorted output.");
   }
-
-  LOG_DEBUG("Writing initial records from each temp file to priority queue...");
-
   boost::shared_ptr<PartialOsmMapWriter> writer =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::getInstance().createWriter(_sortTempFile->fileName()));
   writer->open(_sortTempFile->fileName());
 
-  std::priority_queue<ConstElementPtr, std::vector<ConstElementPtr>, ElementCompare> priorityQueue;
+  return writer;
+}
 
-  QList<boost::shared_ptr<PartialOsmMapReader>> readers;
-  for (int i = 0; i < tempOutputFiles.size(); i++)
+ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
+  QList<boost::shared_ptr<PartialOsmMapReader>>& readers)
+{
+  LOG_DEBUG("Writing initial records from each temp file to priority queue...");
+
+  ElementPriorityQueue priorityQueue;
+  for (int i = 0; i < _tempOutputFiles.size(); i++)
   {
-    const QString fileName = tempOutputFiles.at(i)->fileName();
+    const QString fileName = _tempOutputFiles.at(i)->fileName();
     LOG_VART(fileName);
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -242,7 +284,7 @@ void ExternalMergeElementSorter::_mergeFiles(
     readers.append(reader);
 
     //this should always return true but has to be called before readNextElement, so an assert
-    //isn't good enough
+    //isn't good enough here
     if (reader->hasMoreElements())
     {
       ConstElementPtr element = reader->readNextElement();
@@ -253,54 +295,7 @@ void ExternalMergeElementSorter::_mergeFiles(
   LOG_VART(priorityQueue.size());
   LOG_VART(readers.size());
 
-  LOG_DEBUG("Iterating through remaining elements in sorted order...");
-
-  int i = 0;
-  long elementPerFileCount = 0;
-  long pushesToPriorityQueue = 0;
-  while (i != readers.size())
-  {
-    ConstElementPtr root = priorityQueue.top();
-    //LOG_VART(root);
-    priorityQueue.pop();
-    //if (root->getStatus() != Status::Invalid)
-    if (root->getId() != LONG_MAX)
-    {
-      LOG_TRACE("Writing element from priority queue: " << root);
-      writer->writePartial(root);
-      elementPerFileCount++;
-    }
-    if (readers.at(i)->hasMoreElements())
-    {
-      root = readers.at(i)->readNextElement();
-      LOG_TRACE("Read new element: " << root);
-    }
-    else
-    {
-      LOG_TRACE("No elements left in file.");
-      root.reset(new Relation(Status::Invalid, LONG_MAX, 15.0)); //??
-      LOG_VART(elementPerFileCount);
-      elementPerFileCount = 0;
-      i++;
-    }
-
-    LOG_TRACE("Pushing element to priority queue: " << root);
-    priorityQueue.push(root);
-    pushesToPriorityQueue++;
-  }
-  LOG_VART(priorityQueue.size());
-  LOG_VART(pushesToPriorityQueue);
-
-  writer->finalizePartial();
-  writer->close();
-
-  //for debugging only; this will only be useful if you temporarily turn off auto removal of the
-  //temp file
-  LOG_DEBUG("Sorted temp files: ");
-  for (int i = 0; i < _tempOutputFiles.size(); i++)
-  {
-    LOG_VARD(_tempOutputFiles.at(i)->fileName());
-  }
+  return priorityQueue;
 }
 
 }

@@ -87,7 +87,7 @@ void OsmFileSorter::sort(const QString input, const QString output)
   }
   else
   {
-    throw HootException("Unsupported input format for node sorting.");
+    throw HootException("Unsupported input format for node sorting: " + input);
   }
 }
 

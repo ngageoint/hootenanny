@@ -5,12 +5,36 @@
 // Hoot
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 
 // Qt
 #include <QTemporaryFile>
 
+// std
+#include <queue>
+
 namespace hoot
 {
+
+struct ElementComparePQ
+{
+  bool operator()(const ConstElementPtr& e1, const ConstElementPtr& e2) const
+  {
+    const ElementType::Type type1 = e1->getElementType().getEnum();
+    const ElementType::Type type2 = e2->getElementType().getEnum();
+    if (type1 == type2)
+    {
+      return e1->getId() > e2->getId();
+    }
+    else
+    {
+      return type1 > type2;
+    }
+  }
+};
+
+typedef std::priority_queue<ConstElementPtr,
+                            std::vector<ConstElementPtr>, ElementComparePQ> ElementPriorityQueue;
 
 /**
   Very much influenced by http://www.techiedelight.com/external-merge-sort
@@ -57,14 +81,6 @@ public:
 
 private:
 
-  struct ElementCompare
-  {
-    bool operator()(const ConstElementPtr& e1, const ConstElementPtr& e2) const
-    {
-      return _elementCompare2(e1, e2);
-    }
-  };
-
   static const QString SORT_TEMP_FILE_BASE_NAME;
 
   //
@@ -82,11 +98,11 @@ private:
 
   /*
    */
-  QList<boost::shared_ptr<QTemporaryFile>> _createSortedFileOutputs(ElementInputStreamPtr input);
+  void _createSortedFileOutputs(ElementInputStreamPtr input);
 
   /*
    */
-  void _mergeFiles(QList<boost::shared_ptr<QTemporaryFile>> tempOutputFiles);
+  void _mergeSortedFiles();
 
   /*
    */
@@ -94,11 +110,16 @@ private:
 
   /*
    */
-  static bool _elementCompare1(const ConstElementPtr& e1, const ConstElementPtr& e2);
+  static bool _elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2);
 
-  static bool _elementCompare2(const ConstElementPtr& e1, const ConstElementPtr& e2);
+  ElementPriorityQueue _getInitializedPriorityQueue(
+    QList<boost::shared_ptr<PartialOsmMapReader>>& readers);
 
-  //static QString _getSortTempFileBaseName() { return "element-sorter-temp-XXXXXX"; }
+  void _mergeSortedElements(ElementPriorityQueue& priorityQueue,
+                            boost::shared_ptr<PartialOsmMapWriter> writer,
+                            QList<boost::shared_ptr<PartialOsmMapReader>> readers);
+
+  boost::shared_ptr<PartialOsmMapWriter> _getFinalOutputWriter();
 };
 
 }
