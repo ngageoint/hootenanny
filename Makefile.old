@@ -22,7 +22,8 @@ all: build
 always:
 
 build: makedirs js-make qt-make services-build ui-build model-build conf/dictionary/words.sqlite \
-	conf/dictionary/WordsAbridged.sqlite osmapidb
+	conf/dictionary/WordsAbridged.sqlite hoot-services/src/main/resources/language-translation/langdetect-183.bin \
+	osmapidb
 
 makedirs: 
 	mkdir -p $$HOOT_HOME/userfiles/customscript
@@ -473,6 +474,10 @@ conf/dictionary/words1.sqlite:
 	(wget --quiet -N -P /tmp/ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2 && \
 	 bzcat /tmp/words1.sqlite.bz2 > conf/dictionary/words1.sqlite) || \
 	echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
+
+hoot-services/src/main/resources/language-translation/langdetect-183.bin:
+	if [ ! -f $@ ]; then echo "Downloading OpenNLP language detection model..."; wget --quiet -O $@ https://s3.amazonaws.com/hoot-rpms/support-files/langdetect-183.bin; fi 
+	test "`sha1sum hoot-services/src/main/resources/language-translation/langdetect-183.bin`" == 'be8bf56c1b8cb1ecddecc3009c7a3020f149987f  hoot-services/src/main/resources/language-translation/langdetect-183.bin' || echo "OpenNLP language detection not available due to failure downloading model."
 
 bin/HootEnv.sh: scripts/HootEnv.sh
 	mkdir -p bin

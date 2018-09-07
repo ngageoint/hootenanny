@@ -1,0 +1,28 @@
+# All languages supported by TikaLanguageDetector
+# 
+# https://tika.apache.org
+#
+# format: ISO-639-1\tISO-639-2\tname
+#
+# listed alphabetically by ISO-639-1
+#
+# Last updated: 8/8/18
+
+da	dan	Danish
+de	deu	German
+el	ell	Greek (modern)
+en	eng	English
+es	spa	Spanish
+et	est	Estonian
+fi	fin	Finnish
+fr	fra	French
+hu	hun	Hungarian
+is	isl	Icelandic
+it	ita	Italian
+nl	nld	Dutch
+no	nor	Norwegian
+pl	pol	Polish
+pt	por	Portuguese
+ru	rus	Russian
+sv	swe	Swedish
+th	tha	Thai

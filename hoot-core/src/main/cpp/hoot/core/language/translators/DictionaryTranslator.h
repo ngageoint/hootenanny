@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#ifndef DICTIONARY_TRANSLATOR_H
+#define DICTIONARY_TRANSLATOR_H
 
 // Qt
 #include <QRegExp>
@@ -50,14 +50,15 @@ class JsonDictionary;
  * any concept of grammar. If the word is unknown it is assumed to be a pronoun and will be
  * transliterated into latin characters.
  */
-class Translator
+class DictionaryTranslator
 {
 public:
-  Translator();
 
-  ~Translator();
+  DictionaryTranslator();
 
-  static Translator& getInstance();
+  ~DictionaryTranslator();
+
+  static DictionaryTranslator& getInstance();
 
   /**
    * Translates the given input string into a translation & transliteration of the input.
@@ -86,19 +87,20 @@ public:
   QString translateStreet(const QString& input);
 
 private:
+
   char* _buffer;
   int _bufferLength;
   Tgs::LruCache<QString, QString> _cache;
-  static boost::shared_ptr<Translator> _theInstance;
+  static boost::shared_ptr<DictionaryTranslator> _theInstance;
   boost::shared_ptr<JsonDictionary> _dictionary;
   QSet<QString> _streetTypes;
   Transliterator* _transliterator;
   Transliterator* _titler;
   QRegExp _whiteSpace;
 
-  QString _transform(icu::Transliterator* t, const QString& input);
+  QString _transform(icu::Transliterator* t, const QString& input) const;
 };
 
 }
 
-#endif // TRANSLATOR_H
+#endif // DICTIONARY_TRANSLATOR_H

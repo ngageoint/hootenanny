@@ -32,7 +32,7 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 
@@ -160,7 +160,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
 
-    //TODO: this is temp for testing until it gets fixed with a translation
+    //TODO: this is temp for testing until it gets fixed with a schema translation
     if (e->getTags().get("gnis:feature_type").toLower() == "mine")
     {
       LOG_TRACE("Using custom tagging rule...");
@@ -399,7 +399,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
     if (_translateAllNamesToEnglish)
     {
       //TODO: can this be combined with the ImplicitTagUtils translate method?
-      const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
+      const QString englishNameToken = DictionaryTranslator::getInstance().toEnglish(nameToken);
       nameToken = englishNameToken;
       LOG_VART(englishNameToken);
     }
@@ -482,7 +482,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
       const QString word = nameTokensList.at(i);
       LOG_VART(word);
       //TODO: can this be combined with the ImplicitTagUtils translate method?
-      const QString englishNameToken = Translator::getInstance().toEnglish(word);
+      const QString englishNameToken = DictionaryTranslator::getInstance().toEnglish(word);
       LOG_VART(englishNameToken);
       translatedNameTokens.append(englishNameToken);
     }

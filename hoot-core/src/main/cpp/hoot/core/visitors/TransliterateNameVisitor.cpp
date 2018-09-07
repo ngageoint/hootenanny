@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 
 namespace hoot
 {
@@ -68,7 +68,8 @@ void TransliterateNameVisitor::visit(const boost::shared_ptr<Element>& e)
 
   if (names.size() > 0)
   {
-    e->getTags().addNote("Transliterated Name: " + Translator::getInstance().toEnglish(names[0]));
+    e->getTags().addNote(
+      "Transliterated Name: " + DictionaryTranslator::getInstance().toEnglish(names[0]));
   }
 }
 
