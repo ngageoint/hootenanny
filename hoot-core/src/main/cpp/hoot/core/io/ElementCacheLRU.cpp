@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/elements/Element.h>
@@ -82,8 +82,9 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
         _removeOldest(ElementType::Node);
       }
 
+      _nodeList.push_front(newNode->getId());
       _nodes.insert(std::make_pair(newNode->getId(),
-       std::make_pair(newNode, boost::posix_time::microsec_clock::universal_time())));
+                    std::make_pair(newNode, _nodeList.begin())));
     }
     break;
   case ElementType::Way:
@@ -95,8 +96,9 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
       {
         _removeOldest(ElementType::Way);
       }
+      _wayList.push_front(newWay->getId());
       _ways.insert(std::make_pair(newWay->getId(),
-        std::make_pair(newWay, boost::posix_time::microsec_clock::universal_time())));
+                   std::make_pair(newWay, _wayList.begin())));
     }
 
     break;
@@ -110,8 +112,9 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
         _removeOldest(ElementType::Relation);
       }
 
+      _relationList.push_front(newRelation->getId());
       _relations.insert(std::make_pair(newRelation->getId(),
-        std::make_pair(newRelation, boost::posix_time::microsec_clock::universal_time())));
+                        std::make_pair(newRelation, _relationList.begin())));
     }
     break;
   default:
@@ -125,25 +128,14 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
   resetElementIterators();
 }
 
-ConstNodePtr ElementCacheLRU::getNextNode()
-{
-  ConstNodePtr returnPtr;
-
-  if ( _nodesIter != _nodes.end() )
-  {
-    _nodesIter->second.second = boost::posix_time::microsec_clock::universal_time();
-    returnPtr = _nodesIter->second.first;
-    ++_nodesIter;
-  }
-
-  return returnPtr;
-}
-
 void ElementCacheLRU::close()
 {
   _nodes.clear();
+  _nodeList.clear();
   _ways.clear();
+  _wayList.clear();
   _relations.clear();
+  _relationList.clear();
 
   resetElementIterators();
 }
@@ -185,13 +177,33 @@ void ElementCacheLRU::writeElement(ElementPtr& element)
   addElement(el);
 }
 
+ConstNodePtr ElementCacheLRU::getNextNode()
+{
+  ConstNodePtr returnPtr;
+
+  if ( _nodesIter != _nodes.end() )
+  {
+    // Update our usage
+    _updateNodeAccess(_nodesIter->first);
+
+    // Get return node
+    returnPtr = _nodesIter->second.first;
+    ++_nodesIter;
+  }
+
+  return returnPtr;
+}
+
 ConstWayPtr ElementCacheLRU::getNextWay()
 {
   ConstWayPtr returnPtr;
 
   if ( _waysIter != _ways.end() )
   {
-    _waysIter->second.second = boost::posix_time::microsec_clock::universal_time();
+    // Update our usage
+    _updateWayAccess(_waysIter->first);
+
+    // Get return way
     returnPtr = _waysIter->second.first;
     ++_waysIter;
   }
@@ -205,7 +217,10 @@ ConstRelationPtr ElementCacheLRU::getNextRelation()
 
   if ( _relationsIter != _relations.end() )
   {
-    _relationsIter->second.second = boost::posix_time::microsec_clock::universal_time();
+    // Update our usage
+    _updateRelationAccess(_relationsIter->first);
+
+    // Get return relation
     returnPtr = _relationsIter->second.first;
     ++_relationsIter;
   }
@@ -222,69 +237,38 @@ void ElementCacheLRU::resetElementIterators()
 
 void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 {
-  std::map<long, std::pair<ConstNodePtr, boost::posix_time::ptime> >::iterator nodesIter;
-  std::map<long, std::pair<ConstWayPtr, boost::posix_time::ptime> >::iterator waysIter;
-  std::map<long, std::pair<ConstRelationPtr, boost::posix_time::ptime> >::iterator relationsIter;
-
-  // Initialize oldest to current, then we can walk it back
-  boost::posix_time::ptime oldestTime(boost::posix_time::microsec_clock::universal_time());
-  long oldestId = 0;
-
+  long id = 0;
   switch (typeToRemove)
   {
   case ElementType::Node:
-    for (nodesIter = _nodes.begin(); nodesIter != _nodes.end(); ++nodesIter)
-    {
-      if ( nodesIter->second.second < oldestTime )
-      {
-        oldestTime = nodesIter->second.second;
-        oldestId = nodesIter->first;
-      }
-    }
+    // Get ID of oldest & remove
+    id = _nodeList.back();
+    _nodeList.pop_back();
+    _nodes.erase(id);
 
-    // Remove oldest entry
-    _nodes.erase(oldestId);
-    LOG_TRACE("Removed node: " << oldestId << " from cache.");
-
+    LOG_TRACE("Removed node: " << id << " from cache.");
     break;
 
   case ElementType::Way:
-    for (waysIter = _ways.begin(); waysIter != _ways.end(); ++waysIter)
-    {
-      if ( waysIter->second.second < oldestTime )
-      {
-        oldestTime = waysIter->second.second;
-        oldestId = waysIter->first;
-      }
-    }
+    id = _wayList.back();
+    _wayList.pop_back();
+    _ways.erase(id);
 
-    // Remove oldest entry
-    _ways.erase(oldestId);
-    LOG_TRACE("Removed way: " << oldestId << " from cache.");
-
+    LOG_TRACE("Removed way: " << id << " from cache.");
     break;
 
   case ElementType::Relation:
-    for (relationsIter = _relations.begin(); relationsIter != _relations.end(); ++relationsIter)
-    {
-      if ( relationsIter->second.second < oldestTime )
-      {
-        oldestTime = relationsIter->second.second;
-        oldestId = relationsIter->first;
-      }
-    }
+    id = _relationList.back();
+    _relationList.pop_back();
+    _relations.erase(id);
 
-    // Remove oldest entry
-    _relations.erase(oldestId);
-    LOG_TRACE("Removed relation: " << oldestId << " from cache.");
-
+    LOG_TRACE("Removed relation: " << id << " from cache.");
     break;
 
   // Intentional fallthrow
   case ElementType::Unknown:
   default:
     throw HootException(QString("Tried to remove oldest of invalid type"));
-
     break;
   }
 }
@@ -328,11 +312,10 @@ bool ElementCacheLRU::containsElement(const ElementId& eid) const
   // Intentional fallthrow
   case ElementType::Unknown:
   default:
-
     break;
   }
 
-  // If we get to this point, it meant we never found it
+  // If we get to this point, it means we couldn't find it
   return false;
 }
 
@@ -347,12 +330,12 @@ ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
     break;
 
   case ElementType::Way:
-    returnPtr = _ways.find(id)->second.first;
+    returnPtr = getWay(id);
 
     break;
 
   case ElementType::Relation:
-    returnPtr = _relations.find(id)->second.first;
+    returnPtr = getRelation(id);
 
     break;
 
@@ -366,6 +349,9 @@ ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
   return returnPtr;
 }
 
+// This const function kind of defeats the purpose of the LRU cache,
+// but it's necessary to conform to the interface. It should call
+// _updateNodeAccess(id) - but can't because of const
 const ConstNodePtr ElementCacheLRU::getNode(long id) const
 {
   return _nodes.find(id)->second.first;
@@ -373,19 +359,13 @@ const ConstNodePtr ElementCacheLRU::getNode(long id) const
 
 const NodePtr ElementCacheLRU::getNode(long id)
 {
+  _updateNodeAccess(id);
   return boost::const_pointer_cast<Node>(_nodes.find(id)->second.first);
 }
 
-const ConstRelationPtr ElementCacheLRU::getRelation(long id) const
-{
-  return _relations.find(id)->second.first;
-}
-
-const RelationPtr ElementCacheLRU::getRelation(long id)
-{
-  return boost::const_pointer_cast<Relation>(_relations.find(id)->second.first);
-}
-
+// This const function kind of defeats the purpose of the LRU cache,
+// but it's necessary to conform to the interface. It should call
+// _updateWayAccess - but can't because of const
 const ConstWayPtr ElementCacheLRU::getWay(long id) const
 {
   return _ways.find(id)->second.first;
@@ -393,7 +373,22 @@ const ConstWayPtr ElementCacheLRU::getWay(long id) const
 
 const WayPtr ElementCacheLRU::getWay(long id)
 {
+  _updateWayAccess(id);
   return boost::const_pointer_cast<Way>(_ways.find(id)->second.first);
+}
+
+// This const function kind of defeats the purpose of the LRU cache,
+// but it's necessary to conform to the interface. It should call
+// _updateRelationAccess - but can't becuase of const
+const ConstRelationPtr ElementCacheLRU::getRelation(long id) const
+{
+  return _relations.find(id)->second.first;
+}
+
+const RelationPtr ElementCacheLRU::getRelation(long id)
+{
+  _updateRelationAccess(id);
+  return boost::const_pointer_cast<Relation>(_relations.find(id)->second.first);
 }
 
 bool ElementCacheLRU::containsNode(long id) const
@@ -442,14 +437,17 @@ void ElementCacheLRU::removeElement(const ElementId &eid)
   switch ( eid.getType().getEnum() )
   {
   case ElementType::Node:
+    _nodeList.erase(_nodes.find(eid.getId())->second.second);
     _nodes.erase(_nodes.find(eid.getId()));
     break;
 
   case ElementType::Way:
+    _wayList.erase(_ways.find(eid.getId())->second.second);
     _ways.erase(_ways.find(eid.getId()));
     break;
 
   case ElementType::Relation:
+    _relationList.erase(_relations.find(eid.getId())->second.second);
     _relations.erase(_relations.find(eid.getId()));
     break;
 
@@ -466,13 +464,16 @@ void ElementCacheLRU::removeElements(const ElementType::Type type)
   switch ( type )
   {
   case ElementType::Node:
+    _nodeList.clear();
     _nodes.erase(_nodes.begin(), _nodes.end());
     break;
   case ElementType::Way:
+    _wayList.clear();
     _ways.erase(_ways.begin(), _ways.end());
     break;
 
   case ElementType::Relation:
+    _relationList.clear();
     _relations.erase(_relations.begin(), _relations.end());
     break;
 
@@ -481,8 +482,64 @@ void ElementCacheLRU::removeElements(const ElementType::Type type)
     break;
   }
 
-    resetElementIterators();
+  resetElementIterators();
 }
 
+void ElementCacheLRU::_updateNodeAccess(long id)
+{
+  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator> >::iterator nodeItr = _nodes.find(id);
+  _nodeList.erase(nodeItr->second.second);
+  _nodeList.push_front(nodeItr->first);
+  nodeItr->second.second = _nodeList.begin();
+}
+
+void ElementCacheLRU::_updateWayAccess(long id)
+{
+  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator> >::iterator wayItr = _ways.find(id);
+  _wayList.erase(wayItr->second.second);
+  _wayList.push_front(wayItr->first);
+  wayItr->second.second = _wayList.begin();
+}
+
+void ElementCacheLRU::_updateRelationAccess(long id)
+{
+  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator> >::iterator relItr = _relations.find(id);
+  _relationList.erase(relItr->second.second);
+  _relationList.push_front(relItr->first);
+  relItr->second.second = _relationList.begin();
+}
+
+std::string ElementCacheLRU::getLRUString(const ElementType::Type type)
+{
+  std::ostringstream list;
+  switch (type)
+  {
+  case ElementType::Node:
+    for (std::list<long>::iterator it = _nodeList.begin(); it != _nodeList.end(); ++it)
+    {
+      list << *it << ",";
+    }
+    break;
+
+  case ElementType::Way:
+    for (std::list<long>::iterator it = _wayList.begin(); it != _wayList.end(); ++it)
+    {
+      list << *it << ",";
+    }
+    break;
+
+  case ElementType::Relation:
+    for (std::list<long>::iterator it = _relationList.begin(); it != _relationList.end(); ++it)
+    {
+      list << *it << ",";
+    }
+    break;
+
+  default:
+    throw HootException("Invalid type passed");
+    break;
+  }
+  return list.str();
+}
 
 }
