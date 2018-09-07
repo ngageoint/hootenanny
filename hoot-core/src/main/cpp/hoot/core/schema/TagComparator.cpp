@@ -724,6 +724,16 @@ Tags TagComparator::overwriteMerge(Tags t1, Tags t2)
   return result;
 }
 
+Tags TagComparator::overwriteAllMerge(Tags t1, Tags t2)
+{
+  Tags result;
+
+  // use the tags in t1 first, then fall back to tags in t2
+  _overwriteRemainingTags(t1, t2, result);
+
+  return result;
+}
+
 void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result)
 {
   // Add t2 tags

@@ -1032,6 +1032,7 @@ mgcp = {
             ["t.amenity == 'ferry_terminal'","t['transport:type'] = 'maritime'"],
             ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
+            ["t.communication == 'line'","t['cable:type'] = 'communication'"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
@@ -1054,7 +1055,8 @@ mgcp = {
             ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.water == 'pond'","a.F_CODE = 'BH170'; t.natural = 'other_pool_type'"],
             ["t.water == 'river'","t.waterway = 'river'"],
-            ["t.waterway == 'riverbank'","t.waterway = 'river'"]
+            ["t.waterway == 'riverbank'","t.waterway = 'river'"],
+            ["t.wetland && t.natural == 'wetland'","delete t.natural"]
             ];
 
             mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
@@ -1234,9 +1236,11 @@ mgcp = {
             case 'village':
             case 'hamlet':
             case 'yes':  // We set this as a default when going to OSM
-                attrs.F_CODE = 'AL020'; // Built Up Area
-                delete tags.place;
-                break;
+                    if (geometryType == 'Point')
+                    {
+                        attrs.F_CODE = 'AL020'; // Built Up Area
+                        delete tags.place;                        
+                    }                break;
 
             case 'isolated_dwelling':
                 attrs.F_CODE = 'AL105'; // Settlement
@@ -2078,7 +2082,8 @@ mgcp = {
                 if (i.indexOf('hoot:') !== -1) delete tags[i];
             }
 
-            var str = JSON.stringify(tags);
+            // var str = JSON.stringify(tags);
+            var str = JSON.stringify(tags,Object.keys(tags).sort());
 
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.

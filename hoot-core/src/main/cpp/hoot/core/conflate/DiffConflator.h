@@ -156,6 +156,15 @@ public:
    */
   void storeOriginalMap(OsmMapPtr& pMap);
 
+  /**
+   * @brief addChangesToMap - Adds the changes to a map, as regular elements.
+   *                          This is useful for visualizing tag-diff output
+   *                          in JOSM and the hoot UI
+   * @param pMap - Map to add the changes to
+   * @param pChanges - Changeset provider
+   */
+  void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
+
 private:
 
   OsmMapPtr _pMap;

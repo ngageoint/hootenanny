@@ -108,8 +108,8 @@ public:
         HOOT_STR_EQUALS(Status::Unknown1, map->getWay(-12)->getStatus().getEnum());
         HOOT_STR_EQUALS(Status::Conflated, map->getWay(-13)->getStatus().getEnum());
         HOOT_STR_EQUALS(Status::Unknown2, map->getWay(-51)->getStatus().getEnum());
-        HOOT_STR_EQUALS(Status::Conflated + 1, map->getWay(-14)->getStatus().getEnum());
-        HOOT_STR_EQUALS(Status::Conflated + 2, map->getWay(-15)->getStatus().getEnum());
+        HOOT_STR_EQUALS(Status::EnumEnd + 1, map->getWay(-14)->getStatus().getEnum());
+        HOOT_STR_EQUALS(Status::EnumEnd + 2, map->getWay(-15)->getStatus().getEnum());
 
         HOOT_STR_EQUALS(0, map->getWay(-12)->getStatus().getInput());
         HOOT_STR_EQUALS(1, map->getWay(-51)->getStatus().getInput());

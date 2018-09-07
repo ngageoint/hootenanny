@@ -102,7 +102,7 @@ public:
    */
   const geos::geom::Envelope& getApproximateEnvelope(boost::shared_ptr<const ElementProvider> ep) const;
 
-  virtual ElementType getElementType() const { return ElementType::Way; }
+  virtual ElementType getElementType() const { return ElementType(ElementType::Way); }
 
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
