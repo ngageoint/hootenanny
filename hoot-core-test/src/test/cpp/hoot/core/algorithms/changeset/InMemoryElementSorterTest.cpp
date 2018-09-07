@@ -76,7 +76,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(InMemoryElementSorter, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(InMemoryElementSorterTest, "quick");
 
 }
 
