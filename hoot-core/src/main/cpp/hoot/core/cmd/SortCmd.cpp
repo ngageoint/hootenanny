@@ -64,6 +64,8 @@ public:
     LOG_VARD(input);
     LOG_VARD(output);
 
+    //TODO: replace this with ExternalMergeElementSorter
+
     //Technically, OsmFileSorter is already doing some input validation, but it was customized for
     //use with multiary ingest, so it also allows for an OGR input and then autoconverts it to
     //PBF...that seems kind of inappropriate for this command.  So, let's just do our own input

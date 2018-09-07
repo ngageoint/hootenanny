@@ -32,25 +32,35 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
 
 namespace hoot
 {
 
 class ExternalMergeElementSorterTest : public HootTestFixture
 {
-    //TODO: finish
     CPPUNIT_TEST_SUITE(ExternalMergeElementSorterTest);
-    //CPPUNIT_TEST(runTest);
+    CPPUNIT_TEST(runTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void runTest()
   {
-    /*OsmMapPtr inputMap(new OsmMap());
-    OsmMapReaderFactory::read(inputMap, "test-files/MultipolygonTest.osm", true);
+    //Since ExternalMergeElementSorter writes chunks of maps, it naturally sets off some of the
+    //incomplete map warnings which we don't want to see.
+    DisableLog dl;
 
-    ExternalMergeElementSorter elementSorter(inputMap);
+    const QString input = "test-files/MultipolygonTest.osm";
+    boost::shared_ptr<PartialOsmMapReader> reader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(input));
+    reader->setUseDataSourceIds(true);
+    reader->open(input);
+
+    ExternalMergeElementSorter elementSorter;
+    elementSorter.setMaxElementsPerFile(5);
+    elementSorter.sort(boost::dynamic_pointer_cast<ElementInputStream>(reader), "osm");
 
     int index = 0;
     while (elementSorter.hasMoreElements())
@@ -73,7 +83,8 @@ public:
       }
       index++;
     }
-    CPPUNIT_ASSERT_EQUAL(29, index);*/
+    CPPUNIT_ASSERT_EQUAL(29, index);
+    CPPUNIT_ASSERT_EQUAL(6, elementSorter.getNumTempFiles());
   }
 };
 

@@ -125,18 +125,16 @@ public:
 
     _parseBuffer();
 
-    //try to stream the changeset to avoid memory issues
-    //This element sorter implementation check is here temporarily during initial testing so that
-    //ElementExternalMergeSorter can be manually turned off until any issues are worked through.
+    //If streaming is enabled, try to stream the changeset to avoid memory issues.
     if (!ConfigOptions().getElementSorterInMemory() && _inputFormatsStreamable(input1, input2))
     {
-      _streamChangesets(input1, input2, outputs);
+      _sortExternallyAndStreamChangesetOutput(input1, input2, outputs);
     }
-    //Currently, not all formats are supported as streamable when sorting element IDs, so switch
-    //over to memory bound I/O.
+    //Currently, not all input formats are supported as streamable, so switch over to memory bound
+    //I/O if necessary.
     else
     {
-      _writeOutputs(_readInputs(input1, input2), outputs);
+      _sortInMemoryAndStreamChangesetOutput(_readInputsFully(input1, input2), outputs);
     }
 
     return 0;
@@ -162,18 +160,19 @@ private:
   }
 
   /*
-   * Streams changesets on input and output; the data must have timestamps
+   * Streams inputs, sorts externall, and streams changeset output
    */
-  void _streamChangesets(const QString input1, const QString input2, const QStringList outputs)
+  void _sortExternallyAndStreamChangesetOutput(const QString input1, const QString input2,
+                                               const QStringList outputs)
   {
     const bool singleInput = input2.trimmed().isEmpty();
 
-    QString msg = "Streaming changeset output from " + input1.right(25);
+    QString msg = "Streaming changeset input from " + input1.right(25);
     if (!singleInput)
     {
       msg += " and " + input2.right(25);
     }
-    msg += " to " + outputs.join(",").right(50);
+    msg += " sorting, and writing output(s) to " + outputs.join(",").right(50);
     LOG_INFO(msg);
 
     QList<ElementVisitorPtr> visitors;
@@ -194,11 +193,13 @@ private:
     ElementInputStreamPtr filteredSortedInputStream1(
       new ElementCriterionVisitorInputStream(inputStream1, elementCriterion, visitors));
 
-    boost::shared_ptr<ExternalMergeElementSorter> sorted1;
-    boost::shared_ptr<ExternalMergeElementSorter> sorted2;
+    boost::shared_ptr<ExternalMergeElementSorter> sorted1(new ExternalMergeElementSorter());
+    boost::shared_ptr<ExternalMergeElementSorter> sorted2(new ExternalMergeElementSorter());
+
     QFileInfo inputFileInfo1(input1);
-    sorted1.reset(
-      new ExternalMergeElementSorter(filteredSortedInputStream1, inputFileInfo1.completeSuffix()));
+    sorted1->sort(filteredSortedInputStream1, inputFileInfo1.completeSuffix());
+    reader1->finalizePartial();
+
     if (!singleInput)
     {
       boost::shared_ptr<PartialOsmMapReader> reader2 =
@@ -211,14 +212,13 @@ private:
         new ElementCriterionVisitorInputStream(inputStream2, elementCriterion, visitors));
 
       QFileInfo inputFileInfo2(input2);
-      sorted2.reset(
-        new ExternalMergeElementSorter(
-          filteredSortedInputStream2, inputFileInfo2.completeSuffix()));
+      sorted2->sort(filteredSortedInputStream2, inputFileInfo2.completeSuffix());
+      reader2->finalizePartial();
     }
 
     //Eventually this could be cleaned up to use OsmChangeWriterFactory and the OsmChange interface
     //instead.
-    _writeOutputs(
+    _streamChangesetOutput(
       outputs,
       boost::shared_ptr<ChangesetDeriver>(new ChangesetDeriver(sorted1, sorted2)));
   }
@@ -226,9 +226,17 @@ private:
   /*
    * Reads entire inputs into memory
    */
-  QList<OsmMapPtr> _readInputs(const QString input1, const QString input2)
+  QList<OsmMapPtr> _readInputsFully(const QString input1, const QString input2)
   {
     const bool singleInput = input2.trimmed().isEmpty();
+
+    QString msg = "Reading entire inputs into memory for " + input1;
+    if (!singleInput)
+    {
+      msg += " and " + input2;
+    }
+    msg += "...";
+    LOG_INFO(msg);
 
     //some in these datasets may have status=3 if you're loading conflated data, so use
     //reader.use.file.status and reader.keep.status.tag if you want to retain that value
@@ -267,10 +275,7 @@ private:
     return inputMaps;
   }
 
-  /*
-   * memory bound sorting
-   */
-  ChangesetDeriverPtr _sortInputs(QList<OsmMapPtr> inputMaps)
+  ChangesetDeriverPtr _sortInputsInMemory(QList<OsmMapPtr> inputMaps)
   {
     InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(inputMaps[0]));
     InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(inputMaps[1]));
@@ -279,11 +284,11 @@ private:
   }
 
   /*
-   * Writes output for the given changeset provider
+   * Writes changeset output for the given changeset provider
    */
-  void _writeOutputs(const QStringList outputs, ChangesetDeriverPtr changesetDeriver)
+  void _streamChangesetOutput(const QStringList outputs, ChangesetDeriverPtr changesetDeriver)
   {
-    LOG_INFO("Writing changeset output to " << outputs.join(",").right(50) << "...")
+    LOG_INFO("Streaming changeset output to " << outputs.join(",").right(50) << "...")
 
     LOG_VARD(outputs.size());
     QString stats;
@@ -312,11 +317,12 @@ private:
   }
 
   /*
-   * Writes output after first creating a changeset deriver with sorted elements
+   * Writes output after first sorting elements in memory
    */
-  void _writeOutputs(const QList<OsmMapPtr>& inputMaps, const QStringList outputs)
+  void _sortInMemoryAndStreamChangesetOutput(const QList<OsmMapPtr>& inputMaps,
+                                             const QStringList outputs)
   {
-    _writeOutputs(outputs, _sortInputs(inputMaps));
+    _streamChangesetOutput(outputs, _sortInputsInMemory(inputMaps));
   }
 
   void _parseBuffer()

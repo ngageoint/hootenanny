@@ -85,7 +85,6 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
 // Convenience function used when deriving a changeset
 boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
 {
-  //TODO: consolidate with logic in DeriveChangesetCmd
   InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
   InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
   boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
@@ -300,12 +299,14 @@ int ConflateCmd::runSimple(QStringList args)
     ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(result);
 
     if (!conflateTags)
-    { // only one changeset to write
+    {
+      // only one changeset to write
       OsmXmlChangesetFileWriter writer;
       writer.write(output, pGeoChanges);
     }
-    else if(separateOutput)
-    { // write two changesets
+    else if (separateOutput)
+    {
+      // write two changesets
       OsmXmlChangesetFileWriter writer;
       writer.write(output, pGeoChanges);
 
@@ -316,7 +317,8 @@ int ConflateCmd::runSimple(QStringList args)
       tagChangeWriter.write(outFileName, pTagChanges);
     }
     else
-    { // write unified output
+    {
+      // write unified output
       MultipleChangesetProviderPtr pChanges(new MultipleChangesetProvider(result->getProjection()));
       pChanges->addChangesetProvider(pGeoChanges);
       pChanges->addChangesetProvider(pTagChanges);

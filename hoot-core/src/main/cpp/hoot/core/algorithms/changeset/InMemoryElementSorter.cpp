@@ -43,7 +43,7 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
 {
   if (source)
   {
-    LOG_DEBUG(
+    LOG_INFO(
       "Sorting elements by element type for map with element count: " << source->getElementCount());
 
     _source = source;

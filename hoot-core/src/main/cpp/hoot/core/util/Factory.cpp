@@ -84,8 +84,8 @@ vector<std::string> Factory::getObjectNamesByBase(const std::string& baseName)
        it != _creators.end(); ++it)
   {
     boost::shared_ptr<ObjectCreator> c = it->second;
-    LOG_VART(c->getName());
-    LOG_VART(c->getBaseName());
+    //LOG_VART(c->getName());
+    //LOG_VART(c->getBaseName());
     if (c->getBaseName() == baseName)
     {
       result.push_back(c->getName());
