@@ -378,7 +378,8 @@ void DataConverter::_convert(const QString input, const QString output)
   }
 
   //try to stream the i/o
-  if (ElementStreamer::isStreamableIo(input, output))
+  if (ElementStreamer::isStreamableIo(input, output) &&
+      ElementStreamer::areValidStreamingOps(_convertOps))
   {
     //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
     //it is ever made streamable, then we'd have to refactor this.

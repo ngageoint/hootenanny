@@ -40,12 +40,8 @@
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/algorithms/changeset/ExternalMergeElementSorter.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
-#include <hoot/core/io/OsmChangeWriterFactory.h>
-#include <hoot/core/io/OsmChangeWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/ElementStreamer.h>
-#include <hoot/core/visitors/AddAttributesVisitor.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 
@@ -54,8 +50,6 @@
 
 // Qt
 #include <QUrl>
-#include <QDateTime>
-#include <QFileInfo>
 
 using namespace std;
 
@@ -126,7 +120,8 @@ public:
     _parseBuffer();
 
     //If streaming is enabled, try to stream the changeset to avoid memory issues.
-    if (!ConfigOptions().getElementSorterInMemory() && _inputFormatsStreamable(input1, input2))
+    if (ConfigOptions().getElementSorterElementBufferSize() != -1 &&
+        _inputFormatsStreamable(input1, input2))
     {
       _sortExternallyAndStreamChangesetOutput(input1, input2, outputs);
     }
@@ -196,8 +191,7 @@ private:
     boost::shared_ptr<ExternalMergeElementSorter> sorted1(new ExternalMergeElementSorter());
     boost::shared_ptr<ExternalMergeElementSorter> sorted2(new ExternalMergeElementSorter());
 
-    QFileInfo inputFileInfo1(input1);
-    sorted1->sort(filteredSortedInputStream1, inputFileInfo1.completeSuffix());
+    sorted1->sort(filteredSortedInputStream1);
     reader1->finalizePartial();
 
     if (!singleInput)
@@ -211,16 +205,20 @@ private:
       ElementInputStreamPtr filteredSortedInputStream2(
         new ElementCriterionVisitorInputStream(inputStream2, elementCriterion, visitors));
 
-      QFileInfo inputFileInfo2(input2);
-      sorted2->sort(filteredSortedInputStream2, inputFileInfo2.completeSuffix());
+      sorted2->sort(filteredSortedInputStream2);
       reader2->finalizePartial();
     }
 
     //Eventually this could be cleaned up to use OsmChangeWriterFactory and the OsmChange interface
     //instead.
-    _streamChangesetOutput(
-      outputs,
-      boost::shared_ptr<ChangesetDeriver>(new ChangesetDeriver(sorted1, sorted2)));
+    //TODO: this will break for multiple outputs; make a deep copy of ChangesetDeriver instead
+    //when there are multiple outputs
+    for (int i = 0; i < outputs.size(); i++)
+    {
+      _streamChangesetOutput(
+        boost::shared_ptr<ChangesetDeriver>(new ChangesetDeriver(sorted1, sorted2)),
+        outputs.at(i));
+    }
   }
 
   /*
@@ -286,28 +284,23 @@ private:
   /*
    * Writes changeset output for the given changeset provider
    */
-  void _streamChangesetOutput(const QStringList outputs, ChangesetDeriverPtr changesetDeriver)
+  void _streamChangesetOutput(ChangesetDeriverPtr changesetDeriver, const QString output)
   {
-    LOG_INFO("Streaming changeset output to " << outputs.join(",").right(50) << "...")
+    LOG_INFO("Streaming changeset output to " << output.right(25) << "...")
 
-    LOG_VARD(outputs.size());
     QString stats;
-    for (int i = 0; i < outputs.size(); i++)
-    {
-      const QString output = outputs[i];
-      LOG_VARD(output);
+    LOG_VARD(output);
 
-      if (output.endsWith(".osc"))
-      {
-        OsmXmlChangesetFileWriter writer;
-        writer.write(output, changesetDeriver);
-        stats = writer.getStatsTable();
-      }
-      else if (output.endsWith(".osc.sql"))
-      {
-        assert(!_osmApiDbUrl.isEmpty());;
-        OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetDeriver);
-      }
+    if (output.endsWith(".osc"))
+    {
+      OsmXmlChangesetFileWriter writer;
+      writer.write(output, changesetDeriver);
+      stats = writer.getStatsTable();
+    }
+    else if (output.endsWith(".osc.sql"))
+    {
+      assert(!_osmApiDbUrl.isEmpty());
+      OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetDeriver);
     }
 
     if (_printStats)
@@ -322,7 +315,11 @@ private:
   void _sortInMemoryAndStreamChangesetOutput(const QList<OsmMapPtr>& inputMaps,
                                              const QStringList outputs)
   {
-    _streamChangesetOutput(outputs, _sortInputsInMemory(inputMaps));
+    for (int i = 0; i < outputs.size(); i++)
+    {
+      //TODO: tmake a deep copy of ChangesetDeriver instead when there are multiple outputs
+      _streamChangesetOutput(_sortInputsInMemory(inputMaps), outputs.at(i));
+    }
   }
 
   void _parseBuffer()

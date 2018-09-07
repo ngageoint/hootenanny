@@ -72,6 +72,8 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
 void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
 {  
   LOG_VARD(path);
+  LOG_VARD(cs->hasMoreChanges());
+
   QFileInfo info(path);
   info.setCaching(false);
   QString file = info.baseName();

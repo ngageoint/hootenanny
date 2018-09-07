@@ -49,9 +49,9 @@ public:
   {
     //Since ExternalMergeElementSorter writes chunks of maps, it naturally sets off some of the
     //incomplete map warnings which we don't want to see.
-    DisableLog dl;
+    //DisableLog dl;
 
-    const QString input = "test-files/MultipolygonTest.osm";
+    const QString input = "test-files/algorithms/changeset/ExternalMergeElementSorterTest.osm";
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(input));
@@ -60,7 +60,9 @@ public:
 
     ExternalMergeElementSorter elementSorter;
     elementSorter.setMaxElementsPerFile(5);
-    elementSorter.sort(boost::dynamic_pointer_cast<ElementInputStream>(reader), "osm");
+    elementSorter.setTempFormat("osm");
+    elementSorter.setRetainTempFiles(true);
+    elementSorter.sort(boost::dynamic_pointer_cast<ElementInputStream>(reader));
 
     int index = 0;
     while (elementSorter.hasMoreElements())

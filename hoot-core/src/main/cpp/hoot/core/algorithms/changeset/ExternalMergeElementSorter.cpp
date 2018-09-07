@@ -14,8 +14,11 @@ namespace hoot
 const QString ExternalMergeElementSorter::SORT_TEMP_FILE_BASE_NAME = "element-sorter-temp-XXXXXX";
 
 ExternalMergeElementSorter::ExternalMergeElementSorter() :
-_maxElementsPerFile(ConfigOptions().getElementSorterExternalMergeMaxElementSize())
+_tempFormat(ConfigOptions().getElementSorterExternalTempFormat()),
+_maxElementsPerFile(ConfigOptions().getElementSorterElementBufferSize()),
+_retainTempFiles(false)
 {
+  assert(_maxElementsPerFile != -1);
 }
 
 ExternalMergeElementSorter::~ExternalMergeElementSorter()
@@ -55,10 +58,9 @@ ElementPtr ExternalMergeElementSorter::readNextElement()
   return _sortedElements->readNextElement();
 }
 
-void ExternalMergeElementSorter::sort(ElementInputStreamPtr input, QString inputFileExtension)
+void ExternalMergeElementSorter::sort(ElementInputStreamPtr input)
 {
-  _inputFileExtension = inputFileExtension;
-  LOG_VART(_inputFileExtension);
+  LOG_VART(_tempFormat);
   LOG_VART(_maxElementsPerFile);
 
   _sort(input);
@@ -77,19 +79,19 @@ void ExternalMergeElementSorter::_sort(ElementInputStreamPtr input)
   }
   else
   {
-    _sortTempFile = _tempOutputFiles.at(0);
+    _sortFinalOutput = _tempOutputFiles.at(0);
   }
 }
 
 void ExternalMergeElementSorter::_initElementStream()
 {
-  LOG_DEBUG("Opening reader for element stream at " << _sortTempFile->fileName() << "...");
+  LOG_DEBUG("Opening reader for element stream at " << _sortFinalOutput->fileName() << "...");
 
   _sortedElementsReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::getInstance().createReader(_sortTempFile->fileName()));
+      OsmMapReaderFactory::getInstance().createReader(_sortFinalOutput->fileName()));
   _sortedElementsReader->setUseDataSourceIds(true);
-  _sortedElementsReader->open(_sortTempFile->fileName());
+  _sortedElementsReader->open(_sortFinalOutput->fileName());
   _sortedElements = boost::dynamic_pointer_cast<ElementInputStream>(_sortedElementsReader);
 }
 
@@ -133,9 +135,12 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
       tempOutputFile.reset(
         new QTemporaryFile(
           ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME +
-          "." + _inputFileExtension));
-      //for debugging only
-      //tempOutputFile->setAutoRemove(false);
+          "." + _tempFormat));
+      if (_retainTempFiles)
+      {
+        //for debugging only
+        tempOutputFile->setAutoRemove(false);
+      }
       if (!tempOutputFile->open())
       {
         throw HootException("Unable to open sort temp file: " + tempOutputFile->fileName() + ".");
@@ -189,12 +194,15 @@ void ExternalMergeElementSorter::_mergeSortedFiles()
   writer->finalizePartial();
   writer->close();
 
-  //for debugging only; this will only be useful if you temporarily turn off auto removal of the
-  //temp file
-  LOG_DEBUG("Sorted temp files: ");
-  for (int i = 0; i < _tempOutputFiles.size(); i++)
+  if (_retainTempFiles)
   {
-    LOG_VARD(_tempOutputFiles.at(i)->fileName());
+    //for debugging only; this will only be useful if you temporarily turn off auto removal of the
+    //temp file
+    LOG_DEBUG("Sorted temp files: ");
+    for (int i = 0; i < _tempOutputFiles.size(); i++)
+    {
+      LOG_VARD(_tempOutputFiles.at(i)->fileName());
+    }
   }
 }
 
@@ -243,25 +251,28 @@ boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutp
 {
   LOG_DEBUG("Initializing final output...");
 
-  _sortTempFile.reset(
+  _sortFinalOutput.reset(
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + "." +
-      _inputFileExtension));
-  //for debugging only
-  //_sortTempFile->setAutoRemove(false);
-  if (!_sortTempFile->open())
+      _tempFormat));
+  if (_retainTempFiles)
   {
-    throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
+    //for debugging only
+    _sortFinalOutput->setAutoRemove(false);
+  }
+  if (!_sortFinalOutput->open())
+  {
+    throw HootException("Unable to open sort temp file: " + _sortFinalOutput->fileName() + ".");
   }
   else
   {
     LOG_DEBUG(
-      "Opened temp final output file: " << _sortTempFile->fileName() << " for sorted output.");
+      "Opened temp final output file: " << _sortFinalOutput->fileName() << " for sorted output.");
   }
   boost::shared_ptr<PartialOsmMapWriter> writer =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-      OsmMapWriterFactory::getInstance().createWriter(_sortTempFile->fileName()));
-  writer->open(_sortTempFile->fileName());
+      OsmMapWriterFactory::getInstance().createWriter(_sortFinalOutput->fileName()));
+  writer->open(_sortFinalOutput->fileName());
 
   return writer;
 }

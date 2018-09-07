@@ -406,8 +406,6 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     double x = _convertLon(lon);
     double y = _convertLat(lat);
     _denseNodeTmp[i] = Node::newSp(_status, newId, x, y, _circularError);
-    //NodePtr n(Node::newSp(_status, newId, x, y, _circularError));
-    //nodes[i].reset(new Node(_status, newId, x, y, _circularError));
     if (_map->containsNode(newId))
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -1259,7 +1257,7 @@ void OsmPbfReader::initializePartial()
   _firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
-  if ( _in != NULL )
+  if (_in != NULL)
   {
     _blobs = loadOsmDataBlobOffsets(*_in);
     _in->seekg (0, ios::end);    _fileLength = _in->tellg();
@@ -1270,7 +1268,7 @@ void OsmPbfReader::initializePartial()
 bool OsmPbfReader::hasMoreElements()
 {
   // If we've closed/finalized, definitely no
-  if ( _in == NULL )
+  if (_in == NULL)
   {
     return false;
   }

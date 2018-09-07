@@ -47,7 +47,10 @@ public:
   void runTest()
   {
     OsmMapPtr inputMap(new OsmMap());
-    OsmMapReaderFactory::read(inputMap, "test-files/MultipolygonTest.osm", true);
+    OsmMapReaderFactory::read(
+      inputMap,
+      "test-files/algorithms/changeset/ExternalMergeElementSorterTest.osm",
+      true);
 
     InMemoryElementSorter elementSorter(inputMap);
 

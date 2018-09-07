@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+   <way id='-1558' action='modify' visible='true'>
+    <nd ref='-1456' />
+    <nd ref='-1470' />
+    <nd ref='-1466' />
+    <nd ref='-1460' />
+    <nd ref='-1456' />
+  </way>
+  <node id='-1474' action='modify' visible='true' lat='0.29190791154' lon='0.28166994244' />
+  <node id='-1472' action='modify' visible='true' lat='0.2220878946' lon='0.33615888193' />
+  <node id='-1470' action='modify' visible='true' lat='0.3172672996' lon='0.37739193759' />
+  <node id='-1468' action='modify' visible='true' lat='0.22025483131' lon='0.30700733777' />
+  <node id='-1466' action='modify' visible='true' lat='0.16820784834' lon='0.37739193759' />
+  <node id='-1454' action='modify' visible='true' lat='0.19807150785' lon='0.2798368655' />
+    <relation id='-1588' action='modify' visible='true'>
+    <tag k='landuse' v='farmland' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <relation id='-1594' action='modify' visible='true'>
+    <tag k='landuse' v='farmland' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <node id='-1452' action='modify' visible='true' lat='0.27019877541' lon='0.33615888193' />
+  <node id='-1464' action='modify' visible='true' lat='0.29519437963' lon='0.35767518478' />
+  <node id='-1462' action='modify' visible='true' lat='0.19936768119' lon='0.35675864631' />
+  <node id='-1460' action='modify' visible='true' lat='0.16820784834' lon='0.25555091051' />
+  <node id='-1458' action='modify' visible='true' lat='0.27019877541' lon='0.30387807969' />
+  <node id='-1456' action='modify' visible='true' lat='0.31208265324' lon='0.25555091051' />
+  <way id='-1556' visible='true'>
+    <nd ref='-1458' />
+    <nd ref='-1452' />
+    <nd ref='-1472' />
+    <nd ref='-1468' />
+    <nd ref='-1458' />
+  </way>
+  <way id='-1554' action='modify' visible='true'>
+    <nd ref='-1462' />
+    <nd ref='-1454' />
+    <nd ref='-1474' />
+    <nd ref='-1464' />
+    <nd ref='-1462' />
+  </way>
+  <node id='-1446' action='modify' visible='true' lat='0.23151375101' lon='0.32894567128' />
+  <node id='-1444' action='modify' visible='true' lat='0.23165356164' lon='0.31569455694' />
+  <relation id='-1600' action='modify' visible='true'>
+    <tag k='landuse' v='farmland' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <relation id='-1598' action='modify' visible='true'>
+    <tag k='landuse' v='farmland' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <node id='-1450' visible='true' lat='0.26312708976' lon='0.31499563849' />
+  <node id='-1448' action='modify' visible='true' lat='0.26221533037' lon='0.32759389276' />
+  <relation id='-1596' action='modify' visible='true'>
+    <tag k='landuse' v='farmland' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <relation id='-1592' action='modify' visible='true'>
+    <member type='way' ref='-1558' role='outer' />
+    <member type='way' ref='-1554' role='inner' />
+    <member type='way' ref='-1556' role='outer' />
+    <member type='way' ref='-1552' role='inner' />
+    <tag k='landuse' v='farmland' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <relation id='-1590' action='modify' visible='true'>
+    <tag k='landuse' v='farmland' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <relation id='-1586' action='modify' visible='true'>
+    <tag k='landuse' v='farmland' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <way id='-1552' visible='true'>
+    <nd ref='-1450' />
+    <nd ref='-1448' />
+    <nd ref='-1446' />
+    <nd ref='-1444' />
+    <nd ref='-1450' />
+  </way>
+  <relation id='-1584' action='modify' visible='true'>
+    <tag k='landuse' v='farmland' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+</osm>

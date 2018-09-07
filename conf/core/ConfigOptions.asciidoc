@@ -689,22 +689,21 @@ honored by all ElementCriterionConsumers.  Example setting which pass element cr
 ElementCriterionConsumers: remove.elements.visitor.element.criterion,
 set.tag.value.visitor.element.criterion, etc.
 
-=== element.sorter.in.memory
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, all element sorting will occur in memory.  If false, temporary disk storage will be used
-for storage if the number of elements to be sorted is larger than
-element.sorter.external.merge.max.element.size.
-
-=== element.sorter.external.merge.max.element.size
+=== element.sorter.element.buffer.size
 
 * Data Type: long
-* Default Value: `100000`
+* Default Value: `-1`
 
-When the element.sorter.in.memory is set to false, the maximum number of elements to be written to
-a single file during sorting.
+The maximum number of elements allowed to be in memory during element sorting.  A value of -1
+indicates no limit.
+
+=== element.sorter.external.temp.format
+
+* Data Type: string
+* Default Value: `osm`
+
+The OSM format to use for writing sorted temp files.  Valid values are any extension Hootenanny can
+both read from and write to.
 
 === english.words.files
 
