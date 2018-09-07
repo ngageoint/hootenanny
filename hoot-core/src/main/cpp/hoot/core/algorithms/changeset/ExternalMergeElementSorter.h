@@ -1,9 +1,8 @@
 
-#ifndef ELEMENT_EXTERNAL_MERGE_SORTER_H
-#define ELEMENT_EXTERNAL_MERGE_SORTER_H
+#ifndef EXTERNAL_MERGE_ELEMENT_SORTER_H
+#define EXTERNAL_MERGE_ELEMENT_SORTER_H
 
 // Hoot
-#include "ElementSorter.h"
 #include <hoot/core/io/ElementInputStream.h>
 
 // Qt
@@ -15,7 +14,7 @@ namespace hoot
 /**
   Very much influenced by http://www.techiedelight.com/external-merge-sort
  */
-class ElementExternalMergeSorter : public ElementSorter
+class ExternalMergeElementSorter : public ElementInputStream
 {
 
 public:
@@ -36,7 +35,7 @@ public:
     }
   };
 
-  ElementExternalMergeSorter(ElementInputStreamPtr input, const QString inputFileExtension);
+  ExternalMergeElementSorter(ElementInputStreamPtr input, const QString inputFileExtension);
 
   /**
    * @see ElementInputStream
@@ -55,14 +54,12 @@ public:
    */
   virtual ElementPtr readNextElement();
 
-  static bool isSupportedInputFormat(const QString input);
-
 private:
 
   boost::shared_ptr<QTemporaryFile> _sortTempFile;
   ElementInputStreamPtr _sortedElements;
   QString _inputFileExtension;
-  int _maxElementsPerFile;
+  long _maxElementsPerFile;
 
   void _sort(ElementInputStreamPtr input);
   QList<boost::shared_ptr<QTemporaryFile>> _createSortedFileOutputs(ElementInputStreamPtr input);
@@ -71,4 +68,4 @@ private:
 
 }
 
-#endif // ELEMENT_EXTERNAL_MERGE_SORTER_H
+#endif // EXTERNAL_MERGE_ELEMENT_SORTER_H

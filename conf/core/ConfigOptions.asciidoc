@@ -333,13 +333,6 @@ derivation time.
 
 The text description that is written to the OSM API database with a changeset.
 
-=== changeset.element.sorter
-
-* Data Type: string
-* Default Value: `hoot::NonMemoryBoundElementSorter`
-
-The ElementSorter implementation to use.  This setting is likely temporary.
-
 === changeset.max.size
 
 * Data Type: long
@@ -695,6 +688,23 @@ If true, element criterions passed to an ElementCriterionConsumer will be negate
 honored by all ElementCriterionConsumers.  Example setting which pass element criterions to
 ElementCriterionConsumers: remove.elements.visitor.element.criterion,
 set.tag.value.visitor.element.criterion, etc.
+
+=== element.sorter.in.memory
+
+* Data Type: bool
+* Default Value: `false``
+
+If true, all element sorting will occur in memory.  If false, temporary disk storage will be used
+for storage if the number of elements to be sorted is larger than
+element.sorter.external.merge.max.element.size.
+
+=== element.sorter.external.merge.max.element.size
+
+* Data Type: long
+* Default Value: `100000`
+
+When the element.sorter.in.memory is set to false, the maximum number of elements to be written to
+a single file during sorting.
 
 === english.words.files
 

@@ -1,5 +1,5 @@
 
-#include "ElementExternalMergeSorter.h"
+#include "ExternalMergeElementSorter.h"
 
 // Hoot
 #include <hoot/core/util/Log.h>
@@ -19,12 +19,11 @@
 namespace hoot
 {
 
-ElementExternalMergeSorter::ElementExternalMergeSorter(ElementInputStreamPtr input,
+ExternalMergeElementSorter::ExternalMergeElementSorter(ElementInputStreamPtr input,
                                                        const QString inputFileExtension) :
 ElementSorter(ConstOsmMapPtr()),
 _inputFileExtension(inputFileExtension),
-//TODO: put vals in config
-_maxElementsPerFile(1000)
+_maxElementsPerFile(ConfigOptions().getElementSorterExternalMergeMaxElementSize())
 {
   _sort(input);
 
@@ -37,40 +36,40 @@ _maxElementsPerFile(1000)
   _sortedElements = boost::dynamic_pointer_cast<ElementInputStream>(reader);
 }
 
-void ElementExternalMergeSorter::close()
+void ExternalMergeElementSorter::close()
 {
   _sortedElements->close();
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementExternalMergeSorter::getProjection() const
+boost::shared_ptr<OGRSpatialReference> ExternalMergeElementSorter::getProjection() const
 {
   return _sortedElements->getProjection();
 }
 
-bool ElementExternalMergeSorter::hasMoreElements()
+bool ExternalMergeElementSorter::hasMoreElements()
 {
   return _sortedElements->hasMoreElements();
 }
 
-ElementPtr ElementExternalMergeSorter::readNextElement()
+ElementPtr ExternalMergeElementSorter::readNextElement()
 {
   return _sortedElements->readNextElement();
 }
 
-bool ElementExternalMergeSorter::isSupportedInputFormat(const QString /*input*/)
+void ExternalMergeElementSorter::_sort(ElementInputStreamPtr input)
 {
-  //return OsmFileSorter::isSupportedInputFormat(input);
-  //??
-  return true;
-}
+  LOG_INFO("Sorting input by element ID and type...");
 
-void ElementExternalMergeSorter::_sort(ElementInputStreamPtr input)
-{
-  LOG_INFO("Sorting input by element ID...");
-
-  _mergeFiles(_createSortedFileOutputs(input));
-
-  LOG_DEBUG("input sorted by element ID to output: " << _sortTempFile->fileName() << ".");
+  //if only one file was written, skip merging
+  QList<boost::shared_ptr<QTemporaryFile>> tempOutputFiles = _createSortedFileOutputs(input);
+  if (tempOutputFiles.size() > 1)
+  {
+    _mergeFiles(tempOutputFiles);
+  }
+  else
+  {
+    _sortTempFile = tempOutputFiles.at(0);
+  }
 }
 
 bool elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2)
@@ -86,7 +85,7 @@ bool elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2)
   return e1->getId() < e2->getId();
 }
 
-QList<boost::shared_ptr<QTemporaryFile>> ElementExternalMergeSorter::_createSortedFileOutputs(
+QList<boost::shared_ptr<QTemporaryFile>> ExternalMergeElementSorter::_createSortedFileOutputs(
   ElementInputStreamPtr input)
 {
   long elementCtr = 0;
@@ -146,7 +145,7 @@ QList<boost::shared_ptr<QTemporaryFile>> ElementExternalMergeSorter::_createSort
   return tempOutputFiles;
 }
 
-void ElementExternalMergeSorter::_mergeFiles(
+void ExternalMergeElementSorter::_mergeFiles(
                                      QList<boost::shared_ptr<QTemporaryFile>> tempOutputFiles)
 {
   const QString sortTempFileBaseName = "element-sorter-temp-XXXXXX";
@@ -160,6 +159,7 @@ void ElementExternalMergeSorter::_mergeFiles(
   {
     throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
   }
+
   boost::shared_ptr<PartialOsmMapWriter> writer =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::getInstance().createWriter(_sortTempFile->fileName()));
@@ -195,7 +195,7 @@ void ElementExternalMergeSorter::_mergeFiles(
     }
     else
     {
-      root.reset(new Relation(Status::Unknown1, LONG_MAX, 15.0)); //??
+      root.reset(new Relation(Status::Invalid, LONG_MAX, 15.0)); //??
       i++;
     }
 

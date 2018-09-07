@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
-#include <hoot/core/algorithms/changeset/ElementSorter.h>
+#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -38,7 +38,7 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/IoUtils.h>
-#include <hoot/core/algorithms/changeset/ElementExternalMergeSorter.h>
+#include <hoot/core/algorithms/changeset/ExternalMergeElementSorter.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
 #include <hoot/core/io/OsmChangeWriter.h>
@@ -128,8 +128,7 @@ public:
     //try to stream the changeset to avoid memory issues
     //This element sorter implementation check is here temporarily during initial testing so that
     //ElementExternalMergeSorter can be manually turned off until any issues are worked through.
-    if (ConfigOptions().getChangesetElementSorter() == "hoot::ElementExternalMergeSorter" &&
-        _inputFormatsStreamable(input1, input2))
+    if (!ConfigOptions().getElementSorterInMemory() && _inputFormatsStreamable(input1, input2))
     {
       _streamChangesets(input1, input2, outputs);
     }
@@ -152,17 +151,12 @@ private:
     const bool singleInput = input2.trimmed().isEmpty();
     LOG_VART(singleInput);
     LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input1));
-    LOG_VARD(ElementExternalMergeSorter::isSupportedInputFormat(input1));
-    bool streamable =
-      OsmMapReaderFactory::getInstance().hasElementInputStream(input1) &&
-      ElementExternalMergeSorter::isSupportedInputFormat(input1);
+    bool streamable = OsmMapReaderFactory::getInstance().hasElementInputStream(input1);
     if (!singleInput)
     {
       LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input2));
-      LOG_VARD(ElementExternalMergeSorter::isSupportedInputFormat(input2));
       streamable =
-        streamable && OsmMapReaderFactory::getInstance().hasElementInputStream(input2) &&
-        ElementExternalMergeSorter::isSupportedInputFormat(input2);
+        streamable && OsmMapReaderFactory::getInstance().hasElementInputStream(input2);
     }
     return streamable;
   }
@@ -200,11 +194,11 @@ private:
     ElementInputStreamPtr filteredSortedInputStream1(
       new ElementCriterionVisitorInputStream(inputStream1, elementCriterion, visitors));
 
-    ElementSorterPtr sorted1;
-    ElementSorterPtr sorted2;
+    boost::shared_ptr<ExternalMergeElementSorter> sorted1;
+    boost::shared_ptr<ExternalMergeElementSorter> sorted2;
     QFileInfo inputFileInfo1(input1);
     sorted1.reset(
-      new ElementExternalMergeSorter(filteredSortedInputStream1, inputFileInfo1.completeSuffix()));
+      new ExternalMergeElementSorter(filteredSortedInputStream1, inputFileInfo1.completeSuffix()));
     if (!singleInput)
     {
       boost::shared_ptr<PartialOsmMapReader> reader2 =
@@ -218,7 +212,7 @@ private:
 
       QFileInfo inputFileInfo2(input2);
       sorted2.reset(
-        new ElementExternalMergeSorter(
+        new ExternalMergeElementSorter(
           filteredSortedInputStream2, inputFileInfo2.completeSuffix()));
     }
 
@@ -278,8 +272,8 @@ private:
    */
   ChangesetDeriverPtr _sortInputs(QList<OsmMapPtr> inputMaps)
   {
-    ElementSorterPtr sorted1(new ElementSorter(inputMaps[0]));
-    ElementSorterPtr sorted2(new ElementSorter(inputMaps[1]));
+    InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(inputMaps[0]));
+    InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(inputMaps[1]));
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
     return delta;
   }

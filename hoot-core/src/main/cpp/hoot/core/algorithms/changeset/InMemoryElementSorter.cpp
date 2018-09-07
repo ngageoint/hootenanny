@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ElementSorter.h"
+#include "InMemoryElementSorter.h"
 
 #include <hoot/core/util/Log.h>
 
@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-ElementSorter::ElementSorter(ConstOsmMapPtr source) :
+InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
   _nodeIndex(0),
   _wayIndex(0),
   _relationIndex(0)
@@ -70,19 +70,19 @@ ElementSorter::ElementSorter(ConstOsmMapPtr source) :
   }
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementSorter::getProjection() const
+boost::shared_ptr<OGRSpatialReference> InMemoryElementSorter::getProjection() const
 {
   return _source->getProjection();
 }
 
-bool ElementSorter::hasMoreElements()
+bool InMemoryElementSorter::hasMoreElements()
 {
   return _nodeIndex != _nodeIds.size() ||
     _wayIndex != _wayIds.size() ||
     _relationIndex != _relationIds.size();
 }
 
-ElementPtr ElementSorter::readNextElement()
+ElementPtr InMemoryElementSorter::readNextElement()
 {
   ElementPtr result;
   ConstElementPtr cr;

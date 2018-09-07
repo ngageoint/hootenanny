@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTSORTER_H
-#define ELEMENTSORTER_H
+#ifndef IN_MEMORY_ELEMENT_SORTER_H
+#define IN_MEMORY_ELEMENT_SORTER_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
@@ -41,23 +41,20 @@ namespace hoot
 /**
  * An element stream that returns elements in the order of node, way, then relation, sorted by
  * element ID; memory bound as it requires the entire map be passed in to sort the IDs
- *
- * Eventually, this could be completely replaced by NonMemoryBoundElementSorter.  However, it
- * would be better to wait until #2596 is completed to do that.
  */
-class ElementSorter : public ElementInputStream
+class InMemoryElementSorter : public ElementInputStream
 {
 
 public:
 
-  ElementSorter(ConstOsmMapPtr map);
+  InMemoryElementSorter(ConstOsmMapPtr map);
 
   /**
    * @see ElementInputStream
    */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  virtual ~ElementSorter() {}
+  virtual ~InMemoryElementSorter() {}
 
   /**
    * @see ElementInputStream
@@ -83,8 +80,8 @@ private:
 
 };
 
-typedef boost::shared_ptr<ElementSorter> ElementSorterPtr;
+typedef boost::shared_ptr<InMemoryElementSorter> InMemoryElementSorterPtr;
 
 }
 
-#endif // ELEMENTSORTER_H
+#endif // IN_MEMORY_ELEMENT_SORTER_H
