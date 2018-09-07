@@ -692,7 +692,7 @@ set.tag.value.visitor.element.criterion, etc.
 === element.sorter.in.memory
 
 * Data Type: bool
-* Default Value: `false``
+* Default Value: `false`
 
 If true, all element sorting will occur in memory.  If false, temporary disk storage will be used
 for storage if the number of elements to be sorted is larger than
