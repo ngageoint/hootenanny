@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef OSM_API_NETWORK_REQUEST_H
-#define OSM_API_NETWORK_REQUEST_H
+#ifndef HOOT_NETWORK_REQUEST_H
+#define HOOT_NETWORK_REQUEST_H
 
 //  Boost
 #include <boost/shared_ptr.hpp>
@@ -42,11 +42,11 @@ namespace hoot
 {
 
 /** Class for sending HTTP network requests to an OSM API */
-class OsmApiNetworkRequest
+class HootNetworkRequest
 {
 public:
   /** Constructor */
-  OsmApiNetworkRequest();
+  HootNetworkRequest();
   /**
    * @brief networkRequest Function to make the actual request
    * @param url URL for the request
@@ -89,8 +89,8 @@ private:
   QString _error;
 };
 
-typedef boost::shared_ptr<OsmApiNetworkRequest> OsmApiNetworkRequestPtr;
+typedef boost::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;
 
 }
 
-#endif  //  OSM_API_NETWORK_REQUEST_H
+#endif  //  HOOT_NETWORK_REQUEST_H

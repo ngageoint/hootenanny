@@ -102,7 +102,7 @@ public:
     osm.setUrl(OSM_API_URL);
 
     QList<QString> changesets;
-    OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
+    HootNetworkRequestPtr request(new HootNetworkRequest());
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.queryCapabilities(request));
     CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
@@ -139,7 +139,7 @@ public:
     osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
-    OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
+    HootNetworkRequestPtr request(new HootNetworkRequest());
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.validatePermissions(request));
     CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
