@@ -75,10 +75,23 @@ public class OAuth1Resource {
         OAuthConsumerSupport s = oauthRestTemplate.getSupport();
         ProtectedResourceDetails r = oauthRestTemplate.getResource();
         HttpSession sess = getSession();
+        if (sess == null) {
+            return Response.status(401).build();
+        }
         sess.setMaxInactiveInterval(31536000);
-
         OAuthConsumerToken requestToken = tokenServices.getToken(r.getId());
-        OAuthConsumerToken accessToken = s.getAccessToken(r /* <== Specifying this was important [!] */, requestToken, oauth_verifier);
+        if (requestToken == null) {
+            return Response.status(401).build();
+        }
+        OAuthConsumerToken accessToken = null;
+        try {
+            accessToken = s.getAccessToken(r /* <== Specifying this was important [!] */, requestToken, oauth_verifier);
+        } catch (Exception e) {
+            // Pass.
+        }
+        if (accessToken == null) {
+            return Response.status(401).build();
+        }
         // Save this access token to our HTTP Session based token services:
         tokenServices.storeToken(r.getId(), accessToken);
         // Save this access token to our security context, used by
