@@ -39,7 +39,7 @@ import hoot.services.models.db.Users;
 
 @Service
 public interface UserManager {
-    void upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
+    Users upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
     Users parseUser(String xml) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
 
     Timestamp parseTimestamp(String timestamp);

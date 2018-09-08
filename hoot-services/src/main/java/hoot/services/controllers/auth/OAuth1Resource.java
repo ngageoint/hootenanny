@@ -53,6 +53,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.xml.sax.SAXException;
 
+import hoot.services.models.db.Users;
+
 @Controller
 @Path("")
 @Transactional
@@ -73,6 +75,7 @@ public class OAuth1Resource {
         OAuthConsumerSupport s = oauthRestTemplate.getSupport();
         ProtectedResourceDetails r = oauthRestTemplate.getResource();
         HttpSession sess = getSession();
+        sess.setMaxInactiveInterval(31536000);
 
         OAuthConsumerToken requestToken = tokenServices.getToken(r.getId());
         OAuthConsumerToken accessToken = s.getAccessToken(r /* <== Specifying this was important [!] */, requestToken, oauth_verifier);
@@ -85,8 +88,9 @@ public class OAuth1Resource {
         context.getAccessTokens().put(r.getId(), accessToken);
 
         String response = oauthRestTemplate.getForObject("https://api.openstreetmap.org/api/0.6/user/details", String.class);
+        Users user;
         try {
-            userManager.upsert(response, accessToken, sess.getId());
+            user = userManager.upsert(response, accessToken, sess.getId());
         } catch (InvalidUserProfileException | SAXException | IOException | ParserConfigurationException e) {
             logger.error("Failed to read user profile from oauth provider", e);
             return Response.status(502).build();
@@ -95,7 +99,7 @@ public class OAuth1Resource {
             return Response.status(500).build();
         }
 
-        return Response.status(200).entity("{}").type(MediaType.APPLICATION_JSON).build();
+        return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
     }
 
     @GET
@@ -106,7 +110,7 @@ public class OAuth1Resource {
         ProtectedResourceDetails r = oauthRestTemplate.getResource();
         OAuthConsumerToken requestToken = null;
         try {
-            requestToken = s.getUnauthorizedRequestToken(r, "http://host.local/hoot-services/auth/oauth1");
+            requestToken = s.getUnauthorizedRequestToken(r, "http://localhost:8080/");
         } catch (OAuthRequestFailedException e) {
             logger.error("Failed to obtain request token", e);
             return Response.status(502).build();

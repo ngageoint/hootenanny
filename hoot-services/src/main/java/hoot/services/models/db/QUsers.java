@@ -60,7 +60,6 @@ public class QUsers extends com.querydsl.sql.RelationalPathBase<Users> {
 
     public final StringPath provider_access_key = createString("provider_access_key");
     public final StringPath provider_access_token = createString("provider_access_token");
-    public final StringPath session_id = createString("session_id");
 
     public final DateTimePath<java.sql.Timestamp> hootservices_last_authorize = createDateTime(
             "hootservices_last_authorize", java.sql.Timestamp.class);
@@ -101,14 +100,11 @@ public class QUsers extends com.querydsl.sql.RelationalPathBase<Users> {
                 ColumnMetadata.named("provider_access_key").withIndex(4).ofType(Types.VARCHAR).withSize(255).notNull());
         addMetadata(provider_access_token, ColumnMetadata.named("provider_access_token").withIndex(5)
                 .ofType(Types.VARCHAR).withSize(255).notNull());
-        addMetadata(session_id,
-                ColumnMetadata.named("session_id").withIndex(6).ofType(Types.CHAR).withSize(36).notNull());
-
-        addMetadata(hootservices_last_authorize, ColumnMetadata.named("hootservices_last_authorize").withIndex(7)
+        addMetadata(hootservices_last_authorize, ColumnMetadata.named("hootservices_last_authorize").withIndex(6)
                 .ofType(Types.TIMESTAMP).withSize(29).withDigits(6).notNull());
-        addMetadata(hootservices_created_at, ColumnMetadata.named("hootservices_created_at").withIndex(8)
+        addMetadata(hootservices_created_at, ColumnMetadata.named("hootservices_created_at").withIndex(7)
                 .ofType(Types.TIMESTAMP).withSize(29).withDigits(6).notNull());
-        addMetadata(provider_created_at, ColumnMetadata.named("provider_created_at").withIndex(9)
+        addMetadata(provider_created_at, ColumnMetadata.named("provider_created_at").withIndex(8)
                 .ofType(Types.TIMESTAMP).withSize(29).withDigits(6).notNull());
     }
 

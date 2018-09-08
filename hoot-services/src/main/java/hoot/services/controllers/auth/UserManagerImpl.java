@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.auth;
 
+import static hoot.services.models.db.QUserSessions.usersessions;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
 
@@ -51,6 +52,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import hoot.services.models.db.UserSessions;
 import hoot.services.models.db.Users;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -66,20 +68,30 @@ public class UserManagerImpl implements UserManager {
         if (userCache.containsKey(sessionId)) {
             return userCache.get(sessionId);
         } else {
-            return createQuery().select(users).from(users).where(users.session_id.eq(sessionId)).fetchFirst();
+            UserSessions usess = createQuery().select(usersessions).from(usersessions).where(usersessions.session_id.eq(sessionId)).fetchOne();
+            if (usess != null) {
+                Users user = createQuery().select(users).from(users).where(users.id.eq(usess.getUser_id())).fetchOne();
+                userCache.put(sessionId, user);
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+    public void updateUserSessionsTable(Users user, String sessionId) {
+        UserSessions usess = new UserSessions(user.getId(), sessionId);
+        long rowsAffected = createQuery().update(usersessions).populate(usess).where(usersessions.session_id.eq(sessionId)).execute();
+        if (rowsAffected == 0) {
+            createQuery().insert(usersessions).populate(usess).execute();
         }
     }
-    public void update(Users user) {
+
+    private void update(Users user) {
         createQuery().update(users).populate(user).where(users.id.eq(user.getId())).execute();
-        if (user.getSessionId() != null) {
-            userCache.put(user.getSessionId(), user);
-        }
     }
     private void insert(Users user) {
         createQuery().insert(users).populate(user).execute();
-        if (user.getSessionId() != null) {
-            userCache.put(user.getSessionId(), user);
-        }
     }
     public Users getUser(String id) {
         return getUser(Long.parseLong(id));
@@ -120,15 +132,17 @@ public class UserManagerImpl implements UserManager {
         return user;
     }
     @Override
-    public void upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
+    public Users upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
         Users user = this.parseUser(xml);
         user.setProviderAccessToken(accessToken);
-        user.setSessionId(sessionId);
-        user.setEmail(String.format("%d@hootenanny.com", user.getId()));
+        user.setEmail(String.format("%d@hootenanny", user.getId()));
         if (this.getUser(user.getId()) == null) {
             this.insert(user);
         } else {
             this.update(user);
         }
+        updateUserSessionsTable(user, sessionId);
+        userCache.put(sessionId, user);
+        return user;
     }
 }

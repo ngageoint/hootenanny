@@ -7,17 +7,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
-	<!-- tag::beans[] -->
-
-	<!--   <import resource="classpath:security-applicationContext.xml"/> -->
-	<!--1-->
 	<context:annotation-config/>
 	<bean class="org.springframework.session.jdbc.config.annotation.web.http.JdbcHttpSessionConfiguration"/>
-
-	<!--
-	<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<constructor-arg ref="dataSource"/>
-	</bean> -->
 	
-	<!-- end::beans[] -->
 </beans>

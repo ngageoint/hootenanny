@@ -116,4 +116,7 @@
 		<res-type>javax.sql.DataSource</res-type>
 		<res-auth>Container</res-auth>
 	</resource-ref>
+    <session-config>
+        <session-timeout>525600</session-timeout>
+    </session-config>
 </web-app>
