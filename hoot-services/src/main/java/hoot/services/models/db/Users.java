@@ -32,25 +32,35 @@ import javax.annotation.Generated;
 
 import org.springframework.security.oauth.consumer.OAuthConsumerToken;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 /**
  * Users is a Querydsl bean type
  */
 @Generated("com.querydsl.codegen.BeanSerializer")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Users {
 
+    public Users() {
+        this.hootservices_created_at = new Timestamp(System.currentTimeMillis());
+    }
+
     private String displayName;
-
+    @JsonIgnore
     private String email;
-
     private Long id;
-
+    @JsonIgnore
     private String provider_access_key;
+    @JsonIgnore
     private String provider_access_token;
-    private String session_id;
     private Timestamp hootservices_last_authorize;
     private Timestamp hootservices_created_at;
     private Timestamp provider_created_at;
 
+    @JsonProperty(value = "display_name")
     public String getDisplayName() {
         return displayName;
     }
@@ -59,6 +69,7 @@ public class Users {
         this.displayName = displayName;
     }
 
+    @JsonIgnore
     public String getEmail() {
         return email;
     }
@@ -67,6 +78,7 @@ public class Users {
         this.email = email;
     }
 
+    @JsonProperty(value = "user_id")
     public Long getId() {
         return id;
     }
@@ -75,6 +87,7 @@ public class Users {
         this.id = id;
     }
 
+    @JsonIgnore
     public String getProviderAccessKey() {
         return provider_access_key;
     }
@@ -83,6 +96,7 @@ public class Users {
         this.provider_access_key = provider_access_key;
     }
 
+    @JsonIgnore
     public String getProviderAccessToken() {
         return provider_access_token;
     }
@@ -91,6 +105,7 @@ public class Users {
         this.provider_access_token = provider_access_token;
     }
 
+    @JsonProperty(value = "last_authorized")
     public Timestamp getHootservicesLastAuthorize() {
         return hootservices_last_authorize;
     }
@@ -99,14 +114,7 @@ public class Users {
         this.hootservices_last_authorize = hootservices_last_authorize;
     }
 
-    public String getSessionId() {
-        return session_id;
-    }
-
-    public void setSessionId(String session_id) {
-        this.session_id = session_id;
-    }
-
+    @JsonProperty(value = "provider_created_at")
     public Timestamp getProviderCreatedAt() {
         return provider_created_at;
     }
@@ -120,6 +128,7 @@ public class Users {
         setProviderCreatedAt(t);
     }
 
+    @JsonProperty(value = "created_at")
     public Timestamp getHootservicesCreatedAt() {
         return hootservices_created_at;
     }
@@ -135,7 +144,7 @@ public class Users {
 
     @Override
     public String toString() {
-        return this.displayName + " // " + this.session_id;
+        return this.displayName;
     }
 
 }

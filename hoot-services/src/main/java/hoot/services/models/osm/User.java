@@ -50,8 +50,6 @@ public class User extends Users {
 
         setHootservicesCreatedAt(user.getHootservicesCreatedAt());
         setHootservicesLastAuthorize(user.getHootservicesLastAuthorize());
-
-        setSessionId(user.getSessionId());
     }
 
     /**
@@ -77,8 +75,6 @@ public class User extends Users {
         userElement.setAttribute("hootservices_created_at", UserManagerImpl.DATE_FORMAT.format(new Date(getHootservicesCreatedAt().getTime())));
         userElement.setAttribute("hootservices_last_authorize_epoch", Long.toString(getHootservicesLastAuthorize().getTime()));
         userElement.setAttribute("hootservices_last_authorize", UserManagerImpl.DATE_FORMAT.format(new Date(getHootservicesLastAuthorize().getTime())));
-
-        userElement.setAttribute("session_id", getSessionId());
 
         // img element not supported
         // roles element not supported
