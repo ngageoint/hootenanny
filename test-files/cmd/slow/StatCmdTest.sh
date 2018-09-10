@@ -7,4 +7,4 @@ mkdir -p $OUTPUT_DIR
 INPUT_FILE_1=test-files/visitors/SumNumericTagsVisitorTest.osm
 
 # calculate the numerical average of all values for a custom tag
-hoot stat -D numeric.tags.visitor.keys="test1" $INPUT_FILE_1 hoot::AverageNumericTagsVisitor
+hoot stat -D tags.visitor.keys="test1" $INPUT_FILE_1 hoot::AverageNumericTagsVisitor

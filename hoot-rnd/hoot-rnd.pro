@@ -12,6 +12,7 @@ QT += script \
     sql \
     testlib \
     xml \
+    network \
 
 TARGET = HootRnd
 TEMPLATE = lib

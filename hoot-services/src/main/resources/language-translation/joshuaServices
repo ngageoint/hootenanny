@@ -1,0 +1,71 @@
+# List of Joshua to English language translation services to be launched by hoot-services.  
+#
+# https://cwiki.apache.org/confluence/display/JOSHUA
+#
+# Hootenanny only works with Joshua language packs version 2.  List a separate entry for each language, keep the entries in 
+# alphabetical order by source language code, make sure each port is unique and available, and the language pack must have 
+# already been downloaded and extracted in order for the service to be launched.  See the Hootenanny install documentation 
+# for information on installing language packs.
+#
+# format: source lang code (ISO-639-1)\tlanguage pack absolute path\tservice port
+
+#am	/home/vagrant/joshua-language-packs/apache-joshua-am-en-2016-11-18	5764
+#ar	/home/vagrant/joshua-language-packs/apache-joshua-ar-en-2016-11-18	5765
+#az	/home/vagrant/joshua-language-packs/apache-joshua-az-en-2016-11-18	5766
+#bg	/home/vagrant/joshua-language-packs/apache-joshua-bg-en-2016-11-18	5767
+#bs	/home/vagrant/joshua-language-packs/apache-joshua-bs-en-2016-11-18	5768
+#ca	/home/vagrant/joshua-language-packs/apache-joshua-ca-en-2016-11-18	5769
+#cs	/home/vagrant/joshua-language-packs/apache-joshua-cs-en-2016-11-18	5770
+#da	/home/vagrant/joshua-language-packs/apache-joshua-da-en-2016-11-18	5771
+#de	/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18	5772
+#dv	/home/vagrant/joshua-language-packs/apache-joshua-dv-en-2016-11-18	5773
+#el	/home/vagrant/joshua-language-packs/apache-joshua-el-en-2016-11-18	5774
+#es	/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18	5775
+#et	/home/vagrant/joshua-language-packs/apache-joshua-et-en-2016-11-18	5776
+#eu	/home/vagrant/joshua-language-packs/apache-joshua-eu-en-2016-11-18	5777
+#fa	/home/vagrant/joshua-language-packs/apache-joshua-fa-en-2016-11-18	5778
+#fi	/home/vagrant/joshua-language-packs/apache-joshua-fi-en-2016-11-18	5779
+#fr	/home/vagrant/joshua-language-packs/apache-joshua-fr-en-2016-11-18	5780
+#ga	/home/vagrant/joshua-language-packs/apache-joshua-ga-en-2016-11-18	5781
+#gl	/home/vagrant/joshua-language-packs/apache-joshua-gl-en-2016-11-18	5782
+#ha	/home/vagrant/joshua-language-packs/apache-joshua-ha-en-2016-11-18	5783
+#he	/home/vagrant/joshua-language-packs/apache-joshua-he-en-2016-11-18	5784
+#hi	/home/vagrant/joshua-language-packs/apache-joshua-hi-en-2016-11-18	5785
+#hr	/home/vagrant/joshua-language-packs/apache-joshua-hr-en-2016-11-18	5786
+#hu	/home/vagrant/joshua-language-packs/apache-joshua-hu-en-2016-11-18	5787
+#id	/home/vagrant/joshua-language-packs/apache-joshua-id-en-2016-11-18	5788
+#is	/home/vagrant/joshua-language-packs/apache-joshua-is-en-2016-11-18	5789
+#it	/home/vagrant/joshua-language-packs/apache-joshua-it-en-2016-11-18	5790
+#ka	/home/vagrant/joshua-language-packs/apache-joshua-ka-en-2016-11-18	5791
+#ku	/home/vagrant/joshua-language-packs/apache-joshua-ku-en-2016-11-18	5792
+#lt	/home/vagrant/joshua-language-packs/apache-joshua-lt-en-2016-11-18	5793
+#lv	/home/vagrant/joshua-language-packs/apache-joshua-lv-en-2016-11-18	5794
+#mg	/home/vagrant/joshua-language-packs/apache-joshua-mg-en-2016-11-18	5795
+#mk	/home/vagrant/joshua-language-packs/apache-joshua-mk-en-2016-11-18	5796
+#ml	/home/vagrant/joshua-language-packs/apache-joshua-ml-en-2016-11-18	5797
+#ms	/home/vagrant/joshua-language-packs/apache-joshua-ms-en-2016-11-18	5798
+#mt	/home/vagrant/joshua-language-packs/apache-joshua-mt-en-2016-11-18	5799
+#nl	/home/vagrant/joshua-language-packs/apache-joshua-nl-en-2016-11-18	5800
+#no	/home/vagrant/joshua-language-packs/apache-joshua-no-en-2016-11-18	5801
+#pl	/home/vagrant/joshua-language-packs/apache-joshua-pl-en-2016-11-18	5802
+#pt	/home/vagrant/joshua-language-packs/apache-joshua-pt-en-2016-11-18	5803
+#ro	/home/vagrant/joshua-language-packs/apache-joshua-ro-en-2016-11-18	5804
+#ru	/home/vagrant/joshua-language-packs/apache-joshua-ru-en-2016-11-18	5805
+#sd	/home/vagrant/joshua-language-packs/apache-joshua-sd-en-2016-11-18	5806
+#si	/home/vagrant/joshua-language-packs/apache-joshua-si-en-2016-11-18	5807
+#sk	/home/vagrant/joshua-language-packs/apache-joshua-sk-en-2016-11-18	5808
+#sl	/home/vagrant/joshua-language-packs/apache-joshua-sl-en-2016-11-18	5809
+#so	/home/vagrant/joshua-language-packs/apache-joshua-so-en-2016-11-18	5810
+#sq	/home/vagrant/joshua-language-packs/apache-joshua-sq-en-2016-11-18	5811
+#sr	/home/vagrant/joshua-language-packs/apache-joshua-sr-en-2016-11-18	5812
+#sv	/home/vagrant/joshua-language-packs/apache-joshua-sv-en-2016-11-18	5813
+#sw	/home/vagrant/joshua-language-packs/apache-joshua-sw-en-2016-11-18	5814
+#ta	/home/vagrant/joshua-language-packs/apache-joshua-ta-en-2016-11-18	5815
+#te	/home/vagrant/joshua-language-packs/apache-joshua-te-en-2016-11-18	5816
+#tg	/home/vagrant/joshua-language-packs/apache-joshua-tg-en-2016-11-18	5817
+#tt	/home/vagrant/joshua-language-packs/apache-joshua-tt-en-2016-11-18	5818
+#ug	/home/vagrant/joshua-language-packs/apache-joshua-ug-en-2016-11-18	5819
+#uk	/home/vagrant/joshua-language-packs/apache-joshua-uk-en-2016-11-18	5820
+#ur	/home/vagrant/joshua-language-packs/apache-joshua-ur-en-2016-11-18	5821
+#vi	/home/vagrant/joshua-language-packs/apache-joshua-vi-en-2016-11-18	5822
+

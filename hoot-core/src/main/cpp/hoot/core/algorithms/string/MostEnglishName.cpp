@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MostEnglishName.h"
 
@@ -121,6 +121,23 @@ const QSet<QString>& MostEnglishName::_getWords()
   }
 
   return _englishWords;
+}
+
+bool MostEnglishName::isInDictionary(const QString word)
+{
+  return _getWords().contains(word.toLower());
+}
+
+bool MostEnglishName::areAllInDictionary(const QStringList words)
+{
+  for (int i = 0; i < words.size(); i++)
+  {
+    if (!_getWords().contains(words.at(i).toLower()))
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 long MostEnglishName::_loadEnglishWords(QString path)

@@ -497,7 +497,7 @@ compared to the more specialized open source power line datasets coming from pow
 .*Power Line Conflation Test Results - July 2018*
 [width="100%"]
 |======
-| *Test Number* | *AOI* | *Reference Data* | *Secondary Data* | *Manually Matched Feature Count* | *Percentage Correctly Conflated* | *Percentage Marked for Unecessary Review* | *Percentage Combined Correct and Reviewable* | *Time Elapsed (MM:SS)*
+| *Test Number* | *AOI* | *Reference Data* | *Secondary Data* | *Manually Matched Feature Count* | *Percentage Correctly Conflated* | *Percentage Marked for Unnecessary Review* | *Percentage Combined Correct and Reviewable* | *Time Elapsed (MM:SS)*
 | 1 | Mozambique | ENERGYDATA.INFO | OpenStreetMap | 62 | 96.7 | 0.0 | 96.7 | 05:14
 | 2 | Namibia | ENERGYDATA.INFO | OpenStreetMap | 200 | 51.7 | 0.0 | 51.7 | 23:15
 | 3 | California Bay Area | California State Govt | OpenStreetMap | 229 | 75.3 | 0.0 | 75.3 | 01:39

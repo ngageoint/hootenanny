@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MOSTENGLISHNAME_H
 #define MOSTENGLISHNAME_H
@@ -66,6 +66,7 @@ typedef boost::shared_ptr<MostEnglishName> MostEnglishNamePtr;
 class MostEnglishName : public Configurable
 {
 public:
+
   static std::string className() { return "hoot::MostEnglishName"; }
 
   static unsigned int logWarnCount;
@@ -80,7 +81,12 @@ public:
 
   void setConfiguration(const Settings& conf);
 
+  bool isInDictionary(const QString word);
+
+  bool areAllInDictionary(const QStringList words);
+
 private:
+
   static MostEnglishNamePtr _theInstance;
 
   QSet<QString> _englishWords;

@@ -111,6 +111,13 @@ public final class HootProperties {
     public static final String HOOTAPI_DB_URL;
     public static final String OSMAPI_DB_URL;
     public static final String CHANGESET_DERIVE_BUFFER;
+    public static final String HOOT_LANGUAGE_TRANSLATOR_APP;
+    public static final String JOSHUA_CONNECTION_POOL_MAX_SIZE;
+    public static final String JOSHUA_CONNECTION_TIMEOUT;
+    public static final String JOSHUA_CONNECTION_MAX_WAIT;
+    public static final String JOSHUA_LIBRARY;
+    public static final String JOSHUA_MAX_MEMORY;
+    public static final String OPEN_NLP_LANGUAGE_DETECTION_MODEL;
 
     private static final String USERFILES_FOLDER;
     private static final String OSMAPI_DB_USER;
@@ -207,6 +214,13 @@ public final class HootProperties {
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
         CHANGESET_DERIVE_BUFFER = getProperty("changesetDeriveBufferDegrees");
+	HOOT_LANGUAGE_TRANSLATOR_APP = getProperty("hootLanguageTranslatorApp");
+	JOSHUA_CONNECTION_POOL_MAX_SIZE = getProperty("joshuaConnectionPoolMaxSize");
+	JOSHUA_CONNECTION_TIMEOUT = getProperty("joshuaConnectionTimeout");
+        JOSHUA_CONNECTION_MAX_WAIT= getProperty("joshuaConnectionMaxWait");
+	JOSHUA_LIBRARY = getProperty("joshuaLibrary");
+	JOSHUA_MAX_MEMORY = getProperty("joshuaMaxMemory");
+	OPEN_NLP_LANGUAGE_DETECTION_MODEL = getProperty("openNlpLanguageDetectionModel");
 
         // Root folder of tomcat writable locations
         USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";
