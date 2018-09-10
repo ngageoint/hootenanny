@@ -53,6 +53,7 @@ class ElementCacheLruTest : public HootTestFixture
   CPPUNIT_TEST(runForceNodeReplacementTest);
   CPPUNIT_TEST(runForceWayReplacementTest);
   CPPUNIT_TEST(runForceRelationReplacementTest);
+  CPPUNIT_TEST(runAlgorithmTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -301,6 +302,53 @@ public:
     ConstRelationPtr emptyRelation;
     myRelationCopy = myCache.getNextRelation();
     CPPUNIT_ASSERT( myRelationCopy == emptyRelation );
+  }
+
+  // Checks to make sure LRU list functions as it should
+  void runAlgorithmTest()
+  {
+    std::string list = "";
+    ElementCacheLRU myCache(10, 10, 10);
+
+    // Add 10 nodes
+    for (int i = 1; i <= 10; i++)
+    {
+      Status status(Status::Unknown1);
+      Meters circularError(15.0);
+      ConstElementPtr newNode(new Node(status, i, 2.0, 3.0, circularError));
+      myCache.addElement(newNode);
+    }
+
+    // Verify LRU order
+    // 10 should be most recent, 1 least recent (10 ... 1)
+    list = myCache.getLRUString(ElementType::Node);
+    CPPUNIT_ASSERT_EQUAL(list, std::string("10,9,8,7,6,5,4,3,2,1,"));
+
+    // Access some stuff
+    myCache.getNode(5);
+    myCache.getNode(5);
+    myCache.getNode(5);
+    myCache.getNode(4);
+
+    // Verify LRU order
+    // Verify 5 only shows up once
+    // Verify 4 is most recent, 5, then prev. order
+    list = myCache.getLRUString(ElementType::Node);
+    CPPUNIT_ASSERT_EQUAL(list, std::string("4,5,10,9,8,7,6,3,2,1,"));
+
+    // Add more nodes
+    for (int i = 11; i <= 15; i++)
+    {
+      Status status(Status::Unknown1);
+      Meters circularError(15.0);
+      ConstElementPtr newNode(new Node(status, i, 2.0, 3.0, circularError));
+      myCache.addElement(newNode);
+    }
+
+    // Verify LRU order
+    // Make sure the least recently used stuff (7, 6, 5, ect.) got pushed out.
+    list = myCache.getLRUString(ElementType::Node);
+    CPPUNIT_ASSERT_EQUAL(list, std::string("15,14,13,12,11,4,5,10,9,8,"));
   }
 
 };

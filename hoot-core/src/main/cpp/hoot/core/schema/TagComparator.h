@@ -87,12 +87,27 @@ public:
 
   static TagComparator& getInstance();
 
+  /**
+   * @brief mergeNames - This merges "names" tags, so the name tag in t1 gets
+   *                     to be the final "name" tag, and the "name" tag from t2
+   *                     gets demoted to alt_name, along with any alt_names from
+   *                     t1 & t2.
+   * @param t1 - Tags that are given preference
+   * @param t2 - These names/tags get demoted to alt_name
+   * @param result Tags w/names merged
+   */
   void mergeNames(Tags& t1, Tags& t2, Tags& result);
 
   /**
    * Keep all names. If there is a conflict in tags between t1 and t2 then use the value in t1.
    */
   Tags overwriteMerge(Tags t1, Tags t2);
+
+  /**
+   * Merges tags. If there is a conflict in tags between t1 and t2 then use the value in t1.
+   * EVEN FOR NAMES.
+   */
+  Tags overwriteAllMerge(Tags t1, Tags t2);
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 

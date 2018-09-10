@@ -35,7 +35,6 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/util/Log.h>
 
 #include "extractors/PoiPolygonNameScoreExtractor.h"

@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -42,11 +43,6 @@ namespace pt = boost::property_tree;
 // Qt
 #include <QTextStream>
 #include <QTextCodec>
-#include <QEventLoop>
-#include <QTextStream>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkAccessManager>
 
 // Standard
 #include <fstream>
@@ -178,25 +174,10 @@ void OsmJsonReader::read(OsmMapPtr map)
   }
   else
   {
-    // Do HTTP GET request
-    boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
-    QNetworkRequest request(_url);
-    boost::shared_ptr<QNetworkReply> pReply(pNAM->get(request));
-
-    // Wait for finished signal from reply object
-    QEventLoop loop;
-    QObject::connect(pReply.get(), SIGNAL(finished()), &loop, SLOT(quit()));
-    loop.exec();
-
-    // Check error status on our reply
-    if (QNetworkReply::NoError != pReply->error())
-    {
-      QString errMsg = pReply->errorString();
-      throw HootException(QString("Network error for GET request (%1): %2").arg(_url.toString()).arg(errMsg));
-    }
-
-    QByteArray data = pReply->readAll();
-    jsonStr = QString::fromAscii(data.data());
+    //  Do HTTP GET request
+    HootNetworkRequest request;
+    request.networkRequest(_url);
+    jsonStr = QString::fromUtf8(request.getResponseContent().data());
   }
   // This will throw a hoot exception if JSON is invalid
   _loadJSON(jsonStr);

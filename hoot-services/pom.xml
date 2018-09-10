@@ -21,57 +21,41 @@
         <skip.hoot.services.integrationTests>false</skip.hoot.services.integrationTests>
         <redirect-test-output-to-file>false</redirect-test-output-to-file>
 
-        <spring.version>4.2.6.RELEASE</spring.version>
-        <jersey.version>2.23.1</jersey.version>
-        <querydsl.version>4.2.1</querydsl.version>
-        <postgresql.version>42.2.4</postgresql.version>
-        <slf4j.version>1.7.21</slf4j.version>
-        <log4j2.version>2.7</log4j2.version>
-        <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
+        <!-- keep this alphabetized -->
+
+        <antlr-runtime.version>3.4</antlr-runtime.version>
+        <apache.commons.exec.version>1.3</apache.commons.exec.version>
+        <apache.commons.io.version>2.5</apache.commons.io.version>
+        <apache.commons.lang3.version>3.1</apache.commons.lang3.version>
+        <fasterxml-jackson.version>2.5.4</fasterxml-jackson.version>
+        <guava.version>20.0</guava.version>
+        <httpasyncclient.version>4.0</httpasyncclient.version>
         <httpclient.version>4.3.1</httpclient.version>
         <httpcore.version>4.3</httpcore.version>
         <httpcore-nio.version>4.3</httpcore-nio.version>
-        <httpasyncclient.version>4.0</httpasyncclient.version>
+        <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
+        <jersey.version>2.23.1</jersey.version>
+        <json-simple.version>1.1.1</json-simple.version>
+        <log4j2.version>2.7</log4j2.version>
+        <opennlp.version>1.8.3</opennlp.version>
+        <postgresql.version>42.2.4</postgresql.version>
+        <querydsl.version>4.2.1</querydsl.version>
+        <reflections.version>0.9.11</reflections.version>
+        <rhino.version>1.7R4</rhino.version>
+        <slf4j.version>1.7.21</slf4j.version>
         <smiley-http-proxy-servlet.version>1.6</smiley-http-proxy-servlet.version>
-        <apache.commons.lang3.version>3.1</apache.commons.lang3.version>
-        <apache.commons.io.version>2.5</apache.commons.io.version>
-        <apache.commons.exec.version>1.3</apache.commons.exec.version>
+        <spring.version>4.2.6.RELEASE</spring.version> 
+        <tika.version>1.18</tika.version>
         <xalan.version>2.7.1</xalan.version>
         <xercesImpl.version>2.9.1</xercesImpl.version>
-        <json-simple.version>1.1.1</json-simple.version>
-        <guava.version>18.0</guava.version>
-        <rhino.version>1.7R4</rhino.version>
-        <fasterxml-jackson.version>2.5.4</fasterxml-jackson.version>
-        <!--<osmosis-core.version>0.43-RELEASE</osmosis-core.version>-->
-        <antlr-runtime.version>3.4</antlr-runtime.version>
 
-        <!-- Unit test tools section -->
-        <junit.version>4.12</junit.version>
-        <hamcrest.version>1.3</hamcrest.version>
-        <powermock.version>1.6.5</powermock.version>
+        <!-- test -->
         <cpsuite.version>1.2.6</cpsuite.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <junit.version>4.12</junit.version>
+        <powermock.version>1.6.5</powermock.version>
+        
     </properties>
-
-    <repositories>
-        <!-- can comment out these repos if using artifactory -->
-
-        <!-- uncomment below for artifactory support -->
-        <!-- repository>
-            <id>central</id>
-            <url>http://selma:8081/artifactory/libs-release</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>snapshots</id>
-            <url>http://selma:8081/artifactory/libs-snapshot</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository -->
-    </repositories>
-
     <build>
         <finalName>hoot-services-${revision}</finalName>
         <defaultGoal>install</defaultGoal>
@@ -396,6 +380,65 @@
 		    <artifactId>javax.ws.rs-api</artifactId>
 		    <version>2.1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-dbcp2</artifactId>
+		    <version>2.5.0</version>
+		    <scope>test</scope>
+		</dependency>
+
+		<!-- XML processing -->
+		<dependency>
+		    <groupId>dom4j</groupId>
+		    <artifactId>dom4j</artifactId>
+		    <version>1.6.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>${fasterxml-jackson.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>${fasterxml-jackson.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		    <version>${fasterxml-jackson.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/xml-apis/xml-apis -->
+		<dependency>
+		    <groupId>xml-apis</groupId>
+		    <artifactId>xml-apis</artifactId>
+		    <version>1.0.b2</version>
+		</dependency>
+        <!-- PowerMock builds on top of Mockito -->
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-core</artifactId>
+		    <version>1.10.19</version>
+		    <scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-pool/commons-pool -->
+		<dependency>
+		    <groupId>commons-pool</groupId>
+		    <artifactId>commons-pool</artifactId>
+		    <version>1.6</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+		<dependency>
+		    <groupId>javax.annotation</groupId>
+		    <artifactId>javax.annotation-api</artifactId>
+		    <version>1.2</version>
+		</dependency>
 
         <!-- web -->
         <dependency>
@@ -484,53 +527,12 @@
             <version>${apache.commons.io.version}</version>
         </dependency>
 
-        <!-- Postgresql database driver -->
+        <!-- database -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
         </dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-dbcp2</artifactId>
-		    <version>2.5.0</version>
-		    <scope>test</scope>
-		</dependency>
-
-        <!-- XML processing -->
-		<dependency>
-		    <groupId>dom4j</groupId>
-		    <artifactId>dom4j</artifactId>
-		    <version>1.6.1</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-core</artifactId>
-		    <version>${fasterxml-jackson.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
-		    <version>${fasterxml-jackson.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-annotations</artifactId>
-		    <version>${fasterxml-jackson.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/xml-apis/xml-apis -->
-		<dependency>
-		    <groupId>xml-apis</groupId>
-		    <artifactId>xml-apis</artifactId>
-		    <version>1.0.b2</version>
-		</dependency>
-
-
 
         <!-- XPath -->
         <dependency>
@@ -538,14 +540,15 @@
             <artifactId>xalan</artifactId>
             <version>${xalan.version}</version>
         </dependency>
-        <!-- JSON processing -->
+
+        <!-- JSON -->
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>${json-simple.version}</version>
         </dependency>
 
-        <!-- QueryDsl Dependency -->
+        <!-- QueryDsl -->
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-core</artifactId>
@@ -567,11 +570,6 @@
             <artifactId>querydsl-sql-spring</artifactId>
             <version>${querydsl.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
 
         <!-- Javascript Support -->
         <dependency>
@@ -579,25 +577,6 @@
             <artifactId>rhino</artifactId>
             <version>${rhino.version}</version>
         </dependency>
-
-        <!--  OSM Parsing Support -->
-<!--
-        <dependency>
-            <groupId>org.openstreetmap.osmosis</groupId>
-            <artifactId>osmosis-core</artifactId>
-            <version>${osmosis-core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openstreetmap.osmosis</groupId>
-            <artifactId>osmosis-testutil</artifactId>
-            <version>${osmosis-core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openstreetmap.osmosis</groupId>
-            <artifactId>osmosis-xml</artifactId>
-            <version>${osmosis-core.version}</version>
-        </dependency>
--->
 
         <!-- Spring framework provides dependency injection, transaction management, and a hook
         into db connection pooling via commons dbcp -->
@@ -625,11 +604,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
+            <artifactId>spring-tx</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
+            <artifactId>spring-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -691,12 +670,50 @@
             <artifactId>jersey-test-framework-util</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr-runtime</artifactId>
             <version>${antlr-runtime.version}</version>
         </dependency>
+
+	<!-- language detection -->
+	
+	<dependency>
+          <groupId>org.apache.tika</groupId>
+          <artifactId>tika-core</artifactId>
+          <version>${tika.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.tika</groupId>
+          <artifactId>tika-langdetect</artifactId>
+          <version>${tika.version}</version>
+          <exclusions>
+            <exclusion>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-rs-client</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.opennlp</groupId>
+          <artifactId>opennlp-tools</artifactId>
+          <version>${opennlp.version}</version>
+        </dependency>
+
+       <!-- reflection -->
+
+        <dependency>
+          <groupId>org.reflections</groupId>
+          <artifactId>reflections</artifactId>
+          <version>${reflections.version}</version>
+        </dependency>
+       <!-- org.reflections should be pulling this version of guava down but isn't -->
+        <dependency>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+          <version>${guava.version}</version>
+        </dependency>
+
         <!-- test -->
 
         <!-- JUnit is the core testing framework -->
@@ -720,14 +737,6 @@
         </dependency>
 
         <!-- PowerMock builds on top of Mockito -->
-		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-		<dependency>
-		    <groupId>org.mockito</groupId>
-		    <artifactId>mockito-core</artifactId>
-		    <version>1.10.19</version>
-		    <scope>test</scope>
-		</dependency>
-
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
@@ -765,7 +774,6 @@
             <version>${cpsuite.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <reporting>

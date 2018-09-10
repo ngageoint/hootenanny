@@ -347,6 +347,12 @@ When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
   page.find('div.combobox').find('a', :text=> opt).click
 end
 
+When(/^I select the exact "([^"]*)" option in "([^"]*)"$/) do |opt, el|
+  combobox = page.find(el)
+  combobox.find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt, exact_text: true).click
+end
+
 When(/^The value of "([^"]*)" option in "([^"]*)"$/) do |opt, el|
   combobox = page.find(el)
   combobox.find('.combobox-caret').click
@@ -473,6 +479,13 @@ When(/^I scroll "([^"]*)" element into view and press it$/) do |txt|
   include_hidden_fields do
     element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
     page.driver.browser.execute_script("arguments[0].scrollIntoView(true)", element)
+    element.click
+  end
+end
+
+When("I click toggle menu item {string}") do |txt|
+  include_hidden_fields do
+    element = find('a.hide-toggle', :text=> txt);
     element.click
   end
 end

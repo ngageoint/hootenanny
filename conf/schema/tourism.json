@@ -79,6 +79,11 @@
             "multiuse"
         ],
         "isA": "tourism",
+        "geometries": [
+            "node",
+            "area",
+            "linestring"
+        ],
         "name": "tourism=attraction",
         "objectType": "tag",
         "similarTo": [

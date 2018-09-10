@@ -68,6 +68,7 @@ void OgrUtilities::loadDriverInfo()
   //  Order is important here for the two FileGDB drivers, grab the first for read ops and the second for write
   _drivers.push_back(OgrDriverInfo(".gdb",      "OpenFileGDB",    true,     false,  GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".gdb",      "FileGDB",        true,     true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".gpkg",      "GPKG",          true,     true,   GDAL_OF_ALL));
   _drivers.push_back(OgrDriverInfo(".pix",      "PCIDSK",         true,     true,   GDAL_OF_ALL));
   _drivers.push_back(OgrDriverInfo(".sql",      "PGDump",         true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".gtm",      "GPSTrackMaker",  true,     true,   GDAL_OF_VECTOR));

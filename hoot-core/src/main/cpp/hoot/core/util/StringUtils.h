@@ -31,6 +31,10 @@
 // Qt
 #include <QString>
 
+// Boost
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+
 namespace hoot
 {
 
@@ -65,6 +69,14 @@ public:
    * @return true if the input has at least one alphabetic character; false otherwise
    */
   static bool hasAlphabeticCharacter(const QString input);
+
+  /**
+   * Converts a JSON string to a Boost property tree
+   *
+   * @param jsonStr the string to convert
+   * @return a Boost property tree
+   */
+  static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
 };
 
 }

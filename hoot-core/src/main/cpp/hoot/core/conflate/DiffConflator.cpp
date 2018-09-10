@@ -201,6 +201,45 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
   _pOriginalMap.reset(new OsmMap(pMap));
 }
 
+void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges)
+{
+  while (pChanges->hasMoreChanges())
+  {
+    Change c = pChanges->readNextChange();
+
+    // Need to add children
+    if (ElementType::Way == c.getElement()->getElementType().getEnum())
+    {
+      WayPtr pWay = _pOriginalMap->getWay(c.getElement()->getId());
+
+      // Add nodes if need to
+      vector<long> nIds = pWay->getNodeIds();
+      for (vector<long>::iterator it = nIds.begin(); it != nIds.end(); ++it)
+      {
+        if (!pMap->containsNode(*it))
+        {
+          // Add a copy
+          NodePtr pNewNode(new Node(*(_pOriginalMap->getNode(*it))));
+          pNewNode->setStatus(Status::TagChange);
+          pMap->addNode(pNewNode);
+        }
+      }
+
+      // Add the changed way with merged tags
+      ConstWayPtr pTempWay = boost::dynamic_pointer_cast<const Way>(c.getElement());
+      WayPtr pNewWay(new Way(*pTempWay));
+      pNewWay->setStatus(Status::TagChange);
+      pMap->addWay(pNewWay);
+    }
+    else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
+    {
+      // Diff conflation doesn't do relations
+      throw HootException("Relation handling not implemented with differential "
+                          "conflation yet.");
+    }
+  }
+}
+
 void DiffConflator::_calcAndStoreTagChanges()
 {
   // Make sure we have a container for our changes

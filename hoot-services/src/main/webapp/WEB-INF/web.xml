@@ -40,7 +40,6 @@
 		<dispatcher>INCLUDE</dispatcher>
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
-
 	<servlet>
 		<servlet-name>hoot-services</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -57,6 +56,7 @@
 		<url-pattern>/info/*</url-pattern>
 		<url-pattern>/ogr/*</url-pattern>
 		<url-pattern>/ingest/*</url-pattern>
+		<url-pattern>/language/*</url-pattern>
 	</servlet-mapping>
 
     <!-- EVWHS - DG's imagery service for non-commercial clients.

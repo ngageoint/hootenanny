@@ -22,27 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils;
+
+package hoot.services.language;
 
 /**
- * Various utilities related to reflection
+ * Interface for language translators
  */
-public final class ReflectUtils {
-    private ReflectUtils() {}
+public interface ToEnglishTranslator 
+{
+  /**
+   * Sets a configuration
+   *
+   * @param config a configuration object
+   */
+  void setConfig(Object config);
 
-    /**
-     * Returns the name of the class that calls a method
-     * 
-     * @return class name string
-     */
-    public static String getCallingClassName() {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        StackTraceElement stackTraceElement = stackTrace[stackTrace.length - 2];
-        if (stackTraceElement != null) {
-            return stackTraceElement.getClassName();
-        }
-        return null;
-    }
+  /**
+   * Translates text to English
+   *
+   * @param sourceLangCodes the specified source languages to attempt to translate from
+   * @param text the text to translate
+   */
+  String translate(String[] sourceLangCodes, String text) throws Exception;
+
+  /**
+   * Translates text to English
+   *
+   * @param sourceLangCodes the specified source language to attempt to translate from
+   * @param text the text to translate
+   */
+  String translate(String sourceLangCode, String text) throws Exception;
 }

@@ -73,7 +73,7 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
 bool OsmApiWriter::apply()
 {
   Timer timer;
-  OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
+  HootNetworkRequestPtr request(new HootNetworkRequest());
   //  Validate API capabilites
   if (!queryCapabilities(request))
   {
@@ -177,7 +177,7 @@ bool OsmApiWriter::apply()
 
 void OsmApiWriter::_changesetThreadFunc()
 {
-  OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
+  HootNetworkRequestPtr request(new HootNetworkRequest());
   //
   long id = -1;
   //  Iterate until all elements are sent and updated
@@ -285,7 +285,7 @@ bool OsmApiWriter::isSupported(const QUrl &url)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
-bool OsmApiWriter::queryCapabilities(OsmApiNetworkRequestPtr request)
+bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
 {
   try
   {
@@ -306,7 +306,7 @@ bool OsmApiWriter::queryCapabilities(OsmApiNetworkRequestPtr request)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
-bool OsmApiWriter::validatePermissions(OsmApiNetworkRequestPtr request)
+bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
 {
   bool success = false;
   try
@@ -398,7 +398,7 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
-long OsmApiWriter::_createChangeset(OsmApiNetworkRequestPtr request, const QString& description)
+long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request, const QString& description)
 {
   try
   {
@@ -426,7 +426,7 @@ long OsmApiWriter::_createChangeset(OsmApiNetworkRequestPtr request, const QStri
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
-void OsmApiWriter::_closeChangeset(OsmApiNetworkRequestPtr request, long id)
+void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
 {
   try
   {
@@ -457,7 +457,7 @@ void OsmApiWriter::_closeChangeset(OsmApiNetworkRequestPtr request, long id)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
-bool OsmApiWriter::_uploadChangeset(OsmApiNetworkRequestPtr request, long id, const QString& changeset)
+bool OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset)
 {
   bool success = false;
   try

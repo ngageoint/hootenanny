@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "OsmApiNetworkRequest.h"
+#include "HootNetworkRequest.h"
 
 //  Hootenanny
 #include <hoot/core/util/HootException.h>
@@ -39,11 +39,11 @@
 namespace hoot
 {
 
-OsmApiNetworkRequest::OsmApiNetworkRequest()
+HootNetworkRequest::HootNetworkRequest()
 {
 }
 
-bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op, const QByteArray& data)
+bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op, const QByteArray& data)
 {
   //  Reset status
   _status = 0;
@@ -111,7 +111,7 @@ bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Opera
   return true;
 }
 
-int OsmApiNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
+int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
 {
   if (reply != NULL)
   {
