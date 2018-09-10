@@ -48,7 +48,13 @@ class ExternalMergeElementSorter : public ElementInputStream
 public:
 
   ExternalMergeElementSorter();
-  ~ExternalMergeElementSorter();
+  ExternalMergeElementSorter(const ExternalMergeElementSorter& sorter);
+  virtual ~ExternalMergeElementSorter();
+
+  /**
+   * @see ElementInputStream
+   */
+  virtual ExternalMergeElementSorter* clone() { return new ExternalMergeElementSorter(*this); }
 
   /**
    * Sorts elements first by type, then increasing by ID
@@ -92,8 +98,6 @@ private:
 
   //a stream of sorted elements to serve
   ElementInputStreamPtr _sortedElements;
-
-  boost::shared_ptr<PartialOsmMapReader> _sortedElementsReader;
 
   //what formats to write the temp files to
   QString _tempFormat;

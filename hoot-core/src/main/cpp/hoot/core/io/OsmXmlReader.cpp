@@ -73,6 +73,12 @@ _preserveAllTags(ConfigOptions().getReaderPreserveAllTags())
 {
 }
 
+OsmXmlReader::OsmXmlReader(const OsmXmlReader& reader) :
+QXmlDefaultHandler()
+{
+  _inputFile.setFileName(reader._inputFile.fileName());
+}
+
 OsmXmlReader::~OsmXmlReader()
 {
   close();

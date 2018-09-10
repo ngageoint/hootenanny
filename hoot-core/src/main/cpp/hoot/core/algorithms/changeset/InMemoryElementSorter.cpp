@@ -70,6 +70,17 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
   }
 }
 
+InMemoryElementSorter::InMemoryElementSorter(const InMemoryElementSorter& sorter)
+{
+  _source.reset(new OsmMap(sorter._source));
+  _nodeIds = sorter._nodeIds;
+  _wayIds = sorter._wayIds;
+  _relationIds = sorter._relationIds;
+  _nodeIndex = sorter._nodeIndex;
+  _wayIndex = sorter._wayIndex;
+  _relationIndex = sorter._relationIndex;
+}
+
 boost::shared_ptr<OGRSpatialReference> InMemoryElementSorter::getProjection() const
 {
   return _source->getProjection();

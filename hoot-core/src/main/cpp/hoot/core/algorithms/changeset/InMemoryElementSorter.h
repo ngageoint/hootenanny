@@ -48,13 +48,18 @@ class InMemoryElementSorter : public ElementInputStream
 public:
 
   InMemoryElementSorter(ConstOsmMapPtr map);
+  InMemoryElementSorter(const InMemoryElementSorter& sorter);
+  virtual ~InMemoryElementSorter() {}
 
   /**
    * @see ElementInputStream
    */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  virtual ~InMemoryElementSorter() {}
+  /**
+   * @see ElementInputStream
+   */
+  virtual InMemoryElementSorter* clone() { return new InMemoryElementSorter(*this); }
 
   /**
    * @see ElementInputStream

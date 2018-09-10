@@ -21,6 +21,15 @@ _retainTempFiles(false)
   assert(_maxElementsPerFile != -1);
 }
 
+ExternalMergeElementSorter::ExternalMergeElementSorter(const ExternalMergeElementSorter& sorter)
+{
+  _maxElementsPerFile = sorter._maxElementsPerFile;
+  _tempFormat = sorter._tempFormat;
+  _retainTempFiles = sorter._retainTempFiles;
+  _tempOutputFiles = sorter._tempOutputFiles;
+  _sortedElements.reset(_sortedElements->clone());
+}
+
 ExternalMergeElementSorter::~ExternalMergeElementSorter()
 {
   close();
@@ -28,13 +37,11 @@ ExternalMergeElementSorter::~ExternalMergeElementSorter()
 
 void ExternalMergeElementSorter::close()
 {
-  if (_sortedElementsReader)
-  {
-    _sortedElementsReader->finalizePartial();
-    _sortedElementsReader->close();
-  }
   if (_sortedElements)
   {
+    boost::shared_ptr<PartialOsmMapReader> sortedElementsReader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(_sortedElements);
+    sortedElementsReader->finalizePartial();
     _sortedElements->close();
   }
 }
@@ -87,12 +94,12 @@ void ExternalMergeElementSorter::_initElementStream()
 {
   LOG_DEBUG("Opening reader for element stream at " << _sortFinalOutput->fileName() << "...");
 
-  _sortedElementsReader =
+  boost::shared_ptr<PartialOsmMapReader> sortedElementsReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::getInstance().createReader(_sortFinalOutput->fileName()));
-  _sortedElementsReader->setUseDataSourceIds(true);
-  _sortedElementsReader->open(_sortFinalOutput->fileName());
-  _sortedElements = boost::dynamic_pointer_cast<ElementInputStream>(_sortedElementsReader);
+  sortedElementsReader->setUseDataSourceIds(true);
+  sortedElementsReader->open(_sortFinalOutput->fileName());
+  _sortedElements = boost::dynamic_pointer_cast<ElementInputStream>(sortedElementsReader);
 }
 
 bool ExternalMergeElementSorter::_elementCompare(const ConstElementPtr& e1,

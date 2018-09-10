@@ -73,6 +73,13 @@ public:
    *
    */
   virtual ElementPtr readNextElement() = 0;
+
+  /**
+   *
+   *
+   * @return
+   */
+  virtual ElementInputStream* clone() const { throw NotImplementedException(); }
 };
 
 typedef boost::shared_ptr<ElementInputStream> ElementInputStreamPtr;

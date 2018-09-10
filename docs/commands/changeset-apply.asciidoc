@@ -2,26 +2,28 @@
 
 === Description
 
-The +apply-changeset+ command writes an OSM changeset XML file(s), OSM XML file(s), or SQL file that represents the difference between two OSM datasets
-to an OSM API database.  The OSM API database URL is   Optional conflict parameters may be passed for SQL files, so that if the target database contains any changesets
-created after the time represented by a timestamp that intersect with a specified AOI, the command will return an error.
+The +apply-changeset+ command writes an OSM changeset XML file(s), OSM XML file(s), or SQL file that represents the difference between two 
+OSM datasets to an OSM API database.  
 
-* +changeset.os*+     - one or more input OSM XML changeset (.osc file) or OSM XML file (.osm) with negative IDs.
-* +targetOsmApiUrl+   - OSM API endpoint the changeset will be written to.
-* +changeset.osc.sql+ - input SQL changeset (e.g. .osc.sql file).
-* +targetDatabaseUrl+ - database the changeset will be written to.
+Optional conflict parameters may be passed for SQL files, so that if the target database contains any changesets created after the time 
+represented by a timestamp that intersect with a specified AOI, the command will return an error.
+
+* +changeset.os*+     - one or more input OSM XML changeset (.osc file) or OSM XML file (.osm) with negative IDs when writing the changeset 
+                        through the OSM API OR an input SQL changeset (.osc.sql) when writing the changeset directly to an OSM API database
+* +targetUrl+         - If writing the changeset through the OSM API, the OSM API endpoint the changeset will be written to; if writing 
+                        the changeset directly to an OSM API database, the URL of the database being written to 
 * +conflictAoi+       - bounding box string of the form: minx,miny,maxx,maxy used to prevent writing conflicted
-                        data (see description)
+                        data (see description); valid only when writing the changeset directly to an OSM API database
 * +conflictTimestamp+ - timestamp of the form: "yyyy-MM-dd hh:mm:ss.zzz" used to prevent writing conflicted
-                        data (see description)
+                        data (see description); valid only when writing the changeset directly to an OSM API database
 * +--stats+           - output statistics (element, node, way, relation, failure, create, modify, and delete counts)
 * +--progress+        - display progress as a percent complete while the upload is working
 
 === Usage
 
 --------------------------------------
-changeset-apply (changeset.os*) [changeset2.os* ...] (targetOsmApiUrl) [--stats] [--progress]
-changeset-apply (changeset.osc.sql) (targetDatabaseUrl) [conflictAoi] [conflictTimestamp]
+changeset-apply (changeset.os*) [changeset2.os* ...] (targetUrl) [--stats] [--progress]
+changeset-apply (changeset.osc.sql) (targetUrl) [conflictAoi] [conflictTimestamp]
 --------------------------------------
 
 ==== Examples

@@ -65,7 +65,13 @@ public:
   static unsigned int logWarnCount;
 
   OsmXmlReader();
+  OsmXmlReader(const OsmXmlReader& reader);
   virtual ~OsmXmlReader();
+
+  /**
+   * @see ElementInputStream
+   */
+  virtual OsmXmlReader* clone() const { return new OsmXmlReader(*this); }
 
   virtual void close();
 

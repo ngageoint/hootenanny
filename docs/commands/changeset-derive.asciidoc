@@ -7,8 +7,6 @@ OSM datasets.  Alternatively, when only one dataset is input it generates a chan
 the data in the input dataset. The output changeset file can later be applied to an OSM API database with 
 the +changeset-apply+ command.  
 
-Currently, only the SQL output format only supports changeset application. 
-
 If deriving a changeset between two inputs from different dates, the first input should be the older 
 dataset and the second should be the newer dataset.  
 
