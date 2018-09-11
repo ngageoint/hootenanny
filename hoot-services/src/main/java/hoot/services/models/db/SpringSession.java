@@ -6,6 +6,7 @@ public class SpringSession {
     private Long last_access_time;
     private Integer max_inactive_interval;
     private String principal_name;
+    private Long user_id;
 
     public String getSession_id() {
         return session_id;
@@ -45,5 +46,13 @@ public class SpringSession {
 
     public void setPrincipal_name(String principal_name) {
         this.principal_name = principal_name;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 }

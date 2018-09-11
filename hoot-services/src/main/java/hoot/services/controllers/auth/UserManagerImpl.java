@@ -26,8 +26,8 @@
  */
 package hoot.services.controllers.auth;
 
-import static hoot.services.models.db.QUserSessions.usersessions;
 import static hoot.services.models.db.QUsers.users;
+import static hoot.services.models.db.QSpringSession.springsessions;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.io.IOException;
@@ -52,7 +52,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import hoot.services.models.db.UserSessions;
+import hoot.services.models.db.SpringSession;
 import hoot.services.models.db.Users;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -68,9 +68,19 @@ public class UserManagerImpl implements UserManager {
         if (userCache.containsKey(sessionId)) {
             return userCache.get(sessionId);
         } else {
-            UserSessions usess = createQuery().select(usersessions).from(usersessions).where(usersessions.session_id.eq(sessionId)).fetchOne();
-            if (usess != null) {
-                Users user = createQuery().select(users).from(users).where(users.id.eq(usess.getUser_id())).fetchOne();
+            SpringSession sess = createQuery()
+                    .select(springsessions)
+                    .from(springsessions)
+                    .where(springsessions.session_id.eq(sessionId))
+                    .where(springsessions.user_id.isNotNull())
+                    .fetchOne();
+
+            if(sess != null) {
+                Users user = createQuery()
+                        .select(users)
+                        .from(users)
+                        .where(users.id.eq(sess.getUser_id()))
+                        .fetchOne();
                 userCache.put(sessionId, user);
                 return user;
             }
@@ -78,15 +88,6 @@ public class UserManagerImpl implements UserManager {
 
         return null;
     }
-
-    public void updateUserSessionsTable(Users user, String sessionId) {
-        UserSessions usess = new UserSessions(user.getId(), sessionId);
-        long rowsAffected = createQuery().update(usersessions).populate(usess).where(usersessions.session_id.eq(sessionId)).execute();
-        if (rowsAffected == 0) {
-            createQuery().insert(usersessions).populate(usess).execute();
-        }
-    }
-
     private void update(Users user) {
         createQuery().update(users).populate(user).where(users.id.eq(user.getId())).execute();
     }
@@ -131,6 +132,17 @@ public class UserManagerImpl implements UserManager {
         user.setHootservicesLastAuthorize(new Timestamp(System.currentTimeMillis()));
         return user;
     }
+    private void attributeSessionWithUser(String sessionId, Users u) {
+        long affectedRows = createQuery()
+        .update(springsessions)
+        .set(springsessions.user_id, u.getId())
+        .where(springsessions.session_id.eq(sessionId))
+        .execute();
+
+        if(affectedRows == 0) {
+            logger.warn("attributeSessionWithUser(): failed to attribute spring session with user.");
+        }
+    }
     @Override
     public Users upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
         Users user = this.parseUser(xml);
@@ -141,7 +153,7 @@ public class UserManagerImpl implements UserManager {
         } else {
             this.update(user);
         }
-        updateUserSessionsTable(user, sessionId);
+        attributeSessionWithUser(sessionId, user);
         userCache.put(sessionId, user);
         return user;
     }

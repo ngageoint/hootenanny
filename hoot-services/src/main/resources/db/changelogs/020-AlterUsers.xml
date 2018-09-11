@@ -19,45 +19,33 @@
 				remarks="Timestamp of user creation @ the oAuth Provider" />
 		</addColumn>
 
+		<!-- OAuth1.0 provided data, could contain duplicate display names: -->
 		<dropUniqueConstraint
 			constraintName="users_display_name_key" tableName="users"
 			uniqueColumns="display_name" />
 
-		<createTable tableName="user_sessions">
-			<column name="session_id" type="character(36)">
-				<constraints unique="true" primaryKey="true"
-					nullable="false" />
-			</column>
-			<column name="user_id" type="bigint">
-				<constraints nullable="false" />
-			</column>
-		</createTable>
+		<!-- Track Users on the spring sessions table. -->
+		<addColumn tableName="spring_session">
+			<column name="user_id" type="bigint" />
+		</addColumn>
 
 		<addForeignKeyConstraint
-			baseColumnNames="user_id" baseTableName="user_sessions"
-			constraintName="fk_usersessions_userid" deferrable="true"
+			baseColumnNames="user_id" baseTableName="spring_session"
+			constraintName="fk_springsession_users_userid" deferrable="true"
 			initiallyDeferred="true" onDelete="CASCADE" onUpdate="RESTRICT"
 			referencedColumnNames="id" referencedTableName="users" />
-
-		<addForeignKeyConstraint
-			baseColumnNames="session_id" baseTableName="user_sessions"
-			constraintName="fk_usersessions_sessionid" deferrable="true"
-			initiallyDeferred="true" onDelete="CASCADE" onUpdate="RESTRICT"
-			referencedColumnNames="session_id"
-			referencedTableName="spring_session" />
 
 
 		<rollback>
 			<dropForeignKeyConstraint
-				baseTableName="user_sessions"
-				constraintName="fk_usersessions_userid" />
-			<dropForeignKeyConstraint
-				baseTableName="user_sessions"
-				constraintName="fk_usersessions_sessionid" />
+				baseTableName="spring_session"
+				constraintName="fk_springsession_users_userid" />
 
-			<dropTable cascadeConstraints="true"
-				tableName="user_sessions" />
+			<dropColumn columnName="user_id"
+				tableName="spring_session" />
 
+			<!-- Likely to fail; successful roll back might require truncating the
+				user table -->
 			<addUniqueConstraint columnNames="display_name"
 				constraintName="users_display_name_key" tableName="users" />
 

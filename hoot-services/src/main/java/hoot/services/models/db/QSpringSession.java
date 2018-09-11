@@ -19,6 +19,7 @@ public class QSpringSession extends com.querydsl.sql.RelationalPathBase<SpringSe
     public final NumberPath<Long> last_access_time = createNumber("last_access_time", Long.class);
     public final NumberPath<Integer> max_inactive_interval = createNumber("max_inactive_interval", Integer.class);
     public final StringPath principal_name = createString("principal_name");
+    public final NumberPath<Long> user_id = createNumber("user_id", Long.class);
 
     public QSpringSession(String variable) {
         super(SpringSession.class, forVariable(variable), "public", "spring_session");
@@ -46,6 +47,7 @@ public class QSpringSession extends com.querydsl.sql.RelationalPathBase<SpringSe
         addMetadata(last_access_time, ColumnMetadata.named("last_access_time").withIndex(3).ofType(Types.BIGINT).withSize(19).notNull());
         addMetadata(max_inactive_interval, ColumnMetadata.named("max_inactive_interval").withIndex(4).ofType(Types.INTEGER).withSize(10).notNull());
         addMetadata(principal_name, ColumnMetadata.named("principal_name").withIndex(5).ofType(Types.VARCHAR).withSize(100).notNull());
+        addMetadata(user_id, ColumnMetadata.named("user_id").withIndex(6).ofType(Types.BIGINT).withSize(19).notNull());
     }
 
 }
