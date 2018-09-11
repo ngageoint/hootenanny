@@ -16,16 +16,22 @@
 namespace hoot
 {
 
-struct ElementComparePQ
+struct PqElement
+{
+  ConstElementPtr element;
+  int fileIndex;
+};
+
+struct ElementComparePq
 {
   //The priority queue expects the reverse sorting priority that we use with vector sorting.
-  bool operator()(const ConstElementPtr& e1, const ConstElementPtr& e2) const
+  bool operator()(const PqElement& e1, const PqElement& e2) const
   {
-    const ElementType::Type type1 = e1->getElementType().getEnum();
-    const ElementType::Type type2 = e2->getElementType().getEnum();
+    const ElementType::Type type1 = e1.element->getElementType().getEnum();
+    const ElementType::Type type2 = e2.element->getElementType().getEnum();
     if (type1 == type2)
     {
-      return e1->getId() > e2->getId();
+      return e1.element->getId() > e2.element->getId();
     }
     else
     {
@@ -34,8 +40,8 @@ struct ElementComparePQ
   }
 };
 
-typedef std::priority_queue<ConstElementPtr,
-                            std::vector<ConstElementPtr>, ElementComparePQ> ElementPriorityQueue;
+typedef std::priority_queue<PqElement,
+                            std::vector<PqElement>, ElementComparePq> ElementPriorityQueue;
 
 /**
   This performs element sorting outside of main memory on disk.
@@ -134,6 +140,8 @@ private:
                             QList<boost::shared_ptr<PartialOsmMapReader>> readers);
 
   boost::shared_ptr<PartialOsmMapWriter> _getFinalOutputWriter();
+
+  void _printPriorityQueue(ElementPriorityQueue priorityQueue);
 };
 
 }

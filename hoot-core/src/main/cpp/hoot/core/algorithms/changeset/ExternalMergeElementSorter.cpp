@@ -7,6 +7,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmXmlReader.h>
 
 namespace hoot
 {
@@ -18,7 +19,6 @@ _tempFormat(ConfigOptions().getElementSorterExternalTempFormat()),
 _maxElementsPerFile(ConfigOptions().getElementSorterElementBufferSize()),
 _retainTempFiles(false)
 {
-  assert(_maxElementsPerFile != -1);
 }
 
 ExternalMergeElementSorter::~ExternalMergeElementSorter()
@@ -60,6 +60,11 @@ void ExternalMergeElementSorter::sort(ElementInputStreamPtr input)
 {
   LOG_VART(_tempFormat);
   LOG_VART(_maxElementsPerFile);
+
+  if (_maxElementsPerFile < 1)
+  {
+    throw HootException("Invalid buffer size value: " + QString::number(_maxElementsPerFile));
+  }
 
   _sort(input);
   _initElementStream();
@@ -121,7 +126,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
   while (input->hasMoreElements())
   {
     ConstElementPtr element = input->readNextElement();
-    LOG_TRACE("Read element: " << element);
+    LOG_TRACE("Read element: " << element->getElementId());
     elements.push_back(element);
     elementCtr++;
 
@@ -160,7 +165,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
            itr != elements.end(); ++itr)
       {
         ConstElementPtr element = *itr;
-        LOG_TRACE("Wrote element: " << element);
+        LOG_TRACE("Wrote element: " << element->getElementId());
         writer->writePartial(element);
       }
       elements.clear();
@@ -214,41 +219,67 @@ void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& prio
 {
   LOG_DEBUG("Iterating through remaining elements in sorted order...");
 
-  int i = 0;
-  long elementPerFileCount = 0;
+  int fullyParsedFiles = 0;
+  long elementsWritten = 0;
   long pushesToPriorityQueue = 0;
-  while (i != readers.size())
+  while (fullyParsedFiles != readers.size())
   {
-    ConstElementPtr rootElement = priorityQueue.top();
-    LOG_TRACE("Read root element from priority queue: " << rootElement);
-    LOG_TRACE("Removing root from priority queue...");
+    LOG_VART(fullyParsedFiles);
+    _printPriorityQueue(priorityQueue);
+    PqElement rootPqElement = priorityQueue.top();
     priorityQueue.pop();
-    if (rootElement->getId() != LONG_MAX)
+    LOG_TRACE(
+      "Read root element from priority queue and removed it: " <<
+      rootPqElement.element->getElementId());
+    if (rootPqElement.element->getId() != LONG_MAX)
     {
-      LOG_TRACE("Writing root element from priority queue to final output: " << rootElement);
-      writer->writePartial(rootElement);
-      elementPerFileCount++;
+      LOG_TRACE(
+        "Writing root element from priority queue to final output: " <<
+        rootPqElement.element->getElementId());
+      writer->writePartial(rootPqElement.element);
+      elementsWritten++;
+      LOG_VART(elementsWritten);
     }
-    if (readers.at(i)->hasMoreElements())
+    if (readers.at(rootPqElement.fileIndex)->hasMoreElements())
     {
-      rootElement = readers.at(i)->readNextElement();
-      LOG_TRACE("Read new element: " << rootElement);
+      ConstElementPtr element = readers.at(rootPqElement.fileIndex)->readNextElement();
+      LOG_TRACE(
+        "Read new element: " << element->getElementId() << " from file: " <<
+      rootPqElement.fileIndex);
+      rootPqElement.element = element;
     }
     else
     {
-      LOG_TRACE("No elements left in file.  Creating invalid root...");
-      rootElement.reset(new Relation(Status::Invalid, LONG_MAX, 15.0));
-      LOG_VART(elementPerFileCount);
-      elementPerFileCount = 0;
-      i++;
+      LOG_TRACE("No elements left in file: " << rootPqElement.fileIndex);
+      readers.at(rootPqElement.fileIndex)->close();
+      rootPqElement.element.reset(new Relation(Status::Invalid, LONG_MAX, 15.0));
+      fullyParsedFiles++;
     }
 
-    LOG_TRACE("Pushing element to priority queue: " << rootElement);
-    priorityQueue.push(rootElement);
-    pushesToPriorityQueue++;
+    if (rootPqElement.element->getId() != LONG_MAX)
+    {
+      LOG_TRACE("Pushing element to priority queue: " << rootPqElement.element->getElementId());
+      priorityQueue.push(rootPqElement);
+      pushesToPriorityQueue++;
+    }
   }
+
+  LOG_VART(elementsWritten);
+  LOG_VART(fullyParsedFiles);
   LOG_VART(priorityQueue.size());
   LOG_VART(pushesToPriorityQueue);
+}
+
+void ExternalMergeElementSorter::_printPriorityQueue(ElementPriorityQueue priorityQueue)
+{
+  QString str;
+  while (!priorityQueue.empty())
+  {
+    PqElement pqElement = priorityQueue.top();
+    str += pqElement.fileIndex + "," + pqElement.element->getElementId().toString() + ";";
+    priorityQueue.pop();
+  }
+  LOG_TRACE("Priority queue: " << str);
 }
 
 boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutputWriter()
@@ -294,6 +325,14 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(fileName));
+
+    boost::shared_ptr<OsmXmlReader> xmlReader =
+      boost::dynamic_pointer_cast<OsmXmlReader>(reader);
+    if (xmlReader.get())
+    {
+      xmlReader->setAddChildRefsWhenMissing(true);
+    }
+
     reader->setUseDataSourceIds(true);
     reader->open(fileName);
     readers.append(reader);
@@ -303,8 +342,11 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
     if (reader->hasMoreElements())
     {
       ConstElementPtr element = reader->readNextElement();
-      LOG_TRACE("Pushing element to priority queue: " << element);
-      priorityQueue.push(element);
+      PqElement pqElement;
+      pqElement.element = element;
+      pqElement.fileIndex = i;
+      LOG_TRACE("Pushing element to priority queue: " << element->getElementId());
+      priorityQueue.push(pqElement);
     }
   }
   LOG_VART(priorityQueue.size());

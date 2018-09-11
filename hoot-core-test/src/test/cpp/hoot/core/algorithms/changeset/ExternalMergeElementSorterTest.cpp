@@ -50,6 +50,7 @@ public:
   {
     //Since ExternalMergeElementSorter writes chunks of maps, it naturally sets off some of the
     //incomplete map warnings which we don't want to see.
+    //TODO: re-enable
     //DisableLog dl;
 
     const QString input = "test-files/algorithms/changeset/ExternalMergeElementSorterTest.osm";
@@ -65,6 +66,7 @@ public:
     ExternalMergeElementSorter elementSorter;
     elementSorter.setMaxElementsPerFile(5);
     elementSorter.setTempFormat("osm");
+    //TODO: disable
     elementSorter.setRetainTempFiles(true);
     elementSorter.sort(boost::dynamic_pointer_cast<ElementInputStream>(reader));
 
