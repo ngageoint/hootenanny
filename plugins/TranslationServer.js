@@ -299,8 +299,7 @@ var osm2ogr = function(params) {
         } else if (match.length === 1) {
             return match[0]
         } else {
-            // find superset of matching...
-
+            // find intersections of matching...
             match = match.sort(function(schemaA, schemaB) { return schemaA.columns.length - schemaB.columns.length });
             var base = match.shift();
             var finColumns = []

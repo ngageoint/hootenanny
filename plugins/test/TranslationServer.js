@@ -104,23 +104,42 @@ describe('TranslationServer', function () {
                 })
             }, Error, 'TDSv61 for Area with fcode=FB123 not found');
         });
-
-        it('build a super-set schema when fcode supports multiple geometries', function() {
-            var schema = server.handleInputs({
+        it('builds intersection of between geometry schemas', function() {
+            var pointSchema = server.handleInputs({
                 idval: 'AL013',
-                geom: 'Point,Area',
+                geom: 'Point',
                 translation: 'TDSv61',
                 idelem: 'fcode',
                 method: 'GET',
                 path: '/translateTo'
             });
+    
+            var areaSchema = server.handleInputs({
+                idval: 'AL013',
+                geom: 'Area',
+                translation: 'TDSv61',
+                idelem: 'fcode',
+                method: 'GET',
+                path: '/translateTo'
+            });
+            var allSchema = server.handleInputs({
+                idval: 'AL013',
+                geom: 'Area,Point',
+                translation: 'TDSv61',
+                idelem: 'fcode',
+                method: 'GET',
+                path: '/translateTo'
+            });
+    
+            var pointSchemaColumns = pointSchema.columns.map(function(col) { return col.name; });
+            var areaSchemaColumns = areaSchema.columns.map(function(col) { return col.name; } );
+            var allSchemaColumns = allSchema.columns.map(function(col) { return col.name; });
+    
+            var intersection = pointSchemaColumns.filter(function(col) { return areaSchemaColumns.indexOf(col) !== -1 }).length > 0;
+            assert.equal(allSchemaColumns.length > 0, true);
+            assert.equal(intersection, true);
+        })
 
-            assert.equal(schema.desc, 'Building');
-            assert.equal(schema.fcode, 'AL013');
-            assert.equal(schema.name, 'BUILDING');
-            assert.notEqual(schema.columns, undefined);
-        });
-        
         it('should handle translateFrom GET for TDSv61', function() {
             //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv61
             var attrs = server.handleInputs({
