@@ -208,6 +208,9 @@ function handleInputs(params) {
         case '/capabilities':
             result = getCapabilities(params);
             break;
+        case '/supportedGeometries':
+            result = getSupportedGeometries(params);
+            break;
         case '/translations':
             result = getTranslations(params);
             break;
@@ -219,6 +222,20 @@ function handleInputs(params) {
     }
     return result;
 };
+
+var getSupportedGeometries = function(params) {
+    if (params.method === 'GET') {
+        var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
+        var fcode = params.fcode;
+        // same as saying, filter schema for those with matching fcode, then mapping to be only geometry
+        return schema.reduce(function(geoms, d) {
+            if (d.fcode === fcode) geoms.push(d.geom);
+            return geoms;
+        }, []);
+    } else {
+        throw new Error('Unsupported method');
+    }
+}
 
 var getCapabilities = function(params) {
     if (params.method === 'GET'){
@@ -268,22 +285,75 @@ var osm2ogr = function(params) {
 
 
         //geom type may be Vertex for tagged nodes that are members of ways
-        var geom = params.geom;
-        if (geom === 'Vertex') geom = 'Point';
-
+        var geom = params.geom.split(',').map(function(geom) {
+            return geom === 'Vertex' ? 'Point' : geom;         
+        });
         var k = params.key || params.idelem;
         var v = params.value || params.idval;
         var match = schema.filter(function(d) {
-            return d[k] === v && d.geom === geom;
+            return d[k] === v && geom.indexOf(d.geom) > -1;
         });
 
-        if (match.length !== 1) {
+        if (!match.length) {
             schemaError(params);
-        }
+        } else if (match.length === 1) {
+            return match[0]
+        } else {
+            // find intersections of matching...
+            match = match.sort(function(schemaA, schemaB) { return schemaA.columns.length - schemaB.columns.length });
+            var base = match.shift();
+            var finColumns = []
 
-        return match[0];
+            // for each column in the base schema...
+            base.columns.forEach(function(column) {
+                // first check to see if the current column name is found
+                // in other schema columns
+                var matches = [];
+                match.forEach(function(schema) { 
+                    schema.columns.forEach(function(col) { if (col.name === column.name) matches.push(col) })
+                })
+                // if it is...
+                if (matches.length) {
+                    // and it's a non enumerated column, just add it to the finColumns
+                    if (!matches[0].hasOwnProperty('enumerations')) {
+                        finColumns.push(column)
+                    } else {
+                        // otherwise build the intersection of 
+                        // all matches' enumerations...
+                        matches.push(column)
+                        var enumerations = [].concat
+                            .apply([], matches.map(function(column) { return column.enumerations }))
+                            .filter(function(enumeration, index, self) { 
+                                return self.findIndex(function(e) { 
+                                    return e.name === enumeration.name 
+                                }) === index; 
+                            })
+
+                        // and then only if that intersection
+                        // exists, add the column to the final column
+                        if (enumerations.length) {
+                            column.enumerations = enumerations
+                            finColumns.push(column)
+                        }
+                    }
+                }
+            })
+
+            // final check to see if no 
+            // intersection was found amongst columns
+            if (!finColumns.length) {
+                schemaError(params);
+            } else {
+                return {
+                    desc: match[0].desc,
+                    fcode: match[0].fcode,
+                    name: match[0].desc.toUpperCase(),
+                    columns: finColumns
+                }
+            }
+        }
     }
-};
+}
 
 // Translated Schema to OSM handler
 var ogr2osm = function(params) {
