@@ -45,6 +45,9 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/HootApiDbReader.h>
+#include <hoot/core/io/OsmApiDbReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -66,11 +69,6 @@ namespace hoot
  * reading/sorting.  Access to the in memory implementation is controlled by the configuration
  * option, element.sorter.element.buffer.size (size = -1 results in the in memory implementation
  * being used).
- *
- * Note that cloning the results of external sorting can currently only be used when the underlying
- * source is OSM XML.  Therefore, using other types of data sources will always result an
- * additional external sorting operation for each changeset output.  #2609 would eliminate that
- * limitation.
  */
 class DeriveChangesetCmd : public BaseCommand
 {
@@ -92,7 +90,6 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    //  Check if the --stats option is present
     if (args.contains("--stats"))
     {
       _printStats = true;
@@ -107,56 +104,49 @@ public:
 
     const QString input1 = args[0];
     const QString input2 = args[1];
-    const QStringList outputs = args[2].split(";");
+    const QString output = args[2];
 
     LOG_VARD(input1);
     LOG_VARD(input2);
-    LOG_VARD(outputs);
+    LOG_VARD(output);
 
-    for (int i = 0; i < outputs.length(); i++)
+    if (!_isSupportedOutputFormat(output))
     {
-      const QString format = outputs[i];
-      if (!_isSupportedOutputFormat(format))
+      throw HootException("Unsupported changeset output format: " + output);
+    }
+    else if (output.endsWith(".osc.sql"))
+    {
+      if (args.size() != 4)
       {
-        throw HootException("Unsupported changeset output format: " + format);
+        cout << getHelp() << endl << endl;
+        throw HootException(
+          QString("%1 with SQL output takes four parameters.").arg(getName()));
       }
-      else if (format.endsWith(".osc.sql"))
-      {
-        if (args.size() != 4)
-        {
-          cout << getHelp() << endl << endl;
-          throw HootException(
-            QString("%1 with SQL output takes four parameters.").arg(getName()));
-        }
-        _osmApiDbUrl = args[3];
-      }
+      _osmApiDbUrl = args[3];
     }
     LOG_VARD(_osmApiDbUrl);
 
     _parseBuffer();
 
-    //If streaming is enabled, try to stream the changeset to avoid memory issues.
-    if (ConfigOptions().getElementSorterElementBufferSize() != -1 &&
-        _inputFormatsStreamable(input1, input2))
+    const bool singleInput = input2.trimmed().isEmpty();
+
+    ElementInputStreamPtr sortedElements1;
+    ElementInputStreamPtr sortedElements2;
+    if (!singleInput)
     {
-      if (outputs.size() == 1 ||
-          //See comments in class description as to why this check exists.
-          (outputs.size() > 1 &&
-            (!OsmXmlReader().isSupported(input1) || !OsmXmlReader().isSupported(input2))))
-      {
-        _sortExternallyAndStreamChangesetOutput(input1, input2, outputs.at(0));
-      }
-      else
-      {
-        _sortExternallyAndStreamChangesetOutputs(input1, input2, outputs);
-      }
+      //sortedElements1 is the former state of the data
+      sortedElements1 = _getSortedElements(input1, Status::Unknown1);
+      //sortedElements2 is the newer state of the data
+      sortedElements2 = _getSortedElements(input2, Status::Unknown2);
     }
-    //Currently, not all input formats are supported as streamable, so switch over to memory bound
-    //I/O if necessary.
     else
     {
-      _sortInMemoryAndStreamChangesetOutput(_readInputsFully(input1, input2), outputs);
+      //Here we're passing all the input data through to the output changeset, so put it in the
+      //sortedElements2 newer data and leave the first one empty.
+      sortedElements1 = _getEmptyInputStream();
+      sortedElements2 = _getSortedElements(input1, Status::Unknown2);
     }
+    _streamChangesetOutput(sortedElements1, sortedElements2, output);
 
     return 0;
   }
@@ -164,237 +154,6 @@ public:
 private:
 
   QString _osmApiDbUrl;
-
-  bool _inputFormatsStreamable(const QString input1, const QString input2) const
-  {
-    const bool singleInput = input2.trimmed().isEmpty();
-    LOG_VART(singleInput);
-    LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input1));
-    bool streamable = OsmMapReaderFactory::getInstance().hasElementInputStream(input1);
-    if (!singleInput)
-    {
-      LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input2));
-      streamable =
-        streamable && OsmMapReaderFactory::getInstance().hasElementInputStream(input2);
-    }
-    return streamable;
-  }
-
-  boost::shared_ptr<ExternalMergeElementSorter> _getSortedElements(const QString input)
-  {
-    QList<ElementVisitorPtr> visitors;
-    //we don't want to include review relations
-    boost::shared_ptr<ElementCriterion> elementCriterion(
-      new NotCriterion(
-        boost::shared_ptr<TagKeyCriterion>(
-          new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
-    //node comparisons require hashes be present on the elements
-    visitors.append(boost::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
-
-    boost::shared_ptr<PartialOsmMapReader> reader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(input));
-    reader->setUseDataSourceIds(true);
-    reader->open(input);
-    ElementInputStreamPtr inputStream = boost::dynamic_pointer_cast<ElementInputStream>(reader);
-    ElementInputStreamPtr filteredSortedInputStream(
-      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
-
-    boost::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
-
-    sorted->sort(filteredSortedInputStream);
-    reader->finalizePartial();
-
-    return sorted;
-  }
-
-  /*
-   * Streams inputs, sorts elements externally, and streams changeset output(s).  The sorting will
-   * only be done once per output here, since the sort results get cloned after sorting.
-   *
-   * Currently, this will only work when the underlying stream is an OsmXmlReader.
-   */
-  void _sortExternallyAndStreamChangesetOutputs(const QString input1, const QString input2,
-                                                const QStringList outputs)
-  {
-    const bool singleInput = input2.trimmed().isEmpty();
-
-    QString msg = "Streaming changeset input from " + input1.right(25);
-    if (!singleInput)
-    {
-      msg += " and " + input2.right(25);
-    }
-    msg += " sorting, and writing output(s) to " + outputs.join(",").right(50);
-    LOG_INFO(msg);
-
-    boost::shared_ptr<ExternalMergeElementSorter> sortedElements1 = _getSortedElements(input1);
-    boost::shared_ptr<ExternalMergeElementSorter> sortedElements2;
-    if (!singleInput)
-    {
-      sortedElements2 = _getSortedElements(input2);
-    }
-
-    //Not worrying about the unnecessary clone here for a single output, since we're just cloning
-    //a stream here and not an entire map, like in _sortInMemoryAndStreamChangesetOutput.
-    for (int i = 0; i < outputs.size(); i++)
-    {
-      _streamChangesetOutput(
-        boost::shared_ptr<ChangesetDeriver>(
-          new ChangesetDeriver(
-            //clone the sorted element streams here, so we don't have to resort the inputs for every
-            //single output we want to write
-            ElementInputStreamPtr(sortedElements1->clone()),
-            ElementInputStreamPtr(sortedElements2->clone()))),
-        outputs.at(i));
-    }
-  }
-
-  /*
-   * Streams inputs, sorts elements externally, and streams changeset to a single output.  Each
-   * call to this method will result in a sorting operation.
-   *
-   * This will work with readers other than OsmXmlReader; can be eliminated after #2609.
-   */
-  void _sortExternallyAndStreamChangesetOutput(const QString input1, const QString input2,
-                                               const QString output)
-  {
-    const bool singleInput = input2.trimmed().isEmpty();
-
-    QString msg = "Streaming changeset input from " + input1.right(25);
-    if (!singleInput)
-    {
-      msg += " and " + input2.right(25);
-    }
-    msg += " sorting, and writing output to " + output;
-    LOG_INFO(msg);
-
-    boost::shared_ptr<ExternalMergeElementSorter> sortedElements1 = _getSortedElements(input1);
-    boost::shared_ptr<ExternalMergeElementSorter> sortedElements2;
-    if (!singleInput)
-    {
-      sortedElements2 = _getSortedElements(input2);
-    }
-
-    _streamChangesetOutput(
-      boost::shared_ptr<ChangesetDeriver>(new ChangesetDeriver(sortedElements1, sortedElements2)),
-      output);
-  }
-
-  /*
-   * Reads entire inputs into memory
-   */
-  QList<OsmMapPtr> _readInputsFully(const QString input1, const QString input2)
-  {
-    const bool singleInput = input2.trimmed().isEmpty();
-
-    QString msg = "Reading entire inputs into memory for " + input1;
-    if (!singleInput)
-    {
-      msg += " and " + input2;
-    }
-    msg += "...";
-    LOG_INFO(msg);
-
-    //some in these datasets may have status=3 if you're loading conflated data, so use
-    //reader.use.file.status and reader.keep.status.tag if you want to retain that value
-    OsmMapPtr map1(new OsmMap());
-    OsmMapPtr map2(new OsmMap());
-    if (!singleInput)
-    {
-      //map1 is the former state of the data
-      IoUtils::loadMap(map1, input1, true, Status::Unknown1);
-      //map2 is the newer state of the data
-      IoUtils::loadMap(map2, input2, true, Status::Unknown2);
-    }
-    else
-    {
-      //here we're passing all the input data through to the output changeset, so put it in the
-      //map2 newer data
-      IoUtils::loadMap(map2, input1, true, Status::Unknown2);
-    }
-
-    //we don't want to include review relations
-    boost::shared_ptr<TagKeyCriterion> elementCriterion(
-      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
-    removeElementsVisitor.setRecursive(false);
-    map1->visitRw(removeElementsVisitor);
-    map2->visitRw(removeElementsVisitor);
-
-    //node comparisons require hashes be present on the elements
-    CalculateHashVisitor2 hashVis;
-    map1->visitRw(hashVis);
-    map2->visitRw(hashVis);
-
-    QList<OsmMapPtr> inputMaps;
-    inputMaps.append(map1);
-    inputMaps.append(map2);
-    return inputMaps;
-  }
-
-  /*
-   * Writes changeset output for the given changeset provider
-   */
-  void _streamChangesetOutput(ChangesetDeriverPtr changesetDeriver, const QString output)
-  {
-    LOG_INFO("Streaming changeset output to " << output.right(25) << "...")
-
-    QString stats;
-    LOG_VARD(output);
-
-    //Could this eventually this could be cleaned up to use OsmChangeWriterFactory and the
-    //OsmChange interface instead?
-    if (output.endsWith(".osc"))
-    {
-      OsmXmlChangesetFileWriter writer;
-      writer.write(output, changesetDeriver);
-      stats = writer.getStatsTable();
-    }
-    else if (output.endsWith(".osc.sql"))
-    {
-      assert(!_osmApiDbUrl.isEmpty());
-      OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetDeriver);
-    }
-
-    if (_printStats)
-    {
-      LOG_INFO("Changeset Stats:\n" << stats);
-    }
-  }
-
-  /*
-   * Writes output after first sorting elements in memory
-   */
-  void _sortInMemoryAndStreamChangesetOutput(const QList<OsmMapPtr>& inputMaps,
-                                             const QStringList outputs)
-  {
-    LOG_INFO(
-      "Sorting changeset inputs in memory and streaming to " << outputs.join(",").right(50) <<
-      "...");
-
-    InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(inputMaps[0]));
-    InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(inputMaps[1]));
-    if (outputs.size() == 1)
-    {
-      //we can save a map copy here if there's only one output
-      _streamChangesetOutput(
-        boost::shared_ptr<ChangesetDeriver>(new ChangesetDeriver(sorted1, sorted2)),
-        outputs.at(0));
-    }
-    else
-    {
-      for (int i = 0; i < outputs.size(); i++)
-      {
-        _streamChangesetOutput(
-          boost::shared_ptr<ChangesetDeriver>(
-            new ChangesetDeriver(
-              //Clone the sorted element streams here, so we don't have to re-sort the inputs for
-              //every single output we want to write.
-              ElementInputStreamPtr(sorted1->clone()), ElementInputStreamPtr(sorted2->clone()))),
-          outputs.at(i));
-      }
-    }
-  }
 
   void _parseBuffer()
   {
@@ -440,6 +199,183 @@ private:
   bool _isSupportedOutputFormat(const QString format) const
   {
     return format.endsWith(".osc") || format.endsWith(".osc.sql");
+  }
+
+  bool _inputIsSorted(const QString input) const
+  {
+    //db inputs are already sorted
+    if (HootApiDbReader().isSupported(input) || OsmApiDbReader().isSupported(input))
+    {
+      return true;
+    }
+    else if (OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input))
+    {
+      return true;
+    }
+    return false;
+  }
+
+  bool _inputFormatStreamable(const QString input) const
+  {
+    LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
+    return OsmMapReaderFactory::getInstance().hasElementInputStream(input);
+  }
+
+  /*
+   * Reads entire input into memory
+   */
+  OsmMapPtr _readInputFully(const QString input, const Status& elementStatus)
+  {
+    LOG_INFO("Reading entire input into memory for " << input << "...");
+
+    //some in these datasets may have status=3 if you're loading conflated data, so use
+    //reader.use.file.status and reader.keep.status.tag if you want to retain that value
+    OsmMapPtr map(new OsmMap());
+    /*if (!singleInput)
+    {
+      //map1 is the former state of the data
+      IoUtils::loadMap(map1, input1, true, Status::Unknown1);
+      //map2 is the newer state of the data
+      IoUtils::loadMap(map2, input2, true, Status::Unknown2);
+    }
+    else
+    {
+      //here we're passing all the input data through to the output changeset, so put it in the
+      //map2 newer data
+      IoUtils::loadMap(map2, input1, true, Status::Unknown2);
+    }*/
+    IoUtils::loadMap(map, input, true, elementStatus);
+
+    //we don't want to include review relations
+    boost::shared_ptr<TagKeyCriterion> elementCriterion(
+      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    removeElementsVisitor.setRecursive(false);
+    map->visitRw(removeElementsVisitor);
+
+    //node comparisons require hashes be present on the elements
+    CalculateHashVisitor2 hashVis;
+    map->visitRw(hashVis);
+
+    return map;
+  }
+
+  ElementInputStreamPtr _getSortedElements(const QString input, const Status& status)
+  {
+    LOG_VARD(input);
+    ElementInputStreamPtr sortedElements;
+
+    //Some in these datasets may have status=3 if you're loading conflated data, so use
+    //reader.use.file.status and reader.keep.status.tag if you want to retain that value.
+
+    const bool inputSorted = _inputIsSorted(input);
+    LOG_VARD(inputSorted);
+    //Only sort if input isn't already sorted.
+    if (!inputSorted)
+    {
+      //If external sorting is enabled and both inputs are streamable, externally sort the elements
+      //to avoid potential memory issues.
+      const bool inputStreamable = _inputFormatStreamable(input);
+      LOG_VARD(inputStreamable);
+      LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
+      if (inputStreamable && ConfigOptions().getElementSorterElementBufferSize() != -1)
+      {
+        sortedElements = _sortElementsExternally(input);
+      }
+      else
+      {
+        //Otherwise, since currently not all input formats are supported as streamable, switch over
+        //to memory bound sorting.
+        sortedElements = _sortElementsInMemory(_readInputFully(input, status));
+      }
+    }
+    else
+    {
+      sortedElements = _getFilteredInputStream(input);
+    }
+    return sortedElements;
+  }
+
+  void _streamChangesetOutput(ElementInputStreamPtr input1, ElementInputStreamPtr input2,
+                              const QString output)
+  {
+    LOG_INFO("Streaming changeset output to " << output.right(25) << "...")
+
+    QString stats;
+    LOG_VARD(output);
+
+    //Could this eventually this could be cleaned up to use OsmChangeWriterFactory and the
+    //OsmChange interface instead?
+    ChangesetDeriverPtr changesetDeriver(new ChangesetDeriver(input1, input2));
+    if (output.endsWith(".osc"))
+    {
+      OsmXmlChangesetFileWriter writer;
+      writer.write(output, changesetDeriver);
+      stats = writer.getStatsTable();
+    }
+    else if (output.endsWith(".osc.sql"))
+    {
+      assert(!_osmApiDbUrl.isEmpty());
+      OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetDeriver);
+    }
+
+    if (_printStats)
+    {
+      LOG_INFO("Changeset Stats:\n" << stats);
+    }
+  }
+
+  ElementInputStreamPtr _getEmptyInputStream()
+  {
+    //no-op here since InMemoryElementSorter taking in an empty map will just return an empty
+    //element stream
+    return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
+  }
+
+  ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map)
+  {
+    return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
+  }
+
+  ElementInputStreamPtr _sortElementsExternally(const QString input)
+  {
+    ElementInputStreamPtr filteredInputStream = _getFilteredInputStream(input, true);
+    boost::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+    sorted->sort(filteredInputStream);
+    //reader->finalizePartial();
+    return sorted;
+  }
+
+  ElementInputStreamPtr _getFilteredInputStream(const QString input,
+                                                const bool addChildRefsWhenMissing = false)
+  {
+    QList<ElementVisitorPtr> visitors;
+    //we don't want to include review relations
+    boost::shared_ptr<ElementCriterion> elementCriterion(
+      new NotCriterion(
+        boost::shared_ptr<TagKeyCriterion>(
+          new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
+    //node comparisons require hashes be present on the elements
+    visitors.append(boost::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
+
+    boost::shared_ptr<PartialOsmMapReader> reader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(input));
+
+    boost::shared_ptr<OsmXmlReader> xmlReader =
+      boost::dynamic_pointer_cast<OsmXmlReader>(reader);
+    if (xmlReader.get())
+    {
+      xmlReader->setAddChildRefsWhenMissing(addChildRefsWhenMissing);
+    }
+
+    reader->setUseDataSourceIds(true);
+    reader->open(input);
+    ElementInputStreamPtr inputStream = boost::dynamic_pointer_cast<ElementInputStream>(reader);
+    ElementInputStreamPtr filteredInputStream(
+      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+
+    return filteredInputStream;
   }
 };
 

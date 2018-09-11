@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 
 namespace hoot
 {
@@ -55,6 +56,9 @@ public:
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(input));
+    boost::shared_ptr<OsmXmlReader> xmlReader =
+      boost::dynamic_pointer_cast<OsmXmlReader>(reader);
+    xmlReader->setAddChildRefsWhenMissing(true);
     reader->setUseDataSourceIds(true);
     reader->open(input);
 
@@ -68,8 +72,8 @@ public:
     while (elementSorter.hasMoreElements())
     {
       ElementPtr element = elementSorter.readNextElement();
-      LOG_TRACE(element->toString());
-      LOG_VART(index);
+      //LOG_TRACE(element->toString());
+      //LOG_VART(index);
       //elements should be returned in the order nodes, ways, then relations
       if (index >= 0 && index <=15)
       {

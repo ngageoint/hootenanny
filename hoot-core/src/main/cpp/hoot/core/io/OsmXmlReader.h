@@ -65,20 +65,14 @@ public:
   static unsigned int logWarnCount;
 
   OsmXmlReader();
-  OsmXmlReader(const OsmXmlReader& reader);
   virtual ~OsmXmlReader();
-
-  /**
-   * @see ElementInputStream
-   */
-  virtual OsmXmlReader* clone() const { return new OsmXmlReader(*this); }
 
   virtual void close();
 
   virtual QString errorString() const { return _errorString; }
 
   virtual bool endElement(const QString &namespaceURI, const QString &localName,
-                  const QString &qName);
+                          const QString &qName);
 
   virtual bool fatalError(const QXmlParseException &exception);
 
@@ -107,13 +101,16 @@ public:
   virtual bool startElement(const QString &namespaceURI, const QString &localName,
                             const QString &qName, const QXmlAttributes &attributes);
 
-  void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
-  void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
+  //void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
   void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
   void setDefaultAccuracy(Meters circularError) { _circularError = circularError; } 
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
   virtual QString supportedFormats() { return ".osm;.osm.bz2;.osm.gz"; }
+
+  void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
+  { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
 
 private:
 
@@ -160,6 +157,9 @@ private:
   // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
   // QHash goes away when the reading is done, but the memory sharing remains.
   QHash<QString, QString> _strings;
+
+  //
+  bool _addChildRefsWhenMissing;
 
   void _createNode(const QXmlAttributes &attributes);
   void _createWay(const QXmlAttributes &attributes);

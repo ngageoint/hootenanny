@@ -1260,7 +1260,8 @@ void OsmPbfReader::initializePartial()
   if (_in != NULL)
   {
     _blobs = loadOsmDataBlobOffsets(*_in);
-    _in->seekg (0, ios::end);    _fileLength = _in->tellg();
+    _in->seekg (0, ios::end);
+    _fileLength = _in->tellg();
     _in->seekg (0, ios::beg);
   }
 }
@@ -1309,8 +1310,8 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
       _lastReadTime = _startReadTime;
       _lastPosition = 0;
     }
-    //clear out the map and read a new blob
 
+    //clear out the map and read a new blob
     _map->clear();
     _partialNodesRead = 0;
     _partialWaysRead = 0;
@@ -1351,7 +1352,6 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
 
-
     element = _nodesItr->second->cloneSp();
     ++_nodesItr;
     _partialNodesRead++;
@@ -1387,7 +1387,7 @@ void OsmPbfReader::close()
 {
   finalizePartial();
 
-  if ( _needToCloseInput == true )
+  if (_needToCloseInput == true)
   {
     // Deleting fstream objects invokes the istream destructor, who in turn calls istream::close as part of its contract
     delete _in;

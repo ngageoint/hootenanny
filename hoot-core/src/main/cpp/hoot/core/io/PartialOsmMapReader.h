@@ -63,6 +63,8 @@ public:
    */
   virtual void readPartial(OsmMapPtr map);
 
+  virtual void initializePartial() {}
+
   /**
    * Finalize the reading of partial data. Any connections/files should be closed when this is
      complete.

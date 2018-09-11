@@ -59,11 +59,6 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual InMemoryElementSorter* clone() { return new InMemoryElementSorter(*this); }
-
-  /**
-   * @see ElementInputStream
-   */
   virtual void close() {}
 
   /**

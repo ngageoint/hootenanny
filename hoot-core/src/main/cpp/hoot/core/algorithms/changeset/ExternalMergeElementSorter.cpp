@@ -21,15 +21,6 @@ _retainTempFiles(false)
   assert(_maxElementsPerFile != -1);
 }
 
-ExternalMergeElementSorter::ExternalMergeElementSorter(const ExternalMergeElementSorter& sorter)
-{
-  _maxElementsPerFile = sorter._maxElementsPerFile;
-  _tempFormat = sorter._tempFormat;
-  _retainTempFiles = sorter._retainTempFiles;
-  _tempOutputFiles = sorter._tempOutputFiles;
-  _sortedElements.reset(_sortedElements->clone());
-}
-
 ExternalMergeElementSorter::~ExternalMergeElementSorter()
 {
   close();
@@ -129,12 +120,15 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
   while (input->hasMoreElements())
   {
-    elements.push_back(input->readNextElement());
+    ConstElementPtr element = input->readNextElement();
+    LOG_TRACE("Read element: " << element);
+    elements.push_back(element);
     elementCtr++;
 
     if ((elementCtr % _maxElementsPerFile == 0 && elementCtr != 0) || !input->hasMoreElements())
     {
       LOG_DEBUG("Sorting elements...");
+      LOG_VART(elements.size());
       std::sort(elements.begin(), elements.end(), _elementCompare);
 
       LOG_DEBUG("Writing elements to temp file...");
@@ -166,10 +160,11 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
            itr != elements.end(); ++itr)
       {
         ConstElementPtr element = *itr;
-        LOG_VART(element);
+        LOG_TRACE("Wrote element: " << element);
         writer->writePartial(element);
       }
       elements.clear();
+      LOG_VART(elements.size());
 
       if (writer)
       {
@@ -225,10 +220,12 @@ void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& prio
   while (i != readers.size())
   {
     ConstElementPtr rootElement = priorityQueue.top();
+    LOG_TRACE("Read root element from priority queue: " << rootElement);
+    LOG_TRACE("Removing root from priority queue...");
     priorityQueue.pop();
     if (rootElement->getId() != LONG_MAX)
     {
-      LOG_TRACE("Writing element from priority queue: " << rootElement);
+      LOG_TRACE("Writing root element from priority queue to final output: " << rootElement);
       writer->writePartial(rootElement);
       elementPerFileCount++;
     }
@@ -239,7 +236,7 @@ void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& prio
     }
     else
     {
-      LOG_TRACE("No elements left in file.");
+      LOG_TRACE("No elements left in file.  Creating invalid root...");
       rootElement.reset(new Relation(Status::Invalid, LONG_MAX, 15.0));
       LOG_VART(elementPerFileCount);
       elementPerFileCount = 0;

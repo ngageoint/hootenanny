@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' upload='true' generator='JOSM'>
-   <way id='-1558' action='modify' visible='true'>
+  <way id='-1558' action='modify' visible='true'>
     <nd ref='-1456' />
     <nd ref='-1470' />
     <nd ref='-1466' />
@@ -13,7 +13,7 @@
   <node id='-1468' action='modify' visible='true' lat='0.22025483131' lon='0.30700733777' />
   <node id='-1466' action='modify' visible='true' lat='0.16820784834' lon='0.37739193759' />
   <node id='-1454' action='modify' visible='true' lat='0.19807150785' lon='0.2798368655' />
-    <relation id='-1588' action='modify' visible='true'>
+  <relation id='-1588' action='modify' visible='true'>
     <tag k='landuse' v='farmland' />
     <tag k='type' v='multipolygon' />
   </relation>

@@ -514,7 +514,6 @@ void OsmPbfWriter::_writeNode(const boost::shared_ptr<const hoot::Node>& n)
       newNode->add_vals(vid);
     }
   }
-
 }
 
 void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)

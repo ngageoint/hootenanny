@@ -69,14 +69,9 @@ _useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
-_preserveAllTags(ConfigOptions().getReaderPreserveAllTags())
+_preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
+_addChildRefsWhenMissing(false)
 {
-}
-
-OsmXmlReader::OsmXmlReader(const OsmXmlReader& reader) :
-QXmlDefaultHandler()
-{
-  _inputFile.setFileName(reader._inputFile.fileName());
 }
 
 OsmXmlReader::~OsmXmlReader()
@@ -454,27 +449,34 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
     else if (qName == QLatin1String("nd") && _element)
     {
       long ref = _parseLong(attributes.value("ref"));
+      const bool nodePresent = _nodeIdMap.contains(ref);
 
-      if (_nodeIdMap.contains(ref) == false)
+      if (!nodePresent)
       {
-        _missingNodeCount++;
-        if (logWarnCount < Log::getWarnMessageLimit())
+        if (_addChildRefsWhenMissing)
         {
-          LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
+          WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
+          w->addNode(ref);
         }
-        else if (logWarnCount == Log::getWarnMessageLimit())
+        else
         {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          _missingNodeCount++;
+          if (logWarnCount < Log::getWarnMessageLimit())
+          {
+            LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
+          }
+          else if (logWarnCount == Log::getWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
         }
-        logWarnCount++;
       }
       else
       {
         long newRef = _nodeIdMap.value(ref);
         //LOG_TRACE("Adding way node: " << newRef << "...");
-
         WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
-
         w->addNode(newRef);
       }
     }
@@ -488,18 +490,27 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
 
       if (type == QLatin1String("node"))
       {
-        if (_nodeIdMap.contains(ref) == false)
+        const bool nodePresent = _nodeIdMap.contains(ref);
+
+        if (!nodePresent)
         {
-          _missingNodeCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
+          if (_addChildRefsWhenMissing)
           {
-            LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
+            r->addElement(role, ElementType::Node, ref);
           }
-          else if (logWarnCount == Log::getWarnMessageLimit())
+          else
           {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            _missingNodeCount++;
+            if (logWarnCount < Log::getWarnMessageLimit())
+            {
+              LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
+            }
+            else if (logWarnCount == Log::getWarnMessageLimit())
+            {
+              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            }
+            logWarnCount++;
           }
-          logWarnCount++;
         }
         else
         {
@@ -510,18 +521,27 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       }
       else if (type == QLatin1String("way"))
       {
-        if (_wayIdMap.contains(ref) == false)
+        const bool wayPresent = _wayIdMap.contains(ref);
+
+        if (!wayPresent)
         {
-          _missingWayCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
+          if (_addChildRefsWhenMissing)
           {
-            LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
+            r->addElement(role, ElementType::Way, ref);
           }
-          else if (logWarnCount == Log::getWarnMessageLimit())
+          else
           {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            _missingWayCount++;
+            if (logWarnCount < Log::getWarnMessageLimit())
+            {
+              LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
+            }
+            else if (logWarnCount == Log::getWarnMessageLimit())
+            {
+              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            }
+            logWarnCount++;
           }
-          logWarnCount++;
         }
         else
         {

@@ -360,7 +360,7 @@ purposes.
 === circular.error.default.value
 
 * Data Type: double
-* Default Value: `15`
+* Default Value: `15.0`
 
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
@@ -700,10 +700,10 @@ indicates no limit.
 === element.sorter.external.temp.format
 
 * Data Type: string
-* Default Value: `osm`
+* Default Value: `pbf`
 
 The OSM format to use for writing sorted temp files.  Valid values are any extension Hootenanny can
-both read from and write to.
+both read from and write to.  TODO: if we stay with PBF, then get rid of this
 
 === english.words.files
 

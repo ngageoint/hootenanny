@@ -48,13 +48,7 @@ class ExternalMergeElementSorter : public ElementInputStream
 public:
 
   ExternalMergeElementSorter();
-  ExternalMergeElementSorter(const ExternalMergeElementSorter& sorter);
   virtual ~ExternalMergeElementSorter();
-
-  /**
-   * @see ElementInputStream
-   */
-  virtual ExternalMergeElementSorter* clone() { return new ExternalMergeElementSorter(*this); }
 
   /**
    * Sorts elements first by type, then increasing by ID
