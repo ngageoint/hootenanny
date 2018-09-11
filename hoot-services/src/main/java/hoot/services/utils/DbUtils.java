@@ -232,7 +232,9 @@ public final class DbUtils {
                     stmt.close();
                 }
             }
-            conn.commit();
+            if(!conn.getAutoCommit()) {
+                conn.commit();
+            }
         }
     }
 
@@ -246,7 +248,9 @@ public final class DbUtils {
                     stmt.close();
                 }
             }
-            conn.commit();
+            if(!conn.getAutoCommit()) {
+                conn.commit();
+            }
         }
     }
 
