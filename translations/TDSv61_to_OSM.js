@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,88 +22,25 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-/*
-    TDSv61 One2one rules
-*/
+//
+// Convert TDSv61 to OSM+
+//
 
-tds61.rules = {
-    // ##### Start of One2One Rules #####
+hoot.require('config');
+hoot.require('translate');
+hoot.require('fcode_common');
 
-    // FCODE rules for Import
-    // This is where anything "unique" to TDS goes.
-    fcodeOne2oneIn : [
-    // ['F_CODE','AP030','highway','road'], // Road
-    ], // End fcodeOne2oneIn
+tds61 = {
+	// ##### Start of One2One Rules #####
 
-    // These are for finding an FCODE for export.
-    // Note: These get swapped around before being used
-    fcodeOne2oneOut : [
-//     ['F_CODE','AN060','railway','yes'], // Rail yards
-    // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
-    // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
-    ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
-    ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
-    ['F_CODE','AJ110','building','greenhouse_horticulture'], // Greenhouse
-    ['F_CODE','AK030','leisure','water_park'], // Amusement Park
-    ['F_CODE','AK120','landuse','recreation_ground'], // Park
-    ['F_CODE','AK120','landuse','village_green'], // Park
-    ['F_CODE','AK120','leisure','common'], // Park - close but not great
-    ['F_CODE','AK120','leisure','nature_reserve'], // Park
-    ['F_CODE','AK120','leisure','playground'], // Park
-    ['F_CODE','AK170','amenity','swimming_pool'], // Pool
-    ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
-    ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
-    ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
-    ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
-    ['F_CODE','AL200','ruins','yes'], // Ruins
-    ['F_CODE','AL241','tower','communication'],
-    ['F_CODE','AL241','tower','yes'],
-    ['F_CODE','AM080','tower:type','water'],
-    ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
-    ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
-    ['F_CODE','AP030','highway','primary'],
-    ['F_CODE','AP030','highway','primary_link'],
-    ['F_CODE','AP030','highway','residential'],
-    ['F_CODE','AP030','highway','secondary'],
-    ['F_CODE','AP030','highway','secondary_link'],
-    ['F_CODE','AP030','highway','service'],
-    ['F_CODE','AP030','highway','tertiary'],
-    ['F_CODE','AP030','highway','tertiary_link'],
-    ['F_CODE','AP030','highway','trunk'], // Motorway
-    ['F_CODE','AP030','highway','trunk_link'], // Motorway
-    ['F_CODE','AP030','highway','unclassified'],
-    ['F_CODE','AP030','highway','yes'], // Just in case...
-    ['F_CODE','AP040','barrier','lift_gate'], // Gate
-    ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
-    ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
-    ['F_CODE','AP050','highway','footway'], // Trail
-    ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
-    ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
-    ['F_CODE','AQ125','public_transport','stop_position'],
-    ['F_CODE','AQ125','railway','station'], // Railway Station
-    ['F_CODE','AQ141','parking','multi-story'], // Parking Garage
-    ['F_CODE','AT042','power','pole'], // OSM
-    ['F_CODE','AT042','power','tower'], // OSM
-    ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
-    ['F_CODE','BA030','place','islet'], // Island - From OSM
-    ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
-    ['F_CODE','BH145','natural','sinkhole'],
-    ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
-    ['F_CODE','ED010','natural','wetland'], // Marsh
-    ['F_CODE','ED010','wetland','reedbed'], // Marsh
-    ['F_CODE','FA015','man_made','shooting_range'], // Firing Range
-    ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
-    ['F_CODE','ZB050','survey:point:type','benchmark'], // GGDM3 now has this as an FCODE
-    ['F_CODE','ZB050','survey:point:type','geodetic'], // GGDM3 now has this as an FCODE
-    ['F_CODE','ZD040','natural','bay'], // From OSM
-    ['F_CODE','ZD040','natural','cape'], // From OSM
-    ['F_CODE','ZD040','natural','hill'], // From GeoNames
-    ['F_CODE','ZD040','natural','peak'], // From OSM
-    ['F_CODE','ZD040','natural','valley'], // From GeoNames
-    ], // End fcodeOne2oneOut
+	// FCODE rules for Import
+	// This is where anything "unique" to TDS goes.
+	fcodeOne2oneIn : [
+	// ['F_CODE','AP030','highway','road'], // Road
+	], // End fcodeOne2oneIn
 
     // One2one rules for Text Fields
     txtBiased : {
@@ -3896,176 +3833,6 @@ tds61.rules = {
 
     ], // End one2oneIn
 
-    // One2one translation table for converting "Other" OSM attributes to TDS
-    // This is for Export only. The values are swapped before use
-    one2oneOut : [
-    ['ZSAX_RS0','U','security:classification','U'],
-    ['ZSAX_RS0','R','security:classification','R'],
-    ['ZSAX_RS0','C','security:classification','C'],
-    ['ZSAX_RS0','S','security:classification','S'],
-    ['ZSAX_RS0','TS','security:classification','TS'],
-
-    // OTH Filler.  These are to build OTH values
-    ['RTY','999','highway','other'],
-    ['FFN','999','amenity','other'], 
-    ['FFN','999','building','other'], 
-    ['FFN','999','camp:type','other'], 
-    ['FFN','999','craft','other'], 
-    ['FFN','999','landuse','other'], 
-    ['FFN','999','leisure','other'], 
-    ['FFN','999','military','other'], 
-    ['FFN','999','office','other'],
-    ['FFN','999','repair','other'],
-    ['FFN','999','shop','other'],
-    ['FFN','999','social_facility','other'],
-    ['FFN','999','tourism','other'],
-
-    // Funky Road Type attributes from TDSv40
-    ['RTY','4','ref:road:type','boulevard'], // Boulevard
-    ['RTY','4','ref:road:type','avenue'], // Avenue
-    ['RTY','4','ref:road:type','drive'], // Drive
-    ['RTY','4','ref:road:type','circle'], // Circle
-    ['RTY','4','ref:road:type','close'], // Close
-    ['RTY','4','ref:road:type','parkway'], // Parkway
-    ['RTY','4','ref:road:type','lane'], // Lane
-    ['RTY','4','ref:road:type','terrace'], // Terrace
-    ['RTY','4','ref:road:type','place'], // Place
-    ['RTY','4','ref:roadtype','roundabout'], // Roundabout
-
-    // Fix up the building/use tags from FFN
-    [undefined,undefined,'building','industrial'], // Industrial
-    [undefined,undefined,'man_made','works'], // Works
-    ['FFN','2','building','farm'], // Agriculture
-
-    ['FFN','827','amenity','embassy'], // Embassy
-
-    ['FFN','850','building','school'],
-    ['FFN','850','isced:level','0'], // Education
-    ['FFN','850','amenity','kindergarten'], // Education
-    // ['FFN','851','isced:level','1'], // Primary Education
-    ['FFN','852','isced:level','2'], // Secondary Education
-    ['FFN','852','isced:level','3'], // Secondary Education
-    // ['FFN','852','isced:level','2,3'], // Secondary Education
-    ['FFN','857','building','college'], // Vocational Education
-
-    ['FFN','572','amenity','cafe'], // Restaurant
-    ['FFN','572','building','restaurant'], // Restaurant
-
-    // Backward compatibility for 'oil'
-    ['ZI014_PPO','83','product','oil'], // Petroleum
-    ['ZI014_PPO','83','product','fuel'], // Close...
-
-    // Extra road stuff - see similarTable
-    // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
-    // ['ZI016_ROC','3','surface','unpaved'], // Stabilized earth
-    // ['ZI016_ROC','1','surface','dirt'], // Unimproved
-    // ['ZI016_ROC','1','surface','earth'], // Unimproved
-
-    // Fix up some of the Defaults
-    // ['FFN','-999999','building','yes'], // Map to No Information
-    // ['RRC','-999999','railway','rail'], // Map to No Information
-    [undefined,undefined,'natural','water'], // to get rid of errors
-
-    // From MGCP
-    ['FFN','480','building','transportation_outbuilding'], // Transportation
-    ['FFN','481','man_made','depot'], // not a good fit for depot terminal
-    ['FFN','550','building','dwelling'], // Accomodation
-    ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
-    ['FFN','811','amenity','government_administration_building'], //
-    ['FFN','835','military','military_outbuilding'], // Military
-    ['FFN','835','military','barracks'], // Military
-    ['FFN','843','amenity','jail'], // Imprisonment
-    ['FFN','980','building','cemetery_building'], // Death care services
-    ['ZI014_PPO','-999999','product','unknown'], // Unknown
-//     [undefined,undefined,'amenity','school'], //  converted in pre processing
-//     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
-//     [undefined,undefined,'amenity','university'], //  converted in pre processing
-//     [undefined,undefined,'amenity','college'], //  converted in pre processing
-    [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
-
-    ['IWT','4','water','reservoir'], // Reservoir
-
-    // From UFD
-    ['CAA','-999999','controlling_authority','unknown'],
-    ['FFN','190','use','oil_gas_facility'], //
-
-    // From UTP
-    // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
-    ['FFN','482','amenity','bus_station'], // Station
-    ['FFN','831','amenity','courthouse'], // Public Order - from spec
-    ['FFN','610','building','communication'],
-    ['FFN','530','building','warehouse'],
-    ['FFN','835','building','military'],
-    // ['FFN','999','landuse','institutional'], //
-
-
-    // From NAVTEQ
-    ['FFN','122','man_made','winery'], // Winery
-    ['FFN','440','office','company'], // Commerce
-    ['FFN','440','office','yes'], // Commerce
-    ['FFN','464','shop','car'], // Specialized Store
-    ['FFN','464','shop','motorcycle'], // Specialized Store
-    ['FFN','465','shop','general'], // Non-specialized Store
-    ['FFN','480','amenity','transportation'], // Transport
-    ['FFN','481','aeroway','terminal'], // Terminal
-    ['FFN','552','leisure','ski_resort'], // Resort Hotel
-    ['FFN','572','amenity','fast_food'], // Restaurant
-    ['FFN','775','tourism','information'], // Travel Agency
-    ['FFN','850','amenity','education'], // Education
-    ['FFN','860','building','hospital'], // Human Health Activities
-    ['FFN','860','amenity','clinic'], // Human Health Activities
-    ['FFN','860','amenity','medical'], // Human Health Activities
-    ['FFN','890','amenity','cultural'], // Cultural, Arts and Entertainment
-    ['FFN','900','tourism','yes'], // Sports, Amusement and Recreation
-    // ['FFN','922','tourism','theme_park'], // Amusement
-    ['FFN','923','sport','10pin'], // Hobbies and/or Leisure Activities
-    ['FFN','909','amenity','casino'], // Gambling
-    ['FFN','912','leisure','sports_complex'], // Sports Centre
-    ['FFN','970','amenity','townhall'], // Meeting Place
-    [undefined,undefined,'historic','yes'], // Not a good translation, push to o2s
-
-    // ### From OSM - This list could never end.....
-    ['FFN','464','shop','books'], // Specialized Store
-    ['FFN','563','building','house'], // Residence
-    ['FFN','558','building','dependents_housing'], // Dependents Housing
-    ['FFN','610','office','telecommunication'], // telecommunication
-    ['FFN','640','shop','bureau_de_change'], // Financial Services
-    ['FFN','760','amenity','office'], // Business and Personal Support Services 
-    ['FFN','815','building','palace'], // Palace
-
-    // Added to give something for the OTH value to use
-    ['ZI016_ROC','999','surface','other'], // Other
-
-   ], // End one2oneOut
-
-    // ##### End of One2One Rules #####
-
-   
-    // ##### Start of fuzzyTable #####
-    // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
-    fuzzyTable : [
-    ['ZI016_ROC','1',schemaTools.simple('surface=ground',1)], // Unimproved
-    ['ZI016_ROC','2',schemaTools.simple('surface=compacted',1)], // Stabilized earth
-    ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8)], // Flexible Pavement
-    ['ZI016_ROC','4',schemaTools.simple('surface=gravel',1)], // Aggregate
-    ['ZI016_ROC','5',schemaTools.simple('surface=macadam',1)], // Macadam
-    ['ZI016_ROC','6',schemaTools.simple('surface=bound_surface',1)], // Bound Surface
-    ['ZI016_ROC','7',schemaTools.isA('surface=paved', 0.8)], // Ridgid Pavement
-    ['ZI016_ROC','8',schemaTools.simple('surface=concrete',1)], // Concrete
-    ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',1)], // Asphalt
-    ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',1)], // Asphalt over Concrete
-    ['ZI016_ROC','11',"surface=cobblestone",schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
-    ['ZI016_ROC','12',schemaTools.simple('surface=brick',1)], // Brick
-    ['ZI016_ROC','13',schemaTools.simple('surface=metal',1)], // Metal
-    ['ZI016_ROC','14',schemaTools.simple('surface=wood',1)], // Wood
-    ['ZI016_ROC','15',schemaTools.simple('surface=corduroy',1)], // rough hewn logs...  // Corduroy
-    ['ZI016_ROC','16',schemaTools.simple('surface=wood_plank',1)], // Wood Plank
-    ['ZI016_ROC','17',schemaTools.simple('surface=ice',1)], // Ice
-    ['ZI016_ROC','18',schemaTools.simple('surface=snow',1)], // Snow
-    ['ZI016_ROC','999',schemaTools.simple('surface=other',1)], // Other
-    ],
-    // ##### End of fuzzyTable #####
-
     // ##### Start of ignoreList #####
     // This is taken from OSM pre processing and a few added
     ignoreList : [
@@ -4200,7 +3967,6 @@ tds61.rules = {
     ],
     // ##### End of fCodeMap #####
 
-
     // ##### Start of closureList #####
     closureList : {
     'AQTC':['AQTL','AQTU'],
@@ -4257,67 +4023,6 @@ tds61.rules = {
     'ZVH_VDT':'VDT'
     },
     // ##### End of swapListIn #####
-
-    // ##### Start of swapListOut #####
-    // Format is: <FCODE>:{<from>:<to>}
-    swapListOut : {
-    'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
-    'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AL020':{'ZI005_NFN':'ZI005_NFN1'},
-    'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
-    'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AM080':{'ZI014_YWQ':'YWQ'},
-    'AQ059':{'ZI016_WD1':'WD1'},
-    'AQ113':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'AT005':{'WLE':'ZI025_WLE'},
-    'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB','CAB2':'AT005_CAB2','CAB3':'AT005_CAB3'},
-    'BD100':{'WLE':'ZI025_WLE'},
-    'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-    'BH070':{'PWA':'WBD'},
-    'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
-    'ED010':{'ZI024_HYP':'HYP'},
-    'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
-    'BD115':{'MAN':'ZI025_MAN'},
-    'AP055':{'RIN_RTN':'RTN', 'RIN_RTN2':'RTN2', 'RIN_RTN3':'RTN3'},
-    'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'},
-    'ZI026':{'ZI026_SUR':'SUR'}
-    },
-
-    // ##### End of swapListOut #####
-
-    // ##### Start of txtLength #####
-    // This list is for validateing the lengths of text attributes prior to export
-    txtLength : {
-    'BA000_VDR':80, 'BEN':15, 'BRN':24, 'CID':20, 'CUD':20, 'ETZ':24, 'F_CODE':5, 'GB052_RIDH':14, 'GB052_RIDL':14,
-    'IKO':14, 'MDE':20, 'NA8':80, 'PDA':14, 'PSE':14, 'RIN_RTN':24, 'RIN_RTN2':24, 'RIN_RTN3':24, 'RTN':24, 'RTN2':24,
-    'RTN3':24, 'SAX_RS3':14, 'SAX_RS4':14, 'SAX_RS6':14, 'SAX_RX1':254, 'SAX_RX2':254, 'SAX_RX5':254, 'SAX_RX6':254,
-    'SAX_RX7':254, 'SAX_RX8':14, 'SAX_RY1':254, 'SAX_RY2':254, 'SSE':14, 'UFI':254, 'URI':254, 'VCS_VCR':132, 'VOI':14,
-    'WPI':14, 'ZI001_SDV':20, 'ZI001_VSD':20, 'ZI002_UFI':254, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_FNA3':200,
-    'ZI005_NFN':18, 'ZI005_NFN2':18, 'ZI005_NFN3':18, 'ZI026T_UFI':254, 'ZI027T_UFI':254, 'ZI028_UFI':254, 'ZI031S_URI':254,
-    'ZI031T_URI':254, 'ZI039S_UFI':254, 'ZI039T_UFI':254, 'ZSAX_RS0':14,
-    'ZSAX_RX0':254, 'ZSAX_RX3':254, 'ZSAX_RX4':254
-    },
-    // ##### End of txtLength #####
-
-    // ##### Start of intList #####
-    // This list is for validateing the integer attributes prior to export
-    intList : [
-    'BC040_LCN', 'BC040_LVN', 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'ZI026_CTUL',
-    'ZI026_CTUU'
-    ],
-    // ##### End of intList #####
 
     // ##### Start of ge4List #####
     // This list is for validateing the XXX_GE4XX values
@@ -4608,841 +4313,778 @@ tds61.rules = {
     },
     // ##### End of ge4List #####
 
-    // ##### Start of Thematic Group Rules #####
-    thematicGroupList : {
-    'PAA010':'IndustryPnt', // Industry
-    'AAA010':'IndustrySrf', // Industry
-    'LAA011':'IndustryCrv', // Industry
-    'PAA020':'IndustryPnt', // Industry
-    'AAA020':'IndustrySrf', // Industry
-    'PAA040':'IndustryPnt', // Industry
-    'AAA040':'IndustrySrf', // Industry
-    'PAA045':'IndustryPnt', // Industry
-    'AAA052':'IndustrySrf', // Industry
-    'PAA054':'IndustryPnt', // Industry
-    'PAB000':'IndustryPnt', // Industry
-    'AAB000':'IndustrySrf', // Industry
-    'AAB010':'IndustrySrf', // Industry
-    'PAB021':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAB040':'IndustrySrf', // Industry
-    'PAB507':'IndustryPnt', // Industry
-    'AAB507':'IndustrySrf', // Industry
-    'PAC010':'IndustryPnt', // Industry
-    'AAC010':'IndustrySrf', // Industry
-    'PAC020':'IndustryPnt', // Industry
-    'AAC020':'IndustrySrf', // Industry
-    'AAC030':'IndustrySrf', // Industry
-    'PAC040':'IndustryPnt', // Industry
-    'AAC040':'IndustrySrf', // Industry
-    'PAC060':'IndustryPnt', // Industry
-    'AAC060':'IndustrySrf', // Industry
-    'PAC507':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAC507':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD010':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD010':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD020':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD020':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD025':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD025':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD030':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD030':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD041':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD041':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD050':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD050':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD055':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD055':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD060':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD060':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAF010':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'LAF020':'IndustryCrv', // Industry
-    'PAF030':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAF030':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAF040':'IndustryPnt', // Industry
-    'AAF040':'IndustrySrf', // Industry
-    'PAF050':'IndustryPnt', // Industry
-    'LAF050':'IndustryCrv', // Industry
-    'PAF060':'StructurePnt', // Structure
-    'AAF060':'StructureSrf', // Structure
-    'PAF070':'IndustryPnt', // Industry
-    'PAF080':'IndustryPnt', // Industry
-    'AAG030':'FacilitySrf', // Facility
-    'AAG040':'FacilitySrf', // Facility
-    'PAG050':'StructurePnt', // Structure
-    'LAH025':'MilitaryCrv', // Military
-    'AAH025':'MilitarySrf', // Military
-    'PAH055':'MilitaryPnt', // Military
-    'AAH055':'MilitarySrf', // Military
-    'PAH060':'MilitaryPnt', // Military
-    'AAH060':'MilitarySrf', // Military
-    'PAH070':'TransportationGroundPnt', // Transportation - Ground
-    'AAI020':'SettlementSrf', // Settlement
-    'AAI021':'SettlementSrf', // Settlement
-    'PAI030':'SettlementPnt', // Settlement
-    'AAI030':'SettlementSrf', // Settlement
-    'PAJ030':'AgriculturePnt', // Agriculture
-    'AAJ030':'AgricultureSrf', // Agriculture
-    'PAJ050':'AgriculturePnt', // Agriculture
-    'AAJ050':'AgricultureSrf', // Agriculture
-    'PAJ051':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAJ055':'IndustryPnt', // Industry
-    'AAJ055':'IndustrySrf', // Industry
-    'PAJ080':'AgriculturePnt', // Agriculture
-    'AAJ080':'AgricultureSrf', // Agriculture
-    'PAJ085':'AgriculturePnt', // Agriculture
-    'AAJ085':'AgricultureSrf', // Agriculture
-    'PAJ110':'AgriculturePnt', // Agriculture
-    'AAJ110':'AgricultureSrf', // Agriculture
-    'PAK020':'RecreationPnt', // Recreation
-    'LAK020':'RecreationCrv', // Recreation
-    'AAK020':'RecreationSrf', // Recreation
-    'PAK030':'RecreationPnt', // Recreation
-    'AAK030':'RecreationSrf', // Recreation
-    'PAK040':'RecreationPnt', // Recreation
-    'AAK040':'RecreationSrf', // Recreation
-    'PAK060':'RecreationPnt', // Recreation
-    'AAK060':'RecreationSrf', // Recreation
-    'AAK061':'RecreationSrf', // Recreation
-    'AAK070':'RecreationSrf', // Recreation
-    'PAK080':'RecreationPnt', // Recreation
-    'LAK080':'RecreationCrv', // Recreation
-    'AAK090':'RecreationSrf', // Recreation
-    'AAK100':'RecreationSrf', // Recreation
-    'AAK101':'RecreationSrf', // Recreation
-    'PAK110':'RecreationPnt', // Recreation
-    'AAK110':'RecreationSrf', // Recreation
-    'AAK120':'CultureSrf', // Culture
-    'PAK121':'CulturePnt', // Culture
-    'AAK121':'CultureSrf', // Culture
-    'LAK130':'RecreationCrv', // Recreation
-    'AAK130':'RecreationSrf', // Recreation
-    'PAK150':'RecreationPnt', // Recreation
-    'LAK150':'RecreationCrv', // Recreation
-    'LAK155':'RecreationCrv', // Recreation
-    'AAK155':'RecreationSrf', // Recreation
-    'PAK160':'RecreationPnt', // Recreation
-    'AAK160':'RecreationSrf', // Recreation
-    'PAK161':'RecreationPnt', // Recreation
-    'PAK164':'RecreationPnt', // Recreation
-    'AAK164':'RecreationSrf', // Recreation
-    'PAK170':'RecreationPnt', // Recreation
-    'AAK170':'RecreationSrf', // Recreation
-    'PAK180':'RecreationPnt', // Recreation
-    'AAK180':'RecreationSrf', // Recreation
-    'PAL010':'FacilityPnt', // Facility
-    'AAL010':'FacilitySrf', // Facility
-    'PAL011':'FacilityPnt', // Facility
-    'AAL011':'FacilitySrf', // Facility
-    'PAL012':'CulturePnt', // Culture
-    'AAL012':'CultureSrf', // Culture
-    'PAL013':'StructurePnt', // Structure
-    'AAL013':'StructureSrf', // Structure
-    'PAL014':'StructurePnt', // Structure
-    'AAL014':'StructureSrf', // Structure
-    'PAL017':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAL018':'StructurePnt', // Structure
-    'LAL018':'StructureCrv', // Structure
-    'AAL018':'StructureSrf', // Structure
-    'PAL019':'StructurePnt', // Structure
-    'AAL019':'StructureSrf', // Structure
-    'PAL020':'SettlementPnt', // Settlement
-    'AAL020':'SettlementSrf', // Settlement
-    'PAL025':'CulturePnt', // Culture
-    'PAL030':'CulturePnt', // Culture
-    'AAL030':'CultureSrf', // Culture
-    'PAL036':'CulturePnt', // Culture
-    'AAL036':'CultureSrf', // Culture
-    'LAL060':'MilitaryCrv', // Military
-    'AAL060':'MilitarySrf', // Military
-    'AAL065':'MilitarySrf', // Military
-    'LAL070':'StructureCrv', // Structure
-    'PAL073':'StructurePnt', // Structure
-    'PAL080':'StructurePnt', // Structure
-    'LAL080':'StructureCrv', // Structure
-    'PAL099':'StructurePnt', // Structure
-    'AAL099':'StructureSrf', // Structure
-    'PAL105':'SettlementPnt', // Settlement
-    'AAL105':'SettlementSrf', // Settlement
-    'PAL110':'StructurePnt', // Structure
-    'PAL120':'MilitaryPnt', // Military
-    'AAL120':'MilitarySrf', // Military
-    'PAL130':'CulturePnt', // Culture
-    'LAL130':'CultureCrv', // Culture
-    'AAL130':'CultureSrf', // Culture
-    'LAL140':'StructureCrv', // Structure
-    'AAL140':'StructureSrf', // Structure
-    'PAL142':'StructurePnt', // Structure
-    'AAL142':'StructureSrf', // Structure
-    'PAL155':'TransportationGroundPnt', // Transportation - Ground
-    'LAL155':'TransportationGroundCrv', // Transportation - Ground
-    'PAL165':'TransportationGroundPnt', // Transportation - Ground
-    'PAL170':'RecreationPnt', // Recreation
-    'AAL170':'RecreationSrf', // Recreation
-    'AAL175':'CultureSrf', // Culture
-    'AAL180':'CultureSrf', // Culture
-    'LAL195':'TransportationGroundCrv', // Transportation - Ground
-    'AAL195':'TransportationGroundSrf', // Transportation - Ground
-    'PAL200':'CulturePnt', // Culture
-    'AAL200':'CultureSrf', // Culture
-    'PAL201':'CulturePnt', // Culture
-    'AAL201':'CultureSrf', // Culture
-    'PAL208':'SettlementPnt', // Settlement
-    'AAL208':'SettlementSrf', // Settlement
-    'PAL211':'TransportationGroundPnt', // Transportation - Ground
-    'LAL211':'TransportationGroundCrv', // Transportation - Ground
-    'AAL211':'TransportationGroundSrf', // Transportation - Ground
-    'PAL241':'StructurePnt', // Structure
-    'AAL241':'StructureSrf', // Structure
-    'PAL250':'StructurePnt', // Structure
-    'LAL260':'StructureCrv', // Structure
-    'PAL270':'AgriculturePnt', // Agriculture
-    'AAL270':'AgricultureSrf', // Agriculture
-    'PAL351':'AeronauticPnt', // Aeronautic
-    'AAL351':'AeronauticSrf', // Aeronautic
-    'PAL371':'StructurePnt', // Structure
-    'AAL371':'StructureSrf', // Structure
-    'PAL375':'MilitaryPnt', // Military
-    'AAL375':'MilitarySrf', // Military
-    'PAL376':'MilitaryPnt', // Military
-    'AAL376':'MilitarySrf', // Military
-    'PAL510':'AeronauticPnt', // Aeronautic
-    'PAM010':'StoragePnt', // Storage
-    'AAM010':'StorageSrf', // Storage
-    'PAM011':'StoragePnt', // Storage
-    'AAM011':'StorageSrf', // Storage
-    'PAM020':'AgriculturePnt', // Agriculture
-    'AAM020':'AgricultureSrf', // Agriculture
-    'PAM030':'StoragePnt', // Storage
-    'AAM030':'StorageSrf', // Storage
-    'PAM040':'IndustryPnt', // Industry
-    'AAM040':'IndustrySrf', // Industry
-    'PAM060':'MilitaryPnt', // Military
-    'AAM060':'MilitarySrf', // Military
-    'PAM065':'StoragePnt', // Storage
-    'AAM065':'StorageSrf', // Storage
-    'PAM070':'StoragePnt', // Storage
-    'AAM070':'StorageSrf', // Storage
-    'PAM071':'StoragePnt', // Storage
-    'AAM071':'StorageSrf', // Storage
-    'PAM075':'StoragePnt', // Storage
-    'AAM075':'StorageSrf', // Storage
-    'PAM080':'StoragePnt', // Storage
-    'AAM080':'StorageSrf', // Storage
-    'LAN010':'TransportationGroundCrv', // Transportation - Ground
-    'LAN050':'TransportationGroundCrv', // Transportation - Ground
-    'AAN060':'TransportationGroundSrf', // Transportation - Ground
-    'PAN075':'TransportationGroundPnt', // Transportation - Ground
-    'AAN075':'TransportationGroundSrf', // Transportation - Ground
-    'PAN076':'TransportationGroundPnt', // Transportation - Ground
-    'AAN076':'TransportationGroundSrf', // Transportation - Ground
-    'PAN085':'TransportationGroundPnt', // Transportation - Ground
-    'LAP010':'TransportationGroundCrv', // Transportation - Ground
-    'PAP020':'TransportationGroundPnt', // Transportation - Ground
-    'LAP030':'TransportationGroundCrv', // Transportation - Ground
-    'AAP030':'TransportationGroundSrf', // Transportation - Ground
-    'PAP033':'TransportationGroundPnt', // Transportation - Ground
-    'PAP040':'TransportationGroundPnt', // Transportation - Ground
-    'LAP040':'TransportationGroundCrv', // Transportation - Ground
-    'PAP041':'TransportationGroundPnt', // Transportation - Ground
-    'LAP041':'TransportationGroundCrv', // Transportation - Ground
-    'LAP050':'TransportationGroundCrv', // Transportation - Ground
-    'AAP055':'TransportationGroundSrf', // Transportation - Ground
-    'PAP056':'TransportationGroundPnt', // Transportation - Ground
-    'AAP056':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ035':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ040':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ040':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ040':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ045':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ045':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ045':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ050':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ050':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ055':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ056':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ056':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ056':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ059':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ059':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ060':'AeronauticPnt', // Aeronautic
-    'AAQ060':'AeronauticSrf', // Aeronautic
-    'PAQ062':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ063':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ063':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ065':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ065':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ068':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ068':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ070':'TransportationWaterCrv', // Transportation - Water
-    'LAQ075':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ080':'TransportationWaterPnt', // Transportation - Water
-    'AAQ080':'TransportationWaterSrf', // Transportation - Water
-    'PAQ095':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ110':'AeronauticPnt', // Aeronautic
-    'PAQ111':'TransportationWaterPnt', // Transportation - Water
-    'LAQ113':'UtilityInfrastructureCrv', // Utility Infrastructure
-    'PAQ114':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAQ115':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAQ116':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAQ116':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAQ118':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ120':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ125':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ125':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ130':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ130':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ135':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ135':'TransportationGroundSrf', // Transportation - Ground
-    'AAQ140':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ141':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ141':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ150':'StructureCrv', // Structure
-    'AAQ150':'StructureSrf', // Structure
-    'LAQ151':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ151':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ160':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ161':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ162':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ170':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ170':'TransportationGroundSrf', // Transportation - Ground
-    'LAT005':'UtilityInfrastructureCrv', // Utility Infrastructure
-    'PAT010':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAT011':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAT012':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAT012':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'LAT041':'TransportationGroundCrv', // Transportation - Ground
-    'PAT042':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAT045':'FacilityPnt', // Facility
-    'AAT045':'FacilitySrf', // Facility
-    'LBA010':'PhysiographyCrv', // Physiography
-    'PBA030':'PhysiographyPnt', // Physiography
-    'ABA030':'PhysiographySrf', // Physiography
-    'ABA040':'HydrographySrf', // Hydrography
-    'ABB005':'PortorHarbourSrf', // Port or Harbour
-    'PBB009':'PortorHarbourPnt', // Port or Harbour
-    'ABB009':'PortorHarbourSrf', // Port or Harbour
-    'LBB081':'PortorHarbourCrv', // Port or Harbour
-    'ABB081':'PortorHarbourSrf', // Port or Harbour
-    'LBB082':'PortorHarbourCrv', // Port or Harbour
-    'ABB082':'PortorHarbourSrf', // Port or Harbour
-    'ABB090':'PortorHarbourSrf', // Port or Harbour
-    'PBB110':'HydrographyPnt', // Hydrography
-    'ABB110':'HydrographySrf', // Hydrography
-    'ABB199':'PortorHarbourSrf', // Port or Harbour
-    'PBB201':'PortorHarbourPnt', // Port or Harbour
-    'ABB201':'PortorHarbourSrf', // Port or Harbour
-    'PBB241':'PortorHarbourPnt', // Port or Harbour
-    'ABB241':'PortorHarbourSrf', // Port or Harbour
-    'PBC050':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
-    'ABC050':'HydrographicAidtoNavigationSrf', // Hydrographic Aid to Navigation
-    'PBC070':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
-    'PBD100':'PortorHarbourPnt', // Port or Harbour
-    'ABD100':'PortorHarbourSrf', // Port or Harbour
-    'PBD115':'HydrographyPnt', // Hydrography
-    'ABD115':'HydrographySrf', // Hydrography
-    'PBD140':'HydrographyPnt', // Hydrography
-    'ABD140':'HydrographySrf', // Hydrography
-    'PBD181':'HydrographyPnt', // Hydrography
-    'LBH010':'HydrographyCrv', // Hydrography
-    'ABH010':'HydrographySrf', // Hydrography
-    'PBH012':'HydrographyPnt', // Hydrography
-    'ABH015':'VegetationSrf', // Vegetation
-    'LBH020':'TransportationWaterCrv', // Transportation - Water
-    'ABH020':'TransportationWaterSrf', // Transportation - Water
-    'LBH030':'HydrographyCrv', // Hydrography
-    'ABH030':'HydrographySrf', // Hydrography
-    'ABH040':'IndustrySrf', // Industry
-    'PBH051':'AgriculturePnt', // Agriculture
-    'ABH051':'AgricultureSrf', // Agriculture
-    'LBH065':'HydrographyCrv', // Hydrography
-    'PBH070':'TransportationGroundPnt', // Transportation - Ground
-    'LBH070':'TransportationGroundCrv', // Transportation - Ground
-    'ABH070':'TransportationGroundSrf', // Transportation - Ground
-    'PBH075':'CulturePnt', // Culture
-    'ABH075':'CultureSrf', // Culture
-    'ABH077':'VegetationSrf', // Vegetation
-    'PBH082':'HydrographyPnt', // Hydrography
-    'ABH082':'HydrographySrf', // Hydrography
-    'ABH090':'HydrographySrf', // Hydrography
-    'LBH100':'HydrographyCrv', // Hydrography
-    'ABH100':'HydrographySrf', // Hydrography
-    'LBH110':'HydrographyCrv', // Hydrography
-    'ABH116':'SubterraneanSrf', // Subterranean
-    'PBH120':'HydrographyPnt', // Hydrography
-    'LBH120':'HydrographyCrv', // Hydrography
-    'ABH120':'HydrographySrf', // Hydrography
-    'ABH135':'AgricultureSrf', // Agriculture
-    'LBH140':'HydrographyCrv', // Hydrography
-    'ABH140':'HydrographySrf', // Hydrography
-    'PBH145':'HydrographyPnt', // Hydrography
-    'ABH150':'PhysiographySrf', // Physiography
-    'PBH155':'IndustryPnt', // Industry
-    'ABH155':'IndustrySrf', // Industry
-    'ABH160':'PhysiographySrf', // Physiography
-    'LBH165':'HydrographyCrv', // Hydrography
-    'ABH165':'HydrographySrf', // Hydrography
-    'PBH170':'HydrographyPnt', // Hydrography
-    'ABH170':'HydrographySrf', // Hydrography
-    'PBH180':'HydrographyPnt', // Hydrography
-    'LBH180':'HydrographyCrv', // Hydrography
-    'PBH220':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'ABH220':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PBH230':'HydrographyPnt', // Hydrography
-    'ABH230':'HydrographySrf', // Hydrography
-    'ABI005':'PortorHarbourSrf', // Port or Harbour
-    'PBI006':'TransportationWaterPnt', // Transportation - Water
-    'LBI006':'TransportationWaterCrv', // Transportation - Water
-    'ABI006':'TransportationWaterSrf', // Transportation - Water
-    'PBI010':'HydrographyPnt', // Hydrography
-    'PBI020':'HydrographyPnt', // Hydrography
-    'LBI020':'HydrographyCrv', // Hydrography
-    'ABI020':'HydrographySrf', // Hydrography
-    'PBI030':'TransportationWaterPnt', // Transportation - Water
-    'LBI030':'TransportationWaterCrv', // Transportation - Water
-    'ABI030':'TransportationWaterSrf', // Transportation - Water
-    'PBI040':'HydrographyPnt', // Hydrography
-    'LBI040':'HydrographyCrv', // Hydrography
-    'PBI044':'HydrographyPnt', // Hydrography
-    'LBI044':'HydrographyCrv', // Hydrography
-    'ABI044':'HydrographySrf', // Hydrography
-    'PBI045':'TransportationWaterPnt', // Transportation - Water
-    'LBI045':'TransportationWaterCrv', // Transportation - Water
-    'PBI050':'HydrographyPnt', // Hydrography
-    'ABI050':'HydrographySrf', // Hydrography
-    'LBI060':'HydrographyCrv', // Hydrography
-    'PBI070':'HydrographyPnt', // Hydrography
-    'ABJ020':'PhysiographySrf', // Physiography
-    'ABJ030':'PhysiographySrf', // Physiography
-    'LBJ031':'PhysiographyCrv', // Physiography
-    'ABJ031':'PhysiographySrf', // Physiography
-    'LBJ040':'PhysiographyCrv', // Physiography
-    'PBJ060':'PhysiographyPnt', // Physiography
-    'ABJ065':'PhysiographySrf', // Physiography
-    'ABJ080':'PhysiographySrf', // Physiography
-    'ABJ099':'PhysiographySrf', // Physiography
-    'ABJ100':'PhysiographySrf', // Physiography
-    'ABJ110':'VegetationSrf', // Vegetation
-    'LCA010':'HypsographyCrv', // Hypsography
-    'PCA030':'HypsographyPnt', // Hypsography
-    'ADA005':'PhysiographySrf', // Physiography
-    'ADA010':'PhysiographySrf', // Physiography
-    'LDB010':'PhysiographyCrv', // Physiography
-    'ADB028':'SubterraneanSrf', // Subterranean
-    'PDB029':'PhysiographyPnt', // Physiography
-    'LDB061':'PhysiographyCrv', // Physiography
-    'ADB061':'PhysiographySrf', // Physiography
-    'LDB070':'PhysiographyCrv', // Physiography
-    'LDB071':'PhysiographyCrv', // Physiography
-    'ADB080':'PhysiographySrf', // Physiography
-    'LDB090':'PhysiographyCrv', // Physiography
-    'ADB090':'PhysiographySrf', // Physiography
-    'LDB100':'PhysiographyCrv', // Physiography
-    'LDB110':'PhysiographyCrv', // Physiography
-    'PDB115':'PhysiographyPnt', // Physiography
-    'ADB115':'PhysiographySrf', // Physiography
-    'PDB150':'PhysiographyPnt', // Physiography
-    'PDB160':'PhysiographyPnt', // Physiography
-    'ADB160':'PhysiographySrf', // Physiography
-    'ADB170':'PhysiographySrf', // Physiography
-    'PDB180':'PhysiographyPnt', // Physiography
-    'ADB180':'PhysiographySrf', // Physiography
-    'LDB190':'PhysiographyCrv', // Physiography
-    'ADB211':'PhysiographySrf', // Physiography
-    'AEA010':'AgricultureSrf', // Agriculture
-    'LEA020':'VegetationCrv', // Vegetation
-    'AEA030':'AgricultureSrf', // Agriculture
-    'AEA031':'CultureSrf', // Culture
-    'AEA040':'AgricultureSrf', // Agriculture
-    'AEA050':'AgricultureSrf', // Agriculture
-    'AEA055':'AgricultureSrf', // Agriculture
-    'AEB010':'VegetationSrf', // Vegetation
-    'AEB020':'VegetationSrf', // Vegetation
-    'AEB070':'VegetationSrf', // Vegetation
-    'PEC005':'VegetationPnt', // Vegetation
-    'AEC010':'AgricultureSrf', // Agriculture
-    'LEC015':'VegetationCrv', // Vegetation
-    'AEC015':'VegetationSrf', // Vegetation
-    'PEC020':'PhysiographyPnt', // Physiography
-    'AEC020':'PhysiographySrf', // Physiography
-    'LEC040':'VegetationCrv', // Vegetation
-    'AEC040':'VegetationSrf', // Vegetation
-    'AEC060':'VegetationSrf', // Vegetation
-    'AED010':'VegetationSrf', // Vegetation
-    'AED020':'VegetationSrf', // Vegetation
-    'AEE010':'VegetationSrf', // Vegetation
-    'AEE030':'PhysiographySrf', // Physiography
-    'PFA012':'CulturePnt', // Culture
-    'AFA012':'CultureSrf', // Culture
-    'PFA015':'MilitaryPnt', // Military
-    'AFA015':'MilitarySrf', // Military
-    'AFA100':'MilitarySrf', // Military
-    'PFA165':'MilitaryPnt', // Military
-    'AFA165':'MilitarySrf', // Military
-    'AFA210':'CultureSrf', // Culture
-    'PGB005':'AeronauticPnt', // Aeronautic
-    'AGB005':'AeronauticSrf', // Aeronautic
-    'AGB015':'AeronauticSrf', // Aeronautic
-    'PGB030':'AeronauticPnt', // Aeronautic
-    'AGB030':'AeronauticSrf', // Aeronautic
-    'PGB035':'AeronauticPnt', // Aeronautic
-    'AGB035':'AeronauticSrf', // Aeronautic
-    'PGB040':'AeronauticPnt', // Aeronautic
-    'AGB040':'AeronauticSrf', // Aeronautic
-    'AGB045':'AeronauticSrf', // Aeronautic
-    'LGB050':'MilitaryCrv', // Military
-    'AGB055':'AeronauticSrf', // Aeronautic
-    'PGB065':'AeronauticPnt', // Aeronautic
-    'AGB065':'AeronauticSrf', // Aeronautic
-    'AGB070':'AeronauticSrf', // Aeronautic
-    'LGB075':'AeronauticCrv', // Aeronautic
-    'AGB075':'AeronauticSrf', // Aeronautic
-    'PGB230':'AeronauticPnt', // Aeronautic
-    'AGB230':'AeronauticSrf', // Aeronautic
-    'PGB250':'AeronauticPnt', // Aeronautic
-    'AGB250':'AeronauticSrf', // Aeronautic
-    'AIA040':'BoundarySrf', // Boundary
-    'PSU001':'MilitaryPnt', // Military
-    'ASU001':'MilitarySrf', // Military
-    'ASU004':'MilitarySrf', // Military
-    'LSU030':'MilitaryCrv', // Military
-    'PZB030':'BoundaryPnt', // Boundary
-    'PZB050':'HypsographyPnt', // Hypsography
-    'AZD020':'InformationSrf', // Information
-    'PZD040':'InformationPnt', // Information
-    'PZD045':'InformationPnt', // Information
-    'LZD045':'InformationCrv', // Information
-    'AZD045':'InformationSrf', // Information
-    'PZD070':'HydrographyPnt', // Hydrography
-    'AZD070':'HydrographySrf', // Hydrography
-    'AZI031':'ResourceSrf', // Resource
-    'AZI039':'MetadataSrf' // Metadata
-    }, // End of thematicGroupList
-    // ##### End of Thematic Group Rules #####
 
-    // ##### Start of ESRI FCSubtype Rules #####
-    subtypeList : {
-    'AA010':'100001', // Extraction Mine
-    'AA011':'100002', // Shear Wall
-    'AA020':'100003', // Mine Shaft Superstructure
-    'AA040':'100004', // Rig
-    'AA045':'100696', // Borehole
-    'AA052':'100006', // Hydrocarbons Field
-    'AA054':'155023', // Non-water Well
-    'AB000':'100007', // Disposal Site
-    'AB010':'100008', // Recycling Site
-    'AB021':'100009', // Liquid Diffuser
-    'AB040':'100010', // Aeration Basin
-    'AB507':'177962', // Waste Heap
-    'AC010':'100012', // Blast-furnace
-    'AC020':'100013', // Catalytic Cracker
-    'AC030':'100014', // Settling Pond
-    'AC040':'100015', // Hydrocarbon Products Facility
-    'AC060':'100016', // Industrial Furnace
-    'AC507':'134665', // Sewage Treatment Plant
-    'AD010':'100018', // Electric Power Station
-    'AD020':'100019', // Solar Panel
-    'AD025':'100020', // Solar Farm
-    'AD030':'100021', // Power Substation
-    'AD041':'100022', // Nuclear Reactor Containment
-    'AD050':'100023', // Heating Facility
-    'AD055':'100697', // Cooling Facility
-    'AD060':'100687', // Wind Farm
-    'AF010':'100025', // Smokestack
-    'AF020':'100026', // Conveyor
-    'AF030':'100028', // Cooling Tower
-    'AF040':'100029', // Crane
-    'AF050':'100030', // Excavating Machine
-    'AF060':'100031', // Engine Test Cell
-    'AF070':'100032', // Flare Pipe
-    'AF080':'100033', // Hopper
-    'AG030':'100034', // Shopping Complex
-    'AG040':'100035', // Office Park
-    'AG050':'121638', // Billboard
-    'AH025':'132596', // Engineered Earthwork
-    'AH055':'132626', // Fortified Building
-    'AH060':'100038', // Underground Bunker
-    'AH070':'100039', // Checkpoint
-    'AI020':'100040', // Caravan Park
-    'AI021':'133168', // Manufactured Home Park
-    'AI030':'100041', // Camp
-    'AJ030':'100043', // Holding Pen
-    'AJ050':'100044', // Windmill
-    'AJ051':'100045', // Wind Turbine
-    'AJ055':'100046', // Water Mill
-    'AJ080':'100049', // Stable
-    'AJ085':'100691', // Barn
-    'AJ110':'100052', // Greenhouse
-    'AK020':'100053', // Amusement Park Attraction
-    'AK030':'100054', // Amusement Park
-    'AK040':'100055', // Sports Ground
-    'AK060':'100057', // Camp-site
-    'AK061':'100058', // Picnic Site
-    'AK070':'100059', // Drive-in Theatre
-    'AK080':'100060', // Outdoor Theatre Screen
-    'AK090':'100061', // Fairground
-    'AK100':'100062', // Golf Course
-    'AK101':'100063', // Golf Driving Range
-    'AK110':'100064', // Grandstand
-    'AK120':'100065', // Park
-    'AK121':'100066', // Lookout
-    'AK130':'100069', // Racetrack
-    'AK150':'100072', // Ski-jump
-    'AK155':'100073', // Ski-run
-    'AK160':'154703', // Stadium
-    'AK161':'121747', // Scoreboard
-    'AK164':'100074', // Amphitheatre
-    'AK170':'100077', // Swimming Pool
-    'AK180':'100078', // Zoo
-    'AL010':'100080', // Facility
-    'AL011':'100081', // Installation
-    'AL012':'100082', // Archeological Site
-    'AL013':'100083', // Building
-    'AL014':'100084', // Non-building Structure
-    'AL017':'100086', // Fire Hydrant
-    'AL018':'100087', // Building Superstructure
-    'AL019':'100088', // Shed
-    'AL020':'100089', // Built-up Area
-    'AL025':'100091', // Cairn
-    'AL030':'100092', // Cemetery
-    'AL036':'100094', // Tomb
-    'AL060':'100096', // Dragon's Teeth
-    'AL065':'100097', // Minefield
-    'AL070':'100098', // Fence
-    'AL073':'100099', // Flagpole
-    'AL080':'100101', // Gantry
-    'AL099':'100103', // Hut
-    'AL105':'100104', // Settlement
-    'AL110':'100105', // Light Support Structure
-    'AL120':'100106', // Missile Site
-    'AL130':'100108', // Memorial Monument
-    'AL140':'100110', // Particle Accelerator
-    'AL142':'100111', // Astronomical Observatory
-    'AL155':'100112', // Overhead Obstruction
-    'AL165':'100113', // Pipeline Crossing Point
-    'AL170':'100114', // Public Square
-    'AL175':'100688', // Courtyard
-    'AL180':'100689', // Retail Stand
-    'AL195':'100115', // Ramp
-    'AL200':'100116', // Ruins
-    'AL201':'100117', // Interest Site
-    'AL208':'100118', // Shanty Town
-    'AL211':'130921', // Transportation Route Protection Structure
-    'AL241':'100122', // Tower
-    'AL250':'100123', // Underground Dwelling
-    'AL260':'100124', // Wall
-    'AL270':'100129', // Industrial Farm
-    'AL351':'100126', // Space Facility
-    'AL371':'180086', // Manor House
-    'AL375':'100128', // Castle
-    'AL376':'132642', // Castle Complex
-    'AL510':'100130', // Tethered Balloon
-    'AM010':'100131', // Storage Depot
-    'AM011':'100132', // Shipping Container
-    'AM020':'100133', // Grain Storage Structure
-    'AM030':'100134', // Grain Elevator
-    'AM040':'100136', // Mineral Pile
-    'AM060':'100137', // Surface Bunker
-    'AM065':'100138', // Munition Storage Facility
-    'AM070':'100139', // Storage Tank
-    'AM071':'100140', // Tank Farm
-    'AM075':'100141', // Fuel Storage Facility
-    'AM080':'100142', // Water Tower
-    'AN010':'100143', // Railway
-    'AN050':'100144', // Railway Sidetrack
-    'AN060':'100145', // Railway Yard
-    'AN075':'100146', // Railway Turntable
-    'AN076':'100147', // Roundhouse
-    'AN085':'100149', // Railway Signal
-    'AP010':'100150', // Cart Track
-    'AP020':'100151', // Road Interchange
-    'AP030':'100152', // Road
-    'AP033':'179969', // Engineered Turnaround Site
-    'AP040':'100154', // Gate
-    'AP041':'100155', // Vehicle Barrier
-    'AP050':'100156', // Trail
-    'AP055':'179906', // Tank Trail
-    'AP056':'180006', // Tank Crossing
-    'AQ035':'100159', // Sidewalk
-    'AQ040':'100161', // Bridge
-    'AQ045':'100162', // Bridge Span
-    'AQ050':'100163', // Bridge Superstructure
-    'AQ055':'100164', // Bridge Tower
-    'AQ056':'100165', // Bridge Pier
-    'AQ059':'131083', // Transportation Route Characteristic Change
-    'AQ060':'100167', // Control Tower
-    'AQ062':'100168', // Crossing
-    'AQ063':'130381', // Causeway Structure
-    'AQ065':'100170', // Culvert
-    'AQ068':'100171', // Transportation Block
-    'AQ070':'100172', // Ferry Crossing
-    'AQ075':'100173', // Ice Route
-    'AQ080':'100174', // Ferry Station
-    'AQ095':'100176', // Tunnel Mouth
-    'AQ110':'100177', // Mooring Mast
-    'AQ111':'100178', // Prepared Watercourse Crossing
-    'AQ113':'100179', // Pipeline
-    'AQ114':'100180', // Storm Drain
-    'AQ115':'100181', // Utility Cover
-    'AQ116':'100182', // Pumping Station
-    'AQ118':'100183', // Sharp Curve
-    'AQ120':'100185', // Steep Grade
-    'AQ125':'100186', // Transportation Station
-    'AQ130':'100187', // Tunnel
-    'AQ135':'100188', // Roadside Rest Area
-    'AQ140':'100189', // Vehicle Lot
-    'AQ141':'100190', // Parking Garage
-    'AQ150':'100191', // Stair
-    'AQ151':'100192', // Arcade
-    'AQ160':'100194', // Traffic Light
-    'AQ161':'100195', // Street Lamp
-    'AQ162':'100196', // Street Sign
-    'AQ170':'100197', // Motor Vehicle Station
-    'AT005':'100199', // Cable
-    'AT010':'100200', // Dish Aerial
-    'AT011':'100201', // Aerial
-    'AT012':'100202', // Aerial Farm
-    'AT041':'100206', // Cableway
-    'AT042':'100558', // Pylon
-    'AT045':'100207', // Radar Station
-    'BA010':'100212', // Land Water Boundary
-    'BA030':'100217', // Island
-    'BA040':'100218', // Tidal Water
-    'BB005':'100222', // Harbour
-    'BB009':'100223', // Port
-    'BB081':'100231', // Shoreline Construction
-    'BB082':'100232', // Shoreline Ramp
-    'BB090':'100233', // Dry Dock
-    'BB110':'100236', // Fish Weir
-    'BB199':'100243', // Floating Dry Dock
-    'BB201':'100244', // Small Craft Facility
-    'BB241':'100245', // Shipyard
-    'BC050':'100253', // Lighthouse
-    'BC070':'100256', // Light Vessel
-    'BD100':'100271', // Structural Pile
-    'BD115':'100272', // Offshore Construction
-    'BD140':'100277', // Snag
-    'BD181':'100279', // Hulk
-    'BH010':'100295', // Aqueduct
-    'BH012':'131749', // Qanat Shaft
-    'BH015':'100296', // Bog
-    'BH020':'100297', // Canal
-    'BH030':'100298', // Ditch
-    'BH040':'100299', // Water Treatment Bed
-    'BH051':'191951', // Fish Farm Facility
-    'BH065':'131810', // Water Race
-    'BH070':'100302', // Ford
-    'BH075':'100303', // Fountain
-    'BH077':'100304', // Hummock
-    'BH082':'130384', // Inland Waterbody
-    'BH090':'100307', // Land Subject to Inundation
-    'BH100':'100309', // Moat
-    'BH110':'100310', // Penstock
-    'BH116':'154640', // Aquifer
-    'BH120':'100311', // Rapids
-    'BH135':'100313', // Rice Field
-    'BH140':'100314', // River
-    'BH145':'100315', // Vanishing Point
-    'BH150':'100316', // Salt Flat
-    'BH155':'100317', // Salt Evaporator
-    'BH160':'100318', // Sabkha
-    'BH165':'100319', // Spillway
-    'BH170':'100320', // Natural Pool
-    'BH180':'100321', // Waterfall
-    'BH220':'100325', // Waterwork
-    'BH230':'100326', // Water Well
-    'BI005':'100328', // Vessel Lift
-    'BI006':'132749', // Ship Elevator
-    'BI010':'100329', // Cistern
-    'BI020':'100330', // Dam
-    'BI030':'100331', // Lock
-    'BI040':'100334', // Sluice Gate
-    'BI044':'131207', // Flood Control Structure
-    'BI045':'131206', // Basin Gate
-    'BI050':'100337', // Water Intake Tower
-    'BI060':'100338', // Fish Ladder
-    'BI070':'100339', // Gauging Station
-    'BJ020':'100340', // Moraine
-    'BJ030':'100341', // Glacier
-    'BJ031':'100342', // Crevasse
-    'BJ040':'100343', // Ice Cliff
-    'BJ060':'100344', // Ice Peak
-    'BJ065':'100345', // Ice Shelf
-    'BJ080':'100347', // Polar Ice
-    'BJ099':'100348', // Ice-cap
-    'BJ100':'100349', // Snow Field and/or Ice-field
-    'BJ110':'100350', // Tundra
-    'CA010':'100353', // Elevation Contour
-    'CA030':'100355', // Spot Elevation
-    'DA005':'100356', // Asphalt Lake
-    'DA010':'100358', // Soil Surface Region
-    'DB010':'100362', // Steep Terrain Face
-    'DB028':'154959', // Cave Chamber
-    'DB029':'154961', // Cave Mouth
-    'DB061':'100365', // Crevice
-    'DB070':'100366', // Cut
-    'DB071':'192101', // Cut Line
-    'DB080':'100367', // Depression
-    'DB090':'100368', // Embankment
-    'DB100':'100369', // Esker
-    'DB110':'100370', // Geologic Fault
-    'DB115':'100371', // Geothermal Outlet
-    'DB150':'100372', // Mountain Pass
-    'DB160':'100373', // Rock Formation
-    'DB170':'100374', // Sand Dunes
-    'DB180':'100375', // Volcano
-    'DB190':'100377', // Volcanic Dyke
-    'DB211':'100379', // Landslide Mass
-    'EA010':'100380', // Crop Land
-    'EA020':'100381', // Hedgerow
-    'EA030':'100382', // Plant Nursery
-    'EA031':'100383', // Botanic Garden
-    'EA040':'100384', // Orchard
-    'EA050':'100385', // Vineyard
-    'EA055':'100386', // Hop Field
-    'EB010':'100387', // Grassland
-    'EB020':'100388', // Thicket
-    'EB070':'100390', // Brush
-    'EC005':'100392', // Tree
-    'EC010':'100393', // Cane
-    'EC015':'130380', // Forest
-    'EC020':'100394', // Oasis
-    'EC040':'100396', // Cleared Way
-    'EC060':'100398', // Forest Clearing
-    'ED010':'100399', // Marsh
-    'ED020':'100400', // Swamp
-    'EE010':'100401', // Logging Site
-    'EE030':'100403', // Desert
-    'FA012':'100409', // Contaminated Region
-    'FA015':'100410', // Firing Range
-    'FA100':'100414', // Test Site
-    'FA165':'100416', // Training Site
-    'FA210':'100417', // Conservation Area
-    'GB005':'100436', // Land Aerodrome
-    'GB015':'100438', // Apron
-    'GB030':'100441', // Helipad
-    'GB035':'100442', // Heliport
-    'GB040':'100443', // Launch Pad
-    'GB045':'100444', // Stopway
-    'GB050':'100446', // Defensive Revetment
-    'GB055':'100448', // Runway
-    'GB065':'100452', // Water Aerodrome
-    'GB070':'100453', // Seaplane Run
-    'GB075':'100454', // Taxiway
-    'GB230':'100456', // Aircraft Hangar
-    'GB250':'100457', // Hardened Aircraft Shelter
-    'IA040':'100458', // Land Parcel
-    'SU001':'100462', // Military Installation
-    'SU004':'170162', // Cantonment Area
-    'SU030':'180061', // Installation Boundary
-    'ZB030':'100465', // Boundary Monument
-    'ZB050':'177997', // Survey Point
-    'ZD020':'100473', // Void Collection Area
-    'ZD040':'100475', // Named Location
-    'ZD045':'100476', // Annotated Location
-    'ZD070':'164755', // Water Measurement Location
-    'ZI031':'121591', // Dataset
-    'ZI039':'132721', // Entity Collection Metadata
-    }, // End of subtypeList
-    // ##### End of ESRI FCSubtype Rules #####
 
-} // End of tds61.rules
+
+// #####################################################################################################
+
+    // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
+    fixTransType : function(tags)
+    {
+        if (tags.railway)
+        {
+            tags['transport:type'] = 'railway';
+        }
+        else if (tags.highway && ['path','pedestrian','steps','trail'].indexOf(tags.highway) > -1)
+        {
+            tags['transport:type'] = 'pedestrian';
+        }
+        else if (tags.highway)
+        {
+            tags['transport:type'] = 'road';
+        }
+    },
+
+    // Untangle TDS attributes & OSM tags.
+    // Some people have been editing OSM files and inserting TDS attributes
+    untangleAttributes: function (attrs, tags)
+    {
+        // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
+        // We need to unpack this before we can do anything.
+        if (attrs.other_tags)
+        {
+            var tList = attrs.other_tags.split('","');
+
+            delete attrs.other_tags;
+
+            for (var val in tList)
+            {
+                vList = tList[val].split('"=>"');
+
+                attrs[vList[0].replace('"','')] = vList[1].replace('"','');
+
+                // Debug
+                //print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+            }
+        }
+
+        for (var col in attrs)
+        {
+            // Sort out FCODE funkyness:  f_CODE, F_Code etc
+            var tKey = col.toLowerCase();
+            tKey = tKey.replace(/\s/g, '').replace(/_/g, '');;
+
+            if (tKey == 'fcode' && col !== 'F_CODE')
+            {
+                attrs.F_CODE = attrs[col];
+                delete attrs[col];
+                continue;
+            }
+
+            // Check for an FCODE as a tag
+            if (col in tds61.fcodeLookup['F_CODE'])
+            {
+                attrs.F_CODE = col;
+                delete attrs[col];
+                continue;
+            }
+
+
+            // Stuff to be ignored or that gets swapped later - See applyToOsmPreProcessing
+            if (~tds61.ignoreList.indexOf(col)) continue;
+
+            // Look for Attributes
+            if (col in tds61.numBiased) continue;
+
+            if (col in tds61.txtBiased) continue;
+
+            if (col in tds61.lookup) continue;
+
+            // Drop the "GEOM" attribute
+            if (col == 'GEOM')
+            {
+                delete attrs[col];
+                continue;
+            }
+
+            // Not an Attribute so push it to the tags object
+            tags[col] = attrs[col];
+            delete attrs[col];
+        }
+
+    }, // End attributeUntangle
+
+
+
+// #####################################################################################################
+    // ##### Start of the xxToOsmxx Block #####
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+    {
+        // Drop the FCSUBTYPE since we don't use it
+        if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+
+        // List of data values to drop/ignore
+        var ignoreList = { '-999999.0':1, '-999999':1, 'noinformation':1 };
+
+        // List of attributes that can't have '0' as a value
+        var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
+
+        // This is a handy loop. We use it to:
+        // 1) Remove all of the "No Information" and -999999 fields
+        // 2) Convert all of the Attrs to uppercase - if needed
+       for (var col in attrs)
+        {
+            // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
+            // First, push to lowercase
+            var attrValue = attrs[col].toString().toLowerCase();
+
+            // Get rid of the spaces in the text
+            attrValue = attrValue.replace(/\s/g, '');
+
+            // Wipe out the useless values
+            if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
+            {
+                delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
+                continue;
+            }
+
+            // Remove attributes with '0' values if they can't be '0'
+            if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+            {
+                delete attrs[col];
+                continue;
+            }
+
+            // Push the attribute to upper case - if needed
+            var c = col.toUpperCase();
+            if (c !== col)
+            {
+                attrs[c] = attrs[col];
+                delete attrs[col];
+                col = c; // For the rest of this loop iteration
+            }
+
+            // Now see if we need to swap attr names
+            if (col in tds61.swapListIn)
+            {
+                // print('Swapped: ' + tds61.swapListIn[i]); // debug
+                attrs[tds61.swapListIn[col]] = attrs[col];
+                delete attrs[col];
+                continue;
+            }
+
+        } // End in attrs loop
+
+        // Drop all of the XXX Closure default values IFF the associated attributes are
+        // not set.
+        // Doing this after the main cleaning loop so all of the -999999 values are
+        // already gone and we can just check for existance.
+
+        for (var i in tds61.closureList)
+        {
+            if (attrs[i])
+            {
+                if (attrs[tds61.closureList[i][0]] || attrs[tds61.closureList[i][1]])
+                {
+                    continue;
+                }
+                else
+                {
+                    delete attrs[i];
+                }
+            }
+        } // End closureList
+
+        // Now find an F_CODE
+        if (attrs.F_CODE)
+        {
+            // Drop the the "Not Found" F_CODE. This is from the UI
+            if (attrs.F_CODE == 'Not found') delete attrs.F_CODE;
+        }
+        else if (attrs.FCODE)
+        {
+            attrs.F_CODE = attrs.FCODE;
+            delete attrs.FCODE;
+        }
+        else
+        {
+            // Time to find an FCODE based on the filename
+            // Funky but it makes life easier
+            var llayerName = layerName.toString().toLowerCase();
+
+            for (var row in tds61.fCodeMap)
+            {
+                for (var val in tds61.fCodeMap[row][1])
+                {
+                    if (llayerName == tds61.fCodeMap[row][1][val])
+                    {
+                        attrs.F_CODE = tds61.fCodeMap[row][0];
+                        break;
+                    }
+                }
+            }
+        } // End of Find an FCode
+
+    }, // End of applyToOsmPreProcessing
+
+
+// #####################################################################################################
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
+    {
+        // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
+        if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
+        {
+             // Set a Default: "It is a road but we don't know what it is"
+            tags.highway = 'road';
+
+            // Top level
+            if (tags['ref:road:type'] == 'motorway' || tags['ref:road:class'] == 'national_motorway')
+            {
+                tags.highway = 'motorway';
+            }
+            else if (tags['ref:road:type'] == 'limited_access_motorway')
+            {
+                tags.highway = 'trunk';
+            }
+            else if (tags['ref:road:class'] == 'primary')
+            {
+                tags.highway = 'primary';
+            }
+            else if (tags['ref:road:class'] == 'secondary')
+            {
+                tags.highway = 'secondary';
+            }
+            else if (tags['ref:road:class'] == 'local')
+            {
+                if (tags['ref:road:type'] == 'road') // RTY=3
+                {
+                    tags.highway = 'tertiary';
+                }
+                else
+                {
+                    tags.highway = 'unclassified';
+                }
+            }
+            else if (tags['ref:road:type'] == 'pedestrian')
+            {
+                tags.highway = 'pedestrian';
+            }
+            else if (tags['ref:road:type'] == 'road') // RTY=3
+            {
+                tags.highway = 'tertiary';
+            }
+            else if (tags['ref:road:type'] == 'street') // RTY=4
+            {
+                tags.highway = 'unclassified';
+            }
+            // Other should get picked up by the OTH field
+            else if (tags['ref:road:type'] == 'other')
+            {
+                tags.highway = 'road';
+            }
+        } // End if AP030
+
+
+        // New TDSv61 Attribute - ROR (Road Interchange Ramp)
+        if (tags.highway && tags.interchange_ramp == 'yes')
+        {
+            var roadList = ['motorway','trunk','primary','secondary','tertiary'];
+            if (roadList.indexOf(tags.highway) !== -1) tags.highway = tags.highway + '_link';
+        }
+
+        // Add the LayerName to the source
+        if ((! tags.source) && layerName !== '') tags.source = 'tdsv61:' + layerName.toLowerCase();
+
+        // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
+        if (attrs.UFI)
+        {
+            tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
+        }
+        else
+        {
+            tags.uuid = createUuid();
+        }
+
+
+        if (tds61.osmPostRules == undefined)
+        {
+            // ##############
+            // A "new" way of specifying rules. Jason came up with this while playing around with NodeJs
+            //
+            // Rules format:  ["test expression","output result"];
+            // Note: t = tags, a = attrs and attrs can only be on the RHS
+            var rulesList = [
+            ["t.barrier == 'dragons_teeth' && !(t.tank_trap)","t.barrier = 'tank_trap'; t.tank_trap = 'dragons_teeth'"],
+            ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
+            ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
+            ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
+            ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
+            ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4'"],
+            ["t.bunker_type && !(t.military)","t.military = 'bunker'"],
+            ["t.cable =='yes' && t['cable:type'] == 'power'"," t.power = 'line'; delete t.cable; delete t['cable:type']"],
+            ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
+            ["t.crossing == 'tank'","t.highway = 'crossing'"],
+            ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
+            ["t.dock && !(t.waterway)","t.waterway = 'dock'"],
+            ["t.drive_in == 'yes'","t.amenity = 'cinema'"],
+//             ["t['generator:source']","t.power = 'generator'"],
+            ["t['glacier:type'] == 'icecap' && t.natural == 'glacier'","delete t.natural"],
+            ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course'"],
+            ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
+            //["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
+            ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
+            ["t.leisure == 'stadium'","t.building = 'yes'"],
+            ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
+            ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
+            //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
+            ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
+            ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
+            ["t.product && t.man_made == 'storage_tank'","t.content = t.product; delete t.product"],
+            ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
+            ["t.pylon =='yes' && t['cable:type'] == 'cableway'"," t.aerialway = 'pylon'"],
+            ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
+            ["t.sidetrack && !(t.railway)","t.railway = 'rail'"],
+            ["t.sidetrack && !(t.service)","t.service = 'siding'"],
+            ["t.social_facility","t.amenity = 'social_facility'; t['social_facility:for'] = t.social_facility; t.social_facility = 'shelter'"],
+            ["t['theatre:type'] && !(t.amenity)","t.amenity = 'theatre'"],
+            ["t['tower:material']","t.material = t['tower:material']; delete t['tower:material']"],
+            ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
+            ["t.use == 'islamic_prayer_hall' && !(t.amenity)","t.amenity = 'place_of_worship'"],
+            ["t.water || t.landuse == 'basin'","t.natural = 'water'"],
+            ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"],
+            ["t.wetland && !(t.natural)","t.natural = 'wetland'"],
+            ["t['width:minimum_traveled_way'] && !(t.width)","t.width = t['width:minimum_traveled_way']"]
+            ];
+
+            tds61.osmPostRules = translate.buildComplexRules(rulesList);
+        }
+
+        // translate.applyComplexRules(tags,attrs,tds61.osmPostRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = tds61.osmPostRules.length; i < rLen; i++)
+        {
+            if (tds61.osmPostRules[i][0](tags)) tds61.osmPostRules[i][1](tags,attrs);
+        }
+
+        // ##############
+
+        // Road & Railway Crossings
+        // Road/Rail = crossing
+        // Road + Rail = level_crossing
+        if (tags.crossing_point)
+        {
+            if (tags['transport:type'] == 'railway')
+            {
+                tags.railway = 'crossing';
+
+                if (tags['transport:type:2'] == 'road') tags.railway = 'level_crossing';
+            }
+            else if (tags['transport:type'] == 'road')
+            {
+                if (tags['transport:type:2'] == 'railway')
+                {
+                    tags.railway = 'level_crossing';
+                }
+                else
+                {
+                    tags.highway = 'crossing';
+                }
+            }
+        } // End crossing_point
+
+
+        // Add a building tag to Buildings and Fortified Buildings if we don't have one
+        // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
+        if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building))
+        {
+            tags.building = 'yes';
+        }
+
+
+        // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
+        if (tags.building == 'yes' && tags.use)
+        {
+            if ((tags.use.indexOf('manufacturing') > -1) || (tags.use.indexOf('processing') > -1))
+            {
+                tags.building = 'industrial';
+            }
+            // NOTE: Shops have been rempved from "use"
+            // Sort out shops
+            // else if (hoot.OsmSchema.getTagVertex("shop=" + tags.use).name != "shop=*")
+            // {
+            //    hoot.warn(hoot.OsmSchema.getTagVertex("shop=" + tags.use));
+            //    hoot.warn(hoot.OsmSchema.isAncestor("shop=" + tags.use, "shop"));
+            //    hoot.warn(tags.use);
+            //    tags.shop = tags.use;
+            //    delete tags.use;
+            // }
+
+        } // End building & use tags
+
+        // Education:
+        if (tags['isced:level'] || tags.use == 'education')
+        {
+            if (tags.building == 'yes')
+            {
+                tags.building = 'school'
+            }
+            else if (tags.facility)
+            {
+                tags.amenity = 'school';
+            }
+        }
+
+        if (tags.use == 'vocational_education')
+        {
+            if (tags.building == 'yes')
+            {
+                tags.building = 'college'
+            }
+            else if (tags.facility)
+            {
+                tags.amenity = 'college';
+            }
+        }
+
+        // A facility is an area. Therefore "use" becomes "amenity". "Building" becomes "landuse"
+        if (tags.facility && tags.use)
+        {
+            if ((tags.use.indexOf('manufacturing') > -1) || (tags.use.indexOf('processing') > -1))
+            {
+                tags.man_made = 'works';
+            }
+        }
+
+        // Fix up landuse tags
+        if (attrs.F_CODE == 'AL020')
+        {
+            switch (tags.use) // Fixup the landuse tags
+            {
+                case undefined: // Break early if no value
+                    break;
+
+                case 'commercial':
+                    tags.landuse = 'commercial';
+                    delete tags.use;
+                    break;
+
+                case 'industrial':
+                    tags.landuse = 'industrial';
+                    delete tags.use;
+                    break;
+
+                case 'residential':
+                    tags.landuse = 'residential';
+                    delete tags.use;
+                    break;
+            } // End switch
+        }
+
+        // Fix oil/gas/petroleum fields
+        if (attrs.F_CODE == 'AA052')
+        {
+            tags.landuse = 'industrial';
+
+            switch (tags.product)
+            {
+                case undefined:
+                    break;
+
+                case 'gas':
+                    tags.industrial = 'gas';
+                    break;
+
+                case 'petroleum':
+                    tags.industrial = 'oil';
+                    break;
+            }
+        } // End Hydrocarbons
+
+        // Fix up lifestyle tags.
+        // This needs to be expanded to handle all of the options.
+//      ['PCF','1','condition','construction'], // Construction
+//      ['PCF','2','condition','functional'], // Intact in spec, using for MGCP compatibility
+//      ['PCF','3','condition','abandoned'], // Unmaintained in spec
+//      ['PCF','4','condition','damaged'], // Damaged
+//      ['PCF','5','condition','dismantled'], // Dismantled
+//      ['PCF','6','condition','destroyed'], // Destroyed
+        if (tags.condition)
+        {
+            if (tags.condition == 'construction')
+            {
+//                 if (tags.highway && attrs.F_CODE == 'AP030')
+                if (tags.highway)
+                {
+                    tags.construction = tags.highway;
+                    tags.highway = 'construction';
+                    delete tags.condition;
+                }
+                else if (tags.railway)
+                {
+                    tags.construction = tags.railway;
+                    tags.railway = 'construction';
+                    delete tags.condition;
+                }
+            } // End Construction
+
+        } // End Condition tags
+
+        // Add defaults for common features
+        if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
+        if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
+        if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
+
+        // Not sure about adding a Highway tag to this.
+        // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
+
+        // Denominations without religions - from ZI037_REL which has some denominations as religions
+        if (tags.denomination)
+        {
+            switch (tags.denomination)
+            {
+                case 'roman_catholic':
+                case 'orthodox':
+                case 'protestant':
+                case 'chaldean_catholic':
+                case 'nestorian': // Not sure about this
+                    tags.religion = 'christian';
+                    break;
+
+                case 'shia':
+                case 'sunni':
+                    tags.religion = 'muslim';
+                    break;
+            } // End switch
+        }
+
+        // Religious buildings: Church, Pagoda, Temple etc
+        if (attrs.ZI037_REL && tags.amenity !== 'place_of_worship')
+        {
+            tags.amenity = 'place_of_worship';
+        }
+
+        // Fords and Roads
+        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
+        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+
+        // Unpack the ZI006_MEM field
+        if (tags.note)
+        {
+            var tObj = translate.unpackMemo(tags.note);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+            }
+
+            if (tObj.text && tObj.text !== '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
+        } // End process tags.note
+
+        // Fix up areas
+        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+        if (geometryType == 'Area' && ! translate.isOsmArea(tags))
+        {
+            // Debug
+            // print('Adding area=yes');
+            tags.area = 'yes';
+        }
+
+        // Fix the ZI020_GE4X Values
+        var ge4meta = ['is_in:country_code','country_code:second','country_code:third','country_code:fourth'];
+
+        for (var i=0, iLen=ge4meta.length; i < iLen; i++)
+        {
+            if (tags[ge4meta[i]])
+            {
+                if (tds61.ge4List[tags[ge4meta[i]]])
+                {
+                    tags[ge4meta[i]] = tds61.ge4List[tags[ge4meta[i]]];
+                }
+                else
+                {
+                    hoot.logWarn('Dropping invalid ' + ge4meta[i] + ' value: ' + tags[ge4meta[i]]);
+                    delete tags[ge4meta[i]];
+                }
+            }
+        } // End for GE4 loop
+
+
+    }, // End of applyToOsmPostProcessing
+
+    // ##### End of the xxToOsmxx Block #####
+
+// #####################################################################################################
+
+
+    // ##### End of the xxToTdsxx Block #####
+
+    // toOsm - Translate Attrs to Tags
+    // This is the main routine to convert _TO_ OSM
+    toOsm : function(attrs, layerName, geometryType)
+    {
+    }, // End of toOsm
+
+} // End of tds61
+
+
+
+
+function initialize()
+{
+    // Setup config variables. We could do this in initialize() but some things don't call it :-(
+    // Doing this so we don't have to keep calling into Hoot core
+    if (tds61.configIn == undefined)
+    {
+        tds61.configIn = {};
+        tds61.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+        tds61.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+
+        // Get any changes
+        tds61.toChange = hoot.Settings.get("translation.override");
+    }
+
+    // Set up the fcode translation rules. We need this due to clashes between the one2one and
+    // the fcode one2one rules
+    if (tds61.fcodeLookup == undefined)
+    {
+        // Add the FCODE rules for Import
+        fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.fcodeOne2oneIn);
+
+        tds61.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+        // Debug
+        // translate.dumpOne2OneLookup(tds61.fcodeLookup);
+    }
+
+    if (tds61.lookup == undefined)
+    {
+        // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
+        // other tables are not set either.
+
+        // Support Import Only attributes
+        tds61.one2one.push.apply(tds61.one2one,tds61.one2oneIn);
+
+        tds61.lookup = translate.createLookup(tds61.one2one);
+    }
+}
+
+// Layer name filter - Filter out all layers that match this regexp
+function layerNameFilter()
+{
+    // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
+    return "^(?!SRC_|extra_)";
+}
+
+// IMPORT
+function translateToOsm(attrs, layerName, geometryType)
+{
+    tags = {};  // The final output Tag list
+
+    // Debug:
+    if (tds61.configIn.OgrDebugDumptags == 'true')
+    {
+        print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
+        var kList = Object.keys(attrs).sort()
+        for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+    }
+
+    // See if we have an o2s_X layer and try to unpack it.
+    if (layerName.indexOf('o2s_') > -1)
+    {
+        tags = translate.parseO2S(attrs);
+
+        // Add some metadata
+        if (! tags.uuid) tags.uuid = createUuid();
+        if (! tags.source) tags.source = 'tdsv61:' + layerName.toLowerCase();
+
+        // Debug:
+        if (tds61.configIn.OgrDebugDumptags == 'true')
+        {
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            print('');
+        }
+
+        return tags;
+    } // End layername = o2s_X
+
+    // Untangle TDS attributes & OSM tags.
+    // NOTE: This could get wrapped with an ENV variable so it only gets called during import
+    tds61.untangleAttributes(attrs, tags);
+
+    // Debug:
+    if (tds61.configIn.OgrDebugDumptags == 'true')
+    {
+        var kList = Object.keys(attrs).sort()
+        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+
+        var kList = Object.keys(tags).sort()
+        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+    }
+
+    // pre processing
+    tds61.applyToOsmPreProcessing(attrs, layerName, geometryType);
+
+    // Use the FCODE to add some tags.
+    if (attrs.F_CODE)
+    {
+        var ftag = tds61.fcodeLookup['F_CODE'][attrs.F_CODE];
+        if (ftag)
+        {
+            tags[ftag[0]] = ftag[1];
+            // Debug: Dump out the tags from the FCODE
+            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        }
+        else
+        {
+            hoot.logTrace('Translation for F_CODE ' + attrs.F_CODE + ' not found');
+        }
+    }
+
+    // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
+    // isn't used in the translation - this should end up empty.
+    // not in v8 yet: // var tTags = Object.assign({},tags);
+    var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+    delete notUsedAttrs.F_CODE;
+    delete notUsedAttrs.FCSUBTYPE;
+
+    // apply the simple number and text biased rules
+    // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+    translate.applySimpleNumBiased(notUsedAttrs, tags, tds61.numBiased, 'forward',[]);
+    translate.applySimpleTxtBiased(notUsedAttrs, tags, tds61.txtBiased, 'forward');
+
+    // one 2 one
+    //translate.applyOne2One(notUsedAttrs, tags, tds61.lookup, {'k':'v'});
+    translate.applyOne2OneQuiet(notUsedAttrs, tags, tds61.lookup);
+
+    // Translate the XXX2, XXX3 etc attributes
+    translate.fix23Attr(notUsedAttrs, tags, tds61.lookup);
+
+    // Crack open the OTH field and populate the appropriate attributes
+    // The OTH format is _supposed_ to be (<attr>:<value>) but anything is possible
+    if (attrs.OTH) translate.processOTH(attrs, tags, tds61.lookup);
+
+    // post processing
+    tds61.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
+
+    // Debug: Add the FCODE to the tags
+    if (tds61.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+
+    // Debug:
+    if (tds61.configIn.OgrDebugDumptags == 'true')
+    {
+        var kList = Object.keys(notUsedAttrs).sort()
+        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
+
+        var kList = Object.keys(tags).sort()
+        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+        print('');
+    }
+
+    // Override tag values if appropriate
+    translate.overrideValues(tags,tds61.toChange);
+
+    return tags;
+} // End of Translate Attributes

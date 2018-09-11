@@ -285,9 +285,9 @@ void JavaScriptTranslator::_init()
   {
     _toOsmFunctionName = "translateAttributes";
   }
-  else
+  else if (!tObj->Has(String::NewFromUtf8(current, "translateToOgr")))
   {
-    throw HootException("A 'translateToOsm' function must be defined.");
+    throw HootException("A 'translateToOsm' or 'translateToOgr' function must be defined.");
   }
 
   // Debug Stuff - Dump the object properties

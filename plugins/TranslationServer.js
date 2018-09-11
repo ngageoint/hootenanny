@@ -46,7 +46,7 @@ var translationsMap = {
             'translation.direction': 'toogr'
         }),
         TDSv61: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/TDSv61.js',
+            'translation.script': HOOT_HOME + '/translations/TDSv61_to_OGR.js',
             'translation.direction': 'toogr'
         }),
         MGCP: new hoot.TranslationOp({
@@ -64,7 +64,7 @@ var translationsMap = {
             'translation.direction': 'toosm'
         }),
         TDSv61: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/TDSv61.js',
+            'translation.script': HOOT_HOME + '/translations/TDSv61_to_OSM.js',
             'translation.direction': 'toosm'
         }),
         MGCP: new hoot.TranslationOp({
