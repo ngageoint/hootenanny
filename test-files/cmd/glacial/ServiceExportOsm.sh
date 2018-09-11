@@ -34,7 +34,7 @@ export outputtype=shp
 MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript > /dev/null
 
 # Test gdb with TDSv6.1 translation
-export translation="translations/TDSv61.js"
+export translation="translations/TDSv61_to_OGR.js"
 export outputtype=gdb
 MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript > /dev/null
 

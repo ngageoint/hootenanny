@@ -3043,7 +3043,7 @@ The format used to write the element payload portion of the Spark changeset file
 === stats.translate.script
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/translations/TDSv61.js`
+* Default Value: `${HOOT_HOME}/translations/TDSv61_to_OGR.js`
 
 Path to the translation script to use when translating tags for stats. If the path is empty, then
 all translation stats are disabled.

@@ -6624,12 +6624,9 @@ function layerNameFilter()
 // Create the output Schema
 function getDbSchema()
 {
-
 	
 	hoot.require('tds61_schema');
 	
-	print('### Globals ###');
-
 	tds61.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
     tds61.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 

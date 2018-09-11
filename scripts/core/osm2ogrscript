@@ -75,7 +75,7 @@ else ifeq ("$(outputtype)","osc")
 else
 	mkdir -p "$(outputfolder)"
 ifeq "$(append)" "true"
-ifeq "$(translation)" "translations/TDSv61.js"
+ifeq "$(translation)" "translations/TDSv61_to_OGR.js"
 ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
 	mkdir -p $(OP_OUTPUT)
 	tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)

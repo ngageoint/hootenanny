@@ -4913,24 +4913,9 @@ tds61 = {
 
 
     }, // End of applyToOsmPostProcessing
-
-    // ##### End of the xxToOsmxx Block #####
-
-// #####################################################################################################
-
-
-    // ##### End of the xxToTdsxx Block #####
-
-    // toOsm - Translate Attrs to Tags
-    // This is the main routine to convert _TO_ OSM
-    toOsm : function(attrs, layerName, geometryType)
-    {
-    }, // End of toOsm
-
 } // End of tds61
 
-
-
+// #####################################################################################################
 
 function initialize()
 {

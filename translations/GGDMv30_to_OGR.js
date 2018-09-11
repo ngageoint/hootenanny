@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //
-// Convert GGDMv30 to/from OSM+
+// Convert GGDMv30 from OSM+ to OGR
 //
 
 hoot.require('SchemaTools');

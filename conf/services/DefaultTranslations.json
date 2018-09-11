@@ -34,18 +34,18 @@
         "NAME" : "GIFD D4",
         "DESCRIPTION" : "Geospatial Intelligence Feature Database (GIFD) D4",
         "CANEXPORT" : false,
-        "PATH" : "translations/GIFD_D4.js",
+        "PATH" : "translations/GIFD_D4_to_OSM.js",
     },
     {
         "NAME" : "WorldPortIndex",
         "DESCRIPTION" : "NGA World Port Index",
         "CANEXPORT" : false,
-        "PATH" : "translations/WorldPortIndex.js",
+        "PATH" : "translations/WorldPortIndex_to_OSM.js",
     },
     {
         "NAME" : "GEONAMES",
         "DESCRIPTION" : "GeoNames.org",
         "CANEXPORT" : false,
-        "PATH" : "translations/GeoNames.js"
+        "PATH" : "translations/GeoNames_to_OSM.js"
     }
 ]
