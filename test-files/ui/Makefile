@@ -53,6 +53,7 @@ clean:
 		done; \
 		true; \
 	fi
+	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c "DELETE FROM users where id=-1" || true
 
 coverage: clean-coverage
 	echo Generating user interface coverage report...
@@ -73,15 +74,19 @@ clean-coverage:
 	rm -rf $(HOOT_HOME)/hoot-ui/cucumber-coverage
 	rm -rf $(HOOT_HOME)/hoot-ui/combined-coverage
 load-data: clean
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcOsmRoads.osm $(DB_URL)/DcOsmRoadsCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(DB_URL)/AllDataTypesACucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesB.osm $(DB_URL)/AllDataTypesBCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestA.osm $(DB_URL)/ToyTestACucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestB.osm $(DB_URL)/ToyTestBCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestCauseReview.osm $(DB_URL)/TTCauseReviewCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/Merged_Brazil_daba15e4.osm $(DB_URL)/BrazilMergedCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/diff/input1.osm $(DB_URL)/DiffInput1Cucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/diff/input2.osm $(DB_URL)/DiffInput2Cucumber
+	# Add a cookie for Selenium
+	echo $PGPASSWORD
+	echo $AUTH
+	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c "INSERT INTO users(email,id,display_name,provider_access_key,provider_access_token,session_id,hootservices_last_authorize,hootservices_created_at,provider_created_at) VALUES ('-1@hootenanny', -1, 'Cucumber', 'Al45qjcp1DQIHvAIRIHrOmxnrmTbE4Y2Q948q9mj', 'kUy9KDgXl0XnQkkE7PsgTYMAT08TgVXvdG1jeei7', '150b91e6-2da5-4dd0-81f8-309226b4b4dc', now(), now(), now())"
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcOsmRoads.osm $(DB_URL)/DcOsmRoadsCucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(DB_URL)/AllDataTypesACucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesB.osm $(DB_URL)/AllDataTypesBCucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestA.osm $(DB_URL)/ToyTestACucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestB.osm $(DB_URL)/ToyTestBCucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestCauseReview.osm $(DB_URL)/TTCauseReviewCucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/Merged_Brazil_daba15e4.osm $(DB_URL)/BrazilMergedCucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/diff/input1.osm $(DB_URL)/DiffInput1Cucumber
+	# hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/diff/input2.osm $(DB_URL)/DiffInput2Cucumber
 

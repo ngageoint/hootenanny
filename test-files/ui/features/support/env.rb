@@ -18,6 +18,7 @@ Capybara.register_driver :selenium_chrome do |app|
   )
 end
 
+
 Capybara.javascript_driver = :selenium_chrome
 Capybara.default_driver = :selenium_chrome
 

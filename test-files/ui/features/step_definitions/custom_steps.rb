@@ -1,9 +1,12 @@
 Given(/^I am on Hootenanny$/) do
+  # page.driver.browser.set_cookie('SESSION=882a2e8f-c005-4c35-bff2-586e42e3afa1; lock=1')
   visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id" # may need to change URL
+  Capybara.current_session.driver.browser.manage.add_cookie :name => "SESSION", :value => "882a2e8f-c005-4c35-bff2-586e42e3afa1"
 end
 
 Given(/^I am on Hootenanny at location "([^"]*)"$/) do |location|
   visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id/#map=" + location # may need to change URL
+  Capybara.current_session.driver.browser.manage.add_cookie :name => "SESSION", :value => "882a2e8f-c005-4c35-bff2-586e42e3afa1"
 end
 
 When(/^I click Get Started$/) do
