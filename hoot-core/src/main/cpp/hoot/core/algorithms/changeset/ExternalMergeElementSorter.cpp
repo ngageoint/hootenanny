@@ -132,8 +132,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
     if ((elementCtr % _maxElementsPerFile == 0 && elementCtr != 0) || !input->hasMoreElements())
     {
-      LOG_DEBUG("Sorting elements...");
-      LOG_VART(elements.size());
+      LOG_DEBUG("Sorting " << elements.size() << " elements...");
       std::sort(elements.begin(), elements.end(), _elementCompare);
 
       LOG_DEBUG("Writing elements to temp file...");
@@ -222,24 +221,30 @@ void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& prio
   int fullyParsedFiles = 0;
   long elementsWritten = 0;
   long pushesToPriorityQueue = 0;
+
+  //Go through the contents of each sorted files until all elements have been parsed.
   while (fullyParsedFiles != readers.size())
   {
     LOG_VART(fullyParsedFiles);
-    _printPriorityQueue(priorityQueue);
+    //_printPriorityQueue(priorityQueue);
+
+    //pop the next element to be written off of the queue
     PqElement rootPqElement = priorityQueue.top();
     priorityQueue.pop();
     LOG_TRACE(
       "Read root element from priority queue and removed it: " <<
       rootPqElement.element->getElementId());
-    if (rootPqElement.element->getId() != LONG_MAX)
-    {
-      LOG_TRACE(
-        "Writing root element from priority queue to final output: " <<
-        rootPqElement.element->getElementId());
-      writer->writePartial(rootPqElement.element);
-      elementsWritten++;
-      LOG_VART(elementsWritten);
-    }
+
+    //write the element to the final output file
+    LOG_TRACE(
+      "Writing root element from priority queue to final output: " <<
+      rootPqElement.element->getElementId());
+    writer->writePartial(rootPqElement.element);
+    elementsWritten++;
+    LOG_VART(elementsWritten);
+
+    //The next file to be pushed to the root of the priority queue will be in the same file as the
+    //previously read root, if there are any more elements in the file.
     if (readers.at(rootPqElement.fileIndex)->hasMoreElements())
     {
       ConstElementPtr element = readers.at(rootPqElement.fileIndex)->readNextElement();
@@ -248,17 +253,21 @@ void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& prio
       rootPqElement.fileIndex);
       rootPqElement.element = element;
     }
+    //Otherwise, move to the next file.
     else
     {
       LOG_TRACE("No elements left in file: " << rootPqElement.fileIndex);
       readers.at(rootPqElement.fileIndex)->close();
-      rootPqElement.element.reset(new Relation(Status::Invalid, LONG_MAX, 15.0));
+      //null elements don't get pushed onto the queue
+      rootPqElement.element.reset();
       fullyParsedFiles++;
     }
 
-    if (rootPqElement.element->getId() != LONG_MAX)
+    if (rootPqElement.element)
     {
-      LOG_TRACE("Pushing element to priority queue: " << rootPqElement.element->getElementId());
+      LOG_TRACE(
+        "Pushing element to priority queue: " << rootPqElement.element->getElementId() <<
+        " for file: " << rootPqElement.fileIndex);
       priorityQueue.push(rootPqElement);
       pushesToPriorityQueue++;
     }
@@ -317,6 +326,7 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
 {
   LOG_DEBUG("Writing initial records from each temp file to priority queue...");
 
+  //Push the first element from each sorted file onto the priority queue to seed it.
   ElementPriorityQueue priorityQueue;
   for (int i = 0; i < _tempOutputFiles.size(); i++)
   {
@@ -337,15 +347,17 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
     reader->open(fileName);
     readers.append(reader);
 
-    //this should always return true but has to be called before readNextElement, so an assert
-    //isn't good enough here
+    //This should always return true but is required to be called before readNextElement, so just an
+    //assert isn't good enough here
     if (reader->hasMoreElements())
     {
       ConstElementPtr element = reader->readNextElement();
       PqElement pqElement;
       pqElement.element = element;
       pqElement.fileIndex = i;
-      LOG_TRACE("Pushing element to priority queue: " << element->getElementId());
+      LOG_TRACE(
+        "Pushing element to priority queue: " << pqElement.element->getElementId() <<
+        " from file: " << pqElement.fileIndex);
       priorityQueue.push(pqElement);
     }
   }

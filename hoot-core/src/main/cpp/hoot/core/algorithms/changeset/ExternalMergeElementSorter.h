@@ -19,12 +19,14 @@ namespace hoot
 struct PqElement
 {
   ConstElementPtr element;
+  //the index of the temporary file this element resides in needed when combining multiple sorted
+  //files into a single file
   int fileIndex;
 };
 
 struct ElementComparePq
 {
-  //The priority queue expects the reverse sorting priority that we use with vector sorting.
+  //The priority queue expects the reverse element sorting priority that we use with vector sorting.
   bool operator()(const PqElement& e1, const PqElement& e2) const
   {
     const ElementType::Type type1 = e1.element->getElementType().getEnum();
@@ -86,7 +88,6 @@ public:
   void setMaxElementsPerFile(long max) { _maxElementsPerFile = max; }
   void setTempFormat(QString format) { _tempFormat = format; }
   void setRetainTempFiles(bool retain) { _retainTempFiles = retain; }
-
   int getNumTempFiles() const { return _tempOutputFiles.size(); }
 
 private:
