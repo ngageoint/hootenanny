@@ -2302,7 +2302,7 @@ ufd = {
         ['SSC','Mast','shape','mast'], // Mast
         ['SSC','65','shape','cylindrical_with_flat_top'], // Cylindrical with flat top
         ['SSC','Cylindrical with flat top','shape','cylindrical_with_flat_top'], // Cylindrical with flat top
-        ['SSC','Cylindrical with Flat top','shape','cylindrical_with_flat_top'], // Cylindrical with flat top
+        ['SSC','Cylindrical with Flat Top','shape','cylindrical_with_flat_top'], // Cylindrical with flat top
         ['SSC','66','shape','cylindrical_with_domed_top'], // Cylindrical with domed top
         ['SSC','Cylindrical with domed top','shape','cylindrical_with_domed_top'], // Cylindrical with domed top
         ['SSC','71','shape','cylindrical_with_conical_top'], // Cylindrical/Peaked
@@ -2329,7 +2329,7 @@ ufd = {
         ['SSC','108','shape','scanner'], // Scanner
         ['SSC','Scanner','shape','scanner'], // Scanner
         ['SSC','109','shape','obelisk'], // Obelisk
-        ['SSC','obelisk','shape','obelisk'], // Obelisk
+        ['SSC','Obelisk','shape','obelisk'], // Obelisk
         ['SSC','110','shape','radome_tower_mounted'], // Radome Tower Mounted
         ['SSC','Radome Tower Mounted','shape','radome_tower_mounted'], // Radome Tower Mounted
         ['SSC','999','shape','other'], // Other
