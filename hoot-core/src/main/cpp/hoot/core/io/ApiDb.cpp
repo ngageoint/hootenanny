@@ -1007,10 +1007,10 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementTyp
     _selectQueries[elementTableName].reset(new QSqlQuery(_db));
     _selectQueries[elementTableName]->setForwardOnly(true);
     //This query uses the ORDER BY with LIMIT to ensure that we consistently see unique pages
-    //of data returned. However, if the data coming back won't necessarily be strictly sorted by
+    //of data returned. However, the data coming back won't necessarily be strictly sorted by
     //element ID.  I *believe* this is because we have no index on element ID (or maybe this just
     //how PG optimizes it?).  This is ok, though, b/c if we needed all elements returned strictly
-    //sorted by ID (e.g. changeset derivation) we can just do that after retrieving them.
+    //sorted by ID (e.g. changeset derivation) we can just do that after retrieving them. - BDW
     const QString sql =
       "SELECT * FROM " + elementTableName +
       " WHERE visible = true AND id > :minId ORDER BY id " +
