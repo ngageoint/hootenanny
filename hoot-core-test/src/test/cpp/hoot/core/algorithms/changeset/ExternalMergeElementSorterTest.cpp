@@ -33,7 +33,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/OsmXmlReader.h>
 
 namespace hoot
 {
@@ -71,17 +70,9 @@ private:
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(input));
-
-    //see note in ExternalMergeElementSorter about this setting on OsmXmlReader is necessary
-    boost::shared_ptr<OsmXmlReader> xmlReader =
-      boost::dynamic_pointer_cast<OsmXmlReader>(reader);
-    if (xmlReader)
-    {
-      xmlReader->setAddChildRefsWhenMissing(true);
-    }
-
     reader->setUseDataSourceIds(true);
     reader->open(input);
+    reader->initializePartial();
 
     ExternalMergeElementSorter elementSorter;
     elementSorter.setMaxElementsPerFile(5);

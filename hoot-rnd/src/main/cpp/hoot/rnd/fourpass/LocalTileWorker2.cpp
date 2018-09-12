@@ -212,7 +212,7 @@ boost::shared_ptr<OsmMap> LocalTileWorker2::_readAllParts(QString dir)
 
   OsmXmlReader reader;
   reader.setUseDataSourceIds(true);
-  reader.setUseStatusFromFile(true);
+  reader.setUseFileStatus(true);
 
   QStringList filters;
   filters << "Part*.osm";

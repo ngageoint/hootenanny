@@ -206,8 +206,9 @@ private:
     //db inputs are already sorted
     if (HootApiDbReader().isSupported(input) || OsmApiDbReader().isSupported(input))
     {
-      return true;
+      return true/*false*/;
     }
+    //pbf sets a sort flag
     else if (OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input))
     {
       return true;
@@ -217,7 +218,6 @@ private:
 
   bool _inputFormatStreamable(const QString input) const
   {
-    LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
     return OsmMapReaderFactory::getInstance().hasElementInputStream(input);
   }
 
@@ -226,24 +226,11 @@ private:
    */
   OsmMapPtr _readInputFully(const QString input, const Status& elementStatus)
   {
-    LOG_INFO("Reading entire input into memory for " << input << "...");
+    LOG_INFO("Reading entire input into memory for " << input.right(25) << "...");
 
     //some in these datasets may have status=3 if you're loading conflated data, so use
     //reader.use.file.status and reader.keep.status.tag if you want to retain that value
     OsmMapPtr map(new OsmMap());
-    /*if (!singleInput)
-    {
-      //map1 is the former state of the data
-      IoUtils::loadMap(map1, input1, true, Status::Unknown1);
-      //map2 is the newer state of the data
-      IoUtils::loadMap(map2, input2, true, Status::Unknown2);
-    }
-    else
-    {
-      //here we're passing all the input data through to the output changeset, so put it in the
-      //map2 newer data
-      IoUtils::loadMap(map2, input1, true, Status::Unknown2);
-    }*/
     IoUtils::loadMap(map, input, true, elementStatus);
 
     //we don't want to include review relations
@@ -262,7 +249,6 @@ private:
 
   ElementInputStreamPtr _getSortedElements(const QString input, const Status& status)
   {
-    LOG_VARD(input);
     ElementInputStreamPtr sortedElements;
 
     //Some in these datasets may have status=3 if you're loading conflated data, so use
@@ -296,6 +282,50 @@ private:
     return sortedElements;
   }
 
+  ElementInputStreamPtr _getEmptyInputStream()
+  {
+    //no-op here since InMemoryElementSorter taking in an empty map will just return an empty
+    //element stream
+    return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
+  }
+
+  ElementInputStreamPtr _getFilteredInputStream(const QString input)
+  {
+    LOG_DEBUG("Retrieving filtered input stream for: " << input.right(25) << "...");
+
+    QList<ElementVisitorPtr> visitors;
+    //we don't want to include review relations
+    boost::shared_ptr<ElementCriterion> elementCriterion(
+      new NotCriterion(
+        boost::shared_ptr<TagKeyCriterion>(
+          new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
+    //node comparisons require hashes be present on the elements
+    visitors.append(boost::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
+
+    boost::shared_ptr<PartialOsmMapReader> reader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(input));
+    reader->setUseDataSourceIds(true);
+    reader->open(input);
+    ElementInputStreamPtr inputStream = boost::dynamic_pointer_cast<ElementInputStream>(reader);
+    ElementInputStreamPtr filteredInputStream(
+      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+
+    return filteredInputStream;
+  }
+
+  ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map)
+  {
+    return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
+  }
+
+  ElementInputStreamPtr _sortElementsExternally(const QString input)
+  {
+    boost::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+    sorted->sort(_getFilteredInputStream(input));
+    return sorted;
+  }
+
   void _streamChangesetOutput(ElementInputStreamPtr input1, ElementInputStreamPtr input2,
                               const QString output)
   {
@@ -319,63 +349,25 @@ private:
       OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetDeriver);
     }
 
+    boost::shared_ptr<PartialOsmMapReader> partialReader1 =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(input1);
+    if (partialReader1)
+    {
+      partialReader1->finalizePartial();
+    }
+    input1->close();
+    boost::shared_ptr<PartialOsmMapReader> partialReader2 =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(input2);
+    if (partialReader2)
+    {
+      partialReader2->finalizePartial();
+    }
+    input2->close();
+
     if (_printStats)
     {
       LOG_INFO("Changeset Stats:\n" << stats);
     }
-  }
-
-  ElementInputStreamPtr _getEmptyInputStream()
-  {
-    //no-op here since InMemoryElementSorter taking in an empty map will just return an empty
-    //element stream
-    return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
-  }
-
-  ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map)
-  {
-    return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
-  }
-
-  ElementInputStreamPtr _sortElementsExternally(const QString input)
-  {
-    ElementInputStreamPtr filteredInputStream = _getFilteredInputStream(input, true);
-    boost::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
-    sorted->sort(filteredInputStream);
-    //reader->finalizePartial();
-    return sorted;
-  }
-
-  ElementInputStreamPtr _getFilteredInputStream(const QString input,
-                                                const bool addChildRefsWhenMissing = false)
-  {
-    QList<ElementVisitorPtr> visitors;
-    //we don't want to include review relations
-    boost::shared_ptr<ElementCriterion> elementCriterion(
-      new NotCriterion(
-        boost::shared_ptr<TagKeyCriterion>(
-          new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
-    //node comparisons require hashes be present on the elements
-    visitors.append(boost::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
-
-    boost::shared_ptr<PartialOsmMapReader> reader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(input));
-
-    boost::shared_ptr<OsmXmlReader> xmlReader =
-      boost::dynamic_pointer_cast<OsmXmlReader>(reader);
-    if (xmlReader.get())
-    {
-      xmlReader->setAddChildRefsWhenMissing(addChildRefsWhenMissing);
-    }
-
-    reader->setUseDataSourceIds(true);
-    reader->open(input);
-    ElementInputStreamPtr inputStream = boost::dynamic_pointer_cast<ElementInputStream>(reader);
-    ElementInputStreamPtr filteredInputStream(
-      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
-
-    return filteredInputStream;
   }
 };
 

@@ -195,7 +195,9 @@ via web service calls. The _Web Browser_ (Hootenanny User Interface) communicate
 Services_ over HTTP to request data and post changes.
 
 The latitude/longitude data is stored in the database as 64 bit double precision floating point 
-values. All values are stored in the Database in the WGS84/EPSG:4326 projection.
+values. All values are stored in the Database in the WGS84/EPSG:4326 projection and have an accuracy
+of 0.01 nanodegrees.  Of note, is the fact that OpenStreetMap's default accuracy is 100 nanodegrees, 
+and it stores coordinates as 64 bit integers).
 
 When _Hoot Core_ writes data to the DB, no significant error should be introduced.  This has not 
 been tested experimentally, but some informal testing with Washington, D.C. streets data has 
@@ -227,6 +229,3 @@ the process of posting changesets.
 The posted changeset is processed by the web services and the values are stored as 64 bit double 
 precision floating point values in the database as WGS84/EPSG:4326. The changeset is already in 
 WGS84/EPSG:4326 so no addition change in projection is necessary.
-
-
-

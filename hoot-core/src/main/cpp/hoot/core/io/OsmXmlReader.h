@@ -102,7 +102,6 @@ public:
                             const QString &qName, const QXmlAttributes &attributes);
 
   virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
-  //void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
   void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
   void setDefaultAccuracy(Meters circularError) { _circularError = circularError; } 
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }

@@ -648,6 +648,9 @@ void OsmPbfWriter::writePartial(const ConstOsmMapPtr& map)
 
 void OsmPbfWriter::writePartial(const ConstNodePtr& n)
 {
+  //LOG_TRACE("Writing " << n->getElementId() << "...");
+  LOG_TRACE("Writing " << n << "...");
+
   _writeNodeDense(n);
 
   if (_enablePbFlushing && _tick++ % 100000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
@@ -658,6 +661,9 @@ void OsmPbfWriter::writePartial(const ConstNodePtr& n)
 
 void OsmPbfWriter::writePartial(const ConstWayPtr& w)
 {
+  //LOG_TRACE("Writing " << w->getElementId() << "...");
+  LOG_TRACE("Writing " << w << "...");
+
   _writeWay(w);
 
   if (_enablePbFlushing && _tick++ % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
@@ -668,6 +674,8 @@ void OsmPbfWriter::writePartial(const ConstWayPtr& w)
 
 void OsmPbfWriter::writePartial(const ConstRelationPtr& r)
 {
+  LOG_TRACE("Writing " << r->getElementId() << "...");
+
   _writeRelation(r);
 
   if (_enablePbFlushing && _tick++ % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
@@ -690,7 +698,8 @@ void OsmPbfWriter::_writePrimitiveBlock()
 
 void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>& r)
 {
-  LOG_TRACE("Writing relation: " << r->getElementId());
+  //LOG_TRACE("Writing relation: " << r->getElementId());
+  LOG_TRACE("Writing relation: " << r);
 
   _elementsWritten++;
 

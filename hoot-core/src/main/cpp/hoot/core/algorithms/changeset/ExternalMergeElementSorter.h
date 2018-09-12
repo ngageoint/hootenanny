@@ -102,6 +102,7 @@ private:
 
   long _maxElementsPerFile;
 
+  //set true for debugging only
   bool _retainTempFiles;
 
   //what formats to write the temp files to
