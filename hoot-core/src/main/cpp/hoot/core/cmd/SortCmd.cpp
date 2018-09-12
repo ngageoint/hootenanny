@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/IoUtils.h>
 
@@ -73,21 +74,11 @@ public:
     if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
         ConfigOptions().getElementSorterElementBufferSize() != -1)
     {
-      boost::shared_ptr<PartialOsmMapReader> reader =
-        boost::dynamic_pointer_cast<PartialOsmMapReader>(
-          OsmMapReaderFactory::getInstance().createReader(input));
-      reader->setUseDataSourceIds(true);
-      reader->open(input);
-      ElementInputStreamPtr inputStream = boost::dynamic_pointer_cast<ElementInputStream>(reader);
-      boost::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
-      sorted->sort(inputStream);
+      _sortExternally(input, output);
     }
     else
     {
-      OsmMapPtr map(new OsmMap());
-      IoUtils::loadMap(map, input, true, Status::Unknown1);
-      InMemoryElementSorterPtr(new InMemoryElementSorter(map));
-      IoUtils::saveMap(map, output);
+      _sortInMemory(input, output);
     }
 
     return 0;
@@ -98,6 +89,42 @@ private:
   bool _inputIsSorted(const QString input) const
   {
     return OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input);
+  }
+
+  void _sortInMemory(const QString input, const QString output)
+  {
+    OsmMapPtr map(new OsmMap());
+    IoUtils::loadMap(map, input, true, Status::Unknown1);
+    InMemoryElementSorterPtr(new InMemoryElementSorter(map));
+    IoUtils::saveMap(map, output);
+  }
+
+  void _sortExternally(const QString input, const QString output)
+  {
+    boost::shared_ptr<PartialOsmMapReader> reader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(input));
+    reader->setUseDataSourceIds(true);
+    reader->open(input);
+    reader->initializePartial();
+
+    boost::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+    sorted->sort(boost::dynamic_pointer_cast<ElementInputStream>(reader));
+
+    reader->finalizePartial();
+    reader->close();
+
+    boost::shared_ptr<PartialOsmMapWriter> writer =
+      boost::dynamic_pointer_cast<PartialOsmMapWriter>(
+        OsmMapWriterFactory::getInstance().createWriter(output));
+    writer->open(output);
+    writer->initializePartial();
+    while (sorted->hasMoreElements())
+    {
+      writer->writePartial(sorted->readNextElement());
+    }
+    writer->finalizePartial();
+    writer->close();
   }
 };
 
