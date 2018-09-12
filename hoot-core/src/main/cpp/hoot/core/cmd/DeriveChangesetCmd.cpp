@@ -44,7 +44,6 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmPbfReader.h>
 
 //GEOS

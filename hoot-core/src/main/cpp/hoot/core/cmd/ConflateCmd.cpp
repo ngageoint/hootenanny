@@ -85,6 +85,9 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
 // Convenience function used when deriving a changeset
 boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
 {
+  //Conflation requires all data to be in memory, so no point in adding support for
+  //ExternalMergeElementSorter here.
+
   InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
   InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
   boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
@@ -295,7 +298,8 @@ int ConflateCmd::runSimple(QStringList args)
 
   // Figure out what to write
   if (isDiffConflate && output.endsWith(".osc"))
-  { // Write a changeset
+  {
+    // Write a changeset
     ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(result);
 
     if (!conflateTags)
