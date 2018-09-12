@@ -173,9 +173,6 @@ public:
   void writePb(const ConstRelationPtr& r, std::ostream* strm);
   void writePb(const RelationPtr& r, std::ostream* strm) { writePb((const ConstRelationPtr)r, strm); }
 
-  //this doesn't work yet - #2207
-  //static void updateSorted(const QString url, const bool sorted);
-
   virtual QString supportedFormats() { return ".osm.pbf"; }
 
 private:

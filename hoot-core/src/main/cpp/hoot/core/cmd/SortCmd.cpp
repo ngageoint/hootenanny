@@ -29,12 +29,12 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmFileSorter.h>
+#include <hoot/core/algorithms/changeset/ExternalMergeElementSorter.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/GeoNamesReader.h>
-#include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/OsmPbfWriter.h>
+#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/IoUtils.h>
 
 namespace hoot
 {
@@ -64,37 +64,40 @@ public:
     LOG_VARD(input);
     LOG_VARD(output);
 
-    //TODO: replace this with ExternalMergeElementSorter
-
-    //Technically, OsmFileSorter is already doing some input validation, but it was customized for
-    //use with multiary ingest, so it also allows for an OGR input and then autoconverts it to
-    //PBF...that seems kind of inappropriate for this command.  So, let's just do our own input
-    //validation here for now.
-    bool valid = false;
-    //There is no GeoNamesWriter, so just doing a simple extension check.
-    if (GeoNamesReader().isSupported(input) && output.toLower().endsWith(".geonames"))
+    if (_inputIsSorted(input))
     {
-      valid = true;
-    }
-    else if (OsmPbfReader().isSupported(input) && OsmPbfWriter().isSupported(output))
-    {
-      valid = true;
-    }
-    else if (OsmXmlReader().isSupported(input) && OsmXmlWriter().isSupported(output))
-    {
-      valid = true;
-    }
-    LOG_VARD(valid);
-
-    if (!valid)
-    {
-      throw HootException(
-        "Invalid input or output format.  Input format: " + input + ", output format: " + output);
+      LOG_WARN("Input is already sorted.");
+      return 0;
     }
 
-    OsmFileSorter().sort(input, output);
+    if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
+        ConfigOptions().getElementSorterElementBufferSize() != -1)
+    {
+      boost::shared_ptr<PartialOsmMapReader> reader =
+        boost::dynamic_pointer_cast<PartialOsmMapReader>(
+          OsmMapReaderFactory::getInstance().createReader(input));
+      reader->setUseDataSourceIds(true);
+      reader->open(input);
+      ElementInputStreamPtr inputStream = boost::dynamic_pointer_cast<ElementInputStream>(reader);
+      boost::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+      sorted->sort(inputStream);
+    }
+    else
+    {
+      OsmMapPtr map(new OsmMap());
+      IoUtils::loadMap(map, input, true, Status::Unknown1);
+      InMemoryElementSorterPtr(new InMemoryElementSorter(map));
+      IoUtils::saveMap(map, output);
+    }
 
     return 0;
+  }
+
+private:
+
+  bool _inputIsSorted(const QString input) const
+  {
+    return OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input);
   }
 };
 

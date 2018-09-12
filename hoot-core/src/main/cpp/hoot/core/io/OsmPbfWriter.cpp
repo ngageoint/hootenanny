@@ -252,15 +252,6 @@ void OsmPbfWriter::close()
   }
 }
 
-//this doesn't work yet - #2207
-//void OsmPbfWriter::updateSorted(const QString url, const bool sorted)
-//{
-//  OsmPbfWriter writer;
-//  writer._open(url);
-//  writer._writeOsmHeader(true, sorted);
-//  writer.close();
-//}
-
 void OsmPbfWriter::setIdDelta(long nodeIdDelta, long wayIdDelta, long relationIdDelta)
 {
   _nodeIdDelta = nodeIdDelta;

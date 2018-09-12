@@ -215,11 +215,6 @@ private:
     return false;
   }
 
-  bool _inputFormatStreamable(const QString input) const
-  {
-    return OsmMapReaderFactory::getInstance().hasElementInputStream(input);
-  }
-
   /*
    * Reads entire input into memory
    */
@@ -260,10 +255,10 @@ private:
     {
       //If external sorting is enabled and both inputs are streamable, externally sort the elements
       //to avoid potential memory issues.
-      const bool inputStreamable = _inputFormatStreamable(input);
-      LOG_VARD(inputStreamable);
       LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
-      if (inputStreamable && ConfigOptions().getElementSorterElementBufferSize() != -1)
+      LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
+      if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
+          ConfigOptions().getElementSorterElementBufferSize() != -1)
       {
         sortedElements = _sortElementsExternally(input);
       }
