@@ -41,41 +41,61 @@ namespace hoot
 class ExternalMergeElementSorterTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(ExternalMergeElementSorterTest);
-    CPPUNIT_TEST(runTest);
+    CPPUNIT_TEST(runXmlTempTest);
+    CPPUNIT_TEST(runPbfTempTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void runXmlTempTest()
+  {
+    _runTest("osm");
+  }
+
+  void runPbfTempTest()
+  {
+    _runTest("pbf");
+  }
+
+private:
+
+  void _runTest(const QString format)
   {
     //Since ExternalMergeElementSorter writes chunks of maps, it naturally sets off some of the
     //incomplete map warnings which we don't want to see.
-    //TODO: re-enable
-    //DisableLog dl;
+    //comment out for debugging only
+    DisableLog dl;
 
     const QString input = "test-files/algorithms/changeset/ExternalMergeElementSorterTest.osm";
+
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(input));
+
+    //see note in ExternalMergeElementSorter about this setting on OsmXmlReader is necessary
     boost::shared_ptr<OsmXmlReader> xmlReader =
       boost::dynamic_pointer_cast<OsmXmlReader>(reader);
-    xmlReader->setAddChildRefsWhenMissing(true);
+    if (xmlReader)
+    {
+      xmlReader->setAddChildRefsWhenMissing(true);
+    }
+
     reader->setUseDataSourceIds(true);
     reader->open(input);
 
     ExternalMergeElementSorter elementSorter;
     elementSorter.setMaxElementsPerFile(5);
-    elementSorter.setTempFormat("osm");
-    //TODO: disable
-    elementSorter.setRetainTempFiles(true);
+    elementSorter.setTempFormat(format);
+    //only enable this for debugging
+    //elementSorter.setRetainTempFiles(true);
     elementSorter.sort(boost::dynamic_pointer_cast<ElementInputStream>(reader));
 
     int index = 0;
     while (elementSorter.hasMoreElements())
     {
       ElementPtr element = elementSorter.readNextElement();
-      //LOG_TRACE(element->toString());
-      //LOG_VART(index);
+      LOG_TRACE(element->toString());
+      LOG_VART(index);
       //elements should be returned in the order nodes, ways, then relations
       if (index >= 0 && index <=15)
       {

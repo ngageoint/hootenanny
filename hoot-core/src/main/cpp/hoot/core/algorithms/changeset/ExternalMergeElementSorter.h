@@ -86,7 +86,7 @@ public:
   virtual ElementPtr readNextElement();
 
   void setMaxElementsPerFile(long max) { _maxElementsPerFile = max; }
-  void setTempFormat(QString format) { _tempFormat = format; }
+  void setTempFormat(QString format);
   void setRetainTempFiles(bool retain) { _retainTempFiles = retain; }
   int getNumTempFiles() const { return _tempOutputFiles.size(); }
 
@@ -100,12 +100,12 @@ private:
   //a stream of sorted elements to serve
   ElementInputStreamPtr _sortedElements;
 
-  //what formats to write the temp files to
-  QString _tempFormat;
-
   long _maxElementsPerFile;
 
   bool _retainTempFiles;
+
+  //what formats to write the temp files to
+  QString _tempFormat;
 
   //pre-merge temp files; auto-deleted on exit
   QList<boost::shared_ptr<QTemporaryFile>> _tempOutputFiles;

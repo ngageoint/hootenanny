@@ -95,6 +95,7 @@ OsmPbfWriter::OsmPbfWriter()
   _wayIdDelta = 0;
   _compressionLevel = -1;
   _includeVersion = true;
+  _needToCloseInput = false;
 
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 }
@@ -177,12 +178,15 @@ void OsmPbfWriter::_deflate(const char* raw, size_t rawSize)
 
 void OsmPbfWriter::finalizePartial()
 {
+  LOG_DEBUG("Finalizing partial...");
   // finalize the current blob.
   _writePrimitiveBlock();
 }
 
 void OsmPbfWriter::_initBlob()
 {
+  LOG_TRACE("Initializing the blob...");
+
   _d->blob.Clear();
   _d->blobHeader.Clear();
   _d->primitiveBlock.Clear();
@@ -205,26 +209,27 @@ void OsmPbfWriter::_initBlob()
 void OsmPbfWriter::initializePartial(ostream* strm)
 {
   _out = strm;
-
   _writeOsmHeader(false, false);
-
   _initBlob();
 }
 
 void OsmPbfWriter::initializePartial()
 {
+  LOG_DEBUG("Initializing partial...");
   _writeOsmHeader();
   _initBlob();
 }
 
 void OsmPbfWriter::_open(QString url)
 {
+  LOG_TRACE("Opening url: " << url);
   _openStream.reset(new fstream(url.toUtf8().constData(), ios::out | ios::binary));
   if (_openStream->good() == false)
   {
     throw HootException(QString("Error opening for writing: %1").arg(url));
   }
   _out = _openStream.get();
+  _needToCloseInput = true;
 }
 
 void OsmPbfWriter::open(QString url)
@@ -235,11 +240,16 @@ void OsmPbfWriter::open(QString url)
 
 void OsmPbfWriter::close()
 {
-  if (_openStream.get())
+  if (_needToCloseInput)
   {
-    _openStream->close();
+    LOG_DEBUG("Closing PBF writer...");
+    if (_openStream.get())
+    {
+      _openStream->close();
+    }
+    delete _d;
+    _needToCloseInput = false;
   }
-  delete _d;
 }
 
 //this doesn't work yet - #2207
@@ -369,6 +379,8 @@ void OsmPbfWriter::writePb(const ConstRelationPtr& r, ostream* strm)
 
 void OsmPbfWriter::_writeBlob(const char* buffer, int size, string type)
 {
+  LOG_DEBUG("Writing blob...");
+
   // compress the buffer
   _deflate(buffer, size);
 
@@ -385,7 +397,7 @@ void OsmPbfWriter::_writeBlob(const char* buffer, int size, string type)
   uint32_t blobHeaderSize = htonl(_d->blobHeader.ByteSize());
   _out->write((char*)&blobHeaderSize, 4);
 
-  // serialize the blob header.
+  // serialize the blob header
   _d->blobHeader.SerializePartialToOstream(_out);
 
   // serialize the blob
@@ -583,6 +595,8 @@ void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)
 
 void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
 {
+  LOG_TRACE("Writing the OSM header...");
+
   // create the header block
   _d->headerBlock.Clear();
 
@@ -666,6 +680,7 @@ void OsmPbfWriter::_writePrimitiveBlock()
 {
   if (_dirty)
   {
+    LOG_DEBUG("Writing primitive block...");
     int size = _d->primitiveBlock.ByteSize();
     _d->primitiveBlock.SerializePartialToArray(_getBuffer(size), size);
     _writeBlob(_buffer.data(), size, PBF_OSM_DATA);

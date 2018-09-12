@@ -15,15 +15,24 @@ namespace hoot
 const QString ExternalMergeElementSorter::SORT_TEMP_FILE_BASE_NAME = "element-sorter-temp-XXXXXX";
 
 ExternalMergeElementSorter::ExternalMergeElementSorter() :
-_tempFormat(ConfigOptions().getElementSorterExternalTempFormat()),
 _maxElementsPerFile(ConfigOptions().getElementSorterElementBufferSize()),
 _retainTempFiles(false)
 {
+  setTempFormat(ConfigOptions().getElementSorterExternalTempFormat());
 }
 
 ExternalMergeElementSorter::~ExternalMergeElementSorter()
 {
   close();
+}
+
+void ExternalMergeElementSorter::setTempFormat(QString format)
+{
+  _tempFormat = format;
+  if (_tempFormat.toLower() == "pbf")
+  {
+    _tempFormat = "osm.pbf";
+  }
 }
 
 void ExternalMergeElementSorter::close()
@@ -118,8 +127,6 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
   LOG_DEBUG("Writing sorted file outputs...");
 
   long elementCtr = 0;
-  boost::shared_ptr<QTemporaryFile> tempOutputFile;
-  boost::shared_ptr<PartialOsmMapWriter> writer;
   std::vector<ConstElementPtr> elements;
   elements.reserve(_maxElementsPerFile);
 
@@ -137,7 +144,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
       LOG_DEBUG("Writing elements to temp file...");
 
-      tempOutputFile.reset(
+      boost::shared_ptr<QTemporaryFile> tempOutputFile(
         new QTemporaryFile(
           ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME +
           "." + _tempFormat));
@@ -156,32 +163,41 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
       }
       _tempOutputFiles.append(tempOutputFile);
 
-      writer =
+      boost::shared_ptr<PartialOsmMapWriter> writer =
         boost::dynamic_pointer_cast<PartialOsmMapWriter>(
           OsmMapWriterFactory::getInstance().createWriter(tempOutputFile->fileName()));
+      LOG_VART(writer.get());
       writer->open(tempOutputFile->fileName());
+      writer->initializePartial();
       for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin();
            itr != elements.end(); ++itr)
       {
         ConstElementPtr element = *itr;
-        LOG_TRACE("Wrote element: " << element->getElementId());
+        LOG_TRACE("Writing element: " << element->getElementId());
         writer->writePartial(element);
       }
       elements.clear();
-      LOG_VART(elements.size());
 
-      if (writer)
-      {
+      //if (writer)
+      //{
         writer->finalizePartial();
         writer->close();
-      }
-      if (tempOutputFile)
-      {
+      //}
+      //if (tempOutputFile)
+      //{
         tempOutputFile->close();
-      }
+      //}
     }
   }
+
+  boost::shared_ptr<PartialOsmMapReader> partialReader =
+    boost::dynamic_pointer_cast<PartialOsmMapReader>(input);
+  if (partialReader.get())
+  {
+    partialReader->finalizePartial();
+  }
   input->close();
+
   LOG_DEBUG("Finished writing sorted file outputs.");
   LOG_VART(elementCtr);
   LOG_VART(_tempOutputFiles.size());
@@ -336,6 +352,9 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(fileName));
 
+    //By default, OsmXmlReader will not add child references (node ref, elements members) to parent
+    //elements if those elements are not present in the data.  For external sorting, where partial
+    //chunks of elements will be present, we need to change that behavior.
     boost::shared_ptr<OsmXmlReader> xmlReader =
       boost::dynamic_pointer_cast<OsmXmlReader>(reader);
     if (xmlReader.get())

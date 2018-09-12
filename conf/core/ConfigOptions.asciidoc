@@ -703,7 +703,7 @@ indicates no limit.
 * Default Value: `pbf`
 
 The OSM format to use for writing sorted temp files.  Valid values are any extension Hootenanny can
-both read from and write to.  TODO: if we stay with PBF, then get rid of this
+both stream reading from and writing to (PartialMapReader/Writer implementation).
 
 === english.words.files
 
