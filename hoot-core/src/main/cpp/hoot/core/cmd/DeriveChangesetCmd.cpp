@@ -45,8 +45,6 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/HootApiDbReader.h>
-#include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/io/OsmPbfReader.h>
 
 //GEOS
@@ -61,11 +59,11 @@ namespace hoot
 {
 
 /**
- * Derives a set of changes given two map inputs; can write to multiple outputs
+ * Derives a set of changes given two map inputs
  *
  * As part of #2596, streaming reads and external element sorting were added.  However, the
  * in memory input reading/sorting has been left in place to support faster I/O in the situation
- * where large inputs are being delat with and large amounts of memory are available for
+ * where large inputs are being dealt with and large amounts of memory are available for
  * reading/sorting.  Access to the in memory implementation is controlled by the configuration
  * option, element.sorter.element.buffer.size (size = -1 results in the in memory implementation
  * being used).
@@ -203,13 +201,15 @@ private:
 
   bool _inputIsSorted(const QString input) const
   {
-    //db inputs are already sorted
-    if (HootApiDbReader().isSupported(input) || OsmApiDbReader().isSupported(input))
-    {
-      return true/*false*/;
-    }
+      //Streaming db inputs actually do not come back sorted, despite the order by id clause
+      //in the query (see ApiDb::selectElements).
+//    if (HootApiDbReader().isSupported(input) || OsmApiDbReader().isSupported(input))
+//    {
+//      return false;
+//    }
+
     //pbf sets a sort flag
-    else if (OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input))
+    if (OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input))
     {
       return true;
     }

@@ -93,11 +93,9 @@ bool ApiDbReader::_hasBounds()
 
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
-  LOG_TRACE("Mapping element ID: " << oldId << "...");
-
   ElementId result;
-  LOG_VART(oldId);
-  LOG_VART(_useDataSourceIds);
+  //LOG_VART(oldId);
+  //LOG_VART(_useDataSourceIds);
   if (_useDataSourceIds)
   {
     result = oldId;
@@ -615,7 +613,7 @@ bool ApiDbReader::hasMoreElements()
     //we'll just grab the estimated count and expect it to be wrong from time to time.
 
     const double start = Tgs::Time::getTime();
-    LOG_DEBUG("Retrieving element counts and max IDs...");
+    LOG_DEBUG("Retrieving element counts and max IDs for: " << _url.right(25) << "...");
 
     _totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
     _totalNumMapWays = 0;
@@ -669,11 +667,12 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results are available, so request some more results
-    LOG_DEBUG("Requesting more query results...");
-    //LOG_VART(_lastId);
+    LOG_DEBUG(
+      "Requesting more query results from: " << _url.right(50) << ", for element type: " <<
+       _selectElementType.toString() << ", starting with ID: " << _lastId << "...");
     const double start = Tgs::Time::getTime();
-    //Never ever remove the _lastId input from this call.  Doing that will turn the query into a
-    //select all query.
+    //NEVER remove the _lastId input from the call to selectElements here.  Doing that will
+    //basically turn the query into a select all query (up to the max element limit).
     _elementResultIterator = _getDatabase()->selectElements(_selectElementType, _lastId);
     LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
   }

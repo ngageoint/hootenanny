@@ -123,6 +123,7 @@ protected:
   Status _status;
   bool _open;
   QString _email;
+  QString _url;
 
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;

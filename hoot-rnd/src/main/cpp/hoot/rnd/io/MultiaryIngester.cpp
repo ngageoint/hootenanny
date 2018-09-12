@@ -284,7 +284,7 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   //The changeset file changes and reference layer POI updates are written in two separate steps.
   //If we tried to write the POI changes to the reference layer as we streamed in the POIs
   //from the ref layer to the changeset deriver, we'd have a moving target as far as number of
-  //elements is concerned, and the partial map reader would behave correctly.
+  //elements is concerned, and the partial map reader wouldn't behave correctly.
 
   _timer.restart();
   LOG_INFO("Deriving and writing changes to changeset file: " << changesetOutput << "...");
