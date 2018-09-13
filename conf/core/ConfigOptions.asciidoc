@@ -700,10 +700,10 @@ indicates no limit.
 === element.sorter.external.temp.format
 
 * Data Type: string
-* Default Value: `pbf`
+* Default Value: `osm`
 
-The OSM format to use for writing sorted temp files.  Valid values are any extension Hootenanny can
-both stream reading from and writing to (PartialMapReader/Writer implementation).
+The OSM format to use for writing sorted temp files.  Valid values are 'osm' and 'pbf'.  PBF should
+be a little more performant but currently loses some coordinate precision (need to fix).
 
 === english.words.files
 

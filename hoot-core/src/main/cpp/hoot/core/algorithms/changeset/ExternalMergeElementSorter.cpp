@@ -54,7 +54,11 @@ ExternalMergeElementSorter::~ExternalMergeElementSorter()
 
 void ExternalMergeElementSorter::setTempFormat(QString format)
 {
-  _tempFormat = format;
+  _tempFormat = format.toLower();
+  if (_tempFormat != "osm" || _tempFormat != "pbf")
+  {
+    throw IllegalArgumentException("Invalid external sort temporary format: " + format);
+  }
   if (_tempFormat.toLower() == "pbf")
   {
     _tempFormat = "osm.pbf";
