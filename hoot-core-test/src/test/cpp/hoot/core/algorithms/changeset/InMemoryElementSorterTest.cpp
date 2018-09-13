@@ -46,6 +46,10 @@ public:
 
   void runTest()
   {
+    //Since we're processing an unsorted map data file, we'll get some missing ref warnings
+    //from the xml reader before its sorted that we don't care to see.
+    DisableLog dl;
+
     OsmMapPtr inputMap(new OsmMap());
     OsmMapReaderFactory::read(
       inputMap,

@@ -700,10 +700,13 @@ indicates no limit.
 === element.sorter.external.temp.format
 
 * Data Type: string
-* Default Value: `osm`
+* Default Value: `pbf`
 
-The OSM format to use for writing sorted temp files.  Valid values are 'osm' and 'pbf'.  PBF should
-be a little more performant but currently loses some coordinate precision (need to fix).
+The OSM format to use for writing sorted temp files during element external sorting.  Valid values
+are 'osm' and 'pbf'.  Using 'pbf' will result in better performance for larger datasets and uses
+the OpenStreetMap default resolution of 100 nanodegrees. 'osm' may be less performant and but allows
+for using the higher Hootenanny internal resolution of .01 nanodegrees (same as used by the
+Hootenanny API database).
 
 === english.words.files
 
