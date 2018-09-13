@@ -2,7 +2,7 @@
 
 === Description
 
-The +apply-changeset+ command writes an OSM changeset XML file(s), OSM XML file(s), or SQL file that represents the difference between two 
+The +changeset-apply+ command writes an OSM changeset XML file(s), OSM XML file(s), or SQL file that represents the difference between two 
 OSM datasets to an OSM API database.  
 
 Optional conflict parameters may be passed for SQL files, so that if the target database contains any changesets created after the time 
