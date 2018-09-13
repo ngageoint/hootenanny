@@ -54,6 +54,7 @@
         <servlet-name>hoot-services</servlet-name>
         <url-pattern>/osm/*</url-pattern>
         <url-pattern>/job/*</url-pattern>
+        <url-pattern>/jobs/*</url-pattern>
         <url-pattern>/info/*</url-pattern>
         <url-pattern>/ogr/*</url-pattern>
         <url-pattern>/ingest/*</url-pattern>
