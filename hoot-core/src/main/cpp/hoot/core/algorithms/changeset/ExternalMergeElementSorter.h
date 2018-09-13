@@ -72,7 +72,8 @@ typedef std::priority_queue<PqElement,
                             std::vector<PqElement>, ElementComparePq> ElementPriorityQueue;
 
 /**
-  This performs element sorting outside of main memory on disk.
+  This performs element sorting outside of main memory on disk and serves the sorted results up
+  as an element stream.
 
   Very much influenced by http://www.techiedelight.com/external-merge-sort
  */
@@ -123,25 +124,28 @@ private:
   //the final merged sorted element output
   boost::shared_ptr<QTemporaryFile> _sortFinalOutput;
 
-  //a stream of sorted elements to serve
+  //a stream of sorted elements to serve up
   ElementInputStreamPtr _sortedElements;
 
+  //max elements written to any temp sorted file
   long _maxElementsPerFile;
 
-  //set true for debugging only
+  //set true for debugging contents of temp files only
   bool _retainTempFiles;
 
-  //what formats to write the temp files to
+  //what format to use for the temp files
   QString _tempFormat;
 
-  //pre-merge temp files; auto-deleted on exit
+  //pre-merged temp files; auto-deleted on exit
   QList<boost::shared_ptr<QTemporaryFile>> _tempOutputFiles;
+
+  long _logUpdateInterval;
 
   void _sort(ElementInputStreamPtr input);
 
   /*
-   * Writes a set of OSM files filled with sorted elements; the number of files is the total
-   * elements read form the source divided by the element buffer size
+   * Writes a set of OSM files filled with sorted elements; the number of files written is the total
+   * elements read from the source divided by the element buffer size
    */
   void _createSortedFileOutputs(ElementInputStreamPtr input);
 
@@ -160,6 +164,9 @@ private:
    */
   static bool _elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2);
 
+  /*
+   * Adds the first member from each temp file to the priority queue
+   */
   ElementPriorityQueue _getInitializedPriorityQueue(
     QList<boost::shared_ptr<PartialOsmMapReader>>& readers);
 

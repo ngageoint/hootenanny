@@ -200,12 +200,8 @@ private:
 
   bool _inputIsSorted(const QString input) const
   {
-      //Streaming db inputs actually do not come back sorted, despite the order by id clause
-      //in the query (see ApiDb::selectElements).
-//    if (HootApiDbReader().isSupported(input) || OsmApiDbReader().isSupported(input))
-//    {
-//      return false;
-//    }
+    //Streaming db inputs actually do not come back sorted, despite the order by id clause
+    //in the query (see ApiDb::selectElements).  Otherwise, we'd skip sorting them too.
 
     //pbf sets a sort flag
     if (OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input))

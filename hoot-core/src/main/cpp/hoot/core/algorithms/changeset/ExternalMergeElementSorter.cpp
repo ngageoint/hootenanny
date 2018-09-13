@@ -41,7 +41,8 @@ const QString ExternalMergeElementSorter::SORT_TEMP_FILE_BASE_NAME = "element-so
 
 ExternalMergeElementSorter::ExternalMergeElementSorter() :
 _maxElementsPerFile(ConfigOptions().getElementSorterElementBufferSize()),
-_retainTempFiles(false)
+_retainTempFiles(false),
+_logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   setTempFormat(ConfigOptions().getElementSorterExternalTempFormat());
 }
@@ -156,6 +157,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
   std::vector<ConstElementPtr> elements;
   elements.reserve(_maxElementsPerFile);
 
+  long elementsWritten = 0;
   while (input->hasMoreElements())
   {
     elements.push_back(input->readNextElement());
@@ -192,6 +194,12 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
            itr != elements.end(); ++itr)
       {
         writer->writePartial(*itr);
+        elementsWritten++;
+
+        if (elementsWritten % _logUpdateInterval == 0)
+        {
+          PROGRESS_INFO("Wrote " << elementsWritten << " temporary sorted elements.");
+        }
       }
       elements.clear();
 
@@ -204,6 +212,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
   LOG_DEBUG("Finished writing sorted file outputs.");
   LOG_VART(elementCtr);
+  LOG_VART(elementsWritten);
   LOG_VART(_tempOutputFiles.size());
 }
 
@@ -262,6 +271,11 @@ void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& prio
     elementsWritten++;
     LOG_VART(elementsWritten);
 
+    if (elementsWritten % _logUpdateInterval == 0)
+    {
+      PROGRESS_INFO("Wrote " << elementsWritten << " final sorted elements.");
+    }
+
     //The next element to be pushed to the root of the priority queue will be in the same file as
     //the previously read root element, if there are any more elements in that file.
     if (readers.at(rootPqElement.fileIndex)->hasMoreElements())
@@ -269,7 +283,7 @@ void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& prio
       rootPqElement.element = readers.at(rootPqElement.fileIndex)->readNextElement();
       LOG_TRACE(
         "Read new element: " << rootPqElement.element->getElementId() << " from file: " <<
-        rootPqElement.fileIndex);
+        rootPqElement.fileIndex);  
     }
     //Otherwise, move to the next file.
     else
@@ -367,7 +381,7 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
     readers.append(reader);
 
     //This should always return true but is required to be called before readNextElement, so just an
-    //assert isn't good enough here
+    //assert isn't good enough here.
     if (reader->hasMoreElements())
     {
       ConstElementPtr element = reader->readNextElement();

@@ -592,8 +592,8 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   // create the header block
   _d->headerBlock.Clear();
 
-  LOG_VARD(includeBounds);
-  LOG_VARD(_map.get());
+  LOG_VART(includeBounds);
+  LOG_VART(_map.get());
   if (includeBounds && _map.get())
   {
     const OGREnvelope& env = CalculateMapBoundsVisitor::getBounds(_map);
@@ -610,12 +610,12 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   _d->headerBlock.mutable_required_features()->Add()->assign(PBF_OSM_SCHEMA_V06);
   _d->headerBlock.mutable_required_features()->Add()->assign(PBF_DENSE_NODES);
 
-  LOG_VARD(sorted);
+  LOG_VART(sorted);
   if (sorted)
   {
     _d->headerBlock.mutable_optional_features()->Add()->assign(PBF_SORT_TYPE_THEN_ID);
   }
-  LOG_VARD(_includeVersion);
+  LOG_VART(_includeVersion);
   if (_includeVersion)
   {
     _d->headerBlock.mutable_writingprogram()->assign(HOOT_FULL_VERSION);
@@ -626,7 +626,7 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   }
 
   int size = _d->headerBlock.ByteSize();
-  LOG_VARD(size);
+  LOG_VART(size);
   _d->headerBlock.SerializePartialToArray(_getBuffer(size), size);
   _writeBlob(_buffer.data(), size, PBF_OSM_HEADER);
 }
