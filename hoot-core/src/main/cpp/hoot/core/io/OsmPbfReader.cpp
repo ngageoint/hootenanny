@@ -209,6 +209,10 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
   {
     // pass
   }
+  else if (key == MetadataTags::RelationType() && e->getElementType() == ElementType::Relation)
+  {
+    (boost::dynamic_pointer_cast<Relation>(e))->setType(value);
+  }
   else if (value != "")
   {
     e->setTag(key, value);
@@ -563,6 +567,7 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   _map->addNode(newNode);
 
   LOG_TRACE("Loaded node: " << newNode->getElementId());
+  //LOG_TRACE("Loaded node: " << newNode);
 }
 
 void OsmPbfReader::_loadNodes()
@@ -656,7 +661,6 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
   long newId = _createRelationId(r.id());
 
   boost::shared_ptr<hoot::Relation> newRelation(new hoot::Relation(_status, newId, _circularError));
-
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
   {
@@ -752,6 +756,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     {
       QString key = _strings[r.keys().Get(i)];
       QString value = _strings[r.vals().Get(i)];
+      //LOG_VART(key);
+      //LOG_VART(value);
 
       _addTag(newRelation, key, value);
     }
@@ -773,7 +779,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
   }
   _map->addRelation(newRelation);
 
-  LOG_TRACE("Loaded relation: " << newRelation->getElementId());
+  //LOG_TRACE("Loaded relation: " << newRelation->getElementId());
+  LOG_TRACE("Loaded relation: " << newRelation);
 }
 
 void OsmPbfReader::_loadRelations()
@@ -912,6 +919,7 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
   _map->addWay(newWay);
 
   LOG_TRACE("Loaded way: " << newWay->getElementId());
+  //LOG_TRACE("Loaded way: " << newWay);
 }
 
 void OsmPbfReader::_loadWays()

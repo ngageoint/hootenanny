@@ -521,7 +521,8 @@ void OsmPbfWriter::_writeNode(const boost::shared_ptr<const hoot::Node>& n)
 
 void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)
 {
-  LOG_TRACE("Writing node: " << n->getElementId());
+  LOG_TRACE("Writing node: " << n->getElementId() << "...");
+  //LOG_TRACE("Writing node: " << n << "...");
 
   _elementsWritten++;
   if (_dn == 0)
@@ -639,9 +640,6 @@ void OsmPbfWriter::writePartial(const ConstOsmMapPtr& map)
 
 void OsmPbfWriter::writePartial(const ConstNodePtr& n)
 {
-  //LOG_TRACE("Writing " << n->getElementId() << "...");
-  LOG_TRACE("Writing " << n << "...");
-
   _writeNodeDense(n);
 
   if (_enablePbFlushing && _tick++ % 100000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
@@ -652,9 +650,6 @@ void OsmPbfWriter::writePartial(const ConstNodePtr& n)
 
 void OsmPbfWriter::writePartial(const ConstWayPtr& w)
 {
-  //LOG_TRACE("Writing " << w->getElementId() << "...");
-  LOG_TRACE("Writing " << w << "...");
-
   _writeWay(w);
 
   if (_enablePbFlushing && _tick++ % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
@@ -665,8 +660,6 @@ void OsmPbfWriter::writePartial(const ConstWayPtr& w)
 
 void OsmPbfWriter::writePartial(const ConstRelationPtr& r)
 {
-  LOG_TRACE("Writing " << r->getElementId() << "...");
-
   _writeRelation(r);
 
   if (_enablePbFlushing && _tick++ % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
@@ -689,8 +682,8 @@ void OsmPbfWriter::_writePrimitiveBlock()
 
 void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>& r)
 {
-  //LOG_TRACE("Writing relation: " << r->getElementId());
-  LOG_TRACE("Writing relation: " << r);
+  //LOG_TRACE("Writing relation: " << r->getElementId() << "...");
+  LOG_TRACE("Writing relation: " << r << "...");
 
   _elementsWritten++;
 
@@ -728,6 +721,8 @@ void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>&
   {
     const QString& key = it.key();
     const QString& value = it.value().trimmed();
+    //LOG_VART(key);
+    //LOG_VART(value);
     if (!value.isEmpty())
     {
       pbr->add_keys(_convertString(key));
@@ -747,12 +742,19 @@ void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>&
     pbr->add_vals(vid);
   }
 
+  //don't see anywhere in the pbf spec to store a relation type, so adding it to the tags
+  kid = _convertString(MetadataTags::RelationType());
+  vid = _convertString(r->getType());
+  pbr->add_keys(kid);
+  pbr->add_vals(vid);
+
   _dirty = true;
 }
 
 void OsmPbfWriter::_writeWay(const boost::shared_ptr<const hoot::Way>& w)
 {
-  LOG_TRACE("Writing way: " << w->getElementId());
+  LOG_TRACE("Writing way: " << w->getElementId() << "...");
+  //LOG_TRACE("Writing way: " << w << "...");
 
   _elementsWritten++;
 

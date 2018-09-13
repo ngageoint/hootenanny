@@ -139,7 +139,7 @@ public:
       111, 116,  58, 115, 116,  97, 116, 117, 115,  10,   1,  49,  18,  39,  34,  37,   8,  42,
        18,   5,   5,   7,   9,  11,  13,  26,   5,   6,   8,  10,  12,  14,  66,   5,   1,   2,
         3,   4,   4,  74,   5,   2,   2,   2,   3,   0,  82,   5,   0,   0,   0,   1,   2};
-    size_t dataSize = 143;
+    size_t dataSize = 156;
 
     CPPUNIT_ASSERT_EQUAL(dataSize, ss.str().size());
     for (size_t i = 0; i < dataSize; i++)
