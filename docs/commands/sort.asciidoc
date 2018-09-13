@@ -4,7 +4,7 @@
 === Description
 
 The +sort+ command sorts a file first by element type, then by increasing element ID.  The element type sorting order 
-is: 1) nodes, 2) ways, 3) relations.
+is: 1) nodes, 2) ways, and then 3) relations.
 
 * +input+  - Input (e.g. .osm file).
 * +output+ - Output file (e.g. .osm file).
