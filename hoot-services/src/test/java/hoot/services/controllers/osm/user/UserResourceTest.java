@@ -62,11 +62,8 @@ public class UserResourceTest extends OSMResourceTestAbstract {
 	@Category(UnitTest.class)
 	public void testGetById() throws Exception {
 		Document responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
-		String responseData1 = target("user/" + userId).request(MediaType.TEXT_XML).get(String.class);
 
 		assertNotNull(responseData);
-
-		System.out.println(responseData1);
 
 		XPath xpath = XmlUtils.createXPath();
 		assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
@@ -79,7 +76,6 @@ public class UserResourceTest extends OSMResourceTestAbstract {
 		assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
 		assertEquals("provider_access_key", xpath.evaluate("//osm/user/@provider_access_key", responseData));
 		assertEquals("provider_access_token", xpath.evaluate("//osm/user/@provider_access_token", responseData));
-		assertEquals("session_id_0000000000000000000000000", xpath.evaluate("//osm/user/@session_id", responseData));
 		assertNotNull(xpath.evaluate("//osm/user/@hootservices_last_authorize", responseData));
 		assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
 		assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
@@ -105,7 +101,6 @@ public class UserResourceTest extends OSMResourceTestAbstract {
 		assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
 		assertEquals("provider_access_key", xpath.evaluate("//osm/user/@provider_access_key", responseData));
 		assertEquals("provider_access_token", xpath.evaluate("//osm/user/@provider_access_token", responseData));
-		assertEquals("session_id_0000000000000000000000000", xpath.evaluate("//osm/user/@session_id", responseData));
 		assertNotNull(xpath.evaluate("//osm/user/@hootservices_last_authorize", responseData));
 		assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
 		assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
