@@ -40,7 +40,7 @@
 #include <hoot/core/io/OsmChangeWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
-#include <hoot/core/io/OsmFileSorter.h>
+#include <hoot/rnd/io/OsmFileSorter.h>
 #include <hoot/core/io/OgrReader.h>
 
 // tgs
