@@ -2,11 +2,6 @@
 
 Before do
   # Do something before each scenario.
-  # Capybara.current_session.driver.headers = { 'Cookie' => 'SESSION=882a2e8f-c005-4c35-bff2-586e42e3afa1; lock=1' }
-  # Capybara.current_session.driver.header('Cookie', 'SESSION=882a2e8f-c005-4c35-bff2-586e42e3afa1; lock=1')
-  # page.driver.browser.headers('Cookie', 'SESSION=882a2e8f-c005-4c35-bff2-586e42e3afa1; lock=1')
-
-  # page.driver.browser.header('Cookie', 'SESSION=882a2e8f-c005-4c35-bff2-586e42e3afa1; lock=1')
 end
 
 Before do |scenario|
