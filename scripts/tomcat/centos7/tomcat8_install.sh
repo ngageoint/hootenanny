@@ -6,7 +6,6 @@ set -euo pipefail
 if [ -z "$HOOT_HOME" ]; then
     HOOT_HOME=~/hoot
 fi
-TOMCAT_HOME=/usr/share/tomcat8
 TOMCAT_NAME=tomcat8
 TOMCAT_LEGACY_SYSTEMD=/etc/systemd/system/${TOMCAT_NAME}.service
 TOMCAT_SYSTEMD=/usr/lib/systemd/system/${TOMCAT_NAME}.service
@@ -59,20 +58,6 @@ sudo systemctl enable $TOMCAT_NAME
 if ! grep -i --quiet 'ingest/processed' ${TOMCAT_CONFIG}/server.xml; then
     echo "Adding Tomcat context path for tile images..."
     sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/userfiles\/ingest\/processed\" path=\"\/static\" \/>\n      &@' ${TOMCAT_CONFIG}/server.xml
-fi
-
-if ! grep -i --quiet 'jdbc/postgres' "$TOMCAT_CONFIG/context.xml"; then
-    echo "Adding Tomcat JNDI Postgresql Connection Pool..."
-    sudo sed -i.bak 's@<\/Context>@\n    <Resource name=\"jdbc/postgres"\n      auth="Container"\n      type="javax.sql.DataSource"\n      driverClassName="org.postgresql.Driver"\n      url="jdbc:postgresql://'"$DB_HOST:$DB_PORT/$DB_NAME"'"\n      username="'"$DB_USER"'" password="'"$DB_PASSWORD"'"\n      maxTotal="90"\n      initialSize="25"\n      minIdle="0"\n      maxIdle="30"\n      maxWaitMillis="10000"\n      timeBetweenEvictionRunsMillis="30000"\n      minEvictableIdleTimeMillis="60000"\n      testWhileIdle="true"\n      validationQuery="SELECT 1" />\n\n&@' "$TOMCAT_CONFIG/context.xml"
-fi
-
-# Download JDBC version specified in hoot-services/pom.xml from
-# https://jdbc.postgresql.org/download.html
-JDBC_VERSION="$(grep '<postgresql\.version>.*</postgresql\.version>' < $HOOT_HOME/hoot-services/pom.xml | sed -e 's|</\?postgresql.version>||g' | tr -d '[:blank:]')"
-JDBC_JAR="$TOMCAT_HOME/lib/postgresql-$JDBC_VERSION.jar"
-if [ ! -f "$JDBC_JAR" ]; then
-    echo "Downloading PostgreSQL JDBC v$JDBC_VERSION..."
-    sudo curl -sSL -o "$JDBC_JAR" "https://jdbc.postgresql.org/download/postgresql-$JDBC_VERSION.jar"
 fi
 
 # Note: tomcat8 package already has `allowLinking=true` set in:
