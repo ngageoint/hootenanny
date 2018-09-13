@@ -94,7 +94,6 @@ bool ApiDbReader::_hasBounds()
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;
-  //LOG_VART(oldId);
   //LOG_VART(_useDataSourceIds);
   if (_useDataSourceIds)
   {

@@ -60,12 +60,12 @@ namespace hoot
 /**
  * Derives a set of changes given two map inputs
  *
- * As part of #2596, streaming reads and external element sorting were added.  However, the
- * in memory input reading/sorting has been left in place to support faster I/O in the situation
- * where large inputs are being dealt with and large amounts of memory are available for
- * reading/sorting.  Access to the in memory implementation is controlled by the configuration
- * option, element.sorter.element.buffer.size (size = -1 results in the in memory implementation
- * being used).
+ * Streaming I/O and external element are available to this command.  However, the in memory input
+ * reading/sorting has been left in place to support faster I/O in the situation where large inputs
+ * are being dealt with and large amounts of memory are available for reading/sorting.  Access to
+ * the in memory implementation is controlled by the configuration option,
+ * element.sorter.element.buffer.size (size = -1 results in the in memory implementation being
+ * used).
  */
 class DeriveChangesetCmd : public BaseCommand
 {

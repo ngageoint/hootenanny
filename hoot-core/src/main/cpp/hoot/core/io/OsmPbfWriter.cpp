@@ -522,7 +522,6 @@ void OsmPbfWriter::_writeNode(const boost::shared_ptr<const hoot::Node>& n)
 void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId() << "...");
-  //LOG_TRACE("Writing node: " << n << "...");
 
   _elementsWritten++;
   if (_dn == 0)
@@ -682,8 +681,7 @@ void OsmPbfWriter::_writePrimitiveBlock()
 
 void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>& r)
 {
-  //LOG_TRACE("Writing relation: " << r->getElementId() << "...");
-  LOG_TRACE("Writing relation: " << r << "...");
+  LOG_TRACE("Writing relation: " << r->getElementId() << "...");
 
   _elementsWritten++;
 
@@ -754,7 +752,6 @@ void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>&
 void OsmPbfWriter::_writeWay(const boost::shared_ptr<const hoot::Way>& w)
 {
   LOG_TRACE("Writing way: " << w->getElementId() << "...");
-  //LOG_TRACE("Writing way: " << w << "...");
 
   _elementsWritten++;
 

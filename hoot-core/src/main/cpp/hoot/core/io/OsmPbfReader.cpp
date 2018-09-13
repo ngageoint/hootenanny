@@ -567,7 +567,6 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   _map->addNode(newNode);
 
   LOG_TRACE("Loaded node: " << newNode->getElementId());
-  //LOG_TRACE("Loaded node: " << newNode);
 }
 
 void OsmPbfReader::_loadNodes()
@@ -756,8 +755,6 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     {
       QString key = _strings[r.keys().Get(i)];
       QString value = _strings[r.vals().Get(i)];
-      //LOG_VART(key);
-      //LOG_VART(value);
 
       _addTag(newRelation, key, value);
     }
@@ -779,8 +776,7 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
   }
   _map->addRelation(newRelation);
 
-  //LOG_TRACE("Loaded relation: " << newRelation->getElementId());
-  LOG_TRACE("Loaded relation: " << newRelation);
+  LOG_TRACE("Loaded relation: " << newRelation->getElementId());
 }
 
 void OsmPbfReader::_loadRelations()
@@ -919,7 +915,6 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
   _map->addWay(newWay);
 
   LOG_TRACE("Loaded way: " << newWay->getElementId());
-  //LOG_TRACE("Loaded way: " << newWay);
 }
 
 void OsmPbfReader::_loadWays()
@@ -1379,8 +1374,7 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
   assert(element.get());
   _elementsRead++;
 
-  //LOG_TRACE("Read " << element->getElementId());
-  LOG_TRACE("Read " << element);
+  LOG_TRACE("Read " << element->getElementId());
   return element;
 }
 

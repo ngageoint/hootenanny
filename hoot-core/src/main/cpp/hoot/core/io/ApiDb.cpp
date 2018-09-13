@@ -438,9 +438,7 @@ Tags ApiDb::unescapeTags(const QVariant &v)
     if ((pos = rxValue.indexIn(str, pos)) != -1)
     {
       QString key = rxKey.cap(1);
-      //LOG_VART(key);
       QString value = rxValue.cap(1).trimmed();
-      //LOG_VART(value);
       if (!value.isEmpty())
       {
         // Unescape the actual key/value pairs
