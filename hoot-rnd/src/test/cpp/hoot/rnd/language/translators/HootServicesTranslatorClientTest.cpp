@@ -58,17 +58,6 @@ public:
   {
     boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
-    /*std::stringstream requestStrStrm;
-    boost::shared_ptr<QNetworkRequest> request =
-      uut->_getTranslateRequest("text to translate", requestStrStrm);
-
-    HOOT_STR_EQUALS("http://localhost/test", request->url().toString());
-    HOOT_STR_EQUALS(
-      "application/json", request->header(QNetworkRequest::ContentTypeHeader).toString());
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runBuildRequestTest").trimmed(),
-      QString::fromStdString(requestStrStrm.str()).trimmed());*/
-
     HOOT_STR_EQUALS(
       FileUtils::readFully(testInputRoot + "/runBuildRequestTest").trimmed(),
         uut->_getTranslateRequestData("text to translate").trimmed());
