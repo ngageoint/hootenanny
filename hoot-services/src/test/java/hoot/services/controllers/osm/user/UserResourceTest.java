@@ -206,35 +206,4 @@ public class UserResourceTest extends OSMResourceTestAbstract {
 			throw e;
 		}
 	}
-
-	@Test
-	@Category(UnitTest.class)
-	public void testGetDetails() throws Exception {
-		// Authentication doesn't exist yet, so this just looks for the first user from a select.
-		// This test is essentially the same as testGet now but will change after authentication is implemented.
-		Document responseData = target("api/0.6/user/details").request(MediaType.TEXT_XML).get(Document.class);
-
-		assertNotNull(responseData);
-
-		XPath xpath = XmlUtils.createXPath();
-
-		assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-		assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-		assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-
-		// probably need a better check than this
-		assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
-		assertEquals(DbUtils.getTestUserId(), Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-
-		// TODO: fix
-		// Assert.assertEquals(
-		// String.valueOf(DbUtils.getTestUserId(conn) + "::MapUtils::insertUser()),
-		// xpath.evaluate("//osm/user/@display_name", responseData));
-		// TODO: can't test this from here if clearing out maps after
-		// every test...need a different
-		// test for it
-		// Assert.assertTrue(
-		// Long.parseLong(xpath.evaluate("//osm/user/changesets/@count",
-		// responseData)) > 0);
-	}
 }
