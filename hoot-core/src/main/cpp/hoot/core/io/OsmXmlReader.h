@@ -108,6 +108,13 @@ public:
 
   virtual QString supportedFormats() { return ".osm;.osm.bz2;.osm.gz"; }
 
+  /**
+   * This will adds child refs to elements when they aren't present in the source data.  This is
+   * only useful when dealing with disconnected chunks of map data, as in external sorting, and
+   * should only be activated in that circumstance.  Some verification should be done after
+   * reading data with the parameter enabled to ensure all child data is actually present (reading
+   * the data a second time will log warnings if any data is missing).
+   */
   void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
   { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
 
@@ -157,7 +164,7 @@ private:
   // QHash goes away when the reading is done, but the memory sharing remains.
   QHash<QString, QString> _strings;
 
-  //
+  //adds child refs to elements when they aren't present in the source data
   bool _addChildRefsWhenMissing;
 
   void _createNode(const QXmlAttributes &attributes);

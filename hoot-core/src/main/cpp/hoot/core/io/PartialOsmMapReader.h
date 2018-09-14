@@ -63,7 +63,10 @@ public:
    */
   virtual void readPartial(OsmMapPtr map);
 
-  virtual void initializePartial() {}
+  /**
+   * Perform any necessary initialization after the data source is opened.
+   */
+  virtual void initializePartial() = 0;
 
   /**
    * Finalize the reading of partial data. Any connections/files should be closed when this is
@@ -71,8 +74,18 @@ public:
    */
   virtual void finalizePartial() = 0;
 
+  /**
+   * Returns true if the reader can read any more elements
+   *
+   * @return true if there are more elements; false otherwise
+   */
   virtual bool hasMoreElements() = 0;
 
+  /**
+   * Reads the next available element from the data source
+   *
+   * @return an element
+   */
   virtual ElementPtr readNextElement() = 0;
 
 protected:

@@ -42,21 +42,24 @@ class ElementStreamer
 public:
 
   /**
+   * Streams a data source from input to output.
    *
+   * Associated readers/writers must implemented the partial map interfaces
    *
-   * @param in
-   * @param out
-   * @param convertOps
+   * @param in data source
+   * @param out data destination
+   * @param convertOps a list of map ops/visitors to perform against the data during conversion
    */
   static void stream(const QString in, const QString out,
                      const QStringList convertOps = QStringList());
 
   /**
+   * Determines whether both input and output are streamable data sources (associated
+   * readers/writers must implemented the partial map interfaces)
    *
-   *
-   * @param input
-   * @param output
-   * @return
+   * @param input data source
+   * @param output data destination
+   * @return true if both formats are streamable; false otherwise
    */
   static bool isStreamableIo(const QString input, const QString output);
 

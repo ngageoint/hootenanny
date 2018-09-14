@@ -249,7 +249,7 @@ bool OsmXmlReader::isSupported(QString url)
   const QString checkString( url.toLower() );
 
   // support compressed osm files
-  for (int i = 0; i < numExtensions; ++ i)
+  for (int i = 0; i < numExtensions; ++i)
   {
     if (checkString.endsWith(validExtensions[i]) == true)
     {
