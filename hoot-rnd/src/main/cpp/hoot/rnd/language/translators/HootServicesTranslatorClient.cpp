@@ -33,13 +33,12 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/io/HootNetworkRequest.h>
 
 // Qt
 #include <QByteArray>
-#include <QEventLoop>
 #include <QVariant>
 #include <QMap>
-#include <QNetworkRequest>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -59,7 +58,7 @@ _detectedLangAvailableForTranslation(false),
 _detectedLangOverrides(false),
 _performExhaustiveSearch(false)
 {
-  _client.reset(new QNetworkAccessManager(this));
+  //_client.reset(new QNetworkAccessManager(this));
 }
 
 void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
@@ -169,16 +168,12 @@ void HootServicesTranslatorClient::_validateAvailableLangs(
 
   if (!langNotFound)
   {
-    LOG_DEBUG("All languages available for " << type);
+    LOG_DEBUG("All languages available for operation: " << type);
   }
 }
 
-boost::shared_ptr<QNetworkRequest> HootServicesTranslatorClient::_getTranslateRequest(
-  const QString text, std::stringstream& requestStrStrm)
+QString HootServicesTranslatorClient::_getTranslateRequestData(const QString text)
 {
-  QUrl url(_translationUrl);
-  boost::shared_ptr<QNetworkRequest> request(new QNetworkRequest(url));
-  request->setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   boost::property_tree::ptree requestObj;
   requestObj.put("translator", _translator.toStdString());
   QByteArray textData = QUrl::toPercentEncoding(text);
@@ -205,10 +200,10 @@ boost::shared_ptr<QNetworkRequest> HootServicesTranslatorClient::_getTranslateRe
     sourceLangCodes.push_back(std::make_pair("", sourceLangCode));
   }
   requestObj.add_child("sourceLangCodes", sourceLangCodes);
-  boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
-  LOG_VART(requestStrStrm.str());
 
-  return request;
+  std::stringstream requestStrStrm;
+  boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
+  return QString::fromStdString(requestStrStrm.str());
 }
 
 void HootServicesTranslatorClient::_parseTranslateResponse(
@@ -218,11 +213,12 @@ void HootServicesTranslatorClient::_parseTranslateResponse(
     QUrl::fromPercentEncoding(
       QString::fromStdString(replyObj->get<std::string>("translatedText")).toUtf8());
   LOG_VARD(_translatedText);
-  _detectedLang = QString::fromStdString(replyObj->get<std::string>("detectedLang"));
-  if (!_detectedLang.isEmpty())
+  if (replyObj->count("detectedLang") > 0)
   {
+    _detectedLang = QString::fromStdString(replyObj->get<std::string>("detectedLang"));
     _detectionMade = true;
     LOG_VARD(_detectedLang);
+    //detector used should always be here if a detection was made
     _detectorUsed = QString::fromStdString(replyObj->get<std::string>("detectorUsed"));
     LOG_VARD(_detectorUsed);
     _detectedLangAvailableForTranslation =
@@ -244,27 +240,24 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
     "Translating to English with specified source languages: " <<
      _sourceLangs.join(",") << "; text: " << textToTranslate);
 
-  //create the request
-  std::stringstream requestStrStrm;
-  boost::shared_ptr<QNetworkRequest> request =
-    _getTranslateRequest(textToTranslate, requestStrStrm);
-
-  //send the request and wait for the response
-  QNetworkReply* reply =
-    _client->post(*request, QString::fromStdString(requestStrStrm.str()).toUtf8());
-  QEventLoop loop;
-  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-  loop.exec();
+  //create and execute the request
+  QUrl url(_translationUrl);
+  QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
+  headers[QNetworkRequest::ContentTypeHeader] = "application/json";
+  HootNetworkRequest request;
+  request.networkRequest(
+    url, headers, QNetworkAccessManager::Operation::PostOperation,
+    _getTranslateRequestData(textToTranslate).toUtf8());
 
   //check for a response error
-  if (reply->error() != QNetworkReply::NoError)
+  if (request.getHttpStatus() != 200)
   {
-    emit translationError(textToTranslate, reply->errorString());
+    emit translationError(textToTranslate, request.getErrorString());
     return;
   }
 
-  //get and parse the response data
-  _parseTranslateResponse(StringUtils::jsonStringToPropTree(reply->readAll()));
+  //parse the response data
+  _parseTranslateResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()));
 }
 
 }

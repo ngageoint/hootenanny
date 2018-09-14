@@ -32,10 +32,6 @@
 #include <hoot/rnd/language/translators/ToEnglishTranslator.h>
 #include <hoot/rnd/language/translators/TranslationInfoProvider.h>
 
-// Qt
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-
 namespace hoot
 {
 
@@ -110,8 +106,6 @@ private:
   //against all available translatable languages (expensive)
   bool _performExhaustiveSearch;
 
-  boost::shared_ptr<QNetworkAccessManager> _client;
-
   /**
    * Verifies that every language specified for this translator is supported by the server
    *
@@ -124,8 +118,8 @@ private:
   void _validateAvailableLangs(boost::shared_ptr<boost::property_tree::ptree> replyObj,
                                const QString type);
 
-  boost::shared_ptr<QNetworkRequest> _getTranslateRequest(const QString text,
-                                                          std::stringstream& requestStrStrm);
+  QString _getTranslateRequestData(const QString text);
+
   void _parseTranslateResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
 };
 

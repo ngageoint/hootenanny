@@ -47,18 +47,18 @@ static const QString testInputRoot =
 class HootServicesTranslatorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesTranslatorClientTest);
-  CPPUNIT_TEST(runBuildRequestTest);
+  CPPUNIT_TEST(runRequestDataTest);
   CPPUNIT_TEST(runParseResponseTest);
   CPPUNIT_TEST(runInvalidLangDetectConfigTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runBuildRequestTest()
+  void runRequestDataTest()
   {
     boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
-    std::stringstream requestStrStrm;
+    /*std::stringstream requestStrStrm;
     boost::shared_ptr<QNetworkRequest> request =
       uut->_getTranslateRequest("text to translate", requestStrStrm);
 
@@ -67,7 +67,11 @@ public:
       "application/json", request->header(QNetworkRequest::ContentTypeHeader).toString());
     HOOT_STR_EQUALS(
       FileUtils::readFully(testInputRoot + "/runBuildRequestTest").trimmed(),
-      QString::fromStdString(requestStrStrm.str()).trimmed());
+      QString::fromStdString(requestStrStrm.str()).trimmed());*/
+
+    HOOT_STR_EQUALS(
+      FileUtils::readFully(testInputRoot + "/runBuildRequestTest").trimmed(),
+        uut->_getTranslateRequestData("text to translate").trimmed());
   }
 
   void runParseResponseTest()

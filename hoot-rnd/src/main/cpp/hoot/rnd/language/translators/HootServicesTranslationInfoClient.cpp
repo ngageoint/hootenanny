@@ -33,12 +33,10 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/io/HootNetworkRequest.h>
 
 // Qt
-#include <QEventLoop>
 #include <QVariant>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 
 // std
 #include <iostream>
@@ -51,7 +49,7 @@ HOOT_FACTORY_REGISTER(TranslationInfoProvider, HootServicesTranslationInfoClient
 
 HootServicesTranslationInfoClient::HootServicesTranslationInfoClient()
 {
-  _client.reset(new QNetworkAccessManager());
+  //_client.reset(new QNetworkAccessManager());
 }
 
 void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
@@ -82,24 +80,18 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  }
  LOG_VARD(urlStr);
 
- //create the request
  QUrl url(urlStr);
- QNetworkRequest request(url);
-
- //send the request and wait for a response
- QNetworkReply* reply = _client->get(request);
- QEventLoop loop;
- QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
- loop.exec();
+ HootNetworkRequest request;
+ request.networkRequest(url);
 
  //check for a response error
- if (reply->error() != QNetworkReply::NoError)
+ if (request.getHttpStatus() != 200)
  {
-   throw HootException(QString("Reply error:\n%1").arg(reply->error()));
+   throw HootException(QString("Reply error:\n%1").arg(request.getErrorString()));
  }
 
- //parse and return the response
- return StringUtils::jsonStringToPropTree(reply->readAll());
+ //get and parse the response data
+ return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
  boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableLanguages(
@@ -122,35 +114,27 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
   LOG_VARD(urlStr);
   LOG_VARD(apps);
 
-  //create the request
-  std::stringstream requestStrStrm;
-  boost::shared_ptr<QNetworkRequest> request =
-    _getAvailableLanguagesRequest(urlStr, apps, requestStrStrm);
-
-  //send the request and wait for a response
-  QNetworkReply* reply =
-    _client->post(*request, QString::fromStdString(requestStrStrm.str()).toUtf8());
-  QEventLoop loop;
-  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-  loop.exec();
+  //create and execute the request
+  QUrl url(urlStr);
+  QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
+  headers[QNetworkRequest::ContentTypeHeader] = "application/json";
+  HootNetworkRequest request;
+  request.networkRequest(
+    url, headers, QNetworkAccessManager::Operation::PostOperation,
+    _getAvailableLanguagesRequestData(apps).toUtf8());
 
   //check for a response error
-  if (reply->error() != QNetworkReply::NoError)
+  if (request.getHttpStatus() != 200)
   {
-    throw HootException(QString("Reply error:\n%1").arg(reply->error()));
+    throw HootException(QString("Reply error:\n%1").arg(request.getErrorString()));
   }
 
-  //parse and return the response
-  return StringUtils::jsonStringToPropTree(reply->readAll());
+  //parse the response data
+  return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
-boost::shared_ptr<QNetworkRequest> HootServicesTranslationInfoClient::_getAvailableLanguagesRequest(
-  const QString urlStr, const QStringList apps, std::stringstream& requestStrStrm)
-{
-  QUrl url(urlStr);
-  boost::shared_ptr<QNetworkRequest> request(new QNetworkRequest(url));
-
-  request->setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
+QString HootServicesTranslationInfoClient::_getAvailableLanguagesRequestData(const QStringList apps)
+{ 
   boost::property_tree::ptree requestObj;
   boost::property_tree::ptree appsObj;
   for (int i = 0; i < apps.size(); i++)
@@ -160,10 +144,10 @@ boost::shared_ptr<QNetworkRequest> HootServicesTranslationInfoClient::_getAvaila
     appsObj.push_back(std::make_pair("", appObj));
   }
   requestObj.add_child("apps", appsObj);
-  boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
-  LOG_VART(requestStrStrm.str());
 
-  return request;
+  std::stringstream requestStrStrm;
+  boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
+  return QString::fromStdString(requestStrStrm.str());
 }
 
 }
