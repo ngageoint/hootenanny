@@ -195,9 +195,22 @@ void OsmApiWriter::_changesetThreadFunc()
 
     if (workInfo)
     {
-      //  Create the changeset for the first changeset
-      if (id == -1)
+      //  Create the changeset ID if required
+      if (id < 1)
         id = _createChangeset(request, _description);
+      //  An ID of less than 1 isn't valid, try to fix it
+      if (id < 1)
+      {
+        _workQueueMutex.lock();
+        _workQueue.push(workInfo);
+        _workQueueMutex.unlock();
+        //  Reset the network request object and sleep it off
+        request.reset(new HootNetworkRequest());
+        LOG_WARN("Bad changeset ID. Resetting network request object.");
+        this_thread::sleep_for(chrono::milliseconds(100));
+        //  Try a new create changeset request
+        continue;
+      }
       //  Display the changeset in TRACE mode
       LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << _changeset.getChangesetString(workInfo, id));
       //  Upload the changeset
@@ -460,6 +473,9 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
 bool OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset)
 {
   bool success = false;
+  //  Don't even attempt if the ID is bad
+  if (id < 1)
+    return false;
   try
   {
     QUrl change = _url;
