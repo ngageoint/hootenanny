@@ -76,6 +76,8 @@ public:
 
   virtual bool fatalError(const QXmlParseException &exception);
 
+  virtual void initializePartial() {};
+
   virtual void finalizePartial();
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
