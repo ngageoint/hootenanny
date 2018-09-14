@@ -201,6 +201,9 @@ void OsmApiWriter::_changesetThreadFunc()
       //  An ID of less than 1 isn't valid, try to fix it
       if (id < 1)
       {
+        _workQueueMutex.lock();
+        _workQueue.push(workInfo);
+        _workQueueMutex.unlock();
         //  Reset the network request object and sleep it off
         request.reset(new HootNetworkRequest());
         LOG_WARN("Bad changeset ID. Resetting network request object.");
