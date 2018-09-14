@@ -99,21 +99,20 @@ bool OsmGeoJsonReader::isSupported(QString url)
 void OsmGeoJsonReader::read(OsmMapPtr map)
 {
   _map = map;
-  QString jsonStr;
   if (_isFile)
   {
     QTextStream instream(&_file);
-    jsonStr = instream.readAll();
+    _results.append(instream.readAll());
   }
   else
+    _readFromHttp();
+  //  Process all of the result strings
+  for (int i = 0; i < _results.size(); ++i)
   {
-    //  Do HTTP GET request
-    HootNetworkRequest request;
-    request.networkRequest(_url);
-    jsonStr = QString::fromUtf8(request.getResponseContent().data());
+    // This will throw a hoot exception if JSON is invalid
+    _loadJSON(_results[i]);
+    _parseGeoJson();
   }
-  _loadJSON(jsonStr);
-  _parseGeoJson();
 }
 
 OsmMapPtr OsmGeoJsonReader::loadFromString(QString jsonStr)
@@ -139,7 +138,6 @@ OsmMapPtr OsmGeoJsonReader::loadFromFile(QString path)
   _parseGeoJson();
   return _map;
 }
-
 
 void OsmGeoJsonReader::_parseGeoJson()
 {

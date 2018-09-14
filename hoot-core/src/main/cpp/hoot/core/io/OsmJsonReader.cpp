@@ -30,10 +30,11 @@
 // hoot
 #include <hoot/core/Hoot.h>
 #include <hoot/core/io/HootNetworkRequest.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/Factory.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -47,6 +48,7 @@ namespace pt = boost::property_tree;
 // Standard
 #include <fstream>
 #include <iostream>
+#include <thread>
 #include <sstream>
 #include <unistd.h>
 using namespace std;
@@ -74,18 +76,22 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 //}
 
 // Default constructor
-OsmJsonReader::OsmJsonReader():
-  _defaultStatus(Status::Invalid),
-  _useDataSourceIds(true),
-  _defaultCircErr(15.0),
-  _propTree(),
-  _version(""),
-  _generator(""),
-  _timestamp_base(""),
-  _copyright(""),
-  _url(""),
-  _isFile(false),
-  _isWeb(false)
+OsmJsonReader::OsmJsonReader()
+  : _defaultStatus(Status::Invalid),
+    _useDataSourceIds(true),
+    _defaultCircErr(15.0),
+    _propTree(),
+    _version(""),
+    _generator(""),
+    _timestamp_base(""),
+    _copyright(""),
+    _url(""),
+    _isFile(false),
+    _isWeb(false),
+    _bboxContinue(true),
+    _runParallel(ConfigOptions().getJsonReaderHttpBboxParallel()),
+    _coordGridSize(ConfigOptions().getJsonReaderHttpBboxMaxSize()),
+    _threadCount(ConfigOptions().getJsonReaderHttpBboxThreadCount())
 {
   // Do nothing special
 }
@@ -166,22 +172,20 @@ void OsmJsonReader::close()
 void OsmJsonReader::read(OsmMapPtr map)
 {
   _map = map;
-  QString jsonStr;
   if (_isFile)
   {
     QTextStream instream(&_file);
-    jsonStr = instream.readAll();
+    _results.append(instream.readAll());
   }
   else
+    _readFromHttp();
+  //  Process all of the result strings
+  for (int i = 0; i < _results.size(); ++i)
   {
-    //  Do HTTP GET request
-    HootNetworkRequest request;
-    request.networkRequest(_url);
-    jsonStr = QString::fromUtf8(request.getResponseContent().data());
+    // This will throw a hoot exception if JSON is invalid
+    _loadJSON(_results[i]);
+    _parseOverpassJson();
   }
-  // This will throw a hoot exception if JSON is invalid
-  _loadJSON(jsonStr);
-  _parseOverpassJson();
 }
 
 // Throws HootException on error
@@ -253,6 +257,13 @@ OsmMapPtr OsmJsonReader::loadFromFile(QString path)
   _map.reset(new OsmMap());
   _parseOverpassJson();
   return _map;
+}
+
+void OsmJsonReader::setConfiguration(const Settings& conf)
+{
+  _runParallel = ConfigOptions(conf).getJsonReaderHttpBboxParallel();
+  _coordGridSize = ConfigOptions(conf).getJsonReaderHttpBboxMaxSize();
+  _threadCount = ConfigOptions(conf).getJsonReaderHttpBboxThreadCount();
 }
 
 void OsmJsonReader::_parseOverpassJson()
@@ -444,6 +455,121 @@ void OsmJsonReader::scrubBigInts(QString &jsonStr)
   jsonStr.replace(rx1, "\\1\"\\2\"");
   QRegExp rx2("([\\[:,\\s]\\s*)(-?\\d{8,})([,\\}\\]\\n])");
   jsonStr.replace(rx2, "\\1\"\\2\"\\3");
+}
+
+void OsmJsonReader::_readFromHttp()
+{
+  if (!_url.isValid())
+    throw HootException("Invalid URL: " + _url.toString());
+  //  Update the `srsname` parameter to use EPSG:4326
+  if (_url.hasQueryItem("srsname"))
+  {
+    _url.removeQueryItem("srsname");
+    _url.addQueryItem("srsname", "EPSG:4326");
+  }
+  bool split = false;
+  int numSplits = 1;
+  //  Check if there is a bounding box
+  if (_url.hasQueryItem("bbox") && _runParallel)
+  {
+    QStringList bbox = _url.allQueryItemValues("bbox");
+    //  Parse the bounding box
+    geos::geom::Envelope envelope = GeometryUtils::envelopeFromConfigString(bbox.last());
+    //  Check if the bounding box needs to be split
+    int lon_div = 1;
+    int lat_div = 1;
+    //  Don't split an envelope if it is just a little bigger than the prescribed max
+    if (envelope.getWidth() > _coordGridSize * 1.5)
+      lon_div = (int)std::ceil(envelope.getWidth() / _coordGridSize);
+    if (envelope.getHeight() > _coordGridSize * 1.5)
+      lat_div = (int)std::ceil(envelope.getHeight() / _coordGridSize);
+    numSplits = lat_div * lon_div;
+    //  Create envelopes for splitting the request
+    if (lon_div != 1 || lat_div != 1)
+    {
+      split = true;
+      //  Setup the envelopes to query in a grid
+      for (int i = 0; i < lon_div; ++i)
+      {
+        double lon = envelope.getMinX() + _coordGridSize * i;
+        for (int j = 0; j < lat_div; ++j)
+        {
+          double lat = envelope.getMaxY() - _coordGridSize * j;
+          _bboxMutex.lock();
+          //  Start at the upper right corner and create boxes left to right, top to bottom
+          _bboxes.append(
+              geos::geom::Envelope(
+                  lon,
+                  std::max(lat, envelope.getMinY()),
+                  std::min(lon + _coordGridSize, envelope.getMaxX()),
+                  lat + _coordGridSize));
+          _bboxMutex.unlock();
+        }
+      }
+    }
+  }
+  if (split)
+  {
+    //  Only spin up enough threads for the work up to the max
+    int max_threads = _threadCount;
+    if (numSplits < max_threads)
+      max_threads = numSplits;
+    //  Fire up the worker threads
+    vector<thread> threads;
+    _bboxContinue = true;
+    for (int i = 0; i < _threadCount; ++i)
+      threads.push_back(thread(&OsmJsonReader::_doHttpRequestFunc, this));
+    //  Wait on the work to be completed
+    _bboxContinue = false;
+    for (size_t i = 0; i < threads.size(); ++i)
+      threads[i].join();
+  }
+  else
+  {
+    //  Do HTTP GET request without splitting
+    HootNetworkRequest request;
+    request.networkRequest(_url);
+    _results.append(QString::fromUtf8(request.getResponseContent().data()));
+  }
+}
+
+void OsmJsonReader::_doHttpRequestFunc()
+{
+  //  Lock the mutex before checking
+  _bboxMutex.lock();
+  while (_bboxContinue || _bboxes.size() > 0)
+  {
+    if (_bboxes.size() > 0)
+    {
+      //  Get the envelope
+      geos::geom::Envelope envelope = _bboxes.first();
+      _bboxes.removeFirst();
+      _bboxMutex.unlock();
+      //  Update the URL
+      QUrl url(_url);
+      url.removeQueryItem("bbox");
+      url.addQueryItem("bbox", GeometryUtils::toString(envelope) + ",EPSG:4326");
+      HootNetworkRequest request;
+      LOG_VART(url);
+      request.networkRequest(url);
+      QString result = QString::fromUtf8(request.getResponseContent().data());
+      //  Store the result inside of a locked mutex
+      _resultsMutex.lock();
+      LOG_VART(result);
+      _results.append(result);
+      _resultsMutex.unlock();
+    }
+    else
+    {
+      //  Sleep for a bit unlocked so things can happen
+      _bboxMutex.unlock();
+      this_thread::sleep_for(chrono::milliseconds(100));
+    }
+    //  Lock up before checking the continue flag and the work queue
+    _bboxMutex.lock();
+  }
+  //  Unlock it all and end the thread
+  _bboxMutex.unlock();
 }
 
 }

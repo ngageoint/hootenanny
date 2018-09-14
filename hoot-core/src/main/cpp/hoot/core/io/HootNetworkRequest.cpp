@@ -45,6 +45,9 @@ HootNetworkRequest::HootNetworkRequest()
 
 bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op, const QByteArray& data)
 {
+  //  Disable logging for the QNetworkAccessManager calls because it logs an error when
+  //  run in a sub-thread.  An exception is thrown below for error handling instead of logging
+  boost::shared_ptr<DisableLog> disable(new DisableLog());
   //  Reset status
   _status = 0;
   _content.clear();
@@ -92,6 +95,8 @@ bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operati
   QEventLoop loop;
   QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
   loop.exec();
+  //  Enable logging
+  disable.reset();
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
   //  According to the documention this shouldn't ever happen

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryUtils.h"
@@ -173,10 +173,10 @@ QString GeometryUtils::toString(const Envelope& e)
 {
   const int precision = ConfigOptions().getWriterPrecision();
   return QString("%1,%2,%3,%4").
-      arg(e.getMinX(), 0, 'g', precision).
-      arg(e.getMaxX(), 0, 'g', precision).
-      arg(e.getMinY(), 0, 'g', precision).
-      arg(e.getMaxY(), 0, 'g', precision);
+      arg(e.getMinX(), 0, 'f', precision).
+      arg(e.getMaxX(), 0, 'f', precision).
+      arg(e.getMinY(), 0, 'f', precision).
+      arg(e.getMaxY(), 0, 'f', precision);
 }
 
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)
@@ -305,7 +305,8 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
   if (boundsStr.contains(","))
   {
     const QStringList bboxParts = boundsStr.trimmed().split(",");
-    if (bboxParts.size() == 4)
+    int size = bboxParts.size();
+    if (size == 4 || size == 5)
     {
       bool parseSuccess = true;
       bool ok;
@@ -317,7 +318,7 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
       parseSuccess = parseSuccess && ok;
       const double maxLon = bboxParts[2].toDouble(&ok);
       parseSuccess = parseSuccess && ok;
-
+      //  The fifth element, if it exists, can be ignored
       if (!parseSuccess)
       {
         throw HootException(errMsg);
