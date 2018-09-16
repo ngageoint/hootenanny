@@ -12,6 +12,10 @@ endif
 ifeq ($(TOMCAT_PORT),)
   TOMCAT_PORT=8080
 endif
+# setup proxy port
+ifeq ($(TOMCAT_PROXY_PORT),)
+  TOMCAT_PROXY_PORT=9090
+endif
 
 CWD=$(shell pwd)
 
@@ -34,15 +38,15 @@ test: load-data
 # The path used in VerifyTomcatStarted.sh requires auth; if this is giving you problems
 # be sure that the load-data target is run prior to load the user session data.
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	$(HOOT_HOME)/scripts/tomcat/VerifyTomcatStarted.sh 9090 --quiet 2> >( $(FILTER) >&2 )
+	$(HOOT_HOME)/scripts/tomcat/VerifyTomcatStarted.sh $(TOMCAT_PROXY_PORT) --quiet 2> >( $(FILTER) >&2 )
 else
-	$(HOOT_HOME)/scripts/tomcat/VerifyTomcatStarted.sh 9090
+	$(HOOT_HOME)/scripts/tomcat/VerifyTomcatStarted.sh $(TOMCAT_PROXY_PORT)
 endif
 	# Running user interface tests...
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	TOMCAT_PORT=$(9090) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format progress $(CUKE_OPTS)
+	TOMCAT_PORT=$(TOMCAT_PROXY_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format progress $(CUKE_OPTS)
 else
-	TOMCAT_PORT=$(9090) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format pretty  $(CUKE_OPTS)
+	TOMCAT_PORT=$(TOMCAT_PROXY_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format pretty  $(CUKE_OPTS)
 endif
 	echo ""
 
