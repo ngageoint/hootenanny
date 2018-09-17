@@ -29,7 +29,6 @@
 #include "OsmMapJs.h"
 
 // hoot
-#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
@@ -115,7 +114,8 @@ void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
 
   boost::shared_ptr<IdGenerator> idGen =  toCpp<boost::shared_ptr<IdGenerator> >(args[0]);
 
-  if (obj->getMap()) {
+  if (obj->getMap())
+  {
     obj->getMap()->setIdGenerator(idGen);
   }
 

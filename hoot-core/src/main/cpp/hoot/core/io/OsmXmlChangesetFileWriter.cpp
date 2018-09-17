@@ -231,8 +231,14 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
         it.key() != MetadataTags::HootHash())
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", _invalidCharacterEncoder.encodeInvalidCharacters(it.key()));
-      writer.writeAttribute("v", _invalidCharacterEncoder.encodeInvalidCharacters(it.value()));
+      writer.writeAttribute(
+        "k",
+        _invalidCharacterHandler.encodeData(
+          _invalidCharacterHandler.removeInvalidCharacters(it.key())));
+      writer.writeAttribute(
+        "v",
+        _invalidCharacterHandler.encodeData(
+          _invalidCharacterHandler.removeInvalidCharacters(it.value())));
       writer.writeEndElement();
     }
   }
@@ -305,8 +311,14 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
     if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", _invalidCharacterEncoder.encodeInvalidCharacters(tit.key()));
-      writer.writeAttribute("v", _invalidCharacterEncoder.encodeInvalidCharacters(tit.value()));
+      writer.writeAttribute(
+        "k",
+        _invalidCharacterHandler.encodeData(
+          _invalidCharacterHandler.removeInvalidCharacters(tit.key())));
+      writer.writeAttribute(
+        "v",
+        _invalidCharacterHandler.encodeData(
+          _invalidCharacterHandler.removeInvalidCharacters(tit.value())));
       writer.writeEndElement();
     }
   }
@@ -369,7 +381,10 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
       memberId = newMemberId;
     }
     writer.writeAttribute("ref", QString::number(memberId));
-    writer.writeAttribute("role", _invalidCharacterEncoder.encodeInvalidCharacters(e.role));
+    writer.writeAttribute(
+      "role",
+      _invalidCharacterHandler.encodeData(
+        _invalidCharacterHandler.removeInvalidCharacters(e.role)));
     writer.writeEndElement();
   }
 
@@ -383,8 +398,14 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", _invalidCharacterEncoder.encodeInvalidCharacters(tit.key()));
-      writer.writeAttribute("v", _invalidCharacterEncoder.encodeInvalidCharacters(tit.value()));
+      writer.writeAttribute(
+        "k",
+        _invalidCharacterHandler.encodeData(
+          _invalidCharacterHandler.removeInvalidCharacters(tit.key())));
+      writer.writeAttribute(
+        "v",
+        _invalidCharacterHandler.encodeData(
+          _invalidCharacterHandler.removeInvalidCharacters(tit.value())));
       writer.writeEndElement();
     }
   }
@@ -393,7 +414,10 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", "type");
-    writer.writeAttribute("v", _invalidCharacterEncoder.encodeInvalidCharacters(r->getType()));
+    writer.writeAttribute(
+      "v",
+      _invalidCharacterHandler.encodeData(
+        _invalidCharacterHandler.removeInvalidCharacters(r->getType())));
     writer.writeEndElement();
   }
 

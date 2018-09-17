@@ -88,7 +88,7 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
   }
 }
 
-QString OsmXmlReader::_decodeInvalidCharacters(QString text)
+QString OsmXmlReader::_decodeData(QString text)
 {
   return
     text
@@ -486,8 +486,8 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
     else if (qName == QLatin1String("member") && _element)
     {
       long ref = _parseLong(attributes.value("ref"));
-      QString type = _decodeInvalidCharacters(attributes.value("type"));
-      QString role = _decodeInvalidCharacters(attributes.value("role"));
+      QString type = _decodeData(attributes.value("type"));
+      QString role = _decodeData(attributes.value("role"));
 
       RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
 
@@ -558,8 +558,8 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
     }
     else if (qName == QLatin1String("tag") && _element)
     {
-      const QString& key = _saveMemory(_decodeInvalidCharacters(attributes.value("k").trimmed()));
-      const QString& value = _saveMemory(_decodeInvalidCharacters(attributes.value("v").trimmed()));
+      const QString& key = _saveMemory(_decodeData(attributes.value("k").trimmed()));
+      const QString& value = _saveMemory(_decodeData(attributes.value("v").trimmed()));
       //LOG_VART(key);
       //LOG_VART(value);
       if (!key.isEmpty() && !value.isEmpty())

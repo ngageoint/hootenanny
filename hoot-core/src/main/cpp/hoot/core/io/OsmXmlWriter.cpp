@@ -70,7 +70,8 @@ OsmXmlWriter::OsmXmlWriter()
     _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
     _precision(ConfigOptions().getWriterPrecision()),
     _encodingErrorCount(0),
-    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
+    _encodeData(true)
 {
 }
 
@@ -79,15 +80,59 @@ OsmXmlWriter::~OsmXmlWriter()
   close();
 }
 
-QString OsmXmlWriter::encodeInvalidCharacters(QString text)
+QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 {
-  return
-    text
-      .replace("&", "&amp;")
-      .replace("\"", "&quot;")
-      .replace("\n", "&#10;")
-      .replace(">", "&gt;")
-      .replace("<", "&lt;");
+  // See #3553 for an explanation.
+
+  QString result;
+  result.reserve(s.size());
+
+  bool foundError = false;
+  for (int i = 0; i < s.size(); i++)
+  {
+    QChar c = s[i];
+    // See http://stackoverflow.com/questions/730133/invalid-characters-in-xml
+    if (c < 0x20 && c != 0x9 && c != 0xA && c != 0xD)
+    {
+      foundError = true;
+    }
+    else
+    {
+      result.append(c);
+    }
+  }
+
+  if (foundError)
+  {
+    _encodingErrorCount++;
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Found an invalid character in string: '" << s << "'");
+      LOG_WARN("  UCS-4 version of the string: " << s.toUcs4());
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+
+  return result;
+}
+
+QString OsmXmlWriter::encodeData(QString text)
+{
+  if (_encodeData)
+  {
+    return
+      text
+        .replace("&", "&amp;")
+        .replace("\"", "&quot;")
+        .replace("\n", "&#10;")
+        .replace(">", "&gt;")
+        .replace("<", "&lt;");
+  }
+  return text;
 }
 
 void OsmXmlWriter::open(QString url)
@@ -124,10 +169,12 @@ void OsmXmlWriter::setIncludeCompatibilityTags(bool includeCompatibility)
   _includeCompatibilityTags = includeCompatibility;
 }
 
-QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
+QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml,
+                               const bool encodeData)
 {
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
+  writer.setEncodeData(encodeData);
   // this will be deleted by the _fp boost::shared_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
@@ -274,7 +321,8 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      key = encodeInvalidCharacters(key);
+      key = removeInvalidCharacters(key);
+      key = encodeData(key);
       LOG_VART(key);
       _writer->writeAttribute("k", key);
       if (key == MetadataTags::HootStatus() &&
@@ -293,7 +341,8 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
       }
       else
       {
-        val = encodeInvalidCharacters(val);
+        val = removeInvalidCharacters(val);
+        val = encodeData(val);
         LOG_VART(val);
         _writer->writeAttribute("v", val);
       }
@@ -308,7 +357,8 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     {
       _writer->writeStartElement("tag");
       _writer->writeAttribute("k", "type");
-      _writer->writeAttribute("v", encodeInvalidCharacters(relation->getType()));
+      const QString type = removeInvalidCharacters(relation->getType());
+      _writer->writeAttribute("v", encodeData(type));
       _writer->writeEndElement();
     }
   }
@@ -495,12 +545,13 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
-    const QString key = tit.key();
-    const QString val = tit.value().trimmed();
+    QString key = tit.key();
+    QString val = tit.value().trimmed();
     if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", encodeInvalidCharacters(key));
+      key = removeInvalidCharacters(key);
+      _writer->writeAttribute("k", encodeData(key));
 
       if (key == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
       {
@@ -515,7 +566,8 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
       }
       else
       {
-        _writer->writeAttribute("v", encodeInvalidCharacters(val));
+        val = removeInvalidCharacters(val);
+        _writer->writeAttribute("v", encodeData(val));
       }
       _writer->writeEndElement();
     }
@@ -604,7 +656,8 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
     _writer->writeStartElement("member");
     _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
     _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-    _writer->writeAttribute("role", encodeInvalidCharacters(e.role));
+    const QString role = removeInvalidCharacters(e.role);
+    _writer->writeAttribute("role", encodeData(role));
     _writer->writeEndElement();
   }
 

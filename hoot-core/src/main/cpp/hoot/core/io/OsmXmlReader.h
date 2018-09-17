@@ -183,12 +183,12 @@ private:
   void _uncompressInput();
 
   /**
-   * Decodes text that may contain chars previously encoded due to being illegal for use with XML
+   * Decodes text that may contain chars previously encoded due to being illegal in well formed xml
    *
    * @param text text to decode
    * @return decoded text
    */
-  QString _decodeInvalidCharacters(QString text);
+  QString _decodeData(QString text);
 };
 
 }
