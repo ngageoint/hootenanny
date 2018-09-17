@@ -17,18 +17,18 @@ psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.
 
 # in memory sorting tests
 
-hoot changeset-derive -D changeset.user.id=1 test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-1.osc.sql $OSM_API_DB_URL
+hoot changeset-derive -D changeset.user.id=1 test-files/cmd/slow/DeriveChangesetCmdTest/map1.osm test-files/cmd/slow/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-1.osc.sql $OSM_API_DB_URL
 diff test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-1.osc.sql test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-1.osc.sql 
 
-hoot changeset-derive -D changeset.user.id=1 test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm "" test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-2.osc.sql $OSM_API_DB_URL
+hoot changeset-derive -D changeset.user.id=1 test-files/cmd/slow/DeriveChangesetCmdTest/map1.osm "" test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-2.osc.sql $OSM_API_DB_URL
 diff test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-2.osc.sql test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-2.osc.sql 
 
 # external merge sorting tests
 
-hoot changeset-derive -D changeset.user.id=1 -D element.sorter.element.buffer.size=5 -D element.sorter.external.temp.format=osm test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql $OSM_API_DB_URL
+hoot changeset-derive -D changeset.user.id=1 -D element.sorter.element.buffer.size=5 -D element.sorter.external.temp.format=osm test-files/cmd/slow/DeriveChangesetCmdTest/map1.osm test-files/cmd/slow/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql $OSM_API_DB_URL
 diff test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql 
 
-hoot changeset-derive -D changeset.user.id=1 -D element.sorter.element.buffer.size=5 -D element.sorter.external.temp.format=osm test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm "" test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-4.osc.sql $OSM_API_DB_URL
+hoot changeset-derive -D changeset.user.id=1 -D element.sorter.element.buffer.size=5 -D element.sorter.external.temp.format=osm test-files/cmd/slow/DeriveChangesetCmdTest/map1.osm "" test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-4.osc.sql $OSM_API_DB_URL
 diff test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-4.osc.sql test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-4.osc.sql 
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
