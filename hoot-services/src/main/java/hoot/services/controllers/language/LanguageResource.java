@@ -630,8 +630,8 @@ public class LanguageResource
         {
           parsedLangCodes.add(lang.getIso6391Code());
           lang.setAvailable(langConsumer.isLanguageAvailable(lang.getIso6391Code()));
-          logger.error("detectedLangName: " + lang.getName());
-          logger.error("encoded detectedLangName: " + encodeText(lang.getName()));
+          logger.trace("detectedLangName: " + lang.getName());
+          logger.trace("encoded detectedLangName: " + encodeText(lang.getName()));
           lang.setName(encodeText(lang.getName()));
           supportedLangs.add(lang);
         }
