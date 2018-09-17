@@ -256,7 +256,7 @@ QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long
   const QString memberType = member.getElementId().getType().toString();
   const QString memberSequenceIndexStr(QString::number(memberSequenceIndex));
   QString memberRole = escapeCopyToData(member.getRole());
-  //handle empty data
+  //handle empty data; this is needed for pg_bulkload
   if (memberRole.trimmed().isEmpty())
   {
     memberRole = "<no role>";

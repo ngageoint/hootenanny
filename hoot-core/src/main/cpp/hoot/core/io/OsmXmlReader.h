@@ -181,6 +181,14 @@ private:
   QXmlAttributes _streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes);
 
   void _uncompressInput();
+
+  /**
+   * Decodes text that may contain chars previously encoded due to being illegal for use with XML
+   *
+   * @param text text to decode
+   * @return decoded text
+   */
+  QString _decodeInvalidCharacters(QString text);
 };
 
 }

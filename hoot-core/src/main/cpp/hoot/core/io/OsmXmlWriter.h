@@ -112,15 +112,18 @@ public:
   virtual void writePartial(const ConstRelationPtr& relation);
   virtual void finalizePartial();
 
-  /**
-   * Remove any invalid characters from the string s and print an error if one is found.
-   */
-  QString removeInvalidCharacters(const QString& s);
-
   bool getFormatXml() const { return _formatXml; }
   void setFormatXml(const bool format) { _formatXml = format; }
 
   virtual QString supportedFormats() { return ".osm"; }
+
+  /**
+   * Encodes characters that are illegal in XML
+   *
+   * @param text text to encode
+   * @return text encoded safe for XML output
+   */
+  QString encodeInvalidCharacters(QString text);
 
 private:
 

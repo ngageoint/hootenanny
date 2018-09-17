@@ -95,7 +95,7 @@ private:
   bool _addTimestamp;
   bool _includeDebugTags;
 
-  OsmXmlWriter _invalidCharacterRemover;
+  OsmXmlWriter _invalidCharacterEncoder;
 
   QMap<ElementType::Type, long> _newElementIdCtrs;
   //keeping track of these mappings unfortunately makes this writer memory bound
