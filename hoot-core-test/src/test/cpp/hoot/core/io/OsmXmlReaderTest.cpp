@@ -98,7 +98,7 @@ public:
 
         OsmMapPtr map(new OsmMap());
         uut.setUseDataSourceIds(true);
-        uut.setUseStatusFromFile(true);
+        uut.setUseFileStatus(true);
         uut.setDefaultStatus(Status::Invalid);
         uut.read("test-files/io/OsmXmlReaderUseStatusTest.osm", map);
 

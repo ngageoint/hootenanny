@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, AddAttributesVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, AddAttributesVisitor)
 
 AddAttributesVisitor::AddAttributesVisitor()
 {

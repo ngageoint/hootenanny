@@ -22,56 +22,49 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CHANGE_H
-#define CHANGE_H
+#ifndef ELEMENTCOMPARER_H
+#define ELEMENTCOMPARER_H
 
+// Hoot
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 /**
- * Represents an individual OSM change in a changeset
+ * Compares two elements of the same type for similarity
  */
-class Change
+class ElementComparer
 {
 
 public:
 
-  /**
-   * The allowable changeset types
-   */
-  enum ChangeType
-  {
-    Create = 0,
-    Modify = 1,
-    Delete = 2,
-    Unknown = 3
-  };
+  static const long DEBUG_ID = 0;
 
-  Change();
-  Change(ChangeType type, ConstElementPtr element);
-  Change(ChangeType type, ConstElementPtr element, ConstElementPtr pe);
+  explicit ElementComparer(Meters threshold = 0.05);
 
-  static QString changeTypeToString(const ChangeType changeType);
-
-  QString toString() const;
-
-  ChangeType getType() const { return _type; }
-  ConstElementPtr getElement() const { return _element; }
-  void clearElement() { _element.reset(); }
-  ConstElementPtr getPreviousElement() const { return _previousElement; }
+  bool isSame(ElementPtr e1, ElementPtr e2) const;
 
 private:
 
-  ChangeType _type;
-  ConstElementPtr _element;
-  ConstElementPtr _previousElement;
+  //currently, this threshold applies only to non-node circular error checks and the var would
+  //eventually go away completely if all element types were converted over to uses hashes for
+  //comparisons
+  Meters _threshold;
+
+  bool _compareNode(const boost::shared_ptr<const Element>& re,
+                    const boost::shared_ptr<const Element>& e) const;
+  bool _compareWay(const boost::shared_ptr<const Element>& re,
+                   const boost::shared_ptr<const Element>& e) const;
+  bool _compareRelation(const boost::shared_ptr<const Element>& re,
+                        const boost::shared_ptr<const Element>& e) const;
+
+  void _removeTagsNotImportantForComparison(Tags& tags) const;
 
 };
 
 }
 
-#endif // CHANGE_H
+#endif // ELEMENTCOMPARER_H

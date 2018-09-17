@@ -121,8 +121,7 @@ private:
     total = singleStat->getStat();
     LOG_VART(total);
 
-    std::cout << "Total: " <<
-      total/*QString::number(total, 'f', ConfigOptions().getWriterPrecision())*/ << std::endl;
+    std::cout << "Total: " << total << std::endl;
   }
 };
 

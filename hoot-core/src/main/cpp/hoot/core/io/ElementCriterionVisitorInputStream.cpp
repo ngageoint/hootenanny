@@ -72,16 +72,14 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
   {
     ElementPtr element = _elementSource->readNextElement();
     _numFeaturesTotal++;
-    //LOG_VART(_numFeaturesTotal);
     LOG_VART(element->getElementId());
 
-    //LOG_VART(_criterion.get());
     if (!_criterion.get() || _criterion->isSatisfied(element))
     {
       _numFeaturesPassingCriterion++;
       //LOG_VART(_numFeaturesPassingCriterion);
-      for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin(); itr != _visitors.end();
-           ++itr)
+      for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin();
+           itr != _visitors.end(); ++itr)
       {
         ElementVisitorPtr visitor = *itr;
         //LOG_VART(visitor->toString());

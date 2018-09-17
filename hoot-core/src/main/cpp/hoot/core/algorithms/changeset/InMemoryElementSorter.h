@@ -24,70 +24,63 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CHANGESETDERIVER_H
-#define CHANGESETDERIVER_H
+#ifndef IN_MEMORY_ELEMENT_SORTER_H
+#define IN_MEMORY_ELEMENT_SORTER_H
 
-#include <hoot/core/io/ChangesetProvider.h>
+// hoot
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/ElementComparer.h>
+
+// Qt
+#include <QFile>
+#include <QUrl>
 
 namespace hoot
 {
 
 /**
- * Calculates the changeset difference between a source and target map.  This logic is based on
- * the same logic used in Osmosis.
+ * An element stream that returns elements in the order of node, way, then relation, sorted by
+ * element ID; memory bound as it requires the entire map be passed in to sort the IDs
  */
-class ChangesetDeriver : public ChangesetProvider
+class InMemoryElementSorter : public ElementInputStream
 {
 
 public:
 
-  ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to);
+  InMemoryElementSorter(ConstOsmMapPtr map);
+  virtual ~InMemoryElementSorter() {}
 
   /**
-   * @see ChangeSetProvider
+   * @see ElementInputStream
    */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  virtual ~ChangesetDeriver();
+  /**
+   * @see ElementInputStream
+   */
+  virtual void close() {}
 
   /**
-   * @see ChangeSetProvider
+   * @see ElementInputStream
    */
-  virtual void close();
+  virtual bool hasMoreElements();
 
   /**
-   * @see ChangeSetProvider
+   * @see ElementInputStream
    */
-  virtual bool hasMoreChanges();
-
-  /**
-   * @see ChangeSetProvider
-   */
-  virtual Change readNextChange();
-
-  long getNumFromElementsParsed() const { return _numFromElementsParsed; }
-  long getNumToElementsParsed() const { return _numToElementsParsed; }
+  virtual ElementPtr readNextElement();
 
 private:
 
-  Change _nextChange();
+  ConstOsmMapPtr _source;
 
-  ElementInputStreamPtr _from;
-  ElementInputStreamPtr _to;
-  Change _next;
-  ElementPtr _fromE, _toE;
-  ElementComparer _elementComparer;
-
-  long _numFromElementsParsed;
-  long _numToElementsParsed;
-  bool _allowDeletingReferenceFeatures;
+  std::vector<long> _nodeIds, _wayIds, _relationIds;
+  size_t _nodeIndex, _wayIndex, _relationIndex;
 
 };
 
-typedef boost::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
+typedef boost::shared_ptr<InMemoryElementSorter> InMemoryElementSorterPtr;
 
 }
 
-#endif // CHANGESETDERIVER_H
+#endif // IN_MEMORY_ELEMENT_SORTER_H

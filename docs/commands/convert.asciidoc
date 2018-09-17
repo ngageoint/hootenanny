@@ -142,3 +142,4 @@ field separators. If you get errors using absolute paths, check that you have th
 *** The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
 *** If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
 *** If you do not specify a specific shapefile then it will read in all shapefiles in the given directory
+* To prevent memory bound conversion when converting to OSM XML, you must set the writer.xml.sort.by.id configuration option to false.

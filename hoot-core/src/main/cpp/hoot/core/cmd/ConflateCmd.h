@@ -31,7 +31,7 @@
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/ChangesetDeriver.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 
 // Standard
 #include <fstream>
@@ -62,6 +62,7 @@ public:
 private:
 
   boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
+
   ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr pMap);
 
 };
