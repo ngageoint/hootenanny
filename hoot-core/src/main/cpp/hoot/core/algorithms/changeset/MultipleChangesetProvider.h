@@ -22,61 +22,60 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTINPUTSTREAM_H
-#define ELEMENTINPUTSTREAM_H
+#ifndef MULTIPLECHANGESETPROVIDER_H
+#define MULTIPLECHANGESETPROVIDER_H
 
-#include <ogr_spatialref.h>
-
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 
 namespace hoot
 {
 
 /**
- *
+ * This is essentially a changeset provider container, allowing multiple
+ * changeset providers to be chained together
  */
-class ElementInputStream
+class MultipleChangesetProvider : public ChangesetProvider
 {
 
 public:
 
-  ElementInputStream() {}
+  explicit MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
 
   /**
-   * @brief getProjection
-   * @return
+   * @todo: is this even used?
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+
+  virtual ~MultipleChangesetProvider();
 
   /**
-   * @brief ~ElementInputStream
-   *
-   * If the stream is open when the destructor is called, closeStream must be called in the destructor
+   * @see ChangeSetProvider
    */
-  virtual ~ElementInputStream() {}
+  virtual void close();
 
   /**
-   * @brief closeStream
-   *
-   * Releases all resources associated with the stream, if any
+   * @see ChangeSetProvider
    */
-  virtual void close() = 0;
+  virtual bool hasMoreChanges();
 
   /**
-   *
+   * @see ChangeSetProvider
    */
-  virtual bool hasMoreElements() = 0;
+  virtual Change readNextChange();
 
-  /**
-   *
-   */
-  virtual ElementPtr readNextElement() = 0;
+  void addChangesetProvider(ChangesetProviderPtr newChangeset);
+
+  size_t getNumChangesets();
+
+private:
+  boost::shared_ptr<OGRSpatialReference> _projection;
+  std::list<ChangesetProviderPtr> _changesets;
 };
 
-typedef boost::shared_ptr<ElementInputStream> ElementInputStreamPtr;
+typedef boost::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
 
 }
 
-#endif // ELEMENTINPUTSTREAM_H
+#endif // MULTIPLECHANGESETPROVIDER_H

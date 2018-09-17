@@ -27,9 +27,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/ChangesetDeriver.h>
-#include <hoot/core/io/ChangesetProvider.h>
-#include <hoot/core/io/ElementSorter.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
@@ -57,8 +57,8 @@ public:
       OsmMapReaderFactory::read(map2, "test-files/io/ChangesetDeriverTest/Map2.osm", true);
       map2->visitRw(hashVis);
 
-      ElementSorterPtr map1SortedElements(new ElementSorter(map1));
-      ElementSorterPtr map2SortedElements(new ElementSorter(map2));
+      InMemoryElementSorterPtr map1SortedElements(new InMemoryElementSorter(map1));
+      InMemoryElementSorterPtr map2SortedElements(new InMemoryElementSorter(map2));
 
       ChangesetDeriverPtr changesetDiff(
         new ChangesetDeriver(map1SortedElements, map2SortedElements));

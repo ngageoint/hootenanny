@@ -72,7 +72,7 @@ OsmApiDbBulkInserter::~OsmApiDbBulkInserter()
 
 bool OsmApiDbBulkInserter::isSupported(QString urlStr)
 {
-  LOG_VARD(urlStr);
+  LOG_VART(urlStr);
   QUrl url(urlStr);
   //if we ever want any other writers that the convert command invokes to output sql, then
   //this will have to be made more specific
