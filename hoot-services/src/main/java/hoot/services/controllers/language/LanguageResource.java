@@ -77,7 +77,7 @@ import javax.annotation.PreDestroy;
 /**
  * Web endpoint for language translation and detection
 
-   @todo possibly some more extensive request param validation
+   @todo possibly add some more extensive request param validation
  */
 @Controller
 @Path("toEnglishTranslation")
@@ -254,7 +254,7 @@ public class LanguageResource
   @Path("/detectable")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public SupportedLanguagesResponse getDetectableLangs(SupportedLanguagesRequest request)
+  public SupportedLanguagesResponse getDetectableLanguages(SupportedLanguagesRequest request)
   {
     try
     {
@@ -317,7 +317,7 @@ public class LanguageResource
   @Path("/translatable")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public SupportedLanguagesResponse getTranslatableLangs(SupportedLanguagesRequest request)
+  public SupportedLanguagesResponse getTranslatableLanguages(SupportedLanguagesRequest request)
   {
     try
     {
@@ -630,6 +630,8 @@ public class LanguageResource
         {
           parsedLangCodes.add(lang.getIso6391Code());
           lang.setAvailable(langConsumer.isLanguageAvailable(lang.getIso6391Code()));
+          logger.error("detectedLangName: " + lang.getName());
+          logger.error("encoded detectedLangName: " + encodeText(lang.getName()));
           lang.setName(encodeText(lang.getName()));
           supportedLangs.add(lang);
         }

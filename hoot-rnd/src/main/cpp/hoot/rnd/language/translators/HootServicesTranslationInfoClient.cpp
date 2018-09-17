@@ -49,7 +49,6 @@ HOOT_FACTORY_REGISTER(TranslationInfoProvider, HootServicesTranslationInfoClient
 
 HootServicesTranslationInfoClient::HootServicesTranslationInfoClient()
 {
-  //_client.reset(new QNetworkAccessManager());
 }
 
 void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
@@ -80,6 +79,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  }
  LOG_VARD(urlStr);
 
+ //create and execute the request
  QUrl url(urlStr);
  HootNetworkRequest request;
  request.networkRequest(url);
@@ -90,7 +90,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
    throw HootException(QString("Reply error:\n%1").arg(request.getErrorString()));
  }
 
- //get and parse the response data
+ //parse the response data
  return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 

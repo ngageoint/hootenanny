@@ -58,7 +58,6 @@ _detectedLangAvailableForTranslation(false),
 _detectedLangOverrides(false),
 _performExhaustiveSearch(false)
 {
-  //_client.reset(new QNetworkAccessManager(this));
 }
 
 void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
@@ -212,18 +211,21 @@ void HootServicesTranslatorClient::_parseTranslateResponse(
   _translatedText =
     QUrl::fromPercentEncoding(
       QString::fromStdString(replyObj->get<std::string>("translatedText")).toUtf8());
-  LOG_VARD(_translatedText);
+  LOG_VART(_translatedText);
+  //detected lang won't be populated if no detection was performed
   if (replyObj->count("detectedLang") > 0)
   {
-    _detectedLang = QString::fromStdString(replyObj->get<std::string>("detectedLang"));
+    _detectedLang =
+      QUrl::fromPercentEncoding(
+        QString::fromStdString(replyObj->get<std::string>("detectedLang")).toUtf8());
     _detectionMade = true;
-    LOG_VARD(_detectedLang);
+    LOG_VART(_detectedLang);
     //detector used should always be here if a detection was made
     _detectorUsed = QString::fromStdString(replyObj->get<std::string>("detectorUsed"));
-    LOG_VARD(_detectorUsed);
+    LOG_VART(_detectorUsed);
     _detectedLangAvailableForTranslation =
       replyObj->get<bool>("detectedLangAvailableForTranslation");
-    LOG_VARD(_detectedLangAvailableForTranslation);
+    LOG_VART(_detectedLangAvailableForTranslation);
   }
 
   emit translationComplete();
@@ -236,7 +238,7 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
     throw HootException("Cannot determine source language.");
   }
 
-  LOG_DEBUG(
+  LOG_TRACE(
     "Translating to English with specified source languages: " <<
      _sourceLangs.join(",") << "; text: " << textToTranslate);
 

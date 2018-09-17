@@ -2,7 +2,7 @@
 #
 # https://cwiki.apache.org/confluence/display/JOSHUA
 #
-# Hootenanny only works with Joshua language packs version 2.  List a separate entry for each language, keep the entries in 
+# Hootenanny works with Joshua language packs version 2.  List a separate entry for each language, keep the entries in 
 # alphabetical order by source language code, make sure each port is unique and available, and the language pack must have 
 # already been downloaded and extracted in order for the service to be launched.  See the Hootenanny install documentation 
 # for information on installing language packs.
@@ -17,10 +17,10 @@
 #ca	/home/vagrant/joshua-language-packs/apache-joshua-ca-en-2016-11-18	5769
 #cs	/home/vagrant/joshua-language-packs/apache-joshua-cs-en-2016-11-18	5770
 #da	/home/vagrant/joshua-language-packs/apache-joshua-da-en-2016-11-18	5771
-#de	/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18	5772
+de	/home/vagrant/joshua-language-packs/apache-joshua-de-en-2016-11-18	5772
 #dv	/home/vagrant/joshua-language-packs/apache-joshua-dv-en-2016-11-18	5773
 #el	/home/vagrant/joshua-language-packs/apache-joshua-el-en-2016-11-18	5774
-#es	/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18	5775
+es	/home/vagrant/joshua-language-packs/apache-joshua-es-en-2016-11-18	5775
 #et	/home/vagrant/joshua-language-packs/apache-joshua-et-en-2016-11-18	5776
 #eu	/home/vagrant/joshua-language-packs/apache-joshua-eu-en-2016-11-18	5777
 #fa	/home/vagrant/joshua-language-packs/apache-joshua-fa-en-2016-11-18	5778

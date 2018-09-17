@@ -1,9 +1,691 @@
-17:58:51.775 INFO  ...hoot/core/io/DataConverter.cpp(  72) Converting test-files/cmd/glacial/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest-in.osm to test-output/cmd/glacial/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest-out.osm...
-17:58:51.785 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from VisitorTest/ToEnglishTranslationVisitorTest-in.osm...
-17:58:51.815 INFO  ...hoot/core/io/DataConverter.cpp( 415) Applying conversion operations...
-17:59:26.719 INFO  ...oEnglishTranslationVisitor.cpp(  63) Language detections made: 602
-17:59:26.720 INFO  ...oEnglishTranslationVisitor.cpp(  66) 492 successful tag translations made on 486 different elements.
-17:59:26.720 INFO  ...oEnglishTranslationVisitor.cpp(  69) Attempted to translate tags for 602 elements out of 763 elements encountered.
-17:59:26.743 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/glacial/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest-out.osm...
-17:59:27.415 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from isitorTest/ToEnglishTranslationVisitorTest-out.osm...
-17:59:27.459 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from isitorTest/ToEnglishTranslationVisitorTest-out.osm...
+detectable languages:
+
+Code: da
+Name: Danish
+Available: yes
+
+Code: de
+Name: German
+Available: yes
+
+Code: el
+Name: Greek
+Available: yes
+
+Code: en
+Name: English
+Available: yes
+
+Code: es
+Name: Spanish
+Available: yes
+
+Code: et
+Name: Estonian
+Available: yes
+
+Code: fi
+Name: Finnish
+Available: yes
+
+Code: fr
+Name: French
+Available: yes
+
+Code: hu
+Name: Hungarian
+Available: yes
+
+Code: is
+Name: Icelandic
+Available: yes
+
+Code: it
+Name: Italian
+Available: yes
+
+Code: nl
+Name: Dutch
+Available: yes
+
+Code: no
+Name: Norwegian
+Available: yes
+
+Code: pl
+Name: Polish
+Available: yes
+
+Code: pt
+Name: Portuguese
+Available: yes
+
+Code: ru
+Name: Russian
+Available: yes
+
+Code: sv
+Name: Swedish
+Available: yes
+
+Code: th
+Name: Thai
+Available: yes
+
+Code: af
+Name: Afrikaans
+Available: yes
+
+Code: ar
+Name: Arabic
+Available: yes
+
+Code: ast
+Name: Asturian
+Available: yes
+
+Code: az
+Name: Azerbaijani
+Available: yes
+
+Code: ba
+Name: Bashkir
+Available: yes
+
+Code: be
+Name: Belarusian
+Available: yes
+
+Code: bg
+Name: Bulgarian
+Available: yes
+
+Code: bn
+Name: Bengali
+Available: yes
+
+Code: bs
+Name: Bosnian
+Available: yes
+
+Code: br
+Name: Breton
+Available: yes
+
+Code: ca
+Name: Catalan
+Available: yes
+
+Code: ceb
+Name: Cebuano
+Available: yes
+
+Code: ce
+Name: Chechen
+Available: yes
+
+Code: cs
+Name: Czech
+Available: yes
+
+Code: cmn
+Name: Mandarin Chinese
+Available: yes
+
+Code: cy
+Name: Welsh
+Available: yes
+
+Code: ekk
+Name: Standard Estonian
+Available: yes
+
+Code: eo
+Name: Esperanto
+Available: yes
+
+Code: eu
+Name: Basque
+Available: yes
+
+Code: fo
+Name: Faroese
+Available: yes
+
+Code: fa
+Name: Persian
+Available: yes
+
+Code: fy
+Name: Western Frisian
+Available: yes
+
+Code: ga
+Name: Irish
+Available: yes
+
+Code: gl
+Name: Galician
+Available: yes
+
+Code: gsw
+Name: Swiss German
+Available: yes
+
+Code: gu
+Name: Gujarati
+Available: yes
+
+Code: he
+Name: Hebrew
+Available: yes
+
+Code: hi
+Name: Hindi
+Available: yes
+
+Code: hr
+Name: Croatian
+Available: yes
+
+Code: hy
+Name: Armenian
+Available: yes
+
+Code: id
+Name: Indonesian
+Available: yes
+
+Code: ja
+Name: Japanese
+Available: yes
+
+Code: jv
+Name: Javanese
+Available: yes
+
+Code: kn
+Name: Kannada
+Available: yes
+
+Code: ka
+Name: Georgian
+Available: yes
+
+Code: kk
+Name: Kazakh
+Available: yes
+
+Code: ko
+Name: Korean
+Available: yes
+
+Code: ky
+Name: Kirghiz
+Available: yes
+
+Code: la
+Name: Latin
+Available: yes
+
+Code: lb
+Name: Luxembourgish
+Available: yes
+
+Code: li
+Name: Limburgan
+Available: yes
+
+Code: lt
+Name: Lithuanian
+Available: yes
+
+Code: lv
+Name: Latvian
+Available: yes
+
+Code: lvs
+Name: Standard Latvian
+Available: yes
+
+Code: mi
+Name: Maori
+Available: yes
+
+Code: mk
+Name: Macedonian
+Available: yes
+
+Code: ml
+Name: Malayalam
+Available: yes
+
+Code: mn
+Name: Mongolian
+Available: yes
+
+Code: mr
+Name: Marathi
+Available: yes
+
+Code: min
+Name: Minangkabau
+Available: yes
+
+Code: ms
+Name: Malay
+Available: yes
+
+Code: mt
+Name: Maltese
+Available: yes
+
+Code: nan
+Name: Min Nan Chinese
+Available: yes
+
+Code: nds
+Name: Low German
+Available: yes
+
+Code: nb
+Name: Norwegian BokmÃ¥l
+Available: yes
+
+Code: ne
+Name: Nepali
+Available: yes
+
+Code: nn
+Name: Norwegian Nynorsk
+Available: yes
+
+Code: oc
+Name: Occitan
+Available: yes
+
+Code: pa
+Name: Panjabi
+Available: yes
+
+Code: pes
+Name: Iranian Persian
+Available: yes
+
+Code: plt
+Name: Plateau Malagasy
+Available: yes
+
+Code: pnb
+Name: Western Panjabi
+Available: yes
+
+Code: ps
+Name: Pushto
+Available: yes
+
+Code: ro
+Name: Romanian
+Available: yes
+
+Code: sa
+Name: Sanskrit
+Available: yes
+
+Code: si
+Name: Sinhala
+Available: yes
+
+Code: sk
+Name: Slovak
+Available: yes
+
+Code: sl
+Name: Slovenian
+Available: yes
+
+Code: so
+Name: Somali
+Available: yes
+
+Code: sq
+Name: Albanian
+Available: yes
+
+Code: sr
+Name: Serbian
+Available: yes
+
+Code: su
+Name: Sundanese
+Available: yes
+
+Code: sw
+Name: Swahili
+Available: yes
+
+Code: ta
+Name: Tamil
+Available: yes
+
+Code: tt
+Name: Tatar
+Available: yes
+
+Code: te
+Name: Telugu
+Available: yes
+
+Code: tg
+Name: Tajik
+Available: yes
+
+Code: tl
+Name: Tagalog
+Available: yes
+
+Code: tr
+Name: Turkish
+Available: yes
+
+Code: uk
+Name: Ukrainian
+Available: yes
+
+Code: ur
+Name: Urdu
+Available: yes
+
+Code: uz
+Name: Uzbek
+Available: yes
+
+Code: vi
+Name: Vietnamese
+Available: yes
+
+Code: vo
+Name: Volapük
+Available: yes
+
+Code: war
+Name: Waray
+Available: yes
+
+Code: zu
+Name: Zulu
+Available: yes
+
+104 languages are supported for detection.
+Currently, 104 of those languages are available for detection.
+Available language detectors:
+
+Name: OpenNlpLanguageDetector
+Description: The language detector portion of a machine learning based toolkit for the processing of natural language text
+URL: https://opennlp.apache.org
+
+Name: TikaLanguageDetector
+Description: The language detection portion of a library which detects and extracts metadata and text from many different file types
+URL: https://tika.apache.org
+
+2 detectors are available.
+translatable languages:
+
+Code: ar
+Name: Arabic
+Available: no
+
+Code: am
+Name: Amharic
+Available: no
+
+Code: az
+Name: Azerbaijani
+Available: no
+
+Code: bg
+Name: Bulgarian
+Available: no
+
+Code: bn
+Name: Bengali
+Available: no
+
+Code: bs
+Name: Bosnian
+Available: no
+
+Code: ca
+Name: Catalan
+Available: no
+
+Code: cs
+Name: Czech
+Available: no
+
+Code: da
+Name: Danish
+Available: no
+
+Code: de
+Name: German
+Available: yes
+
+Code: dv
+Name: Dhivehi
+Available: no
+
+Code: el
+Name: Greek
+Available: no
+
+Code: es
+Name: Spanish
+Available: yes
+
+Code: et
+Name: Estonian
+Available: no
+
+Code: eu
+Name: Basque
+Available: no
+
+Code: fa
+Name: Persian
+Available: no
+
+Code: fi
+Name: Finnish
+Available: no
+
+Code: fr
+Name: French
+Available: no
+
+Code: ga
+Name: Irish
+Available: no
+
+Code: gl
+Name: Galician
+Available: no
+
+Code: ha
+Name: Hausa
+Available: no
+
+Code: he
+Name: Hebrew
+Available: no
+
+Code: hi
+Name: Hindi
+Available: no
+
+Code: hr
+Name: Croatian
+Available: no
+
+Code: hu
+Name: Hungarian
+Available: no
+
+Code: id
+Name: Indonesian
+Available: no
+
+Code: is
+Name: Icelandic
+Available: no
+
+Code: it
+Name: Italian
+Available: no
+
+Code: ka
+Name: Georgian
+Available: no
+
+Code: ku
+Name: Kurdish
+Available: no
+
+Code: lt
+Name: Lithuanian
+Available: no
+
+Code: lv
+Name: Latvian
+Available: no
+
+Code: mg
+Name: Malagasy
+Available: no
+
+Code: ml
+Name: Malayalam
+Available: no
+
+Code: ms
+Name: Malay
+Available: no
+
+Code: mt
+Name: Maltese
+Available: no
+
+Code: nl
+Name: Dutch
+Available: no
+
+Code: no
+Name: Norwegian
+Available: no
+
+Code: pl
+Name: Polish
+Available: no
+
+Code: pt
+Name: Portuguese
+Available: no
+
+Code: ro
+Name: Romanian
+Available: no
+
+Code: ru
+Name: Russian
+Available: no
+
+Code: sd
+Name: Sindhi
+Available: no
+
+Code: si
+Name: Sinhala
+Available: no
+
+Code: sk
+Name: Slovak
+Available: no
+
+Code: sl
+Name: Slovenian
+Available: no
+
+Code: so
+Name: Somali
+Available: no
+
+Code: sq
+Name: Albanian
+Available: no
+
+Code: sr
+Name: Serbian
+Available: no
+
+Code: sv
+Name: Swedish
+Available: no
+
+Code: sw
+Name: Swahili
+Available: no
+
+Code: ta
+Name: Tamil
+Available: no
+
+Code: te
+Name: Telugu
+Available: no
+
+Code: tg
+Name: Tajik
+Available: no
+
+Code: tt
+Name: Tatar
+Available: no
+
+Code: ug
+Name: Uighur
+Available: no
+
+Code: uk
+Name: Ukrainian
+Available: no
+
+Code: ur
+Name: Urdu
+Available: no
+
+Code: vi
+Name: Vietnamese
+Available: no
+
+59 languages are supported for translation.
+Currently, 2 of those languages are available for translation.
+Available language detectors:
+
+Name: HootLanguageTranslator
+Description: A custom translator that combines language detection into its workflow.  See the Hootenanny User Documentation for more details.
+URL: N/A
+
+Name: JoshuaLanguageTranslator
+Description: A statistical machine translation decoder for phrase-based, hierarchical, and syntax-based machine translation
+URL: https://cwiki.apache.org/confluence/display/JOSHUA
+
+2 translators are available.
+14:40:32.158 INFO  ...hoot/core/io/DataConverter.cpp(  72) Converting test-files/cmd/glacial/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest-in.osm to test-output/cmd/glacial/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest-out.osm...
+14:40:32.173 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from VisitorTest/ToEnglishTranslationVisitorTest-in.osm...
+14:40:32.206 INFO  ...hoot/core/io/DataConverter.cpp( 415) Applying conversion operations...
+14:40:36.438 INFO  ...oEnglishTranslationVisitor.cpp(  63) Language detections made: 602
+14:40:36.438 INFO  ...oEnglishTranslationVisitor.cpp(  66) 492 successful tag translations made on 486 different elements.
+14:40:36.438 INFO  ...oEnglishTranslationVisitor.cpp(  69) Attempted to translate tags for 602 elements out of 763 elements encountered.
+14:40:36.439 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/glacial/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest-out.osm...
+14:40:37.083 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from isitorTest/ToEnglishTranslationVisitorTest-out.osm...
+14:40:37.147 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from isitorTest/ToEnglishTranslationVisitorTest-out.osm...

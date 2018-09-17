@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-# This test needs Joshua, and its not feasible to install automatically with hoot right now.  So, this test remains off and just gets checked
-# manually from time to time.  German and Spanish Joshua translation services need to be enabled in the config and Tomcat restarted to enable
-# them for this test to pass.
+# This test requires Joshua, and its not feasible to install automatically with hoot right now.  So, this test remains off and just gets 
+# checked manually from time to time.  German and Spanish Joshua translation services need to be enabled in the config and Tomcat 
+# restarted to enable them for this test to pass.
 
 INPUT_DIR=test-files/cmd/glacial/ToEnglishTranslationVisitorTest
 #TODO: will eventually need a better input file that supports testing detection and multiple translation languages
