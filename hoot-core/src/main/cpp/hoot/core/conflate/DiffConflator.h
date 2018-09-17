@@ -199,11 +199,6 @@ private:
     ic.clear();
   }
 
-  void _removeWholeGroups(std::vector<const Match *> &matches, MatchSetVector &matchSets,
-    const OsmMapPtr &map);
-
-  void _replaceElementIds(const std::vector< std::pair<ElementId, ElementId> >& replaced);
-
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
    * might be thrown during apply() clean up the leftovers nicely (albeit delayed).

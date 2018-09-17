@@ -60,8 +60,9 @@ QString Change::changeTypeToString(const ChangeType changeType)
       return "Delete";
     case Unknown:
       return "Unknown";
+    default:
+      throw HootException("Invalid change type.");
   }
-  throw HootException("Invalid change type.");
 }
 
 QString Change::toString() const

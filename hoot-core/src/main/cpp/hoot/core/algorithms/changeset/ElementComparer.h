@@ -43,7 +43,7 @@ public:
 
   static const long DEBUG_ID = 0;
 
-  ElementComparer(Meters threshold = 0.05);
+  explicit ElementComparer(Meters threshold = 0.05);
 
   bool isSame(ElementPtr e1, ElementPtr e2) const;
 

@@ -123,7 +123,6 @@ public:
 private:
 
   bool _osmFound;
-  double _x, _y;
   long _id;
 
   std::deque<long> _nodeIds;
