@@ -22,9 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ElementSorter.h"
+#include "InMemoryElementSorter.h"
 
 #include <hoot/core/util/Log.h>
 
@@ -36,50 +36,53 @@ using namespace std;
 namespace hoot
 {
 
-ElementSorter::ElementSorter(ConstOsmMapPtr source) :
+InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
   _nodeIndex(0),
   _wayIndex(0),
   _relationIndex(0)
 {
-  LOG_DEBUG(
-    "Sorting elements by element type for map with element count: " << source->getElementCount());
-
-  _source = source;
-
-  for (NodeMap::const_iterator it = _source->getNodes().begin();
-    it != _source->getNodes().end(); ++it)
+  if (source)
   {
-    _nodeIds.push_back(it->first);
-  }
-  for (WayMap::const_iterator it = _source->getWays().begin();
-    it != _source->getWays().end(); ++it)
-  {
-    _wayIds.push_back(it->first);
-  }
-  for (RelationMap::const_iterator it = _source->getRelations().begin();
-    it != _source->getRelations().end(); ++it)
-  {
-    _relationIds.push_back(it->first);
-  }
+    LOG_INFO(
+      "Sorting elements by element type for map with element count: " << source->getElementCount());
 
-  sort(_nodeIds.begin(), _nodeIds.end());
-  sort(_wayIds.begin(), _wayIds.end());
-  sort(_relationIds.begin(), _relationIds.end());
+    _source = source;
+
+    for (NodeMap::const_iterator it = _source->getNodes().begin();
+      it != _source->getNodes().end(); ++it)
+    {
+      _nodeIds.push_back(it->first);
+    }
+    for (WayMap::const_iterator it = _source->getWays().begin();
+      it != _source->getWays().end(); ++it)
+    {
+      _wayIds.push_back(it->first);
+    }
+    for (RelationMap::const_iterator it = _source->getRelations().begin();
+      it != _source->getRelations().end(); ++it)
+    {
+      _relationIds.push_back(it->first);
+    }
+
+    sort(_nodeIds.begin(), _nodeIds.end());
+    sort(_wayIds.begin(), _wayIds.end());
+    sort(_relationIds.begin(), _relationIds.end());
+  }
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementSorter::getProjection() const
+boost::shared_ptr<OGRSpatialReference> InMemoryElementSorter::getProjection() const
 {
   return _source->getProjection();
 }
 
-bool ElementSorter::hasMoreElements()
+bool InMemoryElementSorter::hasMoreElements()
 {
   return _nodeIndex != _nodeIds.size() ||
     _wayIndex != _wayIds.size() ||
     _relationIndex != _relationIds.size();
 }
 
-ElementPtr ElementSorter::readNextElement()
+ElementPtr InMemoryElementSorter::readNextElement()
 {
   ElementPtr result;
   ConstElementPtr cr;

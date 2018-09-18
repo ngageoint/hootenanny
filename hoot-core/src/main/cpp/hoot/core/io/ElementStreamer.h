@@ -41,9 +41,38 @@ class ElementStreamer
 
 public:
 
+  /**
+   * Streams a data source from input to output.
+   *
+   * Associated readers/writers must implemented the partial map interfaces
+   *
+   * @param in data source
+   * @param out data destination
+   * @param convertOps a list of map ops/visitors to perform against the data during conversion
+   */
   static void stream(const QString in, const QString out,
                      const QStringList convertOps = QStringList());
 
+  /**
+   * Determines whether both input and output are streamable data sources (associated
+   * readers/writers must implemented the partial map interfaces)
+   *
+   * @param input data source
+   * @param output data destination
+   * @return true if both formats are streamable; false otherwise
+   */
+  static bool isStreamableIo(const QString input, const QString output);
+
+  /**
+   * Return true if all the specified operations are valid streaming operations.
+   *
+   * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
+   * nodes). These operations are not applicable for streaming.
+   *
+   * @param ops
+   * @return
+   */
+  static bool areValidStreamingOps(const QStringList ops);
 };
 
 }

@@ -141,6 +141,7 @@ public:
   inline static const QString RelationRouteMaster()     { return "route_master"; }
   inline static const QString RelationSuperRoute()      { return "superroute"; }
   inline static const QString RelationWaterway()        { return "waterway"; }
+  inline static const QString RelationType()            { return "type"; }
 
   inline static const QString RoleInner()               { return RelationInner(); }
   inline static const QString RoleOuter()               { return RelationOuter(); }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMFILESORTER_H
 #define OSMFILESORTER_H
@@ -35,15 +35,18 @@ namespace hoot
 {
 
 /**
- * Sorts OSM files by element type, then element ID.  Supports OSM XML, OSM PBF, OGR, and GeoNames
- * formats.
+ * Sorts OSM files by element type, then element ID and is not memory bound.  Supports OSM XML,
+ * OSM PBF, OGR, and GeoNames formats.
  *
  * This class uses the Unix sort command to sort the geonames input, which is possible due to the
- * single line records.  Osmosis is used for sorting OSM files.  Osmosis could be replaced with a
- * custom file based merge sort routine in the future to reduce the dependency on it, but
- * for now, using it is the best solution.  There is no good solution yet for sorting OGR inputs.
- * Those inputs must be converted to an OSM format before sorting, which unfortunately roughly
- * doubles the input parsing time.
+ * single line records.
+ *
+ * Osmosis is used for sorting OSM files.  This implementation currently has no good solution
+ * for sorting OGR inputs.  Those inputs must be converted to an OSM format before sorting, which
+ * unfortunately roughly doubles the input parsing time.
+ *
+ * TODO: This class can be eliminated by swapping its use in MultiaryIngester for
+ * ExternalMergeElementSorter.  See #2622
  */
 class OsmFileSorter
 {

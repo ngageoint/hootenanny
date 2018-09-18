@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/ElementSorter.h>
+#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
@@ -36,9 +36,9 @@
 namespace hoot
 {
 
-class ElementSorterTest : public HootTestFixture
+class InMemoryElementSorterTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(ElementSorterTest);
+    CPPUNIT_TEST_SUITE(InMemoryElementSorterTest);
     CPPUNIT_TEST(runTest);
     CPPUNIT_TEST_SUITE_END();
 
@@ -46,10 +46,17 @@ public:
 
   void runTest()
   {
-    OsmMapPtr inputMap(new OsmMap());
-    OsmMapReaderFactory::read(inputMap, "test-files/MultipolygonTest.osm", true);
+    //Since we're processing an unsorted map data file, we'll get some missing ref warnings
+    //from the xml reader before its sorted that we don't care to see.
+    DisableLog dl;
 
-    ElementSorter elementSorter(inputMap);
+    OsmMapPtr inputMap(new OsmMap());
+    OsmMapReaderFactory::read(
+      inputMap,
+      "test-files/algorithms/changeset/ExternalMergeElementSorterTest.osm",
+      true);
+
+    InMemoryElementSorter elementSorter(inputMap);
 
     int index = 0;
     while (elementSorter.hasMoreElements())
@@ -76,7 +83,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementSorterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(InMemoryElementSorterTest, "quick");
 
 }
 

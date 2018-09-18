@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMCHANGEWRITERFACTORY_H
 #define OSMCHANGEWRITERFACTORY_H
@@ -45,6 +45,8 @@ public:
 
   boost::shared_ptr<OsmChangeWriter> createWriter(
     QString url, QString elementPayloadFormat = "json");
+
+  bool isSupported(const QString output);
 
   static OsmChangeWriterFactory& getInstance();
 

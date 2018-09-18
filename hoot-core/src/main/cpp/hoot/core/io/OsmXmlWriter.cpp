@@ -477,7 +477,7 @@ void OsmXmlWriter::_writeBounds(const Envelope& bounds)
 
 void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 {
-  //LOG_VART(n);
+  LOG_TRACE("Writing " << n->getElementId() << "...");
 
   _writer->writeStartElement("node");
 
@@ -498,7 +498,7 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
 {
-  //LOG_VART(w);
+  LOG_TRACE("Writing " << w->getElementId() << "...");
 
   _writer->writeStartElement("way");
   _writer->writeAttribute("visible", "true");
@@ -591,7 +591,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
 void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 {
-  //LOG_VART(w);
+  LOG_TRACE("Writing " << w->getElementId() << "...");
 
   if (_includePointInWays)
   {
@@ -618,7 +618,7 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 
 void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 {
-  //LOG_VART(r);
+  LOG_TRACE("Writing " << r->getElementId() << "...");
 
   _writer->writeStartElement("relation");
   _writer->writeAttribute("visible", "true");

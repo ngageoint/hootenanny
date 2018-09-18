@@ -67,14 +67,6 @@ private:
   int _featureReadLimit;
   QStringList _convertOps;
 
-  /*
-   * Return true if all the specified operations are valid streaming operations.
-   *
-   * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
-   * nodes). These operations are not applicable for streaming.
-   */
-  bool _areValidStreamingOps(const QStringList ops);
-
   void _validateInput(const QStringList inputs, const QString output);
 
   void _convertToOgr(const QString input, const QString output);
