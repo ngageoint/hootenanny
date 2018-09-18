@@ -454,6 +454,7 @@ void OsmJsonReader::_readFromHttp()
   }
   bool split = false;
   int numSplits = 1;
+  vector<thread> threads;
   //  Check if there is a bounding box
   if (_url.hasQueryItem("bbox") && _runParallel)
   {
@@ -472,6 +473,14 @@ void OsmJsonReader::_readFromHttp()
     //  Create envelopes for splitting the request
     if (lon_div != 1 || lat_div != 1)
     {
+      //  Only spin up enough threads for the work up to the max
+      int max_threads = _threadCount;
+      if (numSplits < max_threads)
+        max_threads = numSplits;
+      //  Fire up the worker threads
+      _bboxContinue = true;
+      for (int i = 0; i < _threadCount; ++i)
+        threads.push_back(thread(&OsmJsonReader::_doHttpRequestFunc, this));
       split = true;
       //  Setup the envelopes to query in a grid
       for (int i = 0; i < lon_div; ++i)
@@ -495,15 +504,6 @@ void OsmJsonReader::_readFromHttp()
   }
   if (split)
   {
-    //  Only spin up enough threads for the work up to the max
-    int max_threads = _threadCount;
-    if (numSplits < max_threads)
-      max_threads = numSplits;
-    //  Fire up the worker threads
-    vector<thread> threads;
-    _bboxContinue = true;
-    for (int i = 0; i < _threadCount; ++i)
-      threads.push_back(thread(&OsmJsonReader::_doHttpRequestFunc, this));
     //  Wait on the work to be completed
     _bboxContinue = false;
     for (size_t i = 0; i < threads.size(); ++i)
