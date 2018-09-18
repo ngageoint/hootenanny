@@ -481,7 +481,10 @@ bool OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, cons
     QUrl change = _url;
     change.setPath(API_PATH_UPLOAD_CHANGESET.arg(id));
 
-    request->networkRequest(change, QNetworkAccessManager::Operation::PostOperation, changeset.toUtf8());
+    QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
+    headers[QNetworkRequest::ContentTypeHeader] = "text/xml";
+
+    request->networkRequest(change, headers, QNetworkAccessManager::Operation::PostOperation, changeset.toUtf8());
 
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
 

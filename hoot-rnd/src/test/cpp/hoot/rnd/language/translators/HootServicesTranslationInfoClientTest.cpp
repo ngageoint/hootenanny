@@ -35,9 +35,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/language/translators/HootServicesTranslationInfoClient.h>
 
-// Qt
-#include <QNetworkRequest>
-
 // Std
 #include <sstream>
 
@@ -47,27 +44,18 @@ namespace hoot
 class HootServicesTranslationInfoClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesTranslationInfoClientTest);
-  CPPUNIT_TEST(runBuildRequestTest);
+  CPPUNIT_TEST(runRequestDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runBuildRequestTest()
+  void runRequestDataTest()
   {
     HootServicesTranslationInfoClient uut;
 
-    std::stringstream requestStrStrm;
-    boost::shared_ptr<QNetworkRequest> request =
-      uut._getAvailableLanguagesRequest(
-        "http://localhost/test", QStringList("TikaLanguageDetector"), requestStrStrm);
-
-    HOOT_STR_EQUALS("http://localhost/test", request->url().toString());
-    HOOT_STR_EQUALS(
-      "application/json", request->header(QNetworkRequest::ContentTypeHeader).toString());
-    //see comment in StringUtilsTest::jsonParseTest about the formatting of the expected string
     HOOT_STR_EQUALS(
       "{ \"apps\": [ \"TikaLanguageDetector\" ] }",
-      QString::fromStdString(requestStrStrm.str()).simplified());
+      uut._getAvailableLanguagesRequestData(QStringList("TikaLanguageDetector")).simplified());
   }
 };
 

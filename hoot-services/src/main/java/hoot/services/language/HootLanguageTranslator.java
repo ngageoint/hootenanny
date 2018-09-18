@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
+import java.lang.CloneNotSupportedException;
+
 import hoot.services.controllers.language.LanguageTranslateRequest;
 
 import org.slf4j.Logger;
@@ -127,7 +129,7 @@ public class HootLanguageTranslator implements ToEnglishTranslator, LanguageDete
   /**
    * @see SupportedLanguageConsumer
    */
-  public SupportedLanguage[] getSupportedLanguages()
+  public SupportedLanguage[] getSupportedLanguages() throws CloneNotSupportedException
   {
     return ((SupportedLanguageConsumer)translator).getSupportedLanguages();
   }

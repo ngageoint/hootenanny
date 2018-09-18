@@ -27,6 +27,8 @@
 
 package hoot.services.language;
 
+import java.lang.CloneNotSupportedException;
+
 /**
  * Information about a language supported by a language app
  */
@@ -50,4 +52,35 @@ public final class SupportedLanguage
 
   public boolean getAvailable() { return available; }
   public void setAvailable(boolean available) { this.available = available; }
+
+  @Override
+  public Object clone()
+  {
+    SupportedLanguage lang = new SupportedLanguage();
+    lang.setIso6391Code(this.getIso6391Code());
+    lang.setIso6392Code(this.getIso6392Code());
+    lang.setName(this.getName());
+    lang.setAvailable(this.getAvailable());
+    return lang;
+  }
+
+  /**
+     Clones an array of SupportedLanguages
+
+     Calling Object::clone on SupportedLanguage[] isn't good enough b/c a java clone of an array 
+     is a new array with refs to the same objects.  LanguageResource expects the SupportedLanguage
+     array members to be deep copies.
+
+     @param supportedLanguages SupportedLanguage array to clone
+   */
+  public static SupportedLanguage[] cloneArray(SupportedLanguage[] supportedLanguages) 
+    throws CloneNotSupportedException
+  {
+    SupportedLanguage[] supportedLangsToReturn = new SupportedLanguage[supportedLanguages.length];
+    for (int i = 0; i < supportedLanguages.length; i++)
+    {
+      supportedLangsToReturn[i] = (SupportedLanguage)supportedLanguages[i].clone();
+    }
+    return supportedLangsToReturn;
+  }
 }
