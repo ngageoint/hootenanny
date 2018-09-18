@@ -27,7 +27,7 @@
 #include "PoiPolygonAddressScoreExtractor.h"
 
 // hoot
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
@@ -176,7 +176,7 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tag
   if (!addressTagValAltFormatRaw.isEmpty())
   {
     addressTagValAltFormatRaw =
-      Translator::getInstance().toEnglish(addressTagValAltFormatRaw).toLower();
+      DictionaryTranslator::getInstance().toEnglish(addressTagValAltFormatRaw).toLower();
     addressTagValAltFormatRaw = addressTagValAltFormatRaw.replace(ESZETT, ESZETT_REPLACE);
     const QStringList addressParts = addressTagValAltFormatRaw.split(QRegExp("\\s"));
     if (addressParts.length() >= 2)
@@ -331,7 +331,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
   QString street = tags.get(STREET_TAG_NAME).trimmed();
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
-    street = Translator::getInstance().toEnglish(street).toLower();
+    street = DictionaryTranslator::getInstance().toEnglish(street).toLower();
     QString combinedAddress;
     houseNum = houseNum.replace(QRegExp("[a-z]+"), "");
     //hack - I thought this would have been eliminated by using the translated name comparison
@@ -352,7 +352,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
   QString addressTagVal = tags.get(FULL_ADDRESS_TAG_NAME).trimmed();
   if (!addressTagVal.isEmpty())
   {
-    addressTagVal = Translator::getInstance().toEnglish(addressTagVal).toLower();
+    addressTagVal = DictionaryTranslator::getInstance().toEnglish(addressTagVal).toLower();
     addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
     addresses.insert(addressTagVal);
   }

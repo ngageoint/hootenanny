@@ -1,0 +1,15 @@
+{
+    "translator": "HootLanguageTranslator",
+    "text": "text%20to%20translate",
+    "detectedLanguageOverridesSpecifiedSourceLanguages": "false",
+    "performExhaustiveTranslationSearchWithNoDetection": "true",
+    "detectors":
+    [
+        "TikaLanguageDetector"
+    ],
+    "sourceLangCodes":
+    [
+        "de",
+        "es"
+    ]
+}

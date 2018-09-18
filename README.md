@@ -88,6 +88,7 @@ available Hootenanny commands, type 'hoot'.  More detail is provided [here](http
 * Additional OGR supported formats
 
 **Hootenanny can export changesets to:** 
+* OpenStreetMap API Web Service
 * OpenStreetMap XML changeset file (.osc) (M)
 * OpenStreetMap SQL changeset file (.osc.sql) (M)
 
@@ -112,6 +113,9 @@ found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
 # Data Cleaning
 Hootenanny supports a variety of geometric and tag based data cleaning operations.  Hootenanny can also add missing tags to POI data 
 implicitly based on a feature's name.  See the documentation for more details.
+
+# Language Translation
+Hootenanny supports translating tags to the English language.  See the User Guide for more information.
 
 # Contributing
 Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny 

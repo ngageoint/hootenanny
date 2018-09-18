@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -320,11 +320,11 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
 
   for (int i = 0; i < n1.size(); i++)
   {
-    n1[i] = Translator::getInstance().translateStreet(n1[i]);
+    n1[i] = DictionaryTranslator::getInstance().translateStreet(n1[i]);
   }
   for (int i = 0; i < n2.size(); i++)
   {
-    n2[i] = Translator::getInstance().translateStreet(n2[i]);
+    n2[i] = DictionaryTranslator::getInstance().translateStreet(n2[i]);
   }
 
   priority_queue<Entry, deque<Entry>, Entry> heap;

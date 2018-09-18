@@ -112,7 +112,9 @@ QString FileUtils::readFully(const QString path)
   {
     QTextStream stream(&file);
     stream.setCodec("UTF-8");
-    return stream.readAll();
+    const QString text = stream.readAll();
+    file.close();
+    return text;
   }
   else
   {

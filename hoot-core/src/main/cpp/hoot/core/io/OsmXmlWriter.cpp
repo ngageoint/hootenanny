@@ -298,12 +298,14 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    const QString key = it.key();
-    const QString val = it.value().trimmed();
+    QString key = it.key();
+    QString val = it.value().trimmed();
     if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", removeInvalidCharacters(key));
+      key = removeInvalidCharacters(key);
+      LOG_VART(key);
+      _writer->writeAttribute("k", key);
       if (key == MetadataTags::HootStatus() &&
           //status check here only for nodes/ways; should relation have this check too?
           (type == ElementType::Relation ||
@@ -320,7 +322,9 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
       }
       else
       {
-        _writer->writeAttribute("v", removeInvalidCharacters(val));
+        val = removeInvalidCharacters(val);
+        LOG_VART(val);
+        _writer->writeAttribute("v", val);
       }
       _writer->writeEndElement();
     }
