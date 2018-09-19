@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbSqlStatementFormatter.h"
 
@@ -256,7 +256,7 @@ QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long
   const QString memberType = member.getElementId().getType().toString();
   const QString memberSequenceIndexStr(QString::number(memberSequenceIndex));
   QString memberRole = escapeCopyToData(member.getRole());
-  //handle empty data
+  //handle empty data; this is needed for pg_bulkload
   if (memberRole.trimmed().isEmpty())
   {
     memberRole = "<no role>";

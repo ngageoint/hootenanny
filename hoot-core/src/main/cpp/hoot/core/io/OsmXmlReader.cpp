@@ -69,7 +69,8 @@ _useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
-_preserveAllTags(ConfigOptions().getReaderPreserveAllTags())
+_preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
+_addChildRefsWhenMissing(false)
 {
 }
 
@@ -86,6 +87,17 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
   {
     _element->setTag(MetadataTags::SourceDateTime(), attributes.value("timestamp"));
   }
+}
+
+QString OsmXmlReader::_decodeData(QString text)
+{
+  return
+    text
+      .replace("&amp;", "&")
+      .replace("&quot;", "\"")
+      .replace("&#10;", "\n")
+      .replace("&gt;", ">")
+      .replace("&lt;", "<");
 }
 
 void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
@@ -248,9 +260,9 @@ bool OsmXmlReader::isSupported(QString url)
   const QString checkString( url.toLower() );
 
   // support compressed osm files
-  for ( int i = 0; i < numExtensions; ++ i )
+  for (int i = 0; i < numExtensions; ++i)
   {
-    if ( checkString.endsWith(validExtensions[i]) == true )
+    if (checkString.endsWith(validExtensions[i]) == true)
     {
       return true;
     }
@@ -448,52 +460,68 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
     else if (qName == QLatin1String("nd") && _element)
     {
       long ref = _parseLong(attributes.value("ref"));
+      const bool nodePresent = _nodeIdMap.contains(ref);
 
-      if (_nodeIdMap.contains(ref) == false)
+      if (!nodePresent)
       {
-        _missingNodeCount++;
-        if (logWarnCount < Log::getWarnMessageLimit())
+        if (_addChildRefsWhenMissing)
         {
-          LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
+          WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
+          w->addNode(ref);
         }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
-      }
-      else
-      {
-        long newRef = _nodeIdMap.value(ref);
-        //LOG_TRACE("Adding way node: " << newRef << "...");
-
-        WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
-
-        w->addNode(newRef);
-      }
-    }
-    else if (qName == QLatin1String("member") && _element)
-    {
-      long ref = _parseLong(attributes.value("ref"));
-      QString type = attributes.value("type");
-      QString role = attributes.value("role");
-
-      RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
-
-      if (type == QLatin1String("node"))
-      {
-        if (_nodeIdMap.contains(ref) == false)
+        else
         {
           _missingNodeCount++;
           if (logWarnCount < Log::getWarnMessageLimit())
           {
-            LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
+            LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
           logWarnCount++;
+        }
+      }
+      else
+      {
+        long newRef = _nodeIdMap.value(ref);
+        //LOG_TRACE("Adding way node: " << newRef << "...");
+        WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
+        w->addNode(newRef);
+      }
+    }
+    else if (qName == QLatin1String("member") && _element)
+    {
+      long ref = _parseLong(attributes.value("ref"));
+      QString type = _decodeData(attributes.value("type"));
+      QString role = _decodeData(attributes.value("role"));
+
+      RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
+
+      if (type == QLatin1String("node"))
+      {
+        const bool nodePresent = _nodeIdMap.contains(ref);
+
+        if (!nodePresent)
+        {
+          if (_addChildRefsWhenMissing)
+          {
+            r->addElement(role, ElementType::Node, ref);
+          }
+          else
+          {
+            _missingNodeCount++;
+            if (logWarnCount < Log::getWarnMessageLimit())
+            {
+              LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
+            }
+            else if (logWarnCount == Log::getWarnMessageLimit())
+            {
+              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            }
+            logWarnCount++;
+          }
         }
         else
         {
@@ -504,18 +532,27 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       }
       else if (type == QLatin1String("way"))
       {
-        if (_wayIdMap.contains(ref) == false)
+        const bool wayPresent = _wayIdMap.contains(ref);
+
+        if (!wayPresent)
         {
-          _missingWayCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
+          if (_addChildRefsWhenMissing)
           {
-            LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
+            r->addElement(role, ElementType::Way, ref);
           }
-          else if (logWarnCount == Log::getWarnMessageLimit())
+          else
           {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            _missingWayCount++;
+            if (logWarnCount < Log::getWarnMessageLimit())
+            {
+              LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
+            }
+            else if (logWarnCount == Log::getWarnMessageLimit())
+            {
+              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            }
+            logWarnCount++;
           }
-          logWarnCount++;
         }
         else
         {
@@ -547,8 +584,8 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
     }
     else if (qName == QLatin1String("tag") && _element)
     {
-      const QString& key = _saveMemory(attributes.value("k").trimmed());
-      const QString& value = _saveMemory(attributes.value("v").trimmed());
+      const QString& key = _saveMemory(_decodeData(attributes.value("k").trimmed()));
+      const QString& value = _saveMemory(_decodeData(attributes.value("v").trimmed()));
       //LOG_VART(key);
       //LOG_VART(value);
       if (!key.isEmpty() && !value.isEmpty())
@@ -881,8 +918,7 @@ ElementPtr OsmXmlReader::readNextElement()
   assert(_foundOsmElementXmlEndElement());
 
   //we're parsed the entire node/way/relation, so return it
-  //LOG_TRACE("Parsing end xml element: " << _streamReader.name().toString());
-  LOG_VART(_element);
+  LOG_TRACE("Read " << _element->getElementId());
   return _element;
 }
 

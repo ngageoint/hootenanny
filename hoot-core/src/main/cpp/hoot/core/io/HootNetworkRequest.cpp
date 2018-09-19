@@ -32,7 +32,6 @@
 
 //  Qt
 #include <QEventLoop>
-#include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QSslConfiguration>
 #include <QtNetwork/QSslSocket>
 
@@ -43,7 +42,23 @@ HootNetworkRequest::HootNetworkRequest()
 {
 }
 
-bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op, const QByteArray& data)
+bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op,
+                                        const QByteArray& data)
+{
+  return _networkRequest(url, QMap<QNetworkRequest::KnownHeaders, QVariant>(), http_op, data);
+}
+
+bool HootNetworkRequest::networkRequest(QUrl url,
+                                        const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+                                        QNetworkAccessManager::Operation http_op,
+                                        const QByteArray& data)
+{
+  return _networkRequest(url, headers, http_op, data);
+}
+
+bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+                                         QNetworkAccessManager::Operation http_op,
+                                         const QByteArray& data)
 {
   //  Reset status
   _status = 0;
@@ -52,6 +67,11 @@ bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operati
   //  Do HTTP request
   boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
   QNetworkRequest request(url);
+
+  for (QMap<QNetworkRequest::KnownHeaders, QVariant>::const_iterator it = headers.begin(); it != headers.end(); ++it)
+  {
+    request.setHeader(it.key(), it.value());
+  }
 
   if (url.scheme().toLower() == "https")
   {
@@ -81,7 +101,6 @@ bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operati
     reply = pNAM->put(request, data);
     break;
   case QNetworkAccessManager::Operation::PostOperation:
-    request.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "text/xml");
     reply = pNAM->post(request, data);
     break;
   default:

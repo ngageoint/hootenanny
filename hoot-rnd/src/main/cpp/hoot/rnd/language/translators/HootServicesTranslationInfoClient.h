@@ -33,7 +33,6 @@
 
 // Qt
 #include <QStringList>
-#include <QNetworkAccessManager>
 
 namespace hoot
 {
@@ -78,11 +77,7 @@ private:
   QString _detectorsUrl;
   QString _translatorsUrl;
 
-  boost::shared_ptr<QNetworkAccessManager> _client;
-
-  boost::shared_ptr<QNetworkRequest> _getAvailableLanguagesRequest(const QString urlStr,
-                                                                   const QStringList apps,
-                                                                   std::stringstream& requestStrStrm);
+  QString _getAvailableLanguagesRequestData(const QStringList apps);
 };
 
 }

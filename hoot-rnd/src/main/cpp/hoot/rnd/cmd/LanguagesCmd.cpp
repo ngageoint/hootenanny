@@ -104,7 +104,7 @@ public:
         HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(
           type, _client.getAvailableApps(type));
     }
-    std::cout << displayStr;
+    std::cout << displayStr << std::endl;
 
     return 0;
   }

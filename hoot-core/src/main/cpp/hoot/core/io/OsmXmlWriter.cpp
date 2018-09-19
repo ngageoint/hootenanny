@@ -70,7 +70,8 @@ OsmXmlWriter::OsmXmlWriter()
     _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
     _precision(ConfigOptions().getWriterPrecision()),
     _encodingErrorCount(0),
-    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
+    _encodeData(true)
 {
 }
 
@@ -119,6 +120,21 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
   return result;
 }
 
+QString OsmXmlWriter::encodeData(QString text)
+{
+  if (_encodeData)
+  {
+    return
+      text
+        .replace("&", "&amp;")
+        .replace("\"", "&quot;")
+        .replace("\n", "&#10;")
+        .replace(">", "&gt;")
+        .replace("<", "&lt;");
+  }
+  return text;
+}
+
 void OsmXmlWriter::open(QString url)
 {
   QFile* f = new QFile();
@@ -153,10 +169,12 @@ void OsmXmlWriter::setIncludeCompatibilityTags(bool includeCompatibility)
   _includeCompatibilityTags = includeCompatibility;
 }
 
-QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
+QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml,
+                               const bool encodeData)
 {
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
+  writer.setEncodeData(encodeData);
   // this will be deleted by the _fp boost::shared_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
@@ -304,6 +322,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     {
       _writer->writeStartElement("tag");
       key = removeInvalidCharacters(key);
+      key = encodeData(key);
       LOG_VART(key);
       _writer->writeAttribute("k", key);
       if (key == MetadataTags::HootStatus() &&
@@ -323,6 +342,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
       else
       {
         val = removeInvalidCharacters(val);
+        val = encodeData(val);
         LOG_VART(val);
         _writer->writeAttribute("v", val);
       }
@@ -337,7 +357,8 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     {
       _writer->writeStartElement("tag");
       _writer->writeAttribute("k", "type");
-      _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
+      const QString type = removeInvalidCharacters(relation->getType());
+      _writer->writeAttribute("v", encodeData(type));
       _writer->writeEndElement();
     }
   }
@@ -477,7 +498,7 @@ void OsmXmlWriter::_writeBounds(const Envelope& bounds)
 
 void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 {
-  //LOG_VART(n);
+  LOG_TRACE("Writing " << n->getElementId() << "...");
 
   _writer->writeStartElement("node");
 
@@ -498,7 +519,7 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
 {
-  //LOG_VART(w);
+  LOG_TRACE("Writing " << w->getElementId() << "...");
 
   _writer->writeStartElement("way");
   _writer->writeAttribute("visible", "true");
@@ -524,12 +545,13 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
-    const QString key = tit.key();
-    const QString val = tit.value().trimmed();
+    QString key = tit.key();
+    QString val = tit.value().trimmed();
     if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", removeInvalidCharacters(key));
+      key = removeInvalidCharacters(key);
+      _writer->writeAttribute("k", encodeData(key));
 
       if (key == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
       {
@@ -544,7 +566,8 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
       }
       else
       {
-        _writer->writeAttribute("v", removeInvalidCharacters(val));
+        val = removeInvalidCharacters(val);
+        _writer->writeAttribute("v", encodeData(val));
       }
       _writer->writeEndElement();
     }
@@ -591,7 +614,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
 void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 {
-  //LOG_VART(w);
+  LOG_TRACE("Writing " << w->getElementId() << "...");
 
   if (_includePointInWays)
   {
@@ -618,7 +641,7 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 
 void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 {
-  //LOG_VART(r);
+  LOG_TRACE("Writing " << r->getElementId() << "...");
 
   _writer->writeStartElement("relation");
   _writer->writeAttribute("visible", "true");
@@ -633,7 +656,8 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
     _writer->writeStartElement("member");
     _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
     _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-    _writer->writeAttribute("role", removeInvalidCharacters(e.role));
+    const QString role = removeInvalidCharacters(e.role);
+    _writer->writeAttribute("role", encodeData(role));
     _writer->writeEndElement();
   }
 
