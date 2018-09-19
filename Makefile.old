@@ -314,6 +314,7 @@ ifeq ($(BUILD_UI_TESTS),uitests)
 endif
 
 ui2x-build:
+	cd hoot-ui-2x
 	npm i
 	npm run production
 
