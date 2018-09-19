@@ -116,8 +116,6 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  static QString toEnglish(const QString& s);
-
   QString toString() const { return QString("Levenshtein %1").arg(_alpha); }
 
 private:

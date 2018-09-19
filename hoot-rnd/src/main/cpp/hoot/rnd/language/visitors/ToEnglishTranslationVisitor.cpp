@@ -33,6 +33,10 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
+#include <hoot/core/language/translators/ToEnglishTranslatorFactory.h>
+
+// std
+#include <typeinfo>
 
 namespace hoot
 {
@@ -40,6 +44,9 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationVisitor)
 
 ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
+//_translatorClient(
+//  ToEnglishTranslatorFactory::getInstance().create(
+//    ConfigOptions().getLanguageTranslationTranslator())),
 _skipPreTranslatedTags(false),
 _numTotalElements(0),
 _skipWordsInEnglishDict(true),
@@ -73,15 +80,22 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _translatorClient.reset(
-    Factory::getInstance().constructObject<ToEnglishTranslator>(
-      opts.getLanguageTranslationTranslator()));
-  boost::shared_ptr<QObject> qObj = boost::dynamic_pointer_cast<QObject>(_translatorClient);
-  if (qObj.get())
-  {
-    LOG_DEBUG("Setting parent on translator client...");
-    qObj->setParent(this);
-  }
+  //_translatorClient.reset(
+    //Factory::getInstance().constructObject<ToEnglishTranslator>(
+      //opts.getLanguageTranslationTranslator()));
+  _translatorClient =
+    ToEnglishTranslatorFactory::getInstance().create(
+      opts.getLanguageTranslationTranslator());
+//  try
+//  {
+//     LOG_VARD(_translatorClient.className());
+//     Configurable& configurable = dynamic_cast<Configurable&>(_translatorClient);
+//     configurable.setConfiguration(conf);
+//  }
+//  catch (const std::bad_cast& e)
+//  {
+//    LOG_ERROR("bad cast: " << e.what());
+//  }
   _translatorClient->setConfiguration(conf);
   _translatorClient->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
 
@@ -156,31 +170,21 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     }
   }
 
-  _translatorClient->translate(_toTranslateVal);
-
-  _numProcessedElements++;
-  if (_numProcessedElements % 10 == 0)
-  {
-    PROGRESS_DEBUG("Processed " << _numProcessedElements << " elements.");
-  }
-}
-
-void ToEnglishTranslationVisitor::translationComplete()
-{
-  const QString translatedVal = _translatorClient->getTranslatedText().trimmed();
-  LOG_VART(translatedVal);
+  _translatedText = _translatorClient->translate(_toTranslateVal).trimmed();
+  LOG_VART(_translatedText);
   if (_translatorClient->detectionMade())
   {
     _numDetectionsMade++;
   }
-  const int strComparison = translatedVal.compare(_toTranslateVal, Qt::CaseInsensitive);
+  const int strComparison = _translatedText.compare(_toTranslateVal, Qt::CaseInsensitive);
   LOG_VART(strComparison);
   //If the translator merely returned the same string we passed in as the translated text, then
   //no point in using it.
   if (strComparison != 0)
   {
-    LOG_DEBUG("Translated: " << _toTranslateVal << " to: " << translatedVal);
-    _element->getTags().appendValue("hoot:translated:" + _toTranslateTagKey + ":en", translatedVal);
+    LOG_DEBUG("Translated: " << _toTranslateVal << " to: " << _translatedText);
+    _element->getTags()
+      .appendValue("hoot:translated:" + _toTranslateTagKey + ":en", _translatedText);
     _numTagTranslationsMade++;
     if (_numTagTranslationsMade % 10 == 0)
     {
@@ -192,13 +196,15 @@ void ToEnglishTranslationVisitor::translationComplete()
   {
     LOG_DEBUG(
       "Translator returned translation with same value as text passed in.  Discarding " <<
-      "translation; text: " << translatedVal);
+      "translation; text: " << _translatedText);
+    _translatedText = "";
   }
-}
 
-void ToEnglishTranslationVisitor::translationError(QString textSent, QString message)
-{
-  LOG_ERROR("Error occurred during translation.  error: " + message + "; text sent: " + textSent);
+  _numProcessedElements++;
+  if (_numProcessedElements % 10 == 0)
+  {
+    PROGRESS_DEBUG("Processed " << _numProcessedElements << " elements.");
+  }
 }
 
 }

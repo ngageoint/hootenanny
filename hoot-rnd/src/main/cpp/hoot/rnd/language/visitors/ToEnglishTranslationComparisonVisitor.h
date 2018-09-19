@@ -55,13 +55,6 @@ public:
   virtual QString getDescription() const
   { return "Scores selected tag value English translations against known translated tags"; }
 
-public slots:
-
-  /**
-   * Performs post translation tasks
-   */
-  virtual void translationComplete();
-
 private:
 
   //scores the similarity of the pre-translated and translated texts

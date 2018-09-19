@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/rnd/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
 
 namespace hoot
 {
@@ -39,11 +39,8 @@ namespace hoot
 /**
  * Translates selected tag values to English
  */
-class ToEnglishTranslationVisitor : public QObject, public ElementOsmMapVisitor,
-   public Configurable
+class ToEnglishTranslationVisitor : public ElementOsmMapVisitor, public Configurable
 {
-
-  Q_OBJECT
 
 public:
 
@@ -59,21 +56,6 @@ public:
   virtual QString getDescription() const
   { return "Translates selected tag values to English"; }
 
-public slots:
-
-  /**
-   * Performs post translation tasks
-   */
-  virtual void translationComplete();
-
-  /**
-   * Handles an error thrown by the translator
-   *
-   * @param textSent text sent for translation
-   * @param message error message
-   */
-  virtual void translationError(QString textSent, QString message);
-
 protected:
 
   boost::shared_ptr<ToEnglishTranslator> _translatorClient;
@@ -85,6 +67,8 @@ protected:
   bool _skipPreTranslatedTags;
 
   long _numTotalElements;
+
+  QString _translatedText;
 
   /**
    * Translates a tag for an element

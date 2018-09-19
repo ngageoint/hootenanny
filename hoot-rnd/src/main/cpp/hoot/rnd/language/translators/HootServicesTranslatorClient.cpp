@@ -71,20 +71,6 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
   _detectors = opts.getLanguageTranslationHootServicesDetectors();
   _translationUrl = opts.getLanguageTranslationHootServicesTranslationEndpoint();
 
-  //allowing null here is primarily for testing purposes; a null parent will cause runtime errors
-  //outside of tests anyway
-  if (parent() != NULL)
-  {
-    connect(this, SIGNAL(translationComplete()), parent(), SLOT(translationComplete()));
-    connect(
-      this, SIGNAL(translationError(QString, QString)), parent(),
-      SLOT(translationError(QString, QString)));
-  }
-  else
-  {
-    LOG_DEBUG("HootServicesTranslatorClient parent null.")
-  }
-
   _infoClient.reset(
     Factory::getInstance().constructObject<TranslationInfoProvider>(
       opts.getLanguageTranslationInfoProvider()));
@@ -115,20 +101,9 @@ void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCode
 
 void HootServicesTranslatorClient::_checkLangsAvailable(const QString type)
 {
-  //request the supported langs info from the service
-  boost::shared_ptr<boost::property_tree::ptree> replyObj;
-  try
-  {
-    replyObj = _infoClient->getAvailableLanguages(type);
-  }
-  catch (const HootException& e)
-  {
-    emit translationError("Supported languages request error", e.getWhat());
-    return;
-  }
-
-  //check the supported langs against our specified langs
-  _validateAvailableLangs(replyObj, type);
+  //request the supported langs info from the service and check the supported langs against our
+  //specified source langs
+  _validateAvailableLangs(_infoClient->getAvailableLanguages(type), type);
 }
 
 void HootServicesTranslatorClient::_validateAvailableLangs(
@@ -227,11 +202,9 @@ void HootServicesTranslatorClient::_parseTranslateResponse(
       replyObj->get<bool>("detectedLangAvailableForTranslation");
     LOG_VART(_detectedLangAvailableForTranslation);
   }
-
-  emit translationComplete();
 }
 
-void HootServicesTranslatorClient::translate(const QString textToTranslate)
+QString HootServicesTranslatorClient::translate(const QString textToTranslate)
 {
   if (_sourceLangs.size() == 0)
   {
@@ -254,12 +227,14 @@ void HootServicesTranslatorClient::translate(const QString textToTranslate)
   //check for a response error
   if (request.getHttpStatus() != 200)
   {
-    emit translationError(textToTranslate, request.getErrorString());
-    return;
+    throw HootException(
+      "Error translating text: " + textToTranslate + ". error: " + request.getErrorString());
   }
 
   //parse the response data
   _parseTranslateResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()));
+
+  return _translatedText;
 }
 
 }

@@ -77,10 +77,4 @@ void LevenshteinDistance::setConfiguration(const Settings& conf)
   setAlpha(ConfigOptions(conf).getLevenshteinDistanceAlpha());
 }
 
-QString LevenshteinDistance::toEnglish(const QString& s)
-{
-  QString result = DictionaryTranslator::getInstance().toEnglish(s);
-  return result;
-}
-
 }

@@ -109,6 +109,7 @@ private:
     boost::shared_ptr<HootServicesTranslatorClient> client(new HootServicesTranslatorMockClient());
 
     Settings conf;
+    conf.set("language.translation.translator", "hoot::HootServicesTranslatorClient");
     conf.set("language.translation.hoot.services.translation.endpoint", "http://localhost/test");
     conf.set("language.translation.hoot.services.translator", "HootLanguageTranslator");
     conf.set("language.translation.hoot.services.detectors", QStringList("TikaLanguageDetector"));

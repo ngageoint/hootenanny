@@ -131,7 +131,6 @@ private:
   QHash<long, long> _relationIdMap;
   QHash<long, long> _wayIdMap;
 
-  hoot::Tags _tags;
   QString _errorString;
   OsmMapPtr _map;
   boost::shared_ptr<Element> _element;

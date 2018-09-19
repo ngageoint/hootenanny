@@ -1347,7 +1347,7 @@ ISO-639-1 language codes for the source languages for to English translation
 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).  Also, you can specify a single list item,
 "detect", to attempt to auto-detect the appropriate source language before translation.  Specifying
 multiple source languages can have a large impact on translation performance due to language
-detection cost.   Separate list items with a ';' and surround in quotes when passing them in from
+detection cost.  Separate list items with a ';' and surround in quotes when passing them in from
 the command line.
 
 === language.translation.to.translate.tag.keys
@@ -1364,9 +1364,13 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 === language.translation.translator
 
 * Data Type: string
-* Default Value: `hoot::HootServicesTranslatorClient`
+* Default Value: `hoot::DictionaryTranslator`
 
-ToEnglishTranslator implementation to use for to English translation
+ToEnglishTranslator implementation to use for to English translation.  hoot::DictionaryTranslator,
+the current default, is a simple lookup table primarily used for translation testing and proof of
+concept.  It is set as the default because other implementations, such as
+hoot::HootServicesTranslatorClient, require custom installation procedures and have lengthy startup
+times. Therefore, they are not available in the default Hootenanny installation.
 
 === language.translation.info.provider
 
@@ -1374,7 +1378,7 @@ ToEnglishTranslator implementation to use for to English translation
 * Default Value: `hoot::HootServicesTranslationInfoClient`
 
 TranslationInfoProvider implementation to use for determining language information needed by to
-English translation
+English translation.  Not all to English translators will make use of this capability.
 
 === levenshtein.distance.alpha
 

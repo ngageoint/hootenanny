@@ -94,7 +94,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
- boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableLanguages(
+boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableLanguages(
   const QString type)
 {
   LOG_DEBUG("Checking languages available for: " << type << "...");

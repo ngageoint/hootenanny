@@ -59,7 +59,7 @@ void HootServicesTranslatorMockClient::setSourceLanguages(const QStringList lang
   _sourceLangs = langCodes;
 }
 
-void HootServicesTranslatorMockClient::translate(const QString textToTranslate)
+QString HootServicesTranslatorMockClient::translate(const QString textToTranslate)
 {
   LOG_VART(textToTranslate);
   if (_sourceLangs.size() == 0)
@@ -81,7 +81,7 @@ void HootServicesTranslatorMockClient::translate(const QString textToTranslate)
   _detectorUsed = "TikaLanguageDetector";
   _detectedLangAvailableForTranslation = true;
 
-  emit translationComplete();
+  return _translatedText;
 }
 
 }

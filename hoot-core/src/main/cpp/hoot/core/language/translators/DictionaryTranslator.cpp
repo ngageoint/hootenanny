@@ -31,6 +31,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 // ICU
 #include <unicode/utypes.h>
@@ -54,6 +55,8 @@ using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ToEnglishTranslator, DictionaryTranslator)
 
 class JsonDictionary
 {
@@ -142,6 +145,11 @@ DictionaryTranslator& DictionaryTranslator::getInstance()
     _theInstance->_streetTypes.insert("road");
   }
   return *_theInstance;
+}
+
+QString DictionaryTranslator::translate(const QString textToTranslate)
+{
+  return toEnglish(textToTranslate);
 }
 
 QString DictionaryTranslator::toEnglish(const QString& input)

@@ -161,7 +161,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   removeRef1Visitor.setRecursive(true);
   _pMap->visitRw(removeRef1Visitor);
 
-
   LOG_INFO("Applying post-diff conflation operations...");
   NamedOp(ConfigOptions().getUnifyPostOps()).apply(_pMap);
 

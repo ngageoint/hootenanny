@@ -39,8 +39,6 @@ namespace hoot
 
 /**
  * Retrieves information from the Hootenanny web translation service about available languages
- *
- * TODO: integrate with HootNetworkRequest (#2606)
  */
 class HootServicesTranslationInfoClient : public TranslationInfoProvider
 {

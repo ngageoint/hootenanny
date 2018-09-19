@@ -65,15 +65,9 @@ public:
    * Translates text to English
    *
    * @param textToTranslate the text to translate
-   */
-  virtual void translate(const QString textToTranslate) = 0;
-
-  /**
-   * Returns text that has been translated to English by translate
-   *
    * @return translated text
    */
-  virtual QString getTranslatedText() const = 0;
+  virtual QString translate(const QString textToTranslate) = 0;
 
   /**
    * Determines if a language detection was made by this translator before translation

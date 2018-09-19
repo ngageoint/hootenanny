@@ -29,7 +29,7 @@
 #define HOOT_SERVICES_TRANSLATOR_CLIENT_H
 
 // hoot
-#include <hoot/rnd/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
 #include <hoot/rnd/language/translators/TranslationInfoProvider.h>
 
 namespace hoot
@@ -38,12 +38,9 @@ namespace hoot
 /**
  * Translates text from a single source language to English using translation/detection
  * technologies integrated into the Hootenanny web services.
- *
- * TODO: integrate with HootNetworkRequest (#2606)
  */
-class HootServicesTranslatorClient : public QObject, public ToEnglishTranslator
+class HootServicesTranslatorClient : public ToEnglishTranslator//, public Configurable
 {
-  Q_OBJECT
 
 public:
 
@@ -53,26 +50,12 @@ public:
 
   virtual QStringList getSourceLanguages() const { return _sourceLangs; }
   virtual void setSourceLanguages(const QStringList langCodes);
-  virtual void translate(const QString textToTranslate);
-  virtual QString getTranslatedText() const { return _translatedText; }
+  virtual QString translate(const QString textToTranslate);
   virtual bool detectionMade() const { return _detectionMade; }
 
   virtual void setConfiguration(const Settings& conf);
 
-signals:
-
-  /**
-   * Fired when the translation service completes a translation
-   */
-  void translationComplete();
-
-  /**
-   * Fired when an error is received from the translation service
-   *
-   * @param textSent text sent for translation
-   * @param message error message
-   */
-  void translationError(QString textSent, QString message);
+  QString getTranslatedText() const { return _translatedText; }
 
 protected:
 

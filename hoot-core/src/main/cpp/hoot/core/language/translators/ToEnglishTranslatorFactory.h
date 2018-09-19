@@ -22,41 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-#ifndef HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
-#define HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
+#ifndef TO_ENGLISH_TRANSLATOR_FACTORY_H
+#define TO_ENGLISH_TRANSLATOR_FACTORY_H
 
 // hoot
-#include <hoot/rnd/language/translators/HootServicesTranslatorClient.h>
-
-// Qt
-#include <QMap>
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 
 namespace hoot
 {
 
 /**
- * This is used to mock the behavior of the translator that makes calls to hoot services.
+ *
  */
-class HootServicesTranslatorMockClient : public HootServicesTranslatorClient
+class ToEnglishTranslatorFactory
 {
 
 public:
 
-  static std::string className() { return "hoot::HootServicesTranslatorMockClient"; }
+  ToEnglishTranslatorFactory();
 
-  HootServicesTranslatorMockClient();
+  boost::shared_ptr<ToEnglishTranslator> create(const QString className);
 
-  virtual QString translate(const QString textToTranslate);
-  virtual void setSourceLanguages(const QStringList langCodes);
+  static ToEnglishTranslatorFactory& getInstance();
 
 private:
 
-  QMap<QString, QString> _mockTranslations;
+  static boost::shared_ptr<ToEnglishTranslatorFactory> _theInstance;
+
+  boost::shared_ptr<DictionaryTranslator> _dictTranslator;
 };
 
 }
 
-#endif // HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
+#endif // TO_ENGLISH_TRANSLATOR_FACTORY_H

@@ -96,6 +96,18 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
       LOG_VARD(_preTranslatedVal);
 
       ToEnglishTranslationVisitor::_translate(e, toTranslateTagKey);
+      LOG_VARD(_translatedText);
+      if (!_translatedText.isEmpty())
+      {
+        Tags& elementTags = _element->getTags();
+        //elementTags.appendValue("hoot:translated:" + _toTranslateTagKey + ":en", _translatedText);
+        const double similarityScore =
+          _translationScorer->compare(_preTranslatedVal, _translatedText);
+        LOG_VARD(similarityScore);
+        elementTags.appendValue(
+          "hoot:translated:similarity:score:" + _toTranslateTagKey + ":en",
+          QString::number(similarityScore));
+      }
     }
   }
 
@@ -104,19 +116,6 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
   {
     LOG_VARD(_numTotalElements);
   }
-}
-
-void ToEnglishTranslationComparisonVisitor::translationComplete()
-{
-  const QString translatedVal = _translatorClient->getTranslatedText();
-  LOG_VARD(translatedVal);
-  Tags& tags = _element->getTags();
-  tags.appendValue("hoot:translated:" + _toTranslateTagKey + ":en", translatedVal);
-  const double similarityScore = _translationScorer->compare(_preTranslatedVal, translatedVal);
-  LOG_VARD(similarityScore);
-  tags.appendValue(
-    "hoot:translated:similarity:score:" + _toTranslateTagKey + ":en",
-    QString::number(similarityScore));
 }
 
 }
