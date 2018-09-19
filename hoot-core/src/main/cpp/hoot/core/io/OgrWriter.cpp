@@ -368,6 +368,9 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
   } // End layer does not exist
 }
 
+// If we upgrade to GDAL 2.3, we could lookup layer by name, instead of
+// iterating through all of them. Of course, layerCount should always be pretty
+// small... like < 100?
 OGRLayer* OgrWriter::_getLayerByName(const QString& layerName)
 {
   // Check if the layer exists in the output.
@@ -391,22 +394,17 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
 {
   if (!_layers.contains(layerName))
   {
-    bool found = false;
-    for (size_t i = 0; i < _schema->getLayerCount(); ++i)
-    {
-      if (_schema->getLayer(i)->getName() == layerName)
-      {
-        _createLayer(_schema->getLayer(i));
-        found = true;
-      }
-    }
-
-    if (!found)
+    if (!_schema->hasLayer(layerName))
     {
       strictError("Layer specified is not part of the schema. (" + layerName + ")");
       return 0;
     }
+    else
+    {
+      _createLayer(_schema->getLayer(layerName));
+    }
   }
+
   return _layers[layerName];
 }
 
@@ -419,7 +417,7 @@ bool OgrWriter::isSupported(QString url)
   return OgrUtilities::getInstance().isReasonableUrl(url);
 }
 
-void OgrWriter::open(QString url)
+void OgrWriter::initTranslator()
 {
   if (_scriptPath.isEmpty())
   {
@@ -442,7 +440,22 @@ void OgrWriter::open(QString url)
   }
 
   _schema = _translator->getOgrOutputSchema();
+}
 
+void OgrWriter::createAllLayers()
+{
+  if (_createAllLayers)
+  {
+    LOG_INFO("Creating layers...");
+    for (size_t i = 0; i < _schema->getLayerCount(); ++i)
+    {
+      _createLayer(_schema->getLayer(i));
+    }
+  }
+}
+
+void OgrWriter::openOutput(QString url)
+{
   try
   {
     _ds = OgrUtilities::getInstance().openDataSource(url, false);
@@ -459,15 +472,18 @@ void OgrWriter::open(QString url)
         "Creating error: \"%2\"").arg(openException.what()).arg(createException.what()));
     }
   }
+}
 
-  if (_createAllLayers)
-  {
-    LOG_INFO("Creating layers...");
-    for (size_t i = 0; i < _schema->getLayerCount(); ++i)
-    {
-      _createLayer(_schema->getLayer(i));
-    }
-  }
+void OgrWriter::open(QString url)
+{
+  // Initialize our translator - this will load the schema
+  initTranslator();
+
+  // Open output dataset
+  openOutput(url);
+
+  // Create all layers if _createAllLayers flag
+  createAllLayers();
 }
 
 void OgrWriter::setConfiguration(const Settings& conf)
@@ -586,7 +602,12 @@ void OgrWriter::write(ConstOsmMapPtr map)
   }
 }
 
-void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPtr& e)
+// Todo.. maybe return a reference or something, to avoid a copy
+ void OgrWriter::translateToFeatures(
+          ElementProviderPtr& provider,
+          const ConstElementPtr& e,
+          boost::shared_ptr<Geometry> &g, // output
+          std::vector<ScriptToOgrTranslator::TranslatedFeature> &tf) // output
 {
   if (_translator.get() == 0)
   {
@@ -598,8 +619,6 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     // There is probably a cleaner way of doing this.
     // convertToGeometry calls  getGeometryType which will throw an exception if it gets a relation
     // that it doesn't know about. E.g. "route", "superroute", " turnlanes:turns" etc
-
-    boost::shared_ptr<Geometry> g;
 
     try
     {
@@ -646,19 +665,30 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
       }
     }
 
-    vector<ScriptToOgrTranslator::TranslatedFeature> tf = _translator->translateToOgr(t,
-      e->getElementType(), g->getGeometryTypeId());
+    tf = _translator->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
+  }
+}
 
-    // only write the feature if it wasn't filtered by the translation script.
-    for (size_t i = 0; i < tf.size(); i++)
+void OgrWriter::writeTranslatedFeature(boost::shared_ptr<Geometry> g,
+                                        vector<ScriptToOgrTranslator::TranslatedFeature> tf)
+{
+  // only write the feature if it wasn't filtered by the translation script.
+  for (size_t i = 0; i < tf.size(); i++)
+  {
+    OGRLayer* layer = _getLayer(tf[i].tableName);
+    if (layer != 0)
     {
-      OGRLayer* layer = _getLayer(tf[i].tableName);
-      if (layer != 0)
-      {
-        _addFeature(layer, tf[i].feature, g);
-      }
+      _addFeature(layer, tf[i].feature, g);
     }
   }
+}
+
+void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPtr& e)
+{
+  boost::shared_ptr<Geometry> g;
+  vector<ScriptToOgrTranslator::TranslatedFeature> tf;
+  translateToFeatures(provider, e, g, tf);
+  writeTranslatedFeature(g, tf);
 }
 
 void OgrWriter::finalizePartial()

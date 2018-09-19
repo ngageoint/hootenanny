@@ -42,8 +42,10 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/io/OgrWriter.h>
+#include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/core/util/Factory.h>
+#include <../hoot-js/src/main/cpp/hoot/js/v8Engine.h>
 
 // std
 #include <vector>
@@ -163,6 +165,204 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   }
 }
 
+void elementTranslatorThread::run()
+{
+  // Node is such a PITA
+  //  Create an isolate
+  v8::Isolate::CreateParams params;
+  params.array_buffer_allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
+  v8::Isolate * threadIsolate = v8::Isolate::New(params);
+  threadIsolate->Enter();
+  v8::Locker v8Lock(threadIsolate);
+
+  // Useful code below here...
+  ElementPtr pNewElement(NULL);
+  ElementProviderPtr cacheProvider(pElementCache);
+
+  // Setup writer used for translation
+  boost::shared_ptr<OgrWriter> writer(new OgrWriter());
+  { // Mutex Scope
+    QMutexLocker lock(pInitMutex);
+    writer->setScriptPath(translation);
+    writer->initTranslator();
+    writer->createAllLayers();
+    writer->setCache(pElementCache);
+  }
+
+  while (!pElementQ->empty())
+  {
+    pNewElement = pElementQ->dequeue();
+
+    boost::shared_ptr<geos::geom::Geometry> g;
+    std::vector<ScriptToOgrTranslator::TranslatedFeature> tf;
+    writer->translateToFeatures(cacheProvider, pNewElement, g, tf);
+
+    { // Mutex Scope
+      QMutexLocker lock(pTransFeaturesQMutex);
+      pTransFeaturesQ->enqueue(std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>(g, tf));
+    }
+  }
+
+  { // Mutex Scope
+    QMutexLocker lock(pTransFeaturesQMutex);
+    *pFinishedTranslating = true;
+  }
+
+  LOG_INFO("Done Translating");
+} // end run
+
+void ogrWriterThread::run()
+{
+  // Node is such a PITA
+  //  Create an isolate
+  v8::Isolate::CreateParams params;
+  params.array_buffer_allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
+  v8::Isolate * threadIsolate = v8::Isolate::New(params);
+  threadIsolate->Enter();
+  v8::Locker v8Lock(threadIsolate);
+
+  // Useful code below here...
+  bool done = false;
+  std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
+
+  // Setup writer
+  boost::shared_ptr<OgrWriter> ogrWriter(new OgrWriter());
+  { // Mutex Scope
+    QMutexLocker lock(pInitMutex);
+    ogrWriter->setScriptPath(translation);
+    ogrWriter->open(output);
+  }
+
+  while (!done)
+  {
+    bool doSleep = false;
+
+    // Get element
+    { // Mutex Scope
+      QMutexLocker lock(pTransFeaturesQMutex);
+      if (pTransFeaturesQ->isEmpty())
+      {
+        doSleep = true;
+        if (*pFinishedTranslating)
+        {
+          done = true;
+        }
+      }
+      else
+      {
+        feature = pTransFeaturesQ->dequeue();
+      }
+    }
+
+    // Translate element
+    if (doSleep)
+    {
+      doSleep = false;
+      msleep(100);
+    }
+    else
+    {
+      ogrWriter->writeTranslatedFeature(feature.first, feature.second);
+    }
+  }
+  ogrWriter->close();
+
+  LOG_INFO("Done Writing Features");
+} // end run
+
+void DataConverter::_fillElementCache(QString inputUrl,
+                                     ElementCachePtr cachePtr,
+                                     QQueue<ElementPtr> &workQ)
+{
+  // Set up reader
+  boost::shared_ptr<OsmMapReader> reader =
+    OsmMapReaderFactory::getInstance().createReader(inputUrl);
+  reader->open(inputUrl);
+  boost::shared_ptr<ElementInputStream> streamReader =
+    boost::dynamic_pointer_cast<ElementInputStream>(reader);
+
+  boost::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
+  ProjectToGeographicVisitor visitor;
+  bool notGeographic = !projection->IsGeographic();
+
+  if (notGeographic)
+  {
+    visitor.initialize(projection);
+  }
+
+  while (streamReader->hasMoreElements())
+  {
+    ElementPtr pNewElement = streamReader->readNextElement();
+    if (notGeographic)
+    {
+      visitor.visit(pNewElement);
+    }
+
+    workQ.enqueue(pNewElement);
+    ConstElementPtr constElement(pNewElement);
+    cachePtr->addElement(constElement);
+  }
+
+  LOG_INFO("Done Reading");
+} // end run
+
+void DataConverter::_transToOgrMT(QString input,
+                                  QString output)
+{
+  LOG_INFO("_transToOgrMT");
+
+  // MAYBE Create a synchronized cache
+  // Read all elements into a cache, and into the work Q
+  // Start multiple translation threads
+  // Wait for translation threads to finish
+  // Write all translated items out.
+
+  QQueue<ElementPtr> elementQ;
+  ElementCachePtr pElementCache(new ElementCacheLRU(
+                                ConfigOptions().getElementCacheSizeNode(),
+                                ConfigOptions().getElementCacheSizeWay(),
+                                ConfigOptions().getElementCacheSizeRelation()));
+  QMutex initMutex;
+  QMutex transFeaturesMutex;
+  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> transFeaturesQ;
+  bool finishedTranslating = false;
+
+  // Read all elements
+  // TODO: We should figure out a way to make this not-memory bound in the future
+  _fillElementCache(input, pElementCache, elementQ);
+  LOG_INFO("Element Cache Filled");
+
+  // Setup & start translator thread
+  hoot::elementTranslatorThread transThread;
+  transThread.translation = _translation;
+  transThread.pElementQ = &elementQ;
+  transThread.pTransFeaturesQMutex = &transFeaturesMutex;
+  transThread.pInitMutex = &initMutex;
+  transThread.pTransFeaturesQ = &transFeaturesQ;
+  transThread.pFinishedTranslating = &finishedTranslating;
+  transThread.pElementCache = pElementCache;
+  transThread.start();
+  LOG_INFO("Translation Thread Started");
+
+  //transThread.wait();
+  //sleep(10);
+
+  // Setup & start our writer thread
+  hoot::ogrWriterThread writerThread;
+  writerThread.translation = _translation;
+  writerThread.output = output;
+  writerThread.pTransFeaturesQMutex = &transFeaturesMutex;
+  writerThread.pInitMutex = &initMutex;
+  writerThread.pTransFeaturesQ = &transFeaturesQ;
+  writerThread.pFinishedTranslating = &finishedTranslating;
+  writerThread.start();
+  LOG_INFO("OGR Writer Thread Started");
+
+  // Wait for writer to finish
+  LOG_INFO("Waiting for writer to finish...");
+  writerThread.wait();
+}
+
 void DataConverter::_convertToOgr(const QString input, const QString output)
 {
   LOG_TRACE("_convertToOgr (formerly known as osm2ogr)");
@@ -171,10 +371,6 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   //translations is done.  Currently, it depends that a translation script is set directly on it
   //(vs using a translation visitor).  See #2416.
 
-  boost::shared_ptr<OgrWriter> writer(new OgrWriter());
-  writer->setScriptPath(_translation);
-  writer->open(output);
-
   OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
   if (readerFactory.hasElementInputStream(input) &&
       //TODO: this ops restriction needs to be removed and the ops applied during streaming.
@@ -182,32 +378,14 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
       //none of the convert bounding box supports are able to do streaming I/O at this point
       !ConfigUtils::boundsOptionEnabled())
   {
-    boost::shared_ptr<OsmMapReader> reader =
-      OsmMapReaderFactory::getInstance().createReader(input);
-    reader->open(input);
-    boost::shared_ptr<ElementInputStream> streamReader =
-      boost::dynamic_pointer_cast<ElementInputStream>(reader);
-    //OgrWriter is streamable, so no extra check needed here.
-    boost::shared_ptr<ElementOutputStream> streamWriter =
-      boost::dynamic_pointer_cast<ElementOutputStream>(writer);
-
-    boost::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
-    ProjectToGeographicVisitor visitor;
-    bool notGeographic = !projection->IsGeographic();
-
-    if (notGeographic)
-      visitor.initialize(projection);
-
-    while (streamReader->hasMoreElements())
-    {
-      ElementPtr element = streamReader->readNextElement();
-      if (notGeographic)
-        visitor.visit(element);
-      streamWriter->writeElement(element);
-    }
+    _transToOgrMT(input, output);
   }
   else
   {
+    boost::shared_ptr<OgrWriter> writer(new OgrWriter());
+    writer->setScriptPath(_translation);
+    writer->open(output);
+
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
 

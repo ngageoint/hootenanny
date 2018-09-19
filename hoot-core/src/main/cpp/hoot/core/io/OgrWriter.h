@@ -36,6 +36,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/schema/StrictChecking.h>
+#include <hoot/core/io/ScriptToOgrTranslator.h>
 
 // GDAL
 #include <ogr_spatialref.h>
@@ -58,7 +59,6 @@ class Layer;
 class Schema;
 class OsmMap;
 class ScriptTranslator;
-class ScriptToOgrTranslator;
 class ElementInputStream;
 class ElementProvider;
 
@@ -108,6 +108,17 @@ public:
 
   virtual bool isSupported(QString url);
 
+  // Init the translator
+  void initTranslator();
+
+  // Open our ogr output
+  void openOutput(QString url);
+
+  // Create layers from our translation schema
+  void createAllLayers();
+
+  void setCache(ElementCachePtr cachePtr) { _elementCache = cachePtr; }
+
   virtual void open(QString url);
 
   virtual void setConfiguration(const Settings& conf);
@@ -117,6 +128,22 @@ public:
   void setPrependLayerName(const QString& pre) { _prependLayerName = pre; }
 
   void setScriptPath(const QString& path) { _scriptPath = path; }
+
+  ///
+  /// \brief translateToFeatures Translates the element to a geometry and a
+  ///        vector of featurs
+  /// \param provider Should provide the element and all its children
+  /// \param e Element to translate
+  /// \param g Geometry output
+  /// \param tf Vector of translated features output
+  ///
+  void translateToFeatures(ElementProviderPtr& provider,
+                           const ConstElementPtr& e,
+                           boost::shared_ptr<geos::geom::Geometry> &g,
+                           std::vector<ScriptToOgrTranslator::TranslatedFeature> &tf);
+
+  void writeTranslatedFeature(boost::shared_ptr<geos::geom::Geometry> g,
+                              std::vector<ScriptToOgrTranslator::TranslatedFeature> tf);
 
   virtual void write(ConstOsmMapPtr map);
 
