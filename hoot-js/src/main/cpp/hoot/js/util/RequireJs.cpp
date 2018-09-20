@@ -72,7 +72,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     }
 
     /*
-    The new Hoot "include" files are all under $HOOT_HOME/plugins & $HOOT_HOME/plugins_local
+    The new Hoot "include" files are under $HOOT_HOME/translations, $HOOT_HOME/translations_local, $HOOT_HOME/plugins & $HOOT_HOME/plugins_local
     */
 
     const QString hootHome = QString(getenv("HOOT_HOME"));

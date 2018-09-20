@@ -36,39 +36,37 @@ hoot.require('fcode_common');
 tds61 = {
 	initialize : function()
 	{
-	    print('TDSv61 OSM Init');
-
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
         // Doing this so we don't have to keep calling into Hoot core
-        if (tds61.configIn == undefined)
-        {
+        // if (tds61.configIn == undefined)
+        // {
             tds61.configIn = {};
             tds61.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             tds61.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-        }
+        // }
 
         // Get any changes
         tds61.toChange = hoot.Settings.get("translation.override");
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
-        if (tds61.fcodeLookup == undefined)
-        {
+        // if (tds61.fcodeLookup == undefined)
+        // {
             // Add the FCODE rules for Import
             fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.fcodeOne2oneIn);
 
             tds61.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
             // Debug
             // translate.dumpOne2OneLookup(tds61.fcodeLookup);
-        }
+        // }
 
-        if (tds61.lookup == undefined)
-        {
+        // if (tds61.lookup == undefined)
+        // {
             // Support Import Only attributes
             tds61.one2one.push.apply(tds61.one2one,tds61.one2oneIn);
 
             tds61.lookup = translate.createLookup(tds61.one2one);
-        }
+        // }
 	},
 
 	// ##### Start of One2One Rules #####
@@ -4939,7 +4937,6 @@ toOsm : function(attrs, layerName, geometryType)
 
     if (tds61.configIn == undefined)
     {
-    	print('Call TDSv61 toOsm Initialise');
     	tds61.initialize();
     }
 
@@ -5068,14 +5065,11 @@ function layerNameFilter()
 
 // IMPORT
 // translateToOsm - takes 'attrs' and returns 'tags'
-// This is a wrapper so that we can use the toOsm function in other places.
-
 // Wrapping this so it doesn't stomp on other functions with the same name. E.g. in englishTDS61_to_OSM.js
 if (typeof translateToOsm != 'function')
 {
 	function translateToOsm(attrs, layerName, geometryType)
 	{
-	    print('TDSv61: translateToOsm');
 	    return tds61.toOsm(attrs, layerName, geometryType);
 	} // End of translateToOsm
 }

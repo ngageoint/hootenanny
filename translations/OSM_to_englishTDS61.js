@@ -27,24 +27,16 @@
 
 //
 // Translate OSM to TDSv61 with the attributes converted to "English"
-//
-
-
-// hoot.require('TDSv61_to_OGR')
-
 etds61 = {
     initialize : function()
     {
-        print('etds61 Init');
         if (etds61.rules == undefined)
         {
-            print('Require: etds61_rules');
             hoot.require('etds61_rules')
         }
 
         if (typeof tds61 == 'undefined')
         {
-            print('Require: tds61');
             hoot.require('TDSv61_to_OGR')
         }
 
@@ -78,16 +70,16 @@ etds61 = {
         tdsData = tds61.toOgr(tags, elementType, geometryType)
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
-        if (config.getOgrDebugDumptags() == 'true')
-        {
-            for (var i = 0, fLen = tdsData.length; i < fLen; i++)
-            {
-                print('eTableName ' + i + ': ' + tdsData[i]['tableName'] + '  FCode: ' + tdsData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                var kList = Object.keys(tdsData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + tdsData[i]['attrs'][kList[j]] + ':');
-            }
-            print('');
-        }
+        // if (config.getOgrDebugDumptags() == 'true')
+        // {
+        //     for (var i = 0, fLen = tdsData.length; i < fLen; i++)
+        //     {
+        //         print('eTableName ' + i + ': ' + tdsData[i]['tableName'] + '  FCode: ' + tdsData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+        //         var kList = Object.keys(tdsData[i]['attrs']).sort()
+        //         for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + tdsData[i]['attrs'][kList[j]] + ':');
+        //     }
+        //     print('');
+        // }
 
         var eAttrs = {}; // The final English output
         eAttrs['Feature Code'] = 'Not found';
@@ -109,7 +101,7 @@ etds61 = {
                     if (tdsData[fNum]['attrs'][val] == '-999999') 
                     {
                         // Debug:
-                        print('Skipping: ' + val + ' = ' + tdsData[fNum]['attrs'][val]);
+                        // print('Skipping: ' + val + ' = ' + tdsData[fNum]['attrs'][val]);
                         delete tdsData[fNum]['attrs'][val];
                         continue;
                     }
@@ -162,7 +154,6 @@ etds61 = {
 // Just a wrapper
 function initialize()
 {
-    print('Call etds61 Initialise');
     etds61.initialize();            
 }
 
@@ -177,8 +168,6 @@ function initialize()
 //
 function translateToOsm(attrs, layerName, geometryType)
 {
-    print('OSM_to_englishTDS: translateToOsm');
-    // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
     return etds61.toEnglish(attrs,layerName,geometryType);
 } // End of translateToOsm
 
@@ -188,6 +177,5 @@ function translateToOsm(attrs, layerName, geometryType)
 //    This version converts OSM+ tags to NFDD "English" attributes
 function translateToOgr(tags, elementType, geometryType)
 {
-    print('OSM_to_englishTDS: translateToOGR');
     return etds61.toEnglish(tags, elementType, geometryType)
 } // End of translateToOgr

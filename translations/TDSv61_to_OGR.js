@@ -39,14 +39,13 @@ tds61 = {
 
 	initialize : function()
 	{
-	    print('TDSv61 OGR Init');
 	    // Set the schema type for the export
 	    hoot.Settings.set({"osm.map.writer.schema":"TDSv61"});
 
 		// Setup config variables. We could do this in initialize() but some things don't call it :-(
 		// Doing this so we don't have to keep calling into Hoot core
-		if (tds61.configOut == undefined)
-		{
+		// if (tds61.configOut == undefined)
+		// {
 		    tds61.configOut = {};
 		    tds61.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
 		    tds61.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
@@ -59,7 +58,7 @@ tds61 = {
 		    // Get any changes to OSM tags
 		    // NOTE: the rest of the config variables will change to this style of assignment soon
 		    tds61.toChange = hoot.Settings.get("translation.override");
-		}
+		// }
 
 		// Check if we have a schema. This is a quick way to workout if various lookup tables have been built
 		if (tds61.rawSchema == undefined)
@@ -79,18 +78,18 @@ tds61 = {
 
 		// Set up the fcode translation rules. We need this due to clashes between the one2one and
 		// the fcode one2one rules
-		if (tds61.fcodeLookup == undefined)
-		{
+		// if (tds61.fcodeLookup == undefined)
+		// {
 		    // Add the FCODE rules for Export
 		    fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.fcodeOne2oneOut);
 
 		    tds61.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
 		    // Debug
 		    // translate.dumpOne2OneLookup(tds61.fcodeLookup);
-		}
+		// }
 
-		if (tds61.lookup == undefined)
-		{
+		// if (tds61.lookup == undefined)
+		// {
 		    // Add "other" rules to the one2one
 		    tds61.one2one.push.apply(tds61.one2one,tds61.one2oneOut);
 
@@ -109,12 +108,7 @@ tds61 = {
             //         print(JSON.stringify([k1, v1, tds61.fuzzy[k1][v1][0], tds61.fuzzy[k1][v1][1], tds61.fuzzy[k1][v1][2]]));
             //     }
             // }
-	} // End tds61.lookup Undefined
-
-
-
-
-
+		// } // End tds61.lookup Undefined
 	},
 
 

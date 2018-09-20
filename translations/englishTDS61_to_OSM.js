@@ -27,22 +27,16 @@
 
 //
 // Convert "English" TDSv61 OSM back to standard OSM+
-//
-
-
 etds61_osm = {
     initialize : function()
     {
-        print('etds61_osm Init');
         if (etds61_osm.rules == undefined)
             {
-                print('Require: etds61_rules');
                 hoot.require('etds61_osm_rules')
             }
 
         if (typeof tds61 == 'undefined')
         {
-            print('Require: tds61');
             hoot.require('TDSv61_to_OSM')
         }
 
@@ -57,22 +51,19 @@ etds61_osm = {
     // This function converts the "English" TDS to TDS and then to OSM+
     toStandardOSM : function(attrs, elementType, geometryType)
     {
-        print('etds61_osm toOsm');
-
         // Being defensive. We might not have had initialise() called
         if (etds61_osm.rules == undefined) 
         {
-            print('Call etds61_osm Init');
             etds61_osm.initialize();            
         }
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
-        if (config.getOgrDebugDumptags() == 'true')
-        {
-            var kList = Object.keys(attrs).sort()
-            print('etds61_osm: Initial Attrs');
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        }
+        // if (config.getOgrDebugDumptags() == 'true')
+        // {
+        //     var kList = Object.keys(attrs).sort()
+        //     print('etds61_osm: Initial Attrs');
+        //     for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+        // }
 
         // Go through the attrs and turn them back into TDS
         var nAttrs = {}; // the "new" TDS attrs
@@ -114,16 +105,16 @@ etds61_osm = {
             if (attrs[val] in etds61_osm.ignoreList) 
                 {
                     // Debug
-                    print('Dropping: ' + val + ' = ' + attrs[val]);
+                    // print('Dropping: ' + val + ' = ' + attrs[val]);
                     delete attrs[val];
                     continue;
                 }
 
             if (val in etds61_osm_rules.singleValues)
             {
-                nAttrs[etds61_osm_rules.singleValues[val]] = attrs[val];
                 // Debug
-                print('Single: ' + etds61_osm_rules.singleValues[val] + ' = ' + attrs[val])
+                // print('Single: ' + etds61_osm_rules.singleValues[val] + ' = ' + attrs[val])
+                nAttrs[etds61_osm_rules.singleValues[val]] = attrs[val];
 
                 // Cleanup used attrs
                 delete attrs[val];
@@ -164,12 +155,12 @@ etds61_osm = {
         }
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
-        {
-            var kList = Object.keys(tags).sort()
-            for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
-            print('');
-        }
+        // if (config.getOgrDebugDumptags() == 'true')
+        // {
+        //     var kList = Object.keys(tags).sort()
+        //     for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
+        //     print('');
+        // }
 
         return tags;
 
@@ -181,7 +172,6 @@ etds61_osm = {
 // Just a wrapper
 function initialize()
 {
-    print('Call etds61_osm Initialise');
     etds61_osm.initialize();            
 }
 
@@ -196,7 +186,6 @@ function initialize()
 //
 function translateToOsm(attrs, layerName, geometryType)
 {
-    print('EnglishTDS61_to_OSM: translateToOsm');
     return etds61_osm.toStandardOSM(attrs,layerName,geometryType);
 } // End of translateToOsm
 
@@ -206,7 +195,6 @@ function translateToOsm(attrs, layerName, geometryType)
 //    This version converts OSM+ tags to NFDD "English" attributes
 function translateToOgr(tags, elementType, geometryType)
 {
-    print('EnglishTDS61_to_OSM: translateToOGR');
     return etds61_osm.toStandardOSM(tags, elementType, geometryType)
 } // End of translateToOgr
 
