@@ -65,13 +65,8 @@ void OsmWriterJs::toString(const FunctionCallbackInfo<Value>& args)
   {
     formatXml = toCpp<bool>(args[1]);
   }
-  bool encodeData = true;
-  if (args.Length() > 2)
-  {
-    encodeData = toCpp<bool>(args[2]);
-  }
 
-  args.GetReturnValue().Set(toV8(OsmXmlWriter::toString(map, formatXml, encodeData)));
+  args.GetReturnValue().Set(toV8(OsmXmlWriter::toString(map, formatXml)));
 }
 
 }
