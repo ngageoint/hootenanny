@@ -38,7 +38,7 @@ void ImplicitTagUtils::cleanName(QString& name)
   {
     name = name.replace(0, 1, "");
   }
-  //TODO: move to config file
+  //TODO: move to config file - #2633
   name =
     name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
         .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
@@ -51,7 +51,7 @@ void ImplicitTagUtils::cleanName(QString& name)
   //another possibility here might be to replace name multiple spaces with one
 
   //This needs to be expanded.
-  //TODO: move to config file
+  //TODO: move to config file - #2633
   if (!name.isEmpty() && name.at(0).isDigit() &&
       (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") ||
        name.endsWith("ave") || name.endsWith("avenue") || name.endsWith("st") ||

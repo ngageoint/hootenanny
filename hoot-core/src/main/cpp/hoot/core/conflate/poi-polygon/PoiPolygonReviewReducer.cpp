@@ -88,7 +88,7 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_addressMatch);
 
-  //TODO: move these to a config unless they have already been
+  //TODO: move these to a config - #2635
   _genericLandUseTagVals.append("cemetery");
   _genericLandUseTagVals.append("commercial");
   //_genericLandUseTagVals.append("construction");
