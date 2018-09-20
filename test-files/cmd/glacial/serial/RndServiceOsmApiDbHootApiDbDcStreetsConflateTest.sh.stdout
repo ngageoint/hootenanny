@@ -3,7 +3,7 @@ secondary dataset:  test-files/DcTigerRoads.osm
 AOI:  -77.04,38.8916,-77.03324,38.8958
 CONFLATION TYPE:  unifying
 TEST_NAME:  RndServiceOsmApiDbHootApiDbDcStreetsConflateTest
-TEST_CATEGORY:  slow
+TEST_CATEGORY:  glacial
 SELECT_RANDOM_AOI:  false
 RANDOM_SEED:  -1
 
@@ -52,6 +52,6 @@ STEP 14: Reading the entire contents of the osm api db, for the SQL changeset wo
 
 STEP 15: Cleaning up database...
 
-15:10:26.324 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 105
-15:10:26.715 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 106
-15:10:27.121 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 107
+18:44:34.657 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 72
+18:44:35.229 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 73
+18:44:35.749 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 74
