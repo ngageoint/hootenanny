@@ -38,6 +38,7 @@ void ImplicitTagUtils::cleanName(QString& name)
   {
     name = name.replace(0, 1, "");
   }
+  //TODO: move to config file
   name =
     name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
         .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
@@ -50,6 +51,7 @@ void ImplicitTagUtils::cleanName(QString& name)
   //another possibility here might be to replace name multiple spaces with one
 
   //This needs to be expanded.
+  //TODO: move to config file
   if (!name.isEmpty() && name.at(0).isDigit() &&
       (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") ||
        name.endsWith("ave") || name.endsWith("avenue") || name.endsWith("st") ||
@@ -72,20 +74,16 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
   {
     QString altName = tags.get("alt_name");
     LOG_VART(altName);
-    if (!altName.trimmed().isEmpty())
+    for (int i = 0; i < names.size(); i++)
     {
-      altName = altName.trimmed();
-      for (int i = 0; i < names.size(); i++)
+      const QString name = names.at(i);
+      LOG_VART(name);
+      if (name != altName)
       {
-        const QString name = names.at(i);
-        LOG_VART(name);
-        if (name != altName)
-        {
-          const QString englishName = translator->translate(name);
-          LOG_VART(englishName);
-          filteredNames.append(englishName);
-          break;
-        }
+        const QString englishName = translator->translate(name);
+        LOG_VART(englishName);
+        filteredNames.append(englishName);
+        break;
       }
     }
 
