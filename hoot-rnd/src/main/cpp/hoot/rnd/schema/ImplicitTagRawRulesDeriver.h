@@ -82,6 +82,8 @@ public:
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
   void setElementCriterion(QString criterionName);
+  void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
+  { _translator = translator; }
 
 private:
 

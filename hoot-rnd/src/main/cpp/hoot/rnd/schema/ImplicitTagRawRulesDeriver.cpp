@@ -258,6 +258,11 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList inputs,
     throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
   }
   _output->close();
+
+  if (_translateAllNamesToEnglish && !_translator.get())
+  {
+    throw HootException("To English translation enabled but no translator was specified.");
+  }
 }
 
 void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString kvp)

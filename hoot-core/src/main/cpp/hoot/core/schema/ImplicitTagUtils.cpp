@@ -62,6 +62,7 @@ void ImplicitTagUtils::cleanName(QString& name)
 QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, const Tags& tags,
                                                  boost::shared_ptr<ToEnglishTranslator> translator)
 {
+  LOG_VART(translator.get());
   QStringList filteredNames;
   if (tags.contains("name:en"))
   {
@@ -71,18 +72,24 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
   {
     QString altName = tags.get("alt_name");
     LOG_VART(altName);
-    for (int i = 0; i < names.size(); i++)
+    if (!altName.trimmed().isEmpty())
     {
-      const QString name = names.at(i);
-      LOG_VART(name);
-      if (name != altName)
+      altName = altName.trimmed();
+      for (int i = 0; i < names.size(); i++)
       {
-        const QString englishName = translator->translate(name);
-        LOG_VART(englishName);
-        filteredNames.append(englishName);
-        break;
+        const QString name = names.at(i);
+        LOG_VART(name);
+        if (name != altName)
+        {
+          const QString englishName = translator->translate(name);
+          LOG_VART(englishName);
+          filteredNames.append(englishName);
+          break;
+        }
       }
     }
+
+    LOG_VART(filteredNames.size());
     if (filteredNames.isEmpty() && !altName.isEmpty())
     {
       if (altName.contains(";"))
@@ -95,6 +102,7 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
       filteredNames.append(englishName);
     }
   }
+  LOG_VART(filteredNames.size());
   LOG_VART(filteredNames);
 
   return filteredNames;

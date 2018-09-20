@@ -61,6 +61,8 @@ public:
   void setAddTopTagOnly(bool add) { _ruleReader->setAddTopTagOnly(add); }
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
+  void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
+  { _translator = translator; }
 
 protected:
 

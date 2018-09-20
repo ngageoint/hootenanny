@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 
 namespace hoot
 {
@@ -99,6 +100,7 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
+    uut.setTranslator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     map->visitRw(uut);
 
     HOOT_STR_EQUALS("name = Alshy Burgers\n"
@@ -175,6 +177,7 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
+    uut.setTranslator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -209,6 +212,7 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
+    uut.setTranslator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -244,6 +248,7 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
+    uut.setTranslator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     map->visitRw(uut);
     LOG_VART(map->getNode(1)->getTags());
 

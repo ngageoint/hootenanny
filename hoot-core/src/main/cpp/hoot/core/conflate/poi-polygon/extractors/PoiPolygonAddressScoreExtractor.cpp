@@ -152,10 +152,12 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString house
   {
     bool startHouseNumParsedOk = false;
     const int startHouseNum = houseNumParts[0].toInt(&startHouseNumParsedOk);
+    LOG_VART(startHouseNum);
     if (startHouseNumParsedOk)
     {
       bool endHouseNumParsedOk = false;
       const int endHouseNum = houseNumParts[1].toInt(&endHouseNumParsedOk);
+      LOG_VART(endHouseNum);
       if (endHouseNumParsedOk && startHouseNum < endHouseNum)
       {
         QString combinedAddress;
@@ -283,7 +285,7 @@ bool PoiPolygonAddressScoreExtractor::nodeHasAddress(const Node& node)
 {
   PoiPolygonAddressScoreExtractor addressExtractor;
   QSet<QString> addresses;
-  // We're just getting a count here, so translation (can be expensive) isn't needed.
+  // We're just getting a count here, so translation isn't needed (can be expensive).
   addressExtractor._collectAddressesFromElement(node, addresses, false);
   return addresses.size() > 0;
 }
@@ -291,7 +293,7 @@ bool PoiPolygonAddressScoreExtractor::nodeHasAddress(const Node& node)
 bool PoiPolygonAddressScoreExtractor::elementHasAddress(const ConstElementPtr& element,
                                                         const OsmMap& map)
 {
-  // We're just getting a count here, so translation (can be expensive) isn't needed.
+  // We're just getting a count here, so translation isn't needed (can be expensive).
   QSet<QString> addresses;
   if (element->getElementType() == ElementType::Node)
   {
@@ -322,7 +324,9 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
 
   //address parts in separate tags (most common situation)
   QString houseNum = tags.get(HOUSE_NUMBER_TAG_NAME).trimmed();
+  LOG_VART(houseNum);
   QString street = tags.get(STREET_TAG_NAME).trimmed();
+  LOG_VART(street);
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
     if (translate)
@@ -332,12 +336,15 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
     street = street.toLower();
     QString combinedAddress;
     houseNum = houseNum.replace(QRegExp("[a-z]+"), "");
+    LOG_VART(houseNum);
     //hack - I thought this would have been eliminated by using the translated name comparison
     //logic...seems like it wasn't. - see others
     street = street.replace(ESZETT, ESZETT_REPLACE);
+    LOG_VART(street);
     if (!houseNum.contains("-"))
     {
       combinedAddress = houseNum + " " + street;
+      LOG_VART(combinedAddress);
       addresses.insert(combinedAddress);
     }
     else
@@ -348,6 +355,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
 
   //full address in one tag
   QString addressTagVal = tags.get(FULL_ADDRESS_TAG_NAME).trimmed();
+  LOG_VART(addressTagVal);
   if (!addressTagVal.isEmpty())
   {
     if (translate)
@@ -356,13 +364,14 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
     }
     addressTagVal = addressTagVal.toLower();
     addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
+    LOG_VART(addressTagVal);
     addresses.insert(addressTagVal);
   }
 
   //street name and house num reversed: ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN
   //parse through the tokens until you come to a number; assume that is the house number and
   //everything before it is the street name
-  _parseAddressesInAltFormat(tags, addresses);
+  _parseAddressesInAltFormat(tags, addresses, translate);
 }
 
 void PoiPolygonAddressScoreExtractor::_collectAddressesFromWayNodes(const Way& way,

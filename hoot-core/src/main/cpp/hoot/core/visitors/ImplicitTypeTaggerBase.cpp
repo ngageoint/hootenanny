@@ -161,6 +161,11 @@ bool caseInsensitiveLessThan(const QString s1, const QString s2)
 
 void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 {
+  if (_translateAllNamesToEnglish && !_translator.get())
+  {
+    throw HootException("To English translation enabled but no translator was specified.");
+  }
+
   if (_visitElement(e))
   {
     bool foundDuplicateMatch = false;
