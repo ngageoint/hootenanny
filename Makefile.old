@@ -314,10 +314,8 @@ ifeq ($(BUILD_UI_TESTS),uitests)
 endif
 
 ui2x-build:
-	cd hoot-ui-2x
-	npm i
-	npm run production
-
+	cd hoot-ui-2x && npm i && npm run production
+	
 ui-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
