@@ -46,6 +46,7 @@ public:
   OsmXmlWriterTest()
   {
     setResetType(ResetBasic);
+    TestUtils::mkpath("test-output/io/OsmXmlWriterTest");
   }
 
   void runEncodeCharsTest()
@@ -67,7 +68,7 @@ public:
     TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags4);
 
     const QString output = "test-output/io/OsmXmlWriterTest/runEncodeCharsTest-out.osm";
-    uut.write(output, map);
+    uut.write(map, output);
     HOOT_FILE_EQUALS("test-files/io/OsmXmlWriterTest/runEncodeCharsTest.osm", output);
   }
 };

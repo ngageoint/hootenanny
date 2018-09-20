@@ -70,8 +70,7 @@ OsmXmlWriter::OsmXmlWriter()
     _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
     _precision(ConfigOptions().getWriterPrecision()),
     _encodingErrorCount(0),
-    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
-    _encodeData(true)
+    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
 }
 
@@ -120,21 +119,6 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
   return result;
 }
 
-QString OsmXmlWriter::encodeData(QString text)
-{
-//  if (_encodeData)
-//  {
-//    return
-//      text
-//        .replace("&", "&amp;")
-//        .replace("\"", "&quot;")
-//        .replace("\n", "&#10;")
-//        .replace(">", "&gt;")
-//        .replace("<", "&lt;");
-//  }
-  return text;
-}
-
 void OsmXmlWriter::open(QString url)
 {
   QFile* f = new QFile();
@@ -169,12 +153,10 @@ void OsmXmlWriter::setIncludeCompatibilityTags(bool includeCompatibility)
   _includeCompatibilityTags = includeCompatibility;
 }
 
-QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml,
-                               const bool encodeData)
+QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 {
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
-  writer.setEncodeData(encodeData);
   // this will be deleted by the _fp boost::shared_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
@@ -321,10 +303,8 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      key = removeInvalidCharacters(key);
-      key = encodeData(key);
       LOG_VART(key);
-      _writer->writeAttribute("k", key);
+      _writer->writeAttribute("k", removeInvalidCharacters(key));
       if (key == MetadataTags::HootStatus() &&
           //status check here only for nodes/ways; should relation have this check too?
           (type == ElementType::Relation ||
@@ -341,10 +321,8 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
       }
       else
       {
-        val = removeInvalidCharacters(val);
-        val = encodeData(val);
         LOG_VART(val);
-        _writer->writeAttribute("v", val);
+        _writer->writeAttribute("v", removeInvalidCharacters(val));
       }
       _writer->writeEndElement();
     }
@@ -357,8 +335,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     {
       _writer->writeStartElement("tag");
       _writer->writeAttribute("k", "type");
-      const QString type = removeInvalidCharacters(relation->getType());
-      _writer->writeAttribute("v", encodeData(type));
+      _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
       _writer->writeEndElement();
     }
   }
@@ -550,8 +527,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
     if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      key = removeInvalidCharacters(key);
-      _writer->writeAttribute("k", encodeData(key));
+      _writer->writeAttribute("k", removeInvalidCharacters(key));
 
       if (key == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
       {
@@ -566,8 +542,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
       }
       else
       {
-        val = removeInvalidCharacters(val);
-        _writer->writeAttribute("v", encodeData(val));
+        _writer->writeAttribute("v", removeInvalidCharacters(val));
       }
       _writer->writeEndElement();
     }
@@ -656,8 +631,7 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
     _writer->writeStartElement("member");
     _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
     _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-    const QString role = removeInvalidCharacters(e.role);
-    _writer->writeAttribute("role", encodeData(role));
+    _writer->writeAttribute("role", removeInvalidCharacters(e.role));
     _writer->writeEndElement();
   }
 

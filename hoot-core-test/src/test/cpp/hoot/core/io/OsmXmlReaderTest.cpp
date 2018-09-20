@@ -153,6 +153,8 @@ public:
     CPPUNIT_ASSERT(f.remove());
   }
 
+  //This test ensures that characters not allowed in well-formed XML get decoded as read in.
+  //Qt's XML reading does this for us automatically.
   void runDecodeCharsTest()
   {
     OsmXmlReader uut;
@@ -176,7 +178,7 @@ public:
       }
       else if (w->getTags().get("note2") == "3")
       {
-        HOOT_STR_EQUALS("0\n", w->getTags().get("note"));
+        HOOT_STR_EQUALS("0", w->getTags().get("note"));
         wayCtr++;
       }
       else if (w->getTags().get("note2") == "4")
