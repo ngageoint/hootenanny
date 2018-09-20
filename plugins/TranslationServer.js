@@ -270,9 +270,7 @@ var postHandler = function(data) {
     // loadMapFromString arguments: map, XML, preserve ID's, hoot:status
     hoot.loadMapFromString(map, data.osm, true);
     translation.apply(map);
-    // don't encode invalid xml chars in the output, since it will contain json 
-    // toString args: map, formatXml, encodeData
-    return hoot.OsmWriter.toString(map, true, false);
+    return hoot.OsmWriter.toString(map);
 };
 
 // OSM to Translated Schema request handler

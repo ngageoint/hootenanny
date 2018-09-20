@@ -98,8 +98,7 @@ public:
    * @param formatXml if true, formats the xml with indentations and new lines
    * @return an OSM XML string
    */
-  static QString toString(const ConstOsmMapPtr& map, const bool formatXml = true,
-                          const bool encodeInvalidOutput = true);
+  static QString toString(const ConstOsmMapPtr& map, const bool formatXml = true);
 
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
@@ -119,21 +118,11 @@ public:
   virtual QString supportedFormats() { return ".osm"; }
 
   /**
-   * Encodes certain characters that are illegal in XML and removes illegal whitespace chars
-   *
-   * @param text text to encode
-   * @return text encoded safe for XML output
-   */
-  QString encodeData(QString text);
-
-  /**
    * Remove illegal XML characters from the string s and print an error if one is found.  These
    * chars cannot exist in an XML document in any spot and could only have been read in from a
    * non-XML source.
    */
   QString removeInvalidCharacters(const QString& s);
-
-  void setEncodeData(bool encode) { _encodeData = encode; }
 
 private:
 
@@ -151,10 +140,6 @@ private:
   boost::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;
   bool _includeCircularErrorTags;
-  //determines whether chars not allowed in well formed xml should be encoded (e.g. quotes,
-  //less than, etc.); normally would always be done, but an exception to this might be if JSON
-  //was being embedded in the tag value output like is done with some translation output
-  bool _encodeData;
 
   static QString _typeName(ElementType e);
 
