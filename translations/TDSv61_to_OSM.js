@@ -34,6 +34,43 @@ hoot.require('translate');
 hoot.require('fcode_common');
 
 tds61 = {
+	initialize : function()
+	{
+	    print('TDSv61 OSM Init');
+
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (tds61.configIn == undefined)
+        {
+            tds61.configIn = {};
+            tds61.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+            tds61.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+        }
+
+        // Get any changes
+        tds61.toChange = hoot.Settings.get("translation.override");
+
+        // Set up the fcode translation rules. We need this due to clashes between the one2one and
+        // the fcode one2one rules
+        if (tds61.fcodeLookup == undefined)
+        {
+            // Add the FCODE rules for Import
+            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.fcodeOne2oneIn);
+
+            tds61.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+            // Debug
+            // translate.dumpOne2OneLookup(tds61.fcodeLookup);
+        }
+
+        if (tds61.lookup == undefined)
+        {
+            // Support Import Only attributes
+            tds61.one2one.push.apply(tds61.one2one,tds61.one2oneIn);
+
+            tds61.lookup = translate.createLookup(tds61.one2one);
+        }
+	},
+
 	// ##### Start of One2One Rules #####
 
 	// FCODE rules for Import
@@ -4313,27 +4350,7 @@ tds61 = {
     },
     // ##### End of ge4List #####
 
-
-
-
 // #####################################################################################################
-
-    // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
-    fixTransType : function(tags)
-    {
-        if (tags.railway)
-        {
-            tags['transport:type'] = 'railway';
-        }
-        else if (tags.highway && ['path','pedestrian','steps','trail'].indexOf(tags.highway) > -1)
-        {
-            tags['transport:type'] = 'pedestrian';
-        }
-        else if (tags.highway)
-        {
-            tags['transport:type'] = 'road';
-        }
-    },
 
     // Untangle TDS attributes & OSM tags.
     // Some people have been editing OSM files and inserting TDS attributes
@@ -4913,59 +4930,18 @@ tds61 = {
 
 
     }, // End of applyToOsmPostProcessing
-} // End of tds61
 
-// #####################################################################################################
-
-function initialize()
-{
-    // Setup config variables. We could do this in initialize() but some things don't call it :-(
-    // Doing this so we don't have to keep calling into Hoot core
-    if (tds61.configIn == undefined)
-    {
-        tds61.configIn = {};
-        tds61.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-        tds61.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-
-        // Get any changes
-        tds61.toChange = hoot.Settings.get("translation.override");
-    }
-
-    // Set up the fcode translation rules. We need this due to clashes between the one2one and
-    // the fcode one2one rules
-    if (tds61.fcodeLookup == undefined)
-    {
-        // Add the FCODE rules for Import
-        fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.fcodeOne2oneIn);
-
-        tds61.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
-        // Debug
-        // translate.dumpOne2OneLookup(tds61.fcodeLookup);
-    }
-
-    if (tds61.lookup == undefined)
-    {
-        // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
-        // other tables are not set either.
-
-        // Support Import Only attributes
-        tds61.one2one.push.apply(tds61.one2one,tds61.one2oneIn);
-
-        tds61.lookup = translate.createLookup(tds61.one2one);
-    }
-}
-
-// Layer name filter - Filter out all layers that match this regexp
-function layerNameFilter()
-{
-    // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
-    return "^(?!SRC_|extra_)";
-}
 
 // IMPORT
-function translateToOsm(attrs, layerName, geometryType)
+toOsm : function(attrs, layerName, geometryType)
 {
     tags = {};  // The final output Tag list
+
+    if (tds61.configIn == undefined)
+    {
+    	print('Call TDSv61 toOsm Initialise');
+    	tds61.initialize();
+    }
 
     // Debug:
     if (tds61.configIn.OgrDebugDumptags == 'true')
@@ -5062,7 +5038,6 @@ function translateToOsm(attrs, layerName, geometryType)
     {
         var kList = Object.keys(notUsedAttrs).sort()
         for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-
         var kList = Object.keys(tags).sort()
         for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
         print('');
@@ -5072,4 +5047,35 @@ function translateToOsm(attrs, layerName, geometryType)
     translate.overrideValues(tags,tds61.toChange);
 
     return tags;
-} // End of Translate Attributes
+} // End of translateToOsm
+
+} // End of tds61
+
+// #####################################################################################################
+
+// This is a wrapper so we can call it in other places
+function initialize()
+{
+	tds61.initialize();
+}
+
+// Layer name filter - Filter out all layers that match this regexp
+function layerNameFilter()
+{
+    // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
+    return "^(?!SRC_|extra_)";
+}
+
+// IMPORT
+// translateToOsm - takes 'attrs' and returns 'tags'
+// This is a wrapper so that we can use the toOsm function in other places.
+
+// Wrapping this so it doesn't stomp on other functions with the same name. E.g. in englishTDS61_to_OSM.js
+if (typeof translateToOsm != 'function')
+{
+	function translateToOsm(attrs, layerName, geometryType)
+	{
+	    print('TDSv61: translateToOsm');
+	    return tds61.toOsm(attrs, layerName, geometryType);
+	} // End of translateToOsm
+}

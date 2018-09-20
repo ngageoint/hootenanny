@@ -22,83 +22,165 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //
-// NFDD Conversion - With "English" output
+// Translate OSM to TDSv61 with the attributes converted to "English"
 //
 
-// For the OSM+ to NFDD translation
-hoot.require('SchemaTools')
-hoot.require('tds61')
-hoot.require('tds61_schema')
-hoot.require('tds61_rules')
-hoot.require('fcode_common')
 
-// The main translation functions
-hoot.require('etds61')
-hoot.require('etds61_rules')
+// hoot.require('TDSv61_to_OGR')
 
-hoot.require('config')
-hoot.require('translate')
+etds61 = {
+    initialize : function()
+    {
+        print('etds61 Init');
+        if (etds61.rules == undefined)
+        {
+            print('Require: etds61_rules');
+            hoot.require('etds61_rules')
+        }
 
-// Create the output Schema - This is not used here. We _do_ use it in the etds functions but
-// we don't need to expose it to the main Hoot program
-function getDbSchema()
-{
-     return tds61.getDbSchema();
-}
+        if (typeof tds61 == 'undefined')
+        {
+            print('Require: tds61');
+            hoot.require('TDSv61_to_OGR')
+        }
 
-// Get raw schema directly from plugins/schema
-function getRawDbSchema()
-{
-     return tds61.schema.getDbSchema();
-}
+        // Turn off the TDS structure so we just get the raw feature
+        hoot.Settings.set({"ogr.thematic.structure":"false"});
+
+        // Turn off the tds extra function
+        hoot.Settings.set({"ogr.note.extra":"none"});
+
+        // Turn off the ESRI FCSUBTYPE
+        hoot.Settings.set({"ogr.esri.fcsubtype":"false"});
+
+        // Throw errors instead of returning partial translations/o2s_X features
+        hoot.Settings.set({"ogr.throw.error":"true"});
+
+        // Set the schema type for the export
+        hoot.Settings.set({"osm.map.writer.schema":"TDSv61"});
+    },
+
+    // This function converts the OSM+ to TDS and then translates the TDS into "English"
+    toEnglish : function(tags, elementType, geometryType)
+    {
+        var tdsData = [];
+
+        // Being defensive. We might not have had initialise() called
+        if (etds61.rules == undefined) 
+        {
+            etds61.initialize();            
+        }
+
+        tdsData = tds61.toOgr(tags, elementType, geometryType)
+
+        // Debug: Commenting this out to cut down the number of Hoot core calls
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            for (var i = 0, fLen = tdsData.length; i < fLen; i++)
+            {
+                print('eTableName ' + i + ': ' + tdsData[i]['tableName'] + '  FCode: ' + tdsData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+                var kList = Object.keys(tdsData[i]['attrs']).sort()
+                for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + tdsData[i]['attrs'][kList[j]] + ':');
+            }
+            print('');
+        }
+
+        var eAttrs = {}; // The final English output
+        eAttrs['Feature Code'] = 'Not found';
+
+        // Defensive: This will either be populated or we threw an error earlier
+        if (tdsData.length > 0)
+        {
+            for (var fNum = 0, fLen = tdsData.length; fNum < fLen; fNum++)
+            {
+                var tFCODE = tdsData[fNum]['attrs']['F_CODE'];
+
+                delete tdsData[fNum]['attrs']['F_CODE'];
+
+                // Translate the single values
+                for (var val in tdsData[fNum]['attrs'])
+                {
+                    // Dump the No Information values. This is being defensive. We should not get these
+                    // This loop goes through the set of tags so it's a good place to do this
+                    if (tdsData[fNum]['attrs'][val] == '-999999') 
+                    {
+                        // Debug:
+                        print('Skipping: ' + val + ' = ' + tdsData[fNum]['attrs'][val]);
+                        delete tdsData[fNum]['attrs'][val];
+                        continue;
+                    }
+
+                    if (val in etds61.rules.engSingle)
+                    {
+                        if (tdsData[fNum]['attrs'][val] !== undefined)
+                        {
+                            eAttrs[etds61.rules.engSingle[val]] = tdsData[fNum]['attrs'][val];
+                        }
+
+                        // Cleanup used attrs so we don't translate them again
+                        delete tdsData[fNum]['attrs'][val];
+                    }
+                }
+
+                // Apply the English one2one rules
+                translate.applyOne2One(tdsData[fNum]['attrs'], eAttrs, etds61.rules.engEnum, {'k':'v'});
+
+                // Find an FCODE
+                if (tFCODE in etds61.rules.fcodeLookup)
+                {
+                    if (eAttrs['Feature Code'] !== 'Not found')
+                    {
+                        eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + etds61.rules.fcodeLookup[tFCODE]['desc'];
+                    }
+                    else
+                    {
+                        eAttrs['Feature Code'] = tFCODE + ':' + etds61.rules.fcodeLookup[tFCODE]['desc'];
+                    }
+                }
+            } // End for tdsData
+
+        }
+
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(eAttrs).sort()
+            for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');
+            print('');
+        }
+
+        // Return the English results. The "tableName" is not set
+        return eAttrs;
+    } // End of toEnglish
+
+} // End of etds61
 
 
+// Just a wrapper
 function initialize()
 {
-    // Turn off the TDS structure so we just get the raw feature
-    hoot.Settings.set({"ogr.thematic.structure":"false"});
-
-    // Turn off the tds extra function
-    hoot.Settings.set({"ogr.note.extra":"none"});
-
-    // Turn off the ESRI FCSUBTYPE
-    hoot.Settings.set({"ogr.esri.fcsubtype":"false"});
-
-    // Throw errors instead of returning partial translations/o2s_X features
-    hoot.Settings.set({"ogr.throw.error":"true"});
-
-    // Set the schema type for the export
-    hoot.Settings.set({"osm.map.writer.schema":"TDSv61"});
+    print('Call etds61 Initialise');
+    etds61.initialize();            
 }
 
 
 // IMPORT
-// translateAttributes - Normally takes 'attrs' and returns OSM 'tags'.  This version
-//    converts OSM+ tags to NFDD "English" Attributes
+// translateToOsm - Normally takes 'attrs' and returns OSM 'tags'.  This version
+//    converts OSM+ tags to TDSv61 "English" Attributes
 //
 // This can be called via the following for testing:
 // hoot convert -D "convert.ops=hoot::TranslationOp"  \
 //      -D translation.script=$HOOT_HOME/translations/OSM_to_englishTDS.js <input>.osm <output>.osm
 //
-function translateAttributes(attrs, layerName, geometryType)
+function translateToOsm(attrs, layerName, geometryType)
 {
+    print('OSM_to_englishTDS: translateToOsm');
     // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
-    var output = etds61.toEnglish(attrs,layerName,geometryType);
-
-    // Make sure the returned value isn't NULL. This does occur
-    if (output)
-    {
-        return output.attrs;
-    }
-    else
-    {
-        return null;
-    }
-} // End of Translate Attributes
+    return etds61.toEnglish(attrs,layerName,geometryType);
+} // End of translateToOsm
 
 
 // EXPORT
@@ -106,5 +188,6 @@ function translateAttributes(attrs, layerName, geometryType)
 //    This version converts OSM+ tags to NFDD "English" attributes
 function translateToOgr(tags, elementType, geometryType)
 {
-        return etds61.toEnglish(tags, elementType, geometryType)
+    print('OSM_to_englishTDS: translateToOGR');
+    return etds61.toEnglish(tags, elementType, geometryType)
 } // End of translateToOgr
