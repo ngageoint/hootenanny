@@ -122,16 +122,16 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 
 QString OsmXmlWriter::encodeData(QString text)
 {
-  if (_encodeData)
-  {
-    return
-      text
-        .replace("&", "&amp;")
-        .replace("\"", "&quot;")
-        .replace("\n", "&#10;")
-        .replace(">", "&gt;")
-        .replace("<", "&lt;");
-  }
+//  if (_encodeData)
+//  {
+//    return
+//      text
+//        .replace("&", "&amp;")
+//        .replace("\"", "&quot;")
+//        .replace("\n", "&#10;")
+//        .replace(">", "&gt;")
+//        .replace("<", "&lt;");
+//  }
   return text;
 }
 

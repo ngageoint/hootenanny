@@ -91,13 +91,14 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 
 QString OsmXmlReader::_decodeData(QString text)
 {
-  return
-    text
-      .replace("&amp;", "&")
-      .replace("&quot;", "\"")
-      .replace("&#10;", "\n")
-      .replace("&gt;", ">")
-      .replace("&lt;", "<");
+//  return
+//    text
+//      .replace("&amp;", "&")
+//      .replace("&quot;", "\"")
+//      .replace("&#10;", "\n")
+//      .replace("&gt;", ">")
+//      .replace("&lt;", "<");
+  return text;
 }
 
 void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
