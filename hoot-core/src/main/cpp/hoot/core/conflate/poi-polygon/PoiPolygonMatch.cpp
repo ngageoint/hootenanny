@@ -36,13 +36,12 @@
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistance.h"
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
-#include "PoiPolygonReviewReducer.h"
 #include "PoiPolygonAdvancedMatcher.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
 #include "extractors/PoiPolygonDistanceExtractor.h"
 #include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
 #include "PoiPolygonTagIgnoreListReader.h"
+#include "PoiPolygonReviewReducer.h"
 
 using namespace std;
 
@@ -155,6 +154,7 @@ void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
 
 void PoiPolygonMatch::setConfiguration(const Settings& conf)
 {
+  _conf = conf;
   ConfigOptions config = ConfigOptions(conf);
 
   setMatchDistanceThreshold(config.getPoiPolygonMatchDistanceThreshold());
@@ -192,6 +192,8 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   setReviewEvidenceThreshold(reviewEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
+
+  _addressExtractor.setConfiguration(conf);
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -311,57 +313,6 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
   }
 
   QStringList reviewTypeIgnoreList;
-//  reviewTypeIgnoreList.append("leisure=park");
-//  reviewTypeIgnoreList.append("leisure=playground");
-//  reviewTypeIgnoreList.append("amenity=university");
-//  reviewTypeIgnoreList.append("building=train_station");
-//  reviewTypeIgnoreList.append("amenity=parking");
-//  reviewTypeIgnoreList.append("amenity=bicycle_parking");
-//  reviewTypeIgnoreList.append("building=retail");
-//  reviewTypeIgnoreList.append("building=residential");
-//  reviewTypeIgnoreList.append("building=station");
-//  reviewTypeIgnoreList.append("shop=department_store");
-//  reviewTypeIgnoreList.append("building=terrace");
-//  reviewTypeIgnoreList.append("landuse=construction");
-//  reviewTypeIgnoreList.append("railway=station");
-//  reviewTypeIgnoreList.append("public_transport=station");
-//  reviewTypeIgnoreList.append("tourism=hotel");
-//  reviewTypeIgnoreList.append("building=office");
-//  reviewTypeIgnoreList.append("landuse=retail");
-//  reviewTypeIgnoreList.append("sport=*");
-//  reviewTypeIgnoreList.append("amenity=school");
-//  reviewTypeIgnoreList.append("man_made=water_works");
-//  reviewTypeIgnoreList.append("amenity=bus_station");
-//  reviewTypeIgnoreList.append("amenity=hospital");
-//  reviewTypeIgnoreList.append("building=apartments");
-//  reviewTypeIgnoreList.append("building=civic");
-//  reviewTypeIgnoreList.append("building=commercial");
-//  reviewTypeIgnoreList.append("building=public");
-//  reviewTypeIgnoreList.append("building=retail");
-//  reviewTypeIgnoreList.append("landuse=commercial");
-  //reviewTypeIgnoreList.append("landuse=forest");
-//  reviewTypeIgnoreList.append("landuse=industrial");
-//  reviewTypeIgnoreList.append("landuse=residential");
-//  reviewTypeIgnoreList.append("landuse=recreation_ground");
-//  reviewTypeIgnoreList.append("leisure=common");
-//  reviewTypeIgnoreList.append("leisure=garden");
-//  reviewTypeIgnoreList.append("leisure=golf_course");
-//  reviewTypeIgnoreList.append("natural=water");
-//  reviewTypeIgnoreList.append("place=neighbourhood");
-//  reviewTypeIgnoreList.append("shop=mall");
-//  reviewTypeIgnoreList.append("shop=department_store");
-//  reviewTypeIgnoreList.append("tourism=attraction");
-//  reviewTypeIgnoreList.append("tourism=zoo");
-//  reviewTypeIgnoreList.append("tourism=museum");
-//  reviewTypeIgnoreList.append("building=roof");
-//  reviewTypeIgnoreList.append("building=school");
-//  reviewTypeIgnoreList.append("amenity=arts_centre");
-//  reviewTypeIgnoreList.append("amenity=restaurant");
-//  reviewTypeIgnoreList.append("building=house");
-//  reviewTypeIgnoreList.append("tourism=camp_site");
-//  reviewTypeIgnoreList.append("landuse=quarry");
-  //reviewTypeIgnoreList.append("landuse=forest_reserve");
-
   if (_poi->getTags().hasAnyKvp(reviewTypeIgnoreList) ||
       _poly->getTags().hasAnyKvp(reviewTypeIgnoreList))
   {
@@ -408,11 +359,12 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   //no point in trying to reduce reviews if we're still at a miss here
   if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
-    //TODO: this constructor has gotten a little out of hand
+    //this constructor has gotten a little out of hand
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
       _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0);
+    reviewReducer.setConfiguration(_conf);
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
@@ -630,7 +582,7 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  _addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
+  _addressScore = _addressExtractor.extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
   LOG_VART(addressMatch);
   return addressMatch ? 1u : 0u;

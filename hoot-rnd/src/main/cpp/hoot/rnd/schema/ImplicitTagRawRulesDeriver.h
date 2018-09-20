@@ -33,6 +33,7 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
 
 // Qt
 #include <QString>
@@ -123,6 +124,9 @@ private:
 
   //controls which elements have tags harvested from them
   boost::shared_ptr<ImplicitTagEligibleCriterion> _elementCriterion;
+
+  //translates names to English
+  boost::shared_ptr<ToEnglishTranslator> _translator;
 
   void _init();
   void _validateInputs(const QStringList inputs, const QStringList translationScripts,

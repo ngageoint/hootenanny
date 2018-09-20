@@ -31,6 +31,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
 
 namespace hoot
 {
@@ -104,6 +105,9 @@ private:
   QStringList _additionalNameKeys;
   //names won't be considered when they are longer than this; very long names tend to be gibberish
   int _maxNameLength;
+
+  //translates names to English
+  boost::shared_ptr<ToEnglishTranslator> _translator;
 
   QStringList _getNameTokens(const QStringList names) const;
   QStringList _getTranslatedNames(const QStringList names, const Tags& tags);

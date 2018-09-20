@@ -69,7 +69,7 @@ void TransliterateNameVisitor::visit(const boost::shared_ptr<Element>& e)
   if (names.size() > 0)
   {
     e->getTags().addNote(
-      "Transliterated Name: " + DictionaryTranslator::getInstance().toEnglish(names[0]));
+      "Transliterated Name: " + DictionaryTranslator().toEnglish(names[0]));
   }
 }
 

@@ -45,7 +45,7 @@
 namespace hoot
 {
 
-class JsonDictionary;
+class TranslateDictionary;
 
 /**
  * This makes a reasonable attempt to translate or transliterate common map words in and pronouns
@@ -61,8 +61,6 @@ public:
 
   DictionaryTranslator();
   ~DictionaryTranslator();
-
-  static DictionaryTranslator& getInstance();
 
   /**
    * Translates the given input string into a translation & transliteration of the input.
@@ -103,11 +101,10 @@ public:
 
 private:
 
-  char* _buffer;
-  int _bufferLength;
+  //char* _buffer;
+  //int _bufferLength;
+
   Tgs::LruCache<QString, QString> _cache;
-  static boost::shared_ptr<DictionaryTranslator> _theInstance;
-  boost::shared_ptr<JsonDictionary> _dictionary;
   QSet<QString> _streetTypes;
   Transliterator* _transliterator;
   Transliterator* _titler;

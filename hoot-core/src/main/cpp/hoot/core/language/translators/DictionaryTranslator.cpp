@@ -28,10 +28,10 @@
 #include "DictionaryTranslator.h"
 
 // Hoot
-#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include "TranslateDictionary.h"
 
 // ICU
 #include <unicode/utypes.h>
@@ -58,55 +58,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ToEnglishTranslator, DictionaryTranslator)
 
-class JsonDictionary
-{
-public:
-  JsonDictionary()
-  {
-  }
-
-  const QMap<QString, QStringList>& getTable() { return _translations; }
-
-  void load(QString path)
-  {
-    try
-    {
-      pt::ptree pt;
-      pt::read_json(path.toAscii().data(), pt);
-
-      _loadTags(pt);
-    }
-    catch (const std::exception& e)
-    {
-      QString reason = e.what();
-      throw HootException("Error parsing JSON. " + reason);
-    }
-  }
-
-private:
-  QMap<QString, QStringList> _translations;
-
-  void _loadTags(pt::ptree& tree)
-  {
-    BOOST_FOREACH(pt::ptree::value_type& translation, tree.get_child("Dictionary"))
-    {
-      int i = 0;
-      QString from;
-      BOOST_FOREACH(pt::ptree::value_type& t, translation.second.get_child(""))
-      {
-        string s = t.second.data();
-        if (i == 0)
-          from = QString::fromUtf8(s.c_str()).toLower();
-        else
-          _translations[from].push_back(QString::fromUtf8(s.c_str()).toLower());
-        i++;
-      }
-    }
-  }
-};
-
-boost::shared_ptr<DictionaryTranslator> DictionaryTranslator::_theInstance = NULL;
-
 DictionaryTranslator::DictionaryTranslator()
 {
   // if this assertion isn't true then bad things will happen when converting between QString and
@@ -115,36 +66,22 @@ DictionaryTranslator::DictionaryTranslator()
   _transliterator = 0;
   _titler = 0;
   _whiteSpace.setPattern("\\W+");
+
+  _streetTypes.insert("street");
+  _streetTypes.insert("lane");
+  _streetTypes.insert("boulevard");
+  _streetTypes.insert("highway");
+  _streetTypes.insert("freeway");
+  _streetTypes.insert("tollway");
+  _streetTypes.insert("road");
 }
 
 DictionaryTranslator::~DictionaryTranslator()
 {
   delete _transliterator;
   delete _titler;
-  delete _buffer;
-}
 
-DictionaryTranslator& DictionaryTranslator::getInstance()
-{
-  if (_theInstance == NULL)
-  {
-    QString dictionary = ConfPath::search("dictionary.json");
-
-    _theInstance.reset(new DictionaryTranslator());
-    _theInstance->_bufferLength = 1024;
-    _theInstance->_buffer = new char[_theInstance->_bufferLength + 1];
-    _theInstance->_dictionary.reset(new JsonDictionary());
-    _theInstance->_dictionary->load(dictionary);
-
-    _theInstance->_streetTypes.insert("street");
-    _theInstance->_streetTypes.insert("lane");
-    _theInstance->_streetTypes.insert("boulevard");
-    _theInstance->_streetTypes.insert("highway");
-    _theInstance->_streetTypes.insert("freeway");
-    _theInstance->_streetTypes.insert("tollway");
-    _theInstance->_streetTypes.insert("road");
-  }
-  return *_theInstance;
+  //delete _buffer;
 }
 
 QString DictionaryTranslator::translate(const QString textToTranslate)
@@ -154,9 +91,9 @@ QString DictionaryTranslator::translate(const QString textToTranslate)
 
 QString DictionaryTranslator::toEnglish(const QString& input)
 {
-  QStringList l = input.split(QRegExp("\\W+"), QString::SkipEmptyParts);
+  QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
 
-  const QMap<QString, QStringList>& dict = _dictionary->getTable();
+  const QMap<QString, QStringList>& dict = TranslateDictionary::getInstance().getTable();
 
   for (int i = 0; i < l.size(); i++)
   {
@@ -190,7 +127,7 @@ QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
     return result;
   }
 
-  const QMap<QString, QStringList>& dict = _dictionary->getTable();
+  const QMap<QString, QStringList>& dict = TranslateDictionary::getInstance().getTable();
 
   int biggestMatchSize = 0;
   QStringList biggestMatch;
@@ -276,9 +213,9 @@ QString DictionaryTranslator::toTitleCase(const QString& input)
 
 QString DictionaryTranslator::translateStreet(const QString& input)
 {
-  QStringList l = input.split(QRegExp("\\W+"), QString::SkipEmptyParts);
+  QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
 
-  const QMap<QString, QStringList>& dict = _dictionary->getTable();
+  const QMap<QString, QStringList>& dict = TranslateDictionary::getInstance().getTable();
 
   for (int i = 0; i < l.size(); i++)
   {

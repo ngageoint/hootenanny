@@ -36,7 +36,6 @@
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/util/Factory.h>
 
@@ -61,6 +60,7 @@ _translateAllNamesToEnglish(true)
 void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 {
   ConfigOptions options = ConfigOptions(conf);
+
   setSortParallelCount(options.getImplicitTaggingRawRulesDeriverSortParallelCount());
   const int idealThreads = QThread::idealThreadCount();
   LOG_VART(idealThreads);
@@ -73,6 +73,12 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
   setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
   setElementCriterion(options.getImplicitTaggingElementCriterion());
+
+  _translator.reset(
+    Factory::getInstance().constructObject<ToEnglishTranslator>(
+      options.getLanguageTranslationTranslator()));
+  _translator->setConfiguration(conf);
+  _translator->setSourceLanguages(options.getLanguageTranslationSourceLanguages());
 }
 
 void ImplicitTagRawRulesDeriver::setElementCriterion(QString criterionName)
@@ -157,7 +163,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
 
         if (_translateAllNamesToEnglish)
         {
-          names = ImplicitTagUtils::translateNamesToEnglish(names, element->getTags());
+          names = ImplicitTagUtils::translateNamesToEnglish(names, element->getTags(), _translator);
         }
         LOG_VART(names);
 
@@ -356,7 +362,7 @@ void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStri
 
   if (_translateAllNamesToEnglish)
   {
-    const QString englishNameToken = DictionaryTranslator::getInstance().toEnglish(nameToken);
+    const QString englishNameToken = _translator->translate(nameToken);
     nameToken = englishNameToken;
     LOG_VART(englishNameToken);
   }

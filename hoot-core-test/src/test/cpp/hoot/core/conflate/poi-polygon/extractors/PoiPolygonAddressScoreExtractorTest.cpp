@@ -46,7 +46,6 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonAddressScoreExtractorTest);
   CPPUNIT_TEST(runTagTest);
-  //CPPUNIT_TEST(runExactMatchingFalseTest);
   CPPUNIT_TEST(runCombinedTagTest);
   CPPUNIT_TEST(runRangeTest);
   CPPUNIT_TEST(runAltFormatTest);
@@ -60,6 +59,7 @@ public:
   void runTagTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -79,24 +79,10 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
   }
 
-//  void runExactMatchingFalseTest()
-//  {
-//    PoiPolygonAddressScoreExtractor uut;
-//    uut.setAddressScoreThreshold(0.6);
-//    OsmMapPtr map(new OsmMap());
-
-//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
-//    map->addNode(node1);
-//    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-//    way1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "567 main street");
-//    map->addWay(way1);
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.667, uut.extract(*map, node1, way1), 0.01);
-//  }
-
   void runCombinedTagTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -123,6 +109,7 @@ public:
   void runRangeTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -159,6 +146,7 @@ public:
   void runAltFormatTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -183,6 +171,7 @@ public:
   void runSubLetterTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -199,6 +188,7 @@ public:
   void runWayTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -231,6 +221,7 @@ public:
   void runRelationTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));

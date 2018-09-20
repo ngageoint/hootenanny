@@ -60,7 +60,7 @@ public:
 
   QString te(const char* s)
   {
-    QString result = DictionaryTranslator::getInstance().translateStreet(QString::fromUtf8(s));
+    QString result = DictionaryTranslator().translateStreet(QString::fromUtf8(s));
     return result;
   }
 

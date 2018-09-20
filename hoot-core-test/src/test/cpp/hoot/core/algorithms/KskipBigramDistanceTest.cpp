@@ -124,7 +124,7 @@ public:
 
   QString te(const char* s)
   {
-    return DictionaryTranslator::getInstance().translateStreet(QString::fromUtf8(s));
+    return DictionaryTranslator().translateStreet(QString::fromUtf8(s));
   }
 
   QString joinBigrams(QSet<QString> bigrams)

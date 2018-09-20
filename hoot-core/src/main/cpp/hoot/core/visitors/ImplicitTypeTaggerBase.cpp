@@ -32,9 +32,9 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSet>
@@ -123,6 +123,12 @@ void ImplicitTypeTaggerBase::setConfiguration(const Settings& conf)
   _ruleReader->setAddTopTagOnly(confOptions.getImplicitTaggerAddTopTagOnly());
   _ruleReader->setAllowWordsInvolvedInMultipleRules(
     confOptions.getImplicitTaggerAllowWordsInvolvedInMultipleRules());
+
+  _translator.reset(
+    Factory::getInstance().constructObject<ToEnglishTranslator>(
+      confOptions.getLanguageTranslationTranslator()));
+  _translator->setConfiguration(conf);
+  _translator->setSourceLanguages(confOptions.getLanguageTranslationSourceLanguages());
 }
 
 QStringList ImplicitTypeTaggerBase::_getNames(const Tags& tags) const
@@ -353,7 +359,7 @@ QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)
   }
   if (_translateAllNamesToEnglish)
   {
-    names = ImplicitTagUtils::translateNamesToEnglish(names, tags);
+    names = ImplicitTagUtils::translateNamesToEnglish(names, tags, _translator);
   }
   LOG_VART(names);
   QStringList filteredNames;
@@ -399,7 +405,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
     if (_translateAllNamesToEnglish)
     {
       //TODO: can this be combined with the ImplicitTagUtils translate method?
-      const QString englishNameToken = DictionaryTranslator::getInstance().toEnglish(nameToken);
+      const QString englishNameToken = _translator->translate(nameToken);
       nameToken = englishNameToken;
       LOG_VART(englishNameToken);
     }
@@ -482,7 +488,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
       const QString word = nameTokensList.at(i);
       LOG_VART(word);
       //TODO: can this be combined with the ImplicitTagUtils translate method?
-      const QString englishNameToken = DictionaryTranslator::getInstance().toEnglish(word);
+      const QString englishNameToken = _translator->translate(word);
       LOG_VART(englishNameToken);
       translatedNameTokens.append(englishNameToken);
     }

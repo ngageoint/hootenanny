@@ -315,7 +315,7 @@ public:
         for (int i = 0; i < names.size(); i++)
         {
           nameSet.insert(names[i].toLower());
-          nameSet.insert(DictionaryTranslator::getInstance().toEnglish(names[i]).toLower());
+          nameSet.insert(DictionaryTranslator().toEnglish(names[i]).toLower());
         }
         for (set<QString>::const_iterator it = nameSet.begin(); it != nameSet.end(); ++it)
         {

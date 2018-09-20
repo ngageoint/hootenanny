@@ -318,13 +318,14 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
   QStringList n1 = t1.getNames();
   QStringList n2 = t2.getNames();
 
+  DictionaryTranslator translator;
   for (int i = 0; i < n1.size(); i++)
   {
-    n1[i] = DictionaryTranslator::getInstance().translateStreet(n1[i]);
+    n1[i] = translator.translateStreet(n1[i]);
   }
   for (int i = 0; i < n2.size(); i++)
   {
-    n2[i] = DictionaryTranslator::getInstance().translateStreet(n2[i]);
+    n2[i] = translator.translateStreet(n2[i]);
   }
 
   priority_queue<Entry, deque<Entry>, Entry> heap;

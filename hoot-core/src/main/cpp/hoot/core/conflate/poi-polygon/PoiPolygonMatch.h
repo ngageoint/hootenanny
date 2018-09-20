@@ -36,7 +36,7 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
-
+#include "extractors/PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonRfClassifier.h"
 
 namespace hoot
@@ -145,6 +145,7 @@ private:
   double _nameScore;
   double _nameScoreThreshold;
 
+  PoiPolygonAddressScoreExtractor _addressExtractor;
   double _addressScore;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
@@ -165,6 +166,8 @@ private:
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   QString _explainText;
+
+  Settings _conf;
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 

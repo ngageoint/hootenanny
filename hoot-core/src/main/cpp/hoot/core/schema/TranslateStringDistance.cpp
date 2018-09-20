@@ -51,17 +51,18 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
 {
   QStringList t1;
   QStringList t2;
+  DictionaryTranslator translator;
   if (_tokenize)
   {
-    t1 = DictionaryTranslator::getInstance().toEnglishAll(s1);
-    t2 = DictionaryTranslator::getInstance().toEnglishAll(s2);
+    t1 = translator.toEnglishAll(s1);
+    t2 = translator.toEnglishAll(s2);
   }
   else
   {
     t1.append(s1);
     t2.append(s2);
-    t1 = DictionaryTranslator::getInstance().toEnglishAll(t1);
-    t2 = DictionaryTranslator::getInstance().toEnglishAll(t2);
+    t1 = translator.toEnglishAll(t1);
+    t2 = translator.toEnglishAll(t2);
   }
 
   double bestScore = -1;

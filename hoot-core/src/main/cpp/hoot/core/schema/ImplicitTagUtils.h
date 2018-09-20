@@ -27,6 +27,9 @@
 #ifndef IMPLICITTAGUTILS_H
 #define IMPLICITTAGUTILS_H
 
+// Hoot
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
+
 // Qt
 #include <QStringList>
 
@@ -57,9 +60,11 @@ public:
    *
    * @param names names to translate
    * @param tags tags to retrieve additional names from
+   * @param translator a to English word translator
    * @return a collection of translated name strings
    */
-  static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags);
+  static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags,
+                                             boost::shared_ptr<ToEnglishTranslator> translator);
 
 };
 

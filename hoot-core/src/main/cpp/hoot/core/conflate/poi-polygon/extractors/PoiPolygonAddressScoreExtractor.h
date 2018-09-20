@@ -31,6 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
 
 namespace hoot
 {
@@ -40,7 +41,7 @@ namespace hoot
  * Only exact string matches yield a positive score.  This translates addresses, but doesn't
  * handle abbreviations.
  */
-class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase
+class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
@@ -57,6 +58,8 @@ public:
   PoiPolygonAddressScoreExtractor();
 
   virtual std::string getClassName() const { return PoiPolygonAddressScoreExtractor::className(); }
+
+  virtual void setConfiguration(const Settings& conf);
 
   /**
    * Calculates the address similarity score of two features
@@ -78,36 +81,31 @@ public:
   static bool nodeHasAddress(const Node& node);
 
   /**
+   * Determines if an element has an address
    *
-   *
-   * @param element
-   * @param map
-   * @return
+   * @param element the element to examine for an address
+   * @param map map the element being examined belongs to
+   * @return true if the element has an address; false otherwise
    */
-  static bool elementHasAddress(const ConstElementPtr& element, const OsmMap& map);
-
-  /**
-   *
-   *
-   * @param element
-   * @param map
-   * @return
-   */
-  static QSet<QString> getAddresses(const ConstElementPtr& element, const OsmMap& map);
+  bool elementHasAddress(const ConstElementPtr& element, const OsmMap& map);
 
   virtual QString getDescription() const
   { return "Calculates the address similarity score of two features involved in POI/Polygon conflation"; }
 
 private:
 
-  void _collectAddressesFromElement(const Element& element, QSet<QString>& addresses) const;
+  boost::shared_ptr<ToEnglishTranslator> _translator;
+
+  void _collectAddressesFromElement(const Element& element, QSet<QString>& addresses,
+                                    const bool translate = true) const;
   void _collectAddressesFromWayNodes(const Way& way, QSet<QString>& addresses,
-                                     const OsmMap& map) const;
+                                     const OsmMap& map, const bool translate = true) const;
   void _collectAddressesFromRelationMembers(const Relation& relation, QSet<QString>& addresses,
-                                     const OsmMap& map) const;
+                                     const OsmMap& map, const bool translate = true) const;
   void _parseAddressesAsRange(const QString houseNum, const QString street,
                               QSet<QString>& addresses) const;
-  void _parseAddressesInAltFormat(const Tags& tags, QSet<QString>& addresses) const;
+  void _parseAddressesInAltFormat(const Tags& tags, QSet<QString>& addresses,
+                                  const bool translate = true) const;
   bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress) const;
 
 };

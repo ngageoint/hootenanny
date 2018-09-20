@@ -33,7 +33,6 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
-#include <hoot/core/language/translators/ToEnglishTranslatorFactory.h>
 
 // std
 #include <typeinfo>
@@ -44,9 +43,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationVisitor)
 
 ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
-//_translatorClient(
-//  ToEnglishTranslatorFactory::getInstance().create(
-//    ConfigOptions().getLanguageTranslationTranslator())),
 _skipPreTranslatedTags(false),
 _numTotalElements(0),
 _skipWordsInEnglishDict(true),
@@ -80,22 +76,9 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  //_translatorClient.reset(
-    //Factory::getInstance().constructObject<ToEnglishTranslator>(
-      //opts.getLanguageTranslationTranslator()));
-  _translatorClient =
-    ToEnglishTranslatorFactory::getInstance().create(
-      opts.getLanguageTranslationTranslator());
-//  try
-//  {
-//     LOG_VARD(_translatorClient.className());
-//     Configurable& configurable = dynamic_cast<Configurable&>(_translatorClient);
-//     configurable.setConfiguration(conf);
-//  }
-//  catch (const std::bad_cast& e)
-//  {
-//    LOG_ERROR("bad cast: " << e.what());
-//  }
+  _translatorClient.reset(
+    Factory::getInstance().constructObject<ToEnglishTranslator>(
+      opts.getLanguageTranslationTranslator()));
   _translatorClient->setConfiguration(conf);
   _translatorClient->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
 
@@ -133,7 +116,7 @@ void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
   }
 }
 
-void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
+bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
                                              const QString toTranslateTagKey)
 {
   const Tags& tags = e->getTags();
@@ -151,7 +134,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     LOG_DEBUG(
       "Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" <<
       _toTranslateVal);
-    return;
+    return false;
   }
 
   //This is an attempt to cut back on translation service requests for text that may already
@@ -166,7 +149,7 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
       LOG_DEBUG(
         "Tag value to be translated determined to already be in English.  Skipping " <<
         "translation; text: " << _toTranslateVal);
-      return;
+      return false;
     }
   }
 
@@ -191,19 +174,28 @@ void ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
       LOG_VARD(_numTagTranslationsMade);
     }
     _currentElementHasSuccessfulTagTranslation = true;
+
+    _numProcessedElements++;
+    if (_numProcessedElements % 10 == 0)
+    {
+      PROGRESS_DEBUG("Processed " << _numProcessedElements << " elements.");
+    }
+
+    return true;
   }
   else
   {
     LOG_DEBUG(
       "Translator returned translation with same value as text passed in.  Discarding " <<
       "translation; text: " << _translatedText);
-    _translatedText = "";
-  }
 
-  _numProcessedElements++;
-  if (_numProcessedElements % 10 == 0)
-  {
-    PROGRESS_DEBUG("Processed " << _numProcessedElements << " elements.");
+    _numProcessedElements++;
+    if (_numProcessedElements % 10 == 0)
+    {
+      PROGRESS_DEBUG("Processed " << _numProcessedElements << " elements.");
+    }
+
+    return false;
   }
 }
 

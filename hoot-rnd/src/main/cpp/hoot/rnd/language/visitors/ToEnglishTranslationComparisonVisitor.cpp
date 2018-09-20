@@ -95,16 +95,12 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
       _preTranslatedVal = tags.get(preTranslatedTagKey).trimmed();
       LOG_VARD(_preTranslatedVal);
 
-      ToEnglishTranslationVisitor::_translate(e, toTranslateTagKey);
-      LOG_VARD(_translatedText);
-      if (!_translatedText.isEmpty())
+      if (ToEnglishTranslationVisitor::_translate(e, toTranslateTagKey))
       {
-        Tags& elementTags = _element->getTags();
-        //elementTags.appendValue("hoot:translated:" + _toTranslateTagKey + ":en", _translatedText);
         const double similarityScore =
           _translationScorer->compare(_preTranslatedVal, _translatedText);
         LOG_VARD(similarityScore);
-        elementTags.appendValue(
+        _element->getTags().appendValue(
           "hoot:translated:similarity:score:" + _toTranslateTagKey + ":en",
           QString::number(similarityScore));
       }
