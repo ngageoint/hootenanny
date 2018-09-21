@@ -54,6 +54,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ToEnglishTranslator, HootServicesTranslatorClient)
 
 HootServicesTranslatorClient::HootServicesTranslatorClient() :
+_detectedLang(""),
 _detectedLangAvailableForTranslation(false),
 _detectedLangOverrides(false),
 _performExhaustiveSearch(false)
@@ -193,7 +194,6 @@ void HootServicesTranslatorClient::_parseTranslateResponse(
     _detectedLang =
       QUrl::fromPercentEncoding(
         QString::fromStdString(replyObj->get<std::string>("detectedLang")).toUtf8());
-    _detectionMade = true;
     LOG_VART(_detectedLang);
     //detector used should always be here if a detection was made
     _detectorUsed = QString::fromStdString(replyObj->get<std::string>("detectorUsed"));
@@ -214,6 +214,10 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
   LOG_TRACE(
     "Translating to English with specified source languages: " <<
      _sourceLangs.join(",") << "; text: " << textToTranslate);
+
+  _translatedText = "";
+  _detectedLang = "";
+  _detectorUsed = "";
 
   //create and execute the request
   QUrl url(_translationUrl);

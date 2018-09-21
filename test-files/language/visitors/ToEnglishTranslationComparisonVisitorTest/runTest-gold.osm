@@ -6,6 +6,7 @@
     </node>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1400416000000035" lon="11.5303757000000004">
         <tag k="hoot:translated:name:en" v="good night"/>
+        <tag k="hoot:translated:name:en:source:language" v="Spanish"/>
         <tag k="hoot:translated:similarity:score:name:en" v="1"/>
         <tag k="name" v="buenos noches"/>
         <tag k="name:en" v="good night"/>
@@ -15,6 +16,7 @@
     </node>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.7831808999999978" lon="9.1823960000000007">
         <tag k="hoot:translated:name:en" v="how old are you"/>
+        <tag k="hoot:translated:name:en:source:language" v="German"/>
         <tag k="alt_name" v="wie alt bist du"/>
         <tag k="hoot:translated:similarity:score:name:en" v="1"/>
         <tag k="name" v="wie alt bist du"/>

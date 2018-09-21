@@ -95,14 +95,11 @@ public:
 
   virtual QStringList getSourceLanguages() const { return QStringList(); }
   virtual void setSourceLanguages(const QStringList /*langCodes*/) {}
-  virtual bool detectionMade() const { return false; }
+  virtual QString getDetectedLanguage() const { return ""; }
 
   virtual void setConfiguration(const Settings& /*conf*/) {}
 
 private:
-
-  //char* _buffer;
-  //int _bufferLength;
 
   Tgs::LruCache<QString, QString> _cache;
   QSet<QString> _streetTypes;

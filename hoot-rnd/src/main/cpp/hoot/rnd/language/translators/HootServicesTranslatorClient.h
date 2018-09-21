@@ -51,11 +51,11 @@ public:
   virtual QStringList getSourceLanguages() const { return _sourceLangs; }
   virtual void setSourceLanguages(const QStringList langCodes);
   virtual QString translate(const QString textToTranslate);
-  virtual bool detectionMade() const { return _detectionMade; }
-
-  virtual void setConfiguration(const Settings& conf);
+  virtual QString getDetectedLanguage() const { return _detectedLang; }
 
   QString getTranslatedText() const { return _translatedText; }
+
+  virtual void setConfiguration(const Settings& conf);
 
 protected:
 
@@ -65,7 +65,6 @@ protected:
   QStringList _sourceLangs;
 
   QString _translatedText;
-  bool _detectionMade;
   QString _detectedLang;
   QString _detectorUsed;
   bool _detectedLangAvailableForTranslation;

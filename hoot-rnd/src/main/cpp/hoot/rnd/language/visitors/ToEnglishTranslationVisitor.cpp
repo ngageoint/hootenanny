@@ -131,7 +131,7 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   const QString preTranslatedTagKey = _toTranslateTagKey + ":en";
   if (_skipPreTranslatedTags && tags.contains(preTranslatedTagKey))
   {
-    LOG_DEBUG(
+    LOG_TRACE(
       "Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" <<
       _toTranslateVal);
     return false;
@@ -146,7 +146,7 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     LOG_TRACE("English name score: " << englishNameScore << " for: " << _toTranslateVal);
     if (englishNameScore == 1.0)
     {
-      LOG_DEBUG(
+      LOG_TRACE(
         "Tag value to be translated determined to already be in English.  Skipping " <<
         "translation; text: " << _toTranslateVal);
       return false;
@@ -155,7 +155,7 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
 
   _translatedText = _translatorClient->translate(_toTranslateVal).trimmed();
   LOG_VART(_translatedText);
-  if (_translatorClient->detectionMade())
+  if (!_translatorClient->getDetectedLanguage().trimmed().isEmpty())
   {
     _numDetectionsMade++;
   }
@@ -163,15 +163,32 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   LOG_VART(strComparison);
   //If the translator merely returned the same string we passed in as the translated text, then
   //no point in using it.
-  if (strComparison != 0)
+  if (!_translatedText.trimmed().isEmpty() && strComparison != 0)
   {
-    LOG_DEBUG("Translated: " << _toTranslateVal << " to: " << _translatedText);
+    LOG_TRACE("Translated: " << _toTranslateVal << " to: " << _translatedText);
+
     _element->getTags()
       .appendValue("hoot:translated:" + _toTranslateTagKey + ":en", _translatedText);
+
+    QString sourceLang;
+    LOG_VART(_translatorClient->getSourceLanguages().size());
+    if (_translatorClient->getDetectedLanguage().trimmed().isEmpty() &&
+        _translatorClient->getSourceLanguages().at(0) != "detect")
+    {
+      assert(_translatorClient->getSourceLanguages().size() == 1);
+      sourceLang = _translatorClient->getSourceLanguages().at(0);
+    }
+    else
+    {
+      sourceLang = _translatorClient->getDetectedLanguage();
+    }
+    _element->getTags()
+      .appendValue("hoot:translated:" + _toTranslateTagKey + ":en:source:language", sourceLang);
+
     _numTagTranslationsMade++;
     if (_numTagTranslationsMade % 10 == 0)
     {
-      LOG_VARD(_numTagTranslationsMade);
+      LOG_VART(_numTagTranslationsMade);
     }
     _currentElementHasSuccessfulTagTranslation = true;
 
@@ -185,9 +202,16 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   }
   else
   {
-    LOG_DEBUG(
-      "Translator returned translation with same value as text passed in.  Discarding " <<
-      "translation; text: " << _translatedText);
+    if (!_translatedText.trimmed().isEmpty())
+    {
+      LOG_TRACE(
+        "Translator returned translation with same value as text passed in.  Discarding " <<
+        "translation; text: " << _translatedText);
+    }
+    else
+    {
+      LOG_TRACE("Unable to translate text: " << _toTranslateVal);
+    }
 
     _numProcessedElements++;
     if (_numProcessedElements % 10 == 0)

@@ -77,7 +77,6 @@ QString HootServicesTranslatorMockClient::translate(const QString textToTranslat
 
   _translatedText = _mockTranslations[textToTranslate].split(";")[0];
   _detectedLang = _mockTranslations[textToTranslate].split(";")[1];
-  _detectionMade = true;
   _detectorUsed = "TikaLanguageDetector";
   _detectedLangAvailableForTranslation = true;
 

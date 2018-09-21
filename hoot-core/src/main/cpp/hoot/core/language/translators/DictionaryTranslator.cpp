@@ -80,8 +80,6 @@ DictionaryTranslator::~DictionaryTranslator()
 {
   delete _transliterator;
   delete _titler;
-
-  //delete _buffer;
 }
 
 QString DictionaryTranslator::translate(const QString textToTranslate)

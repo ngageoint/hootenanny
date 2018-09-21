@@ -70,11 +70,11 @@ public:
   virtual QString translate(const QString textToTranslate) = 0;
 
   /**
-   * Determines if a language detection was made by this translator before translation
+   * Returns the language detected by the translator if language detection was performed
    *
-   * @return true if a language detection was made; false otherwise
+   * @return a language name if a language was detected; an empty string otherwise
    */
-  virtual bool detectionMade() const = 0;
+  virtual QString getDetectedLanguage() const = 0;
 };
 
 }

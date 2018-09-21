@@ -74,8 +74,7 @@ public:
     uut->_parseTranslateResponse(response);
 
     HOOT_STR_EQUALS("How old are you", uut->getTranslatedText());
-    CPPUNIT_ASSERT(uut->detectionMade());
-    HOOT_STR_EQUALS("German", uut->_detectedLang);
+    HOOT_STR_EQUALS("German", uut->getDetectedLanguage());
     HOOT_STR_EQUALS("TikaLanguageDetector", uut->_detectorUsed);
     CPPUNIT_ASSERT(uut->_detectedLangAvailableForTranslation);
   }
