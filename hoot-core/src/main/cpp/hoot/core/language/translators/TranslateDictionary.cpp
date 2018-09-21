@@ -32,6 +32,10 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
+// ICU
+#include <unicode/utypes.h>
+#include <unicode/uobject.h>
+
 // Boost
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
@@ -44,6 +48,28 @@ boost::shared_ptr<TranslateDictionary> TranslateDictionary::_theInstance = NULL;
 
 TranslateDictionary::TranslateDictionary()
 {
+  UErrorCode error = U_ZERO_ERROR;
+
+  _titler = Transliterator::createInstance("Any-Title", UTRANS_FORWARD, error);
+  if (_titler == NULL || error != U_ZERO_ERROR)
+  {
+    LOG_ERROR("transliterator error code: " << error);
+    throw HootException("transliterator error");
+  }
+
+  _transliterator =
+    Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error);
+  if (_transliterator == NULL || error != U_ZERO_ERROR)
+  {
+    LOG_ERROR("transliterator error code: " << error);
+    throw HootException("transliterator error");
+  }
+}
+
+TranslateDictionary::~TranslateDictionary()
+{
+  delete _transliterator;
+  delete _titler;
 }
 
 TranslateDictionary& TranslateDictionary::getInstance()
@@ -55,6 +81,18 @@ TranslateDictionary& TranslateDictionary::getInstance()
     _theInstance->load(dictionary);
   }
   return *_theInstance;
+}
+
+bool TranslateDictionary::getFromTransliterationCache(const QString originalText,
+                                                      QString& transliteratedText)
+{
+  return _cache.get(originalText, transliteratedText);
+}
+
+void TranslateDictionary::insertIntoTransliterationCache(const QString originalText,
+                                                         const QString transliteratedText)
+{
+  _cache.insert(originalText, transliteratedText);
 }
 
 void TranslateDictionary::load(QString path)

@@ -2135,6 +2135,10 @@
         "description": "A shop selling tickets for concerts, events, public transport, ...",
         "isA": "shop",
         "name": "shop=ticket",
+	"aliases": [
+            "amenity=ticket_office",
+	    "amenity=ticket_booth"
+        ],
         "objectType": "tag",
         "similarTo": [
             {

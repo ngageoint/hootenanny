@@ -35,6 +35,12 @@
 // Boost
 #include <boost/property_tree/ptree.hpp>
 
+// ICU
+#include <unicode/translit.h>
+
+// Tgs
+#include <tgs/LruCache.h>
+
 namespace hoot
 {
 
@@ -45,6 +51,7 @@ class TranslateDictionary
 public:
 
   TranslateDictionary();
+  ~TranslateDictionary();
 
   static TranslateDictionary& getInstance();
 
@@ -52,11 +59,20 @@ public:
 
   void load(QString path);
 
+  Transliterator* getTransliterator() const { return _transliterator; }
+  Transliterator* getTitler() const { return _titler; }
+
+  bool getFromTransliterationCache(const QString originalText, QString& transliteratedText);
+  void insertIntoTransliterationCache(const QString originalText, const QString transliteratedText);
+
 private:
 
   static boost::shared_ptr<TranslateDictionary> _theInstance;
 
   QMap<QString, QStringList> _translations;
+  Tgs::LruCache<QString, QString> _cache;
+  Transliterator* _transliterator;
+  Transliterator* _titler;
 
   void _loadTags(boost::property_tree::ptree& tree);
 };

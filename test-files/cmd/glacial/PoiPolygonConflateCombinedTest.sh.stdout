@@ -1,56 +1,986 @@
-21:55:21.060 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 123) Conflating l/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm with l/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm and writing the output to put/cmd/PoiPolygonConflateCombinedTest/output1.osm
-21:55:21.062 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm...
-21:55:21.174 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm...
-21:55:21.178 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 166) Applying pre-conflation operations...
-21:55:21.179 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::BuildingOutlineRemoveOp
-21:55:21.179 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::MapCleaner
-21:55:21.179 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::ReprojectToPlanarOp
+18:15:58.482 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 189) Conflating l/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm with l/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm and writing the output to put/cmd/PoiPolygonConflateCombinedTest/output1.osm
+18:15:58.492 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from l/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm...
+18:15:58.873 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from l/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm...
+18:15:58.881 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 253) Applying pre-conflation operations...
+18:15:58.881 INFO  ...t/core/conflate/MapCleaner.cpp(  49) Cleaning map...
 
-21:55:21.208 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::DuplicateWayRemover
-21:55:21.297 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::SuperfluousWayRemover
-21:55:21.297 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::IntersectionSplitter
-21:55:21.300 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::UnlikelyIntersectionRemover
-21:55:21.305 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::DualWaySplitter
-21:55:21.309 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::ImpliedDividedMarker
-21:55:21.314 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::DuplicateNameRemover
-21:55:21.318 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::SmallWayMerger
-21:55:21.320 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  91) Applying visitor: hoot::RemoveEmptyAreasVisitor
-21:55:21.337 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  91) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-21:55:21.398 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::NoInformationElementRemover
-21:55:21.455 INFO  ...conflate/UnifyingConflator.cpp( 126) Applying pre-unifying conflation operations...
-21:55:21.455 INFO  ...lygon/BuildingMatchCreator.cpp( 288) Creating matches with: hoot::BuildingMatchCreator...
-21:55:22.005 INFO  ...late/js/ScriptMatchCreator.cpp( 540) Creating matches with: hoot::ScriptMatchCreator; rules: PoiGeneric.js...
-Progress: 10 _neighborCountSum: 0          Progress: 20 _neighborCountSum: 0          Progress: 30 _neighborCountSum: 0          Progress: 40 _neighborCountSum: 0          Progress: 50 _neighborCountSum: 0          Progress: 60 _neighborCountSum: 0          Progress: 70 _neighborCountSum: 0          Progress: 80 _neighborCountSum: 0          Progress: 90 _neighborCountSum: 0          Progress: 100 _neighborCountSum: 0          Progress: 110 _neighborCountSum: 0          Progress: 120 _neighborCountSum: 0          Progress: 130 _neighborCountSum: 0          Progress: 140 _neighborCountSum: 0          Progress: 150 _neighborCountSum: 0          Progress: 160 _neighborCountSum: 0          Progress: 170 _neighborCountSum: 0          Progress: 180 _neighborCountSum: 0          Progress: 190 _neighborCountSum: 0          Progress: 200 _neighborCountSum: 0          Progress: 210 _neighborCountSum: 0          Progress: 220 _neighborCountSum: 0          Progress: 230 _neighborCountSum: 0          Progress: 240 _neighborCountSum: 0          Progress: 250 _neighborCountSum: 0          Progress: 260 _neighborCountSum: 0          Progress: 270 _neighborCountSum: 0          Progress: 280 _neighborCountSum: 0          Progress: 290 _neighborCountSum: 0          Progress: 300 _neighborCountSum: 0          Progress: 310 _neighborCountSum: 0          Progress: 320 _neighborCountSum: 0          Progress: 330 _neighborCountSum: 0          Progress: 340 _neighborCountSum: 0          Progress: 350 _neighborCountSum: 0          Progress: 360 _neighborCountSum: 0          Progress: 370 _neighborCountSum: 0          Progress: 380 _neighborCountSum: 0          Progress: 390 _neighborCountSum: 0          Progress: 400 _neighborCountSum: 0          Progress: 410 _neighborCountSum: 0          Progress: 420 _neighborCountSum: 0          Progress: 430 _neighborCountSum: 0          Progress: 440 _neighborCountSum: 0          Progress: 450 _neighborCountSum: 0          Progress: 460 _neighborCountSum: 0          Progress: 470 _neighborCountSum: 0          Progress: 480 _neighborCountSum: 0          Progress: 490 _neighborCountSum: 0          Progress: 500 _neighborCountSum: 0          Progress: 510 _neighborCountSum: 0          Progress: 520 _neighborCountSum: 0          Progress: 530 _neighborCountSum: 0          Progress: 540 _neighborCountSum: 0          Progress: 550 _neighborCountSum: 0          Progress: 560 _neighborCountSum: 0          Progress: 570 _neighborCountSum: 0          Progress: 580 _neighborCountSum: 0          Progress: 590 _neighborCountSum: 0          Progress: 600 _neighborCountSum: 0          Progress: 610 _neighborCountSum: 0          Progress: 620 _neighborCountSum: 0          Progress: 630 _neighborCountSum: 0          Progress: 640 _neighborCountSum: 0          Progress: 650 _neighborCountSum: 0          Progress: 660 _neighborCountSum: 0          Progress: 670 _neighborCountSum: 0          Progress: 680 _neighborCountSum: 0          Progress: 690 _neighborCountSum: 0          Progress: 700 _neighborCountSum: 0          Progress: 710 _neighborCountSum: 0          Progress: 720 _neighborCountSum: 0          Progress: 730 _neighborCountSum: 0          Progress: 740 _neighborCountSum: 0          Progress: 750 _neighborCountSum: 0          Progress: 760 _neighborCountSum: 0          Progress: 770 _neighborCountSum: 0          Progress: 780 _neighborCountSum: 0          Progress: 790 _neighborCountSum: 0          Progress: 800 _neighborCountSum: 0          Progress: 810 _neighborCountSum: 0          Progress: 820 _neighborCountSum: 0          Progress: 830 _neighborCountSum: 0          Progress: 840 _neighborCountSum: 0          Progress: 850 _neighborCountSum: 0          Progress: 860 _neighborCountSum: 0          Progress: 870 _neighborCountSum: 0          Progress: 880 _neighborCountSum: 0          Progress: 890 _neighborCountSum: 0          Progress: 900 _neighborCountSum: 0          Progress: 910 _neighborCountSum: 0          Progress: 920 _neighborCountSum: 0          Progress: 930 _neighborCountSum: 0          Progress: 940 _neighborCountSum: 0          Progress: 950 _neighborCountSum: 0          Progress: 960 _neighborCountSum: 0          Progress: 970 _neighborCountSum: 0          Progress: 980 _neighborCountSum: 0          Progress: 990 _neighborCountSum: 0          Progress: 1000 _neighborCountSum: 0          Progress: 1010 _neighborCountSum: 0          Progress: 1020 _neighborCountSum: 0          Progress: 1030 _neighborCountSum: 0          Progress: 1040 _neighborCountSum: 0          Progress: 1050 _neighborCountSum: 0          Progress: 1060 _neighborCountSum: 0          Progress: 1070 _neighborCountSum: 0          Progress: 1080 _neighborCountSum: 0          Progress: 1090 _neighborCountSum: 0          Progress: 1100 _neighborCountSum: 0          Progress: 1110 _neighborCountSum: 0          Progress: 1120 _neighborCountSum: 0          Progress: 1130 _neighborCountSum: 0          Progress: 1140 _neighborCountSum: 0          Progress: 1150 _neighborCountSum: 0          Progress: 1160 _neighborCountSum: 0          Progress: 1170 _neighborCountSum: 0          Progress: 1180 _neighborCountSum: 0          Progress: 1190 _neighborCountSum: 0          Progress: 1200 _neighborCountSum: 0          Progress: 1210 _neighborCountSum: 0          Progress: 1220 _neighborCountSum: 0          Progress: 1230 _neighborCountSum: 0          Progress: 1240 _neighborCountSum: 0          Progress: 1250 _neighborCountSum: 0          Progress: 1260 _neighborCountSum: 0          Progress: 1270 _neighborCountSum: 0          Progress: 1280 _neighborCountSum: 0          Progress: 1290 _neighborCountSum: 0          Progress: 1300 _neighborCountSum: 0          Progress: 1310 _neighborCountSum: 0          Progress: 1320 _neighborCountSum: 0          Progress: 1330 _neighborCountSum: 0          Progress: 1340 _neighborCountSum: 0          Progress: 1350 _neighborCountSum: 0          Progress: 1360 _neighborCountSum: 0          Progress: 1370 _neighborCountSum: 0          Progress: 1380 _neighborCountSum: 0          Progress: 1390 _neighborCountSum: 0          Progress: 1400 _neighborCountSum: 0          Progress: 1410 _neighborCountSum: 0          Progress: 1420 _neighborCountSum: 0          Progress: 1430 _neighborCountSum: 0          Progress: 1440 _neighborCountSum: 0          Progress: 1450 _neighborCountSum: 0          Progress: 1460 _neighborCountSum: 0          Progress: 1470 _neighborCountSum: 0          Progress: 1480 _neighborCountSum: 0          Progress: 1490 _neighborCountSum: 0          Progress: 1500 _neighborCountSum: 0          Progress: 1510 _neighborCountSum: 0          Progress: 1520 _neighborCountSum: 0          Progress: 1530 _neighborCountSum: 0          Progress: 1540 _neighborCountSum: 0          Progress: 1550 _neighborCountSum: 0          Progress: 1560 _neighborCountSum: 0          Progress: 1570 _neighborCountSum: 77          Progress: 1580 _neighborCountSum: 77          Progress: 1590 _neighborCountSum: 77          Progress: 1600 _neighborCountSum: 77          Progress: 1610 _neighborCountSum: 77          Progress: 1620 _neighborCountSum: 77          Progress: 1630 _neighborCountSum: 77          Progress: 1640 _neighborCountSum: 77          Progress: 1650 _neighborCountSum: 77          Progress: 1660 _neighborCountSum: 77          Progress: 1670 _neighborCountSum: 290          Progress: 1680 _neighborCountSum: 290          Progress: 1690 _neighborCountSum: 290          Progress: 1700 _neighborCountSum: 551          Progress: 1710 _neighborCountSum: 996          Progress: 1720 _neighborCountSum: 1278          Progress: 1730 _neighborCountSum: 1802          Progress: 1740 _neighborCountSum: 1988          Progress: 1750 _neighborCountSum: 1988          Progress: 1760 _neighborCountSum: 1988          Progress: 1770 _neighborCountSum: 1988          Progress: 1780 _neighborCountSum: 1988          Progress: 1790 _neighborCountSum: 1988          Progress: 1800 _neighborCountSum: 1988          Progress: 1810 _neighborCountSum: 1988          Progress: 1820 _neighborCountSum: 1988          Progress: 1830 _neighborCountSum: 1988          Progress: 1840 _neighborCountSum: 1988          Progress: 1850 _neighborCountSum: 1988          Progress: 1860 _neighborCountSum: 1988          Progress: 1870 _neighborCountSum: 2397          Progress: 1880 _neighborCountSum: 2397          Progress: 1890 _neighborCountSum: 2397          Progress: 1900 _neighborCountSum: 2397          Progress: 1910 _neighborCountSum: 2397          Progress: 1920 _neighborCountSum: 2542          Progress: 1930 _neighborCountSum: 2542          Progress: 1940 _neighborCountSum: 2542          Progress: 1950 _neighborCountSum: 2542          Progress: 1960 _neighborCountSum: 2542          Progress: 1970 _neighborCountSum: 2542          Progress: 1980 _neighborCountSum: 2542          Progress: 1990 _neighborCountSum: 2542          Progress: 2000 _neighborCountSum: 2542          Progress: 2010 _neighborCountSum: 2542          Progress: 2020 _neighborCountSum: 2542          Progress: 2030 _neighborCountSum: 2542          Progress: 2040 _neighborCountSum: 2674          Progress: 2050 _neighborCountSum: 2769          Progress: 2060 _neighborCountSum: 2802          Progress: 2070 _neighborCountSum: 2802          Progress: 2080 _neighborCountSum: 2802          Progress: 2090 _neighborCountSum: 2802          Progress: 2100 _neighborCountSum: 2802          Progress: 2110 _neighborCountSum: 2802          Progress: 2120 _neighborCountSum: 2802          Progress: 2130 _neighborCountSum: 2802          Progress: 2140 _neighborCountSum: 2908          Progress: 2150 _neighborCountSum: 3238          Progress: 2160 _neighborCountSum: 3655          Progress: 2170 _neighborCountSum: 4356          Progress: 2180 _neighborCountSum: 4356          Progress: 2190 _neighborCountSum: 4356          Progress: 2200 _neighborCountSum: 4356          Progress: 2210 _neighborCountSum: 4356          Progress: 2220 _neighborCountSum: 4650          Progress: 2230 _neighborCountSum: 5181          Progress: 2240 _neighborCountSum: 5562          Progress: 2250 _neighborCountSum: 5562          Progress: 2260 _neighborCountSum: 5562          Progress: 2270 _neighborCountSum: 5562          Progress: 2280 _neighborCountSum: 5562          Progress: 2290 _neighborCountSum: 5562          Progress: 2300 _neighborCountSum: 5562          Progress: 2310 _neighborCountSum: 5562          Progress: 2320 _neighborCountSum: 6052          Progress: 2330 _neighborCountSum: 6052          Progress: 2340 _neighborCountSum: 6147          Progress: 2350 _neighborCountSum: 6236          Progress: 2360 _neighborCountSum: 6236          Progress: 2370 _neighborCountSum: 6236          Progress: 2380 _neighborCountSum: 6236          Progress: 2390 _neighborCountSum: 6236          Progress: 2400 _neighborCountSum: 6236          Progress: 2410 _neighborCountSum: 6236          Progress: 2420 _neighborCountSum: 6236          Progress: 2430 _neighborCountSum: 6236          Progress: 2440 _neighborCountSum: 6236          Progress: 2450 _neighborCountSum: 6236          Progress: 2460 _neighborCountSum: 6236          Progress: 2470 _neighborCountSum: 6236          Progress: 2480 _neighborCountSum: 6236          Progress: 2490 _neighborCountSum: 6236          Progress: 2500 _neighborCountSum: 6236          Progress: 2510 _neighborCountSum: 6236          Progress: 2520 _neighborCountSum: 6236          Progress: 2530 _neighborCountSum: 6236          Progress: 2540 _neighborCountSum: 6236          Progress: 2550 _neighborCountSum: 6236          Progress: 2560 _neighborCountSum: 6368          Progress: 2570 _neighborCountSum: 6368          Progress: 2580 _neighborCountSum: 6368          Progress: 2590 _neighborCountSum: 6368          Progress: 2600 _neighborCountSum: 6368          Progress: 2610 _neighborCountSum: 6368          Progress: 2620 _neighborCountSum: 6368          Progress: 2630 _neighborCountSum: 6368          Progress: 2640 _neighborCountSum: 6368          Progress: 2650 _neighborCountSum: 6368          Progress: 2660 _neighborCountSum: 6368          Progress: 2670 _neighborCountSum: 6368          Progress: 2680 _neighborCountSum: 6368          Progress: 2690 _neighborCountSum: 6368          Progress: 2700 _neighborCountSum: 6368          Progress: 2710 _neighborCountSum: 6368          Progress: 2720 _neighborCountSum: 6368          Progress: 2730 _neighborCountSum: 6368          Progress: 2740 _neighborCountSum: 6368          Progress: 2750 _neighborCountSum: 6368          Progress: 2760 _neighborCountSum: 6368          Progress: 2770 _neighborCountSum: 6368          Progress: 2780 _neighborCountSum: 6368          Progress: 2790 _neighborCountSum: 6368          Progress: 2800 _neighborCountSum: 6368          Progress: 2810 _neighborCountSum: 6368          Progress: 2820 _neighborCountSum: 6368          Progress: 2830 _neighborCountSum: 6368          Progress: 2840 _neighborCountSum: 6368          Progress: 2850 _neighborCountSum: 6368          Progress: 2860 _neighborCountSum: 6576          Progress: 2870 _neighborCountSum: 6576          Progress: 2880 _neighborCountSum: 6576          Progress: 2890 _neighborCountSum: 6576          Progress: 2900 _neighborCountSum: 6576          Progress: 2910 _neighborCountSum: 6576          Progress: 2920 _neighborCountSum: 6576          Progress: 2930 _neighborCountSum: 6576          Progress: 2940 _neighborCountSum: 6576          Progress: 2950 _neighborCountSum: 6576          Progress: 2960 _neighborCountSum: 6576          Progress: 2970 _neighborCountSum: 6576          Progress: 2980 _neighborCountSum: 7140          Progress: 2990 _neighborCountSum: 7140          Progress: 3000 _neighborCountSum: 7140          Progress: 3010 _neighborCountSum: 7140          Progress: 3020 _neighborCountSum: 7140          Progress: 3030 _neighborCountSum: 7140          Progress: 3040 _neighborCountSum: 7140          Progress: 3050 _neighborCountSum: 7140          Progress: 3060 _neighborCountSum: 7140          Progress: 3070 _neighborCountSum: 7213          Progress: 3080 _neighborCountSum: 7634          Progress: 3090 _neighborCountSum: 7634          Progress: 3100 _neighborCountSum: 8144          Progress: 3110 _neighborCountSum: 8887          Progress: 3120 _neighborCountSum: 8887          Progress: 3130 _neighborCountSum: 8887          Progress: 3140 _neighborCountSum: 9242          Progress: 3150 _neighborCountSum: 10256          Progress: 3160 _neighborCountSum: 10256          Progress: 3170 _neighborCountSum: 10256          Progress: 3180 _neighborCountSum: 10256          Progress: 3190 _neighborCountSum: 10256          Progress: 3200 _neighborCountSum: 10256          Progress: 3210 _neighborCountSum: 10256          Progress: 3220 _neighborCountSum: 10256          Progress: 3230 _neighborCountSum: 10256          Progress: 3240 _neighborCountSum: 10256          Progress: 3250 _neighborCountSum: 10256          Progress: 3260 _neighborCountSum: 10256          Progress: 3270 _neighborCountSum: 10256          Progress: 3280 _neighborCountSum: 10256          Progress: 3290 _neighborCountSum: 10256          Progress: 3300 _neighborCountSum: 10256          Progress: 3310 _neighborCountSum: 10256          Progress: 3320 _neighborCountSum: 10256          Progress: 3330 _neighborCountSum: 10256          Progress: 3340 _neighborCountSum: 10256          Progress: 3350 _neighborCountSum: 10256          Progress: 3360 _neighborCountSum: 10256          Progress: 3370 _neighborCountSum: 10256          Progress: 3380 _neighborCountSum: 10256          Progress: 3390 _neighborCountSum: 10256          Progress: 3400 _neighborCountSum: 10256          Progress: 3410 _neighborCountSum: 10256          Progress: 3420 _neighborCountSum: 10256          Progress: 3430 _neighborCountSum: 10256          Progress: 3440 _neighborCountSum: 10256          Progress: 3450 _neighborCountSum: 10256          Progress: 3460 _neighborCountSum: 10256          Progress: 3470 _neighborCountSum: 10256          Progress: 3480 _neighborCountSum: 10256          Progress: 3490 _neighborCountSum: 10256          Progress: 3500 _neighborCountSum: 10256          Progress: 3510 _neighborCountSum: 11553          Progress: 3520 _neighborCountSum: 11821          Progress: 3530 _neighborCountSum: 12817          Progress: 3540 _neighborCountSum: 12866          Progress: 3550 _neighborCountSum: 12866          Progress: 3560 _neighborCountSum: 12988          Progress: 3570 _neighborCountSum: 13670          Progress: 3580 _neighborCountSum: 13670          Progress: 3590 _neighborCountSum: 13670          Progress: 3600 _neighborCountSum: 13670          Progress: 3610 _neighborCountSum: 13670          Progress: 3620 _neighborCountSum: 13670          Progress: 3630 _neighborCountSum: 13670          Progress: 3640 _neighborCountSum: 13670          Progress: 3650 _neighborCountSum: 13670          Progress: 3660 _neighborCountSum: 13670          Progress: 3670 _neighborCountSum: 13670          Progress: 3680 _neighborCountSum: 13670          Progress: 3690 _neighborCountSum: 14104          Progress: 3700 _neighborCountSum: 14104          Progress: 3710 _neighborCountSum: 14104          Progress: 3720 _neighborCountSum: 15165          Progress: 3730 _neighborCountSum: 15762          Progress: 3740 _neighborCountSum: 16221          Progress: 3750 _neighborCountSum: 17063          Progress: 3760 _neighborCountSum: 17295          Progress: 3770 _neighborCountSum: 17926          Progress: 3780 _neighborCountSum: 18819          Progress: 3790 _neighborCountSum: 19292          Progress: 3800 _neighborCountSum: 19528          Progress: 3810 _neighborCountSum: 19926          Progress: 3820 _neighborCountSum: 20565          Progress: 3830 _neighborCountSum: 21459          Progress: 3840 _neighborCountSum: 22444          Progress: 3850 _neighborCountSum: 23026          Progress: 3860 _neighborCountSum: 23571          Progress: 3870 _neighborCountSum: 23986          Progress: 3880 _neighborCountSum: 23986          Progress: 3890 _neighborCountSum: 23986          Progress: 3900 _neighborCountSum: 23986          Progress: 3910 _neighborCountSum: 23986          Progress: 3920 _neighborCountSum: 23986          Progress: 3930 _neighborCountSum: 23986          Progress: 3940 _neighborCountSum: 24309          Progress: 3950 _neighborCountSum: 24643          Progress: 3960 _neighborCountSum: 25488          Progress: 3970 _neighborCountSum: 25908          Progress: 3980 _neighborCountSum: 27147          Progress: 3990 _neighborCountSum: 28186          Progress: 4000 _neighborCountSum: 29095          Progress: 4010 _neighborCountSum: 29317          Progress: 4020 _neighborCountSum: 29317          Progress: 4030 _neighborCountSum: 29317          Progress: 4040 _neighborCountSum: 29317          Progress: 4050 _neighborCountSum: 29317          Progress: 4060 _neighborCountSum: 29317          Progress: 4070 _neighborCountSum: 30109          Progress: 4080 _neighborCountSum: 31187          Progress: 4090 _neighborCountSum: 31782          Progress: 4100 _neighborCountSum: 32051          Progress: 4110 _neighborCountSum: 32150          Progress: 4120 _neighborCountSum: 32173          Progress: 4130 _neighborCountSum: 32173          Progress: 4140 _neighborCountSum: 32173          Progress: 4150 _neighborCountSum: 32173          Progress: 4160 _neighborCountSum: 32173          Progress: 4170 _neighborCountSum: 32173          Progress: 4180 _neighborCountSum: 32173          Progress: 4190 _neighborCountSum: 32787          Progress: 4200 _neighborCountSum: 32910          Progress: 4210 _neighborCountSum: 32910          Progress: 4220 _neighborCountSum: 33033          Progress: 4230 _neighborCountSum: 33033          Progress: 4240 _neighborCountSum: 33033          Progress: 4250 _neighborCountSum: 33268          Progress: 4260 _neighborCountSum: 33503          Progress: 4270 _neighborCountSum: 33797          Progress: 4280 _neighborCountSum: 34068          Progress: 4290 _neighborCountSum: 34359          Progress: 4300 _neighborCountSum: 34494          Progress: 4310 _neighborCountSum: 34494          Progress: 4320 _neighborCountSum: 34494          Progress: 4330 _neighborCountSum: 34494          Progress: 4340 _neighborCountSum: 34494          Progress: 4350 _neighborCountSum: 34494          Progress: 4360 _neighborCountSum: 34494          Progress: 4370 _neighborCountSum: 34494          Progress: 4380 _neighborCountSum: 34494          Progress: 4390 _neighborCountSum: 34494          Progress: 4400 _neighborCountSum: 34494          Progress: 4410 _neighborCountSum: 34494          Progress: 4420 _neighborCountSum: 34494          Progress: 4430 _neighborCountSum: 34494          Progress: 4440 _neighborCountSum: 35068          Progress: 4450 _neighborCountSum: 35726          Progress: 4460 _neighborCountSum: 36246          Progress: 4470 _neighborCountSum: 36786          Progress: 4480 _neighborCountSum: 37055          Progress: 4490 _neighborCountSum: 37055          Progress: 4500 _neighborCountSum: 37055          Progress: 4510 _neighborCountSum: 38415          Progress: 4520 _neighborCountSum: 39132          Progress: 4530 _neighborCountSum: 39158          Progress: 4540 _neighborCountSum: 39158          Progress: 4550 _neighborCountSum: 39158          Progress: 4560 _neighborCountSum: 39158          Progress: 4570 _neighborCountSum: 39158          Progress: 4580 _neighborCountSum: 39158          Progress: 4590 _neighborCountSum: 39158          Progress: 4600 _neighborCountSum: 39158          Progress: 4610 _neighborCountSum: 39158          Progress: 4620 _neighborCountSum: 39158          Progress: 4630 _neighborCountSum: 39158          Progress: 4640 _neighborCountSum: 39158          Progress: 4650 _neighborCountSum: 39158          Progress: 4660 _neighborCountSum: 39158          Progress: 4670 _neighborCountSum: 39158          Progress: 4680 _neighborCountSum: 39158          Progress: 4690 _neighborCountSum: 39158          Progress: 4700 _neighborCountSum: 39158          Progress: 4710 _neighborCountSum: 39158          Progress: 4720 _neighborCountSum: 39158          Progress: 4730 _neighborCountSum: 39158          Progress: 4740 _neighborCountSum: 39158          Progress: 4750 _neighborCountSum: 39158          Progress: 4760 _neighborCountSum: 39158          Progress: 4770 _neighborCountSum: 39158          Progress: 4780 _neighborCountSum: 39158          Progress: 4790 _neighborCountSum: 39158          Progress: 4800 _neighborCountSum: 39158          Progress: 4810 _neighborCountSum: 39158          Progress: 4820 _neighborCountSum: 39158          Progress: 4830 _neighborCountSum: 39158          Progress: 4840 _neighborCountSum: 39158          Progress: 4850 _neighborCountSum: 39158          Progress: 4860 _neighborCountSum: 39158          Progress: 4870 _neighborCountSum: 39158          Progress: 4880 _neighborCountSum: 39158          Progress: 4890 _neighborCountSum: 39158          Progress: 4900 _neighborCountSum: 39158          Progress: 4910 _neighborCountSum: 39158          Progress: 4920 _neighborCountSum: 39158          Progress: 4930 _neighborCountSum: 39158          Progress: 4940 _neighborCountSum: 39158          Progress: 4950 _neighborCountSum: 39158          Progress: 4960 _neighborCountSum: 39158          Progress: 4970 _neighborCountSum: 39158          Progress: 4980 _neighborCountSum: 39158          Progress: 4990 _neighborCountSum: 39158          Progress: 5000 _neighborCountSum: 39158          Progress: 5010 _neighborCountSum: 39158          Progress: 5020 _neighborCountSum: 39158          Progress: 5030 _neighborCountSum: 39158          Progress: 5040 _neighborCountSum: 39158          Progress: 5050 _neighborCountSum: 39158          Progress: 5060 _neighborCountSum: 39158          Progress: 5070 _neighborCountSum: 39158          Progress: 5080 _neighborCountSum: 39158          Progress: 5090 _neighborCountSum: 39158          Progress: 5100 _neighborCountSum: 39158          Progress: 5110 _neighborCountSum: 39158          Progress: 5120 _neighborCountSum: 39158          Progress: 5130 _neighborCountSum: 39158          Progress: 5140 _neighborCountSum: 39158          Progress: 5150 _neighborCountSum: 39158          Progress: 5160 _neighborCountSum: 39158          Progress: 5170 _neighborCountSum: 39158          Progress: 5180 _neighborCountSum: 39158          Progress: 5190 _neighborCountSum: 39158          Progress: 5200 _neighborCountSum: 39158          Progress: 5210 _neighborCountSum: 39158          Progress: 5220 _neighborCountSum: 39158          Progress: 5230 _neighborCountSum: 39158          Progress: 5240 _neighborCountSum: 39158          Progress: 5250 _neighborCountSum: 39158          Progress: 5260 _neighborCountSum: 39158          Progress: 5270 _neighborCountSum: 39158          Progress: 5280 _neighborCountSum: 39158          Progress: 5290 _neighborCountSum: 39158          Progress: 5300 _neighborCountSum: 39158          Progress: 5310 _neighborCountSum: 39158          Progress: 5320 _neighborCountSum: 39158          Progress: 5330 _neighborCountSum: 39158          Progress: 5340 _neighborCountSum: 39158          Progress: 5350 _neighborCountSum: 39158          Progress: 5360 _neighborCountSum: 39158          Progress: 5370 _neighborCountSum: 39158          Progress: 5380 _neighborCountSum: 39158          Progress: 5390 _neighborCountSum: 39158          Progress: 5400 _neighborCountSum: 39158          Progress: 5410 _neighborCountSum: 39158          Progress: 5420 _neighborCountSum: 39158          Progress: 5430 _neighborCountSum: 39158          Progress: 5440 _neighborCountSum: 39158          Progress: 5450 _neighborCountSum: 39158          Progress: 5460 _neighborCountSum: 39158          Progress: 5470 _neighborCountSum: 39158          Progress: 5480 _neighborCountSum: 39158          Progress: 5490 _neighborCountSum: 39158          Progress: 5500 _neighborCountSum: 39158          Progress: 5510 _neighborCountSum: 39158          Progress: 5520 _neighborCountSum: 39158          Progress: 5530 _neighborCountSum: 39158          Progress: 5540 _neighborCountSum: 39158          Progress: 5550 _neighborCountSum: 39158          Progress: 5560 _neighborCountSum: 39158          21:55:24.583 INFO  ...ighway/HighwayMatchCreator.cpp( 280) Creating matches with: hoot::HighwayMatchCreator...
-21:55:24.589 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
-21:55:24.604 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 5 and 0 tie points were found.
-21:55:24.605 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
-21:55:24.607 INFO  ...late/js/ScriptMatchCreator.cpp( 540) Creating matches with: hoot::ScriptMatchCreator; rules: LinearWaterway.js...
-Progress: 10 _neighborCountSum: 0          Progress: 20 _neighborCountSum: 0          Progress: 30 _neighborCountSum: 0          Progress: 40 _neighborCountSum: 0          Progress: 50 _neighborCountSum: 0          Progress: 60 _neighborCountSum: 0          Progress: 70 _neighborCountSum: 0          Progress: 80 _neighborCountSum: 0          Progress: 90 _neighborCountSum: 0          Progress: 100 _neighborCountSum: 0          Progress: 110 _neighborCountSum: 0          Progress: 120 _neighborCountSum: 0          Progress: 130 _neighborCountSum: 0          Progress: 140 _neighborCountSum: 0          Progress: 150 _neighborCountSum: 0          Progress: 160 _neighborCountSum: 0          Progress: 170 _neighborCountSum: 0          Progress: 180 _neighborCountSum: 0          Progress: 190 _neighborCountSum: 0          Progress: 200 _neighborCountSum: 0          Progress: 210 _neighborCountSum: 0          Progress: 220 _neighborCountSum: 0          Progress: 230 _neighborCountSum: 0          Progress: 240 _neighborCountSum: 0          Progress: 250 _neighborCountSum: 0          Progress: 260 _neighborCountSum: 0          Progress: 270 _neighborCountSum: 0          Progress: 280 _neighborCountSum: 0          Progress: 290 _neighborCountSum: 0          Progress: 300 _neighborCountSum: 0          Progress: 310 _neighborCountSum: 0          Progress: 320 _neighborCountSum: 0          Progress: 330 _neighborCountSum: 0          Progress: 340 _neighborCountSum: 0          Progress: 350 _neighborCountSum: 0          Progress: 360 _neighborCountSum: 0          Progress: 370 _neighborCountSum: 0          Progress: 380 _neighborCountSum: 0          Progress: 390 _neighborCountSum: 0          Progress: 400 _neighborCountSum: 0          Progress: 410 _neighborCountSum: 0          Progress: 420 _neighborCountSum: 0          Progress: 430 _neighborCountSum: 0          Progress: 440 _neighborCountSum: 0          Progress: 450 _neighborCountSum: 0          Progress: 460 _neighborCountSum: 0          Progress: 470 _neighborCountSum: 0          Progress: 480 _neighborCountSum: 0          Progress: 490 _neighborCountSum: 0          Progress: 500 _neighborCountSum: 0          Progress: 510 _neighborCountSum: 0          Progress: 520 _neighborCountSum: 0          Progress: 530 _neighborCountSum: 0          Progress: 540 _neighborCountSum: 0          Progress: 550 _neighborCountSum: 0          Progress: 560 _neighborCountSum: 0          Progress: 570 _neighborCountSum: 0          Progress: 580 _neighborCountSum: 0          Progress: 590 _neighborCountSum: 0          Progress: 600 _neighborCountSum: 0          Progress: 610 _neighborCountSum: 0          Progress: 620 _neighborCountSum: 0          Progress: 630 _neighborCountSum: 0          Progress: 640 _neighborCountSum: 0          Progress: 650 _neighborCountSum: 0          Progress: 660 _neighborCountSum: 0          Progress: 670 _neighborCountSum: 0          Progress: 680 _neighborCountSum: 0          Progress: 690 _neighborCountSum: 0          Progress: 700 _neighborCountSum: 0          Progress: 710 _neighborCountSum: 0          Progress: 720 _neighborCountSum: 0          Progress: 730 _neighborCountSum: 0          Progress: 740 _neighborCountSum: 0          Progress: 750 _neighborCountSum: 0          Progress: 760 _neighborCountSum: 0          Progress: 770 _neighborCountSum: 0          Progress: 780 _neighborCountSum: 0          Progress: 790 _neighborCountSum: 0          Progress: 800 _neighborCountSum: 0          Progress: 810 _neighborCountSum: 0          Progress: 820 _neighborCountSum: 0          Progress: 830 _neighborCountSum: 0          Progress: 840 _neighborCountSum: 0          Progress: 850 _neighborCountSum: 0          Progress: 860 _neighborCountSum: 0          Progress: 870 _neighborCountSum: 0          Progress: 880 _neighborCountSum: 0          Progress: 890 _neighborCountSum: 0          Progress: 900 _neighborCountSum: 0          Progress: 910 _neighborCountSum: 0          Progress: 920 _neighborCountSum: 0          Progress: 930 _neighborCountSum: 0          Progress: 940 _neighborCountSum: 0          Progress: 950 _neighborCountSum: 0          Progress: 960 _neighborCountSum: 0          Progress: 970 _neighborCountSum: 0          Progress: 980 _neighborCountSum: 0          Progress: 990 _neighborCountSum: 0          Progress: 1000 _neighborCountSum: 0          Progress: 1010 _neighborCountSum: 0          Progress: 1020 _neighborCountSum: 0          Progress: 1030 _neighborCountSum: 0          Progress: 1040 _neighborCountSum: 0          Progress: 1050 _neighborCountSum: 0          Progress: 1060 _neighborCountSum: 0          Progress: 1070 _neighborCountSum: 0          Progress: 1080 _neighborCountSum: 0          Progress: 1090 _neighborCountSum: 0          Progress: 1100 _neighborCountSum: 0          Progress: 1110 _neighborCountSum: 0          Progress: 1120 _neighborCountSum: 0          Progress: 1130 _neighborCountSum: 0          Progress: 1140 _neighborCountSum: 0          Progress: 1150 _neighborCountSum: 0          Progress: 1160 _neighborCountSum: 0          Progress: 1170 _neighborCountSum: 0          Progress: 1180 _neighborCountSum: 0          Progress: 1190 _neighborCountSum: 0          Progress: 1200 _neighborCountSum: 0          Progress: 1210 _neighborCountSum: 0          Progress: 1220 _neighborCountSum: 0          Progress: 1230 _neighborCountSum: 0          Progress: 1240 _neighborCountSum: 0          Progress: 1250 _neighborCountSum: 0          Progress: 1260 _neighborCountSum: 0          Progress: 1270 _neighborCountSum: 0          Progress: 1280 _neighborCountSum: 0          Progress: 1290 _neighborCountSum: 0          Progress: 1300 _neighborCountSum: 0          Progress: 1310 _neighborCountSum: 0          Progress: 1320 _neighborCountSum: 0          Progress: 1330 _neighborCountSum: 0          Progress: 1340 _neighborCountSum: 0          Progress: 1350 _neighborCountSum: 0          Progress: 1360 _neighborCountSum: 0          Progress: 1370 _neighborCountSum: 0          Progress: 1380 _neighborCountSum: 0          Progress: 1390 _neighborCountSum: 0          Progress: 1400 _neighborCountSum: 0          Progress: 1410 _neighborCountSum: 0          Progress: 1420 _neighborCountSum: 0          Progress: 1430 _neighborCountSum: 0          Progress: 1440 _neighborCountSum: 0          Progress: 1450 _neighborCountSum: 0          Progress: 1460 _neighborCountSum: 0          Progress: 1470 _neighborCountSum: 0          Progress: 1480 _neighborCountSum: 0          Progress: 1490 _neighborCountSum: 0          Progress: 1500 _neighborCountSum: 0          Progress: 1510 _neighborCountSum: 0          Progress: 1520 _neighborCountSum: 0          Progress: 1530 _neighborCountSum: 0          Progress: 1540 _neighborCountSum: 0          Progress: 1550 _neighborCountSum: 0          Progress: 1560 _neighborCountSum: 0          Progress: 1570 _neighborCountSum: 0          Progress: 1580 _neighborCountSum: 0          Progress: 1590 _neighborCountSum: 0          Progress: 1600 _neighborCountSum: 0          Progress: 1610 _neighborCountSum: 0          Progress: 1620 _neighborCountSum: 0          Progress: 1630 _neighborCountSum: 0          Progress: 1640 _neighborCountSum: 0          Progress: 1650 _neighborCountSum: 0          Progress: 1660 _neighborCountSum: 0          Progress: 1670 _neighborCountSum: 0          Progress: 1680 _neighborCountSum: 0          Progress: 1690 _neighborCountSum: 0          Progress: 1700 _neighborCountSum: 0          Progress: 1710 _neighborCountSum: 0          Progress: 1720 _neighborCountSum: 0          Progress: 1730 _neighborCountSum: 0          Progress: 1740 _neighborCountSum: 0          Progress: 1750 _neighborCountSum: 0          Progress: 1760 _neighborCountSum: 0          Progress: 1770 _neighborCountSum: 0          Progress: 1780 _neighborCountSum: 0          Progress: 1790 _neighborCountSum: 0          Progress: 1800 _neighborCountSum: 0          Progress: 1810 _neighborCountSum: 0          Progress: 1820 _neighborCountSum: 0          Progress: 1830 _neighborCountSum: 0          Progress: 1840 _neighborCountSum: 0          Progress: 1850 _neighborCountSum: 0          Progress: 1860 _neighborCountSum: 0          Progress: 1870 _neighborCountSum: 0          Progress: 1880 _neighborCountSum: 0          Progress: 1890 _neighborCountSum: 0          Progress: 1900 _neighborCountSum: 0          Progress: 1910 _neighborCountSum: 0          Progress: 1920 _neighborCountSum: 0          Progress: 1930 _neighborCountSum: 0          Progress: 1940 _neighborCountSum: 0          Progress: 1950 _neighborCountSum: 0          Progress: 1960 _neighborCountSum: 0          Progress: 1970 _neighborCountSum: 0          Progress: 1980 _neighborCountSum: 0          Progress: 1990 _neighborCountSum: 0          Progress: 2000 _neighborCountSum: 0          Progress: 2010 _neighborCountSum: 0          Progress: 2020 _neighborCountSum: 0          Progress: 2030 _neighborCountSum: 0          Progress: 2040 _neighborCountSum: 0          Progress: 2050 _neighborCountSum: 0          Progress: 2060 _neighborCountSum: 0          Progress: 2070 _neighborCountSum: 0          Progress: 2080 _neighborCountSum: 0          Progress: 2090 _neighborCountSum: 0          Progress: 2100 _neighborCountSum: 0          Progress: 2110 _neighborCountSum: 0          Progress: 2120 _neighborCountSum: 0          Progress: 2130 _neighborCountSum: 0          Progress: 2140 _neighborCountSum: 0          Progress: 2150 _neighborCountSum: 0          Progress: 2160 _neighborCountSum: 0          Progress: 2170 _neighborCountSum: 0          Progress: 2180 _neighborCountSum: 0          Progress: 2190 _neighborCountSum: 0          Progress: 2200 _neighborCountSum: 0          Progress: 2210 _neighborCountSum: 0          Progress: 2220 _neighborCountSum: 0          Progress: 2230 _neighborCountSum: 0          Progress: 2240 _neighborCountSum: 0          Progress: 2250 _neighborCountSum: 0          Progress: 2260 _neighborCountSum: 0          Progress: 2270 _neighborCountSum: 0          Progress: 2280 _neighborCountSum: 0          Progress: 2290 _neighborCountSum: 0          Progress: 2300 _neighborCountSum: 0          Progress: 2310 _neighborCountSum: 0          Progress: 2320 _neighborCountSum: 0          Progress: 2330 _neighborCountSum: 0          Progress: 2340 _neighborCountSum: 0          Progress: 2350 _neighborCountSum: 0          Progress: 2360 _neighborCountSum: 0          Progress: 2370 _neighborCountSum: 0          Progress: 2380 _neighborCountSum: 0          Progress: 2390 _neighborCountSum: 0          Progress: 2400 _neighborCountSum: 0          Progress: 2410 _neighborCountSum: 0          Progress: 2420 _neighborCountSum: 0          Progress: 2430 _neighborCountSum: 0          Progress: 2440 _neighborCountSum: 0          Progress: 2450 _neighborCountSum: 0          Progress: 2460 _neighborCountSum: 0          Progress: 2470 _neighborCountSum: 0          Progress: 2480 _neighborCountSum: 0          Progress: 2490 _neighborCountSum: 0          Progress: 2500 _neighborCountSum: 0          Progress: 2510 _neighborCountSum: 0          Progress: 2520 _neighborCountSum: 0          Progress: 2530 _neighborCountSum: 0          Progress: 2540 _neighborCountSum: 0          Progress: 2550 _neighborCountSum: 0          Progress: 2560 _neighborCountSum: 0          Progress: 2570 _neighborCountSum: 0          Progress: 2580 _neighborCountSum: 0          Progress: 2590 _neighborCountSum: 0          Progress: 2600 _neighborCountSum: 0          Progress: 2610 _neighborCountSum: 0          Progress: 2620 _neighborCountSum: 0          Progress: 2630 _neighborCountSum: 0          Progress: 2640 _neighborCountSum: 0          Progress: 2650 _neighborCountSum: 0          Progress: 2660 _neighborCountSum: 0          Progress: 2670 _neighborCountSum: 0          Progress: 2680 _neighborCountSum: 0          Progress: 2690 _neighborCountSum: 0          Progress: 2700 _neighborCountSum: 0          Progress: 2710 _neighborCountSum: 0          Progress: 2720 _neighborCountSum: 0          Progress: 2730 _neighborCountSum: 0          Progress: 2740 _neighborCountSum: 0          Progress: 2750 _neighborCountSum: 0          Progress: 2760 _neighborCountSum: 0          Progress: 2770 _neighborCountSum: 0          Progress: 2780 _neighborCountSum: 0          Progress: 2790 _neighborCountSum: 0          Progress: 2800 _neighborCountSum: 0          Progress: 2810 _neighborCountSum: 0          Progress: 2820 _neighborCountSum: 0          Progress: 2830 _neighborCountSum: 0          Progress: 2840 _neighborCountSum: 0          Progress: 2850 _neighborCountSum: 0          Progress: 2860 _neighborCountSum: 0          Progress: 2870 _neighborCountSum: 0          Progress: 2880 _neighborCountSum: 0          Progress: 2890 _neighborCountSum: 0          Progress: 2900 _neighborCountSum: 0          Progress: 2910 _neighborCountSum: 0          Progress: 2920 _neighborCountSum: 0          Progress: 2930 _neighborCountSum: 0          Progress: 2940 _neighborCountSum: 0          Progress: 2950 _neighborCountSum: 0          Progress: 2960 _neighborCountSum: 0          Progress: 2970 _neighborCountSum: 0          Progress: 2980 _neighborCountSum: 0          Progress: 2990 _neighborCountSum: 0          Progress: 3000 _neighborCountSum: 0          Progress: 3010 _neighborCountSum: 0          Progress: 3020 _neighborCountSum: 0          Progress: 3030 _neighborCountSum: 0          Progress: 3040 _neighborCountSum: 0          Progress: 3050 _neighborCountSum: 0          Progress: 3060 _neighborCountSum: 0          Progress: 3070 _neighborCountSum: 0          Progress: 3080 _neighborCountSum: 0          Progress: 3090 _neighborCountSum: 0          Progress: 3100 _neighborCountSum: 0          Progress: 3110 _neighborCountSum: 0          Progress: 3120 _neighborCountSum: 0          Progress: 3130 _neighborCountSum: 0          Progress: 3140 _neighborCountSum: 0          Progress: 3150 _neighborCountSum: 0          Progress: 3160 _neighborCountSum: 0          Progress: 3170 _neighborCountSum: 0          Progress: 3180 _neighborCountSum: 0          Progress: 3190 _neighborCountSum: 0          Progress: 3200 _neighborCountSum: 0          Progress: 3210 _neighborCountSum: 0          Progress: 3220 _neighborCountSum: 0          Progress: 3230 _neighborCountSum: 0          Progress: 3240 _neighborCountSum: 0          Progress: 3250 _neighborCountSum: 0          Progress: 3260 _neighborCountSum: 0          Progress: 3270 _neighborCountSum: 0          Progress: 3280 _neighborCountSum: 0          Progress: 3290 _neighborCountSum: 0          Progress: 3300 _neighborCountSum: 0          Progress: 3310 _neighborCountSum: 0          Progress: 3320 _neighborCountSum: 0          Progress: 3330 _neighborCountSum: 0          Progress: 3340 _neighborCountSum: 0          Progress: 3350 _neighborCountSum: 0          Progress: 3360 _neighborCountSum: 0          Progress: 3370 _neighborCountSum: 0          Progress: 3380 _neighborCountSum: 0          Progress: 3390 _neighborCountSum: 0          Progress: 3400 _neighborCountSum: 0          Progress: 3410 _neighborCountSum: 0          Progress: 3420 _neighborCountSum: 0          Progress: 3430 _neighborCountSum: 0          Progress: 3440 _neighborCountSum: 0          Progress: 3450 _neighborCountSum: 0          Progress: 3460 _neighborCountSum: 0          Progress: 3470 _neighborCountSum: 0          Progress: 3480 _neighborCountSum: 0          Progress: 3490 _neighborCountSum: 0          Progress: 3500 _neighborCountSum: 0          Progress: 3510 _neighborCountSum: 0          Progress: 3520 _neighborCountSum: 0          Progress: 3530 _neighborCountSum: 0          Progress: 3540 _neighborCountSum: 0          Progress: 3550 _neighborCountSum: 0          Progress: 3560 _neighborCountSum: 0          Progress: 3570 _neighborCountSum: 0          Progress: 3580 _neighborCountSum: 0          Progress: 3590 _neighborCountSum: 0          Progress: 3600 _neighborCountSum: 0          Progress: 3610 _neighborCountSum: 0          Progress: 3620 _neighborCountSum: 0          Progress: 3630 _neighborCountSum: 0          Progress: 3640 _neighborCountSum: 0          Progress: 3650 _neighborCountSum: 0          Progress: 3660 _neighborCountSum: 0          Progress: 3670 _neighborCountSum: 0          Progress: 3680 _neighborCountSum: 0          Progress: 3690 _neighborCountSum: 0          Progress: 3700 _neighborCountSum: 0          Progress: 3710 _neighborCountSum: 0          Progress: 3720 _neighborCountSum: 0          Progress: 3730 _neighborCountSum: 0          Progress: 3740 _neighborCountSum: 0          Progress: 3750 _neighborCountSum: 0          Progress: 3760 _neighborCountSum: 0          Progress: 3770 _neighborCountSum: 0          Progress: 3780 _neighborCountSum: 0          Progress: 3790 _neighborCountSum: 0          Progress: 3800 _neighborCountSum: 0          Progress: 3810 _neighborCountSum: 0          Progress: 3820 _neighborCountSum: 0          Progress: 3830 _neighborCountSum: 0          Progress: 3840 _neighborCountSum: 0          Progress: 3850 _neighborCountSum: 0          Progress: 3860 _neighborCountSum: 0          Progress: 3870 _neighborCountSum: 0          Progress: 3880 _neighborCountSum: 0          Progress: 3890 _neighborCountSum: 0          Progress: 3900 _neighborCountSum: 0          Progress: 3910 _neighborCountSum: 0          Progress: 3920 _neighborCountSum: 0          Progress: 3930 _neighborCountSum: 0          Progress: 3940 _neighborCountSum: 0          Progress: 3950 _neighborCountSum: 0          Progress: 3960 _neighborCountSum: 0          Progress: 3970 _neighborCountSum: 0          Progress: 3980 _neighborCountSum: 0          Progress: 3990 _neighborCountSum: 0          Progress: 4000 _neighborCountSum: 0          Progress: 4010 _neighborCountSum: 0          Progress: 4020 _neighborCountSum: 0          Progress: 4030 _neighborCountSum: 0          Progress: 4040 _neighborCountSum: 0          Progress: 4050 _neighborCountSum: 0          Progress: 4060 _neighborCountSum: 0          Progress: 4070 _neighborCountSum: 0          Progress: 4080 _neighborCountSum: 0          Progress: 4090 _neighborCountSum: 0          Progress: 4100 _neighborCountSum: 0          Progress: 4110 _neighborCountSum: 0          Progress: 4120 _neighborCountSum: 0          Progress: 4130 _neighborCountSum: 0          Progress: 4140 _neighborCountSum: 0          Progress: 4150 _neighborCountSum: 0          Progress: 4160 _neighborCountSum: 0          Progress: 4170 _neighborCountSum: 0          Progress: 4180 _neighborCountSum: 0          Progress: 4190 _neighborCountSum: 0          Progress: 4200 _neighborCountSum: 0          Progress: 4210 _neighborCountSum: 0          Progress: 4220 _neighborCountSum: 0          Progress: 4230 _neighborCountSum: 0          Progress: 4240 _neighborCountSum: 0          Progress: 4250 _neighborCountSum: 0          Progress: 4260 _neighborCountSum: 0          Progress: 4270 _neighborCountSum: 0          Progress: 4280 _neighborCountSum: 0          Progress: 4290 _neighborCountSum: 0          Progress: 4300 _neighborCountSum: 0          Progress: 4310 _neighborCountSum: 0          Progress: 4320 _neighborCountSum: 0          Progress: 4330 _neighborCountSum: 0          Progress: 4340 _neighborCountSum: 0          Progress: 4350 _neighborCountSum: 0          Progress: 4360 _neighborCountSum: 0          Progress: 4370 _neighborCountSum: 0          Progress: 4380 _neighborCountSum: 0          Progress: 4390 _neighborCountSum: 0          Progress: 4400 _neighborCountSum: 0          Progress: 4410 _neighborCountSum: 0          Progress: 4420 _neighborCountSum: 0          Progress: 4430 _neighborCountSum: 0          Progress: 4440 _neighborCountSum: 0          Progress: 4450 _neighborCountSum: 0          Progress: 4460 _neighborCountSum: 0          Progress: 4470 _neighborCountSum: 0          Progress: 4480 _neighborCountSum: 0          Progress: 4490 _neighborCountSum: 0          Progress: 4500 _neighborCountSum: 0          Progress: 4510 _neighborCountSum: 0          Progress: 4520 _neighborCountSum: 0          Progress: 4530 _neighborCountSum: 0          Progress: 4540 _neighborCountSum: 0          Progress: 4550 _neighborCountSum: 0          Progress: 4560 _neighborCountSum: 0          Progress: 4570 _neighborCountSum: 0          Progress: 4580 _neighborCountSum: 0          Progress: 4590 _neighborCountSum: 0          Progress: 4600 _neighborCountSum: 0          Progress: 4610 _neighborCountSum: 0          Progress: 4620 _neighborCountSum: 0          Progress: 4630 _neighborCountSum: 0          Progress: 4640 _neighborCountSum: 0          Progress: 4650 _neighborCountSum: 0          Progress: 4660 _neighborCountSum: 0          Progress: 4670 _neighborCountSum: 0          Progress: 4680 _neighborCountSum: 0          Progress: 4690 _neighborCountSum: 0          Progress: 4700 _neighborCountSum: 0          Progress: 4710 _neighborCountSum: 0          Progress: 4720 _neighborCountSum: 0          Progress: 4730 _neighborCountSum: 0          Progress: 4740 _neighborCountSum: 0          Progress: 4750 _neighborCountSum: 0          Progress: 4760 _neighborCountSum: 0          Progress: 4770 _neighborCountSum: 0          Progress: 4780 _neighborCountSum: 0          Progress: 4790 _neighborCountSum: 0          Progress: 4800 _neighborCountSum: 0          Progress: 4810 _neighborCountSum: 0          Progress: 4820 _neighborCountSum: 0          Progress: 4830 _neighborCountSum: 0          Progress: 4840 _neighborCountSum: 0          Progress: 4850 _neighborCountSum: 0          Progress: 4860 _neighborCountSum: 0          Progress: 4870 _neighborCountSum: 0          Progress: 4880 _neighborCountSum: 0          Progress: 4890 _neighborCountSum: 0          Progress: 4900 _neighborCountSum: 0          Progress: 4910 _neighborCountSum: 0          Progress: 4920 _neighborCountSum: 0          Progress: 4930 _neighborCountSum: 0          Progress: 4940 _neighborCountSum: 0          Progress: 4950 _neighborCountSum: 0          Progress: 4960 _neighborCountSum: 0          Progress: 4970 _neighborCountSum: 0          Progress: 4980 _neighborCountSum: 0          Progress: 4990 _neighborCountSum: 0          Progress: 5000 _neighborCountSum: 0          Progress: 5010 _neighborCountSum: 0          Progress: 5020 _neighborCountSum: 0          Progress: 5030 _neighborCountSum: 0          Progress: 5040 _neighborCountSum: 0          Progress: 5050 _neighborCountSum: 0          Progress: 5060 _neighborCountSum: 0          Progress: 5070 _neighborCountSum: 0          Progress: 5080 _neighborCountSum: 0          Progress: 5090 _neighborCountSum: 0          Progress: 5100 _neighborCountSum: 0          Progress: 5110 _neighborCountSum: 0          Progress: 5120 _neighborCountSum: 0          Progress: 5130 _neighborCountSum: 0          Progress: 5140 _neighborCountSum: 0          Progress: 5150 _neighborCountSum: 0          Progress: 5160 _neighborCountSum: 0          Progress: 5170 _neighborCountSum: 0          Progress: 5180 _neighborCountSum: 0          Progress: 5190 _neighborCountSum: 0          Progress: 5200 _neighborCountSum: 0          Progress: 5210 _neighborCountSum: 0          Progress: 5220 _neighborCountSum: 0          Progress: 5230 _neighborCountSum: 0          Progress: 5240 _neighborCountSum: 0          Progress: 5250 _neighborCountSum: 0          Progress: 5260 _neighborCountSum: 0          Progress: 5270 _neighborCountSum: 0          Progress: 5280 _neighborCountSum: 0          Progress: 5290 _neighborCountSum: 0          Progress: 5300 _neighborCountSum: 0          Progress: 5310 _neighborCountSum: 0          Progress: 5320 _neighborCountSum: 0          Progress: 5330 _neighborCountSum: 0          Progress: 5340 _neighborCountSum: 0          Progress: 5350 _neighborCountSum: 0          Progress: 5360 _neighborCountSum: 0          Progress: 5370 _neighborCountSum: 0          Progress: 5380 _neighborCountSum: 0          Progress: 5390 _neighborCountSum: 0          Progress: 5400 _neighborCountSum: 0          Progress: 5410 _neighborCountSum: 0          Progress: 5420 _neighborCountSum: 0          Progress: 5430 _neighborCountSum: 0          Progress: 5440 _neighborCountSum: 0          Progress: 5450 _neighborCountSum: 0          Progress: 5460 _neighborCountSum: 0          Progress: 5470 _neighborCountSum: 0          Progress: 5480 _neighborCountSum: 0          Progress: 5490 _neighborCountSum: 0          Progress: 5500 _neighborCountSum: 0          Progress: 5510 _neighborCountSum: 0          Progress: 5520 _neighborCountSum: 0          Progress: 5530 _neighborCountSum: 0          Progress: 5540 _neighborCountSum: 0          Progress: 5550 _neighborCountSum: 0          Progress: 5560 _neighborCountSum: 0          21:55:24.684 INFO  ...gon/PoiPolygonMatchCreator.cpp(  86) Creating matches with: hoot::PoiPolygonMatchCreator...
-21:55:42.532 INFO  ...late/js/ScriptMatchCreator.cpp( 540) Creating matches with: hoot::ScriptMatchCreator; rules: Area.js...
-Progress: 10 _neighborCountSum: 0          Progress: 20 _neighborCountSum: 0          Progress: 30 _neighborCountSum: 0          Progress: 40 _neighborCountSum: 0          Progress: 50 _neighborCountSum: 0          Progress: 60 _neighborCountSum: 0          Progress: 70 _neighborCountSum: 0          Progress: 80 _neighborCountSum: 0          Progress: 90 _neighborCountSum: 0          Progress: 100 _neighborCountSum: 0          Progress: 110 _neighborCountSum: 0          Progress: 120 _neighborCountSum: 0          Progress: 130 _neighborCountSum: 0          Progress: 140 _neighborCountSum: 0          Progress: 150 _neighborCountSum: 0          Progress: 160 _neighborCountSum: 0          Progress: 170 _neighborCountSum: 0          Progress: 180 _neighborCountSum: 0          Progress: 190 _neighborCountSum: 0          Progress: 200 _neighborCountSum: 0          Progress: 210 _neighborCountSum: 0          Progress: 220 _neighborCountSum: 0          Progress: 230 _neighborCountSum: 0          Progress: 240 _neighborCountSum: 0          Progress: 250 _neighborCountSum: 0          Progress: 260 _neighborCountSum: 0          Progress: 270 _neighborCountSum: 0          Progress: 280 _neighborCountSum: 0          Progress: 290 _neighborCountSum: 0          Progress: 300 _neighborCountSum: 0          Progress: 310 _neighborCountSum: 0          Progress: 320 _neighborCountSum: 0          Progress: 330 _neighborCountSum: 0          Progress: 340 _neighborCountSum: 0          Progress: 350 _neighborCountSum: 0          Progress: 360 _neighborCountSum: 0          Progress: 370 _neighborCountSum: 0          Progress: 380 _neighborCountSum: 0          Progress: 390 _neighborCountSum: 0          Progress: 400 _neighborCountSum: 0          Progress: 410 _neighborCountSum: 0          Progress: 420 _neighborCountSum: 0          Progress: 430 _neighborCountSum: 0          Progress: 440 _neighborCountSum: 0          Progress: 450 _neighborCountSum: 0          Progress: 460 _neighborCountSum: 0          Progress: 470 _neighborCountSum: 0          Progress: 480 _neighborCountSum: 0          Progress: 490 _neighborCountSum: 0          Progress: 500 _neighborCountSum: 0          Progress: 510 _neighborCountSum: 0          Progress: 520 _neighborCountSum: 0          Progress: 530 _neighborCountSum: 0          Progress: 540 _neighborCountSum: 0          Progress: 550 _neighborCountSum: 0          Progress: 560 _neighborCountSum: 0          Progress: 570 _neighborCountSum: 0          Progress: 580 _neighborCountSum: 0          Progress: 590 _neighborCountSum: 0          Progress: 600 _neighborCountSum: 0          Progress: 610 _neighborCountSum: 0          Progress: 620 _neighborCountSum: 0          Progress: 630 _neighborCountSum: 0          Progress: 640 _neighborCountSum: 0          Progress: 650 _neighborCountSum: 0          Progress: 660 _neighborCountSum: 0          Progress: 670 _neighborCountSum: 0          Progress: 680 _neighborCountSum: 0          Progress: 690 _neighborCountSum: 0          Progress: 700 _neighborCountSum: 0          Progress: 710 _neighborCountSum: 0          Progress: 720 _neighborCountSum: 0          Progress: 730 _neighborCountSum: 0          Progress: 740 _neighborCountSum: 0          Progress: 750 _neighborCountSum: 0          Progress: 760 _neighborCountSum: 0          Progress: 770 _neighborCountSum: 0          Progress: 780 _neighborCountSum: 0          Progress: 790 _neighborCountSum: 0          Progress: 800 _neighborCountSum: 0          Progress: 810 _neighborCountSum: 0          Progress: 820 _neighborCountSum: 0          Progress: 830 _neighborCountSum: 0          Progress: 840 _neighborCountSum: 0          Progress: 850 _neighborCountSum: 0          Progress: 860 _neighborCountSum: 0          Progress: 870 _neighborCountSum: 0          Progress: 880 _neighborCountSum: 0          Progress: 890 _neighborCountSum: 0          Progress: 900 _neighborCountSum: 0          Progress: 910 _neighborCountSum: 0          Progress: 920 _neighborCountSum: 0          Progress: 930 _neighborCountSum: 0          Progress: 940 _neighborCountSum: 0          Progress: 950 _neighborCountSum: 0          Progress: 960 _neighborCountSum: 0          Progress: 970 _neighborCountSum: 0          Progress: 980 _neighborCountSum: 0          Progress: 990 _neighborCountSum: 0          Progress: 1000 _neighborCountSum: 0          Progress: 1010 _neighborCountSum: 0          Progress: 1020 _neighborCountSum: 0          Progress: 1030 _neighborCountSum: 0          Progress: 1040 _neighborCountSum: 0          Progress: 1050 _neighborCountSum: 0          Progress: 1060 _neighborCountSum: 0          Progress: 1070 _neighborCountSum: 0          Progress: 1080 _neighborCountSum: 0          Progress: 1090 _neighborCountSum: 0          Progress: 1100 _neighborCountSum: 0          Progress: 1110 _neighborCountSum: 0          Progress: 1120 _neighborCountSum: 0          Progress: 1130 _neighborCountSum: 0          Progress: 1140 _neighborCountSum: 0          Progress: 1150 _neighborCountSum: 0          Progress: 1160 _neighborCountSum: 0          Progress: 1170 _neighborCountSum: 0          Progress: 1180 _neighborCountSum: 0          Progress: 1190 _neighborCountSum: 0          Progress: 1200 _neighborCountSum: 0          Progress: 1210 _neighborCountSum: 0          Progress: 1220 _neighborCountSum: 0          Progress: 1230 _neighborCountSum: 0          Progress: 1240 _neighborCountSum: 0          Progress: 1250 _neighborCountSum: 0          Progress: 1260 _neighborCountSum: 0          Progress: 1270 _neighborCountSum: 0          Progress: 1280 _neighborCountSum: 0          Progress: 1290 _neighborCountSum: 0          Progress: 1300 _neighborCountSum: 0          Progress: 1310 _neighborCountSum: 0          Progress: 1320 _neighborCountSum: 0          Progress: 1330 _neighborCountSum: 0          Progress: 1340 _neighborCountSum: 0          Progress: 1350 _neighborCountSum: 0          Progress: 1360 _neighborCountSum: 0          Progress: 1370 _neighborCountSum: 0          Progress: 1380 _neighborCountSum: 0          Progress: 1390 _neighborCountSum: 0          Progress: 1400 _neighborCountSum: 0          Progress: 1410 _neighborCountSum: 0          Progress: 1420 _neighborCountSum: 0          Progress: 1430 _neighborCountSum: 0          Progress: 1440 _neighborCountSum: 0          Progress: 1450 _neighborCountSum: 0          Progress: 1460 _neighborCountSum: 0          Progress: 1470 _neighborCountSum: 0          Progress: 1480 _neighborCountSum: 0          Progress: 1490 _neighborCountSum: 0          Progress: 1500 _neighborCountSum: 0          Progress: 1510 _neighborCountSum: 0          Progress: 1520 _neighborCountSum: 0          Progress: 1530 _neighborCountSum: 0          Progress: 1540 _neighborCountSum: 0          Progress: 1550 _neighborCountSum: 0          Progress: 1560 _neighborCountSum: 0          Progress: 1570 _neighborCountSum: 0          Progress: 1580 _neighborCountSum: 0          Progress: 1590 _neighborCountSum: 0          Progress: 1600 _neighborCountSum: 0          Progress: 1610 _neighborCountSum: 0          Progress: 1620 _neighborCountSum: 0          Progress: 1630 _neighborCountSum: 0          Progress: 1640 _neighborCountSum: 0          Progress: 1650 _neighborCountSum: 0          Progress: 1660 _neighborCountSum: 0          Progress: 1670 _neighborCountSum: 0          Progress: 1680 _neighborCountSum: 0          Progress: 1690 _neighborCountSum: 0          Progress: 1700 _neighborCountSum: 0          Progress: 1710 _neighborCountSum: 0          Progress: 1720 _neighborCountSum: 0          Progress: 1730 _neighborCountSum: 0          Progress: 1740 _neighborCountSum: 0          Progress: 1750 _neighborCountSum: 0          Progress: 1760 _neighborCountSum: 0          Progress: 1770 _neighborCountSum: 0          Progress: 1780 _neighborCountSum: 0          Progress: 1790 _neighborCountSum: 0          Progress: 1800 _neighborCountSum: 0          Progress: 1810 _neighborCountSum: 0          Progress: 1820 _neighborCountSum: 0          Progress: 1830 _neighborCountSum: 0          Progress: 1840 _neighborCountSum: 0          Progress: 1850 _neighborCountSum: 0          Progress: 1860 _neighborCountSum: 0          Progress: 1870 _neighborCountSum: 0          Progress: 1880 _neighborCountSum: 0          Progress: 1890 _neighborCountSum: 0          Progress: 1900 _neighborCountSum: 0          Progress: 1910 _neighborCountSum: 0          Progress: 1920 _neighborCountSum: 0          Progress: 1930 _neighborCountSum: 0          Progress: 1940 _neighborCountSum: 0          Progress: 1950 _neighborCountSum: 0          Progress: 1960 _neighborCountSum: 0          Progress: 1970 _neighborCountSum: 0          Progress: 1980 _neighborCountSum: 0          Progress: 1990 _neighborCountSum: 0          Progress: 2000 _neighborCountSum: 0          Progress: 2010 _neighborCountSum: 0          Progress: 2020 _neighborCountSum: 0          Progress: 2030 _neighborCountSum: 0          Progress: 2040 _neighborCountSum: 0          Progress: 2050 _neighborCountSum: 0          Progress: 2060 _neighborCountSum: 0          Progress: 2070 _neighborCountSum: 0          Progress: 2080 _neighborCountSum: 0          Progress: 2090 _neighborCountSum: 0          Progress: 2100 _neighborCountSum: 0          Progress: 2110 _neighborCountSum: 0          Progress: 2120 _neighborCountSum: 0          Progress: 2130 _neighborCountSum: 0          Progress: 2140 _neighborCountSum: 0          Progress: 2150 _neighborCountSum: 0          Progress: 2160 _neighborCountSum: 0          Progress: 2170 _neighborCountSum: 0          Progress: 2180 _neighborCountSum: 0          Progress: 2190 _neighborCountSum: 0          Progress: 2200 _neighborCountSum: 0          Progress: 2210 _neighborCountSum: 0          Progress: 2220 _neighborCountSum: 0          Progress: 2230 _neighborCountSum: 0          Progress: 2240 _neighborCountSum: 0          Progress: 2250 _neighborCountSum: 0          Progress: 2260 _neighborCountSum: 0          Progress: 2270 _neighborCountSum: 0          Progress: 2280 _neighborCountSum: 0          Progress: 2290 _neighborCountSum: 0          Progress: 2300 _neighborCountSum: 0          Progress: 2310 _neighborCountSum: 0          Progress: 2320 _neighborCountSum: 0          Progress: 2330 _neighborCountSum: 0          Progress: 2340 _neighborCountSum: 0          Progress: 2350 _neighborCountSum: 0          Progress: 2360 _neighborCountSum: 0          Progress: 2370 _neighborCountSum: 0          Progress: 2380 _neighborCountSum: 0          Progress: 2390 _neighborCountSum: 0          Progress: 2400 _neighborCountSum: 0          Progress: 2410 _neighborCountSum: 0          Progress: 2420 _neighborCountSum: 0          Progress: 2430 _neighborCountSum: 0          Progress: 2440 _neighborCountSum: 0          Progress: 2450 _neighborCountSum: 0          Progress: 2460 _neighborCountSum: 0          Progress: 2470 _neighborCountSum: 0          Progress: 2480 _neighborCountSum: 0          Progress: 2490 _neighborCountSum: 0          Progress: 2500 _neighborCountSum: 0          Progress: 2510 _neighborCountSum: 0          Progress: 2520 _neighborCountSum: 0          Progress: 2530 _neighborCountSum: 0          Progress: 2540 _neighborCountSum: 0          Progress: 2550 _neighborCountSum: 0          Progress: 2560 _neighborCountSum: 0          Progress: 2570 _neighborCountSum: 0          Progress: 2580 _neighborCountSum: 0          Progress: 2590 _neighborCountSum: 0          Progress: 2600 _neighborCountSum: 0          Progress: 2610 _neighborCountSum: 0          Progress: 2620 _neighborCountSum: 0          Progress: 2630 _neighborCountSum: 0          Progress: 2640 _neighborCountSum: 0          Progress: 2650 _neighborCountSum: 0          Progress: 2660 _neighborCountSum: 0          Progress: 2670 _neighborCountSum: 0          Progress: 2680 _neighborCountSum: 0          Progress: 2690 _neighborCountSum: 0          Progress: 2700 _neighborCountSum: 0          Progress: 2710 _neighborCountSum: 0          Progress: 2720 _neighborCountSum: 0          Progress: 2730 _neighborCountSum: 0          Progress: 2740 _neighborCountSum: 0          Progress: 2750 _neighborCountSum: 0          Progress: 2760 _neighborCountSum: 0          Progress: 2770 _neighborCountSum: 0          Progress: 2780 _neighborCountSum: 0          Progress: 2790 _neighborCountSum: 0          Progress: 2800 _neighborCountSum: 0          Progress: 2810 _neighborCountSum: 0          Progress: 2820 _neighborCountSum: 0          Progress: 2830 _neighborCountSum: 0          Progress: 2840 _neighborCountSum: 0          Progress: 2850 _neighborCountSum: 0          Progress: 2860 _neighborCountSum: 0          Progress: 2870 _neighborCountSum: 0          Progress: 2880 _neighborCountSum: 0          Progress: 2890 _neighborCountSum: 0          Progress: 2900 _neighborCountSum: 0          Progress: 2910 _neighborCountSum: 0          Progress: 2920 _neighborCountSum: 0          Progress: 2930 _neighborCountSum: 0          Progress: 2940 _neighborCountSum: 0          Progress: 2950 _neighborCountSum: 0          Progress: 2960 _neighborCountSum: 0          Progress: 2970 _neighborCountSum: 0          Progress: 2980 _neighborCountSum: 0          Progress: 2990 _neighborCountSum: 0          Progress: 3000 _neighborCountSum: 0          Progress: 3010 _neighborCountSum: 0          Progress: 3020 _neighborCountSum: 0          Progress: 3030 _neighborCountSum: 0          Progress: 3040 _neighborCountSum: 0          Progress: 3050 _neighborCountSum: 0          Progress: 3060 _neighborCountSum: 0          Progress: 3070 _neighborCountSum: 0          Progress: 3080 _neighborCountSum: 0          Progress: 3090 _neighborCountSum: 0          Progress: 3100 _neighborCountSum: 0          Progress: 3110 _neighborCountSum: 0          Progress: 3120 _neighborCountSum: 0          Progress: 3130 _neighborCountSum: 0          Progress: 3140 _neighborCountSum: 0          Progress: 3150 _neighborCountSum: 0          Progress: 3160 _neighborCountSum: 0          Progress: 3170 _neighborCountSum: 0          Progress: 3180 _neighborCountSum: 0          Progress: 3190 _neighborCountSum: 0          Progress: 3200 _neighborCountSum: 0          Progress: 3210 _neighborCountSum: 0          Progress: 3220 _neighborCountSum: 0          Progress: 3230 _neighborCountSum: 0          Progress: 3240 _neighborCountSum: 0          Progress: 3250 _neighborCountSum: 0          Progress: 3260 _neighborCountSum: 0          Progress: 3270 _neighborCountSum: 0          Progress: 3280 _neighborCountSum: 0          Progress: 3290 _neighborCountSum: 0          Progress: 3300 _neighborCountSum: 0          Progress: 3310 _neighborCountSum: 0          Progress: 3320 _neighborCountSum: 0          Progress: 3330 _neighborCountSum: 0          Progress: 3340 _neighborCountSum: 0          Progress: 3350 _neighborCountSum: 0          Progress: 3360 _neighborCountSum: 0          Progress: 3370 _neighborCountSum: 0          Progress: 3380 _neighborCountSum: 0          Progress: 3390 _neighborCountSum: 0          Progress: 3400 _neighborCountSum: 0          Progress: 3410 _neighborCountSum: 0          Progress: 3420 _neighborCountSum: 0          Progress: 3430 _neighborCountSum: 0          Progress: 3440 _neighborCountSum: 0          Progress: 3450 _neighborCountSum: 0          Progress: 3460 _neighborCountSum: 0          Progress: 3470 _neighborCountSum: 0          Progress: 3480 _neighborCountSum: 0          Progress: 3490 _neighborCountSum: 0          Progress: 3500 _neighborCountSum: 0          Progress: 3510 _neighborCountSum: 0          Progress: 3520 _neighborCountSum: 0          Progress: 3530 _neighborCountSum: 0          Progress: 3540 _neighborCountSum: 0          Progress: 3550 _neighborCountSum: 0          Progress: 3560 _neighborCountSum: 0          Progress: 3570 _neighborCountSum: 0          Progress: 3580 _neighborCountSum: 0          Progress: 3590 _neighborCountSum: 0          Progress: 3600 _neighborCountSum: 0          Progress: 3610 _neighborCountSum: 0          Progress: 3620 _neighborCountSum: 0          Progress: 3630 _neighborCountSum: 0          Progress: 3640 _neighborCountSum: 0          Progress: 3650 _neighborCountSum: 0          Progress: 3660 _neighborCountSum: 0          Progress: 3670 _neighborCountSum: 0          Progress: 3680 _neighborCountSum: 0          Progress: 3690 _neighborCountSum: 0          Progress: 3700 _neighborCountSum: 0          Progress: 3710 _neighborCountSum: 0          Progress: 3720 _neighborCountSum: 0          Progress: 3730 _neighborCountSum: 0          Progress: 3740 _neighborCountSum: 0          Progress: 3750 _neighborCountSum: 0          Progress: 3760 _neighborCountSum: 0          Progress: 3770 _neighborCountSum: 0          Progress: 3780 _neighborCountSum: 0          Progress: 3790 _neighborCountSum: 0          Progress: 3800 _neighborCountSum: 0          Progress: 3810 _neighborCountSum: 0          Progress: 3820 _neighborCountSum: 0          Progress: 3830 _neighborCountSum: 0          Progress: 3840 _neighborCountSum: 0          Progress: 3850 _neighborCountSum: 0          Progress: 3860 _neighborCountSum: 0          Progress: 3870 _neighborCountSum: 0          Progress: 3880 _neighborCountSum: 0          Progress: 3890 _neighborCountSum: 0          Progress: 3900 _neighborCountSum: 0          Progress: 3910 _neighborCountSum: 0          Progress: 3920 _neighborCountSum: 0          Progress: 3930 _neighborCountSum: 0          Progress: 3940 _neighborCountSum: 0          Progress: 3950 _neighborCountSum: 0          Progress: 3960 _neighborCountSum: 0          Progress: 3970 _neighborCountSum: 0          Progress: 3980 _neighborCountSum: 0          Progress: 3990 _neighborCountSum: 0          Progress: 4000 _neighborCountSum: 0          Progress: 4010 _neighborCountSum: 0          Progress: 4020 _neighborCountSum: 0          Progress: 4030 _neighborCountSum: 0          Progress: 4040 _neighborCountSum: 0          Progress: 4050 _neighborCountSum: 0          Progress: 4060 _neighborCountSum: 0          Progress: 4070 _neighborCountSum: 0          Progress: 4080 _neighborCountSum: 0          Progress: 4090 _neighborCountSum: 0          Progress: 4100 _neighborCountSum: 0          Progress: 4110 _neighborCountSum: 0          Progress: 4120 _neighborCountSum: 0          Progress: 4130 _neighborCountSum: 0          Progress: 4140 _neighborCountSum: 0          Progress: 4150 _neighborCountSum: 0          Progress: 4160 _neighborCountSum: 0          Progress: 4170 _neighborCountSum: 0          Progress: 4180 _neighborCountSum: 0          Progress: 4190 _neighborCountSum: 0          Progress: 4200 _neighborCountSum: 0          Progress: 4210 _neighborCountSum: 0          Progress: 4220 _neighborCountSum: 0          Progress: 4230 _neighborCountSum: 0          Progress: 4240 _neighborCountSum: 0          Progress: 4250 _neighborCountSum: 0          Progress: 4260 _neighborCountSum: 0          Progress: 4270 _neighborCountSum: 0          Progress: 4280 _neighborCountSum: 0          Progress: 4290 _neighborCountSum: 0          Progress: 4300 _neighborCountSum: 0          Progress: 4310 _neighborCountSum: 0          Progress: 4320 _neighborCountSum: 0          Progress: 4330 _neighborCountSum: 0          Progress: 4340 _neighborCountSum: 0          Progress: 4350 _neighborCountSum: 0          Progress: 4360 _neighborCountSum: 0          Progress: 4370 _neighborCountSum: 0          Progress: 4380 _neighborCountSum: 0          Progress: 4390 _neighborCountSum: 0          Progress: 4400 _neighborCountSum: 0          Progress: 4410 _neighborCountSum: 0          Progress: 4420 _neighborCountSum: 0          Progress: 4430 _neighborCountSum: 0          Progress: 4440 _neighborCountSum: 0          Progress: 4450 _neighborCountSum: 0          Progress: 4460 _neighborCountSum: 0          Progress: 4470 _neighborCountSum: 0          Progress: 4480 _neighborCountSum: 0          Progress: 4490 _neighborCountSum: 0          Progress: 4500 _neighborCountSum: 0          Progress: 4510 _neighborCountSum: 0          Progress: 4520 _neighborCountSum: 0          Progress: 4530 _neighborCountSum: 0          Progress: 4540 _neighborCountSum: 0          Progress: 4550 _neighborCountSum: 0          Progress: 4560 _neighborCountSum: 0          Progress: 4570 _neighborCountSum: 0          Progress: 4580 _neighborCountSum: 0          Progress: 4590 _neighborCountSum: 0          Progress: 4600 _neighborCountSum: 0          Progress: 4610 _neighborCountSum: 0          Progress: 4620 _neighborCountSum: 0          Progress: 4630 _neighborCountSum: 0          Progress: 4640 _neighborCountSum: 0          Progress: 4650 _neighborCountSum: 0          Progress: 4660 _neighborCountSum: 0          Progress: 4670 _neighborCountSum: 0          Progress: 4680 _neighborCountSum: 0          Progress: 4690 _neighborCountSum: 0          Progress: 4700 _neighborCountSum: 0          Progress: 4710 _neighborCountSum: 0          Progress: 4720 _neighborCountSum: 0          Progress: 4730 _neighborCountSum: 0          Progress: 4740 _neighborCountSum: 0          Progress: 4750 _neighborCountSum: 0          Progress: 4760 _neighborCountSum: 0          Progress: 4770 _neighborCountSum: 34          Progress: 4780 _neighborCountSum: 34          Progress: 4790 _neighborCountSum: 36          Progress: 4800 _neighborCountSum: 36          Progress: 4810 _neighborCountSum: 36          Progress: 4820 _neighborCountSum: 36          Progress: 4830 _neighborCountSum: 36          Progress: 4840 _neighborCountSum: 36          Progress: 4850 _neighborCountSum: 36          Progress: 4860 _neighborCountSum: 36          Progress: 4870 _neighborCountSum: 36          Progress: 4880 _neighborCountSum: 36          Progress: 4890 _neighborCountSum: 36          Progress: 4900 _neighborCountSum: 36          Progress: 4910 _neighborCountSum: 36          Progress: 4920 _neighborCountSum: 36          Progress: 4930 _neighborCountSum: 36          Progress: 4940 _neighborCountSum: 36          Progress: 4950 _neighborCountSum: 36          Progress: 4960 _neighborCountSum: 36          Progress: 4970 _neighborCountSum: 36          Progress: 4980 _neighborCountSum: 36          Progress: 4990 _neighborCountSum: 36          Progress: 5000 _neighborCountSum: 36          Progress: 5010 _neighborCountSum: 36          Progress: 5020 _neighborCountSum: 36          Progress: 5030 _neighborCountSum: 36          Progress: 5040 _neighborCountSum: 36          Progress: 5050 _neighborCountSum: 36          Progress: 5060 _neighborCountSum: 36          Progress: 5070 _neighborCountSum: 48          Progress: 5080 _neighborCountSum: 56          Progress: 5090 _neighborCountSum: 128          Progress: 5100 _neighborCountSum: 131          Progress: 5110 _neighborCountSum: 139          Progress: 5120 _neighborCountSum: 139          Progress: 5130 _neighborCountSum: 139          Progress: 5140 _neighborCountSum: 139          Progress: 5150 _neighborCountSum: 139          Progress: 5160 _neighborCountSum: 139          Progress: 5170 _neighborCountSum: 139          Progress: 5180 _neighborCountSum: 159          Progress: 5190 _neighborCountSum: 171          Progress: 5200 _neighborCountSum: 171          Progress: 5210 _neighborCountSum: 171          Progress: 5220 _neighborCountSum: 175          Progress: 5230 _neighborCountSum: 184          Progress: 5240 _neighborCountSum: 184          Progress: 5250 _neighborCountSum: 184          Progress: 5260 _neighborCountSum: 184          Progress: 5270 _neighborCountSum: 184          Progress: 5280 _neighborCountSum: 184          Progress: 5290 _neighborCountSum: 184          Progress: 5300 _neighborCountSum: 184          Progress: 5310 _neighborCountSum: 184          Progress: 5320 _neighborCountSum: 184          Progress: 5330 _neighborCountSum: 184          Progress: 5340 _neighborCountSum: 184          Progress: 5350 _neighborCountSum: 184          Progress: 5360 _neighborCountSum: 207          Progress: 5370 _neighborCountSum: 215          Progress: 5380 _neighborCountSum: 215          Progress: 5390 _neighborCountSum: 215          Progress: 5400 _neighborCountSum: 215          Progress: 5410 _neighborCountSum: 215          Progress: 5420 _neighborCountSum: 222          Progress: 5430 _neighborCountSum: 238          Progress: 5440 _neighborCountSum: 253          Progress: 5450 _neighborCountSum: 277          Progress: 5460 _neighborCountSum: 288          Progress: 5470 _neighborCountSum: 288          Progress: 5480 _neighborCountSum: 297          Progress: 5490 _neighborCountSum: 310          Progress: 5500 _neighborCountSum: 359          Progress: 5510 _neighborCountSum: 368          Progress: 5520 _neighborCountSum: 370          Progress: 5530 _neighborCountSum: 371          Progress: 5540 _neighborCountSum: 371          Progress: 5550 _neighborCountSum: 420          Progress: 5560 _neighborCountSum: 436          21:55:42.635 INFO  ...conflate/UnifyingConflator.cpp( 228) Match count: 0
-21:55:42.636 INFO  ...conflate/UnifyingConflator.cpp( 245) Creating mergers...
-21:55:42.678 INFO  ...conflate/UnifyingConflator.cpp( 262) Applying 815 mergers...
-21:55:42.690 INFO  ...conflate/UnifyingConflator.cpp( 294) Applying post-unifying conflation operations...
-21:55:42.690 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::SuperfluousNodeRemover
+18:15:59.050 INFO  ...conflate/UnifyingConflator.cpp( 126) Applying pre-unifying conflation operations...
+18:15:59.050 INFO  ...lygon/BuildingMatchCreator.cpp( 288) Creating matches with: hoot::BuildingMatchCreator...
+18:15:59.689 INFO  ...late/js/ScriptMatchCreator.cpp( 544) Creating matches with: hoot::ScriptMatchCreator; rules: PoiGeneric.js...
+18:15:59.703 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 1000        18:16:00.234 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 27 / 2000        18:16:00.695 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 72 / 3000        18:16:02.574 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 280 / 4000        18:16:02.910 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 424 / 5000        18:16:02.912 INFO  ...ighway/HighwayMatchCreator.cpp( 280) Creating matches with: hoot::HighwayMatchCreator...
+18:16:02.919 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
+18:16:02.935 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 5 and 0 tie points were found.
+18:16:02.935 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
+18:16:02.937 INFO  ...late/js/ScriptMatchCreator.cpp( 544) Creating matches with: hoot::ScriptMatchCreator; rules: LinearWaterway.js...
+18:16:02.946 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 1000        18:16:02.954 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 2000        18:16:02.966 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 3000        18:16:02.974 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 4000        18:16:02.997 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 5000        18:16:03.015 INFO  ...gon/PoiPolygonMatchCreator.cpp(  86) Creating matches with: hoot::PoiPolygonMatchCreator...
+18:16:06.803 INFO  ...late/js/ScriptMatchCreator.cpp( 544) Creating matches with: hoot::ScriptMatchCreator; rules: Area.js...
+18:16:06.813 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 1000        18:16:06.821 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 2000        18:16:06.829 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 3000        18:16:06.837 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 4000        18:16:06.867 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 8 / 5000        18:16:06.920 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+18:16:06.920 INFO  ...late/js/ScriptMatchCreator.cpp( 544) Creating matches with: hoot::ScriptMatchCreator; rules: Railway.js...
+18:16:06.927 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 1000        18:16:06.934 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 2000        18:16:06.942 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 3000        18:16:06.949 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 4000        18:16:06.960 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 5000        18:16:06.977 INFO  ...mdisk/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
+18:16:06.992 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 0 tie points were found.
+18:16:06.992 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
+18:16:06.994 INFO  ...late/js/ScriptMatchCreator.cpp( 544) Creating matches with: hoot::ScriptMatchCreator; rules: PowerLine.js...
+18:16:07.003 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 1000        18:16:07.010 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 2000        18:16:07.018 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 3000        18:16:07.025 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 4000        18:16:07.033 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Match candidates: 0 / 5000        18:16:07.040 INFO  ...conflate/UnifyingConflator.cpp( 228) Match count: 0
+18:16:07.040 INFO  ...conflate/UnifyingConflator.cpp( 245) Creating mergers...
+18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 262) Applying 204 mergers...
+18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 1 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2862, Node:-4728)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 2 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2299, Node:-4755)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 3 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2268, Node:-4726)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 4 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2198, Node:-4755)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 5 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-680, Node:-4681)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 6 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-680, Node:-4679)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 7 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-445, Node:-4745)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 8 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-436, Node:-4745)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 9 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-435, Node:-4756)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 10 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-435, Node:-4745)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 11 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-435, Node:-4725)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 12 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-433, Node:-4741)}        18:16:07.078 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 13 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-344, Node:-4727)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 14 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-343, Node:-4727)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 15 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-242, Node:-4685)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 16 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-242, Node:-4683)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 17 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-242, Node:-4682)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 18 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-241, Node:-4685)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 19 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-241, Node:-4683)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 20 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-241, Node:-4682)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 21 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-219, Node:-4727)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 22 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2390, Way:-386)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 23 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2390, Way:-127)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 24 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2380, Way:-10)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 25 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2280, Way:-379)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 26 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2280, Way:-378)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 27 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2266, Way:-22)}        18:16:07.079 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 28 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2206, Way:-379)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 29 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2206, Way:-378)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 30 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2118, Way:-127)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 31 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2114, Way:-374)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 32 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2114, Way:-371)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 33 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2114, Way:-369)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 34 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2114, Way:-365)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 35 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2114, Way:-364)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 36 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-2114, Way:-362)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 37 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1456, Way:-437)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 38 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1360, Way:-82)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 39 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1334, Way:-218)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 40 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1333, Way:-220)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 41 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1331, Way:-139)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 42 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1325, Way:-138)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 43 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1325, Way:-125)}        18:16:07.080 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 44 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1293, Way:-138)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 45 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1293, Way:-125)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 46 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1292, Way:-138)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 47 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1292, Way:-125)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 48 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1291, Way:-374)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 49 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1291, Way:-373)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 50 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1291, Way:-371)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 51 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1291, Way:-369)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 52 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1291, Way:-365)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 53 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1291, Way:-364)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 54 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1291, Way:-362)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 55 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1291, Way:-60)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 56 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1290, Way:-364)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 57 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1286, Way:-386)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 58 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1286, Way:-371)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 59 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1286, Way:-369)}        18:16:07.081 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 60 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1286, Way:-367)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 61 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1286, Way:-361)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 62 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1285, Way:-386)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 63 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1285, Way:-371)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 64 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1285, Way:-369)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 65 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1285, Way:-367)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 66 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1285, Way:-361)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 67 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1284, Way:-386)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 68 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1284, Way:-371)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 69 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1284, Way:-369)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 70 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1284, Way:-367)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 71 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1284, Way:-361)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 72 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1283, Way:-386)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 73 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1283, Way:-369)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 74 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1283, Way:-367)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 75 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1283, Way:-361)}        18:16:07.082 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 76 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-1283, Way:-127)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 77 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-863, Way:-144)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 78 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-863, Way:-141)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 79 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-863, Way:-139)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 80 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-716, Way:-125)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 81 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-715, Way:-125)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 82 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-712, Way:-126)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 83 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-711, Way:-139)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 84 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-708, Way:-139)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 85 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-697, Way:-147)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 86 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-697, Way:-146)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 87 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-694, Way:-147)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 88 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-694, Way:-143)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 89 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-694, Way:-63)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 90 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-683, Way:-374)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 91 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-683, Way:-373)}        18:16:07.083 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 92 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-683, Way:-371)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 93 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-683, Way:-369)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 94 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-683, Way:-365)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 95 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-683, Way:-364)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 96 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-683, Way:-362)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 97 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-683, Way:-60)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 98 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-643, Way:-798)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 99 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-624, Way:-769)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 100 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-624, Way:-752)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 101 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-622, Way:-367)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 102 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-621, Way:-127)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 103 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-620, Way:-127)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 104 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-618, Way:-127)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 105 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-610, Way:-272)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 106 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-601, Way:-288)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 107 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-598, Way:-500)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 108 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-478, Way:-437)}        18:16:07.084 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 109 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-455, Way:-83)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 110 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-659)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 111 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-658)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 112 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-657)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 113 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-656)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 114 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-655)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 115 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-653)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 116 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-648)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 117 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-646)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 118 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-644)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 119 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-640)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 120 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-633)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 121 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-631)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 122 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-630)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 123 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-629)}        18:16:07.085 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 124 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-628)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 125 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-627)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 126 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-623)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 127 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-622)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 128 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-620)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 129 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-619)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 130 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-617)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 131 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-613)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 132 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-611)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 133 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-609)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 134 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-608)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 135 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-606)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 136 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-605)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 137 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-591)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 138 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-590)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 139 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-583)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 140 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-457)}        18:16:07.086 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 141 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-456)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 142 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-437)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 143 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Way:-5)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 144 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-453, Relation:-9)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 145 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-451, Way:-750)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 146 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-441, Way:-590)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 147 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-441, Way:-457)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 148 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-441, Way:-456)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 149 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-440, Way:-219)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 150 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-440, Way:-68)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 151 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-433, Way:-381)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 152 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-350, Way:-287)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 153 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-348, Way:-377)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 154 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-345, Way:-777)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 155 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-334, Way:-590)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 156 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-334, Way:-540)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 157 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-334, Way:-457)}        18:16:07.087 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 158 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-334, Way:-456)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 159 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4750, Way:-798)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 160 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4750, Way:-12)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 161 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4750, Way:-2)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 162 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4744, Way:-689)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 163 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4742, Way:-381)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 164 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4741, Way:-282)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 165 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4741, Way:-281)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 166 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4741, Way:-280)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 167 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4741, Way:-279)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 168 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4741, Way:-277)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 169 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4741, Way:-276)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 170 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4738, Way:-212)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 171 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4737, Way:-82)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 172 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4736, Way:-75)}        18:16:07.088 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 173 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4730, Way:-798)}        18:16:07.089 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 174 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4730, Way:-12)}        18:16:07.089 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 175 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4722, Way:-23)}        18:16:07.089 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 176 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4719, Way:-658)}        18:16:07.089 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 177 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4680, Way:-73)}        18:16:07.089 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 178 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4680, Way:-67)}        18:16:07.089 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 179 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4678, Way:-801)}        18:16:07.089 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 180 / 204 - MarkForReviewMerger, pairs: [1]{(Node:-4675, Way:-73)}        18:16:07.089 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 181 / 204 - ScriptMerger        18:16:07.090 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 182 / 204 - MarkForReviewMerger, pairs: [9]{(Node:-458, Node:-4759), (Node:-458, Node:-4743), (Node:-458, Node:-4722), (Node:-457, Node:-4759), (Node:-457, Node:-4743), (Node:-457, Node:-4722), (Node:-357, Node:-4759), (Node:-357, Node:-4743), (Node:-357, Node:-4722)}        18:16:07.090 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 183 / 204 - ScriptMerger        18:16:07.091 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 184 / 204 - MarkForReviewMerger, pairs: [2]{(Node:-452, Node:-4754), (Node:-452, Node:-4720)}        18:16:07.091 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 185 / 204 - MarkForReviewMerger, pairs: [2]{(Node:-436, Node:-4756), (Node:-436, Node:-4725)}        18:16:07.091 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 186 / 204 - ScriptMerger        18:16:07.091 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 187 / 204 - ScriptMerger        18:16:07.091 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 188 / 204 - PoiPolygonMerger [1]{(Node:-2115, Way:-127)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 189 / 204 - PoiPolygonMerger [1]{(Node:-2114, Way:-373)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 190 / 204 - PoiPolygonMerger [1]{(Node:-2099, Way:-437)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 191 / 204 - PoiPolygonMerger [1]{(Node:-645, Way:-143)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 192 / 204 - PoiPolygonMerger [1]{(Node:-479, Way:-92)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 193 / 204 - MarkForReviewMerger, pairs: [2]{(Node:-453, Way:-614), (Node:-453, Way:-607)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 194 / 204 - MarkForReviewMerger, pairs: [6]{(Node:-4685, Way:-72), (Node:-4683, Way:-72), (Node:-4678, Way:-72), (Node:-242, Way:-72), (Node:-241, Way:-72), (Way:-72, Way:-801)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 195 / 204 - MarkForReviewMerger, pairs: [4]{(Node:-4752, Way:-799), (Node:-4681, Way:-69), (Node:-4679, Way:-69), (Way:-69, Way:-799)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 196 / 204 - PoiPolygonMerger [1]{(Node:-4739, Way:-68)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 197 / 204 - PoiPolygonMerger [1]{(Node:-4736, Way:-74)}        18:16:07.092 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 198 / 204 - PoiPolygonMerger [1]{(Node:-4734, Way:-133)}        18:16:07.093 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 199 / 204 - MarkForReviewMerger, pairs: [2]{(Node:-4730, Way:-2), (Node:-4677, Way:-2)}        18:16:07.093 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 200 / 204 - MarkForReviewMerger, pairs: [5]{(Node:-4687, Way:-12), (Node:-4686, Way:-798), (Node:-4686, Way:-116), (Node:-4676, Way:-12), (Way:-12, Way:-798)}        18:16:07.093 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 201 / 204 - MarkForReviewMerger, pairs: [3]{(Node:-4680, Way:-797), (Node:-4680, Way:-65), (Way:-17, Way:-797)}        18:16:07.093 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 202 / 204 - PoiPolygonMerger [1]{(Node:-4675, Way:-66)}        18:16:07.093 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 203 / 204 - ScriptMerger        18:16:07.094 INFO  ...conflate/UnifyingConflator.cpp( 267) Applying merger: 204 / 204 - ScriptMerger        18:16:07.094 INFO  ...conflate/UnifyingConflator.cpp( 294) Applying post-unifying conflation operations...
 
-21:55:42.700 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::SmallWayMerger
-21:55:42.701 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 192) Applying post-conflation operations...
-21:55:42.701 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::ReplaceRoundabouts
-21:55:42.701 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  91) Applying visitor: hoot::RemoveMissingElementsVisitor
-21:55:42.702 INFO  ...portMissingElementsVisitor.cpp(  59) Removing missing Node:-4675 in Relation:-783.
-21:55:42.702 INFO  ...portMissingElementsVisitor.cpp(  59) Removing missing Node:-4736 in Relation:-763.
-21:55:42.702 INFO  ...portMissingElementsVisitor.cpp(  59) Removing missing Node:-664 in Relation:-551.
-21:55:42.702 INFO  ...portMissingElementsVisitor.cpp(  69) Reached maximum number of missing reports. No longer reporting.
-21:55:42.703 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::RemoveEmptyRelationsOp
-21:55:42.704 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  91) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
-21:55:42.706 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::RemoveDuplicateReviewsOp
-21:55:42.713 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::BuildingOutlineUpdateOp
-21:55:42.729 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  91) Applying visitor: hoot::RemoveInvalidMultilineStringMembersVisitor
-21:55:42.731 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::SuperfluousWayRemover
-21:55:42.731 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  91) Applying visitor: hoot::RemoveDuplicateWayNodesVisitor
-21:55:42.733 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  71) Applying operation: hoot::AddHilbertReviewSortOrderOp
+18:16:07.107 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 293) Applying post-conflation operations...
+18:16:07.109 INFO  ...portMissingElementsVisitor.cpp(  59) Removing missing Node:-2114 in Relation:-46.
+18:16:07.109 INFO  ...portMissingElementsVisitor.cpp(  59) Removing missing Node:-2114 in Relation:-45.
+18:16:07.109 INFO  ...portMissingElementsVisitor.cpp(  59) Removing missing Node:-2114 in Relation:-44.
+18:16:07.109 INFO  ...portMissingElementsVisitor.cpp(  69) Reached maximum number of missing reports. No longer reporting.
 
-21:55:42.739 INFO  ...ore/io/OsmMapWriterFactory.cpp( 136) Writing map to test-output/cmd/PoiPolygonConflateCombinedTest/output1.osm...
-21:55:42.827 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 252) Conflation job completed.
-21:55:43.160 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-output/cmd/PoiPolygonConflateCombinedTest/output1.osm...
-21:55:43.328 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/cmd/glacial/PoiPolygonConflateCombinedTest/output1.osm...
+18:16:07.128 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/PoiPolygonConflateCombinedTest/output1.osm...
+18:16:07.243 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 432) Conflation job completed.
+18:16:07.798 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from put/cmd/PoiPolygonConflateCombinedTest/output1.osm...
+18:16:07.965 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from glacial/PoiPolygonConflateCombinedTest/output1.osm...
+18:16:08.121 WARN  ...core/scoring/MapComparator.cpp( 251) Number of elements does not match.
+18688c18688
+<     <relation visible="true" id="-226" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-227" timestamp="1970-01-01T00:00:00Z" version="1">
+18696c18696
+<         <tag k="hoot:review:sort_order" v="131"/>
+---
+>         <tag k="hoot:review:sort_order" v="132"/>
+18699c18699
+<     <relation visible="true" id="-225" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-226" timestamp="1970-01-01T00:00:00Z" version="1">
+18710c18710
+<     <relation visible="true" id="-224" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-225" timestamp="1970-01-01T00:00:00Z" version="1">
+18721c18721
+<     <relation visible="true" id="-223" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-224" timestamp="1970-01-01T00:00:00Z" version="1">
+18732c18732
+<     <relation visible="true" id="-222" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-223" timestamp="1970-01-01T00:00:00Z" version="1">
+18740c18740
+<         <tag k="hoot:review:sort_order" v="120"/>
+---
+>         <tag k="hoot:review:sort_order" v="121"/>
+18743c18743
+<     <relation visible="true" id="-221" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-222" timestamp="1970-01-01T00:00:00Z" version="1">
+18751c18751
+<         <tag k="hoot:review:sort_order" v="121"/>
+---
+>         <tag k="hoot:review:sort_order" v="122"/>
+18754c18754
+<     <relation visible="true" id="-220" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-221" timestamp="1970-01-01T00:00:00Z" version="1">
+18762c18762
+<         <tag k="hoot:review:sort_order" v="115"/>
+---
+>         <tag k="hoot:review:sort_order" v="116"/>
+18765c18765
+<     <relation visible="true" id="-219" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-220" timestamp="1970-01-01T00:00:00Z" version="1">
+18773c18773
+<         <tag k="hoot:review:sort_order" v="122"/>
+---
+>         <tag k="hoot:review:sort_order" v="123"/>
+18776c18776
+<     <relation visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-219" timestamp="1970-01-01T00:00:00Z" version="1">
+18784c18784
+<         <tag k="hoot:review:sort_order" v="123"/>
+---
+>         <tag k="hoot:review:sort_order" v="124"/>
+18787c18787
+<     <relation visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1">
+18795c18795
+<         <tag k="hoot:review:sort_order" v="116"/>
+---
+>         <tag k="hoot:review:sort_order" v="117"/>
+18798c18798
+<     <relation visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1">
+18806c18806
+<         <tag k="hoot:review:sort_order" v="117"/>
+---
+>         <tag k="hoot:review:sort_order" v="118"/>
+18809c18809
+<     <relation visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1">
+18817c18817
+<         <tag k="hoot:review:sort_order" v="197"/>
+---
+>         <tag k="hoot:review:sort_order" v="198"/>
+18820c18820
+<     <relation visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1">
+18828c18828
+<         <tag k="hoot:review:sort_order" v="198"/>
+---
+>         <tag k="hoot:review:sort_order" v="199"/>
+18831c18831
+<     <relation visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1">
+18839c18839
+<         <tag k="hoot:review:sort_order" v="199"/>
+---
+>         <tag k="hoot:review:sort_order" v="200"/>
+18842c18842
+<     <relation visible="true" id="-212" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1">
+18850c18850
+<         <tag k="hoot:review:sort_order" v="200"/>
+---
+>         <tag k="hoot:review:sort_order" v="201"/>
+18853c18853
+<     <relation visible="true" id="-211" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-212" timestamp="1970-01-01T00:00:00Z" version="1">
+18864c18864
+<     <relation visible="true" id="-210" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-211" timestamp="1970-01-01T00:00:00Z" version="1">
+18875c18875
+<     <relation visible="true" id="-209" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-210" timestamp="1970-01-01T00:00:00Z" version="1">
+18886c18886
+<     <relation visible="true" id="-208" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-209" timestamp="1970-01-01T00:00:00Z" version="1">
+18897c18897
+<     <relation visible="true" id="-207" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-208" timestamp="1970-01-01T00:00:00Z" version="1">
+18908c18908
+<     <relation visible="true" id="-206" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-207" timestamp="1970-01-01T00:00:00Z" version="1">
+18919c18919
+<     <relation visible="true" id="-205" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-206" timestamp="1970-01-01T00:00:00Z" version="1">
+18927c18927
+<         <tag k="hoot:review:sort_order" v="164"/>
+---
+>         <tag k="hoot:review:sort_order" v="165"/>
+18930c18930
+<     <relation visible="true" id="-204" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-205" timestamp="1970-01-01T00:00:00Z" version="1">
+18938c18938
+<         <tag k="hoot:review:sort_order" v="163"/>
+---
+>         <tag k="hoot:review:sort_order" v="164"/>
+18941c18941
+<     <relation visible="true" id="-203" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-204" timestamp="1970-01-01T00:00:00Z" version="1">
+18952c18952
+<     <relation visible="true" id="-202" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-203" timestamp="1970-01-01T00:00:00Z" version="1">
+18963c18963
+<     <relation visible="true" id="-201" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-202" timestamp="1970-01-01T00:00:00Z" version="1">
+18971c18971
+<         <tag k="hoot:review:sort_order" v="135"/>
+---
+>         <tag k="hoot:review:sort_order" v="136"/>
+18974c18974
+<     <relation visible="true" id="-200" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-201" timestamp="1970-01-01T00:00:00Z" version="1">
+18982c18982
+<         <tag k="hoot:review:sort_order" v="144"/>
+---
+>         <tag k="hoot:review:sort_order" v="145"/>
+18985c18985
+<     <relation visible="true" id="-199" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-200" timestamp="1970-01-01T00:00:00Z" version="1">
+18996c18996
+<     <relation visible="true" id="-198" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-199" timestamp="1970-01-01T00:00:00Z" version="1">
+19007c19007
+<     <relation visible="true" id="-197" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-198" timestamp="1970-01-01T00:00:00Z" version="1">
+19018c19018
+<     <relation visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-197" timestamp="1970-01-01T00:00:00Z" version="1">
+19029c19029
+<     <relation visible="true" id="-195" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1">
+19040c19040
+<     <relation visible="true" id="-194" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-195" timestamp="1970-01-01T00:00:00Z" version="1">
+19051c19051
+<     <relation visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-194" timestamp="1970-01-01T00:00:00Z" version="1">
+19062c19062
+<     <relation visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1">
+19073c19073
+<     <relation visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1">
+19084c19084
+<     <relation visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-190" timestamp="1970-01-01T00:00:00Z" version="1">
+19095c19095
+<     <relation visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1">
+19106c19106
+<     <relation visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1">
+19117c19117
+<     <relation visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1">
+19125c19125
+<         <tag k="hoot:review:sort_order" v="185"/>
+---
+>         <tag k="hoot:review:sort_order" v="186"/>
+19128c19128
+<     <relation visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1">
+19139c19139
+<     <relation visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1">
+19147c19147
+<         <tag k="hoot:review:sort_order" v="124"/>
+---
+>         <tag k="hoot:review:sort_order" v="125"/>
+19150c19150
+<     <relation visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1">
+19158c19158
+<         <tag k="hoot:review:sort_order" v="125"/>
+---
+>         <tag k="hoot:review:sort_order" v="126"/>
+19161c19161
+<     <relation visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1">
+19169c19169
+<         <tag k="hoot:review:sort_order" v="133"/>
+---
+>         <tag k="hoot:review:sort_order" v="134"/>
+19172c19172
+<     <relation visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1">
+19180c19180
+<         <tag k="hoot:review:sort_order" v="128"/>
+---
+>         <tag k="hoot:review:sort_order" v="129"/>
+19183c19183
+<     <relation visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1">
+19194c19194
+<     <relation visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1">
+19202c19202
+<         <tag k="hoot:review:sort_order" v="138"/>
+---
+>         <tag k="hoot:review:sort_order" v="139"/>
+19205c19205
+<     <relation visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1">
+19216c19216
+<     <relation visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
+19227c19227
+<     <relation visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1">
+19238c19238
+<     <relation visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1">
+19246c19246
+<         <tag k="hoot:review:sort_order" v="137"/>
+---
+>         <tag k="hoot:review:sort_order" v="138"/>
+19249c19249
+<     <relation visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1">
+19257c19257
+<         <tag k="hoot:review:sort_order" v="201"/>
+---
+>         <tag k="hoot:review:sort_order" v="202"/>
+19260c19260
+<     <relation visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1">
+19268c19268
+<         <tag k="hoot:review:sort_order" v="118"/>
+---
+>         <tag k="hoot:review:sort_order" v="119"/>
+19271c19271
+<     <relation visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1">
+19279c19279
+<         <tag k="hoot:review:sort_order" v="126"/>
+---
+>         <tag k="hoot:review:sort_order" v="127"/>
+19282c19282
+<     <relation visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1">
+19290c19290
+<         <tag k="hoot:review:sort_order" v="127"/>
+---
+>         <tag k="hoot:review:sort_order" v="128"/>
+19293c19293
+<     <relation visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1">
+19301c19301
+<         <tag k="hoot:review:sort_order" v="190"/>
+---
+>         <tag k="hoot:review:sort_order" v="191"/>
+19304c19304
+<     <relation visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
+19312c19312
+<         <tag k="hoot:review:sort_order" v="145"/>
+---
+>         <tag k="hoot:review:sort_order" v="146"/>
+19315c19315
+<     <relation visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1">
+19323c19323
+<         <tag k="hoot:review:sort_order" v="189"/>
+---
+>         <tag k="hoot:review:sort_order" v="190"/>
+19326c19326
+<     <relation visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1">
+19334c19334
+<         <tag k="hoot:review:sort_order" v="187"/>
+---
+>         <tag k="hoot:review:sort_order" v="188"/>
+19337c19337
+<     <relation visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
+19345c19345
+<         <tag k="hoot:review:sort_order" v="202"/>
+---
+>         <tag k="hoot:review:sort_order" v="203"/>
+19348c19348
+<     <relation visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
+19359c19359
+<     <relation visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1">
+19370c19370
+<     <relation visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1">
+19381c19381
+<     <relation visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1">
+19392c19392
+<     <relation visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1">
+19400c19400
+<         <tag k="hoot:review:sort_order" v="191"/>
+---
+>         <tag k="hoot:review:sort_order" v="192"/>
+19403c19403
+<     <relation visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
+19411c19411
+<         <tag k="hoot:review:sort_order" v="146"/>
+---
+>         <tag k="hoot:review:sort_order" v="147"/>
+19414c19414
+<     <relation visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
+19422c19422
+<         <tag k="hoot:review:sort_order" v="188"/>
+---
+>         <tag k="hoot:review:sort_order" v="189"/>
+19425c19425
+<     <relation visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
+19433c19433
+<         <tag k="hoot:review:sort_order" v="203"/>
+---
+>         <tag k="hoot:review:sort_order" v="204"/>
+19436c19436
+<     <relation visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1">
+19444c19444
+<         <tag k="hoot:review:sort_order" v="174"/>
+---
+>         <tag k="hoot:review:sort_order" v="175"/>
+19447c19447
+<     <relation visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1">
+19455c19455
+<         <tag k="hoot:review:sort_order" v="156"/>
+---
+>         <tag k="hoot:review:sort_order" v="157"/>
+19458c19458
+<     <relation visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1">
+19466c19466
+<         <tag k="hoot:review:sort_order" v="162"/>
+---
+>         <tag k="hoot:review:sort_order" v="163"/>
+19469c19469
+<     <relation visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1">
+19477c19477
+<         <tag k="hoot:review:sort_order" v="147"/>
+---
+>         <tag k="hoot:review:sort_order" v="148"/>
+19480c19480
+<     <relation visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1">
+19488c19488
+<         <tag k="hoot:review:sort_order" v="148"/>
+---
+>         <tag k="hoot:review:sort_order" v="149"/>
+19491c19491
+<     <relation visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
+19499c19499
+<         <tag k="hoot:review:sort_order" v="183"/>
+---
+>         <tag k="hoot:review:sort_order" v="184"/>
+19502c19502
+<     <relation visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1">
+19510c19510
+<         <tag k="hoot:review:sort_order" v="184"/>
+---
+>         <tag k="hoot:review:sort_order" v="185"/>
+19513c19513
+<     <relation visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1">
+19521c19521
+<         <tag k="hoot:review:sort_order" v="186"/>
+---
+>         <tag k="hoot:review:sort_order" v="187"/>
+19524c19524
+<     <relation visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1">
+19532c19532
+<         <tag k="hoot:review:sort_order" v="161"/>
+---
+>         <tag k="hoot:review:sort_order" v="162"/>
+19535c19535
+<     <relation visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1">
+19543c19543
+<         <tag k="hoot:review:sort_order" v="160"/>
+---
+>         <tag k="hoot:review:sort_order" v="161"/>
+19546c19546
+<     <relation visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1">
+19554c19554
+<         <tag k="hoot:review:sort_order" v="165"/>
+---
+>         <tag k="hoot:review:sort_order" v="166"/>
+19557c19557
+<     <relation visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1">
+19565c19565
+<         <tag k="hoot:review:sort_order" v="157"/>
+---
+>         <tag k="hoot:review:sort_order" v="158"/>
+19568c19568
+<     <relation visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1">
+19576c19576
+<         <tag k="hoot:review:sort_order" v="158"/>
+---
+>         <tag k="hoot:review:sort_order" v="159"/>
+19579c19579
+<     <relation visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1">
+19587c19587
+<         <tag k="hoot:review:sort_order" v="159"/>
+---
+>         <tag k="hoot:review:sort_order" v="160"/>
+19590c19590
+<     <relation visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
+19598c19598
+<         <tag k="hoot:review:sort_order" v="166"/>
+---
+>         <tag k="hoot:review:sort_order" v="167"/>
+19601c19601
+<     <relation visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1">
+19609c19609
+<         <tag k="hoot:review:sort_order" v="170"/>
+---
+>         <tag k="hoot:review:sort_order" v="171"/>
+19612c19612
+<     <relation visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1">
+19620c19620
+<         <tag k="hoot:review:sort_order" v="169"/>
+---
+>         <tag k="hoot:review:sort_order" v="170"/>
+19623c19623
+<     <relation visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1">
+19631c19631
+<         <tag k="hoot:review:sort_order" v="153"/>
+---
+>         <tag k="hoot:review:sort_order" v="154"/>
+19634c19634
+<     <relation visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
+19642c19642
+<         <tag k="hoot:review:sort_order" v="180"/>
+---
+>         <tag k="hoot:review:sort_order" v="181"/>
+19645c19645
+<     <relation visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1">
+19653c19653
+<         <tag k="hoot:review:sort_order" v="154"/>
+---
+>         <tag k="hoot:review:sort_order" v="155"/>
+19656c19656
+<     <relation visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1">
+19664c19664
+<         <tag k="hoot:review:sort_order" v="155"/>
+---
+>         <tag k="hoot:review:sort_order" v="156"/>
+19667c19667
+<     <relation visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1">
+19675c19675
+<         <tag k="hoot:review:sort_order" v="172"/>
+---
+>         <tag k="hoot:review:sort_order" v="173"/>
+19678c19678
+<     <relation visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1">
+19686c19686
+<         <tag k="hoot:review:sort_order" v="168"/>
+---
+>         <tag k="hoot:review:sort_order" v="169"/>
+19689c19689
+<     <relation visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
+19697c19697
+<         <tag k="hoot:review:sort_order" v="167"/>
+---
+>         <tag k="hoot:review:sort_order" v="168"/>
+19700c19700
+<     <relation visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
+19708c19708
+<         <tag k="hoot:review:sort_order" v="173"/>
+---
+>         <tag k="hoot:review:sort_order" v="174"/>
+19711c19711
+<     <relation visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
+19719c19719
+<         <tag k="hoot:review:sort_order" v="171"/>
+---
+>         <tag k="hoot:review:sort_order" v="172"/>
+19722c19722
+<     <relation visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
+19730c19730
+<         <tag k="hoot:review:sort_order" v="150"/>
+---
+>         <tag k="hoot:review:sort_order" v="151"/>
+19733c19733
+<     <relation visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
+19741c19741
+<         <tag k="hoot:review:sort_order" v="149"/>
+---
+>         <tag k="hoot:review:sort_order" v="150"/>
+19744c19744
+<     <relation visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
+19752c19752
+<         <tag k="hoot:review:sort_order" v="182"/>
+---
+>         <tag k="hoot:review:sort_order" v="183"/>
+19755c19755
+<     <relation visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
+19763c19763
+<         <tag k="hoot:review:sort_order" v="178"/>
+---
+>         <tag k="hoot:review:sort_order" v="179"/>
+19766c19766
+<     <relation visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
+19774c19774
+<         <tag k="hoot:review:sort_order" v="181"/>
+---
+>         <tag k="hoot:review:sort_order" v="182"/>
+19777c19777
+<     <relation visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
+19785c19785
+<         <tag k="hoot:review:sort_order" v="175"/>
+---
+>         <tag k="hoot:review:sort_order" v="176"/>
+19788c19788
+<     <relation visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
+19796c19796
+<         <tag k="hoot:review:sort_order" v="176"/>
+---
+>         <tag k="hoot:review:sort_order" v="177"/>
+19799c19799
+<     <relation visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1">
+19807c19807
+<         <tag k="hoot:review:sort_order" v="179"/>
+---
+>         <tag k="hoot:review:sort_order" v="180"/>
+19810c19810
+<     <relation visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
+19818c19818
+<         <tag k="hoot:review:sort_order" v="177"/>
+---
+>         <tag k="hoot:review:sort_order" v="178"/>
+19821c19821
+<     <relation visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
+19829c19829
+<         <tag k="hoot:review:sort_order" v="132"/>
+---
+>         <tag k="hoot:review:sort_order" v="133"/>
+19832c19832
+<     <relation visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
+19840c19840
+<         <tag k="hoot:review:sort_order" v="151"/>
+---
+>         <tag k="hoot:review:sort_order" v="152"/>
+19843c19843
+<     <relation visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
+19851c19851
+<         <tag k="hoot:review:sort_order" v="136"/>
+---
+>         <tag k="hoot:review:sort_order" v="137"/>
+19854c19854
+<     <relation visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1">
+19865c19865
+<     <relation visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1">
+19876c19876
+<     <relation visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
+19887c19887
+<     <relation visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1">
+19898c19898
+<     <relation visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
+19909c19909
+<     <relation visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
+19920c19920
+<     <relation visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1">
+19928c19928
+<         <tag k="hoot:review:sort_order" v="205"/>
+---
+>         <tag k="hoot:review:sort_order" v="206"/>
+19931c19931
+<     <relation visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1">
+19939c19939
+<         <tag k="hoot:review:sort_order" v="204"/>
+---
+>         <tag k="hoot:review:sort_order" v="205"/>
+19942c19942
+<     <relation visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1">
+19950c19950
+<         <tag k="hoot:review:sort_order" v="119"/>
+---
+>         <tag k="hoot:review:sort_order" v="120"/>
+19953c19953
+<     <relation visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1">
+19961c19961
+<         <tag k="hoot:review:sort_order" v="114"/>
+---
+>         <tag k="hoot:review:sort_order" v="115"/>
+19964c19964
+<     <relation visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1">
+19972c19972
+<         <tag k="hoot:review:sort_order" v="107"/>
+---
+>         <tag k="hoot:review:sort_order" v="108"/>
+19975c19975
+<     <relation visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1">
+19983c19983
+<         <tag k="hoot:review:sort_order" v="112"/>
+---
+>         <tag k="hoot:review:sort_order" v="113"/>
+19986c19986
+<     <relation visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1">
+19994c19994
+<         <tag k="hoot:review:sort_order" v="103"/>
+---
+>         <tag k="hoot:review:sort_order" v="104"/>
+19997c19997
+<     <relation visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1">
+20005c20005
+<         <tag k="hoot:review:sort_order" v="105"/>
+---
+>         <tag k="hoot:review:sort_order" v="106"/>
+20008c20008
+<     <relation visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1">
+20016c20016
+<         <tag k="hoot:review:sort_order" v="106"/>
+---
+>         <tag k="hoot:review:sort_order" v="107"/>
+20019c20019
+<     <relation visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1">
+20027c20027
+<         <tag k="hoot:review:sort_order" v="99"/>
+---
+>         <tag k="hoot:review:sort_order" v="100"/>
+20030c20030
+<     <relation visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1">
+20038c20038
+<         <tag k="hoot:review:sort_order" v="104"/>
+---
+>         <tag k="hoot:review:sort_order" v="105"/>
+20041c20041
+<     <relation visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
+20052c20052
+<     <relation visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1">
+20063c20063
+<     <relation visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1">
+20073a20074,20084
+>     <relation visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <member type="node" ref="-697" role="reviewee"/>
+>         <member type="way" ref="-145" role="reviewee"/>
+>         <tag k="hoot:review:needs" v="yes"/>
+>         <tag k="hoot:review:type" v="POI to Polygon"/>
+>         <tag k="hoot:review:members" v="2"/>
+>         <tag k="hoot:review:score" v="1"/>
+>         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (125m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
+>         <tag k="hoot:review:sort_order" v="98"/>
+>         <tag k="type" v="review"/>
+>     </relation>
+20093c20104
+<         <tag k="hoot:review:sort_order" v="98"/>
+---
+>         <tag k="hoot:review:sort_order" v="99"/>
+20423c20434
+<         <tag k="hoot:review:sort_order" v="113"/>
+---
+>         <tag k="hoot:review:sort_order" v="114"/>
+20434c20445
+<         <tag k="hoot:review:sort_order" v="110"/>
+---
+>         <tag k="hoot:review:sort_order" v="111"/>
+20445c20456
+<         <tag k="hoot:review:sort_order" v="111"/>
+---
+>         <tag k="hoot:review:sort_order" v="112"/>
+20456c20467
+<         <tag k="hoot:review:sort_order" v="101"/>
+---
+>         <tag k="hoot:review:sort_order" v="102"/>
+20467c20478
+<         <tag k="hoot:review:sort_order" v="108"/>
+---
+>         <tag k="hoot:review:sort_order" v="109"/>
+20478c20489
+<         <tag k="hoot:review:sort_order" v="109"/>
+---
+>         <tag k="hoot:review:sort_order" v="110"/>
+20489c20500
+<         <tag k="hoot:review:sort_order" v="100"/>
+---
+>         <tag k="hoot:review:sort_order" v="101"/>
+20500c20511
+<         <tag k="hoot:review:sort_order" v="102"/>
+---
+>         <tag k="hoot:review:sort_order" v="103"/>
+20610c20621
+<         <tag k="hoot:review:sort_order" v="134"/>
+---
+>         <tag k="hoot:review:sort_order" v="135"/>
+20621c20632
+<         <tag k="hoot:review:sort_order" v="152"/>
+---
+>         <tag k="hoot:review:sort_order" v="153"/>
+20643c20654
+<         <tag k="hoot:review:sort_order" v="141"/>
+---
+>         <tag k="hoot:review:sort_order" v="142"/>
+20654c20665
+<         <tag k="hoot:review:sort_order" v="140"/>
+---
+>         <tag k="hoot:review:sort_order" v="141"/>
+20665c20676
+<         <tag k="hoot:review:sort_order" v="192"/>
+---
+>         <tag k="hoot:review:sort_order" v="193"/>
+20731c20742
+<         <tag k="hoot:review:sort_order" v="129"/>
+---
+>         <tag k="hoot:review:sort_order" v="130"/>
+20742c20753
+<         <tag k="hoot:review:sort_order" v="142"/>
+---
+>         <tag k="hoot:review:sort_order" v="143"/>
+20775c20786
+<         <tag k="hoot:review:sort_order" v="143"/>
+---
+>         <tag k="hoot:review:sort_order" v="144"/>
+20808c20819
+<         <tag k="hoot:review:sort_order" v="194"/>
+---
+>         <tag k="hoot:review:sort_order" v="195"/>
+20819c20830
+<         <tag k="hoot:review:sort_order" v="193"/>
+---
+>         <tag k="hoot:review:sort_order" v="194"/>
+20830c20841
+<         <tag k="hoot:review:sort_order" v="130"/>
+---
+>         <tag k="hoot:review:sort_order" v="131"/>
+20896c20907
+<         <tag k="hoot:review:sort_order" v="196"/>
+---
+>         <tag k="hoot:review:sort_order" v="197"/>
+20907c20918
+<         <tag k="hoot:review:sort_order" v="195"/>
+---
+>         <tag k="hoot:review:sort_order" v="196"/>
+20951c20962
+<         <tag k="hoot:review:sort_order" v="139"/>
+---
+>         <tag k="hoot:review:sort_order" v="140"/>

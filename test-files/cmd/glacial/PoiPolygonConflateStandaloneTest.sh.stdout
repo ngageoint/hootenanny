@@ -1,2 +1,831 @@
-21:56:02.615 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-output/cmd/PoiPolygonConflateStandaloneTest/output1.osm...
-21:56:02.777 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/output1.osm...
+18:16:03.525 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from t/cmd/PoiPolygonConflateStandaloneTest/output1.osm...
+18:16:03.683 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from acial/PoiPolygonConflateStandaloneTest/output1.osm...
+18:16:03.841 WARN  ...core/scoring/MapComparator.cpp( 251) Number of elements does not match.
+18734c18734
+<     <relation visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1">
+18745c18745
+<     <relation visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1">
+18756c18756
+<     <relation visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1">
+18764c18764
+<         <tag k="hoot:review:sort_order" v="161"/>
+---
+>         <tag k="hoot:review:sort_order" v="162"/>
+18767c18767
+<     <relation visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1">
+18775c18775
+<         <tag k="hoot:review:sort_order" v="162"/>
+---
+>         <tag k="hoot:review:sort_order" v="163"/>
+18778c18778
+<     <relation visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1">
+18786c18786
+<         <tag k="hoot:review:sort_order" v="90"/>
+---
+>         <tag k="hoot:review:sort_order" v="91"/>
+18789c18789
+<     <relation visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1">
+18797c18797
+<         <tag k="hoot:review:sort_order" v="95"/>
+---
+>         <tag k="hoot:review:sort_order" v="96"/>
+18800c18800
+<     <relation visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1">
+18808c18808
+<         <tag k="hoot:review:sort_order" v="96"/>
+---
+>         <tag k="hoot:review:sort_order" v="97"/>
+18811c18811
+<     <relation visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1">
+18819c18819
+<         <tag k="hoot:review:sort_order" v="97"/>
+---
+>         <tag k="hoot:review:sort_order" v="98"/>
+18822c18822
+<     <relation visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1">
+18830c18830
+<         <tag k="hoot:review:sort_order" v="91"/>
+---
+>         <tag k="hoot:review:sort_order" v="92"/>
+18833c18833
+<     <relation visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1">
+18841c18841
+<         <tag k="hoot:review:sort_order" v="92"/>
+---
+>         <tag k="hoot:review:sort_order" v="93"/>
+18844c18844
+<     <relation visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
+18855c18855
+<     <relation visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1">
+18866c18866
+<     <relation visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1">
+18877c18877
+<     <relation visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1">
+18888c18888
+<     <relation visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1">
+18899c18899
+<     <relation visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1">
+18907c18907
+<         <tag k="hoot:review:sort_order" v="132"/>
+---
+>         <tag k="hoot:review:sort_order" v="133"/>
+18910c18910
+<     <relation visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1">
+18918c18918
+<         <tag k="hoot:review:sort_order" v="131"/>
+---
+>         <tag k="hoot:review:sort_order" v="132"/>
+18921c18921
+<     <relation visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1">
+18932c18932
+<     <relation visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
+18943c18943
+<     <relation visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1">
+18954c18954
+<     <relation visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1">
+18962c18962
+<         <tag k="hoot:review:sort_order" v="153"/>
+---
+>         <tag k="hoot:review:sort_order" v="154"/>
+18965c18965
+<     <relation visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
+18976c18976
+<     <relation visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
+18984c18984
+<         <tag k="hoot:review:sort_order" v="98"/>
+---
+>         <tag k="hoot:review:sort_order" v="99"/>
+18987c18987
+<     <relation visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1">
+18995c18995
+<         <tag k="hoot:review:sort_order" v="99"/>
+---
+>         <tag k="hoot:review:sort_order" v="100"/>
+18998c18998
+<     <relation visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1">
+19006c19006
+<         <tag k="hoot:review:sort_order" v="106"/>
+---
+>         <tag k="hoot:review:sort_order" v="107"/>
+19009c19009
+<     <relation visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1">
+19017c19017
+<         <tag k="hoot:review:sort_order" v="102"/>
+---
+>         <tag k="hoot:review:sort_order" v="103"/>
+19020c19020
+<     <relation visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1">
+19031c19031
+<     <relation visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
+19039c19039
+<         <tag k="hoot:review:sort_order" v="110"/>
+---
+>         <tag k="hoot:review:sort_order" v="111"/>
+19042c19042
+<     <relation visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
+19053c19053
+<     <relation visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
+19064c19064
+<     <relation visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1">
+19075c19075
+<     <relation visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1">
+19083c19083
+<         <tag k="hoot:review:sort_order" v="109"/>
+---
+>         <tag k="hoot:review:sort_order" v="110"/>
+19086c19086
+<     <relation visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1">
+19094c19094
+<         <tag k="hoot:review:sort_order" v="103"/>
+---
+>         <tag k="hoot:review:sort_order" v="104"/>
+19097c19097
+<     <relation visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1">
+19105c19105
+<         <tag k="hoot:review:sort_order" v="163"/>
+---
+>         <tag k="hoot:review:sort_order" v="164"/>
+19108c19108
+<     <relation visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1">
+19116c19116
+<         <tag k="hoot:review:sort_order" v="93"/>
+---
+>         <tag k="hoot:review:sort_order" v="94"/>
+19119c19119
+<     <relation visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
+19127c19127
+<         <tag k="hoot:review:sort_order" v="100"/>
+---
+>         <tag k="hoot:review:sort_order" v="101"/>
+19130c19130
+<     <relation visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1">
+19138c19138
+<         <tag k="hoot:review:sort_order" v="101"/>
+---
+>         <tag k="hoot:review:sort_order" v="102"/>
+19141c19141
+<     <relation visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1">
+19149c19149
+<         <tag k="hoot:review:sort_order" v="158"/>
+---
+>         <tag k="hoot:review:sort_order" v="159"/>
+19152c19152
+<     <relation visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1">
+19160c19160
+<         <tag k="hoot:review:sort_order" v="113"/>
+---
+>         <tag k="hoot:review:sort_order" v="114"/>
+19163c19163
+<     <relation visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1">
+19171c19171
+<         <tag k="hoot:review:sort_order" v="157"/>
+---
+>         <tag k="hoot:review:sort_order" v="158"/>
+19174c19174
+<     <relation visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1">
+19182c19182
+<         <tag k="hoot:review:sort_order" v="155"/>
+---
+>         <tag k="hoot:review:sort_order" v="156"/>
+19185c19185
+<     <relation visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1">
+19193c19193
+<         <tag k="hoot:review:sort_order" v="164"/>
+---
+>         <tag k="hoot:review:sort_order" v="165"/>
+19196c19196
+<     <relation visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1">
+19207c19207
+<     <relation visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1">
+19218c19218
+<     <relation visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
+19226c19226
+<         <tag k="hoot:review:sort_order" v="104"/>
+---
+>         <tag k="hoot:review:sort_order" v="105"/>
+19229c19229
+<     <relation visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1">
+19240c19240
+<     <relation visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1">
+19251c19251
+<     <relation visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1">
+19259c19259
+<         <tag k="hoot:review:sort_order" v="159"/>
+---
+>         <tag k="hoot:review:sort_order" v="160"/>
+19262c19262
+<     <relation visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
+19270c19270
+<         <tag k="hoot:review:sort_order" v="114"/>
+---
+>         <tag k="hoot:review:sort_order" v="115"/>
+19273c19273
+<     <relation visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1">
+19281c19281
+<         <tag k="hoot:review:sort_order" v="156"/>
+---
+>         <tag k="hoot:review:sort_order" v="157"/>
+19284c19284
+<     <relation visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1">
+19292c19292
+<         <tag k="hoot:review:sort_order" v="165"/>
+---
+>         <tag k="hoot:review:sort_order" v="166"/>
+19295c19295
+<     <relation visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1">
+19303c19303
+<         <tag k="hoot:review:sort_order" v="142"/>
+---
+>         <tag k="hoot:review:sort_order" v="143"/>
+19306c19306
+<     <relation visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1">
+19314c19314
+<         <tag k="hoot:review:sort_order" v="124"/>
+---
+>         <tag k="hoot:review:sort_order" v="125"/>
+19317c19317
+<     <relation visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
+19325c19325
+<         <tag k="hoot:review:sort_order" v="130"/>
+---
+>         <tag k="hoot:review:sort_order" v="131"/>
+19328c19328
+<     <relation visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
+19336c19336
+<         <tag k="hoot:review:sort_order" v="115"/>
+---
+>         <tag k="hoot:review:sort_order" v="116"/>
+19339c19339
+<     <relation visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
+19347c19347
+<         <tag k="hoot:review:sort_order" v="116"/>
+---
+>         <tag k="hoot:review:sort_order" v="117"/>
+19350c19350
+<     <relation visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
+19358c19358
+<         <tag k="hoot:review:sort_order" v="151"/>
+---
+>         <tag k="hoot:review:sort_order" v="152"/>
+19361c19361
+<     <relation visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
+19369c19369
+<         <tag k="hoot:review:sort_order" v="152"/>
+---
+>         <tag k="hoot:review:sort_order" v="153"/>
+19372c19372
+<     <relation visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
+19380c19380
+<         <tag k="hoot:review:sort_order" v="154"/>
+---
+>         <tag k="hoot:review:sort_order" v="155"/>
+19383c19383
+<     <relation visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
+19391c19391
+<         <tag k="hoot:review:sort_order" v="129"/>
+---
+>         <tag k="hoot:review:sort_order" v="130"/>
+19394c19394
+<     <relation visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
+19402c19402
+<         <tag k="hoot:review:sort_order" v="128"/>
+---
+>         <tag k="hoot:review:sort_order" v="129"/>
+19405c19405
+<     <relation visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
+19413c19413
+<         <tag k="hoot:review:sort_order" v="133"/>
+---
+>         <tag k="hoot:review:sort_order" v="134"/>
+19416c19416
+<     <relation visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
+19424c19424
+<         <tag k="hoot:review:sort_order" v="125"/>
+---
+>         <tag k="hoot:review:sort_order" v="126"/>
+19427c19427
+<     <relation visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1">
+19435c19435
+<         <tag k="hoot:review:sort_order" v="126"/>
+---
+>         <tag k="hoot:review:sort_order" v="127"/>
+19438c19438
+<     <relation visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
+19446c19446
+<         <tag k="hoot:review:sort_order" v="127"/>
+---
+>         <tag k="hoot:review:sort_order" v="128"/>
+19449c19449
+<     <relation visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
+19457c19457
+<         <tag k="hoot:review:sort_order" v="134"/>
+---
+>         <tag k="hoot:review:sort_order" v="135"/>
+19460c19460
+<     <relation visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
+19468c19468
+<         <tag k="hoot:review:sort_order" v="138"/>
+---
+>         <tag k="hoot:review:sort_order" v="139"/>
+19471c19471
+<     <relation visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
+19479c19479
+<         <tag k="hoot:review:sort_order" v="137"/>
+---
+>         <tag k="hoot:review:sort_order" v="138"/>
+19482c19482
+<     <relation visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1">
+19490c19490
+<         <tag k="hoot:review:sort_order" v="121"/>
+---
+>         <tag k="hoot:review:sort_order" v="122"/>
+19493c19493
+<     <relation visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1">
+19501c19501
+<         <tag k="hoot:review:sort_order" v="148"/>
+---
+>         <tag k="hoot:review:sort_order" v="149"/>
+19504c19504
+<     <relation visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
+19512c19512
+<         <tag k="hoot:review:sort_order" v="122"/>
+---
+>         <tag k="hoot:review:sort_order" v="123"/>
+19515c19515
+<     <relation visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1">
+19523c19523
+<         <tag k="hoot:review:sort_order" v="123"/>
+---
+>         <tag k="hoot:review:sort_order" v="124"/>
+19526c19526
+<     <relation visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
+19534c19534
+<         <tag k="hoot:review:sort_order" v="140"/>
+---
+>         <tag k="hoot:review:sort_order" v="141"/>
+19537c19537
+<     <relation visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
+19545c19545
+<         <tag k="hoot:review:sort_order" v="136"/>
+---
+>         <tag k="hoot:review:sort_order" v="137"/>
+19548c19548
+<     <relation visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1">
+19556c19556
+<         <tag k="hoot:review:sort_order" v="135"/>
+---
+>         <tag k="hoot:review:sort_order" v="136"/>
+19559c19559
+<     <relation visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1">
+19567c19567
+<         <tag k="hoot:review:sort_order" v="141"/>
+---
+>         <tag k="hoot:review:sort_order" v="142"/>
+19570c19570
+<     <relation visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1">
+19578c19578
+<         <tag k="hoot:review:sort_order" v="139"/>
+---
+>         <tag k="hoot:review:sort_order" v="140"/>
+19581c19581
+<     <relation visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1">
+19589c19589
+<         <tag k="hoot:review:sort_order" v="118"/>
+---
+>         <tag k="hoot:review:sort_order" v="119"/>
+19592c19592
+<     <relation visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1">
+19600c19600
+<         <tag k="hoot:review:sort_order" v="117"/>
+---
+>         <tag k="hoot:review:sort_order" v="118"/>
+19603c19603
+<     <relation visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1">
+19611c19611
+<         <tag k="hoot:review:sort_order" v="150"/>
+---
+>         <tag k="hoot:review:sort_order" v="151"/>
+19614c19614
+<     <relation visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1">
+19622c19622
+<         <tag k="hoot:review:sort_order" v="146"/>
+---
+>         <tag k="hoot:review:sort_order" v="147"/>
+19625c19625
+<     <relation visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1">
+19633c19633
+<         <tag k="hoot:review:sort_order" v="149"/>
+---
+>         <tag k="hoot:review:sort_order" v="150"/>
+19636c19636
+<     <relation visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1">
+19644c19644
+<         <tag k="hoot:review:sort_order" v="143"/>
+---
+>         <tag k="hoot:review:sort_order" v="144"/>
+19647c19647
+<     <relation visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1">
+19655c19655
+<         <tag k="hoot:review:sort_order" v="144"/>
+---
+>         <tag k="hoot:review:sort_order" v="145"/>
+19658c19658
+<     <relation visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1">
+19666c19666
+<         <tag k="hoot:review:sort_order" v="147"/>
+---
+>         <tag k="hoot:review:sort_order" v="148"/>
+19669c19669
+<     <relation visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
+19677c19677
+<         <tag k="hoot:review:sort_order" v="145"/>
+---
+>         <tag k="hoot:review:sort_order" v="146"/>
+19680c19680
+<     <relation visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1">
+19688c19688
+<         <tag k="hoot:review:sort_order" v="105"/>
+---
+>         <tag k="hoot:review:sort_order" v="106"/>
+19691c19691
+<     <relation visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1">
+19699c19699
+<         <tag k="hoot:review:sort_order" v="119"/>
+---
+>         <tag k="hoot:review:sort_order" v="120"/>
+19702c19702
+<     <relation visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1">
+19710c19710
+<         <tag k="hoot:review:sort_order" v="108"/>
+---
+>         <tag k="hoot:review:sort_order" v="109"/>
+19713c19713
+<     <relation visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1">
+19724c19724
+<     <relation visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1">
+19735c19735
+<     <relation visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1">
+19746c19746
+<     <relation visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1">
+19757c19757
+<     <relation visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1">
+19768c19768
+<     <relation visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1">
+19779c19779
+<     <relation visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1">
+19787c19787
+<         <tag k="hoot:review:sort_order" v="167"/>
+---
+>         <tag k="hoot:review:sort_order" v="168"/>
+19790c19790
+<     <relation visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1">
+19798c19798
+<         <tag k="hoot:review:sort_order" v="166"/>
+---
+>         <tag k="hoot:review:sort_order" v="167"/>
+19801c19801
+<     <relation visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1">
+19809c19809
+<         <tag k="hoot:review:sort_order" v="94"/>
+---
+>         <tag k="hoot:review:sort_order" v="95"/>
+19812c19812
+<     <relation visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1">
+19820c19820
+<         <tag k="hoot:review:sort_order" v="89"/>
+---
+>         <tag k="hoot:review:sort_order" v="90"/>
+19823c19823
+<     <relation visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1">
+19831c19831
+<         <tag k="hoot:review:sort_order" v="82"/>
+---
+>         <tag k="hoot:review:sort_order" v="83"/>
+19834c19834
+<     <relation visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1">
+19842c19842
+<         <tag k="hoot:review:sort_order" v="87"/>
+---
+>         <tag k="hoot:review:sort_order" v="88"/>
+19845c19845
+<     <relation visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1">
+19853c19853
+<         <tag k="hoot:review:sort_order" v="78"/>
+---
+>         <tag k="hoot:review:sort_order" v="79"/>
+19856c19856
+<     <relation visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1">
+19864c19864
+<         <tag k="hoot:review:sort_order" v="80"/>
+---
+>         <tag k="hoot:review:sort_order" v="81"/>
+19867c19867
+<     <relation visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1">
+19875c19875
+<         <tag k="hoot:review:sort_order" v="81"/>
+---
+>         <tag k="hoot:review:sort_order" v="82"/>
+19878c19878
+<     <relation visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1">
+19886c19886
+<         <tag k="hoot:review:sort_order" v="74"/>
+---
+>         <tag k="hoot:review:sort_order" v="75"/>
+19889c19889
+<     <relation visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1">
+19897c19897
+<         <tag k="hoot:review:sort_order" v="79"/>
+---
+>         <tag k="hoot:review:sort_order" v="80"/>
+19900c19900
+<     <relation visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1">
+19911c19911
+<     <relation visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1">
+19922c19922
+<     <relation visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <relation visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1">
+19932a19933,19943
+>     <relation visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <member type="node" ref="-697" role="reviewee"/>
+>         <member type="way" ref="-145" role="reviewee"/>
+>         <tag k="hoot:review:needs" v="yes"/>
+>         <tag k="hoot:review:type" v="POI to Polygon"/>
+>         <tag k="hoot:review:members" v="2"/>
+>         <tag k="hoot:review:score" v="1"/>
+>         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (125m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
+>         <tag k="hoot:review:sort_order" v="73"/>
+>         <tag k="type" v="review"/>
+>     </relation>
+19952c19963
+<         <tag k="hoot:review:sort_order" v="73"/>
+---
+>         <tag k="hoot:review:sort_order" v="74"/>
+20282c20293
+<         <tag k="hoot:review:sort_order" v="88"/>
+---
+>         <tag k="hoot:review:sort_order" v="89"/>
+20293c20304
+<         <tag k="hoot:review:sort_order" v="85"/>
+---
+>         <tag k="hoot:review:sort_order" v="86"/>
+20304c20315
+<         <tag k="hoot:review:sort_order" v="86"/>
+---
+>         <tag k="hoot:review:sort_order" v="87"/>
+20315c20326
+<         <tag k="hoot:review:sort_order" v="76"/>
+---
+>         <tag k="hoot:review:sort_order" v="77"/>
+20326c20337
+<         <tag k="hoot:review:sort_order" v="83"/>
+---
+>         <tag k="hoot:review:sort_order" v="84"/>
+20337c20348
+<         <tag k="hoot:review:sort_order" v="84"/>
+---
+>         <tag k="hoot:review:sort_order" v="85"/>
+20348c20359
+<         <tag k="hoot:review:sort_order" v="75"/>
+---
+>         <tag k="hoot:review:sort_order" v="76"/>
+20359c20370
+<         <tag k="hoot:review:sort_order" v="77"/>
+---
+>         <tag k="hoot:review:sort_order" v="78"/>
+20469c20480
+<         <tag k="hoot:review:sort_order" v="107"/>
+---
+>         <tag k="hoot:review:sort_order" v="108"/>
+20480c20491
+<         <tag k="hoot:review:sort_order" v="120"/>
+---
+>         <tag k="hoot:review:sort_order" v="121"/>
+20502c20513
+<         <tag k="hoot:review:sort_order" v="112"/>
+---
+>         <tag k="hoot:review:sort_order" v="113"/>
+20513c20524
+<         <tag k="hoot:review:sort_order" v="111"/>
+---
+>         <tag k="hoot:review:sort_order" v="112"/>
+20524c20535
+<         <tag k="hoot:review:sort_order" v="160"/>
+---
+>         <tag k="hoot:review:sort_order" v="161"/>

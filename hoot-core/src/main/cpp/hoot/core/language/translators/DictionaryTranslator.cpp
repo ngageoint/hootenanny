@@ -37,12 +37,6 @@
 #include <unicode/utypes.h>
 #include <unicode/uobject.h>
 
-// Boost
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
-namespace pt = boost::property_tree;
-
 // Qt
 #include <QMap>
 #include <QRegExp>
@@ -63,8 +57,6 @@ DictionaryTranslator::DictionaryTranslator()
   // if this assertion isn't true then bad things will happen when converting between QString and
   // UnicodeString
   assert(sizeof(UChar) == sizeof(QChar));
-  _transliterator = 0;
-  _titler = 0;
   _whiteSpace.setPattern("\\W+");
 
   _streetTypes.insert("street");
@@ -74,12 +66,6 @@ DictionaryTranslator::DictionaryTranslator()
   _streetTypes.insert("freeway");
   _streetTypes.insert("tollway");
   _streetTypes.insert("road");
-}
-
-DictionaryTranslator::~DictionaryTranslator()
-{
-  delete _transliterator;
-  delete _titler;
 }
 
 QString DictionaryTranslator::translate(const QString textToTranslate)
@@ -195,18 +181,7 @@ QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
 
 QString DictionaryTranslator::toTitleCase(const QString& input)
 {
-  if (_titler == 0)
-  {
-    UErrorCode error = U_ZERO_ERROR;
-    _titler = Transliterator::createInstance("Any-Title", UTRANS_FORWARD, error);
-    if (_titler == NULL || error != U_ZERO_ERROR)
-    {
-      LOG_ERROR("transliterator error code: " << error);
-      throw HootException("transliterator error");
-    }
-  }
-
-  return _transform(_titler, input);
+  return _transform(TranslateDictionary::getInstance().getTitler(), input);
 }
 
 QString DictionaryTranslator::translateStreet(const QString& input)
@@ -242,24 +217,12 @@ QString DictionaryTranslator::translateStreet(const QString& input)
 
 QString DictionaryTranslator::transliterateToLatin(const QString& input)
 {
-  if (_transliterator == 0)
-  {
-    UErrorCode error = U_ZERO_ERROR;
-    _transliterator =
-      Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error);
-    if (_transliterator == NULL || error != U_ZERO_ERROR)
-    {
-      LOG_ERROR("transliterator error code: " << error);
-      throw HootException("transliterator error");
-    }
-  }
-
   // cache incoming requests -- we sometimes get a lot of duplicates.
   QString result;
-  if (!_cache.get(input, result))
+  if (!TranslateDictionary::getInstance().getFromTransliterationCache(input, result))
   {
-    result = _transform(_transliterator, input);
-    _cache.insert(input, result);
+    result = _transform(TranslateDictionary::getInstance().getTransliterator(), input);
+    TranslateDictionary::getInstance().insertIntoTransliterationCache(input, result);
   }
 
   return result;

@@ -39,9 +39,6 @@
 // ICU
 #include <unicode/translit.h>
 
-// Tgs
-#include <tgs/LruCache.h>
-
 namespace hoot
 {
 
@@ -60,7 +57,6 @@ public:
   static std::string className() { return "hoot::DictionaryTranslator"; }
 
   DictionaryTranslator();
-  ~DictionaryTranslator();
 
   /**
    * Translates the given input string into a translation & transliteration of the input.
@@ -101,10 +97,7 @@ public:
 
 private:
 
-  Tgs::LruCache<QString, QString> _cache;
   QSet<QString> _streetTypes;
-  Transliterator* _transliterator;
-  Transliterator* _titler;
   QRegExp _whiteSpace;
 
   QString _transform(icu::Transliterator* t, const QString& input) const;
