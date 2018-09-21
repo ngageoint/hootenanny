@@ -21,7 +21,7 @@ default: build
 all: build
 always:
 
-build: makedirs js-make qt-make services-build ui-build model-build conf/dictionary/words.sqlite \
+build: makedirs js-make qt-make services-build ui-build ui2x-build model-build conf/dictionary/words.sqlite \
 	conf/dictionary/WordsAbridged.sqlite hoot-services/src/main/resources/language-translation/langdetect-183.bin \
 	osmapidb
 
@@ -313,6 +313,9 @@ ifeq ($(BUILD_UI_TESTS),uitests)
 	cd test-files/ui && $(MAKE) -f Makefile clean
 endif
 
+ui2x-build:
+	cd hoot-ui-2x && npm i && npm run production
+	
 ui-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
