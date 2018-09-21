@@ -31,8 +31,10 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/algorithms/string/MostEnglishName.h>
 
 #include "PoiPolygonNameScoreExtractor.h"
+#include "PoiPolygonAddressScoreExtractor.h"
 #include "../PoiPolygonDistanceTruthRecorder.h"
 
 // Qt
@@ -50,7 +52,8 @@ QString PoiPolygonTypeScoreExtractor::polyBestKvp;
 QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
 QStringList PoiPolygonTypeScoreExtractor::failedMatchRequirements;
 
-PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor()
+PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor() :
+_translateTagValuesToEnglish(false)
 {
 }
 
@@ -59,6 +62,15 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
   setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
+  _translateTagValuesToEnglish = config.getPoiPolygonTranslateTagValuesToEnglish();
+  if (_translateTagValuesToEnglish)
+  {
+    _translator.reset(
+      Factory::getInstance().constructObject<ToEnglishTranslator>(
+        config.getLanguageTranslationTranslator()));
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
+  }
 }
 
 double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
@@ -70,7 +82,7 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
   const Tags& t1 = poi->getTags();
   const Tags& t2 = poly->getTags();
 
-  //TODO: make this failing match technique more extensible
+  //TODO: make this failing match technique more extensible - #2636
 
   if (_failsCuisineMatch(t1, t2))
   {
@@ -104,6 +116,33 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
   }
   LOG_VART(typeScore);
   return typeScore;
+}
+
+void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QString& tagValue) const
+{
+  //Check to see if the key is in our schema and that the word isn't already in English.  If the
+  //key isn't already in our schema, we won't gain anything during type matching with a
+  //translation anyway.  Also, skip address keys b/c we'll translate those later (they could be
+  //done here, but I don't think all of the address tags, if any, are in our schema so its easier
+  //to manage translating them during address score extraction).
+  LOG_VART(PoiPolygonAddressScoreExtractor::isAddressTagKey(tagKey));
+  LOG_VART(OsmSchema::getInstance().hasTagKey(tagKey));
+  LOG_VART(_isEnglishWord(tagValue));
+  if (!PoiPolygonAddressScoreExtractor::isAddressTagKey(tagKey) &&
+      OsmSchema::getInstance().hasTagKey(tagKey) && !_isEnglishWord(tagValue))
+  {
+    QString translatedTagValue = _translator->translate(tagValue);
+    if (translatedTagValue != tagValue)
+    {
+      tagValue = translatedTagValue.simplified().replace(" ", "_");
+      LOG_VART(tagValue);
+    }
+  }
+}
+
+bool PoiPolygonTypeScoreExtractor::_isEnglishWord(const QString word) const
+{
+  return MostEnglishName::getInstance()->scoreName(word) == 1.0;
 }
 
 double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
@@ -146,9 +185,9 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 
   for (int i = 0; i < poiTagList.size(); i++)
   {
+    const QString poiKvp = poiTagList.at(i).toLower();
     for (int j = 0; j < polyTagList.size(); j++)
     {
-      const QString poiKvp = poiTagList.at(i).toLower();
       const QString polyKvp = polyTagList.at(j).toLower();
       LOG_VART(poiKvp);
       LOG_VART(polyKvp);
@@ -201,14 +240,23 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
   QStringList tagsList;
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    const QStringList values = it.value().split(";");
+    QStringList values = it.value().split(";");
     for (int i = 0; i < values.size(); i++)
     {
-      if ((OsmSchema::getInstance().getCategories(it.key(), it.value()) &
+      const QString key = it.key();
+      QString value = values.at(i);
+
+      if (_translateTagValuesToEnglish)
+      {
+        _translateTagValue(key, value);
+      }
+
+      //TODO: Shouldn't it.value() be values.at(i) here instead?
+      if ((OsmSchema::getInstance().getCategories(key, /*it.value()*/value) &
            (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
              != OsmSchemaCategory::Empty)
       {
-        tagsList.append(it.key() + "=" + values.at(i));
+        tagsList.append(key + "=" + value);
       }
     }
   }

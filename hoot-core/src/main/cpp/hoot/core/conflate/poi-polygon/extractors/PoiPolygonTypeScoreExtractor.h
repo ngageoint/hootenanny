@@ -31,6 +31,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
 
 namespace hoot
 {
@@ -130,11 +131,19 @@ private:
   double _featureDistance;
   bool _printMatchDistanceTruth;
 
+  //when enabled, will scan through all tags and, for any tag keys recognized in the schema, will
+  //attempt to translate their values to English if not determined already to be in English
+  bool _translateTagValuesToEnglish;
+  boost::shared_ptr<ToEnglishTranslator> _translator;
+
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
   bool _failsCuisineMatch(const Tags& t1, const Tags& t2) const;
   bool _failsSportMatch(const Tags& t1, const Tags& t2) const;
   bool _failsReligionMatch(const Tags& t1, const Tags& t2) const;
+
+  void _translateTagValue(const QString tagKey, QString& tagValue) const;
+  bool _isEnglishWord(const QString word) const;
 };
 
 }

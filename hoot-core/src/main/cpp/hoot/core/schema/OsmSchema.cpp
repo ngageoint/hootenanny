@@ -1435,6 +1435,11 @@ QSet<QString> OsmSchema::getAllTagKeys()
   return d->getAllTagKeys();
 }
 
+bool OsmSchema::hasTagKey(const QString key)
+{
+  return d->getAllTagKeys().contains(key);
+}
+
 vector<SchemaVertex> OsmSchema::getAssociatedTags(QString name)
 {
   return d->getAssociatedTags(name);

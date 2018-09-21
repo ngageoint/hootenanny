@@ -297,6 +297,8 @@ public:
 
   QSet<QString> getAllTagKeys();
 
+  bool hasTagKey(const QString key);
+
   std::vector<SchemaVertex> getChildTags(QString name);
 
   static OsmSchema& getInstance();

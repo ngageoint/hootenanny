@@ -43,6 +43,7 @@
 
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
+#include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 #include <float.h>
 
@@ -102,12 +103,6 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
   _genericLandUseTagVals.append("village_green");
 }
 
-void PoiPolygonReviewReducer::setConfiguration(const Settings& conf)
-{
-  ConfigOptions options(conf);
-  _addressExtractor.setConfiguration(conf);
-}
-
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 {
   return _typeScore > 0.03 || _nameScore > 0.35 || _addressMatch;
@@ -129,8 +124,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //if both have addresses and they explicitly contradict each other, throw out the review; don't
   //do it if the poly has more than one address, like in many multi-use buildings
-  if (!_addressMatch && _addressExtractor.elementHasAddress(poi, *_map) &&
-      _addressExtractor.elementHasAddress(poly, *_map))
+  if (!_addressMatch && PoiPolygonAddressScoreExtractor::elementHasAddress(poi, *_map) &&
+      PoiPolygonAddressScoreExtractor::elementHasAddress(poly, *_map))
   {
     LOG_TRACE("Returning miss per review reduction rule #1...");
     return true;

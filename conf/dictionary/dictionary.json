@@ -72,5 +72,8 @@
     ["#Cairo"],
     ["sinagoga", "synagogue"],
 
+    ["#Munich"],
+    ["Fahrscheinschalter", "ticket office"],
+
     ["#end"]
 ] }

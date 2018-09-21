@@ -30,8 +30,8 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -87,25 +87,33 @@ public:
    * @param map map the element being examined belongs to
    * @return true if the element has an address; false otherwise
    */
-  bool elementHasAddress(const ConstElementPtr& element, const OsmMap& map);
+  static bool elementHasAddress(const ConstElementPtr& element, const OsmMap& map);
+
+  /**
+   * TODO
+   *
+   * @param tagKey
+   * @return
+   */
+  static bool isAddressTagKey(const QString tagKey);
 
   virtual QString getDescription() const
   { return "Calculates the address similarity score of two features involved in POI/Polygon conflation"; }
 
 private:
 
+  //when enabled, will attempt to translate address tags to English
+  bool _translateTagValuesToEnglish;
   boost::shared_ptr<ToEnglishTranslator> _translator;
 
-  void _collectAddressesFromElement(const Element& element, QSet<QString>& addresses,
-                                    const bool translate = true) const;
+  void _collectAddressesFromElement(const Element& element, QSet<QString>& addresses) const;
   void _collectAddressesFromWayNodes(const Way& way, QSet<QString>& addresses,
-                                     const OsmMap& map, const bool translate = true) const;
+                                     const OsmMap& map) const;
   void _collectAddressesFromRelationMembers(const Relation& relation, QSet<QString>& addresses,
-                                     const OsmMap& map, const bool translate = true) const;
+                                     const OsmMap& map) const;
   void _parseAddressesAsRange(const QString houseNum, const QString street,
                               QSet<QString>& addresses) const;
-  void _parseAddressesInAltFormat(const Tags& tags, QSet<QString>& addresses,
-                                  const bool translate = true) const;
+  void _parseAddressesInAltFormat(const Tags& tags, QSet<QString>& addresses) const;
   bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress) const;
 
 };

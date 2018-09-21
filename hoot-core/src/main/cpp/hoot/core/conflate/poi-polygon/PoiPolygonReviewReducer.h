@@ -29,8 +29,6 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/util/Configurable.h>
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 namespace hoot
 {
@@ -49,7 +47,7 @@ namespace hoot
  * forest model could make it entirely obsolete (#2323).  At the very least, triggersRule could
  * benefit from being refactored into smaller chunks.
  */
-class PoiPolygonReviewReducer : public Configurable
+class PoiPolygonReviewReducer
 {
 
 public:
@@ -71,8 +69,6 @@ public:
    * @todo this desperately needs to be broken up into more modular pieces
    */
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
-
-  virtual void setConfiguration(const Settings& conf);
 
 private:
 
@@ -97,8 +93,6 @@ private:
   unsigned int _badGeomCount;
 
   bool _keepClosestMatchesOnly;
-
-  PoiPolygonAddressScoreExtractor _addressExtractor;
 
   bool _nonDistanceSimilaritiesPresent() const;
 

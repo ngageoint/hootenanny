@@ -237,7 +237,7 @@ public:
     map->addRelation(relation1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, relation1), 0.0);
 
-    //not convinced this is a valid test for now...need to see it happen in the wild
+    //not convinced this is a valid test for now...need to see it actually happen in the wild
 //    NodePtr node3(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
 //    node3->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
 //    node3->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");

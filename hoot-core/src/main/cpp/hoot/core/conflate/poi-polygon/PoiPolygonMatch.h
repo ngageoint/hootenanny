@@ -35,9 +35,10 @@
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonRfClassifier.h"
+#include "extractors/PoiPolygonTypeScoreExtractor.h"
 
 namespace hoot
 {
@@ -138,6 +139,7 @@ private:
   //requirement for matching
   bool _closeDistanceMatch;
 
+  PoiPolygonTypeScoreExtractor _typeScorer;
   double _typeScore;
   double _typeScoreThreshold;
   QStringList _reviewIfMatchedTypes;
@@ -145,7 +147,7 @@ private:
   double _nameScore;
   double _nameScoreThreshold;
 
-  PoiPolygonAddressScoreExtractor _addressExtractor;
+  PoiPolygonAddressScoreExtractor _addressScorer;
   double _addressScore;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
@@ -183,6 +185,9 @@ private:
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 
   bool _skipForReviewTypeDebugging() const;
+
+  bool _isEnglishWord(const QString word) const;
+  void _translateTagValues(ConstElementPtr element);
 };
 
 }

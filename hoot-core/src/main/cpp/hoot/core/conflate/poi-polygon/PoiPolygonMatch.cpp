@@ -33,7 +33,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-#include "extractors/PoiPolygonTypeScoreExtractor.h"
+#include <hoot/core/util/Factory.h>
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistance.h"
 #include "PoiPolygonAdvancedMatcher.h"
@@ -193,7 +193,8 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   setReviewEvidenceThreshold(reviewEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
 
-  _addressExtractor.setConfiguration(conf);
+  _addressScorer.setConfiguration(conf);
+  _typeScorer.setConfiguration(conf);
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -364,7 +365,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
       _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0);
-    reviewReducer.setConfiguration(_conf);
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
@@ -537,18 +537,17 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   PoiPolygonTypeScoreExtractor::poiBestKvp = "";
   PoiPolygonTypeScoreExtractor::polyBestKvp = "";
   PoiPolygonTypeScoreExtractor::failedMatchRequirements.clear();
-  PoiPolygonTypeScoreExtractor typeScorer;
-  typeScorer.setFeatureDistance(_distance);
-  typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
-  _typeScore = typeScorer.extract(*_map, poi, poly);
+  _typeScorer.setFeatureDistance(_distance);
+  _typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
+  _typeScore = _typeScorer.extract(*_map, poi, poly);
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
 
-  if (typeScorer.failedMatchRequirements.size() > 0)
+  if (_typeScorer.failedMatchRequirements.size() > 0)
   {
     QString failedMatchTypes;
-    for (int i = 0; i < typeScorer.failedMatchRequirements.size(); i++)
+    for (int i = 0; i < _typeScorer.failedMatchRequirements.size(); i++)
     {
-      failedMatchTypes += typeScorer.failedMatchRequirements.at(i) + ", ";
+      failedMatchTypes += _typeScorer.failedMatchRequirements.at(i) + ", ";
     }
     failedMatchTypes.chop(2);
 
@@ -582,7 +581,7 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  _addressScore = _addressExtractor.extract(*_map, poi, poly);
+  _addressScore = _addressScorer.extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
   LOG_VART(addressMatch);
   return addressMatch ? 1u : 0u;

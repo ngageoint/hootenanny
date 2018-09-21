@@ -46,6 +46,7 @@ class PoiPolygonTypeScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonTypeScoreExtractorTest);
   CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(translateTagValueTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -53,6 +54,7 @@ public:
   void runTest()
   {
     PoiPolygonTypeScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -72,6 +74,26 @@ public:
     WayPtr way3(new Way(Status::Unknown2, -1, 15.0));
     way3->getTags().set("building", "yes");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way3), 0.0);
+  }
+
+  void translateTagValueTest()
+  {
+    PoiPolygonTypeScoreExtractor uut;
+    Settings settings = conf();
+    OsmMapPtr map(new OsmMap());
+
+    settings.set("poi.polygon.translate.tag.values.to.english", "true");
+    uut.setConfiguration(settings);
+
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set("amenity", "ticket_office");
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    way1->getTags().set("amenity", "Fahrscheinschalter");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    settings.set("poi.polygon.translate.tag.values.to.english", "false");
+    uut.setConfiguration(settings);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, uut.extract(*map, node1, way1), 0.0);
   }
 };
 
