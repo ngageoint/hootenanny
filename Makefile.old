@@ -12,7 +12,7 @@ SHELL=/bin/bash
 
 # If you're adding another schema file be sure and update the archive target
 # too.
-SCHEMA_FILES=plugins/tds61_schema.js plugins/tds61_full_schema.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds40_schema.js plugins/tds40_full_schema.js plugins/etds40_rules.js plugins/etds40_osm_rules.js plugins/mgcp_schema.js plugins/emgcp_rules.js plugins/emgcp_osm_rules.js plugins/ggdm30_schema.js plugins/ggdm30_full_schema.js plugins/eggdm30_rules.js plugins/eggdm30_osm_rules.js
+SCHEMA_FILES=translations/tds61_schema.js translations/tds61_thematic_schema.js translations/tds61_lookup.js translations/tds61_full_schema.js translations/etds61_rules.js translations/etds61_osm_rules.js plugins/tds40_schema.js plugins/tds40_full_schema.js plugins/etds40_rules.js plugins/etds40_osm_rules.js plugins/mgcp_schema.js plugins/emgcp_rules.js plugins/emgcp_osm_rules.js plugins/ggdm30_schema.js plugins/ggdm30_full_schema.js plugins/eggdm30_rules.js plugins/eggdm30_osm_rules.js
 
 -include Makefile.inc
 
@@ -184,23 +184,33 @@ plugins/etds40_osm_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translat
 
 #### TDSv61
 # TDSv61 is built from the TDSv60 spec with NGA's extensions
-plugins/tds61_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+translations/tds61_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
+# Thematic TDSv61 built from the TDSv60 spec with NGA's extensions
+translations/tds61_thematic_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< --thematicschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+# TDSv61 lookup tables
+translations/tds61_lookup.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< --lookuptables $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
 # TDSv61 full schema is built from the TDSv60 spec with NGA's extensions.
 # This one has all of the Text Enumerations
-plugins/tds61_full_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+translations/tds61_full_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS61 "To English" rules
-plugins/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+translations/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS61 "From English" rules
-plugins/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+translations/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
@@ -383,10 +393,12 @@ archive: js-make services-docs docs
 	cp plugins/etds40_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
 	cp plugins/etds40_osm_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
 	# TDSv61
-	cp plugins/tds61_schema.js $(HOOT_TARNAME)/plugins/tds61_schema.js
-	cp plugins/tds61_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
-	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
-	cp plugins/etds61_osm_rules.js $(HOOT_TARNAME)/plugins/etds61_osm_rules.js
+	cp translations/tds61_schema.js $(HOOT_TARNAME)/translations/tds61_schema.js
+	cp translations/tds61_thematic_schema.js $(HOOT_TARNAME)/translations/tds61_thematic_schema.js
+	cp translations/tds61_lookup.js $(HOOT_TARNAME)/translations/tds61_lookup.js
+	cp translations/tds61_full_schema.js $(HOOT_TARNAME)/translations/tds61_full_schema.js
+	cp translations/etds61_rules.js $(HOOT_TARNAME)/translations/etds61_rules.js
+	cp translations/etds61_osm_rules.js $(HOOT_TARNAME)/translations/etds61_osm_rules.js
 	# MGCP
 	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
 	cp plugins/emgcp_rules.js $(HOOT_TARNAME)/plugins/emgcp_rules.js

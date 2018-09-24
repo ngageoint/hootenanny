@@ -93,27 +93,27 @@ def printJavascript(schema,withDefs):
                 for l in schema[f]['columns'][k]['enum']:
                     #print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
                     print '                           { value:"%s", name:"%s" }, ' % (l['value'],l['name'])
-                print '                        ] // End of Enumerations '
+                print '                        ]'
 
             else:
                 print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
                 print '                       defValue:"%s" ' % (schema[f]['columns'][k]['defValue'])
 
             if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                print '                     } // End of %s' % (k)
+                print '                     }'
             else:
-                print '                     }, // End of %s' % (k)
+                print '                     },'
                 num_attrib -= 1
 
-        print '                    ] // End of Columns'
+        print '                    ]'
 
         if num_feat == 1: # Are we at the last feature? yes = no trailing comma
-            print '          } // End of feature %s\n' % (schema[f]['fcode'])
+            print '          }\n'
         else:
-            print '          }, // End of feature %s\n' % (schema[f]['fcode'])
+            print '          },\n'
             num_feat -= 1
 
-    print '    ]; // End of schema\n' # End of schema
+    print '    ];\n' # End of schema
 
 # End printJavascript
 
@@ -121,6 +121,14 @@ def printJavascript(schema,withDefs):
 # Print out a codelist as a JS variable
 def printFunctions(eList):
     for i in eList:
+        # tArray = []
+        # for j in eList[i]['values']:
+        #     tArray.append({"value":j,"name":eList[i]['values'][j]})
+
+        
+        # print '    var %s = %s;' % (i,json.dumps(tArray))
+        # print
+
         print '    var %s = [' % (i)
 
         num_vals = len(eList[i]['values'].keys()) # How many values does the thing have?

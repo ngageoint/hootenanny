@@ -37,7 +37,7 @@
 # Dump the enumerated attributes into files.
 # Each file is named: <attribute>_<FCODE>
 # The files are put in a directory called: enumGGDM30
-import os,shutil,gzip
+import os,shutil,gzip,json
 
 
 def asint(s):
@@ -109,14 +109,15 @@ def printCopyright():
 
 
 def printJSHeader(spec):
+    # print
+    # print "var _global = (0, eval)('this');"
+    # print 'if (!_global.%s)' % (spec)
+    # print '{'
+    # print '  _global.%s = {};' % (spec)
+    # print '}'
     print
-    print "var _global = (0, eval)('this');"
-    print 'if (!_global.%s)' % (spec)
-    print '{'
-    print '  _global.%s = {};' % (spec)
-    print '}'
-    print
-    print '%s.schema = {' % (spec)
+    # print '%s.schema = {' % (spec)
+    print '%sschema = {' % (spec)
     print 'getDbSchema: function()'
     print '{'
 
@@ -124,9 +125,11 @@ def printJSHeader(spec):
 def printJSFooter(spec):
     print '    return schema; \n'
     print '} // End of getDbSchema\n'
-    print '} // End of %s.schema\n' % (spec)
+    # print '} // End of %s.schema\n' % (spec)
+    print '} // End of %sschema\n' % (spec)
     print
-    print 'exports.getDbSchema = %s.schema.getDbSchema;' % (spec)
+    # print 'exports.getDbSchema = %s.schema.getDbSchema;' % (spec)
+    print 'exports.getDbSchema = %sschema.getDbSchema;' % (spec)
     print
 
 
@@ -325,19 +328,63 @@ def printLayerList(layerList):
 
 # Print out a codelist as a JS variable
 def printVariableBody(name,var):
-    print '    var %s = [' % (name)
+    tArray = []
+    for val in var:
+        tArray.append({"name":val,"value":var[val]})
 
-    num_vals = len(var.keys()) # How many values does the thing have?
-    for l in var:
-        if num_vals == 1: # Are we at the last feature? yes = no trailing comma
-            print '              { name:"%s", value:"%s" } ' % (l,var[l])
-        else:
-            print '              { name:"%s", value:"%s" }, ' % (l,var[l])
-            num_vals -= 1
-
-    print '             ];'
+    print '    var %s = %s' % (name,json.dumps(tArray))
     print
 # End printVariableBody
+
+# The old full text version
+# def printVariableBody(name,var):
+#     print '    var %s = [' % (name)
+
+#     num_vals = len(var.keys()) # How many values does the thing have?
+#     for l in var:
+#         if num_vals == 1: # Are we at the last feature? yes = no trailing comma
+#             print '              { name:"%s", value:"%s" } ' % (l,var[l])
+#         else:
+#             print '              { name:"%s", value:"%s" }, ' % (l,var[l])
+#             num_vals -= 1
+
+#     print '             ];'
+#     print
+# End printVariableBody
+
+
+# printLayerList
+def printLookupTables(schema,tSchema,spec):
+    print '%s.tables = {' % (spec)
+
+    lookup = {}
+    layerLookup = {}
+    for feature in schema:
+        attrList = []
+        for attr in schema[feature]['columns']:
+            attrList.append(schema[feature]['columns'][attr]['name'])
+
+        lookup[schema[feature]['geom'][0] + schema[feature]['fcode']] = attrList
+        layerLookup[schema[feature]['geom'][0] + schema[feature]['fcode']] = schema[feature]['name']
+
+    print '    attrLookup : %s,' % (json.dumps(lookup))
+    print
+    print '    layerNameLookup : %s,' % (json.dumps(layerLookup))
+    print
+
+    lookupThematic = {}
+    for feature in range(len(tSchema)):
+        attrList = []
+        for attr in range(len(tSchema[feature]['columns'])):
+            attrList.append(tSchema[feature]['columns'][attr]['name'])
+        lookupThematic[tSchema[feature]['name']] = attrList
+
+    print '    attrThematicLookup : %s' % (json.dumps(lookupThematic))
+    print
+
+    print '} // End of %s.lookup\n' % (spec)
+
+# End printLookupTables
 
 
 # Print ToEnglish

@@ -85,7 +85,7 @@ def printJavascript(schema):
                 print '                       enumerations:['
                 for l in schema[f]['columns'][k]['enum']:
                     print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
-                print '                        ] // End of Enumerations '
+                print '                        ]'
 
             #elif schema[f]['columns'][k]['type'] == 'textEnumeration':
                 #print '                       type:"Xenumeration",'
@@ -97,20 +97,20 @@ def printJavascript(schema):
                 print '                       defValue:"%s" ' % (schema[f]['columns'][k]['defValue'])
 
             if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                print '                     } // End of %s' % (k)
+                print '                     }'
             else:
-                print '                     }, // End of %s' % (k)
+                print '                     },'
                 num_attrib -= 1
 
-        print '                    ] // End of Columns'
+        print '                    ]'
 
         if num_feat == 1: # Are we at the last feature? yes = no trailing comma
-            print '          } // End of feature %s\n' % (schema[f]['fcode'])
+            print '          }\n'
         else:
-            print '          }, // End of feature %s\n' % (schema[f]['fcode'])
+            print '          },\n'
             num_feat -= 1
 
-    print '    ]; // End of schema\n' # End of schema
+    print '    ];\n' # End of schema
 
 # End printJavascript
 

@@ -31,7 +31,6 @@
 
 hoot.require('SchemaTools');
 // hoot.require('tds61_schema');
-hoot.require('config');
 hoot.require('translate');
 hoot.require('fcode_common');
 
@@ -39,31 +38,40 @@ tds61 = {
 
 	initialize : function()
 	{
+	print('toOgr: Init()');
 	    // Set the schema type for the export
 	    hoot.Settings.set({"osm.map.writer.schema":"TDSv61"});
 
 		// Setup config variables. We could do this in initialize() but some things don't call it :-(
 		// Doing this so we don't have to keep calling into Hoot core
-		// if (tds61.configOut == undefined)
-		// {
-		    tds61.configOut = {};
-		    tds61.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-		    tds61.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
-		    tds61.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
-		    tds61.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-		    tds61.configOut.OgrSplitO2s = config.getOgrSplitO2s();
-		    tds61.configOut.OgrThematicStructure = config.getOgrThematicStructure();
-		    tds61.configOut.OgrThrowError = config.getOgrThrowError();
+		if (typeof config == 'undefined')
+		{
+	        print('## Loading config');
+			hoot.require('config');
+		}
 
-		    // Get any changes to OSM tags
-		    // NOTE: the rest of the config variables will change to this style of assignment soon
-		    tds61.toChange = hoot.Settings.get("translation.override");
-		// }
+	    tds61.configOut = {};
+	    tds61.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
+	    tds61.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
+	    tds61.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
+	    tds61.configOut.OgrNoteExtra = config.getOgrNoteExtra();
+	    tds61.configOut.OgrSplitO2s = config.getOgrSplitO2s();
+	    tds61.configOut.OgrThematicStructure = config.getOgrThematicStructure();
+	    tds61.configOut.OgrThrowError = config.getOgrThrowError();
+
+	    // Get any changes to OSM tags
+	    // NOTE: the rest of the config variables will change to this style of assignment soon
+	    tds61.toChange = hoot.Settings.get("translation.override");
 
 		// Check if we have a schema. This is a quick way to workout if various lookup tables have been built
 		if (tds61.rawSchema == undefined)
 		{
-		    var tmp_schema = getDbSchema();
+			print("Require: tds61 Init() dbSchema");
+			hoot.require('TDSv61_dbSchema');
+			print("Require: Back from tds61 Init() dbSchema");
+			// Debug
+		    // var tmp_schema = getDbSchema();
+		    var tmp_schema = buildTds61Schema();
 		}
 
 		// Flip the ge4List table so we can use it for export
@@ -76,39 +84,44 @@ tds61 = {
 		    }
 		}
 
+		// Flip the ge4List table so we can use it for export
+		if (tds61.tables == undefined)
+		{
+			hoot.require('tds61_lookup');
+		}
+
+print('lookup: attrLookup' + tds61.tables.attrLookup);
+print('lookup: LAP030' + tds61.tables.attrLookup['LAP030']);
+
+print('');
+
 		// Set up the fcode translation rules. We need this due to clashes between the one2one and
 		// the fcode one2one rules
-		// if (tds61.fcodeLookup == undefined)
-		// {
-		    // Add the FCODE rules for Export
-		    fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.fcodeOne2oneOut);
+	    // Add the FCODE rules for Export
+	    fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.fcodeOne2oneOut);
 
-		    tds61.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
-		    // Debug
-		    // translate.dumpOne2OneLookup(tds61.fcodeLookup);
-		// }
+	    tds61.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+	    // Debug
+	    // translate.dumpOne2OneLookup(tds61.fcodeLookup);
 
-		// if (tds61.lookup == undefined)
-		// {
-		    // Add "other" rules to the one2one
-		    tds61.one2one.push.apply(tds61.one2one,tds61.one2oneOut);
+	    // Add "other" rules to the one2one
+	    tds61.one2one.push.apply(tds61.one2one,tds61.one2oneOut);
 
-		    tds61.lookup = translate.createBackwardsLookup(tds61.one2one);
-		    // Debug
-		    // translate.dumpOne2OneLookup(tds61.lookup);
+	    tds61.lookup = translate.createBackwardsLookup(tds61.one2one);
+	    // Debug
+	    // translate.dumpOne2OneLookup(tds61.lookup);
 
-		    // Make the fuzzy lookup table
-		    tds61.fuzzy = schemaTools.generateToOgrTable(tds61.fuzzyTable);
+	    // Make the fuzzy lookup table
+	    tds61.fuzzy = schemaTools.generateToOgrTable(tds61.fuzzyTable);
 
-		    // Debug
-            // for (var k1 in tds61.fuzzy)
-            // {
-            //     for (var v1 in tds61.fuzzy[k1])
-            //     {
-            //         print(JSON.stringify([k1, v1, tds61.fuzzy[k1][v1][0], tds61.fuzzy[k1][v1][1], tds61.fuzzy[k1][v1][2]]));
-            //     }
-            // }
-		// } // End tds61.lookup Undefined
+	    // Debug
+        // for (var k1 in tds61.fuzzy)
+        // {
+        //     for (var v1 in tds61.fuzzy[k1])
+        //     {
+        //         print(JSON.stringify([k1, v1, tds61.fuzzy[k1][v1][0], tds61.fuzzy[k1][v1][1], tds61.fuzzy[k1][v1][2]]));
+        //     }
+        // }
 	},
 
 
@@ -5303,7 +5316,7 @@ tds61 = {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
         // This is quicker than going through the Schema due to the way the Schema is arranged
-        var attrList = tds61.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+        var attrList = tds61.tables.attrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
         var othList = {};
 
@@ -5484,8 +5497,8 @@ tds61 = {
     // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
     validateTDSAttrs: function(gFcode, attrs) {
 
-        var tdsAttrList = tdsAttrLookup[tds61.thematicGroupList[gFcode]];
-        var AttrList = tds61.AttrLookup[gFcode];
+        var tdsAttrList = tds61.tables.attrThematicLookup[tds61.thematicGroupList[gFcode]];
+        var AttrList = tds61.tables.attrLookup[gFcode];
 
         for (var i = 0, len = tdsAttrList.length; i < len; i++)
         {
@@ -6625,6 +6638,8 @@ toOgr : function (tags, elementType, geometryType)
     	print('Call TDSv61 toOgr Initialise');
     	tds61.initialize();
     }
+	print('attrLookup: After init ' + typeof tds61.tables.attrLookup);
+print('lookup: after init LAP030' + tds61.tables.attrLookup['LAP030']);
 
 	// Start processing here
 	// Debug:
@@ -6706,7 +6721,9 @@ toOgr : function (tags, elementType, geometryType)
 	// push the feature to o2s layer
 	var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-	if (!(tds61.AttrLookup[gFcode.toUpperCase()]))
+	print('attrLookup: ' + typeof tds61.tables.attrLookup);
+
+	if (!(tds61.tables.attrLookup[gFcode.toUpperCase()]))
 	{
 	    // For the UI: Throw an error and die if we don't have a valid feature
 	    if (tds61.configOut.getOgrThrowError == 'true')
@@ -6788,7 +6805,7 @@ toOgr : function (tags, elementType, geometryType)
 	    {
 	        // Make sure that we have a valid FCODE
 	        var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-	        if (tds61.AttrLookup[gFcode.toUpperCase()])
+	        if (tds61.tables.attrLookup[gFcode.toUpperCase()])
 	        {
 	            // Validate attrs: remove all that are not supposed to be part of a feature
 	            tds61.validateAttrs(geometryType,returnData[i]['attrs']);
@@ -6808,7 +6825,7 @@ toOgr : function (tags, elementType, geometryType)
 	            }
 	            else
 	            {
-	                returnData[i]['tableName'] = tds61.layerNameLookup[gFcode.toUpperCase()];
+	                returnData[i]['tableName'] = tds61.tables.layerNameLookup[gFcode.toUpperCase()];
 	            }
 	        }
 	        else
@@ -6883,214 +6900,50 @@ function layerNameFilter()
 }
 
 
-// Create the output Schema
 function getDbSchema()
 {
-	
-	hoot.require('tds61_schema');
-	
-	tds61.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-    tds61.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+	// var _global = (0, eval)('this');
+    
+	// print('Global:' + _global.keys());
+    print("OGR: About to require");
+    // hoot.require('tds61_schema');
+    hoot.require('TDSv61_dbSchema')
+    print("OGR: About to send back schema");
+ 
+    // return tds61.schema.getDbSchema();
+    return buildTds61Schema();
 
-    // Warning: This is <GLOBAL> so we can get access to it from other functions
-    tds61.rawSchema = tds61.schema.getDbSchema();
 
-    // Add the Very ESRI specific FCSubtype attribute
-    if (config.getOgrEsriFcsubtype() == 'true') tds61.rawSchema = translate.addFCSubtype(tds61.rawSchema);
 
-    // Add empty "extra" feature layers if needed
-    if (config.getOgrNoteExtra() == 'file') tds61.rawSchema = translate.addExtraFeature(tds61.rawSchema);
 
- /*
-    // This has been removed since we no longer have text enumerations in the schema
 
-    // Go go through the Schema and fix/add attributes
-    for (var i=0, slen = tds61.rawSchema.length; i < slen; i++)
-    {
-        // Cycle throught he columns and "edit" the attribute fields with Text Enumerations
-        // We convert these to plain String types and avoid having to handle String enumerations
-        for (var j=0, clen = tds61.rawSchema[i].columns.length; j < clen; j++)
-        {
-            // exploit the Object and avoid a Switch :-)
-            if (tds61.rawSchema[i].columns[j].name in {'ZI004_RCG':1,'ZSAX_RS0':1,'ZI020_IC2':1})
-            {
-                tds61.rawSchema[i].columns[j].type = "String";
-                delete tds61.rawSchema[i].columns[j].enumerations;
-            }
-        } // End For tds61.rawSchema.columns.length
-    } // End For tds61.rawSchema.length
- */
+	// print('to_OGR getDbSchema');
+ //    if (typeof buildTds61Schema == 'undefined')
+ //    {
+	// 	print('Require: tds61 Schema');
+ //        hoot.require('TDSv61_dbSchema')
+ //    }
+	// print('toOgr Back from Require Schema');
 
-    // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
-    tds61.AttrLookup = translate.makeAttrLookup(tds61.rawSchema);
-
-    // Debug:
-    // print("tds61.AttrLookup");
-    // translate.dumpLookup(tds61.AttrLookup);
-
-    // Decide if we are going to use TDS structure or 1 FCODE / File
-    // if we DON't want the new structure, just return the tds61.rawSchema
-    if (config.getOgrThematicStructure() == 'false')
-    {
-        // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
-        tds61.layerNameLookup = translate.makeLayerNameLookup(tds61.rawSchema);
-
-        // Now add an o2s[A,L,P] feature to the tds61.rawSchema
-        // We can drop features but this is a nice way to see what we would drop
-        tds61.rawSchema = translate.addEmptyFeature(tds61.rawSchema);
-
-        // Add the empty Review layers
-        tds61.rawSchema = translate.addReviewFeature(tds61.rawSchema);
-
-        // Debugging:
-        // translate.dumpSchema(tds61.rawSchema);
-
-        return tds61.rawSchema;
-    }
-
-    // OK, now we build a new schema
-    var newSchema = [];
-    var layerName = '';
-    var fCode = '';
-
-    // Go through the fcode/layer list, find all of the layers and build a skeleton schema
-    // layerList is used to keep track of what we have already seen
-    var layerList = [];
-    var geomType = '';
-    for (var fc in tds61.thematicGroupList)
-    {
-        layerName = tds61.thematicGroupList[fc];
-        if (~layerList.indexOf(layerName)) continue;  // Funky use of ~ instead of '!== -1'
-        layerList.push(layerName);
-
-        // Now build a skeleton schema
-        if (~layerName.indexOf('Pnt'))
-        {
-            geomType = 'Point';
-        }
-        else if (~layerName.indexOf('Srf'))
-        {
-            geomType = 'Area';
-        }
-        else
-        {
-            geomType = 'Line';
-        }
-
-        newSchema.push({ name: layerName,
-                      desc: layerName,
-                      geom: geomType,
-                      columns:[]
-                    });
-    } // End fc loop
-
-    // Loop through the old schema and populate the new one
-    var newSchemaLen = newSchema.length; // cached as we use this a lot
-    for (var os = 0, osLen = tds61.rawSchema.length; os < osLen; os++)
-    {
-        // The table looks like:
-        // 'PGB230':'AeronauticPnt', // AircraftHangar
-        // 'AGB230':'AeronauticSrf', // AircraftHangar
-        // 'AGB015':'AeronauticSrf', // Apron
-        // ....
-        // So we add the geometry to the FCODE
-
-        fCode = tds61.rawSchema[os].geom.charAt(0) + tds61.rawSchema[os].fcode;
-        layerName = tds61.thematicGroupList[fCode];
-
-        // Loop through the new schema and find the right layer
-        for (var ns = 0; ns < newSchemaLen; ns++)
-        {
-            // If we find the layer, populate it
-            if (newSchema[ns].name == layerName)
-            {
-                // now start adding attrs from the raw schema. This Is Not Pretty
-
-                // Loop through the columns in the OLD schema
-                for (var cos = 0, cosLen = tds61.rawSchema[os].columns.length; cos < cosLen; cos++)
-                {
-                    var same = false;
-                    // Loop through the columns in the NEW schema
-                    for (var cns = 0, cnsLen = newSchema[ns].columns.length; cns < cnsLen; cns++)
-                    {
-                        // If the attribute names match then we can ignore it, unless it is enumerated
-                        if (tds61.rawSchema[os].columns[cos].name == newSchema[ns].columns[cns].name)
-                        {
-                            same = true;
-                            if (tds61.rawSchema[os].columns[cos].type !== 'enumeration' ) break;
-
-                            // Now for some more uglyness....
-                            // loop through the enumerated values  in the OLD schema
-                            for (var oen = 0, oenlen = tds61.rawSchema[os].columns[cos].enumerations.length; oen < oenlen; oen++)
-                            {
-                                var esame = false;
-                                // Loop through the enumerated values in the NEW schema
-                                for (var nen = 0, nenlen = newSchema[ns].columns[cns].enumerations.length; nen < nenlen; nen++)
-                                {
-                                    // If the names match, ignore it
-                                    if (tds61.rawSchema[os].columns[cos].enumerations[oen].name == newSchema[ns].columns[cns].enumerations[nen].name)
-                                    {
-                                        esame = true;
-                                        break;
-                                    }
-                                } // End nen loop
-                                // if the enumerated value isn't in the new list, add it
-                                if (!esame)
-                                {
-                                    newSchema[ns].columns[cns].enumerations.push(tds61.rawSchema[os].columns[cos].enumerations[oen]);
-                                }
-                            } // End oen loop
-                        } // End if enumeration
-                    } // End nsc loop
-
-                    // if the attr isn't in the new schema, add it
-                    if (!same)
-                    {
-                        // Remove the Default Value so we get all Null values on export
-                        // delete tds61.rawSchema[os].columns[cos].defValue;
-                        //tds61.rawSchema[os].columns[cos].defValue = undefined;
-
-                        newSchema[ns].columns.push(tds61.rawSchema[os].columns[cos]);
-                    }
-                } // End osc loop
-            } // End if layerName
-        } // End newSchema loop
-    } // end tds61.rawSchema loop
-
-    // Create a lookup table of TDS structures attributes. Note this is <GLOBAL>
-    tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
-
-    // Debug:
-    // print("tdsAttrLookup");
-    // translate.dumpLookup(tdsAttrLookup);
-
-    // Add the ESRI Feature Dataset name to the schema
-    //  newSchema = translate.addFdName(newSchema,'TDS');
-    if (config.getOgrEsriFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
-
-    // Now add the o2s feature to the tds61.rawSchema
-    // We can drop features but this is a nice way to see what we would drop
-    // NOTE: We add these feature AFTER adding the ESRI Feature Dataset so that they
-    // DON'T get put under the Feature Dataset in the output.
-    newSchema = translate.addEmptyFeature(newSchema);
-
-    // Add the empty Review layers
-    newSchema = translate.addReviewFeature(newSchema);
-
-    // Debug:
-    // translate.dumpSchema(newSchema);
-
-    return newSchema;
-
-} // End getDbSchema
+ //    return buildTds61Schema();
+}
 
 
 // EXPORT
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 // This is a wrapper so that we can use the toOgr function in other places.
-function translateToOgr(tags, elementType, geometryType)
+if (typeof translateToOgr != 'function')
 {
-    return tds61.toOgr(tags, elementType, geometryType)
+	function translateToOgr(tags, elementType, geometryType)
+	{
+	var _global = (0, eval)('this');
 
-} // End of translateToOgr
+	print('Global:' + Object.keys(_global));
+	print('Exports:' + Object.keys(_global.exports));
+	print('Hoot:' + Object.keys(_global.hoot));
+	print('TDS61:' + Object.keys(_global.tds61));
 
+	    return tds61.toOgr(tags, elementType, geometryType)
+
+	} // End of translateToOgr
+}

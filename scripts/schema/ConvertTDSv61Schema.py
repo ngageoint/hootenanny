@@ -14,7 +14,7 @@
  #* GNU General Public License for more details.
  #*
  #* You should have received a copy of the GNU General Public License
- #* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #* along with this program.  If not, see <http:#www.gnu.org/licenses/>.
  #*
  #* --------------------------------------------------------------------
  #*
@@ -24,7 +24,7 @@
  #* This will properly maintain the copyright information. DigitalGlobe
  #* copyrights will be updated automatically.
  #*
- #* @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ #* @copyright Copyright (C) 2012, 2013 DigitalGlobe (http:#www.digitalglobe.com/)
  #*/
 
 
@@ -86,7 +86,7 @@ def printJavascript(schema):
                 print '                       enumerations:['
                 for l in schema[f]['columns'][k]['enum']:
                     print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
-                print '                        ] // End of Enumerations '
+                print '                        ]'
 
             #elif schema[f]['columns'][k]['type'] == 'textEnumeration':
                 #print '                       type:"Xenumeration",'
@@ -98,20 +98,20 @@ def printJavascript(schema):
                 print '                       defValue:"%s" ' % (schema[f]['columns'][k]['defValue'])
 
             if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                print '                     } // End of %s' % (k)
+                print '                     }'
             else:
-                print '                     }, // End of %s' % (k)
+                print '                     },'
                 num_attrib -= 1
 
-        print '                    ] // End of Columns'
+        print '                    ]'
 
         if num_feat == 1: # Are we at the last feature? yes = no trailing comma
-            print '          } // End of feature %s\n' % (schema[f]['fcode'])
+            print '          }\n'
         else:
-            print '          }, // End of feature %s\n' % (schema[f]['fcode'])
+            print '          },\n'
             num_feat -= 1
 
-    print '    ]; // End of schema\n' # End of schema
+    print '    ];\n' # End of schema
 
 # End printJavascript
 
@@ -1239,6 +1239,618 @@ text_SAX_RX8 = {
 }
 
 
+thematicGroupList = {
+    'PAA010':'IndustryPnt', # Industry
+    'AAA010':'IndustrySrf', # Industry
+    'LAA011':'IndustryCrv', # Industry
+    'PAA020':'IndustryPnt', # Industry
+    'AAA020':'IndustrySrf', # Industry
+    'PAA040':'IndustryPnt', # Industry
+    'AAA040':'IndustrySrf', # Industry
+    'PAA045':'IndustryPnt', # Industry
+    'AAA052':'IndustrySrf', # Industry
+    'PAA054':'IndustryPnt', # Industry
+    'PAB000':'IndustryPnt', # Industry
+    'AAB000':'IndustrySrf', # Industry
+    'AAB010':'IndustrySrf', # Industry
+    'PAB021':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAB040':'IndustrySrf', # Industry
+    'PAB507':'IndustryPnt', # Industry
+    'AAB507':'IndustrySrf', # Industry
+    'PAC010':'IndustryPnt', # Industry
+    'AAC010':'IndustrySrf', # Industry
+    'PAC020':'IndustryPnt', # Industry
+    'AAC020':'IndustrySrf', # Industry
+    'AAC030':'IndustrySrf', # Industry
+    'PAC040':'IndustryPnt', # Industry
+    'AAC040':'IndustrySrf', # Industry
+    'PAC060':'IndustryPnt', # Industry
+    'AAC060':'IndustrySrf', # Industry
+    'PAC507':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAC507':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAD010':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAD010':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAD020':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAD020':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAD025':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAD025':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAD030':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAD030':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAD041':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAD041':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAD050':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAD050':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAD055':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAD055':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAD060':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAD060':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAF010':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'LAF020':'IndustryCrv', # Industry
+    'PAF030':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAF030':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAF040':'IndustryPnt', # Industry
+    'AAF040':'IndustrySrf', # Industry
+    'PAF050':'IndustryPnt', # Industry
+    'LAF050':'IndustryCrv', # Industry
+    'PAF060':'StructurePnt', # Structure
+    'AAF060':'StructureSrf', # Structure
+    'PAF070':'IndustryPnt', # Industry
+    'PAF080':'IndustryPnt', # Industry
+    'AAG030':'FacilitySrf', # Facility
+    'AAG040':'FacilitySrf', # Facility
+    'PAG050':'StructurePnt', # Structure
+    'LAH025':'MilitaryCrv', # Military
+    'AAH025':'MilitarySrf', # Military
+    'PAH055':'MilitaryPnt', # Military
+    'AAH055':'MilitarySrf', # Military
+    'PAH060':'MilitaryPnt', # Military
+    'AAH060':'MilitarySrf', # Military
+    'PAH070':'TransportationGroundPnt', # Transportation - Ground
+    'AAI020':'SettlementSrf', # Settlement
+    'AAI021':'SettlementSrf', # Settlement
+    'PAI030':'SettlementPnt', # Settlement
+    'AAI030':'SettlementSrf', # Settlement
+    'PAJ030':'AgriculturePnt', # Agriculture
+    'AAJ030':'AgricultureSrf', # Agriculture
+    'PAJ050':'AgriculturePnt', # Agriculture
+    'AAJ050':'AgricultureSrf', # Agriculture
+    'PAJ051':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'PAJ055':'IndustryPnt', # Industry
+    'AAJ055':'IndustrySrf', # Industry
+    'PAJ080':'AgriculturePnt', # Agriculture
+    'AAJ080':'AgricultureSrf', # Agriculture
+    'PAJ085':'AgriculturePnt', # Agriculture
+    'AAJ085':'AgricultureSrf', # Agriculture
+    'PAJ110':'AgriculturePnt', # Agriculture
+    'AAJ110':'AgricultureSrf', # Agriculture
+    'PAK020':'RecreationPnt', # Recreation
+    'LAK020':'RecreationCrv', # Recreation
+    'AAK020':'RecreationSrf', # Recreation
+    'PAK030':'RecreationPnt', # Recreation
+    'AAK030':'RecreationSrf', # Recreation
+    'PAK040':'RecreationPnt', # Recreation
+    'AAK040':'RecreationSrf', # Recreation
+    'PAK060':'RecreationPnt', # Recreation
+    'AAK060':'RecreationSrf', # Recreation
+    'AAK061':'RecreationSrf', # Recreation
+    'AAK070':'RecreationSrf', # Recreation
+    'PAK080':'RecreationPnt', # Recreation
+    'LAK080':'RecreationCrv', # Recreation
+    'AAK090':'RecreationSrf', # Recreation
+    'AAK100':'RecreationSrf', # Recreation
+    'AAK101':'RecreationSrf', # Recreation
+    'PAK110':'RecreationPnt', # Recreation
+    'AAK110':'RecreationSrf', # Recreation
+    'AAK120':'CultureSrf', # Culture
+    'PAK121':'CulturePnt', # Culture
+    'AAK121':'CultureSrf', # Culture
+    'LAK130':'RecreationCrv', # Recreation
+    'AAK130':'RecreationSrf', # Recreation
+    'PAK150':'RecreationPnt', # Recreation
+    'LAK150':'RecreationCrv', # Recreation
+    'LAK155':'RecreationCrv', # Recreation
+    'AAK155':'RecreationSrf', # Recreation
+    'PAK160':'RecreationPnt', # Recreation
+    'AAK160':'RecreationSrf', # Recreation
+    'PAK161':'RecreationPnt', # Recreation
+    'PAK164':'RecreationPnt', # Recreation
+    'AAK164':'RecreationSrf', # Recreation
+    'PAK170':'RecreationPnt', # Recreation
+    'AAK170':'RecreationSrf', # Recreation
+    'PAK180':'RecreationPnt', # Recreation
+    'AAK180':'RecreationSrf', # Recreation
+    'PAL010':'FacilityPnt', # Facility
+    'AAL010':'FacilitySrf', # Facility
+    'PAL011':'FacilityPnt', # Facility
+    'AAL011':'FacilitySrf', # Facility
+    'PAL012':'CulturePnt', # Culture
+    'AAL012':'CultureSrf', # Culture
+    'PAL013':'StructurePnt', # Structure
+    'AAL013':'StructureSrf', # Structure
+    'PAL014':'StructurePnt', # Structure
+    'AAL014':'StructureSrf', # Structure
+    'PAL017':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'PAL018':'StructurePnt', # Structure
+    'LAL018':'StructureCrv', # Structure
+    'AAL018':'StructureSrf', # Structure
+    'PAL019':'StructurePnt', # Structure
+    'AAL019':'StructureSrf', # Structure
+    'PAL020':'SettlementPnt', # Settlement
+    'AAL020':'SettlementSrf', # Settlement
+    'PAL025':'CulturePnt', # Culture
+    'PAL030':'CulturePnt', # Culture
+    'AAL030':'CultureSrf', # Culture
+    'PAL036':'CulturePnt', # Culture
+    'AAL036':'CultureSrf', # Culture
+    'LAL060':'MilitaryCrv', # Military
+    'AAL060':'MilitarySrf', # Military
+    'AAL065':'MilitarySrf', # Military
+    'LAL070':'StructureCrv', # Structure
+    'PAL073':'StructurePnt', # Structure
+    'PAL080':'StructurePnt', # Structure
+    'LAL080':'StructureCrv', # Structure
+    'PAL099':'StructurePnt', # Structure
+    'AAL099':'StructureSrf', # Structure
+    'PAL105':'SettlementPnt', # Settlement
+    'AAL105':'SettlementSrf', # Settlement
+    'PAL110':'StructurePnt', # Structure
+    'PAL120':'MilitaryPnt', # Military
+    'AAL120':'MilitarySrf', # Military
+    'PAL130':'CulturePnt', # Culture
+    'LAL130':'CultureCrv', # Culture
+    'AAL130':'CultureSrf', # Culture
+    'LAL140':'StructureCrv', # Structure
+    'AAL140':'StructureSrf', # Structure
+    'PAL142':'StructurePnt', # Structure
+    'AAL142':'StructureSrf', # Structure
+    'PAL155':'TransportationGroundPnt', # Transportation - Ground
+    'LAL155':'TransportationGroundCrv', # Transportation - Ground
+    'PAL165':'TransportationGroundPnt', # Transportation - Ground
+    'PAL170':'RecreationPnt', # Recreation
+    'AAL170':'RecreationSrf', # Recreation
+    'AAL175':'CultureSrf', # Culture
+    'AAL180':'CultureSrf', # Culture
+    'LAL195':'TransportationGroundCrv', # Transportation - Ground
+    'AAL195':'TransportationGroundSrf', # Transportation - Ground
+    'PAL200':'CulturePnt', # Culture
+    'AAL200':'CultureSrf', # Culture
+    'PAL201':'CulturePnt', # Culture
+    'AAL201':'CultureSrf', # Culture
+    'PAL208':'SettlementPnt', # Settlement
+    'AAL208':'SettlementSrf', # Settlement
+    'PAL211':'TransportationGroundPnt', # Transportation - Ground
+    'LAL211':'TransportationGroundCrv', # Transportation - Ground
+    'AAL211':'TransportationGroundSrf', # Transportation - Ground
+    'PAL241':'StructurePnt', # Structure
+    'AAL241':'StructureSrf', # Structure
+    'PAL250':'StructurePnt', # Structure
+    'LAL260':'StructureCrv', # Structure
+    'PAL270':'AgriculturePnt', # Agriculture
+    'AAL270':'AgricultureSrf', # Agriculture
+    'PAL351':'AeronauticPnt', # Aeronautic
+    'AAL351':'AeronauticSrf', # Aeronautic
+    'PAL371':'StructurePnt', # Structure
+    'AAL371':'StructureSrf', # Structure
+    'PAL375':'MilitaryPnt', # Military
+    'AAL375':'MilitarySrf', # Military
+    'PAL376':'MilitaryPnt', # Military
+    'AAL376':'MilitarySrf', # Military
+    'PAL510':'AeronauticPnt', # Aeronautic
+    'PAM010':'StoragePnt', # Storage
+    'AAM010':'StorageSrf', # Storage
+    'PAM011':'StoragePnt', # Storage
+    'AAM011':'StorageSrf', # Storage
+    'PAM020':'AgriculturePnt', # Agriculture
+    'AAM020':'AgricultureSrf', # Agriculture
+    'PAM030':'StoragePnt', # Storage
+    'AAM030':'StorageSrf', # Storage
+    'PAM040':'IndustryPnt', # Industry
+    'AAM040':'IndustrySrf', # Industry
+    'PAM060':'MilitaryPnt', # Military
+    'AAM060':'MilitarySrf', # Military
+    'PAM065':'StoragePnt', # Storage
+    'AAM065':'StorageSrf', # Storage
+    'PAM070':'StoragePnt', # Storage
+    'AAM070':'StorageSrf', # Storage
+    'PAM071':'StoragePnt', # Storage
+    'AAM071':'StorageSrf', # Storage
+    'PAM075':'StoragePnt', # Storage
+    'AAM075':'StorageSrf', # Storage
+    'PAM080':'StoragePnt', # Storage
+    'AAM080':'StorageSrf', # Storage
+    'LAN010':'TransportationGroundCrv', # Transportation - Ground
+    'LAN050':'TransportationGroundCrv', # Transportation - Ground
+    'AAN060':'TransportationGroundSrf', # Transportation - Ground
+    'PAN075':'TransportationGroundPnt', # Transportation - Ground
+    'AAN075':'TransportationGroundSrf', # Transportation - Ground
+    'PAN076':'TransportationGroundPnt', # Transportation - Ground
+    'AAN076':'TransportationGroundSrf', # Transportation - Ground
+    'PAN085':'TransportationGroundPnt', # Transportation - Ground
+    'LAP010':'TransportationGroundCrv', # Transportation - Ground
+    'PAP020':'TransportationGroundPnt', # Transportation - Ground
+    'LAP030':'TransportationGroundCrv', # Transportation - Ground
+    'AAP030':'TransportationGroundSrf', # Transportation - Ground
+    'PAP033':'TransportationGroundPnt', # Transportation - Ground
+    'PAP040':'TransportationGroundPnt', # Transportation - Ground
+    'LAP040':'TransportationGroundCrv', # Transportation - Ground
+    'PAP041':'TransportationGroundPnt', # Transportation - Ground
+    'LAP041':'TransportationGroundCrv', # Transportation - Ground
+    'LAP050':'TransportationGroundCrv', # Transportation - Ground
+    'AAP055':'TransportationGroundSrf', # Transportation - Ground
+    'PAP056':'TransportationGroundPnt', # Transportation - Ground
+    'AAP056':'TransportationGroundSrf', # Transportation - Ground
+    'LAQ035':'TransportationGroundCrv', # Transportation - Ground
+    'PAQ040':'TransportationGroundPnt', # Transportation - Ground
+    'LAQ040':'TransportationGroundCrv', # Transportation - Ground
+    'AAQ040':'TransportationGroundSrf', # Transportation - Ground
+    'PAQ045':'TransportationGroundPnt', # Transportation - Ground
+    'LAQ045':'TransportationGroundCrv', # Transportation - Ground
+    'AAQ045':'TransportationGroundSrf', # Transportation - Ground
+    'LAQ050':'TransportationGroundCrv', # Transportation - Ground
+    'AAQ050':'TransportationGroundSrf', # Transportation - Ground
+    'PAQ055':'TransportationGroundPnt', # Transportation - Ground
+    'PAQ056':'TransportationGroundPnt', # Transportation - Ground
+    'LAQ056':'TransportationGroundCrv', # Transportation - Ground
+    'AAQ056':'TransportationGroundSrf', # Transportation - Ground
+    'PAQ059':'TransportationGroundPnt', # Transportation - Ground
+    'LAQ059':'TransportationGroundCrv', # Transportation - Ground
+    'PAQ060':'AeronauticPnt', # Aeronautic
+    'AAQ060':'AeronauticSrf', # Aeronautic
+    'PAQ062':'TransportationGroundPnt', # Transportation - Ground
+    'LAQ063':'TransportationGroundCrv', # Transportation - Ground
+    'AAQ063':'TransportationGroundSrf', # Transportation - Ground
+    'PAQ065':'TransportationGroundPnt', # Transportation - Ground
+    'LAQ065':'TransportationGroundCrv', # Transportation - Ground
+    'PAQ068':'TransportationGroundPnt', # Transportation - Ground
+    'AAQ068':'TransportationGroundSrf', # Transportation - Ground
+    'LAQ070':'TransportationWaterCrv', # Transportation - Water
+    'LAQ075':'TransportationGroundCrv', # Transportation - Ground
+    'PAQ080':'TransportationWaterPnt', # Transportation - Water
+    'AAQ080':'TransportationWaterSrf', # Transportation - Water
+    'PAQ095':'TransportationGroundPnt', # Transportation - Ground
+    'PAQ110':'AeronauticPnt', # Aeronautic
+    'PAQ111':'TransportationWaterPnt', # Transportation - Water
+    'LAQ113':'UtilityInfrastructureCrv', # Utility Infrastructure
+    'PAQ114':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'PAQ115':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'PAQ116':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAQ116':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PAQ118':'TransportationGroundPnt', # Transportation - Ground
+    'LAQ120':'TransportationGroundCrv', # Transportation - Ground
+    'PAQ125':'TransportationGroundPnt', # Transportation - Ground
+    'AAQ125':'TransportationGroundSrf', # Transportation - Ground
+    'LAQ130':'TransportationGroundCrv', # Transportation - Ground
+    'AAQ130':'TransportationGroundSrf', # Transportation - Ground
+    'PAQ135':'TransportationGroundPnt', # Transportation - Ground
+    'AAQ135':'TransportationGroundSrf', # Transportation - Ground
+    'AAQ140':'TransportationGroundSrf', # Transportation - Ground
+    'PAQ141':'TransportationGroundPnt', # Transportation - Ground
+    'AAQ141':'TransportationGroundSrf', # Transportation - Ground
+    'LAQ150':'StructureCrv', # Structure
+    'AAQ150':'StructureSrf', # Structure
+    'LAQ151':'TransportationGroundCrv', # Transportation - Ground
+    'AAQ151':'TransportationGroundSrf', # Transportation - Ground
+    'PAQ160':'TransportationGroundPnt', # Transportation - Ground
+    'PAQ161':'TransportationGroundPnt', # Transportation - Ground
+    'PAQ162':'TransportationGroundPnt', # Transportation - Ground
+    'PAQ170':'TransportationGroundPnt', # Transportation - Ground
+    'AAQ170':'TransportationGroundSrf', # Transportation - Ground
+    'LAT005':'UtilityInfrastructureCrv', # Utility Infrastructure
+    'PAT010':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'PAT011':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'PAT012':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'AAT012':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'LAT041':'TransportationGroundCrv', # Transportation - Ground
+    'PAT042':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'PAT045':'FacilityPnt', # Facility
+    'AAT045':'FacilitySrf', # Facility
+    'LBA010':'PhysiographyCrv', # Physiography
+    'PBA030':'PhysiographyPnt', # Physiography
+    'ABA030':'PhysiographySrf', # Physiography
+    'ABA040':'HydrographySrf', # Hydrography
+    'ABB005':'PortorHarbourSrf', # Port or Harbour
+    'PBB009':'PortorHarbourPnt', # Port or Harbour
+    'ABB009':'PortorHarbourSrf', # Port or Harbour
+    'LBB081':'PortorHarbourCrv', # Port or Harbour
+    'ABB081':'PortorHarbourSrf', # Port or Harbour
+    'LBB082':'PortorHarbourCrv', # Port or Harbour
+    'ABB082':'PortorHarbourSrf', # Port or Harbour
+    'ABB090':'PortorHarbourSrf', # Port or Harbour
+    'PBB110':'HydrographyPnt', # Hydrography
+    'ABB110':'HydrographySrf', # Hydrography
+    'ABB199':'PortorHarbourSrf', # Port or Harbour
+    'PBB201':'PortorHarbourPnt', # Port or Harbour
+    'ABB201':'PortorHarbourSrf', # Port or Harbour
+    'PBB241':'PortorHarbourPnt', # Port or Harbour
+    'ABB241':'PortorHarbourSrf', # Port or Harbour
+    'PBC050':'HydrographicAidtoNavigationPnt', # Hydrographic Aid to Navigation
+    'ABC050':'HydrographicAidtoNavigationSrf', # Hydrographic Aid to Navigation
+    'PBC070':'HydrographicAidtoNavigationPnt', # Hydrographic Aid to Navigation
+    'PBD100':'PortorHarbourPnt', # Port or Harbour
+    'ABD100':'PortorHarbourSrf', # Port or Harbour
+    'PBD115':'HydrographyPnt', # Hydrography
+    'ABD115':'HydrographySrf', # Hydrography
+    'PBD140':'HydrographyPnt', # Hydrography
+    'ABD140':'HydrographySrf', # Hydrography
+    'PBD181':'HydrographyPnt', # Hydrography
+    'LBH010':'HydrographyCrv', # Hydrography
+    'ABH010':'HydrographySrf', # Hydrography
+    'PBH012':'HydrographyPnt', # Hydrography
+    'ABH015':'VegetationSrf', # Vegetation
+    'LBH020':'TransportationWaterCrv', # Transportation - Water
+    'ABH020':'TransportationWaterSrf', # Transportation - Water
+    'LBH030':'HydrographyCrv', # Hydrography
+    'ABH030':'HydrographySrf', # Hydrography
+    'ABH040':'IndustrySrf', # Industry
+    'PBH051':'AgriculturePnt', # Agriculture
+    'ABH051':'AgricultureSrf', # Agriculture
+    'LBH065':'HydrographyCrv', # Hydrography
+    'PBH070':'TransportationGroundPnt', # Transportation - Ground
+    'LBH070':'TransportationGroundCrv', # Transportation - Ground
+    'ABH070':'TransportationGroundSrf', # Transportation - Ground
+    'PBH075':'CulturePnt', # Culture
+    'ABH075':'CultureSrf', # Culture
+    'ABH077':'VegetationSrf', # Vegetation
+    'PBH082':'HydrographyPnt', # Hydrography
+    'ABH082':'HydrographySrf', # Hydrography
+    'ABH090':'HydrographySrf', # Hydrography
+    'LBH100':'HydrographyCrv', # Hydrography
+    'ABH100':'HydrographySrf', # Hydrography
+    'LBH110':'HydrographyCrv', # Hydrography
+    'ABH116':'SubterraneanSrf', # Subterranean
+    'PBH120':'HydrographyPnt', # Hydrography
+    'LBH120':'HydrographyCrv', # Hydrography
+    'ABH120':'HydrographySrf', # Hydrography
+    'ABH135':'AgricultureSrf', # Agriculture
+    'LBH140':'HydrographyCrv', # Hydrography
+    'ABH140':'HydrographySrf', # Hydrography
+    'PBH145':'HydrographyPnt', # Hydrography
+    'ABH150':'PhysiographySrf', # Physiography
+    'PBH155':'IndustryPnt', # Industry
+    'ABH155':'IndustrySrf', # Industry
+    'ABH160':'PhysiographySrf', # Physiography
+    'LBH165':'HydrographyCrv', # Hydrography
+    'ABH165':'HydrographySrf', # Hydrography
+    'PBH170':'HydrographyPnt', # Hydrography
+    'ABH170':'HydrographySrf', # Hydrography
+    'PBH180':'HydrographyPnt', # Hydrography
+    'LBH180':'HydrographyCrv', # Hydrography
+    'PBH220':'UtilityInfrastructurePnt', # Utility Infrastructure
+    'ABH220':'UtilityInfrastructureSrf', # Utility Infrastructure
+    'PBH230':'HydrographyPnt', # Hydrography
+    'ABH230':'HydrographySrf', # Hydrography
+    'ABI005':'PortorHarbourSrf', # Port or Harbour
+    'PBI006':'TransportationWaterPnt', # Transportation - Water
+    'LBI006':'TransportationWaterCrv', # Transportation - Water
+    'ABI006':'TransportationWaterSrf', # Transportation - Water
+    'PBI010':'HydrographyPnt', # Hydrography
+    'PBI020':'HydrographyPnt', # Hydrography
+    'LBI020':'HydrographyCrv', # Hydrography
+    'ABI020':'HydrographySrf', # Hydrography
+    'PBI030':'TransportationWaterPnt', # Transportation - Water
+    'LBI030':'TransportationWaterCrv', # Transportation - Water
+    'ABI030':'TransportationWaterSrf', # Transportation - Water
+    'PBI040':'HydrographyPnt', # Hydrography
+    'LBI040':'HydrographyCrv', # Hydrography
+    'PBI044':'HydrographyPnt', # Hydrography
+    'LBI044':'HydrographyCrv', # Hydrography
+    'ABI044':'HydrographySrf', # Hydrography
+    'PBI045':'TransportationWaterPnt', # Transportation - Water
+    'LBI045':'TransportationWaterCrv', # Transportation - Water
+    'PBI050':'HydrographyPnt', # Hydrography
+    'ABI050':'HydrographySrf', # Hydrography
+    'LBI060':'HydrographyCrv', # Hydrography
+    'PBI070':'HydrographyPnt', # Hydrography
+    'ABJ020':'PhysiographySrf', # Physiography
+    'ABJ030':'PhysiographySrf', # Physiography
+    'LBJ031':'PhysiographyCrv', # Physiography
+    'ABJ031':'PhysiographySrf', # Physiography
+    'LBJ040':'PhysiographyCrv', # Physiography
+    'PBJ060':'PhysiographyPnt', # Physiography
+    'ABJ065':'PhysiographySrf', # Physiography
+    'ABJ080':'PhysiographySrf', # Physiography
+    'ABJ099':'PhysiographySrf', # Physiography
+    'ABJ100':'PhysiographySrf', # Physiography
+    'ABJ110':'VegetationSrf', # Vegetation
+    'LCA010':'HypsographyCrv', # Hypsography
+    'PCA030':'HypsographyPnt', # Hypsography
+    'ADA005':'PhysiographySrf', # Physiography
+    'ADA010':'PhysiographySrf', # Physiography
+    'LDB010':'PhysiographyCrv', # Physiography
+    'ADB028':'SubterraneanSrf', # Subterranean
+    'PDB029':'PhysiographyPnt', # Physiography
+    'LDB061':'PhysiographyCrv', # Physiography
+    'ADB061':'PhysiographySrf', # Physiography
+    'LDB070':'PhysiographyCrv', # Physiography
+    'LDB071':'PhysiographyCrv', # Physiography
+    'ADB080':'PhysiographySrf', # Physiography
+    'LDB090':'PhysiographyCrv', # Physiography
+    'ADB090':'PhysiographySrf', # Physiography
+    'LDB100':'PhysiographyCrv', # Physiography
+    'LDB110':'PhysiographyCrv', # Physiography
+    'PDB115':'PhysiographyPnt', # Physiography
+    'ADB115':'PhysiographySrf', # Physiography
+    'PDB150':'PhysiographyPnt', # Physiography
+    'PDB160':'PhysiographyPnt', # Physiography
+    'ADB160':'PhysiographySrf', # Physiography
+    'ADB170':'PhysiographySrf', # Physiography
+    'PDB180':'PhysiographyPnt', # Physiography
+    'ADB180':'PhysiographySrf', # Physiography
+    'LDB190':'PhysiographyCrv', # Physiography
+    'ADB211':'PhysiographySrf', # Physiography
+    'AEA010':'AgricultureSrf', # Agriculture
+    'LEA020':'VegetationCrv', # Vegetation
+    'AEA030':'AgricultureSrf', # Agriculture
+    'AEA031':'CultureSrf', # Culture
+    'AEA040':'AgricultureSrf', # Agriculture
+    'AEA050':'AgricultureSrf', # Agriculture
+    'AEA055':'AgricultureSrf', # Agriculture
+    'AEB010':'VegetationSrf', # Vegetation
+    'AEB020':'VegetationSrf', # Vegetation
+    'AEB070':'VegetationSrf', # Vegetation
+    'PEC005':'VegetationPnt', # Vegetation
+    'AEC010':'AgricultureSrf', # Agriculture
+    'LEC015':'VegetationCrv', # Vegetation
+    'AEC015':'VegetationSrf', # Vegetation
+    'PEC020':'PhysiographyPnt', # Physiography
+    'AEC020':'PhysiographySrf', # Physiography
+    'LEC040':'VegetationCrv', # Vegetation
+    'AEC040':'VegetationSrf', # Vegetation
+    'AEC060':'VegetationSrf', # Vegetation
+    'AED010':'VegetationSrf', # Vegetation
+    'AED020':'VegetationSrf', # Vegetation
+    'AEE010':'VegetationSrf', # Vegetation
+    'AEE030':'PhysiographySrf', # Physiography
+    'PFA012':'CulturePnt', # Culture
+    'AFA012':'CultureSrf', # Culture
+    'PFA015':'MilitaryPnt', # Military
+    'AFA015':'MilitarySrf', # Military
+    'AFA100':'MilitarySrf', # Military
+    'PFA165':'MilitaryPnt', # Military
+    'AFA165':'MilitarySrf', # Military
+    'AFA210':'CultureSrf', # Culture
+    'PGB005':'AeronauticPnt', # Aeronautic
+    'AGB005':'AeronauticSrf', # Aeronautic
+    'AGB015':'AeronauticSrf', # Aeronautic
+    'PGB030':'AeronauticPnt', # Aeronautic
+    'AGB030':'AeronauticSrf', # Aeronautic
+    'PGB035':'AeronauticPnt', # Aeronautic
+    'AGB035':'AeronauticSrf', # Aeronautic
+    'PGB040':'AeronauticPnt', # Aeronautic
+    'AGB040':'AeronauticSrf', # Aeronautic
+    'AGB045':'AeronauticSrf', # Aeronautic
+    'LGB050':'MilitaryCrv', # Military
+    'AGB055':'AeronauticSrf', # Aeronautic
+    'PGB065':'AeronauticPnt', # Aeronautic
+    'AGB065':'AeronauticSrf', # Aeronautic
+    'AGB070':'AeronauticSrf', # Aeronautic
+    'LGB075':'AeronauticCrv', # Aeronautic
+    'AGB075':'AeronauticSrf', # Aeronautic
+    'PGB230':'AeronauticPnt', # Aeronautic
+    'AGB230':'AeronauticSrf', # Aeronautic
+    'PGB250':'AeronauticPnt', # Aeronautic
+    'AGB250':'AeronauticSrf', # Aeronautic
+    'AIA040':'BoundarySrf', # Boundary
+    'PSU001':'MilitaryPnt', # Military
+    'ASU001':'MilitarySrf', # Military
+    'ASU004':'MilitarySrf', # Military
+    'LSU030':'MilitaryCrv', # Military
+    'PZB030':'BoundaryPnt', # Boundary
+    'PZB050':'HypsographyPnt', # Hypsography
+    'AZD020':'InformationSrf', # Information
+    'PZD040':'InformationPnt', # Information
+    'PZD045':'InformationPnt', # Information
+    'LZD045':'InformationCrv', # Information
+    'AZD045':'InformationSrf', # Information
+    'PZD070':'HydrographyPnt', # Hydrography
+    'AZD070':'HydrographySrf', # Hydrography
+    'AZI031':'ResourceSrf', # Resource
+    'AZI039':'MetadataSrf' # Metadata
+} # End of thematicGroupList
+
+
+# Add the ESRI FCSubType to features in a schema
+def addFCSubType(tschema):
+    for i in tschema:
+        tschema[i]['columns']['FCSUBTYPE'] = { 'name':'FCSUBTYPE',
+                                               'desc':"Feature Code Subtype",
+                                               'type':'Integer',
+                                               'optional':'R',
+                                               'defValue':''}
+
+    return tschema
+# End addFCSubType
+
+
+# Convert the schema to a Thematic structure
+def makeThematic(rawSchema):
+    newSchema = []
+    layerName = ''
+    fCode = ''
+    layerList = []
+    geomType = ''
+
+    # Go through the fcode/layer list, find all of the layers and build a skeleton schema
+    # layerList is used to keep track of what we have already seen    
+    for fc in thematicGroupList:
+        layerName = thematicGroupList[fc]
+
+        if layerName in layerList:
+            continue
+
+        layerList.append(layerName)
+
+        if layerName.find('Pnt') > -1:
+            geomType = 'Point'
+        
+        elif layerName.find('Srf'):
+            geomType = 'Area'
+        
+        else:
+            geomType = 'Line'
+
+        newSchema.append({'name':layerName,'desc':layerName,'geom':geomType,'columns':[]})
+
+        # loop through the old schema and add attributes to the new schema
+        for oldFeature in rawSchema.keys():
+
+            # Skip Tables since they don't have geometry
+            if rawSchema[oldFeature]['geom'] == 'Table':
+                # print 'Skip Table: %s' % (rawSchema[oldFeature]['name'])
+                continue
+
+            fCode = rawSchema[oldFeature]['geom'][0] + rawSchema[oldFeature]['fcode']
+            layerName = thematicGroupList[fCode]
+
+            # OK, this is sub-optimal. There are better ways to do this: yet another lookup table, hash map etc
+            # Since we are only dealing with less than 500 features it's not too bad.
+            for newFeature in range(len(newSchema)):
+                # print 'Compare: %s = %s' % (newSchema[newFeature]['name'], layerName)
+
+                if newSchema[newFeature]['name'] != layerName:
+                    continue
+
+                # print 'Got Layer: %s = %s' % (newSchema[newFeature]['name'], layerName)
+
+                # Loop through the columns in the OLD schema
+                for oldCol in rawSchema[oldFeature]['columns'].keys():
+                    sameAttr = False
+
+                    # print 'oldCol: %s = %s' % (oldCol, rawSchema[oldFeature]['columns'][oldCol]['name'])
+
+                    # Loop throught the columns in the NEW schema
+                    for newCol in range(len(newSchema[newFeature]['columns'])):
+                        # print 'newCol: %s = %s' % (newCol, newSchema[newFeature]['columns'][newCol]['name'])
+
+                        if rawSchema[oldFeature]['columns'][oldCol]['name'] == newSchema[newFeature]['columns'][newCol]['name']:
+                            sameAttr = True
+
+                            # print 'Same Name: %s  = %s' % (rawSchema[oldFeature]['columns'][oldCol]['name'],newSchema[newFeature]['columns'][newCol]['name'])
+
+                            # If it's not enumerated, we can skip the next bit 
+                            if rawSchema[oldFeature]['columns'][oldCol]['type'] != 'enumeration':
+                                break
+
+                            # Now the uglyness intensifies. If the attribute is enumerated, add missing values to it
+                            for oldEnum in rawSchema[oldFeature]['columns'][oldCol]['enum']:
+                                sameEnum = False
+                                for newEnum in newSchema[newFeature]['columns'][newCol]['enum']:
+                                    if oldEnum['name'] == newEnum['name']:
+                                        sameEnum = True
+                                        break
+
+                                if not sameEnum:
+                                    newSchema[newFeature]['columns'][newCol]['enum'].append(oldEnum)
+
+                    if not sameAttr:
+                        # print 'not sameAttr: %s' % (rawSchema[oldFeature]['columns'][oldCol])
+                        newSchema[newFeature]['columns'].append(rawSchema[oldFeature]['columns'][oldCol])
+
+            # print
+
+    return newSchema
+# End makeThematic
+
 
 # The main loop to process a file
 def processFile(fileName):
@@ -1308,7 +1920,12 @@ def processFile(fileName):
             tschema[fName]['desc'] = fDesc
             tschema[fName]['geom'] = fGeometry
             tschema[fName]['columns'] = {}
-            tschema[fName]['columns']['F_CODE'] = { 'name':'F_CODE','desc':"Feature Code",'type':'String','optional':'R','defValue':'','length':'5'}
+            tschema[fName]['columns']['F_CODE'] = { 'name':'F_CODE',
+                                                    'desc':"Feature Code",
+                                                    'type':'String',
+                                                    'optional':'R',
+                                                    'defValue':'',
+                                                    'length':'5'}
 
         if aName != '':
             if aName not in tschema[fName]['columns']:
@@ -1446,8 +2063,11 @@ parser.add_argument('--fcodelist', help='Dump out a list of FCODEs',action='stor
 parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
 parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
 parser.add_argument('--fullschema', help='Dump out a schema with text enumerations',action='store_true')
+parser.add_argument('--lookuptables', help='Dump out number of schema lookup tables',action='store_true')
 parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
 parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
+parser.add_argument('--subtypeschema', help='Dump out a schema with the ESRI FCSubType',action='store_true')
+parser.add_argument('--thematicschema', help='Dump out a schema using Thematic Groups',action='store_true')
 parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
 parser.add_argument('--txtrules', help='Dump out text rules',action='store_true')
 parser.add_argument('mainfile', help='The main TDS spec csv file', action='store')
@@ -1535,6 +2155,35 @@ elif args.fullschema:
 
 elif args.dumpenum:
     dumpEnumerations(schema,'enumTDSv61')
+
+elif args.thematicschema:
+    dropTextEnumerations(schema)
+    addFCSubType(schema)
+    tSchema = makeThematic(schema)
+    printCopyright()
+    printJSHeader('tds61')
+    printVariableBody('building_FFN',building_FFN)
+    printVariableBody('facility_FFN',facility_FFN)
+    printVariableBody('fortified_FFN',fortified_FFN)
+    print 'var schema = %s' % (json.dumps(tSchema))
+    printJSFooter('tds61')
+
+elif args.subtypeschema:
+    dropTextEnumerations(schema)
+    addFCSubType(schema)
+    printCopyright()
+    printJSHeader('tds61')
+    printVariableBody('building_FFN',building_FFN)
+    printVariableBody('facility_FFN',facility_FFN)
+    printVariableBody('fortified_FFN',fortified_FFN)
+    printJavascript(schema)
+    printJSFooter('tds61')
+
+elif args.lookuptables:
+    dropTextEnumerations(schema)
+    printCopyright()
+    tSchema = makeThematic(schema)
+    printLookupTables(schema,tSchema,'tds61')
 
 else:
     dropTextEnumerations(schema)
