@@ -479,7 +479,7 @@ void OsmJsonReader::_readFromHttp()
         max_threads = numSplits;
       //  Fire up the worker threads
       _bboxContinue = true;
-      for (int i = 0; i < _threadCount; ++i)
+      for (int i = 0; i < max_threads; ++i)
         threads.push_back(thread(&OsmJsonReader::_doHttpRequestFunc, this));
       split = true;
       //  Setup the envelopes to query in a grid
