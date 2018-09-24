@@ -41,6 +41,6 @@ sed -i "s|Source:src|Source:$HOOT_HOME/hoot-rnd/src|g" *.gcov
 mv *.gcov $HOOT_HOME/gcov
 popd
 # fix final paths
-sed -i "s|Source:../|Source:|g" *.gcov
+sed -i "s|Source:../|Source:|g" gcov/*.gcov
 sed -i '/Source:\//!s/Source:/Source:HOOT_HOME\//g' gcov/*.gcov
 sed -i "s|HOOT_HOME|$HOOT_HOME|g" gcov/*.gcov
