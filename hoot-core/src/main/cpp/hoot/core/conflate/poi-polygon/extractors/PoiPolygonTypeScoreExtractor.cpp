@@ -51,6 +51,7 @@ QString PoiPolygonTypeScoreExtractor::poiBestKvp;
 QString PoiPolygonTypeScoreExtractor::polyBestKvp;
 QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
 QStringList PoiPolygonTypeScoreExtractor::failedMatchRequirements;
+boost::shared_ptr<ToEnglishTranslator> PoiPolygonTypeScoreExtractor::_translator;
 
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor() :
 _translateTagValuesToEnglish(false)
@@ -63,7 +64,7 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
   setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
   _translateTagValuesToEnglish = config.getPoiPolygonTranslateTagValuesToEnglish();
-  if (_translateTagValuesToEnglish)
+  if (_translateTagValuesToEnglish && !_translator)
   {
     _translator.reset(
       Factory::getInstance().constructObject<ToEnglishTranslator>(
@@ -240,10 +241,10 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
   QStringList tagsList;
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
+    const QString key = it.key();
     QStringList values = it.value().split(";");
     for (int i = 0; i < values.size(); i++)
     {
-      const QString key = it.key();
       QString value = values.at(i);
 
       if (_translateTagValuesToEnglish)
@@ -251,8 +252,7 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
         _translateTagValue(key, value);
       }
 
-      //TODO: Shouldn't it.value() be values.at(i) here instead?
-      if ((OsmSchema::getInstance().getCategories(key, /*it.value()*/value) &
+      if ((OsmSchema::getInstance().getCategories(key, value) &
            (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
              != OsmSchemaCategory::Empty)
       {

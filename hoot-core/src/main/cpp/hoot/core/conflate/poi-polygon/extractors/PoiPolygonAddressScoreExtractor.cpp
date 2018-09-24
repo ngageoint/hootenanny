@@ -51,6 +51,8 @@ const QString PoiPolygonAddressScoreExtractor::STREET_TAG_NAME = "addr:street";
 const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME = "address";
 const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
+boost::shared_ptr<ToEnglishTranslator> PoiPolygonAddressScoreExtractor::_translator;
+
 PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor() :
 _translateTagValuesToEnglish(false)
 {
@@ -60,7 +62,7 @@ void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   _translateTagValuesToEnglish = config.getPoiPolygonTranslateTagValuesToEnglish();
-  if (_translateTagValuesToEnglish)
+  if (_translateTagValuesToEnglish && !_translator)
   {
     _translator.reset(
       Factory::getInstance().constructObject<ToEnglishTranslator>(

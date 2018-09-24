@@ -1379,7 +1379,6 @@ private:
 
     return vid;
   }
-
 };
 
 boost::shared_ptr<OsmSchema> OsmSchema::_theInstance = NULL;
@@ -1432,12 +1431,16 @@ vector<SchemaVertex> OsmSchema::getAllTags()
 
 QSet<QString> OsmSchema::getAllTagKeys()
 {
-  return d->getAllTagKeys();
+  if (_allTagKeysCache.isEmpty())
+  {
+    _allTagKeysCache = d->getAllTagKeys();
+  }
+  return _allTagKeysCache;
 }
 
 bool OsmSchema::hasTagKey(const QString key)
 {
-  return d->getAllTagKeys().contains(key);
+  return getAllTagKeys().contains(key);
 }
 
 vector<SchemaVertex> OsmSchema::getAssociatedTags(QString name)

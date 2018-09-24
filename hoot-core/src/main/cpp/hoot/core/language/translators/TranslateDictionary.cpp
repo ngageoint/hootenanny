@@ -31,6 +31,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // ICU
 #include <unicode/utypes.h>
@@ -46,8 +47,17 @@ namespace hoot
 
 boost::shared_ptr<TranslateDictionary> TranslateDictionary::_theInstance = NULL;
 
-TranslateDictionary::TranslateDictionary()
+TranslateDictionary::TranslateDictionary() :
+_transliterationCachingEnabled(false)
 {
+  if (ConfigOptions().getTransliterationMaxCacheSize() != -1)
+  {
+    _transliterationCache.reset(
+      new Tgs::LruCache<QString, QString>(ConfigOptions().getTransliterationMaxCacheSize()));
+    _transliterationCachingEnabled = true;
+  }
+  LOG_VARD(_transliterationCachingEnabled);
+
   UErrorCode error = U_ZERO_ERROR;
 
   _titler = Transliterator::createInstance("Any-Title", UTRANS_FORWARD, error);
@@ -86,13 +96,13 @@ TranslateDictionary& TranslateDictionary::getInstance()
 bool TranslateDictionary::getFromTransliterationCache(const QString originalText,
                                                       QString& transliteratedText)
 {
-  return _cache.get(originalText, transliteratedText);
+  return _transliterationCache->get(originalText, transliteratedText);
 }
 
 void TranslateDictionary::insertIntoTransliterationCache(const QString originalText,
                                                          const QString transliteratedText)
 {
-  _cache.insert(originalText, transliteratedText);
+  _transliterationCache->insert(originalText, transliteratedText);
 }
 
 void TranslateDictionary::load(QString path)

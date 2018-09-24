@@ -213,7 +213,16 @@ double MostEnglishName::scoreName(QString n)
     }
   }
 
-  return characters == 0 ? 0 : score / characters;
+  if (characters == 0)
+  {
+    score = 0.0;
+  }
+  else
+  {
+    score = score / characters;
+  }
+
+  return score;
 }
 
 void MostEnglishName::setConfiguration(const Settings& conf)

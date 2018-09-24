@@ -65,14 +65,17 @@ public:
   bool getFromTransliterationCache(const QString originalText, QString& transliteratedText);
   void insertIntoTransliterationCache(const QString originalText, const QString transliteratedText);
 
+  bool transliterationCachingEnabled() const { return _transliterationCachingEnabled; }
+
 private:
 
   static boost::shared_ptr<TranslateDictionary> _theInstance;
 
   QMap<QString, QStringList> _translations;
-  Tgs::LruCache<QString, QString> _cache;
+  boost::shared_ptr<Tgs::LruCache<QString, QString>> _transliterationCache;
   Transliterator* _transliterator;
   Transliterator* _titler;
+  bool _transliterationCachingEnabled;
 
   void _loadTags(boost::property_tree::ptree& tree);
 };

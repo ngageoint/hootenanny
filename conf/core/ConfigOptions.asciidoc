@@ -1311,6 +1311,22 @@ Java class names implementing ToEnglishTranslator.  Valid values are 'JoshuaLang
 Service endpoint for retrieving available translator implementations supported by
 HootServicesTranslatorClient
 
+=== language.translation.info.provider
+
+* Data Type: string
+* Default Value: `hoot::HootServicesTranslationInfoClient`
+
+TranslationInfoProvider implementation to use for determining language information needed by to
+English translation.  Not all to English translators will make use of this capability.
+
+=== language.translation.max.cache.size
+
+* Data Type: long
+* Default Value: `10000`
+
+Maximum result cache sized used for to English translation and transliteration.  Not honored by all
+translators.  A cache size of -1 disables the translation cache.
+
 === language.translation.perform.exhaustive.search.with.no.detection
 
 * Data Type: bool
@@ -1371,14 +1387,6 @@ the current default, is a simple lookup table primarily used for translation tes
 concept.  It is set as the default because other implementations, such as
 hoot::HootServicesTranslatorClient, require custom installation procedures and have lengthy startup
 times. Therefore, they are not available in the default Hootenanny installation.
-
-=== language.translation.info.provider
-
-* Data Type: string
-* Default Value: `hoot::HootServicesTranslationInfoClient`
-
-TranslationInfoProvider implementation to use for determining language information needed by to
-English translation.  Not all to English translators will make use of this capability.
 
 === levenshtein.distance.alpha
 
@@ -2612,9 +2620,10 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 * Data Type: bool
 * Default Value: `false`
 
-If true, Hootenanny will attempt to translate any tag having a key in its schema or one that is
-part of an address to English.  The configuration option, 'language.translation.translator',
-controls which to English translator is used.
+If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
+schema or one that is part of an address.  This can have significant impact on the runtime
+performance of conflation when enabled.  The configuration option,
+'language.translation.translator', controls which translator is used.
 
 === poi.polygon.type.score.threshold
 
@@ -3334,6 +3343,14 @@ NOTE: This assumes that you know exactly what tags you want to modify/delete
 * Default Value: ``
 
 The script used by the TranslationVisitor for translation.
+
+=== transliteration.max.cache.size
+
+* Data Type: int
+* Default Value: `-1`
+
+The maximum size of the cache used by DictionaryTranslator for transliterations.  A cache size of -1
+disables the transliteration cache.
 
 === unify.enable.optimal.constrained.matches
 

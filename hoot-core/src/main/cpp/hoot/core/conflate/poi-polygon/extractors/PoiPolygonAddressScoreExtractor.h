@@ -104,7 +104,7 @@ private:
 
   //when enabled, will attempt to translate address tags to English
   bool _translateTagValuesToEnglish;
-  boost::shared_ptr<ToEnglishTranslator> _translator;
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   void _collectAddressesFromElement(const Element& element, QSet<QString>& addresses) const;
   void _collectAddressesFromWayNodes(const Way& way, QSet<QString>& addresses,

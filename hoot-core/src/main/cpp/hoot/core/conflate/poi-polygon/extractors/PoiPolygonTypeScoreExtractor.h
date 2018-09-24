@@ -38,6 +38,8 @@ namespace hoot
 
 /**
  * Scores element type similarity
+ *
+ * TODO: move hardcoded strings to config - #2635
  */
 class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -134,7 +136,7 @@ private:
   //when enabled, will scan through all tags and, for any tag keys recognized in the schema, will
   //attempt to translate their values to English if not determined already to be in English
   bool _translateTagValuesToEnglish;
-  boost::shared_ptr<ToEnglishTranslator> _translator;
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;

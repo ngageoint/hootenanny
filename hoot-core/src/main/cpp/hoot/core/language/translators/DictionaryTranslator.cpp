@@ -33,10 +33,6 @@
 #include <hoot/core/util/Factory.h>
 #include "TranslateDictionary.h"
 
-// ICU
-#include <unicode/utypes.h>
-#include <unicode/uobject.h>
-
 // Qt
 #include <QMap>
 #include <QRegExp>
@@ -59,6 +55,7 @@ DictionaryTranslator::DictionaryTranslator()
   assert(sizeof(UChar) == sizeof(QChar));
   _whiteSpace.setPattern("\\W+");
 
+  //TODO: move to config - #2635
   _streetTypes.insert("street");
   _streetTypes.insert("lane");
   _streetTypes.insert("boulevard");
@@ -75,6 +72,9 @@ QString DictionaryTranslator::translate(const QString textToTranslate)
 
 QString DictionaryTranslator::toEnglish(const QString& input)
 {
+  //Since we have all our translations already in memory, caching translations isn't going to help
+  //here.
+
   QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
 
   const QMap<QString, QStringList>& dict = TranslateDictionary::getInstance().getTable();
@@ -93,7 +93,6 @@ QString DictionaryTranslator::toEnglish(const QString& input)
   }
 
   QString result = l.join(" ");
-
   return result;
 }
 
@@ -219,12 +218,15 @@ QString DictionaryTranslator::transliterateToLatin(const QString& input)
 {
   // cache incoming requests -- we sometimes get a lot of duplicates.
   QString result;
-  if (!TranslateDictionary::getInstance().getFromTransliterationCache(input, result))
+  if (!TranslateDictionary::getInstance().transliterationCachingEnabled())
+  {
+    result = _transform(TranslateDictionary::getInstance().getTransliterator(), input);
+  }
+  else if (!TranslateDictionary::getInstance().getFromTransliterationCache(input, result))
   {
     result = _transform(TranslateDictionary::getInstance().getTransliterator(), input);
     TranslateDictionary::getInstance().insertIntoTransliterationCache(input, result);
   }
-
   return result;
 }
 

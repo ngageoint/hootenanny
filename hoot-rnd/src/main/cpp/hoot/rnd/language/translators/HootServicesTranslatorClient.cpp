@@ -76,6 +76,12 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
     Factory::getInstance().constructObject<TranslationInfoProvider>(
       opts.getLanguageTranslationInfoProvider()));
   _infoClient->setConfiguration(conf);
+
+  if (opts.getLanguageTranslationMaxCacheSize()  != -1)
+  {
+    _translateCache.reset(
+      new Tgs::LruCache<QString, TranslationResult>(opts.getLanguageTranslationMaxCacheSize()));
+  }
 }
 
 void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCodes)
@@ -215,6 +221,17 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
     "Translating to English with specified source languages: " <<
      _sourceLangs.join(",") << "; text: " << textToTranslate);
 
+  if (_translateCache)
+  {
+    TranslationResult cachedTranslation;
+    if (_translateCache->get(textToTranslate, cachedTranslation))
+    {
+      _translatedText = cachedTranslation.translatedText;
+      _detectedLang = cachedTranslation.detectedLang;
+      return _translatedText;
+    }
+  }
+
   _translatedText = "";
   _detectedLang = "";
   _detectorUsed = "";
@@ -237,6 +254,14 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
 
   //parse the response data
   _parseTranslateResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()));
+
+  if (_translateCache)
+  {
+    TranslationResult translationResult;
+    translationResult.detectedLang = _detectedLang;
+    translationResult.translatedText = _translatedText;
+    _translateCache->insert(_translatedText, translationResult);
+  }
 
   return _translatedText;
 }

@@ -47,6 +47,7 @@ template<typename K, typename V>
 class LruCache
 {
 public:
+
   typedef std::pair<K, V> Entry;
   // back of the list is the most recently used.
   typedef std::list<Entry> CacheList;
@@ -89,7 +90,6 @@ public:
 
     return result;
   }
-
 
 private:
 

@@ -32,14 +32,23 @@
 #include <hoot/core/language/translators/ToEnglishTranslator.h>
 #include <hoot/rnd/language/translators/TranslationInfoProvider.h>
 
+// Tgs
+#include <tgs/LruCache.h>
+
 namespace hoot
 {
+
+struct TranslationResult
+{
+  QString translatedText;
+  QString detectedLang;
+};
 
 /**
  * Translates text from a single source language to English using translation/detection
  * technologies integrated into the Hootenanny web services.
  */
-class HootServicesTranslatorClient : public ToEnglishTranslator//, public Configurable
+class HootServicesTranslatorClient : public ToEnglishTranslator
 {
 
 public:
@@ -87,6 +96,8 @@ private:
   //if true and no lang can be detected, an exhaustive search for the correct translation is made
   //against all available translatable languages (expensive)
   bool _performExhaustiveSearch;
+
+  boost::shared_ptr<Tgs::LruCache<QString, TranslationResult>> _translateCache;
 
   /**
    * Verifies that every language specified for this translator is supported by the server

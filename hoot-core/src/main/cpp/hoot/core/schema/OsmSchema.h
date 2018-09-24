@@ -541,6 +541,8 @@ private:
 
   /// Provide caching for isMetaData
   QHash<QString, bool> _metadataKey;
+
+  QSet<QString> _allTagKeysCache;
 };
 
 }

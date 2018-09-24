@@ -39,6 +39,7 @@
 // ICU
 #include <unicode/translit.h>
 
+
 namespace hoot
 {
 
@@ -93,7 +94,7 @@ public:
   virtual void setSourceLanguages(const QStringList /*langCodes*/) {}
   virtual QString getDetectedLanguage() const { return ""; }
 
-  virtual void setConfiguration(const Settings& /*conf*/) {}
+  virtual void setConfiguration(const Settings& /*conf*/) {};
 
 private:
 
