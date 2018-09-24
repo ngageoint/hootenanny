@@ -23,9 +23,16 @@ $(shell $(HOOT_HOME)/scripts/ReplaceEnvironmentVariables.sh DbSettings.inc.in Db
 -include DbSettings.inc
 
 HOOT_OPTS+= -D convert.ops=hoot::DecomposeBuildingRelationsVisitor
-HOOT_OPTS+= -D hootapi.db.writer.create.user=false -D hootapi.db.writer.overwrite.map=true
-HOOT_OPTS+= -D api.db.email=-1@hootenanny
+HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true
+HOOT_OPTS+= -D api.db.email=test@test.com
 HOOT_OPTS+= -D reader.add.source.datetime=false
+
+ifneq (,$(findstring s,$(MAKEFLAGS)))
+  override CUKE_OPTS+= --format progress
+else
+  override CUKE_OPTS+= --format pretty
+endif
+
 
 test: load-data
 	# killing faux-authentication proxy server...
@@ -43,11 +50,9 @@ else
 	$(HOOT_HOME)/scripts/tomcat/VerifyTomcatStarted.sh $(TOMCAT_PROXY_PORT)
 endif
 	# Running user interface tests...
-ifneq (,$(findstring s,$(MAKEFLAGS)))
-	TOMCAT_PORT=$(TOMCAT_PROXY_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format progress $(CUKE_OPTS)
-else
-	TOMCAT_PORT=$(TOMCAT_PROXY_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format pretty  $(CUKE_OPTS)
-endif
+	TOMCAT_PORT=$(TOMCAT_PROXY_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber $(CUKE_OPTS) features/advanced_options.feature || (ret=$$?; \
+	(ps ux | grep nod[e] | grep proxy | awk "{print $$2}" | xargs kill >/dev/null 2>&1 || true); exit $$ret)
+
 	echo ""
 
 	#Remove test datasets from db
@@ -56,8 +61,6 @@ endif
  	   echo hoot delete-db-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
 	done; \
 	true
-	# killing faux-authentication proxy server...
-	ps ux | grep nod[e] | grep proxy | awk "{print $$2}" | xargs kill >/dev/null 2>&1 || true
 
 clean:
 	#Remove test datasets from db
@@ -70,7 +73,7 @@ clean:
 	fi
 
 	# Remove test user and faux-session data from db
-	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c "DELETE FROM users where id=-1" 2>/dev/null || true
+	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c "DELETE FROM users where email='test@test.com'" 2>/dev/null || true
 
 	# Cleaning up proxy node modules...
 	rm -rf $(HOOT_HOME)/test-files/ui/node_modules >/dev/null 2>&1 || true
@@ -107,7 +110,7 @@ load-data: clean
 	    provider_created_at) \
 	    \
 	    VALUES ( \
-	    '-1@hootenanny', \
+	    'test@test.com', \
 	    -1, \
 	    'Cucumber', \
 	    \
