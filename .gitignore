@@ -15,6 +15,7 @@ aclocal.m4
 autom4te.cache
 BuildDate.txt
 bin/
+bw-output/
 callgrind.*
 conf/database/DatabaseConfigLocal.sh
 conf/LocalHoot.json
@@ -48,6 +49,7 @@ docs/test.sh
 docs/wpsDocs
 dum*
 fouo
+gcov/
 gdb
 go
 hoot-cmd/Makefile
@@ -99,6 +101,7 @@ translations-local
 **/*.pro.user*
 *.pro.user*
 progress/
+.scannerwork/
 schema.dot
 src/proto/*.pb.cc
 src/proto/*.pb.h

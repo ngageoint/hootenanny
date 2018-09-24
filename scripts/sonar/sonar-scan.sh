@@ -3,6 +3,7 @@ set -euo pipefail
 
 # Defaults.
 USAGE=no
+DEBUG_MODE=""
 SONAR_BRANCH=""
 SONAR_EXCLUSIONS="**/*.pb.cc,**/*.pb.h,**/*.sql"
 SONAR_GITHUB_OAUTH=""
@@ -13,10 +14,10 @@ SONAR_LOGIN=""
 SONAR_ORG="hootenanny"
 SONAR_PROJECT="hoot"
 SONAR_SOURCES="./hoot-core,./hoot-js,./hoot-rnd,./tbs,./tgs"
-SONAR_THREADS="$(nproc)"
+SONAR_THREADS="$(( $(nproc) * 2 ))"  # Sonar scan doesn't max out CPU, double the threads
 
 # Getting parameters from the command line.
-while getopts ":a:b:j:l:o:p:r:s:t:" opt; do
+while getopts ":a:b:dj:l:o:p:r:s:t:" opt; do
     case "$opt" in
         # Required parameters.
         a)
@@ -24,6 +25,9 @@ while getopts ":a:b:j:l:o:p:r:s:t:" opt; do
             ;;
         b)
             SONAR_BRANCH="$OPTARG"
+            ;;
+        d)
+            DEBUG_MODE="--debug"
             ;;
         j)
             SONAR_PROJECT="$OPTARG"
@@ -59,12 +63,9 @@ function usage() {
     echo "  -l <Sonar Login token>"
     echo " [-a <Sonar GitHub OAuth>]"
     echo " [-b <Sonar Branch Name>]"
-    echo " [-j <Sonar Project, default: 'hoot'>"
-    echo " [-o <Sonar Organization, default: 'hootenanny'>]"
     echo " [-p <Sonar GitHub PR>]"
-    echo " [-r <GitHub Repository, default: 'ngageoint/hootenanny'>]"
-    echo " [-s <Sonar Sources, default: './hoot-core,./hoot-js,./hoot-rnd,./tbs,./tgs'>]"
     echo " [-t <Sonar Threads>]"
+    echo " [-d]  # Debug mode"
     exit 1
 }
 
@@ -75,20 +76,18 @@ fi
 
 # Build out the scan command options.
 OPTIONS=(
-    "-Dsonar.organization=$SONAR_ORG"
-    "-Dsonar.github.repository=$SONAR_GITHUB_REPO"
     "-Dsonar.projectKey=$SONAR_PROJECT"
     "-Dsonar.cfamily.build-wrapper-output=bw-output"
-    "-Dsonar.cfamily.gcov.reportsPath=$HOOT_HOME"
     "-Dsonar.cfamily.threads=$SONAR_THREADS"
-    "-Dsonar.exclusions=$SONAR_EXCLUSIONS"
-    "-Dsonar.host.url=$SONAR_HOST_URL"
-    "-Dsonar.sources=$SONAR_SOURCES"
-    "-Dsonar.issue.ignore.multicriteria=j1n1"
-    "-Dsonar.issue.ignore.multicriteria.j1n1.ruleKey=cpp:S106"
-    "-Dsonar.issue.ignore.multicriteria.j1n1.resourceKey=./hoot-core/src/main/cpp/hoot/core/cmd/*"
 )
 
+# Add gcov.reportsPath if the directory exists
+if [ -d $HOOT_HOME/gcov ]; then
+    OPTIONS=(
+        "${OPTIONS[@]}"
+        "-Dsonar.cfamily.gcov.reportsPath=$HOOT_HOME/gcov"
+    )
+fi
 # Optional scan parameters based off parameters passed into script
 if [ -n "$SONAR_LOGIN" ]; then
     # This is the hoot sonarcloud project key, requried to pass scan results to
@@ -123,4 +122,10 @@ if [ -n "$SONAR_GITHUB_OAUTH" ]; then
     )
 fi
 
-sonar-scanner "${OPTIONS[@]}"
+# clean up the old folders
+if [ -d $HOOT_HOME/.scannerwork ]; then
+    rm -rf $HOOT_HOME/.scannerwork
+fi
+
+# run the actual scanner
+sonar-scanner $DEBUG_MODE "${OPTIONS[@]}"
