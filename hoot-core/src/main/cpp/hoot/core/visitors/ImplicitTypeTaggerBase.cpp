@@ -124,11 +124,14 @@ void ImplicitTypeTaggerBase::setConfiguration(const Settings& conf)
   _ruleReader->setAllowWordsInvolvedInMultipleRules(
     confOptions.getImplicitTaggerAllowWordsInvolvedInMultipleRules());
 
-  _translator.reset(
-    Factory::getInstance().constructObject<ToEnglishTranslator>(
-      confOptions.getLanguageTranslationTranslator()));
-  _translator->setConfiguration(conf);
-  _translator->setSourceLanguages(confOptions.getLanguageTranslationSourceLanguages());
+  if (_translateAllNamesToEnglish)
+  {
+    _translator.reset(
+      Factory::getInstance().constructObject<ToEnglishTranslator>(
+        confOptions.getLanguageTranslationTranslator()));
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(confOptions.getLanguageTranslationSourceLanguages());
+  }
 }
 
 QStringList ImplicitTypeTaggerBase::_getNames(const Tags& tags) const
@@ -411,8 +414,11 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
     {
       //TODO: can this be combined with the ImplicitTagUtils translate method?
       const QString englishNameToken = _translator->translate(nameToken);
-      nameToken = englishNameToken;
       LOG_VART(englishNameToken);
+      if (!englishNameToken.isEmpty())
+      {
+        nameToken = englishNameToken;
+      }
     }
     nameTokensListGroupSizeTwo.append(nameToken);
   }
@@ -495,7 +501,14 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
       //TODO: can this be combined with the ImplicitTagUtils translate method?
       const QString englishNameToken = _translator->translate(word);
       LOG_VART(englishNameToken);
-      translatedNameTokens.append(englishNameToken);
+      if (!englishNameToken.isEmpty())
+      {
+        translatedNameTokens.append(englishNameToken);
+      }
+      else
+      {
+        translatedNameTokens.append(word);
+      }
     }
     nameTokensList = translatedNameTokens;
   }

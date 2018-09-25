@@ -75,15 +75,47 @@ public:
 
   static const MostEnglishNamePtr& getInstance();
 
+  /**
+   * TODO
+   *
+   * @param tags
+   * @return
+   */
   QString getMostEnglishName(const Tags& tags);
 
-  double scoreName(QString n);
+  /**
+   * TODO
+   *
+   * @param n
+   * @return
+   */
+  double scoreName(const QString n);
 
   void setConfiguration(const Settings& conf);
 
+  /**
+   * TODO
+   *
+   * @param word
+   * @return
+   */
   bool isInDictionary(const QString word);
 
+  /**
+   * TODO
+   *
+   * @param words
+   * @return
+   */
   bool areAllInDictionary(const QStringList words);
+
+  /**
+   * TODO
+   *
+   * @param word
+   * @return
+   */
+  bool isEnglishWord(const QString word);
 
 private:
 

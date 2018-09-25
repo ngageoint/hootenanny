@@ -171,6 +171,8 @@ private:
 
   Settings _conf;
 
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
+
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 
   bool _inputFeaturesHaveSameSource(const ElementId& eid1, const ElementId& eid2) const;

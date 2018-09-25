@@ -52,6 +52,7 @@ QString PoiPolygonTypeScoreExtractor::polyBestKvp;
 QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
 QStringList PoiPolygonTypeScoreExtractor::failedMatchRequirements;
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonTypeScoreExtractor::_translator;
+QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTagValues;
 
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor() :
 _translateTagValuesToEnglish(false)
@@ -64,13 +65,9 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
   setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
   _translateTagValuesToEnglish = config.getPoiPolygonTranslateTagValuesToEnglish();
-  if (_translateTagValuesToEnglish && !_translator)
+  if (_translateTagValuesToEnglish)
   {
-    _translator.reset(
-      Factory::getInstance().constructObject<ToEnglishTranslator>(
-        config.getLanguageTranslationTranslator()));
-    _translator->setConfiguration(conf);
-    _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
+    assert(_translator);
   }
 }
 
@@ -78,6 +75,8 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
+  LOG_VART(_translateTagValuesToEnglish);
+
   failedMatchRequirements.clear();
 
   const Tags& t1 = poi->getTags();
@@ -119,31 +118,97 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
   return typeScore;
 }
 
-void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QString& tagValue) const
+QSet<QString> PoiPolygonTypeScoreExtractor::_getTagValueTokens(const QString category)
 {
-  //Check to see if the key is in our schema and that the word isn't already in English.  If the
-  //key isn't already in our schema, we won't gain anything during type matching with a
-  //translation anyway.  Also, skip address keys b/c we'll translate those later (they could be
-  //done here, but I don't think all of the address tags, if any, are in our schema so its easier
-  //to manage translating them during address score extraction).
-  LOG_VART(PoiPolygonAddressScoreExtractor::isAddressTagKey(tagKey));
-  LOG_VART(OsmSchema::getInstance().hasTagKey(tagKey));
-  LOG_VART(_isEnglishWord(tagValue));
-  if (!PoiPolygonAddressScoreExtractor::isAddressTagKey(tagKey) &&
-      OsmSchema::getInstance().hasTagKey(tagKey) && !_isEnglishWord(tagValue))
+  if (_categoriesToSchemaTagValues[category].isEmpty())
   {
-    QString translatedTagValue = _translator->translate(tagValue);
-    if (translatedTagValue != tagValue)
+    const std::vector<SchemaVertex> tags =
+      OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::fromString(category));
+    for (std::vector<SchemaVertex>::const_iterator tagItr = tags.begin();
+         tagItr != tags.end(); ++tagItr)
     {
-      tagValue = translatedTagValue.simplified().replace(" ", "_");
-      LOG_VART(tagValue);
+      SchemaVertex tag = *tagItr;
+      const QString tagVal = tag.value.toLower();
+      if (!tagVal.contains("*"))  //skip wildcards
+      {
+        _categoriesToSchemaTagValues[category].insert(tagVal);
+        LOG_TRACE("Appended " << tagVal << " to schema tag values.");
+      }
     }
+    LOG_VART(_categoriesToSchemaTagValues.size());
   }
+  return _categoriesToSchemaTagValues[category];
 }
 
-bool PoiPolygonTypeScoreExtractor::_isEnglishWord(const QString word) const
+void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QString& tagValue) const
 {
-  return MostEnglishName::getInstance()->scoreName(word) == 1.0;
+  LOG_VART(tagKey);
+  LOG_VART(tagValue);
+
+  //If the tag is already in a building/poi category, then it must already be in English and
+  //no translation is required.  Otherwise, skip address keys b/c we'll translate those later
+  //with the address extractor, and don't try to translate any words that are already in English.
+
+  //TODO: bit of a hack
+  if (tagValue.toLower().startsWith("http://"))
+  {
+    return;
+  }
+
+  const bool inABuildingOrPoiCategory =
+    OsmSchema::getInstance()
+      .getCategories(tagKey, tagValue)
+      .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  LOG_VART(inABuildingOrPoiCategory);
+  if (!inABuildingOrPoiCategory)
+  {
+    LOG_TRACE(
+      "Input tag to translate: " << tagKey << "=" << tagValue << " is not a building/poi tag.");
+    return;
+  }
+
+  //TODO: should this also have use and/or building categories be added here?
+  if (_getTagValueTokens("poi").contains(tagValue))
+  {
+    LOG_TRACE("Input tag value to translate: " << tagValue << " is already a poi tag value.");
+    return;
+  }
+
+  const QStringList tagValueParts = tagValue.split("_");
+  LOG_VART(tagValueParts);
+  int englishTagValuePartCount = 0;
+  for (int i = 0; i < tagValueParts.length(); i++)
+  {
+    LOG_VART(tagValueParts.at(i));
+    if (MostEnglishName::getInstance()->isEnglishWord(tagValueParts.at(i)))
+    {
+      englishTagValuePartCount++;
+    }
+  }
+  LOG_VART(englishTagValuePartCount);
+  LOG_VART(tagValueParts.size());
+  if (englishTagValuePartCount == tagValueParts.size())
+  {
+    LOG_TRACE("All tag parts for: " << tagValue << " are already in English.");
+    return;
+  }
+
+  const QString tagValueTemp = tagValue.toLower().simplified().replace("_", " ");
+  LOG_VART(tagValueTemp);
+  QString translatedTagValue = _translator->translate(tagValueTemp).toLower();
+  LOG_VART(translatedTagValue);
+  if (translatedTagValue.isEmpty())
+  {
+    LOG_TRACE("To English translation for: " << tagValue << " same as original text.");
+    return;
+  }
+
+  translatedTagValue = translatedTagValue.simplified().replace(" ", "_");
+  //TODO: change logging
+  LOG_DEBUG(
+    "Translated tag value: " << tagValue << " for key: " << tagKey << " to value: " <<
+    translatedTagValue);
+  tagValue = translatedTagValue;
 }
 
 double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,

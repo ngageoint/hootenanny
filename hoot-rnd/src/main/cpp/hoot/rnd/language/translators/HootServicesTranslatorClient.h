@@ -32,8 +32,8 @@
 #include <hoot/core/language/translators/ToEnglishTranslator.h>
 #include <hoot/rnd/language/translators/TranslationInfoProvider.h>
 
-// Tgs
-#include <tgs/LruCache.h>
+// Qt
+#include <QCache>
 
 namespace hoot
 {
@@ -59,7 +59,15 @@ public:
 
   virtual QStringList getSourceLanguages() const { return _sourceLangs; }
   virtual void setSourceLanguages(const QStringList langCodes);
+
+  /**
+   * Translates text given a source language
+   *
+   * @param textToTranslate the text to translate
+   * @return translated text or an empty string if a translation could not be made
+   */
   virtual QString translate(const QString textToTranslate);
+
   virtual QString getDetectedLanguage() const { return _detectedLang; }
 
   QString getTranslatedText() const { return _translatedText; }
@@ -97,7 +105,14 @@ private:
   //against all available translatable languages (expensive)
   bool _performExhaustiveSearch;
 
-  boost::shared_ptr<Tgs::LruCache<QString, TranslationResult>> _translateCache;
+  boost::shared_ptr<QCache<QString, TranslationResult>> _translateCache;
+
+  int _statusUpdateInterval;
+
+  long _numTranslationsMade;
+  long _numTranslationsAttempted;
+
+  bool _skipWordsInEnglishDict;
 
   /**
    * Verifies that every language specified for this translator is supported by the server

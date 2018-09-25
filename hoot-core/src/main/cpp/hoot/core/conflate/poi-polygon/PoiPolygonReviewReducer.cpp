@@ -110,7 +110,7 @@ bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 
 bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
 {
-  LOG_DEBUG("Checking review reduction rules...");
+  LOG_TRACE("Checking review reduction rules...");
 
   //TODO: Many of these rules may be obsolete now after recent additions.
 

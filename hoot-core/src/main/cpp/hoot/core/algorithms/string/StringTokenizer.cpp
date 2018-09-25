@@ -63,7 +63,7 @@ void StringTokenizer::setConfiguration(const Settings& conf)
   _minSize = co.getTokenMinSize();
 }
 
-QStringList StringTokenizer::tokenize(QString s) const
+QStringList StringTokenizer::tokenize(const QString s) const
 {
   QStringList l = s.split(_sep, QString::SkipEmptyParts);
 

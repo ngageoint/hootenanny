@@ -1669,6 +1669,7 @@ bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tag
   }
   LOG_TRACE("Does not contain tag from tag ignore list");
 
+  //TODO: should use be added as a category here?
   const bool inABuildingOrPoiCategory =
     getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   //isArea includes building too
@@ -1697,6 +1698,8 @@ bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagI
   {
     return false;
   }
+
+  //TODO: should use be added as a category here?
   const bool inABuildingOrPoiCategory =
     getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   bool isPoi = isNode && (inABuildingOrPoiCategory || tags.getNames().size() > 0);

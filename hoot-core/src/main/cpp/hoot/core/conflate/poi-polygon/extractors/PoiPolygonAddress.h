@@ -22,45 +22,42 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FEATUREEXTRACTORBASE_H
-#define FEATUREEXTRACTORBASE_H
+#ifndef POI_POLYGON_ADDRESSS_H
+#define POI_POLYGON_ADDRESSS_H
 
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+// hoot
+#include <hoot/core/algorithms/ExactStringDistance.h>
 
 namespace hoot
 {
 
 /**
- * Similar to Shape Distance as described in [1].
- * 1. Savary & Zeitouni, 2005
+ *
  */
-class FeatureExtractorBase : public FeatureExtractor
+class PoiPolygonAddress
 {
+
 public:
 
-  static std::string className() { return "hoot::FeatureExtractorBase"; }
+  PoiPolygonAddress();
+  PoiPolygonAddress(const QString address, const QString translatedAddress = "");
 
-  FeatureExtractorBase() {}
-  virtual ~FeatureExtractorBase() {}
+  bool operator==(const PoiPolygonAddress& address) const;
 
-  static double nullValue() { return -999999999; }
+  QString toString() const
+  { return "Address: " + _address + ", translated address: " + _translatedAddress; }
 
-  /**
-   * Returns the factor type for this feature/factor (Nominal or Numeric).
-   */
-  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
+private:
 
-  /**
-   * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
-   */
-  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
-  {
-    return Tgs::DataFrame::NullAsMissingValue;
-  }
+  QString _address;
+  QString _translatedAddress;
+  ExactStringDistance _addrComp;
+
+  bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress) const;
 };
 
 }
 
-#endif // FEATUREEXTRACTORBASE_H
+#endif // POI_POLYGON_ADDRESSS_H

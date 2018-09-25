@@ -1108,7 +1108,7 @@ are -1 or 1 up to the number of available processors.
 === implicit.tagging.translate.all.names.to.english
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
 rules are derived.  Also, all implicit taggers will translate element name words to English before

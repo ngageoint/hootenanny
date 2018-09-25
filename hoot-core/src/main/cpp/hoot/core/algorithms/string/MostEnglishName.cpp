@@ -175,7 +175,12 @@ long MostEnglishName::_loadEnglishWords(QString path)
   return wordCount;
 }
 
-double MostEnglishName::scoreName(QString n)
+bool MostEnglishName::isEnglishWord(const QString word)
+{
+  return scoreName(word) == 1.0;
+}
+
+double MostEnglishName::scoreName(const QString n)
 {
   QStringList words = _tokenizer.tokenize(n);
 

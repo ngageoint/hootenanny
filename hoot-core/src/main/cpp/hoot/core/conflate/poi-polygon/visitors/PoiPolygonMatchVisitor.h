@@ -91,6 +91,10 @@ private:
 
   double _reviewDistanceThreshold;
 
+  long _numElementsVisited;
+  long _numMatchCandidatesVisited;
+  int _taskStatusUpdateInterval;
+
   void _checkForMatch(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPoiIds(const boost::shared_ptr<const Element>& e);

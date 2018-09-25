@@ -56,8 +56,6 @@ public:
   /**
    * Translates all input names to English
    *
-   * The hoot translator doesn't seem to perform as well as it should, though.
-   *
    * @param names names to translate
    * @param tags tags to retrieve additional names from
    * @param translator a to English word translator

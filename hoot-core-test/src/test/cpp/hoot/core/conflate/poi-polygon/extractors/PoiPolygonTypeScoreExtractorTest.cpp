@@ -30,6 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/language/translators/DictionaryTranslator.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -83,6 +84,8 @@ public:
     OsmMapPtr map(new OsmMap());
 
     settings.set("poi.polygon.translate.tag.values.to.english", "true");
+    boost::shared_ptr<DictionaryTranslator> translator(new DictionaryTranslator());
+    PoiPolygonTypeScoreExtractor::setTranslator(translator);
     uut.setConfiguration(settings);
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -93,7 +96,7 @@ public:
 
     settings.set("poi.polygon.translate.tag.values.to.english", "false");
     uut.setConfiguration(settings);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, uut.extract(*map, node1, way1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 };
 

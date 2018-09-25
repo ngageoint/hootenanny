@@ -73,7 +73,9 @@
     ["sinagoga", "synagogue"],
 
     ["#Munich"],
-    ["Fahrscheinschalter", "ticket office"],
+    ["fahrscheinschalter", "ticket office"],
+    ["hauptstraße", "main street"],
+    ["ZENTRALLÄNDE STRASSE", "central border street"],
 
     ["#end"]
 ] }

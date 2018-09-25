@@ -82,7 +82,14 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
       {
         const QString englishName = translator->translate(name);
         LOG_VART(englishName);
-        filteredNames.append(englishName);
+        if (!englishName.isEmpty())
+        {
+          filteredNames.append(englishName);
+        }
+        else
+        {
+          filteredNames.append(name);
+        }
         break;
       }
     }
@@ -97,7 +104,14 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
       LOG_VART(altName);
       const QString englishName = translator->translate(altName);
       LOG_VART(englishName);
-      filteredNames.append(englishName);
+      if (!englishName.isEmpty())
+      {
+        filteredNames.append(englishName);
+      }
+      else
+      {
+        filteredNames.append(altName);
+      }
     }
   }
   LOG_VART(filteredNames.size());

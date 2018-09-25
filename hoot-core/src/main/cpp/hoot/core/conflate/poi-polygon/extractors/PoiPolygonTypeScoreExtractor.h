@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
@@ -126,12 +127,16 @@ public:
   virtual QString getDescription() const
   { return "Scores element type similarity for POI/Polygon conflation"; }
 
+  static void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
+  { _translator = translator; }
+
 private:
 
   double _typeScoreThreshold;
   static QSet<QString> _allTagKeys;
   double _featureDistance;
   bool _printMatchDistanceTruth;
+  static QMap<QString, QSet<QString>> _categoriesToSchemaTagValues;
 
   //when enabled, will scan through all tags and, for any tag keys recognized in the schema, will
   //attempt to translate their values to English if not determined already to be in English
@@ -146,6 +151,7 @@ private:
 
   void _translateTagValue(const QString tagKey, QString& tagValue) const;
   bool _isEnglishWord(const QString word) const;
+  static QSet<QString> _getTagValueTokens(const QString category);
 };
 
 }

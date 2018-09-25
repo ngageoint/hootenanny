@@ -49,6 +49,7 @@ namespace hoot
 {
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
+boost::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf,
@@ -192,6 +193,17 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   setReviewEvidenceThreshold(reviewEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
+
+  if (config.getPoiPolygonTranslateTagValuesToEnglish() && !_translator)
+  {
+    _translator.reset(
+      Factory::getInstance().constructObject<ToEnglishTranslator>(
+        config.getLanguageTranslationTranslator()));
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
+    PoiPolygonAddressScoreExtractor::setTranslator(_translator);
+    PoiPolygonTypeScoreExtractor::setTranslator(_translator);
+  }
 
   _addressScorer.setConfiguration(conf);
   _typeScorer.setConfiguration(conf);

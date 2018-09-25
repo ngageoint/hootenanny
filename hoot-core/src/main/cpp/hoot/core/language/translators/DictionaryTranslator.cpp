@@ -72,6 +72,8 @@ QString DictionaryTranslator::translate(const QString textToTranslate)
 
 QString DictionaryTranslator::toEnglish(const QString& input)
 {
+  LOG_TRACE("Translating: " << input << " to English...");
+
   //Since we have all our translations already in memory, caching translations isn't going to help
   //here.
 
@@ -93,6 +95,7 @@ QString DictionaryTranslator::toEnglish(const QString& input)
   }
 
   QString result = l.join(" ");
+  LOG_TRACE("Translated: " << input << " to: " << result);
   return result;
 }
 

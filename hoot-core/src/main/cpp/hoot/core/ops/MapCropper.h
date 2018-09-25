@@ -100,6 +100,7 @@ private:
   bool _invert;
   bool _removeNodes;
   geos::geom::Envelope _nodeBounds;
+  int _statusUpdateInterval;
 
   void _cropWay(boost::shared_ptr<OsmMap> map, long wid);
 

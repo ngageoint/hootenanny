@@ -74,11 +74,14 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
   setElementCriterion(options.getImplicitTaggingElementCriterion());
 
-  _translator.reset(
-    Factory::getInstance().constructObject<ToEnglishTranslator>(
-      options.getLanguageTranslationTranslator()));
-  _translator->setConfiguration(conf);
-  _translator->setSourceLanguages(options.getLanguageTranslationSourceLanguages());
+  if (_translateAllNamesToEnglish)
+  {
+    _translator.reset(
+      Factory::getInstance().constructObject<ToEnglishTranslator>(
+        options.getLanguageTranslationTranslator()));
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(options.getLanguageTranslationSourceLanguages());
+  }
 }
 
 void ImplicitTagRawRulesDeriver::setElementCriterion(QString criterionName)
@@ -274,16 +277,13 @@ void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString k
 
   if (!word.isEmpty())
   {
-    bool wordIsNumber = false;
-    word.toLong(&wordIsNumber);
-    if (wordIsNumber)
+    if (StringUtils::isNumber(word))
     {
       LOG_TRACE("Skipping word: " << word << ", which is a number.");
       return;
     }
 
-    const bool hasAlphaChar = StringUtils::hasAlphabeticCharacter(word);
-    if (!hasAlphaChar)
+    if (!StringUtils::hasAlphabeticCharacter(word))
     {
       LOG_TRACE("Skipping word: " << word << ", which has no alphabetic characters.");
       return;
@@ -368,8 +368,11 @@ void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStri
   if (_translateAllNamesToEnglish)
   {
     const QString englishNameToken = _translator->translate(nameToken);
-    nameToken = englishNameToken;
     LOG_VART(englishNameToken);
+    if (!englishNameToken.isEmpty())
+    {
+      nameToken = englishNameToken;
+    }
   }
 
   for (int k = 0; k < kvps.size(); k++)

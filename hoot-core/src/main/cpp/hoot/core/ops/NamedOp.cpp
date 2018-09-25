@@ -120,8 +120,8 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
-      LOG_VARD(c == 0);
-      LOG_VARD(_conf == 0);
+      LOG_VART(c == 0);
+      LOG_VART(_conf == 0);
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);

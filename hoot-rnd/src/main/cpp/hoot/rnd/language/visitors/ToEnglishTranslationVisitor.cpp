@@ -32,7 +32,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/algorithms/string/MostEnglishName.h>
 
 // std
 #include <typeinfo>
@@ -45,10 +44,10 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationVisitor)
 ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
 _skipPreTranslatedTags(false),
 _numTotalElements(0),
-_skipWordsInEnglishDict(true),
 _currentElementHasSuccessfulTagTranslation(false),
 _numTagTranslationsMade(0),
 _numElementsWithSuccessfulTagTranslation(0),
+_numProcessedTags(0),
 _numProcessedElements(0),
 _numDetectionsMade(0),
 _taskStatusUpdateInterval(10000)
@@ -63,13 +62,16 @@ ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
     _numElementsWithSuccessfulTagTranslation++;
   }
 
-  LOG_INFO("Language detections made: " << _numDetectionsMade);
   LOG_INFO(
     _numTagTranslationsMade << " successful tag translations made on " <<
     _numElementsWithSuccessfulTagTranslation << " different elements.");
   LOG_INFO(
+    "Translated " << _numTagTranslationsMade << " tags out of " << _numProcessedTags <<
+    " encountered.");
+  LOG_INFO(
     "Attempted to translate tags for " << _numProcessedElements << " elements out of " <<
     _numTotalElements << " elements encountered.");
+  LOG_INFO("Language detections made: " << _numDetectionsMade);
 }
 
 void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
@@ -84,7 +86,6 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 
   _toTranslateTagKeys = opts.getLanguageTranslationToTranslateTagKeys();
   _skipPreTranslatedTags = opts.getLanguageTranslationSkipPreTranslatedTags();
-  _skipWordsInEnglishDict = opts.getLanguageTranslationSkipWordsInEnglishDictionary();
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
 
@@ -106,6 +107,12 @@ void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
     if (tags.contains(toTranslateTagKey))
     {
       _translate(e, toTranslateTagKey);
+
+      _numProcessedElements++;
+      if (_numProcessedElements % _taskStatusUpdateInterval == 0)
+      {
+        PROGRESS_INFO("Attempted tag translation for " << _numProcessedElements << " elements.");
+      }
     }
   }
 
@@ -135,22 +142,6 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
       "Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" <<
       _toTranslateVal);
     return false;
-  }
-
-  //This is an attempt to cut back on translation service requests for text that may already
-  //in English.  Leaving it optional, b/c MostEnglishName's ability to determine if a word is
-  //English is still a little suspect at this point.
-  if (_skipWordsInEnglishDict)
-  {
-    const double englishNameScore = MostEnglishName::getInstance()->scoreName(_toTranslateVal);
-    LOG_TRACE("English name score: " << englishNameScore << " for: " << _toTranslateVal);
-    if (englishNameScore == 1.0)
-    {
-      LOG_TRACE(
-        "Tag value to be translated determined to already be in English.  Skipping " <<
-        "translation; text: " << _toTranslateVal);
-      return false;
-    }
   }
 
   _translatedText = _translatorClient->translate(_toTranslateVal).trimmed();
@@ -186,17 +177,11 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
       .appendValue("hoot:translated:" + _toTranslateTagKey + ":en:source:language", sourceLang);
 
     _numTagTranslationsMade++;
-    if (_numTagTranslationsMade % 10 == 0)
+    if (_numTagTranslationsMade % _taskStatusUpdateInterval == 0)
     {
-      LOG_VART(_numTagTranslationsMade);
+      PROGRESS_DEBUG("Translated " << _numProcessedTags << " tags.");
     }
     _currentElementHasSuccessfulTagTranslation = true;
-
-    _numProcessedElements++;
-    if (_numProcessedElements % 10 == 0)
-    {
-      PROGRESS_DEBUG("Processed " << _numProcessedElements << " elements.");
-    }
 
     return true;
   }
@@ -213,10 +198,10 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
       LOG_TRACE("Unable to translate text: " << _toTranslateVal);
     }
 
-    _numProcessedElements++;
-    if (_numProcessedElements % 10 == 0)
+    _numProcessedTags++;
+    if (_numProcessedTags % _taskStatusUpdateInterval == 0)
     {
-      PROGRESS_DEBUG("Processed " << _numProcessedElements << " elements.");
+      PROGRESS_DEBUG("Processed " << _numProcessedTags << " tags.");
     }
 
     return false;

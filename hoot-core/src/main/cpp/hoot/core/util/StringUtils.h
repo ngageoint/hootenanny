@@ -77,6 +77,14 @@ public:
    * @return a Boost property tree
    */
   static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @return
+   */
+  static bool isNumber(const QString input);
 };
 
 }

@@ -54,17 +54,19 @@ namespace hoot
                                                 boost::shared_ptr<PoiPolygonRfClassifier> rf) :
 _map(map),
 _result(result),
+_neighborCountMax(-1),
+_neighborCountSum(0),
+_elementsEvaluated(0),
 _threshold(threshold),
-_rf(rf)
+_rf(rf),
+_numElementsVisited(0),
+_numMatchCandidatesVisited(0)
 {
-  _neighborCountMax = -1;
-  _neighborCountSum = 0;
-  _elementsEvaluated = 0;
-
   ConfigOptions opts = ConfigOptions();
   _enableAdvancedMatching = opts.getPoiPolygonEnableAdvancedMatching();
   _enableReviewReduction = opts.getPoiPolygonEnableReviewReduction();
   _reviewDistanceThreshold = opts.getPoiPolygonReviewDistanceThreshold();
+  _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
 
 PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
@@ -197,6 +199,18 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
       _collectSurroundingPoiIds(e);
     }
     _checkForMatch(e);
+
+    _numMatchCandidatesVisited++;
+    if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO("Visited " << _numMatchCandidatesVisited << " match candidates.");
+    }
+  }
+
+  _numElementsVisited++;
+  if (_numElementsVisited % _taskStatusUpdateInterval == 0)
+  {
+    PROGRESS_INFO("Visited " << _numElementsVisited << " total elements.");
   }
 }
 

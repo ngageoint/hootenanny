@@ -83,11 +83,10 @@ private:
 
   QString _toTranslateVal;
 
-  bool _skipWordsInEnglishDict;
-
   bool _currentElementHasSuccessfulTagTranslation;
   long _numTagTranslationsMade;
   long _numElementsWithSuccessfulTagTranslation;
+  long _numProcessedTags;
   long _numProcessedElements;
   long _numDetectionsMade;
   int _taskStatusUpdateInterval;

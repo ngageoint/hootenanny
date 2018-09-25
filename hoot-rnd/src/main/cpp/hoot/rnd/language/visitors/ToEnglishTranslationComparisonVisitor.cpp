@@ -108,10 +108,6 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
   }
 
   _numTotalElements++;
-  if (_numTotalElements % 10 == 0)
-  {
-    LOG_VARD(_numTotalElements);
-  }
 }
 
 }
