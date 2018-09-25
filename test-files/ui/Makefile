@@ -50,8 +50,11 @@ else
 	$(HOOT_HOME)/scripts/tomcat/VerifyTomcatStarted.sh $(TOMCAT_PROXY_PORT)
 endif
 	# Running user interface tests...
-	TOMCAT_PORT=$(TOMCAT_PROXY_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber $(CUKE_OPTS) || (ret=$$?; \
-	(ps ux | grep nod[e] | grep proxy | awk "{print $$2}" | xargs kill >/dev/null 2>&1 || true); exit $$ret)
+	TOMCAT_PORT=$(TOMCAT_PROXY_PORT) \
+	xvfb-run --server-args="-screen 0, 1024x768x24" cucumber $(CUKE_OPTS); \
+	ret=$$?; \
+	(ps ux | grep nod[e] | grep proxy | awk "{print $$2}" | xargs kill >/dev/null 2>&1 || true); \
+	exit $$ret
 
 	echo ""
 
