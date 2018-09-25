@@ -30,17 +30,16 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementAttributeType.h>
-
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
 
 /**
- * Adds one or more attributes to elements.  Only common OSM attributes may be removed
+ * Adds one or more attributes to elements.  Only common OSM attributes may be added
  * (see ElementAttributeType).
  */
-class AddAttributesVisitor : public ElementOsmMapVisitor, public Configurable
+class AddAttributesVisitor : public ElementVisitor, public Configurable
 {
 
 public:

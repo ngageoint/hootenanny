@@ -44,9 +44,12 @@ QString HootServicesTranslationInfoResponseParser::parseAvailableLanguagesRespon
   int availableCtr = 0;
   BOOST_FOREACH (boost::property_tree::ptree::value_type& language, response->get_child("languages"))
   {
+    LOG_VART(language.second.get<std::string>("name"));
+    LOG_VART(QString::fromStdString(language.second.get<std::string>("name")));
     const QString name =
       QUrl::fromPercentEncoding(
         QString::fromStdString(language.second.get<std::string>("name")).toUtf8());
+    LOG_VART(name);
     const bool available = language.second.get<bool>("available");
     const QString availableStr = available ? "yes" : "no";
 

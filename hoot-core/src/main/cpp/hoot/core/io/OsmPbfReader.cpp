@@ -209,6 +209,10 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
   {
     // pass
   }
+  else if (key == MetadataTags::RelationType() && e->getElementType() == ElementType::Relation)
+  {
+    (boost::dynamic_pointer_cast<Relation>(e))->setType(value);
+  }
   else if (value != "")
   {
     e->setTag(key, value);
@@ -406,8 +410,6 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     double x = _convertLon(lon);
     double y = _convertLat(lat);
     _denseNodeTmp[i] = Node::newSp(_status, newId, x, y, _circularError);
-    //NodePtr n(Node::newSp(_status, newId, x, y, _circularError));
-    //nodes[i].reset(new Node(_status, newId, x, y, _circularError));
     if (_map->containsNode(newId))
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -658,7 +660,6 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
   long newId = _createRelationId(r.id());
 
   boost::shared_ptr<hoot::Relation> newRelation(new hoot::Relation(_status, newId, _circularError));
-
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
   {
@@ -1259,10 +1260,11 @@ void OsmPbfReader::initializePartial()
   _firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
-  if ( _in != NULL )
+  if (_in != NULL)
   {
     _blobs = loadOsmDataBlobOffsets(*_in);
-    _in->seekg (0, ios::end);    _fileLength = _in->tellg();
+    _in->seekg (0, ios::end);
+    _fileLength = _in->tellg();
     _in->seekg (0, ios::beg);
   }
 }
@@ -1270,7 +1272,7 @@ void OsmPbfReader::initializePartial()
 bool OsmPbfReader::hasMoreElements()
 {
   // If we've closed/finalized, definitely no
-  if ( _in == NULL )
+  if (_in == NULL)
   {
     return false;
   }
@@ -1311,8 +1313,8 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
       _lastReadTime = _startReadTime;
       _lastPosition = 0;
     }
-    //clear out the map and read a new blob
 
+    //clear out the map and read a new blob
     _map->clear();
     _partialNodesRead = 0;
     _partialWaysRead = 0;
@@ -1353,7 +1355,6 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
 
-
     element = _nodesItr->second->cloneSp();
     ++_nodesItr;
     _partialNodesRead++;
@@ -1372,6 +1373,8 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
   }
   assert(element.get());
   _elementsRead++;
+
+  LOG_TRACE("Read " << element->getElementId());
   return element;
 }
 
@@ -1389,7 +1392,7 @@ void OsmPbfReader::close()
 {
   finalizePartial();
 
-  if ( _needToCloseInput == true )
+  if (_needToCloseInput == true)
   {
     // Deleting fstream objects invokes the istream destructor, who in turn calls istream::close as part of its contract
     delete _in;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALOSMMAPREADER_H
 #define PARTIALOSMMAPREADER_H
@@ -64,13 +64,28 @@ public:
   virtual void readPartial(OsmMapPtr map);
 
   /**
+   * Perform any necessary initialization after the data source is opened.
+   */
+  virtual void initializePartial() = 0;
+
+  /**
    * Finalize the reading of partial data. Any connections/files should be closed when this is
      complete.
    */
   virtual void finalizePartial() = 0;
 
+  /**
+   * Returns true if the reader can read any more elements
+   *
+   * @return true if there are more elements; false otherwise
+   */
   virtual bool hasMoreElements() = 0;
 
+  /**
+   * Reads the next available element from the data source
+   *
+   * @return an element
+   */
   virtual ElementPtr readNextElement() = 0;
 
 protected:

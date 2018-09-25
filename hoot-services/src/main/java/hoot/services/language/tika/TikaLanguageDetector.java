@@ -37,6 +37,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.lang.CloneNotSupportedException;
+
 import hoot.services.language.LanguageDetector;
 import hoot.services.language.SupportedLanguageConsumer;
 import hoot.services.language.LanguageAppInfo;
@@ -122,9 +124,10 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
   /**
    * @see SupportedLanguageConsumer
    */
-  public SupportedLanguage[] getSupportedLanguages()
+  public SupportedLanguage[] getSupportedLanguages() throws CloneNotSupportedException
   {
-    return langsConfigReader.getSupportedLanguages().clone();
+    //return langsConfigReader.getSupportedLanguages().clone();
+    return SupportedLanguage.cloneArray(langsConfigReader.getSupportedLanguages());
   }
 
   /**

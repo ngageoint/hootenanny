@@ -64,7 +64,7 @@ namespace hoot
 class OsmPbfReaderData;
 
 /**
- * A writer for http://wiki.openstreetmap.org/wiki/PBF_Format
+ * A reader for http://wiki.openstreetmap.org/wiki/PBF_Format
  */
 class OsmPbfReader : public PartialOsmMapReader, public Configurable
 {
@@ -97,6 +97,11 @@ public:
   OsmPbfReader(const QString urlString);
 
   ~OsmPbfReader();
+
+  /**
+   * @see ElementInputStream
+   */
+  virtual OsmPbfReader* clone() const { return new OsmPbfReader(*this); }
 
   /**
    * Scan through the file and calculate the offsets of every blob. This is handy when

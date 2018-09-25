@@ -60,8 +60,13 @@ void OsmWriterJs::toString(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(args.GetIsolate());
 
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
+  bool formatXml = true;
+  if (args.Length() > 1)
+  {
+    formatXml = toCpp<bool>(args[1]);
+  }
 
-  args.GetReturnValue().Set(toV8(OsmXmlWriter::toString(map)));
+  args.GetReturnValue().Set(toV8(OsmXmlWriter::toString(map, formatXml)));
 }
 
 }

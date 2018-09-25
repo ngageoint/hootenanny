@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/ScoreMatrix.h>
 #include <hoot/core/util/Configurable.h>
@@ -95,7 +95,7 @@ private:
   bool _addTimestamp;
   bool _includeDebugTags;
 
-  OsmXmlWriter _invalidCharacterRemover;
+  OsmXmlWriter _invalidCharacterHandler;
 
   QMap<ElementType::Type, long> _newElementIdCtrs;
   //keeping track of these mappings unfortunately makes this writer memory bound

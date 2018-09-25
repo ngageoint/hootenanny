@@ -39,18 +39,27 @@ translate = {
         for (var r in one2one)
         {
             var row = one2one[r];
-            if (!(row[0] in lookup))
+            if (row[2]) // Make sure it isn't 'undefined'
             {
-                lookup[row[0]] = {}
-            }
+                if (!(row[0] in lookup))
+                {
+                    lookup[row[0]] = {}
+                }
 
-            if (!(lookup[row[0]][row[1]])) 
-            {
-                lookup[row[0]][row[1]] = [row[2], row[3]];
-            }
-            else
-            {
-                if (config.getOgrDebugLookupclash() == 'true') print('Fwd Clash: ' + row[0] + ' ' + row[1] + '  is ' + lookup[row[0]][row[1]] + '  tried to change to ' + [row[2], row[3]]);
+                if (!(lookup[row[0]][row[1]])) 
+                {
+                    lookup[row[0]][row[1]] = [row[2], row[3]];
+                }
+                else
+                {
+                    if (config.getOgrDebugLookupclash() == 'true') 
+                        {
+                            if (lookup[row[0]][row[1]] != ('' + row[2] + ',' + row[3]))
+                            {
+                                print('Fwd Clash: ' + row[0] + ' ' + row[1] + '  is ' + lookup[row[0]][row[1]] + '  tried to change to ' + [row[2], row[3]]);
+                            }
+                        }
+                }
             }
         }
     

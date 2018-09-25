@@ -303,9 +303,8 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      key = removeInvalidCharacters(key);
       LOG_VART(key);
-      _writer->writeAttribute("k", key);
+      _writer->writeAttribute("k", removeInvalidCharacters(key));
       if (key == MetadataTags::HootStatus() &&
           //status check here only for nodes/ways; should relation have this check too?
           (type == ElementType::Relation ||
@@ -322,9 +321,8 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
       }
       else
       {
-        val = removeInvalidCharacters(val);
         LOG_VART(val);
-        _writer->writeAttribute("v", val);
+        _writer->writeAttribute("v", removeInvalidCharacters(val));
       }
       _writer->writeEndElement();
     }
@@ -477,7 +475,7 @@ void OsmXmlWriter::_writeBounds(const Envelope& bounds)
 
 void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 {
-  //LOG_VART(n);
+  LOG_TRACE("Writing " << n->getElementId() << "...");
 
   _writer->writeStartElement("node");
 
@@ -498,7 +496,7 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
 {
-  //LOG_VART(w);
+  LOG_TRACE("Writing " << w->getElementId() << "...");
 
   _writer->writeStartElement("way");
   _writer->writeAttribute("visible", "true");
@@ -524,8 +522,8 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
-    const QString key = tit.key();
-    const QString val = tit.value().trimmed();
+    QString key = tit.key();
+    QString val = tit.value().trimmed();
     if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
@@ -591,7 +589,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
 void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 {
-  //LOG_VART(w);
+  LOG_TRACE("Writing " << w->getElementId() << "...");
 
   if (_includePointInWays)
   {
@@ -618,7 +616,7 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 
 void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 {
-  //LOG_VART(r);
+  LOG_TRACE("Writing " << r->getElementId() << "...");
 
   _writer->writeStartElement("relation");
   _writer->writeAttribute("visible", "true");

@@ -89,12 +89,12 @@ available Hootenanny commands, type 'hoot'.  More detail is provided [here](http
 
 **Hootenanny can export changesets to:** 
 * OpenStreetMap API Web Service
-* OpenStreetMap XML changeset file (.osc) (M)
-* OpenStreetMap SQL changeset file (.osc.sql) (M)
+* OpenStreetMap SQL changeset file (.osc.sql)
+* OpenStreetMap XML changeset file (.osc)
 
 Notes:
 * (M) = format requires reading entire dataset into memory during processing
-* (*) = format requires reading entire dataset into memory during processing only if element ID output is sorted
+* (*) = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
 # Tag Schemas

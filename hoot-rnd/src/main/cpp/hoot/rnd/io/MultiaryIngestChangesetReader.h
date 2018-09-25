@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/OsmXmlReader.h>
 
 // Qt

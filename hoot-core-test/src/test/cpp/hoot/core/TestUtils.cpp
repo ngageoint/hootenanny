@@ -66,7 +66,7 @@ bool TestUtils::compareMaps(const QString& refPath, const QString testPath)
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.setUseDataSourceIds(true);
-  reader.setUseStatusFromFile(true);
+  reader.setUseFileStatus(true);
   reader.setAddSourceDateTime(false);
 
   OsmMapPtr ref(new OsmMap());

@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/io/TestOsmChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/TestOsmChangesetProvider.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
 
 namespace hoot

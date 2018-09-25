@@ -27,7 +27,6 @@
 #include "DataConverter.h"
 
 #include <hoot/core/util/Log.h>
-#include <hoot/core/OsmMapConsumer.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
@@ -554,25 +553,9 @@ void DataConverter::_convert(const QString input, const QString output)
     LOG_VART(conf().get(ConfigOptions().getTranslationScriptKey()));
   }
 
-  QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
-  if (writerName.trimmed().isEmpty())
-  {
-    writerName = OsmMapWriterFactory::getWriterName(output);
-  }
-  LOG_VART(writerName);
-  LOG_TRACE(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
-  LOG_TRACE(ConfigUtils::boundsOptionEnabled());
-
   //try to stream the i/o
-  if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
-      OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
-      _areValidStreamingOps(_convertOps) &&
-      //the XML writer can't keep sorted output when streaming, so require an additional config
-      //option be specified in order to stream when writing that format
-      (writerName != "hoot::OsmXmlWriter" ||
-      (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
-      //none of the convert bounding box supports are able to do streaming I/O at this point
-      !ConfigUtils::boundsOptionEnabled())
+  if (ElementStreamer::isStreamableIo(input, output) &&
+      ElementStreamer::areValidStreamingOps(_convertOps))
   {
     //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
     //it is ever made streamable, then we'd have to refactor this.
@@ -620,37 +603,6 @@ void DataConverter::_exportToShapeWithCols(const QString output, const QStringLi
   shapeFileWriter->setColumns(cols);
   shapeFileWriter->open(output);
   shapeFileWriter->write(map, output);
-}
-
-bool DataConverter::_areValidStreamingOps(const QStringList ops)
-{
-  // add visitor/criterion operations if any of the convert ops are visitors.
-  foreach (QString opName, ops)
-  {
-    if (!opName.trimmed().isEmpty())
-    {
-      if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
-      {
-        ElementCriterionPtr criterion(
-          Factory::getInstance().constructObject<ElementCriterion>(opName));
-        // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
-        {
-          return false;
-        }
-      }
-      else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
-      {
-        // good, pass
-      }
-      else
-      {
-        return false;
-      }
-    }
-  }
-
-  return true;
 }
 
 }

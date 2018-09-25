@@ -72,9 +72,11 @@ public:
   virtual QString errorString() const { return _errorString; }
 
   virtual bool endElement(const QString &namespaceURI, const QString &localName,
-                  const QString &qName);
+                          const QString &qName);
 
   virtual bool fatalError(const QXmlParseException &exception);
+
+  virtual void initializePartial() {}
 
   virtual void finalizePartial();
 
@@ -101,18 +103,26 @@ public:
   virtual bool startElement(const QString &namespaceURI, const QString &localName,
                             const QString &qName, const QXmlAttributes &attributes);
 
-  void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
-  void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
   void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
   void setDefaultAccuracy(Meters circularError) { _circularError = circularError; } 
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
   virtual QString supportedFormats() { return ".osm;.osm.bz2;.osm.gz"; }
 
+  /**
+   * This will adds child refs to elements when they aren't present in the source data.  This is
+   * only useful when dealing with disconnected chunks of map data, as in external sorting, and
+   * should only be activated in that circumstance.  Some verification should be done after
+   * reading data with the parameter enabled to ensure all child data is actually present (reading
+   * the data a second time will log warnings if any data is missing).
+   */
+  void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
+  { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
+
 private:
 
   bool _osmFound;
-  double _x, _y;
   long _id;
 
   std::deque<long> _nodeIds;
@@ -154,6 +164,9 @@ private:
   // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
   // QHash goes away when the reading is done, but the memory sharing remains.
   QHash<QString, QString> _strings;
+
+  //adds child refs to elements when they aren't present in the source data
+  bool _addChildRefsWhenMissing;
 
   void _createNode(const QXmlAttributes &attributes);
   void _createWay(const QXmlAttributes &attributes);

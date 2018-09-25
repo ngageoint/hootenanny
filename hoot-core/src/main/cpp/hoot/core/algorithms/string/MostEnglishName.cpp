@@ -116,7 +116,7 @@ const QSet<QString>& MostEnglishName::_getWords()
       logWarnCount++;
     }
 
-    LOG_DEBUG("Unique (case-insensitive) words: " + QString::number(_englishWords.size()));
+    LOG_TRACE("Unique (case-insensitive) words: " + QString::number(_englishWords.size()));
     _initialized = true;
   }
 
