@@ -53,6 +53,116 @@
 namespace hoot
 {
 
+void elementTranslatorThread::run()
+{
+  //  Create an isolate for the thread
+  v8::Isolate::CreateParams params;
+  params.array_buffer_allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
+  v8::Isolate * threadIsolate = v8::Isolate::New(params);
+  threadIsolate->Enter();
+  v8::Locker v8Lock(threadIsolate);
+
+  ElementPtr pNewElement(NULL);
+  ElementProviderPtr cacheProvider(_pElementCache);
+
+  // Setup writer used for translation
+  boost::shared_ptr<OgrWriter> ogrWriter;
+  { // Mutex Scope
+    // We use this init mutex as a bandaid. Hoot uses a lot of problematic
+    // singletons that cause issues when you try to multithread stuff.
+    QMutexLocker lock(_pInitMutex);
+    ogrWriter.reset(new OgrWriter());
+    ogrWriter->setScriptPath(_translation);
+    ogrWriter->initTranslator();
+    ogrWriter->setCache(_pElementCache);
+  }
+
+  while (!_pElementQ->empty())
+  {
+    pNewElement = _pElementQ->dequeue();
+
+    boost::shared_ptr<geos::geom::Geometry> g;
+    std::vector<ScriptToOgrTranslator::TranslatedFeature> tf;
+    ogrWriter->translateToFeatures(cacheProvider, pNewElement, g, tf);
+
+    { // Mutex Scope
+      QMutexLocker lock(_pTransFeaturesQMutex);
+      _pTransFeaturesQ->enqueue(std::pair<boost::shared_ptr<geos::geom::Geometry>,
+                                std::vector<ScriptToOgrTranslator::TranslatedFeature>>(g, tf));
+    }
+  }
+
+  { // Mutex Scope
+    QMutexLocker lock(_pTransFeaturesQMutex);
+    *_pFinishedTranslating = true;
+  }
+
+  LOG_INFO("Done Translating");
+} // end run
+
+void ogrWriterThread::run()
+{
+  // Messing with these parameters did not improve performance...
+  // http://trac.osgeo.org/gdal/wiki/ConfigOptions
+  //CPLSetConfigOption("GDAL_CACHEMAX", "512" );
+  //CPLSetConfigOption("FGDB_BULK_LOAD", "YES");
+
+  //  Create an isolate for our thread
+  v8::Isolate::CreateParams params;
+  params.array_buffer_allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
+  v8::Isolate * threadIsolate = v8::Isolate::New(params);
+  threadIsolate->Enter();
+  v8::Locker v8Lock(threadIsolate);
+
+  bool done = false;
+  std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
+
+  // Setup writer
+  boost::shared_ptr<OgrWriter> ogrWriter;
+  { // Mutex Scope
+    QMutexLocker lock(_pInitMutex);
+    ogrWriter.reset(new OgrWriter());
+    ogrWriter->setScriptPath(_translation);
+    ogrWriter->open(_output);
+  }
+
+  while (!done)
+  {
+    bool doSleep = false;
+
+    // Get element
+    { // Mutex Scope
+      QMutexLocker lock(_pTransFeaturesQMutex);
+      if (_pTransFeaturesQ->isEmpty())
+      {
+        doSleep = true;
+        if (*_pFinishedTranslating)
+        {
+          done = true;
+        }
+      }
+      else
+      {
+        feature = _pTransFeaturesQ->dequeue();
+      }
+    }
+
+    // Write element or sleep
+    if (doSleep)
+    {
+      doSleep = false;
+      msleep(100);
+    }
+    else
+    {
+      ogrWriter->writeTranslatedFeature(feature.first, feature.second);
+    }
+  }
+  ogrWriter->close();
+
+  LOG_INFO("Done Writing Features");
+} // end run
+
 unsigned int DataConverter::logWarnCount = 0;
 
 DataConverter::DataConverter() :
@@ -80,9 +190,7 @@ void DataConverter::convert(const QStringList inputs, const QString output)
     _convertToOgr(inputs.at(0), output);
   }
   /* We require that a translation be present when converting from OGR.
-   *
    * Also, converting to OGR is the only situation where we support multiple inputs.
-   *
    * Would like to be absorb some or all of this logic into _convert but not sure its feasible.
    */
   else if (inputs.size() >= 1 && !_translation.isEmpty() &&
@@ -165,116 +273,11 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   }
 }
 
-void elementTranslatorThread::run()
-{
-  // Node is such a PITA
-  //  Create an isolate
-  v8::Isolate::CreateParams params;
-  params.array_buffer_allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
-  v8::Isolate * threadIsolate = v8::Isolate::New(params);
-  threadIsolate->Enter();
-  v8::Locker v8Lock(threadIsolate);
-
-  // Useful code below here...
-  ElementPtr pNewElement(NULL);
-  ElementProviderPtr cacheProvider(pElementCache);
-
-  // Setup writer used for translation
-  boost::shared_ptr<OgrWriter> writer(new OgrWriter());
-  { // Mutex Scope
-    QMutexLocker lock(pInitMutex);
-    writer->setScriptPath(translation);
-    writer->initTranslator();
-    writer->createAllLayers();
-    writer->setCache(pElementCache);
-  }
-
-  while (!pElementQ->empty())
-  {
-    pNewElement = pElementQ->dequeue();
-
-    boost::shared_ptr<geos::geom::Geometry> g;
-    std::vector<ScriptToOgrTranslator::TranslatedFeature> tf;
-    writer->translateToFeatures(cacheProvider, pNewElement, g, tf);
-
-    { // Mutex Scope
-      QMutexLocker lock(pTransFeaturesQMutex);
-      pTransFeaturesQ->enqueue(std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>(g, tf));
-    }
-  }
-
-  { // Mutex Scope
-    QMutexLocker lock(pTransFeaturesQMutex);
-    *pFinishedTranslating = true;
-  }
-
-  LOG_INFO("Done Translating");
-} // end run
-
-void ogrWriterThread::run()
-{
-  // Node is such a PITA
-  //  Create an isolate
-  v8::Isolate::CreateParams params;
-  params.array_buffer_allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
-  v8::Isolate * threadIsolate = v8::Isolate::New(params);
-  threadIsolate->Enter();
-  v8::Locker v8Lock(threadIsolate);
-
-  // Useful code below here...
-  bool done = false;
-  std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
-
-  // Setup writer
-  boost::shared_ptr<OgrWriter> ogrWriter(new OgrWriter());
-  { // Mutex Scope
-    QMutexLocker lock(pInitMutex);
-    ogrWriter->setScriptPath(translation);
-    ogrWriter->open(output);
-  }
-
-  while (!done)
-  {
-    bool doSleep = false;
-
-    // Get element
-    { // Mutex Scope
-      QMutexLocker lock(pTransFeaturesQMutex);
-      if (pTransFeaturesQ->isEmpty())
-      {
-        doSleep = true;
-        if (*pFinishedTranslating)
-        {
-          done = true;
-        }
-      }
-      else
-      {
-        feature = pTransFeaturesQ->dequeue();
-      }
-    }
-
-    // Translate element
-    if (doSleep)
-    {
-      doSleep = false;
-      msleep(100);
-    }
-    else
-    {
-      ogrWriter->writeTranslatedFeature(feature.first, feature.second);
-    }
-  }
-  ogrWriter->close();
-
-  LOG_INFO("Done Writing Features");
-} // end run
-
 void DataConverter::_fillElementCache(QString inputUrl,
                                      ElementCachePtr cachePtr,
                                      QQueue<ElementPtr> &workQ)
 {
-  // Set up reader
+  // Setup reader
   boost::shared_ptr<OsmMapReader> reader =
     OsmMapReaderFactory::getInstance().createReader(inputUrl);
   reader->open(inputUrl);
@@ -311,12 +314,6 @@ void DataConverter::_transToOgrMT(QString input,
 {
   LOG_INFO("_transToOgrMT");
 
-  // MAYBE Create a synchronized cache
-  // Read all elements into a cache, and into the work Q
-  // Start multiple translation threads
-  // Wait for translation threads to finish
-  // Write all translated items out.
-
   QQueue<ElementPtr> elementQ;
   ElementCachePtr pElementCache(new ElementCacheLRU(
                                 ConfigOptions().getElementCacheSizeNode(),
@@ -332,29 +329,30 @@ void DataConverter::_transToOgrMT(QString input,
   _fillElementCache(input, pElementCache, elementQ);
   LOG_INFO("Element Cache Filled");
 
+  // Note the OGR writer is the slowest part of this whole operation,
+  // but it's relatively opaque to us as a 3rd party library. So the best we
+  // can do right now is try to translate & write in parallel
+
   // Setup & start translator thread
   hoot::elementTranslatorThread transThread;
-  transThread.translation = _translation;
-  transThread.pElementQ = &elementQ;
-  transThread.pTransFeaturesQMutex = &transFeaturesMutex;
-  transThread.pInitMutex = &initMutex;
-  transThread.pTransFeaturesQ = &transFeaturesQ;
-  transThread.pFinishedTranslating = &finishedTranslating;
-  transThread.pElementCache = pElementCache;
+  transThread._translation = _translation;
+  transThread._pElementQ = &elementQ;
+  transThread._pTransFeaturesQMutex = &transFeaturesMutex;
+  transThread._pInitMutex = &initMutex;
+  transThread._pTransFeaturesQ = &transFeaturesQ;
+  transThread._pFinishedTranslating = &finishedTranslating;
+  transThread._pElementCache = pElementCache;
   transThread.start();
   LOG_INFO("Translation Thread Started");
 
-  //transThread.wait();
-  //sleep(10);
-
   // Setup & start our writer thread
   hoot::ogrWriterThread writerThread;
-  writerThread.translation = _translation;
-  writerThread.output = output;
-  writerThread.pTransFeaturesQMutex = &transFeaturesMutex;
-  writerThread.pInitMutex = &initMutex;
-  writerThread.pTransFeaturesQ = &transFeaturesQ;
-  writerThread.pFinishedTranslating = &finishedTranslating;
+  writerThread._translation = _translation;
+  writerThread._output = output;
+  writerThread._pTransFeaturesQMutex = &transFeaturesMutex;
+  writerThread._pInitMutex = &initMutex;
+  writerThread._pTransFeaturesQ = &transFeaturesQ;
+  writerThread._pFinishedTranslating = &finishedTranslating;
   writerThread.start();
   LOG_INFO("OGR Writer Thread Started");
 

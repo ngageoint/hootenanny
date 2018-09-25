@@ -232,6 +232,7 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f
 void OgrWriter::close()
 {
   _layers.clear();
+  _ds->FlushCache();
   _ds.reset();
 }
 
@@ -375,6 +376,7 @@ OGRLayer* OgrWriter::_getLayerByName(const QString& layerName)
 {
   // Check if the layer exists in the output.
   int layerCount = _ds->GetLayerCount();
+
   for (int i = 0; i < layerCount; i++)
   {
     OGRLayer* layer = _ds->GetLayer(i+1);

@@ -38,7 +38,7 @@ Schema::Schema()
 void Schema::addLayer(boost::shared_ptr<Layer> l)
 {
   _layers.push_back(l);
-  _layerNameMap[l->getName()] = _layers.size();
+  _layerNameMap[l->getName()] = _layers.size()-1;
 }
 
 boost::shared_ptr<const Layer> Schema::getLayer(size_t i) const
