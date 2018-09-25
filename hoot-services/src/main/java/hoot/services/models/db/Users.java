@@ -49,7 +49,7 @@ public class Users {
     }
 
     private String displayName;
-    @JsonIgnore
+    // @JsonIgnore
     private String email;
     private Long id;
     @JsonIgnore
