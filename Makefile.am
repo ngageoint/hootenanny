@@ -29,6 +29,9 @@ clean-coverage:
 coverage:
 	$(MAKE) -f Makefile.old coverage
 
+core:
+	$(MAKE) -f Makefile.old core
+
 core-coverage:
 	$(MAKE) -f Makefile.old core-coverage
 
@@ -56,6 +59,7 @@ help:
 	@echo "clean-all               - Clean out all binaries and remove all tables from the DB defined in liquibase.properties"
 	@echo "clean-coverage          - Remove all test code coverage report output."
 	@echo "clean-db                - Remove all tables from the DB defined in liquibase.properties"
+	@echo "core                    - Build just the core without any UI elements"
 	@echo "core-coverage           - If configured '--with-coverage', then creates coverage reports for the core."
 	@echo "coverage                - If configured '--with-coverage', then creates test coverage reports."
 	@echo "docs                    - Build all project documentation."
