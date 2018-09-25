@@ -1216,6 +1216,29 @@ Write out empty OSM tags to JSON such as `"text":""`
 
 Write out JSON in a more legible manner
 
+=== json.reader.http.bbox.max.size
+
+* Data Type: double
+* Default Value: `0.25`
+
+Maximum size of an HTTP request's bounding box in degrees before it is split up into smaller bounding
+boxes and run in parallel
+
+=== json.reader.http.bbox.parallel
+
+* Data Type: bool
+* Default Value: `false`
+
+Split the bounding box of an HTTP read request into smaller bounding boxes that can be run in parallel
+
+=== json.reader.http.bbox.thread.count
+
+* Data Type: int
+* Default Value: `8`
+
+Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are too
+large to query at once (see `json.reader.http.bbox.max.size`).
+
 === keep.tags.visitor.keys
 
 * Data Type: list

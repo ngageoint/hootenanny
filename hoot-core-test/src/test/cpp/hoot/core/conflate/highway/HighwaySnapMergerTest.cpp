@@ -134,7 +134,7 @@ public:
       ec.convertToLineString(map->getWay(-7))->toString());
     HOOT_STR_EQUALS("way(-4)\n"
                     "nodes: [2]{-1, -6}\n"
-                    "tags: cached envelope: 0,-1,0,-1\n"
+                    "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
@@ -142,7 +142,7 @@ public:
                     map->getWay(-4)->toString());
     HOOT_STR_EQUALS("way(-5)\n"
                     "nodes: [2]{-6, -2}\n"
-                    "tags: cached envelope: 0,-1,0,-1\n"
+                    "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
@@ -150,7 +150,7 @@ public:
                     map->getWay(-5)->toString());
     HOOT_STR_EQUALS("way(-7)\n"
                     "nodes: [2]{-1, -4}\n"
-                    "tags: cached envelope: 0,-1,0,-1\n"
+                    "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: unknown2\n"
                     "version: 0\n"
                     "visible: 1\n"
@@ -194,7 +194,7 @@ public:
     HOOT_STR_EQUALS(1, map->getWays().size());
     HOOT_STR_EQUALS("way(-4)\n"
                     "nodes: [2]{-1, -2}\n"
-                    "tags: cached envelope: 0,-1,0,-1\n"
+                    "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
@@ -372,9 +372,6 @@ public:
 
     QString json = OsmJsonWriter().toString(map);
 
-//    MapProjector::reprojectToWgs84(map);
-//    OsmMapWriterFactory::write(map, "tmp/dum.osm");
-
     QString expected = QString(
       "{'version': 0.6,'generator': 'Hootenanny','elements': [\n"
       "{'type':'node','id':-1,'lat':5,'lon':0},\n"
@@ -440,7 +437,7 @@ public:
     merger.apply(map, replaced);
 
     QString json = OsmJsonWriter().toString(map);
-    //LOG_VAR(TestUtils::toQuotedString(json.replace("\"", "'")));
+    LOG_VART(TestUtils::toQuotedString(json.replace("\"", "'")));
 
     QString expected = QString(
       "{'version': 0.6,'generator': 'Hootenanny','elements': [\n"
