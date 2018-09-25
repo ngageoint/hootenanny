@@ -69,7 +69,7 @@ public class Users {
         this.displayName = displayName;
     }
 
-    @JsonIgnore
+    // @JsonIgnore
     public String getEmail() {
         return email;
     }
@@ -78,7 +78,6 @@ public class Users {
         this.email = email;
     }
 
-    @JsonProperty(value = "user_id")
     public Long getId() {
         return id;
     }
