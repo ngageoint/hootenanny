@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::HootServicesTranslationInfoClient"; }
 
   HootServicesTranslationInfoClient();
+  virtual ~HootServicesTranslationInfoClient() {}
 
   virtual void setConfiguration(const Settings& conf);
 

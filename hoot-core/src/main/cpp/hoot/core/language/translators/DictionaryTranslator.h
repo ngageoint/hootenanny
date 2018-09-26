@@ -58,6 +58,7 @@ public:
   static std::string className() { return "hoot::DictionaryTranslator"; }
 
   DictionaryTranslator();
+  virtual ~DictionaryTranslator() {}
 
   /**
    * Translates the given input string into a translation & transliteration of the input.

@@ -259,10 +259,6 @@ bool PoiPolygonAddressScoreExtractor::elementHasAddress(const ConstElementPtr& e
 void PoiPolygonAddressScoreExtractor::_translateAddressToEnglish(QString& address) const
 {
   const QStringList addressParts = address.simplified().split(" ");
-
-  //123 Main Street
-  //"Central Border Street 40 81379
-
   //Try to translate blocks of consecutive address tokens to cut down on the number of
   //translation calls made.
   QString combinedAddressPartToTranslate = "";
@@ -295,8 +291,7 @@ void PoiPolygonAddressScoreExtractor::_translateAddressToEnglish(QString& addres
   {
     const QString combinedAddressPart = combinedAddressPartsToTranslate.at(i).trimmed();
     LOG_VART(combinedAddressPart);
-    const QString translatedCombinedAddressPart =
-      _translator->translate(combinedAddressPart);
+    const QString translatedCombinedAddressPart = _translator->translate(combinedAddressPart);
     if (!translatedCombinedAddressPart.isEmpty())
     {
       translatedAddress =
@@ -308,13 +303,12 @@ void PoiPolygonAddressScoreExtractor::_translateAddressToEnglish(QString& addres
 
   if (anyAddressPartWasTranslated)
   {
-    //TODO: change logging
-    LOG_DEBUG("Translated address from " << address << " to " << translatedAddress);
+    LOG_TRACE("Translated address from " << address << " to " << translatedAddress);
     address = translatedAddress;
   }
   else
   {
-    LOG_DEBUG("Address " << address << " could not be translated.");
+    LOG_TRACE("Address " << address << " could not be translated.");
     address = "";
   }
 }
@@ -325,6 +319,9 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
   //We're parsing multiple types of address tags here, b/c its possible that the same feature
   //could have multiple types of address tags with only one of them being accurate.  Parsing just
   //one type does the same on run time, but can be less accurate for the aforementioned reason.
+  //This code assumes that only one type of address will be present on each element.  If that
+  //assumption ever proves false, then this needs to be reworked to throw an error or process only
+  //the first address type found.
 
   const Tags tags = element.getTags();
 

@@ -208,8 +208,7 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QStr
   }
 
   translatedTagValue = translatedTagValue.simplified().replace(" ", "_");
-  //TODO: change logging
-  LOG_DEBUG(
+  LOG_TRACE(
     "Translated tag value: " << tagValue << " for key: " << tagKey << " to value: " <<
     translatedTagValue);
   tagValue = translatedTagValue;

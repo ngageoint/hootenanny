@@ -115,8 +115,12 @@ private:
   long _untranslatableWords;
   long _numDetectionsMade;
   long _numEnglishWordsSkipped;
+  long _translationCacheHits;
+  long _translationCacheMaxSize;
 
   bool _skipWordsInEnglishDict;
+
+  static bool _loggedCacheMaxReached;
 
   /**
    * Verifies that every language specified for this translator is supported by the server

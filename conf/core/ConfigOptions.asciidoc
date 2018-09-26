@@ -2644,8 +2644,9 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 * Default Value: `false`
 
 If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
-address.  This can have significant impact on the runtime performance of conflation when enabled.
-The configuration option, 'language.translation.translator', controls which translator is used.
+address.  This can have significant impact on the runtime performance of conflation when enabled
+and should only be enabled if the source data is known to have non-English addresses.  The
+configuration option, 'language.translation.translator', controls which translator is used.
 
 === poi.polygon.translate.names.to.english
 
@@ -2653,8 +2654,9 @@ The configuration option, 'language.translation.translator', controls which tran
 * Default Value: `false`
 
 If true, Hootenanny will attempt to translate to English the value of any name tag.  This can have
-significant impact on the runtime performance of conflation when enabled.  The configuration
-option, 'language.translation.translator', controls which translator is used.
+significant impact on the runtime performance of conflation when enabled and should only be enabled
+if the source data is known to have non-English names.  The configuration option,
+'language.translation.translator', controls which translator is used.
 
 === poi.polygon.translate.types.to.english
 
@@ -2662,8 +2664,9 @@ option, 'language.translation.translator', controls which translator is used.
 * Default Value: `false`
 
 If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
-schema.  This can have significant impact on the runtime performance of conflation when enabled.
-The configuration option, 'language.translation.translator', controls which translator is used.
+schema.  This can have significant impact on the runtime performance of conflation when enabled
+and should only be enabled if the source data is known to have non-English type values.  The
+configuration option, 'language.translation.translator', controls which translator is used.
 
 === poi.polygon.type.score.threshold
 
