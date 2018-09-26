@@ -46,9 +46,11 @@ import java.util.Locale;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -83,6 +85,7 @@ import com.querydsl.sql.SQLQuery;
 
 import hoot.services.command.Command;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
@@ -97,7 +100,6 @@ import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.utils.DbUtils;
-import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -471,7 +473,7 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTileNodesCounts(String params) {
-        JSONObject ret = new JSONObject();
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
         String mapId = "";
         String bbox = "";
         try {
@@ -544,14 +546,14 @@ public class MapResource {
             handleError(e, mapId, bbox);
         }
 
-        return Response.ok(ret.toString()).build();
+        return Response.ok(new JSONObject(ret).toString()).build();
     }
 
     @GET
     @Path("/mbr")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMBR(@QueryParam("mapId") String mapId) {
-        JSONObject ret = new JSONObject();
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
         try {
             logger.debug("Retrieving MBR for map with ID: {} ...", mapId);
 
@@ -620,7 +622,7 @@ public class MapResource {
             handleError(e, mapId, "-180,-90,180,90");
         }
 
-        return Response.ok(ret.toString()).build();
+        return Response.ok().entity(ret).build();
     }
 
     private static void handleError(Exception e, String mapId, String requestSnippet) {
@@ -665,16 +667,14 @@ public class MapResource {
     /**
      * Deletes a map
      *
-     * POST hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
+     * DELETE hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
      *
-     * //TODO: should be an HTTP DELETE
      *
      * @param mapId
      *            ID of map record to be deleted
      * @return id of the deleted map
      */
-    @POST
-    @Path("/delete")
+    @DELETE
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteLayers(@QueryParam("mapId") String mapId) {
@@ -695,17 +695,18 @@ public class MapResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject json = new JSONObject();
-        json.put("jobid", jobId);
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("jobid", jobId);
 
-        return Response.ok(json.toJSONString()).build();
+        return Response.ok().entity(ret).build();
     }
 
     /**
      *
-     * POST hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&modName='New Dataset'
+     * PUT
+     * hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&modName='New
+     * Dataset'
      *
-     * //TODO: should be an HTTP PUT
      *
      * @param mapId
      *            ID of map record or folder to be modified
@@ -715,7 +716,7 @@ public class MapResource {
      *            Flag for either dataset or folder
      * @return jobId Success = True/False
      */
-    @POST
+    @PUT
     @Path("/modify")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
@@ -745,10 +746,7 @@ public class MapResource {
             handleError(e, null, null);
         }
 
-        JSONObject json = new JSONObject();
-        json.put("success", true);
-
-        return Response.ok(json.toJSONString()).build();
+        return Response.ok().build();
     }
 
     /**
