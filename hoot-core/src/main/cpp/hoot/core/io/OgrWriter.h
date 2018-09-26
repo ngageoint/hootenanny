@@ -56,7 +56,6 @@ namespace hoot
 
 class Feature;
 class Layer;
-class Schema;
 class OsmMap;
 class ScriptTranslator;
 class ElementInputStream;

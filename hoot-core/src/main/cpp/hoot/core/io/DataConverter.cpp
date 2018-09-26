@@ -103,8 +103,8 @@ void ogrWriterThread::run()
 {
   // Messing with these parameters did not improve performance...
   // http://trac.osgeo.org/gdal/wiki/ConfigOptions
-  //CPLSetConfigOption("GDAL_CACHEMAX", "512" );
-  //CPLSetConfigOption("FGDB_BULK_LOAD", "YES");
+  // e.g. using CPLSetConfigOption to set "GDAL_CACHEMAX" to "512"
+  // or using CPLSetConfigOption to set "FGDB_BULK_LOAD" to "YES"
 
   //  Create an isolate for our thread
   v8::Isolate::CreateParams params;
