@@ -52,6 +52,7 @@
 
 	<oauth:resource-details-service
 		id="resourceDetails">
+		<!-- When editing, also see hoot-services/src/main/resources/conf/hoot-services.conf.in -->
 		<oauth:resource id="openStreetMap"
 			key="4aiqf3gHIWVcKDu0V8Xx6h6I2QYfJ7ClCK8xhj2Z"
 			secret="glOzMrdYh86WbLbMsPP6uXC4gWR4ccDrDdY5LBwj"
