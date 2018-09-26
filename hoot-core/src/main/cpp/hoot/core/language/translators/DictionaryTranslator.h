@@ -99,6 +99,8 @@ public:
 
   void setTokenizeInput(bool tokenize) { _tokenizeInput = tokenize; }
 
+  virtual void setId(const QString /*id*/) {}
+
 private:
 
   bool _tokenizeInput;

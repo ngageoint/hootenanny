@@ -75,6 +75,13 @@ public:
    * @return a language name if a language was detected; an empty string otherwise
    */
   virtual QString getDetectedLanguage() const = 0;
+
+  /**
+   * TODO
+   *
+   * @param id
+   */
+  virtual void setId(const QString id) = 0;
 };
 
 }

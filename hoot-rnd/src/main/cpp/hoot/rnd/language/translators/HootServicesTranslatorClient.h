@@ -75,6 +75,8 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  virtual void setId(const QString id) { _id = id; }
+
 protected:
 
   //the source languages to tell the translator which languages to translate to English from; at
@@ -121,6 +123,8 @@ private:
   bool _skipWordsInEnglishDict;
 
   static bool _loggedCacheMaxReached;
+
+  QString _id;
 
   /**
    * Verifies that every language specified for this translator is supported by the server

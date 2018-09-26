@@ -1628,14 +1628,14 @@ bool OsmSchema::isArea(const Tags& t, const ElementType& type) const
 
 bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList) const
 {
-  LOG_VART(tagList.size());
+  //LOG_VART(tagList.size());
   for (int i = 0; i < tagList.size(); i++)
   {
     QStringList tagParts = tagList.at(i).split("=");
     const QString key = tagParts[0];
-    LOG_VART(key);
+    //LOG_VART(key);
     const QString value = tagParts[1];
-    LOG_VART(value);
+    //LOG_VART(value);
     if ((value == "*" && tags.contains(key)) || (tags.get(key).toLower() == value))
     {
       return true;

@@ -133,6 +133,7 @@ void ImplicitTypeTaggerBase::setConfiguration(const Settings& conf)
         confOptions.getLanguageTranslationTranslator()));
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(confOptions.getLanguageTranslationSourceLanguages());
+    _translator->setId("ImplicitTypeTaggerBase");
   }
 }
 

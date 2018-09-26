@@ -106,7 +106,7 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
       const QString name1 = names1.at(i);
       for (int j = 0; j < names2.size(); j++)
       {
-        const QString name2 = names2.at(i);
+        const QString name2 = names2.at(j);
         const double s = _d->compare(name1, name2);
         if (s > bestScore)
         {
@@ -132,6 +132,7 @@ QStringList TranslateStringDistance::_getNamesToScore(const QString name) const
     const QString translatedName = _translator->translate(name.trimmed());
     if (!translatedName.isEmpty())
     {
+      LOG_VART(translatedName);
       names.append(translatedName);
     }
   }

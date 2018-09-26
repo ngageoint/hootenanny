@@ -75,6 +75,7 @@ _skipWordsInEnglishDict(true)
 
 HootServicesTranslatorClient::~HootServicesTranslatorClient()
 {
+  LOG_INFO("ID: " << _id);
   LOG_INFO(
     "Made " << _numTranslationsMade << " successful translations on " <<
     _numTranslationsAttempted << " attempts.");
@@ -360,7 +361,8 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
 
   if (!_translatedText.isEmpty())
   {
-    LOG_TRACE("Translated: " << textToTranslate << " to English as: " << _translatedText);
+    //TODO: change logging
+    LOG_DEBUG("Translated: " << textToTranslate << " to English as: " << _translatedText);
     _numTranslationsMade++;
     if (_numTranslationsMade % _statusUpdateInterval == 0)
     {

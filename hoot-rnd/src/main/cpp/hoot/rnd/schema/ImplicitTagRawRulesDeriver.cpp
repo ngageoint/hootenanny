@@ -83,6 +83,7 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
         options.getLanguageTranslationTranslator()));
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(options.getLanguageTranslationSourceLanguages());
+    _translator->setId("ImplicitTagRawRulesDeriver");
   }
 }
 
