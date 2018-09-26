@@ -2638,15 +2638,23 @@ The threshold at which a review is called a review for PoiPolygon. See
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
-=== poi.polygon.translate.tag.values.to.english
+=== poi.polygon.translate.addresses.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
+address.  This can have significant impact on the runtime performance of conflation when enabled.
+The configuration option, 'language.translation.translator', controls which translator is used.
+
+=== poi.polygon.translate.types.to.english
 
 * Data Type: bool
 * Default Value: `false`
 
 If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
-schema or one that is part of an address.  This can have significant impact on the runtime
-performance of conflation when enabled.  The configuration option,
-'language.translation.translator', controls which translator is used.
+schema.  This can have significant impact on the runtime performance of conflation when enabled.
+The configuration option, 'language.translation.translator', controls which translator is used.
 
 === poi.polygon.type.score.threshold
 

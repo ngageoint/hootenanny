@@ -98,6 +98,7 @@ public:
 
 private:
 
+  bool _tokenizeInput;
   QSet<QString> _streetTypes;
   QRegExp _whiteSpace;
 

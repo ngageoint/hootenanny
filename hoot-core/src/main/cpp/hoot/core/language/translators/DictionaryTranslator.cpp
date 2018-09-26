@@ -48,7 +48,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ToEnglishTranslator, DictionaryTranslator)
 
-DictionaryTranslator::DictionaryTranslator()
+DictionaryTranslator::DictionaryTranslator() :
+_tokenizeInput(true)
 {
   // if this assertion isn't true then bad things will happen when converting between QString and
   // UnicodeString
@@ -67,7 +68,7 @@ DictionaryTranslator::DictionaryTranslator()
 
 QString DictionaryTranslator::translate(const QString textToTranslate)
 {
-  return toEnglish(textToTranslate, false);
+  return toEnglish(textToTranslate, _tokenizeInput);
 }
 
 QString DictionaryTranslator::toEnglish(const QString& input, const bool tokenize)

@@ -83,7 +83,7 @@ public:
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
-    settings.set("poi.polygon.translate.tag.values.to.english", "true");
+    settings.set("poi.polygon.translate.types.to.english", "true");
     boost::shared_ptr<DictionaryTranslator> translator(new DictionaryTranslator());
     PoiPolygonTypeScoreExtractor::setTranslator(translator);
     uut.setConfiguration(settings);
@@ -94,7 +94,7 @@ public:
     way1->getTags().set("amenity", "Fahrscheinschalter");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    settings.set("poi.polygon.translate.tag.values.to.english", "false");
+    settings.set("poi.polygon.translate.types.to.english", "false");
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }

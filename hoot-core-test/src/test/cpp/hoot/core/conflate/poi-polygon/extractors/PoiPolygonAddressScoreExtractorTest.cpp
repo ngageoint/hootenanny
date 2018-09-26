@@ -287,8 +287,9 @@ public:
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
-    settings.set("poi.polygon.translate.tag.values.to.english", "true");
+    settings.set("poi.polygon.translate.addresses.to.english", "true");
     boost::shared_ptr<DictionaryTranslator> translator(new DictionaryTranslator());
+    translator->setTokenizeInput(false);
     PoiPolygonAddressScoreExtractor::setTranslator(translator);
     uut.setConfiguration(settings);
 
@@ -312,7 +313,7 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
-    settings.set("poi.polygon.translate.tag.values.to.english", "false");
+    settings.set("poi.polygon.translate.addresses.to.english", "false");
     uut.setConfiguration(settings);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }

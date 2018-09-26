@@ -57,7 +57,7 @@ _translateTagValuesToEnglish(false)
 void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  _translateTagValuesToEnglish = config.getPoiPolygonTranslateTagValuesToEnglish();
+  _translateTagValuesToEnglish = config.getPoiPolygonTranslateAddressesToEnglish();
   if (_translateTagValuesToEnglish)
   {
     assert(_translator);
@@ -74,7 +74,8 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
                                                 const ConstElementPtr& poly) const
 {
   //Experimented with partial addresses matches in the past and it had no positive affect.  Search
-  //the history for this class to see examples, if its worth experimenting with again at some point.
+  //the history for this class to see examples, to see if its worth experimenting with again at
+  //some point.
 
   QList<PoiPolygonAddress> polyAddresses;
   //see if the poly has any address
