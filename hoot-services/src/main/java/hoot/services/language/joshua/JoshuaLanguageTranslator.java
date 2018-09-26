@@ -35,6 +35,8 @@ import java.net.Socket;
 import java.io.InputStream;
 import java.io.DataOutputStream;
 
+import java.lang.CloneNotSupportedException;
+
 import java.nio.charset.Charset;
 
 import java.util.Map;
@@ -123,9 +125,10 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
   /**
    * @see SupportedLanguageConsumer
    */
-  public SupportedLanguage[] getSupportedLanguages()
+  public SupportedLanguage[] getSupportedLanguages() throws CloneNotSupportedException
   {
-    return langsConfigReader.getSupportedLanguages().clone();
+    //return langsConfigReader.getSupportedLanguages().clone();
+    return SupportedLanguage.cloneArray(langsConfigReader.getSupportedLanguages());
   }
 
   /**

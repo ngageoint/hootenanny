@@ -70,7 +70,10 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
 }
 
 void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
-{
+{  
+  LOG_VARD(path);
+  LOG_VARD(cs->hasMoreChanges());
+
   QFileInfo info(path);
   info.setCaching(false);
   QString file = info.baseName();
@@ -187,6 +190,8 @@ void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
 
 void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
 {
+  LOG_TRACE("Writing change for " << n << "...");
+
   writer.writeStartElement("node");
   long id = n->getId();
   if (_change.getType() == Change::Create)
@@ -231,8 +236,12 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
         it.key() != MetadataTags::HootHash())
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", _invalidCharacterRemover.removeInvalidCharacters(it.key()));
-      writer.writeAttribute("v", _invalidCharacterRemover.removeInvalidCharacters(it.value()));
+      writer.writeAttribute(
+        "k",
+        _invalidCharacterHandler.removeInvalidCharacters(it.key()));
+      writer.writeAttribute(
+        "v",
+        _invalidCharacterHandler.removeInvalidCharacters(it.value()));
       writer.writeEndElement();
     }
   }
@@ -251,6 +260,8 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
 
 void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
 {
+  LOG_TRACE("Writing change for " << w << "...");
+
   writer.writeStartElement("way");
   long id = w->getId();
   if (_change.getType() == Change::Create)
@@ -305,8 +316,12 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
     if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", _invalidCharacterRemover.removeInvalidCharacters(tit.key()));
-      writer.writeAttribute("v", _invalidCharacterRemover.removeInvalidCharacters(tit.value()));
+      writer.writeAttribute(
+        "k",
+        _invalidCharacterHandler.removeInvalidCharacters(tit.key()));
+      writer.writeAttribute(
+        "v",
+        _invalidCharacterHandler.removeInvalidCharacters(tit.value()));
       writer.writeEndElement();
     }
   }
@@ -324,6 +339,8 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
 
 void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
 {
+  LOG_TRACE("Writing change for " << r << "...");
+
   writer.writeStartElement("relation");
   long id = r->getId();
   if (_change.getType() == Change::Create)
@@ -369,7 +386,9 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
       memberId = newMemberId;
     }
     writer.writeAttribute("ref", QString::number(memberId));
-    writer.writeAttribute("role", _invalidCharacterRemover.removeInvalidCharacters(e.role));
+    writer.writeAttribute(
+      "role",
+      _invalidCharacterHandler.removeInvalidCharacters(e.role));
     writer.writeEndElement();
   }
 
@@ -383,8 +402,12 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", _invalidCharacterRemover.removeInvalidCharacters(tit.key()));
-      writer.writeAttribute("v", _invalidCharacterRemover.removeInvalidCharacters(tit.value()));
+      writer.writeAttribute(
+        "k",
+        _invalidCharacterHandler.removeInvalidCharacters(tit.key()));
+      writer.writeAttribute(
+        "v",
+        _invalidCharacterHandler.removeInvalidCharacters(tit.value()));
       writer.writeEndElement();
     }
   }
@@ -393,7 +416,9 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", "type");
-    writer.writeAttribute("v", _invalidCharacterRemover.removeInvalidCharacters(r->getType()));
+    writer.writeAttribute(
+      "v",
+      _invalidCharacterHandler.removeInvalidCharacters(r->getType()));
     writer.writeEndElement();
   }
 

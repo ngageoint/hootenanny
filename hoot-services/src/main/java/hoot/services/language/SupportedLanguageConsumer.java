@@ -27,6 +27,8 @@
 
 package hoot.services.language;
 
+import java.lang.CloneNotSupportedException;
+
 /**
  * Interface for a language app that has supported languages
  */
@@ -37,7 +39,7 @@ public interface SupportedLanguageConsumer
    *
    * @return an array of supported languages
    */
-  SupportedLanguage[] getSupportedLanguages();
+  SupportedLanguage[] getSupportedLanguages() throws CloneNotSupportedException;
 
   /**
    * Determines whether this language available for the given app (has it been activated; 

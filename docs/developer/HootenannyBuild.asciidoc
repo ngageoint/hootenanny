@@ -81,7 +81,7 @@ Running Hootenanny tests is covered in a subsequent section of this document.
 
 Make files of note:
 
-* Makefile.old
+* Makefile.hoot
 * Makefile.am
 * hoot-services/Makefile
 

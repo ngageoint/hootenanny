@@ -37,6 +37,7 @@
 #include <QNetworkReply>
 #include <QString>
 #include <QUrl>
+#include <QtNetwork/QNetworkRequest>
 
 namespace hoot
 {
@@ -58,6 +59,18 @@ public:
     QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
     const QByteArray& data = QByteArray());
   /**
+   * @brief networkRequest Function to make the actual request
+   * @param url URL for the request
+   * @param headers collection of known headers to set on the request
+   * @param http_op HTTP operation (GET, POST, or PUT), GET is default
+   * @param data POST data as a QByteArray
+   * @return success
+   */
+  bool networkRequest(QUrl url,
+    const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+    QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
+    const QByteArray& data = QByteArray());
+  /**
    * @brief getResponseContent
    * @return HTTP response content
    */
@@ -75,6 +88,8 @@ public:
   QString getErrorString() { return _error; }
 
 private:
+  bool _networkRequest(QUrl url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+                       QNetworkAccessManager::Operation http_op, const QByteArray& data);
   /**
    * @brief _getHttpResponseCode Get the HTTP response code from the response object
    * @param reply Network reply object

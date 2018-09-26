@@ -226,7 +226,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 {
   LOG_TRACE("Getting remapped ID for element ID: " << eid << "...");
 
-  LOG_VART(_remapIds);
+  //LOG_VART(_remapIds);
   if (_remapIds == false)
   {
     return eid.getId();

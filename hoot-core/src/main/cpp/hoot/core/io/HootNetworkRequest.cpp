@@ -32,7 +32,6 @@
 
 //  Qt
 #include <QEventLoop>
-#include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QSslConfiguration>
 #include <QtNetwork/QSslSocket>
 
@@ -43,8 +42,27 @@ HootNetworkRequest::HootNetworkRequest()
 {
 }
 
-bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op, const QByteArray& data)
+bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op,
+                                        const QByteArray& data)
 {
+  return _networkRequest(url, QMap<QNetworkRequest::KnownHeaders, QVariant>(), http_op, data);
+}
+
+bool HootNetworkRequest::networkRequest(QUrl url,
+                                        const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+                                        QNetworkAccessManager::Operation http_op,
+                                        const QByteArray& data)
+{
+  return _networkRequest(url, headers, http_op, data);
+}
+
+bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+                                         QNetworkAccessManager::Operation http_op,
+                                         const QByteArray& data)
+{
+  //  Disable logging for the QNetworkAccessManager calls because it logs an error when
+  //  run in a sub-thread.  An exception is thrown below for error handling instead of logging
+  boost::shared_ptr<DisableLog> disable(new DisableLog());
   //  Reset status
   _status = 0;
   _content.clear();
@@ -52,6 +70,11 @@ bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operati
   //  Do HTTP request
   boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
   QNetworkRequest request(url);
+
+  for (QMap<QNetworkRequest::KnownHeaders, QVariant>::const_iterator it = headers.begin(); it != headers.end(); ++it)
+  {
+    request.setHeader(it.key(), it.value());
+  }
 
   if (url.scheme().toLower() == "https")
   {
@@ -81,7 +104,6 @@ bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operati
     reply = pNAM->put(request, data);
     break;
   case QNetworkAccessManager::Operation::PostOperation:
-    request.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "text/xml");
     reply = pNAM->post(request, data);
     break;
   default:
@@ -92,6 +114,8 @@ bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operati
   QEventLoop loop;
   QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
   loop.exec();
+  //  Enable logging
+  disable.reset();
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
   //  According to the documention this shouldn't ever happen

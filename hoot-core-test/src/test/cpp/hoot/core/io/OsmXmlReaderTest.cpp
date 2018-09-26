@@ -42,114 +42,153 @@ class OsmXmlReaderTest : public HootTestFixture
     CPPUNIT_TEST(runUseIdTest);
     CPPUNIT_TEST(runUseStatusTest);
     CPPUNIT_TEST(runUncompressTest);
+    CPPUNIT_TEST(runDecodeCharsTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-    OsmXmlReaderTest()
+  OsmXmlReaderTest()
+  {
+    setResetType(ResetBasic);
+  }
+
+  void runTest()
+  {
+    OsmXmlReader uut;
+
+    OsmMapPtr map(new OsmMap());
+    uut.read("test-files/ToyTestA.osm", map);
+
+    CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+  }
+
+  void runUseIdTest()
+  {
+    OsmXmlReader uut;
+
+    OsmMapPtr map(new OsmMap());
+    uut.setUseDataSourceIds(true);
+    uut.read("test-files/ToyTestA.osm", map);
+
+    CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+
+    long min = 1e9;
+    long max = -1e9;
+    for (NodeMap::const_iterator it = map->getNodes().begin();
+         it != map->getNodes().end(); ++it)
     {
-      setResetType(ResetBasic);
+      const ConstNodePtr& n = it->second;
+      min = std::min(min, n->getId());
+      max = std::max(max, n->getId());
     }
 
-    void runTest()
+    CPPUNIT_ASSERT_EQUAL(-1669793l, min);
+    CPPUNIT_ASSERT_EQUAL(-1669723l, max);
+
+    CPPUNIT_ASSERT(map->containsWay(-1669801));
+    CPPUNIT_ASSERT(map->containsWay(-1669799));
+    CPPUNIT_ASSERT(map->containsWay(-1669797));
+    CPPUNIT_ASSERT(map->containsWay(-1669795));
+  }
+
+  void runUseStatusTest()
+  {
+    OsmXmlReader uut;
+
+    OsmMapPtr map(new OsmMap());
+    uut.setUseDataSourceIds(true);
+    uut.setUseFileStatus(true);
+    uut.setDefaultStatus(Status::Invalid);
+    uut.read("test-files/io/OsmXmlReaderUseStatusTest.osm", map);
+
+    CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(17, (int)map->getWays().size());
+
+    HOOT_STR_EQUALS(Status::Unknown1, map->getWay(-12)->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Conflated, map->getWay(-13)->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown2, map->getWay(-51)->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::EnumEnd + 1, map->getWay(-14)->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::EnumEnd + 2, map->getWay(-15)->getStatus().getEnum());
+
+    HOOT_STR_EQUALS(0, map->getWay(-12)->getStatus().getInput());
+    HOOT_STR_EQUALS(1, map->getWay(-51)->getStatus().getInput());
+    HOOT_STR_EQUALS(2, map->getWay(-14)->getStatus().getInput());
+    HOOT_STR_EQUALS(3, map->getWay(-15)->getStatus().getInput());
+
+    HOOT_STR_EQUALS("Unknown1", map->getWay(-12)->getStatus().toString());
+    HOOT_STR_EQUALS("Unknown2", map->getWay(-51)->getStatus().toString());
+    HOOT_STR_EQUALS("Input003", map->getWay(-14)->getStatus().toString());
+    HOOT_STR_EQUALS("Input004", map->getWay(-15)->getStatus().toString());
+  }
+
+  void runUncompressTest()
+  {
+    const std::string cmd(
+      "gzip -c test-files/ToyTestA.osm > test-output/ToyTestA_compressed.osm.gz");
+    LOG_DEBUG("Running compress command: " << cmd);
+
+    int retVal;
+    if ((retVal = std::system(cmd.c_str())) != 0)
     {
-        OsmXmlReader uut;
-
-        OsmMapPtr map(new OsmMap());
-        uut.read("test-files/ToyTestA.osm", map);
-
-        CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
-        CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+      QString error = QString("Error %1 returned from compress command: %2").arg(retVal).
+        arg(QString::fromStdString(cmd));
+      throw HootException(error);
     }
 
-    void runUseIdTest()
+    OsmXmlReader uut;
+    OsmMapPtr map(new OsmMap());
+    uut.setUseDataSourceIds(true);
+
+    // Excercise the code
+    uut.read("test-output/ToyTestA_compressed.osm.gz", map);
+
+    // Check a few things
+    CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+
+    QFile f("test-output/ToyTestA_compressed.osm.gz");
+    CPPUNIT_ASSERT(f.exists());
+    CPPUNIT_ASSERT(f.remove());
+  }
+
+  //This test ensures that characters not allowed in well-formed XML get decoded as read in.
+  //Qt's XML reading does this for us automatically.
+  void runDecodeCharsTest()
+  {
+    OsmXmlReader uut;
+
+    OsmMapPtr map(new OsmMap());
+    uut.read("test-files/io/OsmXmlReaderTest/runDecodeCharsTest.osm", map);
+
+    int wayCtr = 0;
+    for (WayMap::const_iterator it = map->getWays().begin(); it != map->getWays().end(); ++it)
     {
-        OsmXmlReader uut;
-
-        OsmMapPtr map(new OsmMap());
-        uut.setUseDataSourceIds(true);
-        uut.read("test-files/ToyTestA.osm", map);
-
-        CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
-        CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-
-        long min = 1e9;
-        long max = -1e9;
-        for (NodeMap::const_iterator it = map->getNodes().begin();
-             it != map->getNodes().end(); ++it)
-        {
-          const ConstNodePtr& n = it->second;
-          min = std::min(min, n->getId());
-          max = std::max(max, n->getId());
-        }
-
-        CPPUNIT_ASSERT_EQUAL(-1669793l, min);
-        CPPUNIT_ASSERT_EQUAL(-1669723l, max);
-
-        CPPUNIT_ASSERT(map->containsWay(-1669801));
-        CPPUNIT_ASSERT(map->containsWay(-1669799));
-        CPPUNIT_ASSERT(map->containsWay(-1669797));
-        CPPUNIT_ASSERT(map->containsWay(-1669795));
-    }
-
-    void runUseStatusTest()
-    {
-        OsmXmlReader uut;
-
-        OsmMapPtr map(new OsmMap());
-        uut.setUseDataSourceIds(true);
-        uut.setUseStatusFromFile(true);
-        uut.setDefaultStatus(Status::Invalid);
-        uut.read("test-files/io/OsmXmlReaderUseStatusTest.osm", map);
-
-        CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodes().size());
-        CPPUNIT_ASSERT_EQUAL(17, (int)map->getWays().size());
-
-        HOOT_STR_EQUALS(Status::Unknown1, map->getWay(-12)->getStatus().getEnum());
-        HOOT_STR_EQUALS(Status::Conflated, map->getWay(-13)->getStatus().getEnum());
-        HOOT_STR_EQUALS(Status::Unknown2, map->getWay(-51)->getStatus().getEnum());
-        HOOT_STR_EQUALS(Status::EnumEnd + 1, map->getWay(-14)->getStatus().getEnum());
-        HOOT_STR_EQUALS(Status::EnumEnd + 2, map->getWay(-15)->getStatus().getEnum());
-
-        HOOT_STR_EQUALS(0, map->getWay(-12)->getStatus().getInput());
-        HOOT_STR_EQUALS(1, map->getWay(-51)->getStatus().getInput());
-        HOOT_STR_EQUALS(2, map->getWay(-14)->getStatus().getInput());
-        HOOT_STR_EQUALS(3, map->getWay(-15)->getStatus().getInput());
-
-        HOOT_STR_EQUALS("Unknown1", map->getWay(-12)->getStatus().toString());
-        HOOT_STR_EQUALS("Unknown2", map->getWay(-51)->getStatus().toString());
-        HOOT_STR_EQUALS("Input003", map->getWay(-14)->getStatus().toString());
-        HOOT_STR_EQUALS("Input004", map->getWay(-15)->getStatus().toString());
-    }
-
-    void runUncompressTest()
-    {
-      const std::string cmd("gzip -c test-files/ToyTestA.osm > test-output/ToyTestA_compressed.osm.gz");
-      LOG_DEBUG("Running compress command: " << cmd);
-
-      int retVal;
-      if ((retVal = std::system(cmd.c_str())) != 0)
+      const ConstWayPtr& w = it->second;
+      if (w->getTags().get("note2") == "1")
       {
-        QString error = QString("Error %1 returned from compress command: %2").arg(retVal).
-          arg(QString::fromStdString(cmd));
-        throw HootException(error);
+        HOOT_STR_EQUALS("1 & 2", w->getTags().get("note"));
+        wayCtr++;
       }
-
-      OsmXmlReader uut;
-      OsmMapPtr map(new OsmMap());
-      uut.setUseDataSourceIds(true);
-
-      // Excercise the code
-      uut.read("test-output/ToyTestA_compressed.osm.gz", map);
-
-      // Checka a few things
-      CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
-      CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-
-      QFile f("test-output/ToyTestA_compressed.osm.gz");
-      CPPUNIT_ASSERT(f.exists());
-      CPPUNIT_ASSERT(f.remove());
+      else if (w->getTags().get("note2") == "2")
+      {
+        HOOT_STR_EQUALS("\"3\"", w->getTags().get("note"));
+        wayCtr++;
+      }
+      else if (w->getTags().get("note2") == "3")
+      {
+        HOOT_STR_EQUALS("0", w->getTags().get("note"));
+        wayCtr++;
+      }
+      else if (w->getTags().get("note2") == "4")
+      {
+        HOOT_STR_EQUALS("<2>", w->getTags().get("note"));
+        wayCtr++;
+      }
     }
+    CPPUNIT_ASSERT_EQUAL(4, wayCtr);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmXmlReaderTest, "quick");

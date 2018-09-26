@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import java.nio.charset.Charset;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,10 +67,12 @@ public final class SupportedLanguagesConfigReader
   { 
     String line = null;
     List<SupportedLanguage> supportedLangs = new ArrayList<SupportedLanguage>();
-    BufferedReader reader = new BufferedReader(new InputStreamReader(configStrm));                         
+    BufferedReader reader = 
+      new BufferedReader(new InputStreamReader(configStrm, Charset.forName("UTF-8")));                         
     while ((line = reader.readLine()) != null) 
     {    
       line = line.trim();
+      logger.trace("line: " + line);
       if (!line.isEmpty() && !line.startsWith("#"))
       {  
         String[] lineParts = line.split("\t");
@@ -80,6 +84,7 @@ public final class SupportedLanguagesConfigReader
         String iso6391 = lineParts[0];
         String iso6392 = lineParts[1];
         String langName = lineParts[2];
+        logger.trace(langName);
 
         SupportedLanguage supportedLanguage = new SupportedLanguage();
         //This probably isn't the best way to handle this.  Only a small number of the languages 

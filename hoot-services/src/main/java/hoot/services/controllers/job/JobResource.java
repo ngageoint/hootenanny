@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -48,7 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.job.JobStatus;
 import hoot.services.job.JobStatusManager;
-import hoot.services.models.db.CommandStatus;
+
 
 @Controller
 @Path("")
@@ -59,17 +57,19 @@ public class JobResource {
     @Autowired
     private JobStatusManager jobStatusManager;
 
-    public JobResource() {
-    }
+
+    public JobResource() {}
 
     /**
      * This service allows for tracking the status of Hootenanny jobs launched by other web services.
      *
      * GET hoot-services/job/status/{Job Id}
      *
-     * @param jobId                ID of the job to track.
+     * @param jobId
+     *            ID of the job to track.
      *
-     * @param includeCommandDetail flag to signal whether to include command level detail.
+     * @param includeCommandDetail
+     *            flag to signal whether to include command level detail.
      *
      * @return job status JSON
      */
@@ -78,30 +78,27 @@ public class JobResource {
     @Produces(MediaType.APPLICATION_JSON)
     public JobStatusResponse getJobStatus(@Context HttpServletRequest request, @PathParam("jobId") String jobId,
             @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
-
-        // Users user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
-
-        JobStatusResponse response = new JobStatusResponse();
+        // Users user = (Users)
+        // request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        JobStatusResponse response = null;
 
         try {
             hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
 
             if (jobStatus != null) {
-                response.setJobId(jobId);
-                response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());
-                response.setStatusDetail(jobStatus.getStatusDetail());
-                response.setPercentComplete(jobStatus.getPercentComplete());
-                response.setLastText(jobStatus.getStatusDetail());
-
-                if (includeCommandDetail) {
-                    List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId);
-                    response.setCommandDetail(commandDetail);
-                }
-            } else {
+            	if(includeCommandDetail) {
+            		response = jobStatus.toJobStatusResponse(this.jobStatusManager);
+            	} else {
+            		response = jobStatus.toJobStatusResponse();
+            	}
+            }
+            else {
+            	response = new JobStatusResponse();
                 response.setJobId(jobId);
                 response.setStatus(JobStatus.UNKNOWN.toString());
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             String msg = "Error retrieving job status for job with ID = " + jobId + ".  Cause: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }

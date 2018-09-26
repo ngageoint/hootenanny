@@ -191,7 +191,7 @@ echo "STEP 12: Executing the SQL changeset on the osm api db..."
 echo ""
 hoot changeset-apply $HOOT_OPTS $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
-# we don't have any way in core of applying xml changesets yet
+# no way to apply xml changesets without a rails port instance in place
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""

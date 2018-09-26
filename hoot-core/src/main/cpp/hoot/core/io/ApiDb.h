@@ -159,12 +159,12 @@ public:
   virtual boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
 
   /**
-   * Returns a results iterator to all OSM elements for a given map and element type in the services
-   * database, sorted by element ID.
+   * Returns a paged results iterator to all OSM elements for a given element type in the services
+   * database.
    *
    * @param elementType the element type to query for
    * @param minId the minimum element ID to return; this is more efficient than using an offset when
-   * dealing with very large record sets sorted by ID
+   * dealing with very large record sets
    * @return a result iterator to the elements
    */
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,

@@ -36,19 +36,19 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         Then I select in row 0 the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select in row 0 the "/test-files/dcpoi_clip.osm" dataset
         And I should see row 0 input "Save As" with value "dcpoi_clip"
-        Then I fill row 0 input "Save As" with value "dcpoi_clip"
+        Then I fill row 0 input "Save As" with value "dcpoi_clip_Cucumber"
         Then I select in row 1 the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select in row 1 the "/test-files/mapcruzinpoi_clip.osm" dataset
         And I should see row 1 input "Save As" with value "mapcruzinpoi_clip"
-        Then I fill row 1 input "Save As" with value "mapcruzinpoi_clip"
+        Then I fill row 1 input "Save As" with value "mapcruzinpoi_clip_Cucumber"
         Then I fill "#customSuffix" with "_customSuffix"
         Then I press "big.loud" span with text "Import"
         And I should see "Initializing..."
         And I wait 2 "minutes" to see "Close"
-        Then I press "big.loud" span with text "Close"        
+        Then I press "big.loud" span with text "Close"
         Then I wait 30 "seconds" to not see "Import Multiple Datasets"
-        Then I wait 30 "seconds" to see "dcpoi_clip_customSuffix"
-        And I wait 2 "minutes" to see "mapcruzinpoi_clip_customSuffix"
+        Then I wait 30 "seconds" to see "dcpoi_clip_Cucumber_customSuffix"
+        And I wait 2 "minutes" to see "mapcruzinpoi_clip_Cucumber_customSuffix"
 
     Scenario: Import Directory with Custom Suffix
         When I click on the "Datasets" option in the "settingsSidebar"
@@ -71,13 +71,13 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         Then I should not see "dcpoi_clip_bulkImport_Cucumber" dataset after 30 "seconds"
         Then I should not see "mapcruzinpoi_clip_bulkImport_Cucumber" dataset after 30 "seconds"
         #
-        When I click the "dcpoi_clip_customSuffix" Dataset and the "mapcruzinpoi_clip_customSuffix" Dataset
-        And I context click the "mapcruzinpoi_clip_customSuffix" Dataset
+        When I click the "dcpoi_clip_Cucumber_customSuffix" Dataset and the "mapcruzinpoi_clip_Cucumber_customSuffix" Dataset
+        And I context click the "mapcruzinpoi_clip_Cucumber_customSuffix" Dataset
         And I click the "Delete" context menu item
         And I wait
         And I accept the alert
-        Then I should not see "dcpoi_clip_customSuffix" dataset after 30 "seconds"
-        Then I should not see "mapcruzinpoi_clip_customSuffix" dataset after 30 "seconds"
+        Then I should not see "dcpoi_clip_Cucumber_customSuffix" dataset after 30 "seconds"
+        Then I should not see "mapcruzinpoi_clip_Cucumber_customSuffix" dataset after 30 "seconds"
         #When I click the "AllDataTypesA_directoryImport" Dataset  and the "AllDataTypesB_directoryImport" Dataset
         And I click the "AllDataTypesA_directoryImport" Dataset
         And I context click the "AllDataTypesA_directoryImport" Dataset

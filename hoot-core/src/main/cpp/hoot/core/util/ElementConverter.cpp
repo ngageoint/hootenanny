@@ -145,8 +145,8 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPt
 }
 
 boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtr& e,
-                                                         bool throwError,
-                                                         const bool statsFlag) const
+                                                                bool throwError,
+                                                                const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
 
