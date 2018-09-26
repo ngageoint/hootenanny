@@ -67,17 +67,25 @@ DictionaryTranslator::DictionaryTranslator()
 
 QString DictionaryTranslator::translate(const QString textToTranslate)
 {
-  return toEnglish(textToTranslate);
+  return toEnglish(textToTranslate, false);
 }
 
-QString DictionaryTranslator::toEnglish(const QString& input)
+QString DictionaryTranslator::toEnglish(const QString& input, const bool tokenize)
 {
   LOG_TRACE("Translating: " << input << " to English...");
 
   //Since we have all our translations already in memory, caching translations isn't going to help
-  //here.
+  //any here.
 
-  QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
+  QStringList l;
+  if (tokenize)
+  {
+    l = input.split(_whiteSpace, QString::SkipEmptyParts);
+  }
+  else
+  {
+    l.append(input);
+  }
 
   const QMap<QString, QStringList>& dict = TranslateDictionary::getInstance().getTable();
 

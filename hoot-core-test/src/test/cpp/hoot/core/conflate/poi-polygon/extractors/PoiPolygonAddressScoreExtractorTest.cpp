@@ -46,14 +46,13 @@ namespace hoot
 class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonAddressScoreExtractorTest);
-  //TODO: re-enable
-//  CPPUNIT_TEST(runTagTest);
-//  CPPUNIT_TEST(runCombinedTagTest);
-//  CPPUNIT_TEST(runRangeTest);
-//  CPPUNIT_TEST(runAltFormatTest);
-//  CPPUNIT_TEST(runSubLetterTest);
-//  CPPUNIT_TEST(runWayTest);
-//  CPPUNIT_TEST(runRelationTest);
+  CPPUNIT_TEST(runTagTest);
+  CPPUNIT_TEST(runCombinedTagTest);
+  CPPUNIT_TEST(runRangeTest);
+  CPPUNIT_TEST(runAltFormatTest);
+  CPPUNIT_TEST(runSubLetterTest);
+  CPPUNIT_TEST(runWayTest);
+  CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST(translateTagValueTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -293,32 +292,29 @@ public:
     PoiPolygonAddressScoreExtractor::setTranslator(translator);
     uut.setConfiguration(settings);
 
-    //TODO: re-enable
-//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
-//    map->addNode(node1);
-//    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-//    way1->getTags().set(
-//      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, QString::fromUtf8("123 Hauptstraße"));
-//    map->addWay(way1);
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    map->addNode(node1);
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    way1->getTags().set(
+      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, QString::fromUtf8("123 Hauptstraße"));
+    map->addWay(way1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    //TODO: fix
     NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set(
-      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "Central Border Street 40 81379");
+      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "Central Border Street 40 81379");
     map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
     way2->getTags().set(
-      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME,
+      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2,
       QString::fromUtf8("ZENTRALLÄNDE STRASSE 40 81379 MÜNCHEN"));
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
-    //TODO: re-enable
-//    settings.set("poi.polygon.translate.tag.values.to.english", "false");
-//    uut.setConfiguration(settings);
-//     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+    settings.set("poi.polygon.translate.tag.values.to.english", "false");
+    uut.setConfiguration(settings);
+     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 };
 

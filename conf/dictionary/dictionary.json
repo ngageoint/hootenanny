@@ -75,7 +75,9 @@
     ["#Munich"],
     ["fahrscheinschalter", "ticket office"],
     ["hauptstraße", "main street"],
-    ["ZENTRALLÄNDE STRASSE", "central border street"],
+    ["zentrallände", "central border"],
+    ["strasse", "street"],
+    ["zentrallände strasse", "central border street"],
 
     ["#end"]
 ] }

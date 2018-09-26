@@ -41,9 +41,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonAddressScoreExtractor)
 
-//const QChar PoiPolygonAddressScoreExtractor::ESZETT(0x00DF);
-//const QString PoiPolygonAddressScoreExtractor::ESZETT_REPLACE = "ss";
-
 //These seem to be all OSM standard tag names, so don't need to be in a configuration file.
 const QString PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
 const QString PoiPolygonAddressScoreExtractor::STREET_TAG_NAME = "addr:street";
@@ -186,7 +183,6 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tag
   if (!addressTagValAltFormatRaw.isEmpty())
   {
     addressTagValAltFormatRaw = addressTagValAltFormatRaw.toLower();
-    //addressTagValAltFormatRaw = addressTagValAltFormatRaw.replace(ESZETT, ESZETT_REPLACE);
     const QStringList addressParts = addressTagValAltFormatRaw.split(QRegExp("\\s"));
     if (addressParts.length() >= 2)
     {
@@ -258,6 +254,9 @@ bool PoiPolygonAddressScoreExtractor::elementHasAddress(const ConstElementPtr& e
 void PoiPolygonAddressScoreExtractor::_translateAddressToEnglish(QString& address) const
 {
   const QStringList addressParts = address.simplified().split(" ");
+
+  //123 Main Street
+  //"Central Border Street 40 81379
 
   //Try to translate blocks of consecutive address tokens to cut down on the number of
   //translation calls made.
@@ -365,16 +364,12 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
       _translateAddressToEnglish(translatedAddressTagVal);
     }
     addressTagVal = addressTagVal.toLower();
-    //addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
     LOG_VART(addressTagVal);
     translatedAddressTagVal = translatedAddressTagVal.toLower();
     LOG_VART(translatedAddressTagVal);
     addresses.append(PoiPolygonAddress(addressTagVal, translatedAddressTagVal));
   }
 
-  //street name and house num reversed: ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN
-  //parse through the tokens until you come to a number; assume that is the house number and
-  //everything before it is the street name
   _parseAddressesInAltFormat(tags, addresses);
 }
 

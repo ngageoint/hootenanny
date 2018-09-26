@@ -62,7 +62,7 @@ public:
   /**
    * Translates the given input string into a translation & transliteration of the input.
    */
-  QString toEnglish(const QString& input);
+  QString toEnglish(const QString& input, const bool tokenize = true);
 
   /**
    * @see ToEnglishTranslator; wraps call to toEnglish

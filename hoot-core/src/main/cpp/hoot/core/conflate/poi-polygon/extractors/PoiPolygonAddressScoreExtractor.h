@@ -50,9 +50,6 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonAddressScoreExtractor"; }
 
-  //static const QChar ESZETT;
-  //static const QString ESZETT_REPLACE;
-
   static const QString HOUSE_NUMBER_TAG_NAME;
   static const QString STREET_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME;

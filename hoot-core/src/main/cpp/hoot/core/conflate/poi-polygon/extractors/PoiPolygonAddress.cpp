@@ -81,6 +81,9 @@ bool PoiPolygonAddress::operator==(const PoiPolygonAddress& address) const
 bool PoiPolygonAddress::_addressesMatchesOnSubLetter(const QString polyAddress,
                                                      const QString poiAddress) const
 {
+  LOG_VART(polyAddress);
+  LOG_VART(poiAddress);
+
   /* we're also going to allow sub letter differences be matches; ex "34 elm street" matches
    * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses by
    * accident, and we'd like to at least end up with a review in that situation.
