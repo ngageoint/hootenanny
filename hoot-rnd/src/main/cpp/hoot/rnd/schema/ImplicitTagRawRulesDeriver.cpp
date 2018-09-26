@@ -46,6 +46,8 @@
 namespace hoot
 {
 
+boost::shared_ptr<ToEnglishTranslator> ImplicitTagRawRulesDeriver::_translator;
+
 ImplicitTagRawRulesDeriver::ImplicitTagRawRulesDeriver() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _countFileLineCtr(0),
@@ -74,7 +76,7 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
   setElementCriterion(options.getImplicitTaggingElementCriterion());
 
-  if (_translateAllNamesToEnglish)
+  if (_translateAllNamesToEnglish && !_translator)
   {
     _translator.reset(
       Factory::getInstance().constructObject<ToEnglishTranslator>(

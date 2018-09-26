@@ -61,8 +61,6 @@ public:
   void setAddTopTagOnly(bool add) { _ruleReader->setAddTopTagOnly(add); }
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
-  void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
-  { _translator = translator; }
 
 protected:
 
@@ -109,7 +107,7 @@ private:
   int _maxNameLength;
 
   //translates names to English
-  boost::shared_ptr<ToEnglishTranslator> _translator;
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   QStringList _getNameTokens(const QStringList names) const;
   QStringList _getTranslatedNames(const QStringList names, const Tags& tags);

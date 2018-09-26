@@ -41,56 +41,101 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, TranslateStringDistance)
 
+boost::shared_ptr<ToEnglishTranslator> TranslateStringDistance::_translator;
+
 TranslateStringDistance::TranslateStringDistance(StringDistancePtr d):
   _d(d)
 {
   setConfiguration(conf());
 }
 
-double TranslateStringDistance::compare(const QString& s1, const QString& s2) const
-{
-  QStringList t1;
-  QStringList t2;
-  DictionaryTranslator translator;
-  if (_tokenize)
-  {
-    t1 = translator.toEnglishAll(s1);
-    t2 = translator.toEnglishAll(s2);
-  }
-  else
-  {
-    t1.append(s1);
-    t2.append(s2);
-    t1 = translator.toEnglishAll(t1);
-    t2 = translator.toEnglishAll(t2);
-  }
-
-  double bestScore = -1;
-  QString best1, best2;
-  for (int i = 0; i < t1.size(); i++)
-  {
-    for (int j = 0; j < t2.size(); j++)
-    {
-      double s = _d->compare(t1[i], t2[j]);
-      if (s > bestScore)
-      {
-        bestScore = s;
-        best1 = t1[i];
-        best2 = t2[j];
-      }
-    }
-  }
-
-//  LOG_INFO("Best translation: " << best1 << " and " << best2 <<
-//           " best score: " << bestScore);
-
-  return bestScore;
-}
-
 void TranslateStringDistance::setConfiguration(const Settings& conf)
 {
   ConfigOptions c(conf);
   _tokenize = c.getTranslateStringDistanceTokenize();
+}
+
+double TranslateStringDistance::compare(const QString& s1, const QString& s2) const
+{
+  double bestScore = -1.0;
+  QString best1, best2;
+
+  boost::shared_ptr<DictionaryTranslator> dictTranslator =
+    boost::dynamic_pointer_cast<DictionaryTranslator>(_translator);
+  if (dictTranslator)
+  {
+    QStringList t1;
+    QStringList t2;
+    if (_tokenize)
+    {
+      t1 = dictTranslator->toEnglishAll(s1);
+      t2 = dictTranslator->toEnglishAll(s2);
+    }
+    else
+    {
+      t1.append(s1);
+      t2.append(s2);
+      t1 = dictTranslator->toEnglishAll(t1);
+      t2 = dictTranslator->toEnglishAll(t2);
+    }
+    LOG_VART(t1);
+    LOG_VART(t2);
+
+    for (int i = 0; i < t1.size(); i++)
+    {
+      for (int j = 0; j < t2.size(); j++)
+      {
+        const double s = _d->compare(t1[i], t2[j]);
+        if (s > bestScore)
+        {
+          bestScore = s;
+          best1 = t1[i];
+          best2 = t2[j];
+        }
+      }
+    }
+  }
+  else
+  {
+    const QStringList names1 = _getNamesToScore(s1);
+    const QStringList names2 = _getNamesToScore(s2);
+    LOG_VART(names1);
+    LOG_VART(names2);
+    for (int i = 0; i < names1.size(); i++)
+    {
+      const QString name1 = names1.at(i);
+      for (int j = 0; j < names2.size(); j++)
+      {
+        const QString name2 = names2.at(i);
+        const double s = _d->compare(name1, name2);
+        if (s > bestScore)
+        {
+          bestScore = s;
+          best1 = name1;
+          best2 = name2;
+        }
+      }
+    }
+  }
+
+  LOG_TRACE("Best translation: " << best1 << " and " << best2 << " best score: " << bestScore);
+
+  return bestScore;
+}
+
+QStringList TranslateStringDistance::_getNamesToScore(const QString name) const
+{
+  QStringList names;
+  if (!name.trimmed().isEmpty())
+  {
+    names.append(name.trimmed());
+    const QString translatedName = _translator->translate(name.trimmed());
+    if (!translatedName.isEmpty())
+    {
+      names.append(translatedName);
+    }
+  }
+  return names;
 }
 
 }

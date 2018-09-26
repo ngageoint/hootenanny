@@ -39,6 +39,7 @@
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonRfClassifier.h"
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
+#include "extractors/PoiPolygonNameScoreExtractor.h"
 
 namespace hoot
 {
@@ -144,6 +145,7 @@ private:
   double _typeScoreThreshold;
   QStringList _reviewIfMatchedTypes;
 
+  PoiPolygonNameScoreExtractor _nameScorer;
   double _nameScore;
   double _nameScoreThreshold;
 

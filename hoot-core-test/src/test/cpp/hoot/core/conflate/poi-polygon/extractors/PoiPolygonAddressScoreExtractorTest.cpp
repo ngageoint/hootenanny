@@ -288,10 +288,12 @@ public:
     OsmMapPtr map(new OsmMap());
 
     settings.set("poi.polygon.translate.addresses.to.english", "true");
-    boost::shared_ptr<DictionaryTranslator> translator(new DictionaryTranslator());
-    translator->setTokenizeInput(false);
-    PoiPolygonAddressScoreExtractor::setTranslator(translator);
+    settings.set("language.translation.translator", "hoot::DictionaryTranslator");
     uut.setConfiguration(settings);
+    boost::shared_ptr<DictionaryTranslator> dictTranslator =
+      boost::dynamic_pointer_cast<DictionaryTranslator>(
+        PoiPolygonAddressScoreExtractor::_translator);
+    dictTranslator->setTokenizeInput(false);
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");

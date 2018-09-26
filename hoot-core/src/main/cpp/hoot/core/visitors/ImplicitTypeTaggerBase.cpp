@@ -43,6 +43,8 @@
 namespace hoot
 {
 
+boost::shared_ptr<ToEnglishTranslator> ImplicitTypeTaggerBase::_translator;
+
 ImplicitTypeTaggerBase::ImplicitTypeTaggerBase() :
 _allowTaggingSpecificFeatures(true),
 _elementIsASpecificFeature(false),
@@ -124,7 +126,7 @@ void ImplicitTypeTaggerBase::setConfiguration(const Settings& conf)
   _ruleReader->setAllowWordsInvolvedInMultipleRules(
     confOptions.getImplicitTaggerAllowWordsInvolvedInMultipleRules());
 
-  if (_translateAllNamesToEnglish)
+  if (_translateAllNamesToEnglish && !_translator)
   {
     _translator.reset(
       Factory::getInstance().constructObject<ToEnglishTranslator>(

@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/algorithms/StringDistanceConsumer.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/language/translators/ToEnglishTranslator.h>
 
 // tgs
 #include <tgs/SharedPtr.h>
@@ -38,14 +39,15 @@ namespace hoot
 {
 
 /**
- * First attempts to translate/transliterate the words and phrases in each input string. Multiple
- * variations on the translation may be derived in which case the best matching translation will
- * be used.
+ * First, attempts to translate to English or transliterate the words and phrases in each input
+ * string. Multiple variations on the translation may be derived in which case the best matching
+ * translation will be used.
  */
 class TranslateStringDistance : public StringDistance, public StringDistanceConsumer,
   public Configurable
 {
 public:
+
   static std::string className() { return "hoot::TranslateStringDistance"; }
 
   TranslateStringDistance(StringDistancePtr d);
@@ -65,9 +67,17 @@ public:
 
   virtual QString toString() const { return "Translate " + _d->toString(); }
 
+  static boost::shared_ptr<ToEnglishTranslator> getTranslator() { return _translator; }
+  static void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
+  { _translator = translator; }
+
 private:
+
   StringDistancePtr _d;
   bool _tokenize;
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
+
+  QStringList _getNamesToScore(const QString name) const;
 };
 
 }

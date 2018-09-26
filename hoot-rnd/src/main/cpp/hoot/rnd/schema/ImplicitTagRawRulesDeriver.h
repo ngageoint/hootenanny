@@ -82,8 +82,6 @@ public:
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
   void setElementCriterion(QString criterionName);
-  void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
-  { _translator = translator; }
 
 private:
 
@@ -128,7 +126,7 @@ private:
   boost::shared_ptr<ImplicitTagEligibleCriterion> _elementCriterion;
 
   //translates names to English
-  boost::shared_ptr<ToEnglishTranslator> _translator;
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   void _init();
   void _validateInputs(const QStringList inputs, const QStringList translationScripts,

@@ -127,9 +127,6 @@ public:
   virtual QString getDescription() const
   { return "Scores element type similarity for POI/Polygon conflation"; }
 
-  static void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
-  { _translator = translator; }
-
 private:
 
   double _typeScoreThreshold;

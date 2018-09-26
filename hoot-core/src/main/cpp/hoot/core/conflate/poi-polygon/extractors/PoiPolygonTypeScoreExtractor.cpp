@@ -65,9 +65,13 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
   setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
   _translateTagValuesToEnglish = config.getPoiPolygonTranslateTypesToEnglish();
-  if (_translateTagValuesToEnglish)
+  if (_translateTagValuesToEnglish && !_translator)
   {
-    assert(_translator);
+    _translator.reset(
+      Factory::getInstance().constructObject<ToEnglishTranslator>(
+        config.getLanguageTranslationTranslator()));
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
   }
 }
 

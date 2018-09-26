@@ -28,7 +28,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 #include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
-#include <hoot/core/language/translators/DictionaryTranslator.h>
 
 // Qt
 #include <QTemporaryFile>
@@ -36,6 +35,10 @@
 namespace hoot
 {
 
+/*
+ * The tests in this class will fail with any translator other than the current default,
+ * DictionaryTranslator.
+ */
 class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
@@ -72,8 +75,6 @@ public:
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
-    rawRulesDeriver.setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
@@ -100,8 +101,6 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
-    rawRulesDeriver.setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -142,8 +141,6 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
-    rawRulesDeriver.setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver._sortedCountFile = sortedCountFile;
     rawRulesDeriver._removeDuplicatedKeyTypes();
@@ -175,8 +172,6 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
-    rawRulesDeriver.setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -198,8 +193,6 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(false);
-    rawRulesDeriver.setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -219,8 +212,6 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
-    rawRulesDeriver.setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
 
     try
     {

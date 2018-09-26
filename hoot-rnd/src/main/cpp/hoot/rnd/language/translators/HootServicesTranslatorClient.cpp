@@ -83,7 +83,7 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
       opts.getLanguageTranslationInfoProvider()));
   _infoClient->setConfiguration(conf);
 
-  if (opts.getLanguageTranslationMaxCacheSize()  != -1)
+  if (opts.getLanguageTranslationMaxCacheSize() != -1)
   {
     _translateCache.reset(
       new QCache<QString, TranslationResult>(opts.getLanguageTranslationMaxCacheSize()));

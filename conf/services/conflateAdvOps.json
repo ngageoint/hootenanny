@@ -928,20 +928,6 @@
         	"minvalue":"0.01",
         	"maxvalue":"1.0",
         	"hoot_key":"poi.polygon.type.score.threshold"
-    	    },
-            {
-        	"id":"poipolygon_translate_addresses_to_english",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, Hootenanny will attempt to translate to English the value of any tag that is part of an address.  This can have significant impact on the runtime performance of conflation when enabled.  The configuration option, 'language.translation.translator', controls which translator is used.",
-        	"hoot_key":"poi.polygon.translate.addresses.to.english"
-    	    },
-            {
-        	"id":"poipolygon_translate_types_to_english",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, Hootenanny will attempt to translate to English the value of any tag having a key in its schema.  This can have significant impact on the runtime performance of conflation when enabled.  The configuration option, 'language.translation.translator', controls which translator is used.",
-        	"hoot_key":"poi.polygon.translate.types.to.english"
     	    }
         ]
     },

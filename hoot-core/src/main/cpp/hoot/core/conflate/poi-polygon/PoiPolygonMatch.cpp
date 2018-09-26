@@ -34,7 +34,6 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-#include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistance.h"
 #include "PoiPolygonAdvancedMatcher.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
@@ -194,19 +193,9 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   setReviewEvidenceThreshold(reviewEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
 
-  if (config.getPoiPolygonTranslateTagValuesToEnglish() && !_translator)
-  {
-    _translator.reset(
-      Factory::getInstance().constructObject<ToEnglishTranslator>(
-        config.getLanguageTranslationTranslator()));
-    _translator->setConfiguration(conf);
-    _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
-    PoiPolygonAddressScoreExtractor::setTranslator(_translator);
-    PoiPolygonTypeScoreExtractor::setTranslator(_translator);
-  }
-
   _addressScorer.setConfiguration(conf);
   _typeScorer.setConfiguration(conf);
+  _nameScorer.setConfiguration(conf);
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -583,9 +572,8 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  PoiPolygonNameScoreExtractor nameScorer;
-  nameScorer.setNameScoreThreshold(_nameScoreThreshold);
-  _nameScore = nameScorer.extract(*_map, poi, poly);
+  _nameScorer.setNameScoreThreshold(_nameScoreThreshold);
+  _nameScore = _nameScorer.extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
   LOG_VART(nameMatch);
   return nameMatch ? 1u : 0u;

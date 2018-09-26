@@ -100,10 +100,9 @@ public:
   virtual QString getDescription() const
   { return "Calculates the address similarity score of two features involved in POI/Polygon conflation"; }
 
-  static void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
-  { _translator = translator; }
-
 private:
+
+  friend class PoiPolygonAddressScoreExtractorTest;
 
   //when enabled, will attempt to translate address tags to English
   bool _translateTagValuesToEnglish;

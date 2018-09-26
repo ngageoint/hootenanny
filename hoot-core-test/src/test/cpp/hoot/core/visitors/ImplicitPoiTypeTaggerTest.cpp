@@ -36,6 +36,10 @@
 namespace hoot
 {
 
+/*
+ * The tests in this class will fail with any translator other than the current default,
+ * DictionaryTranslator.
+ */
 class ImplicitPoiTypeTaggerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitPoiTypeTaggerTest);
@@ -100,7 +104,6 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
-    uut.setTranslator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     map->visitRw(uut);
 
     HOOT_STR_EQUALS("name = Alshy Burgers\n"
@@ -177,7 +180,6 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
-    uut.setTranslator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -212,7 +214,6 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
-    uut.setTranslator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -248,7 +249,6 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
-    uut.setTranslator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
     map->visitRw(uut);
     LOG_VART(map->getNode(1)->getTags());
 

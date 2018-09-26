@@ -96,6 +96,8 @@ public:
 
   virtual void setConfiguration(const Settings& /*conf*/) {}
 
+  void setTokenizeInput(bool tokenize) { _tokenizeInput = tokenize; }
+
 private:
 
   bool _tokenizeInput;

@@ -203,14 +203,17 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     _numMatchCandidatesVisited++;
     if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
     {
-      PROGRESS_INFO("Visited " << _numMatchCandidatesVisited << " match candidates.");
+      PROGRESS_DEBUG(
+        "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
+        _map->getElementCount() << " total elements.");
     }
   }
 
   _numElementsVisited++;
   if (_numElementsVisited % _taskStatusUpdateInterval == 0)
   {
-    PROGRESS_INFO("Visited " << _numElementsVisited << " total elements.");
+    PROGRESS_INFO(
+      "Processed " << _numElementsVisited << " / " << _map->getElementCount() << " elements.");
   }
 }
 
