@@ -29,6 +29,9 @@ clean-coverage:
 coverage:
 	$(MAKE) -f Makefile.old coverage
 
+core:
+	$(MAKE) -f Makefile.old core
+
 core-coverage:
 	$(MAKE) -f Makefile.old core-coverage
 
@@ -56,6 +59,7 @@ help:
 	@echo "clean-all               - Clean out all binaries and remove all tables from the DB defined in liquibase.properties"
 	@echo "clean-coverage          - Remove all test code coverage report output."
 	@echo "clean-db                - Remove all tables from the DB defined in liquibase.properties"
+	@echo "core                    - Build just the core without any UI elements"
 	@echo "core-coverage           - If configured '--with-coverage', then creates coverage reports for the core."
 	@echo "coverage                - If configured '--with-coverage', then creates test coverage reports."
 	@echo "docs                    - Build all project documentation."
@@ -77,6 +81,7 @@ help:
 	@echo "ui-test                 - Run user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 	@echo "ui-coverage             - Generate coverage reports for mocha and cucumber user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 	@echo "ui-clean-coverage       - Removes the coverage reports for mocha and cucumber user interface tests."
+	@echo "ui2x-build              - Build the web UI 2.0 js/css dist.  Must enable --with-services configuration options."
 
 test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test
@@ -110,6 +115,9 @@ ui-coverage:
 
 ui-clean-coverage:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-clean-coverage
+
+ui2x-build:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui2x-build
 
 plugins-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old plugins-test
