@@ -3259,7 +3259,7 @@ Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to b
 === task.status.update.interval
 
 * Data Type: int
-* Default Value: `10000`
+* Default Value: `1000`
 
 For commands supporting it, the iteration count at which a status message should be logged. This
 setting may have a negative impact on performance if set to a very low value.

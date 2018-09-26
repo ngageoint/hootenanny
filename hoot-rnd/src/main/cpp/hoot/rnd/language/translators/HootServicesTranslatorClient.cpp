@@ -62,8 +62,21 @@ _performExhaustiveSearch(false),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _numTranslationsMade(0),
 _numTranslationsAttempted(0),
+_untranslatableWords(0),
+_numDetectionsMade(0),
+_numEnglishWordsSkipped(0),
 _skipWordsInEnglishDict(true)
 {
+}
+
+HootServicesTranslatorClient::~HootServicesTranslatorClient()
+{
+  LOG_INFO(
+    "Made " << _numTranslationsMade << " successful translations on " <<
+    _numTranslationsAttempted << " attempts.");
+  LOG_INFO(_untranslatableWords << " words were not translatable.");
+  LOG_INFO(_numEnglishWordsSkipped << " English words were skipped.");
+  LOG_INFO("Language detections made: " << _numDetectionsMade);
 }
 
 void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
@@ -203,6 +216,7 @@ void HootServicesTranslatorClient::_parseTranslateResponse(
   //detected lang won't be populated if no detection was performed
   if (replyObj->count("detectedLang") > 0)
   {
+    _numDetectionsMade++;
     _detectedLang =
       QUrl::fromPercentEncoding(
         QString::fromStdString(replyObj->get<std::string>("detectedLang")).toUtf8());
@@ -273,6 +287,7 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
     LOG_TRACE(
       "Text to be translated determined to already be in English.  Skipping " <<
       "translation; text: " << textToTranslate);
+    _numEnglishWordsSkipped++;
     _translatedText = "";
     return "";
   }

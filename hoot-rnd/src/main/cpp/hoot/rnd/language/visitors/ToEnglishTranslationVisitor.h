@@ -47,7 +47,7 @@ public:
   static std::string className() { return "hoot::ToEnglishTranslationVisitor"; }
 
   ToEnglishTranslationVisitor();
-  ~ToEnglishTranslationVisitor();
+  virtual ~ToEnglishTranslationVisitor();
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
@@ -88,7 +88,7 @@ private:
   long _numElementsWithSuccessfulTagTranslation;
   long _numProcessedTags;
   long _numProcessedElements;
-  long _numDetectionsMade;
+  //long _numDetectionsMade;
   int _taskStatusUpdateInterval;
 };
 

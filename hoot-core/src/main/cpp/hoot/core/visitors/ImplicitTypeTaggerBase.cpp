@@ -314,7 +314,8 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
     if (_numFeaturesParsed % (_statusUpdateInterval / 10) == 0)
     {
       PROGRESS_INFO(
-        "Parsed " << StringUtils::formatLargeNumber(_numFeaturesParsed) << " features from input.");
+        "Parsed " << StringUtils::formatLargeNumber(_numFeaturesParsed) <<
+        " features from input for type tagging.");
     }
   }
 }

@@ -56,6 +56,7 @@ public:
   static std::string className() { return "hoot::HootServicesTranslatorClient"; }
 
   HootServicesTranslatorClient();
+  virtual ~HootServicesTranslatorClient();
 
   virtual QStringList getSourceLanguages() const { return _sourceLangs; }
   virtual void setSourceLanguages(const QStringList langCodes);
@@ -111,6 +112,9 @@ private:
 
   long _numTranslationsMade;
   long _numTranslationsAttempted;
+  long _untranslatableWords;
+  long _numDetectionsMade;
+  long _numEnglishWordsSkipped;
 
   bool _skipWordsInEnglishDict;
 
