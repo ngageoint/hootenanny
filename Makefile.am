@@ -12,43 +12,43 @@ bin/hoot:
 bin/hoot.bin:
 
 osmapidb:
-	$(MAKE) -f Makefile.old osmapidb
+	$(MAKE) -f Makefile.hoot osmapidb
 
 archive:
-	$(MAKE) -f Makefile.old dist
+	$(MAKE) -f Makefile.hoot dist
 
 clean-db:
-	$(MAKE) -f Makefile.old clean-db
+	$(MAKE) -f Makefile.hoot clean-db
 
 clean-all:
-	$(MAKE) -f Makefile.old clean-all
+	$(MAKE) -f Makefile.hoot clean-all
 
 clean-coverage:
-	$(MAKE) -f Makefile.old clean-coverage
+	$(MAKE) -f Makefile.hoot clean-coverage
 
 coverage:
-	$(MAKE) -f Makefile.old coverage
+	$(MAKE) -f Makefile.hoot coverage
 
 core:
-	$(MAKE) -f Makefile.old core
+	$(MAKE) -f Makefile.hoot core
 
 core-coverage:
-	$(MAKE) -f Makefile.old core-coverage
+	$(MAKE) -f Makefile.hoot core-coverage
 
 eclipse:
-	$(MAKE) -f Makefile.old eclipse
+	$(MAKE) -f Makefile.hoot eclipse
 
 licenses:
-	$(MAKE) -f Makefile.old licenses
+	$(MAKE) -f Makefile.hoot licenses
 
 docs: always
-	$(MAKE) -f Makefile.old docs
+	$(MAKE) -f Makefile.hoot docs
 
 requirements:
 	cd docs; $(MAKE) requirements
 
 tmp/schema.png:
-	$(MAKE) -f Makefile.old tmp/schema.png
+	$(MAKE) -f Makefile.hoot tmp/schema.png
 
 help:
 	@echo "help                    - This help message."
@@ -84,61 +84,61 @@ help:
 	@echo "ui2x-build              - Build the web UI 2.0 js/css dist.  Must enable --with-services configuration options."
 
 test:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old test
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot test
 
 test-all:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot test-all
 
 test-all-no-core:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all-no-core
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot test-all-no-core
 
 test-all-core:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all-core
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot test-all-core
 
 test-quick:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-quick
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot test-quick
 
 services-test:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old services-test
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot services-test
 
 services-test-all:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old services-test-all
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot services-test-all
 
 ui-build:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-build
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-build
 
 ui-test:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-test
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-test
 
 ui-coverage:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-coverage
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-coverage
 
 ui-clean-coverage:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-clean-coverage
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-clean-coverage
 
 ui2x-build:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui2x-build
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui2x-build
 
 plugins-test:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old plugins-test
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot plugins-test
 
 services-build:
-	$(MAKE) -f Makefile.old services-build
+	$(MAKE) -f Makefile.hoot services-build
 
 services-docs:
-	$(MAKE) -f Makefile.old services-docs
+	$(MAKE) -f Makefile.hoot services-docs
 
 services-clean:
-	$(MAKE) -f Makefile.old services-clean
+	$(MAKE) -f Makefile.hoot services-clean
 
 services-clean-db:
-	$(MAKE) -f Makefile.old services-clean-db
+	$(MAKE) -f Makefile.hoot services-clean-db
 
 services-clean-coverage:
-	$(MAKE) -f Makefile.old services-clean-coverage
+	$(MAKE) -f Makefile.hoot services-clean-coverage
 
 services-coverage:
-	$(MAKE) -f Makefile.old services-coverage
+	$(MAKE) -f Makefile.hoot services-coverage
 
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:
