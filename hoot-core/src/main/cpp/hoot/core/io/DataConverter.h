@@ -42,14 +42,10 @@
 namespace hoot
 {
 
-class ElementInputStream;
-class ElementOutputStream;
-
 class elementTranslatorThread : public QThread
 {
   Q_OBJECT
-  private:
-    void run();
+  void run();
 
   public:
     QString _translation;
@@ -64,8 +60,7 @@ class elementTranslatorThread : public QThread
 class ogrWriterThread : public QThread
 {
   Q_OBJECT
-  private:
-    void run();
+  void run();
 
   public:
     QString _translation;
