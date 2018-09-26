@@ -39,6 +39,7 @@ public class HootServicesJerseyApplication extends ResourceConfig {
     public HootServicesJerseyApplication() {
         super.packages(true, "hoot.services");
 
+        super.register(HootExceptionHandler.class);
         super.register(MultiPartFeature.class);
         super.register(CORSResponseFilter.class);
         super.register(RequestContextFilter.class);
