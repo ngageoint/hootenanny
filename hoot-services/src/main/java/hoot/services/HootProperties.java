@@ -125,6 +125,10 @@ public final class HootProperties {
     private static final String OSMAPI_DB_HOST;
     private static final String OSMAPI_DB_PORT;
 
+    public static final String OAUTH_REDIRECTURL;
+    public static final String OAUTH_PROVIDERURL;
+    public static final String OAUTH_PATHS_USER;
+
     static {
         try {
             Properties appProperties = new Properties();
@@ -214,13 +218,16 @@ public final class HootProperties {
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
         CHANGESET_DERIVE_BUFFER = getProperty("changesetDeriveBufferDegrees");
-	HOOT_LANGUAGE_TRANSLATOR_APP = getProperty("hootLanguageTranslatorApp");
-	JOSHUA_CONNECTION_POOL_MAX_SIZE = getProperty("joshuaConnectionPoolMaxSize");
-	JOSHUA_CONNECTION_TIMEOUT = getProperty("joshuaConnectionTimeout");
+        HOOT_LANGUAGE_TRANSLATOR_APP = getProperty("hootLanguageTranslatorApp");
+        JOSHUA_CONNECTION_POOL_MAX_SIZE = getProperty("joshuaConnectionPoolMaxSize");
+        JOSHUA_CONNECTION_TIMEOUT = getProperty("joshuaConnectionTimeout");
         JOSHUA_CONNECTION_MAX_WAIT= getProperty("joshuaConnectionMaxWait");
-	JOSHUA_LIBRARY = getProperty("joshuaLibrary");
-	JOSHUA_MAX_MEMORY = getProperty("joshuaMaxMemory");
-	OPEN_NLP_LANGUAGE_DETECTION_MODEL = getProperty("openNlpLanguageDetectionModel");
+        JOSHUA_LIBRARY = getProperty("joshuaLibrary");
+        JOSHUA_MAX_MEMORY = getProperty("joshuaMaxMemory");
+        OPEN_NLP_LANGUAGE_DETECTION_MODEL = getProperty("openNlpLanguageDetectionModel");
+        OAUTH_REDIRECTURL = getProperty("oauthRedirectURL");
+        OAUTH_PROVIDERURL = getProperty("oauthProviderURL");
+        OAUTH_PATHS_USER = getProperty("oauthPathsUser");
 
         // Root folder of tomcat writable locations
         USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";
@@ -258,6 +265,7 @@ public final class HootProperties {
 
         HOOTAPI_DB_URL = "hootapidb://" + HOOTAPI_DB_USER + ":" + HOOTAPI_DB_PASSWORD + "@" + HOOTAPI_DB_HOST + ":" + HOOTAPI_DB_PORT + "/" + HOOTAPI_DB_NAME;
         OSMAPI_DB_URL = "osmapidb://" + OSMAPI_DB_USER + ":" + OSMAPI_DB_PASSWORD + "@" + OSMAPI_DB_HOST + ":" + OSMAPI_DB_PORT + "/" + OSMAPI_DB_NAME;
+
     }
 
     private HootProperties() {}

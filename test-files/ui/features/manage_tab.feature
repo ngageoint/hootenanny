@@ -112,14 +112,14 @@ Feature: Manage Tab
         And I press enter in the "#modifyDatasetFileOutputName" input
         Then I should see an invalid name warning for "#modifyDatasetFileOutputName" input
         # Input valid name
-        Then I fill "#modifyDatasetFileOutputName" with "DC_poi_clip_cucumber"
+        Then I fill "#modifyDatasetFileOutputName" with "DC_poi_clip_Cucumber"
         And I press "big.loud" span with text "Update"
 
     Scenario: Add dataset as reference and secondary dataset
         # Add as reference
-        Then I wait 5 "seconds" to see "tspan" element with text "DC_poi_clip_cucumber"
-        And I click the "DC_poi_clip_cucumber" Dataset
-        And I context click the "DC_poi_clip_cucumber" Dataset
+        Then I wait 5 "seconds" to see "tspan" element with text "DC_poi_clip_Cucumber"
+        And I click the "DC_poi_clip_Cucumber" Dataset
+        And I context click the "DC_poi_clip_Cucumber" Dataset
         Then I should see "Add as Reference Dataset"
         And I click the "Add as Reference Dataset" context menu item
         And I should see "Successfully added this layer to the map!"
@@ -133,7 +133,7 @@ Feature: Manage Tab
     Scenario: Delete folders
         # Delete sub folder and dataset
         And I click the "TestSubFolder" Dataset
-        And I should see "DC_poi_clip_cucumber"
+        And I should see "DC_poi_clip_Cucumber"
         And I context click the "TestSubFolder" Dataset
         And I click the "Delete" context menu item
         And I accept the alert

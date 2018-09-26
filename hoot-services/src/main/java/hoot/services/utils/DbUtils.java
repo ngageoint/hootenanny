@@ -361,7 +361,7 @@ public final class DbUtils {
         }
 
         // Check if we can compare by ID
-        if (org.apache.commons.lang3.StringUtils.isNumeric(input)) {
+        if (org.apache.commons.lang3.math.NumberUtils.isNumber(input)) {
             logger.debug("Verifying that record with ID = {} in '{}' table has previously been created ...",
                     input, table.getTableName());
 

@@ -100,7 +100,6 @@ class ConflateCommand extends ExternalCommand {
         options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("writer.include.conflate.score.tags=false");
         options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("hootapi.db.writer.create.user=true");
         options.add("writer.text.status=true");
         options.add("api.db.email=test@test.com");
 
