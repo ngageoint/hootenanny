@@ -722,7 +722,7 @@ void ImplicitTypeTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& t
 
 QStringList ImplicitTypeTaggerBase::_getNameTokens(const QStringList names) const
 {
-  if (_translateAllNamesToEnglish)
+  if (_translateNamesToEnglish)
   {
     assert(names.size() == 1);
   }
