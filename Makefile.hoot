@@ -1,9 +1,10 @@
 
-# If the silent flag is passed to make then make Maven quiet too.
+# If the silent flag is passed to make then make Maven and npm quiet too.
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	MVN_QUIET="-q"
+	MVN_QUIET='-q'
+	NPM_QUIET='-s' # > /dev/null'
 else
-	HOOT_TEST_DIFF="--diff"
+	HOOT_TEST_DIFF='--diff'
 endif
 
 SHELL=/bin/bash
@@ -21,9 +22,10 @@ default: build
 all: build
 always:
 
-build: makedirs js-make qt-make services-build ui-build ui2x-build model-build conf/dictionary/words.sqlite \
-	conf/dictionary/WordsAbridged.sqlite hoot-services/src/main/resources/language-translation/langdetect-183.bin \
-	osmapidb
+build: core ui-build ui2x-build
+
+core: makedirs js-make qt-make services-build model-build conf/dictionary/words.sqlite osmapidb \
+	conf/dictionary/WordsAbridged.sqlite hoot-services/src/main/resources/language-translation/langdetect-183.bin
 
 makedirs: 
 	mkdir -p $$HOOT_HOME/userfiles/customscript
@@ -324,8 +326,12 @@ ifeq ($(BUILD_UI_TESTS),uitests)
 endif
 
 ui2x-build:
-	cd hoot-ui-2x && npm i && npm run production
-	
+ifeq ($(BUILD_UI_TESTS),uitests)
+	cd hoot-ui-2x \
+	npm i $(NPM_QUIET) \
+	npm run production $(NPM_QUIET)
+endif
+
 ui-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
