@@ -185,7 +185,7 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QStr
   for (int i = 0; i < tagValueParts.length(); i++)
   {
     LOG_VART(tagValueParts.at(i));
-    if (MostEnglishName::getInstance()->isEnglishWord(tagValueParts.at(i)))
+    if (MostEnglishName::getInstance()->isEnglishText(tagValueParts.at(i)))
     {
       englishTagValuePartCount++;
     }

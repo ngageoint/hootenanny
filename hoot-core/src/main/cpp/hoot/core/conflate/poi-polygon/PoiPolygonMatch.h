@@ -190,7 +190,6 @@ private:
 
   bool _skipForReviewTypeDebugging() const;
 
-  bool _isEnglishWord(const QString word) const;
   void _translateTagValues(ConstElementPtr element);
 };
 

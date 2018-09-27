@@ -175,7 +175,7 @@ long MostEnglishName::_loadEnglishWords(QString path)
   return wordCount;
 }
 
-bool MostEnglishName::isEnglishWord(const QString text)
+bool MostEnglishName::isEnglishText(const QString text)
 {
   return scoreName(text) == 1.0;
 }

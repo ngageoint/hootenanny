@@ -300,7 +300,7 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
     const QStringList tokens = textToTranslate.simplified().split(" ");
     for (int i = 0; i < tokens.size(); i++)
     {
-      if (!MostEnglishName::getInstance()->isEnglishWord(tokens.at(i)))
+      if (!MostEnglishName::getInstance()->isEnglishText(tokens.at(i)))
       {
         LOG_TRACE(
           "Text to be translated determined to already be in English.  Skipping " <<

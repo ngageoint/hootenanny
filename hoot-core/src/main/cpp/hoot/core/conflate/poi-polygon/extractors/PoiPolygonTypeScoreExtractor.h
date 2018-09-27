@@ -150,7 +150,6 @@ private:
   bool _failsReligionMatch(const Tags& t1, const Tags& t2) const;
 
   void _translateTagValue(const QString tagKey, QString& tagValue) const;
-  bool _isEnglishWord(const QString word) const;
   static QSet<QString> _getTagValueTokens(const QString category);
 };
 
