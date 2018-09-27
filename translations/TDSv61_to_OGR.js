@@ -71,7 +71,10 @@ tds61 = {
 			print("Require: Back from tds61 Init() dbSchema");
 			// Debug
 		    // var tmp_schema = getDbSchema();
-		    var tmp_schema = buildTds61Schema();
+		    tds61.rawSchema = buildTds61Schema();
+			print("##############################################");
+			translate.dumpSchema(tds61.rawSchema);
+			print("##############################################");
 		}
 
 		// Flip the ge4List table so we can use it for export

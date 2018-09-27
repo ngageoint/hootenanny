@@ -95,6 +95,11 @@ plugins/etds*_rules.js
 plugins/emgcp*_rules.js
 plugins/eggdm*_rules.js
 plugins-local
+translations/*_schema.js
+translations/*_lookup.js
+translations/etds*_rules.js
+translations/emgcp*_rules.js
+translations/eggdm*_rules.js
 translations-local
 **/*.pro.user*
 *.pro.user*
