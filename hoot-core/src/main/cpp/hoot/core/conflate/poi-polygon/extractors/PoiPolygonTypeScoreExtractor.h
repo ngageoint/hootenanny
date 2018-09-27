@@ -140,7 +140,10 @@ private:
   bool _translateTagValuesToEnglish;
   // This translator is static due to the fact this class gets init'd many times by
   // PoiPolygonMatchCreator via PoiPolygonMatch.  Constructing it from a factory for every
-  // instantiation causes performance to suffer.
+  // instantiation causes performance to suffer.  Arguably, it could be static variable on
+  // PoiPolygonMatch and set on score extractors, like this one, instead.  However, doing that won't
+  // allow you to see the the statistics printed out individually by translators, like
+  // HootServicesTranslatorClient.
   static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;

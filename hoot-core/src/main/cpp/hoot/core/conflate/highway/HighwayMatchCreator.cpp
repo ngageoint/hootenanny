@@ -91,10 +91,14 @@ public:
     _threshold(threshold),
     _tagAncestorDiff(tagAncestorDiff)
   {
+    ConfigOptions opts = ConfigOptions();
     _neighborCountMax = -1;
     _neighborCountSum = 0;
     _elementsEvaluated = 0;
-    _searchRadius = ConfigOptions().getSearchRadiusHighway();
+    _searchRadius = opts.getSearchRadiusHighway();
+    _numElementsVisited = 0;
+    _numMatchCandidatesVisited = 0;
+    _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
   }
 
   ~HighwayMatchVisitor()
@@ -191,6 +195,21 @@ public:
     if (e->getStatus() == _matchStatus && isMatchCandidate(e))
     {
       checkForMatch(e);
+
+      _numMatchCandidatesVisited++;
+      if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
+      {
+        PROGRESS_DEBUG(
+          "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
+          _map->getElementCount() << " total elements.");
+      }
+    }
+
+    _numElementsVisited++;
+    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << _numElementsVisited << " / " << _map->getElementCount() << " elements.");
     }
   }
 
@@ -248,6 +267,10 @@ private:
   // Used for finding neighbors
   boost::shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
+
+  long _numElementsVisited;
+  long _numMatchCandidatesVisited;
+  int _taskStatusUpdateInterval;
 };
 
 HighwayMatchCreator::HighwayMatchCreator()

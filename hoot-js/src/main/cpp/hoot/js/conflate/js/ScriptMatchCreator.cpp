@@ -92,8 +92,10 @@ public:
     _neighborCountMax = -1;
     _neighborCountSum = 0;
     _elementsEvaluated = 0;
-    _elementsVisited = 0;
     _maxGroupSize = 0;
+    _numElementsVisited = 0;
+    _numMatchCandidatesVisited = 0;
+    _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
 
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
@@ -421,18 +423,21 @@ public:
     if (isMatchCandidate(e))
     {
       checkForMatch(e);
-    }
-    _elementsVisited++;
-    if (_elementsVisited % 1000 == 0 && Log::getInstance().getLevel() <= Log::Info)
-    {
-      QString msg =
-        "Match candidates: " + QString::number(_elementsEvaluated) + " / " +
-        QString::number(_elementsVisited);
-      if (Log::getInstance().getLevel() <= Log::Debug)
+
+      _numMatchCandidatesVisited++;
+      if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
       {
-        msg += "; _neighborCountSum: " + QString::number(_neighborCountSum);
+        PROGRESS_DEBUG(
+          "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
+          getMap()->getElementCount() << " total elements.");
       }
-      PROGRESS_INFO(msg);
+    }
+    _numElementsVisited++;
+    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << _numElementsVisited << " / " <<
+        getMap()->getElementCount() << " elements.");
     }
   }
 
@@ -453,7 +458,6 @@ private:
   int _neighborCountSum;
   long _elementCount;
   int _elementsEvaluated;
-  long _elementsVisited;
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _mt;
   boost::shared_ptr<PluginContext> _script;
@@ -471,6 +475,10 @@ private:
   //Javascript rules file used for the generic conflation
   double _customSearchRadius;
   QString _scriptPath;
+
+  long _numElementsVisited;
+  long _numMatchCandidatesVisited;
+  int _taskStatusUpdateInterval;
 };
 
 ScriptMatchCreator::ScriptMatchCreator()
