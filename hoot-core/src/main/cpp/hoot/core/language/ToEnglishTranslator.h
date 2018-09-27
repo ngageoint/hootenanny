@@ -77,7 +77,8 @@ public:
   virtual QString getDetectedLanguage() const = 0;
 
   /**
-   * TODO
+   * Sets a unique ID for the translator; useful when many callers use different translator
+   * instantiations during the same execution
    *
    * @param id
    */

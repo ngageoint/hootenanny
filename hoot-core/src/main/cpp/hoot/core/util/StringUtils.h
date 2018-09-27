@@ -79,10 +79,11 @@ public:
   static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
 
   /**
-   * TODO
+   * Determines if text is a number
    *
-   * @param input
-   * @return
+   * @param input text to examine
+   * @return true if the input is a number; false otherwise
+   * @todo only tested against longs
    */
   static bool isNumber(const QString input);
 };

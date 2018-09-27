@@ -150,16 +150,13 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QStr
   LOG_VART(tagKey);
   LOG_VART(tagValue);
 
-  //If the tag is already in a building/poi category, then it must already be in English and
-  //no translation is required.  Otherwise, skip address keys b/c we'll translate those later
-  //with the address extractor, and don't try to translate any words that are already in English.
-
-  //TODO: bit of a hack
+  //don't care about urls
   if (tagValue.toLower().startsWith("http://"))
   {
     return;
   }
 
+  //If the tag key is not in the categories we're interested in, pass.
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance()
       .getCategories(tagKey, tagValue)
@@ -172,13 +169,16 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QStr
     return;
   }
 
-  //TODO: should this also have use and/or building categories be added here?
+  //If the tag key is already OSM, then no need to translate it.
+  //TODO: Should this also have use and/or building categories be added here?
   if (_getTagValueTokens("poi").contains(tagValue))
   {
     LOG_TRACE("Input tag value to translate: " << tagValue << " is already a poi tag value.");
     return;
   }
 
+  //Remove the underscore translator and check to see if each token is an English word.  If all the
+  //tokens are, then skip translation.
   const QStringList tagValueParts = tagValue.split("_");
   LOG_VART(tagValueParts);
   int englishTagValuePartCount = 0;
@@ -198,6 +198,8 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QStr
     return;
   }
 
+  //Translate the whole phrase, as the translator may be able to derive context from more than
+  //one word.
   const QString tagValueTemp = tagValue.toLower().simplified().replace("_", " ");
   LOG_VART(tagValueTemp);
   QString translatedTagValue = _translator->translate(tagValueTemp).toLower();

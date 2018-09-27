@@ -76,46 +76,47 @@ public:
   static const MostEnglishNamePtr& getInstance();
 
   /**
-   * TODO
+   * Returns the most English name tag value from a set of tags
    *
-   * @param tags
-   * @return
+   * @param tags input to examine
+   * @return the single name that has the highest resemblance to English text
    */
   QString getMostEnglishName(const Tags& tags);
 
   /**
-   * TODO
+   * Scores input as to how likely it is to be English text
    *
-   * @param n
-   * @return
+   * @param text input to examine
+   * @return a score from 0.0 to 1.0 with 1.0 indicating the highest likelihood that the input is
+   * English text
    */
-  double scoreName(const QString n);
+  double scoreName(const QString text);
 
   void setConfiguration(const Settings& conf);
 
   /**
-   * TODO
+   * Determines if a single input is in the English dictionary
    *
-   * @param word
-   * @return
+   * @param text input to examine
+   * @return true if the input is in the English dictionary; false otherwise
    */
-  bool isInDictionary(const QString word);
+  bool isInDictionary(const QString text);
 
   /**
-   * TODO
+   * Determines if all inputs are in the English dictionary
    *
-   * @param words
-   * @return
+   * @param texts input to examine
+   * @return true if all text inputs are in the English dictionary; false otherwise
    */
-  bool areAllInDictionary(const QStringList words);
+  bool areAllInDictionary(const QStringList texts);
 
   /**
-   * TODO
+   * Determines if the input is an English word
    *
-   * @param word
-   * @return
+   * @param text input to examine
+   * @return true if the input is determined to be English text; false otherwise
    */
-  bool isEnglishWord(const QString word);
+  bool isEnglishText(const QString text);
 
 private:
 

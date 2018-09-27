@@ -123,16 +123,16 @@ const QSet<QString>& MostEnglishName::_getWords()
   return _englishWords;
 }
 
-bool MostEnglishName::isInDictionary(const QString word)
+bool MostEnglishName::isInDictionary(const QString text)
 {
-  return _getWords().contains(word.toLower());
+  return _getWords().contains(text.toLower());
 }
 
-bool MostEnglishName::areAllInDictionary(const QStringList words)
+bool MostEnglishName::areAllInDictionary(const QStringList texts)
 {
-  for (int i = 0; i < words.size(); i++)
+  for (int i = 0; i < texts.size(); i++)
   {
-    if (!_getWords().contains(words.at(i).toLower()))
+    if (!_getWords().contains(texts.at(i).toLower()))
     {
       return false;
     }
@@ -175,14 +175,14 @@ long MostEnglishName::_loadEnglishWords(QString path)
   return wordCount;
 }
 
-bool MostEnglishName::isEnglishWord(const QString word)
+bool MostEnglishName::isEnglishWord(const QString text)
 {
-  return scoreName(word) == 1.0;
+  return scoreName(text) == 1.0;
 }
 
-double MostEnglishName::scoreName(const QString n)
+double MostEnglishName::scoreName(const QString text)
 {
-  QStringList words = _tokenizer.tokenize(n);
+  QStringList words = _tokenizer.tokenize(text);
 
   double score = 0;
   int characters = 0;

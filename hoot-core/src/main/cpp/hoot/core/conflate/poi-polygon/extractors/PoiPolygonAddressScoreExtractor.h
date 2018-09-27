@@ -90,10 +90,10 @@ public:
   static bool elementHasAddress(const ConstElementPtr& element, const OsmMap& map);
 
   /**
-   * TODO
+   * Determines if text is an OSM address tag key
    *
-   * @param tagKey
-   * @return
+   * @param tagKey input to examine
+   * @return true if the input is an OSM address tag key; false otherwise
    */
   static bool isAddressTagKey(const QString tagKey);
 
