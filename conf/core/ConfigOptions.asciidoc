@@ -3332,6 +3332,16 @@ options.
 * Default Value: `true`
 
 Set to true if the strings should be tokenized (split into words) before translating the values.
+Only applies if language.translation.translator is set to hoot::DictionaryTranslator.
+
+=== translate.string.distance.translate.all
+
+* Data Type: bool
+* Default Value: `true`
+
+If true and language.translation.translator is set to hoot::DictionaryTranslator, will attempt to
+retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
+translation is retrieved.
 
 === translated.tag.differencer.ignore.list
 

@@ -95,10 +95,12 @@ QString DictionaryTranslator::toEnglish(const QString& input, const bool tokeniz
     QString s = l[i].toLower();
     if (dict.contains(s))
     {
+      LOG_TRACE("Found translation for " << s << " in dictionary.");
       l[i] = dict[s][0];
     }
     else
     {
+      LOG_TRACE("Translation for " << s << " not found in dictionary.  Transliterating...");
       l[i] = transliterateToLatin(s);
     }
   }
@@ -116,6 +118,7 @@ QStringList DictionaryTranslator::toEnglishAll(const QString& input)
 
 QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
 {
+  LOG_VART(l);
   QStringList result;
   if (l.size() == 0)
   {
@@ -127,10 +130,12 @@ QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
   int biggestMatchSize = 0;
   QStringList biggestMatch;
   QString s = l[0].toLower();
+  LOG_VART(s);
   // find the biggest list of consecutive words that match our dictionary
   for (QMap<QString, QStringList>::const_iterator it = dict.find(s); it != dict.constEnd(); ++it)
   {
     QStringList from = it.key().split(" ");
+    LOG_VART(from);
     // if this no longer starts with our first word.
     if (from[0] != s)
     {
@@ -149,6 +154,7 @@ QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
         }
       }
     }
+    LOG_VART(match);
 
     // if this is a solid match
     if (match)
@@ -157,14 +163,19 @@ QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
       biggestMatch = it.value();
     }
   }
+  LOG_VART(biggestMatchSize);
+  LOG_VART(biggestMatch);
 
   if (biggestMatchSize == 0)
   {
     biggestMatch.push_back(transliterateToLatin(s));
     biggestMatchSize = 1;
   }
+  LOG_VART(biggestMatchSize);
+  LOG_VART(biggestMatch);
 
   QStringList children = toEnglishAll(l.mid(biggestMatchSize));
+  LOG_VART(children);
   if (children.size() == 0)
   {
     result = biggestMatch;
@@ -186,6 +197,7 @@ QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
       }
     }
   }
+  LOG_VART(result);
 
   return result;
 }

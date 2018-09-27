@@ -41,27 +41,60 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, TranslateStringDistance)
 
+TranslateStringDistance::TranslateStringDistance(StringDistancePtr d) :
+_d(d),
+_tokenize(true),
+_translateAll(true)
+{
+  setConfiguration(conf());
+}
+
 TranslateStringDistance::TranslateStringDistance(StringDistancePtr d,
                                                  boost::shared_ptr<ToEnglishTranslator> translator) :
 _d(d),
+_tokenize(true),
+_translateAll(true),
 _translator(translator)
 {
+  setConfiguration(conf());
 }
 
 void TranslateStringDistance::setConfiguration(const Settings& conf)
 {
-  ConfigOptions c(conf);
-  _tokenize = c.getTranslateStringDistanceTokenize();
+  ConfigOptions config(conf);
+  _tokenize = config.getTranslateStringDistanceTokenize();
+  _translateAll = config.getTranslateStringDistanceTranslateAll();
+
+  if (!_translator)
+  {
+    _initTranslator(conf);
+  }
+}
+
+void TranslateStringDistance::_initTranslator(const Settings& conf)
+{
+  ConfigOptions config(conf);
+  _translator.reset(
+    Factory::getInstance().constructObject<ToEnglishTranslator>(
+      config.getLanguageTranslationTranslator()));
+  _translator->setConfiguration(conf);
+  _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
+  _translator->setId(QString::fromStdString(className()));
 }
 
 double TranslateStringDistance::compare(const QString& s1, const QString& s2) const
 {
+  if (!_translator)
+  {
+    throw HootException("Translator not set.");
+  }
+
   double bestScore = -1.0;
   QString best1, best2;
 
   boost::shared_ptr<DictionaryTranslator> dictTranslator =
     boost::dynamic_pointer_cast<DictionaryTranslator>(_translator);
-  if (dictTranslator)
+  if (_translateAll && dictTranslator)
   {
     QStringList t1;
     QStringList t2;

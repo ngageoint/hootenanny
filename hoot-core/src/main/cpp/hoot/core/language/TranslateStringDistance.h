@@ -51,6 +51,7 @@ public:
   static std::string className() { return "hoot::TranslateStringDistance"; }
 
   TranslateStringDistance() {}
+  TranslateStringDistance(StringDistancePtr d);
   TranslateStringDistance(StringDistancePtr d, boost::shared_ptr<ToEnglishTranslator> translator);
 
   virtual ~TranslateStringDistance() {}
@@ -67,11 +68,18 @@ public:
 
   virtual QString toString() const { return "Translate " + _d->toString(); }
 
+  void setTokenize(bool tokenize) { _tokenize = tokenize; }
+  void setTranslateAll(bool translateAll) { _translateAll = translateAll; }
+
 private:
 
   StringDistancePtr _d;
   bool _tokenize;
+  //if using the dict translator, try to get multiple translations for comparison scoring
+  bool _translateAll;
   boost::shared_ptr<ToEnglishTranslator> _translator;
+
+  void _initTranslator(const Settings& conf);
 
   QStringList _getNamesToScore(const QString name) const;
 };

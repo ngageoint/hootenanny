@@ -83,6 +83,9 @@ public:
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
   void setElementCriterion(QString criterionName);
 
+  static void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
+  { _translator = translator; }
+
 private:
 
   //for testing

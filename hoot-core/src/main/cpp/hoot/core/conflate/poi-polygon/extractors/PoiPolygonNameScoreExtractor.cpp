@@ -67,18 +67,18 @@ boost::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor
 {
   if (_translateTagValuesToEnglish)
   {
+    TranslateStringDistance* translateStringDist =
+      new TranslateStringDistance(
+        StringDistancePtr(
+          new MeanWordSetDistance(
+            StringDistancePtr(
+              new LevenshteinDistance(
+                //why does this fail when the mem var is used?
+                /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))),
+        _translator);
+    translateStringDist->setTranslateAll(false);
     return
-      boost::shared_ptr<NameExtractor>(
-        new NameExtractor(
-          StringDistancePtr(
-            new TranslateStringDistance(
-              StringDistancePtr(
-                new MeanWordSetDistance(
-                  StringDistancePtr(
-                    new LevenshteinDistance(
-                      //TODO: why does this fail when the mem var is used?
-                      /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))),
-               _translator))));
+      boost::shared_ptr<NameExtractor>(new NameExtractor(StringDistancePtr(translateStringDist)));
   }
   else
   {

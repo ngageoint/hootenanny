@@ -119,6 +119,7 @@ private:
   long _numEnglishWordsSkipped;
   long _translationCacheHits;
   long _translationCacheMaxSize;
+  long _translationCacheSize;
 
   bool _skipWordsInEnglishDict;
 

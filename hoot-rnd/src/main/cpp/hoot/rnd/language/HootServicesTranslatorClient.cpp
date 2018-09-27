@@ -69,6 +69,7 @@ _numDetectionsMade(0),
 _numEnglishWordsSkipped(0),
 _translationCacheHits(0),
 _translationCacheMaxSize(-1),
+_translationCacheSize(0),
 _skipWordsInEnglishDict(true)
 {
 }
@@ -85,6 +86,7 @@ HootServicesTranslatorClient::~HootServicesTranslatorClient()
   if (_translateCache)
   {
     LOG_DEBUG("Translation cache hits: " << _translationCacheHits);
+    LOG_DEBUG("Translation cache size: " << _translationCacheSize);
     LOG_DEBUG("Translation cache max possible size: " << _translationCacheMaxSize);
   }
 }
@@ -351,6 +353,7 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
       "Inserting: " << translationResult->translatedText << " for: " << textToTranslate.toLower() <<
       " into translation cache...");
     _translateCache->insert(textToTranslate.toLower(), translationResult);
+    _translationCacheSize = _translateCache->size();
 
     if (!_loggedCacheMaxReached && _translateCache->size() >= _translationCacheMaxSize)
     {

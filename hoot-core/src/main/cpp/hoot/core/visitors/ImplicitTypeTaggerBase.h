@@ -62,6 +62,9 @@ public:
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
 
+  static void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
+  { _translator = translator; }
+
 protected:
 
   virtual bool _visitElement(const ElementPtr& e) = 0;

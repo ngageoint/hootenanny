@@ -230,8 +230,7 @@ private:
     // found experimentally when doing building name comparisons
     double score = NameExtractor(StringDistancePtr(new TranslateStringDistance(
                                  StringDistancePtr(new MeanWordSetDistance(
-                                 StringDistancePtr(new LevenshteinDistance(1.45)))),
-                                 boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))
+                                 StringDistancePtr(new LevenshteinDistance(1.45)))))))
                    .extract(e1, e2);
 
     return score;

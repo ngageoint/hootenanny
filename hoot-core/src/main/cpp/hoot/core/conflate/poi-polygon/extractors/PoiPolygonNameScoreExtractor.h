@@ -85,6 +85,8 @@ public:
 
 private:
 
+  friend class PoiPolygonNameScoreExtractorTest;
+
   double _nameScoreThreshold;
   double _levDist;
 

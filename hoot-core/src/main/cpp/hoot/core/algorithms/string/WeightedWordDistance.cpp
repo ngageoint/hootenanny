@@ -92,6 +92,7 @@ vector<double> WeightedWordDistance::_calculateWeights(QStringList l) const
   for (int i = 0; i < l.size(); i++)
   {
     double w = pow(_dictionary->getWeight(l[i]), _p);
+    LOG_VART(w);
     // if there is no evidence of the word then just set the value to the heighest weight.
     if (w == 0)
     {
@@ -112,13 +113,21 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
   {
     throw HootException("You must specify both a distance function and dictionary.");
   }
+
+  LOG_VART(s1);
+  LOG_VART(s2);
+
   QStringList sl1 = _tokenizer.tokenize(s1);
   QStringList sl2 = _tokenizer.tokenize(s2);
+  LOG_VART(sl1);
+  LOG_VART(sl2);
 
   LOG_TRACE(std::setprecision(8));
   // calculate the relative weight of each word term.
   vector<double> w1 = _calculateWeights(sl1);
   vector<double> w2 = _calculateWeights(sl2);
+  LOG_VART(w1.size());
+  LOG_VART(w2.size());
 
   ScoreMatrix<double> scores(sl1.size() + 1, sl2.size() + 1);
   ScoreMatrix<double> weightedScores(sl1.size() + 1, sl2.size() + 1);
