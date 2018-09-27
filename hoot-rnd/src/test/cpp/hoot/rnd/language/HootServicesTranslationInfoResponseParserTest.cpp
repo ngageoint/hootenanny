@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/language/translators/HootServicesTranslationInfoResponseParser.h>
+#include <hoot/rnd/language/HootServicesTranslationInfoResponseParser.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -41,7 +41,7 @@ namespace hoot
 {
 
 static const QString testInputRoot =
-  "test-files/language/translators/HootServicesTranslationInfoResponseParserTest";
+  "test-files/language/HootServicesTranslationInfoResponseParserTest";
 
 class HootServicesTranslationInfoResponseParserTest : public HootTestFixture
 {

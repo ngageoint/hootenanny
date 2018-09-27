@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot

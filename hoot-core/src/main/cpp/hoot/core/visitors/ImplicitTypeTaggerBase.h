@@ -31,7 +31,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 
 namespace hoot
 {

@@ -39,7 +39,8 @@
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
+#include <hoot/core/language/TranslateStringDistance.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -55,8 +56,9 @@ public:
 
   void runTest()
   {
-    TranslateStringDistance uut(StringDistancePtr(new MeanWordSetDistance(
-                                StringDistancePtr(new ExactStringDistance()))));
+    TranslateStringDistance uut(
+      StringDistancePtr(new MeanWordSetDistance(StringDistancePtr(new ExactStringDistance()))),
+      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, uut.compare("embassy of hungary", "Kedutaan Besar Swiss"),
       0.01);

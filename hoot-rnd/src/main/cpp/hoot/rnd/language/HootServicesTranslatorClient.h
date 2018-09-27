@@ -29,8 +29,8 @@
 #define HOOT_SERVICES_TRANSLATOR_CLIENT_H
 
 // hoot
-#include <hoot/core/language/translators/ToEnglishTranslator.h>
-#include <hoot/rnd/language/translators/TranslationInfoProvider.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/rnd/language/TranslationInfoProvider.h>
 
 // Qt
 #include <QCache>

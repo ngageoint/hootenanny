@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonRfClassifier.h"
 #include "extractors/PoiPolygonTypeScoreExtractor.h"

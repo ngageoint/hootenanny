@@ -53,10 +53,11 @@
 #include <hoot/core/conflate/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
+#include <hoot/core/language/TranslateStringDistance.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 
 // Standard
 #include <fstream>
@@ -208,15 +209,18 @@ void PoiRfClassifier::_createAllExtractors()
                         StringDistancePtr(new ExactStringDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
-                        StringDistancePtr(new ExactStringDistance()))))));
+                        StringDistancePtr(new ExactStringDistance()),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
-                        StringDistancePtr(new ExactStringDistance()))))))));
+                        StringDistancePtr(new ExactStringDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
-                        StringDistancePtr(new ExactStringDistance()))))))));
+                        StringDistancePtr(new ExactStringDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
 
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new LevenshteinDistance()))));
@@ -228,15 +232,18 @@ void PoiRfClassifier::_createAllExtractors()
                         StringDistancePtr(new LevenshteinDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
-                        StringDistancePtr(new LevenshteinDistance()))))));
+                        StringDistancePtr(new LevenshteinDistance()),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
-                        StringDistancePtr(new LevenshteinDistance()))))))));
+                        StringDistancePtr(new LevenshteinDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
-                        StringDistancePtr(new LevenshteinDistance()))))))));
+                        StringDistancePtr(new LevenshteinDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
 
   for (double a = 1.0; a < 1.8; a += 0.05)
   {
@@ -246,7 +253,8 @@ void PoiRfClassifier::_createAllExtractors()
     _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                           StringDistancePtr(new TranslateStringDistance(
                           StringDistancePtr(new MeanWordSetDistance(
-                          StringDistancePtr(new LevenshteinDistance(a)))))))));
+                          StringDistancePtr(new LevenshteinDistance(a)))),
+                          boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   }
 
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
@@ -259,15 +267,18 @@ void PoiRfClassifier::_createAllExtractors()
                         StringDistancePtr(new Soundex()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
-                        StringDistancePtr(new Soundex()))))));
+                        StringDistancePtr(new Soundex()),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
-                        StringDistancePtr(new Soundex()))))))));
+                        StringDistancePtr(new Soundex()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
-                        StringDistancePtr(new Soundex()))))))));
+                        StringDistancePtr(new Soundex()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
 }
 
 void PoiRfClassifier::_createTestExtractors()

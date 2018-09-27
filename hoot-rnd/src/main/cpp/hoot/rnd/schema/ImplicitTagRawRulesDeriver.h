@@ -33,7 +33,7 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
-#include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 
 // Qt
 #include <QString>

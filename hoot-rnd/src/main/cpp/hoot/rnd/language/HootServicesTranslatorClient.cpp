@@ -361,8 +361,7 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
 
   if (!_translatedText.isEmpty())
   {
-    //TODO: change logging
-    LOG_DEBUG("Translated: " << textToTranslate << " to English as: " << _translatedText);
+    LOG_TRACE("Translated: " << textToTranslate << " to English as: " << _translatedText);
     _numTranslationsMade++;
     if (_numTranslationsMade % _statusUpdateInterval == 0)
     {

@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/language/translators/DictionaryTranslator.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
@@ -41,12 +41,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, TranslateStringDistance)
 
-boost::shared_ptr<ToEnglishTranslator> TranslateStringDistance::_translator;
-
-TranslateStringDistance::TranslateStringDistance(StringDistancePtr d):
-  _d(d)
+TranslateStringDistance::TranslateStringDistance(StringDistancePtr d,
+                                                 boost::shared_ptr<ToEnglishTranslator> translator) :
+_d(d),
+_translator(translator)
 {
-  setConfiguration(conf());
 }
 
 void TranslateStringDistance::setConfiguration(const Settings& conf)

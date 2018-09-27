@@ -25,38 +25,45 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
-#define HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
+#ifndef TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
+#define TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
 
 // hoot
-#include <hoot/rnd/language/translators/HootServicesTranslatorClient.h>
-
-// Qt
-#include <QMap>
+#include <hoot/rnd/visitors/ToEnglishTranslationVisitor.h>
+#include <hoot/core/algorithms/StringDistance.h>
 
 namespace hoot
 {
 
 /**
- * This is used to mock the behavior of the translator that makes calls to hoot services.
+ * This is used to check hoot tag English translations against existing known (assumed)
+ * correct translations; e.g. compare hoot's English translation of a tag to that of name:en
  */
-class HootServicesTranslatorMockClient : public HootServicesTranslatorClient
+class ToEnglishTranslationComparisonVisitor : public ToEnglishTranslationVisitor
 {
 
 public:
 
-  static std::string className() { return "hoot::HootServicesTranslatorMockClient"; }
+  static std::string className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
 
-  HootServicesTranslatorMockClient();
+  ToEnglishTranslationComparisonVisitor();
 
-  virtual QString translate(const QString textToTranslate);
-  virtual void setSourceLanguages(const QStringList langCodes);
+  virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual void setConfiguration(const Settings& conf);
+
+  virtual QString getDescription() const
+  { return "Scores selected tag value English translations against known translated tags"; }
 
 private:
 
-  QMap<QString, QString> _mockTranslations;
+  //scores the similarity of the pre-translated and translated texts
+  StringDistancePtr _translationScorer;
+
+  QStringList _preTranslatedTagKeys;
+  QString _preTranslatedVal;
 };
 
 }
 
-#endif // HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
+#endif // TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H

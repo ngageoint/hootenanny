@@ -46,7 +46,8 @@
 #include <hoot/core/conflate/extractors/OverlapExtractor.h>
 #include <hoot/core/conflate/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
+#include <hoot/core/language/TranslateStringDistance.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 
 // Standard
 #include <sstream>
@@ -86,15 +87,18 @@ void BuildingRfClassifier::_createAllExtractors() const
                         StringDistancePtr(new ExactStringDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
-                        StringDistancePtr(new ExactStringDistance()))))));
+                        StringDistancePtr(new ExactStringDistance()),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
-                        StringDistancePtr(new ExactStringDistance()))))))));
+                        StringDistancePtr(new ExactStringDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
-                        StringDistancePtr(new ExactStringDistance()))))))));
+                        StringDistancePtr(new ExactStringDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
 
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new LevenshteinDistance()))));
@@ -106,15 +110,18 @@ void BuildingRfClassifier::_createAllExtractors() const
                         StringDistancePtr(new LevenshteinDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
-                        StringDistancePtr(new LevenshteinDistance()))))));
+                        StringDistancePtr(new LevenshteinDistance()),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
-                        StringDistancePtr(new LevenshteinDistance()))))))));
+                        StringDistancePtr(new LevenshteinDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
-                        StringDistancePtr(new LevenshteinDistance()))))))));
+                        StringDistancePtr(new LevenshteinDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
 
   for (double b = -0.3; b < 0.0; b += 0.1)
   {
@@ -134,7 +141,8 @@ void BuildingRfClassifier::_createAllExtractors() const
     _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                           StringDistancePtr(new TranslateStringDistance(
                           StringDistancePtr(new MeanWordSetDistance(
-                          StringDistancePtr(new LevenshteinDistance(a)))))))));
+                          StringDistancePtr(new LevenshteinDistance(a)))),
+                          boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   }
 
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
@@ -147,15 +155,18 @@ void BuildingRfClassifier::_createAllExtractors() const
                         StringDistancePtr(new Soundex()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
-                        StringDistancePtr(new Soundex()))))));
+                        StringDistancePtr(new Soundex()),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
-                        StringDistancePtr(new Soundex()))))))));
+                        StringDistancePtr(new Soundex()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
-                        StringDistancePtr(new Soundex()))))))));
+                        StringDistancePtr(new Soundex()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
 
   // checking to see if averaging the top portion of word helps. It doesn't appear to make
   // any difference.
@@ -198,15 +209,18 @@ void BuildingRfClassifier::_createAllExtractors() const
                         StringDistancePtr(new KskipBigramDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
-                        StringDistancePtr(new KskipBigramDistance()))))));
+                        StringDistancePtr(new KskipBigramDistance()),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
-                        StringDistancePtr(new KskipBigramDistance()))))))));
+                        StringDistancePtr(new KskipBigramDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
-                        StringDistancePtr(new KskipBigramDistance()))))))));
+                        StringDistancePtr(new KskipBigramDistance()))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
 }
 
 void BuildingRfClassifier::_createBestExtractors() const
@@ -221,7 +235,8 @@ void BuildingRfClassifier::_createBestExtractors() const
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
                         StringDistancePtr(new TranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
-                        StringDistancePtr(new LevenshteinDistance(1.45)))))))));
+                        StringDistancePtr(new LevenshteinDistance(1.45)))),
+                        boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))))));
   _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
                         ValueAggregatorPtr(new QuantileAggregator(0.4)))));
 }

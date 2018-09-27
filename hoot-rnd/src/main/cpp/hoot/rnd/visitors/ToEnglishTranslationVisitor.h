@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 
 namespace hoot
 {

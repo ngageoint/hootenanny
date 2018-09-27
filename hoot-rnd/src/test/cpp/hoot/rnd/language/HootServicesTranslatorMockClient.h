@@ -25,42 +25,38 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
+#ifndef HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
+#define HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
 
 // hoot
-#include <hoot/core/TestUtils.h>
-#include <hoot/rnd/language/translators/HootServicesTranslationInfoClient.h>
+#include <hoot/rnd/language/HootServicesTranslatorClient.h>
 
-// Std
-#include <sstream>
+// Qt
+#include <QMap>
 
 namespace hoot
 {
 
-class HootServicesTranslationInfoClientTest : public HootTestFixture
+/**
+ * This is used to mock the behavior of the translator that makes calls to hoot services.
+ */
+class HootServicesTranslatorMockClient : public HootServicesTranslatorClient
 {
-  CPPUNIT_TEST_SUITE(HootServicesTranslationInfoClientTest);
-  CPPUNIT_TEST(runRequestDataTest);
-  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runRequestDataTest()
-  {
-    HootServicesTranslationInfoClient uut;
+  static std::string className() { return "hoot::HootServicesTranslatorMockClient"; }
 
-    HOOT_STR_EQUALS(
-      "{ \"apps\": [ \"TikaLanguageDetector\" ] }",
-      uut._getAvailableLanguagesRequestData(QStringList("TikaLanguageDetector")).simplified());
-  }
+  HootServicesTranslatorMockClient();
+
+  virtual QString translate(const QString textToTranslate);
+  virtual void setSourceLanguages(const QStringList langCodes);
+
+private:
+
+  QMap<QString, QString> _mockTranslations;
 };
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootServicesTranslationInfoClientTest, "quick");
 
 }
 
-
+#endif // HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H

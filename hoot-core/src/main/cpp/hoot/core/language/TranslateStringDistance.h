@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/algorithms/StringDistanceConsumer.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 
 // tgs
 #include <tgs/SharedPtr.h>
@@ -50,8 +50,8 @@ public:
 
   static std::string className() { return "hoot::TranslateStringDistance"; }
 
-  TranslateStringDistance(StringDistancePtr d);
   TranslateStringDistance() {}
+  TranslateStringDistance(StringDistancePtr d, boost::shared_ptr<ToEnglishTranslator> translator);
 
   virtual ~TranslateStringDistance() {}
 
@@ -67,15 +67,11 @@ public:
 
   virtual QString toString() const { return "Translate " + _d->toString(); }
 
-  static boost::shared_ptr<ToEnglishTranslator> getTranslator() { return _translator; }
-  static void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
-  { _translator = translator; }
-
 private:
 
   StringDistancePtr _d;
   bool _tokenize;
-  static boost::shared_ptr<ToEnglishTranslator> _translator;
+  boost::shared_ptr<ToEnglishTranslator> _translator;
 
   QStringList _getNamesToScore(const QString name) const;
 };

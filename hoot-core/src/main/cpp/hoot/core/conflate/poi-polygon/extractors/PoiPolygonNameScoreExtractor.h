@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/conflate/extractors/NameExtractor.h>
 
 namespace hoot
@@ -90,6 +90,7 @@ private:
 
   //when enabled, will attempt to translate address tags to English
   bool _translateTagValuesToEnglish;
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   boost::shared_ptr<NameExtractor> _getNameExtractor() const;
 };

@@ -29,7 +29,7 @@
 #define HOOT_SERVICES_TRANSLATION_INFO_CLIENT_H
 
 // hoot
-#include <hoot/rnd/language/translators/TranslationInfoProvider.h>
+#include <hoot/rnd/language/TranslationInfoProvider.h>
 
 // Qt
 #include <QStringList>

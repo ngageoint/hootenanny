@@ -29,7 +29,7 @@
 #define HOOT_SERVICES_TRANSLATION_INFO_MOCK_CLIENT_H
 
 // hoot
-#include <hoot/rnd/language/translators/HootServicesTranslationInfoClient.h>
+#include <hoot/rnd/language/HootServicesTranslationInfoClient.h>
 
 // Qt
 #include <QStringList>

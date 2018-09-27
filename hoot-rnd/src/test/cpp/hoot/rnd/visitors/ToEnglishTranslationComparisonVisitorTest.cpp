@@ -34,7 +34,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/language/visitors/ToEnglishTranslationComparisonVisitor.h>
+#include <hoot/rnd/language/ToEnglishTranslationComparisonVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
@@ -42,11 +42,11 @@ namespace hoot
 {
 
 static const QString testInputRoot =
-  "test-files/language/visitors/ToEnglishTranslationVisitorTest";
+  "test-files/visitors/ToEnglishTranslationVisitorTest";
 static const QString goldInputRoot =
-  "test-files/language/visitors/ToEnglishTranslationComparisonVisitorTest";
+  "test-files/visitors/ToEnglishTranslationComparisonVisitorTest";
 static const QString testOutputRoot =
-  "test-output/language/visitors/ToEnglishTranslationComparisonVisitorTest";
+  "test-output/visitors/ToEnglishTranslationComparisonVisitorTest";
 
 class ToEnglishTranslationComparisonVisitorTest : public HootTestFixture
 {

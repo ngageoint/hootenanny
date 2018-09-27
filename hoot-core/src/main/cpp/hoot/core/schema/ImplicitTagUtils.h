@@ -28,7 +28,7 @@
 #define IMPLICITTAGUTILS_H
 
 // Hoot
-#include <hoot/core/language/translators/ToEnglishTranslator.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 
 // Qt
 #include <QStringList>

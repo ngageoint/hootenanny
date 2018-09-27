@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
+#include <hoot/core/language/TranslateStringDistance.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -38,6 +38,8 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonNameScoreExtractor)
+
+boost::shared_ptr<ToEnglishTranslator> PoiPolygonNameScoreExtractor::_translator;
 
 PoiPolygonNameScoreExtractor::PoiPolygonNameScoreExtractor() :
 _translateTagValuesToEnglish(false)
@@ -50,15 +52,14 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setLevDist(config.getLevenshteinDistanceAlpha());
   setTranslateTagValuesToEnglish(config.getPoiPolygonTranslateNamesToEnglish());
-  if (_translateTagValuesToEnglish && !TranslateStringDistance::getTranslator())
+  if (_translateTagValuesToEnglish && !_translator)
   {
-    boost::shared_ptr<ToEnglishTranslator> translator(
+    _translator.reset(
       Factory::getInstance().constructObject<ToEnglishTranslator>(
         config.getLanguageTranslationTranslator()));
-    translator->setConfiguration(conf);
-    translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
-    translator->setId(QString::fromStdString(className()));
-    TranslateStringDistance::setTranslator(translator);
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
+    _translator->setId(QString::fromStdString(className()));
   }
 }
 
@@ -76,7 +77,8 @@ boost::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor
                   StringDistancePtr(
                     new LevenshteinDistance(
                       //TODO: why does this fail when the mem var is used?
-                      /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha()))))))));
+                      /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))),
+               _translator))));
   }
   else
   {

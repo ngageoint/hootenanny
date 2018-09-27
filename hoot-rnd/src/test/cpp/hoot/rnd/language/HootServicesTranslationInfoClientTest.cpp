@@ -25,45 +25,42 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
-#define TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/rnd/language/visitors/ToEnglishTranslationVisitor.h>
-#include <hoot/core/algorithms/StringDistance.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/rnd/language/HootServicesTranslationInfoClient.h>
+
+// Std
+#include <sstream>
 
 namespace hoot
 {
 
-/**
- * This is used to check hoot tag English translations against existing known (assumed)
- * correct translations; e.g. compare hoot's English translation of a tag to that of name:en
- */
-class ToEnglishTranslationComparisonVisitor : public ToEnglishTranslationVisitor
+class HootServicesTranslationInfoClientTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(HootServicesTranslationInfoClientTest);
+  CPPUNIT_TEST(runRequestDataTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
+  void runRequestDataTest()
+  {
+    HootServicesTranslationInfoClient uut;
 
-  ToEnglishTranslationComparisonVisitor();
-
-  virtual void visit(const boost::shared_ptr<Element>& e);
-
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual QString getDescription() const
-  { return "Scores selected tag value English translations against known translated tags"; }
-
-private:
-
-  //scores the similarity of the pre-translated and translated texts
-  StringDistancePtr _translationScorer;
-
-  QStringList _preTranslatedTagKeys;
-  QString _preTranslatedVal;
+    HOOT_STR_EQUALS(
+      "{ \"apps\": [ \"TikaLanguageDetector\" ] }",
+      uut._getAvailableLanguagesRequestData(QStringList("TikaLanguageDetector")).simplified());
+  }
 };
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootServicesTranslationInfoClientTest, "quick");
 
 }
 
-#endif // TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
+
