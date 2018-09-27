@@ -46,8 +46,6 @@
 namespace hoot
 {
 
-boost::shared_ptr<ToEnglishTranslator> ImplicitTagRawRulesDeriver::_translator;
-
 ImplicitTagRawRulesDeriver::ImplicitTagRawRulesDeriver() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _countFileLineCtr(0),
@@ -55,7 +53,7 @@ _sortParallelCount(QThread::idealThreadCount()),
 _skipFiltering(false),
 _keepTempFiles(false),
 _tempFileDir(ConfigOptions().getApidbBulkInserterTempFileDir()),
-_translateAllNamesToEnglish(true)
+_translateNamesToEnglish(true)
 {
 }
 
@@ -73,10 +71,10 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setSkipFiltering(options.getImplicitTaggingRawRulesDeriverSkipFiltering());
   setKeepTempFiles(options.getImplicitTaggingKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
-  setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
+  setTranslateNamesToEnglish(options.getImplicitTaggingDatabaseDeriverTranslateNamesToEnglish());
   setElementCriterion(options.getImplicitTaggingElementCriterion());
 
-  if (_translateAllNamesToEnglish && !_translator)
+  if (_translateNamesToEnglish)
   {
     _translator.reset(
       Factory::getInstance().constructObject<ToEnglishTranslator>(
@@ -132,7 +130,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
   LOG_VARD(_sortParallelCount);
   LOG_VARD(_skipFiltering);;
-  LOG_VARD(_translateAllNamesToEnglish);
+  LOG_VARD(_translateNamesToEnglish);
 
   _init();
 
@@ -167,7 +165,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
         }
         assert(!names.isEmpty());
 
-        if (_translateAllNamesToEnglish)
+        if (_translateNamesToEnglish)
         {
           names = ImplicitTagUtils::translateNamesToEnglish(names, element->getTags(), _translator);
         }
@@ -265,7 +263,7 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList inputs,
   }
   _output->close();
 
-  if (_translateAllNamesToEnglish && !_translator.get())
+  if (_translateNamesToEnglish && !_translator.get())
   {
     throw HootException("To English translation enabled but no translator was specified.");
   }
@@ -368,7 +366,7 @@ void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStri
   nameToken = nameToken.replace(",", "");
   LOG_VART(nameToken);
 
-  if (_translateAllNamesToEnglish)
+  if (_translateNamesToEnglish)
   {
     const QString englishNameToken = _translator->translate(nameToken);
     LOG_VART(englishNameToken);

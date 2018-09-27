@@ -1055,6 +1055,14 @@ when deriving an implicit tags database from POI names.
 Flat file containing key/value pairs, one per line, to ignore when deriving an implicit tags
 database from POI names.  Use 'key=*' to ignore all tags for a given key.
 
+=== implicit.tagging.database.deriver.translate.names.to.english
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
+rules are derived.
+
 === implicit.tagging.database.deriver.word.ignore.file
 
 * Data Type: string
@@ -1105,15 +1113,13 @@ The number of parallel processes used when sorting output by the implicit tag ra
 The default value of -1 uses a count equal to the number of processors on the machine.  Valid values
 are -1 or 1 up to the number of available processors.
 
-=== implicit.tagging.translate.all.names.to.english
+=== implicit.tagging.translate.names.to.english
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
-If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
-rules are derived.  Also, all implicit taggers will translate element name words to English before
-querying the corresponding implicit tag rules database.  The value of this setting should be set the
-same way when deriving raw implicit tag rules as it is when tagging elements with an implicit tagger.
+If true, all implicit taggers will translate element name words to English before querying the
+corresponding implicit tag rules database.
 
 === javascript.translator.path
 

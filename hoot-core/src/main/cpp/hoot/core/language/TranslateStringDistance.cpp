@@ -41,10 +41,27 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, TranslateStringDistance)
 
+TranslateStringDistance::TranslateStringDistance() :
+_tokenize(true),
+_translateAll(true),
+//The translator implementation should always be passed into this class instead of hardcoded as
+//is done here (see #2649).  Only allowing the passing of the translator in as part of #2328 was
+//going to require a significant amount of work in hoot-js to support scripts like PoiGeneric.js.
+//So instead, since currently only poi/poly and implicit tagging expect to use anything other than
+//DictionaryTranslator and they populate this class with a translator implemenation, the default
+//is hardcoded.  That supports for cases where the caller doesn't specify a translator
+//(PoiGeneric.js, some classifiers, etc.).
+_translator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
+{
+  setConfiguration(conf());
+}
+
 TranslateStringDistance::TranslateStringDistance(StringDistancePtr d) :
 _d(d),
 _tokenize(true),
-_translateAll(true)
+_translateAll(true),
+//see comments above
+_translator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
 {
   setConfiguration(conf());
 }
@@ -64,22 +81,6 @@ void TranslateStringDistance::setConfiguration(const Settings& conf)
   ConfigOptions config(conf);
   _tokenize = config.getTranslateStringDistanceTokenize();
   _translateAll = config.getTranslateStringDistanceTranslateAll();
-
-  if (!_translator)
-  {
-    _initTranslator(conf);
-  }
-}
-
-void TranslateStringDistance::_initTranslator(const Settings& conf)
-{
-  ConfigOptions config(conf);
-  _translator.reset(
-    Factory::getInstance().constructObject<ToEnglishTranslator>(
-      config.getLanguageTranslationTranslator()));
-  _translator->setConfiguration(conf);
-  _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
-  _translator->setId(QString::fromStdString(className()));
 }
 
 double TranslateStringDistance::compare(const QString& s1, const QString& s2) const
@@ -96,6 +97,8 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
     boost::dynamic_pointer_cast<DictionaryTranslator>(_translator);
   if (_translateAll && dictTranslator)
   {
+    // This deals with translations that may return more than one result.
+
     QStringList t1;
     QStringList t2;
     if (_tokenize)
@@ -129,6 +132,8 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
   }
   else
   {
+    // This deals with translations that will only return one result.
+
     const QStringList names1 = _getNamesToScore(s1);
     const QStringList names2 = _getNamesToScore(s2);
     LOG_VART(names1);

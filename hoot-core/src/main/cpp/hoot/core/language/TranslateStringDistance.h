@@ -50,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::TranslateStringDistance"; }
 
-  TranslateStringDistance() {}
+  TranslateStringDistance();
   TranslateStringDistance(StringDistancePtr d);
   TranslateStringDistance(StringDistancePtr d, boost::shared_ptr<ToEnglishTranslator> translator);
 

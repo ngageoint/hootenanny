@@ -138,6 +138,9 @@ private:
   //when enabled, will scan through all tags and, for any tag keys recognized in the schema, will
   //attempt to translate their values to English if not determined already to be in English
   bool _translateTagValuesToEnglish;
+  // This translator is static due to the fact this class gets init'd many times by
+  // PoiPolygonMatchCreator via PoiPolygonMatch.  Constructing it from a factory for every
+  // instantiation causes performance to suffer.
   static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;

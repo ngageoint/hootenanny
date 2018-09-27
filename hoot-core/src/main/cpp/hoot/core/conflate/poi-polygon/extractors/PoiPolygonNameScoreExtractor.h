@@ -92,6 +92,7 @@ private:
 
   //when enabled, will attempt to translate address tags to English
   bool _translateTagValuesToEnglish;
+  // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
   static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   boost::shared_ptr<NameExtractor> _getNameExtractor() const;

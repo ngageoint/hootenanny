@@ -55,15 +55,12 @@ public:
   virtual void visit(const ElementPtr& e);
 
   virtual void setConfiguration(const Settings& conf);
-  void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
+  void setTranslateNamesToEnglish(bool translate) { _translateNamesToEnglish = translate; }
   void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
   void setAllowTaggingSpecificFeatures(bool allow) { _allowTaggingSpecificFeatures = allow; }
   void setAddTopTagOnly(bool add) { _ruleReader->setAddTopTagOnly(add); }
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
-
-  static void setTranslator(boost::shared_ptr<ToEnglishTranslator> translator)
-  { _translator = translator; }
 
 protected:
 
@@ -79,6 +76,8 @@ protected:
   boost::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
 
 private:
+
+  friend class ImplicitPoiTypeTaggerTest;
 
   //number of features which received added tags
   long _numFeaturesModified;
@@ -97,7 +96,7 @@ private:
   //if true; all feature names are first translated to english before querying the rules database;
   //the value of this parameter should match the corresponding parameter used when the tag rules
   //were generated (see ImplicitTagRawRulesDeriver)
-  bool _translateAllNamesToEnglish;
+  bool _translateNamesToEnglish;
   //If true, the tagger will attempt to search for a rule match with the last token in a name first.
   //Setting to true can reduce the number of multiple rule involvements encountered.  e.g. "Police
   //Hospital" would involved rules for both a police station and a hospital if the setting was
@@ -110,7 +109,7 @@ private:
   int _maxNameLength;
 
   //translates names to English
-  static boost::shared_ptr<ToEnglishTranslator> _translator;
+  boost::shared_ptr<ToEnglishTranslator> _translator;
 
   QStringList _getNameTokens(const QStringList names) const;
   QStringList _getTranslatedNames(const QStringList names, const Tags& tags);

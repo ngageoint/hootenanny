@@ -103,9 +103,8 @@ public:
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
-    uut.setTranslateAllNamesToEnglish(true);
-    ImplicitPoiTypeTagger::setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
+    uut.setTranslateNamesToEnglish(true);
+    uut._translator = boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     map->visitRw(uut);
 
     HOOT_STR_EQUALS("name = Alshy Burgers\n"
@@ -181,9 +180,8 @@ public:
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
-    uut.setTranslateAllNamesToEnglish(true);
-    ImplicitPoiTypeTagger::setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
+    uut.setTranslateNamesToEnglish(true);
+    uut._translator = boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -217,9 +215,8 @@ public:
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
-    uut.setTranslateAllNamesToEnglish(true);
-    ImplicitPoiTypeTagger::setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
+    uut.setTranslateNamesToEnglish(true);
+    uut._translator = boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -254,9 +251,8 @@ public:
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
-    uut.setTranslateAllNamesToEnglish(true);
-    ImplicitPoiTypeTagger::setTranslator(
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()));
+    uut.setTranslateNamesToEnglish(true);
+    uut._translator = boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     map->visitRw(uut);
     LOG_VART(map->getNode(1)->getTags());
 
