@@ -31,17 +31,12 @@
 #include <geos/geom/LineSegment.h>
 
 // hoot
-#include <hoot/core/util/Units.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/OpenCv.h>
+#include <hoot/core/util/Units.h>
 
 #include "Sparse2dMatrix.h"
-
-// OpenCV
-// #include <opencv/cv.h>
-#define int64 opencv_broken_int
-#include <hoot/core/util/OpenCv.h>
-#undef int64
 
 namespace hoot
 {

@@ -88,7 +88,7 @@ namespace Tgs
     {
       Tgs::RandomForestManager initialModel;
 
-      initialModel.init(Tgs::RandomForestManager::MULTICLASS, rfInputs.featureLabels);
+      initialModel.init(BaseRandomForestManager::MULTICLASS, rfInputs.featureLabels);
 
       std::map<std::string, std::vector<std::vector<double> > >::iterator mapItr;
 
@@ -125,7 +125,7 @@ namespace Tgs
 
       MultithreadedRandomForestManager initialModel;
 
-      initialModel.init(RandomForestManager::MULTICLASS, rfInputs.featureLabels);
+      initialModel.init(BaseRandomForestManager::MULTICLASS, rfInputs.featureLabels);
 
       std::map<std::string, std::vector<std::vector<double> > >::iterator mapItr;
 

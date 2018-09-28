@@ -35,11 +35,8 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/util/Units.h>
-
-#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
-#undef int64
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QRgb>

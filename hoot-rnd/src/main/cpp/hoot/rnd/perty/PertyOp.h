@@ -34,12 +34,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-
-// OpenCV
-// #include <opencv/cv.h>
-#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
-#undef int64
 
 // Qt
 #include <QString>

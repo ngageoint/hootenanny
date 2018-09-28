@@ -67,3 +67,6 @@ log4cxx {
   SOURCES -= src/main/cpp/hoot/core/util/LogLog4Cxx.cpp
   HEADERS -= src/main/cpp/hoot/core/util/LogLog4Cxx.h
 }
+
+DISTFILES += \
+    ../sonar-project.properties
