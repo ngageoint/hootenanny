@@ -179,3 +179,4 @@ VagrantfileLocal*
 config.rpath
 0
 tbs/0
+.DS_Store
