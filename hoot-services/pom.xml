@@ -27,7 +27,7 @@
         <apache.commons.exec.version>1.3</apache.commons.exec.version>
         <apache.commons.io.version>2.5</apache.commons.io.version>
         <apache.commons.lang3.version>3.1</apache.commons.lang3.version>
-        <deegree.version>3.3.6</deegree.version>
+        <fasterxml-jackson.version>2.5.4</fasterxml-jackson.version>
         <guava.version>20.0</guava.version>
         <httpasyncclient.version>4.0</httpasyncclient.version>
         <httpclient.version>4.3.1</httpclient.version>
@@ -38,8 +38,8 @@
         <json-simple.version>1.1.1</json-simple.version>
         <log4j2.version>2.7</log4j2.version>
         <opennlp.version>1.8.3</opennlp.version>
-        <postgresql.version>9.4.1208.jre7</postgresql.version>
-        <querydsl.version>4.1.0</querydsl.version>
+        <postgresql.version>42.2.4</postgresql.version>
+        <querydsl.version>4.2.1</querydsl.version>
         <reflections.version>0.9.11</reflections.version>
         <rhino.version>1.7R4</rhino.version>
         <slf4j.version>1.7.21</slf4j.version>
@@ -56,38 +56,6 @@
         <powermock.version>1.6.5</powermock.version>
         
     </properties>
-
-    <repositories>
-        <!-- can comment out these repos if using artifactory -->
-
-        <repository>
-            <id>deegree-repo</id>
-            <url>http://repo.deegree.org/content/groups/public/</url>
-            <releases>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <!-- uncomment below for artifactory support -->
-        <!-- repository>
-            <id>central</id>
-            <url>http://selma:8081/artifactory/libs-release</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>snapshots</id>
-            <url>http://selma:8081/artifactory/libs-snapshot</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository -->
-    </repositories>
-
     <build>
         <finalName>hoot-services-${revision}</finalName>
         <defaultGoal>install</defaultGoal>
@@ -376,6 +344,102 @@
     </dependencyManagement>
 
     <dependencies>
+		<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+		<dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		    <version>2.10</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.vividsolutions/jts -->
+		<dependency>
+		    <groupId>com.vividsolutions</groupId>
+		    <artifactId>jts</artifactId>
+		    <version>1.13</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject -->
+		<dependency>
+		    <groupId>org.apache.servicemix.bundles</groupId>
+		    <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
+		    <version>1_2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-math3</artifactId>
+		    <version>3.6.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/xerces/xercesImpl -->
+		<dependency>
+		    <groupId>xerces</groupId>
+		    <artifactId>xercesImpl</artifactId>
+		    <version>${xercesImpl.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
+		<dependency>
+		    <groupId>javax.ws.rs</groupId>
+		    <artifactId>javax.ws.rs-api</artifactId>
+		    <version>2.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-dbcp2</artifactId>
+		    <version>2.5.0</version>
+		    <scope>test</scope>
+		</dependency>
+
+		<!-- XML processing -->
+		<dependency>
+		    <groupId>dom4j</groupId>
+		    <artifactId>dom4j</artifactId>
+		    <version>1.6.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>${fasterxml-jackson.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>${fasterxml-jackson.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		    <version>${fasterxml-jackson.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/xml-apis/xml-apis -->
+		<dependency>
+		    <groupId>xml-apis</groupId>
+		    <artifactId>xml-apis</artifactId>
+		    <version>1.0.b2</version>
+		</dependency>
+        <!-- PowerMock builds on top of Mockito -->
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-core</artifactId>
+		    <version>1.10.19</version>
+		    <scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-pool/commons-pool -->
+		<dependency>
+		    <groupId>commons-pool</groupId>
+		    <artifactId>commons-pool</artifactId>
+		    <version>1.6</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+		<dependency>
+		    <groupId>javax.annotation</groupId>
+		    <artifactId>javax.annotation-api</artifactId>
+		    <version>1.2</version>
+		</dependency>
+
         <!-- web -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -470,24 +534,11 @@
             <version>${postgresql.version}</version>
         </dependency>
 
-        <!-- XML processing -->
-
         <!-- XPath -->
         <dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
             <version>${xalan.version}</version>
-        </dependency>
-
-        <!-- DOM -->
-        <!-- deegree actually depends on a later version of Xerces but it appears classes have
-        been refactored in that version and class not found errors occur if this version isn't
-        included.  Later, when it comes time to use deegree more heavily, this conflict may need to
-        be resolved. -->
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>${xercesImpl.version}</version>
         </dependency>
 
         <!-- JSON -->
@@ -498,6 +549,11 @@
         </dependency>
 
         <!-- QueryDsl -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
+            <version>${querydsl.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-sql</artifactId>
@@ -548,13 +604,41 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
         </dependency>
-
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth</artifactId>
+			<version>2.3.3.RELEASE</version>
+		</dependency>  
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session</artifactId>
+			<version>1.3.3.RELEASE</version>
+		</dependency>
         <!-- Jersey is for hosting RESTful web service endpoints -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
@@ -609,60 +693,6 @@
             <groupId>org.glassfish.jersey.test-framework</groupId>
             <artifactId>jersey-test-framework-util</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <!-- deegree provides OGC compliant services -->
-        <dependency>
-            <groupId>org.deegree</groupId>
-            <artifactId>deegree-services-wfs</artifactId>
-            <version>${deegree.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javassist</groupId>
-                    <artifactId>javassist</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>postgresql</artifactId>
-                    <groupId>postgresql</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jersey-server</artifactId>
-                    <groupId>com.sun.jersey</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.deegree</groupId>
-            <artifactId>deegree-sqldialect-postgis</artifactId>
-            <version>${deegree.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>postgresql</artifactId>
-                    <groupId>postgresql</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.deegree</groupId>
-            <artifactId>deegree-featurestore-sql</artifactId>
-            <version>${deegree.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.deegree</groupId>
-            <artifactId>deegree-services-config</artifactId>
-            <version>${deegree.version}</version>
         </dependency>
         <dependency>
             <groupId>org.antlr</groupId>

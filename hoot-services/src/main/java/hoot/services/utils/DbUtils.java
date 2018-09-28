@@ -40,8 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Provider;
+import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -126,13 +126,13 @@ public final class DbUtils {
 
     public static Connection getConnection() throws SQLException {
         ApplicationContext applicationContext = ApplicationContextUtils.getApplicationContext();
-        BasicDataSource dbcpDatasource = applicationContext.getBean("dataSource", BasicDataSource.class);
-        return dbcpDatasource.getConnection();
+        DataSource datasource = applicationContext.getBean("dataSource", DataSource.class);
+        return datasource.getConnection();
     }
 
     public static SQLQueryFactory createQuery(String mapId) {
         ApplicationContext applicationContext = ApplicationContextUtils.getApplicationContext();
-        BasicDataSource datasource = applicationContext.getBean("dataSource", BasicDataSource.class);
+        DataSource datasource = applicationContext.getBean("dataSource", DataSource.class);
         Provider<Connection> provider = new SpringConnectionProvider(datasource);
         return new SQLQueryFactory(getConfiguration(mapId), provider);
     }
@@ -205,7 +205,7 @@ public final class DbUtils {
         return createQuery(mapId).update(maps)
                 .where(maps.id.eq(mapId))
                 .set(Collections.singletonList(maps.tags),
-                     Collections.singletonList(Expressions.stringTemplate("COALESCE(tags, '') || {0}::hstore", tags)))
+                        Collections.singletonList(Expressions.stringTemplate("COALESCE(tags, '') || {0}::hstore", tags)))
                 .execute();
     }
 
@@ -232,7 +232,9 @@ public final class DbUtils {
                     stmt.close();
                 }
             }
-            conn.commit();
+            if(!conn.getAutoCommit()) {
+                conn.commit();
+            }
         }
     }
 
@@ -246,7 +248,9 @@ public final class DbUtils {
                     stmt.close();
                 }
             }
-            conn.commit();
+            if(!conn.getAutoCommit()) {
+                conn.commit();
+            }
         }
     }
 
@@ -357,7 +361,7 @@ public final class DbUtils {
         }
 
         // Check if we can compare by ID
-        if (org.apache.commons.lang3.StringUtils.isNumeric(input)) {
+        if (org.apache.commons.lang3.math.NumberUtils.isNumber(input)) {
             logger.debug("Verifying that record with ID = {} in '{}' table has previously been created ...",
                     input, table.getTableName());
 

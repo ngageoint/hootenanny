@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.job;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,6 +34,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -74,8 +76,10 @@ public class JobResource {
     @GET
     @Path("/status/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public JobStatusResponse getJobStatus(@PathParam("jobId") String jobId,
-                                          @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
+    public JobStatusResponse getJobStatus(@Context HttpServletRequest request, @PathParam("jobId") String jobId,
+            @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
+        // Users user = (Users)
+        // request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
         JobStatusResponse response = null;
 
         try {

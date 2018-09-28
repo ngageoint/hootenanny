@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -165,9 +165,9 @@ public final class MapUtils {
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
             createQuery().insert(maps)
-                    .columns(maps.id, maps.createdAt, maps.displayName, maps.publicCol, maps.userId)
-                    .values(newId, now, "map-with-id-" + newId, true, userId)
-                    .execute();
+            .columns(maps.id, maps.createdAt, maps.displayName, maps.publicCol, maps.userId)
+            .values(newId, now, "map-with-id-" + newId, true, userId)
+            .execute();
         }
 
         createMap(newId);
@@ -181,12 +181,20 @@ public final class MapUtils {
                 .from()
                 .fetchOne();
 
-        if (newId != null) {
-            createQuery().insert(users)
-                    .columns(users.id, users.displayName, users.email)
-                    .values(newId, "user-with-id-" + newId, "user-with-id-" + newId)
-                    .execute();
-        }
+        assert newId != null : "failed to generate new test user id";
+
+        // don't collide with someone's actual osm user id
+        newId *= -1;
+        long rowsAffected = createQuery().insert(users)
+                .columns(users.id, users.displayName, users.email, users.provider_access_key,
+                        users.provider_access_token, users.hootservices_created_at,
+                        users.hootservices_last_authorize, users.provider_created_at)
+                .values(newId, newId + "::MapUtils::insertUser()", newId + "@hootenanny.test", "provider_access_key",
+                        "provider_access_token",
+                        Expressions.currentTimestamp(), Expressions.currentTimestamp(), Expressions.currentTimestamp())
+                .execute();
+
+        assert rowsAffected == 1 : "failed to insert test user";
 
         return newId;
     }
