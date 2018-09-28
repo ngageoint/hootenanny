@@ -95,7 +95,6 @@ public:
    * CreatorDescription class.
    */
   QString getDescription() const { return _description; }
-  //void setDescription(QString description) { _description = description; }
 
 protected:
 
