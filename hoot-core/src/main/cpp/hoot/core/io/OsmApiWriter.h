@@ -59,6 +59,7 @@ class OsmApiWriter : public Configurable
   const QString API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create/";
   const QString API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close/";
   const QString API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload/";
+  const QString API_PATH_GET_ELEMENT = "api/0.6/%1/%2";
   /**
    *  Max number of jobs waiting in the work queue = multiplier * number of threads,
    *  this keeps the producer thread from creating too many sub-changesets too early
@@ -166,6 +167,29 @@ private:
    */
   OsmApiStatus _parseStatus(const QString& status);
   /**
+   * @brief _resolveIssues Query the OSM API for the element in the changeset and try to fix resolvable errors
+   * @param request Network request object initialized with OSM API URL
+   * @param changeset Pointer to a changeset with one single failed change
+   * @return success Whether or not the function was able to find a resolvable issue
+   */
+  bool _resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset);
+  /**
+   * @brief _getNode/Way/Relation Perform HTTP GET request to OSM API to get current node/way/relation by ID
+   * @param request Network request object initialized with OSM API URL
+   * @param id ID of node/way/relation to query from database
+   * @return OSM XML string of node/way/relation as it currently sits in the OSM API database
+   */
+  QString _getNode(HootNetworkRequestPtr request, long id);
+  QString _getWay(HootNetworkRequestPtr request, long id);
+  QString _getRelation(HootNetworkRequestPtr request, long id);
+  /**
+   * @brief _getElement Perform HTTP GET request to OSM API to get current element by ID
+   * @param request Network request object initialized with OSM API URL
+   * @param endpoint Filled out API_PATH_GET_ELEMENT string with node/way/relation and ID
+   * @return XML result of the GET request
+   */
+  QString _getElement(HootNetworkRequestPtr request, const QString& endpoint);
+  /**
    * @brief _changesetThreadFunc Thread function that does the actual work of creating a changeset ID
    *  via the API, pushing the changeset data, closing the changeset, and splitting a failing changeset
    *  if necessary
@@ -201,7 +225,7 @@ private:
   bool _showProgress;
   /** Default constructor for testing purposes only */
   OsmApiWriter() {}
-  //  for white box testing
+  /** For white box testing */
   friend class OsmApiWriterTest;
 };
 

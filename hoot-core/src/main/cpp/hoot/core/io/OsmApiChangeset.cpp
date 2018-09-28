@@ -200,7 +200,6 @@ void XmlChangeset::updateChangeset(const QString &changes)
   QXmlStreamReader::TokenType type = reader.readNext();
   if (type == QXmlStreamReader::StartDocument)
     type = reader.readNext();
-  QStringRef name = reader.name();
   if (type == QXmlStreamReader::StartElement && reader.name() != "diffResult")
   {
     LOG_WARN("Unknown changeset response format.");
@@ -233,6 +232,52 @@ void XmlChangeset::updateChangeset(const QString &changes)
         updateElement(_relations, old_id, new_id, version);
     }
   }
+}
+
+bool XmlChangeset::fixChangeset(const QString& update)
+{
+  /* <osm>
+   *  <node|way|relation id="#" lat="#" lon="#" version="#" changeset="#" user="#" uid="#" visible="#" timestamp="#">
+   *   <tag k="..." v="..."/>
+   *   ...
+   *  </node>
+   * </osm>
+   */
+  bool success = false;
+  QXmlStreamReader reader(update);
+  //  Make sure that the XML provided starts with the <osm> tag
+  QXmlStreamReader::TokenType type = reader.readNext();
+  if (type == QXmlStreamReader::StartDocument)
+    type = reader.readNext();
+  if (type == QXmlStreamReader::StartElement && reader.name() != "osm")
+  {
+    LOG_WARN("Unknown element fix format.");
+    return success;
+  }
+  //  Iterate all of updates and record them
+  while (!reader.atEnd() && !reader.hasError())
+  {
+    type = reader.readNext();
+    if (type == QXmlStreamReader::StartElement)
+    {
+      QStringRef name = reader.name();
+      QXmlStreamAttributes attributes = reader.attributes();
+      long id = 0;
+      long version = 0;
+      if (attributes.hasAttribute("id"))
+        id = attributes.value("id").toString().toLong();
+      if (attributes.hasAttribute("version"))
+        version = attributes.value("version").toString().toLong();
+      //  Fix the element
+      if (name == "node")
+        success |= fixElement(_nodes, id, version);
+      else if (name == "way")
+        success |= fixElement(_ways, id, version);
+      else if (name == "relation")
+        success |= fixElement(_relations, id, version);
+    }
+  }
+  return success;
 }
 
 bool XmlChangeset::addNodes(ChangesetInfoPtr& changeset, ChangesetType type)
@@ -706,30 +751,7 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset)
   //  If there is only one element then splitting only marks that element as failed
   if (changeset->size() == 1)
   {
-    //  Iterate the three changeset type arrays looking for elements to mark
-    for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-    {
-      for (ChangesetInfo::iterator it = changeset->begin(ElementType::Relation, (ChangesetType)current_type);
-           it != changeset->end(ElementType::Relation, (ChangesetType)current_type); ++it)
-      {
-        //  Set the relation's status to failed
-        _allRelations[*it]->setStatus(XmlElement::ElementStatus::Failed);
-        //  Update the failed count
-        ++_failedCount;
-      }
-      for (ChangesetInfo::iterator it = changeset->begin(ElementType::Way, (ChangesetType)current_type);
-           it != changeset->end(ElementType::Way, (ChangesetType)current_type); ++it)
-      {
-        _allWays[*it]->setStatus(XmlElement::ElementStatus::Failed);
-        ++_failedCount;
-      }
-      for (ChangesetInfo::iterator it = changeset->begin(ElementType::Node, (ChangesetType)current_type);
-           it != changeset->end(ElementType::Node, (ChangesetType)current_type); ++it)
-      {
-        _allNodes[*it]->setStatus(XmlElement::ElementStatus::Failed);
-        ++_failedCount;
-      }
-    }
+    updateFailedChangeset(changeset);
     return split;
   }
   //  Split the changeset in half (approximately)
@@ -812,6 +834,40 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset)
   }
   //  Return the second changeset to be added to the queue
   return split;
+}
+
+void XmlChangeset::updateFailedChangeset(ChangesetInfoPtr changeset)
+{
+  //  Only set the failed status on single element changesets
+  if (changeset->size() != 1)
+    return;
+  //  Don't set the elements to failed yet, until after they are tried
+  if (!changeset->getChangesetIssuesResolved())
+    return;
+  //  Iterate the three changeset type arrays looking for elements to mark
+  for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+  {
+    for (ChangesetInfo::iterator it = changeset->begin(ElementType::Relation, (ChangesetType)current_type);
+         it != changeset->end(ElementType::Relation, (ChangesetType)current_type); ++it)
+    {
+      //  Set the relation's status to failed
+      _allRelations[*it]->setStatus(XmlElement::ElementStatus::Failed);
+      //  Update the failed count once
+      ++_failedCount;
+    }
+    for (ChangesetInfo::iterator it = changeset->begin(ElementType::Way, (ChangesetType)current_type);
+         it != changeset->end(ElementType::Way, (ChangesetType)current_type); ++it)
+    {
+      _allWays[*it]->setStatus(XmlElement::ElementStatus::Failed);
+      ++_failedCount;
+    }
+    for (ChangesetInfo::iterator it = changeset->begin(ElementType::Node, (ChangesetType)current_type);
+         it != changeset->end(ElementType::Node, (ChangesetType)current_type); ++it)
+    {
+      _allNodes[*it]->setStatus(XmlElement::ElementStatus::Failed);
+      ++_failedCount;
+    }
+  }
 }
 
 QString XmlChangeset::getChangesetString(ChangesetInfoPtr changeset, long changeset_id)
@@ -943,6 +999,32 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
       element->setVersion(version);
     _processedCount++;
   }
+}
+
+bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version)
+{
+  bool success = false;
+  //  Negative IDs should never be fixed
+  if (id < 1)
+    return success;
+  //  Find the affected element
+  for (int type = 0; type < ChangesetType::TypeMax; ++type)
+  {
+    XmlElementMap::iterator position = map[type].find(id);
+    if (position != map[type].end())
+    {
+      //  Found the element, now update it
+      XmlElementPtr element = map[type][id];
+      //  Only update the version if it is out of sync
+      if (element->getVersion() != version)
+      {
+        element->setVersion(version);
+        //  Change was made
+        success = true;
+      }
+    }
+  }
+  return success;
 }
 
 }
