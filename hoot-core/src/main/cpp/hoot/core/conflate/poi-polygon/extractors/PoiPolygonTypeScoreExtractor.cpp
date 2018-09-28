@@ -362,6 +362,42 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
   return tagsList;
 }
 
+bool PoiPolygonTypeScoreExtractor::_typeHasName(const QString kvp, const QString name) const
+{
+  const QStringList typeNames =_typeToNames.values(kvp);
+  for (int i = 0; i < typeNames.size(); i++)
+  {
+    if (name.contains(typeNames.at(i)))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+QString PoiPolygonTypeScoreExtractor::_getMatchingTypeName(const QString kvp,
+                                                           const QString name) const
+{
+  const QStringList typeNames =_typeToNames.values(kvp);
+  for (int i = 0; i < typeNames.size(); i++)
+  {
+    const QString typeName = typeNames.at(i);
+    if (name.contains(typeName))
+    {
+      return typeName;
+    }
+  }
+  return "";
+}
+
+bool PoiPolygonTypeScoreExtractor::_haveMatchingTypeNames(const QString kvp, const QString name1,
+                                                          const QString name2) const
+{
+  const QString typeName1 = _getMatchingTypeName(kvp, name1);
+  const QString typeName2 = _getMatchingTypeName(kvp, name2);
+  return typeName1 == typeName2 && !typeName1.isEmpty();
+}
+
 bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)
 {
   const QString amenityStr = element->getTags().get("amenity").toLower();
@@ -372,17 +408,14 @@ bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)
 // same type when their names indicate they are actually different types.  If this concept proves
 // useful with other types, the code could be abstracted to handle them.
 
-//TODO: reimplement these
-
 bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
 {
-  const QString name = PoiPolygonNameScoreExtractor::getElementName(element).toLower();
+  if (!isSchool(element))
+  {
+    return false;
+  }
   return
-    isSchool(element) &&
-    //TODO: these endsWiths can maybe can be contains instead
-    (name.toLower().endsWith("high school") || name.toLower().endsWith("middle school") ||
-     name.toLower().endsWith("elementary school") ||
-     name.toLower().contains("college") || name.toLower().contains("university") );
+    _typeHasName("amenity=school", PoiPolygonNameScoreExtractor::getElementName(element).toLower());
 }
 
 bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
@@ -392,13 +425,7 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
   {
     const QString name1 = PoiPolygonNameScoreExtractor::getElementName(element1).toLower();
     const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element2).toLower();
-    if ((name1.endsWith("high school") && name2.endsWith("high school")) ||
-        (name1.endsWith("middle school") && name2.endsWith("middle school")) ||
-        (name1.endsWith("elementary school") && name2.endsWith("elementary school")) ||
-        (name1.contains("college") && name2.contains("college")) ||
-        (name1.contains("college") && name2.contains("university")) ||
-        (name1.contains("university") && name2.contains("college")) ||
-        (name1.contains("university") && name2.contains("university")))
+    if (_haveMatchingTypeNames("amenity=school", name1, name2))
     {
       return true;
     }
@@ -456,7 +483,8 @@ bool PoiPolygonTypeScoreExtractor::isReligion(const Tags& tags)
   return tags.get("amenity").toLower() == "place_of_worship" ||
          tags.get("building").toLower() == "church" ||
          tags.get("building").toLower() == "mosque" ||
-         //TODO: this one is an alias of building=mosque, so we should be getting it from there instead
+         //TODO: this one is an alias of building=mosque, so we should be getting it from there
+         //instead
          tags.get("amenity").toLower() == "mosque" ||
          tags.get("building").toLower() == "synagogue";
 }
