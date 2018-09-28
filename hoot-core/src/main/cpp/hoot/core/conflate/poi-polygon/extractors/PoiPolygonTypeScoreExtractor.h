@@ -161,9 +161,9 @@ private:
   static QSet<QString> _getTagValueTokens(const QString category);
 
   static void _readTypeToNames();
-  bool _typeHasName(const QString kvp, const QString name) const;
-  QString _getMatchingTypeName(const QString kvp, const QString name) const;
-  bool _haveMatchingTypeNames(const QString kvp, const QString name1, const QString name2) const;
+  static bool _typeHasName(const QString kvp, const QString name);
+  static QString _getMatchingTypeName(const QString kvp, const QString name);
+  static bool _haveMatchingTypeNames(const QString kvp, const QString name1, const QString name2);
 };
 
 }

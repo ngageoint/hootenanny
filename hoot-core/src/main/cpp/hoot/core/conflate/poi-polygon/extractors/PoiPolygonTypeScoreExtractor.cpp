@@ -86,7 +86,7 @@ void PoiPolygonTypeScoreExtractor::_readTypeToNames()
   {
     const QStringList typeToNamesRaw =
       FileUtils::readFileToList(ConfigOptions().getPoiPolygonTypeToNamesFile());
-    for (int i = 0; i = typeToNamesRaw.size(); i++)
+    for (int i = 0; i < typeToNamesRaw.size(); i++)
     {
       const QString typeToNamesRawEntry = typeToNamesRaw.at(i);
       const QStringList typeToNamesRawEntryParts = typeToNamesRawEntry.split(";");
@@ -362,7 +362,7 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
   return tagsList;
 }
 
-bool PoiPolygonTypeScoreExtractor::_typeHasName(const QString kvp, const QString name) const
+bool PoiPolygonTypeScoreExtractor::_typeHasName(const QString kvp, const QString name)
 {
   const QStringList typeNames =_typeToNames.values(kvp);
   for (int i = 0; i < typeNames.size(); i++)
@@ -375,8 +375,7 @@ bool PoiPolygonTypeScoreExtractor::_typeHasName(const QString kvp, const QString
   return false;
 }
 
-QString PoiPolygonTypeScoreExtractor::_getMatchingTypeName(const QString kvp,
-                                                           const QString name) const
+QString PoiPolygonTypeScoreExtractor::_getMatchingTypeName(const QString kvp, const QString name)
 {
   const QStringList typeNames =_typeToNames.values(kvp);
   for (int i = 0; i < typeNames.size(); i++)
@@ -391,7 +390,7 @@ QString PoiPolygonTypeScoreExtractor::_getMatchingTypeName(const QString kvp,
 }
 
 bool PoiPolygonTypeScoreExtractor::_haveMatchingTypeNames(const QString kvp, const QString name1,
-                                                          const QString name2) const
+                                                          const QString name2)
 {
   const QString typeName1 = _getMatchingTypeName(kvp, name1);
   const QString typeName2 = _getMatchingTypeName(kvp, name2);
