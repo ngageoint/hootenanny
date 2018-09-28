@@ -146,10 +146,6 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
 
   _translatedText = _translatorClient->translate(_toTranslateVal).trimmed();
   LOG_VART(_translatedText);
-//  if (!_translatorClient->getDetectedLanguage().trimmed().isEmpty())
-//  {
-//    _numDetectionsMade++;
-//  }
   const int strComparison = _translatedText.compare(_toTranslateVal, Qt::CaseInsensitive);
   LOG_VART(strComparison);
   //If the translator merely returned the same string we passed in as the translated text, then

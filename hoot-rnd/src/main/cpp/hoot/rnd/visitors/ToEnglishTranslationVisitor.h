@@ -88,7 +88,6 @@ private:
   long _numElementsWithSuccessfulTagTranslation;
   long _numProcessedTags;
   long _numProcessedElements;
-  //long _numDetectionsMade;
   int _taskStatusUpdateInterval;
 };
 
