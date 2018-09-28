@@ -47,7 +47,6 @@ class ExportOSMCommand extends ExportCommand {
         super(jobId, params);
 
         List<String> options = new LinkedList<>();
-        options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=" + params.getUserEmail());
 
         if (!params.getTagOverrides().isEmpty() && !params.getIncludeHootTags()) {

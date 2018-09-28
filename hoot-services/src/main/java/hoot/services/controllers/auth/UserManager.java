@@ -22,27 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils;
+package hoot.services.controllers.auth;
 
-/**
- * Various utilities related to reflection
- */
-public final class ReflectUtils {
-    private ReflectUtils() {}
+import java.io.IOException;
+import java.sql.Timestamp;
 
-    /**
-     * Returns the name of the class that calls a method
-     * 
-     * @return class name string
-     */
-    public static String getCallingClassName() {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        StackTraceElement stackTraceElement = stackTrace[stackTrace.length - 2];
-        if (stackTraceElement != null) {
-            return stackTraceElement.getClassName();
-        }
-        return null;
-    }
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.springframework.security.oauth.consumer.OAuthConsumerToken;
+import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
+
+import hoot.services.models.db.Users;
+
+@Service
+public interface UserManager {
+    Users upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
+    Users parseUser(String xml) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException;
+
+    Timestamp parseTimestamp(String timestamp);
+
+    Users getUserBySession(String sessionId);
 }

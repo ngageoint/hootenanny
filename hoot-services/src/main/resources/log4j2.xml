@@ -36,10 +36,6 @@
             <AppenderRef ref="Console"/>
         </Logger>
 
-        <Logger name="org.deegree" level="INFO" additivity="false">
-            <AppenderRef ref="Console"/>
-        </Logger>
-
         <Logger name="com.querydsl" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>

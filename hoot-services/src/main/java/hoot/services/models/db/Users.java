@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,24 +22,45 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.db;
 
+import java.sql.Timestamp;
+
 import javax.annotation.Generated;
+
+import org.springframework.security.oauth.consumer.OAuthConsumerToken;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 /**
  * Users is a Querydsl bean type
  */
 @Generated("com.querydsl.codegen.BeanSerializer")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Users {
 
+    public Users() {
+        this.hootservices_created_at = new Timestamp(System.currentTimeMillis());
+    }
+
     private String displayName;
-
+    // @JsonIgnore
     private String email;
-
     private Long id;
+    @JsonIgnore
+    private String provider_access_key;
+    @JsonIgnore
+    private String provider_access_token;
+    private Timestamp hootservices_last_authorize;
+    private Timestamp hootservices_created_at;
+    private Timestamp provider_created_at;
 
+    @JsonProperty(value = "display_name")
     public String getDisplayName() {
         return displayName;
     }
@@ -48,6 +69,7 @@ public class Users {
         this.displayName = displayName;
     }
 
+    // @JsonIgnore
     public String getEmail() {
         return email;
     }
@@ -64,5 +86,64 @@ public class Users {
         this.id = id;
     }
 
-}
+    @JsonIgnore
+    public String getProviderAccessKey() {
+        return provider_access_key;
+    }
 
+    public void setProviderAccessKey(String provider_access_key) {
+        this.provider_access_key = provider_access_key;
+    }
+
+    @JsonIgnore
+    public String getProviderAccessToken() {
+        return provider_access_token;
+    }
+
+    public void setProviderAccessToken(String provider_access_token) {
+        this.provider_access_token = provider_access_token;
+    }
+
+    @JsonProperty(value = "last_authorized")
+    public Timestamp getHootservicesLastAuthorize() {
+        return hootservices_last_authorize;
+    }
+
+    public void setHootservicesLastAuthorize(Timestamp hootservices_last_authorize) {
+        this.hootservices_last_authorize = hootservices_last_authorize;
+    }
+
+    @JsonProperty(value = "provider_created_at")
+    public Timestamp getProviderCreatedAt() {
+        return provider_created_at;
+    }
+
+    public void setProviderCreatedAt(Timestamp provider_created_at) {
+        this.provider_created_at = provider_created_at;
+    }
+
+    public void setProviderCreatedAt(String provider_created_at) {
+        Timestamp t = Timestamp.valueOf(provider_created_at);
+        setProviderCreatedAt(t);
+    }
+
+    @JsonProperty(value = "created_at")
+    public Timestamp getHootservicesCreatedAt() {
+        return hootservices_created_at;
+    }
+
+    public void setHootservicesCreatedAt(Timestamp hootservices_created_at) {
+        this.hootservices_created_at = hootservices_created_at;
+    }
+
+    public void setProviderAccessToken(OAuthConsumerToken token) {
+        this.setProviderAccessKey(token.getValue());
+        this.setProviderAccessToken(token.getSecret());
+    }
+
+    @Override
+    public String toString() {
+        return this.displayName;
+    }
+
+}
