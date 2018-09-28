@@ -1044,16 +1044,16 @@ The minimum allowed word length when associating word tokens with tags.
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesCustomRuleList`
 
-Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
-when deriving an implicit tags database from POI names.
+Flat file containing tab separated word key/value pairs to use as custom rules when deriving an
+implicit tags database from POI names.
 
 === implicit.tagging.database.deriver.tag.ignore.file
 
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesTagIgnoreList`
 
-Flat file containing key/value pairs, one per line, to ignore when deriving an implicit tags
-database from POI names.  Use 'key=*' to ignore all tags for a given key.
+Flat file containing key/value pairs to ignore when deriving an implicit tags database from POI
+names.  Use 'key=*' to ignore all tags for a given key.
 
 === implicit.tagging.database.deriver.translate.names.to.english
 
@@ -1068,8 +1068,7 @@ rules are derived.
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesWordIgnoreList`
 
-Flat file containing words, one per line, to ignore when deriving an implicit tags database from
-POI names.
+Flat file containing words to ignore when deriving an implicit tags database from POI names.
 
 === implicit.tagging.database.deriver.use.schema.tag.values.for.words.only
 
@@ -1095,6 +1094,14 @@ pass in more nested criterion, use the Hootenanny Javascript interface instead.
 
 If true, the implicit tag raw rules/database derivers will keep all temporary file output.  For
 debugging only.
+
+=== implicit.tagging.name.cleaning.tokens.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesNameCleaningTokens`
+
+Flat file containing tokens that should be ignored in names when deriving implicit type tagging
+rules or when determining whether to type tag an element using implicit tagging.
 
 === implicit.tagging.raw.rules.deriver.skip.filtering
 
@@ -2682,6 +2689,14 @@ configuration option, 'language.translation.translator', controls which translat
 The minimum similarity the type scores a POI and polygon can have and be considered a type
 match, with 0.0 being the least similar and 1.0 being the most similar.
 
+=== poi.polygon.type.to.names.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonTypeToNames`
+
+Flat file containing OSM types and lists of possible texts features having such a type might
+contain.
+
 === poi.review.threshold
 
 * Data Type: double
@@ -3164,6 +3179,14 @@ status is 'Invalid'.
 
 Adds the specified status to elements.  Valid values are: 'Unknown1', 'Unknown2', 'Conflated', or
 'Invalid'.  If left empty, all elements will receive tag additions.
+
+=== street.types.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/streetTypes`
+
+Flat file containing street types and their abbreviations.  Used in various parts of the
+application.
 
 === tag.ancestor.differencer.name
 

@@ -32,6 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
+#include <hoot/core/util/FileUtils.h>
 
 #include "PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonAddressScoreExtractor.h"
@@ -53,10 +54,12 @@ QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
 QStringList PoiPolygonTypeScoreExtractor::failedMatchRequirements;
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonTypeScoreExtractor::_translator;
 QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTagValues;
+QMultiHash<QString, QString> PoiPolygonTypeScoreExtractor::_typeToNames;
 
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor() :
 _translateTagValuesToEnglish(false)
 {
+  _readTypeToNames();
 }
 
 void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
@@ -73,6 +76,31 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
     _translator->setId(QString::fromStdString(className()));
+  }
+}
+
+void PoiPolygonTypeScoreExtractor::_readTypeToNames()
+{
+  // see related note in ImplicitTagUtils::_modifyUndesirableTokens
+  if (_typeToNames.isEmpty())
+  {
+    const QStringList typeToNamesRaw =
+      FileUtils::readFileToList(ConfigOptions().getPoiPolygonTypeToNamesFile());
+    for (int i = 0; i = typeToNamesRaw.size(); i++)
+    {
+      const QString typeToNamesRawEntry = typeToNamesRaw.at(i);
+      const QStringList typeToNamesRawEntryParts = typeToNamesRawEntry.split(";");
+      if (typeToNamesRawEntryParts.size() != 2)
+      {
+        throw HootException("Invalid POI/Polygon type to names entry: " + typeToNamesRawEntry);
+      }
+      const QString kvp = typeToNamesRawEntryParts.at(0);
+      const QStringList names = typeToNamesRawEntryParts.at(1).split(",");
+      for (int j = 0; j < names.size(); j++)
+      {
+        _typeToNames.insert(kvp, names.at(j));
+      }
+    }
   }
 }
 
@@ -340,14 +368,18 @@ bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)
   return amenityStr == "school" || amenityStr == "university";
 }
 
-//TODO: this specific school logic should be handled in the schema instead
+// Schools are the only example of the concept of trying to reduce reviews between features of the
+// same type when their names indicate they are actually different types.  If this concept proves
+// useful with other types, the code could be abstracted to handle them.
+
+//TODO: reimplement these
 
 bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
 {
   const QString name = PoiPolygonNameScoreExtractor::getElementName(element).toLower();
   return
     isSchool(element) &&
-    //TODO: these endsWiths can maybe be contains instead
+    //TODO: these endsWiths can maybe can be contains instead
     (name.toLower().endsWith("high school") || name.toLower().endsWith("middle school") ||
      name.toLower().endsWith("elementary school") ||
      name.toLower().contains("college") || name.toLower().contains("university") );

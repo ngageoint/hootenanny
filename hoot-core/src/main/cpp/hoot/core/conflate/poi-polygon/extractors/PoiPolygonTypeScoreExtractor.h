@@ -34,6 +34,9 @@
 #include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/schema/OsmSchema.h>
 
+// Qt
+#include <QMultiHash>
+
 namespace hoot
 {
 
@@ -140,11 +143,13 @@ private:
   bool _translateTagValuesToEnglish;
   // This translator is static due to the fact this class gets init'd many times by
   // PoiPolygonMatchCreator via PoiPolygonMatch.  Constructing it from a factory for every
-  // instantiation causes performance to suffer.  Arguably, it could be static variable on
-  // PoiPolygonMatch and set on score extractors, like this one, instead.  However, doing that won't
-  // allow you to see the the statistics printed out individually by translators, like
+  // instantiation causes performance to suffer.  Arguably, it could be made a static variable on
+  // PoiPolygonMatch and then set on each score extractor individually.  However, doing that won't
+  // allow you to see the the final statistics printed out individually by translators, like
   // HootServicesTranslatorClient.
   static boost::shared_ptr<ToEnglishTranslator> _translator;
+  //maps an OSM kvp to multiple possible strings such a feature's name might contain
+  static QMultiHash<QString, QString> _typeToNames;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
@@ -154,6 +159,8 @@ private:
 
   void _translateTagValue(const QString tagKey, QString& tagValue) const;
   static QSet<QString> _getTagValueTokens(const QString category);
+
+  static void _readTypeToNames();
 };
 
 }

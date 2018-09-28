@@ -64,6 +64,13 @@ public:
   static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags,
                                              boost::shared_ptr<ToEnglishTranslator> translator);
 
+private:
+
+  static QStringList _nameCleaningTokens;
+  static QStringList _streetTypes;
+
+  static void _modifyUndesirableTokens(QString& name);
+  static void _filterOutStreets(QString& name);
 };
 
 }

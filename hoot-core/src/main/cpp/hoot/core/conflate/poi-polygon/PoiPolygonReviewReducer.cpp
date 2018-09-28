@@ -92,7 +92,6 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
   //TODO: move these to a config - #2635
   _genericLandUseTagVals.append("cemetery");
   _genericLandUseTagVals.append("commercial");
-  //_genericLandUseTagVals.append("construction");
   _genericLandUseTagVals.append("farm");
   _genericLandUseTagVals.append("forest");
   _genericLandUseTagVals.append("grass");
