@@ -189,8 +189,6 @@ private:
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 
   bool _skipForReviewTypeDebugging() const;
-
-  void _translateTagValues(ConstElementPtr element);
 };
 
 }

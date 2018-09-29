@@ -91,7 +91,8 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
   }
 
   double bestScore = -1.0;
-  QString best1, best2;
+  QString best1;
+  QString best2;
 
   boost::shared_ptr<DictionaryTranslator> dictTranslator =
     boost::dynamic_pointer_cast<DictionaryTranslator>(_translator);

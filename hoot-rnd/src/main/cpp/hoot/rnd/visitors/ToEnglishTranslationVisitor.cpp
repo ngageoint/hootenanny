@@ -71,7 +71,6 @@ ToEnglishTranslationVisitor::~ToEnglishTranslationVisitor()
   LOG_INFO(
     "Attempted to translate tags for " << _numProcessedElements << " elements out of " <<
     _numTotalElements << " elements encountered.");
-  //LOG_INFO("Language detections made: " << _numDetectionsMade);
 }
 
 void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
