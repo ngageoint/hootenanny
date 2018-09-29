@@ -498,27 +498,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 
   return _distance <= _matchDistanceThreshold ? 2u : 0u;
 
-  //The idea here was to weight distance less when both POI's had specific types, but it hasn't
-  //helped so far.
-//  if (_distance > _matchDistanceThreshold)
-//  {
-//    return 0u;
-//  }
-//  else if (_distance <= _matchDistanceThreshold)
-//  {
-//    const bool bothElementsHaveSpecificType =
-//      PoiPolygonTypeScoreExtractor::hasSpecificType(poi) &&
-//      PoiPolygonTypeScoreExtractor::hasSpecificType(poly);
-//    if (bothElementsHaveSpecificType)
-//    {
-//      return 1u;
-//    }
-//    else
-//    {
-//      return 2u;
-//    }
-//  }
-//  return 0u;
+  //Tried weighting distance less when both POI's had specific types, but it hasn't helped so far.
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
@@ -546,9 +526,9 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   if (_typeScorer.failedMatchRequirements.size() > 0)
   {
     QString failedMatchTypes;
-    for (int i = 0; i < _typeScorer.failedMatchRequirements.size(); i++)
+    for (int i = 0; i < PoiPolygonTypeScoreExtractor::failedMatchRequirements.size(); i++)
     {
-      failedMatchTypes += _typeScorer.failedMatchRequirements.at(i) + ", ";
+      failedMatchTypes += PoiPolygonTypeScoreExtractor::failedMatchRequirements.at(i) + ", ";
     }
     failedMatchTypes.chop(2);
 
@@ -639,18 +619,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       return evidence;
     }
   }
-
-//  if (evidence < _matchEvidenceThreshold)
-//  {
-//    //if poi has field in the name and on a sport field, then match...need a better place to put
-//    //this maybe
-//    if (PoiPolygonNameScoreExtractor::getElementName(poi).toLower().contains("field") &&
-//        PoiPolygonTypeScoreExtractor::isSport(poly))
-//    {
-//      LOG_TRACE("Matching on sport field name.");
-//      evidence = _matchEvidenceThreshold;
-//    }
-//  }
 
   //no point in trying to increase evidence if we're already at a match
   if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)
