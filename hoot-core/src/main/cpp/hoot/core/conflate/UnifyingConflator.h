@@ -114,6 +114,7 @@ private:
   std::vector<const Match*> _matches;
   std::vector<Merger*> _mergers;
   QList<SingleStat> _stats;
+  int _taskStatusUpdateInterval;
 
   void _addReviewTags(const OsmMapPtr &map, const std::vector<const Match *> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);

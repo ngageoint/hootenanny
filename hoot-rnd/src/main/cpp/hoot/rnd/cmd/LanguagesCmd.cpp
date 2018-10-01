@@ -29,8 +29,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/language/translators/HootServicesTranslationInfoClient.h>
-#include <hoot/rnd/language/translators/HootServicesTranslationInfoResponseParser.h>
+#include <hoot/rnd/language/HootServicesTranslationInfoClient.h>
+#include <hoot/rnd/language/HootServicesTranslationInfoResponseParser.h>
 
 // Boost
 #include <boost/foreach.hpp>

@@ -40,6 +40,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 
 // Qt
 #include <QStringList>
@@ -314,7 +315,7 @@ public:
         for (int i = 0; i < names.size(); i++)
         {
           nameSet.insert(names[i].toLower());
-          nameSet.insert(LevenshteinDistance::toEnglish(names[i]).toLower());
+          nameSet.insert(DictionaryTranslator().toEnglish(names[i]).toLower());
         }
         for (set<QString>::const_iterator it = nameSet.begin(); it != nameSet.end(); ++it)
         {

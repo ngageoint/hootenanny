@@ -37,7 +37,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/Soundex.h>
-#include <hoot/core/language/translators/DictionaryTranslator.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -56,19 +56,21 @@ public:
 
   void runTest()
   {
+    DictionaryTranslator translator;
+
     QStringList result;
     result << "building";
-    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll("gedung"));
+    HOOT_STR_EQUALS(result, translator.toEnglishAll("gedung"));
 
     result.clear();
     result << "office building";
     result << "agency building";
     result << "bureau building";
-    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll("kantor gedung"));
+    HOOT_STR_EQUALS(result, translator.toEnglishAll("kantor gedung"));
 
     result.clear();
     result << "hospital";
-    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll("rumah sakit"));
+    HOOT_STR_EQUALS(result, translator.toEnglishAll("rumah sakit"));
 
     result.clear();
     result << "general hospital office";
@@ -77,20 +79,17 @@ public:
     result << "hospital office";
     result << "hospital agency";
     result << "hospital bureau";
-    HOOT_STR_EQUALS(
-      result, DictionaryTranslator::getInstance().toEnglishAll("rumah sakit umum kantor"));
+    HOOT_STR_EQUALS(result, translator.toEnglishAll("rumah sakit umum kantor"));
 
     result.clear();
     result << "ryba office bar";
     result << "ryba agency bar";
     result << "ryba bureau bar";
-    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll(
-      QString::fromUtf8("рыба kantor bar")));
+    HOOT_STR_EQUALS(result, translator.toEnglishAll(QString::fromUtf8("рыба kantor bar")));
 
     result.clear();
     result << "embassy hungaria";
-    HOOT_STR_EQUALS(result, DictionaryTranslator::getInstance().toEnglishAll(
-      QString::fromUtf8("Kedutaan Besar Hungaria")));
+    HOOT_STR_EQUALS(result, translator.toEnglishAll(QString::fromUtf8("Kedutaan Besar Hungaria")));
   }
 
 };

@@ -37,7 +37,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/language/translators/DictionaryTranslator.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -60,7 +60,7 @@ public:
 
   QString te(const char* s)
   {
-    QString result = DictionaryTranslator::getInstance().translateStreet(QString::fromUtf8(s));
+    QString result = DictionaryTranslator().translateStreet(QString::fromUtf8(s));
     return result;
   }
 

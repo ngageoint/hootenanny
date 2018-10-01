@@ -47,7 +47,7 @@ public:
 
   void setConfiguration(const Settings& conf);
 
-  QStringList tokenize(QString s) const;
+  QStringList tokenize(const QString s) const;
 
 private:
 

@@ -146,6 +146,8 @@ private:
 
   ReviewMarker _reviewMarker;
 
+  int _statusUpdateInterval;
+
   void _addWrong(const Tags& t1, const Tags& t2);
 
   void _clearCache();

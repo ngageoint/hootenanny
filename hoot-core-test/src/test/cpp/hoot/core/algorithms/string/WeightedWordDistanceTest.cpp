@@ -50,6 +50,7 @@ class WeightedWordDistanceTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
   WeightedWordDistance* _wwd;
 
   QString normalize(QString s)

@@ -89,6 +89,7 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_addressMatch);
 
+  //TODO: move these to a config - #2635
   _genericLandUseTagVals.append("cemetery");
   _genericLandUseTagVals.append("commercial");
   //_genericLandUseTagVals.append("construction");
@@ -109,7 +110,7 @@ bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 
 bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
 {
-  LOG_DEBUG("Checking review reduction rules...");
+  LOG_TRACE("Checking review reduction rules...");
 
   //TODO: Many of these rules may be obsolete now after recent additions.
 
@@ -124,7 +125,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //if both have addresses and they explicitly contradict each other, throw out the review; don't
   //do it if the poly has more than one address, like in many multi-use buildings
   if (!_addressMatch && PoiPolygonAddressScoreExtractor::elementHasAddress(poi, *_map) &&
-      PoiPolygonAddressScoreExtractor::getAddresses(poly, *_map).size() == 1)
+      PoiPolygonAddressScoreExtractor::elementHasAddress(poly, *_map))
   {
     LOG_TRACE("Returning miss per review reduction rule #1...");
     return true;

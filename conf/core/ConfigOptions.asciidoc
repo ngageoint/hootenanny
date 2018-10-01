@@ -1055,6 +1055,14 @@ when deriving an implicit tags database from POI names.
 Flat file containing key/value pairs, one per line, to ignore when deriving an implicit tags
 database from POI names.  Use 'key=*' to ignore all tags for a given key.
 
+=== implicit.tagging.database.deriver.translate.names.to.english
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
+rules are derived.
+
 === implicit.tagging.database.deriver.word.ignore.file
 
 * Data Type: string
@@ -1105,15 +1113,13 @@ The number of parallel processes used when sorting output by the implicit tag ra
 The default value of -1 uses a count equal to the number of processors on the machine.  Valid values
 are -1 or 1 up to the number of available processors.
 
-=== implicit.tagging.translate.all.names.to.english
+=== implicit.tagging.translate.names.to.english
 
 * Data Type: bool
 * Default Value: `true`
 
-If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
-rules are derived.  Also, all implicit taggers will translate element name words to English before
-querying the corresponding implicit tag rules database.  The value of this setting should be set the
-same way when deriving raw implicit tag rules as it is when tagging elements with an implicit tagger.
+If true, all implicit taggers will translate element name words to English before querying the
+corresponding implicit tag rules database.
 
 === javascript.translator.path
 
@@ -1336,6 +1342,22 @@ Java class names implementing ToEnglishTranslator.  Valid values are 'JoshuaLang
 Service endpoint for retrieving available translator implementations supported by
 HootServicesTranslatorClient
 
+=== language.translation.info.provider
+
+* Data Type: string
+* Default Value: `hoot::HootServicesTranslationInfoClient`
+
+TranslationInfoProvider implementation to use for determining language information needed by to
+English translation.  Not all to English translators will make use of this capability.
+
+=== language.translation.max.cache.size
+
+* Data Type: long
+* Default Value: `10000`
+
+Maximum result cache sized used for to English translation and transliteration.  Not honored by all
+translators.  A cache size of -1 disables the translation cache.
+
 === language.translation.perform.exhaustive.search.with.no.detection
 
 * Data Type: bool
@@ -1372,7 +1394,7 @@ ISO-639-1 language codes for the source languages for to English translation
 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).  Also, you can specify a single list item,
 "detect", to attempt to auto-detect the appropriate source language before translation.  Specifying
 multiple source languages can have a large impact on translation performance due to language
-detection cost.   Separate list items with a ';' and surround in quotes when passing them in from
+detection cost.  Separate list items with a ';' and surround in quotes when passing them in from
 the command line.
 
 === language.translation.to.translate.tag.keys
@@ -1389,17 +1411,13 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 === language.translation.translator
 
 * Data Type: string
-* Default Value: `hoot::HootServicesTranslatorClient`
+* Default Value: `hoot::DictionaryTranslator`
 
-ToEnglishTranslator implementation to use for to English translation
-
-=== language.translation.info.provider
-
-* Data Type: string
-* Default Value: `hoot::HootServicesTranslationInfoClient`
-
-TranslationInfoProvider implementation to use for determining language information needed by to
-English translation
+ToEnglishTranslator implementation to use for to English translation.  hoot::DictionaryTranslator,
+the current default, is a simple lookup table primarily used for translation testing and proof of
+concept.  It is set as the default because other implementations, such as
+hoot::HootServicesTranslatorClient, require custom installation procedures and have lengthy startup
+times. Therefore, they are not available in the default Hootenanny installation.
 
 === levenshtein.distance.alpha
 
@@ -2628,6 +2646,36 @@ The threshold at which a review is called a review for PoiPolygon. See
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
+=== poi.polygon.translate.addresses.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
+address.  This can have significant impact on the runtime performance of conflation when enabled
+and should only be enabled if the source data is known to have non-English addresses.  The
+configuration option, 'language.translation.translator', controls which translator is used.
+
+=== poi.polygon.translate.names.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any name tag.  This can have
+significant impact on the runtime performance of conflation when enabled and should only be enabled
+if the source data is known to have non-English names.  The configuration option,
+'language.translation.translator', controls which translator is used.
+
+=== poi.polygon.translate.types.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
+schema.  This can have significant impact on the runtime performance of conflation when enabled
+and should only be enabled if the source data is known to have non-English type values.  The
+configuration option, 'language.translation.translator', controls which translator is used.
+
 === poi.polygon.type.score.threshold
 
 * Data Type: double
@@ -3222,7 +3270,7 @@ Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to b
 === task.status.update.interval
 
 * Data Type: int
-* Default Value: `10000`
+* Default Value: `1000`
 
 For commands supporting it, the iteration count at which a status message should be logged. This
 setting may have a negative impact on performance if set to a very low value.
@@ -3292,6 +3340,16 @@ options.
 * Default Value: `true`
 
 Set to true if the strings should be tokenized (split into words) before translating the values.
+Only applies if language.translation.translator is set to hoot::DictionaryTranslator.
+
+=== translate.string.distance.translate.all
+
+* Data Type: bool
+* Default Value: `true`
+
+If true and language.translation.translator is set to hoot::DictionaryTranslator, will attempt to
+retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
+translation is retrieved.
 
 === translated.tag.differencer.ignore.list
 
@@ -3346,6 +3404,14 @@ NOTE: This assumes that you know exactly what tags you want to modify/delete
 * Default Value: ``
 
 The script used by the TranslationVisitor for translation.
+
+=== transliteration.max.cache.size
+
+* Data Type: int
+* Default Value: `-1`
+
+The maximum size of the cache used by DictionaryTranslator for transliterations.  A cache size of -1
+disables the transliteration cache.
 
 === unify.enable.optimal.constrained.matches
 

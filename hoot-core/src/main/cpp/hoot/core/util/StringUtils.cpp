@@ -79,6 +79,13 @@ bool StringUtils::hasAlphabeticCharacter(const QString input)
   return false;
 }
 
+bool StringUtils::isNumber(const QString input)
+{
+  bool isNumber = false;
+  input.toLong(&isNumber);
+  return isNumber;
+}
+
 boost::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(QString jsonStr)
 {
   LOG_VART(jsonStr);

@@ -287,19 +287,6 @@ long OsmXmlReader::_parseLong(QString s)
   return result;
 }
 
-int OsmXmlReader::_parseInt(QString s)
-{
-  bool ok;
-  int result = s.toInt(&ok);
-
-  if (ok == false)
-  {
-    throw Exception("Error parsing int: " + s);
-  }
-
-  return result;
-}
-
 void OsmXmlReader::open(QString url)
 {
   _path = url;

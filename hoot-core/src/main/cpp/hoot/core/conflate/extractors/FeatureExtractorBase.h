@@ -43,6 +43,7 @@ public:
   static std::string className() { return "hoot::FeatureExtractorBase"; }
 
   FeatureExtractorBase() {}
+  virtual ~FeatureExtractorBase() {}
 
   static double nullValue() { return -999999999; }
 

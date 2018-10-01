@@ -31,12 +31,16 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
 /**
  * Scores element type similarity
+ *
+ * TODO: move hardcoded strings to config - #2635
  */
 class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -129,12 +133,27 @@ private:
   static QSet<QString> _allTagKeys;
   double _featureDistance;
   bool _printMatchDistanceTruth;
+  static QMap<QString, QSet<QString>> _categoriesToSchemaTagValues;
+
+  //when enabled, will scan through all tags and, for any tag keys recognized in the schema, will
+  //attempt to translate their values to English if not determined already to be in English
+  bool _translateTagValuesToEnglish;
+  // This translator is static due to the fact this class gets init'd many times by
+  // PoiPolygonMatchCreator via PoiPolygonMatch.  Constructing it from a factory for every
+  // instantiation causes performance to suffer.  Arguably, it could be static variable on
+  // PoiPolygonMatch and set on score extractors, like this one, instead.  However, doing that won't
+  // allow you to see the the statistics printed out individually by translators, like
+  // HootServicesTranslatorClient.
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
   bool _failsCuisineMatch(const Tags& t1, const Tags& t2) const;
   bool _failsSportMatch(const Tags& t1, const Tags& t2) const;
   bool _failsReligionMatch(const Tags& t1, const Tags& t2) const;
+
+  void _translateTagValue(const QString tagKey, QString& tagValue) const;
+  static QSet<QString> _getTagValueTokens(const QString category);
 };
 
 }

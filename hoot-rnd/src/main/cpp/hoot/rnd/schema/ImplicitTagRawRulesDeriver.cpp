@@ -36,7 +36,6 @@
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/language/translators/DictionaryTranslator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/util/Factory.h>
 
@@ -54,13 +53,14 @@ _sortParallelCount(QThread::idealThreadCount()),
 _skipFiltering(false),
 _keepTempFiles(false),
 _tempFileDir(ConfigOptions().getApidbBulkInserterTempFileDir()),
-_translateAllNamesToEnglish(true)
+_translateNamesToEnglish(true)
 {
 }
 
 void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 {
   ConfigOptions options = ConfigOptions(conf);
+
   setSortParallelCount(options.getImplicitTaggingRawRulesDeriverSortParallelCount());
   const int idealThreads = QThread::idealThreadCount();
   LOG_VART(idealThreads);
@@ -71,8 +71,18 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setSkipFiltering(options.getImplicitTaggingRawRulesDeriverSkipFiltering());
   setKeepTempFiles(options.getImplicitTaggingKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
-  setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
+  setTranslateNamesToEnglish(options.getImplicitTaggingDatabaseDeriverTranslateNamesToEnglish());
   setElementCriterion(options.getImplicitTaggingElementCriterion());
+
+  if (_translateNamesToEnglish)
+  {
+    _translator.reset(
+      Factory::getInstance().constructObject<ToEnglishTranslator>(
+        options.getLanguageTranslationTranslator()));
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(options.getLanguageTranslationSourceLanguages());
+    _translator->setId("ImplicitTagRawRulesDeriver");
+  }
 }
 
 void ImplicitTagRawRulesDeriver::setElementCriterion(QString criterionName)
@@ -120,7 +130,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
   LOG_VARD(_sortParallelCount);
   LOG_VARD(_skipFiltering);;
-  LOG_VARD(_translateAllNamesToEnglish);
+  LOG_VARD(_translateNamesToEnglish);
 
   _init();
 
@@ -155,9 +165,9 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
         }
         assert(!names.isEmpty());
 
-        if (_translateAllNamesToEnglish)
+        if (_translateNamesToEnglish)
         {
-          names = ImplicitTagUtils::translateNamesToEnglish(names, element->getTags());
+          names = ImplicitTagUtils::translateNamesToEnglish(names, element->getTags(), _translator);
         }
         LOG_VART(names);
 
@@ -252,6 +262,11 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList inputs,
     throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
   }
   _output->close();
+
+  if (_translateNamesToEnglish && !_translator.get())
+  {
+    throw HootException("To English translation enabled but no translator was specified.");
+  }
 }
 
 void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString kvp)
@@ -263,16 +278,13 @@ void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString k
 
   if (!word.isEmpty())
   {
-    bool wordIsNumber = false;
-    word.toLong(&wordIsNumber);
-    if (wordIsNumber)
+    if (StringUtils::isNumber(word))
     {
       LOG_TRACE("Skipping word: " << word << ", which is a number.");
       return;
     }
 
-    const bool hasAlphaChar = StringUtils::hasAlphabeticCharacter(word);
-    if (!hasAlphaChar)
+    if (!StringUtils::hasAlphabeticCharacter(word))
     {
       LOG_TRACE("Skipping word: " << word << ", which has no alphabetic characters.");
       return;
@@ -354,11 +366,14 @@ void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStri
   nameToken = nameToken.replace(",", "");
   LOG_VART(nameToken);
 
-  if (_translateAllNamesToEnglish)
+  if (_translateNamesToEnglish)
   {
-    const QString englishNameToken = DictionaryTranslator::getInstance().toEnglish(nameToken);
-    nameToken = englishNameToken;
+    const QString englishNameToken = _translator->translate(nameToken);
     LOG_VART(englishNameToken);
+    if (!englishNameToken.isEmpty())
+    {
+      nameToken = englishNameToken;
+    }
   }
 
   for (int k = 0; k < kvps.size(); k++)

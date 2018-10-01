@@ -1379,7 +1379,6 @@ private:
 
     return vid;
   }
-
 };
 
 boost::shared_ptr<OsmSchema> OsmSchema::_theInstance = NULL;
@@ -1432,7 +1431,16 @@ vector<SchemaVertex> OsmSchema::getAllTags()
 
 QSet<QString> OsmSchema::getAllTagKeys()
 {
-  return d->getAllTagKeys();
+  if (_allTagKeysCache.isEmpty())
+  {
+    _allTagKeysCache = d->getAllTagKeys();
+  }
+  return _allTagKeysCache;
+}
+
+bool OsmSchema::hasTagKey(const QString key)
+{
+  return getAllTagKeys().contains(key);
 }
 
 vector<SchemaVertex> OsmSchema::getAssociatedTags(QString name)
@@ -1620,14 +1628,14 @@ bool OsmSchema::isArea(const Tags& t, const ElementType& type) const
 
 bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList) const
 {
-  LOG_VART(tagList.size());
+  //LOG_VART(tagList.size());
   for (int i = 0; i < tagList.size(); i++)
   {
     QStringList tagParts = tagList.at(i).split("=");
     const QString key = tagParts[0];
-    LOG_VART(key);
+    //LOG_VART(key);
     const QString value = tagParts[1];
-    LOG_VART(value);
+    //LOG_VART(value);
     if ((value == "*" && tags.contains(key)) || (tags.get(key).toLower() == value))
     {
       return true;
@@ -1661,6 +1669,7 @@ bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tag
   }
   LOG_TRACE("Does not contain tag from tag ignore list");
 
+  //TODO: should use be added as a category here?
   const bool inABuildingOrPoiCategory =
     getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   //isArea includes building too
@@ -1689,6 +1698,8 @@ bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagI
   {
     return false;
   }
+
+  //TODO: should use be added as a category here?
   const bool inABuildingOrPoiCategory =
     getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   bool isPoi = isNode && (inABuildingOrPoiCategory || tags.getNames().size() > 0);

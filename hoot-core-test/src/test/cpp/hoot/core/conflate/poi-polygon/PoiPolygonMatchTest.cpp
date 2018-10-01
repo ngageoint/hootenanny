@@ -90,6 +90,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
@@ -109,6 +110,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+
       uut.calculateMatch(n1->getElementId(), w1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
@@ -142,6 +144,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
@@ -161,6 +164,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+
       uut.calculateMatch(n1->getElementId(), w1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
@@ -194,6 +198,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -213,6 +218,7 @@ public:
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
       uut.setDisableSameSourceConflation(false);
+
       uut.calculateMatch(n1->getElementId(), w1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -231,6 +237,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+
       uut.calculateMatch(n1->getElementId(), w1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -271,6 +278,7 @@ public:
       reviewIfMatchedTypes.append("area=yes");
       reviewIfMatchedTypes.append("blah=bleh");
       uut.setReviewIfMatchedTypes(reviewIfMatchedTypes);
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -291,6 +299,7 @@ public:
       reviewIfMatchedTypes.append("building=yes");
       reviewIfMatchedTypes.append("blah=bleh");
       uut.setReviewIfMatchedTypes(reviewIfMatchedTypes);
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -310,6 +319,7 @@ public:
       QStringList reviewIfMatchedTypes;
       reviewIfMatchedTypes.append("blah=bleh");
       uut.setReviewIfMatchedTypes(reviewIfMatchedTypes);
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
@@ -545,6 +555,7 @@ public:
       uut.setDisableSameSourceConflation(true);
       uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(false);
       uut.setSourceTagKey("source");
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
@@ -567,6 +578,7 @@ public:
       uut.setDisableSameSourceConflation(true);
       uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(false);
       uut.setSourceTagKey("source");
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
@@ -607,6 +619,7 @@ public:
       uut.setDisableSameSourceConflation(true);
       uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(true);
       uut.setSourceTagKey("source");
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
@@ -629,6 +642,7 @@ public:
       uut.setDisableSameSourceConflation(true);
       uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(true);
       uut.setSourceTagKey("source");
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
@@ -669,6 +683,7 @@ public:
       uut.setDisableSameSourceConflation(true);
       uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(false);
       uut.setSourceTagKey("source1");
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
@@ -707,6 +722,7 @@ public:
       uut.setDisableSameSourceConflation(true);
       uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(false);
       uut.setSourceTagKey("source");
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
@@ -726,6 +742,7 @@ public:
       uut.setDisableSameSourceConflation(true);
       uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(true);
       uut.setSourceTagKey("source");
+
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());

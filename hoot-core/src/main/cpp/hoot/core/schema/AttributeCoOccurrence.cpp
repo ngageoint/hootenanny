@@ -34,11 +34,12 @@
 #include <hoot/core/conflate/extractors/NameExtractor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
+#include <hoot/core/language/TranslateStringDistance.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 
 // tgs
 #include <tgs/HashMap.h>
