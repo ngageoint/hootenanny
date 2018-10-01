@@ -29,17 +29,20 @@
 // hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/conflate/extractors/NameExtractor.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
+#include <hoot/core/language/TranslateStringDistance.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonNameScoreExtractor)
 
-PoiPolygonNameScoreExtractor::PoiPolygonNameScoreExtractor()
+boost::shared_ptr<ToEnglishTranslator> PoiPolygonNameScoreExtractor::_translator;
+
+PoiPolygonNameScoreExtractor::PoiPolygonNameScoreExtractor() :
+_translateTagValuesToEnglish(false)
 {
 }
 
@@ -48,23 +51,53 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setLevDist(config.getLevenshteinDistanceAlpha());
+  setTranslateTagValuesToEnglish(config.getPoiPolygonTranslateNamesToEnglish());
+  if (_translateTagValuesToEnglish && !_translator)
+  {
+    _translator.reset(
+      Factory::getInstance().constructObject<ToEnglishTranslator>(
+        config.getLanguageTranslationTranslator()));
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
+    _translator->setId(QString::fromStdString(className()));
+  }
+}
+
+boost::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor() const
+{
+  if (_translateTagValuesToEnglish)
+  {
+    TranslateStringDistance* translateStringDist =
+      new TranslateStringDistance(
+        StringDistancePtr(
+          new MeanWordSetDistance(
+            StringDistancePtr(
+              new LevenshteinDistance(
+                //why does this fail when the mem var is used?
+                /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))),
+        _translator);
+    translateStringDist->setTranslateAll(false);
+    return
+      boost::shared_ptr<NameExtractor>(new NameExtractor(StringDistancePtr(translateStringDist)));
+  }
+  else
+  {
+    return
+      boost::shared_ptr<NameExtractor>(
+        new NameExtractor(
+          StringDistancePtr(
+            new MeanWordSetDistance(
+              StringDistancePtr(
+                new LevenshteinDistance(
+                  ConfigOptions().getLevenshteinDistanceAlpha()))))));
+  }
 }
 
 double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
-  double nameScore =
-    NameExtractor(
-      StringDistancePtr(
-        new TranslateStringDistance(
-          StringDistancePtr(
-            new MeanWordSetDistance(
-              StringDistancePtr(
-                new LevenshteinDistance(
-                  //TODO: why does this fail when the mem var is used?
-                  /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))))))
-      .extract(poi, poly);
+  double nameScore = _getNameExtractor()->extract(poi, poly);
   if (nameScore < 0.001)
   {
     nameScore = 0.0;

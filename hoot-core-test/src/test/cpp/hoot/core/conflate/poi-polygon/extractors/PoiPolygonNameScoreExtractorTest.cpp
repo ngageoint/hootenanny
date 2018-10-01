@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -49,6 +50,7 @@ class PoiPolygonNameScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PoiPolygonNameScoreExtractorTest);
   CPPUNIT_TEST(scoreTest);
   CPPUNIT_TEST(elementNameTest);
+  CPPUNIT_TEST(translateTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -78,6 +80,33 @@ public:
     NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set("blah", "blah");
     HOOT_STR_EQUALS("", PoiPolygonNameScoreExtractor::getElementName(node2));
+  }
+
+  void translateTest()
+  {
+    PoiPolygonNameScoreExtractor uut;
+    Settings settings = conf();
+    OsmMapPtr map(new OsmMap());
+
+    settings.set("poi.polygon.translate.names.to.english", "true");
+    settings.set("language.translation.translator", "hoot::DictionaryTranslator");
+    uut.setConfiguration(settings);
+    boost::shared_ptr<DictionaryTranslator> dictTranslator =
+      boost::dynamic_pointer_cast<DictionaryTranslator>(
+        PoiPolygonNameScoreExtractor::_translator);
+    dictTranslator->setTokenizeInput(false);
+
+    //DictionaryTranslator has some support for acronyms in the same manner that it supports to
+    //English translations.
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set("name", "Kentucky Fried Chicken");
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    way1->getTags().set("name", "KFC");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    settings.set("poi.polygon.translate.names.to.english", "false");
+    uut.setConfiguration(settings);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.203, uut.extract(*map, node1, way1), 0.001);
   }
 };
 

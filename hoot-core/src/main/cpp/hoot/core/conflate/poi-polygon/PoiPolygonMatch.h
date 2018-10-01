@@ -35,9 +35,11 @@
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/ConfigOptions.h>
-
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include "extractors/PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonRfClassifier.h"
+#include "extractors/PoiPolygonTypeScoreExtractor.h"
+#include "extractors/PoiPolygonNameScoreExtractor.h"
 
 namespace hoot
 {
@@ -138,13 +140,16 @@ private:
   //requirement for matching
   bool _closeDistanceMatch;
 
+  PoiPolygonTypeScoreExtractor _typeScorer;
   double _typeScore;
   double _typeScoreThreshold;
   QStringList _reviewIfMatchedTypes;
 
+  PoiPolygonNameScoreExtractor _nameScorer;
   double _nameScore;
   double _nameScoreThreshold;
 
+  PoiPolygonAddressScoreExtractor _addressScorer;
   double _addressScore;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
@@ -165,6 +170,10 @@ private:
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   QString _explainText;
+
+  Settings _conf;
+
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 

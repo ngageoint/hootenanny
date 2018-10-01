@@ -33,16 +33,14 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-#include "extractors/PoiPolygonTypeScoreExtractor.h"
-#include "extractors/PoiPolygonNameScoreExtractor.h"
+#include <hoot/core/util/Factory.h>
 #include "PoiPolygonDistance.h"
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
-#include "PoiPolygonReviewReducer.h"
 #include "PoiPolygonAdvancedMatcher.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
 #include "extractors/PoiPolygonDistanceExtractor.h"
 #include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
 #include "PoiPolygonTagIgnoreListReader.h"
+#include "PoiPolygonReviewReducer.h"
 
 using namespace std;
 
@@ -50,6 +48,7 @@ namespace hoot
 {
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
+boost::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf,
@@ -155,6 +154,7 @@ void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
 
 void PoiPolygonMatch::setConfiguration(const Settings& conf)
 {
+  _conf = conf;
   ConfigOptions config = ConfigOptions(conf);
 
   setMatchDistanceThreshold(config.getPoiPolygonMatchDistanceThreshold());
@@ -192,6 +192,10 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   setReviewEvidenceThreshold(reviewEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
+
+  _addressScorer.setConfiguration(conf);
+  _typeScorer.setConfiguration(conf);
+  _nameScorer.setConfiguration(conf);
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -311,57 +315,6 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
   }
 
   QStringList reviewTypeIgnoreList;
-//  reviewTypeIgnoreList.append("leisure=park");
-//  reviewTypeIgnoreList.append("leisure=playground");
-//  reviewTypeIgnoreList.append("amenity=university");
-//  reviewTypeIgnoreList.append("building=train_station");
-//  reviewTypeIgnoreList.append("amenity=parking");
-//  reviewTypeIgnoreList.append("amenity=bicycle_parking");
-//  reviewTypeIgnoreList.append("building=retail");
-//  reviewTypeIgnoreList.append("building=residential");
-//  reviewTypeIgnoreList.append("building=station");
-//  reviewTypeIgnoreList.append("shop=department_store");
-//  reviewTypeIgnoreList.append("building=terrace");
-//  reviewTypeIgnoreList.append("landuse=construction");
-//  reviewTypeIgnoreList.append("railway=station");
-//  reviewTypeIgnoreList.append("public_transport=station");
-//  reviewTypeIgnoreList.append("tourism=hotel");
-//  reviewTypeIgnoreList.append("building=office");
-//  reviewTypeIgnoreList.append("landuse=retail");
-//  reviewTypeIgnoreList.append("sport=*");
-//  reviewTypeIgnoreList.append("amenity=school");
-//  reviewTypeIgnoreList.append("man_made=water_works");
-//  reviewTypeIgnoreList.append("amenity=bus_station");
-//  reviewTypeIgnoreList.append("amenity=hospital");
-//  reviewTypeIgnoreList.append("building=apartments");
-//  reviewTypeIgnoreList.append("building=civic");
-//  reviewTypeIgnoreList.append("building=commercial");
-//  reviewTypeIgnoreList.append("building=public");
-//  reviewTypeIgnoreList.append("building=retail");
-//  reviewTypeIgnoreList.append("landuse=commercial");
-  //reviewTypeIgnoreList.append("landuse=forest");
-//  reviewTypeIgnoreList.append("landuse=industrial");
-//  reviewTypeIgnoreList.append("landuse=residential");
-//  reviewTypeIgnoreList.append("landuse=recreation_ground");
-//  reviewTypeIgnoreList.append("leisure=common");
-//  reviewTypeIgnoreList.append("leisure=garden");
-//  reviewTypeIgnoreList.append("leisure=golf_course");
-//  reviewTypeIgnoreList.append("natural=water");
-//  reviewTypeIgnoreList.append("place=neighbourhood");
-//  reviewTypeIgnoreList.append("shop=mall");
-//  reviewTypeIgnoreList.append("shop=department_store");
-//  reviewTypeIgnoreList.append("tourism=attraction");
-//  reviewTypeIgnoreList.append("tourism=zoo");
-//  reviewTypeIgnoreList.append("tourism=museum");
-//  reviewTypeIgnoreList.append("building=roof");
-//  reviewTypeIgnoreList.append("building=school");
-//  reviewTypeIgnoreList.append("amenity=arts_centre");
-//  reviewTypeIgnoreList.append("amenity=restaurant");
-//  reviewTypeIgnoreList.append("building=house");
-//  reviewTypeIgnoreList.append("tourism=camp_site");
-//  reviewTypeIgnoreList.append("landuse=quarry");
-  //reviewTypeIgnoreList.append("landuse=forest_reserve");
-
   if (_poi->getTags().hasAnyKvp(reviewTypeIgnoreList) ||
       _poly->getTags().hasAnyKvp(reviewTypeIgnoreList))
   {
@@ -408,7 +361,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   //no point in trying to reduce reviews if we're still at a miss here
   if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
-    //TODO: this constructor has gotten a little out of hand
+    //this constructor has gotten a little out of hand
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
@@ -545,27 +498,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 
   return _distance <= _matchDistanceThreshold ? 2u : 0u;
 
-  //The idea here was to weight distance less when both POI's had specific types, but it hasn't
-  //helped so far.
-//  if (_distance > _matchDistanceThreshold)
-//  {
-//    return 0u;
-//  }
-//  else if (_distance <= _matchDistanceThreshold)
-//  {
-//    const bool bothElementsHaveSpecificType =
-//      PoiPolygonTypeScoreExtractor::hasSpecificType(poi) &&
-//      PoiPolygonTypeScoreExtractor::hasSpecificType(poly);
-//    if (bothElementsHaveSpecificType)
-//    {
-//      return 1u;
-//    }
-//    else
-//    {
-//      return 2u;
-//    }
-//  }
-//  return 0u;
+  //Tried weighting distance less when both POI's had specific types, but it hasn't helped so far.
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
@@ -585,18 +518,17 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   PoiPolygonTypeScoreExtractor::poiBestKvp = "";
   PoiPolygonTypeScoreExtractor::polyBestKvp = "";
   PoiPolygonTypeScoreExtractor::failedMatchRequirements.clear();
-  PoiPolygonTypeScoreExtractor typeScorer;
-  typeScorer.setFeatureDistance(_distance);
-  typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
-  _typeScore = typeScorer.extract(*_map, poi, poly);
+  _typeScorer.setFeatureDistance(_distance);
+  _typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
+  _typeScore = _typeScorer.extract(*_map, poi, poly);
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
 
-  if (typeScorer.failedMatchRequirements.size() > 0)
+  if (_typeScorer.failedMatchRequirements.size() > 0)
   {
     QString failedMatchTypes;
-    for (int i = 0; i < typeScorer.failedMatchRequirements.size(); i++)
+    for (int i = 0; i < PoiPolygonTypeScoreExtractor::failedMatchRequirements.size(); i++)
     {
-      failedMatchTypes += typeScorer.failedMatchRequirements.at(i) + ", ";
+      failedMatchTypes += PoiPolygonTypeScoreExtractor::failedMatchRequirements.at(i) + ", ";
     }
     failedMatchTypes.chop(2);
 
@@ -620,9 +552,8 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  PoiPolygonNameScoreExtractor nameScorer;
-  nameScorer.setNameScoreThreshold(_nameScoreThreshold);
-  _nameScore = nameScorer.extract(*_map, poi, poly);
+  _nameScorer.setNameScoreThreshold(_nameScoreThreshold);
+  _nameScore = _nameScorer.extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
   LOG_VART(nameMatch);
   return nameMatch ? 1u : 0u;
@@ -630,7 +561,7 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  _addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
+  _addressScore = _addressScorer.extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
   LOG_VART(addressMatch);
   return addressMatch ? 1u : 0u;
@@ -688,18 +619,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       return evidence;
     }
   }
-
-//  if (evidence < _matchEvidenceThreshold)
-//  {
-//    //if poi has field in the name and on a sport field, then match...need a better place to put
-//    //this maybe
-//    if (PoiPolygonNameScoreExtractor::getElementName(poi).toLower().contains("field") &&
-//        PoiPolygonTypeScoreExtractor::isSport(poly))
-//    {
-//      LOG_TRACE("Matching on sport field name.");
-//      evidence = _matchEvidenceThreshold;
-//    }
-//  }
 
   //no point in trying to increase evidence if we're already at a match
   if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)

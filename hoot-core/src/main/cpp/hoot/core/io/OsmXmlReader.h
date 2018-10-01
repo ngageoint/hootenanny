@@ -123,15 +123,12 @@ public:
 private:
 
   bool _osmFound;
-  long _id;
 
-  std::deque<long> _nodeIds;
   /// Maps from old node ids to new node ids.
   QHash<long, long> _nodeIdMap;
   QHash<long, long> _relationIdMap;
   QHash<long, long> _wayIdMap;
 
-  hoot::Tags _tags;
   QString _errorString;
   OsmMapPtr _map;
   boost::shared_ptr<Element> _element;
@@ -186,7 +183,6 @@ private:
   long _getRelationId(long fileId);
 
   double _parseDouble(QString s);
-  int _parseInt(QString s);
   long _parseLong(QString s);
 
   const QString& _saveMemory(const QString& s);

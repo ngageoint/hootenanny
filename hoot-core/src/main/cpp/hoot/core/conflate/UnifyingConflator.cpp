@@ -63,14 +63,16 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 
 UnifyingConflator::UnifyingConflator() :
   _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance())
+  _settings(Settings::getInstance()),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _reset();
 }
 
 UnifyingConflator::UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance())
+  _settings(Settings::getInstance()),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _matchThreshold = matchThreshold;
   _reset();
@@ -263,8 +265,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   vector< pair<ElementId, ElementId> > replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
-    PROGRESS_INFO(
-      "Applying merger: " << i + 1 << " / " << _mergers.size() << " - " << _mergers[i]->toString());
+    if (i % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Applying merger: " << i + 1 << " / " << _mergers.size() << " - " <<
+        _mergers[i]->toString());
+    }
     _mergers[i]->apply(map, replaced);
 
     // update any mergers that reference the replaced values

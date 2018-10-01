@@ -30,6 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -46,13 +47,13 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonAddressScoreExtractorTest);
   CPPUNIT_TEST(runTagTest);
-  //CPPUNIT_TEST(runExactMatchingFalseTest);
   CPPUNIT_TEST(runCombinedTagTest);
   CPPUNIT_TEST(runRangeTest);
   CPPUNIT_TEST(runAltFormatTest);
   CPPUNIT_TEST(runSubLetterTest);
   CPPUNIT_TEST(runWayTest);
   CPPUNIT_TEST(runRelationTest);
+  CPPUNIT_TEST(translateTagValueTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -60,6 +61,7 @@ public:
   void runTagTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -79,24 +81,10 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
   }
 
-//  void runExactMatchingFalseTest()
-//  {
-//    PoiPolygonAddressScoreExtractor uut;
-//    uut.setAddressScoreThreshold(0.6);
-//    OsmMapPtr map(new OsmMap());
-
-//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
-//    map->addNode(node1);
-//    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-//    way1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "567 main street");
-//    map->addWay(way1);
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.667, uut.extract(*map, node1, way1), 0.01);
-//  }
-
   void runCombinedTagTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -123,6 +111,7 @@ public:
   void runRangeTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -159,6 +148,7 @@ public:
   void runAltFormatTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -175,7 +165,8 @@ public:
       PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
     map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
-    way2->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "first street 567");
+    way2->getTags().set(
+      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "first street 567");
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
   }
@@ -183,6 +174,7 @@ public:
   void runSubLetterTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -199,6 +191,7 @@ public:
   void runWayTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -231,6 +224,7 @@ public:
   void runRelationTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -246,7 +240,7 @@ public:
     map->addRelation(relation1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, relation1), 0.0);
 
-    //not convinced this is a valid test for now...need to see it happen in the wild
+    //not convinced this is a valid test for now...need to see it actually happen in the wild
 //    NodePtr node3(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
 //    node3->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
 //    node3->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
@@ -285,6 +279,45 @@ public:
     relation4->addElement("test", way3->getElementId());
     map->addRelation(relation4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node6, relation4), 0.01);
+  }
+
+  void translateTagValueTest()
+  {
+    PoiPolygonAddressScoreExtractor uut;
+    Settings settings = conf();
+    OsmMapPtr map(new OsmMap());
+
+    settings.set("poi.polygon.translate.addresses.to.english", "true");
+    settings.set("language.translation.translator", "hoot::DictionaryTranslator");
+    uut.setConfiguration(settings);
+    boost::shared_ptr<DictionaryTranslator> dictTranslator =
+      boost::dynamic_pointer_cast<DictionaryTranslator>(
+        PoiPolygonAddressScoreExtractor::_translator);
+    dictTranslator->setTokenizeInput(false);
+
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    map->addNode(node1);
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    way1->getTags().set(
+      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, QString::fromUtf8("123 Hauptstraße"));
+    map->addWay(way1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node2->getTags().set(
+      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "Central Border Street 40 81379");
+    map->addNode(node2);
+    WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
+    way2->getTags().set(
+      PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2,
+      QString::fromUtf8("ZENTRALLÄNDE STRASSE 40 81379 MÜNCHEN"));
+    map->addWay(way2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
+
+    settings.set("poi.polygon.translate.addresses.to.english", "false");
+    uut.setConfiguration(settings);
+     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 };
 

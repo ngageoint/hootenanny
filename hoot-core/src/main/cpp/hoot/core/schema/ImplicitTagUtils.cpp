@@ -28,7 +28,6 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/language/translators/DictionaryTranslator.h>
 
 namespace hoot
 {
@@ -39,6 +38,7 @@ void ImplicitTagUtils::cleanName(QString& name)
   {
     name = name.replace(0, 1, "");
   }
+  //TODO: move to config file - #2633
   name =
     name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
         .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
@@ -51,6 +51,7 @@ void ImplicitTagUtils::cleanName(QString& name)
   //another possibility here might be to replace name multiple spaces with one
 
   //This needs to be expanded.
+  //TODO: move to config file - #2633
   if (!name.isEmpty() && name.at(0).isDigit() &&
       (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") ||
        name.endsWith("ave") || name.endsWith("avenue") || name.endsWith("st") ||
@@ -60,8 +61,10 @@ void ImplicitTagUtils::cleanName(QString& name)
   }
 }
 
-QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, const Tags& tags)
+QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, const Tags& tags,
+                                                 boost::shared_ptr<ToEnglishTranslator> translator)
 {
+  LOG_VART(translator.get());
   QStringList filteredNames;
   if (tags.contains("name:en"))
   {
@@ -77,12 +80,21 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
       LOG_VART(name);
       if (name != altName)
       {
-        const QString englishName = DictionaryTranslator::getInstance().toEnglish(name);
+        const QString englishName = translator->translate(name);
         LOG_VART(englishName);
-        filteredNames.append(englishName);
+        if (!englishName.isEmpty())
+        {
+          filteredNames.append(englishName);
+        }
+        else
+        {
+          filteredNames.append(name);
+        }
         break;
       }
     }
+
+    LOG_VART(filteredNames.size());
     if (filteredNames.isEmpty() && !altName.isEmpty())
     {
       if (altName.contains(";"))
@@ -90,11 +102,19 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
         altName = altName.split(";")[0];
       }
       LOG_VART(altName);
-      const QString englishName = DictionaryTranslator::getInstance().toEnglish(altName);
+      const QString englishName = translator->translate(altName);
       LOG_VART(englishName);
-      filteredNames.append(englishName);
+      if (!englishName.isEmpty())
+      {
+        filteredNames.append(englishName);
+      }
+      else
+      {
+        filteredNames.append(altName);
+      }
     }
   }
+  LOG_VART(filteredNames.size());
   LOG_VART(filteredNames);
 
   return filteredNames;

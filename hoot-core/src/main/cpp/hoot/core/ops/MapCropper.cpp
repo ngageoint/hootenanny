@@ -76,17 +76,19 @@ MapCropper::MapCropper()
   setConfiguration(conf());
 }
 
-MapCropper::MapCropper(const Envelope& envelope)
+MapCropper::MapCropper(const Envelope& envelope) :
+_envelope(envelope),
+_envelopeG(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope)),
+_invert(false),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
-  _envelope = envelope;
-  _invert = false;
-  _envelopeG.reset(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope));
 }
 
-MapCropper::MapCropper(const boost::shared_ptr<const Geometry> &g, bool invert)
+MapCropper::MapCropper(const boost::shared_ptr<const Geometry> &g, bool invert) :
+_envelopeG(g),
+_invert(invert),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
-  _envelopeG = g;
-  _invert = invert;
 }
 
 void MapCropper::setConfiguration(const Settings& conf)
@@ -132,6 +134,7 @@ void MapCropper::apply(OsmMapPtr& map)
   /// most junior (nodes).
 
   // go through all the ways
+  long wayCtr = 0;
   const WayMap ways = result->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
@@ -154,6 +157,12 @@ void MapCropper::apply(OsmMapPtr& map)
       // do an expensive operation to decide how much to keep, if any.
       _cropWay(result, w->getId());
     }
+
+    wayCtr++;
+    if (wayCtr % _statusUpdateInterval == 0)
+    {
+      PROGRESS_DEBUG("Cropped " << wayCtr << " / " << ways.size() << " ways.");
+    }
   }
 
   boost::shared_ptr<NodeToWayMap> n2wp = result->getIndex().getNodeToWayMap();
@@ -162,6 +171,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_INFO("  Removing nodes...");
 
   // go through all the nodes
+  long nodeCtr = 0;
   long nodesRemoved = 0;
   const NodeMap nodes = result->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -211,6 +221,12 @@ void MapCropper::apply(OsmMapPtr& map)
           nodesRemoved++;
         }
       }
+    }
+
+    nodeCtr++;
+    if (nodeCtr % _statusUpdateInterval == 0)
+    {
+      PROGRESS_DEBUG("Cropped " << nodeCtr << " / " << nodes.size() << " nodes.");
     }
   }
   LOG_DEBUG("Nodes removed: " + QString::number(nodesRemoved));

@@ -38,6 +38,7 @@
 
 namespace hoot
 {
+
 class OsmMap;
 class OsmMapReader;
 
