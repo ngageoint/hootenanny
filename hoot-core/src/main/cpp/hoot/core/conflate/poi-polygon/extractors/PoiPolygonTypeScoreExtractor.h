@@ -42,8 +42,6 @@ namespace hoot
 
 /**
  * Scores element type similarity
- *
- * TODO: move hardcoded strings to config - #2635
  */
 class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configurable
 {

@@ -497,6 +497,7 @@ bool PoiPolygonTypeScoreExtractor::hasMoreThanOneType(ConstElementPtr element)
     QSet<QString> allTagKeysTemp = OsmSchema::getInstance().getAllTagKeys();
     allTagKeysTemp.remove(MetadataTags::Ref1());
     allTagKeysTemp.remove(MetadataTags::Ref2());
+    //TODO: move to config file as part of #2635?
     allTagKeysTemp.remove("uuid");
     allTagKeysTemp.remove("name");
     allTagKeysTemp.remove("ele");
@@ -540,6 +541,7 @@ bool PoiPolygonTypeScoreExtractor::hasType(ConstElementPtr element)
 
 bool PoiPolygonTypeScoreExtractor::hasSpecificType(ConstElementPtr element)
 {
+  //TODO: move to config file as part of #2635?
   return
     hasType(element) && !element->getTags().contains("poi") &&
           element->getTags().get("building") != QLatin1String("yes") &&

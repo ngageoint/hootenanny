@@ -137,6 +137,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //be a little stricter on place related reviews.
+  //TODO: move to config file as part of #2635?
   if ((poi->getTags().get("place").toLower() == "neighbourhood" ||
        poi->getTags().get("place").toLower() == "suburb") && !poly->getTags().contains("place"))
   {
@@ -154,6 +155,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //points sitting on islands need to have an island type, or the match doesn't make any sense
+  //TODO: move to type extractor method
   if ((poi->getTags().get("place").toLower() == "island" ||
        poly->getTags().get("place").toLower() == "island") && !_typeMatch)
   {
@@ -165,6 +167,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   LOG_VART(polyIsPark);
 
   //similar to above, but for gardens
+  //TODO: move to type extractor method
   if ((poi->getTags().get("leisure").toLower() == "garden" ||
        poly->getTags().get("leisure").toLower() == "garden") &&
        (!_nonDistanceSimilaritiesPresent() ||
@@ -176,6 +179,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //lots of things have fountains, so let's raise the requirements a bit
+  //TODO: move to type extractor method
   if (poi->getTags().get("amenity") == "fountain" && _nameScore < 0.5)
   {
     LOG_TRACE("Returning miss per review reduction rule #7...");
@@ -187,6 +191,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //handle these types
   const bool poiHasName = !PoiPolygonNameScoreExtractor::getElementName(poi).isEmpty();
   const bool polyHasName = !PoiPolygonNameScoreExtractor::getElementName(poly).isEmpty();
+  //TODO: move to type extractor method
   if (poi->getTags().get("tourism") == "hotel" && poly->getTags().get("tourism") == "hotel" &&
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
   {
@@ -247,6 +252,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
+  //TODO: move to type extractor method
   const bool poiIsNatural = poi->getTags().contains("natural");
   const bool polyIsNatural = poly->getTags().contains("natural");
 
