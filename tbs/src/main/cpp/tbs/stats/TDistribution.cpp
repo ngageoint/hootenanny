@@ -220,7 +220,7 @@ void TDistribution::initialize(const Mat& m)
 
   double oldL = 1e6;
 
-  while (!done && count++ < 100)
+  while (!done && count < 100)
   {
     // Expectation Step
     for (int i = 0; i < m.rows; i++)
@@ -264,6 +264,7 @@ void TDistribution::initialize(const Mat& m)
       done = true;
     }
     oldL = L;
+    count++;
   }
 }
 
