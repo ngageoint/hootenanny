@@ -31,6 +31,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include "TranslateDictionary.h"
 
 // Qt
@@ -46,6 +47,8 @@ using namespace std;
 namespace hoot
 {
 
+QSet<QString> DictionaryTranslator::_streetTypes;
+
 HOOT_FACTORY_REGISTER(ToEnglishTranslator, DictionaryTranslator)
 
 DictionaryTranslator::DictionaryTranslator() :
@@ -56,14 +59,29 @@ _tokenizeInput(true)
   assert(sizeof(UChar) == sizeof(QChar));
   _whiteSpace.setPattern("\\W+");
 
-  //TODO: move to config - #2635
-  _streetTypes.insert("street");
-  _streetTypes.insert("lane");
-  _streetTypes.insert("boulevard");
-  _streetTypes.insert("highway");
-  _streetTypes.insert("freeway");
-  _streetTypes.insert("tollway");
-  _streetTypes.insert("road");
+  _readStreetTypes();
+}
+
+void DictionaryTranslator::_readStreetTypes()
+{
+  // see related note in ImplicitTagUtils::_modifyUndesirableTokens
+  if (_streetTypes.isEmpty())
+  {
+    const QStringList streetTypesRaw =
+      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+    // This list could be expanded.  See the note in the associated config file.
+    for (int i = 0; i < streetTypesRaw.size(); i++)
+    {
+      const QString streetTypeEntry = streetTypesRaw.at(i);
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      if (streetTypeEntryParts.size() != 2)
+      {
+        throw HootException("Invalid street type entry: " + streetTypeEntry);
+      }
+      //don't care about the abbreviation here
+      _streetTypes.insert(streetTypeEntryParts.at(0).toLower());
+    }
+  }
 }
 
 QString DictionaryTranslator::translate(const QString textToTranslate)

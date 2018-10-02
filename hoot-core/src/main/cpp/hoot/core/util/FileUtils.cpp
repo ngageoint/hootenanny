@@ -162,4 +162,29 @@ bool FileUtils::dirContainsFileWithExtension(const QDir dir, const QString exten
   return false;
 }
 
+QStringList FileUtils::readFileToList(const QString inputPath)
+{
+  LOG_VARD(inputPath);
+  QStringList outputList;
+  if (!inputPath.trimmed().isEmpty())
+  {
+    QFile inputFile(inputPath);
+    if (!inputFile.open(QIODevice::ReadOnly))
+    {
+      throw HootException(QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
+    }
+    while (!inputFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
+      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
+      {
+        outputList.append(line.toLower());
+      }
+    }
+    inputFile.close();
+  }
+  LOG_VART(outputList);
+  return outputList;
+}
+
 }

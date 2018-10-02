@@ -92,6 +92,14 @@ public:
    * extension; false otherwise
    */
   static bool dirContainsFileWithExtension(const QDir dir, const QString extension);
+
+  /**
+   * Reads file lines into a string list
+   *
+   * @param inputPath file to read
+   * @return a list of strings
+   */
+  static QStringList readFileToList(const QString inputPath);
 };
 
 }

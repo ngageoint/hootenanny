@@ -28,36 +28,106 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {
 
+QStringList ImplicitTagUtils::_nameCleaningTokens;
+QStringList ImplicitTagUtils::_streetTypes;
+
 void ImplicitTagUtils::cleanName(QString& name)
 {
+  name = name.simplified();
   if (name.startsWith("-"))
   {
     name = name.replace(0, 1, "");
   }
-  //TODO: move to config file - #2633
-  name =
-    name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
-        .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
-        .replace("(historical)", "").replace("-", " ");
+  _modifyUndesirableTokens(name);
   if (name.startsWith("_"))
   {
     name = name.replace(0, 1, "");
   }
 
-  //another possibility here might be to replace name multiple spaces with one
+  _filterOutStreets(name);
+}
 
-  //This needs to be expanded.
-  //TODO: move to config file - #2633
-  if (!name.isEmpty() && name.at(0).isDigit() &&
-      (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") ||
-       name.endsWith("ave") || name.endsWith("avenue") || name.endsWith("st") ||
-       name.endsWith("street") || name.endsWith("pl") || name.endsWith("plaza")))
+void ImplicitTagUtils::_modifyUndesirableTokens(QString& name)
+{
+  // This assumes these file will be populated with at least one entry.  Having the option of
+  // disabling use of these files completely would require different logic.
+  if (_nameCleaningTokens.isEmpty())
+  {
+    _nameCleaningTokens =
+      FileUtils::readFileToList(ConfigOptions().getImplicitTaggingNameCleaningTokensFile());
+  }
+
+  for (int i = 0; i < _nameCleaningTokens.size(); i++)
+  {
+    const QString replacementEntry = _nameCleaningTokens.at(i);
+    const QStringList replacementEntryParts = replacementEntry.split("\t");
+    if (replacementEntryParts.size() != 2)
+    {
+      throw HootException(
+        "Invalid implicit tag rules name cleaning token entry: " + replacementEntry);
+    }
+    const QString replaceText = replacementEntryParts.at(1);
+    if (replaceText.trimmed().isEmpty())
+    {
+      throw HootException(
+          "Empty text specified for implicit tag rules name cleaning token entry.");
+    }
+    else if (replaceText == "e")
+    {
+      name = name.replace(replacementEntryParts.at(0), "");
+    }
+    else if (replaceText == "s")
+    {
+      name = name.replace(replacementEntryParts.at(0), " ");
+    }
+    else
+    {
+      name = name.replace(replacementEntryParts.at(0), replaceText);
+    }
+  }
+}
+
+void ImplicitTagUtils::_filterOutStreets(QString& name)
+{
+  if (name.isEmpty() || !name.at(0).isDigit())
+  {
+    return;
+  }
+  //TODO: This one seems kind of awkward and probably needs to be rethought or expanded somehow...
+  //apparently its to catch address parts like "2nd" or "3rd"
+  else if (name.endsWith("th") || name.endsWith("nd"))
   {
     name = "";
+  }
+  else
+  {
+    // see related note in _modifyUndesirableTokens
+    if (_streetTypes.isEmpty())
+    {
+      _streetTypes = FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+    }
+
+    // This list could be expanded.  See the note in the associated config file.
+    for (int i = 0; i < _streetTypes.size(); i++)
+    {
+      const QString streetTypeEntry = _streetTypes.at(i);
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      if (streetTypeEntryParts.size() != 2)
+      {
+        throw HootException("Invalid street type entry: " + streetTypeEntry);
+      }
+      if (name.endsWith(streetTypeEntryParts.at(0)) || name.endsWith(streetTypeEntryParts.at(1)))
+      {
+        name = "";
+        break;
+      }
+    }
   }
 }
 
