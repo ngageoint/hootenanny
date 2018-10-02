@@ -27,7 +27,6 @@
 package hoot.services.controllers.osm.map;
 
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
-import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
@@ -37,12 +36,10 @@ import java.net.SocketException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -52,6 +49,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -81,7 +79,6 @@ import org.w3c.dom.Element;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.command.Command;
 import hoot.services.command.InternalCommand;
@@ -89,8 +86,6 @@ import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
-import hoot.services.models.db.FolderMapMappings;
-import hoot.services.models.db.Folders;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
@@ -140,93 +135,6 @@ public class MapResource {
         }
 
         return mapLayers;
-    }
-
-    /**
-     * <NAME>Map Service - List Folders </NAME> <DESCRIPTION> Returns a list of
-     * all folders in the services database. </DESCRIPTION> <PARAMETERS>
-     * </PARAMETERS> <OUTPUT> a JSON object containing a list of folders
-     * </OUTPUT> <EXAMPLE>
-     * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/ folders</URL>
-     * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> { "folders": [
-     * { "id": 1, "name": "layer 1", "parentid":0, }, { "id": 2, "name":
-     * "layer 2", "parentid":1, } ] } </OUTPUT> </EXAMPLE>
-     *
-     * Returns a list of all folders in the services database
-     *
-     * @return a JSON object containing a list of folders
-     */
-    @GET
-    @Path("/folders")
-    @Produces(MediaType.APPLICATION_JSON)
-    public FolderRecords getFolders() {
-        FolderRecords folderRecords = null;
-        try {
-            List<Folders> folderRecordSet = createQuery()
-                    .select(folders)
-                    .from(folders)
-                    .orderBy(folders.displayName.asc())
-                    .fetch();
-
-            folderRecords = mapFolderRecordsToFolders(folderRecordSet);
-        }
-        catch (Exception e) {
-            handleError(e, null, null);
-        }
-
-        return folderRecords;
-    }
-
-    /**
-     * Returns a list of all folders in the services database
-     *
-     * GET hoot-services/osm/api/0.6/map/links
-     *
-     * @return a JSON object containing a list of folders
-     */
-    @GET
-    @Path("/links")
-    @Produces(MediaType.APPLICATION_JSON)
-    public LinkRecords getLinks() {
-        LinkRecords linkRecords = null;
-
-        try {
-            createQuery().delete(folderMapMappings)
-                    .where(new SQLQuery<>()
-                            .from(maps)
-                            .where(folderMapMappings.mapId.eq(maps.id))
-                            .notExists())
-                    .execute();
-
-            try {
-                createQuery().insert(folderMapMappings)
-                        .columns(folderMapMappings.mapId, folderMapMappings.folderId)
-                        .select(new SQLQuery<>()
-                                .select(maps.id, Expressions.numberTemplate(Long.class, "0"))
-                                .from(maps)
-                                .where(maps.id.notIn(new SQLQuery<>()
-                                        .select(folderMapMappings.mapId)
-                                        .distinct()
-                                        .from(folderMapMappings))))
-                        .execute();
-            }
-            catch (Exception e) {
-                logger.error("Could not add missing records...", e);
-            }
-
-            List<FolderMapMappings> linkRecordSet = createQuery()
-                    .select(folderMapMappings)
-                    .from(folderMapMappings)
-                    .orderBy(folderMapMappings.folderId.asc())
-                    .fetch();
-
-            linkRecords = mapLinkRecordsToLinks(linkRecordSet);
-        }
-        catch (Exception e) {
-            handleError(e, null, null);
-        }
-
-        return linkRecords;
     }
 
     private static Document generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat) {
@@ -355,7 +263,7 @@ public class MapResource {
     }
 
     /**
-     * GET hoot-services/osm/api/0.6/map?mapId=dc-admin&bbox
+     * GET hoot-services/osm/api/0.6/map/{mapId}/{bbox}
      *
      * @param mapId
      *            ID of the map to query
@@ -370,112 +278,104 @@ public class MapResource {
      * @return response containing the data of the requested elements
      */
     @GET
+    @Path("/{mapId}/{BBox}")
     @Produces(MediaType.TEXT_XML)
-    public Response get(@QueryParam("mapId") String mapId,
-                        @QueryParam("bbox") String BBox,
-                        @QueryParam("extent") String extent,
-                        @QueryParam("autoextent") String auto,
+    public Response get(@PathParam("mapId") String mapId, @PathParam("BBox") String BBox,
+            @QueryParam("manualExtent") String manualExtent,
                         @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") boolean multiLayerUniqueElementIds) {
         Document responseDoc = null;
         try {
             logger.debug("Retrieving map data for map with ID: {} and bounds {} ...", mapId, BBox);
 
+            if (mapId.equals("-1")) {
+                // OSM API database data can't be displayed on a hoot map, due
+                // to differences
+                // between the display code, so we return no data here.
+                responseDoc = writeEmptyResponse();
+                return Response.ok(new DOMSource(responseDoc))
+                        .header("Content-Disposition", "attachment; filename=\"map.osm\"").build();
+
+            }
+
             long mapIdNum = -2;
+
             try {
                 mapIdNum = Long.parseLong(mapId);
             }
             catch (NumberFormatException ignored) {
-                //
-            }
-            if (mapIdNum == -1)
-            {
-                // OSM API database data can't be displayed on a hoot map, due to differences
-                // between the display code, so we return no data here.
-                responseDoc = writeEmptyResponse();
-            }
-            else {
-                String bbox = BBox;
-                String[] Coords = bbox.split(",");
-                if (Coords.length == 4) {
-                    String sMinX = Coords[0];
-                    String sMinY = Coords[1];
-                    String sMaxX = Coords[2];
-                    String sMaxY = Coords[3];
-
-                    double minX = Double.parseDouble(sMinX);
-                    double minY = Double.parseDouble(sMinY);
-                    double maxX = Double.parseDouble(sMaxX);
-                    double maxY = Double.parseDouble(sMaxY);
-
-                    minX = (minX > 180) ? 180 : minX;
-                    minX = (minX < -180) ? -180 : minX;
-
-                    maxX = (maxX > 180) ? 180 : maxX;
-                    maxX = (maxX < -180) ? -180 : maxX;
-
-                    minY = (minY > 90) ? 90 : minY;
-                    minY = (minY < -90) ? -90 : minY;
-
-                    maxY = (maxY > 90) ? 90 : maxY;
-                    maxY = (maxY < -90) ? -90 : maxY;
-
-                    bbox = minX + "," + minY + "," + maxX + "," + maxY;
-                }
-
                 mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+            }
 
-                BoundingBox queryBounds;
-                try {
-                    queryBounds = new BoundingBox(bbox);
-                    logger.debug("Query bounds area: {}", queryBounds.getArea());
+            String bbox = BBox;
+            String[] Coords = bbox.split(",");
+            if (Coords.length != 4) {
+                return Response.status(Status.BAD_REQUEST).entity("").build();
+            }
+
+            String sMinX = Coords[0];
+            String sMinY = Coords[1];
+            String sMaxX = Coords[2];
+            String sMaxY = Coords[3];
+
+            double minX = Double.parseDouble(sMinX);
+            double minY = Double.parseDouble(sMinY);
+            double maxX = Double.parseDouble(sMaxX);
+            double maxY = Double.parseDouble(sMaxY);
+
+            minX = (minX > 180) ? 180 : minX;
+            minX = (minX < -180) ? -180 : minX;
+
+            maxX = (maxX > 180) ? 180 : maxX;
+            maxX = (maxX < -180) ? -180 : maxX;
+
+            minY = (minY > 90) ? 90 : minY;
+            minY = (minY < -90) ? -90 : minY;
+
+            maxY = (maxY > 90) ? 90 : maxY;
+            maxY = (maxY < -90) ? -90 : maxY;
+
+            bbox = minX + "," + minY + "," + maxX + "," + maxY;
+
+            BoundingBox queryBounds = new BoundingBox(bbox);
+            logger.debug("Calculating query bounds area for bounds: {}", queryBounds);
+            logger.debug("Query bounds area: {}", queryBounds.getArea());
+
+
+            if (manualExtent != null && !manualExtent.isEmpty()) {
+                String[] coords = manualExtent.split(",");
+                if (coords.length != 4) {
+                    return Response.status(Status.BAD_REQUEST).entity("").build();
                 }
-                catch (Exception e) {
-                    throw new RuntimeException("Error parsing bounding box from bbox param: " +
-                            bbox + " (" + e.getMessage() + ")", e);
-                }
+                String maxlon = coords[0].trim();
+                String maxlat = coords[1].trim();
+                String minlon = coords[2].trim();
+                String minlat = coords[3].trim();
 
-                boolean doDefault = true;
-                if ((auto != null) && (extent != null)) {
-                    if (auto.equalsIgnoreCase("manual")) {
-                        if (!extent.isEmpty()) {
-                            String[] coords = extent.split(",");
-                            if (coords.length == 4) {
-                                String maxlon = coords[0].trim();
-                                String maxlat = coords[1].trim();
-                                String minlon = coords[2].trim();
-                                String minlat = coords[3].trim();
-                                responseDoc = generateExtentOSM(maxlon, maxlat, minlon, minlat);
-                                doDefault = false;
-                            }
-                        }
+                responseDoc = generateExtentOSM(maxlon, maxlat, minlon, minlat);
+            }
 
-                    }
-                }
-
-                if (doDefault) {
-                    java.util.Map<ElementType, java.util.Map<Long, Tuple>> results =
-                            (new Map(mapIdNum)).query(queryBounds);
-
-                    responseDoc = writeResponse(results, queryBounds, multiLayerUniqueElementIds, mapIdNum);
-                }
+            if (responseDoc == null) {
+                java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = (new Map(mapIdNum)).query(queryBounds);
+                responseDoc = writeResponse(results, queryBounds, multiLayerUniqueElementIds, mapIdNum);
             }
         }
         catch (Exception e) {
             handleError(e, mapId, BBox);
         }
 
-        return Response.ok(new DOMSource(responseDoc))
-                .header("Content-Disposition", "attachment; filename=\"map.osm\"").build();
+        return Response.ok(new DOMSource(responseDoc)).header("Content-Disposition", "attachment; filename=\"map.osm\"")
+                .build();
     }
 
     @POST
     @Path("/nodescount")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTileNodesCounts(String params) {
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         String mapId = "";
         String bbox = "";
+
         try {
             JSONParser parser = new JSONParser();
             JSONArray paramsArray = (JSONArray) parser.parse(params);
@@ -550,10 +450,26 @@ public class MapResource {
     }
 
     @GET
-    @Path("/mbr")
+    @Path("/mbr/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMBR(@QueryParam("mapId") String mapId) {
+    public Response getMBR(@PathParam("id") String mapId) {
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        if (mapId.equals("-1")) {
+            // OSM API database data can't be displayed on a hoot map, due to
+            // differences
+            // between the display code, so we arbitrarily returning roughly a
+            // CONUS bounds
+            // here...not quite sure what else to return...
+            ret.put("minlon", -110);
+            ret.put("maxlon", -75);
+            ret.put("minlat", 20);
+            ret.put("maxlat", 50);
+            ret.put("firstlon", 0);
+            ret.put("firstlat", 0);
+            ret.put("nodescount", 0);
+
+            return Response.status(Status.OK).entity(ret).build();
+        }
         try {
             logger.debug("Retrieving MBR for map with ID: {} ...", mapId);
 
@@ -562,61 +478,39 @@ public class MapResource {
                 mapIdNum = Long.parseLong(mapId);
             }
             catch (NumberFormatException ignored) {
-                //
-            }
-            if (mapIdNum == -1) // OSM API db
-            {
-                // OSM API database data can't be displayed on a hoot map, due to differences
-                // between the display code, so we arbitrarily returning roughly a CONUS bounds
-                // here...not quite sure what else to return...
-                ret.put("minlon", -110);
-                ret.put("maxlon", -75);
-                ret.put("minlat", 20);
-                ret.put("maxlat", 50);
-                ret.put("firstlon", 0);
-                ret.put("firstlat", 0);
-                ret.put("nodescount", 0);
-            }
-            else {
                 mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-
-                BoundingBox queryBounds;
-                try {
-                    queryBounds = new BoundingBox("-180,-90,180,90");
-                    logger.debug("Query bounds area: {}", queryBounds.getArea());
-                }
-                catch (Exception e) {
-                    throw new RuntimeException("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                            + e.getMessage() + ")", e);
-                }
-
-                Map currMap = new Map(mapIdNum);
-                JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-
-                if ((extents.get("minlat") == null) || (extents.get("maxlat") == null) || (extents.get("minlon") == null)
-                        || (extents.get("maxlon") == null)) {
-                    throw new Exception("Map is empty.");
-                }
-
-                JSONObject anode = currMap.retrieveANode(queryBounds);
-                long nodeCnt = currMap.getNodesCount(queryBounds);
-
-                double dMinLon = (Double) extents.get("minlon");
-                double dMaxLon = (Double) extents.get("maxlon");
-                double dMinLat = (Double) extents.get("minlat");
-                double dMaxLat = (Double) extents.get("maxlat");
-
-                double dFirstLon = (Double) anode.get("lon");
-                double dFirstLat = (Double) anode.get("lat");
-
-                ret.put("minlon", dMinLon);
-                ret.put("maxlon", dMaxLon);
-                ret.put("minlat", dMinLat);
-                ret.put("maxlat", dMaxLat);
-                ret.put("firstlon", dFirstLon);
-                ret.put("firstlat", dFirstLat);
-                ret.put("nodescount", nodeCnt);
             }
+
+            BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
+            logger.debug("Query bounds area: {}", queryBounds.getArea());
+
+            Map currMap = new Map(mapIdNum);
+            JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
+
+            if ((extents.get("minlat") == null) || (extents.get("maxlat") == null) || (extents.get("minlon") == null)
+                    || (extents.get("maxlon") == null)) {
+                ret.put("nodescount", 0);
+                return Response.status(Status.NO_CONTENT).entity(ret).build();
+            }
+
+            JSONObject anode = currMap.retrieveANode(queryBounds);
+            long nodeCnt = currMap.getNodesCount(queryBounds);
+
+            double dMinLon = (Double) extents.get("minlon");
+            double dMaxLon = (Double) extents.get("maxlon");
+            double dMinLat = (Double) extents.get("minlat");
+            double dMaxLat = (Double) extents.get("maxlat");
+
+            double dFirstLon = (Double) anode.get("lon");
+            double dFirstLat = (Double) anode.get("lat");
+
+            ret.put("minlon", dMinLon);
+            ret.put("maxlon", dMaxLon);
+            ret.put("minlat", dMinLat);
+            ret.put("maxlat", dMaxLat);
+            ret.put("firstlon", dFirstLon);
+            ret.put("firstlat", dFirstLat);
+            ret.put("nodescount", nodeCnt);
         }
         catch (Exception e) {
             handleError(e, mapId, "-180,-90,180,90");
@@ -667,7 +561,7 @@ public class MapResource {
     /**
      * Deletes a map
      *
-     * DELETE hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
+     * DELETE hoot-services/osm/api/0.6/map/delete/{id}
      *
      *
      * @param mapId
@@ -675,9 +569,10 @@ public class MapResource {
      * @return id of the deleted map
      */
     @DELETE
+    @Path("/delete/{mapId}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteLayers(@QueryParam("mapId") String mapId) {
+    public Response deleteLayers(@PathParam("mapId") String mapId) {
         String jobId = UUID.randomUUID().toString();
 
         try {
@@ -703,10 +598,7 @@ public class MapResource {
 
     /**
      *
-     * PUT
-     * hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&modName='New
-     * Dataset'
-     *
+     * PUT hoot-services/osm/api/0.6/map/modify/123456/New Dataset'
      *
      * @param mapId
      *            ID of map record or folder to be modified
@@ -717,167 +609,17 @@ public class MapResource {
      * @return jobId Success = True/False
      */
     @PUT
-    @Path("/modify")
+    @Path("/modify/{mapId : \\d+}/{name}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyName(@QueryParam("mapId") String mapId,
-                               @QueryParam("modName") String modName,
-                               @QueryParam("inputType") String inputType) {
-        try {
-            if (inputType.toLowerCase(Locale.ENGLISH).equals("dataset")) {
-                createQuery().update(maps)
-                        .where(maps.id.eq(Long.valueOf(mapId)))
-                        .set(maps.displayName, modName)
-                        .execute();
+    public Response modifyName(@PathParam("mapId") String resourceId, @PathParam("name") String modName) {
 
-                logger.debug("Renamed map with id {} {}...", mapId, modName);
-                updateLastAccessed(Long.valueOf(mapId));
-            }
-            else if (inputType.toLowerCase(Locale.ENGLISH).equals("folder")) {
-                createQuery().update(folders)
-                        .where(folders.id.eq(Long.valueOf(mapId)))
-                        .set(folders.displayName, modName)
-                        .execute();
+        createQuery().update(maps).where(maps.id.eq(Long.valueOf(resourceId))).set(maps.displayName, modName).execute();
 
-                logger.debug("Renamed folder with id {} {}...", mapId, modName);
-            }
-        }
-        catch (Exception e) {
-            handleError(e, null, null);
-        }
+        logger.debug("Renamed map with id {} {}...", resourceId, modName);
+        updateLastAccessed(Long.valueOf(resourceId));
 
         return Response.ok().build();
-    }
-
-    /**
-     * Adds new dataset folder
-     *
-     * POST hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&
-     * parentId= {parentId}
-     *
-     * @param folderName
-     *            Display name of folder
-     * @param parentId
-     *            The parent folder of the new folder. If at root level, is
-     *            equal to 0.
-     * @return jobId Success = True/False
-     */
-    @POST
-    @Path("/addfolder")
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addFolder(@QueryParam("folderName") String folderName,
-                              @QueryParam("parentId") Long parentId) {
-
-        Long newId = -1L;
-        try {
-            newId = createQuery()
-                    .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
-                    .from()
-                    .fetchOne();
-
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-
-            long userId = 1;
-            createQuery().insert(folders)
-                    .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
-                            folders.parentId)
-                    .values(newId, now, folderName, true, userId, parentId)
-                    .execute();
-        }
-        catch (Exception e) {
-            handleError(e, null, null);
-        }
-
-        JSONObject json = new JSONObject();
-        json.put("success", true);
-        json.put("folderId", newId);
-
-        return Response.ok(json.toJSONString()).build();
-    }
-
-    /**
-     * Deletes a dataset folder.
-     *
-     * POST hoot-services/osm/api/0.6/map/deletefolder?folderId={folderId}
-     *
-     * //TODO: should be an HTTP DELETE
-     *
-     * @param folderId
-     *            Folder Id
-     * @return jobId
-     */
-    @POST
-    @Path("/deletefolder")
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteFolder(@QueryParam("folderId") Long folderId) {
-        try {
-            List<Long> parentId = createQuery()
-                    .select(folders.id)
-                    .from(folders)
-                    .where(folders.id.eq(folderId))
-                    .fetch();
-
-            Long prntId = !parentId.isEmpty() ? parentId.get(0) : 0L;
-
-            createQuery().update(folders)
-                    .where(folders.parentId.eq(folderId))
-                    .set(folders.parentId, prntId)
-                    .execute();
-
-            createQuery().delete(folders)
-                    .where(folders.id.eq(folderId))
-                    .execute();
-
-            createQuery().update(folderMapMappings)
-                    .where(folderMapMappings.folderId.eq(folderId))
-                    .set(folderMapMappings.folderId, 0L)
-                    .execute();
-        }
-        catch (Exception e) {
-            handleError(e, null, null);
-        }
-
-        JSONObject json = new JSONObject();
-        json.put("success", true);
-
-        return Response.ok(json.toJSONString()).build();
-    }
-
-    /**
-     *
-     * POST hoot-services/osm/api/0.6/map/updateParentId?folderId={folderId}
-     *
-     * //TODO: should be an HTTP PUT
-     *
-     * @param folderId
-     *            ID of folder
-     * @param parentId
-     *            ?
-     * @param newRecord
-     *            ?
-     * @return jobId Success = True/False
-     */
-    @POST
-    @Path("/updateParentId")
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateParentId(@QueryParam("folderId") Long folderId,
-                                   @QueryParam("parentId") Long parentId,
-                                   @QueryParam("newRecord") Boolean newRecord) {
-
-        try {
-            createQuery().update(folders).where(folders.id.eq(folderId)).set(folders.parentId, parentId).execute();
-        }
-        catch (Exception e) {
-            handleError(e, null, null);
-        }
-
-        JSONObject json = new JSONObject();
-        json.put("success", true);
-
-        return Response.ok(json.toJSONString()).build();
     }
 
     /**
@@ -894,88 +636,73 @@ public class MapResource {
      * @return jobId Success = True/False
      */
     @POST
-    @Path("/linkMapFolder")
+    @Path("/link/{mapId : \\d+}/{updateType : update|new}/folder/{folderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateFolderMapLink(@QueryParam("folderId") Long folderId,
-                                        @QueryParam("mapId") Long mapId,
-                                        @QueryParam("updateType") String updateType) {
-        try {
-            // Delete any existing to avoid duplicate entries
-            createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
+    public Response updateFolderMapLink(@PathParam("folderId") Long folderId, @PathParam("mapId") Long mapId,
+            @PathParam("updateType") String updateType) {
 
-            if (updateType.equalsIgnoreCase("new") || updateType.equalsIgnoreCase("update")) {
-                Long newId = createQuery()
-                        .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
-                        .from()
-                        .fetchOne();
+        // Delete any existing to avoid duplicate entries
+        createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
 
-                createQuery().insert(folderMapMappings)
-                        .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
-                        .values(newId, mapId, folderId)
-                        .execute();
-            }
-        }
-        catch (Exception e) {
-            handleError(e, null, null);
-        }
+        Long newId = createQuery()
+                .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')")).from()
+                .fetchOne();
 
-        JSONObject json = new JSONObject();
-        json.put("success", true);
+        createQuery().insert(folderMapMappings)
+                .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
+                .values(newId, mapId, folderId).execute();
 
-        return Response.ok(json.toJSONString()).build();
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("success", true);
+        return Response.ok().entity(ret).build();
     }
 
     @GET
-    @Path("/tags")
+    @Path("/tags/{mapId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTags(@QueryParam("mapid") String mapId) {
-        JSONObject json = new JSONObject();
+    public Response getTags(@PathParam("mapId") String mapId) {
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+
+        if (mapId.isEmpty() || mapId.equals("-1") /* not OSM API db */) {
+            return Response.status(Status.BAD_REQUEST).entity("").build();
+        }
+
         try {
-            if (!StringUtils.isEmpty(mapId)) {
-                long mapIdNum = -2;
-                try {
-                    mapIdNum = Long.parseLong(mapId);
-                }
-                catch (NumberFormatException ignored) {
-                    // a map name string could also be passed in here
-                }
 
-                if (mapIdNum != -1) // not OSM API db
-                {
-                    mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-                    logger.debug("Retrieving map tags for map with ID: {} ...", mapIdNum);
+            long mapIdNum = -2;
+            try {
+                mapIdNum = Long.parseLong(mapId);
+            }
+            catch (NumberFormatException ignored) {
+                mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+            }
 
-                    try {
-                        updateLastAccessed(mapIdNum);
-                        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum);
-                        if (tags != null) {
-                            logger.debug(tags.toString());
-                        }
-                        json.putAll(tags);
-                        Object oInput1 = json.get("input1");
-                        if (oInput1 != null) {
-                            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()));
-                            json.put("input1Name", dispName);
-                        }
+            logger.debug("Retrieving map tags for map with ID: {} ...", mapIdNum);
 
-                        Object oInput2 = json.get("input2");
-                        if (oInput2 != null) {
-                            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput2.toString()));
-                            json.put("input2Name", dispName);
-                        }
-                    }
-                    catch (Exception e) {
-                        throw new RuntimeException("Error getting map tags. :" + e.getMessage(), e);
-                    }
-                }
+            updateLastAccessed(mapIdNum);
+            java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum);
+            if (tags != null) {
+                logger.debug(tags.toString());
+            }
+            ret.putAll(tags);
+            Object oInput1 = ret.get("input1");
+            if (oInput1 != null) {
+                String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()));
+                ret.put("input1Name", dispName);
+            }
+
+            Object oInput2 = ret.get("input2");
+            if (oInput2 != null) {
+                String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput2.toString()));
+                ret.put("input2Name", dispName);
             }
         }
         catch (Exception e) {
             handleError(e, mapId, "");
         }
 
-        return Response.ok(json.toString()).build();
+        return Response.ok().entity(ret).build();
     }
 
     /**
@@ -1055,74 +782,20 @@ public class MapResource {
     }
 
     /**
-     * Converts a set of folder database records into an object returnable by a
-     * web service
-     *
-     * @param folderRecordSet
-     *            set of map layer records
-     * @return folders web service object
-     */
-    private static FolderRecords mapFolderRecordsToFolders(List<Folders> folderRecordSet) {
-        FolderRecords folderRecords = new FolderRecords();
-        List<FolderRecord> folderRecordList = new ArrayList<>();
-
-        for (Folders folderRecord : folderRecordSet) {
-            FolderRecord folder = new FolderRecord();
-            folder.setId(folderRecord.getId());
-            folder.setName(folderRecord.getDisplayName());
-            folder.setParentId(folderRecord.getParentId());
-            folderRecordList.add(folder);
-        }
-
-        folderRecords.setFolders(folderRecordList.toArray(new FolderRecord[folderRecordList.size()]));
-
-        return folderRecords;
-    }
-
-    /**
-     * Converts a set of database records into an object returnable by a web
-     * service
-     *
-     * @param linkRecordSet
-     *            set of map layer records
-     * @return folders web service object
-     */
-    private static LinkRecords mapLinkRecordsToLinks(List<FolderMapMappings> linkRecordSet) {
-        LinkRecords linkRecords = new LinkRecords();
-        List<LinkRecord> linkRecordList = new ArrayList<>();
-
-        for (FolderMapMappings linkRecord : linkRecordSet) {
-            LinkRecord link = new LinkRecord();
-            link.setId(linkRecord.getId());
-            link.setFolderId(linkRecord.getFolderId());
-            link.setMapId(linkRecord.getMapId());
-            linkRecordList.add(link);
-        }
-
-        linkRecords.setLinks(linkRecordList.toArray(new LinkRecord[linkRecordList.size()]));
-
-        return linkRecords;
-    }
-
-    /**
      * Updates the lastAccessed key in the maps
      * tags hstore to the current timestamp
      *
      * @param mapid
      *            id of the maps record
      */
-    public static void updateLastAccessed(Long mapid) {
+    public static long updateLastAccessed(Long mapid) {
         java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapid);
 
         DateFormat dateFormat = MapLayer.format;
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         tags.put("lastAccessed", dateFormat.format(now));
 
-        long count = DbUtils.updateMapsTableTags(tags, mapid);
-
-        if (count < 1) {
-            throw new RuntimeException("Error updating map " + mapid + "'s last accessed tag!");
-        }
+        return DbUtils.updateMapsTableTags(tags, mapid);
 
     }
 }
