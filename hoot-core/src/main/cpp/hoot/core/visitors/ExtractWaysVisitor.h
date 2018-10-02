@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-class ExtractWaysVisitor :  public ElementConstOsmMapVisitor
+class ExtractWaysVisitor : public ElementConstOsmMapVisitor
 {
 public:
 

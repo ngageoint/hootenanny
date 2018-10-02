@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BufferedLineSegmentIntersector.h"
 
@@ -31,10 +31,7 @@
 #include <hoot/core/util/Log.h>
 
 // opencv
-// #include <opencv/cv.h>
-#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
-#undef int64
 
 using namespace cv;
 using namespace geos::geom;

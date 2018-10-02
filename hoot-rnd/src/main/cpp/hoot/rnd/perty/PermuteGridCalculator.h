@@ -27,17 +27,12 @@
 #ifndef PERMUTE_GRID_CALCULATOR_H
 #define PERMUTE_GRID_CALCULATOR_H
 
-//hoot
+// hoot
+#include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Units.h>
 
 // geos
 #include <geos/geom/Envelope.h>
-
-// OpenCV
-// #include <opencv/cv.h>
-#define int64 opencv_broken_int
-#include <hoot/core/util/OpenCv.h>
-#undef int64
 
 // Qt
 #include <QString>

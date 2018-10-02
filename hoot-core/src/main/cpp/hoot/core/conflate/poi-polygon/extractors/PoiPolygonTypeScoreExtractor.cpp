@@ -304,7 +304,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
         {
           polyBestKvp = polyKvp;
           LOG_VART(polyBestKvp);
-        } 
+        }
       }
       result = max(score, result);
       LOG_VART(result);

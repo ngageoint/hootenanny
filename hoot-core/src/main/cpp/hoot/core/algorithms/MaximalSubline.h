@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALSUBLINE_H
 #define MAXIMALSUBLINE_H
@@ -31,17 +31,12 @@
 #include <geos/geom/LineSegment.h>
 
 // hoot
-#include <hoot/core/util/Units.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/OpenCv.h>
+#include <hoot/core/util/Units.h>
 
 #include "Sparse2dMatrix.h"
-
-// OpenCV
-// #include <opencv/cv.h>
-#define int64 opencv_broken_int
-#include <hoot/core/util/OpenCv.h>
-#undef int64
 
 namespace hoot
 {

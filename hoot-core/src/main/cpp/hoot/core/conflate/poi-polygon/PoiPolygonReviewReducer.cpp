@@ -230,7 +230,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
   else if ((poiLeisureVal == "pitch" || polyLeisureVal == "pitch") &&
            !_nonDistanceSimilaritiesPresent())
-  {   
+  {
     LOG_TRACE("Returning miss per review reduction rule #10...");
     return true;
   }

@@ -1063,6 +1063,14 @@ names.  Use 'key=*' to ignore all tags for a given key.
 If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
 rules are derived.
 
+=== implicit.tagging.database.deriver.translate.names.to.english
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
+rules are derived.
+
 === implicit.tagging.database.deriver.word.ignore.file
 
 * Data Type: string
