@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TDistribution.h"
@@ -48,9 +48,8 @@ class CostT : public LineSearch::Function
 {
 public:
 
-  CostT(TDistribution* td, const Mat& m, const vector<double>& EH, const vector<double>& ELogH) :
+  CostT(TDistribution* td, const Mat& /*m*/, const vector<double>& EH, const vector<double>& ELogH) :
     _td(td),
-    _m(m),
     _EH(EH),
     _ELogH(ELogH)
   {
@@ -60,13 +59,11 @@ public:
   virtual double operator()(double x)
   {
     double y = _td->_calculateTCost(x, _EH, _ELogH);
-    //cout << "f(" << x << ") = " << y << endl;
     return y;
   }
 
 private:
   TDistribution* _td;
-  const Mat& _m;
   const vector<double>& _EH;
   const vector<double>& _ELogH;
 };
@@ -220,7 +217,7 @@ void TDistribution::initialize(const Mat& m)
 
   double oldL = 1e6;
 
-  while (!done && count++ < 100)
+  while (!done && count < 100)
   {
     // Expectation Step
     for (int i = 0; i < m.rows; i++)
@@ -264,6 +261,7 @@ void TDistribution::initialize(const Mat& m)
       done = true;
     }
     oldL = L;
+    count++;
   }
 }
 

@@ -414,11 +414,12 @@ void OsmPbfWriter::_writeMap()
     const ConstNodePtr& n = _map->getNode(nids[i]);
     _writeNodeDense(n);
 
-    if (_enablePbFlushing && _tick++ % 100000 == 0 &&
+    if (_enablePbFlushing && _tick % 100000 == 0 &&
         _d->primitiveBlock.ByteSize() > _minBlobTarget)
     {
       _writePrimitiveBlock();
     }
+    _tick++;
   }
 
   const WayMap& ways = _map->getWays();
@@ -437,10 +438,11 @@ void OsmPbfWriter::_writeMap()
     const boost::shared_ptr<const hoot::Way>& w = _map->getWay(wids[i]);
     _writeWay(w);
 
-    if (_enablePbFlushing && _tick++ % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+    if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
     {
       _writePrimitiveBlock();
     }
+    _tick++;
   }
 
   // write out relations
@@ -460,10 +462,11 @@ void OsmPbfWriter::_writeMap()
     const ConstRelationPtr& r = _map->getRelation(rids[i]);
     _writeRelation(r);
 
-    if (_enablePbFlushing && _tick++ % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+    if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
     {
       _writePrimitiveBlock();
     }
+    _tick++;
   }
 }
 
@@ -641,30 +644,33 @@ void OsmPbfWriter::writePartial(const ConstNodePtr& n)
 {
   _writeNodeDense(n);
 
-  if (_enablePbFlushing && _tick++ % 100000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+  if (_enablePbFlushing && _tick % 100000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
   {
     _writePrimitiveBlock();
   }
+  _tick++;
 }
 
 void OsmPbfWriter::writePartial(const ConstWayPtr& w)
 {
   _writeWay(w);
 
-  if (_enablePbFlushing && _tick++ % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+  if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
   {
     _writePrimitiveBlock();
   }
+  _tick++;
 }
 
 void OsmPbfWriter::writePartial(const ConstRelationPtr& r)
 {
   _writeRelation(r);
 
-  if (_enablePbFlushing && _tick++ % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+  if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
   {
     _writePrimitiveBlock();
   }
+  _tick++;
 }
 
 void OsmPbfWriter::_writePrimitiveBlock()
@@ -675,7 +681,6 @@ void OsmPbfWriter::_writePrimitiveBlock()
     int size = _d->primitiveBlock.ByteSize();
     _d->primitiveBlock.SerializePartialToArray(_getBuffer(size), size);
     _writeBlob(_buffer.data(), size, PBF_OSM_DATA);
-    _initBlob();
   }
 }
 
