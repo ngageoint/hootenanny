@@ -35,10 +35,7 @@
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/util/MapProjector.h>
-
-#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
-#undef int64
 
 using namespace hoot;
 

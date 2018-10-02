@@ -32,10 +32,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/AttributeComparator.h>
-
-#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
-#undef int64
 
 // Tgs
 #include <tgs/Statistics/Random.h>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RandomForestUtilities.h"
 
@@ -88,7 +88,7 @@ namespace Tgs
     {
       Tgs::RandomForestManager initialModel;
 
-      initialModel.init(Tgs::RandomForestManager::MULTICLASS, rfInputs.featureLabels);
+      initialModel.init(BaseRandomForestManager::MULTICLASS, rfInputs.featureLabels);
 
       std::map<std::string, std::vector<std::vector<double> > >::iterator mapItr;
 
@@ -125,7 +125,7 @@ namespace Tgs
 
       MultithreadedRandomForestManager initialModel;
 
-      initialModel.init(RandomForestManager::MULTICLASS, rfInputs.featureLabels);
+      initialModel.init(BaseRandomForestManager::MULTICLASS, rfInputs.featureLabels);
 
       std::map<std::string, std::vector<std::vector<double> > >::iterator mapItr;
 

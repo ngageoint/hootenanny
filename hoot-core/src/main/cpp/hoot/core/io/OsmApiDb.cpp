@@ -495,9 +495,9 @@ QString OsmApiDb::extractTagFromRow(boost::shared_ptr<QSqlQuery> row, const Elem
 {
   QString tag = "";
   int pos = -1;
-  if (type == ElementType::Node) pos = OsmApiDb::NODES_TAGS;
-  else if (type == ElementType::Way) pos = OsmApiDb::WAYS_TAGS;
-  else if (type == ElementType::Relation) pos = OsmApiDb::RELATIONS_TAGS;
+  if (type == ElementType::Node) pos = ApiDb::NODES_TAGS;
+  else if (type == ElementType::Way) pos = ApiDb::WAYS_TAGS;
+  else if (type == ElementType::Relation) pos = ApiDb::RELATIONS_TAGS;
   else throw HootException("extractTagFromRow_OsmApi called with unknown Type");
 
   // test for blank tag
