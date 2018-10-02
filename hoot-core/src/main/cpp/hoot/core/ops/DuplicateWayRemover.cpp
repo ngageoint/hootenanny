@@ -178,7 +178,7 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
       w1->setTags(mergedTags);
       //  Pass along the parent id or set w2 as the parent
       long pid = Way::getPid(w1, w2);
-      if (pid == WayData::CHANGESET_EMPTY)
+      if (pid == ElementData::CHANGESET_EMPTY)
         pid = w2->getId();
       w1->setPid(pid);
       //  Remove w2
@@ -193,7 +193,7 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
       w2->setTags(mergedTags);
       //  Pass along the parent id or set w1 as the parent
       long pid = Way::getPid(w2, w1);
-      if (pid == WayData::CHANGESET_EMPTY)
+      if (pid == ElementData::CHANGESET_EMPTY)
         pid = w1->getId();
       w2->setPid(pid);
       //  Replace w1 with both w1 and w2

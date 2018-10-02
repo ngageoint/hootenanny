@@ -30,9 +30,7 @@
 
 
 // Hoot
-#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
-#undef int64
 
 // Boost
 #include <boost/shared_ptr.hpp>

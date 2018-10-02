@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-class ExtractNodesVisitor :  public ConstElementVisitor
+class ExtractNodesVisitor : public ConstElementVisitor
 {
 public:
 

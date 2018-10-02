@@ -64,7 +64,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   OGREnvelope _envelope;
 };
 

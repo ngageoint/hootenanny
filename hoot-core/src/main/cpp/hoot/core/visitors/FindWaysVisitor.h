@@ -36,7 +36,7 @@ class ElementCriterion;
 
 // Used to get a vector of IDs for the ways that satisfy
 // the specified criterion
-class FindWaysVisitor :  public ElementConstOsmMapVisitor
+class FindWaysVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
@@ -71,7 +71,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   std::vector<long> _wayIds;
   ElementCriterion * _pCrit;
 };
