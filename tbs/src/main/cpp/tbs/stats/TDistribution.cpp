@@ -48,9 +48,8 @@ class CostT : public LineSearch::Function
 {
 public:
 
-  CostT(TDistribution* td, const Mat& m, const vector<double>& EH, const vector<double>& ELogH) :
+  CostT(TDistribution* td, const Mat& /*m*/, const vector<double>& EH, const vector<double>& ELogH) :
     _td(td),
-    _m(m),
     _EH(EH),
     _ELogH(ELogH)
   {
@@ -60,13 +59,11 @@ public:
   virtual double operator()(double x)
   {
     double y = _td->_calculateTCost(x, _EH, _ELogH);
-    //cout << "f(" << x << ") = " << y << endl;
     return y;
   }
 
 private:
   TDistribution* _td;
-  const Mat& _m;
   const vector<double>& _EH;
   const vector<double>& _ELogH;
 };
