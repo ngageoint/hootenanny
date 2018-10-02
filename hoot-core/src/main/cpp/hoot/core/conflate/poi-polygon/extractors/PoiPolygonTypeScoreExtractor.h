@@ -85,16 +85,14 @@ public:
   static bool isParkish(ConstElementPtr element);
   static bool isPlayground(ConstElementPtr element);
   static bool isSport(ConstElementPtr element);
+  static bool isSport(const Tags& tags);
   static bool isRestroom(ConstElementPtr element);
   static bool isParking(ConstElementPtr element);
-
   static bool isSchool(ConstElementPtr element);
   static bool isSpecificSchool(ConstElementPtr element);
   static bool specificSchoolMatch(ConstElementPtr element1, ConstElementPtr element2);
-
   static bool isReligion(ConstElementPtr element);
   static bool isReligion(const Tags& tags);
-
   static bool isRestaurant(ConstElementPtr element);
   static bool isRestaurant(const Tags& tags);
 
@@ -162,6 +160,9 @@ private:
   static bool _typeHasName(const QString kvp, const QString name);
   static QString _getMatchingTypeName(const QString kvp, const QString name);
   static bool _haveMatchingTypeNames(const QString kvp, const QString name1, const QString name2);
+
+  bool _haveConflictingTags(const QString tagKey, const Tags& t1, const Tags& t2, QString& tag1Val,
+                            QString& tag2Val) const;
 };
 
 }

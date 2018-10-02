@@ -115,8 +115,7 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
   const Tags& t1 = poi->getTags();
   const Tags& t2 = poly->getTags();
 
-  //TODO: make this failing match technique more extensible - #2636
-
+  //be a little more restrictive with each of these
   if (_failsCuisineMatch(t1, t2))
   {
     if (!failedMatchRequirements.contains("cuisine"))
@@ -397,6 +396,12 @@ bool PoiPolygonTypeScoreExtractor::_haveMatchingTypeNames(const QString kvp, con
   return typeName1 == typeName2 && !typeName1.isEmpty();
 }
 
+// As part of #2633, attempted to re-implement some of this hardcoded type code as categories in
+// the hoot schema.  In doing that, several strange bugs started occurring and many poi/poly unit
+// tests started to break.  Using the categories in that manner may not be the best approach and
+// possibly a different on is needed.  The branch "2633-new-categories" is an example of the failed
+// changes.
+
 bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)
 {
   const QString amenityStr = element->getTags().get("amenity").toLower();
@@ -453,10 +458,15 @@ bool PoiPolygonTypeScoreExtractor::isPlayground(ConstElementPtr element)
   return element->getTags().get("leisure") == "playground";
 }
 
+bool PoiPolygonTypeScoreExtractor::isSport(const Tags& tags)
+{
+  const QString leisureVal = tags.get("leisure").toLower();
+  return tags.contains("sport") || leisureVal.contains("sport") || leisureVal == "pitch";
+}
+
 bool PoiPolygonTypeScoreExtractor::isSport(ConstElementPtr element)
 {
-  const Tags& tags = element->getTags();
-  return tags.contains("sport") || tags.get("leisure").contains("sport");
+  return isSport(element->getTags());
 }
 
 bool PoiPolygonTypeScoreExtractor::isRestroom(ConstElementPtr element)
@@ -497,7 +507,6 @@ bool PoiPolygonTypeScoreExtractor::hasMoreThanOneType(ConstElementPtr element)
     QSet<QString> allTagKeysTemp = OsmSchema::getInstance().getAllTagKeys();
     allTagKeysTemp.remove(MetadataTags::Ref1());
     allTagKeysTemp.remove(MetadataTags::Ref2());
-    //TODO: move to config file as part of #2635?
     allTagKeysTemp.remove("uuid");
     allTagKeysTemp.remove("name");
     allTagKeysTemp.remove("ele");
@@ -541,7 +550,6 @@ bool PoiPolygonTypeScoreExtractor::hasType(ConstElementPtr element)
 
 bool PoiPolygonTypeScoreExtractor::hasSpecificType(ConstElementPtr element)
 {
-  //TODO: move to config file as part of #2635?
   return
     hasType(element) && !element->getTags().contains("poi") &&
           element->getTags().get("building") != QLatin1String("yes") &&
@@ -559,22 +567,35 @@ bool PoiPolygonTypeScoreExtractor::isRestaurant(const Tags& tags)
   return tags.get("amenity") == "restaurant" || tags.get("amenity") == "fast_food";
 }
 
-//TODO: abstract these three type fail methods into one; also, this should be able to be done
-//more intelligently using the schema vs custom code
+bool PoiPolygonTypeScoreExtractor::_haveConflictingTags(const QString tagKey, const Tags& t1,
+                                                        const Tags& t2, QString& tag1Val,
+                                                        QString& tag2Val) const
+{
+  const QString t1Val = t1.get(tagKey).toLower();
+  const bool t1HasVal = !t1Val.trimmed().isEmpty();
+  const QString t2Val = t2.get(tagKey).toLower();
+  const bool t2HasVal = !t2Val.trimmed().isEmpty();
+  tag1Val = t1Val;
+  tag2Val = t2Val;
+  if (t1HasVal && t2HasVal &&
+      OsmSchema::getInstance().score(tagKey + "=" + t1Val, tagKey + "=" + t2Val) != 1.0)
+  {
+    return true;
+  }
+  return false;
+}
 
 bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags& t2) const
 {
-  //be a little more restrictive with restaurants
-  if (isRestaurant(t1) && isRestaurant(t2) && t1.contains("cuisine") && t2.contains("cuisine"))
+  QString t1Val;
+  QString t2Val;
+  if (isRestaurant(t1) && isRestaurant(t2) && _haveConflictingTags("cuisine", t1, t2, t1Val, t2Val))
   {
-    const QString t1Cuisine = t1.get("cuisine").toLower();
-    const QString t2Cuisine = t2.get("cuisine").toLower();
-    if (OsmSchema::getInstance().score("cuisine=" + t1Cuisine, "cuisine=" + t2Cuisine) != 1.0 &&
-        //Don't return false on regional, since its location dependent and we don't take that into
-        //account.
-        t1Cuisine != "regional" && t2Cuisine != "regional" &&
+    if (//Don't return false on regional, since its location dependent, and we don't take the
+        //location into account for this.
+        t1Val != "regional" && t2Val != "regional" &&
         //Don't fail on "other", since that's not very descriptive.
-        t1Cuisine != "other" && t2Cuisine != "other")
+        t1Val != "other" && t2Val != "other")
     {
       LOG_TRACE("Failed type match on different cuisines.");
       return true;
@@ -585,19 +606,14 @@ bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags
 
 bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const Tags& t1, const Tags& t2) const
 {
-  //be a little more restrictive with sport areas
-  //TODO: the sports center part of this may go away if the 0.8 similarity match between
-  //sports_centre and sport=tennis is removed
-  //TODO: use isSport here instead
-  if ((t1.get("leisure").toLower() == "pitch" || t1.get("leisure").toLower() == "sports_centre") &&
-      (t2.get("leisure").toLower() == "pitch" || t2.get("leisure").toLower() == "sports_centre") &&
-      t1.contains("sport") && t2.contains("sport"))
+  if (isSport(t1) && isSport(t2))
   {
-    const QString t1Sport = t1.get("sport").toLower();
-    const QString t2Sport = t2.get("sport").toLower();
-    if (OsmSchema::getInstance().score("sport=" + t1Sport, "sport=" + t2Sport) != 1.0)
+    QString t1Val;
+    QString t2Val;
+
+    if (_haveConflictingTags("sport", t1, t2, t1Val, t2Val))
     {
-      LOG_TRACE("Failed type match on different sports.");
+      LOG_TRACE("Failed type match on different sports: " << t1Val << ", " << t2Val);
       return true;
     }
   }
@@ -606,33 +622,24 @@ bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const Tags& t1, const Tags& 
 
 bool PoiPolygonTypeScoreExtractor::_failsReligionMatch(const Tags& t1, const Tags& t2) const
 {
-  //be a little more restrictive with religions
   if (isReligion(t1) && isReligion(t2))
   {
-    if (t1.contains("denomination") && t2.contains("denomination"))
+    QString t1Val;
+    QString t2Val;
+
+    if (_haveConflictingTags("denomination", t1, t2, t1Val, t2Val))
     {
-      const QString t1Denom = t1.get("denomination").toLower().trimmed();
-      const QString t2Denom = t2.get("denomination").toLower().trimmed();
-      if (!t1Denom.isEmpty() && !t2Denom.isEmpty() &&
-          OsmSchema::getInstance().score("denomination=" + t1Denom, "denomination=" + t2Denom) != 1.0)
-      {
-        LOG_TRACE("Failed type match on different religious denomination.");
-        return true;
-      }
+      LOG_TRACE(
+        "Failed type match on different religious denominations: " << t1Val << ", " << t2Val);
+      return true;
     }
-    else if (t1.contains("religion") && t2.contains("religion"))
+
+    if (_haveConflictingTags("religion", t1, t2, t1Val, t2Val))
     {
-      const QString t1Denom = t1.get("religion").toLower().trimmed();
-      const QString t2Denom = t2.get("religion").toLower().trimmed();
-      if (!t1Denom.isEmpty() && !t2Denom.isEmpty() &&
-          OsmSchema::getInstance().score("religion=" + t1Denom, "religion=" + t2Denom) != 1.0)
-      {
-        LOG_TRACE("Failed type match on different religions.");
-        return true;
-      }
+      LOG_TRACE("Failed type match on different religions: " << t1Val << ", " << t2Val);
+      return true;
     }
   }
-
   return false;
 }
 
