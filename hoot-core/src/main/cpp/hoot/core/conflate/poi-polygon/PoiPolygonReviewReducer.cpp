@@ -88,17 +88,6 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
   LOG_VART(_typeMatch);
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_addressMatch);
-
-//  _genericLandUseTagVals.append("cemetery");
-//  _genericLandUseTagVals.append("commercial");
-//  _genericLandUseTagVals.append("farm");
-//  _genericLandUseTagVals.append("forest");
-//  _genericLandUseTagVals.append("grass");
-//  _genericLandUseTagVals.append("industrial");
-//  _genericLandUseTagVals.append("meadow");
-//  _genericLandUseTagVals.append("residential");
-//  _genericLandUseTagVals.append("retail");
-//  _genericLandUseTagVals.append("village_green");
 }
 
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
@@ -110,7 +99,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 {
   LOG_TRACE("Checking review reduction rules...");
 
-  //TODO: Many of these rules may be obsolete now after recent additions.
+  // Some of these rules may be obsolete...they need to be checked.
 
   const Tags& poiTags = poi->getTags();
   const Tags& polyTags = poly->getTags();
