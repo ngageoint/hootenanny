@@ -242,6 +242,81 @@ void HootServicesTranslatorClient::_parseTranslateResponse(
   }
 }
 
+bool HootServicesTranslatorClient::_getTranslationFromCache(const QString textToTranslate)
+{
+  TranslationResult* cachedTranslation = _translateCache->object(textToTranslate.toLower());
+  if (cachedTranslation != 0)
+  {
+    _translatedText = cachedTranslation->translatedText;
+    _detectedLang = cachedTranslation->detectedLang;
+    LOG_TRACE(
+      "Found cached translation: " << _translatedText << " for: " << textToTranslate);
+    _translationCacheHits++;
+
+    _numTranslationsMade++;
+    if (_numTranslationsMade % _statusUpdateInterval == 0)
+    {
+      PROGRESS_DEBUG("Made " << _numTranslationsMade << " translations.");
+    }
+    _numTranslationsAttempted++;
+    if (_numTranslationsAttempted % _statusUpdateInterval == 0)
+    {
+      PROGRESS_DEBUG("Attempted " << _numTranslationsAttempted << " translations.");
+    }
+
+    return true;
+  }
+  return false;
+}
+
+bool HootServicesTranslatorClient::_textIsTranslatable(const QString textToTranslate) const
+{
+  return
+    !StringUtils::isNumber(textToTranslate) && StringUtils::hasAlphabeticCharacter(textToTranslate);
+}
+
+bool HootServicesTranslatorClient::_textIsEnglish(const QString textToTranslate) const
+{
+  const QString textToCheck =
+    textToTranslate
+      .simplified()
+      .replace("&", "and"); //will likely need some additions to this
+  const QStringList tokens = textToCheck.split(" ");
+  LOG_VART(tokens);
+  int englishTagValuePartCount = 0;
+  for (int i = 0; i < tokens.length(); i++)
+  {
+    LOG_VART(tokens.at(i));
+    if (MostEnglishName::getInstance()->isEnglishText(tokens.at(i)))
+    {
+      englishTagValuePartCount++;
+    }
+  }
+  LOG_VART(englishTagValuePartCount);
+  LOG_VART(tokens.size());
+  return englishTagValuePartCount == tokens.size();
+}
+
+void HootServicesTranslatorClient::_insertTranslationIntoCache(const QString textToTranslate,
+                                                               const QString translatedText,
+                                                               const QString detectedLang)
+{
+  TranslationResult* translationResult = new TranslationResult();
+  translationResult->detectedLang = detectedLang;
+  translationResult->translatedText = translatedText;
+  LOG_TRACE(
+    "Inserting: " << translationResult->translatedText << " for: " << textToTranslate.toLower() <<
+    " into translation cache...");
+  _translateCache->insert(textToTranslate.toLower(), translationResult);
+  _translationCacheSize = _translateCache->size();
+
+  if (!_loggedCacheMaxReached && _translateCache->size() >= _translationCacheMaxSize)
+  {
+    LOG_DEBUG(
+      "Translation cache max size of: " << _translationCacheMaxSize << " has been reached.");
+  }
+}
+
 QString HootServicesTranslatorClient::translate(const QString textToTranslate)
 {
   if (_sourceLangs.size() == 0)
@@ -257,34 +332,12 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
   _detectedLang = "";
   _detectorUsed = "";
 
-  if (_translateCache)
+  if (_translateCache && _getTranslationFromCache(textToTranslate))
   {
-    TranslationResult* cachedTranslation = _translateCache->object(textToTranslate.toLower());
-    if (cachedTranslation != 0)
-    {
-      _translatedText = cachedTranslation->translatedText;
-      _detectedLang = cachedTranslation->detectedLang;
-      LOG_TRACE(
-        "Found cached translation: " << _translatedText << " for: " << textToTranslate);
-      _translationCacheHits++;
-
-      _numTranslationsMade++;
-      if (_numTranslationsMade % _statusUpdateInterval == 0)
-      {
-        PROGRESS_DEBUG("Made " << _numTranslationsMade << " translations.");
-      }
-      _numTranslationsAttempted++;
-      if (_numTranslationsAttempted % _statusUpdateInterval == 0)
-      {
-        PROGRESS_DEBUG("Attempted " << _numTranslationsAttempted << " translations.");
-      }
-
-      return _translatedText;
-    }
+    return _translatedText;
   }
 
-  if (StringUtils::isNumber(textToTranslate) ||
-      !StringUtils::hasAlphabeticCharacter(textToTranslate))
+  if (!_textIsTranslatable(textToTranslate))
   {
     LOG_TRACE(
       "Text to be translated is not translatable; text: " << textToTranslate);
@@ -295,21 +348,14 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
   //This is an attempt to cut back on translation service requests for text that may already
   //in English.  Leaving it optional, b/c MostEnglishName's ability to determine if a word is
   //English is still a little suspect at this point.
-  if (_skipWordsInEnglishDict)
+  if (_skipWordsInEnglishDict && _textIsEnglish(textToTranslate))
   {
-    const QStringList tokens = textToTranslate.simplified().split(" ");
-    for (int i = 0; i < tokens.size(); i++)
-    {
-      if (!MostEnglishName::getInstance()->isEnglishText(tokens.at(i)))
-      {
-        LOG_TRACE(
-          "Text to be translated determined to already be in English.  Skipping " <<
-          "translation for text: " << textToTranslate);
-        _numEnglishWordsSkipped++;
-        _translatedText = "";
-        return "";
-      }
-    }
+    LOG_TRACE(
+      "Text to be translated determined to already be in English.  Skipping " <<
+      "translation for text: " << textToTranslate);
+    _numEnglishWordsSkipped++;
+    _translatedText = "";
+    return "";
   }
 
   //create and execute the request
@@ -343,23 +389,9 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
     _translatedText = "";
   }
 
-  if (_translateCache && /*!_translatedText.isEmpty() &&*/
-      !_translateCache->contains(textToTranslate))
+  if (_translateCache && !_translateCache->contains(textToTranslate))
   {
-    TranslationResult* translationResult = new TranslationResult();
-    translationResult->detectedLang = _detectedLang;
-    translationResult->translatedText = _translatedText/*.toLower()*/;
-    LOG_TRACE(
-      "Inserting: " << translationResult->translatedText << " for: " << textToTranslate.toLower() <<
-      " into translation cache...");
-    _translateCache->insert(textToTranslate.toLower(), translationResult);
-    _translationCacheSize = _translateCache->size();
-
-    if (!_loggedCacheMaxReached && _translateCache->size() >= _translationCacheMaxSize)
-    {
-      LOG_DEBUG(
-        "Translation cache max size of: " << _translationCacheMaxSize << " has been reached.");
-    }
+    _insertTranslationIntoCache(textToTranslate, _translatedText, _detectedLang);
   }
 
   if (!_translatedText.isEmpty())

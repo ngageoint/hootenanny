@@ -204,27 +204,6 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QStr
     return;
   }
 
-  //Remove the underscore translator and check to see if each token is an English word.  If all the
-  //tokens are, then skip translation.
-  const QStringList tagValueParts = tagValue.split("_");
-  LOG_VART(tagValueParts);
-  int englishTagValuePartCount = 0;
-  for (int i = 0; i < tagValueParts.length(); i++)
-  {
-    LOG_VART(tagValueParts.at(i));
-    if (MostEnglishName::getInstance()->isEnglishText(tagValueParts.at(i)))
-    {
-      englishTagValuePartCount++;
-    }
-  }
-  LOG_VART(englishTagValuePartCount);
-  LOG_VART(tagValueParts.size());
-  if (englishTagValuePartCount == tagValueParts.size())
-  {
-    LOG_TRACE("All tag parts for: " << tagValue << " are already in English.");
-    return;
-  }
-
   //Translate the whole phrase, as the translator may be able to derive context from more than
   //one word.
   const QString tagValueTemp = tagValue.toLower().simplified().replace("_", " ");
