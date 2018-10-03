@@ -298,17 +298,26 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
   if (_skipWordsInEnglishDict)
   {
     const QStringList tokens = textToTranslate.simplified().split(" ");
-    for (int i = 0; i < tokens.size(); i++)
+    LOG_VART(tokens);
+    int englishTagValuePartCount = 0;
+    for (int i = 0; i < tokens.length(); i++)
     {
-      if (!MostEnglishName::getInstance()->isEnglishText(tokens.at(i)))
+      LOG_VART(tokens.at(i));
+      if (MostEnglishName::getInstance()->isEnglishText(tokens.at(i)))
       {
-        LOG_TRACE(
-          "Text to be translated determined to already be in English.  Skipping " <<
-          "translation for text: " << textToTranslate);
-        _numEnglishWordsSkipped++;
-        _translatedText = "";
-        return "";
+        englishTagValuePartCount++;
       }
+    }
+    LOG_VART(englishTagValuePartCount);
+    LOG_VART(tokens.size());
+    if (englishTagValuePartCount == tokens.size())
+    {
+      LOG_TRACE(
+        "Text to be translated determined to already be in English.  Skipping " <<
+        "translation for text: " << textToTranslate);
+      _numEnglishWordsSkipped++;
+      _translatedText = "";
+      return "";
     }
   }
 
