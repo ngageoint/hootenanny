@@ -140,8 +140,14 @@ private:
                                const QString type);
 
   QString _getTranslateRequestData(const QString text);
-
   void _parseTranslateResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
+
+  bool _getTranslationFromCache(const QString textToTranslate);
+  void _insertTranslationIntoCache(const QString textToTranslate, const QString translatedText,
+                                   const QString detectedLang);
+
+  bool _textIsTranslatable(const QString textToTranslate) const;
+  bool _textIsEnglish(const QString textToTranslate) const;
 };
 
 }
