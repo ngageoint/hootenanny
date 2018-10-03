@@ -129,7 +129,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
     "Generating implicit tag rules raw file for inputs: " << inputs <<
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
   LOG_VARD(_sortParallelCount);
-  LOG_VARD(_skipFiltering);;
+  LOG_VARD(_skipFiltering);
   LOG_VARD(_translateNamesToEnglish);
 
   _init();
