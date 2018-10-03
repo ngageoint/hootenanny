@@ -6,6 +6,7 @@ ifneq (,$(findstring s,$(MAKEFLAGS)))
   HOOT_OPTS=--warn
   TIME=
   ECHO=true
+  PSQL_QUIET=1>&2
 endif
 
 # Check if we are using a different Tomcat8 port
@@ -76,7 +77,7 @@ clean:
 	fi
 
 	# Remove test user and faux-session data from db
-	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c "DELETE FROM users where email='test@test.com' or id=-1" 2>/dev/null || true
+	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c "DELETE FROM users where email='test@test.com' or id=-1" 2>/dev/null $(PSQL_QUIET) || true
 
 	# Cleaning up proxy node modules...
 	rm -rf $(HOOT_HOME)/test-files/ui/node_modules >/dev/null 2>&1 || true
