@@ -32,7 +32,6 @@ import static hoot.services.utils.DbUtils.createQuery;
 
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.SocketException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -65,13 +65,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -126,13 +127,9 @@ public class MapResource {
     @Produces(MediaType.APPLICATION_JSON)
     public MapLayers getLayers() {
         MapLayers mapLayers = null;
-        try {
-            List<Maps> mapLayerRecords = createQuery().select(maps).from(maps).orderBy(maps.displayName.asc()).fetch();
-            mapLayers = Map.mapLayerRecordsToLayers(mapLayerRecords);
-        }
-        catch (Exception e) {
-            handleError(e, null, null);
-        }
+
+        List<Maps> mapLayerRecords = createQuery().select(maps).from(maps).orderBy(maps.displayName.asc()).fetch();
+        mapLayers = Map.mapLayerRecordsToLayers(mapLayerRecords);
 
         return mapLayers;
     }
@@ -284,38 +281,135 @@ public class MapResource {
             @QueryParam("manualExtent") String manualExtent,
                         @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") boolean multiLayerUniqueElementIds) {
         Document responseDoc = null;
+
+        logger.debug("Retrieving map data for map with ID: {} and bounds {} ...", mapId, BBox);
+
+        if (mapId.equals("-1")) {
+            // OSM API database data can't be displayed on a hoot map, due
+            // to differences
+            // between the display code, so we return no data here.
+            responseDoc = writeEmptyResponse();
+            return Response.ok(new DOMSource(responseDoc))
+                    .header("Content-Disposition", "attachment; filename=\"map.osm\"").build();
+
+        }
+
+        long mapIdNum = -2;
+
         try {
-            logger.debug("Retrieving map data for map with ID: {} and bounds {} ...", mapId, BBox);
+            mapIdNum = Long.parseLong(mapId);
+        }
+        catch (NumberFormatException ignored) {
+            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+        }
 
-            if (mapId.equals("-1")) {
-                // OSM API database data can't be displayed on a hoot map, due
-                // to differences
-                // between the display code, so we return no data here.
-                responseDoc = writeEmptyResponse();
-                return Response.ok(new DOMSource(responseDoc))
-                        .header("Content-Disposition", "attachment; filename=\"map.osm\"").build();
+        String bbox = BBox;
+        String[] Coords = bbox.split(",");
+        if (Coords.length != 4) {
+            return Response.status(Status.BAD_REQUEST).entity("").build();
+        }
 
-            }
+        String sMinX = Coords[0];
+        String sMinY = Coords[1];
+        String sMaxX = Coords[2];
+        String sMaxY = Coords[3];
 
-            long mapIdNum = -2;
+        double minX = Double.parseDouble(sMinX);
+        double minY = Double.parseDouble(sMinY);
+        double maxX = Double.parseDouble(sMaxX);
+        double maxY = Double.parseDouble(sMaxY);
 
-            try {
-                mapIdNum = Long.parseLong(mapId);
-            }
-            catch (NumberFormatException ignored) {
-                mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-            }
+        minX = (minX > 180) ? 180 : minX;
+        minX = (minX < -180) ? -180 : minX;
 
-            String bbox = BBox;
-            String[] Coords = bbox.split(",");
-            if (Coords.length != 4) {
+        maxX = (maxX > 180) ? 180 : maxX;
+        maxX = (maxX < -180) ? -180 : maxX;
+
+        minY = (minY > 90) ? 90 : minY;
+        minY = (minY < -90) ? -90 : minY;
+
+        maxY = (maxY > 90) ? 90 : maxY;
+        maxY = (maxY < -90) ? -90 : maxY;
+
+        bbox = minX + "," + minY + "," + maxX + "," + maxY;
+
+        BoundingBox queryBounds = new BoundingBox(bbox);
+        logger.debug("Calculating query bounds area for bounds: {}", queryBounds);
+        logger.debug("Query bounds area: {}", queryBounds.getArea());
+
+
+        if (manualExtent != null && !manualExtent.isEmpty()) {
+            String[] coords = manualExtent.split(",");
+            if (coords.length != 4) {
                 return Response.status(Status.BAD_REQUEST).entity("").build();
             }
+            String maxlon = coords[0].trim();
+            String maxlat = coords[1].trim();
+            String minlon = coords[2].trim();
+            String minlat = coords[3].trim();
 
-            String sMinX = Coords[0];
-            String sMinY = Coords[1];
-            String sMaxX = Coords[2];
-            String sMaxY = Coords[3];
+            responseDoc = generateExtentOSM(maxlon, maxlat, minlon, minlat);
+        }
+
+        if (responseDoc == null) {
+            java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = null;
+            try {
+                results = (new Map(mapIdNum)).query(queryBounds);
+            }
+            catch (DataAccessException e) {
+                return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("No map with that id exists")
+                        .build();
+            }
+            responseDoc = writeResponse(results, queryBounds, multiLayerUniqueElementIds, mapIdNum);
+        }
+
+
+        return Response.ok(new DOMSource(responseDoc)).header("Content-Disposition", "attachment; filename=\"map.osm\"")
+                .build();
+    }
+
+    @POST
+    @Path("/nodescount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTileNodesCounts(String params) {
+        // Forward declarations
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        String mapId = "";
+        String bbox = "";
+
+        JSONParser parser = new JSONParser();
+        JSONArray paramsArray = null;
+        try {
+            paramsArray = (JSONArray) parser.parse(params);
+        }
+        catch (ParseException e) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        long nodeCnt = 0;
+        for (Object aParamsArray : paramsArray) {
+            JSONObject param = (JSONObject) aParamsArray;
+            mapId = (String) param.get("mapId");
+            bbox = (String) param.get("tile");
+
+            // OSM API database data can't be displayed on a hoot map, due to
+            // differences between the display code, so we return a zero count
+            // if its that layer.
+            if (mapId.isEmpty() || mapId.equals("-1")) {
+                continue;
+            }
+
+            logger.debug("Retrieving node count for map with ID: {} ...", mapId);
+
+            String[] coords = bbox.split(",");
+            if (coords.length != 4) {
+                return Response.status(Status.BAD_REQUEST).build();
+            }
+            String sMinX = coords[0];
+            String sMinY = coords[1];
+            String sMaxX = coords[2];
+            String sMaxY = coords[3];
 
             double minX = Double.parseDouble(sMinX);
             double minY = Double.parseDouble(sMinY);
@@ -336,116 +430,23 @@ public class MapResource {
 
             bbox = minX + "," + minY + "," + maxX + "," + maxY;
 
-            BoundingBox queryBounds = new BoundingBox(bbox);
-            logger.debug("Calculating query bounds area for bounds: {}", queryBounds);
-            logger.debug("Query bounds area: {}", queryBounds.getArea());
+            // Get map numerical identifier from database:
+            long mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
 
-
-            if (manualExtent != null && !manualExtent.isEmpty()) {
-                String[] coords = manualExtent.split(",");
-                if (coords.length != 4) {
-                    return Response.status(Status.BAD_REQUEST).entity("").build();
-                }
-                String maxlon = coords[0].trim();
-                String maxlat = coords[1].trim();
-                String minlon = coords[2].trim();
-                String minlat = coords[3].trim();
-
-                responseDoc = generateExtentOSM(maxlon, maxlat, minlon, minlat);
+            BoundingBox queryBounds;
+            try {
+                queryBounds = new BoundingBox(bbox);
+                logger.debug("Query bounds area: {}", queryBounds.getArea());
+            }
+            catch (Exception e) {
+                // If we can't parse bounds, quit now.
+                return Response.status(Status.BAD_REQUEST).build();
             }
 
-            if (responseDoc == null) {
-                java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = (new Map(mapIdNum)).query(queryBounds);
-                responseDoc = writeResponse(results, queryBounds, multiLayerUniqueElementIds, mapIdNum);
-            }
-        }
-        catch (Exception e) {
-            handleError(e, mapId, BBox);
-        }
+            nodeCnt += new Map(mapIdNum).getNodesCount(queryBounds);
+        } // for
 
-        return Response.ok(new DOMSource(responseDoc)).header("Content-Disposition", "attachment; filename=\"map.osm\"")
-                .build();
-    }
-
-    @POST
-    @Path("/nodescount")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTileNodesCounts(String params) {
-        java.util.Map<String, Object> ret = new HashMap<String, Object>();
-        String mapId = "";
-        String bbox = "";
-
-        try {
-            JSONParser parser = new JSONParser();
-            JSONArray paramsArray = (JSONArray) parser.parse(params);
-
-            long nodeCnt = 0;
-            for (Object aParamsArray : paramsArray) {
-                JSONObject param = (JSONObject) aParamsArray;
-                mapId = (String) param.get("mapId");
-                long mapIdNum = -2;
-                try {
-                    mapIdNum = Long.parseLong(mapId);
-                }
-                catch (NumberFormatException ignored) {
-                    //
-                }
-                // OSM API database data can't be displayed on a hoot map, due to differences
-                // between the display code, so we return a zero count if its that layer.
-                if (mapIdNum != -1) {
-                    logger.debug("Retrieving node count for map with ID: {} ...", mapId);
-                    bbox = (String) param.get("tile");
-                    String[] coords = bbox.split(",");
-                    if (coords.length == 4) {
-                        String sMinX = coords[0];
-                        String sMinY = coords[1];
-                        String sMaxX = coords[2];
-                        String sMaxY = coords[3];
-
-                        double minX = Double.parseDouble(sMinX);
-                        double minY = Double.parseDouble(sMinY);
-                        double maxX = Double.parseDouble(sMaxX);
-                        double maxY = Double.parseDouble(sMaxY);
-
-                        minX = (minX > 180) ? 180 : minX;
-                        minX = (minX < -180) ? -180 : minX;
-
-                        maxX = (maxX > 180) ? 180 : maxX;
-                        maxX = (maxX < -180) ? -180 : maxX;
-
-                        minY = (minY > 90) ? 90 : minY;
-                        minY = (minY < -90) ? -90 : minY;
-
-                        maxY = (maxY > 90) ? 90 : maxY;
-                        maxY = (maxY < -90) ? -90 : maxY;
-
-                        bbox = minX + "," + minY + "," + maxX + "," + maxY;
-                    }
-
-                    mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-
-                    BoundingBox queryBounds;
-                    try {
-                        queryBounds = new BoundingBox(bbox);
-                        logger.debug("Query bounds area: {}", queryBounds.getArea());
-                    }
-                    catch (Exception e) {
-                        throw new RuntimeException("Error parsing bounding box from bbox param: " + bbox + " ("
-                                + e.getMessage() + ")", e);
-                    }
-
-                    Map currMap = new Map(mapIdNum);
-                    nodeCnt += currMap.getNodesCount(queryBounds);
-                }
-            }
-
-            ret.put("nodescount", nodeCnt);
-        }
-        catch (Exception e) {
-            handleError(e, mapId, bbox);
-        }
-
+        ret.put("nodescount", nodeCnt);
         return Response.ok(new JSONObject(ret).toString()).build();
     }
 
@@ -470,92 +471,50 @@ public class MapResource {
 
             return Response.status(Status.OK).entity(ret).build();
         }
+
+        logger.debug("Retrieving MBR for map with ID: {} ...", mapId);
+
+        long mapIdNum = -2;
         try {
-            logger.debug("Retrieving MBR for map with ID: {} ...", mapId);
-
-            long mapIdNum = -2;
-            try {
-                mapIdNum = Long.parseLong(mapId);
-            }
-            catch (NumberFormatException ignored) {
-                mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-            }
-
-            BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
-            logger.debug("Query bounds area: {}", queryBounds.getArea());
-
-            Map currMap = new Map(mapIdNum);
-            JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-
-            if ((extents.get("minlat") == null) || (extents.get("maxlat") == null) || (extents.get("minlon") == null)
-                    || (extents.get("maxlon") == null)) {
-                ret.put("nodescount", 0);
-                return Response.status(Status.NO_CONTENT).entity(ret).build();
-            }
-
-            JSONObject anode = currMap.retrieveANode(queryBounds);
-            long nodeCnt = currMap.getNodesCount(queryBounds);
-
-            double dMinLon = (Double) extents.get("minlon");
-            double dMaxLon = (Double) extents.get("maxlon");
-            double dMinLat = (Double) extents.get("minlat");
-            double dMaxLat = (Double) extents.get("maxlat");
-
-            double dFirstLon = (Double) anode.get("lon");
-            double dFirstLat = (Double) anode.get("lat");
-
-            ret.put("minlon", dMinLon);
-            ret.put("maxlon", dMaxLon);
-            ret.put("minlat", dMinLat);
-            ret.put("maxlat", dMaxLat);
-            ret.put("firstlon", dFirstLon);
-            ret.put("firstlat", dFirstLat);
-            ret.put("nodescount", nodeCnt);
+            mapIdNum = Long.parseLong(mapId);
         }
-        catch (Exception e) {
-            handleError(e, mapId, "-180,-90,180,90");
+        catch (NumberFormatException ignored) {
+            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
         }
+
+        BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
+        logger.debug("Query bounds area: {}", queryBounds.getArea());
+
+        Map currMap = new Map(mapIdNum);
+        JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
+
+        if ((extents.get("minlat") == null) || (extents.get("maxlat") == null) || (extents.get("minlon") == null)
+                || (extents.get("maxlon") == null)) {
+            ret.put("nodescount", 0);
+            return Response.status(Status.NO_CONTENT).entity(ret).build();
+        }
+
+        JSONObject anode = currMap.retrieveANode(queryBounds);
+        long nodeCnt = currMap.getNodesCount(queryBounds);
+
+        double dMinLon = (Double) extents.get("minlon");
+        double dMaxLon = (Double) extents.get("maxlon");
+        double dMinLat = (Double) extents.get("minlat");
+        double dMaxLat = (Double) extents.get("maxlat");
+
+        double dFirstLon = (Double) anode.get("lon");
+        double dFirstLat = (Double) anode.get("lat");
+
+        ret.put("minlon", dMinLon);
+        ret.put("maxlon", dMaxLon);
+        ret.put("minlat", dMinLat);
+        ret.put("maxlat", dMaxLat);
+        ret.put("firstlon", dFirstLon);
+        ret.put("firstlat", dFirstLat);
+        ret.put("nodescount", nodeCnt);
+
 
         return Response.ok().entity(ret).build();
-    }
-
-    private static void handleError(Exception e, String mapId, String requestSnippet) {
-        if ((e instanceof SocketException) && e.getMessage().toLowerCase().contains("broken pipe")) {
-            // This occurs when iD aborts a tile request before it is finished.
-            // This happens quite frequently but is acceptable, so let's catch this and just logger as
-            // debug rather than an error to make the logs cleaner.
-            logger.debug(e.getMessage());
-        }
-        else if (!StringUtils.isEmpty(e.getMessage())) {
-            if (e.getMessage().startsWith("Multiple records exist") ||
-                    e.getMessage().startsWith("No record exists")) {
-                String msg = e.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
-                throw new WebApplicationException(e, Response.status(Status.NOT_FOUND).entity(msg).build());
-            }
-            else if (e.getMessage().startsWith("Map is empty")) {
-                String msg = e.getMessage();
-                throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
-            }
-            else if (e.getMessage().startsWith("Error parsing bounding box from bbox param") ||
-                    e.getMessage().contains("The maximum bbox size is") ||
-                    e.getMessage().contains("The maximum number of nodes that may be returned in a map query")) {
-                String msg = e.getMessage();
-                throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(msg).build());
-            }
-        }
-        else {
-            if (mapId != null) {
-                String msg = "Error querying map with ID: " + mapId + " - data: " + requestSnippet;
-                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-            }
-            else {
-                String msg = "Error listing layers for map - data: " + requestSnippet;
-                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-            }
-        }
-
-        String msg = e.getMessage();
-        throw new WebApplicationException(e, Response.serverError().entity(msg).build());
     }
 
     /**
@@ -668,38 +627,32 @@ public class MapResource {
             return Response.status(Status.BAD_REQUEST).entity("").build();
         }
 
+        long mapIdNum = -2;
         try {
-
-            long mapIdNum = -2;
-            try {
-                mapIdNum = Long.parseLong(mapId);
-            }
-            catch (NumberFormatException ignored) {
-                mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-            }
-
-            logger.debug("Retrieving map tags for map with ID: {} ...", mapIdNum);
-
-            updateLastAccessed(mapIdNum);
-            java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum);
-            if (tags != null) {
-                logger.debug(tags.toString());
-            }
-            ret.putAll(tags);
-            Object oInput1 = ret.get("input1");
-            if (oInput1 != null) {
-                String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()));
-                ret.put("input1Name", dispName);
-            }
-
-            Object oInput2 = ret.get("input2");
-            if (oInput2 != null) {
-                String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput2.toString()));
-                ret.put("input2Name", dispName);
-            }
+            mapIdNum = Long.parseLong(mapId);
         }
-        catch (Exception e) {
-            handleError(e, mapId, "");
+        catch (NumberFormatException ignored) {
+            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+        }
+
+        logger.debug("Retrieving map tags for map with ID: {} ...", mapIdNum);
+
+        updateLastAccessed(mapIdNum);
+        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum);
+        if (tags != null) {
+            logger.debug(tags.toString());
+        }
+        ret.putAll(tags);
+        Object oInput1 = ret.get("input1");
+        if (oInput1 != null) {
+            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()));
+            ret.put("input1Name", dispName);
+        }
+
+        Object oInput2 = ret.get("input2");
+        if (oInput2 != null) {
+            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput2.toString()));
+            ret.put("input2Name", dispName);
         }
 
         return Response.ok().entity(ret).build();

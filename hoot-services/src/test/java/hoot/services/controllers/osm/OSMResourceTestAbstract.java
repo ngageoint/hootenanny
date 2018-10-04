@@ -47,9 +47,9 @@ import hoot.services.utils.MapUtils;
 
 public abstract class OSMResourceTestAbstract extends HootServicesJerseyTestAbstract {
 
-    private static PlatformTransactionManager txManager;
-    private static TransactionStatus transactionStatus;
-    private static BasicDataSource dbcpDatasource;
+    protected static PlatformTransactionManager txManager;
+    protected static TransactionStatus transactionStatus;
+    protected static BasicDataSource dbcpDatasource;
 
     protected long userId;
     protected long mapId;

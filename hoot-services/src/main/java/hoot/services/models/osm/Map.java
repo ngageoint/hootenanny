@@ -28,7 +28,11 @@ package hoot.services.models.osm;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.tuple;
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.MAP_QUERY_DIMENSIONS;
+import static hoot.services.HootProperties.MAX_QUERY_NODES;
+import static hoot.services.HootProperties.OSMAPI_DB_NAME;
+import static hoot.services.HootProperties.OSM_API_DB_ENABLED;
+import static hoot.services.HootProperties.replaceSensitiveData;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.utils.DbUtils.createQuery;
 
@@ -40,9 +44,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.WebApplicationException;
+
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -129,22 +137,13 @@ public class Map extends Maps {
                 .and(currentNodes.longitude.loe(bounds.getMaxLon())).and(currentNodes.latitude.loe(bounds.getMaxLat()));
     }
 
-    private static void validateQueryBounds(BoundingBox bounds) {
-        double maxQueryAreaDegrees = Double.parseDouble(MAP_QUERY_AREA_DEGREES);
-        double requestedArea = bounds.getArea();
-        if (requestedArea > maxQueryAreaDegrees) {
-            throw new IllegalArgumentException("The maximum bbox size is: " + maxQueryAreaDegrees +
-                    ", and your request was too large at " + requestedArea + " degrees.  Request a smaller area.");
-        }
-    }
-
     /*
      * This does a check to see how many nodes are in the query and throws an
      * exception if over the configured maximum. This only needs to be used for
      * actual map queries returning XML. If you're just doing a node count
      * check, then getNodeCount should be used.
      */
-    private void validateNodeCount(BooleanExpression combinedGeospatialCondition) {
+    private void validateNodeCount(BooleanExpression combinedGeospatialCondition) throws WebApplicationException {
         long nodeCount = createQuery(getId())
                 .from(currentNodes)
                 .where(combinedGeospatialCondition.and(currentNodes.visible.eq(true)))
@@ -153,16 +152,16 @@ public class Map extends Maps {
         // The max node count only applies to the nodes falling within the query
         // bounds, not those that belong to ways that cross the query bounds but fall
         // outside of the query bounds, even though those nodes are returned as well in the query.
-        long maxQueryNodes = Long.parseLong(MAX_QUERY_NODES);
+        final long maxQueryNodes = Long.parseLong(MAX_QUERY_NODES);
         if (nodeCount > maxQueryNodes) {
-            throw new IllegalArgumentException("The maximum number of nodes that may be returned in a map query is " +
-                    maxQueryNodes + ".  This query returned " + nodeCount + " nodes.  Please " +
-                    "execute a query which returns fewer nodes.");
+            throw new BadRequestException("The maximum number of nodes that may be returned in a map query is "
+                    + maxQueryNodes + ". This query returned " + nodeCount
+                    + " nodes. Please execute a query which returns fewer nodes.");
         }
     }
 
     public JSONObject retrieveNodesMBR(BoundingBox bounds) {
-        JSONObject ret = new JSONObject();
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
 
         // get the intersecting tile ranges for the nodes
         List<Range> tileIdRanges = getTileRanges(bounds);
@@ -190,7 +189,7 @@ public class Map extends Maps {
             ret.put("minlat", minLat);
         }
 
-        return ret;
+        return new JSONObject(ret);
     }
 
     public long getNodesCount(BoundingBox bounds) {
@@ -212,7 +211,7 @@ public class Map extends Maps {
     }
 
     public JSONObject retrieveANode(BoundingBox bounds) {
-        JSONObject ret = new JSONObject();
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
 
         // get the intersecting tile ranges for the nodes
         List<Range> tileIdRanges = getTileRanges(bounds);
@@ -234,7 +233,7 @@ public class Map extends Maps {
             ret.put("lat", lat);
         }
 
-        return ret;
+        return new JSONObject(ret);
     }
 
     private java.util.Map<ElementType, java.util.Map<Long, Tuple>> retrieveElements(
@@ -298,7 +297,8 @@ public class Map extends Maps {
 
                 // TODO: should this be an assert instead? Regardless, fix the error handling.
                 if (!wayIds.addAll(pageWayIds)) {
-                    // error
+                    logger.warn("retrieveElements(): java.util.List<Long> contents unchanged. "
+                            + "Failed to append all ways");
                 }
             }
 
@@ -594,19 +594,24 @@ public class Map extends Maps {
      *            geospatial bounds the returned nodes should fall within
      * @return a collection of elements mapped to their IDs, grouped by element type
      */
-    public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(BoundingBox bounds) {
+    public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(BoundingBox bounds)
+            throws DataAccessException, WebApplicationException {
+        // function removed from source, see git if we need to enable
+        // this at a later date. disabled @ 2b6917da due to failing
+        // cucumber tests
+        // https://github.com/ngageoint/hootenanny/commit/2b6917da197e7d1de4ff17a6ae69d4e15419ed82
         //validateQueryBounds(bounds);
 
         // get the intersecting tile ranges for the nodes
         List<Range> tileIdRanges = getTileRanges(bounds);
         java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType = new HashMap<>();
+
         if (!tileIdRanges.isEmpty()) {
             BooleanExpression combinedGeospatialCondition = getTileWhereCondition(tileIdRanges).and(
                     getGeospatialWhereCondition(bounds));
             validateNodeCount(combinedGeospatialCondition);
             elementIdsToRecordsByType = retrieveElements(combinedGeospatialCondition);
         }
-
         return elementIdsToRecordsByType;
     }
 
