@@ -36,7 +36,9 @@ public:
     const QString accessTokenSecret = args[2];
 
     HootApiDb db;
-    db.open(HootApiDb::getBaseUrl());
+    //hoot db requires a layer to open, but we don't need one here...so put anything in
+    QUrl url(HootApiDb::getBaseUrl().toString() + "/blah");
+    db.open(url);
     if (!db.accessTokensAreValid(userName, accessToken, accessTokenSecret))
     {
       throw HootException("Unable to log out user: " + userName + ".  Invalid access tokens.");

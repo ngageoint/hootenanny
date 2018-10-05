@@ -143,6 +143,7 @@ private:
   {
     HootApiDb db;
     LOG_VARD(HootApiDb::getBaseUrl());
+    //hoot db requires a layer to open, but we don't need one here...so put anything in
     QUrl url(HootApiDb::getBaseUrl().toString() + "/blah");
     db.open(url);
     const QString accessToken = db.getAccessTokenByUserId(userId);
