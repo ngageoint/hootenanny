@@ -340,7 +340,7 @@ public final class DbUtils {
         long id;
         try {
             id = getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
-        } catch (IllegalArgumentException ex) {
+        } catch (WebApplicationException ex) {
             id = -1;
         }
         return (id > -1);

@@ -29,11 +29,16 @@ package hoot.services.controllers.common;
 
 import org.springframework.stereotype.Component;
 
+import hoot.services.models.db.Users;
+
 
 @Component
 public class ExportRenderDBCommandFactory {
 
+    public ExportRenderDBCommand build(String jobId, String name, Class<?> caller, Users user) {
+        return new ExportRenderDBCommand(jobId, name, caller, user);
+    }
     public ExportRenderDBCommand build(String jobId, String name, Class<?> caller) {
-        return new ExportRenderDBCommand(jobId, name, caller);
+        return build(jobId, name, caller, null);
     }
 }

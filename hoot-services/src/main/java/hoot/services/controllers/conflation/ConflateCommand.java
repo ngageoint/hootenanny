@@ -26,7 +26,10 @@
  */
 package hoot.services.controllers.conflation;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.OSMAPI_DB_URL;
+import static hoot.services.HootProperties.OSM_API_DB_ENABLED;
+import static hoot.services.HootProperties.RPT_STORE_PATH;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,13 +45,14 @@ import org.apache.commons.io.FileUtils;
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.Users;
 
 
 class ConflateCommand extends ExternalCommand {
 
     private final ConflateParams conflateParams;
 
-    ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller) {
+    ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) {
         super(jobId);
         this.conflateParams = params;
 
@@ -101,7 +105,11 @@ class ConflateCommand extends ExternalCommand {
         options.add("writer.include.conflate.score.tags=false");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("writer.text.status=true");
-        options.add("api.db.email=test@test.com");
+        if(user == null) {
+            options.add("api.db.email=test@test.com");
+        } else {
+            options.add("api.db.email=" + user.getEmail());
+        }
 
         String input1Type = params.getInputType1();
         String input1 = input1Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput1()) : params.getInput1();

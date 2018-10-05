@@ -689,6 +689,10 @@ public class Map extends Maps {
 
         return bounds;
     }
+    
+    public long getOwner() {
+        return createQuery().select(QMaps.maps.userId).from(QMaps.maps).where(QMaps.maps.id.eq(this.getId())).fetchOne();
+    }
 
     public static boolean mapExists(long id) {
         return createQuery().from(QMaps.maps).where(QMaps.maps.id.eq(id)).fetchCount() > 0;

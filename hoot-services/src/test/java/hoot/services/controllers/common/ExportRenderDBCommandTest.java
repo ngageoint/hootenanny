@@ -58,7 +58,7 @@ public class ExportRenderDBCommandTest {
         long userId = MapUtils.insertUser();
         long mapId = MapUtils.insertMap(userId);
 
-        ExportRenderDBCommand exportRenderDBCommand = new ExportRenderDBCommand(jobId, "map-with-id-" + mapId, caller);
+        ExportRenderDBCommand exportRenderDBCommand = new ExportRenderDBCommand(jobId, "map-with-id-" + mapId, caller, null);
         exportRenderDBCommand.execute();
 
         assertEquals(true, exportRenderDBCommand.getTrackable());

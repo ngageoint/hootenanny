@@ -863,7 +863,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
-            assertTrue(r.readEntity(String.class).contains("No map with that id exists"));
+            assertEquals(r.readEntity(String.class), "No map with that id exists");
 
             // Map::query() throws an exception because there is no map "table"
             // by that name corrupting the current transaction it is not
@@ -876,10 +876,6 @@ public class MapResourceTest extends OSMResourceTestAbstract {
             // OSMTestUtils.verifyTestDataUnmodified(originalBounds,
             // changesetId, nodeIds, wayIds, relationIds);
             throw e;
-        }
-        catch (Exception e1) {
-            e1.printStackTrace();
-            throw e1;
         }
     }
 
@@ -894,6 +890,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
             // and double slash URIs being rejected by spring security
             // this response has changed to a 404 due to the invalid
             // URI.
+            // https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#request-matching
             target("api/0.6/map//" + queryBounds.toServicesString())
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
@@ -901,9 +898,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
-            // Actual Response will be "invalid uri", but unit tests don't
-            // run the same gambit of filters that a deployment does.
-            assertEquals(r.readEntity(String.class), "HTTP 404 Not Found");
+            assertEquals(r.readEntity(String.class), "");
             // Map::query() throws an exception because there is no map "table"
             // by that name corrupting the current transaction it is not
             // possible to execute any additional queries without a rollback.

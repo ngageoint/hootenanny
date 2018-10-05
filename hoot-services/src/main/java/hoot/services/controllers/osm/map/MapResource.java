@@ -41,11 +41,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -53,6 +56,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -80,6 +84,7 @@ import org.w3c.dom.Element;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.sql.SQLQuery;
 
 import hoot.services.command.Command;
 import hoot.services.command.InternalCommand;
@@ -125,13 +130,22 @@ public class MapResource {
     @GET
     @Path("/layers")
     @Produces(MediaType.APPLICATION_JSON)
-    public MapLayers getLayers() {
-        MapLayers mapLayers = null;
+    public MapLayers getLayers(@Context HttpServletRequest request) {
+        Users user = null;
+        if(request != null) {
+            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        }
 
-        List<Maps> mapLayerRecords = createQuery().select(maps).from(maps).orderBy(maps.displayName.asc()).fetch();
-        mapLayers = Map.mapLayerRecordsToLayers(mapLayerRecords);
+        SQLQuery<Maps> q = createQuery()
+            .select(maps)
+            .from(maps)
+            .orderBy(maps.displayName.asc());
+        if(user != null) {
+            q.where(maps.userId.eq(user.getId()));
+        }
+        List<Maps> mapLayerRecords = q.fetch();
 
-        return mapLayers;
+        return Map.mapLayerRecordsToLayers(mapLayerRecords);
     }
 
     private static Document generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat) {
@@ -278,10 +292,10 @@ public class MapResource {
     @Path("/{mapId}/{BBox}")
     @Produces(MediaType.TEXT_XML)
     public Response get(@PathParam("mapId") String mapId, @PathParam("BBox") String BBox,
-            @QueryParam("manualExtent") String manualExtent,
+            @QueryParam("manualExtent") String manualExtent, @Context HttpServletRequest request,
                         @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") boolean multiLayerUniqueElementIds) {
-        Document responseDoc = null;
 
+        Document responseDoc = null;
         logger.debug("Retrieving map data for map with ID: {} and bounds {} ...", mapId, BBox);
 
         if (mapId.equals("-1")) {
@@ -293,16 +307,7 @@ public class MapResource {
                     .header("Content-Disposition", "attachment; filename=\"map.osm\"").build();
 
         }
-
-        long mapIdNum = -2;
-
-        try {
-            mapIdNum = Long.parseLong(mapId);
-        }
-        catch (NumberFormatException ignored) {
-            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-        }
-
+        Map currMap = getMapForRequest(request, mapId, true);
         String bbox = BBox;
         String[] Coords = bbox.split(",");
         if (Coords.length != 4) {
@@ -349,18 +354,17 @@ public class MapResource {
             String minlat = coords[3].trim();
 
             responseDoc = generateExtentOSM(maxlon, maxlat, minlon, minlat);
-        }
 
-        if (responseDoc == null) {
+        } else {
             java.util.Map<ElementType, java.util.Map<Long, Tuple>> results = null;
             try {
-                results = (new Map(mapIdNum)).query(queryBounds);
+                results = currMap.query(queryBounds);
             }
-            catch (DataAccessException e) {
+            catch (/* tables did not exist */DataAccessException e) {
                 return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("No map with that id exists")
                         .build();
             }
-            responseDoc = writeResponse(results, queryBounds, multiLayerUniqueElementIds, mapIdNum);
+            responseDoc = writeResponse(results, queryBounds, multiLayerUniqueElementIds, currMap.getId());
         }
 
 
@@ -372,8 +376,9 @@ public class MapResource {
     @Path("/nodescount")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTileNodesCounts(String params) {
+    public Response getTileNodesCounts(@Context HttpServletRequest request, String params) {
         // Forward declarations
+        Users user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         String mapId = "";
         String bbox = "";
@@ -442,8 +447,13 @@ public class MapResource {
                 // If we can't parse bounds, quit now.
                 return Response.status(Status.BAD_REQUEST).build();
             }
+            Map m = new Map(mapIdNum);
 
-            nodeCnt += new Map(mapIdNum).getNodesCount(queryBounds);
+            if(m.getOwner() != user.getId()) {
+                continue;
+            }
+
+            nodeCnt += m.getNodesCount(queryBounds);
         } // for
 
         ret.put("nodescount", nodeCnt);
@@ -453,7 +463,9 @@ public class MapResource {
     @GET
     @Path("/mbr/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMBR(@PathParam("id") String mapId) {
+    public Response getMBR(@Context HttpServletRequest request, @PathParam("id") String mapId) {
+        Map currMap = getMapForRequest(request, mapId, true);
+
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         if (mapId.equals("-1")) {
             // OSM API database data can't be displayed on a hoot map, due to
@@ -474,18 +486,10 @@ public class MapResource {
 
         logger.debug("Retrieving MBR for map with ID: {} ...", mapId);
 
-        long mapIdNum = -2;
-        try {
-            mapIdNum = Long.parseLong(mapId);
-        }
-        catch (NumberFormatException ignored) {
-            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-        }
 
         BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
         logger.debug("Query bounds area: {}", queryBounds.getArea());
 
-        Map currMap = new Map(mapIdNum);
         JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
 
         if ((extents.get("minlat") == null) || (extents.get("maxlat") == null) || (extents.get("minlon") == null)
@@ -531,9 +535,11 @@ public class MapResource {
     @Path("/delete/{mapId}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteLayers(@PathParam("mapId") String mapId) {
-        String jobId = UUID.randomUUID().toString();
+    public Response deleteLayers(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
+        @SuppressWarnings("unused") // handles some ACL logic for us...
+        Map m = getMapForRequest(request, mapId, false);
 
+        String jobId = UUID.randomUUID().toString();
         try {
             Command[] workflow = {
                 () -> {
@@ -568,15 +574,15 @@ public class MapResource {
      * @return jobId Success = True/False
      */
     @PUT
-    @Path("/modify/{mapId : \\d+}/{name}")
+    @Path("/modify/{mapId}/{name}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyName(@PathParam("mapId") String resourceId, @PathParam("name") String modName) {
+    public Response modifyName(@Context HttpServletRequest request, @PathParam("mapId") String mapId, @PathParam("name") String modName) {
+        Map m = getMapForRequest(request, mapId, false);
+        createQuery().update(maps).where(maps.id.eq(m.getId())).set(maps.displayName, modName).execute();
 
-        createQuery().update(maps).where(maps.id.eq(Long.valueOf(resourceId))).set(maps.displayName, modName).execute();
-
-        logger.debug("Renamed map with id {} {}...", resourceId, modName);
-        updateLastAccessed(Long.valueOf(resourceId));
+        logger.debug("Renamed map with id {} {}...", mapId, modName);
+        updateLastAccessed(m.getId());
 
         return Response.ok().build();
     }
@@ -595,14 +601,15 @@ public class MapResource {
      * @return jobId Success = True/False
      */
     @POST
-    @Path("/link/{mapId : \\d+}/{updateType : update|new}/folder/{folderId : \\d+}")
+    @Path("/link/{mapId}/{updateType : update|new}/folder/{folderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateFolderMapLink(@PathParam("folderId") Long folderId, @PathParam("mapId") Long mapId,
+    public Response updateFolderMapLink(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("mapId") String mapId,
             @PathParam("updateType") String updateType) {
+        Map m = getMapForRequest(request, mapId, true);
 
         // Delete any existing to avoid duplicate entries
-        createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
+        createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(m.getId())).execute();
 
         Long newId = createQuery()
                 .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')")).from()
@@ -620,25 +627,11 @@ public class MapResource {
     @GET
     @Path("/tags/{mapId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTags(@PathParam("mapId") String mapId) {
+    public Response getTags(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
+        Map m = getMapForRequest(request, mapId, true);
+        updateLastAccessed(m.getId());
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
-
-        if (mapId.isEmpty() || mapId.equals("-1") /* not OSM API db */) {
-            return Response.status(Status.BAD_REQUEST).entity("").build();
-        }
-
-        long mapIdNum = -2;
-        try {
-            mapIdNum = Long.parseLong(mapId);
-        }
-        catch (NumberFormatException ignored) {
-            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-        }
-
-        logger.debug("Retrieving map tags for map with ID: {} ...", mapIdNum);
-
-        updateLastAccessed(mapIdNum);
-        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum);
+        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(m.getId());
         if (tags != null) {
             logger.debug(tags.toString());
         }
@@ -750,5 +743,29 @@ public class MapResource {
 
         return DbUtils.updateMapsTableTags(tags, mapid);
 
+    }
+    private Map getMapForRequest(HttpServletRequest request, String mapId, boolean allowOSM) throws WebApplicationException {
+        Users user = null;
+        if(request != null) {
+            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        }
+        if(!allowOSM && mapId.equals("-1")) {
+            throw new BadRequestException();
+        }
+        long mapIdNum = -2;
+        try {
+            mapIdNum = Long.parseLong(mapId);
+        }
+        catch (NumberFormatException ignored) {
+            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+        }
+        if(mapIdNum < 0) {
+            throw new NotFoundException("No map with that id exists");
+        }
+        Map m = new Map(mapIdNum);
+        if(user != null && m.getOwner() != user.getId()) {
+            throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+        }
+        return m;
     }
 }
