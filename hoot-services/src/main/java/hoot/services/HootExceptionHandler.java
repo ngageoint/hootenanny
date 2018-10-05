@@ -18,12 +18,13 @@ public class HootExceptionHandler implements ExceptionMapper<Exception> {
             WebApplicationException e = (WebApplicationException) err;
             Response r = e.getResponse();
 
-            // Rebuild the response if needed:
-            if (r.getLength() < 1) {
+            // Rebuild the response if needed,
+            // but never send back the generic WebApplicationException messages:
+            if (r.getLength() < 1 && !e.getMessage().startsWith("HTTP")) {
                 return Response.status(r.getStatus()).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
             }
             else {
-                return r;
+                return Response.status(r.getStatus()).entity("").type(MediaType.TEXT_PLAIN).build();
             }
         }
         return Response.status(Status.INTERNAL_SERVER_ERROR).entity("").build();

@@ -11,11 +11,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response.Status;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.web.firewall.RequestRejectedException;
 
 
 public class ExceptionFilter implements Filter {
-
+	private static final Logger logger = LoggerFactory.getLogger(ExceptionFilter.class);
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -34,6 +36,10 @@ public class ExceptionFilter implements Filter {
             filteredResponse.setStatus(Status.NOT_FOUND.getStatusCode());
             filteredResponse.setContentType("text/plain");
             filteredResponse.getWriter().write("invalid uri");
+        }
+        catch(Exception e) {
+            logger.warn("doFilter(): uncaught exception was of type: " + e.getClass().getCanonicalName());
+            throw e;
         }
     }
 
