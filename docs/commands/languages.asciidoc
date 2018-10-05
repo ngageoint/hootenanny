@@ -1,7 +1,13 @@
 == languages
 
-The +languages+ command displays information about Hootenanny language translation/detection capabilities.  It makes use of the configuration
-options named language.translation.* and requires that both the hoot-rnd and hoot-services libraries be loaded.  
+The +languages+ command displays information about Hootenanny language translation/detection capabilities.  
+
+The command makes use of configuration options named language.translation.*, requires that both the Hootenanny Web Services the Hootenanny 
+RND libraries be enabled, and requires that you be logged into the Hootenanny Web Services.  
+
+For more information on logging into the web services, see the 'login' command documentation.  All uses of the +languages+ command require 
+the configuration options: hoot.services.user.name, hoot.services.oauth.access.token, and hoot.services.oauth.access.token.secret be 
+populated with your authentication information.  Those options are omitted from the following examples.
 
 Only one of the following options can be passed to the command:
 

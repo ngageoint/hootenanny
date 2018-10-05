@@ -33,6 +33,7 @@
 
 // Qt
 #include <QStringList>
+#include <QNetworkCookieJar>
 
 namespace hoot
 {
@@ -75,6 +76,8 @@ private:
   QString _translatableUrl;
   QString _detectorsUrl;
   QString _translatorsUrl;
+
+  boost::shared_ptr<QNetworkCookieJar> _cookies;
 
   QString _getAvailableLanguagesRequestData(const QStringList apps);
 };

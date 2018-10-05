@@ -1128,6 +1128,10 @@ void HootApiDb::_resetQueries()
   _getMapIdByName.reset();
   _insertChangeSet2.reset();
   _numChangesets.reset();
+  _getSessionIdByUserId.reset();
+  _accessTokensAreValid.reset();
+  _getAccessTokenByUserId.reset();
+  _getAccessTokenSecretByUserId.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1289,7 +1293,7 @@ long HootApiDb::numChangesets()
     if (!ok)
     {
       throw HootException(
-        "Count not changeset count for map with ID: " + QString::number(_currMapId));
+        "Could not get changeset count for map with ID: " + QString::number(_currMapId));
     }
   }
   _numChangesets->finish();
@@ -1317,6 +1321,184 @@ bool HootApiDb::changesetExists(const long id)
   }
 
   return _changesetExists->next();
+}
+
+bool HootApiDb::accessTokensAreValid(const QString userName, const QString accessToken,
+                                     const QString accessTokenSecret)
+{
+  LOG_VART(userName);
+  LOG_VART(accessToken);
+  LOG_VART(accessTokenSecret);
+
+  if (_accessTokensAreValid == 0)
+  {
+    _accessTokensAreValid.reset(new QSqlQuery(_db));
+    _accessTokensAreValid->prepare(
+        QString("SELECT COUNT(*) FROM users WHERE display_name = :userName AND ") +
+        QString("provider_access_key = :accessToken AND ") +
+        QString("provider_access_token = :accessTokenSecret"));
+  }
+  _accessTokensAreValid->bindValue(":userName", userName);
+  _accessTokensAreValid->bindValue(":accessToken", accessToken);
+  _accessTokensAreValid->bindValue(":accessTokenSecret", accessTokenSecret);
+  if (!_accessTokensAreValid->exec())
+  {
+    throw HootException(
+      "Error validating access tokens for user name: " + userName + " " +
+      _accessTokensAreValid->lastError().text());
+  }
+
+  long result = -1;
+  if (_accessTokensAreValid->next())
+  {
+    bool ok;
+    result = _accessTokensAreValid->value(0).toLongLong(&ok);
+    assert(result <= 1);
+    if (!ok)
+    {
+      throw HootException("Error validating access tokens for user name: " + userName);
+    }
+  }
+  _accessTokensAreValid->finish();
+
+  LOG_VART(result);
+  return result > 0;
+}
+
+QString HootApiDb::getAccessTokenByUserId(const long userId)
+{
+  LOG_VART(userId);
+
+  QString accessToken = "";
+
+  if (_getAccessTokenByUserId == 0)
+  {
+    _getAccessTokenByUserId.reset(new QSqlQuery(_db));
+    _getAccessTokenByUserId->prepare(
+      "SELECT provider_access_key FROM spring_session WHERE user_id = :userId");
+  }
+  _getAccessTokenByUserId->bindValue(":userId", (qlonglong)userId);
+  if (!_getAccessTokenByUserId->exec())
+  {
+    throw HootException(
+      "Error finding access token for user ID: " + QString::number(userId) + " " +
+      _getAccessTokenByUserId->lastError().text());
+  }
+
+  //shouldn't be more than one result, but if there is we don't care
+  if (_getAccessTokenByUserId->next())
+  {
+    accessToken = _getAccessTokenByUserId->value(0).toString();
+  }
+  else
+  {
+    LOG_DEBUG(
+      "No access token available for user ID: " << userId);
+    _getAccessTokenByUserId->finish();
+    return "";
+  }
+  _getAccessTokenByUserId->finish();
+
+  LOG_VART(accessToken);
+  return accessToken;
+}
+
+QString HootApiDb::getAccessTokenSecretByUserId(const long userId)
+{
+  LOG_VART(userId);
+
+  QString accessTokenSecret = "";
+
+  if (_getAccessTokenSecretByUserId == 0)
+  {
+    _getAccessTokenSecretByUserId.reset(new QSqlQuery(_db));
+    _getAccessTokenSecretByUserId->prepare(
+      "SELECT provider_access_token FROM spring_session WHERE user_id = :userId");
+  }
+  _getAccessTokenSecretByUserId->bindValue(":userId", (qlonglong)userId);
+  if (!_getAccessTokenSecretByUserId->exec())
+  {
+    throw HootException(
+      "Error finding access token secret for user ID: " + QString::number(userId) + " " +
+      _getAccessTokenSecretByUserId->lastError().text());
+  }
+
+  //shouldn't be more than one result, but if there is we don't care
+  if (_getAccessTokenSecretByUserId->next())
+  {
+    accessTokenSecret = _getAccessTokenSecretByUserId->value(0).toString();
+  }
+  else
+  {
+    LOG_DEBUG(
+      "No access token secret available for user ID: " << userId);
+    _getAccessTokenSecretByUserId->finish();
+    return "";
+  }
+  _getAccessTokenSecretByUserId->finish();
+
+  LOG_VART(accessTokenSecret);
+  return accessTokenSecret;
+}
+
+QString HootApiDb::getSessionIdByUserId(const long userId)
+{
+  LOG_VART(userId);
+
+  QString sessionId = "";
+
+  if (_getSessionIdByUserId == 0)
+  {
+    _getSessionIdByUserId.reset(new QSqlQuery(_db));
+    _getSessionIdByUserId->prepare(
+      "SELECT session_id FROM spring_session WHERE user_id = :userId");
+  }
+  _getSessionIdByUserId->bindValue(":userId", (qlonglong)userId);
+  if (!_getSessionIdByUserId->exec())
+  {
+    throw HootException(
+      "Error finding session ID for user ID: " + QString::number(userId) + " " +
+      _getSessionIdByUserId->lastError().text());
+  }
+
+  //shouldn't be more than one result, but if there is we don't care
+  if (_getSessionIdByUserId->next())
+  {
+    sessionId = _getSessionIdByUserId->value(0).toString();
+  }
+  else
+  {
+    LOG_DEBUG("No user session ID available for user ID: " << userId);
+    _getSessionIdByUserId->finish();
+    return "";
+  }
+  _getSessionIdByUserId->finish();
+
+  LOG_VART(sessionId);
+  return sessionId;
+}
+
+QString HootApiDb::getSessionIdByAccessTokens(const QString userName, const QString accessToken,
+                                              const QString accessTokenSecret)
+{
+  QString sessionId = "";
+
+  if (accessTokensAreValid(userName, accessToken, accessTokenSecret))
+  {
+    const long userId = getUserIdByName(userName);
+    if (userId == -1)
+    {
+      return "";
+    }
+
+    sessionId = getSessionIdByUserId(userId);
+  }
+  else
+  {
+    throw HootException("Access tokens for user: " + userName + " are invalid.");
+  }
+
+  return sessionId;
 }
 
 QString HootApiDb::elementTypeToElementTableName(const ElementType& elementType) const

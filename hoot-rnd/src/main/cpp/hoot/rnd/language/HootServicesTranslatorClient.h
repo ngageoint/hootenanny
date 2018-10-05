@@ -34,6 +34,7 @@
 
 // Qt
 #include <QCache>
+#include <QNetworkCookieJar>
 
 namespace hoot
 {
@@ -126,6 +127,8 @@ private:
   static bool _loggedCacheMaxReached;
 
   QString _id;
+
+  boost::shared_ptr<QNetworkCookieJar> _cookies;
 
   /**
    * Verifies that every language specified for this translator is supported by the server

@@ -1,0 +1,20 @@
+== logout
+
+The +logout+ command logs a user out of the Hootenanny application. 
+
+* +userName+          - The user name used to log into Hootenanny.
+* +accessToken+       - The access token used to log into Hootenanny.
+* +accessTokenSecret+ - The access token secret used to log into Hootenanny.
+
+=== Usage
+
+--------------------------------------
+logout [userName] [accessToken] [accessTokenSecret]
+--------------------------------------
+
+=== Example
+
+--------------------------------------
+$ hoot logout icenine18 <token> <tokenSecret>
+The user: icenine18 was logged out of Hootenanny.
+--------------------------------------

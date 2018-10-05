@@ -38,9 +38,12 @@
 #include <QString>
 #include <QUrl>
 #include <QtNetwork/QNetworkRequest>
+#include <QNetworkCookieJar>
 
 namespace hoot
 {
+
+//class HootNetworkCookieJar;
 
 /** Class for sending HTTP network requests to an OSM API */
 class HootNetworkRequest
@@ -87,6 +90,18 @@ public:
    */
   QString getErrorString() { return _error; }
 
+  /**
+   * @brief getCookies
+   * @return the cookies used by the request
+   */
+  boost::shared_ptr<QNetworkCookieJar> getCookies() const { return _cookies; }
+
+  /**
+   * @brief setCookies
+   * @param cookies sets the cookies for the request
+   */
+  void setCookies(boost::shared_ptr<QNetworkCookieJar> cookies);
+
 private:
   bool _networkRequest(QUrl url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                        QNetworkAccessManager::Operation http_op, const QByteArray& data);
@@ -102,6 +117,8 @@ private:
   int _status;
   /** Error string */
   QString _error;
+  //boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  boost::shared_ptr<QNetworkCookieJar> _cookies;
 };
 
 typedef boost::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;

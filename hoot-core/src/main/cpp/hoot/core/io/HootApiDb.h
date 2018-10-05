@@ -347,6 +347,36 @@ public:
   void setCreateIndexesOnClose(bool create) { _createIndexesOnClose = create; }
   void setFlushOnClose(bool flush) { _flushOnClose = flush; }
 
+  /**
+   * @brief getSessionIdByAccessTokens
+   * @param userName
+   * @param accessToken
+   * @param accessTokenSecret
+   * @return
+   */
+  QString getSessionIdByAccessTokens(const QString userName, const QString accessToken,
+                                     const QString accessTokenSecret);
+
+  /**
+   * @brief accessTokensValid
+   * @param userName
+   * @param accessToken
+   * @param accessTokenSecret
+   * @return
+   */
+  bool accessTokensAreValid(const QString userName, const QString accessToken,
+                            const QString accessTokenSecret);
+
+  /**
+   * @brief getSessionIdByUserId
+   * @param userId
+   * @return
+   */
+  QString getSessionIdByUserId(const long userId);
+
+  QString getAccessTokenByUserId(const long userId);
+  QString getAccessTokenSecretByUserId(const long userId);
+
 protected:
 
   virtual void _resetQueries();
@@ -375,6 +405,10 @@ private:
   boost::shared_ptr<QSqlQuery> _getMapIdByName;
   boost::shared_ptr<QSqlQuery> _insertChangeSet2;
   boost::shared_ptr<QSqlQuery> _numChangesets;
+  boost::shared_ptr<QSqlQuery> _getSessionIdByUserId;
+  boost::shared_ptr<QSqlQuery> _accessTokensAreValid;
+  boost::shared_ptr<QSqlQuery> _getAccessTokenByUserId;
+  boost::shared_ptr<QSqlQuery> _getAccessTokenSecretByUserId;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

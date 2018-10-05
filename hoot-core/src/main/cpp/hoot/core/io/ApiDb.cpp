@@ -107,6 +107,7 @@ void ApiDb::_resetQueries()
   _selectRelationIdsByMemberIds.reset();
   _selectChangesetsCreatedAfterTime.reset();
   _userExists.reset();
+  _getUserIdByName.reset();
 
   for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _maxIdQueries.begin();
        itr != _maxIdQueries.end(); ++itr)
@@ -222,6 +223,45 @@ void ApiDb::rollback()
     throw HootException("Error rolling back transaction: " + _db.lastError().text());
   }
   _inTransaction = false;
+}
+
+long ApiDb::getUserIdByName(const QString userName)
+{
+  LOG_VART(userName);
+  if (_getUserIdByName == 0)
+  {
+    _getUserIdByName.reset(new QSqlQuery(_db));
+    _getUserIdByName->prepare(
+      "SELECT id FROM " + ApiDb::getUsersTableName() + " WHERE display_name = :displayName");
+  }
+  _getUserIdByName->bindValue(":displayName", userName);
+  if (!_getUserIdByName->exec())
+  {
+    throw HootException(
+      "Error finding user with user name: " + userName + " " + _getUserIdByName->lastError().text());
+  }
+
+  long userId = -1;
+  //will only be one result
+  if (_getUserIdByName->next())
+  {
+    bool ok;
+    userId = _getUserIdByName->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Error executing user ID query for " + userName);
+    }
+  }
+  else
+  {
+    LOG_TRACE("No user ID available for user name: " << userName);
+    _getUserIdByName->finish();
+    return -1;
+  }
+  _getUserIdByName->finish();
+
+  LOG_VART(userId);
+  return userId;
 }
 
 bool ApiDb::userExists(const long id)

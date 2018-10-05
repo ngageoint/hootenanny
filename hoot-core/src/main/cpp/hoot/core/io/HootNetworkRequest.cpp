@@ -29,6 +29,7 @@
 
 //  Hootenanny
 #include <hoot/core/util/HootException.h>
+//#include <hoot/core/util/NetworkUtils.h>
 
 //  Qt
 #include <QEventLoop>
@@ -40,6 +41,14 @@ namespace hoot
 
 HootNetworkRequest::HootNetworkRequest()
 {
+}
+
+void HootNetworkRequest::setCookies(boost::shared_ptr<QNetworkCookieJar> cookies)
+{
+  //prevent this class from trying to delete these cookies and allow them to be shared across
+  //multiple requests
+  //cookies->setParent(0);
+  _cookies = cookies;
 }
 
 bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op,
@@ -69,6 +78,7 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   _error.clear();
   //  Do HTTP request
   boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
+  LOG_VART(url);
   QNetworkRequest request(url);
 
   for (QMap<QNetworkRequest::KnownHeaders, QVariant>::const_iterator it = headers.begin(); it != headers.end(); ++it)
@@ -93,6 +103,12 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     request.setRawHeader("Authorization", QString("Basic %1").arg(base64).toUtf8());
     url.setUserInfo("");
   }
+
+  if (_cookies)
+  {
+    pNAM->setCookieJar(_cookies.get());
+  }
+
   //  Call the correct function on the network access manager
   QNetworkReply* reply = NULL;
   switch (http_op)
@@ -131,6 +147,16 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     _error = reply->errorString();
     return false;
   }
+
+  // update our cookies with any new ones that might have come back in the response (previous ones
+  // will be in there too)
+  //boost::shared_ptr<QNetworkCookieJar> cookies(pNAM->cookieJar());
+  //_cookies = cookies;
+  if (_cookies) //TODO: check seems wrong
+  {
+    _cookies.reset(pNAM->cookieJar());
+  }
+
   //  return successfully
   return true;
 }

@@ -34,6 +34,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/HootNetworkRequest.h>
+#include <hoot/core/util/NetworkUtils.h>
 
 // Qt
 #include <QVariant>
@@ -61,6 +62,13 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   _translatableUrl = opts.getLanguageTranslationHootServicesTranslatableLanguagesEndpoint();
   _detectorsUrl = opts.getLanguageTranslationHootServicesDetectorsEndpoint();
   _translatorsUrl = opts.getLanguageTranslationHootServicesTranslatorsEndpoint();
+  //const QString baseUrl = _detectorsUrl.replace(_detectorsUrl.lastIndexOf("/"), ?, "");
+  //TODO: remove hardcode
+  const QString baseUrl = "http://localhost:8080/hoot-services/language/toEnglishTranslation";
+  _cookies =
+    NetworkUtils::getUserSessionCookie(
+      opts.getHootServicesUserName(), opts.getHootServicesOauthAccessToken(),
+      opts.getHootServicesOauthAccessTokenSecret(), baseUrl);
 }
 
 boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableApps(
