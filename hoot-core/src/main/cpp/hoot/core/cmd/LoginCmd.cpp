@@ -43,11 +43,22 @@ public:
       throw HootException(QString("%1 takes zero parameters.").arg(getName()));
     }
 
-    //boost::shared_ptr<HootNetworkCookieJar> cookies;
-    boost::shared_ptr<QNetworkCookieJar> cookies;
-
     // get a request token
+    // auth through the 3rd party (OpenStreetMap, MapEdit, etc.)
+    // verify the user
+    // get the access tokens and show to the user
+    _printAccessTokens(_verifyUser(_getRequestToken(), _getAuthorizationVerifier()));
 
+    return 0;
+  }
+
+private:
+
+  //boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  boost::shared_ptr<QNetworkCookieJar> _cookies;
+
+  QString _getRequestToken()
+  {
     HootNetworkRequest requestTokenRequest;
     try
     {
@@ -64,18 +75,22 @@ public:
       throw HootException(
         "Error retrieving request token. error: " + requestTokenRequest.getErrorString());
     }
-    // will need this session cookie during verification
+    // will need this session cookie for verification to be successful
     //TODO: print out cookies
-    cookies = requestTokenRequest.getCookies();
-    //LOG_VART(cookies->size());
-    //LOG_VART(cookies->toString());
+    _cookies = requestTokenRequest.getCookies();
+    //LOG_VART(_cookies->size());
+    //LOG_VART(_cookies->toString());
     const QUrl authUrl(requestTokenRequest.getResponseContent());
     const QString requestToken = authUrl.queryItemValue("oauth_token");
     LOG_VARD(requestToken);
 
-    // auth through the 3rd party (OpenStreetMap, MapEdit, etc.)
-
     std::cout << "Authorization URL: " << authUrl.toString() << std::endl;
+
+    return requestToken;
+  }
+
+  QString _getAuthorizationVerifier() const
+  {
     std::string consoleInput;
     std::cout <<
       "Using the authorization URL shown above, authenticate through the 3rd party application, " <<
@@ -83,15 +98,17 @@ public:
     std::getline(std::cin, consoleInput);
     const QString verifier = QString::fromStdString(consoleInput);
     LOG_VARD(verifier);
+    return verifier;
+  }
 
-    // verify the user
-
+  long _verifyUser(const QString requestToken, const QString verifier)
+  {
     HootNetworkRequest verifyRequest;
     // hoot requires the same http session be used throughout the auth process, so a session cookie
     // must be passed here or the request token lookup during the token trade will fail
-    //LOG_VART(cookies->size());
-    //LOG_VART(cookies->toString());
-    verifyRequest.setCookies(cookies);
+    //LOG_VART(_cookies->size());
+    //LOG_VART(_cookies->toString());
+    verifyRequest.setCookies(_cookies);
     LOG_VART(ConfigOptions().getAuthVerifyEndpoint());
     QUrl verifyUrl(ConfigOptions().getAuthVerifyEndpoint());
     verifyUrl.addQueryItem("oauth_token", QString(QUrl::toPercentEncoding(requestToken)));
@@ -110,17 +127,20 @@ public:
     {
       throw HootException("Error verifying user. error: " + verifyRequest.getErrorString());
     }
-    cookies = verifyRequest.getCookies();
-    //LOG_VART(cookies->size());
-    //LOG_VART(cookies->toString());
+    _cookies = verifyRequest.getCookies();
+    //LOG_VART(_cookies->size());
+    //LOG_VART(_cookies->toString());
+
     // reply contains a user object
     boost::shared_ptr<boost::property_tree::ptree> replyObj =
       StringUtils::jsonStringToPropTree(verifyRequest.getResponseContent());
     const long userId = replyObj->get<long>("id");
     LOG_VARD(userId);
+    return userId;
+  }
 
-    // get the access tokens
-
+  void _printAccessTokens(const long userId)
+  {
     HootApiDb db;
     db.open(HootApiDb::getBaseUrl());
     const QString accessToken = db.getAccessTokenByUserId(userId);
@@ -129,8 +149,6 @@ public:
     LOG_VARD(accessTokenSecret);
     std::cout << "oauth_token=" << accessToken << std::endl;
     std::cout << "oauth_token_secret=" << accessTokenSecret << std::endl;
-
-    return 0;
   }
 };
 
