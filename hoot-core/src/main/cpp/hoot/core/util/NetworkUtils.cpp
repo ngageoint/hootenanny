@@ -20,7 +20,9 @@ boost::shared_ptr<HootNetworkCookieJar> NetworkUtils::getUserSessionCookie(
 
   HootApiDb db;
   LOG_VART(HootApiDb::getBaseUrl());
-  db.open(HootApiDb::getBaseUrl());
+  //hoot db requires a layer to open, but we don't need one here...so put anything in
+  QUrl dbUrl(HootApiDb::getBaseUrl().toString() + "/blah");
+  db.open(dbUrl);
   const QString sessionId = db.getSessionIdByAccessTokens(userName, accessToken, accessTokenSecret);
   LOG_VART(sessionId);
   db.close();

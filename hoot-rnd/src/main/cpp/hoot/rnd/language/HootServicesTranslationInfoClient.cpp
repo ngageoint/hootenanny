@@ -90,6 +90,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  //create and execute the request
  QUrl url(urlStr);
  HootNetworkRequest request;
+ request.setCookies(_cookies);
  request.networkRequest(url);
 
  //check for a response error
@@ -127,6 +128,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
   HootNetworkRequest request;
+  request.setCookies(_cookies);
   request.networkRequest(
     url, headers, QNetworkAccessManager::Operation::PostOperation,
     _getAvailableLanguagesRequestData(apps).toUtf8());
