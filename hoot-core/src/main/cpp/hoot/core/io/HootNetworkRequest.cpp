@@ -29,7 +29,7 @@
 
 //  Hootenanny
 #include <hoot/core/util/HootException.h>
-//#include <hoot/core/util/NetworkUtils.h>
+#include <hoot/core/io/HootNetworkCookieJar.h>
 
 //  Qt
 #include <QEventLoop>
@@ -41,14 +41,6 @@ namespace hoot
 
 HootNetworkRequest::HootNetworkRequest()
 {
-}
-
-void HootNetworkRequest::setCookies(boost::shared_ptr<QNetworkCookieJar> cookies)
-{
-  //prevent this class from trying to delete these cookies and allow them to be shared across
-  //multiple requests
-  //cookies->setParent(0);
-  _cookies = cookies;
 }
 
 bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op,
@@ -107,6 +99,9 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   if (_cookies)
   {
     pNAM->setCookieJar(_cookies.get());
+    // don't want to take ownership of these cookies so they could potentially be shared across
+    // different requests
+    _cookies->setParent(0);
   }
 
   //  Call the correct function on the network access manager
@@ -134,6 +129,7 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   disable.reset();
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
+  LOG_VART(_status);
   //  According to the documention this shouldn't ever happen
   if (reply == NULL)
   {
@@ -141,20 +137,13 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     return false;
   }
   _content = reply->readAll();
+  LOG_VART(QString(_content).left(50));
   //  Check error status on our reply
   if (QNetworkReply::NoError != reply->error())
   {
     _error = reply->errorString();
+    LOG_VART(_error);
     return false;
-  }
-
-  // update our cookies with any new ones that might have come back in the response (previous ones
-  // will be in there too)
-  //boost::shared_ptr<QNetworkCookieJar> cookies(pNAM->cookieJar());
-  //_cookies = cookies;
-  if (_cookies) //TODO: check seems wrong
-  {
-    _cookies.reset(pNAM->cookieJar());
   }
 
   //  return successfully

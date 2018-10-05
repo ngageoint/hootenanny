@@ -30,6 +30,7 @@
 
 // hoot
 #include <hoot/rnd/language/TranslationInfoProvider.h>
+#include <hoot/core/util/NetworkUtils.h>
 
 // Qt
 #include <QStringList>
@@ -77,7 +78,7 @@ private:
   QString _detectorsUrl;
   QString _translatorsUrl;
 
-  boost::shared_ptr<QNetworkCookieJar> _cookies;
+  boost::shared_ptr<HootNetworkCookieJar/*QNetworkCookieJar*/> _cookies;
 
   QString _getAvailableLanguagesRequestData(const QStringList apps);
 };

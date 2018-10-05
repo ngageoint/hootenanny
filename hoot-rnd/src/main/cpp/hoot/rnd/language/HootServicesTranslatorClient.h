@@ -31,6 +31,7 @@
 // hoot
 #include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/rnd/language/TranslationInfoProvider.h>
+#include <hoot/core/util/NetworkUtils.h>
 
 // Qt
 #include <QCache>
@@ -128,7 +129,7 @@ private:
 
   QString _id;
 
-  boost::shared_ptr<QNetworkCookieJar> _cookies;
+  boost::shared_ptr<HootNetworkCookieJar/*QNetworkCookieJar*/> _cookies;
 
   /**
    * Verifies that every language specified for this translator is supported by the server

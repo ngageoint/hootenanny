@@ -9,7 +9,7 @@
 namespace hoot
 {
 
-boost::shared_ptr<QNetworkCookieJar> NetworkUtils::getUserSessionCookie(
+boost::shared_ptr<HootNetworkCookieJar> NetworkUtils::getUserSessionCookie(
   const QString userName, const QString accessToken, const QString accessTokenSecret,
   const QString url)
 {
@@ -19,22 +19,23 @@ boost::shared_ptr<QNetworkCookieJar> NetworkUtils::getUserSessionCookie(
   LOG_VART(url);
 
   HootApiDb db;
+  LOG_VART(HootApiDb::getBaseUrl());
   db.open(HootApiDb::getBaseUrl());
   const QString sessionId = db.getSessionIdByAccessTokens(userName, accessToken, accessTokenSecret);
   LOG_VART(sessionId);
+  db.close();
   if (sessionId.isEmpty())
   {
     throw HootException("User: " + userName + " has not been authenticated.");
   }
 
-  //boost::shared_ptr<HootNetworkCookieJar> cookieJar(new HootNetworkCookieJar());
-  boost::shared_ptr<QNetworkCookieJar> cookieJar(new QNetworkCookieJar());
+  boost::shared_ptr<HootNetworkCookieJar> cookieJar(new HootNetworkCookieJar());
   QList<QNetworkCookie> cookies;
   QNetworkCookie sessionCookie(QString("SESSION").toUtf8(), sessionId.toUtf8());
   cookies.append(sessionCookie);
   cookieJar->setCookiesFromUrl(cookies, url);
-  //LOG_VART(cookieJar->size());
-  //LOG_VART(cookieJar->toString());
+  LOG_VART(cookieJar->size());
+  LOG_VART(cookieJar->toString());
   return cookieJar;
 }
 

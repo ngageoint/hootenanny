@@ -1375,7 +1375,7 @@ QString HootApiDb::getAccessTokenByUserId(const long userId)
   {
     _getAccessTokenByUserId.reset(new QSqlQuery(_db));
     _getAccessTokenByUserId->prepare(
-      "SELECT provider_access_key FROM spring_session WHERE user_id = :userId");
+      "SELECT provider_access_key FROM users WHERE id = :userId");
   }
   _getAccessTokenByUserId->bindValue(":userId", (qlonglong)userId);
   if (!_getAccessTokenByUserId->exec())
@@ -1413,7 +1413,7 @@ QString HootApiDb::getAccessTokenSecretByUserId(const long userId)
   {
     _getAccessTokenSecretByUserId.reset(new QSqlQuery(_db));
     _getAccessTokenSecretByUserId->prepare(
-      "SELECT provider_access_token FROM spring_session WHERE user_id = :userId");
+      "SELECT provider_access_token FROM users WHERE id = :userId");
   }
   _getAccessTokenSecretByUserId->bindValue(":userId", (qlonglong)userId);
   if (!_getAccessTokenSecretByUserId->exec())
