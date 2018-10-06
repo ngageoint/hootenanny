@@ -242,7 +242,7 @@ long ApiDb::getUserIdByName(const QString userName)
   }
 
   long userId = -1;
-  //will only be one result
+  //should only be one result
   if (_getUserIdByName->next())
   {
     bool ok;

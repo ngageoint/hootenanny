@@ -1488,9 +1488,11 @@ QString HootApiDb::getSessionIdByAccessTokens(const QString userName, const QStr
     const long userId = getUserIdByName(userName);
     if (userId == -1)
     {
+      //no user with user name found
       return "";
     }
 
+    //will be an empty string if no session ID was found
     sessionId = getSessionIdByUserId(userId);
   }
   else

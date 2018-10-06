@@ -116,6 +116,7 @@ private:
   int _status;
   /** Error string */
   QString _error;
+  // cookies to pass in with the request
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
 };
 

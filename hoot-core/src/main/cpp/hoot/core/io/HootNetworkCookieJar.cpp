@@ -27,11 +27,6 @@
 
 #include "HootNetworkCookieJar.h"
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/HootApiDb.h>
-
 namespace hoot
 {
 

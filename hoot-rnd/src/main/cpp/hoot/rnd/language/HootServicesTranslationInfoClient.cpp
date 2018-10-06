@@ -65,10 +65,12 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   //const QString baseUrl = _detectorsUrl.replace(_detectorsUrl.lastIndexOf("/"), ?, "");
   //TODO: remove hardcode
   const QString baseUrl = "http://localhost:8080/hoot-services/language/toEnglishTranslation";
+  // get a session cookie associated with the user information passed into the command calling
+  // this class
   _cookies =
     NetworkUtils::getUserSessionCookie(
-      opts.getHootServicesUserName(), opts.getHootServicesOauthAccessToken(),
-      opts.getHootServicesOauthAccessTokenSecret(), baseUrl);
+      opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
+      opts.getHootServicesAuthAccessTokenSecret(), baseUrl);
 }
 
 boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableApps(
@@ -90,6 +92,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  //create and execute the request
  QUrl url(urlStr);
  HootNetworkRequest request;
+ //Hoot OAuth requires that session state be maintained for the authenticated user
  request.setCookies(_cookies);
  request.networkRequest(url);
 

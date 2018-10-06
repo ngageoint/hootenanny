@@ -35,8 +35,8 @@ namespace hoot
 {
 
 /**
- * This primarily exists to check the contents of the cookie store.  May not be needed with
- * Qt 5.
+ * Customization of Qt's cookie store.  This primarily exists simply to check the contents of a
+ * cookie store.  It may not be needed after upgrading to Qt 5.
  */
 class HootNetworkCookieJar : public QNetworkCookieJar
 {

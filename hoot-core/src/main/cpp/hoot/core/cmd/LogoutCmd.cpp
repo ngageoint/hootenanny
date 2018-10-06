@@ -74,7 +74,7 @@ public:
     HootNetworkRequest logoutRequest;
     try
     {
-      logoutRequest.networkRequest(ConfigOptions().getAuthLogoutEndpoint());
+      logoutRequest.networkRequest(ConfigOptions().getHootServicesAuthLogoutEndpoint());
     }
     catch (const std::exception& e)
     {
@@ -87,7 +87,7 @@ public:
         logoutRequest.getErrorString());
     }
 
-    std::cout << "User: " << userName << " logged out of Hootenanny." << std::endl;
+    std::cout << "User: " << userName << " logged out of the Hootenanny Web Services." << std::endl;
 
     return 0;
   }

@@ -1,10 +1,10 @@
 == logout
 
-The +logout+ command logs a user out of the Hootenanny application. 
+The +logout+ command logs a user out of the Hootenanny Web Services. 
 
-* +userName+          - The user name used to log into Hootenanny.
-* +accessToken+       - The access token used to log into Hootenanny.
-* +accessTokenSecret+ - The access token secret used to log into Hootenanny.
+* +userName+          - The user name used to log into the Hootenanny Web Services.
+* +accessToken+       - The access token used to authenticate with the Hootenanny Web Services.
+* +accessTokenSecret+ - The access token secret used to authenticate with the Hootenanny Web Services.
 
 === Usage
 
@@ -15,6 +15,6 @@ logout [userName] [accessToken] [accessTokenSecret]
 === Example
 
 --------------------------------------
-$ hoot logout icenine18 <token> <tokenSecret>
-The user: icenine18 was logged out of Hootenanny.
+$ hoot logout icenine18 <accessToken> <accessTokenSecret>
+The user: icenine18 was logged out of the Hootenanny Web Services.
 --------------------------------------

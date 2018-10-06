@@ -348,33 +348,50 @@ public:
   void setFlushOnClose(bool flush) { _flushOnClose = flush; }
 
   /**
-   * @brief getSessionIdByAccessTokens
-   * @param userName
-   * @param accessToken
-   * @param accessTokenSecret
-   * @return
+   * Retrieve the HTTP session ID associated with a user
+   *
+   * @param userName user name of the user
+   * @param accessToken public OAuth access token for the user
+   * @param accessTokenSecret private OAuth access token for the user
+   * @return an HTTP session ID or an empty string if no session ID was found for the given input
    */
   QString getSessionIdByAccessTokens(const QString userName, const QString accessToken,
                                      const QString accessTokenSecret);
 
   /**
-   * @brief accessTokensValid
-   * @param userName
-   * @param accessToken
-   * @param accessTokenSecret
-   * @return
+   * Determines whether a set of access tokens are valid for a user
+   *
+   * @param userName user name of the user
+   * @param accessToken public OAuth access token for the user
+   * @param accessTokenSecret private OAuth access token for the user
+   * @return true if the access tokens passed in are associated with the specified user; false
+   * otherwise
    */
   bool accessTokensAreValid(const QString userName, const QString accessToken,
                             const QString accessTokenSecret);
 
   /**
-   * @brief getSessionIdByUserId
-   * @param userId
-   * @return
+   * Returns the HTTP session ID associated with a user
+   *
+   * @param userId ID of a user
+   * @return an HTTP session ID or an empty string if no session ID was found
    */
   QString getSessionIdByUserId(const long userId);
 
+  /**
+   * Returns the public OAuth access token associated with a user
+   *
+   * @param userId ID of a user
+   * @return a public OAuth access token or an empty string if no session ID was found
+   */
   QString getAccessTokenByUserId(const long userId);
+
+  /**
+   * Returns the private OAuth access token associated with a user
+   *
+   * @param userId ID of a user
+   * @return a private OAuth access token or an empty string if no session ID was found
+   */
   QString getAccessTokenSecretByUserId(const long userId);
 
 protected:

@@ -31,27 +31,25 @@
 // Hoot
 #include <hoot/core/io/HootNetworkCookieJar.h>
 
-// Qt
-#include <QNetworkCookieJar>
-
 namespace hoot
 {
 
 /**
- *
+ * Various utilities for use in network programming
  */
 class NetworkUtils
 {
 
 public:
 
-   /**
-   * @brief getUserSessionCookie
-   * @param userName
-   * @param accessToken
-   * @param accessTokenSecret
-   * @param url
-   * @return
+  /**
+   * Retrieves a session cookie that can be associated with a user account
+   *
+   * @param userName user name of the user
+   * @param accessToken the user's public OAuth access token
+   * @param accessTokenSecret the user's private OAuth access token
+   * @param url URL of the request containing the cookies
+   * @return a cookie store containing only the session cookie
    */
   static boost::shared_ptr<HootNetworkCookieJar> getUserSessionCookie(
     const QString userName, const QString accessToken, const QString accessTokenSecret,

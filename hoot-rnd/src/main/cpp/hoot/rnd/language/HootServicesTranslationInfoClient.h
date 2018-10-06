@@ -30,14 +30,14 @@
 
 // hoot
 #include <hoot/rnd/language/TranslationInfoProvider.h>
-#include <hoot/core/util/NetworkUtils.h>
 
 // Qt
 #include <QStringList>
-#include <QNetworkCookieJar>
 
 namespace hoot
 {
+
+class HootNetworkCookieJar;
 
 /**
  * Retrieves information from the Hootenanny web translation service about available languages
@@ -78,7 +78,7 @@ private:
   QString _detectorsUrl;
   QString _translatorsUrl;
 
-  boost::shared_ptr<HootNetworkCookieJar/*QNetworkCookieJar*/> _cookies;
+  boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
   QString _getAvailableLanguagesRequestData(const QStringList apps);
 };

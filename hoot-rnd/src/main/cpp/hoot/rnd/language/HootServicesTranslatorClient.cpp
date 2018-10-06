@@ -115,10 +115,12 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
     _translateCache.reset(new QCache<QString, TranslationResult>(_translationCacheMaxSize));
   }
 
+  // get a session cookie associated with the user information passed into the command calling
+  // this class
   _cookies =
     NetworkUtils::getUserSessionCookie(
-      opts.getHootServicesUserName(), opts.getHootServicesOauthAccessToken(),
-      opts.getHootServicesOauthAccessTokenSecret(), _translationUrl);
+      opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
+      opts.getHootServicesAuthAccessTokenSecret(), _translationUrl);
 }
 
 void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCodes)
@@ -369,6 +371,7 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
   HootNetworkRequest request;
+  //Hoot OAuth requires that session state be maintained for the authenticated user
   request.setCookies(_cookies);
   try
   {

@@ -69,13 +69,13 @@ public:
     // get a request token
     const QString requestToken = _getRequestToken();
 
-    // auth through the 3rd party (OpenStreetMap, MapEdit, etc.)
-    const QString verifier = _getAuthorizationVerifier();
+    // prompt user to auth through the 3rd party (OpenStreetMap, MapEdit, etc.)
+    const QString verifier = _promptForAuthorizationVerifier();
 
-    // verify the user and get the user id
-    const long userId = _verifyUser(requestToken, verifier);
+    // verify the user's login and get the user id
+    const long userId = _verifyUserAndLogin(requestToken, verifier);
 
-    // get the access tokens and show to the user
+    // get access tokens and display to the user
     _printAccessTokens(userId);
 
     return 0;
@@ -83,6 +83,8 @@ public:
 
 private:
 
+  // hoot requires the same http session be used throughout the auth process, so the same session
+  // cookie must be passed along with all OAuth requests
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
   QString _getRequestToken()
@@ -92,8 +94,8 @@ private:
     requestTokenRequest.setCookies(_cookies);
     try
     {
-      LOG_VART(ConfigOptions().getAuthRequestTokenEndpoint());
-      requestTokenRequest.networkRequest(ConfigOptions().getAuthRequestTokenEndpoint());
+      LOG_VART(ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
+      requestTokenRequest.networkRequest(ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
     }
     catch (const std::exception& e)
     {
@@ -111,33 +113,31 @@ private:
     const QString requestToken = authUrl.queryItemValue("oauth_token");
     LOG_VARD(requestToken);
 
-    std::cout << "Authorization URL: " << authUrl.toString() << std::endl;
+    std::cout << std::endl << "Authorization URL: " << authUrl.toString() << std::endl << std::endl;
 
     return requestToken;
   }
 
-  QString _getAuthorizationVerifier() const
+  QString _promptForAuthorizationVerifier() const
   {
     std::string consoleInput;
     std::cout <<
       "Using the authorization URL shown above, authenticate through the 3rd party application, " <<
-      "grant Hootenanny access, enter your verifier code here, and press ENTER: ";
+      "grant Hootenanny access to it, then enter your verifier code here and press ENTER: ";
     std::getline(std::cin, consoleInput);
     const QString verifier = QString::fromStdString(consoleInput);
     LOG_VARD(verifier);
     return verifier;
   }
 
-  long _verifyUser(const QString requestToken, const QString verifier)
+  long _verifyUserAndLogin(const QString requestToken, const QString verifier)
   {
     HootNetworkRequest verifyRequest;
-    // hoot requires the same http session be used throughout the auth process, so a session cookie
-    // must be passed here or the request token lookup during the token trade will fail
     LOG_VART(_cookies->size());
     LOG_VART(_cookies->toString());
     verifyRequest.setCookies(_cookies);
-    LOG_VART(ConfigOptions().getAuthVerifyEndpoint());
-    QUrl verifyUrl(ConfigOptions().getAuthVerifyEndpoint());
+    LOG_VART(ConfigOptions().getHootServicesAuthVerifyEndpoint());
+    QUrl verifyUrl(ConfigOptions().getHootServicesAuthVerifyEndpoint());
     verifyUrl.addQueryItem("oauth_token", QString(QUrl::toPercentEncoding(requestToken)));
     verifyUrl.addQueryItem("oauth_verifier", QString(QUrl::toPercentEncoding(verifier)));
     LOG_VART(verifyUrl.toString());
@@ -178,6 +178,7 @@ private:
     LOG_VARD(accessTokenSecret);
     db.close();
 
+    std::cout << std::endl;
     std::cout << "oauth_token=" << accessToken << std::endl;
     std::cout << "oauth_token_secret=" << accessTokenSecret << std::endl;
   }

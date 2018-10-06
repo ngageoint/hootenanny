@@ -70,7 +70,6 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   _error.clear();
   //  Do HTTP request
   boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
-  LOG_VART(url);
   QNetworkRequest request(url);
 
   for (QMap<QNetworkRequest::KnownHeaders, QVariant>::const_iterator it = headers.begin(); it != headers.end(); ++it)
@@ -100,7 +99,7 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   {
     pNAM->setCookieJar(_cookies.get());
     // don't want to take ownership of these cookies so they could potentially be shared across
-    // different requests
+    // different requests made by the same caller
     _cookies->setParent(0);
   }
 
@@ -129,7 +128,6 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   disable.reset();
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
-  LOG_VART(_status);
   //  According to the documention this shouldn't ever happen
   if (reply == NULL)
   {
@@ -137,12 +135,10 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     return false;
   }
   _content = reply->readAll();
-  LOG_VART(QString(_content).left(50));
   //  Check error status on our reply
   if (QNetworkReply::NoError != reply->error())
   {
     _error = reply->errorString();
-    LOG_VART(_error);
     return false;
   }
 

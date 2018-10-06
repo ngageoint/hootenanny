@@ -201,27 +201,6 @@ The precision of numeric values written to Attribute-Relation (.arff) files.
 
 Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
-=== auth.request.token.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/request`
-
-Service endpoint for retrieving Hootenanny OAuth request tokens.
-
-=== auth.logout.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/logout`
-
-Service endpoint for logging out of Hootenanny.
-
-=== auth.verify.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/verify`
-
-Service endpoint for verifying Hootenanny logins.
-
 === autocorrect.options
 
 * Data Type: bool
@@ -899,29 +878,49 @@ The highway subline matcher to use when determining matching highway sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
-=== hoot.services.oauth.access.token
+=== hoot.services.auth.access.token
 
 * Data Type: string
 * Default Value: ``
 
-Public access token of a Hootenanny Web Services authenticated user.  User authentication is
-required by some commands and can be completed using the hoot 'login' command.
+Hootenanny Web Services public access token required by some Hootenanny commands.  Use the
+Hootenanny 'login' command to retrieve access tokens.
 
-=== hoot.services.oauth.access.token.secret
-
-* Data Type: string
-* Default Value: ``
-
-Private access token of a Hootenanny Web Services authenticated user.  User authentication is
-required by some commands and can be completed using the hoot 'login' command.
-
-=== hoot.services.user.name
+=== hoot.services.auth.access.token.secret
 
 * Data Type: string
 * Default Value: ``
 
-Username of a Hootenanny Web Services authenticated user.  User authentication is
-required by some commands and can be completed using the hoot 'login' command.
+Hootenanny Web Services private access token required by some Hootenanny commands.  Use the
+Hootenanny 'login' command to retrieve access tokens.
+
+=== hoot.services.auth.logout.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/logout`
+
+Hootenanny Web Services endpoint for logging out of Hootenanny.
+
+=== hoot.services.auth.request.token.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/request`
+
+Hootenanny Web Services endpoint for retrieving Hootenanny request tokens.
+
+=== hoot.services.auth.user.name
+
+* Data Type: string
+* Default Value: ``
+
+Hootenanny Web Services user name associated with an authenticated login.
+
+=== hoot.services.auth.verify.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/verify`
+
+Hootenanny Web Services endpoint for logging in a user.
 
 === hootapi.db.writer.copy.bulk.insert
 

@@ -424,9 +424,10 @@ public:
   bool isOpen() const { return _db.isOpen(); }
 
   /**
-   * @brief getUserIdByName
-   * @param userName
-   * @return
+   * Returns a Hootenanny Web Services user ID given a user name
+   *
+   * @param userName user name of the user whose ID is to be retrieved
+   * @return a user ID or -1 if no user with the given user name was found
    */
   long getUserIdByName(const QString userName);
 
