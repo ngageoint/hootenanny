@@ -62,15 +62,12 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   _translatableUrl = opts.getLanguageTranslationHootServicesTranslatableLanguagesEndpoint();
   _detectorsUrl = opts.getLanguageTranslationHootServicesDetectorsEndpoint();
   _translatorsUrl = opts.getLanguageTranslationHootServicesTranslatorsEndpoint();
-  //const QString baseUrl = _detectorsUrl.replace(_detectorsUrl.lastIndexOf("/"), ?, "");
-  //TODO: remove hardcode
-  const QString baseUrl = "http://localhost:8080/hoot-services/language/toEnglishTranslation";
   // get a session cookie associated with the user information passed into the command calling
   // this class
   _cookies =
     NetworkUtils::getUserSessionCookie(
       opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
-      opts.getHootServicesAuthAccessTokenSecret(), baseUrl);
+      opts.getHootServicesAuthAccessTokenSecret(), _detectableUrl);
 }
 
 boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableApps(
