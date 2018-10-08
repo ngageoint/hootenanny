@@ -132,7 +132,7 @@ void ExternalMergeElementSorter::_initElementStream()
   boost::shared_ptr<PartialOsmMapReader> sortedElementsReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::getInstance().createReader(_sortFinalOutput->fileName()));
-  sortedElementsReader->setUseDataSourceIds(true);;
+  sortedElementsReader->setUseDataSourceIds(true);
   sortedElementsReader->open(_sortFinalOutput->fileName());
   sortedElementsReader->initializePartial();
   _sortedElements = boost::dynamic_pointer_cast<ElementInputStream>(sortedElementsReader);
