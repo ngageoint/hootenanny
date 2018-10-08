@@ -30,8 +30,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/HootApiDb.h>
-#include <hoot/core/io/HootNetworkRequest.h>
+#include <hoot/core/auth/HootServicesLoginManager.h>
 
 namespace hoot
 {
@@ -61,33 +60,19 @@ public:
     const QString accessToken = args[1];
     const QString accessTokenSecret = args[2];
 
-    HootApiDb db;
-    //hoot db requires a layer to open, but we don't need one here...so put anything in
-    QUrl url(HootApiDb::getBaseUrl().toString() + "/blah");
-    db.open(url);
-    if (!db.accessTokensAreValid(userName, accessToken, accessTokenSecret))
-    {
-      throw HootException("Unable to log out user: " + userName + ".  Invalid access tokens.");
-    }
+    const bool success =
+      HootServicesLoginManager().logout(userName, accessToken, accessTokenSecret);
 
-    // log the user out
-    HootNetworkRequest logoutRequest;
-    try
+    if (success)
     {
-      logoutRequest.networkRequest(ConfigOptions().getHootServicesAuthLogoutEndpoint());
+      std::cout << "User: " << userName << " logged out of the Hootenanny Web Services." <<
+        std::endl;
     }
-    catch (const std::exception& e)
+    else
     {
-      throw HootException("Error logging out user: " + userName + ". error: " + e.what());
+      std::cout << "Unable to log user: " << userName << " out of the Hootenanny Web Services." <<
+        std::endl;
     }
-    if (logoutRequest.getHttpStatus() != 200)
-    {
-      throw HootException(
-        "Error retrieving logging out user: " + userName + ". error: " +
-        logoutRequest.getErrorString());
-    }
-
-    std::cout << "User: " << userName << " logged out of the Hootenanny Web Services." << std::endl;
 
     return 0;
   }

@@ -29,18 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/HootNetworkRequest.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/HootApiDb.h>
-#include <hoot/core/io/HootNetworkCookieJar.h>
-
-// Std
-#include <iostream>
-#include <string>
-
-// Boost
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
+#include <hoot/core/auth/HootServicesLoginManager.h>
 
 namespace hoot
 {
@@ -66,122 +55,27 @@ public:
       throw HootException(QString("%1 takes zero parameters.").arg(getName()));
     }
 
+    HootServicesLoginManager loginManager;
+
     // get a request token
-    const QString requestToken = _getRequestToken();
+    const QString requestToken = loginManager.getRequestToken();
 
     // prompt user to auth through the 3rd party (OpenStreetMap, MapEdit, etc.)
-    const QString verifier = _promptForAuthorizationVerifier();
+    const QString verifier = loginManager.promptForAuthorizationVerifier();
 
-    // verify the user's login and get the user id
-    const long userId = _verifyUserAndLogin(requestToken, verifier);
+    // verify the user's login, create the user, and get their id
+    const long userId = loginManager.verifyUserAndLogin(requestToken, verifier);
 
-    // get access tokens and display to the user
-    _printAccessTokens(userId);
+    // retrieve access tokens and display to the user
+    loginManager.printAccessTokens(userId);
 
     return 0;
   }
 
 private:
 
-  // hoot requires the same http session be used throughout the auth process, so the same session
-  // cookie must be passed along with all OAuth requests
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
-  QString _getRequestToken()
-  {
-    HootNetworkRequest requestTokenRequest;
-    _cookies.reset(new HootNetworkCookieJar());
-    requestTokenRequest.setCookies(_cookies);
-    try
-    {
-      LOG_VART(ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
-      requestTokenRequest.networkRequest(ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
-    }
-    catch (const std::exception& e)
-    {
-      const QString exceptionMsg = e.what();
-      throw HootException("Error retrieving request token. error: " + exceptionMsg);
-    }
-    if (requestTokenRequest.getHttpStatus() != 200)
-    {
-      throw HootException(
-        "Error retrieving request token. error: " + requestTokenRequest.getErrorString());
-    }
-    LOG_VART(_cookies->size());
-    LOG_VART(_cookies->toString());
-    const QUrl authUrl(requestTokenRequest.getResponseContent());
-    const QString requestToken = authUrl.queryItemValue("oauth_token");
-    LOG_VARD(requestToken);
 
-    std::cout << std::endl << "Authorization URL: " << authUrl.toString() << std::endl << std::endl;
-
-    return requestToken;
-  }
-
-  QString _promptForAuthorizationVerifier() const
-  {
-    std::string consoleInput;
-    std::cout <<
-      "Using the authorization URL shown above, authenticate through the 3rd party application, " <<
-      "grant Hootenanny access to it, then enter your verifier code here and press ENTER: ";
-    std::getline(std::cin, consoleInput);
-    const QString verifier = QString::fromStdString(consoleInput);
-    LOG_VARD(verifier);
-    return verifier;
-  }
-
-  long _verifyUserAndLogin(const QString requestToken, const QString verifier)
-  {
-    HootNetworkRequest verifyRequest;
-    LOG_VART(_cookies->size());
-    LOG_VART(_cookies->toString());
-    verifyRequest.setCookies(_cookies);
-    LOG_VART(ConfigOptions().getHootServicesAuthVerifyEndpoint());
-    QUrl verifyUrl(ConfigOptions().getHootServicesAuthVerifyEndpoint());
-    verifyUrl.addQueryItem("oauth_token", QString(QUrl::toPercentEncoding(requestToken)));
-    verifyUrl.addQueryItem("oauth_verifier", QString(QUrl::toPercentEncoding(verifier)));
-    LOG_VART(verifyUrl.toString());
-    try
-    {
-      verifyRequest.networkRequest(verifyUrl.toString());
-    }
-    catch (const std::exception& e)
-    {
-      const QString exceptionMsg = e.what();
-      throw HootException("Error verifying user. error: " + exceptionMsg);
-    }
-    if (verifyRequest.getHttpStatus() != 200)
-    {
-      throw HootException("Error verifying user. error: " + verifyRequest.getErrorString());
-    }
-    LOG_VART(_cookies->size());
-    LOG_VART(_cookies->toString());
-
-    // reply contains a user object
-    boost::shared_ptr<boost::property_tree::ptree> replyObj =
-      StringUtils::jsonStringToPropTree(verifyRequest.getResponseContent());
-    const long userId = replyObj->get<long>("id");
-    LOG_VARD(userId);
-    return userId;
-  }
-
-  void _printAccessTokens(const long userId)
-  {
-    HootApiDb db;
-    LOG_VARD(HootApiDb::getBaseUrl());
-    //hoot db requires a layer to open, but we don't need one here...so put anything in
-    QUrl url(HootApiDb::getBaseUrl().toString() + "/blah");
-    db.open(url);
-    const QString accessToken = db.getAccessTokenByUserId(userId);
-    LOG_VARD(accessToken);
-    const QString accessTokenSecret = db.getAccessTokenSecretByUserId(userId);
-    LOG_VARD(accessTokenSecret);
-    db.close();
-
-    std::cout << std::endl;
-    std::cout << "oauth_token=" << accessToken << std::endl;
-    std::cout << "oauth_token_secret=" << accessTokenSecret << std::endl;
-  }
 };
 
 HOOT_FACTORY_REGISTER(Command, LoginCmd)

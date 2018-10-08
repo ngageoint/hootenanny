@@ -26,8 +26,9 @@ $ hoot login
 
 Authorization URL: https://www.openstreetmap.org/oauth/authorize?oauth_token=sUGfkaRnEaFoOfsdAILgZWcUb4VhZkdonQMz67BT
 
-Using the authorization URL shown above, authenticate through the 3rd party application, grant Hootenanny access to it, then enter your 
-verifier code here and press ENTER: lHhO73e7NaPNZlmKop6j
+1. Using the authorization URL shown above, authenticate through the 3rd party application. 
+2. Grant Hootenanny access to the application
+3. Copy and paste your verifier code from the browser here and press ENTER: lHhO73e7NaPNZlmKop6j
 
 oauth_token=pAJaKkZzsR8sE0cyfHc7oUgW5VOr32YEyYdT8OKN
 oauth_token_secret=78djJKrgOGlfVPqsc0wGlMCpKVar1LUrBs3DunRM
