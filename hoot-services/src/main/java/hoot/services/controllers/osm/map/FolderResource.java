@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -45,6 +46,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -55,9 +57,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
 
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
+import hoot.services.models.db.Users;
 
 
 @Controller
@@ -75,14 +79,18 @@ public class FolderResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public FolderRecords getFolders() {
+    public FolderRecords getFolders(@Context HttpServletRequest request) {
+        Users user = Users.fromResponse(request);
         FolderRecords folderRecords = null;
 
-        List<Folders> folderRecordSet = createQuery().select(folders).from(folders).orderBy(folders.displayName.asc())
-                .fetch();
-
+        SQLQuery<Folders> sql = createQuery()
+                .select(folders)
+                .from(folders);
+        if(user != null) {
+            sql.where(folders.userId.eq(user.getId()));
+        }
+        List<Folders> folderRecordSet = sql.orderBy(folders.displayName.asc()).fetch();
         folderRecords = mapFolderRecordsToFolders(folderRecordSet);
-
         return folderRecords;
     }
 
@@ -96,29 +104,35 @@ public class FolderResource {
     @GET
     @Path("/linked")
     @Produces(MediaType.APPLICATION_JSON)
-    public LinkRecords getLinks() {
+    public LinkRecords getLinks(@Context HttpServletRequest request) {
+        Users user = Users.fromResponse(request);
         LinkRecords linkRecords = null;
 
         createQuery().delete(folderMapMappings)
-                .where(new SQLQuery<>().from(maps).where(folderMapMappings.mapId.eq(maps.id)).notExists()).execute();
+            .where(new SQLQuery<>().from(maps).where(folderMapMappings.mapId.eq(maps.id)).notExists())
+            .execute();
 
         try {
             createQuery().insert(folderMapMappings).columns(folderMapMappings.mapId, folderMapMappings.folderId)
                     .select(new SQLQuery<>().select(maps.id, Expressions.numberTemplate(Long.class, "0")).from(maps)
                             .where(maps.id.notIn(new SQLQuery<>().select(folderMapMappings.mapId).distinct()
-                                    .from(folderMapMappings))))
+                            .from(folderMapMappings))))
                     .execute();
         }
         catch (Exception e) {
-            logger.error("Could not add missing records...", e);
+            logger.error("getLinks(): Could not add missing records...", e);
         }
 
-        List<FolderMapMappings> linkRecordSet = createQuery().select(folderMapMappings).from(folderMapMappings)
-                .orderBy(folderMapMappings.folderId.asc()).fetch();
-
+        SQLQuery<FolderMapMappings> sql = createQuery().select(folderMapMappings).from(folderMapMappings);
+        if(user != null) {
+            sql.where(folderMapMappings.mapId.isNull()
+                .or(folderMapMappings.mapId.in(
+                    new SQLQuery<>().select(maps.id).from(maps).where(maps.userId.eq(user.getId()))
+                ))
+            );
+        }
+        List<FolderMapMappings> linkRecordSet = sql.orderBy(folderMapMappings.folderId.asc()).fetch();
         linkRecords = mapLinkRecordsToLinks(linkRecordSet);
-
-
         return linkRecords;
     }
 
@@ -138,7 +152,7 @@ public class FolderResource {
     @Path("/add/{parentId}/{folderName}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addFolder(@PathParam("folderName") String folderName, @PathParam("parentId") Long parentId) {
+    public Response addFolder(@Context HttpServletRequest request, @PathParam("folderName") String folderName, @PathParam("parentId") Long parentId) {
 
         Long newId = createQuery().select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')")).from()
                 .fetchOne();
@@ -172,7 +186,7 @@ public class FolderResource {
     @Path("/delete/{folderId}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteFolder(@PathParam("folderId") Long folderId) {
+    public Response deleteFolder(@Context HttpServletRequest request, @PathParam("folderId") Long folderId) {
 
         List<Long> parentId = createQuery().select(folders.id).from(folders).where(folders.id.eq(folderId)).fetch();
 
@@ -207,7 +221,7 @@ public class FolderResource {
     @Path("/update/parent/{id}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateParentId(@QueryParam("folderId") Long folderId, @QueryParam("parentId") Long parentId,
+    public Response updateParentId(@Context HttpServletRequest request, @QueryParam("folderId") Long folderId, @QueryParam("parentId") Long parentId,
             @QueryParam("newRecord") Boolean newRecord) {
 
         createQuery().update(folders).where(folders.id.eq(folderId)).set(folders.parentId, parentId).execute();
@@ -233,7 +247,7 @@ public class FolderResource {
     @Path("/modify/{folderId : \\d+}/{modName}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyName(@QueryParam("folderId") Long folderId, @QueryParam("modName") String modName,
+    public Response modifyName(@Context HttpServletRequest request, @QueryParam("folderId") Long folderId, @QueryParam("modName") String modName,
             @PathParam("resource") String inputType) {
 
         createQuery().update(folders).where(folders.id.eq(folderId)).set(folders.displayName, modName)
