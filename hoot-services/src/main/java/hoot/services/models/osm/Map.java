@@ -26,6 +26,9 @@
  */
 package hoot.services.models.osm;
 
+import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
+import static hoot.services.models.db.QFolders.folders;
+import static hoot.services.models.db.QMaps.maps;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.tuple;
 import static hoot.services.HootProperties.MAP_QUERY_DIMENSIONS;
@@ -67,6 +70,7 @@ import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.db.QUsers;
+import hoot.services.models.db.Users;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
@@ -689,9 +693,19 @@ public class Map extends Maps {
 
         return bounds;
     }
-    
-    public long getOwner() {
-        return createQuery().select(QMaps.maps.userId).from(QMaps.maps).where(QMaps.maps.id.eq(this.getId())).fetchOne();
+
+    public boolean isVisibleTo(Users user) {
+        Tuple t = createQuery()
+            .select(maps.userId, folderMapMappings.folderId, folders.publicCol)
+            .from(maps)
+            .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(QMaps.maps.id))
+            .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
+            .where(maps.id.eq(this.getId()))
+            .fetchFirst();
+
+        Long folderId = t.get(1, Long.class);
+        // Owned by the current user, or has no folder -or- at root, in public folder:
+        return t.get(0, Long.class) == user.getId() || (folderId == null || folderId == 0L) || t.get(2, Boolean.class) == true;
     }
 
     public static boolean mapExists(long id) {

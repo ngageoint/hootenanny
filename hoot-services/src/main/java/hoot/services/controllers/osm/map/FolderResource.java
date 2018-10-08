@@ -39,7 +39,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -57,7 +60,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.dml.SQLDeleteClause;
 
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
@@ -80,14 +82,16 @@ public class FolderResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public FolderRecords getFolders(@Context HttpServletRequest request) {
-        Users user = Users.fromResponse(request);
+        Users user = Users.fromRequest(request);
         FolderRecords folderRecords = null;
 
         SQLQuery<Folders> sql = createQuery()
                 .select(folders)
                 .from(folders);
         if(user != null) {
-            sql.where(folders.userId.eq(user.getId()));
+            sql.where(
+                    folders.userId.eq(user.getId()).or(folders.publicCol.isTrue())
+                    );
         }
         List<Folders> folderRecordSet = sql.orderBy(folders.displayName.asc()).fetch();
         folderRecords = mapFolderRecordsToFolders(folderRecordSet);
@@ -105,7 +109,7 @@ public class FolderResource {
     @Path("/linked")
     @Produces(MediaType.APPLICATION_JSON)
     public LinkRecords getLinks(@Context HttpServletRequest request) {
-        Users user = Users.fromResponse(request);
+        Users user = Users.fromRequest(request);
         LinkRecords linkRecords = null;
 
         createQuery().delete(folderMapMappings)
@@ -123,13 +127,13 @@ public class FolderResource {
             logger.error("getLinks(): Could not add missing records...", e);
         }
 
-        SQLQuery<FolderMapMappings> sql = createQuery().select(folderMapMappings).from(folderMapMappings);
+        SQLQuery<FolderMapMappings> sql = createQuery()
+                .select(folderMapMappings)
+                .from(folderMapMappings)
+                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId));
         if(user != null) {
-            sql.where(folderMapMappings.mapId.isNull()
-                .or(folderMapMappings.mapId.in(
-                    new SQLQuery<>().select(maps.id).from(maps).where(maps.userId.eq(user.getId()))
-                ))
-            );
+            // public or folder owned by current user
+            sql.where(folders.publicCol.isTrue().or(folders.userId.eq(user.getId())));
         }
         List<FolderMapMappings> linkRecordSet = sql.orderBy(folderMapMappings.folderId.asc()).fetch();
         linkRecords = mapLinkRecordsToLinks(linkRecordSet);
@@ -146,24 +150,30 @@ public class FolderResource {
      * @param parentId
      *            The parent folder of the new folder. If at root level, is
      *            equal to 0.
+     * @param isPublic
+     *            Default true
      * @return jobId Success = True/False
      */
     @POST
     @Path("/add/{parentId}/{folderName}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addFolder(@Context HttpServletRequest request, @PathParam("folderName") String folderName, @PathParam("parentId") Long parentId) {
+    public Response addFolder(@Context HttpServletRequest request, @PathParam("folderName") String folderName, @PathParam("parentId") Long parentId, @DefaultValue("true") @QueryParam("isPublic") Boolean isPublic) {
+        Users user = Users.fromRequest(request);
 
-        Long newId = createQuery().select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')")).from()
+        // handles some ACL logic for us...
+        getFolderForUser(user, parentId);
+
+        Long newId = createQuery()
+                .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
+                .from()
                 .fetchOne();
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
 
-        long userId = 1;
         createQuery()
-                .insert(folders).columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol,
-                        folders.userId, folders.parentId)
-                .values(newId, now, folderName, true, userId, parentId).execute();
+                .insert(folders).columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId, folders.parentId)
+                .values(newId, now, folderName, isPublic, user.getId(), parentId).execute();
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);
@@ -187,17 +197,25 @@ public class FolderResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteFolder(@Context HttpServletRequest request, @PathParam("folderId") Long folderId) {
+        Users user = Users.fromRequest(request);
+        Folders folder = getFolderForUser(user, folderId);
 
-        List<Long> parentId = createQuery().select(folders.id).from(folders).where(folders.id.eq(folderId)).fetch();
+        createQuery()
+            .update(folders)
+            .where(folders.parentId.eq(folderId))
+            .set(folders.parentId, folder.getParentId()) // move stuff in this folder to -this folder's- parent.
+            .execute();
 
-        Long prntId = !parentId.isEmpty() ? parentId.get(0) : 0L;
+        createQuery()
+            .delete(folders)
+            .where(folders.id.eq(folderId))
+            .execute();
 
-        createQuery().update(folders).where(folders.parentId.eq(folderId)).set(folders.parentId, prntId).execute();
-
-        createQuery().delete(folders).where(folders.id.eq(folderId)).execute();
-
-        createQuery().update(folderMapMappings).where(folderMapMappings.folderId.eq(folderId))
-                .set(folderMapMappings.folderId, 0L).execute();
+        createQuery()
+            .update(folderMapMappings)
+            .where(folderMapMappings.folderId.eq(folderId))
+            .set(folderMapMappings.folderId, folder.getParentId()) // Update mappings for objects inside this folder
+            .execute();
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);
@@ -206,25 +224,31 @@ public class FolderResource {
 
     /**
      *
-     * POST hoot-services/osm/api/0.6/map/update/parent/{id}
+     * POST hoot-services/osm/api/0.6/map/folders/{folderId}/update/parent/{parentFolderId}
      *
      *
      * @param folderId
      *            ID of folder
      * @param parentId
-     *            ?
-     * @param newRecord
-     *            ?
+     *            ID of another folder
      * @return jobId Success = True/False
      */
     @PUT
-    @Path("/update/parent/{id}")
+    @Path("/{folderId}/update/parent/{parentFolderId}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateParentId(@Context HttpServletRequest request, @QueryParam("folderId") Long folderId, @QueryParam("parentId") Long parentId,
-            @QueryParam("newRecord") Boolean newRecord) {
+    public Response updateParentId(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("parentFolderId") Long parentFolderId) {
+        Users user = Users.fromRequest(request);
+        // handle some ACL logic:
+        getFolderForUser(user, folderId);
+        getFolderForUser(user, parentFolderId);
 
-        createQuery().update(folders).where(folders.id.eq(folderId)).set(folders.parentId, parentId).execute();
+        createQuery()
+            .update(folders)
+            .where(folders.id.eq(folderId))
+            .set(folders.parentId, parentFolderId)
+            .execute();
+
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);
         return Response.ok().entity(ret).build();
@@ -247,13 +271,16 @@ public class FolderResource {
     @Path("/modify/{folderId : \\d+}/{modName}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyName(@Context HttpServletRequest request, @QueryParam("folderId") Long folderId, @QueryParam("modName") String modName,
-            @PathParam("resource") String inputType) {
+    public Response modifyName(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("modName") String modName) {
+        Users user = Users.fromRequest(request);
+        // handle some ACL logic:
+        getFolderForUser(user, folderId);
 
-        createQuery().update(folders).where(folders.id.eq(folderId)).set(folders.displayName, modName)
-                .execute();
-
-        logger.debug("Renamed folder with id {} {}...", folderId, modName);
+        createQuery()
+            .update(folders)
+            .where(folders.id.eq(folderId))
+            .set(folders.displayName, modName)
+            .execute();
 
         return Response.ok().build();
     }
@@ -306,5 +333,22 @@ public class FolderResource {
         linkRecords.setLinks(linkRecordList.toArray(new LinkRecord[linkRecordList.size()]));
 
         return linkRecords;
+    }
+
+    private static Folders getFolderForUser(Users user, Long folderId) {
+        Folders folder = createQuery()
+                .select(folders)
+                .from(folders)
+                .where(folders.id.eq(folderId))
+                .fetchOne();
+
+        if(folder == null) {
+            throw new NotFoundException();
+        }
+        if(!folder.getPublicCol() && folder.getUserId() != user.getId()) {
+            throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+        }
+
+        return folder;
     }
 }

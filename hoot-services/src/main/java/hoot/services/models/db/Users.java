@@ -147,7 +147,7 @@ public class Users {
         return this.displayName;
     }
 
-    public static Users fromResponse(HttpServletRequest request) {
+    public static Users fromRequest(HttpServletRequest request) {
         if(request == null) {
             return null;
         }

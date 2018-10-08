@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm.map;
 
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
+import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
@@ -139,9 +140,17 @@ public class MapResource {
         SQLQuery<Maps> q = createQuery()
             .select(maps)
             .from(maps)
+            .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
+            .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
             .orderBy(maps.displayName.asc());
         if(user != null) {
-            q.where(maps.userId.eq(user.getId()));
+            q.where(
+                    // Owned by the current user
+                    maps.userId.eq(user.getId()).or(
+                            // or not in a folder // or in a public folder.
+                            folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L)).or(folders.publicCol.isTrue())
+                            )
+                    );
         }
         List<Maps> mapLayerRecords = q.fetch();
 
@@ -449,7 +458,7 @@ public class MapResource {
             }
             Map m = new Map(mapIdNum);
 
-            if(m.getOwner() != user.getId()) {
+            if(user != null && !m.isVisibleTo(user)) {
                 continue;
             }
 
@@ -536,8 +545,8 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteLayers(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
-        @SuppressWarnings("unused") // handles some ACL logic for us...
-        Map m = getMapForRequest(request, mapId, false);
+        // handles some ACL logic for us...
+        getMapForRequest(request, mapId, false);
 
         String jobId = UUID.randomUUID().toString();
         try {
@@ -763,7 +772,7 @@ public class MapResource {
             throw new NotFoundException("No map with that id exists");
         }
         Map m = new Map(mapIdNum);
-        if(user != null && m.getOwner() != user.getId()) {
+        if(user != null && !m.isVisibleTo(user)) {
             throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
         }
         return m;
