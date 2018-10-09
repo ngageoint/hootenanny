@@ -76,7 +76,7 @@ only other hoot services language translator available is JoshuaLanguageTranslat
 JoshuaLanguageTranslator internally for its translation and adds detection on top of that, you won't gain to much by switching over to 
 JoshuaLanguageTranslator.  However, if additional translators become available at any time, you can list them with this:
 -----------------------
-hoot languages --translators -D hoot.services.authenticated.username=yourUserName
+hoot languages --translators
 -----------------------
 
 Then, to use a different service translator you can do this (only one translator may be specified):
@@ -87,7 +87,7 @@ hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.tran
 Service language detectors are configurable in a similar fashion to translators.  By default when language detection is used, translators 
 attempt to deploy all available language detectors until a detection is made.  To list available language detectors:
 -----------------------
-hoot languages --detectors -D hoot.services.authenticated.username=yourUserName
+hoot languages --detectors
 -----------------------
 
 Then, you can modify which service detectors are used with this (multiple detectors may be specified):

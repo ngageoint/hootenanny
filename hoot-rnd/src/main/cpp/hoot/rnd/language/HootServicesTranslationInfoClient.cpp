@@ -51,7 +51,6 @@ HOOT_FACTORY_REGISTER(TranslationInfoProvider, HootServicesTranslationInfoClient
 HootServicesTranslationInfoClient::HootServicesTranslationInfoClient() :
 _useCookies(true)
 {
-  LOG_VART(_useCookies);
 }
 
 void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
@@ -66,7 +65,6 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   _translatableUrl = opts.getLanguageTranslationHootServicesTranslatableLanguagesEndpoint();
   _detectorsUrl = opts.getLanguageTranslationHootServicesDetectorsEndpoint();
   _translatorsUrl = opts.getLanguageTranslationHootServicesTranslatorsEndpoint();
-  LOG_VART(_useCookies);
   if (_useCookies)
   {
     // get a session cookie associated with the user information passed into the command calling

@@ -424,26 +424,18 @@ public:
   bool isOpen() const { return _db.isOpen(); }
 
   /**
-   * Returns a Hootenanny Web Services user ID given a user name
+   * Returns a user ID given a user name
    *
-   * @param userName user name of the user whose ID is to be retrieved
+   * @param userName user name of the user
    * @return a user ID or -1 if no user with the given user name was found
    */
   long getUserIdByName(const QString userName);
 
   /**
-   * TODO
+   * Determines whether a user exists
    *
-   * @param userId
-   * @return
-   */
-  QString getUserNameById(const long userId);
-
-  /**
-   * TODO
-   *
-   * @param userName
-   * @return
+   * @param userName user name of the user
+   * @return true if the user exists; false otherwise
    */
   bool userExists(const QString userName);
 
@@ -483,7 +475,6 @@ private:
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
   boost::shared_ptr<QSqlQuery> _userExists;
   boost::shared_ptr<QSqlQuery> _getUserIdByName;
-  boost::shared_ptr<QSqlQuery> _getUserNameById;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;

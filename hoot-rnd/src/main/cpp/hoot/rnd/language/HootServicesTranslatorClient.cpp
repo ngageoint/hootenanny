@@ -74,7 +74,6 @@ _translationCacheMaxSize(-1),
 _translationCacheSize(0),
 _skipWordsInEnglishDict(true)
 {
-  LOG_VART(_useCookies);
 }
 
 HootServicesTranslatorClient::~HootServicesTranslatorClient()
@@ -119,7 +118,6 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
     _translateCache.reset(new QCache<QString, TranslationResult>(_translationCacheMaxSize));
   }
 
-  LOG_VART(_useCookies);
   if (_useCookies)
   {
     // get a session cookie associated with the user information passed into the command calling

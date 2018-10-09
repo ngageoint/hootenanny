@@ -60,12 +60,13 @@ public:
   virtual void setUp()
   {
     _sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
-    LOG_VART(_sessionId);
+
     _userId =
       ServicesDbTestUtils::insertTestUser(
         "ServicesHootServicesLoginManagerTest",
         "ServicesHootServicesLoginManagerTest@hoot.com",
         _sessionId, "testAccessToken", "testAccessTokenSecret");
+
     _cookies =
       ServicesDbTestUtils::getTestSessionCookie(
         "testSessionId", ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
@@ -73,7 +74,7 @@ public:
 
   virtual void tearDown()
   {
-    ServicesDbTestUtils::deleteUserByUserName("HootServicesTranslatorClientTest");
+    ServicesDbTestUtils::deleteUserByUserName("ServicesHootServicesLoginManagerTest");
   }
 
   ServicesHootServicesLoginManagerTest()
@@ -97,8 +98,10 @@ public:
     QUrl loginUrl;
     HootNetworkRequest request = uut._getLoginRequest("testRequestToken", "testVerifier", loginUrl);
 
+    //check that the request has the single session cookie with the correct session id
     CPPUNIT_ASSERT_EQUAL(1, request.getCookies()->size());
     HOOT_STR_EQUALS(_cookies->toString(), request.getCookies()->toString());
+
     HOOT_STR_EQUALS(
       "http://localhost:8080/hoot-services/auth/oauth1/verify?oauth_token=testRequestToken&oauth_verifier=testVerifier",
       loginUrl.toString());
@@ -106,6 +109,7 @@ public:
 
   void loginResponseTest()
   {
+    //id is the only thing we parse from the user json
     CPPUNIT_ASSERT_EQUAL(
       1L,
       HootServicesLoginManager()._parseLoginResponse(
@@ -141,7 +145,8 @@ public:
 
   void logoutTest()
   {
-    //Since we're deleting this user as part of the test, don't use the test user from setUp.
+    //Since we're deleting this user as part of this test, don't use the same test user as the
+    //other tests.
     const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
     const long userId =
       ServicesDbTestUtils::insertTestUser(

@@ -400,19 +400,19 @@ public:
   QString getAccessTokenSecretByUserId(const long userId);
 
   /**
-   * TODO
+   * Creates a user session entry
    *
-   * @param userId
-   * @param sessionId
+   * @param userId user ID
+   * @param sessionId HTTP session ID
    */
   void insertUserSession(const long userId, const QString sessionId);
 
   /**
-   * TODO
+   * Updates the OAuth access tokens for a user
    *
-   * @param userId
-   * @param accessToken
-   * @param accessTokenSecret
+   * @param userId user ID
+   * @param accessToken OAuth public access token
+   * @param accessTokenSecret OAuth private access token
    */
   void updateUserAccessTokens(const long userId, const QString accessToken,
                               const QString accessTokenSecret);

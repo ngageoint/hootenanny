@@ -41,7 +41,6 @@ HootServicesTranslationInfoMockClient::HootServicesTranslationInfoMockClient() :
 HootServicesTranslationInfoClient()
 {
   _useCookies = false;
-  LOG_VART(_useCookies);
 }
 
 /**

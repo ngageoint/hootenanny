@@ -40,7 +40,7 @@ namespace hoot
 class HootNetworkCookieJar;
 
 /**
- * TODO
+ * Manages user logins to the Hootenanny Web Services
  */
 class HootServicesLoginManager
 {
@@ -49,45 +49,46 @@ public:
   HootServicesLoginManager();
 
   /**
-   * TODO
+   * Retrieves an OAuth request token from the Hootenanny Web Services
    *
-   * @param authUrlStr
-   * @return
+   * @param authUrlStr the 3rd party app authorization URL populated by the method to be used to
+   * authorize Hootenanny's access to the login credentials
+   * @return an OAuth request token
    */
   QString getRequestToken(QString& authUrlStr);
 
   /**
-   * TODO
+   * Prompts the user to enter the OAuth verification code after 3rd party authorization
    *
-   * @return
+   * @return the OAuth verifier code input by the user
    */
   QString promptForAuthorizationVerifier() const;
 
   /**
-   * TODO
+   * Verifies a user's 3rd party authorization and logs them in to the Hootenanny Web Services
    *
-   * @param requestToken
-   * @param verifier
-   * @return
+   * @param requestToken an OAuth request token
+   * @param verifier the OAuth verifier code associated with the input request token
+   * @return ID of the authenticated user
    */
   long verifyUserAndLogin(const QString requestToken, const QString verifier);
 
   /**
-   * TODO
+   * Retrieves OAuth access tokens for an authenticated user
    *
-   * @param userId
-   * @param accessToken
-   * @param accessTokenSecret
+   * @param userId ID of the user
+   * @param accessToken populated OAuth public access token
+   * @param accessTokenSecret populated OAuth private access token
    */
   void getAccessTokens(const long userId, QString& accessToken, QString& accessTokenSecret);
 
   /**
-   * TODO
+   * Logs a user out of the Hootenanny Web Services
    *
-   * @param userName
-   * @param accessToken
-   * @param accessTokenSecret
-   * @return
+   * @param userName user name of the user
+   * @param accessToken the OAuth public access token for the user
+   * @param accessTokenSecret the OAuth private access token for the user
+   * @return true if the logout was successful; false otherwise
    */
   bool logout(const QString userName, const QString accessToken, const QString accessTokenSecret);
 

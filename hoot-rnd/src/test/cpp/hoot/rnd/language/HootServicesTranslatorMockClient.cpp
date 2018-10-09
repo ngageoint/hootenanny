@@ -53,7 +53,6 @@ HootServicesTranslatorClient()
     QString::fromUtf8("computer store;English");
 
   _useCookies = false;
-  LOG_VART(_useCookies);
 }
 
 void HootServicesTranslatorMockClient::setSourceLanguages(const QStringList langCodes)
