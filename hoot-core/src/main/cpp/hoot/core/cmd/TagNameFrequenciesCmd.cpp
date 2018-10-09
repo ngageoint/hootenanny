@@ -110,7 +110,7 @@ public:
   virtual QString getName() const { return "tag-name-frequencies"; }
 
   virtual QString getDescription() const
-  { return "Prints feature names ordered by frequency"; }
+  { return "Displays feature names ordered by frequency"; }
 
   int runSimple(QStringList args)
   {
