@@ -52,6 +52,9 @@ public:
     uut.setText("phone");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
+    uut.setText("PHONE");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
     uut.setText("source:phone");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
@@ -59,6 +62,10 @@ public:
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
     uut.setText("something else");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    uut.setCaseSensitive(true);
+    uut.setText("PHONE");
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 };

@@ -56,11 +56,13 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setText(const QString text) { _text = text; }
+  void setText(QString text) { _text = text; }
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
 private:
 
   QString _text;
+  bool _caseSensitive;
 };
 
 }
