@@ -102,8 +102,8 @@ private:
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
   HootNetworkRequest _getLoginRequest(const QString requestToken, const QString verifier,
-                                      QUrl& loginUrl);
-  long _parseLoginResponse(const QString response);
+                                      QUrl& loginUrl) const;
+  long _parseLoginResponse(const QString response) const;
 };
 
 }

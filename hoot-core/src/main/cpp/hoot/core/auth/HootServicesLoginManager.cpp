@@ -127,7 +127,7 @@ long HootServicesLoginManager::verifyUserAndLogin(const QString requestToken,
 
 HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString requestToken,
                                                               const QString verifier,
-                                                              QUrl& loginUrl)
+                                                              QUrl& loginUrl) const
 {
   HootNetworkRequest loginRequest;
   LOG_VART(_cookies->size());
@@ -143,7 +143,7 @@ HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString requ
   return loginRequest;
 }
 
-long HootServicesLoginManager::_parseLoginResponse(const QString response)
+long HootServicesLoginManager::_parseLoginResponse(const QString response) const
 {
   LOG_VART(response);
   boost::shared_ptr<boost::property_tree::ptree> replyObj =
