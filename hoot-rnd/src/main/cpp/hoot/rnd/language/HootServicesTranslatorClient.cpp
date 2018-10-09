@@ -60,6 +60,7 @@ bool HootServicesTranslatorClient::_loggedCacheMaxReached = false;
 HootServicesTranslatorClient::HootServicesTranslatorClient() :
 _detectedLang(""),
 _detectedLangAvailableForTranslation(false),
+_useCookies(true),
 _detectedLangOverrides(false),
 _performExhaustiveSearch(false),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
@@ -73,6 +74,7 @@ _translationCacheMaxSize(-1),
 _translationCacheSize(0),
 _skipWordsInEnglishDict(true)
 {
+  LOG_VART(_useCookies);
 }
 
 HootServicesTranslatorClient::~HootServicesTranslatorClient()
@@ -94,6 +96,8 @@ HootServicesTranslatorClient::~HootServicesTranslatorClient()
 
 void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
 {
+  LOG_DEBUG("Setting configuration...");
+
   ConfigOptions opts(conf);
 
   _detectedLangOverrides =
@@ -115,12 +119,16 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
     _translateCache.reset(new QCache<QString, TranslationResult>(_translationCacheMaxSize));
   }
 
-  // get a session cookie associated with the user information passed into the command calling
-  // this class
-  _cookies =
-    NetworkUtils::getUserSessionCookie(
-      opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
-      opts.getHootServicesAuthAccessTokenSecret(), _translationUrl);
+  LOG_VART(_useCookies);
+  if (_useCookies)
+  {
+    // get a session cookie associated with the user information passed into the command calling
+    // this class
+    _cookies =
+      NetworkUtils::getUserSessionCookie(
+        opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
+        opts.getHootServicesAuthAccessTokenSecret(), _translationUrl);
+  }
 }
 
 void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCodes)
@@ -371,8 +379,11 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
   HootNetworkRequest request;
-  //Hoot OAuth requires that session state be maintained for the authenticated user
-  request.setCookies(_cookies);
+  if (_useCookies)
+  {
+    //Hoot OAuth requires that session state be maintained for the authenticated user
+    request.setCookies(_cookies);
+  }
   try
   {
     request.networkRequest(

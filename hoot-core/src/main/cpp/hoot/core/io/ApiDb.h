@@ -431,6 +431,22 @@ public:
    */
   long getUserIdByName(const QString userName);
 
+  /**
+   * TODO
+   *
+   * @param userId
+   * @return
+   */
+  QString getUserNameById(const long userId);
+
+  /**
+   * TODO
+   *
+   * @param userName
+   * @return
+   */
+  bool userExists(const QString userName);
+
 protected:
 
   //osm api db stores coords as integers and hoot api db as floating point
@@ -467,6 +483,7 @@ private:
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
   boost::shared_ptr<QSqlQuery> _userExists;
   boost::shared_ptr<QSqlQuery> _getUserIdByName;
+  boost::shared_ptr<QSqlQuery> _getUserNameById;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;

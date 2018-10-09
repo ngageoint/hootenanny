@@ -1132,6 +1132,8 @@ void HootApiDb::_resetQueries()
   _accessTokensAreValid.reset();
   _getAccessTokenByUserId.reset();
   _getAccessTokenSecretByUserId.reset();
+  _insertUserSession.reset();
+  _updateUserAccessTokens.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1334,7 +1336,8 @@ bool HootApiDb::accessTokensAreValid(const QString userName, const QString acces
   {
     _accessTokensAreValid.reset(new QSqlQuery(_db));
     _accessTokensAreValid->prepare(
-        QString("SELECT COUNT(*) FROM users WHERE display_name = :userName AND ") +
+        QString("SELECT COUNT(*) FROM " + ApiDb::getUsersTableName() +
+                " WHERE display_name = :userName AND ") +
         QString("provider_access_key = :accessToken AND ") +
         QString("provider_access_token = :accessTokenSecret"));
   }
@@ -1375,7 +1378,7 @@ QString HootApiDb::getAccessTokenByUserId(const long userId)
   {
     _getAccessTokenByUserId.reset(new QSqlQuery(_db));
     _getAccessTokenByUserId->prepare(
-      "SELECT provider_access_key FROM users WHERE id = :userId");
+      "SELECT provider_access_key FROM " + ApiDb::getUsersTableName() + " WHERE id = :userId");
   }
   _getAccessTokenByUserId->bindValue(":userId", (qlonglong)userId);
   if (!_getAccessTokenByUserId->exec())
@@ -1413,7 +1416,7 @@ QString HootApiDb::getAccessTokenSecretByUserId(const long userId)
   {
     _getAccessTokenSecretByUserId.reset(new QSqlQuery(_db));
     _getAccessTokenSecretByUserId->prepare(
-      "SELECT provider_access_token FROM users WHERE id = :userId");
+      "SELECT provider_access_token FROM " + ApiDb::getUsersTableName() + " WHERE id = :userId");
   }
   _getAccessTokenSecretByUserId->bindValue(":userId", (qlonglong)userId);
   if (!_getAccessTokenSecretByUserId->exec())
@@ -1441,6 +1444,54 @@ QString HootApiDb::getAccessTokenSecretByUserId(const long userId)
   return accessTokenSecret;
 }
 
+void HootApiDb::insertUserSession(const long userId, const QString sessionId)
+{
+  if (_insertUserSession == 0)
+  {
+    _insertUserSession.reset(new QSqlQuery(_db));
+    _insertUserSession->prepare(
+      "INSERT INTO " + getUserSessionTableName() +
+      " (session_id, creation_time, last_access_time, max_inactive_interval, user_id)" +
+      " VALUES (:sessionId, " + currentTimestampAsBigIntSql() + ", " +
+      currentTimestampAsBigIntSql() + ", :maxInactiveInterval, :userId)");
+  }
+  _insertUserSession->bindValue(":sessionId", sessionId);
+  _insertUserSession->bindValue(":maxInactiveInterval", 1);
+  _insertUserSession->bindValue(":userId", (qlonglong)userId);
+  if (!_insertUserSession->exec())
+  {
+    LOG_VART(_insertUserSession->executedQuery());
+    LOG_VART(_insertUserSession->lastError().databaseText());
+    LOG_VART(_insertUserSession->lastError().number());
+    LOG_VART(_insertUserSession->lastError().driverText());
+    throw HootException(
+      "Error inserting session for user ID: " + QString::number(userId) + " " +
+      _insertUserSession->lastError().text());
+  }
+}
+
+void HootApiDb::updateUserAccessTokens(const long userId, const QString accessToken,
+                                       const QString accessTokenSecret)
+{
+  if (_updateUserAccessTokens == 0)
+  {
+    _updateUserAccessTokens.reset(new QSqlQuery(_db));
+    _updateUserAccessTokens->prepare(
+      "UPDATE " + ApiDb::getUsersTableName() +
+      " SET provider_access_key=:accessToken, provider_access_token=:accessTokenSecret" +
+      " WHERE id=:userId");
+  }
+  _updateUserAccessTokens->bindValue(":userId", (qlonglong)userId);
+  _updateUserAccessTokens->bindValue(":accessToken", accessToken);
+  _updateUserAccessTokens->bindValue(":accessTokenSecret", accessTokenSecret);
+  if (!_updateUserAccessTokens->exec())
+  {
+    throw HootException(
+      "Error updating access tokens for user ID: " + QString::number(userId) + " " +
+      _updateUserAccessTokens->lastError().text());
+  }
+}
+
 QString HootApiDb::getSessionIdByUserId(const long userId)
 {
   LOG_VART(userId);
@@ -1451,7 +1502,7 @@ QString HootApiDb::getSessionIdByUserId(const long userId)
   {
     _getSessionIdByUserId.reset(new QSqlQuery(_db));
     _getSessionIdByUserId->prepare(
-      "SELECT session_id FROM spring_session WHERE user_id = :userId");
+      "SELECT session_id FROM " + getUserSessionTableName() + " WHERE user_id = :userId");
   }
   _getSessionIdByUserId->bindValue(":userId", (qlonglong)userId);
   if (!_getSessionIdByUserId->exec())

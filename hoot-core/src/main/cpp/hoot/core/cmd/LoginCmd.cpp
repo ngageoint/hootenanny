@@ -57,8 +57,10 @@ public:
 
     HootServicesLoginManager loginManager;
 
-    // get a request token
-    const QString requestToken = loginManager.getRequestToken();
+    // get a request token and display the authorization url
+    QString authUrl;
+    const QString requestToken = loginManager.getRequestToken(authUrl);
+    std::cout << std::endl << "Authorization URL: " << authUrl << std::endl << std::endl;
 
     // prompt user to auth through the 3rd party (OpenStreetMap, MapEdit, etc.)
     const QString verifier = loginManager.promptForAuthorizationVerifier();
@@ -67,15 +69,15 @@ public:
     const long userId = loginManager.verifyUserAndLogin(requestToken, verifier);
 
     // retrieve access tokens and display to the user
-    loginManager.printAccessTokens(userId);
+    QString accessToken;
+    QString accessTokenSecret;
+    loginManager.getAccessTokens(userId, accessToken, accessTokenSecret);
+    std::cout << std::endl;
+    std::cout << "oauth_token=" << accessToken << std::endl;
+    std::cout << "oauth_token_secret=" << accessTokenSecret << std::endl;
 
     return 0;
   }
-
-private:
-
-
-
 };
 
 HOOT_FACTORY_REGISTER(Command, LoginCmd)

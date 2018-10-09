@@ -2,6 +2,9 @@
 #ifndef HOOT_SERVICES_LOGIN_MANAGER_H
 #define HOOT_SERVICES_LOGIN_MANAGER_H
 
+// Hoot
+#include <hoot/core/io/HootNetworkRequest.h>
+
 // Qt
 #include <QString>
 
@@ -11,7 +14,7 @@ namespace hoot
 class HootNetworkCookieJar;
 
 /**
- *
+ * TODO
  */
 class HootServicesLoginManager
 {
@@ -22,9 +25,10 @@ public:
   /**
    * TODO
    *
+   * @param authUrlStr
    * @return
    */
-  QString getRequestToken();
+  QString getRequestToken(QString& authUrlStr);
 
   /**
    * TODO
@@ -46,8 +50,10 @@ public:
    * TODO
    *
    * @param userId
+   * @param accessToken
+   * @param accessTokenSecret
    */
-  void printAccessTokens(const long userId);
+  void getAccessTokens(const long userId, QString& accessToken, QString& accessTokenSecret);
 
   /**
    * TODO
@@ -61,9 +67,15 @@ public:
 
 private:
 
+  friend class ServicesHootServicesLoginManagerTest;
+
   // hoot requires the same http session be used throughout the auth process, so the same session
   // cookie must be passed along with all OAuth requests
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
+
+  HootNetworkRequest _getLoginRequest(const QString requestToken, const QString verifier,
+                                      QUrl& loginUrl);
+  long _parseLoginResponse(const QString response);
 };
 
 }

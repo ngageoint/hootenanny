@@ -316,6 +316,11 @@ public:
 
   inline static QString getJobStatusTableName() { return "job_status"; }
 
+  inline static QString getUserSessionTableName() { return "spring_session"; }
+
+  inline static QString currentTimestampAsBigIntSql()
+  { return "extract('epoch' FROM CURRENT_TIMESTAMP)::bigint"; }
+
   /**
    * Very handy for testing.
    */
@@ -394,6 +399,24 @@ public:
    */
   QString getAccessTokenSecretByUserId(const long userId);
 
+  /**
+   * TODO
+   *
+   * @param userId
+   * @param sessionId
+   */
+  void insertUserSession(const long userId, const QString sessionId);
+
+  /**
+   * TODO
+   *
+   * @param userId
+   * @param accessToken
+   * @param accessTokenSecret
+   */
+  void updateUserAccessTokens(const long userId, const QString accessToken,
+                              const QString accessTokenSecret);
+
 protected:
 
   virtual void _resetQueries();
@@ -426,6 +449,8 @@ private:
   boost::shared_ptr<QSqlQuery> _accessTokensAreValid;
   boost::shared_ptr<QSqlQuery> _getAccessTokenByUserId;
   boost::shared_ptr<QSqlQuery> _getAccessTokenSecretByUserId;
+  boost::shared_ptr<QSqlQuery> _insertUserSession;
+  boost::shared_ptr<QSqlQuery> _updateUserAccessTokens;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

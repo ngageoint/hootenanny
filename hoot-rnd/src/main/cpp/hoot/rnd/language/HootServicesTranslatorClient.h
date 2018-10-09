@@ -93,6 +93,10 @@ protected:
 
   boost::shared_ptr<TranslationInfoProvider> _infoClient;
 
+  //determines whether cookies are used in web requests; should be set to true to support auth,
+  //except when running tests as they don't make web requests that require auth
+  bool _useCookies;
+
 private:
 
   friend class HootServicesTranslatorClientTest;

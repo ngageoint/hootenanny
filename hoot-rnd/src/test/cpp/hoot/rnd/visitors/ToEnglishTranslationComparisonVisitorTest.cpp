@@ -149,6 +149,9 @@ private:
     conf.set("language.translation.to.translate.tag.keys", toTranslateTagKeys);
     conf.set("language.translation.translator", "hoot::HootServicesTranslatorMockClient");
     conf.set("language.translation.info.provider", "hoot::HootServicesTranslationInfoMockClient");
+    conf.set("hoot.services.auth.user.name", "ToEnglishTranslationComparisonVisitorTest");
+    conf.set("hoot.services.auth.access.token", "testAccessToken");
+    conf.set("hoot.services.auth.access.token.secret", "testAccessTokenSecret");
 
     return conf;
   }

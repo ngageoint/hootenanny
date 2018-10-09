@@ -51,6 +51,9 @@ HootServicesTranslatorClient()
     QString::fromUtf8("good morning;Spanish");
   _mockTranslations[QString::fromUtf8("computer store")] =
     QString::fromUtf8("computer store;English");
+
+  _useCookies = false;
+  LOG_VART(_useCookies);
 }
 
 void HootServicesTranslatorMockClient::setSourceLanguages(const QStringList langCodes)

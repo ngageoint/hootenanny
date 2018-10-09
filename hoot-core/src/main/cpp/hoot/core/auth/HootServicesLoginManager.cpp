@@ -3,7 +3,6 @@
 
 // Hoot
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootNetworkCookieJar.h>
@@ -23,7 +22,7 @@ HootServicesLoginManager::HootServicesLoginManager()
 {
 }
 
-QString HootServicesLoginManager::getRequestToken()
+QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
 {
   HootNetworkRequest requestTokenRequest;
   _cookies.reset(new HootNetworkCookieJar());
@@ -48,8 +47,7 @@ QString HootServicesLoginManager::getRequestToken()
   const QUrl authUrl(requestTokenRequest.getResponseContent());
   const QString requestToken = authUrl.queryItemValue("oauth_token");
   LOG_VARD(requestToken);
-
-  std::cout << std::endl << "Authorization URL: " << authUrl.toString() << std::endl << std::endl;
+  authUrlStr = authUrl.toString();
 
   return requestToken;
 }
@@ -71,55 +69,76 @@ QString HootServicesLoginManager::promptForAuthorizationVerifier() const
 long HootServicesLoginManager::verifyUserAndLogin(const QString requestToken,
                                                   const QString verifier)
 {
-  HootNetworkRequest verifyRequest;
-  LOG_VART(_cookies->size());
-  LOG_VART(_cookies->toString());
-  verifyRequest.setCookies(_cookies);
-  LOG_VART(ConfigOptions().getHootServicesAuthVerifyEndpoint());
-  QUrl verifyUrl(ConfigOptions().getHootServicesAuthVerifyEndpoint());
-  verifyUrl.addQueryItem("oauth_token", QString(QUrl::toPercentEncoding(requestToken)));
-  verifyUrl.addQueryItem("oauth_verifier", QString(QUrl::toPercentEncoding(verifier)));
-  LOG_VART(verifyUrl.toString());
+  QUrl loginUrl;
+  HootNetworkRequest loginRequest = _getLoginRequest(requestToken, verifier, loginUrl);
   try
   {
-    verifyRequest.networkRequest(verifyUrl.toString());
+    loginRequest.networkRequest(loginUrl.toString());
   }
   catch (const std::exception& e)
   {
     const QString exceptionMsg = e.what();
     throw HootException("Error verifying user. error: " + exceptionMsg);
   }
-  if (verifyRequest.getHttpStatus() != 200)
+  if (loginRequest.getHttpStatus() != 200)
   {
-    throw HootException("Error verifying user. error: " + verifyRequest.getErrorString());
+    throw HootException("Error verifying user. error: " + loginRequest.getErrorString());
   }
   LOG_VART(_cookies->size());
   LOG_VART(_cookies->toString());
 
   // reply contains a user object
+  return _parseLoginResponse(loginRequest.getResponseContent());
+}
+
+HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString requestToken,
+                                                              const QString verifier,
+                                                              QUrl& loginUrl)
+{
+  HootNetworkRequest loginRequest;
+  LOG_VART(_cookies->size());
+  LOG_VART(_cookies->toString());
+  loginRequest.setCookies(_cookies);
+  LOG_VART(ConfigOptions().getHootServicesAuthVerifyEndpoint());
+
+  loginUrl.setUrl(ConfigOptions().getHootServicesAuthVerifyEndpoint());
+  loginUrl.addQueryItem("oauth_token", QString(QUrl::toPercentEncoding(requestToken)));
+  loginUrl.addQueryItem("oauth_verifier", QString(QUrl::toPercentEncoding(verifier)));
+  LOG_VART(loginUrl.toString());
+
+  return loginRequest;
+}
+
+long HootServicesLoginManager::_parseLoginResponse(const QString response)
+{
+  LOG_VART(response);
   boost::shared_ptr<boost::property_tree::ptree> replyObj =
-    StringUtils::jsonStringToPropTree(verifyRequest.getResponseContent());
+    StringUtils::jsonStringToPropTree(response);
   const long userId = replyObj->get<long>("id");
   LOG_VARD(userId);
   return userId;
 }
 
-void HootServicesLoginManager::printAccessTokens(const long userId)
+void HootServicesLoginManager::getAccessTokens(const long userId, QString& accessToken,
+                                               QString& accessTokenSecret)
 {
   HootApiDb db;
   LOG_VARD(HootApiDb::getBaseUrl());
   //hoot db requires a layer to open, but we don't need one here...so put anything in
   QUrl url(HootApiDb::getBaseUrl().toString() + "/blah");
   db.open(url);
-  const QString accessToken = db.getAccessTokenByUserId(userId);
+
+  LOG_VART(db.userExists(userId));
+  if (!db.userExists(userId))
+  {
+    throw HootException("User does not exist. ID: " + QString::number(userId));
+  }
+
+  accessToken = db.getAccessTokenByUserId(userId);
   LOG_VARD(accessToken);
-  const QString accessTokenSecret = db.getAccessTokenSecretByUserId(userId);
+  accessTokenSecret = db.getAccessTokenSecretByUserId(userId);
   LOG_VARD(accessTokenSecret);
   db.close();
-
-  std::cout << std::endl;
-  std::cout << "oauth_token=" << accessToken << std::endl;
-  std::cout << "oauth_token_secret=" << accessTokenSecret << std::endl;
 }
 
 bool HootServicesLoginManager::logout(const QString userName, const QString accessToken,
@@ -129,6 +148,11 @@ bool HootServicesLoginManager::logout(const QString userName, const QString acce
   //hoot db requires a layer to open, but we don't need one here...so put anything in
   QUrl url(HootApiDb::getBaseUrl().toString() + "/blah");
   db.open(url);
+
+  if (!db.userExists(userName))
+  {
+    throw HootException("User does not exist. user name:" + userName);
+  }
   if (!db.accessTokensAreValid(userName, accessToken, accessTokenSecret))
   {
     throw HootException("Unable to log out user: " + userName + ".  Invalid access tokens.");
@@ -148,6 +172,13 @@ bool HootServicesLoginManager::logout(const QString userName, const QString acce
   {
     return false;
   }
+
+  // The services invalidate the http session associated with the user account but don't seem to
+  // be invalidating the user account.  For the meantime, going to remove the user here so that
+  // calling this log out actually does something.  For the long term, it would be better to do
+  // this, or something similar, in the services instead and remove this delete.
+  db.deleteUser(db.getUserIdByName(userName));
+
   return true;
 }
 

@@ -108,6 +108,7 @@ void ApiDb::_resetQueries()
   _selectChangesetsCreatedAfterTime.reset();
   _userExists.reset();
   _getUserIdByName.reset();
+  _getUserNameById.reset();
 
   for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _maxIdQueries.begin();
        itr != _maxIdQueries.end(); ++itr)
@@ -264,6 +265,46 @@ long ApiDb::getUserIdByName(const QString userName)
   return userId;
 }
 
+QString ApiDb::getUserNameById(const long userId)
+{
+  LOG_VART(userId);
+  if (_getUserNameById == 0)
+  {
+    _getUserNameById.reset(new QSqlQuery(_db));
+    _getUserNameById->prepare(
+      "SELECT display_name FROM " + ApiDb::getUsersTableName() + " WHERE id = :userId");
+  }
+  _getUserNameById->bindValue(":userId", (qlonglong)userId);
+  if (!_getUserNameById->exec())
+  {
+    throw HootException(
+      "Error finding user with ID: " + QString::number(userId) + " " +
+      _getUserNameById->lastError().text());
+  }
+
+  QString userName = "";
+  //should only be one result
+  if (_getUserNameById->next())
+  {
+    userName = _getUserNameById->value(0).toString();
+  }
+  else
+  {
+    LOG_TRACE("No user name available for ID: " << userId);
+    _getUserNameById->finish();
+    return "";
+  }
+  _getUserNameById->finish();
+
+  LOG_VART(userName);
+  return userName;
+}
+
+bool ApiDb::userExists(const QString userName)
+{
+  return userExists(getUserIdByName(userName));
+}
+
 bool ApiDb::userExists(const long id)
 {
   LOG_VART(id);
@@ -289,6 +330,10 @@ bool ApiDb::userExists(const long id)
     {
       return false;
     }
+  }
+  else
+  {
+    return false;
   }
   LOG_VART(result);
 

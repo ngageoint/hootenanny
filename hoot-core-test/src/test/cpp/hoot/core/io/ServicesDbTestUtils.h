@@ -35,6 +35,7 @@
 // Hoot
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/io/HootNetworkCookieJar.h>
 
 namespace hoot
 {
@@ -89,6 +90,14 @@ public:
   static boost::shared_ptr<OsmMap> createTestMap1();
 
   static OsmMapPtr createServiceTestMap();
+
+  static long insertTestUser(const QString userName, const QString email, const QString sessionId,
+                             const QString accessToken, const QString accessTokenSecret);
+
+  static bool deleteUserByUserName(const QString userName);
+
+  static boost::shared_ptr<HootNetworkCookieJar> getTestSessionCookie(const QString sessionId,
+                                                                      const QString url);
 
 private:
 
