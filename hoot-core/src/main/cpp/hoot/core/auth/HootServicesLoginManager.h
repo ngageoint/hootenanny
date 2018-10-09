@@ -69,9 +69,10 @@ public:
    *
    * @param requestToken an OAuth request token
    * @param verifier the OAuth verifier code associated with the input request token
+   * @paraqm userName populated user name for the authenticated user
    * @return ID of the authenticated user
    */
-  long verifyUserAndLogin(const QString requestToken, const QString verifier);
+  long verifyUserAndLogin(const QString requestToken, const QString verifier, QString& userName);
 
   /**
    * Retrieves OAuth access tokens for an authenticated user

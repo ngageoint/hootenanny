@@ -432,6 +432,14 @@ public:
   long getUserIdByName(const QString userName);
 
   /**
+   * Returns a user name given a user ID
+   *
+   * @param userId ID of the user
+   * @return a user name or an empty string if not user with the given user ID was found
+   */
+  QString getUserNameById(const long userId);
+
+  /**
    * Determines whether a user exists
    *
    * @param userName user name of the user
@@ -475,6 +483,7 @@ private:
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
   boost::shared_ptr<QSqlQuery> _userExists;
   boost::shared_ptr<QSqlQuery> _getUserIdByName;
+  boost::shared_ptr<QSqlQuery> _getUserNameById;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;

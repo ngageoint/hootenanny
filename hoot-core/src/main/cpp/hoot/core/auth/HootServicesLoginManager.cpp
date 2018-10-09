@@ -93,7 +93,7 @@ QString HootServicesLoginManager::promptForAuthorizationVerifier() const
 }
 
 long HootServicesLoginManager::verifyUserAndLogin(const QString requestToken,
-                                                  const QString verifier)
+                                                  const QString verifier, QString& userName)
 {
   QUrl loginUrl;
   HootNetworkRequest loginRequest = _getLoginRequest(requestToken, verifier, loginUrl);
@@ -114,7 +114,15 @@ long HootServicesLoginManager::verifyUserAndLogin(const QString requestToken,
   LOG_VART(_cookies->toString());
 
   // reply contains a user object
-  return _parseLoginResponse(loginRequest.getResponseContent());
+  const long userId = _parseLoginResponse(loginRequest.getResponseContent());
+
+  HootApiDb db;
+  //hoot db requires a layer to open, but we don't need one here...so put anything in
+  QUrl url(HootApiDb::getBaseUrl().toString() + "/blah");
+  db.open(url);
+  userName = db.getUserNameById(userId);
+
+  return userId;
 }
 
 HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString requestToken,
@@ -199,10 +207,11 @@ bool HootServicesLoginManager::logout(const QString userName, const QString acce
     return false;
   }
 
-  // The services invalidate the http session associated with the user account but don't seem to
-  // be invalidating the user account.  For the meantime, going to remove the user here so that
-  // calling this log out actually does something.  For the long term, it would be better to do
-  // this, or something similar, in the services instead and remove this delete.
+  // The services invalidate the http session associated with the user account on a logout but
+  // don't remove the user account record.  If the user account record isn't removed here, then the
+  // user really isn't logged out from a core perspective and this functionality has no purpose.
+  // So, going to remove the user here.  For the longer term, it may be better to perform this
+  // step, or something similar, in the services rather than right here.
   db.deleteUser(db.getUserIdByName(userName));
 
   return true;

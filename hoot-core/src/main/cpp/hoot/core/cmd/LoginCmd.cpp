@@ -65,16 +65,23 @@ public:
     // prompt user to auth through the 3rd party (OpenStreetMap, MapEdit, etc.)
     const QString verifier = loginManager.promptForAuthorizationVerifier();
 
-    // verify the user's login, create the user, and get their id
-    const long userId = loginManager.verifyUserAndLogin(requestToken, verifier);
+    // verify the user's login, create the user, and get their id and user name
+    QString userName;
+    const long userId = loginManager.verifyUserAndLogin(requestToken, verifier, userName);
 
     // retrieve access tokens and display to the user
     QString accessToken;
     QString accessTokenSecret;
     loginManager.getAccessTokens(userId, accessToken, accessTokenSecret);
     std::cout << std::endl;
+    std::cout << "user name=" << userName << std::endl;
     std::cout << "oauth_token=" << accessToken << std::endl;
     std::cout << "oauth_token_secret=" << accessTokenSecret << std::endl;
+    std::cout << std::endl;
+    std::cout << "Use the above information with all Hootenanny commands that require use of the Hootenanny Web Services:" << std::endl;
+    std::cout << "-D hoot.services.auth.user.name=" << userName << std::endl;
+    std::cout << "-D hoot.services.auth.access.token=" << accessToken << std::endl;
+    std::cout << "-D hoot.services.auth.access.token.secret=" << accessTokenSecret << std::endl;
 
     return 0;
   }
