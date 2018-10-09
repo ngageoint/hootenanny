@@ -91,7 +91,7 @@ public class FolderResource {
         if(user != null) {
             sql.where(
                     folders.userId.eq(user.getId()).or(folders.publicCol.isTrue())
-                    );
+            );
         }
         List<Folders> folderRecordSet = sql.orderBy(folders.displayName.asc()).fetch();
         folderRecords = mapFolderRecordsToFolders(folderRecordSet);
@@ -162,7 +162,9 @@ public class FolderResource {
         Users user = Users.fromRequest(request);
 
         // handles some ACL logic for us...
-        getFolderForUser(user, parentId);
+        if(parentId != 0L) {
+            getFolderForUser(user, parentId);
+        }
 
         Long newId = createQuery()
                 .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
@@ -335,7 +337,13 @@ public class FolderResource {
         return linkRecords;
     }
 
-    private static Folders getFolderForUser(Users user, Long folderId) {
+    public static Folders getFolderForUser(Users user, Long folderId) {
+        if(folderId == 0) {
+            Folders f = new Folders();
+            f.setId(0L);
+            f.setPublicCol(true);
+            return f;
+        }
         Folders folder = createQuery()
                 .select(folders)
                 .from(folders)
@@ -345,10 +353,12 @@ public class FolderResource {
         if(folder == null) {
             throw new NotFoundException();
         }
-        if(!folder.getPublicCol() && folder.getUserId() != user.getId()) {
-            throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+        if(user == null || user.getId().longValue() == folder.getUserId().longValue() || folder.getPublicCol().booleanValue()) {
+            return folder;
         }
-
-        return folder;
+        System.out.println(user.getId());
+        System.out.println(folder.getUserId());
+        System.out.println(folder.getPublicCol().booleanValue());
+        throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
     }
 }

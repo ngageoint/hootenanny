@@ -613,20 +613,31 @@ public class MapResource {
     @Path("/link/{mapId}/{updateType : update|new}/folder/{folderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateFolderMapLink(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("mapId") String mapId,
-            @PathParam("updateType") String updateType) {
-        Map m = getMapForRequest(request, mapId, true);
+    public Response updateFolderMapLink(@Context HttpServletRequest request, @PathParam("folderId") Long folderId,
+            @PathParam("mapId") String mapId, @PathParam("updateType") String updateType) {
+
+        Users user = null;
+        if(request != null) {
+            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        }
+
+        // These functions ensure the map + folder are
+        // either owned by the user -or- public.
+        Map m = getMapForUser(user, mapId, true);
+        FolderResource.getFolderForUser(user, folderId);
 
         // Delete any existing to avoid duplicate entries
         createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(m.getId())).execute();
 
         Long newId = createQuery()
-                .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')")).from()
-                .fetchOne();
+            .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
+            .from()
+            .fetchOne();
 
-        createQuery().insert(folderMapMappings)
-                .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
-                .values(newId, mapId, folderId).execute();
+        createQuery()
+            .insert(folderMapMappings)
+            .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
+            .values(newId, m.getId(), folderId).execute();
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);
@@ -753,11 +764,7 @@ public class MapResource {
         return DbUtils.updateMapsTableTags(tags, mapid);
 
     }
-    private Map getMapForRequest(HttpServletRequest request, String mapId, boolean allowOSM) throws WebApplicationException {
-        Users user = null;
-        if(request != null) {
-            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
-        }
+    public static Map getMapForUser(Users user, String mapId, boolean allowOSM) throws WebApplicationException {
         if(!allowOSM && mapId.equals("-1")) {
             throw new BadRequestException();
         }
@@ -776,5 +783,14 @@ public class MapResource {
             throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
         }
         return m;
+
+    }
+    public static Map getMapForRequest(HttpServletRequest request, String mapId, boolean allowOSM) throws WebApplicationException {
+        Users user = null;
+        if(request != null) {
+            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        }
+
+        return getMapForUser(user, mapId, allowOSM);
     }
 }
