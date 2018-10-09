@@ -163,7 +163,7 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
   QString msg = " (prepend 'hoot::' before using";
   if (apiEntityType == "operators")
   {
-    msg += "* = implements SingleStatistic):";
+    msg += "; * = implements SingleStatistic):";
     msg.prepend("Operators");
     std::cout << msg << std::endl << std::endl;
 
