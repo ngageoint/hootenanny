@@ -32,6 +32,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -43,7 +44,8 @@ class CriterionCountVisitor :
     public ConstElementVisitor,
     public ConstOsmMapConsumer,
     public ElementCriterionConsumer,
-    public Configurable
+    public Configurable,
+    public SingleStatistic
 {
 public:
 
@@ -68,6 +70,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
+  virtual double getStat() const { return (double)getCount(); }
   uint64_t getCount() const { return _count; }
   uint64_t getTotal() const { return _visited; }
 

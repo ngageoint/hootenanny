@@ -22,6 +22,9 @@ hoot stat -D tags.visitor.keys="accuracy" input1.osm hoot::AverageNumericTagsVis
 
 # count all manual matches made on features in a map
 hoot stat input1.osm hoot::CountManualMatchesVisitor
+
+# count all feature which have a tag whose key contains the text "phone"
+hoot stat -D tag.key.contains.criterion.text="phone" input1.osm hoot::CriterionCountVisitor
 --------------------------------------
 
 

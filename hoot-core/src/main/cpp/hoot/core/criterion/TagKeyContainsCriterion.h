@@ -25,50 +25,44 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef TAGCONTAINSCRITERION_H
-#define TAGCONTAINSCRITERION_H
+#ifndef TAG_KEY_CONTAINS_CRITERION_H
+#define TAG_KEY_CONTAINS_CRITERION_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
-
-// Qt
-#include <QStringList>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
- * Identifies elements by tag key and tag value substring
+ * Identifies elements which have a tag key containing specified text
  */
-class TagContainsCriterion : public ElementCriterion
+class TagKeyContainsCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagContainsCriterion"; }
+  static std::string className() { return "hoot::TagKeyContainsCriterion"; }
 
-  TagContainsCriterion() {}
-  TagContainsCriterion(QString key, QString valueSubstring);
-  TagContainsCriterion(QStringList keys, QStringList valueSubstrings);
+  TagKeyContainsCriterion() {}
+  TagKeyContainsCriterion(const QString text);
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
- /**
-   * Adds an additional pair to the search list. If any one of the pairs matches then it is
-   * considered a match.
-   */
-  void addPair(QString key, QString valueSubstring);
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagContainsCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagKeyContainsCriterion()); }
 
   virtual QString getDescription() const
-  { return "Identifies elements by tag key and tag value substring"; }
+  { return "Identifies elements which have a tag key containing specified text"; }
+
+  virtual void setConfiguration(const Settings& conf);
+
+  void setText(const QString text) { _text = text; }
 
 private:
 
-  QStringList _key;
-  QStringList _valueSubstring;
+  QString _text;
 };
 
 }
 
-#endif // TAGCONTAINSCRITERION_H
+#endif // TAG_KEY_CONTAINS_CRITERION_H
