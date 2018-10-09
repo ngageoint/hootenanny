@@ -42,4 +42,12 @@ public class FolderRecords {
     public void setFolders(FolderRecord[] folders) {
         this.folders = folders;
     }
+    public FolderRecord getFolderById(Long folderId) {
+        for(FolderRecord f : this.folders) {
+            if(f.getId() == folderId) {
+                return f;
+            }
+        }
+        return null;
+    }
 }

@@ -155,16 +155,20 @@ public class FolderResource {
      * @return jobId Success = True/False
      */
     @POST
-    @Path("/add/{parentId}/{folderName}")
+    @Path("/add/{parentId : \\d+}/{folderName}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addFolder(@Context HttpServletRequest request, @PathParam("folderName") String folderName, @PathParam("parentId") Long parentId, @DefaultValue("true") @QueryParam("isPublic") Boolean isPublic) {
         Users user = Users.fromRequest(request);
+        Long userid = -1L;
+        if(user != null) {
+            userid = user.getId();
+        }
 
         // handles some ACL logic for us...
-        if(parentId != 0L) {
-            getFolderForUser(user, parentId);
-        }
+        // (to be sure we can see the parent folder)
+        getFolderForUser(user, parentId);
+
 
         Long newId = createQuery()
                 .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
@@ -173,9 +177,10 @@ public class FolderResource {
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
 
+
         createQuery()
                 .insert(folders).columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId, folders.parentId)
-                .values(newId, now, folderName, isPublic, user.getId(), parentId).execute();
+                .values(newId, now, folderName, isPublic, userid, parentId).execute();
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);
@@ -195,7 +200,7 @@ public class FolderResource {
      * @return jobId
      */
     @DELETE
-    @Path("/delete/{folderId}")
+    @Path("/delete/{folderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteFolder(@Context HttpServletRequest request, @PathParam("folderId") Long folderId) {
@@ -236,7 +241,7 @@ public class FolderResource {
      * @return jobId Success = True/False
      */
     @PUT
-    @Path("/{folderId}/update/parent/{parentFolderId}")
+    @Path("/{folderId : \\d+}/update/parent/{parentFolderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateParentId(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("parentFolderId") Long parentFolderId) {
