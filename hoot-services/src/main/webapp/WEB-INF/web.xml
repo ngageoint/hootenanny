@@ -106,4 +106,13 @@
         <url-pattern>/evwhs/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+      <servlet-name>out-of-band</servlet-name>
+      <jsp-file>/out-of-band.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>out-of-band</servlet-name>
+      <url-pattern>/out-of-band</url-pattern>
+    </servlet-mapping>
+
 </web-app>

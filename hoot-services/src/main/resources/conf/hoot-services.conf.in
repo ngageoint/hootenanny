@@ -152,14 +152,13 @@ openNlpLanguageDetectionModel=language-translation/langdetect-183.bin
 # oAuth Redirect URL
 # [!] Externally facing URL [!]
 # This will be used to redirect the user back to the site;
-# and for non-OOB auth should land the user at index.html to complete the oAuth process.
+# and should land the user at index.html to complete the oAuth process.
 # This value works for the UI running separately with node:
 oauthRedirectURL=http://localhost:8080/
 # This value works for the UI deployed by tomcat on vagrant:
 # oauthRedirectURL=http://localhost:8888/hootenanny-id
 # This value works with hoot core OOB auth:
-# oauthRedirectURL=http://localhost:8888/hootenanny-id/out-of-band.html
-# oauthRedirectURL=http://192.168.1.63:8080/out-of-band.html
+# oauthRedirectURL=http://192.168.1.63:8080/hoot-services/out-of-band.html
 
 # oAuth Provider
 # Also see hoot-services/src/main/resources/security-applicationContext.xml
