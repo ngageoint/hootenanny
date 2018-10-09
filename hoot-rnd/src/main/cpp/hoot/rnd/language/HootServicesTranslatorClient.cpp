@@ -388,7 +388,7 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
       url, headers, QNetworkAccessManager::Operation::PostOperation,
       _getTranslateRequestData(textToTranslate).toUtf8());
   }
-  catch (const std::exception& e)
+  catch (const HootException& e)
   {
     throw HootException("Error translating text: " + textToTranslate + ". error: " + e.what());
   }

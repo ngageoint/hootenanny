@@ -58,7 +58,7 @@ QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
     LOG_VART(ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
     requestTokenRequest.networkRequest(ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
   }
-  catch (const std::exception& e)
+  catch (const HootException& e)
   {
     const QString exceptionMsg = e.what();
     throw HootException("Error retrieving request token. error: " + exceptionMsg);
@@ -101,7 +101,7 @@ long HootServicesLoginManager::verifyUserAndLogin(const QString requestToken,
   {
     loginRequest.networkRequest(loginUrl.toString());
   }
-  catch (const std::exception& e)
+  catch (const HootException& e)
   {
     const QString exceptionMsg = e.what();
     throw HootException("Error verifying user. error: " + exceptionMsg);
@@ -198,7 +198,7 @@ bool HootServicesLoginManager::logout(const QString userName, const QString acce
   {
     logoutRequest.networkRequest(ConfigOptions().getHootServicesAuthLogoutEndpoint());
   }
-  catch (const std::exception& e)
+  catch (const HootException& e)
   {
     throw HootException("Error logging out user: " + userName + ". error: " + e.what());
   }

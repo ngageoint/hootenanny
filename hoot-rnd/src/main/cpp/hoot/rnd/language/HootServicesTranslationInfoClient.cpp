@@ -100,7 +100,15 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
    //Hoot OAuth requires that session state be maintained for the authenticated user
    request.setCookies(_cookies);
  }
- request.networkRequest(url);
+ try
+ {
+   request.networkRequest(url);
+ }
+ catch (const HootException& e)
+ {
+   const QString errorMsg = e.what();
+   throw HootException("Error getting available translation apps. error: " + errorMsg);
+ }
 
  //check for a response error
  if (request.getHttpStatus() != 200)
@@ -141,9 +149,17 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
   {
     request.setCookies(_cookies);
   }
-  request.networkRequest(
-    url, headers, QNetworkAccessManager::Operation::PostOperation,
-    _getAvailableLanguagesRequestData(apps).toUtf8());
+  try
+  {
+    request.networkRequest(
+      url, headers, QNetworkAccessManager::Operation::PostOperation,
+      _getAvailableLanguagesRequestData(apps).toUtf8());
+  }
+  catch (const HootException& e)
+  {
+    const QString errorMsg = e.what();
+    throw HootException("Error getting available translation languages. error: " + errorMsg);
+  }
 
   //check for a response error
   if (request.getHttpStatus() != 200)
