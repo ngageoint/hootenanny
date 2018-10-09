@@ -158,7 +158,7 @@ oauthRedirectURL=http://localhost:8080/
 # This value works for the UI deployed by tomcat on vagrant:
 # oauthRedirectURL=http://localhost:8888/hootenanny-id
 # This value works with hoot core OOB auth:
-# oauthRedirectURL=http://192.168.1.63:8888/hoot-services/out-of-band.html
+# oauthRedirectURL=http://localhost:8888/hoot-services/out-of-band.html
 
 # oAuth Provider
 # Also see hoot-services/src/main/resources/security-applicationContext.xml
