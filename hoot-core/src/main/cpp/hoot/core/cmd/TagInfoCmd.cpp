@@ -49,8 +49,7 @@ public:
 
   virtual QString getName() const { return "tag-info"; }
 
-  virtual QString getDescription() const
-  { return "Prints tag keys and values for map data."; }
+  virtual QString getDescription() const { return "Displays tag keys and values for map data"; }
 
   virtual int runSimple(QStringList args)
   {

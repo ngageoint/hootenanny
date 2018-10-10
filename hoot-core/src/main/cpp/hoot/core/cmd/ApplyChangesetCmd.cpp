@@ -52,8 +52,7 @@ public:
 
   virtual QString getName() const { return "changeset-apply"; }
 
-  virtual QString getDescription() const
-  { return "Writes an OSM changeset to an OSM API database"; }
+  virtual QString getDescription() const { return "Writes an OSM changeset"; }
 
   virtual int runSimple(QStringList args)
   {
