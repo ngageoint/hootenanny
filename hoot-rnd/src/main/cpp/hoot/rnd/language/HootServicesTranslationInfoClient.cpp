@@ -34,6 +34,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/HootNetworkRequest.h>
+#include <hoot/core/util/NetworkUtils.h>
 
 // Qt
 #include <QVariant>
@@ -47,12 +48,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TranslationInfoProvider, HootServicesTranslationInfoClient)
 
-HootServicesTranslationInfoClient::HootServicesTranslationInfoClient()
+HootServicesTranslationInfoClient::HootServicesTranslationInfoClient() :
+_useCookies(true)
 {
 }
 
 void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
 {
+  LOG_DEBUG("Setting configuration options...");
+
   ConfigOptions opts(conf);
 
   _translator = opts.getLanguageTranslationHootServicesTranslator();
@@ -61,6 +65,15 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   _translatableUrl = opts.getLanguageTranslationHootServicesTranslatableLanguagesEndpoint();
   _detectorsUrl = opts.getLanguageTranslationHootServicesDetectorsEndpoint();
   _translatorsUrl = opts.getLanguageTranslationHootServicesTranslatorsEndpoint();
+  if (_useCookies)
+  {
+    // get a session cookie associated with the user information passed into the command calling
+    // this class
+    _cookies =
+      NetworkUtils::getUserSessionCookie(
+        opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
+        opts.getHootServicesAuthAccessTokenSecret(), _detectableUrl);
+  }
 }
 
 boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableApps(
@@ -82,7 +95,20 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  //create and execute the request
  QUrl url(urlStr);
  HootNetworkRequest request;
- request.networkRequest(url);
+ if (_useCookies)
+ {
+   //Hoot OAuth requires that session state be maintained for the authenticated user
+   request.setCookies(_cookies);
+ }
+ try
+ {
+   request.networkRequest(url);
+ }
+ catch (const HootException& e)
+ {
+   const QString errorMsg = e.what();
+   throw HootException("Error getting available translation apps. error: " + errorMsg);
+ }
 
  //check for a response error
  if (request.getHttpStatus() != 200)
@@ -119,9 +145,21 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
   HootNetworkRequest request;
-  request.networkRequest(
-    url, headers, QNetworkAccessManager::Operation::PostOperation,
-    _getAvailableLanguagesRequestData(apps).toUtf8());
+  if (_useCookies)
+  {
+    request.setCookies(_cookies);
+  }
+  try
+  {
+    request.networkRequest(
+      url, headers, QNetworkAccessManager::Operation::PostOperation,
+      _getAvailableLanguagesRequestData(apps).toUtf8());
+  }
+  catch (const HootException& e)
+  {
+    const QString errorMsg = e.what();
+    throw HootException("Error getting available translation languages. error: " + errorMsg);
+  }
 
   //check for a response error
   if (request.getHttpStatus() != 200)

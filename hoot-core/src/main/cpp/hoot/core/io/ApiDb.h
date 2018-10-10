@@ -423,6 +423,30 @@ public:
    */
   bool isOpen() const { return _db.isOpen(); }
 
+  /**
+   * Returns a user ID given a user name
+   *
+   * @param userName user name of the user
+   * @return a user ID or -1 if no user with the given user name was found
+   */
+  long getUserIdByName(const QString userName);
+
+  /**
+   * Returns a user name given a user ID
+   *
+   * @param userId ID of the user
+   * @return a user name or an empty string if not user with the given user ID was found
+   */
+  QString getUserNameById(const long userId);
+
+  /**
+   * Determines whether a user exists
+   *
+   * @param userName user name of the user
+   * @return true if the user exists; false otherwise
+   */
+  bool userExists(const QString userName);
+
 protected:
 
   //osm api db stores coords as integers and hoot api db as floating point
@@ -458,6 +482,8 @@ private:
   boost::shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
   boost::shared_ptr<QSqlQuery> _userExists;
+  boost::shared_ptr<QSqlQuery> _getUserIdByName;
+  boost::shared_ptr<QSqlQuery> _getUserNameById;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;

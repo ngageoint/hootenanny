@@ -1,0 +1,42 @@
+== login
+
+The +login+ command logs a user into the Hootenanny application, authenticating via the Hootenanny Web Services, and returns Hootenanny 
+access tokens for use in command invocations.  Some commands require Hootenanny Web Services authentication before use (e.g. 'languages' 
+command). 
+
+The access tokens retrieved after login, along with their associated user name, must be used as configuration options when using any 
+Hootenanny commands requiring Hootenanny Web Services authentication:
+* hoot.services.auth.user.name
+* hoot.services.auth.access.token
+* hoot.services.auth.access.token.secret
+
+For the login command to work correctly, the oauthRedirectURL property for the Hootenanny Web Services in hoot-services.conf must be pointed 
+to the page 'out-of-band.html' found in the Hootenanny Web Services application.  See the Hootenanny OAuth documentation for more detail 
+on the Hootenanny authentication process.
+
+=== Usage
+
+--------------------------------------
+login
+--------------------------------------
+
+=== Example
+
+--------------------------------------
+[vagrant@centos7-hoot hoot]$ hoot login
+
+Authorization URL: https://www.openstreetmap.org/oauth/authorize?oauth_token=xSpqQk
+
+1. Using the authorization URL shown above, authenticate through the 3rd party application.
+2. Grant Hootenanny access to the application.
+3. Copy and paste your verifier code from the browser here and press ENTER: E50JtUb
+
+user name=icenine18
+oauth_token=xIhWho
+oauth_token_secret=GTSwRn
+
+Use the above information with all Hootenanny commands that require use of the Hootenanny Web Services:
+-D hoot.services.auth.user.name=icenine18
+-D hoot.services.auth.access.token=xIhWho
+-D hoot.services.auth.access.token.secret=GTSwRn
+--------------------------------------

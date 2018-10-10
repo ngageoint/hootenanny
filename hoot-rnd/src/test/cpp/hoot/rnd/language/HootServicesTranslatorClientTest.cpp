@@ -37,6 +37,8 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
+#include <hoot/core/util/UuidHelper.h>
 
 namespace hoot
 {
@@ -114,6 +116,7 @@ private:
     conf.set("language.translation.hoot.services.detectors", QStringList("TikaLanguageDetector"));
     conf.set("language.translation.detected.language.overrides.specified.source.languages", false);
     conf.set("language.translation.perform.exhaustive.search.with.no.detection", true);
+    conf.set("language.translation.info.provider", "hoot::HootServicesTranslationInfoMockClient");
     client->setConfiguration(conf);
 
     QStringList sourceLangs;

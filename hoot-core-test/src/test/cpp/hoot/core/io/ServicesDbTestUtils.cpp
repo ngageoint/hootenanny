@@ -146,6 +146,7 @@ void ServicesDbTestUtils::deleteUser(QString email)
   {
     database.deleteUser(userId);
   }
+  database.close();
 }
 
 int ServicesDbTestUtils::findIndex(const QList<QString>& keys, const QString& key)
@@ -318,6 +319,44 @@ OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
   map->addRelation(r2);
 
   return map;
+}
+
+long ServicesDbTestUtils::insertTestUser(const QString userName, const QString email,
+                                         const QString sessionId, const QString accessToken,
+                                         const QString accessTokenSecret)
+{
+  HootApiDb db;
+  db.open(QUrl(HootApiDb::getBaseUrl().toString() + "/blah"));
+  const long userId = db.insertUser(email, userName);
+  db.insertUserSession(userId, sessionId);
+  db.updateUserAccessTokens(userId, accessToken, accessTokenSecret);
+  db.close();
+  return userId;
+}
+
+bool ServicesDbTestUtils::deleteUserByUserName(const QString userName)
+{
+  HootApiDb db;
+  db.open(getDbModifyUrl());
+  const long userId = db.getUserIdByName(userName);
+  if (userId == -1)
+  {
+    return false;
+  }
+  db.deleteUser(userId);
+  db.close();
+  return true;
+}
+
+boost::shared_ptr<HootNetworkCookieJar> ServicesDbTestUtils::getTestSessionCookie(
+  const QString sessionId, const QString url)
+{
+  boost::shared_ptr<HootNetworkCookieJar> cookieJar(new HootNetworkCookieJar());
+  QList<QNetworkCookie> cookies;
+  QNetworkCookie sessionCookie(QString("SESSION").toUtf8(), sessionId.toUtf8());
+  cookies.append(sessionCookie);
+  cookieJar->setCookiesFromUrl(cookies, url);
+  return cookieJar;
 }
 
 }

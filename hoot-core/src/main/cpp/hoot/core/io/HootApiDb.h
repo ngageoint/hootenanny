@@ -316,6 +316,11 @@ public:
 
   inline static QString getJobStatusTableName() { return "job_status"; }
 
+  inline static QString getUserSessionTableName() { return "spring_session"; }
+
+  inline static QString currentTimestampAsBigIntSql()
+  { return "extract('epoch' FROM CURRENT_TIMESTAMP)::bigint"; }
+
   /**
    * Very handy for testing.
    */
@@ -347,6 +352,71 @@ public:
   void setCreateIndexesOnClose(bool create) { _createIndexesOnClose = create; }
   void setFlushOnClose(bool flush) { _flushOnClose = flush; }
 
+  /**
+   * Retrieve the HTTP session ID associated with a user
+   *
+   * @param userName user name of the user
+   * @param accessToken public OAuth access token for the user
+   * @param accessTokenSecret private OAuth access token for the user
+   * @return an HTTP session ID or an empty string if no session ID was found for the given input
+   */
+  QString getSessionIdByAccessTokens(const QString userName, const QString accessToken,
+                                     const QString accessTokenSecret);
+
+  /**
+   * Determines whether a set of access tokens are valid for a user
+   *
+   * @param userName user name of the user
+   * @param accessToken public OAuth access token for the user
+   * @param accessTokenSecret private OAuth access token for the user
+   * @return true if the access tokens passed in are associated with the specified user; false
+   * otherwise
+   */
+  bool accessTokensAreValid(const QString userName, const QString accessToken,
+                            const QString accessTokenSecret);
+
+  /**
+   * Returns the HTTP session ID associated with a user
+   *
+   * @param userId ID of a user
+   * @return an HTTP session ID or an empty string if no session ID was found
+   */
+  QString getSessionIdByUserId(const long userId);
+
+  /**
+   * Returns the public OAuth access token associated with a user
+   *
+   * @param userId ID of a user
+   * @return a public OAuth access token or an empty string if no session ID was found
+   */
+  QString getAccessTokenByUserId(const long userId);
+
+  /**
+   * Returns the private OAuth access token associated with a user
+   *
+   * @param userId ID of a user
+   * @return a private OAuth access token or an empty string if no session ID was found
+   */
+  QString getAccessTokenSecretByUserId(const long userId);
+
+  /**
+   * Creates a user session entry
+   *
+   * @param userId user ID
+   * @param sessionId HTTP session ID
+   */
+  void insertUserSession(const long userId, const QString sessionId);
+
+  /**
+   * Updates the OAuth access tokens for a user
+   *
+   * @param userId user ID
+   * @param accessToken OAuth public access token
+   * @param accessTokenSecret OAuth private access token
+   */
+  void updateUserAccessTokens(const long userId, const QString accessToken,
+                              const QString accessTokenSecret);
+
 protected:
 
   virtual void _resetQueries();
@@ -375,6 +445,12 @@ private:
   boost::shared_ptr<QSqlQuery> _getMapIdByName;
   boost::shared_ptr<QSqlQuery> _insertChangeSet2;
   boost::shared_ptr<QSqlQuery> _numChangesets;
+  boost::shared_ptr<QSqlQuery> _getSessionIdByUserId;
+  boost::shared_ptr<QSqlQuery> _accessTokensAreValid;
+  boost::shared_ptr<QSqlQuery> _getAccessTokenByUserId;
+  boost::shared_ptr<QSqlQuery> _getAccessTokenSecretByUserId;
+  boost::shared_ptr<QSqlQuery> _insertUserSession;
+  boost::shared_ptr<QSqlQuery> _updateUserAccessTokens;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
