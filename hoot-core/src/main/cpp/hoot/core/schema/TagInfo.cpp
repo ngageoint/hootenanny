@@ -40,11 +40,12 @@ namespace hoot
 {
 
 TagInfo::TagInfo(const int tagValuesPerKeyLimit, const QStringList keys, const bool keysOnly,
-                 const bool caseSensitive) :
+                 const bool caseSensitive, const bool exactKeyMatch) :
 _tagValuesPerKeyLimit(tagValuesPerKeyLimit),
 _keys(keys),
 _keysOnly(keysOnly),
-_caseSensitive(caseSensitive)
+_caseSensitive(caseSensitive),
+_exactKeyMatch(exactKeyMatch)
 {
 }
 
@@ -55,6 +56,7 @@ QString TagInfo::getInfo(QString input)
   LOG_VART(_keys);
   LOG_VART(_keysOnly);
   LOG_VART(_caseSensitive);
+  LOG_VART(_exactKeyMatch);
   QString finalText;
 
   boost::shared_ptr<OsmMapReader> reader =
@@ -166,6 +168,30 @@ QString TagInfo::getInfo(QString input)
   return finalText;
 }
 
+bool TagInfo::_tagKeysMatch(const QString tagKey) const
+{
+  LOG_VART(tagKey);
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  if (_exactKeyMatch)
+  {
+    return _keys.contains(tagKey, caseSensitivity);
+  }
+  else
+  {
+    for (int i = 0; i < _keys.size(); i++)
+    {
+      const QString specifiedTagKey = _keys.at(i);
+      LOG_VART(specifiedTagKey);
+      if (tagKey.contains(specifiedTagKey, caseSensitivity))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result)
 {
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
@@ -178,7 +204,7 @@ void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result)
       continue;
     }
 
-    // Drop Hoot metadata tags
+    // Drop Hoot metadata tags - TODO: needs to be more extensible
     if (it.key() == "source:ingest:datetime")
     {
       continue;
@@ -226,9 +252,7 @@ QString TagInfo::_printJSON(QString lName, TagInfoHash& data)
     valKey.sort();
 
     const QString key = attrKey[i];
-    const Qt::CaseSensitivity caseSensitivity =
-      _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-    if (_keys.isEmpty() || _keys.contains(key, caseSensitivity))
+    if (_keys.isEmpty() || _tagKeysMatch(key))
     {
       if (!_keysOnly)
       {
