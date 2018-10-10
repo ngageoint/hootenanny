@@ -47,7 +47,7 @@ public:
   virtual QString getName() const { return "conflate-cumulative"; }
 
   virtual QString getDescription() const
-  { return "(experimental) Conflates three or more maps into a single map in a cumulative fashion"; }
+  { return "(experimental) Conflates three or more maps into a single map"; }
 
   virtual int runSimple(QStringList args)
   {

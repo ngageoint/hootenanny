@@ -81,7 +81,7 @@ public:
 
   virtual QString getName() const { return "version"; }
 
-  virtual QString getDescription() const { return "Version information"; }
+  virtual QString getDescription() const { return "Displays version information"; }
 
   int runSimple(QStringList args)
   {

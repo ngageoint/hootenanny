@@ -21,22 +21,22 @@ GEOINT features in the topographic domain.  In short, it merges multiple maps of
 * Create up-to-date routable transportation networks from multiple sources
 
 # Feature Summary
-In addition to conflating maps, Hootenanny has the following features:
-* Adding missing type tags to feature data
-* Aligning map data
-* Cleaning map data
-* Combining polygon data
-* Comparing maps
-* Converting maps between geodata formats
-* Deriving changesets between maps and applying them to external OSM data stores
-* Gathering statistics on map features
-* Identifying road intersections
-* Perturbing map data
-* Plotting node feature density
-* Sorting map data
-* Tag data exploration
-* Translating feature tags using user defined schemas
-* Translating feature tags to English
+In addition to conflating maps, Hootenanny can also:
+* Add missing type tags to feature data
+* Align map data
+* Clean map data
+* Combine polygon data
+* Compare maps
+* Convert maps between different geodata formats
+* Derive changesets between maps and apply them to external OSM data stores
+* Explore tag data
+* Gather statistics on map features
+* Identify road intersections
+* Perturb map data
+* Plot node feature density
+* Sort map data
+* Translate feature tags using user defined schemas
+* Translate feature tags to English
 
 # Overview
 Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, 
