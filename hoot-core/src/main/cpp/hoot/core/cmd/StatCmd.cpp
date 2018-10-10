@@ -51,7 +51,7 @@ public:
   virtual QString getName() const { return "stat"; }
 
   virtual QString getDescription() const
-  { return "Calculates a statistic on features"; }
+  { return "Calculates a specified statistic against map data"; }
 
   virtual int runSimple(QStringList args)
   {
