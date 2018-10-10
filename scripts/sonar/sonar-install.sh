@@ -6,7 +6,7 @@ SONAR_VERSION=3.1.0.1141
 SONAR_CLI=sonar-scanner-cli-$SONAR_VERSION-linux
 SONAR_PKG=sonar-scanner-$SONAR_VERSION-linux
 SONAR_ZIP=$SONAR_CLI.zip
-SONAR_URL=https://sonarsource.bintray.com/Distribution/sonar-scanner-cli
+SONAR_URL=https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
 SONAR_PATH=/opt/sonar
 
 # Sonar build wrapper (required to scan C/C++)
