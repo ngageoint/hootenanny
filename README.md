@@ -27,8 +27,8 @@ In addition to conflating maps, Hootenanny can also:
 * Clean map data
 * Combine polygon data
 * Compare maps
-* Convert maps between geodata formats
-* Derive changesets between maps and applyg them to external OSM data stores
+* Convert maps between different geodata formats
+* Derive changesets between maps and apply them to external OSM data stores
 * Explore tag data
 * Gather statistics on map features
 * Identify road intersections
