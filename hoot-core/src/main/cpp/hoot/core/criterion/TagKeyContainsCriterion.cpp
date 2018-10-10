@@ -38,7 +38,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, TagKeyContainsCriterion)
 
 TagKeyContainsCriterion::TagKeyContainsCriterion(const QString text) :
-_text(text)
+_text(text),
+_caseSensitive(false)
 {
 }
 
@@ -46,13 +47,21 @@ void TagKeyContainsCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   _text = configOptions.getTagKeyContainsCriterionText();
+  LOG_VART(_text);
 }
 
 bool TagKeyContainsCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
+  Qt::CaseSensitivity caseSens = Qt::CaseSensitive;
+  if (!_caseSensitive)
+  {
+    caseSens = Qt::CaseInsensitive;
+  }
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
-    if (it.key().contains(_text))
+    const QString tagKey = it.key();
+    LOG_VART(tagKey);
+    if (tagKey.contains(_text, caseSens))
     {
       return true;
     }
