@@ -25,50 +25,51 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef TAGCONTAINSCRITERION_H
-#define TAGCONTAINSCRITERION_H
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/TagKeyContainsCriterion.h>
 
-// hoot
-#include <hoot/core/criterion/ElementCriterion.h>
-
-// Qt
-#include <QStringList>
+using namespace geos::geom;
 
 namespace hoot
 {
 
-/**
- * Identifies elements by tag key and tag value substring
- */
-class TagContainsCriterion : public ElementCriterion
+class TagKeyContainsCriterionTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(TagKeyContainsCriterionTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static std::string className() { return "hoot::TagContainsCriterion"; }
+  void runTest()
+  {
+    TagKeyContainsCriterion uut;
+    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node->getTags().set("source:phone", "blah");
+    node->getTags().set("key2", "blah");
 
-  TagContainsCriterion() {}
-  TagContainsCriterion(QString key, QString valueSubstring);
-  TagContainsCriterion(QStringList keys, QStringList valueSubstrings);
+    uut.setText("phone");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+    uut.setText("PHONE");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
- /**
-   * Adds an additional pair to the search list. If any one of the pairs matches then it is
-   * considered a match.
-   */
-  void addPair(QString key, QString valueSubstring);
+    uut.setText("source:phone");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagContainsCriterion()); }
+    uut.setText("source:phone:2");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
-  virtual QString getDescription() const
-  { return "Identifies elements by tag key and tag value substring"; }
+    uut.setText("something else");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
-private:
-
-  QStringList _key;
-  QStringList _valueSubstring;
+    uut.setCaseSensitive(true);
+    uut.setText("PHONE");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagKeyContainsCriterionTest, "quick");
 
-#endif // TAGCONTAINSCRITERION_H
+}

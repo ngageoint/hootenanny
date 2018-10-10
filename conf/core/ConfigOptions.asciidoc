@@ -3212,6 +3212,13 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
+=== tag.key.contains.criterion.text
+
+* Data Type: string
+* Default Value: ``
+
+Text that TagKeyContainsCriterion searches a match for.
+
 === tag.criterion.kvps
 
 * Data Type: list

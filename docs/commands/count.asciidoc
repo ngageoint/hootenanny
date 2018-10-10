@@ -30,6 +30,9 @@ hoot count "input1.osm;input2.osm" hoot::PoiCriterion
 
 # count all elements that are not POIs
 hoot count -D element.criterion.negate=true "input1.osm;input2.osm" hoot::PoiCriterion --all-elements
+
+# count all features which have a tag whose key contains the text "phone"
+hoot count -D tag.key.contains.criterion.text="phone" input1.osm hoot::TagKeyContainsCriterion
 --------------------------------------
 
 
