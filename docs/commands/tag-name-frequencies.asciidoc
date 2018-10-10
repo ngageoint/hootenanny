@@ -3,7 +3,7 @@
 
 === Description
 
-The +tag-name-frequencies+ command reads input and write out a list of names ordered by frequency.
+The +tag-name-frequencies+ command reads input and write out a list of name word tokens ordered by frequency.
 
 * +input+ - One or more input map paths.
 

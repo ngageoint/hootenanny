@@ -16,3 +16,9 @@ hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;HIGHWAY
 hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;HIGHWAY" --case-insensitive
 
 hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "blah"
+
+hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "high" --partial-key-match
+
+hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "HIGH" --partial-key-match
+
+hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "HIGH" --partial-key-match --case-insensitive
