@@ -20,6 +20,14 @@ GEOINT features in the topographic domain.  In short, it merges multiple maps of
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
+# Conflatable Data Types
+* Area polygons
+* Building polygons
+* Points of Interest (POIs)
+* Transportation polylines (roads and railways)
+* Utility polylines (power lines)
+* Waterway polylines
+
 # Feature Summary
 In addition to conflating maps, Hootenanny can also:
 * Add missing type tags to feature data
@@ -72,15 +80,6 @@ A command line user interface for conflation capabilities is available for users
 interface (e.g. when using JOSM).  It exposes additional functionality that is not available from the web user interface.  For a list of 
 Hootenanny commands, type 'hoot' from the command line.  The Hootenanny User Documentation contains detailed information about the 
 commands.  More detail on using the CLI is provided [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
-
-# Supported Geodata Types
-**Hootenanny can conflate:**
-* Area polygons
-* Building polygons
-* Points of Interest (POIs)
-* Transportation polylines (roads and railways)
-* Utility polylines (power lines)
-* Waterway polylines
 
 # Supported Data Formats
 **Hootenanny can import from:**
