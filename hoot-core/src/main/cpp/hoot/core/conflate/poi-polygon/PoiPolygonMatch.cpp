@@ -42,8 +42,6 @@
 #include "PoiPolygonTagIgnoreListReader.h"
 #include "PoiPolygonReviewReducer.h"
 
-#include <phonenumbers/phonenumberutil.h>
-
 using namespace std;
 
 namespace hoot
@@ -82,9 +80,6 @@ _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText("")
 {
-  i18n::phonenumbers::PhoneNumberUtil* phoneUtil =
-    i18n::phonenumbers::PhoneNumberUtil::GetInstance();
-  LOG_VART(phoneUtil);
 }
 
 void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
