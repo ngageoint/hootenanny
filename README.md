@@ -21,7 +21,7 @@ GEOINT features in the topographic domain.  In short, it merges multiple maps of
 * Create up-to-date routable transportation networks from multiple sources
 
 # Feature Summary
-In addition to conflating maps, Hootenanny has the following features:
+In addition to conflating maps, Hootenanny can also:
 * Add missing type tags to feature data
 * Align map data
 * Clean map data
