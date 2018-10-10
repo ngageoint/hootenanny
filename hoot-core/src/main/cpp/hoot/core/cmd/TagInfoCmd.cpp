@@ -104,7 +104,15 @@ public:
       LOG_VART(args);
     }
 
-    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive);
+    bool exactKeyMatch = true;
+    if (args.contains("--partial-key-match"))
+    {
+      exactKeyMatch = false;
+      args.removeAt(args.indexOf("--partial-key-match"));
+      LOG_VART(args);
+    }
+
+    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch);
 
     finalText += "{\n";
 

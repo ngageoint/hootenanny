@@ -89,6 +89,7 @@ public:
             word = noSymbols;
           }
           // ignore any empty words. This may happen when there are multiple consecutive spaces.
+          // TODO: use QString::simplify?
           if (word.isEmpty() == false)
           {
             _counts[word]++;

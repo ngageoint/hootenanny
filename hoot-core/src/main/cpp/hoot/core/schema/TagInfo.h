@@ -45,7 +45,8 @@ class TagInfo
 public:
 
   TagInfo(const int tagValuesPerKeyLimit = INT_MAX, const QStringList keys = QStringList(),
-          const bool keysOnly = false, const bool caseSensitive = true);
+          const bool keysOnly = false, const bool caseSensitive = true,
+          const bool exactKeyMatch = true);
 
   /**
    * Returns a tags string with values grouped by keys
@@ -72,9 +73,14 @@ private:
   //if true, tag comparisons are case sensitive
   bool _caseSensitive;
 
+  //if true, specified/feature tag keys need to match exactly for values to be written; otherwise
+  //they match if any part of the feature tag key is contained in the specified tag key
+  bool _exactKeyMatch;
+
   QString _printJSON(QString lName, TagInfoHash& data);
 
   void _parseElement(ElementPtr e, TagInfoHash& result);
+  bool _tagKeysMatch(const QString tagKey) const;
 };
 
 }
