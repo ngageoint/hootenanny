@@ -35,6 +35,8 @@ hoot tag-info input.osm --keys-only
 hoot tag-info input.osm --keys "key1;Key2" --case-insensitive
 
 hoot tag-info myshapefile.shp "myfgb.gdb;mylayer" --tag-values-limit 30
+
+hoot tag-info input.osm --keys "key" --partial-key-match
 --------------------------------------
 
 === Example Output
