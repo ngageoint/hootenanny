@@ -126,6 +126,8 @@ public:
   virtual QString getDescription() const
   { return "Scores element type similarity for POI/Polygon conflation"; }
 
+  static bool noTypeFound;
+
 private:
 
   double _typeScoreThreshold;

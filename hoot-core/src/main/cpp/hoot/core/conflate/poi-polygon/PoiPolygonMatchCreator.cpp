@@ -95,6 +95,25 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   {
     PoiPolygonMatch::printMatchDistanceInfo();
   }
+  LOG_INFO(
+    "POI/Polygon total match pair candidates processed: " << PoiPolygonMatch::matchesProcessed);
+  LOG_INFO("POI/Polygon distance matches: " << PoiPolygonMatch::distanceMatches);
+  LOG_INFO("POI/Polygon type matches: " << PoiPolygonMatch::typeMatches);
+  LOG_INFO("POI/Polygon match pairs with no relevant type: " << PoiPolygonMatch::noTypeFoundCount);
+  LOG_INFO(
+    "POI/Polygon name matches: " << PoiPolygonMatch::nameMatches << " / " <<
+    PoiPolygonMatch::nameMatchCandidates << " match candidates.  " <<
+    PoiPolygonMatch::numNamesFound << " total names found.");
+  LOG_INFO(
+    "POI/Polygon address matches: " << PoiPolygonMatch::addressMatches << " / " <<
+     PoiPolygonMatch::addressMatchCandidates << " candidate matches.  " <<
+     PoiPolygonMatch::numAddressesFound << " total addresses found.");
+  LOG_INFO(
+    "POI/Polygon phone number matches: " << PoiPolygonMatch::phoneNumberMatches << " / " <<
+    PoiPolygonMatch::phoneNumberMatchCandidates << " candidate matches.  " <<
+    PoiPolygonMatch::numPhoneNumbersFound << " total phone numbers found.");
+  LOG_INFO(
+    "POI/Polygon convex polygon distance matches: " << PoiPolygonMatch::convexPolyDistanceMatches);
 }
 
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const

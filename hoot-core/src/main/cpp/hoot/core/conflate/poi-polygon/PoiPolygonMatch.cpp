@@ -49,6 +49,20 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
+long PoiPolygonMatch::matchesProcessed = 0;
+long PoiPolygonMatch::distanceMatches = 0;
+long PoiPolygonMatch::typeMatches = 0;
+long PoiPolygonMatch::noTypeFoundCount = 0;
+long PoiPolygonMatch::nameMatches = 0;
+long PoiPolygonMatch::numNamesFound = 0;
+long PoiPolygonMatch::nameMatchCandidates = 0;
+long PoiPolygonMatch::numAddressesFound = 0;
+long PoiPolygonMatch::addressMatches = 0;
+long PoiPolygonMatch::addressMatchCandidates = 0;
+long PoiPolygonMatch::phoneNumberMatches = 0;
+long PoiPolygonMatch::numPhoneNumbersFound = 0;
+long PoiPolygonMatch::phoneNumberMatchCandidates = 0;
+long PoiPolygonMatch::convexPolyDistanceMatches = 0;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf,
@@ -196,6 +210,7 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   _addressScorer.setConfiguration(conf);
   _typeScorer.setConfiguration(conf);
   _nameScorer.setConfiguration(conf);
+  _phoneNumberScorer.setConfiguration(conf);
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -332,6 +347,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //    e1->getElementType() == ElementType::Relation ||
 //    e2->getElementType() == ElementType::Relation;
 
+  matchesProcessed++;
   _explainText = "";
   _class.setMiss();
 
@@ -506,10 +522,16 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
 {
   //don't really need to put a distance == -1.0 check here for now, since we're assuming
   //PoiPolygonDistanceExtractor will always be run before this one
+  //TODO: Should this check be moved up to the get distance method?
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   LOG_VART(alphaShapeDist);
-  return alphaShapeDist <= _matchDistanceThreshold ? 2u : 0u;
+  const bool convexPolyDistMatch = alphaShapeDist <= _matchDistanceThreshold;
+  if (convexPolyDistMatch)
+  {
+    convexPolyDistanceMatches++;
+  }
+  return convexPolyDistMatch ? 2u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -522,6 +544,14 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   _typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
   _typeScore = _typeScorer.extract(*_map, poi, poly);
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
+  if (typeMatch)
+  {
+    typeMatches++;
+  }
+  if (PoiPolygonTypeScoreExtractor::noTypeFound)
+  {
+    noTypeFoundCount++;
+  }
 
   if (_typeScorer.failedMatchRequirements.size() > 0)
   {
@@ -556,6 +586,15 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
   _nameScore = _nameScorer.extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
   LOG_VART(nameMatch);
+  if (nameMatch)
+  {
+    nameMatches++;
+  }
+  numNamesFound += PoiPolygonNameScoreExtractor::numNamesFound;
+  if (PoiPolygonNameScoreExtractor::matchAttemptMade)
+  {
+    nameMatchCandidates++;
+  }
   return nameMatch ? 1u : 0u;
 }
 
@@ -564,7 +603,33 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
   _addressScore = _addressScorer.extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
   LOG_VART(addressMatch);
+  if (addressMatch)
+  {
+    addressMatches++;
+  }
+  numAddressesFound += PoiPolygonAddressScoreExtractor::numAddressesFound;
+  if (PoiPolygonAddressScoreExtractor::matchAttemptMade)
+  {
+    addressMatchCandidates++;
+  }
   return addressMatch ? 1u : 0u;
+}
+
+unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly)
+{
+  _phoneNumberScore = _phoneNumberScorer.extract(*_map, poi, poly);
+  const bool phoneNumberMatch = _phoneNumberScore == 1.0;
+  LOG_VART(phoneNumberMatch);
+  if (phoneNumberMatch)
+  {
+    phoneNumberMatches++;
+  }
+  numPhoneNumbersFound += PoiPolygonPhoneNumberScoreExtractor::numPhoneNumbersFound;
+  if (PoiPolygonPhoneNumberScoreExtractor::matchAttemptMade)
+  {
+    phoneNumberMatchCandidates++;
+  }
+  return phoneNumberMatch ? 1u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -577,31 +642,21 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   {
     return 0;
   }
+  distanceMatches++;
 
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
-  //Used to allow for kicking out of the method once enough evidence was accumulated for a match
-  //as an optimization.  However, that results in incomplete scoring information passed to the
-  //review reducer, so have since disabled.
-
   evidence += _getNameEvidence(poi, poly);
-  //if we already have a match, no point in doing more calculations
+  //Used to allow for kicking out of the method once enough evidence was accumulated for a match
+  //as a runtime optimization.  However, that results in incomplete scoring information passed to
+  //the review reducer, so have since disabled.
 //  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
 //  {
 //    return evidence;
 //  }
-
   evidence += _getTypeEvidence(poi, poly);
-//  if (evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
-
   evidence += _getAddressEvidence(poi, poly);
-//  if (evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
+  evidence += _getPhoneNumberEvidence(poi, poly);
 
   //We only want to run this if the previous match distance calculation was too large.
   //Tightening up the requirements for running the convex poly calculation here to improve

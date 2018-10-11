@@ -13,6 +13,10 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+//#include <phonenumbers/phonenumberutil.h>
+//#include <phonenumbers/geocoding/phonenumber_offline_geocoder.h>
+//using namespace i18n::phonenumbers;
+
 namespace hoot
 {
 
@@ -23,6 +27,7 @@ class PoiPolygonPhoneNumberScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(regionValidationTest);
   CPPUNIT_TEST(invalidNumberTest);
   CPPUNIT_TEST(tagKeyTest);
+  //CPPUNIT_TEST(tagNumberParse);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -87,6 +92,37 @@ public:
     way1->getTags().set("phone", "123 456 7890");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
   }
+
+//  void tagNumberParse()
+//  {
+//    PhoneNumber number1;
+//    PhoneNumberUtil::ErrorType parseError =
+//      PhoneNumberUtil::GetInstance()->Parse("(123) 456 7890", "US", &number1);
+//    LOG_VARW(parseError);
+//    parseError = PhoneNumberUtil::GetInstance()->Parse("(123) 456 7890", "", &number1);
+//    LOG_VARW(parseError);
+//    parseError = PhoneNumberUtil::GetInstance()->Parse("+41 44 668 1800", "CH", &number1);
+//    LOG_VARW(parseError);
+//    parseError = PhoneNumberUtil::GetInstance()->Parse("+41 44 668 1800", "", &number1);
+//    LOG_VARW(parseError);
+
+//    LOG_VARW(PhoneNumberUtil::GetInstance()->IsPossibleNumberForString("(123) 456 7890", "US"));
+//    LOG_VARW(PhoneNumberUtil::GetInstance()->IsPossibleNumberForString("(123) 456 7890", ""));
+//    LOG_VARW(PhoneNumberUtil::GetInstance()->IsPossibleNumberForString("+41 44 668 1800", "CH"));
+//    LOG_VARW(PhoneNumberUtil::GetInstance()->IsPossibleNumberForString("+41 44 668 1800", ""));
+
+//    PhoneNumber number2;
+//    parseError = PhoneNumberUtil::GetInstance()->Parse("(123) 456 7890", "US", &number2);
+//    LOG_VARW(parseError);
+//    LOG_VARW(PhoneNumberUtil::GetInstance()->IsValidNumber(number2));
+//    LOG_VARW(PhoneNumberUtil::GetInstance()->IsValidNumberForRegion(number2, "US"));
+//    LOG_VARW(PhoneNumberUtil::GetInstance()->IsValidNumberForRegion(number2, "CH"));
+
+//    PhoneNumberOfflineGeocoder geocoder;
+//    PhoneNumber number3;
+//    parseError = PhoneNumberUtil::GetInstance()->Parse("+41 44 668 1800", "CH", &number3);
+//    LOG_VARW(geocoder.GetDescriptionForValidNumber(number3, icu::Locale::getUS()));
+//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonPhoneNumberScoreExtractorTest, "quick");

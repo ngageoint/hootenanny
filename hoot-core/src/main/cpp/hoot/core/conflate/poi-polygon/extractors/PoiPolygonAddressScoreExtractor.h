@@ -100,6 +100,9 @@ public:
   virtual QString getDescription() const
   { return "Calculates the address similarity score of two features involved in POI/Polygon conflation"; }
 
+  static long numAddressesFound;
+  static bool matchAttemptMade;
+
 private:
 
   friend class PoiPolygonAddressScoreExtractorTest;

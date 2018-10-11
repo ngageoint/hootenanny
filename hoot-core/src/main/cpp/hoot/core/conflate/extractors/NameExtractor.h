@@ -66,9 +66,13 @@ public:
   virtual QString getDescription() const
   { return "Calculates name similarity between features"; }
 
+  static long numNamesFound;
+  static bool matchAttemptMade;
+
 private:
 
   StringDistancePtr _d;
+
 };
 
 }

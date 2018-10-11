@@ -40,6 +40,7 @@
 #include "PoiPolygonRfClassifier.h"
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
+#include "extractors/PoiPolygonPhoneNumberScoreExtractor.h"
 
 namespace hoot
 {
@@ -109,6 +110,22 @@ public:
   void setSourceTagKey(const QString key) { _sourceTagKey = key; }
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
 
+  //summary of match types found; assumes one invocation of this class per executed process
+  static long matchesProcessed;
+  static long distanceMatches;
+  static long typeMatches;
+  static long noTypeFoundCount;
+  static long nameMatches;
+  static long numNamesFound;
+  static long nameMatchCandidates;
+  static long addressMatches;
+  static long numAddressesFound;
+  static long addressMatchCandidates;
+  static long phoneNumberMatches;
+  static long numPhoneNumbersFound;
+  static long phoneNumberMatchCandidates;
+  static long convexPolyDistanceMatches;
+
 private:
 
   static QString _matchName;
@@ -140,6 +157,8 @@ private:
   //requirement for matching
   bool _closeDistanceMatch;
 
+  //TODO: should be able to shrink some of this scorer code down with some abstraction
+
   PoiPolygonTypeScoreExtractor _typeScorer;
   double _typeScore;
   double _typeScoreThreshold;
@@ -151,6 +170,9 @@ private:
 
   PoiPolygonAddressScoreExtractor _addressScorer;
   double _addressScore;
+
+  PoiPolygonPhoneNumberScoreExtractor _phoneNumberScorer;
+  double _phoneNumberScore;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   std::set<ElementId> _polyNeighborIds;
@@ -185,6 +207,7 @@ private:
   unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 

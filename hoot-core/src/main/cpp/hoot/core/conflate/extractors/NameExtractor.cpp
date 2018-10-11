@@ -45,13 +45,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, NameExtractor)
 
+long NameExtractor::numNamesFound = 0;
+bool NameExtractor::matchAttemptMade = false;
+
 NameExtractor::NameExtractor():
-  _d(new LevenshteinDistance())
+_d(new LevenshteinDistance())
 {
 }
 
 NameExtractor::NameExtractor(StringDistancePtr d):
-  _d(d)
+_d(d)
 {
 }
 
@@ -63,9 +66,14 @@ double NameExtractor::extract(const OsmMap& /*map*/, const boost::shared_ptr<con
 
 double NameExtractor::extract(const ConstElementPtr& target, const ConstElementPtr& candidate) const
 {
+  numNamesFound = 0;
+  matchAttemptMade = false;
+
   QStringList targetNames = target->getTags().getNames();
+  numNamesFound += targetNames.size();
   targetNames.append(target->getTags().getPseudoNames());
   QStringList candidateNames = candidate->getTags().getNames();
+  numNamesFound += candidateNames.size();
   candidateNames.append(candidate->getTags().getPseudoNames());
   double score = -1;
 
@@ -74,6 +82,7 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
     const QString targetName = targetNames[i];
     for (int j = 0; j < candidateNames.size(); j++)
     {
+      matchAttemptMade = true;
       const QString candidateName = candidateNames[j];
       LOG_VART(targetName);
       LOG_VART(candidateName);

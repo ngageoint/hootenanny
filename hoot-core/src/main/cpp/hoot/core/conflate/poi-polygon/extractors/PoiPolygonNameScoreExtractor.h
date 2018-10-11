@@ -66,6 +66,7 @@ public:
    *
    * @param element the element to examine
    * @return the element's name if it has one
+   * @todo move this somewhere else
    */
   static QString getElementName(ConstElementPtr element);
 
@@ -82,6 +83,9 @@ public:
 
   virtual QString getDescription() const
   { return "Scores element name similarity for POI/Polygon conflation"; }
+
+  static long numNamesFound;
+  static bool matchAttemptMade;
 
 private:
 

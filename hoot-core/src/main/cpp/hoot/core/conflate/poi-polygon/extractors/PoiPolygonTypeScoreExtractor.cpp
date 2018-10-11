@@ -55,6 +55,7 @@ QStringList PoiPolygonTypeScoreExtractor::failedMatchRequirements;
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonTypeScoreExtractor::_translator;
 QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTagValues;
 QMultiHash<QString, QString> PoiPolygonTypeScoreExtractor::_typeToNames;
+bool PoiPolygonTypeScoreExtractor::noTypeFound = false;
 
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor() :
 _translateTagValuesToEnglish(false)
@@ -226,12 +227,18 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QStr
 double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
                                                   ConstElementPtr poly) const
 {
+  noTypeFound = false;
   double result = 0.0;
 
   QStringList poiTagList = _getRelatedTags(poi->getTags());
   QStringList polyTagList = _getRelatedTags(poly->getTags());
   LOG_VART(poiTagList);
   LOG_VART(polyTagList);
+  if (poiTagList.size() == 0 || polyTagList.size() == 0)
+  {
+    noTypeFound = true;
+    return 0.0;
+  }
 
   //If a feature has a specific type, we only want to look at that type and ignore any generic
   //types.  Otherwise, we'll allow a type match with just a generic tag.

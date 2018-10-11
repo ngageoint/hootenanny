@@ -41,6 +41,9 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonNameScoreExtractor)
 
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonNameScoreExtractor::_translator;
 
+long PoiPolygonNameScoreExtractor::numNamesFound = 0;
+bool PoiPolygonNameScoreExtractor::matchAttemptMade = false;
+
 PoiPolygonNameScoreExtractor::PoiPolygonNameScoreExtractor() :
 _translateTagValuesToEnglish(false)
 {
@@ -97,7 +100,13 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
-  double nameScore = _getNameExtractor()->extract(poi, poly);
+  numNamesFound = 0;
+  matchAttemptMade = false;
+
+  boost::shared_ptr<NameExtractor> nameExtractor = _getNameExtractor();
+  double nameScore = nameExtractor->extract(poi, poly);
+  numNamesFound = NameExtractor::numNamesFound;
+  matchAttemptMade = NameExtractor::matchAttemptMade;
   if (nameScore < 0.001)
   {
     nameScore = 0.0;
