@@ -31,9 +31,6 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
 
-// libphonenumber
-#include <phonenumbers/phonenumberutil.h>
-
 using namespace geos::geom;
 
 namespace hoot
@@ -56,7 +53,6 @@ class PoiPolygonMatchTest : public HootTestFixture
   CPPUNIT_TEST(sourceTagKeyMismatchDisableConflationTest);
   CPPUNIT_TEST(missingSourceTagTest);
   CPPUNIT_TEST(multiUseBuildingTest);
-  CPPUNIT_TEST(phoneNumberTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -902,18 +898,6 @@ public:
 
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
-  }
-
-  void phoneNumberTest()
-  {
-    //http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html
-    i18n::phonenumbers::PhoneNumberUtil* phoneUtil =
-      i18n::phonenumbers::PhoneNumberUtil::GetInstance();
-    i18n::phonenumbers::PhoneNumberUtil::MatchType matchType =
-      phoneUtil->IsNumberMatchWithTwoStrings("(703) 786 9345", "(703) 786 9345");
-    LOG_VAR(matchType);
-    matchType = phoneUtil->IsNumberMatchWithTwoStrings("703 786 9345", "(703) 786 9345");
-    LOG_VAR(matchType);
   }
 };
 
