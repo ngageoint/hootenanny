@@ -2,20 +2,23 @@
 AC_DEFUN([LIBPHONENUMBER_INIT],[
   AC_SUBST(HAS_LIBPHONENUMBER) 
 
+  AC_LANG_PUSH([C++])
+
   CPPFLAGS="-I/usr/include/phonenumbers ${CPPFLAGS}"
   LIBS="-lphonenumber -L/usr/lib64 ${LIBS}"
 
-  #AC_CHECK_LIB([libphonenumber], [i18n::phonenumbers::PhoneNumberUtil::GetInstance], [], AC_MSG_FAILURE("libphonenumber is required."))
+    AC_CHECK_HEADERS(
+      [phonenumbers/phonenumberutil.h], 
+      [hootFoundLibphonenumberHeaders=yes; break;], 
+      [AC_MSG_FAILURE("Unable to find libphonenumber header"); break;])
 
-  # TODO: this isn't actually doing anything (?)
   AC_LINK_IFELSE(
-				[AC_LANG_PROGRAM(
-					[[#include <phonenumbers/phonenumberutil.h>]],
-					[[i18n::phonenumbers::PhoneNumberUtil::GetInstance();]])],
-				[hootFoundLibphonenumberHeaders=yes; break;])
+    [AC_LANG_PROGRAM(
+      [[#include <phonenumbers/phonenumberutil.h>]],
+      [[i18n::phonenumbers::PhoneNumberUtil::GetInstance();]])],
+    [],
+    [hootFoundLibphonenumberHeaders=no; AC_MSG_FAILURE("Unable to link to libphonenumber"); break;])
 
-  #AC_CHECK_HEADERS([libphonenumber/phonenumber.h], [hootFoundLibphonenumberHeaders=yes; break;])
-  #AS_IF([test "x$hootFoundLibphonenumberHeaders" != "xyes"], [AC_MSG_ERROR([Unable to find libphonenumber])])
-
+  AC_LANG_POP
 ])
 
