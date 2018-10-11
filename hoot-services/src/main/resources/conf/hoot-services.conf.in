@@ -146,14 +146,19 @@ joshuaLibrary=joshua-6.2-SNAPSHOT-jar-with-dependencies.jar
 # maximum amount of memory in gigabytes that may be consumed by a Joshua service for a single language
 joshuaMaxMemory=16
 
-# path to downloaded language detection model for OpenNlp relative to resources directory
+# path to downloaded language detection model for OpenNLP relative to resources directory
 openNlpLanguageDetectionModel=language-translation/langdetect-183.bin
 
 # oAuth Redirect URL
 # [!] Externally facing URL [!]
 # This will be used to redirect the user back to the site;
-# and it should land the user at index.html to complete the oAuth process.
+# and should land the user at index.html to complete the oAuth process.
+# This value works for the UI running separately with node:
 oauthRedirectURL=http://localhost:8080/
+# This value works for the UI deployed by tomcat on vagrant:
+# oauthRedirectURL=http://localhost:8888/hootenanny-id
+# This value works with hoot core OOB auth:
+# oauthRedirectURL=http://localhost:8888/hoot-services/out-of-band.html
 
 # oAuth Provider
 # Also see hoot-services/src/main/resources/security-applicationContext.xml

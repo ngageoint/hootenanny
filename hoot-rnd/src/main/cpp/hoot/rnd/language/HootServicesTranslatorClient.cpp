@@ -35,6 +35,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
+#include <hoot/core/util/NetworkUtils.h>
 
 // Qt
 #include <QByteArray>
@@ -59,6 +60,7 @@ bool HootServicesTranslatorClient::_loggedCacheMaxReached = false;
 HootServicesTranslatorClient::HootServicesTranslatorClient() :
 _detectedLang(""),
 _detectedLangAvailableForTranslation(false),
+_useCookies(true),
 _detectedLangOverrides(false),
 _performExhaustiveSearch(false),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
@@ -93,6 +95,8 @@ HootServicesTranslatorClient::~HootServicesTranslatorClient()
 
 void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
 {
+  LOG_DEBUG("Setting configuration...");
+
   ConfigOptions opts(conf);
 
   _detectedLangOverrides =
@@ -112,6 +116,16 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
   if (_translationCacheMaxSize != -1)
   {
     _translateCache.reset(new QCache<QString, TranslationResult>(_translationCacheMaxSize));
+  }
+
+  if (_useCookies)
+  {
+    // get a session cookie associated with the user information passed into the command calling
+    // this class
+    _cookies =
+      NetworkUtils::getUserSessionCookie(
+        opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
+        opts.getHootServicesAuthAccessTokenSecret(), _translationUrl);
   }
 }
 
@@ -363,13 +377,18 @@ QString HootServicesTranslatorClient::translate(const QString textToTranslate)
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
   HootNetworkRequest request;
+  if (_useCookies)
+  {
+    //Hoot OAuth requires that session state be maintained for the authenticated user
+    request.setCookies(_cookies);
+  }
   try
   {
     request.networkRequest(
       url, headers, QNetworkAccessManager::Operation::PostOperation,
       _getTranslateRequestData(textToTranslate).toUtf8());
   }
-  catch (const std::exception& e)
+  catch (const HootException& e)
   {
     throw HootException("Error translating text: " + textToTranslate + ". error: " + e.what());
   }

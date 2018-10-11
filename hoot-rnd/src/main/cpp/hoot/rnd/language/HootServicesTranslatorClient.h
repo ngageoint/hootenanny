@@ -38,6 +38,8 @@
 namespace hoot
 {
 
+class HootNetworkCookieJar;
+
 struct TranslationResult
 {
   QString translatedText;
@@ -91,6 +93,10 @@ protected:
 
   boost::shared_ptr<TranslationInfoProvider> _infoClient;
 
+  //determines whether cookies are used in web requests; should be set to true to support auth,
+  //except when running tests as they don't make web requests that require auth
+  bool _useCookies;
+
 private:
 
   friend class HootServicesTranslatorClientTest;
@@ -126,6 +132,8 @@ private:
   static bool _loggedCacheMaxReached;
 
   QString _id;
+
+  boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
   /**
    * Verifies that every language specified for this translator is supported by the server

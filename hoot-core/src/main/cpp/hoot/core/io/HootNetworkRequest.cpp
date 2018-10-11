@@ -29,6 +29,7 @@
 
 //  Hootenanny
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/io/HootNetworkCookieJar.h>
 
 //  Qt
 #include <QEventLoop>
@@ -93,6 +94,15 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     request.setRawHeader("Authorization", QString("Basic %1").arg(base64).toUtf8());
     url.setUserInfo("");
   }
+
+  if (_cookies)
+  {
+    pNAM->setCookieJar(_cookies.get());
+    // don't want to take ownership of these cookies so they could potentially be shared across
+    // different requests made by the same caller
+    _cookies->setParent(0);
+  }
+
   //  Call the correct function on the network access manager
   QNetworkReply* reply = NULL;
   switch (http_op)
@@ -131,6 +141,7 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     _error = reply->errorString();
     return false;
   }
+
   //  return successfully
   return true;
 }
