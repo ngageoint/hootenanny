@@ -32,6 +32,7 @@ _searchInText(false)
 
 void PoiPolygonPhoneNumberScoreExtractor::setRegionCode(QString code)
 {
+  code = code.trimmed().toUpper();
   if (!code.isEmpty())
   {
     std::set<std::string> regions;
@@ -57,7 +58,7 @@ void PoiPolygonPhoneNumberScoreExtractor::setSearchInText(bool search)
 void PoiPolygonPhoneNumberScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  setRegionCode(config.getPoiPolygonPhoneNumberRegionCode().trimmed().toUpper());
+  setRegionCode(config.getPoiPolygonPhoneNumberRegionCode());
   setAdditionalTagKeys(config.getPoiPolygonPhoneNumberAdditionalTagKeys());
   setSearchInText(config.getPoiPolygonPhoneNumberSearchInText());
 }
