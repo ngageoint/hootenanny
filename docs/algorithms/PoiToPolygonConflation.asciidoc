@@ -87,13 +87,13 @@ how many matches it correctly made.
 [options="header"]
 |======
 | Test | Region | Schema 1 | Schema 2 | Geospatial Accuracy | Type Attribution | Name Attribution | Address Attribution | Phone Number Attribution
-| 1 | KisMaayo, Somalia | MGCP | UTP | good | good | poor | none | poor
-| 2 | KisMaayo, Somalia | MGCP | OSM | good | good | poor in MGCP; average in OSM | none | poor
+| 1 | KisMaayo, Somalia | MGCP | UTP | good | good | poor | none | none
+| 2 | KisMaayo, Somalia | MGCP | OSM | good | good | poor in MGCP; average in OSM | none | none
 | 3 | San Francisco, USA | OSM | city govt | good | average | average | poor in OSM; none in city govt | average
 | 4 | Munich, Germany | OSM | NAVTEQ | good in OSM; poor near intersections for NAVTEQ | average for OSM; good for NAVTEQ | good | average | average  
-| 5 | Cairo, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none | poor
+| 5 | Cairo, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none | average
 | 6 | Alexandria, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none | poor
-| 7 | Rafah, Syria | N/A | N/A | good | good | poor for polys; good for POIs | none | poor
+| 7 | Rafah, Syria | N/A | N/A | good | good | poor for polys; good for POIs | none | none
 |======
 
 .POI to Polygon Test Results
