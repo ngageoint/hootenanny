@@ -534,10 +534,6 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  //don't like these static var inits
-  PoiPolygonTypeScoreExtractor::poiBestKvp = "";
-  PoiPolygonTypeScoreExtractor::polyBestKvp = "";
-  PoiPolygonTypeScoreExtractor::failedMatchRequirements.clear();
   _typeScorer.setFeatureDistance(_distance);
   _typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
   _typeScore = _typeScorer.extract(*_map, poi, poly);
@@ -546,17 +542,17 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   {
     typeMatches++;
   }
-  if (PoiPolygonTypeScoreExtractor::noTypeFound)
+  if (_typeScorer.getNoTypeFound())
   {
     noTypeFoundCount++;
   }
 
-  if (_typeScorer.failedMatchRequirements.size() > 0)
+  if (_typeScorer.getFailedMatchRequirements().size() > 0)
   {
     QString failedMatchTypes;
-    for (int i = 0; i < PoiPolygonTypeScoreExtractor::failedMatchRequirements.size(); i++)
+    for (int i = 0; i < _typeScorer.getFailedMatchRequirements().size(); i++)
     {
-      failedMatchTypes += PoiPolygonTypeScoreExtractor::failedMatchRequirements.at(i) + ", ";
+      failedMatchTypes += _typeScorer.getFailedMatchRequirements().at(i) + ", ";
     }
     failedMatchTypes.chop(2);
 
@@ -572,8 +568,6 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   }
 
   LOG_VART(typeMatch);
-  LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
-  LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
 
   return typeMatch ? 1u : 0u;
 }
@@ -588,8 +582,8 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
   {
     nameMatches++;
   }
-  namesProcessed += PoiPolygonNameScoreExtractor::namesProcessed;
-  if (PoiPolygonNameScoreExtractor::matchAttemptMade)
+  namesProcessed += _nameScorer.getNamesProcessed();
+  if (_nameScorer.getMatchAttemptMade())
   {
     nameMatchCandidates++;
   }
@@ -605,8 +599,8 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
   {
     addressMatches++;
   }
-  addressesProcessed += PoiPolygonAddressScoreExtractor::addressesProcessed;
-  if (PoiPolygonAddressScoreExtractor::matchAttemptMade)
+  addressesProcessed += _addressScorer.getAddressesProcessed();
+  if (_addressScorer.getMatchAttemptMade())
   {
     addressMatchCandidates++;
   }
@@ -622,8 +616,8 @@ unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, Const
   {
     phoneNumberMatches++;
   }
-  phoneNumbersProcesed += PoiPolygonPhoneNumberScoreExtractor::phoneNumbersProcesed;
-  if (PoiPolygonPhoneNumberScoreExtractor::matchAttemptMade)
+  phoneNumbersProcesed += _phoneNumberScorer.getPhoneNumbersProcessed();
+  if (_phoneNumberScorer.getMatchAttemptMade())
   {
     phoneNumberMatchCandidates++;
   }

@@ -47,13 +47,12 @@ const QString PoiPolygonAddressScoreExtractor::STREET_TAG_NAME = "addr:street";
 const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME = "address";
 const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
-long PoiPolygonAddressScoreExtractor::addressesProcessed = 0;
-bool PoiPolygonAddressScoreExtractor::matchAttemptMade = false;
-
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonAddressScoreExtractor::_translator;
 
 PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor() :
-_translateTagValuesToEnglish(false)
+_translateTagValuesToEnglish(false),
+_addressesProcessed(0),
+_matchAttemptMade(false)
 {
 }
 
@@ -84,9 +83,6 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
   //Experimented with partial addresses matches in the past and it had no positive affect.  Search
   //the history for this class to see examples, to see if its worth experimenting with again at
   //some point.
-
-  addressesProcessed = 0;
-  matchAttemptMade = false;
 
   QList<PoiPolygonAddress> polyAddresses;
   //see if the poly has any address
@@ -121,9 +117,9 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
     return 0.0;
   }
 
-  matchAttemptMade = true;
-  addressesProcessed += poiAddresses.size();
-  addressesProcessed += polyAddresses.size();
+  _matchAttemptMade = true;
+  _addressesProcessed += poiAddresses.size();
+  _addressesProcessed += polyAddresses.size();
 
   //check for address matches
   for (QList<PoiPolygonAddress>::const_iterator polyAddrItr = polyAddresses.begin();

@@ -51,14 +51,16 @@ public:
   void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }
   void setSearchInText(bool search);
 
-  static long phoneNumbersProcesed;
-  static bool matchAttemptMade;
+  long getPhoneNumbersProcessed() const { return _phoneNumbersProcessed; }
+  bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
 private:
 
   QString _regionCode;
   QStringList _additionalTagKeys;
   bool _searchInText;
+  mutable long _phoneNumbersProcessed;
+  mutable bool _matchAttemptMade;
 
   QList<ElementPhoneNumber> _getPhoneNumbers(const ConstElementPtr& element) const;
   void _addPhoneNumber(const QString name, const QString tagKey, const QString tagValue,

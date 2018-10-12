@@ -19,14 +19,13 @@ using namespace i18n::phonenumbers;
 namespace hoot
 {
 
-long PoiPolygonPhoneNumberScoreExtractor::phoneNumbersProcesed = 0;
-bool PoiPolygonPhoneNumberScoreExtractor::matchAttemptMade = false;
-
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonPhoneNumberScoreExtractor)
 
 PoiPolygonPhoneNumberScoreExtractor::PoiPolygonPhoneNumberScoreExtractor() :
 _regionCode(""),
-_searchInText(false)
+_searchInText(false),
+_phoneNumbersProcessed(0),
+_matchAttemptMade(false)
 {
 }
 
@@ -73,7 +72,7 @@ void PoiPolygonPhoneNumberScoreExtractor::_addPhoneNumber(const QString name, co
   elementPhoneNumber.tagKey = tagKey;
   elementPhoneNumber.tagValue = tagValue;
   phoneNumbers.append(elementPhoneNumber);
-  phoneNumbersProcesed++;
+  _phoneNumbersProcessed++;
 }
 
 QList<ElementPhoneNumber> PoiPolygonPhoneNumberScoreExtractor::_getPhoneNumbers(
@@ -158,10 +157,6 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
                                                     const ConstElementPtr& poi,
                                                     const ConstElementPtr& poly) const
 {
-
-  phoneNumbersProcesed = 0;
-  matchAttemptMade = false;
-
   const QList<ElementPhoneNumber> poiPhoneNumbers = _getPhoneNumbers(poi);
   if (poiPhoneNumbers.size() > 0)
   {
@@ -180,7 +175,7 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
     for (QList<ElementPhoneNumber>::const_iterator polyPhoneNumberItr = polyPhoneNumbers.constBegin();
          polyPhoneNumberItr != polyPhoneNumbers.constEnd(); ++polyPhoneNumberItr)
     {
-      matchAttemptMade = true;  
+      _matchAttemptMade = true;
       const ElementPhoneNumber polyNumber = *polyPhoneNumberItr;
 
       PhoneNumberUtil::MatchType numberMatchType =

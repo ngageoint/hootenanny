@@ -84,8 +84,8 @@ public:
   virtual QString getDescription() const
   { return "Scores name similarity for POI/Polygon conflation"; }
 
-  static long namesProcessed;
-  static bool matchAttemptMade;
+  long getNamesProcessed() const { return _namesProcessed; }
+  bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
 private:
 
@@ -98,6 +98,9 @@ private:
   bool _translateTagValuesToEnglish;
   // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
   static boost::shared_ptr<ToEnglishTranslator> _translator;
+
+  mutable long _namesProcessed;
+  mutable bool _matchAttemptMade;
 
   boost::shared_ptr<NameExtractor> _getNameExtractor() const;
 };

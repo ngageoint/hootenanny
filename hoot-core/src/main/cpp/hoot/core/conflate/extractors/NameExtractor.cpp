@@ -45,16 +45,17 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, NameExtractor)
 
-long NameExtractor::namesProcessed = 0;
-bool NameExtractor::matchAttemptMade = false;
-
 NameExtractor::NameExtractor():
-_d(new LevenshteinDistance())
+_d(new LevenshteinDistance()),
+_namesProcessed(0),
+_matchAttemptMade(false)
 {
 }
 
 NameExtractor::NameExtractor(StringDistancePtr d):
-_d(d)
+_d(d),
+_namesProcessed(0),
+_matchAttemptMade(false)
 {
 }
 
@@ -66,14 +67,11 @@ double NameExtractor::extract(const OsmMap& /*map*/, const boost::shared_ptr<con
 
 double NameExtractor::extract(const ConstElementPtr& target, const ConstElementPtr& candidate) const
 {
-  namesProcessed = 0;
-  matchAttemptMade = false;
-
   QStringList targetNames = target->getTags().getNames();
-  namesProcessed += targetNames.size();
+  _namesProcessed += targetNames.size();
   targetNames.append(target->getTags().getPseudoNames());
   QStringList candidateNames = candidate->getTags().getNames();
-  namesProcessed += candidateNames.size();
+  _namesProcessed += candidateNames.size();
   candidateNames.append(candidate->getTags().getPseudoNames());
   double score = -1;
 
@@ -82,7 +80,7 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
     const QString targetName = targetNames[i];
     for (int j = 0; j < candidateNames.size(); j++)
     {
-      matchAttemptMade = true;
+      _matchAttemptMade = true;
       const QString candidateName = candidateNames[j];
       LOG_VART(targetName);
       LOG_VART(candidateName);

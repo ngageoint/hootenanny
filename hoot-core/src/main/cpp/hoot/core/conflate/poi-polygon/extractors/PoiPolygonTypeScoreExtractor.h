@@ -47,15 +47,6 @@ class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configu
 {
 public:
 
-  //hacks to get around constness of extract method
-
-  //best type kvp match for the poi
-  static QString poiBestKvp;
-  //best type kvp match for the poly
-  static QString polyBestKvp;
-  //custom type matching types that failed
-  static QStringList failedMatchRequirements;
-
   static std::string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
   PoiPolygonTypeScoreExtractor();
@@ -126,7 +117,8 @@ public:
   virtual QString getDescription() const
   { return "Scores element type similarity for POI/Polygon conflation"; }
 
-  static bool noTypeFound;
+  QStringList getFailedMatchRequirements() const { return _failedMatchRequirements; }
+  bool getNoTypeFound() const { return _noTypeFound; }
 
 private:
 
@@ -148,6 +140,14 @@ private:
   static boost::shared_ptr<ToEnglishTranslator> _translator;
   //maps an OSM kvp to multiple possible strings such a feature's name might contain
   static QMultiHash<QString, QString> _typeToNames;
+
+  //best type kvp match for the poi
+  mutable QString _poiBestKvp;
+  //best type kvp match for the poly
+  mutable QString _polyBestKvp;
+  //custom type matching types that failed
+  mutable QStringList _failedMatchRequirements;
+  mutable bool _noTypeFound;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
