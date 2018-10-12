@@ -23,10 +23,9 @@ struct ElementPhoneNumber
 };
 
 /**
- * TODO: seeing this error message logged out of libphonenumber quite a bit:
- * UTF-8 buffer is not interchange-valid;c omes out of unicodetext.cc; need to suppress
+ * Scores phone number similarity between features.  Looks at tag keys containing "phone" by deafult
+ * and can be expanded with additional tag keys.
  *
- * @todo look for numbers in note or description field with PhoneNumberMatcher::Find ??
  * This class is generic enough that it could be used outside of POI/Poly conflation, if needed.
  */
 class PoiPolygonPhoneNumberScoreExtractor : public FeatureExtractorBase, public Configurable
@@ -49,6 +48,7 @@ public:
   { return "Scores phone number similarity for POI/Polygon conflation"; }
 
   void setRegionCode(QString code);
+  void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }
 
   static long phoneNumbersProcesed;
   static bool matchAttemptMade;
@@ -56,6 +56,7 @@ public:
 private:
 
   QString _regionCode;
+  QStringList _additionalTagKeys;
 
   QList<ElementPhoneNumber> _getPhoneNumbers(const ConstElementPtr& element) const;
 };

@@ -46,8 +46,7 @@ void PoiPolygonPhoneNumberScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   setRegionCode(config.getPoiPolygonPhoneNumberRegionCode().toUpper());
-
-
+  _additionalTagKeys = config.getPoiPolygonPhoneNumberAdditionalTagKeys();
 }
 
 QList<ElementPhoneNumber> PoiPolygonPhoneNumberScoreExtractor::_getPhoneNumbers(
@@ -61,9 +60,10 @@ QList<ElementPhoneNumber> PoiPolygonPhoneNumberScoreExtractor::_getPhoneNumbers(
   {
     const QString tagKey = it.key();
     LOG_VART(tagKey);
-    if (tagKey.contains("phone", Qt::CaseInsensitive))
+    if (_additionalTagKeys.contains(tagKey, Qt::CaseInsensitive) ||
+        tagKey.contains("phone", Qt::CaseInsensitive))
     {
-      const QString tagValue = it.value();
+      const QString tagValue = it.value().toUtf8().trimmed().simplified();
       LOG_VART(tagValue);
       // If we're not using libphonenumber with a region code to see if the number is valid, then
       // check for at least one digit (vanity numbers can have letters).
