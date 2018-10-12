@@ -50,7 +50,6 @@ namespace hoot
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
 
-// would like some better way to do this...
 long PoiPolygonMatch::matchesProcessed = 0;
 long PoiPolygonMatch::distanceMatches = 0;
 long PoiPolygonMatch::typeMatches = 0;

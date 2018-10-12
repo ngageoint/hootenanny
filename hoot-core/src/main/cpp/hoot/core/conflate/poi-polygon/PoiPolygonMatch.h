@@ -110,7 +110,8 @@ public:
   void setSourceTagKey(const QString key) { _sourceTagKey = key; }
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
 
-  //summary of match types found; assumes one invocation of this class per executed process
+  //summary of match types found; assumes one invocation of this class per executed process; would
+  //like to handle these in a different way
   static long matchesProcessed;
   static long distanceMatches;
   static long typeMatches;
