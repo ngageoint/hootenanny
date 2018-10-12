@@ -1,37 +1,680 @@
-21:01:28.573 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-output/tds61_translation/new_TDSv61.osm...
-21:01:28.600 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/TDSv61/TDSv61.osm...
-21:01:28.909 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 153) Hoot instance reinit...
-21:01:28.909 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: /ramdisk/hoot/translations/TDSv61.js
-21:01:28.910 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
-21:01:29.122 DEBUG ...hoot/core/schema/OsmSchema.cpp(2009) Loading translation files...
-21:01:29.207 DEBUG ...ot/js/JavaScriptTranslator.cpp( 298) Translation script loaded.
-21:01:31.011 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-21:01:31.011 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-21:01:31.049 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: TRANSPORTATION_STATION_P not found.  Creating layer...
-21:01:31.062 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: TOWER_P not found.  Creating layer...
-21:01:31.072 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: STORAGE_TANK_P not found.  Creating layer...
-21:01:31.078 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: SHED_P not found.  Creating layer...
-21:01:31.084 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: PYLON_P not found.  Creating layer...
-21:01:31.088 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: MOTOR_VEHICLE_STATION_P not found.  Creating layer...
-21:01:31.090 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: HUT_P not found.  Creating layer...
-21:01:31.097 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: FACILITY_P not found.  Creating layer...
-21:01:31.105 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: CROSSING_P not found.  Creating layer...
-21:01:31.110 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: CONTROL_TOWER_P not found.  Creating layer...
-21:01:31.116 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: BUILT_UP_AREA_P not found.  Creating layer...
-21:01:31.122 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: BUILDING_SUPERSTRUCTURE_P not found.  Creating layer...
-21:01:31.127 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: BUILDING_P not found.  Creating layer...
-21:01:31.186 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: AIRCRAFT_HANGAR_P not found.  Creating layer...
-21:01:31.189 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: TUNNEL_C not found.  Creating layer...
-21:01:31.194 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: TRAIL_C not found.  Creating layer...
-21:01:31.203 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: STORAGE_TANK_S not found.  Creating layer...
-21:01:31.211 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: STAIR_C not found.  Creating layer...
-21:01:31.214 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: STADIUM_S not found.  Creating layer...
-21:01:31.217 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: SHED_S not found.  Creating layer...
-21:01:31.220 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: ROAD_C not found.  Creating layer...
-21:01:31.248 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: RIVER_C not found.  Creating layer...
-21:01:31.271 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: RAILWAY_C not found.  Creating layer...
-21:01:31.282 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: FACILITY_S not found.  Creating layer...
-21:01:31.290 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: CART_TRACK_C not found.  Creating layer...
-21:01:31.299 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: BUILT_UP_AREA_S not found.  Creating layer...
-21:01:31.309 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: BUILDING_S not found.  Creating layer...
-21:01:31.321 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: BRIDGE_C not found.  Creating layer...
+09:19:45.812 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-output/tds61_translation/new_TDSv61.osm...
+09:19:45.836 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/TDSv61/TDSv61.osm...
+09:19:45.859 WARN  ...core/scoring/MapComparator.cpp( 132) Tags do not match:
+09:19:45.859 WARN  ...core/scoring/MapComparator.cpp( 145) < use = education
+09:19:45.860 WARN  ...core/scoring/MapComparator.cpp( 146) > use = 
+09:19:45.860 WARN  ...core/scoring/MapComparator.cpp( 145) < use:2 = 
+09:19:45.860 WARN  ...core/scoring/MapComparator.cpp( 146) > use:2 = education
+09:19:45.861 WARN  ...core/scoring/MapComparator.cpp( 132) Tags do not match:
+09:19:45.861 WARN  ...core/scoring/MapComparator.cpp( 145) < by_product = no_byproduct
+09:19:45.861 WARN  ...core/scoring/MapComparator.cpp( 146) > by_product = 
+09:19:45.861 WARN  ...core/scoring/MapComparator.cpp( 145) < by_product:2 = 
+09:19:45.861 WARN  ...core/scoring/MapComparator.cpp( 146) > by_product:2 = no_byproduct
+27c27
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.107Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.792Z"/>
+54c54
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.106Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.792Z"/>
+90c90
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.082Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.787Z"/>
+114c114
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.081Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.786Z"/>
+143c143
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.080Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.786Z"/>
+170c170
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.079Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.786Z"/>
+195c195
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.078Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.785Z"/>
+233c233
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.059Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.779Z"/>
+241c241
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.059Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.779Z"/>
+249c249
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.058Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.779Z"/>
+257c257
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.057Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.778Z"/>
+289c289
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.018Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.770Z"/>
+316c316
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.017Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.770Z"/>
+317a318
+>         <tag k="by_product:2" v="no_byproduct"/>
+322d322
+<         <tag k="by_product" v="no_byproduct"/>
+427c427
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.951Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.746Z"/>
+450c450
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.950Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.746Z"/>
+461c461
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.943Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.744Z"/>
+479c479
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.935Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.743Z"/>
+497c497
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.934Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.742Z"/>
+528c528
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.933Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.742Z"/>
+540c540
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.933Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.742Z"/>
+583c583
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.917Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.738Z"/>
+605c605
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.917Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.737Z"/>
+616c616
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.916Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.737Z"/>
+651c651
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.915Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.736Z"/>
+672c672
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.915Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.736Z"/>
+688c688
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.909Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.734Z"/>
+705c705
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.908Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.734Z"/>
+724c724
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.908Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.733Z"/>
+736c736
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.907Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.733Z"/>
+773c773
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.901Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.732Z"/>
+796c796
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.901Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.731Z"/>
+821c821
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.899Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.731Z"/>
+874c874
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.870Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.722Z"/>
+893c893
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.869Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.721Z"/>
+913c913
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.869Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.721Z"/>
+933c933
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.868Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.721Z"/>
+953c953
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.863Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.719Z"/>
+973c973
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.862Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.719Z"/>
+993c993
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.862Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.718Z"/>
+1055c1055
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.833Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.711Z"/>
+1078c1078
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.832Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.711Z"/>
+1101c1101
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.831Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.710Z"/>
+1123c1123
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.830Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.710Z"/>
+1149c1149
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.830Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.709Z"/>
+1171c1171
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.829Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.709Z"/>
+1193c1193
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.828Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.709Z"/>
+1217c1217
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.827Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.708Z"/>
+1242c1242
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.826Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.708Z"/>
+1261c1261
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.822Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.707Z"/>
+1285c1285
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.821Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.706Z"/>
+1298c1298
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.820Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.705Z"/>
+1324a1325
+>         <tag k="use:2" v="education"/>
+1330c1331
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.820Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.705Z"/>
+1336d1336
+<         <tag k="use" v="education"/>
+1353c1353
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.819Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.704Z"/>
+1363c1363
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.818Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.704Z"/>
+1394c1394
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.817Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.703Z"/>
+1419c1419
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.817Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.703Z"/>
+1442c1442
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.816Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.702Z"/>
+1464c1464
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.815Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.702Z"/>
+1474c1474
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.815Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.701Z"/>
+1509c1509
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.814Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.701Z"/>
+1532c1532
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.813Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.700Z"/>
+1554c1554
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.812Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.699Z"/>
+1567c1567
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.812Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.699Z"/>
+1597c1597
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.811Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.699Z"/>
+1621c1621
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.810Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.698Z"/>
+1630c1630
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.809Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.698Z"/>
+1662c1662
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.808Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.697Z"/>
+1689c1689
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.808Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.697Z"/>
+1713c1713
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.807Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.695Z"/>
+1723c1723
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.806Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.695Z"/>
+1757c1757
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.806Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.694Z"/>
+1784c1784
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.805Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.694Z"/>
+1806c1806
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.804Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.693Z"/>
+1833c1833
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.803Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.693Z"/>
+1856c1856
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.800Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.692Z"/>
+1886c1886
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.781Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.687Z"/>
+1899c1899
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.115Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.795Z"/>
+1917c1917
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.114Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.795Z"/>
+1935c1935
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.114Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.794Z"/>
+1954c1954
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.113Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.794Z"/>
+1973c1973
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.097Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.790Z"/>
+2004c2004
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.096Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.790Z"/>
+2018c2018
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.095Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.790Z"/>
+2051c2051
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.094Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.789Z"/>
+2066c2066
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.094Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.789Z"/>
+2099c2099
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.093Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.789Z"/>
+2113c2113
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.092Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.789Z"/>
+2123c2123
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.091Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.788Z"/>
+2135c2135
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.071Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.784Z"/>
+2147c2147
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.070Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.783Z"/>
+2159c2159
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.070Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.783Z"/>
+2172c2172
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.069Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.783Z"/>
+2184c2184
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.068Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.782Z"/>
+2196c2196
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.068Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.782Z"/>
+2208c2208
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.067Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.782Z"/>
+2220c2220
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.066Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.781Z"/>
+2231c2231
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.041Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.777Z"/>
+2259c2259
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.033Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.775Z"/>
+2292c2292
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.025Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.773Z"/>
+2324c2324
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.010Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.768Z"/>
+2362c2362
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.009Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.768Z"/>
+2391c2391
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.007Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.767Z"/>
+2419c2419
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.007Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.767Z"/>
+2451c2451
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.006Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.766Z"/>
+2484c2484
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.004Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.766Z"/>
+2500c2500
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.003Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.765Z"/>
+2521c2521
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.002Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.765Z"/>
+2542c2542
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.001Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.764Z"/>
+2564c2564
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.000Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.764Z"/>
+2585c2585
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:45.000Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.763Z"/>
+2606c2606
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.999Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.763Z"/>
+2617c2617
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.996Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.763Z"/>
+2628c2628
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.994Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.762Z"/>
+2640c2640
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.994Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.762Z"/>
+2652c2652
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.993Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.761Z"/>
+2664c2664
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.992Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.761Z"/>
+2676c2676
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.991Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.761Z"/>
+2688c2688
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.990Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.760Z"/>
+2700c2700
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.988Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.760Z"/>
+2712c2712
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.987Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.760Z"/>
+2733c2733
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.979Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.758Z"/>
+2748c2748
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.978Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.757Z"/>
+2777c2777
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.977Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.757Z"/>
+2799c2799
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.976Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.757Z"/>
+2815c2815
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.975Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.756Z"/>
+2842c2842
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.974Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.756Z"/>
+2858c2858
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.973Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.755Z"/>
+2887c2887
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.972Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.755Z"/>
+2903c2903
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.972Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.754Z"/>
+2924c2924
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.971Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.754Z"/>
+2946c2946
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.970Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.753Z"/>
+2968c2968
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.969Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.753Z"/>
+2996c2996
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.969Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.752Z"/>
+3012c3012
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.968Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.752Z"/>
+3032c3032
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.967Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.752Z"/>
+3054c3054
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.961Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.750Z"/>
+3089c3089
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.960Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.749Z"/>
+3113c3113
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.959Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.749Z"/>
+3138c3138
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.959Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.749Z"/>
+3164c3164
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.958Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.748Z"/>
+3178c3178
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.957Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.748Z"/>
+3222c3222
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.925Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.740Z"/>
+3243c3243
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.925Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.740Z"/>
+3270c3270
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.924Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.739Z"/>
+3292c3292
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.890Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.729Z"/>
+3326c3326
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.889Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.729Z"/>
+3350c3350
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.888Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.728Z"/>
+3362c3362
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.887Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.728Z"/>
+3376c3376
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.880Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.726Z"/>
+3398c3398
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.880Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.725Z"/>
+3424c3424
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.879Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.725Z"/>
+3448c3448
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.878Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.725Z"/>
+3473c3473
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.878Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.724Z"/>
+3498c3498
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.877Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.724Z"/>
+3523c3523
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.876Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.723Z"/>
+3560c3560
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.853Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.717Z"/>
+3590c3590
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.852Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.716Z"/>
+3611c3611
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.851Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.716Z"/>
+3652c3652
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.850Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.715Z"/>
+3667c3667
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.850Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.715Z"/>
+3694c3694
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.849Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.714Z"/>
+3719c3719
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.845Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.714Z"/>
+3758c3758
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.843Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.713Z"/>
+3771c3771
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.790Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.690Z"/>
+3791c3791
+<         <tag k="source:ingest:datetime" v="2018-10-12T15:19:44.789Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2017-08-10T05:15:23.690Z"/>
