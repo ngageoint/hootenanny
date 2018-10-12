@@ -42,7 +42,7 @@ class HootNetworkCookieJar : public QNetworkCookieJar
 {
 public:
 
-  HootNetworkCookieJar(QObject* parent = 0);
+  explicit HootNetworkCookieJar(QObject* parent = 0);
 
   int size() const { return allCookies().size(); }
 

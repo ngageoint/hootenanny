@@ -45,7 +45,7 @@ public:
   static std::string className() { return "hoot::TagKeyContainsCriterion"; }
 
   TagKeyContainsCriterion() {}
-  TagKeyContainsCriterion(const QString text);
+  explicit TagKeyContainsCriterion(const QString text);
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 

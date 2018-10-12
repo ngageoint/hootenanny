@@ -57,26 +57,6 @@ class ServicesHootServicesLoginManagerTest : public HootTestFixture
 
 public:
 
-  virtual void setUp()
-  {
-    _sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
-
-    _userId =
-      ServicesDbTestUtils::insertTestUser(
-        "ServicesHootServicesLoginManagerTest",
-        "ServicesHootServicesLoginManagerTest@hoot.com",
-        _sessionId, "testAccessToken", "testAccessTokenSecret");
-
-    _cookies =
-      ServicesDbTestUtils::getTestSessionCookie(
-        "testSessionId", ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
-  }
-
-  virtual void tearDown()
-  {
-    ServicesDbTestUtils::deleteUserByUserName("ServicesHootServicesLoginManagerTest");
-  }
-
   ServicesHootServicesLoginManagerTest()
   {
   }
@@ -93,14 +73,17 @@ public:
   void loginRequestTest()
   {
     HootServicesLoginManager uut;
-    uut._cookies = _cookies;
+    boost::shared_ptr<HootNetworkCookieJar> cookies =
+      ServicesDbTestUtils::getTestSessionCookie(
+        "testSessionId", ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
+    uut._cookies = cookies;
 
     QUrl loginUrl;
     HootNetworkRequest request = uut._getLoginRequest("testRequestToken", "testVerifier", loginUrl);
 
     //check that the request has the single session cookie with the correct session id
     CPPUNIT_ASSERT_EQUAL(1, request.getCookies()->size());
-    HOOT_STR_EQUALS(_cookies->toString(), request.getCookies()->toString());
+    HOOT_STR_EQUALS(cookies->toString(), request.getCookies()->toString());
 
     HOOT_STR_EQUALS(
       "http://localhost:8080/hoot-services/auth/oauth1/verify?oauth_token=testRequestToken&oauth_verifier=testVerifier",
@@ -118,9 +101,16 @@ public:
 
   void getAccessTokensTest()
   {
+    const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
+    const long userId =
+      ServicesDbTestUtils::insertTestUser(
+        "ServicesHootServicesLoginManagerTest::getAccessTokensTest",
+        "ServicesHootServicesLoginManagerTest::getAccessTokensTest@hoot.com",
+        sessionId, "testAccessToken", "testAccessTokenSecret");
+
     QString accessToken;
     QString accessTokenSecret;
-    HootServicesLoginManager().getAccessTokens(_userId, accessToken, accessTokenSecret);
+    HootServicesLoginManager().getAccessTokens(userId, accessToken, accessTokenSecret);
 
     HOOT_STR_EQUALS("testAccessToken", accessToken);
     HOOT_STR_EQUALS("testAccessTokenSecret", accessTokenSecret);
@@ -145,18 +135,19 @@ public:
 
   void logoutTest()
   {
-    //Since we're deleting this user as part of this test, don't use the same test user as the
-    //other tests.
     const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
     const long userId =
       ServicesDbTestUtils::insertTestUser(
-        "ServicesHootServicesLoginManagerTest2", "ServicesHootServicesLoginManagerTest2@hoot.com",
-        sessionId, "testAccessToken2", "testAccessTokenSecret2");
+        "ServicesHootServicesLoginManagerTest::logoutTest",
+        "ServicesHootServicesLoginManagerTest::logoutTest@hoot.com",
+        sessionId, "testAccessToken", "testAccessTokenSecret");
     LOG_VART(userId);
 
+    //this deletes the user record
     CPPUNIT_ASSERT(
       HootServicesLoginManager().logout(
-        "ServicesHootServicesLoginManagerTest2", "testAccessToken2", "testAccessTokenSecret2"));
+        "ServicesHootServicesLoginManagerTest::logoutTest",
+        "testAccessToken", "testAccessTokenSecret"));
 
     HootApiDb db;
     QUrl url(HootApiDb::getBaseUrl().toString() + "/blah");
@@ -166,11 +157,20 @@ public:
 
   void logoutInvalidTokensTest()
   {
+    const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
+    const long userId =
+      ServicesDbTestUtils::insertTestUser(
+        "ServicesHootServicesLoginManagerTest::logoutInvalidTokensTest",
+        "ServicesHootServicesLoginManagerTest::logoutInvalidTokensTest@hoot.com",
+        sessionId, "testAccessToken", "testAccessTokenSecret");
+    LOG_VART(userId);
+
     QString exceptionMsg("");
     try
     {
       HootServicesLoginManager().logout(
-        "ServicesHootServicesLoginManagerTest", "testAccessTokenBLAH", "testAccessTokenSecret");
+        "ServicesHootServicesLoginManagerTest::logoutInvalidTokensTest", "testAccessTokenBLAH",
+        "testAccessTokenSecret");
     }
     catch (const HootException& e)
     {
@@ -183,7 +183,8 @@ public:
     try
     {
       HootServicesLoginManager().logout(
-        "ServicesHootServicesLoginManagerTest", "testAccessToken", "testAccessTokenSecretBLAH");
+        "ServicesHootServicesLoginManagerTest::logoutInvalidTokensTest", "testAccessToken",
+        "testAccessTokenSecretBLAH");
     }
     catch (const HootException& e)
     {
@@ -191,10 +192,21 @@ public:
       LOG_VART(exceptionMsg);
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid access tokens."));
+
+    ServicesDbTestUtils::deleteUserByUserName(
+      "ServicesHootServicesLoginManagerTest::logoutInvalidTokensTest");
   }
 
   void logoutInvalidUserTest()
   {
+    const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
+    const long userId =
+      ServicesDbTestUtils::insertTestUser(
+        "ServicesHootServicesLoginManagerTest::logoutInvalidUserTest",
+        "ServicesHootServicesLoginManagerTest::logoutInvalidUserTest@hoot.com",
+        sessionId, "testAccessToken", "testAccessTokenSecret");
+    LOG_VART(userId);
+
     QString exceptionMsg("");
     try
     {
@@ -207,13 +219,10 @@ public:
       LOG_VART(exceptionMsg);
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("User does not exist."));
+
+    ServicesDbTestUtils::deleteUserByUserName(
+      "ServicesHootServicesLoginManagerTest::logoutInvalidUserTest");
   }
-
-private:
-
-  QString _sessionId;
-  long _userId;
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesHootServicesLoginManagerTest, "slow");
