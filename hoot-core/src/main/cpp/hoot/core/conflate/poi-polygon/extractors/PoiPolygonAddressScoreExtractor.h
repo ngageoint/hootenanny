@@ -98,9 +98,9 @@ public:
   static bool isAddressTagKey(const QString tagKey);
 
   virtual QString getDescription() const
-  { return "Calculates the address similarity score of two features involved in POI/Polygon conflation"; }
+  { return "Scores address similarity for POI/Polygon conflation"; }
 
-  static long numAddressesFound;
+  static long addressesProcessed;
   static bool matchAttemptMade;
 
 private:

@@ -45,7 +45,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, NameExtractor)
 
-long NameExtractor::numNamesFound = 0;
+long NameExtractor::namesProcessed = 0;
 bool NameExtractor::matchAttemptMade = false;
 
 NameExtractor::NameExtractor():
@@ -66,14 +66,14 @@ double NameExtractor::extract(const OsmMap& /*map*/, const boost::shared_ptr<con
 
 double NameExtractor::extract(const ConstElementPtr& target, const ConstElementPtr& candidate) const
 {
-  numNamesFound = 0;
+  namesProcessed = 0;
   matchAttemptMade = false;
 
   QStringList targetNames = target->getTags().getNames();
-  numNamesFound += targetNames.size();
+  namesProcessed += targetNames.size();
   targetNames.append(target->getTags().getPseudoNames());
   QStringList candidateNames = candidate->getTags().getNames();
-  numNamesFound += candidateNames.size();
+  namesProcessed += candidateNames.size();
   candidateNames.append(candidate->getTags().getPseudoNames());
   double score = -1;
 

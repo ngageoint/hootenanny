@@ -103,15 +103,15 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_INFO(
     "POI/Polygon name matches: " << PoiPolygonMatch::nameMatches << " / " <<
     PoiPolygonMatch::nameMatchCandidates << " match candidates.  " <<
-    PoiPolygonMatch::numNamesFound << " total names found.");
+    PoiPolygonMatch::namesProcessed << " total names processed.");
   LOG_INFO(
     "POI/Polygon address matches: " << PoiPolygonMatch::addressMatches << " / " <<
      PoiPolygonMatch::addressMatchCandidates << " candidate matches.  " <<
-     PoiPolygonMatch::numAddressesFound << " total addresses found.");
+     PoiPolygonMatch::addressesProcessed << " total addresses processed.");
   LOG_INFO(
     "POI/Polygon phone number matches: " << PoiPolygonMatch::phoneNumberMatches << " / " <<
     PoiPolygonMatch::phoneNumberMatchCandidates << " candidate matches.  " <<
-    PoiPolygonMatch::numPhoneNumbersFound << " total phone numbers found.");
+    PoiPolygonMatch::phoneNumbersProcesed << " total phone numbers processed.");
   LOG_INFO(
     "POI/Polygon convex polygon distance matches: " << PoiPolygonMatch::convexPolyDistanceMatches);
 }

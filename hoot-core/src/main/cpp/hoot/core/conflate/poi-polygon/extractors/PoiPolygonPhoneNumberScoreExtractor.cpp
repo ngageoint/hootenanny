@@ -6,6 +6,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/OsmMap.h>
 #include "PoiPolygonNameScoreExtractor.h"
 
 // libphonenumber
@@ -15,7 +17,7 @@ using namespace i18n::phonenumbers;
 namespace hoot
 {
 
-long PoiPolygonPhoneNumberScoreExtractor::numPhoneNumbersFound = 0;
+long PoiPolygonPhoneNumberScoreExtractor::phoneNumbersProcesed = 0;
 bool PoiPolygonPhoneNumberScoreExtractor::matchAttemptMade = false;
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonPhoneNumberScoreExtractor)
@@ -25,20 +27,26 @@ _regionCode("")
 {
 }
 
+void PoiPolygonPhoneNumberScoreExtractor::setRegionCode(QString code)
+{
+  if (!code.isEmpty())
+  {
+    std::set<std::string> regions;
+      PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
+    std::set<std::string>::const_iterator it = regions.find(code.toStdString());
+    if (it == regions.end())
+    {
+      throw HootException("Invalid phone number region code: " + code);
+    }
+  }
+  _regionCode = code;
+}
+
 void PoiPolygonPhoneNumberScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  _regionCode = config.getPoiPolygonPhoneNumberRegionCode().toUpper();
-  if (!_regionCode.isEmpty())
-  {
-    std::set<std::string> regions;
-    PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
-    std::set<std::string>::const_iterator it = regions.find(_regionCode.toStdString());
-    if (it == regions.end())
-    {
-      throw HootException("Invalid phone number region code: " + _regionCode);
-    }
-  }
+  setRegionCode(config.getPoiPolygonPhoneNumberRegionCode().toUpper());
+
 
 }
 
@@ -46,7 +54,7 @@ QList<ElementPhoneNumber> PoiPolygonPhoneNumberScoreExtractor::_getPhoneNumbers(
   const ConstElementPtr& element) const
 {
   //phone=* is the standard OSM tag, but have seen many others over time...keeping the allowed tags
-  //loose for now.
+  //fairly loose for now.
   QList<ElementPhoneNumber> parsedPhoneNums;
   for (Tags::const_iterator it = element->getTags().constBegin();
        it != element->getTags().constEnd(); ++it)
@@ -57,24 +65,26 @@ QList<ElementPhoneNumber> PoiPolygonPhoneNumberScoreExtractor::_getPhoneNumbers(
     {
       const QString tagValue = it.value();
       LOG_VART(tagValue);
-      //check for at least one digit (vanity numbers can have letters)
+      // If we're not using libphonenumber with a region code to see if the number is valid, then
+      // check for at least one digit (vanity numbers can have letters).
       if ((_regionCode.isEmpty() && StringUtils::hasDigit(tagValue)) ||
+          // IsPossibleNumber is a fairly quick check (IsValidNumber is more strict and a little
+          // more expensive)
           PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(
             tagValue.toStdString(), _regionCode.toStdString()))
       {
-        numPhoneNumbersFound++;
-        //TODO: change to trace
-        LOG_INFO("Possibly a phone number: " << tagKey << "=" << tagValue);
+        phoneNumbersProcesed++;
+
+        LOG_TRACE("Possibly a phone number: " << tagKey << "=" << tagValue);
         ElementPhoneNumber elementPhoneNumber;
         elementPhoneNumber.name = PoiPolygonNameScoreExtractor::getElementName(element);
         elementPhoneNumber.tagKey = tagKey;
         elementPhoneNumber.tagValue = tagValue;
-        parsedPhoneNums./*insert*/append(elementPhoneNumber);
+        parsedPhoneNums.append(elementPhoneNumber);
       }
       else
       {
-        //TODO: change to trace
-        LOG_INFO("Not a phone number: " << tagKey << "=" << tagValue);
+        LOG_TRACE("Not a phone number: " << tagKey << "=" << tagValue);
       }
     }
   }
@@ -86,20 +96,20 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
                                                     const ConstElementPtr& poly) const
 {
 
-  numPhoneNumbersFound = 0;
+  phoneNumbersProcesed = 0;
   matchAttemptMade = false;
 
   const QList<ElementPhoneNumber> poiPhoneNumbers = _getPhoneNumbers(poi);
-  //TODO: change to trace
   if (poiPhoneNumbers.size() > 0)
   {
-    LOG_VAR(poiPhoneNumbers.size());
+    LOG_VART(poiPhoneNumbers.size());
   }
   const QList<ElementPhoneNumber> polyPhoneNumbers = _getPhoneNumbers(poly);
   if (polyPhoneNumbers.size() > 0)
   {
-    LOG_VAR(polyPhoneNumbers.size());
+    LOG_VART(polyPhoneNumbers.size());
   }
+
   for (QList<ElementPhoneNumber>::const_iterator poiPhoneNumberItr = poiPhoneNumbers.constBegin();
        poiPhoneNumberItr != poiPhoneNumbers.constEnd(); ++poiPhoneNumberItr)
   {
@@ -107,18 +117,16 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
     for (QList<ElementPhoneNumber>::const_iterator polyPhoneNumberItr = polyPhoneNumbers.constBegin();
          polyPhoneNumberItr != polyPhoneNumbers.constEnd(); ++polyPhoneNumberItr)
     {
-      matchAttemptMade = true;
+      matchAttemptMade = true;  
       const ElementPhoneNumber polyNumber = *polyPhoneNumberItr;
+
       PhoneNumberUtil::MatchType numberMatchType =
         PhoneNumberUtil::GetInstance()->IsNumberMatchWithTwoStrings(
           poiNumber.tagValue.toStdString(), polyNumber.tagValue.toStdString());
       LOG_VART(numberMatchType);
       if (numberMatchType > PhoneNumberUtil::MatchType::NO_MATCH)
-      //if (numberMatchType != PhoneNumberUtil::MatchType::INVALID_NUMBER &&
-      //    numberMatchType != PhoneNumberUtil::MatchType::NO_MATCH)
       {
-        //TODO: change to trace
-        LOG_INFO(
+        LOG_TRACE(
           "Phone number match: " << poiNumber.tagKey.toStdString() << "=" <<
           poiNumber.tagValue.toStdString() << " <--> " << polyNumber.tagKey.toStdString() << "=" <<
           polyNumber.tagValue.toStdString() << "; POI name: " << poiNumber.name <<
@@ -127,8 +135,7 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
       }
       else
       {
-        //TODO: change to trace
-        LOG_INFO(
+        LOG_TRACE(
           "Phone number mismatch: " << poiNumber.tagKey.toStdString() << "=" <<
           poiNumber.tagValue.toStdString() << " <--> " << polyNumber.tagKey.toStdString() << "=" <<
           polyNumber.tagValue.toStdString() << "; POI name: " << poiNumber.name <<

@@ -47,7 +47,7 @@ const QString PoiPolygonAddressScoreExtractor::STREET_TAG_NAME = "addr:street";
 const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME = "address";
 const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
-long PoiPolygonAddressScoreExtractor::numAddressesFound = 0;
+long PoiPolygonAddressScoreExtractor::addressesProcessed = 0;
 bool PoiPolygonAddressScoreExtractor::matchAttemptMade = false;
 
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonAddressScoreExtractor::_translator;
@@ -85,7 +85,7 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
   //the history for this class to see examples, to see if its worth experimenting with again at
   //some point.
 
-  numAddressesFound = 0;
+  addressesProcessed = 0;
   matchAttemptMade = false;
 
   QList<PoiPolygonAddress> polyAddresses;
@@ -122,8 +122,8 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
   }
 
   matchAttemptMade = true;
-  numAddressesFound += poiAddresses.size();
-  numAddressesFound += polyAddresses.size();
+  addressesProcessed += poiAddresses.size();
+  addressesProcessed += polyAddresses.size();
 
   //check for address matches
   for (QList<PoiPolygonAddress>::const_iterator polyAddrItr = polyAddresses.begin();

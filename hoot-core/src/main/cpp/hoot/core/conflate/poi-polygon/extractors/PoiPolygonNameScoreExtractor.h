@@ -82,9 +82,9 @@ public:
   void setTranslateTagValuesToEnglish(bool translate) { _translateTagValuesToEnglish = translate; }
 
   virtual QString getDescription() const
-  { return "Scores element name similarity for POI/Polygon conflation"; }
+  { return "Scores name similarity for POI/Polygon conflation"; }
 
-  static long numNamesFound;
+  static long namesProcessed;
   static bool matchAttemptMade;
 
 private:

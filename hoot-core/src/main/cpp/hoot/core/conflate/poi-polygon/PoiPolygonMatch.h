@@ -116,13 +116,13 @@ public:
   static long typeMatches;
   static long noTypeFoundCount;
   static long nameMatches;
-  static long numNamesFound;
+  static long namesProcessed;
   static long nameMatchCandidates;
   static long addressMatches;
-  static long numAddressesFound;
+  static long addressesProcessed;
   static long addressMatchCandidates;
   static long phoneNumberMatches;
-  static long numPhoneNumbersFound;
+  static long phoneNumbersProcesed;
   static long phoneNumberMatchCandidates;
   static long convexPolyDistanceMatches;
 

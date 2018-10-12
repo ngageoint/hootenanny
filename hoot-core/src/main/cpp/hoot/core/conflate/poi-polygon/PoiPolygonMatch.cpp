@@ -54,13 +54,13 @@ long PoiPolygonMatch::distanceMatches = 0;
 long PoiPolygonMatch::typeMatches = 0;
 long PoiPolygonMatch::noTypeFoundCount = 0;
 long PoiPolygonMatch::nameMatches = 0;
-long PoiPolygonMatch::numNamesFound = 0;
+long PoiPolygonMatch::namesProcessed = 0;
 long PoiPolygonMatch::nameMatchCandidates = 0;
-long PoiPolygonMatch::numAddressesFound = 0;
+long PoiPolygonMatch::addressesProcessed = 0;
 long PoiPolygonMatch::addressMatches = 0;
 long PoiPolygonMatch::addressMatchCandidates = 0;
 long PoiPolygonMatch::phoneNumberMatches = 0;
-long PoiPolygonMatch::numPhoneNumbersFound = 0;
+long PoiPolygonMatch::phoneNumbersProcesed = 0;
 long PoiPolygonMatch::phoneNumberMatchCandidates = 0;
 long PoiPolygonMatch::convexPolyDistanceMatches = 0;
 
@@ -512,9 +512,8 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_distance);
   LOG_VART(_closeDistanceMatch);
 
-  return _distance <= _matchDistanceThreshold ? 2u : 0u;
-
   //Tried weighting distance less when both POI's had specific types, but it hasn't helped so far.
+  return _distance <= _matchDistanceThreshold ? 2u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
@@ -522,7 +521,6 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
 {
   //don't really need to put a distance == -1.0 check here for now, since we're assuming
   //PoiPolygonDistanceExtractor will always be run before this one
-  //TODO: Should this check be moved up to the get distance method?
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   LOG_VART(alphaShapeDist);
@@ -590,7 +588,7 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
   {
     nameMatches++;
   }
-  numNamesFound += PoiPolygonNameScoreExtractor::numNamesFound;
+  namesProcessed += PoiPolygonNameScoreExtractor::namesProcessed;
   if (PoiPolygonNameScoreExtractor::matchAttemptMade)
   {
     nameMatchCandidates++;
@@ -607,7 +605,7 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
   {
     addressMatches++;
   }
-  numAddressesFound += PoiPolygonAddressScoreExtractor::numAddressesFound;
+  addressesProcessed += PoiPolygonAddressScoreExtractor::addressesProcessed;
   if (PoiPolygonAddressScoreExtractor::matchAttemptMade)
   {
     addressMatchCandidates++;
@@ -624,7 +622,7 @@ unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, Const
   {
     phoneNumberMatches++;
   }
-  numPhoneNumbersFound += PoiPolygonPhoneNumberScoreExtractor::numPhoneNumbersFound;
+  phoneNumbersProcesed += PoiPolygonPhoneNumberScoreExtractor::phoneNumbersProcesed;
   if (PoiPolygonPhoneNumberScoreExtractor::matchAttemptMade)
   {
     phoneNumberMatchCandidates++;

@@ -66,7 +66,7 @@ public:
   virtual QString getDescription() const
   { return "Calculates name similarity between features"; }
 
-  static long numNamesFound;
+  static long namesProcessed;
   static bool matchAttemptMade;
 
 private:
