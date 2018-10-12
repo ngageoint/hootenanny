@@ -25,7 +25,7 @@ class PoiPolygonPhoneNumberScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(tagKeyTest);
   CPPUNIT_TEST(invalidRegionCodeTest);
   CPPUNIT_TEST(additionalTagKeysTest);
-  //CPPUNIT_TEST(findInTextTest);
+  CPPUNIT_TEST(findInTextTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -114,10 +114,10 @@ public:
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
 
-    node1->getTags().set("ph", "(123) 456 7890");
+    node1->getTags().set("note", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
 
-    uut.setAdditionalTagKeys(QStringList("ph"));
+    uut.setAdditionalTagKeys(QStringList("note"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     uut.setAdditionalTagKeys(QStringList());
@@ -133,10 +133,16 @@ public:
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
 
     node1->getTags().set(
-      "note",
+      "phone",
       "this is some text with a phone number: (123) 456 7890; and here's another one: 123 456 7890");
     way1->getTags().set("phone", "123 456 7890");
+
+    uut.setRegionCode("US");
+    uut.setSearchInText(true);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    uut.setSearchInText(false);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 };
 

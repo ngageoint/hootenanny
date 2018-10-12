@@ -12,6 +12,8 @@
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
+#include <phonenumbers/phonenumbermatcher.h>
+#include <phonenumbers/phonenumbermatch.h>
 using namespace i18n::phonenumbers;
 
 namespace hoot
@@ -23,7 +25,8 @@ bool PoiPolygonPhoneNumberScoreExtractor::matchAttemptMade = false;
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonPhoneNumberScoreExtractor)
 
 PoiPolygonPhoneNumberScoreExtractor::PoiPolygonPhoneNumberScoreExtractor() :
-_regionCode("")
+_regionCode(""),
+_searchInText(false)
 {
 }
 
@@ -42,18 +45,41 @@ void PoiPolygonPhoneNumberScoreExtractor::setRegionCode(QString code)
   _regionCode = code;
 }
 
+void PoiPolygonPhoneNumberScoreExtractor::setSearchInText(bool search)
+{
+  if (search && _regionCode.isEmpty())
+  {
+    throw HootException("A region code must be set when searching for phone numbers in text.");
+  }
+  _searchInText = search;
+}
+
 void PoiPolygonPhoneNumberScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  setRegionCode(config.getPoiPolygonPhoneNumberRegionCode().toUpper());
-  _additionalTagKeys = config.getPoiPolygonPhoneNumberAdditionalTagKeys();
+  setRegionCode(config.getPoiPolygonPhoneNumberRegionCode().trimmed().toUpper());
+  setAdditionalTagKeys(config.getPoiPolygonPhoneNumberAdditionalTagKeys());
+  setSearchInText(config.getPoiPolygonPhoneNumberSearchInText());
+}
+
+void PoiPolygonPhoneNumberScoreExtractor::_addPhoneNumber(const QString name, const QString tagKey,
+                                                          const QString tagValue,
+                                                      QList<ElementPhoneNumber>& phoneNumbers) const
+{
+  LOG_TRACE("Possibly a phone number: " << tagKey << "=" << tagValue);
+  ElementPhoneNumber elementPhoneNumber;
+  elementPhoneNumber.name = name;
+  elementPhoneNumber.tagKey = tagKey;
+  elementPhoneNumber.tagValue = tagValue;
+  phoneNumbers.append(elementPhoneNumber);
+  phoneNumbersProcesed++;
 }
 
 QList<ElementPhoneNumber> PoiPolygonPhoneNumberScoreExtractor::_getPhoneNumbers(
   const ConstElementPtr& element) const
 {
   //phone=* is the standard OSM tag, but have seen many others over time...keeping the allowed tags
-  //fairly loose for now.
+  //fairly loose for now
   QList<ElementPhoneNumber> parsedPhoneNums;
   for (Tags::const_iterator it = element->getTags().constBegin();
        it != element->getTags().constEnd(); ++it)
@@ -65,24 +91,60 @@ QList<ElementPhoneNumber> PoiPolygonPhoneNumberScoreExtractor::_getPhoneNumbers(
     {
       const QString tagValue = it.value().toUtf8().trimmed().simplified();
       LOG_VART(tagValue);
-      // If we're not using libphonenumber with a region code to see if the number is valid, then
-      // check for at least one digit (vanity numbers can have letters).
-      if ((_regionCode.isEmpty() && StringUtils::hasDigit(tagValue)) ||
-          // IsPossibleNumber is a fairly quick check (IsValidNumber is more strict and a little
-          // more expensive)
-          PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(
-            tagValue.toStdString(), _regionCode.toStdString()))
-      {
-        phoneNumbersProcesed++;
 
-        LOG_TRACE("Possibly a phone number: " << tagKey << "=" << tagValue);
-        ElementPhoneNumber elementPhoneNumber;
-        elementPhoneNumber.name = PoiPolygonNameScoreExtractor::getElementName(element);
-        elementPhoneNumber.tagKey = tagKey;
-        elementPhoneNumber.tagValue = tagValue;
-        parsedPhoneNums.append(elementPhoneNumber);
+      if (_regionCode.isEmpty())
+      {
+        // If we're not using a region code to see if the number is valid, then just check for at
+        // least one digit (vanity numbers can have letters).
+        if (StringUtils::hasDigit(tagValue))
+        {
+          _addPhoneNumber(
+            PoiPolygonNameScoreExtractor::getElementName(element), tagKey, tagValue,
+            parsedPhoneNums);
+        }
       }
       else
+      {
+        if (!_searchInText)
+        {
+          // IsPossibleNumber is a fairly quick check (IsValidNumber is more strict and a little
+          // more expensive)
+          if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(
+                tagValue.toStdString(), _regionCode.toStdString()))
+          {
+            _addPhoneNumber(
+              PoiPolygonNameScoreExtractor::getElementName(element), tagKey, tagValue,
+              parsedPhoneNums);
+          }
+        }
+        else
+        {
+          // This lets us search through text that may have other things in it besides phone
+          // numbers.
+          PhoneNumberMatcher numberFinder(
+            *PhoneNumberUtil::GetInstance(),
+            tagValue.toStdString(),
+            _regionCode.toStdString(),
+            PhoneNumberMatcher::Leniency::POSSIBLE,
+            //not sure what a good number is for max tries yet or what that number actually even
+            //means
+            1);
+          int parserFinds = 0;
+          while (numberFinder.HasNext())
+          {
+            PhoneNumberMatch match;
+            numberFinder.Next(&match);
+            const QString parsedNum = QString::fromStdString(match.raw_string());
+            _addPhoneNumber(
+              PoiPolygonNameScoreExtractor::getElementName(element), tagKey, parsedNum,
+              parsedPhoneNums);
+            parserFinds++;
+          }
+          LOG_TRACE("Number finder found " << parserFinds << " numbers.");
+        }
+      }
+
+      if (parsedPhoneNums.size() == 0)
       {
         LOG_TRACE("Not a phone number: " << tagKey << "=" << tagValue);
       }

@@ -2633,6 +2633,17 @@ Optional geographical region code used when comparing phone numbers.  Specifying
 known for the input data, may increase phone number matching accuracy.  See:
 http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html
 
+=== poi.polygon.phone.number.search.in.text
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text
+that may contain things other than phone numbers.  If false, the conflation will assume the tag
+value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must
+be set to a valid region code when enabling this option.  Enabling this option may have runtime
+performance implications.
+
 === poi.polygon.poi.ignore.tags.file
 
 * Data Type: string
