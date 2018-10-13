@@ -163,8 +163,6 @@ tds61.rules = {
     'ZI001_SDV':'source:datetime', // Source Information : Source Date and Time
     'ZI001_VSD':'source:vertical_source:datetime', // Source Information : Vertical Source Date and Time
     'ZI001_VSN':'source:vertical_source:description', // Source Information : Vertical Source Description
-    'CCN':'source:copyright', // Restriction Information : Commercial Copyright Notice
-    'CDR':'source:commercial_distribution_restriction', // Restriction Information : Commercial Distribution Restriction
     'ZI002_UFI':'security:restriction_ufi', // Restriction Information : Unique Entity Identifier
     'ZI004_PRE':'source:processing_information', // Process Step Information : Process Step Description
     'ZI005_FNA':'name', // Geographic Name Information : Full Name

@@ -108,84 +108,43 @@ tds70.rules = {
     // One2one rules for Text Fields
     txtBiased : {
     'ADR':'addr:full', // Address
-    'AQN':'aquifer_name', // Aquifer Name
     'BA000_VDR':'source:datum:sounding:name', // Water Line : Sounding Datum Name
-    'BEN':'be_number', // Basic Encyclopedia (BE) Number
     'BRN':'bridge:reference', // Bridge Reference Number
     'CCN':'source:copyright', // Commercial Copyright Notice
-    'CDM':'source:cadastral:measurement', // Cadastral Source Measurement
     'CDR':'source:commercial_distribution_restriction', // Commercial Distribution Restriction
     'CID':'source:cell_identifier', // Cell Identifier
-    'CSI':'source:cadastral:identifier', // Cadastral Source Identifier
-    'CSY':'source:cadastral:identifier:type', // Cadastral Source Identifier Type
-    'CUD':'source:currency:datetime', // Currency Date and Time
     'DQS':'source:data_quality', // Data Quality Statement
     'ETZ':'source:extraction_specification:version', // Extraction Specification Version
 //     'F_CODE':'raw:F_CODE', // Feature Code
     'GB052_RIDH':'aeroway:runway_designator_high', // Runway Direction (high end) : Runway Designator (high)
     'GB052_RIDL':'aeroway:runway_designator_low', // Runway Direction (low end) : Runway Designator (low)
     'IKO':'icao', // ICAO Location Indicator
-    'LINK_ID':'etds:link_id', // eLTDS40 Field
     'MDE':'source:update:datetime', // Maintenance Date and Time
     'NA8':'official_name', // Aerodrome Official Name
-    'NAO':'installation_operator_name', // Installation Operator
     'OTH':'note:oth', // Specified Domain Value(s)
-    'PDA':'source:dfdd_accessor', // Property DFDD-compatible Accessor
-    'PSE':'restriction_interval', // Periodic Restriction Month Interval
+    'RIN_RTN':'ref', // Route Identification <route designation>
     'RIN_RTN2':'ref:2', // Route Identification [2] <route designation>
     'RIN_RTN3':'ref:3', // Route Identification [3] <route designation>
-    'RIN_RTN':'ref', // Route Identification <route designation>
-    'SAX_RS1':'security:classification:reason', // Security Attributes Group <resource classification reason>
-    'SAX_RS2':'security:classification:classified_by', // Security Attributes Group <resource classified by>
-    'SAX_RS3':'security:exempted_source:date', // Security Attributes Group <resource date of exempted source>
-    'SAX_RS4':'security:declassification:date', // Security Attributes Group <resource declassification date>
-    'SAX_RS5':'security:declassification:event', // Security Attributes Group <resource declassification event>
-    'SAX_RS8':'security:classification:derived_by', // Security Attributes Group <resource derivatively classified by>
-    'SAX_RS9':'security:classification:derived_from', // Security Attributes Group <resource derived from>
-    'SAX_RX1':'security:foreign_government_information:open_source', // Security Attributes Group <resource foreign government information (open source)>
-    'SAX_RX2':'security:foreign_government_information:protected_source', // Security Attributes Group <resource foreign government information (protected source)>
-    'SAX_RX5':'security:releasability', // Security Attributes Group <resource releasable to>
-    'SAX_RX6':'security:classification:sar', // Security Attributes Group <resource special-access-required program identifier>
-    'SAX_RX7':'security:classification:sci', // Security Attributes Group <resource SCI controls>
-    'SAX_RX9':'security:classification:compilation_reason', // Security Attributes Group <resource compilation reason>
-    'SAX_RY0':'security:display_only_to', // Security Attributes Group <resource display only to>
-    'SAX_RY1':'security:classification:sci:non_us', // Security Attributes Group <resource non-US controls>
-    'SAX_RY2':'security:atomic_markings', // Security Attributes Group <resource atomic energy markings>
-    'SSE':'seasonal_ice_limit', // Seasonal Ice Limit
     'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
     'URI':'source:ref', // Unique Resource Identifier
-    'VCS_VCR':'max_clearance:note', // Vertical Clearance, Safe <reference level remark>
     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
-    'WAD':'well:description', // Water Well Construction Description
     'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
     //'ZI001_SDP':'source:description', // Source Information : Source Description
     'ZI001_SDP':'source', // Source Information : Source Description
     'ZI001_SDV':'source:datetime', // Source Information : Source Date and Time
     'ZI001_VSD':'source:vertical_source:datetime', // Source Information : Vertical Source Date and Time
     'ZI001_VSN':'source:vertical_source:description', // Source Information : Vertical Source Description
-    'CCN':'source:copyright', // Restriction Information : Commercial Copyright Notice
-    'CDR':'source:commercial_distribution_restriction', // Restriction Information : Commercial Distribution Restriction
-    'ZI002_UFI':'security:restriction_ufi', // Restriction Information : Unique Entity Identifier
     'ZI004_PRE':'source:processing_information', // Process Step Information : Process Step Description
     'ZI005_FNA':'name', // Geographic Name Information : Full Name
     'ZI005_FNA2':'alt_name', // Geographic Name Information : (second) Full Name
-    'ZI005_FNA3':'alt_name:2', // Geographic Name Information : Full Name (third)
     'ZI005_NFN':'gndb_id', // Geographic Name Information : Name Identifier
     'ZI005_NFN2':'gndb_id:2', // Geographic Name Information : (second) Name Identifier
-    'ZI005_NFN3':'gndb_id:3', // Geographic Name Information : Name Identifier (third)
     'ZI006_MEM':'note', // Note : Memorandum
     // We fix ZI020_GE4X in post processing
     'ZI020_GE4':'is_in:country_code', // (Location Country) Designation : GENC Short URN-based Identifier
     'ZI020_GE42':'country_code:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
     'ZI020_GE43':'country_code:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
     'ZI020_GE44':'country_code:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
-    'ZI026T_UFI':'source:table:uuid', // Feature Metadata (Table) : Unique Entity Identifier
-    'ZI027T_UFI':'source:attribute:uuid', // Feature Attribute Metadata (Table) : Unique Entity Identifier
-    'ZI028_UFI':'source:feature:uuid', // Feature Entity : Unique Entity Identifier
-    'ZI039S_UFI':'source:entity:surface:uuid', // Entity Collection Metadata (Surface) : Unique Entity Identifier
-    'ZI039T_UFI':'source:entity:table:uuid', // Entity Collection Metadata (Table) : Unique Entity Identifier
-    'ZI031S_URI':'source:dataset:surface:uuid', // Dataset (Surface) : Unique Resource Identifier
-    'ZI031T_URI':'source:dataset:table:uuid', // Dataset (Table) : Unique Resource Identifier
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
@@ -195,49 +154,18 @@ tds70.rules = {
     numBiased : {
     'AHA':'source:accuracy:horizontal', // Absolute Horizontal Accuracy (90%)
     'AOO':'angle', // Angle of Orientation
-    'AQTL':'aquifer:thickness:lower', // Aquifer Thickness <lower value>
-    'AQTU':'aquifer:thickness:upper', // Aquifer Thickness <upper value>
     'ARA':'feature_area', // Area - this has been moved from 'area' due to hoot conflicts
     'AVA':'source:accuracy:vertical', // Absolute Vertical Accuracy (90%)
-    'AYRL':'aquifer:yield:lower', // Aquifer Yield Rating <lower value>
-    'AYRU':'aquifer:yield:upper', // Aquifer Yield Rating <upper value>
-    'BC040_EOL':'seamark:light:height', // Maritime Navigation Light : Nominal Range
-    'BC040_LCN':'seamark:light:characteristic_number', // Maritime Navigation Light : Light Characteristic Number
-    'BC040_LVN':'seamark:light:range', // Maritime Navigation Light : Light Elevation
-    'BC040_PER':'seamark:light:period', // Maritime Navigation Light : Period of Light
-    'BEL':'ele:base', // Base Elevation - conflict with "ele" but is only used in one feature: ZB035 Control Point
-    'BH141_AWBA':'waterway:bank1:slope:above_water', // Inland Waterbody Bank (1) : Above Water Bank Slope (first bank)
-    'BH141_AWBB':'waterway:bank2:slope:above_water', // Inland Waterbody Bank (2) : Above Water Bank Slope (second bank)
-    'BH141_WBHA':'waterway:bank1:height', // Inland Waterbody Bank (1) : Waterbody Bank Height (first bank)
-    'BH141_WBHB':'waterway:bank2:height', // Inland Waterbody Bank (2) : Waterbody Bank Height (second bank)
     'BNF':'building:levels', // Floor Count
-    'BPWHAL':'waterway:bank1:height:lower', // Inland Waterbody Bank (1) : Predominant Waterbody Bank Height (first bank) (lower value)
-    'BPWHAU':'waterway:bank1:height:upper', // Inland Waterbody Bank (1) : Predominant Waterbody Bank Height (first bank) (upper value)
-    'BPWHBL':'waterway:bank2:height:lower', // Inland Waterbody Bank (2) : Predominant Waterbody Bank Height (second bank) (lower value)
-    'BPWHBU':'waterway:bank2:height:upper', // Inland Waterbody Bank (2) : Predominant Waterbody Bank Height (second bank) (upper value)
-    'BPWSAL':'waterway:bank1:slope:lower', // Inland Waterbody Bank (1) : Predominant Waterbody Bank Slope (first bank) (lower value)
-    'BPWSAU':'waterway:bank1:slope:upper', // Inland Waterbody Bank (1) : Predominant Waterbody Bank Slope (first bank) (upper value)
-    'BPWSBL':'waterway:bank2:slope:lower', // Inland Waterbody Bank (2) : Predominant Waterbody Bank Slope (second bank) (lower value)
-    'BPWSBU':'waterway:bank2:slope:upper', // Inland Waterbody Bank (2) : Predominant Waterbody Bank Slope (second bank) (upper value)
-    'BWVCAL':'waterway:bank1:cover:lower', // Inland Waterbody Bank (1) : Waterbody Bank Vegetation Cover (first bank) (lower value)
-    'BWVCAU':'waterway:bank1:cover:upper', // Inland Waterbody Bank (1) : Waterbody Bank Vegetation Cover (first bank) (upper value)
-    'BWVCBL':'waterway:bank2:cover:lower', // Inland Waterbody Bank (2) : Waterbody Bank Vegetation Cover (second bank) (lower value)
-    'BWVCBU':'waterway:bank2:cover:upper', // Inland Waterbody Bank (2) : Waterbody Bank Vegetation Cover (second bank) (upper value)
-    'CDL':'covered_drain:length', // Covered Drain Length
     'CTL':'railway:track:length', // Cumulative Track Length
     'DEV':'level', // Deck Level
     'DIM':'diameter', // Diameter
-    'DMBL':'undergrowth:density:lower', // Undergrowth Density (lower value)
-    'DMBU':'undergrowth:density:upper', // Undergrowth Density (upper value)
     'DMT':'canopy_cover', // Canopy Cover
     'DOF':'flow_direction', // Direction of Flow
-    'DPAL':'aquifer:depth:lower', // Aquifer Depth <lower value>
-    'DPAU':'aquifer:depth:upper', // Aquifer Depth <upper value>
     'DZC':'deck_count', // Deck Count
     'DZP':'depth:maximum_below_surface', // Deepest Depth Below Surface Level
     'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
-    'FCL':'ferry:crossing_distance', // Ferry Crossing Distance
 //    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
     'GSGCHL':'aeroway:runway_highend:slope:high_lowervalue', // Runway Direction (high end) : Surface Slope (high) (lower value)
     'GSGCHU':'aeroway:runway_highend:slope:high_uppervalue', // Runway Direction (high end) : Surface Slope (high) (upper value)
@@ -253,76 +181,42 @@ tds70.rules = {
     'LC2':'bridge:load_class2', // Load Class Type 2
     'LC3':'bridge:load_class3', // Load Class Type 3
     'LC4':'bridge:load_class4', // Load Class Type 4
-    'LCA':'crane:lifting_capacity', // Lifting Capacity
     'LDC':'length:crest', // Dam Crest Length
     'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
-    'LNU':'length:interior_useable', // Usable Length
-    'LOG':'gradient:length', // Gradient Length
     'LTN':'lanes', // Track or Lane Count
     'LZN':'length', // Length
     'MAG':'magnetic_variation', // Magnetic Variation
-    'MWD':'depth:designed:maximum', // Maximum Design Water Depth
     'MWG':'divider:width', // Centerline Spacing
     'NOS':'bridge:span_count', // Span Count
     'NPL':'cables', // Parallel Line Count: See AT005
     'OHC':'max_clearance', // Overhead Clearance
+    'PFD':'raw:PFD', // Predominant Feature Depth
     'PFH':'height:feature', // Predominant Feature Height
     'PVH':'height:vegetation', // Predominant Vegetation Height
     'PWA':'depth', // Predominant Water Depth
-    'PWAL':'depth:lower', // Predominant Water Depth <lower value>
-    'PWAU':'depth:upper', // Predominant Water Depth <upper value>
     'RAD':'curve_radius', // Curve Radius
     'RMWL':'median:min_width', // Route Median Width (lower value)
     'RMWU':'median:max_width', // Route Median Width (upper value)
-    'SDCL':'soil:depth:lower', // Soil Depth <lower value>
-    'SDCU':'soil:depth:upper', // Soil Depth <upper value>
     'SDO':'dune:orientation', // Sand Dune Orientation
-    'SDSL':'tree:diameter:lower', // Stem Diameter (lower value)
-    'SDSU':'tree:diameter:upper', // Stem Diameter (upper value)
     'SGCL':'incline:min', // Surface Slope (lower value)
     'SGCU':'incline:max', // Surface Slope (upper value)
-    'SHC':'safe_clearance:horizontal', // Safe Horizontal Clearance
     'SPM':'maxspeed', // Speed Limit (KPH)
-    'SWW':'water_level', // Static Water Level
     'THI':'thickness', // Thickness
-    'TSCL':'tree:spacing:lower', // Tree Spacing (lower value)
-    'TSCU':'tree:spacing:upper', // Tree Spacing (upper value)
     'UBC':'bridge:under_clearance', // Underbridge Clearance
     'VCS':'safe_clearance:vertical', // Vertical Clearance, Safe
-    'VLM':'volume', // Volume
     'VTI':'trafficability_impact', // Vegetation Trafficability Impact
-    'WD2':'width:total_usable', // Route Total Usable Width
+    'WBD':'raw:WBD', // Waterbody Depth
     'WD3':'width:gap', // Terrain Gap Width
-    'WD5':'width:top', // Width at Top
-    'WDAL':'depth:average:lower', // Average Water Depth <lower value>
-    'WDAU':'depth:average:upper', // Average Water Depth <upper value>
-    'WDH':'depth:max', // Predominant Maximum Water Depth
-    'WDL':'depth:min', // Predominant Minimum Water Depth
     'WDU':'width:interior_useable', // Usable Width
     'WID':'width', // Width
     'WOC':'width:crest', // Dam Crest Width
-    'WT2':'width:second_way', // Width of Second Travelled Way
-    'WVA':'water:velocity:average', // Predominant Average Water Velocity
-    'WVH':'water:velocity:maximum', // Predominant Maximum Water Velocity
-    'WVL':'water:velocity:minimum', // Predominant Minimum Water Velocity
     'ZI016_WD1':'width:minimum_traveled_way', // Route Pavement Information : Route Minimum Travelled Way Width
-    'ZI017_GAW':'gauge', // Track Information : Railway Gauge
-    'ZI024_ASE':'water:arsnic_concentration', // Water Resource Information : Arsenic Concentration
-    'ZI024_CFR':'water:coliform_concentration', // Water Resource Information : Coliform Concentration
-    'ZI024_CLO':'water:chloride_concentration', // Water Resource Information : Chloride Concentration
-    'ZI024_CYN':'water:cyanide_concentration', // Water Resource Information : Cyanide Concentration
-    'ZI024_HAR':'water:hardness', // Water Resource Information : Water Hardness
-    'ZI024_MGN':'water:magnesium_concentration', // Water Resource Information : Magnesium Concentration
-    'ZI024_PHW':'water:ph', // Water Resource Information : pH
-    'ZI024_SUL':'water:sulfate_concentration', // Water Resource Information : Sulfate Concentration
-    'ZI024_TDS':'water:total_dissolved_solids', // Water Resource Information : Total Dissolved Solids
-    'ZI024_TEP':'water:temperature', // Water Resource Information : Temperature
-    'ZI024_TUR':'water:turbidity', // Water Resource Information : Nephelometric Turbidity
-    'ZI024_WAC':'water:conductivity', // Water Resource Information : Water Conductivity
+    'ZI016_WD2':'raw:ZI016_WD2', // Route Pavement Information : Route Total Usable Width
+    'ZI016_WT2':'raw:ZI016_WT2', // Route Pavement Information : Width of Second Travelled Way
+    'ZI017_GAW':'raw:ZI017_GAW', // Track Information : Railway Gauge
     'ZI026_CTUL':'cartographic_scale:lower', // Feature Metadata : Cartographic Usability Range <lower value>
     'ZI026_CTUU':'cartographic_scale:upper', // Feature Metadata : Cartographic Usability Range <upper value>
     'ZVA':'ele', // Aerodrome Elevation
-    'ZVH_AVA':'source:accuracy:highest_elevation', // Highest Elevation <absolute vertical accuracy>
     'ZVH':'ele:max' // Highest Elevation
     }, // End numBiased
     
