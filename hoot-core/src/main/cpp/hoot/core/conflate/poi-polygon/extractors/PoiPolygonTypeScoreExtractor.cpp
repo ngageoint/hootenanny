@@ -48,11 +48,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonTypeScoreExtractor)
 
-QString PoiPolygonTypeScoreExtractor::poiBestKvp;
-QString PoiPolygonTypeScoreExtractor::polyBestKvp;
-QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
-QStringList PoiPolygonTypeScoreExtractor::failedMatchRequirements;
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonTypeScoreExtractor::_translator;
+QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
 QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTagValues;
 QMultiHash<QString, QString> PoiPolygonTypeScoreExtractor::_typeToNames;
 
@@ -110,34 +107,23 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
 {
   LOG_VART(_translateTagValuesToEnglish);
 
-  failedMatchRequirements.clear();
-
   const Tags& t1 = poi->getTags();
   const Tags& t2 = poly->getTags();
 
   //be a little more restrictive with each of these
   if (_failsCuisineMatch(t1, t2))
   {
-    if (!failedMatchRequirements.contains("cuisine"))
-    {
-      failedMatchRequirements.append("cusine");
-    }
+    _failedMatchRequirements.append("cusine");
     return 0.0;
   }
   else if (_failsSportMatch(t1, t2))
   {
-    if (!failedMatchRequirements.contains("sport"))
-    {
-      failedMatchRequirements.append("sport");
-    }
+    _failedMatchRequirements.append("sport");
     return 0.0;
   }
   else if (_failsReligionMatch(t1, t2))
   {
-    if (!failedMatchRequirements.contains("religion"))
-    {
-      failedMatchRequirements.append("religion");
-    }
+    _failedMatchRequirements.append("religion");
     return 0.0;
   }
 
@@ -232,6 +218,11 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   QStringList polyTagList = _getRelatedTags(poly->getTags());
   LOG_VART(poiTagList);
   LOG_VART(polyTagList);
+  if (poiTagList.size() == 0 || polyTagList.size() == 0)
+  {
+    _noTypeFound = true;
+    return 0.0;
+  }
 
   //If a feature has a specific type, we only want to look at that type and ignore any generic
   //types.  Otherwise, we'll allow a type match with just a generic tag.
@@ -276,13 +267,13 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
       {
         if (!poiKvp.isEmpty() && !excludeKvps.contains(poiKvp))
         {
-          poiBestKvp = poiKvp;
-          LOG_VART(poiBestKvp);
+          _poiBestKvp = poiKvp;
+          LOG_VART(_poiBestKvp);
         }
         if (!polyKvp.isEmpty() && !excludeKvps.contains(polyKvp))
         {
-          polyBestKvp = polyKvp;
-          LOG_VART(polyBestKvp);
+          _polyBestKvp = polyKvp;
+          LOG_VART(_polyBestKvp);
         }
       }
       result = max(score, result);
@@ -292,22 +283,22 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
       {
         if (_printMatchDistanceTruth)
         {
-          LOG_VART(poiBestKvp);
-          LOG_VART(polyBestKvp);
+          LOG_VART(_poiBestKvp);
+          LOG_VART(_polyBestKvp);
           PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
-            poi, poly, poiBestKvp, polyBestKvp, _featureDistance);
+            poi, poly, _poiBestKvp, _polyBestKvp, _featureDistance);
         }
         return result;
       }
     }
   }
-  LOG_VART(poiBestKvp);
-  LOG_VART(polyBestKvp);
+  LOG_VART(_poiBestKvp);
+  LOG_VART(_polyBestKvp);
 
   if (_printMatchDistanceTruth)
   {
     PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
-      poi, poly, poiBestKvp, polyBestKvp, _featureDistance);
+      poi, poly, _poiBestKvp, _polyBestKvp, _featureDistance);
   }
 
   return result;

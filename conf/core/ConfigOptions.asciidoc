@@ -2502,6 +2502,15 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.address.match.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.
+If the data being conflated is known to have poor address data, disabling this option may speed up
+conflation runtime performance.
+
 === poi.polygon.auto.merge.many.poi.to.one.poly.matches
 
 * Data Type: bool
