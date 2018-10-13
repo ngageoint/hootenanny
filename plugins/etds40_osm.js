@@ -122,7 +122,7 @@ etds40_osm = {
         var tags = {};
 
         // Now convert the attributes to tags.
-        tags = tds.toOsm(nAttrs,'',geometryType);
+        tags = tds40.toOsm(nAttrs,'',geometryType);
 
         // Go looking for "OSM:XXX" values and copy them to the output
         for (var i in attrs)
@@ -133,7 +133,7 @@ etds40_osm = {
         // Check if we have a second FCODE and if it can add any tags
         if (fCode2 !== '')
         {
-            var ftag = tds.fcodeLookup['F_CODE'][fCode2];
+            var ftag = tds40.fcodeLookup['F_CODE'][fCode2];
             if (ftag)
             {
                 if (!(tags[ftag[0]]))
@@ -167,7 +167,7 @@ etds40_osm = {
 if (typeof exports !== 'undefined') {
     exports.toOSM = etds40_osm.toOSM;
     exports.EnglishtoOSM = etds40_osm.toOSM;
-    exports.RawtoOSM = tds.toOsm;
+    exports.RawtoOSM = tds40.toOsm;
     exports.OSMtoEnglish = etds40.toEnglish;
-    exports.OSMtoRaw = tds.toTds;
+    exports.OSMtoRaw = tds40.toTds;
 }

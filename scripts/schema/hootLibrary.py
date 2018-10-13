@@ -446,3 +446,15 @@ def printFromEnglish(schema,spec,engValue):
     print '} // End of %s\n' % (engValue)
 # End printFromEnglish
 
+
+# Drop all of the text enumerations and replace them with strings
+def convertTextEnumerations(tschema):
+    for i in tschema:
+        for j in tschema[i]['columns']:
+            if tschema[i]['columns'][j]['type'] == 'textEnumeration':
+                if 'func'in tschema[i]['columns'][j]:
+                    del tschema[i]['columns'][j]['func']
+                tschema[i]['columns'][j]['type'] = 'String'
+
+    return tschema
+# End convertTextEnumerations

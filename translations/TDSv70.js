@@ -22,32 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //
-// Convert RenderDb to TDSv40
+// Convert TDSv70 to/from OSM+
 //
 
-hoot.require('tds40');
-hoot.require('tds40_schema');
-hoot.require('tds40_rules');
+hoot.require('SchemaTools');
+hoot.require('tds70');
+hoot.require('tds70_schema');
+hoot.require('tds70_rules');
 hoot.require('config');
 hoot.require('translate');
 hoot.require('fcode_common');
 
+function initialize()
+{
+    // Set the schema type for the export
+    hoot.Settings.set({"osm.map.writer.schema":"TDSv70"});
+}
+
 // Layer name filter - Filter out all layers that match this regexp
 function layerNameFilter()
 {
-    // Drop all of the "SRC_*" and "o2s_*" layers
-    return "^(?!SRC_|o2s_)";
+    // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
+    return "^(?!SRC_|extra_)";
 }
 
 
 // Create the output Schema
 function getDbSchema()
 {
-    return tds40.getDbSchema();
+    return tds70.getDbSchema();
 }
 
 
@@ -56,7 +63,7 @@ function getDbSchema()
 // function translateAttributes(attrs, layerName, geometryType)
 function translateToOsm(attrs, layerName, geometryType)
 {
-    return tds40.toOsm(attrs, layerName, geometryType);
+    return tds70.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 
@@ -65,20 +72,7 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
-    // print('Going to OGR: eType:' + elementType + '  gType:' + geometryType);
-
-    // The "tags" value is a string with this structure: "cables"=>"3", "voltage"=>"230000"
-    if (tags.tags)
-    {
-        var tStr = tags['tags'].toString();
-
-        var tObj = JSON.parse('{' + tStr.split('=>').join(':') + '}');
-
-        for (var i in tObj) tags[i.replace(/\"/g,'').trim()] = tObj[i].replace(/\"/g,'').trim();
-
-        delete tags.tags;
-    }
-
-    return tds40.toNfdd(tags, elementType, geometryType)
+    return tds70.toTds(tags, elementType, geometryType)
 
 } // End of translateToOgr
+

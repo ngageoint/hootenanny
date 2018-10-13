@@ -36,7 +36,7 @@
 
 // Set up stubs for the namespaces.
 // If we don't do this, v8 complains about "xx.rules"
-tds = {}
+tds40 = {}
 tds61 = {}
 mgcp = {}
 ufd = {}
@@ -109,8 +109,8 @@ function initialize()
     var tagList = {} // Final list of tags
 
     // Standard one2one rules
-    createLookup(tagList, tds.rules.one2one, 'TDS40');
-    createLookup(tagList, tds.rules.one2oneIn, 'TDS40');
+    createLookup(tagList, tds40.rules.one2one, 'TDS40');
+    createLookup(tagList, tds40.rules.one2oneIn, 'TDS40');
     createLookup(tagList, tds61.rules.one2one, 'TDS61');
     createLookup(tagList, tds61.rules.one2oneIn, 'TDS61');
     createLookup(tagList, mgcp.rules.one2one, 'MGCP');
@@ -122,8 +122,8 @@ function initialize()
     // createLookup(tagList, geonames.rules.one2one, 'GeoNames');
 
     // Add in the Biased rules
-    createBiasedLookup(tagList, tds.rules.txtBiased, 'TDS40');
-    createBiasedLookup(tagList, tds.rules.numBiased, 'TDS40');
+    createBiasedLookup(tagList, tds40.rules.txtBiased, 'TDS40');
+    createBiasedLookup(tagList, tds40.rules.numBiased, 'TDS40');
     createBiasedLookup(tagList, tds61.rules.txtBiased, 'TDS61');
     createBiasedLookup(tagList, tds61.rules.numBiased, 'TDS61');
     createBiasedLookup(tagList, mgcp.rules.txtBiased, 'MGCP');
@@ -138,7 +138,7 @@ function initialize()
 
     // F_CODE one2one rules
     createLookup(tagList, fcodeCommon.one2one, 'NFDD');
-    createLookup(tagList, tds.rules.fcodeOne2oneIn, 'TDS40');
+    createLookup(tagList, tds40.rules.fcodeOne2oneIn, 'TDS40');
     createLookup(tagList, tds61.rules.fcodeOne2oneIn, 'TDS61');
     createLookup(tagList, mgcp.rules.fcodeOne2oneIn, 'MGCP');
     createLookup(tagList, ufd.rules.fcodeOne2oneIn, 'UFD');

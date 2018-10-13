@@ -62,59 +62,65 @@ def printJavascript(schema,withDefs):
         if withDefs and 'definition' in schema[f]:
             print '          definition:"%s",' % (schema[f]['definition'])
         print '          geom:"%s",' % (schema[f]['geom'])
-        print '          columns:[ '
+        print '          columns:['
 
         num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
         for k in sorted(schema[f]['columns'].keys()):
             print '                     { name:"%s",' % (k)
-            print '                       desc:"%s" ,' % (schema[f]['columns'][k]['desc'])
-            print '                       optional:"%s" ,' % (schema[f]['columns'][k]['optional'])
+            print '                       desc:"%s",' % (schema[f]['columns'][k]['desc'])
+            print '                       optional:"%s",' % (schema[f]['columns'][k]['optional'])
 
             if withDefs and 'definition' in schema[f]['columns'][k]:
-                print '                       definition:"%s", ' % (schema[f]['columns'][k]['definition'])
+                print '                       definition:"%s",' % (schema[f]['columns'][k]['definition'])
 
 
             if 'length' in schema[f]['columns'][k]:
-                print '                       length:"%s", ' % (schema[f]['columns'][k]['length'])
+                print '                       length:"%s",' % (schema[f]['columns'][k]['length'])
 
             if 'units' in schema[f]['columns'][k]:
-                print '                       units:"%s", ' % (schema[f]['columns'][k]['units'])
+                print '                       units:"%s",' % (schema[f]['columns'][k]['units'])
 
             if 'func' in schema[f]['columns'][k]:
                 print '                       type:"enumeration",'
-                print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
+                print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations: %s' % (schema[f]['columns'][k]['func'])
 
             elif schema[f]['columns'][k]['type'] == 'enumeration':
                 #print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
                 print '                       type:"enumeration",'
-                print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
+                print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations:['
                 for l in schema[f]['columns'][k]['enum']:
                     #print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
                     print '                           { value:"%s", name:"%s" }, ' % (l['value'],l['name'])
-                print '                        ] // End of Enumerations '
+                # print '                        ] // End of Enumerations '
+                print '                        ]'
 
             else:
                 print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
                 print '                       defValue:"%s" ' % (schema[f]['columns'][k]['defValue'])
 
             if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                print '                     } // End of %s' % (k)
+                # print '                     } // End of %s' % (k)
+                print '                     }'
             else:
-                print '                     }, // End of %s' % (k)
+                # print '                     }, // End of %s' % (k)
+                print '                     },'
                 num_attrib -= 1
 
-        print '                    ] // End of Columns'
+        # print '                    ] // End of Columns'
+        print '                    ]'
 
         if num_feat == 1: # Are we at the last feature? yes = no trailing comma
-            print '          } // End of feature %s\n' % (schema[f]['fcode'])
+            # print '          } // End of feature %s\n' % (schema[f]['fcode'])
+            print '          }'
         else:
-            print '          }, // End of feature %s\n' % (schema[f]['fcode'])
+            # print '          }, // End of feature %s\n' % (schema[f]['fcode'])
+            print '          },'
             num_feat -= 1
 
-    print '    ]; // End of schema\n' # End of schema
-
+    # print '    ]; // End of schema\n'
+    print '    ];'
 # End printJavascript
 
 
@@ -150,17 +156,6 @@ def dropTextEnumerations(tValues):
     return nValues
 # End dropTextEnumerations
 
-
-# Drop all of the text enumerations and replace them with strings
-def convertTextEnumerations(tschema):
-    for i in tschema:
-        for j in tschema[i]['columns']:
-            if tschema[i]['columns'][j]['type'] == 'textEnumeration':
-                del tschema[i]['columns'][j]['func']
-                tschema[i]['columns'][j]['type'] = 'String'
-
-    return tschema
-# End convertTextEnumerations
 
 
 # Print Text Attribute Lengths

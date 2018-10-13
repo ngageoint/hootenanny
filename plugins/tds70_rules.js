@@ -26,22 +26,22 @@
  */
 
 /*
-    TDSv40 One2one rules
+    TDSv70 One2one rules
 */
 
-tds40.rules = {
+tds70.rules = {
     // ##### Start of One2One Rules #####
 
     // FCODE rules for Import
     // This is where anything "unique" to TDS goes.
     fcodeOne2oneIn : [
-    ['F_CODE','ZB035','man_made','survey_point'], // Control Point - Superseded by ZB050
     // ['F_CODE','AP030','highway','road'], // Road
     ], // End fcodeOne2oneIn
 
     // These are for finding an FCODE for export.
     // Note: These get swapped around before being used
     fcodeOne2oneOut : [
+//     ['F_CODE','AN060','railway','yes'], // Rail yards
     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
@@ -57,14 +57,11 @@ tds40.rules = {
     ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
-    ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
     ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
-    ['F_CODE','AL241','man_made','mast'], // OSM
     ['F_CODE','AL241','tower','communication'],
-    ['F_CODE','AL241','tower','yes'], // OSM
+    ['F_CODE','AL241','tower','yes'],
     ['F_CODE','AM080','tower:type','water'],
-    ['F_CODE','AN060','railway','yes'], // Rail yards
     ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
     ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
     ['F_CODE','AP030','highway','primary'],
@@ -78,9 +75,10 @@ tds40.rules = {
     ['F_CODE','AP030','highway','trunk'], // Motorway
     ['F_CODE','AP030','highway','trunk_link'], // Motorway
     ['F_CODE','AP030','highway','unclassified'],
-    ['F_CODE','AP030','highway','construction'],
     ['F_CODE','AP030','highway','yes'], // Just in case...
     ['F_CODE','AP040','barrier','lift_gate'], // Gate
+    ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
+    ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
     ['F_CODE','AP050','highway','footway'], // Trail
     ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
@@ -98,7 +96,8 @@ tds40.rules = {
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
     ['F_CODE','FA015','man_made','shooting_range'], // Firing Range
     ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
-    ['F_CODE','ZB035','man_made','survey_point'], // Control Point - Superseded by ZB050
+    ['F_CODE','ZB050','survey:point:type','benchmark'], // GGDM3 now has this as an FCODE
+    ['F_CODE','ZB050','survey:point:type','geodetic'], // GGDM3 now has this as an FCODE
     ['F_CODE','ZD040','natural','bay'], // From OSM
     ['F_CODE','ZD040','natural','cape'], // From OSM
     ['F_CODE','ZD040','natural','hill'], // From GeoNames
@@ -111,54 +110,101 @@ tds40.rules = {
     'ADR':'addr:full', // Address
     'AQN':'aquifer_name', // Aquifer Name
     'BA000_VDR':'source:datum:sounding:name', // Water Line : Sounding Datum Name
+    'BEN':'be_number', // Basic Encyclopedia (BE) Number
     'BRN':'bridge:reference', // Bridge Reference Number
+    'CCN':'source:copyright', // Commercial Copyright Notice
+    'CDM':'source:cadastral:measurement', // Cadastral Source Measurement
+    'CDR':'source:commercial_distribution_restriction', // Commercial Distribution Restriction
     'CID':'source:cell_identifier', // Cell Identifier
+    'CSI':'source:cadastral:identifier', // Cadastral Source Identifier
+    'CSY':'source:cadastral:identifier:type', // Cadastral Source Identifier Type
+    'CUD':'source:currency:datetime', // Currency Date and Time
     'DQS':'source:data_quality', // Data Quality Statement
+    'ETZ':'source:extraction_specification:version', // Extraction Specification Version
+//     'F_CODE':'raw:F_CODE', // Feature Code
     'GB052_RIDH':'aeroway:runway_designator_high', // Runway Direction (high end) : Runway Designator (high)
     'GB052_RIDL':'aeroway:runway_designator_low', // Runway Direction (low end) : Runway Designator (low)
     'IKO':'icao', // ICAO Location Indicator
     'LINK_ID':'etds:link_id', // eLTDS40 Field
     'MDE':'source:update:datetime', // Maintenance Date and Time
     'NA8':'official_name', // Aerodrome Official Name
+    'NAO':'installation_operator_name', // Installation Operator
     'OTH':'note:oth', // Specified Domain Value(s)
-    'RTN2':'ref:2', // Route Designation [2]
-    'RTN3':'ref:3', // Route Designation [3]
-    'RTN':'ref', // Route Designation
+    'PDA':'source:dfdd_accessor', // Property DFDD-compatible Accessor
+    'PSE':'restriction_interval', // Periodic Restriction Month Interval
+    'RIN_RTN2':'ref:2', // Route Identification [2] <route designation>
+    'RIN_RTN3':'ref:3', // Route Identification [3] <route designation>
+    'RIN_RTN':'ref', // Route Identification <route designation>
+    'SAX_RS1':'security:classification:reason', // Security Attributes Group <resource classification reason>
+    'SAX_RS2':'security:classification:classified_by', // Security Attributes Group <resource classified by>
+    'SAX_RS3':'security:exempted_source:date', // Security Attributes Group <resource date of exempted source>
+    'SAX_RS4':'security:declassification:date', // Security Attributes Group <resource declassification date>
+    'SAX_RS5':'security:declassification:event', // Security Attributes Group <resource declassification event>
+    'SAX_RS8':'security:classification:derived_by', // Security Attributes Group <resource derivatively classified by>
+    'SAX_RS9':'security:classification:derived_from', // Security Attributes Group <resource derived from>
+    'SAX_RX1':'security:foreign_government_information:open_source', // Security Attributes Group <resource foreign government information (open source)>
+    'SAX_RX2':'security:foreign_government_information:protected_source', // Security Attributes Group <resource foreign government information (protected source)>
+    'SAX_RX5':'security:releasability', // Security Attributes Group <resource releasable to>
+    'SAX_RX6':'security:classification:sar', // Security Attributes Group <resource special-access-required program identifier>
+    'SAX_RX7':'security:classification:sci', // Security Attributes Group <resource SCI controls>
+    'SAX_RX9':'security:classification:compilation_reason', // Security Attributes Group <resource compilation reason>
+    'SAX_RY0':'security:display_only_to', // Security Attributes Group <resource display only to>
+    'SAX_RY1':'security:classification:sci:non_us', // Security Attributes Group <resource non-US controls>
+    'SAX_RY2':'security:atomic_markings', // Security Attributes Group <resource atomic energy markings>
     'SSE':'seasonal_ice_limit', // Seasonal Ice Limit
-    'UFI':'uuid', // Unique Feature Identifier. Handled in pre-processing
+    'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
     'URI':'source:ref', // Unique Resource Identifier
+    'VCS_VCR':'max_clearance:note', // Vertical Clearance, Safe <reference level remark>
     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
     'WAD':'well:description', // Water Well Construction Description
     'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
-    'ZI001_NSD':'source:non_spatial_source:datetime', // Source Information : Non-spatial Source Date and Time
-    'ZI001_NSN':'source:non_spatial_source:description', // Source Information : Non-spatial Source Description
-    'ZI001_SSD':'source:datetime', // Source Information : Spatial Source Date and Time
-    //'ZI001_SSN':'source:description', // Source Information : Spatial Source Description
-    'ZI001_SSN':'source', // Source Information : Spatial Source Description
+    //'ZI001_SDP':'source:description', // Source Information : Source Description
+    'ZI001_SDP':'source', // Source Information : Source Description
+    'ZI001_SDV':'source:datetime', // Source Information : Source Date and Time
     'ZI001_VSD':'source:vertical_source:datetime', // Source Information : Vertical Source Date and Time
     'ZI001_VSN':'source:vertical_source:description', // Source Information : Vertical Source Description
-    'ZI002_CCN':'source:copyright', // Restriction Information : Commercial Copyright Notice
-    'ZI002_CDR':'source:commercial_distribution_restriction', // Restriction Information : Commercial Distribution Restriction
+    'CCN':'source:copyright', // Restriction Information : Commercial Copyright Notice
+    'CDR':'source:commercial_distribution_restriction', // Restriction Information : Commercial Distribution Restriction
+    'ZI002_UFI':'security:restriction_ufi', // Restriction Information : Unique Entity Identifier
     'ZI004_PRE':'source:processing_information', // Process Step Information : Process Step Description
     'ZI005_FNA':'name', // Geographic Name Information : Full Name
     'ZI005_FNA2':'alt_name', // Geographic Name Information : (second) Full Name
+    'ZI005_FNA3':'alt_name:2', // Geographic Name Information : Full Name (third)
     'ZI005_NFN':'gndb_id', // Geographic Name Information : Name Identifier
     'ZI005_NFN2':'gndb_id:2', // Geographic Name Information : (second) Name Identifier
+    'ZI005_NFN3':'gndb_id:3', // Geographic Name Information : Name Identifier (third)
     'ZI006_MEM':'note', // Note : Memorandum
-    'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group (resource non-intelligence community markings)
-    'ZSAX_RX4':'security:resource_owner', //Restriction Information : Security Attributes Group (resource owner-producer)
+    // We fix ZI020_GE4X in post processing
+    'ZI020_GE4':'is_in:country_code', // (Location Country) Designation : GENC Short URN-based Identifier
+    'ZI020_GE42':'country_code:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
+    'ZI020_GE43':'country_code:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
+    'ZI020_GE44':'country_code:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
+    'ZI026T_UFI':'source:table:uuid', // Feature Metadata (Table) : Unique Entity Identifier
+    'ZI027T_UFI':'source:attribute:uuid', // Feature Attribute Metadata (Table) : Unique Entity Identifier
+    'ZI028_UFI':'source:feature:uuid', // Feature Entity : Unique Entity Identifier
+    'ZI039S_UFI':'source:entity:surface:uuid', // Entity Collection Metadata (Surface) : Unique Entity Identifier
+    'ZI039T_UFI':'source:entity:table:uuid', // Entity Collection Metadata (Table) : Unique Entity Identifier
+    'ZI031S_URI':'source:dataset:surface:uuid', // Dataset (Surface) : Unique Resource Identifier
+    'ZI031T_URI':'source:dataset:table:uuid', // Dataset (Table) : Unique Resource Identifier
+    'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
+    'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
+    'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
     }, // End txtBiased
 
     // One2one ruled for Number fields
     numBiased : {
     'AHA':'source:accuracy:horizontal', // Absolute Horizontal Accuracy (90%)
     'AOO':'angle', // Angle of Orientation
-    'AQTL':'aquifer:thickness:lower', // Aquifer Thickness (lower value)
-    'AQTU':'aquifer:thickness:upper', // Aquifer Thickness (upper value)
+    'AQTL':'aquifer:thickness:lower', // Aquifer Thickness <lower value>
+    'AQTU':'aquifer:thickness:upper', // Aquifer Thickness <upper value>
     'ARA':'feature_area', // Area - this has been moved from 'area' due to hoot conflicts
     'AVA':'source:accuracy:vertical', // Absolute Vertical Accuracy (90%)
-    'AYRL':'aquifer:yield:lower', // Aquifer Yield Rating (lower value)
-    'AYRU':'aquifer:yield:upper', // Aquifer Yield Rating (upper value)
+    'AYRL':'aquifer:yield:lower', // Aquifer Yield Rating <lower value>
+    'AYRU':'aquifer:yield:upper', // Aquifer Yield Rating <upper value>
+    'BC040_EOL':'seamark:light:height', // Maritime Navigation Light : Nominal Range
+    'BC040_LCN':'seamark:light:characteristic_number', // Maritime Navigation Light : Light Characteristic Number
+    'BC040_LVN':'seamark:light:range', // Maritime Navigation Light : Light Elevation
+    'BC040_PER':'seamark:light:period', // Maritime Navigation Light : Period of Light
     'BEL':'ele:base', // Base Elevation - conflict with "ele" but is only used in one feature: ZB035 Control Point
     'BH141_AWBA':'waterway:bank1:slope:above_water', // Inland Waterbody Bank (1) : Above Water Bank Slope (first bank)
     'BH141_AWBB':'waterway:bank2:slope:above_water', // Inland Waterbody Bank (2) : Above Water Bank Slope (second bank)
@@ -177,6 +223,7 @@ tds40.rules = {
     'BWVCAU':'waterway:bank1:cover:upper', // Inland Waterbody Bank (1) : Waterbody Bank Vegetation Cover (first bank) (upper value)
     'BWVCBL':'waterway:bank2:cover:lower', // Inland Waterbody Bank (2) : Waterbody Bank Vegetation Cover (second bank) (lower value)
     'BWVCBU':'waterway:bank2:cover:upper', // Inland Waterbody Bank (2) : Waterbody Bank Vegetation Cover (second bank) (upper value)
+    'CDL':'covered_drain:length', // Covered Drain Length
     'CTL':'railway:track:length', // Cumulative Track Length
     'DEV':'level', // Deck Level
     'DIM':'diameter', // Diameter
@@ -184,20 +231,21 @@ tds40.rules = {
     'DMBU':'undergrowth:density:upper', // Undergrowth Density (upper value)
     'DMT':'canopy_cover', // Canopy Cover
     'DOF':'flow_direction', // Direction of Flow
-    'DPAL':'aquifer:depth:lower', // Aquifer Depth (lower value)
-    'DPAU':'aquifer:depth:upper', // Aquifer Depth (upper value)
+    'DPAL':'aquifer:depth:lower', // Aquifer Depth <lower value>
+    'DPAU':'aquifer:depth:upper', // Aquifer Depth <upper value>
     'DZC':'deck_count', // Deck Count
     'DZP':'depth:maximum_below_surface', // Deepest Depth Below Surface Level
+    'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
-    'ETZ':'source:extraction_specification:version', // Extraction Specification Version
     'FCL':'ferry:crossing_distance', // Ferry Crossing Distance
-//    'FCSUBTYPE':'etds:fcsubtype', // eLTDS40 Field. Very ESRI Specific. Ignored for now
+//    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
     'GSGCHL':'aeroway:runway_highend:slope:high_lowervalue', // Runway Direction (high end) : Surface Slope (high) (lower value)
     'GSGCHU':'aeroway:runway_highend:slope:high_uppervalue', // Runway Direction (high end) : Surface Slope (high) (upper value)
     'GSGCLL':'aeroway:runway_highend:slope:low_lowervalue', // Runway Direction (low end) : Surface Slope (low) (lower value)
     'GSGCLU':'aeroway:runway_highend:slope:low_uppervalue', // Runway Direction (low end) : Surface Slope (low) (upper value)
     'HCA':'bridge:horizontal_clearance', // Horizontal Clearance
     'HEI':'height:object', // Height of Object
+    'HGS':'spillway:height', // Spillway Height
     'HGT':'height', // Height Above Surface Level
     'HVA':'source:accuracy:height', // Height Vertical Accuracy (90%)
     'KVA':'voltage', // Power Line Maximum Voltage
@@ -205,60 +253,82 @@ tds40.rules = {
     'LC2':'bridge:load_class2', // Load Class Type 2
     'LC3':'bridge:load_class3', // Load Class Type 3
     'LC4':'bridge:load_class4', // Load Class Type 4
-    'LCA':'crane:max_load', // Lifting Capacity
+    'LCA':'crane:lifting_capacity', // Lifting Capacity
+    'LDC':'length:crest', // Dam Crest Length
     'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
     'LNU':'length:interior_useable', // Usable Length
     'LOG':'gradient:length', // Gradient Length
     'LTN':'lanes', // Track or Lane Count
     'LZN':'length', // Length
+    'MAG':'magnetic_variation', // Magnetic Variation
+    'MWD':'depth:designed:maximum', // Maximum Design Water Depth
     'MWG':'divider:width', // Centerline Spacing
     'NOS':'bridge:span_count', // Span Count
     'NPL':'cables', // Parallel Line Count: See AT005
     'OHC':'max_clearance', // Overhead Clearance
-    'PFD':'depth:predominant', // Predominant Feature Depth
-    'PFH':'height:predominant', // Predominant Feature Height
+    'PFH':'height:feature', // Predominant Feature Height
     'PVH':'height:vegetation', // Predominant Vegetation Height
-    'PWA':'waterway:predominant_depth', // Predominant Water Depth
+    'PWA':'depth', // Predominant Water Depth
+    'PWAL':'depth:lower', // Predominant Water Depth <lower value>
+    'PWAU':'depth:upper', // Predominant Water Depth <upper value>
     'RAD':'curve_radius', // Curve Radius
     'RMWL':'median:min_width', // Route Median Width (lower value)
     'RMWU':'median:max_width', // Route Median Width (upper value)
-    'SCAMAX':'cartographic_scale:upper', // eLTDS40 Field
-    'SCAMIN':'cartographic_scale:lower', // eLTDS40 Field
-    'SDCL':'soil:depth:lower', // Soil Depth (lower value)
-    'SDCU':'soil:depth:upper', // Soil Depth (upper value)
+    'SDCL':'soil:depth:lower', // Soil Depth <lower value>
+    'SDCU':'soil:depth:upper', // Soil Depth <upper value>
     'SDO':'dune:orientation', // Sand Dune Orientation
     'SDSL':'tree:diameter:lower', // Stem Diameter (lower value)
     'SDSU':'tree:diameter:upper', // Stem Diameter (upper value)
     'SGCL':'incline:min', // Surface Slope (lower value)
     'SGCU':'incline:max', // Surface Slope (upper value)
     'SHC':'safe_clearance:horizontal', // Safe Horizontal Clearance
+    'SPM':'maxspeed', // Speed Limit (KPH)
     'SWW':'water_level', // Static Water Level
     'THI':'thickness', // Thickness
     'TSCL':'tree:spacing:lower', // Tree Spacing (lower value)
     'TSCU':'tree:spacing:upper', // Tree Spacing (upper value)
     'UBC':'bridge:under_clearance', // Underbridge Clearance
+    'VCS':'safe_clearance:vertical', // Vertical Clearance, Safe
     'VLM':'volume', // Volume
-    'VST':'vehicle_scale_count', // Vehicle Scale Count
+    'VTI':'trafficability_impact', // Vegetation Trafficability Impact
     'WD2':'width:total_usable', // Route Total Usable Width
     'WD3':'width:gap', // Terrain Gap Width
     'WD5':'width:top', // Width at Top
-    'WDH':'waterway:predominant_depth:max', // Predominant Maximum Water Depth
-    'WDL':'waterway:predominant_depth:min', // Predominant Minimum Water Depth
+    'WDAL':'depth:average:lower', // Average Water Depth <lower value>
+    'WDAU':'depth:average:upper', // Average Water Depth <upper value>
+    'WDH':'depth:max', // Predominant Maximum Water Depth
+    'WDL':'depth:min', // Predominant Minimum Water Depth
     'WDU':'width:interior_useable', // Usable Width
     'WID':'width', // Width
+    'WOC':'width:crest', // Dam Crest Width
     'WT2':'width:second_way', // Width of Second Travelled Way
     'WVA':'water:velocity:average', // Predominant Average Water Velocity
     'WVH':'water:velocity:maximum', // Predominant Maximum Water Velocity
     'WVL':'water:velocity:minimum', // Predominant Minimum Water Velocity
     'ZI016_WD1':'width:minimum_traveled_way', // Route Pavement Information : Route Minimum Travelled Way Width
     'ZI017_GAW':'gauge', // Track Information : Railway Gauge
+    'ZI024_ASE':'water:arsnic_concentration', // Water Resource Information : Arsenic Concentration
+    'ZI024_CFR':'water:coliform_concentration', // Water Resource Information : Coliform Concentration
+    'ZI024_CLO':'water:chloride_concentration', // Water Resource Information : Chloride Concentration
+    'ZI024_CYN':'water:cyanide_concentration', // Water Resource Information : Cyanide Concentration
+    'ZI024_HAR':'water:hardness', // Water Resource Information : Water Hardness
+    'ZI024_MGN':'water:magnesium_concentration', // Water Resource Information : Magnesium Concentration
+    'ZI024_PHW':'water:ph', // Water Resource Information : pH
+    'ZI024_SUL':'water:sulfate_concentration', // Water Resource Information : Sulfate Concentration
+    'ZI024_TDS':'water:total_dissolved_solids', // Water Resource Information : Total Dissolved Solids
+    'ZI024_TEP':'water:temperature', // Water Resource Information : Temperature
+    'ZI024_TUR':'water:turbidity', // Water Resource Information : Nephelometric Turbidity
+    'ZI024_WAC':'water:conductivity', // Water Resource Information : Water Conductivity
+    'ZI026_CTUL':'cartographic_scale:lower', // Feature Metadata : Cartographic Usability Range <lower value>
+    'ZI026_CTUU':'cartographic_scale:upper', // Feature Metadata : Cartographic Usability Range <upper value>
     'ZVA':'ele', // Aerodrome Elevation
+    'ZVH_AVA':'source:accuracy:highest_elevation', // Highest Elevation <absolute vertical accuracy>
     'ZVH':'ele:max' // Highest Elevation
     }, // End numBiased
     
 
     // Common one2one rules. Used for both import and export
-    // taken from TDS v40 and semi-auto generated
+    // taken from TDSv60 with the NGA TDSv61 additions
     one2one : [
     // ['ADI','-999999',undefined,undefined], // No Information
     // ADI - Administrative Division - Admin_level may need some work
@@ -278,6 +348,38 @@ tds40.rules = {
     ['AMA','5','attraction','water_attraction'], // Water Attraction
     ['AMA','6','attraction','vertical_ride'], // Vertical Ride
     ['AMA','999','attraction','other'], // Other
+
+     // APT - Airfield Use
+    // ['APT','-999999',undefined,undefined], // No Information
+    ['APT','1','aeroway:use','major_airfield'], // Major Airfield
+    ['APT','2','aeroway:use','minor_airfield'], // Minor Airfield
+    ['APT','3','aeroway:use','general_aviation_aircraft_operating_only'], // General Aviation Aircraft Operating Only
+    ['APT','5','aeroway:use','glider_site'], // Glider Site
+    ['APT','6','aeroway:use','ultralight_site'], // Ultralight Site
+    ['APT','7','aeroway:use','hang_glider_site'], // Hang Glider Site
+    ['APT','8','aeroway:use','winch_launched_hang_glider_site'], // Winch Launched Hang Glider Site
+    ['APT','12','aeroway:use','emergency'], // Emergency
+    ['APT','13','aeroway:use','parascending_site'], // Parascending Site
+    ['APT','16','aeroway:use','search_and_rescue_airfield'], // Search and Rescue Airfield
+    ['APT','999','aeroway:use','other'], // Other
+
+    // APU - Apron Usage
+    // ['APU','-999999',undefined,undefined], // No Information
+    ['APU','1','apron:use','parking'], // Parking
+    ['APU','2','apron:use','loading_and/or_unloading'], // Loading and/or Unloading
+    ['APU','3','apron:use','fuelling'], // Fuelling
+    ['APU','4','apron:use','transient'], // Transient
+    ['APU','5','apron:use','compass_rose'], // Compass Rose
+    ['APU','6','apron:use','engine_run_up'], // Engine Run Up
+    ['APU','7','apron:use','maintenance'], // Maintenance
+    ['APU','8','apron:use','alert'], // Alert
+    ['APU','9','apron:use','firing-in'], // Firing-In
+    ['APU','10','apron:use','hot_refuelling'], // Hot Refuelling
+    ['APU','11','apron:use','weapon_loading'], // Weapon Loading
+    ['APU','12','apron:use','de-icing_and/or_anti-icing'], // De-icing and/or Anti-icing
+    ['APU','13','apron:use','ins_alignment'], // INS Alignment
+    ['APU','14','apron:use','decontamination'], // Decontamination
+    ['APU','999','apron:use','other'], // Other
 
     // APY - Apron Type
     // ['APY','-999999',undefined,undefined], // No Information
@@ -311,6 +413,8 @@ tds40.rules = {
     ['AQO','16','aquifer:overburden','unconsolidated'], // Unconsolidated
     ['AQO','17','aquifer:overburden','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
     ['AQO','18','aquifer:overburden','volcanic_rock'], // Volcanic Rock
+    ['AQO','19','aquifer:overburden','sandstone'], // Sandstone
+    ['AQO','20','aquifer:overburden','shale'], // Shale
     ['AQO','999','aquifer:overburden','other'], // Other
 
     // AQP - Aquifer Composition
@@ -333,44 +437,21 @@ tds40.rules = {
     ['AQP','16','aquifer:composition','unconsolidated'], // Unconsolidated
     ['AQP','17','aquifer:composition','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
     ['AQP','18','aquifer:composition','volcanic_rock'], // Volcanic Rock
+    ['AQP','19','aquifer:composition','sandstone'], // Sandstone
+    ['AQP','20','aquifer:composition','shale'], // Shale
     ['AQP','999','aquifer:composition','other'], // Other
 
-    // AQTC - Aquifer Thickness (interval closure)
+    // AQTC - Aquifer Thickness <interval closure>
     ['AQTC','2','aquifer:thickness:closure','open_interval'], // Open Interval
-    ['AQTC','3','aquifer:thickness:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['AQTC','4','aquifer:thickness:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['AQTC','3','aquifer:thickness:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['AQTC','4','aquifer:thickness:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['AQTC','5','aquifer:thickness:closure','closed_interval'], // Closed Interval
     ['AQTC','6','aquifer:thickness:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['AQTC','7','aquifer:thickness:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
     ['AQTC','8','aquifer:thickness:closure','less-than_semi-interval'], // Less-than Semi-interval
     ['AQTC','9','aquifer:thickness:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-    /*
     // ASU - Aerodrome Movement Area Surface Composition - See ZI019_ASU
-    // ['ASU','-999999',undefined,undefined], // No Information
-    ['ASU','1','ASU','asphalt'], // Asphalt
-    ['ASU','2','ASU','bituminous_mix'], // Bituminous Mix
-    ['ASU','3','ASU','brick'], // Brick
-    ['ASU','4','ASU','clay'], // Clay
-    ['ASU','5','ASU','concrete'], // Concrete
-    ['ASU','6','ASU','coral'], // Coral
-    ['ASU','7','ASU','earthen'], // Earthen
-    ['ASU','8','ASU','gravel'], // Gravel
-    ['ASU','9','ASU','ice'], // Ice
-    ['ASU','10','ASU','landing_mat'], // Landing Mat
-    ['ASU','11','ASU','laterite'], // Laterite
-    ['ASU','12','ASU','macadam'], // Macadam
-    ['ASU','13','ASU','membrane'], // Membrane
-    ['ASU','14','ASU','non-bituminous_mix'], // Non-bituminous Mix
-    ['ASU','15','ASU','pierced_steel_planking'], // Pierced Steel Planking
-    ['ASU','16','ASU','sand'], // Sand
-    ['ASU','17','ASU','snow'], // Snow
-    ['ASU','18','ASU','stone'], // Stone
-    ['ASU','19','ASU','water'], // Water
-    ['ASU','20','ASU','wood'], // Wood
-    ['ASU','21','ASU','asphalt_over_concrete'], // Asphalt Over Concrete
-    ['ASU','999','ASU','other'], // Other
-    */
 
     // ASY - Airfield Symbol Type
     // ['ASY','-999999',undefined,undefined], // No Information
@@ -388,23 +469,7 @@ tds40.rules = {
     ['ASY','12','aeroway:aerodrome_symbol','decoy'], // X - Decoy
     ['ASY','13','aeroway:aerodrome_symbol','active_joint_(civilian/military)_heliport'], // Active Joint (Civilian/Military) Heliport
 
-    // AT005_CAB - Cable : Cable Type -- See CAB
-    // ['AT005_CAB','-999999',undefined,undefined], // No Information
-    // ['AT005_CAB','2','cable:type','power_line'], // Power Line
-    // ['AT005_CAB','3','cable:type','telephone'], // Telephone
-    // ['AT005_CAB','4','cable:type','telegraph'], // Telegraph
-    // ['AT005_CAB','6','cable:type','transmission_line'], // Transmission Line
-    // ['AT005_CAB','7','cable:type','digital_communication_line'], // Digital Communication Line
-    // ['AT005_CAB','8','cable:type','communication_line'], // Communication Line
-    // ['AT005_CAB','9','cable:type','fibre-optic'], // Fibre-optic
-    // ['AT005_CAB','10','cable:type','tethering'], // Tethering
-    // ['AT005_CAB','11','cable:type','load_bearing'], // Load Bearing
-    // ['AT005_CAB','12','cable:type','guide'], // Guide
-    // ['AT005_CAB','13','cable:type','barrier'], // Barrier
-    // ['AT005_CAB','14','cable:type','restraining'], // Restraining
-    // ['AT005_CAB','15','cable:type','towing'], // Towing
-    // ['AT005_CAB','19','cable:type','cableway'], // Cableway
-    // ['AT005_CAB','999','cable:type','other'], // Other
+    // AT005_CAB - Cable : Cable Type - See CAB
 
     // ATB - Attached Building
     // ['ATB','-999999',undefined,undefined], // No Information
@@ -432,8 +497,8 @@ tds40.rules = {
 
     // AYRC - Aquifer Yield Rating (interval closure)
     ['AYRC','2','aquifer:yield:closure','open_interval'], // Open Interval
-    ['AYRC','3','aquifer:yield:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['AYRC','4','aquifer:yield:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['AYRC','3','aquifer:yield:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['AYRC','4','aquifer:yield:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['AYRC','5','aquifer:yield:closure','closed_interval'], // Closed Interval
     ['AYRC','6','aquifer:yield:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['AYRC','7','aquifer:yield:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -478,8 +543,38 @@ tds40.rules = {
     ['BAT','5','barrier:top','spiked'], // Spiked
     ['BAT','999','barrier:top','other'], // Other
 
-    // BCC - Bypass condition
-    // ['BCC','-999999',undefined,undefined],
+    // BC034_MRT - Maritime Radiobeacon : Maritime Radiobeacon Type
+    // ['BC034_MRT','-999999',undefined,undefined], // No Information
+    ['BC034_MRT','1','seamark:radio_station:category','ais'], // Automated Identification System (AIS)
+    ['BC034_MRT','2','seamark:radio_station:category','omnidirectional'], // Circular Radiobeacon
+    ['BC034_MRT','3','seamark:radio_station:category','directional'], // Directional Radiobeacon
+    ['BC034_MRT','4','seamark:radio_station:category','loran'], // Long Range Air Navigation System (LORAN) C
+    ['BC034_MRT','5','seamark:radio_station:category','qtg'], // QTG Station
+    ['BC034_MRT','6','seamark:radar_transponder:category','ramark'], // Radar Marker (RAMARK)
+    ['BC034_MRT','7','seamark:radar_transponder:category','racon'], // Radar Responder Beacon (RACON)
+    ['BC034_MRT','8','seamark:radio_station:category','rdf'], // Radio Direction Finding Station
+    ['BC034_MRT','9','seamark:radio_station:category','rotating_pattern'], // Rotating Pattern Radiobeacon
+    ['BC034_MRT','999','seamark:radio_station:category','other'], // Other
+
+    // BC101_SST - Fog Signal : Fog Signal Type
+    // ['BC101_SST','-999999',undefined,undefined], // No Information
+    ['BC101_SST','1','seamark:fog_signal:category','bell'], // Bell
+    ['BC101_SST','2','seamark:fog_signal:category','diaphone'], // Diaphone
+    ['BC101_SST','3','seamark:fog_signal:category','explosive'], // Explosive
+    ['BC101_SST','4','seamark:fog_signal:category','gong'], // Gong
+    ['BC101_SST','6','seamark:fog_signal:category','horn'], // Horn
+    ['BC101_SST','7','seamark:fog_signal:category','nautophone'], // Nautophone
+    ['BC101_SST','8','seamark:fog_signal:category','radio'], // Radio
+    ['BC101_SST','9','seamark:fog_signal:category','siren'], // Siren
+    ['BC101_SST','10','seamark:fog_signal:category','submarine_bell'], // Submarine Bell
+    ['BC101_SST','14','seamark:fog_signal:category','whistle'], // Whistle
+    ['BC101_SST','15','seamark:fog_signal:category','reed'], // Reed
+    ['BC101_SST','16','seamark:fog_signal:category','none'], // None
+    ['BC101_SST','98','seamark:fog_signal:category','tyfon'], // Tyfon
+    ['BC101_SST','999','seamark:fog_signal:category','other'], // Other
+
+    // BCC - Bypass Condition
+    // ['BCC','-999999',undefined,undefined], // No Information
     ['BCC','1','bypass','easy'],
     ['BCC','2','bypass','difficult'],
     ['BCC','3','bypass','impossible'],
@@ -487,7 +582,7 @@ tds40.rules = {
     // BGT - Basin Gate Type
     // ['BGT','-999999',undefined,undefined], // No Information
     ['BGT','1','seamark:gate:category','caisson'], // Caisson
-    ['BGT','2','seamark:gate:category','lock_gate'], // Lock Gate
+    ['BGT','2','seamark:gate:category','lock'], // Lock Gate
     ['BGT','3','seamark:gate:category','tide_lock'], // Tide Lock
     ['BGT','999','seamark:gate:category','other'], // Other
 
@@ -518,7 +613,7 @@ tds40.rules = {
     ['BH141_SHDB','1001','waterway:bank2:shoreline_delineated','yes'],
 
     // BH141_SLTA - Waterbody bank 1 shoreline type: No OSM even close, See MGCP SHR & SHL
-    // ['BH141_SLTA','-999999',undefined,undefined],  // Null
+    // ['BH141_SLTA','-999999',undefined,undefined], // Null
     ['BH141_SLTA','6','waterway:bank1:type','mangrove'],
     ['BH141_SLTA','8','waterway:bank1:type','marshy'],
     ['BH141_SLTA','10','waterway:bank1:type','stony'],
@@ -531,7 +626,7 @@ tds40.rules = {
     ['BH141_SLTA','999','waterway:bank1:type','other'],
 
     // BH141_SLTB - Waterbody bank 2 shoreline type: No OSM even close, See MGCP SHR & SHL
-    // ['BH141_SLTB','-999999',undefined,undefined],  // Null
+    // ['BH141_SLTB','-999999',undefined,undefined], // Null
     ['BH141_SLTB','6','waterway:bank2:type','mangrove'],
     ['BH141_SLTB','8','waterway:bank2:type','marshy'],
     ['BH141_SLTB','10','waterway:bank2:type','stony'],
@@ -590,7 +685,6 @@ tds40.rules = {
     ['BOT','10','bridge:movable','swing'],
     ['BOT','11','bridge:movable','lift'],
     ['BOT','12','bridge:movable','retractable'],
-    ['BOT','13',undefined,undefined], // In data but not in any spec!
     ['BOT','14','bridge:movable','submersible'],
     ['BOT','15','bridge:movable','drawbridge'],
     ['BOT','16','bridge:movable','opening'],
@@ -598,10 +692,10 @@ tds40.rules = {
     ['BOT','999','bridge:movable','other'],
 
     // BPWHAC - Waterbody Bank 1 height interval closure
-    ['BPWHAC','2','waterway:bank1:height:closure','open_interval'], 
+    ['BPWHAC','2','waterway:bank1:height:closure','open_interval'],
     ['BPWHAC','3','waterway:bank1:height:closure','greater-than_or_equal_to_less-than_interval'],
     ['BPWHAC','4','waterway:bank1:height:closure','greater-than_to_less-than_or_equal_interval'],
-    ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'], 
+    ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'],
     ['BPWHAC','6','waterway:bank1:height:closure','greater-than_semi-interval'],
     ['BPWHAC','7','waterway:bank1:height:closure','greater-than_or_equal_semi-interval'],
     ['BPWHAC','8','waterway:bank1:height:closure','less-than_semi-interval'],
@@ -619,8 +713,8 @@ tds40.rules = {
 
     // BPWSAC - Inland Waterbody Bank (1) : Predominant Waterbody Bank Slope (first bank) (interval closure)
     ['BPWSAC','2','waterway:bank1:slope:closure','open_interval'], // Open Interval
-    ['BPWSAC','3','waterway:bank1:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['BPWSAC','4','waterway:bank1:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['BPWSAC','3','waterway:bank1:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['BPWSAC','4','waterway:bank1:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['BPWSAC','5','waterway:bank1:slope:closure','closed_interval'], // Closed Interval
     ['BPWSAC','6','waterway:bank1:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['BPWSAC','7','waterway:bank1:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -657,7 +751,12 @@ tds40.rules = {
     ['BSC','31','bridge:structure','arch'], // Arch
     ['BSC','32','bridge:structure','trestle'], // Trestle
     ['BSC','999','bridge:structure','other'], // Other
-    
+
+    // BSM - Mobile Bridge Span
+    // ['BSM','-999999',undefined,undefined], // No Information
+    ['BSM','1000','bridge:mobile_span','no'],
+    ['BSM','1001','bridge:mobile_span','yes'],
+
     // BSU - Building Superstructure Type
     // ['BSU','-999999',undefined,undefined], // No Information
     ['BSU','1','building:superstructure:type','chimney'], // Chimney
@@ -719,7 +818,7 @@ tds40.rules = {
 
     // CAB - Cable Type
     // ['CAB','-999999',undefined,undefined], // No Information
-    // ['CAB','2','power','line'], // Power Line
+    // ['CAB','2','power','line'], // Power Distribution Line
     ['CAB','2','cable:type','power'], // Power Line
     ['CAB','3','cable:type','telephone'], // Telephone
     ['CAB','4','cable:type','telegraph'], // Telegraph
@@ -771,7 +870,7 @@ tds40.rules = {
     // ['CCG','-999999',undefined,undefined], // No Information
     ['CCG','1','military:hazard','biological'], // Biological
     ['CCG','2','military:hazard','chemical'], // Chemical
-    ['CCG','3','military:hazard','nuclear_and/or_radiological'], // Nuclear and/or Radiological
+    ['CCG','3','military:hazard','nuclear_andor_radiological'], // Nuclear and/or Radiological
     ['CCG','4','military:hazard','thermal'], // Thermal
     ['CCG','999','military:hazard','other'], // Other
 
@@ -787,6 +886,24 @@ tds40.rules = {
     ['CDA','1000','covered','no'],
     ['CDA','1001','covered','yes'],
 
+    // CDY - Cadastral Source Type
+    // ['CDY','-999999',undefined,undefined], // No Information
+    ['CDY','1','source:cadastral:type','collateral_evidence'], // Collateral Evidence
+    ['CDY','2','source:cadastral:type','field_notes'], // Field Notes
+    ['CDY','3','source:cadastral:type','field_sketch'], // Field Sketch
+    ['CDY','4','source:cadastral:type','gnss_survey'], // GNSS Survey
+    ['CDY','5','source:cadastral:type','official_cadastral_survey'], // Official Cadastral Survey
+    ['CDY','6','source:cadastral:type','orthophoto'], // Orthophoto
+    ['CDY','7','source:cadastral:type','plat'], // Plat
+    ['CDY','8','source:cadastral:type','relative_measurement'], // Relative Measurement
+    ['CDY','9','source:cadastral:type','resurvey'], // Resurvey
+    ['CDY','10','source:cadastral:type','survey'], // Survey
+    ['CDY','11','source:cadastral:type','tenure_map'], // Tenure Map
+    ['CDY','12','source:cadastral:type','topographic_map'], // Topographic Map
+    ['CDY','13','source:cadastral:type','use_plat'], // Use Plat
+    ['CDY','14','source:cadastral:type','video'], // Video
+    ['CDY','999','source:cadastral:type','other'], // Other
+
     // CET - Grading Type
     // ['CET','-999999',undefined,undefined], // No Information
     ['CET','1','grading:type','one_side'], // One Side
@@ -795,10 +912,21 @@ tds40.rules = {
     ['CET','4','grading:type','no_sides'], // No Sides
     ['CET','999','grading:type','other'], // Other
 
-    // CNS - Controlled
-    // ['CNS','-999999',undefined,undefined], // No Information
-    ['CNS','1000','controlled','no'],
-    ['CNS','1001','controlled','yes'],
+    // CNF - Confined
+    // ['CNF','-999999',undefined,undefined], // No Information
+    ['CNF','1000','aquifer:confined','no'],
+    ['CNF','1001','aquifer:confined','yes'],
+
+    // COD - Delineation Known
+    ['COD','1000','deliniation','unknown'], // Limits and Information Unknown
+    ['COD','1001','deliniation','known'], // Limits and Information Known
+
+    //COE - Certainty of Existence - Really???
+    // ['COE','-999999',undefined,undefined], // No Information
+    ['COE','1',undefined,undefined], // Definite - Default?
+    ['COE','2','existence','doubtful'], // Doubtful
+    ['COE','3','existence','reported'], // Reported
+    ['COE','6','existence','probable'], // Probable
 
     // CON - Route Width Constriction Type
     // ['CON','-999999',undefined,undefined], // No Information
@@ -817,11 +945,11 @@ tds40.rules = {
     ['CON','13','constriction:type','cut'], // Cut
     ['CON','14','constriction:type','dam'], // Dam
     ['CON','15','constriction:type','embankment'], // Embankment
-    ['CON','16','constriction:type','entrance_and/or_exit'], // Entrance and/or Exit
+    ['CON','16','constriction:type','entrance_andor_exit'], // Entrance and/or Exit
     ['CON','17','constriction:type','fence'], // Fence
     ['CON','18','constriction:type','fire_hydrant'], // Fire Hydrant
     ['CON','19','constriction:type','ford'], // Ford
-    ['CON','20','constriction:type','avalanche_protector'], // Gallery
+    ['CON','20','constriction:type','gallery'], // Gallery
     ['CON','21','constriction:type','gantry'], // Gantry
     ['CON','22','constriction:type','gate'], // Gate
     ['CON','23','constriction:type','hedgerow'], // Hedgerow
@@ -842,7 +970,7 @@ tds40.rules = {
     ['CON','38','constriction:type','stair'], // Stair
     ['CON','39','constriction:type','steep_terrain_face'], // Steep Terrain Face
     ['CON','40','constriction:type','transportation_block'], // Transportation Block
-    ['CON','41','constriction:type','transportation_route_protection_structure'], // Traneportation Route Protection Structure
+    ['CON','41','constriction:type','transportation_route_protection_structure'], // Transportation Route Protection Structure
     ['CON','42','constriction:type','tunnel'], // Tunnel
     ['CON','999','constriction:type','other'], // Other
 
@@ -855,19 +983,13 @@ tds40.rules = {
     ['COS','13','operational_status','operational'], // Operational
     ['COS','14','operational_status','partial'], // Partially Operational
 
-    // CPA - Survey Control Point Type
-    // ['CPA','-999999',undefined,undefined], // No Information
-    ['CPA','2','survey_point:control','horizontal'], // Horizontal Position
-    ['CPA','3','survey_point:control','horizontal_and_benchmark'], // Horizontal Position and Benchmark
-    ['CPA','5','survey_point:control','vertical'], // Vertical Position
-
     // CPS - Cell Partition Scheme
-    // ['CPS','-999999',undefined,undefined], // No Information
-    ['CPS','fixed0r25','source:cell_partition_scheme','0r25_arc_degree'], // Fixed Cells, 0.25 Arc Degree
-    ['CPS','fixed0r5','source:cell_partition_scheme','0r5_arc_degree'], // Fixed Cells, 0.5 Arc Degree
-    ['CPS','fixed1r0','source:cell_partition_scheme','1_arc_degree'], // Fixed Cells, 1 Arc Degree
-    ['CPS','fixed5r0','source:cell_partition_scheme','5_arc_degree'], // Fixed Cells, 5 Arc Degree
-    ['CPS','variable','source:cell_partition_scheme','variable'], // Variable Cells
+    // ['CPS','noInformation',undefined,undefined], // No Information
+    ['CPS','fixed0r25','source:cell_partition_scheme','0.25_arc_degree'], // A global geodetic grid consisting of 15 by 15 arc minute cells over land.
+    ['CPS','fixed0r5','source:cell_partition_scheme','0.5_arc_degree'], // A global geodetic grid consisting of 30 by 30 arc minute cells over land.
+    ['CPS','fixed1r0','source:cell_partition_scheme','1_arc_degree'], // A global geodetic grid consisting of 1 by 1 arc degree cells.
+    ['CPS','fixed5r0','source:cell_partition_scheme','5_arc_degree'], // A global geodetic grid consisting of 5 by 5 arc degree cells.
+    ['CPS','variable','source:cell_partition_scheme','variable'], // A geodetic grid consisting of variable-sized cells situated so as to cover the extent of a region of interest.
     ['CPS','other','source:cell_partition_scheme','other'], // Other
 
     // CRA - Crane Type
@@ -920,20 +1042,26 @@ tds40.rules = {
     ['CTC','3','culvert:type','load_bearing_box'], // Box with Load
     ['CTC','999','culvert:type','other'], // Other
 
-    // CUL - Cultural Context Type
-    // ['CUL','-999999',undefined,undefined], // No Information
-    ['CUL','1','cultural_context','national_identity'], // National Identity
-    ['CUL','2','cultural_context','ethnic_group'], // Ethnic Group
-    ['CUL','3','cultural_context','tribe'], // Tribe
-    ['CUL','4','cultural_context','clan'], // Clan
-    ['CUL','5','cultural_context','language'], // Language
-    ['CUL','6','cultural_context','religion'], // Religion
-    ['CUL','999','cultural_context','other'], // Other
+    // CVT - Conveyor Type
+    // ['CVT','-999999',undefined,undefined], // No Information
+    ['CVT','1','conveyor:type','not_visible'], // Not Visible
+    ['CVT','2','conveyor:type','belt'], // Belt
+    ['CVT','3','conveyor:type','rollers'], // Rollers
+    ['CVT','4','conveyor:type','bucket'], // Bucket
+    ['CVT','5','conveyor:type','screw_auger'], // Screw Auger
+    ['CVT','6','conveyor:type','apron'], // Apron
+    ['CVT','7','conveyor:type','flight'], // Flight
+    ['CVT','999','conveyor:type','other'], // Other
 
     // CWT - Contained Within Tunnel
     // ['CWT','-999999',undefined,undefined],
     ['CWT','1000','in_tunnel','no'],
     ['CWT','1001','in_tunnel','yes'], // Need to think about this
+
+    // DFT - Dam Face Type
+    // ['DFT','-999999',undefined,undefined], // No Information
+    ['DFT','1','dam:face:type','vertical'], // Vertical
+    ['DFT','2','dam:face:type','slope'], // Slope
 
     // DGC - Transportation Block Type
     // ['DGC','-999999',undefined,undefined], // No Information
@@ -943,8 +1071,8 @@ tds40.rules = {
 
     // DMBC - Undergrowth Density (interval closure)
     ['DMBC','2','undergrowth:density:closure','open_interval'], // Open Interval
-    ['DMBC','3','undergrowth:density:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['DMBC','4','undergrowth:density:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['DMBC','3','undergrowth:density:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['DMBC','4','undergrowth:density:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['DMBC','5','undergrowth:density:closure','closed_interval'], // Closed Interval
     ['DMBC','6','undergrowth:density:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['DMBC','7','undergrowth:density:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -956,10 +1084,10 @@ tds40.rules = {
     ['DMD','1000','dammed','no'], // Just to get rid of errors
     ['DMD','1001','dammed','yes'], // yes
 
-    // DPAC - Aquifer Depth (interval closure)
+    // DPAC - Aquifer Depth <interval closure>
     ['DPAC','2','aquifer:depth:closure','open_interval'], // Open Interval
-    ['DPAC','3','aquifer:depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['DPAC','4','aquifer:depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['DPAC','3','aquifer:depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['DPAC','4','aquifer:depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['DPAC','5','aquifer:depth:closure','closed_interval'], // Closed Interval
     ['DPAC','6','aquifer:depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['DPAC','7','aquifer:depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -984,36 +1112,40 @@ tds40.rules = {
     ['EET','999','earthwork:type','other'], // Other
 
     // EQC - Equivalent Scale Category
-    // ['EQC','-999999',undefined,undefined], // No Information
-    ['EQC','scale1m','source:equivalent_scale','1:1m'], // 1:1,000,000
-    ['EQC','scale100k','source:equivalent_scale','1:100k'], // 1:100,000
-    ['EQC','scale12r5k','source:equivalent_scale','1:12.5k'], // 1:12,500
-    ['EQC','scale2m','source:equivalent_scale','1:2m'], // 1:2,000,000
-    ['EQC','scale25k','source:equivalent_scale','1:25k'], // 1:25,000
-    ['EQC','scale250k','source:equivalent_scale','1:250K'], // 1:250,000
-    ['EQC','scale5k','source:equivalent_scale','1:5k'], // 1:5,000
-    ['EQC','scale5m','source:equivalent_scale','1:5m'], // 1:5,000,000
-    ['EQC','scale50k','source:equivalent_scale','1:50k'], // 1:50,000
-    ['EQC','scale500k','source:equivalent_scale','1:500k'], // 1:500,000
+    // ['EQC','noInformation',undefined,undefined], // No Information
+    ['EQC','scale5k','source:equivalent_scale','1:5k'], // A map scale of 1:5,000.
+    ['EQC','scale12r5k','source:equivalent_scale','1:12.5k'], // A map scale of 1:12,500.
+    ['EQC','scale25k','source:equivalent_scale','1:25k'], // A map scale of 1:25,000.
+    ['EQC','scale50k','source:equivalent_scale','1:50k'], // A map scale of 1:50,000.
+    ['EQC','scale100k','source:equivalent_scale','1:100k'], // A map scale of 1:100,000.
+    ['EQC','scale250k','source:equivalent_scale','1:250k'], // A map scale of 1:250,000.
+    ['EQC','scale500k','source:equivalent_scale','1:500k'], // A map scale of 1:500,000.
+    ['EQC','scale1m','source:equivalent_scale','1:1m'], // A map scale of 1:1,000,000.
+    ['EQC','scale2m','source:equivalent_scale','1:2m'], // A map scale of 1:2,000,000.
+    ['EQC','scale5m','source:equivalent_scale','1:5m'], // A map scale of 1:5,000,000.
     ['EQC','other','source:equivalent_scale','other'], // Other
 
     // ESC - Elevation Surface Category
     // ['ESC','-999999',undefined,undefined], // No Information
     ['ESC','1','elevation:surface','land'], // Land
     ['ESC','2','elevation:surface','snow_field_and/or_ice-field'], // Snow Field and/or Ice-field
-    ['ESC','3','elevation:surface','water'], // Water
     ['ESC','4','elevation:surface','vegetation'], // Vegetation
     ['ESC','5','elevation:surface','inland_water'], // Inland Water
+    ['ESC','6','elevation:surface','tidal_water'], // Tidal Water
 
     // ETS - Extraction Specification
-    // ['ETS','-999999',undefined,undefined], // No Information
-    ['ETS','tpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
-    ['ETS','onc','source:extraction_specification','1ab-onc'], // 1AB-ONC
-    ['ETS','jogAirGround','source:extraction_specification','1ae-jog-a/g'], // 1AE-JOG-A/G
-    ['ETS','dted1','source:extraction_specification','1cd-dted-1'], // 1CD-DTED-1
+    // ['ETS','noInformation',undefined,undefined], // No Information
+    ['ETS','atc','source:extraction_specification','4aa-atc'], // 4AA-ATC
+    ['ETS','combat','source:extraction_specification','2ad-combat'], // 2AD-Combat
     ['ETS','dfad1','source:extraction_specification','1ce-dfad-1'], // 1CE-DFAD-1
-    ['ETS','dted2','source:extraction_specification','1cf-dted-2'], // 1CF-DTED-2
     ['ETS','dfad2','source:extraction_specification','1cg-dfad-2'], // 1CG-DFAD-2
+    ['ETS','digitalFeg','source:extraction_specification','dfeg'], // DFEG
+    ['ETS','dnc','source:extraction_specification','dnc'], // DNC
+    ['ETS','dted1','source:extraction_specification','1cd-dted-1'], // 1CD-DTED-1
+    ['ETS','dted2','source:extraction_specification','1cf-dted-2'], // 1CF-DTED-2
+    ['ETS','dtop','source:extraction_specification','3kc/001-dtop'], // 3KC/001-DTOP
+    ['ETS','ffd','source:extraction_specification','5ee-ffd'], // 5EE-FFD
+    ['ETS','globalTdsEg','source:extraction_specification','gtds-eg'], // GTDS-EG
     ['ETS','hac1','source:extraction_specification','2aa/001-hac-1'], // 2AA/001-HAC-1
     ['ETS','hac2','source:extraction_specification','2aa/002-hac-2'], // 2AA/002-HAC-2
     ['ETS','hac3','source:extraction_specification','2aa/003-hac-3'], // 2AA/003-HAC-3
@@ -1023,41 +1155,25 @@ tds40.rules = {
     ['ETS','hac7','source:extraction_specification','2aa/007-hac-7'], // 2AA/007-HAC-7
     ['ETS','hac8','source:extraction_specification','2aa/008-hac-8'], // 2AA/008-HAC-8
     ['ETS','hac9','source:extraction_specification','2aa/009-hac-9'], // 2AA/009-HAC-9
-    ['ETS','combat','source:extraction_specification','2ad-combat'], // 2AD-Combat
-    ['ETS','tlm50','source:extraction_specification','3aa-tlm50'], // 3AA-TLM50
-    ['ETS','tlm100','source:extraction_specification','3ag-tlm100'], // 3AG-TLM100
-    ['ETS','vitd','source:extraction_specification','3ka-vitd'], // 3KA-VITD
-    ['ETS','dtop','source:extraction_specification','3kc/001-dtop'], // 3KC/001-DTOP
-    ['ETS','vmap2','source:extraction_specification','3kh-vmap-2'], // 3KH-VMap-2
-    ['ETS','vmap0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
-    ['ETS','vmap1','source:extraction_specification','3km-vmap-1'], // 3KM-VMap-1
-    ['ETS','uvmap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
-    ['ETS','atc','source:extraction_specification','4aa-atc'], // 4AA-ATC
+    ['ETS','jogAirGround','source:extraction_specification','1ae-jog-a/g'], // 1AE-JOG-A/G
     ['ETS','jogRadar','source:extraction_specification','4ac-jog-r'], // 4AC-JOG-R
-    ['ETS','tercomL','source:extraction_specification','4ge-tercom-l'], // 4GE-TERCOM-L
-    ['ETS','tercomE','source:extraction_specification','4gf-tercom-e'], // 4GF-TERCOM-E
-    ['ETS','tercomT','source:extraction_specification','4gg-tercom-t'], // 4GG-TERCOM-T
-    ['ETS','ffd','source:extraction_specification','5ee-ffd'], // 5EE-FFD
-    ['ETS','digitalFeg','source:extraction_specification','dfeg'], // DFEG
-    ['ETS','dnc','source:extraction_specification','dnc'], // DNC
-    ['ETS','globalTdsEg','source:extraction_specification','gtds-eg'], // GTDS-EG
     ['ETS','localTdsEg','source:extraction_specification','ltds-eg'], // LTDS-EG
-    ['ETS','mgcpTrd','source:extraction_specification','mgcp-trd'], // MGCP TRD
+    ['ETS','mgcpTrd','source:extraction_specification','mgcp_trd'], // MGCP TRD
     ['ETS','msd1','source:extraction_specification','msd1'], // MSD1
     ['ETS','msd2','source:extraction_specification','msd2'], // MSD2
     ['ETS','msd3','source:extraction_specification','msd3'], // MSD3
     ['ETS','msd4','source:extraction_specification','msd4'], // MSD4
     ['ETS','msd5','source:extraction_specification','msd5'], // MSD5
-    ['ETS','regionalTdsEg','source:extraction_specification','rtds-eg'], // RTDS-EG
-    ['ETS','specUrbanTdsEg','source:extraction_specification','s-utds-eg'], // S-UTDS-EG
-    ['ETS','tod0','source:extraction_specification','tod0'], // TOD0
-    ['ETS','tod1','source:extraction_specification','tod1'], // TOD1
-    ['ETS','tod2','source:extraction_specification','tod2'], // TOD2
-    ['ETS','tod3','source:extraction_specification','tod3'], // TOD3
-    ['ETS','tod4','source:extraction_specification','tod4'], // TOD4
+    ['ETS','onc','source:extraction_specification','1ab-onc'], // 1AB-ONC
     ['ETS','other','source:extraction_specification','other'], // Other
+    ['ETS','regionalTdsEg','Fpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
+    ['ETS','uvmap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
+    ['ETS','vitd','source:extraction_specification','3ka-vitd'], // 3KA-VITD
+    ['ETS','vmap0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
+    ['ETS','vmap1','source:extraction_specification','3km-vmap-1'], // 3KM-VMap-1
+    ['ETS','vmap2','source:extraction_specification','3kh-vmap-2'], // 3KH-VMap-2
 
-    // ETY - Engine Test Cell Type -- Wow....
+    // ETY - Engine Test Cell Type
     // ['ETY','-999999',undefined,undefined], // No Information
     ['ETY','1','test_cell:type','jet_engine_dismounted'], // Jet Engine Dismounted
     ['ETY','2','test_cell:type','jet_engine_mounted'], // Jet Engine Mounted
@@ -1103,7 +1219,6 @@ tds40.rules = {
 
     // FFN - Feature Function
     // ['FFN','-999999',undefined,undefined], // No Information
-    // ['FFN','0','building','yes'], // Good default?
     ['FFN','2','use','agriculture'], // Agriculture
     ['FFN','3','use','growing_crops'], // Growing of Crops
     ['FFN','9','use','raising_animals'], // Raising of Animals
@@ -1111,6 +1226,7 @@ tds40.rules = {
     ['FFN','15','use','mixed_farming'], // Mixed Farming
     ['FFN','16','camp:type','migrant_labour'], // Migrant Labour
     ['FFN','20','camp:type','forestry'], // Forestry and/or Logging
+    ['FFN','21','landuse','silviculture'], // Silviculture
     ['FFN','27','amenity','forest_warden'], // Forest Warden
     ['FFN','30','leisure','fishing'], // Fishing
     ['FFN','35','use','aquaculture'], // Aquaculture
@@ -1183,7 +1299,7 @@ tds40.rules = {
     ['FFN','257','use','fabricated_metal_product_manufacturing'], // Fabricated Metal Product Manufacture
     ['FFN','260','use','electronic_equipment_manufacturing'], // Electronic Equipment Manufacture
     ['FFN','270','use','electrical_equipment_manufacturing'], // Electrical Equipment Manufacture
-    ['FFN','272','shop','propane'], // Propane Sale
+    ['FFN','272','shop','gas'], // Propane Sale
     ['FFN','280','use','machinery_manufacturing'], // Machinery Manufacture
     ['FFN','289','use','transportation_equipment_manufacturing'], // Transportation Equipment Manufacturing
     ['FFN','290','use','motor_vehicle_manufacturing'], // Motor Vehicle Manufacture
@@ -1227,13 +1343,13 @@ tds40.rules = {
     ['FFN','464','shop','specialized'], // Specialized Store
     ['FFN','465','shop','non-specialized'], // Non-specialized Store
     ['FFN','466','shop','convenience'], // Convenience Store
-    ['FFN','470','shop','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
+    ['FFN','470','amenity','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
     ['FFN','473','amenity','sales_yard'], // Sales Yard
     ['FFN','474','shop','precious_metal'], // Precious Metal Merchant
     ['FFN','475','amenity','marketplace'], // Market
-    ['FFN','476','shop','grocery'], // Grocery
+    ['FFN','476','shop','supermarket'], // Grocery
     ['FFN','477','amenity','pharmacy'], // Pharmacy
-    ['FFN','478','shop','pet-shop'], // Pet-shop
+    ['FFN','478','shop','pet'], // Pet-shop
     ['FFN','480','use','transportation'], // Transport
     ['FFN','481','use','terminal'], // Terminal
     ['FFN','482','public_transport','station'], // Station
@@ -1275,11 +1391,12 @@ tds40.rules = {
     ['FFN','551','tourism','hotel'], // Hotel
     ['FFN','552','tourism','resort_hotel'], // Resort Hotel
     ['FFN','553','tourism','motel'], // Motel
-    ['FFN','554','tourism','guest-house'], // Guest-house
+    ['FFN','554','tourism','guest_house'], // Guest-house
     ['FFN','555','tourism','hostel'], // Hostel
     ['FFN','556','use','dormitory'], // Dormitory
     ['FFN','557','use','vacation_cottage'], // Vacation Cottage
     ['FFN','558','use','dependents_housing'], // Dependents Housing
+    ['FFN','559','amenity','public_bath'], // Communal Bath
     ['FFN','563','use','residential'], // Residence
     ['FFN','570','use','food_service'], // Food Service
     ['FFN','572','amenity','restaurant'], // Restaurant
@@ -1303,7 +1420,8 @@ tds40.rules = {
     ['FFN','622','use','wireless_repeater'], // Wireless Repeater
     ['FFN','625','use','satellite_telecommunications'], // Satellite Telecommunications
     ['FFN','626','man_made','ground_station'], // Satellite Ground Control
-    ['FFN','633','use','public_records'], // Public Records
+    ['FFN','632','amenity','information_service'], // Information Service
+    ['FFN','633','amenity','public_records'], // Public Records
     ['FFN','640','office','financial_services'], // Financial Services
     ['FFN','642','office','central_banking'], // Central Banking
     ['FFN','643','amenity','bank'], // Retail Banking
@@ -1396,7 +1514,7 @@ tds40.rules = {
     ['FFN','885','amenity','child_care'], // Day Care
     ['FFN','887','use','social_work'], // Social Work
     ['FFN','888','use','emergency_relief_services'], // Emergency Relief Services
-    ['FFN','890','amenity','arts_centre'], // Cultural, Arts and Entertainment
+    ['FFN','890','amenity','cultural_centre'], // Cultural, Arts and Entertainment
     ['FFN','891','amenity','theatre'], // Theatre
     ['FFN','892','amenity','auditorium'], // Auditorium
     ['FFN','893','amenity','community_centre'], // Community Centre
@@ -1422,7 +1540,7 @@ tds40.rules = {
     ['FFN','954','amenity','club'], // Club
     ['FFN','955','leisure','yacht_club'], // Yacht-club
     ['FFN','961','shop','laundry'], // Laundry
-    ['FFN','962','shop','beauty_treatment'], // Beauty Treatment
+    ['FFN','962','shop','beauty'], // Beauty Treatment
     ['FFN','963','shop','funeral_directors'], // Funeral Services
     ['FFN','964','amenity','crematorium'], // Cremation
     ['FFN','965','amenity','mortuary'], // Mortuary Services
@@ -1431,7 +1549,7 @@ tds40.rules = {
     ['FFN','970','use','meeting_place'], // Meeting Place
     ['FFN','980','amenity','death_care_services'], // Death Care Services
     ['FFN','999','use','other'], // Other
-    
+
     // FHC - Harbour Facility Function
     // ['FHC','-999999',undefined,undefined], // No Information
     ['FHC','1','harbour:use','ro-ro_terminal'], // Ro-Ro Terminal
@@ -1521,8 +1639,8 @@ tds40.rules = {
 
     // GSGCHC - Runway Direction (high end) : Surface Slope (high) (interval closure)
     ['GSGCHC','2','aeroway:runway_highend:slope:closure','open_interval'], // Open Interval
-    ['GSGCHC','3','aeroway:runway_highend:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['GSGCHC','4','aeroway:runway_highend:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['GSGCHC','3','aeroway:runway_highend:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['GSGCHC','4','aeroway:runway_highend:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['GSGCHC','5','aeroway:runway_highend:slope:closure','closed_interval'], // Closed Interval
     ['GSGCHC','6','aeroway:runway_highend:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['GSGCHC','7','aeroway:runway_highend:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -1531,8 +1649,8 @@ tds40.rules = {
 
     // GSGCLC - Runway Direction (low end) : Surface Slope (low) (interval closure)
     ['GSGCLC','2','aeroway:runway_lowend:slope:closure','open_interval'], // Open Interval
-    ['GSGCLC','3','aeroway:runway_lowend:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['GSGCLC','4','aeroway:runway_lowend:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['GSGCLC','3','aeroway:runway_lowend:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['GSGCLC','4','aeroway:runway_lowend:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['GSGCLC','5','aeroway:runway_lowend:slope:closure','closed_interval'], // Closed Interval
     ['GSGCLC','6','aeroway:runway_lowend:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['GSGCLC','7','aeroway:runway_lowend:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -1624,558 +1742,305 @@ tds40.rules = {
     ['HTP','6','hangar:type','double_bay'], // D - Double Bay
     ['HTP','7','hangar:type','t-shaped'], // T - T-Shaped
 
-    // This attribute is handled in Pre and Post processing. See ZI024_HYP
-    // HYP - Hydrologic Persistence
-    // ['HYP','-999999',undefined,undefined], // No Information
-    // ['HYP','1','HYP','perennial'], // Perennial
-    // ['HYP','2','HYP','intermittent'], // Intermittent
-
     // HZD - Geodetic Datum
-    // ['HZD','-999999',undefined,undefined], // No Information
-    ['HZD','adindanBurkinaFaso','source:datum:geodetic','adindan_(burkina_faso)'], // Adindan_(Burkina_Faso)
-    ['HZD','adindanCameroon','source:datum:geodetic','adindan_(cameroon)'], // Adindan_(Cameroon)
-    ['HZD','adindanEthiopia','source:datum:geodetic','adindan_(ethiopia)'], // Adindan_(Ethiopia)
-    ['HZD','adindanMali','source:datum:geodetic','adindan_(mali)'], // Adindan_(Mali)
-    ['HZD','adindanMeanValue','source:datum:geodetic','adindan_(mean_value)'], // Adindan_(mean_value)
-    ['HZD','adindanSenegal','source:datum:geodetic','adindan_(senegal)'], // Adindan_(Senegal)
-    ['HZD','adindanSudan','source:datum:geodetic','adindan_(sudan)'], // Adindan_(Sudan)
-    ['HZD','afgooyeSomalia','source:datum:geodetic','afgooye_(somalia)'], // Afgooye_(Somalia)
-    ['HZD','ainelAbd1970BahrainIsland','source:datum:geodetic','ain_el_abd_1970_(bahrain_island)'], // Ain_el_Abd_1970_(Bahrain_Island)
-    ['HZD','ainelAbd1970SaudiArabia','source:datum:geodetic','ain_el_abd_1970_(saudi_arabia)'], // Ain_el_Abd_1970_(Saudi_Arabia)
-    ['HZD','americanSamoaDatum1962','source:datum:geodetic','american_samoa_datum_1962'], // American_Samoa_Datum_1962
-    ['HZD','amersfoort1885dash1903','source:datum:geodetic','amersfoort_1885/1903_(netherlands)'], // Amersfoort_1885/1903_(Netherlands)
-    ['HZD','anna1Astro1965CocosIslands','source:datum:geodetic','anna_1_astro_1965_(cocos_islands)'], // Anna_1_Astro_1965_(Cocos_Islands)
-    ['HZD','antiguaIslandAstro1943','source:datum:geodetic','antigua_island_astro_1943'], // Antigua_Island_Astro_1943
-    ['HZD','approximateLuzonDatum','source:datum:geodetic','approximate_luzon_datum_(philippines)'], // Approximate_Luzon_Datum_(Philippines)
-    ['HZD','arc1935Africa','source:datum:geodetic','arc_1935_(africa)'], // Arc_1935_(Africa)
-    ['HZD','arc1950Botswana','source:datum:geodetic','arc_1950_(botswana)'], // Arc_1950_(Botswana)
-    ['HZD','arc1950Burundi','source:datum:geodetic','arc_1950_(burundi)'], // Arc_1950_(Burundi)
-    ['HZD','arc1950Lesotho','source:datum:geodetic','arc_1950_(lesotho)'], // Arc_1950_(Lesotho)
-    ['HZD','arc1950Malawi','source:datum:geodetic','arc_1950_(malawi)'], // Arc_1950_(Malawi)
-    ['HZD','arc1950MeanValue','source:datum:geodetic','arc_1950_(mean_value)'], // Arc_1950_(mean_value)
-    ['HZD','arc1950Swaziland','source:datum:geodetic','arc_1950_(swaziland)'], // Arc_1950_(Swaziland)
-    ['HZD','arc1950Zaire','source:datum:geodetic','arc_1950_(zaire)'], // Arc_1950_(Zaire)
-    ['HZD','arc1950Zambia','source:datum:geodetic','arc_1950_(zambia)'], // Arc_1950_(Zambia)
-    ['HZD','arc1950Zimbabwe','source:datum:geodetic','arc_1950_(zimbabwe)'], // Arc_1950_(Zimbabwe)
-    ['HZD','arc1960Kenya','source:datum:geodetic','arc_1960_(kenya)'], // Arc_1960_(Kenya)
-    ['HZD','arc1960MeanValue','source:datum:geodetic','arc_1960_(mean_value)'], // Arc_1960_(mean_value)
-    ['HZD','arc1960Tanzania','source:datum:geodetic','arc_1960_(tanzania)'], // Arc_1960_(Tanzania)
-    ['HZD','ascensionIsland1958','source:datum:geodetic','ascension_island_1958_(ascension_island)'], // Ascension_Island_1958_(Ascension_Island)
-    ['HZD','astroBeaconEIwoJimaIsland','source:datum:geodetic','astro_beacon_e_(iwo_jima_island)'], // Astro_Beacon_'E'_(Iwo_Jima_Island)
-    ['HZD','astroDos71dash4StHelena','source:datum:geodetic','astro_dos_71/4_(st._helena_island)'], // Astro_DOS_71/4_(St._Helena_Island)
-    ['HZD','astroStation1952MarcusIs','source:datum:geodetic','astro_station_1952_(marcus_island)'], // Astro_Station_1952_(Marcus_Island)
-    ['HZD','astroTernIsland1961Hawaii','source:datum:geodetic','astro_tern_island_1961_(tern_island_hawaii)'], // Astro_Tern_Island_1961_(Tern_Island_Hawaii)
-    ['HZD','australianGeodetic1966','source:datum:geodetic','australian_geod._1966_(australia_and_tasmania_island)'], // Australian_Geod._1966_(Australia_and_Tasmania_Island)
-    ['HZD','australianGeodetic1984','source:datum:geodetic','australian_geod._1984_(australia_and_tasmania_island)'], // Australian_Geod._1984_(Australia_and_Tasmania_Island)
-    ['HZD','averageTerrestrialSys1977','source:datum:geodetic','average_terrestrial_system_1977_new_brunswick'], // Average_Terrestrial_System_1977_New_Brunswick
-    ['HZD','ayabelleLighthouseDjibouti','source:datum:geodetic','ayabelle_lighthouse_(djibouti)'], // Ayabelle_Lighthouse_(Djibouti)
-    ['HZD','bekaaBaseSouthEndLebanon','source:datum:geodetic','bekaa_base_south_end_(lebanon)'], // Bekaa_Base_South_End_(Lebanon)
-    ['HZD','belgium1950SystemLommelSig','source:datum:geodetic','belgium_1950_system_(lommel_signal_belgium)'], // Belgium_1950_System_(Lommel_Signal_Belgium)
-    ['HZD','belgium1972Observatoire','source:datum:geodetic','belgium_1972_(observatoire_duccle)'], // Belgium_1972_(Observatoire_d'Uccle)
-    ['HZD','bellevueIgnEfateErromango','source:datum:geodetic','bellevue_(ign)_(efate_and_erromango_islands)'], // Bellevue_(IGN)_(Efate_and_Erromango_Islands)
-    ['HZD','bermuda1957BermudaIslands','source:datum:geodetic','bermuda_1957_(bermuda_islands)'], // Bermuda_1957_(Bermuda_Islands)
-    ['HZD','bern1898Switzerland','source:datum:geodetic','bern_1898_(switzerland)'], // Bern_1898_(Switzerland)
-    ['HZD','bern1898ZeroMeridian','source:datum:geodetic','bern_1898_(switzerland)_with_zero_meridian_bern'], // Bern_1898_(Switzerland)_with_Zero_Meridian_Bern
-    ['HZD','bissauGuineaBissau','source:datum:geodetic','bissau_(guinea-bissau)'], // Bissau_(Guinea-Bissau)
-    ['HZD','bjz54A954BeijingCoord','source:datum:geodetic','bjz54_(a954_beijing_coordinates)_(china)'], // BJZ54_(A954_Beijing_Coordinates)_(China)
-    ['HZD','bogotaObservatoryColombia','source:datum:geodetic','bogota_observatory_(colombia)'], // Bogota_Observatory_(Colombia)
-    ['HZD','bogotaObsZeroMeridian','source:datum:geodetic','bogota_observatory_(colombia)_with_zero_meridian_bogota'], // Bogota_Observatory_(Colombia)_with_Zero_Meridian_Bogota
-    ['HZD','bukitRimpahIndonesia','source:datum:geodetic','bukit_rimpah_(bangka_and_belitung_islands_indonesia)'], // Bukit_Rimpah_(Bangka_and_Belitung_Islands_Indonesia)
-    ['HZD','camacupaBaseSwEndAngola','source:datum:geodetic','camacupa_base_sw_end_(campo_de_aviacao_angola)'], // Camacupa_Base_SW_End_(Campo_De_Aviacao_Angola)
-    ['HZD','campAreaAstroAntarctica','source:datum:geodetic','camp_area_astro_(camp_mcmurdo_area_antarctica)'], // Camp_Area_Astro_(Camp_McMurdo_Area_Antarctica)
-    ['HZD','campoInchauspeArgentina','source:datum:geodetic','campo_inchauspe_(argentina)'], // Campo_Inchauspe_(Argentina)
-    ['HZD','cantonAstro1966PhoenixIs','source:datum:geodetic','canton_astro_1966_(phoenix_islands)'], // Canton_Astro_1966_(Phoenix_Islands)
-    ['HZD','capeSouthAfrica','source:datum:geodetic','cape_(south_africa)'], // Cape_(South_Africa)
-    ['HZD','capeCanaveralMeanValue','source:datum:geodetic','cape_canaveral_(mean_value)'], // Cape_Canaveral_(mean_value)
-    ['HZD','carthageTunisia','source:datum:geodetic','carthage_(tunisia)'], // Carthage_(Tunisia)
-    ['HZD','chatham1971NewZealand','source:datum:geodetic','chatham_1971_(chatham_island_new_zealand)'], // Chatham_1971_(Chatham_Island_New_Zealand)
-    ['HZD','chuaAstroParaguay','source:datum:geodetic','chua_astro_(paraguay)'], // Chua_Astro_(Paraguay)
-    ['HZD','compensationGeoQuebec1977','source:datum:geodetic','compensation_geodetique_du_quebec_1977'], // Compensation_Geodetique_du_Quebec_1977
-    ['HZD','conakryPyramidGuinea','source:datum:geodetic','conakry_pyramid_of_the_service_geographique_(guinea)'], // Conakry_Pyramid_of_the_Service_Geographique_(Guinea)
-    ['HZD','estonia1937','source:datum:geodetic','co-ordinate_system_1937_of_estonia'], // Co-ordinate_System_1937_of_Estonia
-    ['HZD','corregoAlegreBrazil','source:datum:geodetic','corrego_alegre_(brazil)'], // Corrego_Alegre_(Brazil)
-    ['HZD','dabolaGuinea','source:datum:geodetic','dabola_(guinea)'], // Dabola_(Guinea)
-    ['HZD','dcs3LighthouseLesserAnt','source:datum:geodetic','dcs-3_lighthouse_saint_lucia_lesser_antilles'], // DCS-3_Lighthouse_Saint_Lucia_Lesser_Antilles
-    ['HZD','deceptionIslAntarctica','source:datum:geodetic','deception_island_antarctica'], // Deception_Island_Antarctica
-    ['HZD','djakartaBataviaIndonesia','source:datum:geodetic','djakarta_(batavia)_(sumatra_island_indonesia)'], // Djakarta_(Batavia)_(Sumatra_Island_Indonesia)
-    ['HZD','djakartaBataviaZeroMerid','source:datum:geodetic','djakarta_(batavia)_(sumatra_island_indonesia)_with_zero_meridian_djakarta'], // Djakarta_(Batavia)_(Sumatra_Island_Indonesia)_with_Zero_Meridian_Djakarta
-    ['HZD','dominicaAstroM12LesserAnt','source:datum:geodetic','dominica_astro_m-12_dominica_lesser_antilles'], // Dominica_Astro_M-12_Dominica_Lesser_Antilles
-    ['HZD','dos1968GizoNewGeorgiaIs','source:datum:geodetic','dos_1968_(gizo_island_new_georgia_islands)'], // DOS_1968_(Gizo_Island_New_Georgia_Islands)
-    ['HZD','easterIsland1967EasterIs','source:datum:geodetic','easter_island_1967_(easter_island)'], // Easter_Island_1967_(Easter_Island)
-    ['HZD','european1950BritishIsles','source:datum:geodetic','european_1950_(british_isles)'], // European_1950_(British_Isles)
-    ['HZD','european1950Cyprus','source:datum:geodetic','european_1950_(cyprus)'], // European_1950_(Cyprus)
-    ['HZD','european1950Egypt','source:datum:geodetic','european_1950_(egypt)'], // European_1950_(Egypt)
-    ['HZD','european1950England','source:datum:geodetic','european_1950_(england_channel_islands_scotland_and_shetland_islands)'], // European_1950_(England_Channel_Islands_Scotland_and_Shetland_Islands)
-    ['HZD','european1950Greece','source:datum:geodetic','european_1950_(greece)'], // European_1950_(Greece)
-    ['HZD','european1950Iran','source:datum:geodetic','european_1950_(iran)'], // European_1950_(Iran)
-    ['HZD','european1950IraqSyria','source:datum:geodetic','european_1950_(iraq_israel_jordan_kuwait_lebanon_saudi_arabia_and_syria)'], // European_1950_(Iraq_Israel_Jordan_Kuwait_Lebanon_Saudi_Arabia_and_Syria)
-    ['HZD','european1950Malta','source:datum:geodetic','european_1950_(malta)'], // European_1950_(Malta)
-    ['HZD','european1950MeanValue','source:datum:geodetic','european_1950_(mean_value)'], // European_1950_(mean_value)
-    ['HZD','european1950NorwayFinland','source:datum:geodetic','european_1950_(norway_and_finland)'], // European_1950_(Norway_and_Finland)
-    ['HZD','european1950PortugalSpain','source:datum:geodetic','european_1950_(portugal_and_spain)'], // European_1950_(Portugal_and_Spain)
-    ['HZD','european1950Sardinia','source:datum:geodetic','european_1950_(sardinia)'], // European_1950_(Sardinia)
-    ['HZD','european1950Sicily','source:datum:geodetic','european_1950_(sicily)'], // European_1950_(Sicily)
-    ['HZD','european1950Tunisia','source:datum:geodetic','european_1950_(tunisia)'], // European_1950_(Tunisia)
-    ['HZD','european1950WesternEurope','source:datum:geodetic','european_1950_(western_europe)'], // European_1950_(Western_Europe)
-    ['HZD','european1979MeanValue','source:datum:geodetic','european_1979_(mean_value)'], // European_1979_(mean_value)
-    ['HZD','etrs1989','source:datum:geodetic','european_terrestrial_reference_system_1989_(etrs89)'], // European_Terrestrial_Reference_System_1989_(ETRS89)
-    ['HZD','fortThomas1955LeewardIs','source:datum:geodetic','fort_thomas_1955_(nevis_st_kitts_leeward_islands)'], // Fort_Thomas_1955_(Nevis_St_Kitts_Leeward_Islands)
-    ['HZD','gan1970AdduAtoll','source:datum:geodetic','gan_1970_(addu_atoll_republic_of_maldives)'], // Gan_1970_(Addu_Atoll_Republic_of_Maldives)
-    ['HZD','gandajikaBaseZaire','source:datum:geodetic','gandajika_base_(zaire)'], // Gandajika_Base_(Zaire)
-    ['HZD','gdz80China','source:datum:geodetic','gdz80_(china)'], // GDZ80_(China)
-    ['HZD','geocentricDatumOfAustralia','source:datum:geodetic','geocentric_datum_of_australia_(gda)'], // Geocentric_Datum_of_Australia_(GDA)
-    ['HZD','geodeticDatum1949Zealand','source:datum:geodetic','geodetic_datum_1949_(new_zealand)'], // Geodetic_Datum_1949_(New_Zealand)
-    ['HZD','graciosaBaseSWFaialAzores','source:datum:geodetic','graciosa_base_sw_(faial_graciosa_pico_sao_jorge_and_terceira_island_azores)'], // Graciosa_Base_SW_(Faial_Graciosa_Pico_Sao_Jorge_and_Terceira_Island_Azores)
-    ['HZD','greekDatumGreece','source:datum:geodetic','greek_datum_greece'], // Greek_Datum_Greece
-    ['HZD','greekGeodeticRefSystem1987','source:datum:geodetic','greek_geodetic_reference_system_1987_(ggrs_87)'], // Greek_Geodetic_Reference_System_1987_(GGRS_87)
-    ['HZD','guam1963','source:datum:geodetic','guam_1963'], // Guam_1963
-    ['HZD','gunongSegaraKalimantanIs','source:datum:geodetic','gunong_segara_(kalimantan_island_indonesia)'], // Gunong_Segara_(Kalimantan_Island_Indonesia)
-    ['HZD','gunongSerindung','source:datum:geodetic','gunong_serindung'], // Gunong_Serindung
-    ['HZD','gux1AstroGuadacanalIs','source:datum:geodetic','gux_1_astro_(guadacanal_island)'], // GUX_1_Astro_(Guadacanal_Island)
-    ['HZD','guyanaCSG67','source:datum:geodetic','guyana_csg67'], // Guyana_CSG67
-    ['HZD','heratNorthAfganistan','source:datum:geodetic','herat_north_(afganistan)'], // Herat_North_(Afganistan)
-    ['HZD','hermannskogel','source:datum:geodetic','hermannskogel'], // Hermannskogel
-    ['HZD','hjorsey1955Iceland','source:datum:geodetic','hjorsey_1955_(iceland)'], // Hjorsey_1955_(Iceland)
-    ['HZD','hongKong1929','source:datum:geodetic','hong_kong_1929'], // Hong_Kong_1929
-    ['HZD','hongKong1963HongKong','source:datum:geodetic','hong_kong_1963_(hong_kong)'], // Hong_Kong_1963_(Hong_Kong)
-    ['HZD','hungarian1972','source:datum:geodetic','hungarian_1972'], // Hungarian_1972
-    ['HZD','huTzuShan','source:datum:geodetic','hu-tzu-shan'], // Hu-Tzu-Shan
-    ['HZD','indianBangladesh','source:datum:geodetic','indian_(bangladesh)'], // Indian_(Bangladesh)
-    ['HZD','indianIndiaNepal','source:datum:geodetic','indian_(india_and_nepal)'], // Indian_(India_and_Nepal)
-    ['HZD','indianPakistan','source:datum:geodetic','indian_(pakistan)'], // Indian_(Pakistan)
-    ['HZD','indianThailandVietnam','source:datum:geodetic','indian_(thailand_and_vietnam)'], // Indian_(Thailand_and_Vietnam)
-    ['HZD','indian1954Thailand','source:datum:geodetic','indian_1954_(thailand)'], // Indian_1954_(Thailand)
-    ['HZD','indian1960ConSonIsland','source:datum:geodetic','indian_1960_(con_son_island_(vietnam))'], // Indian_1960_(Con_Son_Island_(Vietnam))
-    ['HZD','indian1960Vietnam','source:datum:geodetic','indian_1960_(vietnam:_near_16_degrees_north)'], // Indian_1960_(Vietnam:_near_16_degrees_North)
-    ['HZD','indian1975Thailand','source:datum:geodetic','indian_1975_(thailand)'], // Indian_1975_(Thailand)
-    ['HZD','indian1975ThailandCycle1','source:datum:geodetic','indian_1975_(thailand)_-_cycle_1'], // Indian_1975_(Thailand)_-_Cycle_1
-    ['HZD','indonesian1974','source:datum:geodetic','indonesian_1974'], // Indonesian_1974
-    ['HZD','ireland1965IrelandNorthern','source:datum:geodetic','ireland_1965_(ireland_and_northern_ireland)'], // Ireland_1965_(Ireland_and_Northern_Ireland)
-    ['HZD','ists061Astro1968GeorgiaIs','source:datum:geodetic','ists_061_astro_1968_(south_georgia_islands)'], // ISTS_061_Astro_1968_(South_Georgia_Islands)
-    ['HZD','ists073Astro1969DiegoGar','source:datum:geodetic','ists_073_astro_1969_(diego_garcia)'], // ISTS_073_Astro_1969_(Diego_Garcia)
-    ['HZD','johnstonIsland1961','source:datum:geodetic','johnston_island_1961_(johnston_island)'], // Johnston_Island_1961_(Johnston_Island)
-    ['HZD','kalianpurIndia','source:datum:geodetic','kalianpur_(india)'], // Kalianpur_(India)
-    ['HZD','kandawalaSriLanka','source:datum:geodetic','kandawala_(sri_lanka)'], // Kandawala_(Sri_Lanka)
-    ['HZD','kcs2SierraLeone','source:datum:geodetic','kcs_2_sierra_leone'], // KCS_2_Sierra_Leone
-    ['HZD','kerguelenIsland1949','source:datum:geodetic','kerguelen_island_1949_(kerguelen_island)'], // Kerguelen_Island_1949_(Kerguelen_Island)
-    ['HZD','kertau1948RevisedMalaysia','source:datum:geodetic','kertau_1948_(or_revised_kertau)_(west_malaysia_and_singapore)'], // Kertau_1948_(or_Revised_Kertau)_(West_Malaysia_and_Singapore)
-    ['HZD','kkjFinland','source:datum:geodetic','kkj_(or_kartastokoordinaattijarjestelma)_finland'], // KKJ_(or_Kartastokoordinaattijarjestelma)_Finland
-    ['HZD','koreanGeodeticSystem1995','source:datum:geodetic','korean_geodetic_system_1995_(south_korea)'], // Korean_Geodetic_System_1995_(South_Korea)
-    ['HZD','kusaieAstro1951','source:datum:geodetic','kusaie_astro_1951'], // Kusaie_Astro_1951
-    ['HZD','kuwaitOilCompanyK28','source:datum:geodetic','kuwait_oil_company_(k28)'], // Kuwait_Oil_Company_(K28)
-    ['HZD','lc5Astro1961CaymanBracIs','source:datum:geodetic','l.c._5_astro_1961_(cayman_brac_island)'], // L.C._5_Astro_1961_(Cayman_Brac_Island)
-    ['HZD','leigonGhana','source:datum:geodetic','leigon_(ghana)'], // Leigon_(Ghana)
-    ['HZD','liberia1964Liberia','source:datum:geodetic','liberia_1964_(liberia)'], // Liberia_1964_(Liberia)
-    ['HZD','lisbonCastelodiSaoJorge','source:datum:geodetic','lisbon_(castelo_di_sao_jorge)_portugal'], // Lisbon_(Castelo_di_Sao_Jorge)_Portugal
-    ['HZD','localAstro','source:datum:geodetic','local_astro'], // Local_Astro
-    ['HZD','lomaQuintanaVenezuela','source:datum:geodetic','loma_quintana_(venezuela)'], // Loma_Quintana_(Venezuela)
-    ['HZD','luzonMindanaoIsland','source:datum:geodetic','luzon_(mindanao_island)'], // Luzon_(Mindanao_Island)
-    ['HZD','luzonPhilipinesNotMindanao','source:datum:geodetic','luzon_(philipines_except_mindanao_island)'], // Luzon_(Philipines_except_Mindanao_Island)
-    ['HZD','mahe1971MaheIsland','source:datum:geodetic','mahe_1971_(mahe_island)'], // Mahe_1971_(Mahe_Island)
-    ['HZD','manokwariWestIrian','source:datum:geodetic','manokwari_(west_irian)'], // Manokwari_(West_Irian)
-    ['HZD','marcoAstroSalvageIslands','source:datum:geodetic','marco_astro_(salvage_islands)'], // Marco_Astro_(Salvage_Islands)
-    ['HZD','martiniqueFortDesaix','source:datum:geodetic','martinique_fort-desaix'], // Martinique_Fort-Desaix
-    ['HZD','massawEritreaEthiopia','source:datum:geodetic','massawa_(eritrea_ethiopia)'], // Massawa_(Eritrea_Ethiopia)
-    ['HZD','mayotteCombani','source:datum:geodetic','mayotte_combani'], // Mayotte_Combani
-    ['HZD','merchichMorocco','source:datum:geodetic','merchich_(morocco)'], // Merchich_(Morocco)
-    ['HZD','midwayAstro1961MidwayIs','source:datum:geodetic','midway_astro_1961_(midway_island)'], // Midway_Astro_1961_(Midway_Island)
-    ['HZD','minnaCameroon','source:datum:geodetic','minna_(cameroon)'], // Minna_(Cameroon)
-    ['HZD','minnaNigeria','source:datum:geodetic','minna_(nigeria)'], // Minna_(Nigeria)
-    ['HZD','modifiedBJZ54China','source:datum:geodetic','modified_bjz54_(china)'], // Modified_BJZ54_(China)
-    ['HZD','montjongLowe','source:datum:geodetic','montjong_lowe'], // Montjong_Lowe
-    ['HZD','montserratIslandAstro1958','source:datum:geodetic','montserrat_island_astro_1958'], // Montserrat_Island_Astro_1958
-    ['HZD','mountDillonTobago','source:datum:geodetic','mount_dillon_tobago'], // Mount_Dillon_Tobago
-    ['HZD','mPoralokoGabon','source:datum:geodetic','mporaloko_(gabon)'], // M'Poraloko_(Gabon)
-    ['HZD','nahrwanMasirahIslandOman','source:datum:geodetic','nahrwan_(masirah_island_oman)'], // Nahrwan_(Masirah_Island_Oman)
-    ['HZD','nahrwanSaudiArabia','source:datum:geodetic','nahrwan_(saudi_arabia)'], // Nahrwan_(Saudi_Arabia)
-    ['HZD','nahrwanUnitedArabEmirates','source:datum:geodetic','nahrwan_(united_arab_emirates)'], // Nahrwan_(United_Arab_Emirates)
-    ['HZD','naparimaBwiTrinidadTobago','source:datum:geodetic','naparima_(bwi_trinidad_and_tobago)'], // Naparima_(BWI_Trinidad_and_Tobago)
-    ['HZD','newFrenchZeroMeridianParis','source:datum:geodetic','new_french_or_nouvelle_triangulation_francaise_(ntf)_with_zero_meridian_paris'], // New_French_or_Nouvelle_Triangulation_Francaise_(NTF)_with_Zero_Meridian_Paris
-    ['HZD','northAm1927Alaska','source:datum:geodetic','north_american_1927_(alaska)'], // North_American_1927_(Alaska)
-    ['HZD','northAm1927Alberta','source:datum:geodetic','north_american_1927_(alberta_and_british_columbia)'], // North_American_1927_(Alberta_and_British_Columbia)
-    ['HZD','northAm1927AleutianE','source:datum:geodetic','north_american_1927_(aleutian_islands_east_of_180_degrees_west)'], // North_American_1927_(Aleutian_Islands_East_of_180_degrees_West)
-    ['HZD','northAm1927AleutianW','source:datum:geodetic','north_american_1927_(aleutian_islands_west_of_180_degrees_west)'], // North_American_1927_(Aleutian_Islands_West_of_180_degrees_West)
-    ['HZD','northAm1927Bahamas','source:datum:geodetic','north_american_1927_(bahamas_except_san_salvador_island)'], // North_American_1927_(Bahamas_except_San_Salvador_Island)
-    ['HZD','northAm1927CanadMean','source:datum:geodetic','north_american_1927_(canada_mean)'], // North_American_1927_(Canada_mean)
-    ['HZD','northAm1927CanalZone','source:datum:geodetic','north_american_1927_(canal_zone)'], // North_American_1927_(Canal_Zone)
-    ['HZD','northAm1927Caribbean','source:datum:geodetic','north_american_1927_(caribbean)'], // North_American_1927_(Caribbean)
-    ['HZD','northAm1927CentAmer','source:datum:geodetic','north_american_1927_(central_america)'], // North_American_1927_(Central_America)
-    ['HZD','northAm1927ConusMean','source:datum:geodetic','north_american_1927_(conus_mean)'], // North_American_1927_(CONUS_mean)
-    ['HZD','northAm1927Cuba','source:datum:geodetic','north_american_1927_(cuba)'], // North_American_1927_(Cuba)
-    ['HZD','northAm1927EasternUs','source:datum:geodetic','north_american_1927_(eastern_us)'], // North_American_1927_(Eastern_US)
-    ['HZD','northAm1927HayesPen','source:datum:geodetic','north_american_1927_(hayes_peninsula_greenland)'], // North_American_1927_(Hayes_Peninsula_Greenland)
-    ['HZD','northAm1927Manitoba','source:datum:geodetic','north_american_1927_(manitoba_and_ontario)'], // North_American_1927_(Manitoba_and_Ontario)
-    ['HZD','northAm1927Mexico','source:datum:geodetic','north_american_1927_(mexico)'], // North_American_1927_(Mexico)
-    ['HZD','northAm1927Newfound','source:datum:geodetic','north_american_1927_(newfoundland_new_brunswick_nova_scotia_and_quebec)'], // North_American_1927_(Newfoundland_New_Brunswick_Nova_Scotia_and_Quebec)
-    ['HZD','northAm1927NwTerSaskat','source:datum:geodetic','north_american_1927_(northwest_territories_and_saskatchewan)'], // North_American_1927_(Northwest_Territories_and_Saskatchewan)
-    ['HZD','northAm1927Salvador','source:datum:geodetic','north_american_1927_(san_salvador_island)'], // North_American_1927_(San_Salvador_Island)
-    ['HZD','northAm1927WesternUs','source:datum:geodetic','north_american_1927_(western_us)'], // North_American_1927_(Western_US)
-    ['HZD','northAm1927Yukon','source:datum:geodetic','north_american_1927_(yukon)'], // North_American_1927_(Yukon)
-    ['HZD','northAm1983AlaskaExAleut','source:datum:geodetic','north_american_1983_(alaska_excluding_aleutian_islands)'], // North_American_1983_(Alaska_excluding_Aleutian_Islands)
-    ['HZD','northAm1983Aleutian','source:datum:geodetic','north_american_1983_(aleutian_islands)'], // North_American_1983_(Aleutian_Islands)
-    ['HZD','northAm1983Canada','source:datum:geodetic','north_american_1983_(canada)'], // North_American_1983_(Canada)
-    ['HZD','northAm1983Conus','source:datum:geodetic','north_american_1983_(conus)'], // North_American_1983_(CONUS)
-    ['HZD','northAm1983Hawaii','source:datum:geodetic','north_american_1983_(hawaii)'], // North_American_1983_(Hawaii)
-    ['HZD','northAm1983Mexico','source:datum:geodetic','north_american_1983_(mexico_and_central_america))'], // North_American_1983_(Mexico_and_Central_America))
-    ['HZD','northSahara1959','source:datum:geodetic','north_sahara_1959'], // North_Sahara_1959
-    ['HZD','observMeteorologico1939','source:datum:geodetic','observatorio_meteorologico_1939_(corvo_and_flores_islands_azores)'], // Observatorio_Meteorologico_1939_(Corvo_and_Flores_Islands_Azores)
-    ['HZD','ocotopequeGuatemala','source:datum:geodetic','ocotopeque_guatemala'], // Ocotopeque_Guatemala
-    ['HZD','oldEgyptian','source:datum:geodetic','old_egyptian_(egypt)'], // Old_Egyptian_(Egypt)
-    ['HZD','oldHawaiianHawaiiIsland','source:datum:geodetic','old_hawaiian_(hawaii)'], // Old_Hawaiian_(Hawaii)
-    ['HZD','oldHawaiianKauaiIsland','source:datum:geodetic','old_hawaiian_(kauai)'], // Old_Hawaiian_(Kauai)
-    ['HZD','oldHawaiianMauiIsland','source:datum:geodetic','old_hawaiian_(maui)'], // Old_Hawaiian_(Maui)
-    ['HZD','oldHawaiianMeanValue','source:datum:geodetic','old_hawaiian_(mean_value)'], // Old_Hawaiian_(mean_value)
-    ['HZD','oldHawaiianOahuIsland','source:datum:geodetic','old_hawaiian_(oahu)'], // Old_Hawaiian_(Oahu)
-    ['HZD','oman','source:datum:geodetic','oman_(oman)'], // Oman_(Oman)
-    ['HZD','ordnanceSurvGB1936England','source:datum:geodetic','ordnance_survey_g.b._1936_(england)'], // Ordnance_Survey_G.B._1936_(England)
-    ['HZD','ordnanceSurvGB1936ScotWale','source:datum:geodetic','ordnance_survey_g.b._1936_(england_isle_of_man_and_wales)'], // Ordnance_Survey_G.B._1936_(England_Isle_of_Man_and_Wales)
-    ['HZD','ordnanceSurvGB1936MeanVal','source:datum:geodetic','ordnance_survey_g.b._1936_(mean_value)'], // Ordnance_Survey_G.B._1936_(mean_value)
-    ['HZD','ordnanceSurvGB1936ScotShet','source:datum:geodetic','ordnance_survey_g.b._1936_(scotland_and_shetland_islands)'], // Ordnance_Survey_G.B._1936_(Scotland_and_Shetland_Islands)
-    ['HZD','ordnanceSurvGB1936Wales','source:datum:geodetic','ordnance_survey_g.b._1936_(wales)'], // Ordnance_Survey_G.B._1936_(Wales)
-    ['HZD','osloObservatoryOld','source:datum:geodetic','oslo_observatory_(old)_norway'], // Oslo_Observatory_(Old)_Norway
-    ['HZD','padangBaseWestEnd','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)'], // Padang_Base_West_End_(Sumatra_Indonesia)
-    ['HZD','padangBaseWestEndZeroMerid','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)_with_zero_meridian_djakarta'], // Padang_Base_West_End_(Sumatra_Indonesia)_with_Zero_Meridian_Djakarta
-    ['HZD','palestine1928','source:datum:geodetic','palestine_1928_(israel_jordan)'], // Palestine_1928_(Israel_Jordan)
-    ['HZD','picoDeLasNievesCanaryIs','source:datum:geodetic','pico_de_las_nieves_(canary_islands)'], // Pico_de_las_Nieves_(Canary_Islands)
-    ['HZD','pitcairnAstro1967','source:datum:geodetic','pitcairn_astro_1967_(pitcairn_island)'], // Pitcairn_Astro_1967_(Pitcairn_Island)
-    ['HZD','point58MeanSolution','source:datum:geodetic','point_58_mean_solution_(burkina_faso_and_niger)'], // Point_58_Mean_Solution_(Burkina_Faso_and_Niger)
-    ['HZD','pointeNoire1948','source:datum:geodetic','pointe_noire_1948'], // Pointe_Noire_1948
-    ['HZD','potsdamHelmertturmGermany','source:datum:geodetic','potsdam_or_helmertturm_(germany)'], // Potsdam_or_Helmertturm_(Germany)
-    ['HZD','provSouthAm1956Bolivia','source:datum:geodetic','prov._s._american_1956_(bolivia)'], // Prov._S._American_1956_(Bolivia)
-    ['HZD','provSouthAm1956Columbia','source:datum:geodetic','prov._s._american_1956_(columbia)'], // Prov._S._American_1956_(Columbia)
-    ['HZD','provSouthAm1956Ecuador','source:datum:geodetic','prov._s._american_1956_(ecuador)'], // Prov._S._American_1956_(Ecuador)
-    ['HZD','provSouthAm1956Guyana','source:datum:geodetic','prov._s._american_1956_(guyana)'], // Prov._S._American_1956_(Guyana)
-    ['HZD','provSouthAm1956MeanValue','source:datum:geodetic','prov._s._american_1956_(mean_value)'], // Prov._S._American_1956_(mean_value)
-    ['HZD','provSouthAm1956NChile','source:datum:geodetic','prov._s._american_1956_(northern_chile_near_19_degrees_south)'], // Prov._S._American_1956_(Northern_Chile_near_19_degrees_South)
-    ['HZD','provSouthAm1956Peru','source:datum:geodetic','prov._s._american_1956_(peru)'], // Prov._S._American_1956_(Peru)
-    ['HZD','provSouthAm1956SChile','source:datum:geodetic','prov._s._american_1956_(southern_chile_near_43_degrees_south)'], // Prov._S._American_1956_(Southern_Chile_near_43_degrees_South)
-    ['HZD','provSouthAm1956Venezuela','source:datum:geodetic','prov._s._american_1956_(venezuela)'], // Prov._S._American_1956_(Venezuela)
-    ['HZD','provSouthChilean1963','source:datum:geodetic','provisional_south_chilean_1963_(or_hito_xviii_1963)_(s._chile_53_degrees_south)'], // Provisional_South_Chilean_1963_(or_Hito_XVIII_1963)_(S._Chile_53_degrees_South)
-    ['HZD','puertoRicoVirginIslands','source:datum:geodetic','puerto_rico_(puerto_rico_and_virgin_islands)'], // Puerto_Rico_(Puerto_Rico_and_Virgin_Islands)
-    ['HZD','pulkovo1942Albania','source:datum:geodetic','pulkovo_1942_(albania)'], // Pulkovo_1942_(Albania)
-    ['HZD','pulkovo1942Czechoslovakia','source:datum:geodetic','pulkovo_1942_(czechoslovakia)'], // Pulkovo_1942_(Czechoslovakia)
-    ['HZD','pulkovo1942Hungary','source:datum:geodetic','pulkovo_1942_(hungary)'], // Pulkovo_1942_(Hungary)
-    ['HZD','pulkovo1942Kazakhstan','source:datum:geodetic','pulkovo_1942_(kazakhstan)'], // Pulkovo_1942_(Kazakhstan)
-    ['HZD','pulkovo1942Latvia','source:datum:geodetic','pulkovo_1942_(latvia)'], // Pulkovo_1942_(Latvia)
-    ['HZD','pulkovo1942Poland','source:datum:geodetic','pulkovo_1942_(poland)'], // Pulkovo_1942_(Poland)
-    ['HZD','pulkovo1942Romania','source:datum:geodetic','pulkovo_1942_(romania)'], // Pulkovo_1942_(Romania)
-    ['HZD','pulkovo1942Russia','source:datum:geodetic','pulkovo_1942_(russia)'], // Pulkovo_1942_(Russia)
-    ['HZD','qatarNationalQatar','source:datum:geodetic','qatar_national_(qatar)'], // Qatar_National_(Qatar)
-    ['HZD','qornoqSouthGreenland','source:datum:geodetic','qornoq_(south_greenland)'], // Qornoq_(South_Greenland)
-    ['HZD','rauenbergBerlinGermany','source:datum:geodetic','rauenberg_(berlin_germany)'], // Rauenberg_(Berlin_Germany)
-    ['HZD','reconTriangulationMorocco','source:datum:geodetic','reconnaissance_triangulation_morocco'], // Reconnaissance_Triangulation_Morocco
-    ['HZD','reunion1947','source:datum:geodetic','reunion_1947'], // Reunion_1947
-    ['HZD','revisedNahrwan','source:datum:geodetic','revised_nahrwan'], // Revised_Nahrwan
-    ['HZD','rome1940','source:datum:geodetic','rome_1940_(or_monte_mario_1940)_italy'], // Rome_1940_(or_Monte_Mario_1940)_Italy
-    ['HZD','rome1940ZeroMeridianRome','source:datum:geodetic','rome_1940_(or_monte_mario_1940)_italy_with_zero_meridian_rome'], // Rome_1940_(or_Monte_Mario_1940)_Italy_with_Zero_Meridian_Rome
-    ['HZD','rt90StockholmSweden','source:datum:geodetic','rt90_stockholm_sweden'], // RT90_Stockholm_Sweden
-    ['HZD','sainteAnneI1984Guadeloupe','source:datum:geodetic','sainte_anne_i_1984_(guadeloupe)'], // Sainte_Anne_I_1984_(Guadeloupe)
-    ['HZD','santoDos1965EspiritoSanto','source:datum:geodetic','santo_(dos)_1965_(espirito_santo_island)'], // Santo_(DOS)_1965_(Espirito_Santo_Island)
-    ['HZD','saoBrazSaoMiguelAzores','source:datum:geodetic','sao_braz_(sao_miguel_santa_maria_islands_azores)'], // Sao_Braz_(Sao_Miguel_Santa_Maria_Islands_Azores)
-    ['HZD','sapperHill1943EastFalkland','source:datum:geodetic','sapper_hill_1943_(east_falkland_islands)'], // Sapper_Hill_1943_(East_Falkland_Islands)
-    ['HZD','schwarzeckNamibia','source:datum:geodetic','schwarzeck_(namibia)'], // Schwarzeck_(Namibia)
-    ['HZD','seBasePortoSanto','source:datum:geodetic','se_base_(porto_santo)_(porto_santo_and_madeira_islands)'], // SE_Base_(Porto_Santo)_(Porto_Santo_and_Madeira_Islands)
-    ['HZD','selvagemGrande1938Salvage','source:datum:geodetic','selvagem_grande_1938_(salvage_islands)'], // Selvagem_Grande_1938_(Salvage_Islands)
-    ['HZD','sierraLeone1960','source:datum:geodetic','sierra_leone_1960'], // Sierra_Leone_1960
-    ['HZD','sJtsk','source:datum:geodetic','s-jtsk'], // S-JTSK
-    ['HZD','southAfricanSouthAfrica','source:datum:geodetic','south_african_(south_africa)'], // South_African_(South_Africa)
-    ['HZD','southAmerican1969Argentina','source:datum:geodetic','south_american_1969_(argentina)'], // South_American_1969_(Argentina)
-    ['HZD','southAmerican1969BaltraIs','source:datum:geodetic','south_american_1969_(baltra_galapagos_islands)'], // South_American_1969_(Baltra_Galapagos_Islands)
-    ['HZD','southAmerican1969Bolivia','source:datum:geodetic','south_american_1969_(bolivia)'], // South_American_1969_(Bolivia)
-    ['HZD','southAmerican1969Brazil','source:datum:geodetic','south_american_1969_(brazil)'], // South_American_1969_(Brazil)
-    ['HZD','southAmerican1969Chile','source:datum:geodetic','south_american_1969_(chile)'], // South_American_1969_(Chile)
-    ['HZD','southAmerican1969Columbia','source:datum:geodetic','south_american_1969_(columbia)'], // South_American_1969_(Columbia)
-    ['HZD','southAmerican1969Ecuador','source:datum:geodetic','south_american_1969_(ecuador)'], // South_American_1969_(Ecuador)
-    ['HZD','southAmerican1969Guyana','source:datum:geodetic','south_american_1969_(guyana)'], // South_American_1969_(Guyana)
-    ['HZD','southAmerican1969MeanValue','source:datum:geodetic','south_american_1969_(mean_value)'], // South_American_1969_(mean_value)
-    ['HZD','southAmerican1969Paraguay','source:datum:geodetic','south_american_1969_(paraguay)'], // South_American_1969_(Paraguay)
-    ['HZD','southAmerican1969Peru','source:datum:geodetic','south_american_1969_(peru)'], // South_American_1969_(Peru)
-    ['HZD','southAmerican1969Trinidad','source:datum:geodetic','south_american_1969_(trinidad_and_tobago)'], // South_American_1969_(Trinidad_and_Tobago)
-    ['HZD','southAmerican1969Venezuela','source:datum:geodetic','south_american_1969_(venezuela)'], // South_American_1969_(Venezuela)
-    ['HZD','sirgas','source:datum:geodetic','south_american_geocentric_reference_system_(sirgas)'], // South_American_Geocentric_Reference_System_(SIRGAS)
-    ['HZD','southAsiaSingapore','source:datum:geodetic','south_asia_(southeast_asia_singapore)'], // South_Asia_(Southeast_Asia_Singapore)
-    ['HZD','sovietGeodeticSystem1985','source:datum:geodetic','soviet_geodetic_system_1985'], // Soviet_Geodetic_System_1985
-    ['HZD','sovietGeodeticSystem1990','source:datum:geodetic','soviet_geodetic_system_1990'], // Soviet_Geodetic_System_1990
-    ['HZD','stPierreetMiquelon1950','source:datum:geodetic','st._pierre_et_miquelon_1950'], // St._Pierre_et_Miquelon_1950
-    ['HZD','stockholm1938Sweden','source:datum:geodetic','stockholm_1938_(sweden)'], // Stockholm_1938_(Sweden)
-    ['HZD','sydneyObservatoryNewSouth','source:datum:geodetic','sydney_observatory_new_south_wales_australia'], // Sydney_Observatory_New_South_Wales_Australia
-    ['HZD','tananariveObservatory1925','source:datum:geodetic','tananarive_observatory_1925'], // Tananarive_Observatory_1925
-    ['HZD','tananariveObs1925ZerMerPar','source:datum:geodetic','tananarive_observatory_1925_with_zero_meridian_paris'], // Tananarive_Observatory_1925_with_Zero_Meridian_Paris
-    ['HZD','timbalai1948BruneiMalaysia','source:datum:geodetic','timbalai_1948_(brunei_and_east_malaysia_-_sarawak_and_sabah)'], // Timbalai_1948_(Brunei_and_East_Malaysia_-_Sarawak_and_Sabah)
-    ['HZD','timbalai1968','source:datum:geodetic','timbalai_1968'], // Timbalai_1968
-    ['HZD','tokyoJapan','source:datum:geodetic','tokyo_(japan)'], // Tokyo_(Japan)
-    ['HZD','tokyoKorea','source:datum:geodetic','tokyo_(korea)'], // Tokyo_(Korea)
-    ['HZD','tokyoKoreaCycle1','source:datum:geodetic','tokyo_(korea)_-_cycle_1'], // Tokyo_(Korea)_-_Cycle_1
-    ['HZD','tokyoMeanValue','source:datum:geodetic','tokyo_(mean_value)'], // Tokyo_(mean_value)
-    ['HZD','tokyoOkinawa','source:datum:geodetic','tokyo_(okinawa)'], // Tokyo_(Okinawa)
-    ['HZD','trinidad1903','source:datum:geodetic','trinidad_1903'], // Trinidad_1903
-    ['HZD','tristanAstro1968Cunha','source:datum:geodetic','tristan_astro_1968_(tristan_da_cunha)'], // Tristan_Astro_1968_(Tristan_da_Cunha)
-    ['HZD','vitiLevu1916FijiIslands','source:datum:geodetic','viti_levu_1916_(viti_levu_island_fiji_islands)'], // Viti_Levu_1916_(Viti_Levu_Island_Fiji_Islands)
-    ['HZD','voirol1875','source:datum:geodetic','voirol_1875'], // Voirol_1875
-    ['HZD','voirol1875ZeroMeridParis','source:datum:geodetic','voirol_1875_with_zero_meridian_paris'], // Voirol_1875_with_Zero_Meridian_Paris
-    ['HZD','voirol1960Algeria','source:datum:geodetic','voirol_1960_algeria'], // Voirol_1960_Algeria
-    ['HZD','voirol1960ZeroMeridParis','source:datum:geodetic','voirol_1960_algeria_with_zero_meridian_paris'], // Voirol_1960_Algeria_with_Zero_Meridian_Paris
-    ['HZD','wakeIslandAstro1952','source:datum:geodetic','wake_island_astro_1952'], // Wake_Island_Astro_1952
-    ['HZD','wakeEniwetok1960MarshallIs','source:datum:geodetic','wake-eniwetok_1960_(marshall_islands)'], // Wake-Eniwetok_1960_(Marshall_Islands)
-    ['HZD','worldGeodeticSystem1960','source:datum:geodetic','world_geodetic_system_1960'], // World_Geodetic_System_1960
-    ['HZD','worldGeodeticSystem1966','source:datum:geodetic','world_geodetic_system_1966'], // World_Geodetic_System_1966
-    ['HZD','worldGeodeticSystem1972','source:datum:geodetic','world_geodetic_system_1972'], // World_Geodetic_System_1972
-    ['HZD','worldGeodeticSystem1984','source:datum:geodetic','world_geodetic_system_1984'], // World_Geodetic_System_1984
-    ['HZD','yacareUruguay','source:datum:geodetic','yacare_(uruguay)'], // Yacare_(Uruguay)
-    ['HZD','zanderijSurinam','source:datum:geodetic','zanderij_(surinam)'], // Zanderij_(Surinam)
+    // ['HZD','noInformation',undefined,undefined], // No Information
     ['HZD','other','source:datum:geodetic','other'], // Other
+    ['HZD','worldGeodeticSystem1984','source:datum:geodetic','world_geodetic_system_1984'], // The geodetic datum known as 'World Geodetic System 1984' and intended to be used globally.
+    ['HZD','adindanBurkinaFaso','source:datum:geodetic','adindan_(burkina_faso)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Burkina Faso.
+    ['HZD','adindanCameroon','source:datum:geodetic','adindan_(cameroon)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Cameroon.
+    ['HZD','adindanEthiopia','source:datum:geodetic','adindan_(ethiopia)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Ethiopia.
+    ['HZD','adindanMali','source:datum:geodetic','adindan_(mali)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Mali.
+    ['HZD','adindanMeanValue','source:datum:geodetic','adindan_(mean_value)'], // The geodetic datum known as 'Adindan' and intended as a mean solution for the geographic region of Ethiopia and Sudan.
+    ['HZD','adindanSenegal','source:datum:geodetic','adindan_(senegal)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Senegal.
+    ['HZD','adindanSudan','source:datum:geodetic','adindan_(sudan)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Sudan.
+    ['HZD','afgooyeSomalia','source:datum:geodetic','afgooye_(somalia)'], // The geodetic datum known as 'Afgooye' and intended to be used only in the geographic region of Somalia.
+    ['HZD','ainelAbd1970BahrainIsland','source:datum:geodetic','ain_el_abd_1970_(bahrain_island)'], // The geodetic datum known as 'Ain el Abd 1970' and intended to be used only in the geographic region of Bahrain Island.
+    ['HZD','ainelAbd1970SaudiArabia','source:datum:geodetic','ain_el_abd_1970_(saudi_arabia)'], // The geodetic datum known as 'Ain el Abd 1970' and intended to be used only in the geographic region of Saudi Arabia.
+    ['HZD','americanSamoaDatum1962','source:datum:geodetic','american_samoa_datum_1962'], // The geodetic datum known as 'American Samoa Datum 1962' and intended to be used in the geographic region of the American Samoa Islands.
+    ['HZD','amersfoort1885dash1903','source:datum:geodetic','amersfoort_1885/1903_(netherlands)'], // The geodetic datum known as 'Amersfoort 1885/1903' and intended to be used only in the geographic region of Netherlands.
+    ['HZD','anna1Astro1965CocosIslands','source:datum:geodetic','anna_1_astro_1965_(cocos_islands)'], // The geodetic datum known as 'Anna 1 Astro 1965' and intended to be used only in the geographic region of Cocos Islands.
+    ['HZD','antiguaIslandAstro1943','source:datum:geodetic','antigua_island_astro_1943'], // The geodetic datum known as 'Antigua Island Astro 1943' and intended to be used only in the geographic region of Antigua and the Leeward Islands.
+    ['HZD','approximateLuzonDatum','source:datum:geodetic','approximate_luzon_datum_(philippines)'], // The geodetic datum known as 'Approximate Luzon Datum' and intended to be used only in the geographic region of Philippines.
+    ['HZD','arc1935Africa','source:datum:geodetic','arc_1935_(africa)'], // The geodetic datum known as 'Arc 1935' and intended to be used only in the geographic region of Africa.
+    ['HZD','arc1950Botswana','source:datum:geodetic','arc_1950_(botswana)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Botswana.
+    ['HZD','arc1950Burundi','source:datum:geodetic','arc_1950_(burundi)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Burundi.
+    ['HZD','arc1950Lesotho','source:datum:geodetic','arc_1950_(lesotho)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Lesotho.
+    ['HZD','arc1950Malawi','source:datum:geodetic','arc_1950_(malawi)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Malawi.
+    ['HZD','arc1950MeanValue','source:datum:geodetic','arc_1950_(mean_value)'], // The geodetic datum known as 'Arc 1950' and intended as a mean solution for the geographic region of Botswana, Lesotho, Malawi, Swaziland, Zaire, Zambia and Zimbabwe.
+    ['HZD','arc1950Swaziland','source:datum:geodetic','arc_1950_(swaziland)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Swaziland.
+    ['HZD','arc1950Zaire','source:datum:geodetic','arc_1950_(zaire)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Zaire.
+    ['HZD','arc1950Zambia','source:datum:geodetic','arc_1950_(zambia)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Zambia.
+    ['HZD','arc1950Zimbabwe','source:datum:geodetic','arc_1950_(zimbabwe)'], // The geodetic datum known as 'Arc 1950' and intended to be used only in the geographic region of Zimbabwe.
+    ['HZD','arc1960Kenya','source:datum:geodetic','arc_1960_(kenya)'], // The geodetic datum known as 'Arc 1960' and intended to be used only in the geographic region of Kenya.
+    ['HZD','arc1960MeanValue','source:datum:geodetic','arc_1960_(mean_value)'], // The geodetic datum known as 'Arc 1960' and intended as a mean solution for the geographic region of Kenya and Tanzania.
+    ['HZD','arc1960Tanzania','source:datum:geodetic','arc_1960_(tanzania)'], // The geodetic datum known as 'Arc 1960' and intended to be used only in the geographic region of Tanzania.
+    ['HZD','ascensionIsland1958','source:datum:geodetic','ascension_island_1958_(ascension_island)'], // The geodetic datum known as 'Ascension Island 1958' and intended to be used only in the geographic region of Ascension Island.
+    ['HZD','astroBeaconEIwoJimaIsland','source:datum:geodetic','astro_beacon_e_(iwo_jima_island)'], // The geodetic datum known as 'Astro Beacon 'E'' and intended to be used only in the geographic region of Iwo Jima Island.
+    ['HZD','astroDos71dash4StHelena','source:datum:geodetic','astro_dos_71/4_(st._helena_island)'], // The geodetic datum known as 'Astro DOS 71/4' and intended to be used only in the geographic region of St. Helena Island.
+    ['HZD','astroStation1952MarcusIs','source:datum:geodetic','astro_station_1952_(marcus_island)'], // The geodetic datum known as 'Astro Station 1952' and intended to be used only in the geographic region of Marcus Island.
+    ['HZD','astroTernIsland1961Hawaii','source:datum:geodetic','astro_tern_island_1961_(tern_island_hawaii)'], // The geodetic datum known as 'Astro Tern Island 1961' and intended to be used only in the geographic region of Tern Island and Hawaii.
+    ['HZD','australianGeodetic1966','source:datum:geodetic','australian_geod._1966_(australia_and_tasmania_island)'], // The geodetic datum known as 'Australian Geod. 1966' and intended to be used only in the geographic region of Australia and Tasmania Island.
+    ['HZD','australianGeodetic1984','source:datum:geodetic','australian_geod._1984_(australia_and_tasmania_island)'], // The geodetic datum known as 'Australian Geod. 1984' and intended to be used only in the geographic region of Australia and Tasmania Island.
+    ['HZD','averageTerrestrialSys1977','source:datum:geodetic','average_terrestrial_system_1977_new_brunswick'], // The geodetic datum known as 'Average Terrestrial System 1977' and intended to be used only in the geographic region of New Brunswick, Nova Scotia, and Prince Edward Island.
+    ['HZD','ayabelleLighthouseDjibouti','source:datum:geodetic','ayabelle_lighthouse_(djibouti)'], // The geodetic datum known as 'Ayabelle Lighthouse' and intended to be used only in the geographic region of Djibouti.
+    ['HZD','bekaaBaseSouthEndLebanon','source:datum:geodetic','bekaa_base_south_end_(lebanon)'], // The geodetic datum known as 'Bekaa Base South End' and intended to be used only in the geographic region of Lebanon.
+    ['HZD','belgium1950SystemLommelSig','source:datum:geodetic','belgium_1950_system_(lommel_signal_belgium)'], // The geodetic datum known as 'Belgium 1950 System' and intended to be used only in the geographic region of Lommel Signal, Belgium.
+    ['HZD','belgium1972Observatoire','source:datum:geodetic','belgium_1972_(observatoire_duccle)'], // The geodetic datum known as Belgium 1972 and intended to be used only in the geographic region of the Observatoire dUccle.
+    ['HZD','bellevueIgnEfateErromango','source:datum:geodetic','bellevue_(ign)_(efate_and_erromango_islands)'], // The geodetic datum known as 'Bellevue IGN' and intended to be used only in the geographic region of the Efate and Erromango Islands.
+    ['HZD','bermuda1957BermudaIslands','source:datum:geodetic','bermuda_1957_(bermuda_islands)'], // The geodetic datum known as 'Bermuda 1957' and intended to be used only in the geographic region of the Bermuda Islands.
+    ['HZD','bern1898Switzerland','source:datum:geodetic','bern_1898_(switzerland)'], // The geodetic datum known as 'Bern 1898' and intended to be used only in the geographic region of Switzerland.
+    ['HZD','bern1898ZeroMeridian','source:datum:geodetic','bern_1898_(switzerland)_with_zero_meridian_bern'], // The geodetic datum known as 'Bern 1898' whose zero meridian is set at Bern and is intended to be used only in the geographic region of Switzerland.
+    ['HZD','bissauGuineaBissau','source:datum:geodetic','bissau_(guinea-bissau)'], // The geodetic datum known as 'Bissau' and intended to be used only in the geographic region of Guinea-Bissau.
+    ['HZD','bjz54A954BeijingCoord','source:datum:geodetic','bjz54_(a954_beijing_coordinates)_(china)'], // The geodetic datum known as 'BJZ54' or 'A954 Beijing Coordinates' and intended to be used only in the geographic region of China.
+    ['HZD','bogotaObservatoryColombia','source:datum:geodetic','bogota_observatory_(colombia)'], // The geodetic datum known as 'Bogota Observatory' and intended to be used only in the geographic region of Colombia.
+    ['HZD','bogotaObsZeroMeridian','source:datum:geodetic','bogota_observatory_(colombia)_with_zero_meridian_bogota'], // The geodetic datum known as 'Bogota Observatory' whose zero meridian is set at Bogota and is intended to be used only in the geographic region of Colombia.
+    ['HZD','bukitRimpahIndonesia','source:datum:geodetic','bukit_rimpah_(bangka_and_belitung_islands_indonesia)'], // The geodetic datum known as 'Bukit Rimpah' and intended to be used only in the geographic region of Bangka and Belitung Islands, Indonesia.
+    ['HZD','camacupaBaseSwEndAngola','source:datum:geodetic','camacupa_base_sw_end_(campo_de_aviacao_angola)'], // The geodetic datum known as 'Camacupa Base SW End' and intended to be used only in the geographic region of Campo De Aviacao, Angola.
+    ['HZD','campAreaAstroAntarctica','source:datum:geodetic','camp_area_astro_(camp_mcmurdo_area_antarctica)'], // The geodetic datum known as 'Camp Area Astro' and intended to be used only in the geographic region of Camp McMurdo Area, Antarctica.
+    ['HZD','campoInchauspeArgentina','source:datum:geodetic','campo_inchauspe_(argentina)'], // The geodetic datum known as 'Campo Inchauspe' and intended to be used only in the geographic region of Argentina.
+    ['HZD','cantonAstro1966PhoenixIs','source:datum:geodetic','canton_astro_1966_(phoenix_islands)'], // The geodetic datum known as 'Canton Astro 1966' and intended to be used only in the geographic region of Phoenix Islands.
+    ['HZD','capeSouthAfrica','source:datum:geodetic','cape_(south_africa)'], // The geodetic datum known as 'Cape' and intended to be used only in the geographic region of South Africa.
+    ['HZD','capeCanaveralMeanValue','source:datum:geodetic','cape_canaveral_(mean_value)'], // The geodetic datum known as 'Cape Canaveral' and intended as a mean solution for the geographic region of Florida and the Bahama Islands.
+    ['HZD','carthageTunisia','source:datum:geodetic','carthage_(tunisia)'], // The geodetic datum known as 'Carthage' and intended to be used only in the geographic region of Tunisia.
+    ['HZD','chatham1971NewZealand','source:datum:geodetic','chatham_1971_(chatham_island_new_zealand)'], // The geodetic datum known as 'Chatham 1971' and intended to be used only in the geographic region of Chatham Island, New Zealand.
+    ['HZD','chuaAstroParaguay','source:datum:geodetic','chua_astro_(paraguay)'], // The geodetic datum known as 'Chua Astro' and intended to be used only in the geographic region of Paraguay.
+    ['HZD','compensationGeoQuebec1977','source:datum:geodetic','compensation_geodetique_du_quebec_1977'], // The geodetic datum known as 'Compensation Geodetique du Quebec 1977' and whose geographic region of intended use is not specified.
+    ['HZD','conakryPyramidGuinea','source:datum:geodetic','conakry_pyramid_of_the_service_geographique_(guinea)'], // The geodetic datum known as 'Conakry Pyramid of the Service Geographique' and intended to be used only in the geographic region of Guinea.
+    ['HZD','estonia1937','source:datum:geodetic','co-ordinate_system_1937_of_estonia'], // The geodetic datum known as 'Co-ordinate System 1937 of Estonia' and intended to be used only in the geographic region of Estonia.
+    ['HZD','corregoAlegreBrazil','source:datum:geodetic','corrego_alegre_(brazil)'], // The geodetic datum known as 'Corrego Alegre' and intended to be used only in the geographic region of Brazil.
+    ['HZD','dabolaGuinea','source:datum:geodetic','dabola_(guinea)'], // The geodetic datum known as 'Dabola' and intended to be used only in the geographic region of Guinea.
+    ['HZD','dcs3LighthouseLesserAnt','source:datum:geodetic','dcs-3_lighthouse_saint_lucia_lesser_antilles'], // The geodetic datum known as 'DCS-3 Lighthouse, Saint Lucia, Lesser Antilles' and whose geographic region of intended use is not specified.
+    ['HZD','deceptionIslAntarctica','source:datum:geodetic','deception_island_antarctica'], // The geodetic datum known as 'Deception Island' or 'Deception 1993' and intended to be used only in the geographic region of Deception Island, Antarctica.
+    ['HZD','djakartaBataviaIndonesia','source:datum:geodetic','djakarta_(batavia)_(sumatra_island_indonesia)'], // The geodetic datum known as 'Djakarta (Batavia)' and intended to be used only in the geographic region of Sumatra Island, Indonesia.
+    ['HZD','djakartaBataviaZeroMerid','source:datum:geodetic','djakarta_(batavia)_(sumatra_island_indonesia)_with_zero_meridian_djakarta'], // The geodetic datum known as 'Djakarta (Batavia)' whose zero meridian is set at Djakarta and is intended to be used only in the geographic region of Sumatra Island, Indonesia.
+    ['HZD','dominicaAstroM12LesserAnt','source:datum:geodetic','dominica_astro_m-12_dominica_lesser_antilles'], // The geodetic datum known as 'Dominica Astro M-12, Dominica, Lesser Antilles' and whose geographic region of intended use is not specified.
+    ['HZD','dos1968GizoNewGeorgiaIs','source:datum:geodetic','dos_1968_(gizo_island_new_georgia_islands)'], // The geodetic datum known as 'DOS 1968' and intended to be used only in the geographic region of Gizo Island and the New Georgia Islands.
+    ['HZD','easterIsland1967EasterIs','source:datum:geodetic','easter_island_1967_(easter_island)'], // The geodetic datum known as 'Easter Island 1967' and intended to be used only in the geographic region of Easter Island.
+    ['HZD','european1950BritishIsles','source:datum:geodetic','european_1950_(british_isles)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of the British Isles to specifically encompass England, the Channel Islands, Ireland, Northern Ireland, Scotland, the Shetland Islands, and Wales.
+    ['HZD','european1950Cyprus','source:datum:geodetic','european_1950_(cyprus)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Cyprus.
+    ['HZD','european1950Egypt','source:datum:geodetic','european_1950_(egypt)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Egypt.
+    ['HZD','european1950England','source:datum:geodetic','european_1950_(england_channel_islands_scotland_and_shetland_islands)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of England, Channel Islands, Scotland, and Shetland Islands.
+    ['HZD','european1950Greece','source:datum:geodetic','european_1950_(greece)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Greece.
+    ['HZD','european1950Iran','source:datum:geodetic','european_1950_(iran)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Iran.
+    ['HZD','european1950IraqSyria','source:datum:geodetic','european_1950_(iraq_israel_jordan_kuwait_lebanon_saudi_arabia_and_syria)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Iraq, Israel, Jordan, Kuwait, Lebanon, Saudi Arabia, and Syria.
+    ['HZD','european1950Malta','source:datum:geodetic','european_1950_(malta)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Malta.
+    ['HZD','european1950MeanValue','source:datum:geodetic','european_1950_(mean_value)'], // The geodetic datum known as 'European 1950' and intended as a mean solution for the geographic region of Austria, Belgium, Denmark, Finland, France, Federal Republic of Germany, Gibraltar, Greece, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, S
+    ['HZD','european1950NorwayFinland','source:datum:geodetic','european_1950_(norway_and_finland)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Norway and Finland.
+    ['HZD','european1950PortugalSpain','source:datum:geodetic','european_1950_(portugal_and_spain)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Portugal and Spain.
+    ['HZD','european1950Sardinia','source:datum:geodetic','european_1950_(sardinia)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Sardinia.
+    ['HZD','european1950Sicily','source:datum:geodetic','european_1950_(sicily)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Sicily.
+    ['HZD','european1950Tunisia','source:datum:geodetic','european_1950_(tunisia)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Tunisia.
+    ['HZD','european1950WesternEurope','source:datum:geodetic','european_1950_(western_europe)'], // The geodetic datum known as 'European 1950' and intended as a mean solution for a geographic region of Western Europe encompassing Austria, Denmark, France, Federal Republic of Germany, Netherlands, and Switzerland.
+    ['HZD','european1979MeanValue','source:datum:geodetic','european_1979_(mean_value)'], // The geodetic datum known as 'European 1979' and intended as a mean solution for the geographic region of Austria, Finland, Netherlands, Norway, Spain, Sweden, and Switzerland.
+    ['HZD','etrs1989','source:datum:geodetic','european_terrestrial_reference_system_1989_(etrs89)'], // The geodetic datum known as 'European Terrestrial Reference System 1989' and intended to be used only in the geographic region of ETRS89.
+    ['HZD','fortThomas1955LeewardIs','source:datum:geodetic','fort_thomas_1955_(nevis_st_kitts_leeward_islands)'], // The geodetic datum known as 'Fort Thomas 1955' and intended to be used only in the geographic region of Nevis, St Kitts, and the Leeward Islands.
+    ['HZD','gan1970AdduAtoll','source:datum:geodetic','gan_1970_(addu_atoll_republic_of_maldives)'], // The geodetic datum known as 'Gan 1970' and intended to be used only in the geographic region of Addu Atoll, Republic of Maldives.
+    ['HZD','gandajikaBaseZaire','source:datum:geodetic','gandajika_base_(zaire)'], // The geodetic datum known as 'Gandajika Base' and intended to be used only in the geographic region of Zaire.
+    ['HZD','gdz80China','source:datum:geodetic','gdz80_(china)'], // The geodetic datum known as 'GDZ80' and intended to be used only in the geographic region of China.
+    ['HZD','geocentricDatumOfAustralia','source:datum:geodetic','geocentric_datum_of_australia_(gda)'], // The geodetic datum known as 'Geocentric Datum of Australia' or 'GDA' and intended to be used only in the geographic region of Australia.
+    ['HZD','geodeticDatum1949Zealand','source:datum:geodetic','datum:geodetic_1949_(new_zealand)'], // The geodetic datum known as 'Geodetic Datum 1949' and intended to be used only in the geographic region of New Zealand.
+    ['HZD','graciosaBaseSWFaialAzores','source:datum:geodetic','graciosa_base_sw_(faial_graciosa_pico_sao_jorge_and_terceira_island_azores)'], // The geodetic datum known as 'Graciosa Base SW' and intended to be used only in the geographic region of Faial, Graciosa, Pico, Sao Jorge, and Terceira Island, Azores.
+    ['HZD','greekDatumGreece','source:datum:geodetic','greek_datum_greece'], // The geodetic datum known as 'Greek Datum, Greece' and whose geographic region of intended use is not specified.
+    ['HZD','greekGeodeticRefSystem1987','source:datum:geodetic','greek_geodetic_reference_system_1987_(ggrs_87)'], // The geodetic datum known as 'Greek Geodetic Reference System 1987' or 'GGRS 87' and whose geographic region of intended use is not specified.
+    ['HZD','guam1963','source:datum:geodetic','guam_1963'], // The geodetic datum known as 'Guam 1963' and intended to be used only in the geographic region of Guam.
+    ['HZD','gunongSegaraKalimantanIs','source:datum:geodetic','gunong_segara_(kalimantan_island_indonesia)'], // The geodetic datum known as 'Gunong Segara' and intended to be used only in the geographic region of Kalimantan Island, Indonesia.
+    ['HZD','gunongSerindung','source:datum:geodetic','gunong_serindung'], // The geodetic datum known as 'Gunong Serindung' and whose geographic region of intended use is not specified.
+    ['HZD','gux1AstroGuadacanalIs','source:datum:geodetic','gux_1_astro_(guadacanal_island)'], // The geodetic datum known as 'GUX 1 Astro' and intended to be used only in the geographic region of Guadacanal Island.
+    ['HZD','guyanaCSG67','source:datum:geodetic','guyana_csg67'], // The geodetic datum known as 'Guyana CSG76' and whose geographic region of intended use is not specified.
+    ['HZD','heratNorthAfganistan','source:datum:geodetic','herat_north_(afganistan)'], // The geodetic datum known as 'Herat North' and intended to be used only in the geographic region of Afganistan.
+    ['HZD','hermannskogel','source:datum:geodetic','hermannskogel'], // The geodetic datum known as 'Hermannskogel' and intended to be used only in the geographic region of Yugoslavia (prior to 1990), Slovenia, Croatia, Bosnia and Herzegovina, and Serbia.
+    ['HZD','hjorsey1955Iceland','source:datum:geodetic','hjorsey_1955_(iceland)'], // The geodetic datum known as 'Hjorsey 1955' and intended to be used only in the geographic region of Iceland.
+    ['HZD','hongKong1929','source:datum:geodetic','hong_kong_1929'], // The geodetic datum known as 'Hong Kong 1929' and whose geographic region of intended use is not specified.
+    ['HZD','hongKong1963HongKong','source:datum:geodetic','hong_kong_1963_(hong_kong)'], // The geodetic datum known as 'Hong Kong 1963' and intended to be used only in the geographic region of Hong Kong.
+    ['HZD','hungarian1972','source:datum:geodetic','hungarian_1972'], // The geodetic datum known as 'Hungarian 1972' and whose geographic region of intended use is not specified.
+    ['HZD','huTzuShan','source:datum:geodetic','hu-tzu-shan'], // The geodetic datum known as 'Hu-Tzu-Shan' and intended to be used only in the geographic region of Taiwan.
+    ['HZD','indianBangladesh','source:datum:geodetic','indian_(bangladesh)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Bangladesh.
+    ['HZD','indianIndiaNepal','source:datum:geodetic','indian_(india_and_nepal)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of India and Nepal.
+    ['HZD','indianPakistan','source:datum:geodetic','indian_(pakistan)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Pakistan.
+    ['HZD','indianThailandVietnam','source:datum:geodetic','indian_(thailand_and_vietnam)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Thailand and Vietnam.
+    ['HZD','indian1954Thailand','source:datum:geodetic','indian_1954_(thailand)'], // The geodetic datum known as 'Indian 1954' and intended to be used only in the geographic region of Thailand.
+    ['HZD','indian1960ConSonIsland','source:datum:geodetic','indian_1960_(con_son_island_(vietnam))'], // The geodetic datum known as 'Indian 1960 (Con Son Island)' and intended to be used only in the geographic region of Con Son Island (Vietnam).
+    ['HZD','indian1960Vietnam','source:datum:geodetic','indian_1960_(vietnam:_near_16_degrees_north)'], // The geodetic datum known as 'Indian 1960' and intended to be used only in the geographic region of Vietnam near 16 degrees North.
+    ['HZD','indian1975Thailand','source:datum:geodetic','indian_1975_(thailand)'], // The geodetic datum known as 'Indian 1975' and intended to be used only in the geographic region of Thailand.
+    ['HZD','indian1975ThailandCycle1','source:datum:geodetic','indian_1975_(thailand)_-_cycle_1'], // The geodetic datum known as 'Indian 1975 - Cycle 1' and intended to be used only in the geographic region of Thailand.
+    ['HZD','indonesian1974','source:datum:geodetic','indonesian_1974'], // The geodetic datum known as 'Indonesian 1974' and intended to be used only in the geographic region of Indonesia.
+    ['HZD','ireland1965IrelandNorthern','source:datum:geodetic','ireland_1965_(ireland_and_northern_ireland)'], // The geodetic datum known as 'Ireland 1965' and intended to be used only in the geographic region of Ireland and Northern Ireland.
+    ['HZD','ists061Astro1968GeorgiaIs','source:datum:geodetic','ists_061_astro_1968_(south_georgia_islands)'], // The geodetic datum known as 'ISTS 061 Astro 1968' and intended to be used only in the geographic region of the South Georgia Islands.
+    ['HZD','ists073Astro1969DiegoGar','source:datum:geodetic','ists_073_astro_1969_(diego_garcia)'], // The geodetic datum known as 'ISTS 073 Astro 1969' and intended to be used only in the geographic region of Diego Garcia.
+    ['HZD','johnstonIsland1961','source:datum:geodetic','johnston_island_1961_(johnston_island)'], // The geodetic datum known as 'Johnston Island 1961' and intended to be used only in the geographic region of Johnston Island.
+    ['HZD','kalianpurIndia','source:datum:geodetic','kalianpur_(india)'], // The geodetic datum known as 'Kalianpur' and intended to be used only in the geographic region of India.
+    ['HZD','kandawalaSriLanka','source:datum:geodetic','kandawala_(sri_lanka)'], // The geodetic datum known as 'Kandawala' and intended to be used only in the geographic region of Sri Lanka.
+    ['HZD','kcs2SierraLeone','source:datum:geodetic','kcs_2_sierra_leone'], // The geodetic datum known as 'KCS 2, Sierra Leone' and whose geographic region of intended use is not specified.
+    ['HZD','kerguelenIsland1949','source:datum:geodetic','kerguelen_island_1949_(kerguelen_island)'], // The geodetic datum known as 'Kerguelen Island 1949' and intended to be used only in the geographic region of Kerguelen Island.
+    ['HZD','kertau1948RevisedMalaysia','source:datum:geodetic','kertau_1948_(or_revised_kertau)_(west_malaysia_and_singapore)'], // The geodetic datum known as 'Kertau 1948' or 'Revised Kertau' and intended to be used only in the geographic region of West Malaysia and Singapore.
+    ['HZD','kkjFinland','source:datum:geodetic','kkj_(or_kartastokoordinaattijarjestelma)_finland'], // The geodetic datum known as 'KKJ' or 'Kartastokoordinaattijarjestelma' and intended to be used only in the geographic region of Finland.
+    ['HZD','koreanGeodeticSystem1995','source:datum:geodetic','korean_geodetic_system_1995_(south_korea)'], // The geodetic datum known as 'Korean Geodetic System 1995' and intended to be used only in the geographic region of South Korea.
+    ['HZD','kusaieAstro1951','source:datum:geodetic','kusaie_astro_1951'], // The geodetic datum known as 'Kusaie Astro 1951' and intended to be used only in the geographic region of the Caroline Islands (Federated States of Micronesia).
+    ['HZD','kuwaitOilCompanyK28','source:datum:geodetic','kuwait_oil_company_(k28)'], // The geodetic datum known as 'Kuwait Oil Company (K28)' and whose geographic region of intended use is not specified.
+    ['HZD','lc5Astro1961CaymanBracIs','source:datum:geodetic','l.c._5_astro_1961_(cayman_brac_island)'], // The geodetic datum known as 'L.C. 5 Astro 1961' and intended to be used only in the geographic region of Cayman Brac Island.
+    ['HZD','leigonGhana','source:datum:geodetic','leigon_(ghana)'], // The geodetic datum known as 'Leigon' and intended to be used only in the geographic region of Ghana.
+    ['HZD','liberia1964Liberia','source:datum:geodetic','liberia_1964_(liberia)'], // The geodetic datum known as 'Liberia 1964' and intended to be used only in the geographic region of Liberia.
+    ['HZD','lisbonCastelodiSaoJorge','source:datum:geodetic','lisbon_(castelo_di_sao_jorge)_portugal'], // The geodetic datum known as 'Lisbon (Castelo di Sao Jorge)' and intended to be used only in the geographic region of Portugal.
+    ['HZD','localAstro','source:datum:geodetic','local_astro'], // A local geodetic datum established through astronomic observations.
+    ['HZD','lomaQuintanaVenezuela','source:datum:geodetic','loma_quintana_(venezuela)'], // The geodetic datum known as 'Loma Quintana' and intended to be used only in the geographic region of Venezuela.
+    ['HZD','luzonMindanaoIsland','source:datum:geodetic','luzon_(mindanao_island)'], // The geodetic datum known as 'Luzon' and intended to be used only in the geographic region of Mindanao Island.
+    ['HZD','luzonPhilipinesNotMindanao','source:datum:geodetic','luzon_(philipines_except_mindanao_island)'], // The geodetic datum known as 'Luzon' and intended to be used only in the geographic region of the Philipines, excepting Mindanao Island.
+    ['HZD','mahe1971MaheIsland','source:datum:geodetic','mahe_1971_(mahe_island)'], // The geodetic datum known as 'Mahe 1971' and intended to be used only in the geographic region of Mahe Island.
+    ['HZD','manokwariWestIrian','source:datum:geodetic','manokwari_(west_irian)'], // The geodetic datum known as 'Manokwari' and intended to be used only in the geographic region of West Irian.
+    ['HZD','marcoAstroSalvageIslands','source:datum:geodetic','marco_astro_(salvage_islands)'], // The geodetic datum known as 'Marco Astro' and intended to be used only in the geographic region of Salvage Islands.
+    ['HZD','martiniqueFortDesaix','source:datum:geodetic','martinique_fort-desaix'], // The geodetic datum known as 'Martinique Fort-Desaix' and whose geographic region of intended use is not specified.
+    ['HZD','massawEritreaEthiopia','source:datum:geodetic','massawa_(eritrea_ethiopia)'], // The geodetic datum known as 'Massawa' and intended to be used only in the geographic region of Eritrea, Ethiopia.
+    ['HZD','mayotteCombani','source:datum:geodetic','mayotte_combani'], // The geodetic datum known as 'Mayotte Combani' and whose geographic region of intended use is not specified.
+    ['HZD','merchichMorocco','source:datum:geodetic','merchich_(morocco)'], // The geodetic datum known as 'Merchich' and intended to be used only in the geographic region of Morocco.
+    ['HZD','midwayAstro1961MidwayIs','source:datum:geodetic','midway_astro_1961_(midway_island)'], // The geodetic datum known as 'Midway Astro 1961' and intended to be used only in the geographic region of Midway Island.
+    ['HZD','minnaCameroon','source:datum:geodetic','minna_(cameroon)'], // The geodetic datum known as 'Minna' and intended to be used only in the geographic region of Cameroon.
+    ['HZD','minnaNigeria','source:datum:geodetic','minna_(nigeria)'], // The geodetic datum known as 'Minna' and intended to be used only in the geographic region of Nigeria.
+    ['HZD','modifiedBJZ54China','source:datum:geodetic','modified_bjz54_(china)'], // The geodetic datum known as 'Modified BJZ54' and intended to be used only in the geographic region of China.
+    ['HZD','montjongLowe','source:datum:geodetic','montjong_lowe'], // The geodetic datum known as 'Montjong Lowe' and whose geographic region of intended use is not specified.
+    ['HZD','montserratIslandAstro1958','source:datum:geodetic','montserrat_island_astro_1958'], // The geodetic datum known as 'Montserrat Island Astro 1958' and intended to be used only in the geographic region of Montserrat and Leeward Islands.
+    ['HZD','mountDillonTobago','source:datum:geodetic','mount_dillon_tobago'], // The geodetic datum known as 'Mount Dillon, Tobago' and whose geographic region of intended use is not specified.
+    ['HZD','mPoralokoGabon','source:datum:geodetic','mporaloko_(gabon)'], // The geodetic datum known as 'M'Poraloko' and intended to be used only in the geographic region of Gabon.
+    ['HZD','nahrwanMasirahIslandOman','source:datum:geodetic','nahrwan_(masirah_island_oman)'], // The geodetic datum known as 'Nahrwan' and intended to be used only in the geographic region of Masirah Island, Oman.
+    ['HZD','nahrwanSaudiArabia','source:datum:geodetic','nahrwan_(saudi_arabia)'], // The geodetic datum known as 'Nahrwan' and intended to be used only in the geographic region of Saudi Arabia.
+    ['HZD','nahrwanUnitedArabEmirates','source:datum:geodetic','nahrwan_(united_arab_emirates)'], // The geodetic datum known as 'Nahrwan' and intended to be used only in the geographic region of the United Arab Emirates.
+    ['HZD','naparimaBwiTrinidadTobago','source:datum:geodetic','naparima_(bwi_trinidad_and_tobago)'], // The geodetic datum known as 'Naparima' and intended to be used only in the geographic region of the British West Indies, Trinidad and Tobago.
+    ['HZD','newFrenchZeroMeridianParis','source:datum:geodetic','new_french_or_nouvelle_triangulation_francaise_(ntf)_with_zero_meridian_paris'], // The geodetic datum known as 'New French' or 'Nouvelle Triangulation Francaise' whose zero meridian is set at Paris and is intended to be used only in the geographic region of continental France, Corsica and other surrounding islands.
+    ['HZD','northAm1927Alaska','source:datum:geodetic','north_american_1927_(alaska)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Alaska.
+    ['HZD','northAm1927Alberta','source:datum:geodetic','north_american_1927_(alberta_and_british_columbia)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Alberta and British Columbia.
+    ['HZD','northAm1927AleutianE','source:datum:geodetic','north_american_1927_(aleutian_islands_east_of_180_degrees_west)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Aleutian Islands East of 180 degrees West.
+    ['HZD','northAm1927AleutianW','source:datum:geodetic','north_american_1927_(aleutian_islands_west_of_180_degrees_west)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Aleutian Islands West of 180 degrees West.
+    ['HZD','northAm1927Bahamas','source:datum:geodetic','north_american_1927_(bahamas_except_san_salvador_island)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Bahamas, except San Salvador Island.
+    ['HZD','northAm1927CanadMean','source:datum:geodetic','north_american_1927_(canada_mean)'], // The geodetic datum known as 'North American 1927' and intended as a mean solution for the geographic region of Canada.
+    ['HZD','northAm1927CanalZone','source:datum:geodetic','north_american_1927_(canal_zone)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Canal Zone.
+    ['HZD','northAm1927Caribbean','source:datum:geodetic','north_american_1927_(caribbean)'], // The geodetic datum known as 'North American 1927' and intended as a mean solution for the geographic region of the Caribbean (Barbados, Caicos Islands, Cuba, Dominican Republic, Grand Cayman, Jamaica, Leeward Islands, and Turks Islands).
+    ['HZD','northAm1927CentAmer','source:datum:geodetic','north_american_1927_(central_america)'], // The geodetic datum known as 'North American 1927' and intended as a mean solution for the geographic region of Central America (Belize, Costa Rica, El Salvador, Guatemala, Honduras, and Nicaragua).
+    ['HZD','northAm1927ConusMean','source:datum:geodetic','north_american_1927_(conus_mean)'], // The geodetic datum known as 'North American 1927 'and intended as a mean solution for the geographic region of the continental United States.
+    ['HZD','northAm1927Cuba','source:datum:geodetic','north_american_1927_(cuba)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Cuba.
+    ['HZD','northAm1927EasternUs','source:datum:geodetic','north_american_1927_(eastern_us)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Eastern United States.
+    ['HZD','northAm1927HayesPen','source:datum:geodetic','north_american_1927_(hayes_peninsula_greenland)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Hayes Peninsula, Greenland.
+    ['HZD','northAm1927Manitoba','source:datum:geodetic','north_american_1927_(manitoba_and_ontario)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Manitoba and Ontario.
+    ['HZD','northAm1927Mexico','source:datum:geodetic','north_american_1927_(mexico)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Mexico.
+    ['HZD','northAm1927Newfound','source:datum:geodetic','north_american_1927_(newfoundland_new_brunswick_nova_scotia_and_quebec)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Newfoundland, New Brunswick, Nova Scotia and Quebec.
+    ['HZD','northAm1927NwTerSaskat','source:datum:geodetic','north_american_1927_(northwest_territories_and_saskatchewan)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Northwest Territories and Saskatchewan.
+    ['HZD','northAm1927Salvador','source:datum:geodetic','north_american_1927_(san_salvador_island)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of San Salvador Island.
+    ['HZD','northAm1927WesternUs','source:datum:geodetic','north_american_1927_(western_us)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of the Western United States.
+    ['HZD','northAm1927Yukon','source:datum:geodetic','north_american_1927_(yukon)'], // The geodetic datum known as 'North American 1927' and intended to be used only in the geographic region of Yukon.
+    ['HZD','northAm1983AlaskaExAleut','source:datum:geodetic','north_american_1983_(alaska_excluding_aleutian_islands)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Alaska, excluding Aleutian Islands.
+    ['HZD','northAm1983Aleutian','source:datum:geodetic','north_american_1983_(aleutian_islands)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Aleutian Islands.
+    ['HZD','northAm1983Canada','source:datum:geodetic','north_american_1983_(canada)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Canada.
+    ['HZD','northAm1983Conus','source:datum:geodetic','north_american_1983_(conus)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of the continental United States.
+    ['HZD','northAm1983Hawaii','source:datum:geodetic','north_american_1983_(hawaii)'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Hawaii.
+    ['HZD','northAm1983Mexico','source:datum:geodetic','north_american_1983_(mexico_and_central_america))'], // The geodetic datum known as 'North American 1983' and intended to be used only in the geographic region of Mexico and Central America..
+    ['HZD','northSahara1959','source:datum:geodetic','north_sahara_1959'], // The geodetic datum known as 'North Sahara 1959' and intended to be used only in the geographic region of Algeria.
+    ['HZD','observMeteorologico1939','source:datum:geodetic','observatorio_meteorologico_1939_(corvo_and_flores_islands_azores)'], // The geodetic datum known as 'Observatorio Meteorologico 1939' and intended to be used only in the geographic region of the Corvo and Flores Islands, Azores.
+    ['HZD','ocotopequeGuatemala','source:datum:geodetic','ocotopeque_guatemala'], // The geodetic datum known as 'Ocotopeque, Guatemala' and whose geographic region of intended use is not specified.
+    ['HZD','oldEgyptian','source:datum:geodetic','old_egyptian_(egypt)'], // The geodetic datum known as 'Old Egyptian' and intended to be used only in the geographic region of Egypt.
+    ['HZD','oldHawaiianHawaiiIsland','source:datum:geodetic','old_hawaiian_(hawaii)'], // The geodetic datum known as 'Old Hawaiian' and intended to be used only in the geographic region of Hawaii.
+    ['HZD','oldHawaiianKauaiIsland','source:datum:geodetic','old_hawaiian_(kauai)'], // The geodetic datum known as 'Old Hawaiian' and intended to be used only in the geographic region of Kauai.
+    ['HZD','oldHawaiianMauiIsland','source:datum:geodetic','old_hawaiian_(maui)'], // The geodetic datum known as 'Old Hawaiian' and intended to be used only in the geographic region of Maui.
+    ['HZD','oldHawaiianMeanValue','source:datum:geodetic','old_hawaiian_(mean_value)'], // The geodetic datum known as 'Old Hawaiian' and intended as a mean solution for the geographic region of the Hawaii Islands.
+    ['HZD','oldHawaiianOahuIsland','source:datum:geodetic','old_hawaiian_(oahu)'], // The geodetic datum known as 'Old Hawaiian' and intended to be used only in the geographic region of Oahu.
+    ['HZD','oman','source:datum:geodetic','oman_(oman)'], // The geodetic datum known as 'Oman' and intended to be used only in the geographic region of Oman.
+    ['HZD','ordnanceSurvGB1936England','source:datum:geodetic','ordnance_survey_g.b._1936_(england)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of England.
+    ['HZD','ordnanceSurvGB1936ScotWale','source:datum:geodetic','ordnance_survey_g.b._1936_(england_isle_of_man_and_wales)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of England, the Isle of Man, and Wales.
+    ['HZD','ordnanceSurvGB1936MeanVal','source:datum:geodetic','ordnance_survey_g.b._1936_(mean_value)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended as a mean solution for the geographic region of England, the Isle of Man, Scotland, Shetland, and Wales.
+    ['HZD','ordnanceSurvGB1936ScotShet','source:datum:geodetic','ordnance_survey_g.b._1936_(scotland_and_shetland_islands)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of Scotland and the Shetland Islands.
+    ['HZD','ordnanceSurvGB1936Wales','source:datum:geodetic','ordnance_survey_g.b._1936_(wales)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of Wales.
+    ['HZD','osloObservatoryOld','source:datum:geodetic','oslo_observatory_(old)_norway'], // The geodetic datum known as 'Oslo Observatory (Old)' and intended to be used only in the geographic region of Norway.
+    ['HZD','padangBaseWestEnd','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)'], // The geodetic datum known as 'Padang Base West End' and intended to be used only in the geographic region of Sumatra, Indonesia.
+    ['HZD','padangBaseWestEndZeroMerid','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)_with_zero_meridian_djakarta'], // The geodetic datum known as 'Padang Base West End' whose zero meridian is set at Djakarta and is intended to be used only in the geographic region of Sumatra, Indonesia.
+    ['HZD','palestine1928','source:datum:geodetic','palestine_1928_(israel_jordan)'], // The geodetic datum known as 'Palestine 1928' and intended to be used only in the geographic region of Israel and Jordan.
+    ['HZD','picoDeLasNievesCanaryIs','source:datum:geodetic','pico_de_las_nieves_(canary_islands)'], // The geodetic datum known as 'Pico de las Nieves' and intended to be used only in the geographic region of Canary Islands.
+    ['HZD','pitcairnAstro1967','source:datum:geodetic','pitcairn_astro_1967_(pitcairn_island)'], // The geodetic datum known as 'Pitcairn Astro 1967' and intended to be used only in the geographic region of Pitcairn Island.
+    ['HZD','point58MeanSolution','source:datum:geodetic','point_58_mean_solution_(burkina_faso_and_niger)'], // The geodetic datum known as 'Point 58 Mean Solution' and intended to be used only in the geographic region of Burkina Faso and Niger.
+    ['HZD','pointeNoire1948','source:datum:geodetic','pointe_noire_1948'], // The geodetic datum known as 'Pointe Noire 1948' and intended to be used only in the geographic region of Congo.
+    ['HZD','potsdamHelmertturmGermany','source:datum:geodetic','potsdam_or_helmertturm_(germany)'], // The geodetic datum known as 'Potsdam' or 'Helmertturm' and intended to be used only in the geographic region of Germany.
+    ['HZD','provSouthAm1956Bolivia','source:datum:geodetic','prov._s._american_1956_(bolivia)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Bolivia.
+    ['HZD','provSouthAm1956Columbia','source:datum:geodetic','prov._s._american_1956_(columbia)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Columbia.
+    ['HZD','provSouthAm1956Ecuador','source:datum:geodetic','prov._s._american_1956_(ecuador)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Ecuador.
+    ['HZD','provSouthAm1956Guyana','source:datum:geodetic','prov._s._american_1956_(guyana)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Guyana.
+    ['HZD','provSouthAm1956MeanValue','source:datum:geodetic','prov._s._american_1956_(mean_value)'], // The geodetic datum known as 'Prov. S. American 1956' and intended as a mean solution for the geographic region of Bolivia, Chile, Colombia, Ecuador, Guyana, Peru, and Venezuela.
+    ['HZD','provSouthAm1956NChile','source:datum:geodetic','prov._s._american_1956_(northern_chile_near_19_degrees_south)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Northern Chile near 19 degrees South.
+    ['HZD','provSouthAm1956Peru','source:datum:geodetic','prov._s._american_1956_(peru)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Peru.
+    ['HZD','provSouthAm1956SChile','source:datum:geodetic','prov._s._american_1956_(southern_chile_near_43_degrees_south)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Southern Chile near 43 degrees South.
+    ['HZD','provSouthAm1956Venezuela','source:datum:geodetic','prov._s._american_1956_(venezuela)'], // The geodetic datum known as 'Prov. S. American 1956' and intended to be used only in the geographic region of Venezuela.
+    ['HZD','provSouthChilean1963','source:datum:geodetic','provisional_south_chilean_1963_(or_hito_xviii_1963)_(s._chile_53_degrees_south)'], // The geodetic datum known as 'Provisional South Chilean 1963' or 'Hito XVIII 1963' and intended to be used only in the geographic region of Chile south of 53 degrees South.
+    ['HZD','puertoRicoVirginIslands','source:datum:geodetic','puerto_rico_(puerto_rico_and_virgin_islands)'], // The geodetic datum known as 'Puerto Rico' and intended to be used only in the geographic region of Puerto Rico and the Virgin Islands.
+    ['HZD','pulkovo1942Albania','source:datum:geodetic','pulkovo_1942_(albania)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Albania.
+    ['HZD','pulkovo1942Czechoslovakia','source:datum:geodetic','pulkovo_1942_(czechoslovakia)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Czechoslovakia (prior to 1 January 1993).
+    ['HZD','pulkovo1942Hungary','source:datum:geodetic','pulkovo_1942_(hungary)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Hungary.
+    ['HZD','pulkovo1942Kazakhstan','source:datum:geodetic','pulkovo_1942_(kazakhstan)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Kazakhstan.
+    ['HZD','pulkovo1942Latvia','source:datum:geodetic','pulkovo_1942_(latvia)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Latvia.
+    ['HZD','pulkovo1942Poland','source:datum:geodetic','pulkovo_1942_(poland)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Poland.
+    ['HZD','pulkovo1942Romania','source:datum:geodetic','pulkovo_1942_(romania)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Romania.
+    ['HZD','pulkovo1942Russia','source:datum:geodetic','pulkovo_1942_(russia)'], // The geodetic datum known as 'Pulkovo 1942' and intended to be used only in the geographic region of Russia.
+    ['HZD','qatarNationalQatar','source:datum:geodetic','qatar_national_(qatar)'], // The geodetic datum known as 'Qatar National' and intended to be used only in the geographic region of Qatar.
+    ['HZD','qornoqSouthGreenland','source:datum:geodetic','qornoq_(south_greenland)'], // The geodetic datum known as 'Qornoq' and intended to be used only in the geographic region of South Greenland.
+    ['HZD','rauenbergBerlinGermany','source:datum:geodetic','rauenberg_(berlin_germany)'], // The geodetic datum known as 'Rauenberg' and intended to be used only in the geographic region of Berlin, Germany.
+    ['HZD','reconTriangulationMorocco','source:datum:geodetic','reconnaissance_triangulation_morocco'], // The geodetic datum known as 'Reconnaissance Triangulation, Morocco' and whose geographic region of intended use is not specified.
+    ['HZD','reunion1947','source:datum:geodetic','reunion_1947'], // The geodetic datum known as 'Reunion 1947' and intended to be used only in the geographic region of the Mascarene Islands.
+    ['HZD','revisedNahrwan','source:datum:geodetic','revised_nahrwan'], // The geodetic datum known as 'Revised Nahrwan' and whose geographic region of intended use is not specified.
+    ['HZD','rome1940','source:datum:geodetic','rome_1940_(or_monte_mario_1940)_italy'], // The geodetic datum known as 'Rome 1940' or 'Monte Mario 1940' and intended to be used only in the geographic region of Italy.
+    ['HZD','rome1940ZeroMeridianRome','source:datum:geodetic','rome_1940_(or_monte_mario_1940)_italy_with_zero_meridian_rome'], // The geodetic datum known as 'Rome 1940' or 'Monte Mario 1940' whose zero meridian is set at Rome and is intended to be used only in the geographic region of Italy.
+    ['HZD','rt90StockholmSweden','source:datum:geodetic','rt90_stockholm_sweden'], // The geodetic datum known as 'RT90, Stockholm, Sweden' and whose geographic region of intended use is not specified.
+    ['HZD','sainteAnneI1984Guadeloupe','source:datum:geodetic','sainte_anne_i_1984_(guadeloupe)'], // The geodetic datum known as 'Sainte Anne I 1984' and intended to be used only in the geographic region of Guadeloupe.
+    ['HZD','santoDos1965EspiritoSanto','source:datum:geodetic','santo_(dos)_1965_(espirito_santo_island)'], // The geodetic datum known as 'Santo DOS. 1965' and intended to be used only in the geographic region of Espirito Santo Island.
+    ['HZD','saoBrazSaoMiguelAzores','source:datum:geodetic','sao_braz_(sao_miguel_santa_maria_islands_azores)'], // The geodetic datum known as 'Sao Braz' and intended to be used only in the geographic region of Sao Miguel, the Santa Maria Islands, and the Azores.
+    ['HZD','sapperHill1943EastFalkland','source:datum:geodetic','sapper_hill_1943_(east_falkland_islands)'], // The geodetic datum known as 'Sapper Hill 1943' and intended to be used only in the geographic region of the East Falkland Islands.
+    ['HZD','schwarzeckNamibia','source:datum:geodetic','schwarzeck_(namibia)'], // The geodetic datum known as 'Schwarzeck' and intended to be used only in the geographic region of Namibia.
+    ['HZD','seBasePortoSanto','source:datum:geodetic','se_base_(porto_santo)_(porto_santo_and_madeira_islands)'], // The geodetic datum known as 'SE Base Porto Santo' and intended to be used only in the geographic region of Porto Santo and the Madeira Islands.
+    ['HZD','selvagemGrande1938Salvage','source:datum:geodetic','selvagem_grande_1938_(salvage_islands)'], // The geodetic datum known as 'Selvagem Grande 1938' and intended to be used only in the geographic region of the Salvage Islands.
+    ['HZD','sierraLeone1960','source:datum:geodetic','sierra_leone_1960'], // The geodetic datum known as 'Sierra Leone 1960' and intended to be used only in the geographic region of Sierra Leone.
+    ['HZD','sJtsk','source:datum:geodetic','s-jtsk'], // The geodetic datum known as 'S-JTSK' and intended to be used in the geographic region of the Czech Republic and Slovakia.
+    ['HZD','southAfricanSouthAfrica','source:datum:geodetic','south_african_(south_africa)'], // The geodetic datum known as 'South African' and intended to be used only in the geographic region of South Africa.
+    ['HZD','southAmerican1969Argentina','source:datum:geodetic','south_american_1969_(argentina)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Argentina.
+    ['HZD','southAmerican1969BaltraIs','source:datum:geodetic','south_american_1969_(baltra_galapagos_islands)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Baltra and the Galapagos Islands.
+    ['HZD','southAmerican1969Bolivia','source:datum:geodetic','south_american_1969_(bolivia)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Bolivia.
+    ['HZD','southAmerican1969Brazil','source:datum:geodetic','south_american_1969_(brazil)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Brazil.
+    ['HZD','southAmerican1969Chile','source:datum:geodetic','south_american_1969_(chile)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Chile.
+    ['HZD','southAmerican1969Columbia','source:datum:geodetic','south_american_1969_(columbia)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Columbia.
+    ['HZD','southAmerican1969Ecuador','source:datum:geodetic','south_american_1969_(ecuador)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Ecuador.
+    ['HZD','southAmerican1969Guyana','source:datum:geodetic','south_american_1969_(guyana)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Guyana.
+    ['HZD','southAmerican1969MeanValue','source:datum:geodetic','south_american_1969_(mean_value)'], // The geodetic datum known as 'South American 1969' and intended as a mean solution for the geographic region of Argentina, Bolivia, Brazil, Chile, Columbia, Ecuador, Guyana, Paraguay, Peru, Trinidad and Tobago, and Venezuela.
+    ['HZD','southAmerican1969Paraguay','source:datum:geodetic','south_american_1969_(paraguay)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Paraguay.
+    ['HZD','southAmerican1969Peru','source:datum:geodetic','south_american_1969_(peru)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Peru.
+    ['HZD','southAmerican1969Trinidad','source:datum:geodetic','south_american_1969_(trinidad_and_tobago)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Trinidad and Tobago.
+    ['HZD','southAmerican1969Venezuela','source:datum:geodetic','south_american_1969_(venezuela)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Venezuela.
+    ['HZD','sirgas','source:datum:geodetic','south_american_geocentric_reference_system_(sirgas)'], // The geodetic datum known as 'South American Geocentric Reference System' and intended to be used only in the geographic region of South America.
+    ['HZD','southAsiaSingapore','source:datum:geodetic','south_asia_(southeast_asia_singapore)'], // The geodetic datum known as 'South Asia' and intended to be used only in the geographic region of Southeast Asia and Singapore.
+    ['HZD','sovietGeodeticSystem1985','source:datum:geodetic','soviet_geodetic_system_1985'], // The geodetic datum known as 'Soviet Geodetic System 1985' and intended to be used only in the geographic region of the former Soviet Union.
+    ['HZD','sovietGeodeticSystem1990','source:datum:geodetic','soviet_geodetic_system_1990'], // The geodetic datum known as 'Soviet Geodetic System 1990' and intended to be used only in the geographic region of the former Soviet Union.
+    ['HZD','stPierreetMiquelon1950','source:datum:geodetic','st._pierre_et_miquelon_1950'], // The geodetic datum known as 'St. Pierre et Miquelon 1950' and whose geographic region of intended use is not specified.
+    ['HZD','stockholm1938Sweden','source:datum:geodetic','stockholm_1938_(sweden)'], // The geodetic datum known as 'Stockholm 1938' and intended to be used only in the geographic region of Sweden.
+    ['HZD','sydneyObservatoryNewSouth','source:datum:geodetic','sydney_observatory_new_south_wales_australia'], // The geodetic datum known as 'Sydney Observatory, New South Wales, Australia' and whose geographic region of intended use is not specified.
+    ['HZD','tananariveObservatory1925','source:datum:geodetic','tananarive_observatory_1925'], // The geodetic datum known as 'Tananarive Observatory 1925' and intended to be used only in the geographic region of Madagascar.
+    ['HZD','tananariveObs1925ZerMerPar','source:datum:geodetic','tananarive_observatory_1925_with_zero_meridian_paris'], // The geodetic datum known as 'Tananarive Observatory 1925' whose zero meridian is set at Paris and is intended to be used only in the geographic region of Madagascar.
+    ['HZD','timbalai1948BruneiMalaysia','source:datum:geodetic','timbalai_1948_(brunei_and_east_malaysia_-_sarawak_and_sabah)'], // The geodetic datum known as 'Timbalai 1948' and intended to be used only in the geographic region of Brunei and East Malaysia (Sarawak and Sabah).
+    ['HZD','timbalai1968','source:datum:geodetic','timbalai_1968'], // The geodetic datum known as 'Timbalai 1968' and whose geographic region of intended use is not specified.
+    ['HZD','tokyoJapan','source:datum:geodetic','tokyo_(japan)'], // The geodetic datum known as 'Tokyo' and intended to be used only in the geographic region of Japan.
+    ['HZD','tokyoKorea','source:datum:geodetic','tokyo_(korea)'], // The geodetic datum known as 'Tokyo' and intended to be used only in the geographic region of Korea.
+    ['HZD','tokyoKoreaCycle1','source:datum:geodetic','tokyo_(korea)_-_cycle_1'], // The geodetic datum known as 'Tokyo - Cycle 1' and intended to be used only in the geographic region of Korea.
+    ['HZD','tokyoMeanValue','source:datum:geodetic','tokyo_(mean_value)'], // The geodetic datum known as 'Tokyo' and intended as a mean solution for the geographic region of Japan, Korea, and Okinawa.
+    ['HZD','tokyoOkinawa','source:datum:geodetic','tokyo_(okinawa)'], // The geodetic datum known as 'Tokyo' and intended to be used only in the geographic region of Okinawa.
+    ['HZD','trinidad1903','source:datum:geodetic','trinidad_1903'], // The geodetic datum known as 'Trinidad 1903' and whose geographic region of intended use is not specified.
+    ['HZD','tristanAstro1968Cunha','source:datum:geodetic','tristan_astro_1968_(tristan_da_cunha)'], // The geodetic datum known as 'Tristan Astro 1968' and intended to be used only in the geographic region of Tristan da Cunha.
+    ['HZD','vitiLevu1916FijiIslands','source:datum:geodetic','viti_levu_1916_(viti_levu_island_fiji_islands)'], // The geodetic datum known as 'Viti Levu 1916' and intended to be used only in the geographic region of Viti Levu Island, Fiji Islands.
+    ['HZD','voirol1875','source:datum:geodetic','voirol_1875'], // The geodetic datum known as 'Voirol 1875' and intended to be used only in the geographic region of Algeria.
+    ['HZD','voirol1875ZeroMeridParis','source:datum:geodetic','voirol_1875_with_zero_meridian_paris'], // The geodetic datum known as 'Voirol 1875' whose zero meridian is set at Paris and is intended to be used only in the geographic region of Algeria.
+    ['HZD','voirol1960Algeria','source:datum:geodetic','voirol_1960_algeria'], // The geodetic datum known as 'Voirol 1960' and intended to be used only in the geographic region of Algeria.
+    ['HZD','voirol1960ZeroMeridParis','source:datum:geodetic','voirol_1960_algeria_with_zero_meridian_paris'], // The geodetic datum known as 'Voirol 1960' whose zero meridian is set at Paris and is intended to be used only in the geographic region of Algeria.
+    ['HZD','wakeIslandAstro1952','source:datum:geodetic','wake_island_astro_1952'], // The geodetic datum known as 'Wake Island 1952' which is based on astronomic observations and is intended to be used only in the geographic region of the Wake Atoll.
+    ['HZD','wakeEniwetok1960MarshallIs','source:datum:geodetic','wake-eniwetok_1960_(marshall_islands)'], // The geodetic datum known as 'Wake-Eniwetok 1960' and intended to be used only in the geographic region of the Marshall Islands.
+    ['HZD','worldGeodeticSystem1960','source:datum:geodetic','world_geodetic_system_1960'], // The geodetic datum known as 'World Geodetic System 1960' and intended to be used globally.
+    ['HZD','worldGeodeticSystem1966','source:datum:geodetic','world_geodetic_system_1966'], // The geodetic datum known as 'World Geodetic System 1966' and intended to be used globally.
+    ['HZD','worldGeodeticSystem1972','source:datum:geodetic','world_geodetic_system_1972'], // The geodetic datum known as 'World Geodetic System 1972' and intended to be used globally.
+    ['HZD','yacareUruguay','source:datum:geodetic','yacare_(uruguay)'], // The geodetic datum known as 'Yacare' and intended to be used only in the geographic region of Uruguay.
+    ['HZD','zanderijSurinam','source:datum:geodetic','zanderij_(surinam)'], // The geodetic datum known as 'Zanderij' and intended to be used only in the geographic region of Surinam.
 
-    // IC2 - ISO 3166-1 Country Code (alpha3)
-    // ['IC2','-999999',undefined,undefined], // No Information
-    ['IC2','AFG','is_in:country_code3','afg'], // AFGHANISTAN
-    ['IC2','ALA','is_in:country_code3','ala'], // ALAND ISLANDS
-    ['IC2','ALB','is_in:country_code3','alb'], // ALBANIA
-    ['IC2','DZA','is_in:country_code3','dza'], // ALGERIA
-    ['IC2','ASM','is_in:country_code3','asm'], // AMERICAN SAMOA
-    ['IC2','AND','is_in:country_code3','and'], // ANDORRA
-    ['IC2','AGO','is_in:country_code3','ago'], // ANGOLA
-    ['IC2','AIA','is_in:country_code3','aia'], // ANGUILLA
-    ['IC2','ATA','is_in:country_code3','ata'], // ANTARCTICA
-    ['IC2','ATG','is_in:country_code3','atg'], // ANTIGUA AND BARBUDA
-    ['IC2','ARG','is_in:country_code3','arg'], // ARGENTINA
-    ['IC2','ARM','is_in:country_code3','arm'], // ARMENIA
-    ['IC2','ABW','is_in:country_code3','abw'], // ARUBA
-    ['IC2','AUS','is_in:country_code3','aus'], // AUSTRALIA
-    ['IC2','AUT','is_in:country_code3','aut'], // AUSTRIA
-    ['IC2','AZE','is_in:country_code3','aze'], // AZERBAIJAN
-    ['IC2','BHS','is_in:country_code3','bhs'], // BAHAMAS
-    ['IC2','BHR','is_in:country_code3','bhr'], // BAHRAIN
-    ['IC2','BGD','is_in:country_code3','bgd'], // BANGLADESH
-    ['IC2','BRB','is_in:country_code3','brb'], // BARBADOS
-    ['IC2','BLR','is_in:country_code3','blr'], // BELARUS
-    ['IC2','BEL','is_in:country_code3','bel'], // BELGIUM
-    ['IC2','BLZ','is_in:country_code3','blz'], // BELIZE
-    ['IC2','BEN','is_in:country_code3','ben'], // BENIN
-    ['IC2','BMU','is_in:country_code3','bmu'], // BERMUDA
-    ['IC2','BTN','is_in:country_code3','btn'], // BHUTAN
-    ['IC2','BOL','is_in:country_code3','bol'], // BOLIVIA PLURINATIONAL STATE OF
-    ['IC2','BES','is_in:country_code3','bes'], // BONAIRE SINT EUSTATIUS AND SABA
-    ['IC2','BIH','is_in:country_code3','bih'], // BOSNIA AND HERZEGOVINA
-    ['IC2','BWA','is_in:country_code3','bwa'], // BOTSWANA
-    ['IC2','BVT','is_in:country_code3','bvt'], // BOUVET ISLAND
-    ['IC2','BRA','is_in:country_code3','bra'], // BRAZIL
-    ['IC2','IOT','is_in:country_code3','iot'], // BRITISH INDIAN OCEAN TERRITORY
-    ['IC2','BRN','is_in:country_code3','brn'], // BRUNEI DARUSSALAM
-    ['IC2','BGR','is_in:country_code3','bgr'], // BULGARIA
-    ['IC2','BFA','is_in:country_code3','bfa'], // BURKINA FASO
-    ['IC2','BDI','is_in:country_code3','bdi'], // BURUNDI
-    ['IC2','KHM','is_in:country_code3','khm'], // CAMBODIA
-    ['IC2','CMR','is_in:country_code3','cmr'], // CAMEROON
-    ['IC2','CAN','is_in:country_code3','can'], // CANADA
-    ['IC2','CPV','is_in:country_code3','cpv'], // CAPE VERDE
-    ['IC2','CYM','is_in:country_code3','cym'], // CAYMAN ISLANDS
-    ['IC2','CAF','is_in:country_code3','caf'], // CENTRAL AFRICAN REPUBLIC
-    ['IC2','TCD','is_in:country_code3','tcd'], // CHAD
-    ['IC2','CHL','is_in:country_code3','chl'], // CHILE
-    ['IC2','CHN','is_in:country_code3','chn'], // CHINA
-    ['IC2','CXR','is_in:country_code3','cxr'], // CHRISTMAS ISLAND
-    ['IC2','CCK','is_in:country_code3','cck'], // COCOS (KEELING) ISLANDS
-    ['IC2','COL','is_in:country_code3','col'], // COLOMBIA
-    ['IC2','COM','is_in:country_code3','com'], // COMOROS
-    ['IC2','COG','is_in:country_code3','cog'], // CONGO
-    ['IC2','COD','is_in:country_code3','cod'], // CONGO DEMOCRATIC REPUBLIC OF THE
-    ['IC2','COK','is_in:country_code3','cok'], // COOK ISLANDS
-    ['IC2','CRI','is_in:country_code3','cri'], // COSTA RICA
-    ['IC2','CIV','is_in:country_code3','civ'], // COTE DIVOIRE
-    ['IC2','HRV','is_in:country_code3','hrv'], // CROATIA
-    ['IC2','CUB','is_in:country_code3','cub'], // CUBA
-    ['IC2','CUW','is_in:country_code3','cuw'], // CURACAO
-    ['IC2','CYP','is_in:country_code3','cyp'], // CYPRUS
-    ['IC2','CZE','is_in:country_code3','cze'], // CZECH REPUBLIC
-    ['IC2','DNK','is_in:country_code3','dnk'], // DENMARK
-    ['IC2','DJI','is_in:country_code3','dji'], // DJIBOUTI
-    ['IC2','DMA','is_in:country_code3','dma'], // DOMINICA
-    ['IC2','DOM','is_in:country_code3','dom'], // DOMINICAN REPUBLIC
-    ['IC2','ECU','is_in:country_code3','ecu'], // ECUADOR
-    ['IC2','EGY','is_in:country_code3','egy'], // EGYPT
-    ['IC2','SLV','is_in:country_code3','slv'], // EL SALVADOR
-    ['IC2','GNQ','is_in:country_code3','gnq'], // EQUATORIAL GUINEA
-    ['IC2','ERI','is_in:country_code3','eri'], // ERITREA
-    ['IC2','EST','is_in:country_code3','est'], // ESTONIA
-    ['IC2','ETH','is_in:country_code3','eth'], // ETHIOPIA
-    ['IC2','FLK','is_in:country_code3','flk'], // FALKLAND ISLANDS (MALVINAS)
-    ['IC2','FRO','is_in:country_code3','fro'], // FAROE ISLANDS
-    ['IC2','FJI','is_in:country_code3','fji'], // FIJI
-    ['IC2','FIN','is_in:country_code3','fin'], // FINLAND
-    ['IC2','FRA','is_in:country_code3','fra'], // FRANCE
-    ['IC2','GUF','is_in:country_code3','guf'], // FRENCH GUIANA
-    ['IC2','PYF','is_in:country_code3','pyf'], // FRENCH POLYNESIA
-    ['IC2','ATF','is_in:country_code3','atf'], // FRENCH SOUTHERN TERRITORIES
-    ['IC2','GAB','is_in:country_code3','gab'], // GABON
-    ['IC2','GMB','is_in:country_code3','gmb'], // GAMBIA
-    ['IC2','GEO','is_in:country_code3','geo'], // GEORGIA
-    ['IC2','DEU','is_in:country_code3','deu'], // GERMANY
-    ['IC2','GHA','is_in:country_code3','gha'], // GHANA
-    ['IC2','GIB','is_in:country_code3','gib'], // GIBRALTAR
-    ['IC2','GRC','is_in:country_code3','grc'], // GREECE
-    ['IC2','GRL','is_in:country_code3','grl'], // GREENLAND
-    ['IC2','GRD','is_in:country_code3','grd'], // GRENADA
-    ['IC2','GLP','is_in:country_code3','glp'], // GUADELOUPE
-    ['IC2','GUM','is_in:country_code3','gum'], // GUAM
-    ['IC2','GTM','is_in:country_code3','gtm'], // GUATEMALA
-    ['IC2','GGY','is_in:country_code3','ggy'], // GUERNSEY
-    ['IC2','GIN','is_in:country_code3','gin'], // GUINEA
-    ['IC2','GNB','is_in:country_code3','gnb'], // GUINEA-BISSAU
-    ['IC2','GUY','is_in:country_code3','guy'], // GUYANA
-    ['IC2','HTI','is_in:country_code3','hti'], // HAITI
-    ['IC2','HMD','is_in:country_code3','hmd'], // HEARD ISLAND AND MCDONALD ISLANDS
-    ['IC2','VAT','is_in:country_code3','vat'], // HOLY SEE (VATICAN CITY STATE)
-    ['IC2','HND','is_in:country_code3','hnd'], // HONDURAS
-    ['IC2','HKG','is_in:country_code3','hkg'], // HONG KONG
-    ['IC2','HUN','is_in:country_code3','hun'], // HUNGARY
-    ['IC2','ISL','is_in:country_code3','isl'], // ICELAND
-    ['IC2','IND','is_in:country_code3','ind'], // INDIA
-    ['IC2','IDN','is_in:country_code3','idn'], // INDONESIA
-    ['IC2','IRN','is_in:country_code3','irn'], // IRAN ISLAMIC REPUBLIC OF
-    ['IC2','IRQ','is_in:country_code3','irq'], // IRAQ
-    ['IC2','IRL','is_in:country_code3','irl'], // IRELAND
-    ['IC2','IMN','is_in:country_code3','imn'], // ISLE OF MAN
-    ['IC2','ISR','is_in:country_code3','isr'], // ISRAEL
-    ['IC2','ITA','is_in:country_code3','ita'], // ITALY
-    ['IC2','JAM','is_in:country_code3','jam'], // JAMAICA
-    ['IC2','JPN','is_in:country_code3','jpn'], // JAPAN
-    ['IC2','JEY','is_in:country_code3','jey'], // JERSEY
-    ['IC2','JOR','is_in:country_code3','jor'], // JORDAN
-    ['IC2','KAZ','is_in:country_code3','kaz'], // KAZAKHSTAN
-    ['IC2','KEN','is_in:country_code3','ken'], // KENYA
-    ['IC2','KIR','is_in:country_code3','kir'], // KIRIBATI
-    ['IC2','PRK','is_in:country_code3','prk'], // KOREA DEMOCRATIC PEOPLE'S REPUBLIC OF
-    ['IC2','KOR','is_in:country_code3','kor'], // KOREA REPUBLIC OF
-    ['IC2','KWT','is_in:country_code3','kwt'], // KUWAIT
-    ['IC2','KGZ','is_in:country_code3','kgz'], // KYRGYZSTAN
-    ['IC2','LAO','is_in:country_code3','lao'], // LAO PEOPLES DEMOCRATIC REPUBLIC
-    ['IC2','LVA','is_in:country_code3','lva'], // LATVIA
-    ['IC2','LBN','is_in:country_code3','lbn'], // LEBANON
-    ['IC2','LSO','is_in:country_code3','lso'], // LESOTHO
-    ['IC2','LBR','is_in:country_code3','lbr'], // LIBERIA
-    ['IC2','LBY','is_in:country_code3','lby'], // LIBYA
-    ['IC2','LIE','is_in:country_code3','lie'], // LIECHTENSTEIN
-    ['IC2','LTU','is_in:country_code3','ltu'], // LITHUANIA
-    ['IC2','LUX','is_in:country_code3','lux'], // LUXEMBOURG
-    ['IC2','MAC','is_in:country_code3','mac'], // MACAO
-    ['IC2','MKD','is_in:country_code3','mkd'], // MACEDONIA THE FORMER YUGOSLAV REPUBLIC OF
-    ['IC2','MDG','is_in:country_code3','mdg'], // MADAGASCAR
-    ['IC2','MWI','is_in:country_code3','mwi'], // MALAWI
-    ['IC2','MYS','is_in:country_code3','mys'], // MALAYSIA
-    ['IC2','MDV','is_in:country_code3','mdv'], // MALDIVES
-    ['IC2','MLI','is_in:country_code3','mli'], // MALI
-    ['IC2','MLT','is_in:country_code3','mlt'], // MALTA
-    ['IC2','MHL','is_in:country_code3','mhl'], // MARSHALL ISLANDS
-    ['IC2','MTQ','is_in:country_code3','mtq'], // MARTINIQUE
-    ['IC2','MRT','is_in:country_code3','mrt'], // MAURITANIA
-    ['IC2','MUS','is_in:country_code3','mus'], // MAURITIUS
-    ['IC2','MYT','is_in:country_code3','myt'], // MAYOTTE
-    ['IC2','MEX','is_in:country_code3','mex'], // MEXICO
-    ['IC2','FSM','is_in:country_code3','fsm'], // MICRONESIA FEDERATED STATES OF
-    ['IC2','MDA','is_in:country_code3','mda'], // MOLDOVA REPUBLIC OF
-    ['IC2','MCO','is_in:country_code3','mco'], // MONACO
-    ['IC2','MNG','is_in:country_code3','mng'], // MONGOLIA
-    ['IC2','MNE','is_in:country_code3','mne'], // MONTENEGRO
-    ['IC2','MSR','is_in:country_code3','msr'], // MONTSERRAT
-    ['IC2','MAR','is_in:country_code3','mar'], // MOROCCO
-    ['IC2','MOZ','is_in:country_code3','moz'], // MOZAMBIQUE
-    ['IC2','MMR','is_in:country_code3','mmr'], // MYANMAR
-    ['IC2','NAM','is_in:country_code3','nam'], // NAMIBIA
-    ['IC2','NRU','is_in:country_code3','nru'], // NAURU
-    ['IC2','NPL','is_in:country_code3','npl'], // NEPAL
-    ['IC2','NLD','is_in:country_code3','nld'], // NETHERLANDS
-    ['IC2','NCL','is_in:country_code3','ncl'], // NEW CALEDONIA
-    ['IC2','NZL','is_in:country_code3','nzl'], // NEW ZEALAND
-    ['IC2','NIC','is_in:country_code3','nic'], // NICARAGUA
-    ['IC2','NER','is_in:country_code3','ner'], // NIGER
-    ['IC2','NGA','is_in:country_code3','nga'], // NIGERIA
-    ['IC2','NIU','is_in:country_code3','niu'], // NIUE
-    ['IC2','NFK','is_in:country_code3','nfk'], // NORFOLK ISLAND
-    ['IC2','MNP','is_in:country_code3','mnp'], // NORTHERN MARIANA ISLANDS
-    ['IC2','NOR','is_in:country_code3','nor'], // NORWAY
-    ['IC2','OMN','is_in:country_code3','omn'], // OMAN
-    ['IC2','PAK','is_in:country_code3','pak'], // PAKISTAN
-    ['IC2','PLW','is_in:country_code3','plw'], // PALAU
-    ['IC2','PSE','is_in:country_code3','pse'], // PALESTINIAN TERRITORY OCCUPIED
-    ['IC2','PAN','is_in:country_code3','pan'], // PANAMA
-    ['IC2','PNG','is_in:country_code3','png'], // PAPUA NEW GUINEA
-    ['IC2','PRY','is_in:country_code3','pry'], // PARAGUAY
-    ['IC2','PER','is_in:country_code3','per'], // PERU
-    ['IC2','PHL','is_in:country_code3','phl'], // PHILIPPINES
-    ['IC2','PCN','is_in:country_code3','pcn'], // PITCAIRN
-    ['IC2','POL','is_in:country_code3','pol'], // POLAND
-    ['IC2','PRT','is_in:country_code3','prt'], // PORTUGAL
-    ['IC2','PRI','is_in:country_code3','pri'], // PUERTO RICO
-    ['IC2','QAT','is_in:country_code3','qat'], // QATAR
-    ['IC2','REU','is_in:country_code3','reu'], // RÉUNION
-    ['IC2','ROU','is_in:country_code3','rou'], // ROMANIA
-    ['IC2','RUS','is_in:country_code3','rus'], // RUSSIAN FEDERATION
-    ['IC2','RWA','is_in:country_code3','rwa'], // RWANDA
-    ['IC2','BLM','is_in:country_code3','blm'], // SAINT BARTHELEMY
-    ['IC2','SHN','is_in:country_code3','shn'], // SAINT HELENA ASCENSION AND TRISTAN DA CUNHA
-    ['IC2','KNA','is_in:country_code3','kna'], // SAINT KITTS AND NEVIS
-    ['IC2','LCA','is_in:country_code3','lca'], // SAINT LUCIA
-    ['IC2','MAF','is_in:country_code3','maf'], // SAINT MARTIN (FRENCH PART)
-    ['IC2','SPM','is_in:country_code3','spm'], // SAINT PIERRE AND MIQUELON
-    ['IC2','VCT','is_in:country_code3','vct'], // SAINT VINCENT AND THE GRENADINES
-    ['IC2','WSM','is_in:country_code3','wsm'], // SAMOA
-    ['IC2','SMR','is_in:country_code3','smr'], // SAN MARINO
-    ['IC2','STP','is_in:country_code3','stp'], // SAO TOME AND PRINCIPE
-    ['IC2','SAU','is_in:country_code3','sau'], // SAUDI ARABIA
-    ['IC2','SEN','is_in:country_code3','sen'], // SENEGAL
-    ['IC2','SRB','is_in:country_code3','srb'], // SERBIA
-    ['IC2','SYC','is_in:country_code3','syc'], // SEYCHELLES
-    ['IC2','SLE','is_in:country_code3','sle'], // SIERRA LEONE
-    ['IC2','SGP','is_in:country_code3','sgp'], // SINGAPORE
-    ['IC2','SXM','is_in:country_code3','sxm'], // SINT MAARTEN (DUTCH PART)
-    ['IC2','SVK','is_in:country_code3','svk'], // SLOVAKIA
-    ['IC2','SVN','is_in:country_code3','svn'], // SLOVENIA
-    ['IC2','SLB','is_in:country_code3','slb'], // SOLOMON ISLANDS
-    ['IC2','SOM','is_in:country_code3','som'], // SOMALIA
-    ['IC2','ZAF','is_in:country_code3','zaf'], // SOUTH AFRICA
-    ['IC2','SGS','is_in:country_code3','sgs'], // SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS
-    ['IC2','SSD','is_in:country_code3','ssd'], // SOUTH SUDAN
-    ['IC2','ESP','is_in:country_code3','esp'], // SPAIN
-    ['IC2','LKA','is_in:country_code3','lka'], // SRI LANKA
-    ['IC2','SDN','is_in:country_code3','sdn'], // SUDAN
-    ['IC2','SUR','is_in:country_code3','sur'], // SURINAME
-    ['IC2','SJM','is_in:country_code3','sjm'], // SVALBARD AND JAN MAYEN
-    ['IC2','SWZ','is_in:country_code3','swz'], // SWAZILAND
-    ['IC2','SWE','is_in:country_code3','swe'], // SWEDEN
-    ['IC2','CHE','is_in:country_code3','che'], // SWITZERLAND
-    ['IC2','SYR','is_in:country_code3','syr'], // SYRIAN ARAB REPUBLIC
-    ['IC2','TWN','is_in:country_code3','twn'], // TAIWAN PROVINCE OF CHINA
-    ['IC2','TJK','is_in:country_code3','tjk'], // TAJIKISTAN
-    ['IC2','TZA','is_in:country_code3','tza'], // TANZANIA UNITED REPUBLIC OF
-    ['IC2','THA','is_in:country_code3','tha'], // THAILAND
-    ['IC2','TLS','is_in:country_code3','tls'], // TIMOR-LESTE
-    ['IC2','TGO','is_in:country_code3','tgo'], // TOGO
-    ['IC2','TKL','is_in:country_code3','tkl'], // TOKELAU
-    ['IC2','TON','is_in:country_code3','ton'], // TONGA
-    ['IC2','TTO','is_in:country_code3','tto'], // TRINIDAD AND TOBAGO
-    ['IC2','TUN','is_in:country_code3','tun'], // TUNISIA
-    ['IC2','TUR','is_in:country_code3','tur'], // TURKEY
-    ['IC2','TKM','is_in:country_code3','tkm'], // TURKMENISTAN
-    ['IC2','TCA','is_in:country_code3','tca'], // TURKS AND CAICOS ISLANDS
-    ['IC2','TUV','is_in:country_code3','tuv'], // TUVALU
-    ['IC2','UGA','is_in:country_code3','uga'], // UGANDA
-    ['IC2','UKR','is_in:country_code3','ukr'], // UKRAINE
-    ['IC2','ARE','is_in:country_code3','are'], // UNITED ARAB EMIRATES
-    ['IC2','GBR','is_in:country_code3','gbr'], // UNITED KINGDOM
-    ['IC2','USA','is_in:country_code3','usa'], // UNITED STATES
-    ['IC2','UMI','is_in:country_code3','umi'], // UNITED STATES MINOR OUTLYING ISLANDS
-    ['IC2','URY','is_in:country_code3','ury'], // URUGUAY
-    ['IC2','UZB','is_in:country_code3','uzb'], // UZBEKISTAN
-    ['IC2','VUT','is_in:country_code3','vut'], // VANUATU
-    ['IC2','VEN','is_in:country_code3','ven'], // VENEZUELA BOLIVARIAN REPUBLIC OF
-    ['IC2','VNM','is_in:country_code3','vnm'], // VIET NAM
-    ['IC2','VGB','is_in:country_code3','vgb'], // VIRGIN ISLANDS BRITISH
-    ['IC2','VIR','is_in:country_code3','vir'], // VIRGIN ISLANDS U.S.
-    ['IC2','WLF','is_in:country_code3','wlf'], // WALLIS AND FUTUNA
-    ['IC2','ESH','is_in:country_code3','esh'], // WESTERN SAHARA
-    ['IC2','YEM','is_in:country_code3','yem'], // YEMEN
-    ['IC2','ZMB','is_in:country_code3','zmb'], // ZAMBIA
-    ['IC2','ZWE','is_in:country_code3','zwe'], // ZIMBABWE
+    // INU - Inundation Type
+    // ['INU','-999999',undefined,undefined], // No Information
+    ['INU','1','inundation','controlled'], // Controlled
+    ['INU','2','inundation','natural'], // Natural
 
     // IWT - Inland Water Type
     // ['IWT','-999999',undefined,undefined], // No Information
@@ -2214,6 +2079,11 @@ tds40.rules = {
     // ['LUN','-999999',undefined,undefined], // No Information
     ['LUN','1000','underground','no'],
     ['LUN','1001','underground','yes'],
+
+    // MAN - Maritime Navigation Marked
+    // ['MAN','-999999',undefined,undefined], // No Information
+    ['MAN','1000','navigation:maritime_landmark','no'],
+    ['MAN','1001','navigation:maritime_landmark','yes'],
 
     // MCC - Structural Material Type
     // ['MCC','-999999',undefined,undefined], // No Information
@@ -2396,13 +2266,7 @@ tds40.rules = {
     ['OWO','1000','waterway:overhead_obstruction','no'],
     ['OWO','1001','waterway:overhead_obstruction','yes'],
 
-    // PBY - By-product - See ZI014_PBY
-    // ['PBY','-999999',undefined,undefined], // No Information
-    // ['PBY','8','PBY','refuse'], // Refuse
-    // ['PBY','15','PBY','slag'], // Slag
-    // ['PBY','16','PBY','sludge'], // Sludge
-    // ['PBY','17','PBY','spoil'], // Spoil
-    // ['PBY','999','PBY','other'], // Other
+    // PBY - By-product - See ZI014PBY
 
     // PCF - Physical Condition
     // ['PCF','-999999',undefined,undefined], // No Information
@@ -2418,6 +2282,16 @@ tds40.rules = {
     ['PEC','1000','port_of_entry','no'],
     ['PEC','1001','port_of_entry','yes'],
 
+    // PLT - Pipeline Type
+    // ['PLT','-999999',undefined,undefined], // No Information
+    ['PLT','1','pipeline:type','transport'], // Transport Pipe
+    ['PLT','2','pipeline:type','outfall'], // Outfall Pipe
+    ['PLT','3','pipeline:type','intake'], // Intake Pipe
+    ['PLT','4','pipeline:type','sewer'], // Sewer
+    ['PLT','5','pipeline:type','pipeline_valve'], // Pipeline Valve
+    ['PLT','7','pipeline:type','bubbler_system'], // Bubbler System
+    ['PLT','999','pipeline:type','other'], // Other
+
     // POS - Power Source
     // ['POS','-999999',undefined,undefined], // No Information
     ['POS','1','generator:source','geothermal'], // Geothermal
@@ -2429,95 +2303,24 @@ tds40.rules = {
 
     // This attribute is handled in Pre and Post processing. See ZI014_PPO
     // PPO - Product
-    // ['PPO','-999999',undefined,undefined], // No Information
-/*
-    ['PPO','1','PPO','aircraft'], // Aircraft
-    ['PPO','3','PPO','ammunition'], // Ammunition
-    ['PPO','8','PPO','basalt'], // Basalt
-    ['PPO','9','PPO','bauxite'], // Bauxite
-    ['PPO','11','PPO','bivalve_mollusc'], // Bivalve Mollusc
-    ['PPO','13','PPO','brick'], // Brick
-    ['PPO','15','PPO','cement'], // Cement
-    ['PPO','16','PPO','chemical'], // Chemical
-    ['PPO','17','PPO','clay'], // Clay
-    ['PPO','18','PPO','coal'], // Coal
-    ['PPO','19','PPO','cobbles'], // Cobbles
-    ['PPO','21','PPO','coke'], // Coke
-    ['PPO','26','PPO','copper'], // Copper
-    ['PPO','29','PPO','crustacean'], // Crustacean
-    ['PPO','30','PPO','cultivated_shellfish'], // Cultivated Shellfish
-    ['PPO','33','PPO','diamond'], // Diamond
-    ['PPO','34','PPO','diatomaceous_earth'], // Diatomaceous Earth
-    ['PPO','35','PPO','dolomite'], // Dolomite
-    ['PPO','37','PPO','electric_power'], // Electric Power
-    ['PPO','38','PPO','explosive'], // Explosive
-    ['PPO','39','PPO','fish'], // Fish
-    ['PPO','45','PPO','gas'], // Gas
-    ['PPO','46','PPO','petrol'], // Petrol
-    ['PPO','48','PPO','gold'], // Gold
-    ['PPO','50','PPO','granite'], // Granite
-    ['PPO','53','PPO','gravel'], // Gravel
-    ['PPO','58','PPO','iron'], // Iron
-    ['PPO','59','PPO','lead'], // Lead
-    ['PPO','60','PPO','lime'], // Lime
-    ['PPO','61','PPO','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
-    ['PPO','62','PPO','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
-    ['PPO','63','PPO','lumber'], // Lumber
-    ['PPO','65','PPO','manganese'], // Manganese
-    ['PPO','66','PPO','marble'], // Marble
-    ['PPO','72','PPO','mussels'], // Mussels
-    ['PPO','77','PPO','oysters'], // Oysters
-    ['PPO','83','PPO','petroleum'], // Petroleum
-    ['PPO','85','PPO','porphyry'], // Porphyry
-    ['PPO','88','PPO','pumice'], // Pumice
-    ['PPO','89','PPO','quartz'], // Quartz
-    ['PPO','90','PPO','radioactive_material'], // Radioactive Material
-    ['PPO','93','PPO','rock'], // Rock
-    ['PPO','95','PPO','salt'], // Salt
-    ['PPO','96','PPO','sand'], // Sand
-    ['PPO','97','PPO','sandstone'], // Sandstone
-    ['PPO','101','PPO','sewage'], // Sewage
-    ['PPO','105','PPO','silver'], // Silver
-    ['PPO','110','PPO','stone'], // Stone
-    ['PPO','116','PPO','timber'], // Timber
-    ['PPO','117','PPO','tobacco'], // Tobacco
-    ['PPO','118','PPO','travertine'], // Travertine
-    ['PPO','120','PPO','uranium'], // Uranium
-    ['PPO','122','PPO','water'], // Water
-    ['PPO','126','PPO','zinc'], // Zinc
-    ['PPO','130','PPO','chalk'], // Chalk
-    ['PPO','146','PPO','heating_steam_and/or_water'], // Heating Steam and/or Water
-    ['PPO','149','PPO','brine'], // Brine
-    ['PPO','151','PPO','chromium'], // Chromium
-    ['PPO','152','PPO','nickel'], // Nickel
-    ['PPO','153','PPO','tin'], // Tin
-    ['PPO','158','PPO','pottery'], // Pottery
-    ['PPO','159','PPO','charcoal'], // Charcoal
-    ['PPO','160','PPO','milled_grain'], // Milled Grain
-    ['PPO','161','PPO','coalbed_methane'], // Coalbed Methane
-    ['PPO','162','PPO','natural_gas_condensate'], // Natural Gas Condensate
-    ['PPO','163','PPO','helium'], // Helium
-    ['PPO','164','PPO','hydrothermal_fluid'], // Hydrothermal Fluid
-    ['PPO','173','PPO','fluorite'], // Fluorite
-    ['PPO','204','PPO','phosphate'], // Phosphate
-    ['PPO','214','PPO','biodiesel'], // Biodiesel
-    ['PPO','224','PPO','vanadium'], // Vanadium
-    ['PPO','283','PPO','mica'], // Mica
-    ['PPO','339','PPO','selenium'], // Selenium
-    ['PPO','999','PPO','other'], // Other
-*/
+
+    // PRM - Permanent
+    // ['PRM','-999999',undefined,undefined], // No Information
+    ['PRM','1000','permanent','no'],
+    ['PRM','1001','permanent','yes'],
+
     // This attribute is handled in Pre and Post processing. See ZI014_PRW
     // PRW - Raw Material
-    // ['PRW','-999999',undefined,undefined], // No Information
-    // ['PRW','12','resource','coal'], // Coal
-    // ['PRW','14','resource','coke'], // Coke
-    // ['PRW','34','resource','gravel'], // Gravel
-    // ['PRW','54','resource','ore'], // Ore
-    // ['PRW','67','resource','salt'], // Salt
-    // ['PRW','68','resource','sand'], // Sand
-    // ['PRW','84','resource','stone'], // Stone
-    // ['PRW','154','resource','sulphur'], // Sulphur
-    // ['PRW','999','resource','other'], // Other
+
+    // PWAC - Predominant Water Depth <interval closure>
+    ['PWAC','2','depth:closure','open_interval'], // Open Interval
+    ['PWAC','3','depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['PWAC','4','depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['PWAC','5','depth:closure','closed_interval'], // Closed Interval
+    ['PWAC','6','depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+    ['PWAC','7','depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+    ['PWAC','8','depth:closure','less-than_semi-interval'], // Less-than Semi-interval
+    ['PWAC','9','depth:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
     // PWC - Shoreline Construction Type
     // ['PWC','-999999',undefined,undefined], // No Information
@@ -2576,12 +2379,28 @@ tds40.rules = {
     ['RAS','8','radar:use','aircraft_flight_tracking'], // Aircraft Flight Tracking
     ['RAS','9','radar:use','fire_control_tracking'], // Fire Control Tracking
     ['RAS','10','radar:use','launch_control_tracking'], // Launch Control Tracking
+    ['RAS','11','radar:use','aerodrome_ground_surveillance'], // Aerodrome Ground Surveillance
+    ['RAS','12','radar:use','precision_approach'], // Precision Approach
     ['RAS','999','radar:use','other'], // Other
 
     // RFD - Roofed (really?)
     // ['RFD','-999999',undefined,undefined], // No Information
     ['RFD','1000','bridge:roof','no'],
     ['RFD','1001','bridge:roof','yes'],
+
+    // RIN_ROI - Route Designation (route designation type)
+    // ['RIN_ROI','-999999',undefined,undefined], // No Information
+    ['RIN_ROI','1','ref:road:class','international'], // International
+    ['RIN_ROI','2','ref:road:class','national_motorway'], // National Motorway
+    ['RIN_ROI','3','ref:road:class','primary'], // National
+    ['RIN_ROI','4','ref:road:class','secondary'], // Secondary
+    ['RIN_ROI','5','ref:road:class','local'], // Local
+    ['RIN_ROI','999','ref:road:class','other'], // Other
+
+    // RIP - Rig Present
+    // ['RIP','-999999',undefined,undefined], // No Information
+    ['RIP','1000','rig','no'],
+    ['RIP','1001','rig','yes'],
 
     // RIT - Road Interchange Type
     // ['RIT','-999999',undefined,undefined], // No Information
@@ -2596,11 +2415,6 @@ tds40.rules = {
     ['RIT','9','junction','turban'], // Turban
     ['RIT','10','junction','wye'], // Wye
     ['RIT','999','junction','other'], // Other
-
-    // RIP - Rig Present
-    // ['RIP','-999999',undefined,undefined], // No Information
-    ['RIP','1000','rig','no'],
-    ['RIP','1001','rig','yes'],
 
     // RKF - Rock Formation Structure
     // ['RKF','-999999',undefined,undefined], // No Information
@@ -2628,6 +2442,12 @@ tds40.rules = {
     ['RMWC','7','median:interval:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
     ['RMWC','8','median:interval:closure','less-than_semi-interval'], // Less-than Semi-interval
     ['RMWC','9','median:interval:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+
+    // This gets fixed in pre/post processing
+    // ROR - Road Interchange Ramp
+    // ['ROR','-999999',undefined,undefined], // No Information
+    ['ROR','1000',undefined,undefined], // The default: No ramp
+    ['ROR','1001','interchange_ramp','yes'],
 
     // RRC - Railway Use
     // ['RRC','-999999',undefined,undefined], // No Information
@@ -2657,17 +2477,16 @@ tds40.rules = {
     ['RTA','1','arrangement','single'], // Single Arrangement
     ['RTA','2','arrangement','double'], // Double Arrangement
     ['RTA','3','arrangement','multiple'], // Multiple Arrangements
-    ['RTA','4','arrangement','juxtaposition'], // Juxtaposition
     ['RTA','999','arrangement','other'], // Other
 
-    // RTN_ROI - Route Designation (route designation type)
-    // ['RTN_ROI','-999999',undefined,undefined], // No Information
-    ['RTN_ROI','1','ref:road:class','international'], // International
-    ['RTN_ROI','2','ref:road:class','national_motorway'], // National Motorway
-    ['RTN_ROI','3','ref:road:class','primary'], // National
-    ['RTN_ROI','4','ref:road:class','secondary'], // Secondary
-    ['RTN_ROI','5','ref:road:class','local'], // Local
-    ['RTN_ROI','999','ref:road:class','other'], // Other
+    // These give the basic highway types. Post processing fixes them
+    // RTY - Roadway Type
+    // ['RTY','-999999',undefined,undefined], // No Information
+    ['RTY','1','ref:road:type','motorway'], // Motorway
+    ['RTY','2','ref:road:type','limited_access_motorway'], // Limited Access Motorway
+    ['RTY','3','ref:road:type','road'], // Road - Def: Roads outside a BUA
+    ['RTY','4','ref:road:type','street'], // Street - Def: Roads inside a BUA
+    ['RTY','999','ref:road:type','other'], // Other
 
     // RWC - Railway Class
     // ['RWC','-999999',undefined,undefined], // No Information
@@ -2681,10 +2500,37 @@ tds40.rules = {
     ['SAD','1000','stabilized','no'],
     ['SAD','1001','stabilized','yes'],
 
+    // SAX_RS6 - Security Attributes Group <resource declassification exception>
+    ['SAX_RS6','AEA','security:declassification:exception','AEA'],
+    ['SAX_RS6','25X1','security:declassification:exception','25X1'],
+    ['SAX_RS6','25X1-human','security:declassification:exception','25X1-human'],
+    ['SAX_RS6','25X1-EO-12951','security:declassification:exception','25X1-EO-12951'],
+    ['SAX_RS6','25X2','security:declassification:exception','25X2'],
+    ['SAX_RS6','25X3','security:declassification:exception','25X3'],
+    ['SAX_RS6','25X4','security:declassification:exception','25X4'],
+    ['SAX_RS6','25X5','security:declassification:exception','25X5'],
+    ['SAX_RS6','25X6','security:declassification:exception','25X6'],
+    ['SAX_RS6','25X7','security:declassification:exception','25X7'],
+    ['SAX_RS6','25X8','security:declassification:exception','25X8'],
+    ['SAX_RS6','25X9','security:declassification:exception','25X9'],
+    ['SAX_RS6','50X1-HUM','security:declassification:exception','50X1-HUM'],
+    ['SAX_RS6','50X2-WMD','security:declassification:exception','50X2-WMD'],
+
+    // SAX_RX8 - Security Attributes Group <resource type of exempted source>
+    ['SAX_RX8','OADR','security:exempted_source:type','OADR'], // Source Marked OADR (Originating Agency's Determination Required)
+    ['SAX_RX8','X1','security:exempted_source:type','X1'], // Source Marked X1
+    ['SAX_RX8','X2','security:exempted_source:type','X2'], // Source Marked X2
+    ['SAX_RX8','X3','security:exempted_source:type','X3'], // Source Marked X3
+    ['SAX_RX8','X4','security:exempted_source:type','X4'], // Source Marked X4
+    ['SAX_RX8','X5','security:exempted_source:type','X5'], // Source Marked X5
+    ['SAX_RX8','X6','security:exempted_source:type','X6'], // Source Marked X6
+    ['SAX_RX8','X7','security:exempted_source:type','X7'], // Source Marked X7
+    ['SAX_RX8','X8','security:exempted_source:type','X8'], // Source Marked X8
+
     // SBB - Supported by Bridge Span
     // ['SBB','-999999',undefined,undefined], // No Information
-    ['SBB','1000','on_bridge','no'], // Do we need this?? 
-    ['SBB','1001','on_bridge','yes'], 
+    ['SBB','1000','on_bridge','no'], // Do we need this??
+    ['SBB','1001','on_bridge','yes'],
 
     // SBC - Shelter Belt
     // ['SBC','-999999',undefined,undefined], // No Information
@@ -2698,20 +2544,25 @@ tds40.rules = {
     ['SBT','3','substation','converter'], // Converter Substation
     ['SBT','999','substation','other'], // Other
 
-    // SDCC - Soil Depth (interval closure)
+    // SDCC - Soil Depth <interval closure>
     ['SDCC','2','soil:depth:closure','open_interval'], // Open Interval
-    ['SDCC','3','soil:depth:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['SDCC','4','soil:depth:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['SDCC','3','soil:depth:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['SDCC','4','soil:depth:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['SDCC','5','soil:depth:closure','closed_interval'], // Closed Interval
     ['SDCC','6','soil:depth:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['SDCC','7','soil:depth:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
     ['SDCC','8','soil:depth:closure','less-than_semi-interval'], // Less-than Semi-interval
     ['SDCC','9','soil:depth:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
+    // SDQ - Structurally-dissected
+    // ['SDQ','-999999',undefined,undefined], // No Information
+    ['SDQ','1000','structurally_dissected','no'],
+    ['SDQ','1001','structurally_dissected','yes'],
+
     // SDSC - Stem Diameter (interval closure)
     ['SDSC','2','tree:diameter:closure','open_interval'], // Open Interval
-    ['SDSC','3','tree:diameter:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['SDSC','4','tree:diameter:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['SDSC','3','tree:diameter:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['SDSC','4','tree:diameter:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['SDSC','5','tree:diameter:closure','closed_interval'], // Closed Interval
     ['SDSC','6','tree:diameter:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['SDSC','7','tree:diameter:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2792,8 +2643,8 @@ tds40.rules = {
     ['SPT','1000','supported','no'],
     ['SPT','1001','supported','yes'],
 
-    // ['SRD','-999999',undefined,undefined], // No Information
     // SRD - Terrain Morphology
+    // ['SRD','-999999',undefined,undefined], // No Information
     ['SRD','1','terrain:morphology','no_effect'], // No Effect
     ['SRD','2','terrain:morphology','landslide_potential'], // Landslide Potential
     ['SRD','11','terrain:morphology','numerous_cobbles_and_boulders'], // Numerous Cobbles and Boulders
@@ -2849,10 +2700,8 @@ tds40.rules = {
     ['SRE','1','traffic_restriction','railway_switch'], // Railway Switch
     ['SRE','2','traffic_restriction','reduced_track_or_lane_count'], // Reduced Track or Lane Count
     ['SRE','3','traffic_restriction','road_interchange'], // Road Interchange
-    ['SRE','4','traffic_restriction','sharp_curve'], // Sharp Curve
-    ['SRE','5','traffic_restriction','steep_grade'], // Steep Grade
     ['SRE','8','traffic_restriction','sharp_curves'], // Sharp Curves
-    ['SRE','9','traffic_restriction','steep_curves'], // Steep Curves
+    ['SRE','9','traffic_restriction','steep_grades'], // Steep Grades
     ['SRE','999','traffic_restriction','other'], // Other
 
     // SRL - Location Referenced to Shoreline -- deconflicted with LOC
@@ -2914,15 +2763,8 @@ tds40.rules = {
     ['SSR','42','roof:shape','pitched'], // Pitched
     ['SSR','47','roof:shape','sawtoothed'], // Sawtoothed
     ['SSR','50','roof:shape','with_clerestory'], // With Clerestory
-    ['SSR','51','roof:shape','with_steeple'], // With Steeple
     ['SSR','55','roof:shape','flat_with_clerestory'], // Flat with Clerestory
     ['SSR','64','roof:shape','pitched_with_clerestory'], // Pitched with Clerestory
-    ['SSR','77','roof:shape','with_cupola'], // With Cupola
-    ['SSR','78','roof:shape','with_turret'], // With Turret
-    ['SSR','79','roof:shape','with_tower'], // With Tower
-    ['SSR','80','roof:shape','with_minaret'], // With Minaret
-    ['SSR','81','roof:shape','with_smokestack'], // With Smokestack
-    ['SSR','82','roof:shape','flat_with_parapet'], // Flat with Parapet
     ['SSR','999','roof:shape','other'], // Other
 
     // STL - Nomadic Seasonal Location -- Nothing in OSM is close to this
@@ -2950,10 +2792,24 @@ tds40.rules = {
     ['STP','13','soil:type','mh:micraceous'], // MH: Micraceous
     ['STP','14','soil:type','oh:organic_clay'], // OH: Organic Clay
     ['STP','15','soil:type','pt:peat'], // PT: Peat
-    ['STP','17','soil:type','ml-cl:silt_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
+    ['STP','17','soil:type','ml-cl:silt,_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
     ['STP','18','soil:type','evaporite'], // Evaporite
     ['STP','99','soil:type','not_evaluated'], // Not Evaluated
     ['STP','999','soil:type','other'], // Other
+
+    // SUY - Survey Point Type
+    // ['SUY','-999999',undefined,undefined], // No Information
+    ['SUY','1','survey_point:type','astronomic_position'], // Astronomic Position
+    ['SUY','2','survey_point:type','benchmark'], // Benchmark
+    ['SUY','3','survey_point:type','cadastral_control_point'], // Cadastral Control Point
+    ['SUY','4','survey_point:type','camera_station'], // Camera Station
+    ['SUY','5','survey_point:type','geodetic_point'], // Geodetic Point
+    ['SUY','6','survey_point:type','gravity_point'], // Gravity Point
+    ['SUY','7','survey_point:type','magnetic_station'], // Magnetic Station
+    ['SUY','8','survey_point:type','theodolite_station'], // Theodolite Station
+    ['SUY','9','survey_point:type','tidal_benchmark'], // Tidal Benchmark
+    ['SUY','10','survey_point:type','transit_station'], // Transit Station
+    ['SUY','999','survey_point:type','other'], // Other
 
     // SWC - Soil Wetness Condition
     // ['SWC','-999999',undefined,undefined], // No Information
@@ -3029,8 +2885,6 @@ tds40.rules = {
 
     // TRS - Transportation System Type
     // ['TRS','-999999',undefined,undefined], // No Information
-    ['TRS','999','transport:type','other'], // Other
-    // ['TRS','0','transport:type','unknown'],
     ['TRS','1','transport:type','air'],
     ['TRS','2','transport:type','aqueduct'], // Aqueduct
     ['TRS','3','transport:type','automotive'], // From TRD3.0 to stop warnings Automotive
@@ -3054,18 +2908,20 @@ tds40.rules = {
     ['TRS','22','transport:type','powerline_maintenance'], // Power Line Maintenance
     ['TRS','23','transport:type','drove'], // Drove
     ['TRS','25','transport:type','runway'], // Runway
+    ['TRS','30','transport:type','cableway'], // Cableway
+    ['TRS','999','transport:type','other'], // Other
 
     // TSCC - Tree Spacing (interval closure)
     ['TSCC','2','tree:spacing:closure','open_interval'], // Open Interval
-    ['TSCC','3','tree:spacing:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['TSCC','4','tree:spacing:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['TSCC','3','tree:spacing:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['TSCC','4','tree:spacing:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['TSCC','5','tree:spacing:closure','closed_interval'], // Closed Interval
     ['TSCC','6','tree:spacing:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['TSCC','7','tree:spacing:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
     ['TSCC','8','tree:spacing:closure','less-than_semi-interval'], // Less-than Semi-interval
     ['TSCC','9','tree:spacing:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
-    // TSM - Terrain Surface Material
+    // TSM - Terrain Surface Material - Added to ZI016_ROC list
     // ['TSM','-999999',undefined,undefined], // No Information
     ['TSM','1','desert_surface','asphalt'], // Asphalt
     ['TSM','2','desert_surface','bedrock'], // Bedrock
@@ -3113,25 +2969,6 @@ tds40.rules = {
     ['TTY','7','tomb','columbarium'], // Columbarium
     ['TTY','999','tomb','other'], // Other
 
-    // TYP - Thoroughfare Type: Not pretty, need to look at custom rules
-    // ['TYP','-999999',undefined,undefined], // No Information
-    ['TYP','1','ref:road:type','road'], // Road
-    ['TYP','5','ref:road:type','boulevard'], // Boulevard
-    ['TYP','9','ref:road:type','avenue'], // Avenue
-    ['TYP','13','ref:road:type','drive'], // Drive
-    ['TYP','17','ref:road:type','circle'], // Circle
-    ['TYP','21','ref:road:type','close'], // Close
-    ['TYP','25','ref:road:type','parkway'], // Parkway
-    ['TYP','29','ref:road:type','lane'], // Lane
-    ['TYP','33','ref:road:type','street'], // Street
-    ['TYP','37','ref:road:type','terrace'], // Terrace
-    ['TYP','41','ref:road:type','motorway'], // Motorway
-    ['TYP','45','ref:road:type','place'], // Place
-    ['TYP','47','ref:road:type','limited_access_motorway'], // Limited Access Motorway
-    ['TYP','48','junction','roundabout'], // Roundabout from AP020 Road Interchange
-    ['TYP','50','link_road','yes'], // Ramp, from AP020 Road Interchange
-    ['TYP','999','ref:road:type','other'], 
-
     // TXP - Taxiway Type
     // ['TXP','-999999',undefined,undefined], // No Information
     ['TXP','1','taxiway:type','parallel'], // Parallel Taxiway
@@ -3148,6 +2985,14 @@ tds40.rules = {
     ['TXP','12','taxiway:type','air'], // Air Taxiway
     ['TXP','13','taxiway:type','helicopter_ground_taxiway'], // Helicopter Ground Taxiway
     ['TXP','999','taxiway:type','other'], // Other
+
+    // UDQ - Underwater Delineation Quality
+    // ['UDQ','-999999',undefined,undefined], // No Information
+    ['UDQ','1','deliniation:quality','excellent'], // Excellent Delineation
+    ['UDQ','2','deliniation:quality','good'], // Good Delineation
+    ['UDQ','3','deliniation:quality','average'], // Average Delineation
+    ['UDQ','4','deliniation:quality','poor'], // Poor Delineation
+    ['UDQ','5','deliniation:quality','highly_obscured'], // Highly Obscured Delineation
 
     // UMA - Underground Mine Access
     // ['UMA','-999999',undefined,undefined], // No Information
@@ -3190,7 +3035,7 @@ tds40.rules = {
     ['VCA','16','void_collection:reason','no_available_survey'], // No Available Survey
     ['VCA','999','void_collection:reason','other'], // Other
 
-    // VCM - Vertical Construction Material 
+    // VCM - Vertical Construction Material
     // ['VCM','-999999',undefined,undefined], // No Information
     ['VCM','1','material:vertical','adobe_brick'], // Adobe Brick
     ['VCM','2','material:vertical','aluminum'], // Aluminum
@@ -3212,6 +3057,17 @@ tds40.rules = {
     ['VCM','18','material:vertical','wood'], // Wood
     ['VCM','999','material:vertical','other'], // Other
 
+    // VCS_VCD - Vertical Clearance, Safe <reference level>
+    // ['VCS_VCD','-999999',undefined,undefined], // No Information
+    ['VCS_VCD','7','safe_clearance:vertical:reference','mean_high_water'], // Mean High Water
+    ['VCS_VCD','9','safe_clearance:vertical:reference','mean_high_water_springs'], // Mean High Water Springs
+    ['VCS_VCD','10','safe_clearance:vertical:reference','mean_higher_high_water'], // Mean Higher High Water
+    ['VCS_VCD','15','safe_clearance:vertical:reference','mean_sea_level'], // Mean Sea Level
+    ['VCS_VCD','24','safe_clearance:vertical:reference','mean_higher_high_water_springs'], // Mean Higher High Water Springs
+    ['VCS_VCD','28','safe_clearance:vertical:reference','highest_high_water'], // Highest High Water
+    ['VCS_VCD','30','safe_clearance:vertical:reference','indian_spring_high_water'], // Indian Spring High Water
+    ['VCS_VCD','999','safe_clearance:vertical:reference','other'], // Other
+
     // VCT - Void Collection Type
     // ['VCT','-999999',undefined,undefined], // No Information
     ['VCT','1','void_collection:type','hypsography'], // Hypsography
@@ -3220,15 +3076,15 @@ tds40.rules = {
     ['VCT','999','void_collection:type','other'], // Other
 
     // VDT - Vertical Datum
-    // ['VDT','-999999',undefined,undefined], // No Information
+    // ['VDT','noInformation',undefined,undefined], // No Information
+    ['VDT','other','source:datum:vertical','other'], // Other
     ['VDT','groundLevel','source:datum:vertical','ground_level'], // Ground Level
-    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level'], // Mean Sea Level (MSL)
-    ['VDT','ngvd29','source:datum:vertical','national_geodetic_source:datum:vertical_1929'], // National Geodetic Vertical Datum (NGVD) 1929
-    ['VDT','navd88','source:datum:vertical','north_american_source:datum:vertical_1988'], // North American Vertical Datum (NAVD) 1988
+    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
+    ['VDT','navd88','source:datum:vertical','north_american_vertical_datum_(navd)_1988'], // North American Vertical Datum (NAVD) 1988
+    ['VDT','ngvd29','source:datum:vertical','national_geodetic_vertical_datum_(ngvd)_1929'], // National Geodetic Vertical Datum (NGVD) 1929
+    ['VDT','wgs84','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
     ['VDT','wgs84Egm08','source:datum:vertical','wgs_84_egm08_geoid'], // WGS 84 EGM08 Geoid
     ['VDT','wgs84Egm96','source:datum:vertical','wgs_84_egm96_geoid'], // WGS 84 EGM96 Geoid
-    ['VDT','wgs84','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
-    ['VDT','other','source:datum:vertical','other'], // Other
 
     // VEG - Vegetation Characteristic
     // ['VEG','-999999',undefined,undefined], // No Information
@@ -3269,28 +3125,33 @@ tds40.rules = {
 
     // VSP - Vegetation Species
     // ['VSP','-999999',undefined,undefined], // No Information
-    ['VSP','4','vegetation:type','casuarina'], // Casuarina
-    ['VSP','6','vegetation:type','conifer'], // Conifer
     ['VSP','8','vegetation:type','cypress'], // Cypress
-    ['VSP','10','vegetation:type','eucalyptus'], // Eucalyptus
-    ['VSP','11','vegetation:type','filao'], // Filao
     ['VSP','19','vegetation:type','mangrove'], // Mangrove
     ['VSP','22','vegetation:type','nipa'], // Nipa
     ['VSP','25','vegetation:type','palm'], // Palm
     ['VSP','34','vegetation:type','bamboo'], // Bamboo
+    ['VSP','64','vegetation:type','swamp_cypress'], // Swamp Cypress
     ['VSP','999','vegetation:type','other'], // Other
 
     // WCC - Watercourse Channel Type
     // ['WCC','-999999',undefined,undefined], // No Information
-    // ['WCC','0','waterway','river'],
     ['WCC','1','waterway','stream'], // Channelized Stream
     ['WCC','2','waterway','braided_stream'], // Braided Stream
     ['WCC','3','waterway','gorge'], // Gorge
     ['WCC','4','wadi','yes'], // Wadi
-    ['WCC','6','waterway','split_stream'], // Split Stream
     ['WCC','7','waterway','river'], // Normal Channel
     ['WCC','8','waterway','lost_watercourse'], // Lost Watercourse
     ['WCC','999','waterway','other'], // Other
+
+    // WDAC - Average Water Depth <interval closure>
+    ['WDAC','2','depth:average:closure','open_interval'], // Open Interval
+    ['WDAC','3','depth:average:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['WDAC','4','depth:average:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['WDAC','5','depth:average:closure','closed_interval'], // Closed Interval
+    ['WDAC','6','depth:average:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+    ['WDAC','7','depth:average:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+    ['WDAC','8','depth:average:closure','less-than_semi-interval'], // Less-than Semi-interval
+    ['WDAC','9','depth:average:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
     // WEQ - Well Equipment
     // ['WEQ','-999999',undefined,undefined], // No Information
@@ -3298,7 +3159,7 @@ tds40.rules = {
     ['WEQ','2','well:equipment','christmas_tree'], // Christmas Tree
     ['WEQ','3','well:equipment','manifold'], // Manifold
     ['WEQ','4','well:equipment','protective_structure'], // Protective Structure
-    ['WEQ','5','well:equipment','pump'], // Pump
+    ['WEQ','5','pump','yes'], // Pump
     ['WEQ','6','well:equipment','rod_pump'], // Rod Pump
     ['WEQ','7','well:equipment','separator'], // Separator
     ['WEQ','8','well:equipment','stock_tank'], // Stock Tank
@@ -3377,68 +3238,113 @@ tds40.rules = {
     ['YSU','999','military:service','other'], // Other
 
     // YWQ - Water Potability - See ZI024_YWQ
-    // ['YWQ','-999999',undefined,undefined], // No Information
-    // ['YWQ','1','YWQ','potable'], // Potable
-    // ['YWQ','2','YWQ','treatable'], // Treatable
-    // ['YWQ','3','YWQ','contaminated'], // Contaminated
-    // ['YWQ','4','YWQ','nonpotable'], // Nonpotable
-    // ['YWQ','999','YWQ','other'], // Other
 
-    // ZI001_NSP - Source Information : Non-spatial Source Type
-    ['ZI001_NSP','ngaAutoAirFacInfoFile','source:non_spatial_source:type','aafif'], // AAFIF
-    ['ZI001_NSP','ngaControlledImageBase1','source:non_spatial_source:type','cib1'], // CIB 1
-    ['ZI001_NSP','commercialData','source:non_spatial_source:type','commercial_data'], // Commercial Data
-    ['ZI001_NSP','ngaDigitalAirFltInfoFile','source:non_spatial_source:type','dafif'], // DAFIF
-    ['ZI001_NSP','digitalGlobeImagery','source:non_spatial_source:type','digitalglobe_imagery'], // DigitalGlobe Imagery
-    ['ZI001_NSP','ngaDigitalNauticalChart','source:non_spatial_source:type','dnc'], // DNC
-    ['ZI001_NSP','ngaDigitalVertObstruction','source:non_spatial_source:type','dvof'], // DVOF
-    ['ZI001_NSP','ngaFoundationFeatureData','source:non_spatial_source:type','ffd'], // FFD
-    ['ZI001_NSP','ngaGeoNames','source:non_spatial_source:type','geonames'], // GeoNames
-    ['ZI001_NSP','gpsBasedFieldCollect','source:non_spatial_source:type','gps'], // GPS
-    ['ZI001_NSP','ikonosImagery','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
-    ['ZI001_NSP','imageryUnspecified','source:non_spatial_source:type','imagery'], // Imagery
-    ['ZI001_NSP','ngaInterimTerrainData','source:non_spatial_source:type','itd'], // ITD
-    ['ZI001_NSP','ngaInterimVectorData','source:non_spatial_source:type','ivd'], // IVD
-    ['ZI001_NSP','landsatImagery','source:non_spatial_source:type','landsat_imagery'], // Landsat Imagery
-    ['ZI001_NSP','usModernizedIntegratedDB','source:non_spatial_source:type','midb'], // MIDB
-    ['ZI001_NSP','militaryMapData','source:non_spatial_source:type','military_map_data'], // Map Data
-    ['ZI001_NSP','nonMilitaryMap','source:non_spatial_source:type','non-military_map'], // Non-military Map
-    ['ZI001_NSP','usNtmImagery','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
-    ['ZI001_NSP','openSourceInfo','source:non_spatial_source:type','open_source_information'], // Open Source Information
-    ['ZI001_NSP','operationsData','source:non_spatial_source:type','operations_data'], // Operations Data
-    ['ZI001_NSP','orbimageImagery','source:non_spatial_source:type','orbimage_imagery'], // ORBIMAGE Imagery
-    ['ZI001_NSP','quickBirdImagery','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
-    ['ZI001_NSP','ngaStereoAirfieldCollect','source:non_spatial_source:type','sac'], // SAC
-    ['ZI001_NSP','ngaUrbanVectorMap','source:non_spatial_source:type','uvmap'], // UVMap
-    ['ZI001_NSP','ngaVectorInterimTerrain','source:non_spatial_source:type','vitd'], // VITD
-    ['ZI001_NSP','ngaVectorMap2','source:non_spatial_source:type','vmap2'], // VMap 2
-    ['ZI001_NSP','other','source:non_spatial_source:type','other'], // Other
+    // ZI001_SPS - Source Information : Spatial Source
+    // ['ZI001_SPS','-999999',undefined,undefined], // No Information
+    ['ZI001_SPS','1000','source:spatial_source','no'],
+    ['ZI001_SPS','1001','source:spatial_source','yes'],
 
-    // ZI001_SSY - Source Information : Spatial Source Type
-    ['ZI001_SSY','ngaControlledImageBase1','source:spatial_source:type','cib1'], // CIB 1
-    ['ZI001_SSY','digitalGlobeImagery','source:spatial_source:type','digitalglobe_imagery'], // DigitalGlobe Imagery
-    ['ZI001_SSY','ngaDigitalNauticalChart','source:spatial_source:type','dnc'], // DNC
-    ['ZI001_SSY','ngaFoundationFeatureData','source:spatial_source:type','ffd'], // FFD
-    ['ZI001_SSY','geoEye1','source:spatial_source:type','geoeye1_imagery'], // GeoEye 1 Imagery
-    ['ZI001_SSY','gpsBasedFieldCollect','source:spatial_source:type','gps'], // GPS
-    ['ZI001_SSY','ikonosImagery','source:spatial_source:type','ikonos_imagery'], // Ikonos Imagery
-    ['ZI001_SSY','imageryUnspecified','source:spatial_source:type','imagery'], // Imagery
-    ['ZI001_SSY','ngaInterimTerrainData','source:spatial_source:type','itd'], // ITD
-    ['ZI001_SSY','usModernizedIntegratedDB','source:spatial_source:type','midb'], // MIDB
-    ['ZI001_SSY','usNtmImagery','source:spatial_source:type','ntm_imagery'], // NTM Imagery
-    ['ZI001_SSY','operationsData','source:spatial_source:type','operations_data'], // Operations Data
-    ['ZI001_SSY','orbimageImagery','source:spatial_source:type','orbimage_imagery'], // ORBIMAGE Imagery
-    ['ZI001_SSY','quickBirdImagery','source:spatial_source:type','quickbird_imagery'], // QuickBird Imagery
-    ['ZI001_SSY','other','source:spatial_source:type','other'], // Other
+    // ZI001_SRT - Source Information : Source Type
+    // ['ZI001_SRT','noInformation',undefined,undefined], // No Information
+    // ['ZI001_SRT','noInformation',undefined,undefined], // No Information
+    ['ZI001_SRT','other','source:non_spatial_source:type','other'], // Other
+    ['ZI001_SRT','commercial','source:non_spatial_source:type','commercial_data'], // Commercial Data
+    ['ZI001_SRT','deLormeDigitalAtlasEarth','source:non_spatial_source:type','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
+    ['ZI001_SRT','gpsBasedFieldCollect','source:non_spatial_source:type','gps'], // GPS
+    ['ZI001_SRT','ikonosImagery','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
+    ['ZI001_SRT','imageryUnspecified','source:non_spatial_source:type','imagery'], // Imagery
+    ['ZI001_SRT','militaryMapData','source:non_spatial_source:type','military_map_data'], // Military Map Data
+    ['ZI001_SRT','navteqData','source:non_spatial_source:type','navteq_data'], // NAVTEQ Data
+    ['ZI001_SRT','ngaAutoAirFacInfoFile','source:non_spatial_source:type','aafif'], // AAFIF
+    ['ZI001_SRT','ngaControlledImageBase1','source:non_spatial_source:type','cib1'], // CIB1
+    ['ZI001_SRT','ngaDigitalAirFltInfoFile','source:non_spatial_source:type','dafif'], // DAFIF
+    ['ZI001_SRT','ngaDigitalNauticalChart','source:non_spatial_source:type','dnc'], // DNC
+    ['ZI001_SRT','ngaDigitalVertObstruction','source:non_spatial_source:type','dvof'], // DVOF
+    ['ZI001_SRT','ngaFoundationFeatureData','source:non_spatial_source:type','ffd'], // FFD
+    ['ZI001_SRT','ngaGeoNames','source:non_spatial_source:type','geonames'], // GeoNames
+    ['ZI001_SRT','ngaInterimTerrainData','source:non_spatial_source:type','itd'], // ITD
+    ['ZI001_SRT','ngaInterimVectorData','source:non_spatial_source:type','ivd'], // IVD
+    ['ZI001_SRT','ngaStereoAirfieldCollect','source:non_spatial_source:type','sac'], // SAC
+    ['ZI001_SRT','ngaUrbanVectorMap','source:non_spatial_source:type','uvmap'], // UVMap
+    ['ZI001_SRT','ngaVectorInterimTerrain','source:non_spatial_source:type','vitd'], // VITD
+    ['ZI001_SRT','ngaVectorMap2','source:non_spatial_source:type','vmap_2'], // VMap 2
+    ['ZI001_SRT','nonMilitaryMap','source:non_spatial_source:type','non-military_map'], // Non-military Map
+    ['ZI001_SRT','openSource','source:non_spatial_source:type','open_source_information'], // Open Source Information
+    ['ZI001_SRT','operationsData','source:non_spatial_source:type','operations_data'], // Operations Data
+    ['ZI001_SRT','quickBirdImagery','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
+    ['ZI001_SRT','tomTomData','source:non_spatial_source:type','tomtom_data'], // TomTom Data
+    ['ZI001_SRT','usModernizedIntegratedDB','source:non_spatial_source:type','midb'], // MIDB
+    ['ZI001_SRT','usNtmImagery','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
 
     // ZI001_VSC - Source Information : Vertical Source Category
-    ['ZI001_VSC','interpolatedDted1','source:vertical_source:type','dted1'], // DTED 1
-    ['ZI001_VSC','interpolatedDted2','source:vertical_source:type','dted2'], // DTED 2
+    // ['ZI001_VSC','noInformation',undefined,undefined], // No Information
+    ['ZI001_VSC','other','source:vertical_source:type','other'], // Other
+    ['ZI001_VSC','interpolatedDted1','source:vertical_source:type','dted_1'], // DTED 1
+    ['ZI001_VSC','interpolatedDted2','source:vertical_source:type','dted_2'], // DTED 2
     ['ZI001_VSC','noElevations','source:vertical_source:type','no_elevations'], // No Elevations
     ['ZI001_VSC','reflectiveSurface','source:vertical_source:type','reflective_surface'], // Reflective Surface
     ['ZI001_VSC','stereoscopicImagery','source:vertical_source:type','stereoscopic_imagery'], // Stereoscopic Imagery
     ['ZI001_VSC','tinData','source:vertical_source:type','tin_data'], // TIN Data
-    ['ZI001_VSC','other','source:vertical_source:type','other'], // Other
+
+    // ZI004_RCG - Process Step Information : Resource Content Originator
+    // This is just plain Ugly
+    // ['ZI004_RCG','noInformation',undefined,undefined], // No Information
+    ['ZI004_RCG','other','attribution','other'], // Other
+    ['ZI004_RCG','armyGeoAgencyNetherlands','attribution','army_geographic_agency_(netherlands)'], // The Royal Netherlands Army Geographic Agency (RNLAGA) in the Dutch Ministry of Defence.
+    ['ZI004_RCG','armyGeographicCentreSpain','attribution','army_geographic_centre_(spain)'], // The Army Geographic Centre of the Spanish Armed Forces.
+    ['ZI004_RCG','armyGeoInstitutePortugal','attribution','army_geographic_institute_(portugal)'], // The Army Geographic Institute (IGeoE),whose mission is to provide geographic information and geographic support the Portugese Army, to provide geographical information to other branches of the Portugese Armed Forces and the civilian community, ensuring th
+    ['ZI004_RCG','bundeswehrGeoinfoOffice','attribution','bundeswehr_geoinformation_office_(germany)'], // The Bundeswehr Geoinformation Office (BGIO) of the German Federal Armed Forces.
+    ['ZI004_RCG','defenceAcqLogOrgDenmark','attribution','defence_acquisition_and_logistics_organization_(denmark)'], // The Danish Defence Acquisition and Logistics Organisation (DALO) is the specialized materiel centre and logistics authority of the Danish Defence.
+    ['ZI004_RCG','defenceGeoCentreIntColGrp','attribution','defence_geographic_centre_intelligence_collection_group_(united_kingdom)'], // The Defence Geographic Centre (DGC) Intelligence Collection Group (ICG) of the Ministry of Defence of the United Kingdom.
+    ['ZI004_RCG','defenceImageryGeoOrg','attribution','defence_imagery_and_geospatial_organisation_(australia)'], // The Defence Imagery and Geospatial Organisation (DIGO) provides geospatial intelligence, from imagery and other sources, in support of Australia's defence and national interests.
+    ['ZI004_RCG','defenseInfoSecurityItaly','attribution','defense_information_security_(italy)'], // The Reparto Informazioni e Sicurezza dello Stato Maggiore della Difesa (SMD-RIS), an intelligence agency of the Defense Ministry of Italy.
+    ['ZI004_RCG','generalCommandMapping','attribution','general_command_of_mapping_(turkey)'], // The General Command of Mapping (GCM) is the National Mapping Agency for Turkey and is responsible for the official topographical mapping of the country in hard-copy and digital forms for: military, government, administrative, and educational uses.
+    ['ZI004_RCG','geoServiceBelgium','attribution','geographic_service_(belgium)'], // The Geographic Service of Belgium.
+    ['ZI004_RCG','geoServCzechArmedForces','attribution','geographic_service_of_the_czech_armed_forces_(czech_republic)'], // The Geographic Service of the Armed Forces of the Czech Republic (GeoS AER).
+    ['ZI004_RCG','geoInfoAgencyLatvia','attribution','geospatial_information_agency_(latvia)'], // The Geospatial Information Agency of the Defence Ministry of Latvia.
+    ['ZI004_RCG','geoIntelOrgNewZealand','attribution','geospatial_intelligence_organisation_(new_zealand)'], // The Geospatial Intelligence Organisation of the New Zealand Defence Force (NZDF), whose mission is to acquire, collate and maintain high integrity databases for production and dissemination of geospatial products and services to static and deployed NZDF H
+    ['ZI004_RCG','hellenicMilitaryGeoServ','attribution','hellenic_military_geographic_service_(greece)'], // The Hellenic Military Geographic Service of the Hellenic Army General Service Directorate of Geographical Corps, who produce, manage and provide geographical data for the entire Hellenic region including the neighbouring countries of Greece.
+    ['ZI004_RCG','jointGeoBureauFrance','attribution','joint_geography_bureau_(france)'], // The Bureau Geographique Interarmees (BGI), Etat-Major des Armees (EMA), Department of the Ministry of Defense of the French Republic, who is in charge of geospatial information support to the French military forces.
+    ['ZI004_RCG','mapChartEstablishment','attribution','mapping_and_charting_establishment_(canada)'], // The Mapping and Charting Establishment (MCE) of Canada.
+    ['ZI004_RCG','mappingServiceHungary','attribution','mapping_service_(hungary)'], // The Mapping Service of the Hungarian Defence Forces.
+    ['ZI004_RCG','milGeoGroupEstonia','attribution','military_geographic_group_(estonia)'], // The Military Geographic Group of the Estonian Defence Forces.
+    ['ZI004_RCG','milGeoServiceNorway','attribution','military_geographic_service_(norway)'], // The Norwegian Military Geographic Service of the Defence Command Norway.
+    ['ZI004_RCG','milGeogDivisionPoland','attribution','military_geography_division_(poland)'], // The Military Geography Division of the General Staff of the Polish Armed Forces.
+    ['ZI004_RCG','milMapCentreLithuania','attribution','military_mapping_centre_(lithuania)'], // The Military Mapping Centre of the Lithuanian National Defence Forces, whose mission is to ensure that the troops and commands of the Lithuanian Armed Forces are provided with the relevant mapping material, geographic information and geospatial support re
+    ['ZI004_RCG','milTopoDirectRomania','attribution','military_topographic_directorate_(romania)'], // The Military Topographic Directorate of the Romanian Armed Forces.
+    ['ZI004_RCG','milTopoServiceBulgaria','attribution','military_topographic_service_(bulgaria)'], // The Military Topographic Service of the Bulgarian Army.
+    ['ZI004_RCG','natArmyTopoServiceMoldova','attribution','national_army_topographic_service_(moldova)'], // The National Army Topographic Service of Moldova.
+    ['ZI004_RCG','swedishArmedForces','attribution','swedish_armed_forces_(sweden)'], // The Swedish Armed Forces (Forsvarsmakten).
+    ['ZI004_RCG','topoInstituteSlovakia','attribution','topographic_institute_(slovakia)'], // The Topograficky Ustav (TOPU) of Slovakia.
+    ['ZI004_RCG','topoServiceFinland','attribution','topographic_service_(finland)'], // The Topographic Service of the Finnish Defence Forces.
+    ['ZI004_RCG','usAfricaCommand','attribution','u.s._africa_command_(usafricom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations with 53 African nations.
+    ['ZI004_RCG','usAirForce','attribution','u.s._air_force'], // The aerial warfare branch of the U.S. Armed Forces.
+    ['ZI004_RCG','usArmy','attribution','u.s._army'], // The land-based military operations branch of the U.S. Armed Forces.
+    ['ZI004_RCG','usArmyGeospatialCenter','attribution','u.s._army_geospatial_center_(agc)'], // A laboratory of the Engineer Research and Development Center (ERDC) that is responsible for coordination, integration and synchronization of geospatial information requirements and standards across the U.S. Army; development and fielding of geospatial-ent
+    ['ZI004_RCG','usCentralCommand','attribution','u.s._central_command_(uscentcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations in the Middle East, extending from Egypt through Central Asia.
+    ['ZI004_RCG','usCentralIntelAgency','attribution','u.s._central_intelligence_agency_(cia)'], // An independent U.S. Government agency responsible for providing national security intelligence to senior U.S. policymakers.
+    ['ZI004_RCG','usCoastGuard','attribution','u.s._coast_guard'], // The branch of the U.S. Armed Forces responsible for protecting the public, the environment, and the U.S. economic and security interests in any maritime region in which those interests may be at risk, including international waters and America's coasts, p
+    ['ZI004_RCG','usDefenseIntelAgency','attribution','u.s._defense_intelligence_agency_(dia)'], // A U.S. Department of Defense (DoD) combat support agency that is responsible for providing intelligence in support of military planning and operations and weapons acquisition.
+    ['ZI004_RCG','usDeptOfEnergy','attribution','u.s._department_of_energy_(doe)'], // The cabinet-level department of the U.S. Government that is responsible for maintaining national energy policy, nuclear power and nuclear weapons programs, and the national energy research labs.
+    ['ZI004_RCG','usDeptOfHomelandSecurity','attribution','u.s._department_of_homeland_security_(dhs)'], // The cabinet-level department of the U.S. Government that is responsible for protecting the territory of the U.S. from terrorist attacks and for responding to natural disasters.
+    ['ZI004_RCG','usDeptOfState','attribution','u.s._department_of_state'], // The cabinet-level foreign affairs department of the U.S. Government, often referred to as the State Department.
+    ['ZI004_RCG','usEuropeanCommand','attribution','u.s._european_command_(useucom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations in Europe, extending from Greenland/Iceland through Israel.
+    ['ZI004_RCG','usFedBurOfInvestigation','attribution','u.s._federal_bureau_of_investigation_(fbi)'], // The principal investigative arm of the U.S. Department of Justice (the Cabinet-level department of the U.S. Government responsible for enforcing federal laws).
+    ['ZI004_RCG','usGeologicalSurvey','attribution','u.s._geological_survey_(usgs)'], // The U.S. Department of the Interior (a cabinet-level department of the U.S. Government) component agency that provides reliable scientific information to describe and understand the Earth; minimize loss of life and property from natural disasters; manage
+    ['ZI004_RCG','usJointForcesCommand','attribution','u.s._joint_forces_command_(usjfcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is a functional command providing specific services to the U.S. military.
+    ['ZI004_RCG','usMarineCorps','attribution','u.s._marine_corps'], // The branch of the U.S. Armed Forces responsible for providing force projection from the sea, using the mobility of the U.S. Navy to rapidly deliver combined-arms task forces.
+    ['ZI004_RCG','usNatCivilAppsProgram','attribution','u.s._national_civil_applications_program_(ncap)'], // The component of the U.S. Geological Survey (USGS) Mapping, Remote Sensing, and Geographic Investigations Program that serves Federal civil agencies by providing for the acquisition, dissemination, and exploitation of classified remote sensing systems and
+    ['ZI004_RCG','usNationalGeoIntelAgency','attribution','u.s._national_geospatial-intelligence_agency_(nga)'], // A U.S. Department of Defense (DoD) combat support agency that provides geographic intelligence in support of national security.
+    ['ZI004_RCG','usNatOceanAtmosAdmin','attribution','u.s._national_oceanic_and_atmospheric_administration'], // The U.S. Department of Commerce (a cabinet-level department of the U.S. Government) component agency that provides reliable scientific information to describe and understand the conditions of the oceans and the atmosphere, including: warning of dangerous
+    ['ZI004_RCG','usNationalReconnOffice','attribution','u.s._national_reconnaissance_office_(nro)'], // An intelligence agency in the U.S. Department of Defense (DoD) that is responsible for designing, building and operating space reconnaissance systems to: detect trouble spots worldwide; monitor arms control agreements and environmental issues; and help pl
+    ['ZI004_RCG','usNationalSecurityAgency','attribution','u.s._national_security_agency_(nsa)'], // A U.S. Department of Defense (DoD) combat support agency that is responsible for providing cryptologic products and services to the U.S. DoD, the U.S. Intelligence Community, U.S. Government agencies, industry partners, and select allies and coalition par
+    ['ZI004_RCG','usNavy','attribution','u.s._navy'], // The sea-based military operations branch of the U.S. Armed Forces.
+    ['ZI004_RCG','usNorthernCommand','attribution','u.s._northern_command_(usnorthcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for protecting the United States homeland and supporting local, state, and federal authorities.
+    ['ZI004_RCG','usPacificCommand','attribution','u.s._pacific_command_(pacom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations in the region of the Pacific Ocean, extending westwards to Mongolia, the People's Republic of China, and Southest
+    ['ZI004_RCG','usSouthernCommand','attribution','u.s._southern_command_(ussouthcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for providing contingency planning, operations, and security cooperation for Central and South America, the Caribbean (except U.S. commonwealths, territories, and po
+    ['ZI004_RCG','usSpecialOperCommand','attribution','u.s._special_operations_command_(ussocom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for overseeing the various Special Operations Commands of the Army, Air Force, Navy and Marine Corps of the U.S. Armed Forces.
+    ['ZI004_RCG','usStrategicCommand','attribution','u.s._strategic_command_(usstratcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that controls the nuclear weapons of the U.S. military and is a globally focused command charged with the missions of space operations, information operations, integrated missile defens
+    ['ZI004_RCG','usTransportationCommand','attribution','u.s._transportation_command_(ustranscom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for providing air, land and sea transportation for the DoD, both in time of peace and time of war.
 
     // ZI013_CSP - Crop Information : Crop Species
     // ['ZI013_CSP','-999999',undefined,undefined], // No Information
@@ -3512,7 +3418,6 @@ tds40.rules = {
     ['ZI013_FMM','2','farm:method','grazing'], // Grazing
     ['ZI013_FMM','3','farm:method','permanent'], // Permanent
     ['ZI013_FMM','4','farm:method','slash_and_burn'], // Slash and Burn
-    ['ZI013_FMM','5','farm:method','permanent_irrigation'], // Permanent Irrigation
     ['ZI013_FMM','999','farm:method','other'], // Other
 
     // ZI013_IRG - Crop Information : Irrigation Method
@@ -3521,7 +3426,16 @@ tds40.rules = {
     ['ZI013_IRG','2','farm:irrigation','overhead'], // Overhead
     ['ZI013_IRG','3','farm:irrigation','centre_pivot'], // Center Pivot
     ['ZI013_IRG','4','farm:irrigation','linear_move'], // Linear Move
+    ['ZI013_IRG','5','farm:irrigation','lateral_move'], // Lateral Move
+    ['ZI013_IRG','6','farm:irrigation','drip'], // Drip
+    ['ZI013_IRG','7','farm:irrigation','subirrigation'], // Subirrigation
+    ['ZI013_IRG','8','farm:irrigation','terrace'], // Terrace
     ['ZI013_IRG','999','farm:irrigation','other'], // Other
+
+    // ZI013_PIG - Crop Information : Permanent Irrigation
+    // ['ZI013_PIG','-999999',undefined,undefined], // No Information
+    ['ZI013_PIG','1000','permanent_irrigation','no'],
+    ['ZI013_PIG','1001','permanent_irrigation','yes'],
 
     // ZI014_PBY - Manufacturing Information : By-product
     // ['ZI014_PBY','-999999',undefined,undefined], // No Information
@@ -3533,8 +3447,6 @@ tds40.rules = {
     ['ZI014_PBY','12','by_product','scrap-metal'], // Scrap-metal
     ['ZI014_PBY','13','by_product','sewage'], // Sewage
     ['ZI014_PBY','15','by_product','slag'], // Slag
-    ['ZI014_PBY','16','by_product','sludge'], // Sludge
-    ['ZI014_PBY','17','by_product','spoil'], // Spoil
     ['ZI014_PBY','999','by_product','other'], // Other
 
     // ZI014_PPO - Manufacturing Information : Product
@@ -3705,41 +3617,21 @@ tds40.rules = {
     ['ZI014_PRW','154','raw_material','sulphur'], // Sulphur -- Added from PRW
     ['ZI014_PRW','999','raw_material','other'], // Other
 
-
+    // Some of these have been added to the fuzzy table for export
+    // The remaining one is a place holder
     // ZI016_ROC - Route Pavement Information : Route Surface Composition
-    // ['ZI016_ROC','-999999','surface','unknown'], // Trying this instead of undefined
     ['ZI016_ROC','-999999',undefined,undefined], // No Information
-    ['ZI016_ROC','1','surface','ground'], // Unimproved 
-    ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
-    ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
-    ['ZI016_ROC','4','surface','gravel'], // Aggregate 
-    ['ZI016_ROC','5','surface','macadam'], // Macadam
-    ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
-    ['ZI016_ROC','7','surface','ridgid_pavement'], // Rigid Pavement
-    ['ZI016_ROC','8','surface','concrete'], // Concrete
-    ['ZI016_ROC','9','surface','asphalt'], // Asphalt 
-    ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
-    ['ZI016_ROC','11','surface','cobblestone'], // Cebble-stone
-    ['ZI016_ROC','12','surface','brick'], // Brick
-    ['ZI016_ROC','13','surface','metal'], // Metal
-    ['ZI016_ROC','14','surface','wood'], // Wood
-    ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
-    ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
-    ['ZI016_ROC','17','surface','ice'], // Ice
-    ['ZI016_ROC','18','surface','snow'], // Snow
-    ['ZI016_ROC','999','surface','other'], // Other
 
     // ZI016_WTC - Route Pavement Information : Road Weather Restriction
     // ['ZI016_WTC','-999999',undefined,undefined], // No Information
     ['ZI016_WTC','1','seasonal','no'], // All-weather
     ['ZI016_WTC','2','seasonal','fair'], // possibly seasonal // Fair-weather
     ['ZI016_WTC','3','seasonal','winter'], // Winter Only
-    ['ZI016_WTC','4','seasonal','limited'], // Limited all-weather 
+    ['ZI016_WTC','4','seasonal','limited'], // Limited all-weather
     ['ZI016_WTC','5','seasonal','not_winter'], // Closed in Winter
     ['ZI016_WTC','999','seasonal','other'], // Other
 
     // ZI017_RGC - Track Information : Railway Gauge Classification
-    // ['ZI017_RGC','0','gauge:type','unknown'],
     // ['ZI017_RGC','-999999',undefined,undefined], // No Information
     ['ZI017_RGC','1','gauge:type','broad'], // Broad
     ['ZI017_RGC','2','gauge:type','narrow'], // Narrow
@@ -3747,7 +3639,6 @@ tds40.rules = {
 
     // ZI017_RIR - Track Information : Railway in Road
     // ['ZI017_RIR','-999999',undefined,undefined], // No Information
-    // ['ZI017_RIR','0','railway:in_road','unknown'],
     ['ZI017_RIR','1000','railway:in_road','separated'],
     ['ZI017_RIR','1001','railway:in_road','yes'],
 
@@ -3773,7 +3664,7 @@ tds40.rules = {
     // ['ZI017_TRT','12','railway','monorail'], // We used this in MGCP // Monorail
     ['ZI017_TRT','13','railway:track','maglev'], // Maglev
     ['ZI017_TRT','999','railway:track','other'], // Other
-    
+
     // ZI018_WIT - Wireless Telecommunication Information : Wireless Telecommunication Type
     // ['ZI018_WIT','-999999',undefined,undefined], // No Information
     ['ZI018_WIT','1','communication:cellular_phone','yes'], // Cellular Phone
@@ -3843,6 +3734,12 @@ tds40.rules = {
     ['ZI019_SFS','8','surface:condition','unserviceable'], // Unserviceable
     ['ZI019_SFS','9','surface:condition','excellent'], // Excellent
 
+    // We fix these in post processing
+    // ZI020_GE4 - (Location Country) Designation : GENC Short URN-based Identifier
+    // ZI020_GE42 - (Location Country) Designation : GENC Short URN-based Identifier (second)
+    // ZI020_GE43 - (Location Country) Designation : GENC Short URN-based Identifier (third)
+    // ZI020_GE44 - (Location Country) Designation : GENC Short URN-based Identifier (fourth)
+
     // ZI024_HYP - Water Resource Information : Hydrologic Persistence
     // ['ZI024_HYP','-999999',undefined,undefined], // No Information
     ['ZI024_HYP','1','intermittent','no'], // Perennial
@@ -3869,52 +3766,32 @@ tds40.rules = {
     ['ZI024_YWQ','4','water:potable','no'], // Nonpotable
     ['ZI024_YWQ','999','water:potable','other'], // Other
 
-    /* See WLE
+    // See MAN
+    // ZI025_MAN - Hydrographic Vertical Positioning Information : Maritime Navigation Marked
+
+    // See WLE
     // ZI025_WLE - Hydrographic Vertical Positioning Information : Water Level Effect
-    // ['ZI025_WLE','-999999',undefined,undefined], // No Information
-    ['ZI025_WLE','1','ZI025_WLE','partly_submerged'], // Partly Submerged
-    ['ZI025_WLE','2','ZI025_WLE','always_dry'], // Always Dry
-    ['ZI025_WLE','3','ZI025_WLE','always_submerged'], // Always Submerged
-    ['ZI025_WLE','4','ZI025_WLE','covers_and_uncovers'], // Covers and Uncovers
-    ['ZI025_WLE','5','ZI025_WLE','awash_at_low_water'], // Awash at Low Water
-    ['ZI025_WLE','9','ZI025_WLE','awash_at_chart_datum'], // Awash at Chart Datum
-    ['ZI025_WLE','999','ZI025_WLE','other'], // Other
-    */
+
+    // ZI026_CTUC - Feature Metadata : Cartographic Usability Range <interval closure>
+    ['ZI026_CTUC','2','cartographic_scale:closure','open_interval'], // Open Interval
+    ['ZI026_CTUC','3','cartographic_scale:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['ZI026_CTUC','4','cartographic_scale:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['ZI026_CTUC','5','cartographic_scale:closure','closed_interval'], // Closed Interval
+    ['ZI026_CTUC','6','cartographic_scale:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+    ['ZI026_CTUC','7','cartographic_scale:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+    ['ZI026_CTUC','8','cartographic_scale:closure','less-than_semi-interval'], // Less-than Semi-interval
+    ['ZI026_CTUC','9','cartographic_scale:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+
+    // ZI026_SUR - Feature Metadata : Survey Coverage Category
+    // ['ZI026_SUR','-999999',undefined,undefined], // No Information
+    ['ZI026_SUR','1','source:surveyed','yes'], // Surveyed
+    ['ZI026_SUR','2','source:surveyed','inadequately_surveyed'], // Inadequately Surveyed
+    ['ZI026_SUR','3','source:surveyed','no'], // Unsurveyed
 
     // ZI032_GUG - Pylon Information : Guyed - See GUG
-    // ['ZI032_GUG','-999999',undefined,undefined], // No Information
-    // ['ZI032_GUG','1000','guyed','no'],
-    // ['ZI032_GUG','1001','guyed','yes'],
-
-    // ZI032_PYC - Pylon Information : Pylon Configuration -- See PYC
-    // ['ZI032_PYC','-999999',undefined,undefined], // No Information
-    // ['ZI032_PYC','1','ZI032_PYC','a'], // 'A'
-    // ['ZI032_PYC','2','ZI032_PYC','h'], // 'H'
-    // ['ZI032_PYC','3','ZI032_PYC','i'], // 'I'
-    // ['ZI032_PYC','4','ZI032_PYC','y'], // 'Y'
-    // ['ZI032_PYC','5','ZI032_PYC','t'], // 'T'
-    // ['ZI032_PYC','999','ZI032_PYC','other'], // Other
-
-    // ZI032_PYM - Pylon Information : Pylon Material -- See PYM
-    // ['ZI032_PYM','-999999',undefined,undefined], // No Information
-    // ['ZI032_PYM','1','ZI032_PYM','aluminum'], // Aluminum
-    // ['ZI032_PYM','3','ZI032_PYM','concrete'], // Concrete
-    // ['ZI032_PYM','4','ZI032_PYM','masonry'], // Masonry
-    // ['ZI032_PYM','5','ZI032_PYM','metal'], // Metal
-    // ['ZI032_PYM','7','ZI032_PYM','wood'], // Wood
-    // ['ZI032_PYM','8','ZI032_PYM','steel'], // Steel
-    // ['ZI032_PYM','9','ZI032_PYM','fibreglass'], // Fibreglass
-    // ['ZI032_PYM','10','ZI032_PYM','iron'], // Iron
-    // ['ZI032_PYM','999','ZI032_PYM','other'], // Other
-
-    // ZI032_TOS - Pylon Information : Tower Shape - See TOS
-    // ['ZI032_TOS','-999999',undefined,undefined], // No Information
-    // ['ZI032_TOS','6','ZI032_TOS','mast'], // Mast
-    // ['ZI032_TOS','8','ZI032_TOS','pole'], // Pole
-    // ['ZI032_TOS','11','ZI032_TOS','tripod'], // Tripod
-    // ['ZI032_TOS','12','ZI032_TOS','truss'], // Truss
-    // ['ZI032_TOS','13','ZI032_TOS','tubular'], // Tubular
-    // ['ZI032_TOS','999','ZI032_TOS','other'], // Other
+    // ZI032_PYC - Pylon Information : Pylon Configuration - See PYC
+    // ZI032_PYM - Pylon Information : Pylon Material - See PYM
+    // ZI032_TOS - Pylon Information : Tower Shape = See TOS
 
     // ZI037_REL - Religious Information : Religious Designation
     // ['ZI037_REL','-999999',undefined,undefined], // No Information
@@ -3931,10 +3808,11 @@ tds40.rules = {
     ['ZI037_REL','11','denomination','sunni'], // Sunni
     ['ZI037_REL','12','denomination','nestorian'], // Nestorian
     ['ZI037_REL','13','denomination','chaldean_catholic'], // Chaldean
+    ['ZI037_REL','14','religion','mixed_or_none'], // Mixed and/or No Designation
     ['ZI037_REL','999','religion','other'], // Other
 
     // ZI037_RFA - Religious Information : Religious Facility Type
-    // ['ZI037_RFA','-999999',undefined,undefined], // No Information
+    ['ZI037_RFA','-999999','building:religious','unknown'], // No Information
     ['ZI037_RFA','1','building','cathedral'], // Cathedral
     ['ZI037_RFA','2','building','chapel'], // Chapel
     ['ZI037_RFA','3','building','church'], // Church
@@ -3955,9 +3833,7 @@ tds40.rules = {
     ['ZI037_RFA','20','building','noviciate'], // Noviciate
     ['ZI037_RFA','21','building','hermitage'], // Hermitage
     ['ZI037_RFA','22','building','retreat'], // Retreat
-    ['ZI037_RFA','23','building','burial_site'], // Burial Site
-    ['ZI037_RFA','999','building:religious','other'], // Other - to avoid conflicts
-    ['ZI037_RFA','-999999','building:religious','unknown'], // Other - to avoid conflicts
+    ['ZI037_RFA','999','building:religious','other'], // Other
 
     // ZI071_CTX - Cave Information : Cave Type
     // ['ZI071_CTX','-999999',undefined,undefined], // No Information
@@ -3970,13 +3846,7 @@ tds40.rules = {
     ['ZI071_CTX','7','cave:type','talus'], // Talus
     ['ZI071_CTX','999','cave:type','other'], // Other
 
-    // ZI071_FFN - Cave Information : Feature Function -- See FFN
-    // ['ZI071_FFN','-999999',undefined,undefined], // No Information
-    // ['ZI071_FFN','530','building','warehouse'], // Warehousing and Storage
-    // ['ZI071_FFN','563','building','residence'], // Residence
-    // ['ZI071_FFN','835','building','military'], // Defence Activities
-    // ['ZI071_FFN','930','amenity','religious_activities'], // Religious Activities
-    // ['ZI071_FFN','999','building','other'], // Other
+    // ZI071_FFN - Cave Information : Feature Function - See FFN
 
     // ZI071_UAO - Cave Information : Underground Access Orientation
     // ['ZI071_UAO','-999999',undefined,undefined], // No Information
@@ -3986,251 +3856,49 @@ tds40.rules = {
     ['ZI071_UAO','4','direction','slopes_upward'], // Slopes Upward
     ['ZI071_UAO','5','direction','vertical_up'], // Vertical Up
 
-//   #######################
-    // Text Enumerations - We swapped them for strings in the Schema. 
-    // Some of these are ugly and will probably cause problems with dirty-word checkers
-
-    // ZSAX_RS0 - Restriction Information : Security Attributes Group (resource classification)
+    // ZSAX_RS0 - Restriction Information : Security Attributes Group <resource classification>
     ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
     ['ZSAX_RS0','R','security:classification','RESTRICTED'],
     ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
     ['ZSAX_RS0','S','security:classification','SECRET'],
     ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
 
-    // ZI004_RCG - Process Step Information : Resource Content Originator
-    // This is just plain Ugly
-    // ['ZI004_RCG','noInformation',undefined,undefined], // No Information
-    ['ZI004_RCG','other','attribution','other'], // Other
-    ['ZI004_RCG','armyGeoAgencyNetherlands','attribution','army_geographic_agency_(netherlands)'], // The Royal Netherlands Army Geographic Agency (RNLAGA) in the Dutch Ministry of Defence.
-    ['ZI004_RCG','armyGeographicCentreSpain','attribution','army_geographic_centre_(spain)'], // The Army Geographic Centre of the Spanish Armed Forces.
-    ['ZI004_RCG','armyGeoInstitutePortugal','attribution','army_geographic_institute_(portugal)'], // The Army Geographic Institute (IGeoE),whose mission is to provide geographic information and geographic support the Portugese Army, to provide geographical information to other branches of the Portugese Armed Forces and the civilian community, ensuring th
-    ['ZI004_RCG','bundeswehrGeoinfoOffice','attribution','bundeswehr_geoinformation_office_(germany)'], // The Bundeswehr Geoinformation Office (BGIO) of the German Federal Armed Forces.
-    ['ZI004_RCG','defenceAcqLogOrgDenmark','attribution','defence_acquisition_and_logistics_organization_(denmark)'], // The Danish Defence Acquisition and Logistics Organisation (DALO) is the specialized materiel centre and logistics authority of the Danish Defence.
-    ['ZI004_RCG','defenceGeoCentreIntColGrp','attribution','defence_geographic_centre_intelligence_collection_group_(united_kingdom)'], // The Defence Geographic Centre (DGC) Intelligence Collection Group (ICG) of the Ministry of Defence of the United Kingdom.
-    ['ZI004_RCG','defenceImageryGeoOrg','attribution','defence_imagery_and_geospatial_organisation_(australia)'], // The Defence Imagery and Geospatial Organisation (DIGO) provides geospatial intelligence, from imagery and other sources, in support of Australia's defence and national interests.
-    ['ZI004_RCG','defenseInfoSecurityItaly','attribution','defense_information_security_(italy)'], // The Reparto Informazioni e Sicurezza dello Stato Maggiore della Difesa (SMD-RIS), an intelligence agency of the Defense Ministry of Italy.
-    ['ZI004_RCG','generalCommandMapping','attribution','general_command_of_mapping_(turkey)'], // The General Command of Mapping (GCM) is the National Mapping Agency for Turkey and is responsible for the official topographical mapping of the country in hard-copy and digital forms for: military, government, administrative, and educational uses.
-    ['ZI004_RCG','geoServiceBelgium','attribution','geographic_service_(belgium)'], // The Geographic Service of Belgium.
-    ['ZI004_RCG','geoServCzechArmedForces','attribution','geographic_service_of_the_czech_armed_forces_(czech_republic)'], // The Geographic Service of the Armed Forces of the Czech Republic (GeoS AER).
-    ['ZI004_RCG','geoInfoAgencyLatvia','attribution','geospatial_information_agency_(latvia)'], // The Geospatial Information Agency of the Defence Ministry of Latvia.
-    ['ZI004_RCG','geoIntelOrgNewZealand','attribution','geospatial_intelligence_organisation_(new_zealand)'], // The Geospatial Intelligence Organisation of the New Zealand Defence Force (NZDF), whose mission is to acquire, collate and maintain high integrity databases for production and dissemination of geospatial products and services to static and deployed NZDF H
-    ['ZI004_RCG','hellenicMilitaryGeoServ','attribution','hellenic_military_geographic_service_(greece)'], // The Hellenic Military Geographic Service of the Hellenic Army General Service Directorate of Geographical Corps, who produce, manage and provide geographical data for the entire Hellenic region including the neighbouring countries of Greece.
-    ['ZI004_RCG','jointGeoBureauFrance','attribution','joint_geography_bureau_(france)'], // The Bureau Geographique Interarmees (BGI), Etat-Major des Armees (EMA), Department of the Ministry of Defense of the French Republic, who is in charge of geospatial information support to the French military forces.
-    ['ZI004_RCG','mapChartEstablishment','attribution','mapping_and_charting_establishment_(canada)'], // The Mapping and Charting Establishment (MCE) of Canada.
-    ['ZI004_RCG','mappingServiceHungary','attribution','mapping_service_(hungary)'], // The Mapping Service of the Hungarian Defence Forces.
-    ['ZI004_RCG','milGeoGroupEstonia','attribution','military_geographic_group_(estonia)'], // The Military Geographic Group of the Estonian Defence Forces.
-    ['ZI004_RCG','milGeoServiceNorway','attribution','military_geographic_service_(norway)'], // The Norwegian Military Geographic Service of the Defence Command Norway.
-    ['ZI004_RCG','milGeogDivisionPoland','attribution','military_geography_division_(poland)'], // The Military Geography Division of the General Staff of the Polish Armed Forces.
-    ['ZI004_RCG','milMapCentreLithuania','attribution','military_mapping_centre_(lithuania)'], // The Military Mapping Centre of the Lithuanian National Defence Forces, whose mission is to ensure that the troops and commands of the Lithuanian Armed Forces are provided with the relevant mapping material, geographic information and geospatial support re
-    ['ZI004_RCG','milTopoDirectRomania','attribution','military_topographic_directorate_(romania)'], // The Military Topographic Directorate of the Romanian Armed Forces.
-    ['ZI004_RCG','milTopoServiceBulgaria','attribution','military_topographic_service_(bulgaria)'], // The Military Topographic Service of the Bulgarian Army.
-    ['ZI004_RCG','natArmyTopoServiceMoldova','attribution','national_army_topographic_service_(moldova)'], // The National Army Topographic Service of Moldova.
-    ['ZI004_RCG','swedishArmedForces','attribution','swedish_armed_forces_(sweden)'], // The Swedish Armed Forces (Forsvarsmakten).
-    ['ZI004_RCG','topoInstituteSlovakia','attribution','topographic_institute_(slovakia)'], // The Topograficky Ustav (TOPU) of Slovakia.
-    ['ZI004_RCG','topoServiceFinland','attribution','topographic_service_(finland)'], // The Topographic Service of the Finnish Defence Forces.
-    ['ZI004_RCG','usAfricaCommand','attribution','u.s._africa_command_(usafricom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations with 53 African nations.
-    ['ZI004_RCG','usAirForce','attribution','u.s._air_force'], // The aerial warfare branch of the U.S. Armed Forces.
-    ['ZI004_RCG','usArmy','attribution','u.s._army'], // The land-based military operations branch of the U.S. Armed Forces.
-    ['ZI004_RCG','usArmyGeospatialCenter','attribution','u.s._army_geospatial_center_(agc)'], // A laboratory of the Engineer Research and Development Center (ERDC) that is responsible for coordination, integration and synchronization of geospatial information requirements and standards across the U.S. Army; development and fielding of geospatial-ent
-    ['ZI004_RCG','usCentralCommand','attribution','u.s._central_command_(uscentcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations in the Middle East, extending from Egypt through Central Asia.
-    ['ZI004_RCG','usCentralIntelAgency','attribution','u.s._central_intelligence_agency_(cia)'], // An independent U.S. Government agency responsible for providing national security intelligence to senior U.S. policymakers.
-    ['ZI004_RCG','usCoastGuard','attribution','u.s._coast_guard'], // The branch of the U.S. Armed Forces responsible for protecting the public, the environment, and the U.S. economic and security interests in any maritime region in which those interests may be at risk, including international waters and America's coasts, p
-    ['ZI004_RCG','usDefenseIntelAgency','attribution','u.s._defense_intelligence_agency_(dia)'], // A U.S. Department of Defense (DoD) combat support agency that is responsible for providing intelligence in support of military planning and operations and weapons acquisition.
-    ['ZI004_RCG','usDeptOfEnergy','attribution','u.s._department_of_energy_(doe)'], // The cabinet-level department of the U.S. Government that is responsible for maintaining national energy policy, nuclear power and nuclear weapons programs, and the national energy research labs.
-    ['ZI004_RCG','usDeptOfHomelandSecurity','attribution','u.s._department_of_homeland_security_(dhs)'], // The cabinet-level department of the U.S. Government that is responsible for protecting the territory of the U.S. from terrorist attacks and for responding to natural disasters.
-    ['ZI004_RCG','usDeptOfState','attribution','u.s._department_of_state'], // The cabinet-level foreign affairs department of the U.S. Government, often referred to as the State Department.
-    ['ZI004_RCG','usEuropeanCommand','attribution','u.s._european_command_(useucom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations in Europe, extending from Greenland/Iceland through Israel.
-    ['ZI004_RCG','usFedBurOfInvestigation','attribution','u.s._federal_bureau_of_investigation_(fbi)'], // The principal investigative arm of the U.S. Department of Justice (the Cabinet-level department of the U.S. Government responsible for enforcing federal laws).
-    ['ZI004_RCG','usGeologicalSurvey','attribution','u.s._geological_survey_(usgs)'], // The U.S. Department of the Interior (a cabinet-level department of the U.S. Government) component agency that provides reliable scientific information to describe and understand the Earth; minimize loss of life and property from natural disasters; manage
-    ['ZI004_RCG','usJointForcesCommand','attribution','u.s._joint_forces_command_(usjfcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is a functional command providing specific services to the U.S. military.
-    ['ZI004_RCG','usMarineCorps','attribution','u.s._marine_corps'], // The branch of the U.S. Armed Forces responsible for providing force projection from the sea, using the mobility of the U.S. Navy to rapidly deliver combined-arms task forces.
-    ['ZI004_RCG','usNatCivilAppsProgram','attribution','u.s._national_civil_applications_program_(ncap)'], // The component of the U.S. Geological Survey (USGS) Mapping, Remote Sensing, and Geographic Investigations Program that serves Federal civil agencies by providing for the acquisition, dissemination, and exploitation of classified remote sensing systems and
-    ['ZI004_RCG','usNationalGeoIntelAgency','attribution','u.s._national_geospatial-intelligence_agency_(nga)'], // A U.S. Department of Defense (DoD) combat support agency that provides geographic intelligence in support of national security.
-    ['ZI004_RCG','usNatOceanAtmosAdmin','attribution','u.s._national_oceanic_and_atmospheric_administration'], // The U.S. Department of Commerce (a cabinet-level department of the U.S. Government) component agency that provides reliable scientific information to describe and understand the conditions of the oceans and the atmosphere, including: warning of dangerous
-    ['ZI004_RCG','usNationalReconnOffice','attribution','u.s._national_reconnaissance_office_(nro)'], // An intelligence agency in the U.S. Department of Defense (DoD) that is responsible for designing, building and operating space reconnaissance systems to: detect trouble spots worldwide; monitor arms control agreements and environmental issues; and help pl
-    ['ZI004_RCG','usNationalSecurityAgency','attribution','u.s._national_security_agency_(nsa)'], // A U.S. Department of Defense (DoD) combat support agency that is responsible for providing cryptologic products and services to the U.S. DoD, the U.S. Intelligence Community, U.S. Government agencies, industry partners, and select allies and coalition par
-    ['ZI004_RCG','usNavy','attribution','u.s._navy'], // The sea-based military operations branch of the U.S. Armed Forces.
-    ['ZI004_RCG','usNorthernCommand','attribution','u.s._northern_command_(usnorthcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for protecting the United States homeland and supporting local, state, and federal authorities.
-    ['ZI004_RCG','usPacificCommand','attribution','u.s._pacific_command_(pacom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for U.S. military operations and military relations in the region of the Pacific Ocean, extending westwards to Mongolia, the People's Republic of China, and Southest
-    ['ZI004_RCG','usSouthernCommand','attribution','u.s._southern_command_(ussouthcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for providing contingency planning, operations, and security cooperation for Central and South America, the Caribbean (except U.S. commonwealths, territories, and po
-    ['ZI004_RCG','usSpecialOperCommand','attribution','u.s._special_operations_command_(ussocom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for overseeing the various Special Operations Commands of the Army, Air Force, Navy and Marine Corps of the U.S. Armed Forces.
-    ['ZI004_RCG','usStrategicCommand','attribution','u.s._strategic_command_(usstratcom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that controls the nuclear weapons of the U.S. military and is a globally focused command charged with the missions of space operations, information operations, integrated missile defens
-    ['ZI004_RCG','usTransportationCommand','attribution','u.s._transportation_command_(ustranscom)'], // The unified combatant command of the U.S. Department of Defense (DoD) that is responsible for providing air, land and sea transportation for the DoD, both in time of peace and time of war.
-
-    // End Text Enumeration
     ], // End one2one
 
     // Input Translation Rules:
     // These are only used for IMPORT and get added to the standard one2one rules
     // This is mainly for TDS 3.0 attributes but we have added some "funky" TDSv40 attributes as well.
     one2oneIn : [
-    // HCT - Thoroughfare Class TDSv30
-    // ['HCT','-999999',undefined,undefined], // Null
-    ['HCT','1','ref:road:class','primary'], // Primary Route
-    ['HCT','2','ref:road:class','secondary'], // Secondary
-    ['HCT','3','ref:road:class','national_motorway'], // National Motorway
-    ['HCT','4','ref:road:class','local'], // Local
-    ['HCT','999','ref:road:class','other'],
+    // To account for an "error" in the TDSv61 sample GDB
+    ['ZI001_VSC','Stereoscopic Imagery','source:vertical_source:type','stereoscopic_imagery'],
+    ['ZI001_SRT','NTM Imagery','source:non_spatial_source:type','ntm_imagery'],
 
-    // FUN - Condition of Facility TDSv30
-    // ['FUN','-999999',undefined,undefined], // Null
-    ['FUN','1','condition','construction'], // Check on this
-    ['FUN','2','condition','abandoned'],
-    ['FUN','3','condition','destroyed'],
-    ['FUN','4','condition','dismantled'],
-    ['FUN','5','condition','proposed'],
-    ['FUN','6','condition','functional'], //Fully Functional - default
-    ['FUN','7','condition','ruined'],
-    ['FUN','9','condition','partly_functional'],
-    ['FUN','11','condition','partly_destroyed'],
-    ['FUN','13','condition','damaged'],
-    ['FUN','16','condition','disused'],
-    ['FUN','17','condition','planned'],
-    ['FUN','998',undefined,undefined], // From data, no value in spec
-
-    // AMB - Special Administrative Unit TDSv30
-    // ['AMB','-999999',undefined,undefined], // No Information
-    ['AMB','1','administrative_unit:type','lease_area'], // Lease Area
-    ['AMB','2','administrative_unit:type','concession_area'], // Concession Area
-    ['AMB','3','administrative_unit:type','free_trade_zone'], // Free Trade Zone
-    ['AMB','4','administrative_unit:type','economic_region'], // Economic Region
-    ['AMB','5','administrative_unit:type','postal_district'], // Postal District
-    ['AMB','6','administrative_unit:type','census_district'], // Census District
-    ['AMB','7','administrative_unit:type','water_management_district'], // Water Management District
-    ['AMB','8','administrative_unit:type','congressional_district'], // Congressional District
-    ['AMB','9','administrative_unit:type','environmental_protection_agency_region'], // Environmental Protection Agency Region
-    ['AMB','10','administrative_unit:type','federal_emergency_management_agency_region'], // Federal Emergency Management Agency Region
-    ['AMB','11','administrative_unit:type','federal_energy_regulatory_commission_region'], // Federal Energy Regulatory Commission Region
-    ['AMB','12','administrative_unit:type','native_american_reservation'], // Native American Reservation
-    ['AMB','13','administrative_unit:type','radiological_assistance_program_region'], // Radiological Assistance Program Region
-    ['AMB','14','administrative_unit:type','federal_aviation_administration_region'], // Federal Aviation Administration Region
-    ['AMB','15','administrative_unit:type','army_corps_of_engineers_district'], // Army Corps of Engineers District
-    ['AMB','16','administrative_unit:type','army_corps_of_engineers_division'], // Army Corps of Engineers Division
-    ['AMB','17','administrative_unit:type','coast_guard_sector'], // Coast Guard Sector
-    ['AMB','18','administrative_unit:type','border_patrol_sector'], // Border Patrol Sector
-    ['AMB','19','administrative_unit:type','fbi_field_office_jurisdiction'], // FBI Field Office Jurisdiction
-    ['AMB','20','administrative_unit:type','fbi_resident_agency_district'], // FBI Resident Agency District
-
-    // BAL - BGN Administrative Level TDSv30
-    // ['BAL','-999999',undefined,undefined], // No Information
-    ['BAL','1','administrative_subdivision','first-order'], // First-order
-    ['BAL','2','administrative_subdivision','second-order'], // Second-order
-    ['BAL','3','administrative_subdivision','third-order'], // Third-order
-    ['BAL','4','administrative_subdivision','fourth-order'], // Fourth-order
-    ['BAL','5','administrative_subdivision','undifferentiated'], // Undifferentiated
-    ['BAL','999','administrative_subdivision','other'], // Other
-
-    // BST - Boundary Status TDSv30
-    // ['BST','-999999',undefined,undefined], // No Information
-    ['BST','1','boundary:status','definite'], // Definite
-    ['BST','2','boundary:status','indefinite'], // Indefinite
-    ['BST','3','boundary:status','in_dispute'], // In Dispute
-    ['BST','4','boundary:status','no_defined_boundary'], // No Defined Boundary
-
-    // COS - Facility Operational Status TDSv30
-    ['COS','1','operational_status','operational'], // Continuous
-    ['COS','2','operational_status','intermittent'], // Intermittent
-
-    // DSP - Boundary Dispute Type TDSv30
-    // ['DSP','-999999',undefined,undefined], // No Information
-    ['DSP','1','boundary:dispute_type','in_dispute'], // In Dispute
-    ['DSP','2','boundary:dispute_type','undisputed'], // Undisputed
-    ['DSP','3','boundary:dispute_type','de_facto'], // De Facto
-    ['DSP','4','boundary:dispute_type','de_jure'], // De Jure
-
-    // FFN From TDSv30
-    ['FFN','19','amenity','hunting'], // Hunting
-    ['FFN','21','landuse','silviculture'], // Silviculture - it's like forestry
-    ['FFN','559','building','apartment_house'], // Apartment House
-    ['FFN','560','building','detached_house'], // Detached House
-    ['FFN','561','building','attached_house'], // Attached House
-    ['FFN','562','building','manufactured_house'], // Manufactured House
-    ['FFN','960','shop','retail_service'], // Retail Service
-
-    // GEC - Geopolitical Entity Type TDSv30
-    // ['GEC','-999999',undefined,undefined], // No Information
-    ['GEC','5','geopolitical_entity','area_of_no_sovereignty'], // Area of No Sovereignty
-    ['GEC','7','geopolitical_entity','demilitarized_zone'], // Demilitarized Zone (DMZ)
-    ['GEC','8','geopolitical_entity','zone_of_occupation'], // Zone of Occupation
-    ['GEC','9','geopolitical_entity','leased_area'], // Leased Area
-    ['GEC','10','geopolitical_entity','political_entity'], // Political Entity
-    ['GEC','11','geopolitical_entity','dependent_political_entity'], // Dependent Political Entity
-    ['GEC','12','geopolitical_entity','freely_associated_state'], // Freely Associated State
-    ['GEC','13','geopolitical_entity','independent_political_entity'], // Independent Political Entity
-    ['GEC','14','geopolitical_entity','semi-independent_political_entity'], // Semi-independent Political Entity
-    ['GEC','15','geopolitical_entity','economic_region'], // Economic Region
-    ['GEC','16','geopolitical_entity','territory'], // Territory
-    ['GEC','17','geopolitical_entity','buffer_zone'], // Buffer Zone
-    ['GEC','999','geopolitical_entity','other'], // Other
-
-    // LOC TDSv30
-    ['LOC','1','location','raised'], // Raised
-    ['LOC','2','location','level'], // Level
-    ['LOC','3','location','depressed'], // Depressed
-
-    // LSP - Geopolitical Line Type TDSv30
-    // ['LSP','-999999',undefined,undefined], // No Information
-    ['LSP','1','geopolitical_line','administrative'], // Generic Administrative Boundary
-    ['LSP','2','geopolitical_line','provisional_administrative'], // Provisional Administrative Line
-    ['LSP','3','geopolitical_line','armistice'], // Armistice Line
-    ['LSP','4','geopolitical_line','line_of_control'], // Line of Control
-    ['LSP','5','geopolitical_line','demarcation'], // Demarcation Line
-    ['LSP','6','geopolitical_line','line_of_convenience'], // Line of Convenience
-    ['LSP','7','geopolitical_line','cease_fire'], // Cease Fire Line
-    ['LSP','8','geopolitical_line','convention'], // Convention Line
-    ['LSP','9','geopolitical_line','claim'], // Claim Line
-    ['LSP','10','geopolitical_line','intercolonial'], // Intercolonial Line
-    ['LSP','11','geopolitical_line','interentity'], // Interentity Line
-    ['LSP','12','geopolitical_line','line_of_adjacency'], // Line of Adjacency
-    ['LSP','13','geopolitical_line','line_of_withdrawal'], // Line of Withdrawal
-    ['LSP','14','geopolitical_line','military_disengagement'], // Military Disengagement Line
-    ['LSP','15','geopolitical_line','treaty'], // Treaty Line
-    ['LSP','16','geopolitical_line','unclos_claim_boundary'], // UNCLOS Claim Boundary
-    ['LSP','17','geopolitical_line','international_boundary'], // Generic International Boundary
-    ['LSP','999','geopolitical_line','other'], // Other
-
-    // MGL1 - Maritime Geopolitical Limit Type [1] TDSv30
-    // ['MGL1','-999999',undefined,undefined], // No Information
-    ['MGL1','1','geopolitical_line:maritime1','international_boundary'], // International Boundary
-    ['MGL1','2','geopolitical_line:maritime1','territorial_sea_baseline'], // Territorial Sea Baseline
-    ['MGL1','3','geopolitical_line:maritime1','three_nautical_mile_limit'], // Three Nautical Mile Limit
-    ['MGL1','4','geopolitical_line:maritime1','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
-    ['MGL1','5','geopolitical_line:maritime1','contiguous_zone_limit'], // Contiguous Zone Limit
-    ['MGL1','6','geopolitical_line:maritime1','continental_shelf_limit'], // Continental Shelf Limit
-    ['MGL1','7','geopolitical_line:maritime1','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
-    ['MGL1','8','geopolitical_line:maritime1','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
-    ['MGL1','9','geopolitical_line:maritime1','customs_boundary'], // Customs Boundary
-    ['MGL1','999','geopolitical_line:maritime1','other'], // Other
-
-    // PPC - Power Station Type TDSv30
-    // ['PPC','-999999',undefined,undefined], // No Information
-    ['PPC','1','generator:source','hydro'], // Hydro-electric
-    ['PPC','2','generator:source','nuclear'], // Nuclear
-    ['PPC','4','generator:source','geothermal'], // Geothermal
-    ['PPC','6','generator:source','tidal'], // Tidal
-    ['PPC','7','generator:source','thermal'], // Thermal
-    ['PPC','999','generator:source','other'], // Other
-
-    // RPC - Boundary Representation Policy TDSv30
-    // ['RPC','-999999',undefined,undefined], // No Information
-    ['RPC','1','boundary_representation_policy','show_no_line'], // Show No Line
-    ['RPC','2','boundary_representation_policy','definite'], // Definite
-    ['RPC','3','boundary_representation_policy','indefinite'], // Indefinite
-    ['RPC','4','boundary_representation_policy','in_dispute'], // In Dispute
-    ['RPC','5','boundary_representation_policy','administrative_as_international'], // Administrative as International
-    ['RPC','999','boundary_representation_policy','other'], // Other
-
-    // VDT - Vertical Datum
-    // From MAAX data
-    ['VDT','WGS 84 Ellipsoid','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
+    // ['ZI016_ROC','-999999',undefined,undefined], // No Information
+    ['ZI016_ROC','1','surface','ground'], // Unimproved
+    ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
+    ['ZI016_ROC','3','surface','unpaved'], // Flexible Pavement
+    ['ZI016_ROC','4','surface','gravel'], // Aggregate
+    ['ZI016_ROC','5','surface','macadam'], // Macadam
+    ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
+    ['ZI016_ROC','7','surface','paved'], // Rigid Pavement
+    ['ZI016_ROC','8','surface','concrete'], // Concrete
+    ['ZI016_ROC','9','surface','asphalt'], // Asphalt
+    ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
+    ['ZI016_ROC','11','surface','cobblestone'], // Cobble-stone
+    ['ZI016_ROC','12','surface','brick'], // Brick
+    ['ZI016_ROC','13','surface','metal'], // Metal
+    ['ZI016_ROC','14','surface','wood'], // Wood
+    ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
+    ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
+    ['ZI016_ROC','17','surface','ice'], // Ice
+    ['ZI016_ROC','18','surface','snow'], // Snow
+    ['ZI016_ROC','999','surface','other'], // Other
 
     ], // End one2oneIn
 
-
-    // One2one translation table for converting "Other" OSM attributes to NFDD
+    // One2one translation table for converting "Other" OSM attributes to TDS
     // This is for Export only. The values are swapped before use
     one2oneOut : [
-    // ZSAX_RS0 - Restriction Information : Security Attributes Group (resource classification)
     ['ZSAX_RS0','U','security:classification','U'],
     ['ZSAX_RS0','R','security:classification','R'],
     ['ZSAX_RS0','C','security:classification','C'],
@@ -4238,19 +3906,31 @@ tds40.rules = {
     ['ZSAX_RS0','TS','security:classification','TS'],
 
     // OTH Filler.  These are to build OTH values
-    ['RTN_ROI','999','highway','other'],
-    ['FFN','999','amenity','other'],
-    ['FFN','999','building','other'],
-    ['FFN','999','camp:type','other'],
-    ['FFN','999','craft','other'],
-    ['FFN','999','landuse','other'],
-    ['FFN','999','leisure','other'],
-    ['FFN','999','military','other'],
+    ['RTY','999','highway','other'],
+    ['FFN','999','amenity','other'], 
+    ['FFN','999','building','other'], 
+    ['FFN','999','camp:type','other'], 
+    ['FFN','999','craft','other'], 
+    ['FFN','999','landuse','other'], 
+    ['FFN','999','leisure','other'], 
+    ['FFN','999','military','other'], 
     ['FFN','999','office','other'],
     ['FFN','999','repair','other'],
     ['FFN','999','shop','other'],
     ['FFN','999','social_facility','other'],
     ['FFN','999','tourism','other'],
+
+    // Funky Road Type attributes from TDSv40
+    ['RTY','4','ref:road:type','boulevard'], // Boulevard
+    ['RTY','4','ref:road:type','avenue'], // Avenue
+    ['RTY','4','ref:road:type','drive'], // Drive
+    ['RTY','4','ref:road:type','circle'], // Circle
+    ['RTY','4','ref:road:type','close'], // Close
+    ['RTY','4','ref:road:type','parkway'], // Parkway
+    ['RTY','4','ref:road:type','lane'], // Lane
+    ['RTY','4','ref:road:type','terrace'], // Terrace
+    ['RTY','4','ref:road:type','place'], // Place
+    ['RTY','4','ref:roadtype','roundabout'], // Roundabout
 
     // Fix up the building/use tags from FFN
     [undefined,undefined,'building','industrial'], // Industrial
@@ -4271,15 +3951,15 @@ tds40.rules = {
     ['FFN','572','amenity','cafe'], // Restaurant
     ['FFN','572','building','restaurant'], // Restaurant
 
-    // Extra road stuff
-    ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
-    ['ZI016_ROC','2','surface','unpaved'], // Stabilized earth
-    ['ZI016_ROC','1','surface','dirt'], // Unimproved
-    ['ZI016_ROC','1','surface','earth'], // Unimproved
-
     // Backward compatibility for 'oil'
     ['ZI014_PPO','83','product','oil'], // Petroleum
     ['ZI014_PPO','83','product','fuel'], // Close...
+
+    // Extra road stuff - see similarTable
+    // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
+    // ['ZI016_ROC','3','surface','unpaved'], // Stabilized earth
+    // ['ZI016_ROC','1','surface','dirt'], // Unimproved
+    // ['ZI016_ROC','1','surface','earth'], // Unimproved
 
     // Fix up some of the Defaults
     // ['FFN','-999999','building','yes'], // Map to No Information
@@ -4291,7 +3971,7 @@ tds40.rules = {
     ['FFN','481','man_made','depot'], // not a good fit for depot terminal
     ['FFN','550','building','dwelling'], // Accomodation
     ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
-    ['FFN','811','amenity','government_administration_building'],
+    ['FFN','811','amenity','government_administration_building'], //
     ['FFN','835','military','military_outbuilding'], // Military
     ['FFN','835','military','barracks'], // Military
     ['FFN','843','amenity','jail'], // Imprisonment
@@ -4307,7 +3987,7 @@ tds40.rules = {
 
     // From UFD
     ['CAA','-999999','controlling_authority','unknown'],
-    ['FFN','190','use','oil_gas_facility'],
+    ['FFN','190','use','oil_gas_facility'], //
 
     // From UTP
     // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
@@ -4316,7 +3996,8 @@ tds40.rules = {
     ['FFN','610','building','communication'],
     ['FFN','530','building','warehouse'],
     ['FFN','835','building','military'],
-    // ['FFN','999','landuse','institutional'],
+    // ['FFN','999','landuse','institutional'], //
+
 
     // From NAVTEQ
     ['FFN','122','man_made','winery'], // Winery
@@ -4345,7 +4026,6 @@ tds40.rules = {
 
     // ### From OSM - This list could never end.....
     ['FFN','464','shop','books'], // Specialized Store
-    ['FFN','465','shop','supermarket'], // Non-specialized
     ['FFN','563','building','house'], // Residence
     ['FFN','558','building','dependents_housing'], // Dependents Housing
     ['FFN','610','office','telecommunication'], // telecommunication
@@ -4353,60 +4033,79 @@ tds40.rules = {
     ['FFN','760','amenity','office'], // Business and Personal Support Services 
     ['FFN','815','building','palace'], // Palace
 
+    // Added to give something for the OTH value to use
+    ['ZI016_ROC','999','surface','other'], // Other
+
    ], // End one2oneOut
 
     // ##### End of One2One Rules #####
 
-   // ##### Start of txtLength #####
-    // This list is for validateing the lengths of text attributes prior to export
-    txtLength : {
-    'BA000_VDR':80, 'BRN':24, 'CID':20, 'CPS':30, 'EQC':30, 'ETS':30, 'ETZ':24, 'GB052_RIDH':14, 'GB052_RIDL':14,
-    'HZD':30, 'IC2':14, 'IKO':14, 'MDE':20, 'NA8':80, 'RCG':30, 'RTN2':24, 'RTN':24, 'RTN3':24, 'SSE':14, 'UFI':254,
-    'URI':254, 'VDT':30, 'VOI':14, 'WPI':14, 'ZI001_NSD':20, 'ZI001_NSP':30, 'ZI001_SSD':20, 'ZI001_SSY':30, 'ZI001_VSC':30,
-    'ZI001_VSD':20, 'ZI004_RCG':30, 'ZI005_FNA1':200, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_NFN1':18, 'ZI005_NFN':18,
-    'ZI005_NFN2':18, 'ZSAX_RS0':2, 'ZSAX_RX3':254, 'ZSAX_RX4':254
-    },
-    // ##### End of txtLength #####
+   
+    // ##### Start of fuzzyTable #####
+    // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
+    fuzzyTable : [
+    ['ZI016_ROC','1',schemaTools.simple('surface=ground',1)], // Unimproved
+    ['ZI016_ROC','2',schemaTools.simple('surface=compacted',1)], // Stabilized earth
+    ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8)], // Flexible Pavement
+    ['ZI016_ROC','4',schemaTools.simple('surface=gravel',1)], // Aggregate
+    ['ZI016_ROC','5',schemaTools.simple('surface=macadam',1)], // Macadam
+    ['ZI016_ROC','6',schemaTools.simple('surface=bound_surface',1)], // Bound Surface
+    ['ZI016_ROC','7',schemaTools.isA('surface=paved', 0.8)], // Ridgid Pavement
+    ['ZI016_ROC','8',schemaTools.simple('surface=concrete',1)], // Concrete
+    ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',1)], // Asphalt
+    ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',1)], // Asphalt over Concrete
+    ['ZI016_ROC','11',"surface=cobblestone",schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
+    ['ZI016_ROC','12',schemaTools.simple('surface=brick',1)], // Brick
+    ['ZI016_ROC','13',schemaTools.simple('surface=metal',1)], // Metal
+    ['ZI016_ROC','14',schemaTools.simple('surface=wood',1)], // Wood
+    ['ZI016_ROC','15',schemaTools.simple('surface=corduroy',1)], // rough hewn logs...  // Corduroy
+    ['ZI016_ROC','16',schemaTools.simple('surface=wood_plank',1)], // Wood Plank
+    ['ZI016_ROC','17',schemaTools.simple('surface=ice',1)], // Ice
+    ['ZI016_ROC','18',schemaTools.simple('surface=snow',1)], // Snow
+    ['ZI016_ROC','999',schemaTools.simple('surface=other',1)], // Other
+    ],
+    // ##### End of fuzzyTable #####
 
     // ##### Start of ignoreList #####
-    // This is taken from OSM pre processing and a few things added.
-    // NOTE: Need to think about XX2 and XX3 attributes
+    // This is taken from OSM pre processing and a few added
     ignoreList : [
+    'APT2', 'APT3',
+    'APU2', 'APU3',
     'AQO2', 'AQO3',
+    'AQP2', 'AQP3',
     'ASU', 'ASU2', 'ASU3',
     'AT005_CAB', 'AT005_CAB2', 'AT005_CAB3',
     'BMC2', 'BMC3',
     'BSC2', 'BSC3',
     'CAB2', 'CAB3',
     'CSC2', 'CSC3',
-    'DEP',
-    'FCSubtype', 'FCSUBTYPE',
-    'FFN1', 'FFN2', 'FFN3',
+    'CVT2', 'CVT3',
+    'FCSUBTYPE','FCSubtype',
+    'FFN2', 'FFN3',
     'FHC2', 'FHC3',
     'FRT2', 'FRT3',
     'F_CODE',
-    'HST2',
     'HST2', 'HST3',
     'HYP',
-    'LEN_',
     'MCC2', 'MCC3',
     'MEM',
-    'MGL1', 'MGL2', 'MGL3',
     'MST2', 'MST3',
     'PBY', 'PBY2', 'PBY3',
+    'PFD',
+    'PLT2', 'PLT3',
     'POS2', 'POS3',
     'PPO', 'PPO2', 'PPO3',
     'PRW', 'PRW2', 'PRW3',
-    'PRW2', 'PRW3',
     'RCG',
+    'RIN_ROI2', 'RIN_ROI3',
+    'RIN_RTN2', 'RIN_RTN3',
     'RRC2', 'RRC3',
-    'RTN2', 'RTN3',
-    'RTN_ROI2', 'RTN_ROI3',
+    'RTN', 'RTN2', 'RTN3',
     'SBT2', 'SBT3',
     'SSR2', 'SSR3',
-    'SRL1', 'SRL2', 'SRL3',
     'STL2', 'STL3',
-    'TRS1','TRS2', 'TRS3',
+    'SUR',
+    'TRS2', 'TRS3',
     'TSM2', 'TSM3',
     'TTC2', 'TTC3',
     'UTY2', 'UTY3',
@@ -4414,11 +4113,12 @@ tds40.rules = {
     'VCM2', 'VCM3',
     'VCT2', 'VCT3',
     'VSP2', 'VSP3',
+    'WBD',
     'WD1',
     'WEQ2', 'WEQ3',
     'YWQ',
-    'ZI005_FNA1', 'ZI005_FNAA', 'ZI005_FNAB',
-    'ZI005_NFN1', 'ZI005_NFNA', 'ZI005_NFNB',
+    'ZI005_FNA2', 'ZI005_FNA3',
+    'ZI005_NFN2', 'ZI005_NFN3',
     'ZI013_CSP2', 'ZI013_CSP3',
     'ZI013_FFP2', 'ZI013_FFP3',
     'ZI013_FMM2', 'ZI013_FMM3',
@@ -4427,69 +4127,17 @@ tds40.rules = {
     'ZI014_PRW2', 'ZI014_PRW3',
     'ZI019_ASP2', 'ZI019_ASP3',
     'ZI019_ASU2', 'ZI019_ASU3',
-    'ZI020_IC2',
+    'ZI025_MAN',
     'ZI025_WLE',
     'ZI032_GUG',
     'ZI032_PYC',
     'ZI032_PYM',
     'ZI032_TOS',
-    'ZI071_FFN', 'ZI071_FFN2', 'ZI071_FFN3'
+    'ZI071_FFN', 'ZI071_FFN2', 'ZI071_FFN3',
+    'ZSAX_RX3', 'ZSAX_RX4',
+    'ZVH_VDT',
     ],
     // ##### End of ignoreList #####
-
-    // ##### Start of swapList #####
-    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
-    // but renamed in different features. Some of these were done during the move from TDSv30 to
-    // TDSv40.  We swap these so that there is only one set of rules needed in the One2One section.
-    // These get converted back on output - if we need to.
-    swapList : {
-    'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
-    'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
-    'DEP':'DZP',
-    'HYP':'ZI024_HYP',
-    'LEN_':'LZN',
-    'MEM':'ZI006_MEM',
-    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
-    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
-    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
-    'RCG':'ZI004_RCG',
-    'WD1':'ZI016_WD1',
-    'YWQ':'ZI024_YWQ',
-    'ZI005_FNAA':'ZI005_FNA',
-    'ZI005_FNAB':'ZI005_FNA2',
-    'ZI005_NFNA':'ZI005_NFN',
-    'ZI005_NFNB':'ZI005_NFN2',
-    'ZI020_IC2':'IC2',
-    'ZI025_WLE':'WLE',
-    'ZI032_GUG':'GUG',
-    'ZI032_TOS':'TOS',
-    'ZI032_PYC':'PYC',
-    'ZI032_PYM':'PYM',
-    'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3'
-    },
-    // ##### End of swapList #####
-
-    // ##### Start of closureList #####
-    closureList : {
-    'AQTC':['AQTL','AQTU'],
-    'AYRC':['AYRL','AYRU'],
-    'BPWHAC':['BPWHAL','BPWHAU'],
-    'BPWHBC':['BPWHBL','BPWHBU'],
-    'BPWSAC':['BPWSAL','BPWSAU'],
-    'BPWSBC':['BPWSBL','BPWSBU'],
-    'BWVCAC':['BWVCAL','BWVCAU'],
-    'BWVCBC':['BWVCBL','BWVCBU'],
-    'DMBC':['DMBL','DMBU'],
-    'DPAC':['DPAL','DPAU'],
-    'GSGCHC':['GSGCHL','GSGCHU'],
-    'GSGCLC':['GSGCLL','GSGCLU'],
-    'RMWC':['RMWL','RMWU'],
-    'SDCC':['SDCL','SDCU'],
-    'SDSC':['SDSL','SDSU'],
-    'SGCC':['SGCL','SGCU'],
-    'TSCC':['TSCL','TSCU']
-    },
-    // ##### End of closureList #####
 
     // ##### Start of fCodeMap #####
     // This is a map of FCODE's and filenames
@@ -4550,515 +4198,924 @@ tds40.rules = {
     ['ZD040', ['zd040','named_location_s','named_location_c','named_location_p']], // Named Location
     ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
     ],
-    // ##### End of fCodeMap#####
+    // ##### End of fCodeMap #####
+
+
+    // ##### Start of closureList #####
+    closureList : {
+    'AQTC':['AQTL','AQTU'],
+    'AYRC':['AYRL','AYRU'],
+    'BPWHAC':['BPWHAL','BPWHAU'],
+    'BPWHBC':['BPWHBL','BPWHBU'],
+    'BPWSAC':['BPWSAL','BPWSAU'],
+    'BPWSBC':['BPWSBL','BPWSBU'],
+    'BWVCAC':['BWVCAL','BWVCAU'],
+    'BWVCBC':['BWVCBL','BWVCBU'],
+    'DMBC':['DMBL','DMBU'],
+    'DPAC':['DPAL','DPAU'],
+    'GSGCHC':['GSGCHL','GSGCHU'],
+    'GSGCLC':['GSGCLL','GSGCLU'],
+    'PWAC':['PWAL','PWAU'],
+    'RMWC':['RMWL','RMWU'],
+    'SDCC':['SDCL','SDCU'],
+    'SDSC':['SDSL','SDSU'],
+    'SGCC':['SGCL','SGCU'],
+    'TSCC':['TSCL','TSCU'],
+    'WDAC':['WDAL','WDAU'],
+    'ZI026_CTUC':['ZI026_CTUL','ZI026_CTUU']
+    },
+    // ##### End of closureList #####
+
+    // ##### Start of swapListIn #####
+    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
+    // but renamed in different features. We swap these so that there is only one
+    // set of rules needed in the One2One section.
+    // These get converted back on output - if we need to.
+    swapListIn : {
+    'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
+    'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+    'HYP':'ZI024_HYP',
+    // 'LEN_':'LZN',
+    'MEM':'ZI006_MEM',
+    'PFD':'PWA',
+    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
+    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
+    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
+    'RCG':'ZI004_RCG',
+    'RTN':'RIN_RTN', 'RTN2':'RIN_RTN2', 'RTN3':'RIN_RTN3',
+    'SUR':'ZI026_SUR',
+    'WBD':'PWA',
+    'WD1':'ZI016_WD1',
+    'YWQ':'ZI024_YWQ',
+    'ZI025_MAN':'MAN',
+    'ZI025_WLE':'WLE',
+    'ZI032_GUG':'GUG',
+    'ZI032_TOS':'TOS',
+    'ZI032_PYC':'PYC',
+    'ZI032_PYM':'PYM',
+    'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
+    'ZVH_VDT':'VDT'
+    },
+    // ##### End of swapListIn #####
+
+    // ##### Start of swapListOut #####
+    // Format is: <FCODE>:{<from>:<to>}
+    swapListOut : {
+    'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
+    'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AL020':{'ZI005_NFN':'ZI005_NFN1'},
+    'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
+    'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM080':{'ZI014_YWQ':'YWQ'},
+    'AQ059':{'ZI016_WD1':'WD1'},
+    'AQ113':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AT005':{'WLE':'ZI025_WLE'},
+    'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB','CAB2':'AT005_CAB2','CAB3':'AT005_CAB3'},
+    'BD100':{'WLE':'ZI025_WLE'},
+    'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'BH070':{'PWA':'WBD'},
+    'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
+    'ED010':{'ZI024_HYP':'HYP'},
+    'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
+    'BD115':{'MAN':'ZI025_MAN'},
+    'AP055':{'RIN_RTN':'RTN', 'RIN_RTN2':'RTN2', 'RIN_RTN3':'RTN3'},
+    'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'},
+    'ZI026':{'ZI026_SUR':'SUR'}
+    },
+
+    // ##### End of swapListOut #####
+
+    // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    txtLength : {
+    'BA000_VDR':80, 'BEN':15, 'BRN':24, 'CID':20, 'CUD':20, 'ETZ':24, 'F_CODE':5, 'GB052_RIDH':14, 'GB052_RIDL':14,
+    'IKO':14, 'MDE':20, 'NA8':80, 'PDA':14, 'PSE':14, 'RIN_RTN':24, 'RIN_RTN2':24, 'RIN_RTN3':24, 'RTN':24, 'RTN2':24,
+    'RTN3':24, 'SAX_RS3':14, 'SAX_RS4':14, 'SAX_RS6':14, 'SAX_RX1':254, 'SAX_RX2':254, 'SAX_RX5':254, 'SAX_RX6':254,
+    'SAX_RX7':254, 'SAX_RX8':14, 'SAX_RY1':254, 'SAX_RY2':254, 'SSE':14, 'UFI':254, 'URI':254, 'VCS_VCR':132, 'VOI':14,
+    'WPI':14, 'ZI001_SDV':20, 'ZI001_VSD':20, 'ZI002_UFI':254, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_FNA3':200,
+    'ZI005_NFN':18, 'ZI005_NFN2':18, 'ZI005_NFN3':18, 'ZI026T_UFI':254, 'ZI027T_UFI':254, 'ZI028_UFI':254, 'ZI031S_URI':254,
+    'ZI031T_URI':254, 'ZI039S_UFI':254, 'ZI039T_UFI':254, 'ZSAX_RS0':14,
+    'ZSAX_RX0':254, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    },
+    // ##### End of txtLength #####
 
     // ##### Start of intList #####
     // This list is for validateing the integer attributes prior to export
-    intList : [ 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'VST' ],
-    // ##### End of intList#####
+    intList : [
+    'BC040_LCN', 'BC040_LVN', 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'ZI026_CTUL',
+    'ZI026_CTUU'
+    ],
+    // ##### End of intList #####
+
+    // ##### Start of ge4List #####
+    // This list is for validateing the XXX_GE4XX values
+    ge4List : {
+    'ge:GENC:3:1-2:ABW':'AW', // Aruba
+    'ge:GENC:3:1-2:AFG':'AF', // Islamic Republic of Afghanistan
+    'ge:GENC:3:1-2:AGO':'AO', // Republic of Angola
+    'ge:GENC:3:1-2:ALB':'AL', // Republic of Albania
+    'ge:GENC:3:1-2:AND':'AD', // Principality of Andorra
+    'ge:GENC:3:1-2:ARE':'AE', // United Arab Emirates
+    'ge:GENC:3:1-2:ARG':'AR', // Argentine Republic
+    'ge:GENC:3:1-2:ARM':'AM', // Republic of Armenia
+    'ge:GENC:3:1-2:ASM':'AS', // Territory of American Samoa
+    'ge:GENC:3:1-2:ATF':'TF', // French Southern and Antarctic Lands
+    'ge:GENC:3:1-2:ATG':'AG', // Antigua and Barbuda
+    'ge:GENC:3:1-2:AUS':'AU', // Commonwealth of Australia
+    'ge:GENC:3:1-2:AUT':'AT', // Republic of Austria
+    'ge:GENC:3:1-2:AX1':'A1', // Unknown
+    'ge:GENC:3:1-2:AX2':'A2', // Guantanamo Bay Naval Base
+    'ge:GENC:3:1-2:AZE':'AZ', // Republic of Azerbaijan
+    'ge:GENC:3:1-2:BDI':'BI', // Republic of Burundi
+    'ge:GENC:3:1-2:BEL':'BE', // Kingdom of Belgium
+    'ge:GENC:3:1-2:BEN':'BJ', // Republic of Benin
+    'ge:GENC:3:1-2:BES':'BQ', // Bonaire, Sint Eustatius, and Saba
+    'ge:GENC:3:1-2:BFA':'BF', // Burkina Faso
+    'ge:GENC:3:1-2:BGD':'BD', // Peoples Republic of Bangladesh
+    'ge:GENC:3:1-2:BGR':'BG', // Republic of Bulgaria
+    'ge:GENC:3:1-2:BHR':'BH', // Kingdom of Bahrain
+    'ge:GENC:3:1-2:BHS':'BS', // Commonwealth of The Bahamas
+    'ge:GENC:3:1-2:BLM':'BL', // Saint Barthelemy
+    'ge:GENC:3:1-2:BLR':'BY', // Republic of Belarus
+    'ge:GENC:3:1-2:BOL':'BO', // Plurinational State of Bolivia
+    'ge:GENC:3:1-2:BRA':'BR', // Federative Republic of Brazil
+    'ge:GENC:3:1-2:BRN':'BN', // Brunei Darussalam
+    'ge:GENC:3:1-2:BTN':'BT', // Kingdom of Bhutan
+    'ge:GENC:3:1-2:BWA':'BW', // Republic of Botswana
+    'ge:GENC:3:1-2:CAF':'CF', // Central African Republic
+    'ge:GENC:3:1-2:CAN':'CA', // Canada
+    'ge:GENC:3:1-2:CCK':'CC', // Territory of Cocos (Keeling) Islands
+    'ge:GENC:3:1-2:CHE':'CH', // Swiss Confederation
+    'ge:GENC:3:1-2:CHL':'CL', // Republic of Chile
+    'ge:GENC:3:1-2:CHN':'CN', // Peoples Republic of China
+    'ge:GENC:3:1-2:CIV':'CI', // Republic of Côte dIvoire
+    'ge:GENC:3:1-2:CMR':'CM', // Republic of Cameroon
+    'ge:GENC:3:1-2:COD':'CD', // Democratic Republic of the Congo
+    'ge:GENC:3:1-2:COG':'CG', // Republic of the Congo
+    'ge:GENC:3:1-2:COK':'CK', // Cook Islands
+    'ge:GENC:3:1-2:COL':'CO', // Republic of Colombia
+    'ge:GENC:3:1-2:COM':'KM', // Union of the Comoros
+    'ge:GENC:3:1-2:CPT':'CP', // Clipperton Island
+    'ge:GENC:3:1-2:CPV':'CV', // Republic of Cape Verde
+    'ge:GENC:3:1-2:CRI':'CR', // Republic of Costa Rica
+    'ge:GENC:3:1-2:CUB':'CU', // Republic of Cuba
+    'ge:GENC:3:1-2:CUW':'CW', // Curaçao
+    'ge:GENC:3:1-2:CXR':'CX', // Territory of Christmas Island
+    'ge:GENC:3:1-2:CYM':'KY', // Cayman Islands
+    'ge:GENC:3:1-2:CYP':'CY', // Republic of Cyprus
+    'ge:GENC:3:1-2:CZE':'CZ', // Czech Republic
+    'ge:GENC:3:1-2:DEU':'DE', // Federal Republic of Germany
+    'ge:GENC:3:1-2:DGA':'DG', // Diego Garcia
+    'ge:GENC:3:1-2:DJI':'DJ', // Republic of Djibouti
+    'ge:GENC:3:1-2:DMA':'DM', // Commonwealth of Dominica
+    'ge:GENC:3:1-2:DNK':'DK', // Kingdom of Denmark
+    'ge:GENC:3:1-2:DOM':'DO', // Dominican Republic
+    'ge:GENC:3:1-2:DZA':'DZ', // Peoples Democratic Republic of Algeria
+    'ge:GENC:3:1-2:ECU':'EC', // Republic of Ecuador
+    'ge:GENC:3:1-2:EGY':'EG', // Arab Republic of Egypt
+    'ge:GENC:3:1-2:ERI':'ER', // State of Eritrea
+    'ge:GENC:3:1-2:ESH':'EH', // Western Sahara
+    'ge:GENC:3:1-2:ESP':'ES', // Kingdom of Spain
+    'ge:GENC:3:1-2:EST':'EE', // Republic of Estonia
+    'ge:GENC:3:1-2:ETH':'ET', // Federal Democratic Republic of Ethiopia
+    'ge:GENC:3:1-2:FIN':'FI', // Republic of Finland
+    'ge:GENC:3:1-2:FJI':'FJ', // Republic of Fiji
+    'ge:GENC:3:1-2:FLK':'FK', // Falkland Islands (Islas Malvinas)
+    'ge:GENC:3:1-2:FRA':'FR', // French Republic
+    'ge:GENC:3:1-2:FRO':'FO', // Faroe Islands
+    'ge:GENC:3:1-2:FSM':'FM', // Federated States of Micronesia
+    'ge:GENC:3:1-2:GAB':'GA', // Gabonese Republic
+    'ge:GENC:3:1-2:GBR':'GB', // United Kingdom of Great Britain and Northern Ireland
+    'ge:GENC:3:1-2:GEO':'GE', // Georgia
+    'ge:GENC:3:1-2:GGY':'GG', // Bailiwick of Guernsey
+    'ge:GENC:3:1-2:GHA':'GH', // Republic of Ghana
+    'ge:GENC:3:1-2:GIN':'GN', // Republic of Guinea
+    'ge:GENC:3:1-2:GLP':'GP', // Department of Guadeloupe
+    'ge:GENC:3:1-2:GMB':'GM', // Republic of The Gambia
+    'ge:GENC:3:1-2:GNB':'GW', // Republic of Guinea-Bissau
+    'ge:GENC:3:1-2:GNQ':'GQ', // Republic of Equatorial Guinea
+    'ge:GENC:3:1-2:GRC':'GR', // Hellenic Republic
+    'ge:GENC:3:1-2:GTM':'GT', // Republic of Guatemala
+    'ge:GENC:3:1-2:GUF':'GF', // Department of Guiana
+    'ge:GENC:3:1-2:GUM':'GU', // Territory of Guam
+    'ge:GENC:3:1-2:GUY':'GY', // Co-operative Republic of Guyana
+    'ge:GENC:3:1-2:HKG':'HK', // Hong Kong Special Administrative Region
+    'ge:GENC:3:1-2:HMD':'HM', // Territory of Heard Island and McDonald Islands
+    'ge:GENC:3:1-2:HND':'HN', // Republic of Honduras
+    'ge:GENC:3:1-2:HRV':'HR', // Republic of Croatia
+    'ge:GENC:3:1-2:HTI':'HT', // Republic of Haiti
+    'ge:GENC:3:1-2:IDN':'ID', // Republic of Indonesia
+    'ge:GENC:3:1-2:IND':'IN', // Republic of India
+    'ge:GENC:3:1-2:IOT':'IO', // British Indian Ocean Territory
+    'ge:GENC:3:1-2:IRN':'IR', // Islamic Republic of Iran
+    'ge:GENC:3:1-2:IRQ':'IQ', // Republic of Iraq
+    'ge:GENC:3:1-2:ISL':'IS', // Republic of Iceland
+    'ge:GENC:3:1-2:ISR':'IL', // State of Israel
+    'ge:GENC:3:1-2:ITA':'IT', // Italian Republic
+    'ge:GENC:3:1-2:JEY':'JE', // Bailiwick of Jersey
+    'ge:GENC:3:1-2:JOR':'JO', // Hashemite Kingdom of Jordan
+    'ge:GENC:3:1-2:KAZ':'KZ', // Republic of Kazakhstan
+    'ge:GENC:3:1-2:KEN':'KE', // Republic of Kenya
+    'ge:GENC:3:1-2:KGZ':'KG', // Kyrgyz Republic
+    'ge:GENC:3:1-2:KHM':'KH', // Kingdom of Cambodia
+    'ge:GENC:3:1-2:KIR':'KI', // Republic of Kiribati
+    'ge:GENC:3:1-2:KNA':'KN', // Federation of Saint Kitts and Nevis
+    'ge:GENC:3:1-2:KOR':'KR', // Republic of Korea
+    'ge:GENC:3:1-2:KWT':'KW', // State of Kuwait
+    'ge:GENC:3:1-2:LAO':'LA', // Lao Peoples Democratic Republic
+    'ge:GENC:3:1-2:LBN':'LB', // Lebanese Republic
+    'ge:GENC:3:1-2:LBR':'LR', // Republic of Liberia
+    'ge:GENC:3:1-2:LIE':'LI', // Principality of Liechtenstein
+    'ge:GENC:3:1-2:LKA':'LK', // Democratic Socialist Republic of Sri Lanka
+    'ge:GENC:3:1-2:LSO':'LS', // Kingdom of Lesotho
+    'ge:GENC:3:1-2:LTU':'LT', // Republic of Lithuania
+    'ge:GENC:3:1-2:LUX':'LU', // Grand Duchy of Luxembourg
+    'ge:GENC:3:1-2:LVA':'LV', // Republic of Latvia
+    'ge:GENC:3:1-2:MAC':'MO', // Macau Special Administrative Region
+    'ge:GENC:3:1-2:MAF':'MF', // Saint Martin
+    'ge:GENC:3:1-2:MAR':'MA', // Kingdom of Morocco
+    'ge:GENC:3:1-2:MCO':'MC', // Principality of Monaco
+    'ge:GENC:3:1-2:MDA':'MD', // Republic of Moldova
+    'ge:GENC:3:1-2:MDG':'MG', // Republic of Madagascar
+    'ge:GENC:3:1-2:MDV':'MV', // Republic of Maldives
+    'ge:GENC:3:1-2:MEX':'MX', // United Mexican States
+    'ge:GENC:3:1-2:MHL':'MH', // Republic of the Marshall Islands
+    'ge:GENC:3:1-2:MKD':'MK', // Republic of Macedonia
+    'ge:GENC:3:1-2:MLI':'ML', // Republic of Mali
+    'ge:GENC:3:1-2:MLT':'MT', // Republic of Malta
+    'ge:GENC:3:1-2:MMR':'MM', // Union of Burma
+    'ge:GENC:3:1-2:MNG':'MN', // Mongolia
+    'ge:GENC:3:1-2:MNP':'MP', // Commonwealth of the Northern Mariana Islands
+    'ge:GENC:3:1-2:MOZ':'MZ', // Republic of Mozambique
+    'ge:GENC:3:1-2:MRT':'MR', // Islamic Republic of Mauritania
+    'ge:GENC:3:1-2:MTQ':'MQ', // Department of Martinique
+    'ge:GENC:3:1-2:MUS':'MU', // Republic of Mauritius
+    'ge:GENC:3:1-2:MWI':'MW', // Republic of Malawi
+    'ge:GENC:3:1-2:MYS':'MY', // Malaysia
+    'ge:GENC:3:1-2:MYT':'YT', // Department of Mayotte
+    'ge:GENC:3:1-2:NAM':'NA', // Republic of Namibia
+    'ge:GENC:3:1-2:NCL':'NC', // New Caledonia
+    'ge:GENC:3:1-2:NER':'NE', // Republic of the Niger
+    'ge:GENC:3:1-2:NFK':'NF', // Territory of Norfolk Island
+    'ge:GENC:3:1-2:NGA':'NG', // Federal Republic of Nigeria
+    'ge:GENC:3:1-2:NIC':'NI', // Republic of Nicaragua
+    'ge:GENC:3:1-2:NLD':'NL', // Kingdom of the Netherlands
+    'ge:GENC:3:1-2:NOR':'NO', // Kingdom of Norway
+    'ge:GENC:3:1-2:NPL':'NP', // Federal Democratic Republic of Nepal
+    'ge:GENC:3:1-2:NRU':'NR', // Republic of Nauru
+    'ge:GENC:3:1-2:NZL':'NZ', // New Zealand
+    'ge:GENC:3:1-2:OMN':'OM', // Sultanate of Oman
+    'ge:GENC:3:1-2:PAK':'PK', // Islamic Republic of Pakistan
+    'ge:GENC:3:1-2:PAN':'PA', // Republic of Panama
+    'ge:GENC:3:1-2:PCN':'PN', // Pitcairn, Henderson, Ducie, and Oeno Islands
+    'ge:GENC:3:1-2:PER':'PE', // Republic of Peru
+    'ge:GENC:3:1-2:PHL':'PH', // Republic of the Philippines
+    'ge:GENC:3:1-2:PLW':'PW', // Republic of Palau
+    'ge:GENC:3:1-2:POL':'PL', // Republic of Poland
+    'ge:GENC:3:1-2:PRI':'PR', // Commonwealth of Puerto Rico
+    'ge:GENC:3:1-2:PRK':'KP', // Democratic Peoples Republic of Korea
+    'ge:GENC:3:1-2:PRT':'PT', // Portuguese Republic
+    'ge:GENC:3:1-2:PRY':'PY', // Republic of Paraguay
+    'ge:GENC:3:1-2:PSE':'PS', // Palestinian Territory
+    'ge:GENC:3:1-2:PYF':'PF', // French Polynesia
+    'ge:GENC:3:1-2:QAT':'QA', // State of Qatar
+    'ge:GENC:3:1-2:REU':'RE', // Department of Reunion
+    'ge:GENC:3:1-2:RUS':'RU', // Russian Federation
+    'ge:GENC:3:1-2:RWA':'RW', // Republic of Rwanda
+    'ge:GENC:3:1-2:SAU':'SA', // Kingdom of Saudi Arabia
+    'ge:GENC:3:1-2:SDN':'SD', // Republic of the Sudan
+    'ge:GENC:3:1-2:SEN':'SN', // Republic of Senegal
+    'ge:GENC:3:1-2:SGP':'SG', // Republic of Singapore
+    'ge:GENC:3:1-2:SGS':'GS', // South Georgia and South Sandwich Islands
+    'ge:GENC:3:1-2:SHN':'SH', // Saint Helena, Ascension, and Tristan da Cunha
+    'ge:GENC:3:1-2:SLB':'SB', // Solomon Islands
+    'ge:GENC:3:1-2:SLE':'SL', // Republic of Sierra Leone
+    'ge:GENC:3:1-2:SLV':'SV', // Republic of El Salvador
+    'ge:GENC:3:1-2:SMR':'SM', // Republic of San Marino
+    'ge:GENC:3:1-2:SOM':'SO', // Somalia, Federal Republic of
+    'ge:GENC:3:1-2:SPM':'PM', // Territorial Collectivity of Saint Pierre and Miquelon
+    'ge:GENC:3:1-2:SRB':'RS', // Republic of Serbia
+    'ge:GENC:3:1-2:SSD':'SS', // Republic of South Sudan
+    'ge:GENC:3:1-2:STP':'ST', // Democratic Republic of Sao Tome and Principe
+    'ge:GENC:3:1-2:SUR':'SR', // Republic of Suriname
+    'ge:GENC:3:1-2:SVK':'SK', // Slovak Republic
+    'ge:GENC:3:1-2:SVN':'SI', // Republic of Slovenia
+    'ge:GENC:3:1-2:SWE':'SE', // Kingdom of Sweden
+    'ge:GENC:3:1-2:SWZ':'SZ', // Kingdom of Swaziland
+    'ge:GENC:3:1-2:SXM':'SX', // Sint Maarten
+    'ge:GENC:3:1-2:SYC':'SC', // Republic of Seychelles
+    'ge:GENC:3:1-2:SYR':'SY', // Syrian Arab Republic
+    'ge:GENC:3:1-2:TCA':'TC', // Turks and Caicos Islands
+    'ge:GENC:3:1-2:TCD':'TD', // Republic of Chad
+    'ge:GENC:3:1-2:TGO':'TG', // Togolese Republic
+    'ge:GENC:3:1-2:THA':'TH', // Kingdom of Thailand
+    'ge:GENC:3:1-2:TJK':'TJ', // Republic of Tajikistan
+    'ge:GENC:3:1-2:TLS':'TL', // Democratic Republic of Timor-Leste
+    'ge:GENC:3:1-2:TON':'TO', // Kingdom of Tonga
+    'ge:GENC:3:1-2:TTO':'TT', // Republic of Trinidad and Tobago
+    'ge:GENC:3:1-2:TUN':'TN', // Tunisian Republic
+    'ge:GENC:3:1-2:TUR':'TR', // Republic of Turkey
+    'ge:GENC:3:1-2:TWN':'TW', // Taiwan
+    'ge:GENC:3:1-2:TZA':'TZ', // United Republic of Tanzania
+    'ge:GENC:3:1-2:UGA':'UG', // Republic of Uganda
+    'ge:GENC:3:1-2:UKR':'UA', // Ukraine
+    'ge:GENC:3:1-2:URY':'UY', // Oriental Republic of Uruguay
+    'ge:GENC:3:1-2:USA':'US', // United States of America
+    'ge:GENC:3:1-2:UZB':'UZ', // Republic of Uzbekistan
+    'ge:GENC:3:1-2:VAT':'VA', // State of the Vatican City
+    'ge:GENC:3:1-2:VCT':'VC', // Saint Vincent and the Grenadines
+    'ge:GENC:3:1-2:VEN':'VE', // Bolivarian Republic of Venezuela
+    'ge:GENC:3:1-2:VGB':'VG', // Virgin Islands, British
+    'ge:GENC:3:1-2:VIR':'VI', // United States Virgin Islands
+    'ge:GENC:3:1-2:VNM':'VN', // Socialist Republic of Vietnam
+    'ge:GENC:3:1-2:VUT':'VU', // Republic of Vanuatu
+    'ge:GENC:3:1-2:WLF':'WF', // Wallis and Futuna
+    'ge:GENC:3:1-2:WSM':'WS', // Independent State of Samoa
+    'ge:GENC:3:1-2:XAC':'XA', // Territory of Ashmore and Cartier Islands
+    'ge:GENC:3:1-2:XAZ':'XAZ', // Entity 1
+    'ge:GENC:3:1-2:XBI':'QS', // Bassas da India
+    'ge:GENC:3:1-2:XBK':'XB', // Baker Island
+    'ge:GENC:3:1-2:XCR':'XCR', // Entity 2
+    'ge:GENC:3:1-2:XCS':'XC', // Coral Sea Islands Territory
+    'ge:GENC:3:1-2:XCY':'XCY', // Entity 3
+    'ge:GENC:3:1-2:XEU':'XE', // Europa Island
+    'ge:GENC:3:1-2:XGL':'QX', // Glorioso Islands
+    'ge:GENC:3:1-2:XGZ':'XG', // Gaza Strip
+    'ge:GENC:3:1-2:XHO':'XH', // Howland Island
+    'ge:GENC:3:1-2:XJA':'XU', // Johnston Atoll
+    'ge:GENC:3:1-2:XJM':'XJ', // Jan Mayen
+    'ge:GENC:3:1-2:XJN':'QU', // Juan de Nova Island
+    'ge:GENC:3:1-2:XJV':'XQ', // Jarvis Island
+    'ge:GENC:3:1-2:XKM':'XKM', // Entity 4
+    'ge:GENC:3:1-2:XKN':'XKN', // Entity 5
+    'ge:GENC:3:1-2:XKR':'XM', // Kingman Reef
+    'ge:GENC:3:1-2:XKS':'XK', // Republic of Kosovo
+    'ge:GENC:3:1-2:XMW':'QM', // Midway Islands
+    'ge:GENC:3:1-2:XNV':'XV', // Navassa Island
+    'ge:GENC:3:1-2:XPL':'XL', // Palmyra Atoll
+    'ge:GENC:3:1-2:XPR':'XP', // Paracel Islands
+    'ge:GENC:3:1-2:XQP':'QP', // Etorofu, Habomai, Kunashiri, and Shikotan Islands
+    'ge:GENC:3:1-2:XQZ':'QZ', // Akrotiri
+    'ge:GENC:3:1-2:XSP':'XS', // Spratly Islands
+    'ge:GENC:3:1-2:XSV':'XR', // Svalbard
+    'ge:GENC:3:1-2:XTR':'XT', // Tromelin Island
+    'ge:GENC:3:1-2:XWB':'XW', // West Bank
+    'ge:GENC:3:1-2:XWK':'QW', // Wake Island
+    'ge:GENC:3:1-2:XXD':'XD', // Dhekelia
+    'ge:GENC:3:1-2:XXX':'XXX', // No Mans Land
+    'ge:GENC:3:1-2:YEM':'YE', // Republic of Yemen
+    'ge:GENC:3:1-2:ZAF':'ZA', // Republic of South Africa
+    'ge:GENC:3:1-2:ZMB':'ZM', // Republic of Zambia
+    'ge:GENC:3:1-2:ZWE':'ZW', // Republic of Zimbabwe
+    'ge:ISO1:3:VI-15:AIA':'AI', // Anguilla
+    'ge:ISO1:3:VI-15:ATA':'AQ', // Antarctica
+    'ge:ISO1:3:VI-15:BIH':'BA', // Bosnia and Herzegovina
+    'ge:ISO1:3:VI-15:BLZ':'BZ', // Belize
+    'ge:ISO1:3:VI-15:BMU':'BM', // Bermuda
+    'ge:ISO1:3:VI-15:BRB':'BB', // Barbados
+    'ge:ISO1:3:VI-15:BVT':'BV', // Bouvet Island
+    'ge:ISO1:3:VI-15:GIB':'GI', // Gibraltar
+    'ge:ISO1:3:VI-15:GRD':'GD', // Grenada
+    'ge:ISO1:3:VI-15:GRL':'GL', // Greenland
+    'ge:ISO1:3:VI-15:HUN':'HU', // Hungary
+    'ge:ISO1:3:VI-15:IMN':'IM', // Isle of Man
+    'ge:ISO1:3:VI-15:IRL':'IE', // Ireland
+    'ge:ISO1:3:VI-15:JAM':'JM', // Jamaica
+    'ge:ISO1:3:VI-15:JPN':'JP', // Japan
+    'ge:ISO1:3:VI-15:LBY':'LY', // Libya
+    'ge:ISO1:3:VI-15:LCA':'LC', // Saint Lucia
+    'ge:ISO1:3:VI-15:MNE':'ME', // Montenegro
+    'ge:ISO1:3:VI-15:MSR':'MS', // Montserrat
+    'ge:ISO1:3:VI-15:NIU':'NU', // Niue
+    'ge:ISO1:3:VI-15:PNG':'PG', // Independent State of Papua New Guinea
+    'ge:ISO1:3:VI-15:ROU':'RO', // Romania
+    'ge:ISO1:3:VI-15:TKL':'TK', // Tokelau
+    'ge:ISO1:3:VI-15:TKM':'TM', // Turkmenistan
+    'ge:ISO1:3:VI-15:TUV':'TV', // Tuvalu
+    'other':'other', // Other
+    },
+    // ##### End of ge4List #####
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {
-    'PGB230':'AeronauticPnt', // AircraftHangar
-    'AGB230':'AeronauticSrf', // AircraftHangar
-    'AGB015':'AeronauticSrf', // Apron
-    'PAQ060':'AeronauticPnt', // ControlTower
-    'AAQ060':'AeronauticSrf', // ControlTower
-    'PGB250':'AeronauticPnt', // HardenedAircraftShelter
-    'AGB250':'AeronauticSrf', // HardenedAircraftShelter
-    'PGB030':'AeronauticPnt', // Helipad
-    'AGB030':'AeronauticSrf', // Helipad
-    'PGB035':'AeronauticPnt', // Heliport
-    'AGB035':'AeronauticSrf', // Heliport
-    'PGB005':'AeronauticPnt', // LandAerodrome
-    'AGB005':'AeronauticSrf', // LandAerodrome
-    'PGB040':'AeronauticPnt', // LaunchPad
-    'AGB040':'AeronauticSrf', // LaunchPad
-    'PAQ110':'AeronauticPnt', // MooringMast
-    'AGB055':'AeronauticSrf', // Runway
-    'AGB070':'AeronauticSrf', // SeaplaneRun
-    'PAL351':'AeronauticPnt', // SpaceFacility
-    'AAL351':'AeronauticSrf', // SpaceFacility
-    'AGB045':'AeronauticSrf', // Stopway
-    'LGB075':'AeronauticCrv', // Taxiway
-    'AGB075':'AeronauticSrf', // Taxiway
-    'PAL510':'AeronauticPnt', // TetheredBalloon
-    'PGB065':'AeronauticPnt', // WaterAerodrome
-    'AGB065':'AeronauticSrf', // WaterAerodrome
-    'PAJ085':'AgriculturePnt', // Barn
-    'AAJ085':'AgricultureSrf', // Barn
-    'AEC010':'AgricultureSrf', // Cane
-    'AEA010':'AgricultureSrf', // CropLand
-    'PBH051':'AgriculturePnt', // FishFarmFacility
-    'ABH051':'AgricultureSrf', // FishFarmFacility
-    'PAM020':'AgriculturePnt', // GrainStorageStructure
-    'AAM020':'AgricultureSrf', // GrainStorageStructure
-    'PAJ110':'AgriculturePnt', // Greenhouse
-    'AAJ110':'AgricultureSrf', // Greenhouse
-    'PAJ030':'AgriculturePnt', // HoldingPen
-    'AAJ030':'AgricultureSrf', // HoldingPen
-    'AEA055':'AgricultureSrf', // HopField
-    'PAL270':'AgriculturePnt', // IndustrialFarm
-    'AAL270':'AgricultureSrf', // IndustrialFarm
-    'AEA040':'AgricultureSrf', // Orchard
-    'AEA030':'AgricultureSrf', // PlantNursery
-    'ABH135':'AgricultureSrf', // RiceField
-    'PAJ080':'AgriculturePnt', // Stable
-    'AAJ080':'AgricultureSrf', // Stable
-    'AEA050':'AgricultureSrf', // Vineyard
-    'PAJ050':'AgriculturePnt', // Windmill
-    'AAJ050':'AgricultureSrf', // Windmill
-    'PZB030':'BoundaryPnt', // BoundaryMonument
-    'LFA110':'BoundaryCrv', // InternationalDateLine
-    'AZI040':'CollectionSrf', // Spatial Entity Metadata Collection
-    'AZI041':'CollectionSrf', // Non-Spatial Entity Metadata Collection
-    'PAL012':'CulturePnt', // ArcheologicalSite
-    'AAL012':'CultureSrf', // ArcheologicalSite
-    'AEA031':'CultureSrf', // BotanicGarden
-    'PAL025':'CulturePnt', // Cairn
-    'PAL030':'CulturePnt', // Cemetery
-    'AAL030':'CultureSrf', // Cemetery
-    'AFA210':'CultureSrf', // ConservationArea
-    'PFA012':'CulturePnt', // ContaminatedRegion
-    'AFA012':'CultureSrf', // ContaminatedRegion
-    'AAL175':'CultureSrf', // Courtyard
-    'PZD030':'CulturePnt', // CulturalContextLocation
-    'AZD030':'CultureSrf', // CulturalContextLocation
-    'PBH075':'CulturePnt', // Fountain
-    'ABH075':'CultureSrf', // Fountain
-    'PAL201':'CulturePnt', // InterestSite
-    'AAL201':'CultureSrf', // InterestSite
-    'PAK121':'CulturePnt', // Lookout
-    'AAK121':'CultureSrf', // Lookout
-    'PAL130':'CulturePnt', // MemorialMonument
-    'LAL130':'CultureCrv', // MemorialMonument
-    'AAL130':'CultureSrf', // MemorialMonument
-    'AAK120':'CultureSrf', // Park
-    'AAL180':'CultureSrf', // RetailStand
-    'PAL200':'CulturePnt', // Ruins
-    'AAL200':'CultureSrf', // Ruins
-    'PAL036':'CulturePnt', // Tomb
-    'AAL036':'CultureSrf', // Tomb
-    'AZI031':'DatasetSrf', // Dataset Metadata
+    'PAA010':'IndustryPnt', // Industry
+    'AAA010':'IndustrySrf', // Industry
+    'LAA011':'IndustryCrv', // Industry
+    'PAA020':'IndustryPnt', // Industry
+    'AAA020':'IndustrySrf', // Industry
+    'PAA040':'IndustryPnt', // Industry
+    'AAA040':'IndustrySrf', // Industry
+    'PAA045':'IndustryPnt', // Industry
+    'AAA052':'IndustrySrf', // Industry
+    'PAA054':'IndustryPnt', // Industry
+    'PAB000':'IndustryPnt', // Industry
+    'AAB000':'IndustrySrf', // Industry
+    'AAB010':'IndustrySrf', // Industry
+    'PAB021':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAB040':'IndustrySrf', // Industry
+    'PAB507':'IndustryPnt', // Industry
+    'AAB507':'IndustrySrf', // Industry
+    'PAC010':'IndustryPnt', // Industry
+    'AAC010':'IndustrySrf', // Industry
+    'PAC020':'IndustryPnt', // Industry
+    'AAC020':'IndustrySrf', // Industry
+    'AAC030':'IndustrySrf', // Industry
+    'PAC040':'IndustryPnt', // Industry
+    'AAC040':'IndustrySrf', // Industry
+    'PAC060':'IndustryPnt', // Industry
+    'AAC060':'IndustrySrf', // Industry
+    'PAC507':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAC507':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAD010':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAD010':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAD020':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAD020':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAD025':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAD025':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAD030':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAD030':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAD041':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAD041':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAD050':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAD050':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAD055':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAD055':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAD060':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAD060':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAF010':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'LAF020':'IndustryCrv', // Industry
+    'PAF030':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAF030':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAF040':'IndustryPnt', // Industry
+    'AAF040':'IndustrySrf', // Industry
+    'PAF050':'IndustryPnt', // Industry
+    'LAF050':'IndustryCrv', // Industry
+    'PAF060':'StructurePnt', // Structure
+    'AAF060':'StructureSrf', // Structure
+    'PAF070':'IndustryPnt', // Industry
+    'PAF080':'IndustryPnt', // Industry
+    'AAG030':'FacilitySrf', // Facility
+    'AAG040':'FacilitySrf', // Facility
+    'PAG050':'StructurePnt', // Structure
+    'LAH025':'MilitaryCrv', // Military
+    'AAH025':'MilitarySrf', // Military
+    'PAH055':'MilitaryPnt', // Military
+    'AAH055':'MilitarySrf', // Military
+    'PAH060':'MilitaryPnt', // Military
+    'AAH060':'MilitarySrf', // Military
+    'PAH070':'TransportationGroundPnt', // Transportation - Ground
+    'AAI020':'SettlementSrf', // Settlement
+    'AAI021':'SettlementSrf', // Settlement
+    'PAI030':'SettlementPnt', // Settlement
+    'AAI030':'SettlementSrf', // Settlement
+    'PAJ030':'AgriculturePnt', // Agriculture
+    'AAJ030':'AgricultureSrf', // Agriculture
+    'PAJ050':'AgriculturePnt', // Agriculture
+    'AAJ050':'AgricultureSrf', // Agriculture
+    'PAJ051':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'PAJ055':'IndustryPnt', // Industry
+    'AAJ055':'IndustrySrf', // Industry
+    'PAJ080':'AgriculturePnt', // Agriculture
+    'AAJ080':'AgricultureSrf', // Agriculture
+    'PAJ085':'AgriculturePnt', // Agriculture
+    'AAJ085':'AgricultureSrf', // Agriculture
+    'PAJ110':'AgriculturePnt', // Agriculture
+    'AAJ110':'AgricultureSrf', // Agriculture
+    'PAK020':'RecreationPnt', // Recreation
+    'LAK020':'RecreationCrv', // Recreation
+    'AAK020':'RecreationSrf', // Recreation
+    'PAK030':'RecreationPnt', // Recreation
+    'AAK030':'RecreationSrf', // Recreation
+    'PAK040':'RecreationPnt', // Recreation
+    'AAK040':'RecreationSrf', // Recreation
+    'PAK060':'RecreationPnt', // Recreation
+    'AAK060':'RecreationSrf', // Recreation
+    'AAK061':'RecreationSrf', // Recreation
+    'AAK070':'RecreationSrf', // Recreation
+    'PAK080':'RecreationPnt', // Recreation
+    'LAK080':'RecreationCrv', // Recreation
+    'AAK090':'RecreationSrf', // Recreation
+    'AAK100':'RecreationSrf', // Recreation
+    'AAK101':'RecreationSrf', // Recreation
+    'PAK110':'RecreationPnt', // Recreation
+    'AAK110':'RecreationSrf', // Recreation
+    'AAK120':'CultureSrf', // Culture
+    'PAK121':'CulturePnt', // Culture
+    'AAK121':'CultureSrf', // Culture
+    'LAK130':'RecreationCrv', // Recreation
+    'AAK130':'RecreationSrf', // Recreation
+    'PAK150':'RecreationPnt', // Recreation
+    'LAK150':'RecreationCrv', // Recreation
+    'LAK155':'RecreationCrv', // Recreation
+    'AAK155':'RecreationSrf', // Recreation
+    'PAK160':'RecreationPnt', // Recreation
+    'AAK160':'RecreationSrf', // Recreation
+    'PAK161':'RecreationPnt', // Recreation
+    'PAK164':'RecreationPnt', // Recreation
+    'AAK164':'RecreationSrf', // Recreation
+    'PAK170':'RecreationPnt', // Recreation
+    'AAK170':'RecreationSrf', // Recreation
+    'PAK180':'RecreationPnt', // Recreation
+    'AAK180':'RecreationSrf', // Recreation
     'PAL010':'FacilityPnt', // Facility
     'AAL010':'FacilitySrf', // Facility
-    'PAL011':'FacilityPnt', // Installation
-    'AAL011':'FacilitySrf', // Installation
-    'AAG040':'FacilitySrf', // OfficePark
-    'PAT045':'FacilityPnt', // RadarStation
-    'AAT045':'FacilitySrf', // RadarStation
-    'AAG030':'FacilitySrf', // ShoppingComplex
-    'PBC050':'HydroAidNavigationPnt', // Lighthouse
-    'ABC050':'HydroAidNavigationSrf', // Lighthouse
-    'PBC070':'HydroAidNavigationPnt', // LightVessel
-    'LBH010':'HydrographyCrv', // Aqueduct
-    'ABH010':'HydrographySrf', // Aqueduct
-    'ABH116':'HydrographySrf', // Aquifer
-    'PBI010':'HydrographyPnt', // Cistern
-    'PBI020':'HydrographyPnt', // Dam
-    'LBI020':'HydrographyCrv', // Dam
-    'ABI020':'HydrographySrf', // Dam
-    'LBH030':'HydrographyCrv', // Ditch
-    'ABH030':'HydrographySrf', // Ditch
-    'LBI060':'HydrographyCrv', // FishLadder
-    'PBB110':'HydrographyPnt', // FishWeir
-    'PBI044':'HydrographyPnt', // FloodControlStructure
-    'LBI044':'HydrographyCrv', // FloodControlStructure
-    'ABI044':'HydrographySrf', // FloodControlStructure
-    'PBI070':'HydrographyPnt', // GaugingStation
-    'PBD181':'HydrographyPnt', // Hulk
-    'PBH082':'HydrographyPnt', // InlandWaterbody
-    'ABH082':'HydrographySrf', // InlandWaterbody
-    'ABH090':'HydrographySrf', // LandSubjectToInundation
-    'LBH100':'HydrographyCrv', // Moat
-    'ABH100':'HydrographySrf', // Moat
-    'PBH170':'HydrographyPnt', // NaturalPool
-    'ABH170':'HydrographySrf', // NaturalPool
-    'PBD115':'HydrographyPnt', // OffshoreConstruction
-    'ABD115':'HydrographySrf', // OffshoreConstruction
-    'LBH110':'HydrographyCrv', // Penstock
-    'PBH012':'HydrographyPnt', // QanatShaft
-    'PBH120':'HydrographyPnt', // Rapids
-    'LBH120':'HydrographyCrv', // Rapids
-    'ABH120':'HydrographySrf', // Rapids
-    'LBH140':'HydrographyCrv', // River
-    'ABH140':'HydrographySrf', // River
-    'PBI040':'HydrographyPnt', // SluiceGate
-    'LBI040':'HydrographyCrv', // SluiceGate
-    'PBD140':'HydrographyPnt', // Snag
-    'LBH165':'HydrographyCrv', // Spillway
-    'ABH165':'HydrographySrf', // Spillway
-    'ABA040':'HydrographySrf', // TidalWater
-    'PBH145':'HydrographyPnt', // VanishingPoint
-    'PBH180':'HydrographyPnt', // Waterfall
-    'LBH180':'HydrographyCrv', // Waterfall
-    'PBI050':'HydrographyPnt', // WaterIntakeTower
-    'ABI050':'HydrographySrf', // WaterIntakeTower
-    'LBH065':'HydrographyCrv', // WaterRace
-    'PBH230':'HydrographyPnt', // WaterWell
-    'ABH230':'HydrographySrf', // WaterWell
-    'PZB035':'HypsographyPnt', // ControlPoint
-    'LCA010':'HypsographyCrv', // ElevationContour
-    'PCA030':'HypsographyPnt', // SpotElevation
-    'AAB040':'IndustrySrf', // AerationBasin
-    'PAC010':'IndustryPnt', // BlastFurnace
-    'AAC010':'IndustrySrf', // BlastFurnace
-    'PAA045':'IndustryPnt', // Borehole
-    'PAF021':'IndustryPnt', // BucketElevator
-    'LAF021':'IndustryCrv', // BucketElevator
-    'PAC020':'IndustryPnt', // CatalyticCracker
-    'AAC020':'IndustrySrf', // CatalyticCracker
-    'LAF020':'IndustryCrv', // Conveyor
-    'PAF040':'IndustryPnt', // Crane
-    'AAF040':'IndustrySrf', // Crane
-    'PAB000':'IndustryPnt', // DisposalSite
-    'AAB000':'IndustrySrf', // DisposalSite
-    'PAF050':'IndustryPnt', // ExcavatingMachine
-    'LAF050':'IndustryCrv', // ExcavatingMachine
-    'PAA010':'IndustryPnt', // ExtractionMine
-    'AAA010':'IndustrySrf', // ExtractionMine
-    'PAF070':'IndustryPnt', // FlarePipe
-    'PAF080':'IndustryPnt', // Hopper
-    'PAC040':'IndustryPnt', // HydrocarbonProdFacility
-    'AAC040':'IndustrySrf', // HydrocarbonProdFacility
-    'AAA052':'IndustrySrf', // HydrocarbonsField
-    'PAC060':'IndustryPnt', // IndustrialFurnace
-    'AAC060':'IndustrySrf', // IndustrialFurnace
-    'PAM040':'IndustryPnt', // MineralPile
-    'AAM040':'IndustrySrf', // MineralPile
-    'PAA020':'IndustryPnt', // MineShaftSuperstructure
-    'AAA020':'IndustrySrf', // MineShaftSuperstructure
-    'PAA054':'IndustryPnt', // NonWaterWell
-    'AAB010':'IndustrySrf', // RecyclingSite
-    'PAA040':'IndustryPnt', // Rig
-    'AAA040':'IndustrySrf', // Rig
-    'PBH155':'IndustryPnt', // SaltEvaporator
-    'ABH155':'IndustrySrf', // SaltEvaporator
-    'AAC030':'IndustrySrf', // SettlingPond
-    'LAA011':'IndustryCrv', // ShearWall
-    'PAJ055':'IndustryPnt', // WaterMill
-    'AAJ055':'IndustrySrf', // WaterMill
-    'ABH040':'IndustrySrf', // WaterTreatmentBed
-    'PZD045':'InformationPnt', // AnnotatedLocation
-    'LZD045':'InformationCrv', // AnnotatedLocation
-    'AZD045':'InformationSrf', // AnnotatedLocation
-    'PZD040':'InformationPnt', // NamedLocation
-    'LZD040':'InformationCrv', // NamedLocation
-    'AZD040':'InformationSrf', // NamedLocation
-    'AZD020':'InformationSrf', // VoidCollectionArea
-    'LGB050':'MilitaryCrv', // AircraftRevetment
-    'ASU004':'MilitarySrf', // CantonmentArea
-    'PAL375':'MilitaryPnt', // Castle
-    'AAL375':'MilitarySrf', // Castle
-    'PAL376':'MilitaryPnt', // CastleComplex
-    'AAL376':'MilitarySrf', // CastleComplex
-    'LAL060':'MilitaryCrv', // DragonsTeeth
-    'AAL060':'MilitarySrf', // DragonsTeeth
-    'LAH025':'MilitaryCrv', // EngineeredEarthwork
-    'AAH025':'MilitarySrf', // EngineeredEarthwork
-    'PFA015':'MilitaryPnt', // FiringRange
-    'AFA015':'MilitarySrf', // FiringRange
-    'PAH055':'MilitaryPnt', // FortifiedBuilding
-    'AAH055':'MilitarySrf', // FortifiedBuilding
-    'PSU001':'MilitaryPnt', // MilitaryInstallation
-    'ASU001':'MilitarySrf', // MilitaryInstallation
-    'AAL065':'MilitarySrf', // Minefield
-    'PAL120':'MilitaryPnt', // MissileSite
-    'AAL120':'MilitarySrf', // MissileSite
-    'PAM060':'MilitaryPnt', // SurfaceBunker
-    'AAM060':'MilitarySrf', // SurfaceBunker
-    'AFA100':'MilitarySrf', // TestSite
-    'PFA165':'MilitaryPnt', // TrainingSite
-    'AFA165':'MilitarySrf', // TrainingSite
-    'PAH060':'MilitaryPnt', // UndergroundBunker
-    'AAH060':'MilitarySrf', // UndergroundBunker
-    'ADA005':'PhysiographySrf', // AsphaltLake
-    'PDB029':'PhysiographyPnt', // CaveMouth
-    'LBJ031':'PhysiographyCrv', // Crevasse
-    'ABJ031':'PhysiographySrf', // Crevasse
-    'LDB061':'PhysiographyCrv', // Crevice
-    'ADB061':'PhysiographySrf', // Crevice
-    'LDB070':'PhysiographyCrv', // Cut
-    'LDB071':'PhysiographyCrv', // CutLine
-    'ADB080':'PhysiographySrf', // Depression
-    'AEE030':'PhysiographySrf', // Desert
-    'LDB090':'PhysiographyCrv', // Embankment
-    'ADB090':'PhysiographySrf', // Embankment
-    'LDB100':'PhysiographyCrv', // Esker
-    'LDB110':'PhysiographyCrv', // GeologicFault
-    'PDB115':'PhysiographyPnt', // GeothermalOutlet
-    'ADB115':'PhysiographySrf', // GeothermalOutlet
-    'ABJ030':'PhysiographySrf', // Glacier
-    'ABJ099':'PhysiographySrf', // IceCap
-    'LBJ040':'PhysiographyCrv', // IceCliff
-    'PBJ060':'PhysiographyPnt', // IcePeak
-    'ABJ065':'PhysiographySrf', // IceShelf
-    'PBA030':'PhysiographyPnt', // Island
-    'ABA030':'PhysiographySrf', // Island
-    'ADB211':'PhysiographySrf', // LandslideMass
-    'LBA010':'PhysiographyCrv', // LandWaterBoundary
-    'ABJ020':'PhysiographySrf', // Moraine
-    'PDB150':'PhysiographyPnt', // MountainPass
-    'PEC020':'PhysiographyPnt', // Oasis
-    'AEC020':'PhysiographySrf', // Oasis
-    'ABJ080':'PhysiographySrf', // PolarIce
-    'PDB160':'PhysiographyPnt', // RockFormation
-    'ADB160':'PhysiographySrf', // RockFormation
-    'ABH160':'PhysiographySrf', // Sabkha
-    'ABH150':'PhysiographySrf', // SaltFlat
-    'ADB170':'PhysiographySrf', // SandDunes
-    'ABJ100':'PhysiographySrf', // SnowIceField
-    'ADA010':'PhysiographySrf', // SoilSurfaceRegion
-    'LDB010':'PhysiographyCrv', // SteepTerrainFace
-    'LDB190':'PhysiographyCrv', // VolcanicDyke
-    'PDB180':'PhysiographyPnt', // Volcano
-    'ABB090':'PortHarbourSrf', // DryDock
-    'ABB199':'PortHarbourSrf', // FloatingDryDock
-    'ABB005':'PortHarbourSrf', // Harbour
-    'PBB009':'PortHarbourPnt', // Port
-    'ABB009':'PortHarbourSrf', // Port
-    'PBB241':'PortHarbourPnt', // Shipyard
-    'ABB241':'PortHarbourSrf', // Shipyard
-    'LBB081':'PortHarbourCrv', // ShorelineConstruction
-    'ABB081':'PortHarbourSrf', // ShorelineConstruction
-    'LBB082':'PortHarbourCrv', // ShorelineRamp
-    'ABB082':'PortHarbourSrf', // ShorelineRamp
-    'PBB201':'PortHarbourPnt', // SmallCraftFacility
-    'ABB201':'PortHarbourSrf', // SmallCraftFacility
-    'PBD100':'PortHarbourPnt', // StructuralPile
-    'ABD100':'PortHarbourSrf', // StructuralPile
-    'ABI005':'PortHarbourSrf', // VesselLift
-    'PAK164':'RecreationPnt', // Amphitheatre
-    'AAK164':'RecreationSrf', // Amphitheatre
-    'PAK030':'RecreationPnt', // AmusementPark
-    'AAK030':'RecreationSrf', // AmusementPark
-    'PAK020':'RecreationPnt', // AmusementParkAttraction
-    'LAK020':'RecreationCrv', // AmusementParkAttraction
-    'AAK020':'RecreationSrf', // AmusementParkAttraction
-    'PAK060':'RecreationPnt', // CampSite
-    'AAK060':'RecreationSrf', // CampSite
-    'AAK070':'RecreationSrf', // DriveInTheatre
-    'AAK090':'RecreationSrf', // Fairground
-    'AAK100':'RecreationSrf', // GolfCourse
-    'AAK101':'RecreationSrf', // GolfDrivingRange
-    'PAK110':'RecreationPnt', // Grandstand
-    'AAK110':'RecreationSrf', // Grandstand
-    'PAK080':'RecreationPnt', // OutdoorTheatreScreen
-    'LAK080':'RecreationCrv', // OutdoorTheatreScreen
-    'AAK061':'RecreationSrf', // PicnicSite
-    'AAL170':'RecreationSrf', // PublicSquare
-    'LAK130':'RecreationCrv', // Racetrack
-    'AAK130':'RecreationSrf', // Racetrack
-    'PAK161':'RecreationPnt', // Scoreboard
-    'PAK150':'RecreationPnt', // SkiJump
-    'LAK150':'RecreationCrv', // SkiJump
-    'LAK155':'RecreationCrv', // SkiRun
-    'AAK155':'RecreationSrf', // SkiRun
-    'PAK040':'RecreationPnt', // SportsGround
-    'AAK040':'RecreationSrf', // SportsGround
-    'PAK160':'RecreationPnt', // Stadium
-    'AAK160':'RecreationSrf', // Stadium
-    'PAK170':'RecreationPnt', // SwimmingPool
-    'AAK170':'RecreationSrf', // SwimmingPool
-    'PAK180':'RecreationPnt', // Zoo
-    'AAK180':'RecreationSrf', // Zoo
-    'PAL020':'SettlementPnt', // BuiltUpArea
-    'AAL020':'SettlementSrf', // BuiltUpArea
-    'PAI030':'SettlementPnt', // Camp
-    'AAI030':'SettlementSrf', // Camp
-    'AAI020':'SettlementSrf', // CaravanPark
-    'AAI021':'SettlementSrf', // MobileHomePark
+    'PAL011':'FacilityPnt', // Facility
+    'AAL011':'FacilitySrf', // Facility
+    'PAL012':'CulturePnt', // Culture
+    'AAL012':'CultureSrf', // Culture
+    'PAL013':'StructurePnt', // Structure
+    'AAL013':'StructureSrf', // Structure
+    'PAL014':'StructurePnt', // Structure
+    'AAL014':'StructureSrf', // Structure
+    'PAL017':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'PAL018':'StructurePnt', // Structure
+    'LAL018':'StructureCrv', // Structure
+    'AAL018':'StructureSrf', // Structure
+    'PAL019':'StructurePnt', // Structure
+    'AAL019':'StructureSrf', // Structure
+    'PAL020':'SettlementPnt', // Settlement
+    'AAL020':'SettlementSrf', // Settlement
+    'PAL025':'CulturePnt', // Culture
+    'PAL030':'CulturePnt', // Culture
+    'AAL030':'CultureSrf', // Culture
+    'PAL036':'CulturePnt', // Culture
+    'AAL036':'CultureSrf', // Culture
+    'LAL060':'MilitaryCrv', // Military
+    'AAL060':'MilitarySrf', // Military
+    'AAL065':'MilitarySrf', // Military
+    'LAL070':'StructureCrv', // Structure
+    'PAL073':'StructurePnt', // Structure
+    'PAL080':'StructurePnt', // Structure
+    'LAL080':'StructureCrv', // Structure
+    'PAL099':'StructurePnt', // Structure
+    'AAL099':'StructureSrf', // Structure
     'PAL105':'SettlementPnt', // Settlement
     'AAL105':'SettlementSrf', // Settlement
-    'PAL208':'SettlementPnt', // ShantyTown
-    'AAL208':'SettlementSrf', // ShantyTown
-    'PAM075':'StoragePnt', // FuelStorageFacility
-    'AAM075':'StorageSrf', // FuelStorageFacility
-    'PAM030':'StoragePnt', // GrainElevator
-    'AAM030':'StorageSrf', // GrainElevator
-    'PAM065':'StoragePnt', // MunitionStorageFacility
-    'AAM065':'StorageSrf', // MunitionStorageFacility
-    'PAM011':'StoragePnt', // ShippingContainer
-    'AAM011':'StorageSrf', // ShippingContainer
-    'PAM010':'StoragePnt', // StorageDepot
-    'AAM010':'StorageSrf', // StorageDepot
-    'PAM070':'StoragePnt', // StorageTank
-    'AAM070':'StorageSrf', // StorageTank
-    'PAM071':'StoragePnt', // TankFarm
-    'AAM071':'StorageSrf', // TankFarm
-    'PAM080':'StoragePnt', // WaterTower
-    'AAM080':'StorageSrf', // WaterTower
-    'PAL142':'StructurePnt', // AstronomicalObservatory
-    'AAL142':'StructureSrf', // AstronomicalObservatory
-    'PAG050':'StructurePnt', // Billboard
-    'PAL013':'StructurePnt', // Building
-    'AAL013':'StructureSrf', // Building
-    'PAL018':'StructurePnt', // BuildingSuperstructure
-    'LAL018':'StructureCrv', // BuildingSuperstructure
-    'AAL018':'StructureSrf', // BuildingSuperstructure
-    'PAF060':'StructurePnt', // EngineTestCell
-    'AAF060':'StructureSrf', // EngineTestCell
-    'LAL070':'StructureCrv', // Fence
-    'PAL073':'StructurePnt', // Flagpole
-    'PAL080':'StructurePnt', // Gantry
-    'LAL080':'StructureCrv', // Gantry
-    'PAL099':'StructurePnt', // Hut
-    'AAL099':'StructureSrf', // Hut
-    'PAL110':'StructurePnt', // LightSupportStructure
-    'PAL014':'StructurePnt', // NonBuildingStructure
-    'AAL014':'StructureSrf', // NonBuildingStructure
-    'LAL140':'StructureCrv', // ParticleAccelerator
-    'AAL140':'StructureSrf', // ParticleAccelerator
-    'PAL019':'StructurePnt', // Shed
-    'AAL019':'StructureSrf', // Shed
-    'LAQ150':'StructureCrv', // Stair
-    'AAQ150':'StructureSrf', // Stair
-    'PAL241':'StructurePnt', // Tower
-    'AAL241':'StructureSrf', // Tower
-    'PAL250':'StructurePnt', // UndergroundDwelling
-    'LAL260':'StructureCrv', // Wall
-    'LAQ151':'TransportationGroundCrv', // Arcade
-    'AAQ151':'TransportationGroundSrf', // Arcade
-    'PAQ040':'TransportationGroundPnt', // Bridge
-    'LAQ040':'TransportationGroundCrv', // Bridge
-    'AAQ040':'TransportationGroundSrf', // Bridge
-    'PAQ056':'TransportationGroundPnt', // BridgePier
-    'LAQ056':'TransportationGroundCrv', // BridgePier
-    'AAQ056':'TransportationGroundSrf', // BridgePier
-    'PAQ045':'TransportationGroundPnt', // BridgeSpan
-    'LAQ045':'TransportationGroundCrv', // BridgeSpan
-    'AAQ045':'TransportationGroundSrf', // BridgeSpan
-    'LAQ050':'TransportationGroundCrv', // BridgeSuperstructure
-    'AAQ050':'TransportationGroundSrf', // BridgeSuperstructure
-    'PAQ055':'TransportationGroundPnt', // BridgeTower
-    'LAT041':'TransportationGroundCrv', // Cableway
-    'LAP010':'TransportationGroundCrv', // CartTrack
-    'LAQ063':'TransportationGroundCrv', // CausewayStructure
-    'AAQ063':'TransportationGroundSrf', // CausewayStructure
-    'PAH070':'TransportationGroundPnt', // Checkpoint
-    'PAQ062':'TransportationGroundPnt', // Crossing
-    'PAQ065':'TransportationGroundPnt', // Culvert
-    'LAQ065':'TransportationGroundCrv', // Culvert
-    'PBH070':'TransportationGroundPnt', // Ford
-    'LBH070':'TransportationGroundCrv', // Ford
-    'ABH070':'TransportationGroundSrf', // Ford
-    'PAP040':'TransportationGroundPnt', // Gate
-    'LAP040':'TransportationGroundCrv', // Gate
-    'LAQ075':'TransportationGroundCrv', // IceRoute
-    'PAQ170':'TransportationGroundPnt', // MotorVehicleStation
-    'AAQ170':'TransportationGroundSrf', // MotorVehicleStation
-    'PAL155':'TransportationGroundPnt', // OverheadObstruction
-    'LAL155':'TransportationGroundCrv', // OverheadObstruction
-    'PAQ141':'TransportationGroundPnt', // ParkingGarage
-    'AAQ141':'TransportationGroundSrf', // ParkingGarage
-    'PAL165':'TransportationGroundPnt', // PipelineCrossingPoint
-    'LAN010':'TransportationGroundCrv', // Railway
-    'LAN050':'TransportationGroundCrv', // RailwaySidetrack
-    'PAN085':'TransportationGroundPnt', // RailwaySignal
-    'PAN075':'TransportationGroundPnt', // RailwayTurntable
-    'AAN075':'TransportationGroundSrf', // RailwayTurntable
-    'AAN060':'TransportationGroundSrf', // RailwayYard
-    'LAL195':'TransportationGroundCrv', // Ramp
-    'AAL195':'TransportationGroundSrf', // Ramp
-    'LAP030':'TransportationGroundCrv', // Road
-    'AAP030':'TransportationGroundSrf', // Road
-    'PAP020':'TransportationGroundPnt', // RoadInterchange
-    'PAQ135':'TransportationGroundPnt', // RoadsideRestArea
-    'AAQ135':'TransportationGroundSrf', // RoadsideRestArea
-    'PAN076':'TransportationGroundPnt', // Roundhouse
-    'AAN076':'TransportationGroundSrf', // Roundhouse
-    'PAQ118':'TransportationGroundPnt', // SharpCurve
-    'LAQ035':'TransportationGroundCrv', // Sidewalk
-    'LAQ120':'TransportationGroundCrv', // SteepGrade
-    'PAQ161':'TransportationGroundPnt', // StreetLamp
-    'PAQ162':'TransportationGroundPnt', // StreetSign
-    'PAQ160':'TransportationGroundPnt', // TrafficLight
-    'LAP050':'TransportationGroundCrv', // Trail
-    'PAQ068':'TransportationGroundPnt', // TransportationBlock
-    'AAQ068':'TransportationGroundSrf', // TransportationBlock
-    'PAQ125':'TransportationGroundPnt', // TransportationStation
-    'AAQ125':'TransportationGroundSrf', // TransportationStation
-    'PAQ059':'TransportationGroundPnt', // TransRouteCharacterChange
-    'LAQ059':'TransportationGroundCrv', // TransRouteCharacterChange
-    'PAL211':'TransportationGroundPnt', // TransRouteProtectStruct
-    'LAL211':'TransportationGroundCrv', // TransRouteProtectStruct
-    'AAL211':'TransportationGroundSrf', // TransRouteProtectStruct
-    'LAQ130':'TransportationGroundCrv', // Tunnel
-    'AAQ130':'TransportationGroundSrf', // Tunnel
-    'PAQ095':'TransportationGroundPnt', // TunnelMouth
-    'PAP041':'TransportationGroundPnt', // VehicleBarrier
-    'LAP041':'TransportationGroundCrv', // VehicleBarrier
-    'AAQ140':'TransportationGroundSrf', // VehicleLot
-    'PAQ180':'TransportationGroundPnt', // WeighStation
-    'AAQ180':'TransportationGroundSrf', // WeighStation
-    'PBI045':'TransportationWaterPnt', // BasinGate
-    'LBI045':'TransportationWaterCrv', // BasinGate
-    'LBH020':'TransportationWaterCrv', // Canal
-    'ABH020':'TransportationWaterSrf', // Canal
-    'LAQ070':'TransportationWaterCrv', // FerryCrossing
-    'PAQ080':'TransportationWaterPnt', // FerryStation
-    'AAQ080':'TransportationWaterSrf', // FerryStation
-    'PBI030':'TransportationWaterPnt', // Lock
-    'LBI030':'TransportationWaterCrv', // Lock
-    'ABI030':'TransportationWaterSrf', // Lock
-    'PAQ111':'TransportationWaterPnt', // PreparedWatercourseCross
-    'LAQ111':'TransportationWaterCrv', // PreparedWatercourseCross
-    'PBI006':'TransportationWaterPnt', // ShipElevator
-    'LBI006':'TransportationWaterCrv', // ShipElevator
-    'ABI006':'TransportationWaterSrf', // ShipElevator
-    'PAT011':'UtilityInfrastructurePnt', // Aerial
-    'PAT012':'UtilityInfrastructurePnt', // AerialFarm
-    'AAT012':'UtilityInfrastructureSrf', // AerialFarm
-    'LAT005':'UtilityInfrastructureCrv', // Cable
-    'PAD055':'UtilityInfrastructurePnt', // CoolingFacility
-    'AAD055':'UtilityInfrastructureSrf', // CoolingFacility
-    'PAF030':'UtilityInfrastructurePnt', // CoolingTower
-    'AAF030':'UtilityInfrastructureSrf', // CoolingTower
-    'PAT010':'UtilityInfrastructurePnt', // DishAerial
-    'PAD010':'UtilityInfrastructurePnt', // ElectricPowerStation
-    'AAD010':'UtilityInfrastructureSrf', // ElectricPowerStation
-    'PAL017':'UtilityInfrastructurePnt', // FireHydrant
-    'PAD050':'UtilityInfrastructurePnt', // HeatingFacility
-    'AAD050':'UtilityInfrastructureSrf', // HeatingFacility
-    'PAB021':'UtilityInfrastructurePnt', // LiquidDiffuser
-    'PAD041':'UtilityInfrastructurePnt', // NuclearReactorContainment
-    'AAD041':'UtilityInfrastructureSrf', // NuclearReactorContainment
-    'LAQ113':'UtilityInfrastructureCrv', // Pipeline
-    'PAD030':'UtilityInfrastructurePnt', // PowerSubstation
-    'AAD030':'UtilityInfrastructureSrf', // PowerSubstation
-    'PAQ116':'UtilityInfrastructurePnt', // PumpingStation
-    'AAQ116':'UtilityInfrastructureSrf', // PumpingStation
-    'PAT042':'UtilityInfrastructurePnt', // Pylon
-    'PAC507':'UtilityInfrastructurePnt', // SewageTreatmentPlant
-    'AAC507':'UtilityInfrastructureSrf', // SewageTreatmentPlant
-    'PAF010':'UtilityInfrastructurePnt', // Smokestack
-    'PAD025':'UtilityInfrastructurePnt', // SolarFarm
-    'AAD025':'UtilityInfrastructureSrf', // SolarFarm
-    'PAD020':'UtilityInfrastructurePnt', // SolarPanel
-    'AAD020':'UtilityInfrastructureSrf', // SolarPanel
-    'PAQ114':'UtilityInfrastructurePnt', // StormDrain
-    'PAQ115':'UtilityInfrastructurePnt', // UtilityCover
-    'PBH220':'UtilityInfrastructurePnt', // Waterwork
-    'ABH220':'UtilityInfrastructureSrf', // Waterwork
-    'PAD060':'UtilityInfrastructurePnt', // WindFarm
-    'AAD060':'UtilityInfrastructureSrf', // WindFarm
-    'PAJ051':'UtilityInfrastructurePnt', // WindTurbine
-    'ABH015':'VegetationSrf', // Bog
-    'AEB070':'VegetationSrf', // Brush
-    'LEC040':'VegetationCrv', // ClearedWay
-    'AEC040':'VegetationSrf', // ClearedWay
-    'LEC015':'VegetationCrv', // Forest
-    'AEC015':'VegetationSrf', // Forest
-    'AEC060':'VegetationSrf', // ForestClearing
-    'AEB010':'VegetationSrf', // Grassland
-    'LEA020':'VegetationCrv', // Hedgerow
-    'ABH077':'VegetationSrf', // Hummock
-    'AEE010':'VegetationSrf', // LoggingSite
-    'AED010':'VegetationSrf', // Marsh
-    'AED020':'VegetationSrf', // Swamp
-    'AEB020':'VegetationSrf', // Thicket
-    'PEC005':'VegetationPnt', // Tree
-    'ABJ110':'VegetationSrf', // Tundra
+    'PAL110':'StructurePnt', // Structure
+    'PAL120':'MilitaryPnt', // Military
+    'AAL120':'MilitarySrf', // Military
+    'PAL130':'CulturePnt', // Culture
+    'LAL130':'CultureCrv', // Culture
+    'AAL130':'CultureSrf', // Culture
+    'LAL140':'StructureCrv', // Structure
+    'AAL140':'StructureSrf', // Structure
+    'PAL142':'StructurePnt', // Structure
+    'AAL142':'StructureSrf', // Structure
+    'PAL155':'TransportationGroundPnt', // Transportation - Ground
+    'LAL155':'TransportationGroundCrv', // Transportation - Ground
+    'PAL165':'TransportationGroundPnt', // Transportation - Ground
+    'PAL170':'RecreationPnt', // Recreation
+    'AAL170':'RecreationSrf', // Recreation
+    'AAL175':'CultureSrf', // Culture
+    'AAL180':'CultureSrf', // Culture
+    'LAL195':'TransportationGroundCrv', // Transportation - Ground
+    'AAL195':'TransportationGroundSrf', // Transportation - Ground
+    'PAL200':'CulturePnt', // Culture
+    'AAL200':'CultureSrf', // Culture
+    'PAL201':'CulturePnt', // Culture
+    'AAL201':'CultureSrf', // Culture
+    'PAL208':'SettlementPnt', // Settlement
+    'AAL208':'SettlementSrf', // Settlement
+    'PAL211':'TransportationGroundPnt', // Transportation - Ground
+    'LAL211':'TransportationGroundCrv', // Transportation - Ground
+    'AAL211':'TransportationGroundSrf', // Transportation - Ground
+    'PAL241':'StructurePnt', // Structure
+    'AAL241':'StructureSrf', // Structure
+    'PAL250':'StructurePnt', // Structure
+    'LAL260':'StructureCrv', // Structure
+    'PAL270':'AgriculturePnt', // Agriculture
+    'AAL270':'AgricultureSrf', // Agriculture
+    'PAL351':'AeronauticPnt', // Aeronautic
+    'AAL351':'AeronauticSrf', // Aeronautic
+    'PAL371':'StructurePnt', // Structure
+    'AAL371':'StructureSrf', // Structure
+    'PAL375':'MilitaryPnt', // Military
+    'AAL375':'MilitarySrf', // Military
+    'PAL376':'MilitaryPnt', // Military
+    'AAL376':'MilitarySrf', // Military
+    'PAL510':'AeronauticPnt', // Aeronautic
+    'PAM010':'StoragePnt', // Storage
+    'AAM010':'StorageSrf', // Storage
+    'PAM011':'StoragePnt', // Storage
+    'AAM011':'StorageSrf', // Storage
+    'PAM020':'AgriculturePnt', // Agriculture
+    'AAM020':'AgricultureSrf', // Agriculture
+    'PAM030':'StoragePnt', // Storage
+    'AAM030':'StorageSrf', // Storage
+    'PAM040':'IndustryPnt', // Industry
+    'AAM040':'IndustrySrf', // Industry
+    'PAM060':'MilitaryPnt', // Military
+    'AAM060':'MilitarySrf', // Military
+    'PAM065':'StoragePnt', // Storage
+    'AAM065':'StorageSrf', // Storage
+    'PAM070':'StoragePnt', // Storage
+    'AAM070':'StorageSrf', // Storage
+    'PAM071':'StoragePnt', // Storage
+    'AAM071':'StorageSrf', // Storage
+    'PAM075':'StoragePnt', // Storage
+    'AAM075':'StorageSrf', // Storage
+    'PAM080':'StoragePnt', // Storage
+    'AAM080':'StorageSrf', // Storage
+    'LAN010':'TransportationGroundCrv', // Transportation - Ground
+    'LAN050':'TransportationGroundCrv', // Transportation - Ground
+    'AAN060':'TransportationGroundSrf', // Transportation - Ground
+    'PAN075':'TransportationGroundPnt', // Transportation - Ground
+    'AAN075':'TransportationGroundSrf', // Transportation - Ground
+    'PAN076':'TransportationGroundPnt', // Transportation - Ground
+    'AAN076':'TransportationGroundSrf', // Transportation - Ground
+    'PAN085':'TransportationGroundPnt', // Transportation - Ground
+    'LAP010':'TransportationGroundCrv', // Transportation - Ground
+    'PAP020':'TransportationGroundPnt', // Transportation - Ground
+    'LAP030':'TransportationGroundCrv', // Transportation - Ground
+    'AAP030':'TransportationGroundSrf', // Transportation - Ground
+    'PAP033':'TransportationGroundPnt', // Transportation - Ground
+    'PAP040':'TransportationGroundPnt', // Transportation - Ground
+    'LAP040':'TransportationGroundCrv', // Transportation - Ground
+    'PAP041':'TransportationGroundPnt', // Transportation - Ground
+    'LAP041':'TransportationGroundCrv', // Transportation - Ground
+    'LAP050':'TransportationGroundCrv', // Transportation - Ground
+    'AAP055':'TransportationGroundSrf', // Transportation - Ground
+    'PAP056':'TransportationGroundPnt', // Transportation - Ground
+    'AAP056':'TransportationGroundSrf', // Transportation - Ground
+    'LAQ035':'TransportationGroundCrv', // Transportation - Ground
+    'PAQ040':'TransportationGroundPnt', // Transportation - Ground
+    'LAQ040':'TransportationGroundCrv', // Transportation - Ground
+    'AAQ040':'TransportationGroundSrf', // Transportation - Ground
+    'PAQ045':'TransportationGroundPnt', // Transportation - Ground
+    'LAQ045':'TransportationGroundCrv', // Transportation - Ground
+    'AAQ045':'TransportationGroundSrf', // Transportation - Ground
+    'LAQ050':'TransportationGroundCrv', // Transportation - Ground
+    'AAQ050':'TransportationGroundSrf', // Transportation - Ground
+    'PAQ055':'TransportationGroundPnt', // Transportation - Ground
+    'PAQ056':'TransportationGroundPnt', // Transportation - Ground
+    'LAQ056':'TransportationGroundCrv', // Transportation - Ground
+    'AAQ056':'TransportationGroundSrf', // Transportation - Ground
+    'PAQ059':'TransportationGroundPnt', // Transportation - Ground
+    'LAQ059':'TransportationGroundCrv', // Transportation - Ground
+    'PAQ060':'AeronauticPnt', // Aeronautic
+    'AAQ060':'AeronauticSrf', // Aeronautic
+    'PAQ062':'TransportationGroundPnt', // Transportation - Ground
+    'LAQ063':'TransportationGroundCrv', // Transportation - Ground
+    'AAQ063':'TransportationGroundSrf', // Transportation - Ground
+    'PAQ065':'TransportationGroundPnt', // Transportation - Ground
+    'LAQ065':'TransportationGroundCrv', // Transportation - Ground
+    'PAQ068':'TransportationGroundPnt', // Transportation - Ground
+    'AAQ068':'TransportationGroundSrf', // Transportation - Ground
+    'LAQ070':'TransportationWaterCrv', // Transportation - Water
+    'LAQ075':'TransportationGroundCrv', // Transportation - Ground
+    'PAQ080':'TransportationWaterPnt', // Transportation - Water
+    'AAQ080':'TransportationWaterSrf', // Transportation - Water
+    'PAQ095':'TransportationGroundPnt', // Transportation - Ground
+    'PAQ110':'AeronauticPnt', // Aeronautic
+    'PAQ111':'TransportationWaterPnt', // Transportation - Water
+    'LAQ113':'UtilityInfrastructureCrv', // Utility Infrastructure
+    'PAQ114':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'PAQ115':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'PAQ116':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAQ116':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PAQ118':'TransportationGroundPnt', // Transportation - Ground
+    'LAQ120':'TransportationGroundCrv', // Transportation - Ground
+    'PAQ125':'TransportationGroundPnt', // Transportation - Ground
+    'AAQ125':'TransportationGroundSrf', // Transportation - Ground
+    'LAQ130':'TransportationGroundCrv', // Transportation - Ground
+    'AAQ130':'TransportationGroundSrf', // Transportation - Ground
+    'PAQ135':'TransportationGroundPnt', // Transportation - Ground
+    'AAQ135':'TransportationGroundSrf', // Transportation - Ground
+    'AAQ140':'TransportationGroundSrf', // Transportation - Ground
+    'PAQ141':'TransportationGroundPnt', // Transportation - Ground
+    'AAQ141':'TransportationGroundSrf', // Transportation - Ground
+    'LAQ150':'StructureCrv', // Structure
+    'AAQ150':'StructureSrf', // Structure
+    'LAQ151':'TransportationGroundCrv', // Transportation - Ground
+    'AAQ151':'TransportationGroundSrf', // Transportation - Ground
+    'PAQ160':'TransportationGroundPnt', // Transportation - Ground
+    'PAQ161':'TransportationGroundPnt', // Transportation - Ground
+    'PAQ162':'TransportationGroundPnt', // Transportation - Ground
+    'PAQ170':'TransportationGroundPnt', // Transportation - Ground
+    'AAQ170':'TransportationGroundSrf', // Transportation - Ground
+    'LAT005':'UtilityInfrastructureCrv', // Utility Infrastructure
+    'PAT010':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'PAT011':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'PAT012':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'AAT012':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'LAT041':'TransportationGroundCrv', // Transportation - Ground
+    'PAT042':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'PAT045':'FacilityPnt', // Facility
+    'AAT045':'FacilitySrf', // Facility
+    'LBA010':'PhysiographyCrv', // Physiography
+    'PBA030':'PhysiographyPnt', // Physiography
+    'ABA030':'PhysiographySrf', // Physiography
+    'ABA040':'HydrographySrf', // Hydrography
+    'ABB005':'PortorHarbourSrf', // Port or Harbour
+    'PBB009':'PortorHarbourPnt', // Port or Harbour
+    'ABB009':'PortorHarbourSrf', // Port or Harbour
+    'LBB081':'PortorHarbourCrv', // Port or Harbour
+    'ABB081':'PortorHarbourSrf', // Port or Harbour
+    'LBB082':'PortorHarbourCrv', // Port or Harbour
+    'ABB082':'PortorHarbourSrf', // Port or Harbour
+    'ABB090':'PortorHarbourSrf', // Port or Harbour
+    'PBB110':'HydrographyPnt', // Hydrography
+    'ABB110':'HydrographySrf', // Hydrography
+    'ABB199':'PortorHarbourSrf', // Port or Harbour
+    'PBB201':'PortorHarbourPnt', // Port or Harbour
+    'ABB201':'PortorHarbourSrf', // Port or Harbour
+    'PBB241':'PortorHarbourPnt', // Port or Harbour
+    'ABB241':'PortorHarbourSrf', // Port or Harbour
+    'PBC050':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
+    'ABC050':'HydrographicAidtoNavigationSrf', // Hydrographic Aid to Navigation
+    'PBC070':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
+    'PBD100':'PortorHarbourPnt', // Port or Harbour
+    'ABD100':'PortorHarbourSrf', // Port or Harbour
+    'PBD115':'HydrographyPnt', // Hydrography
+    'ABD115':'HydrographySrf', // Hydrography
+    'PBD140':'HydrographyPnt', // Hydrography
+    'ABD140':'HydrographySrf', // Hydrography
+    'PBD181':'HydrographyPnt', // Hydrography
+    'LBH010':'HydrographyCrv', // Hydrography
+    'ABH010':'HydrographySrf', // Hydrography
+    'PBH012':'HydrographyPnt', // Hydrography
+    'ABH015':'VegetationSrf', // Vegetation
+    'LBH020':'TransportationWaterCrv', // Transportation - Water
+    'ABH020':'TransportationWaterSrf', // Transportation - Water
+    'LBH030':'HydrographyCrv', // Hydrography
+    'ABH030':'HydrographySrf', // Hydrography
+    'ABH040':'IndustrySrf', // Industry
+    'PBH051':'AgriculturePnt', // Agriculture
+    'ABH051':'AgricultureSrf', // Agriculture
+    'LBH065':'HydrographyCrv', // Hydrography
+    'PBH070':'TransportationGroundPnt', // Transportation - Ground
+    'LBH070':'TransportationGroundCrv', // Transportation - Ground
+    'ABH070':'TransportationGroundSrf', // Transportation - Ground
+    'PBH075':'CulturePnt', // Culture
+    'ABH075':'CultureSrf', // Culture
+    'ABH077':'VegetationSrf', // Vegetation
+    'PBH082':'HydrographyPnt', // Hydrography
+    'ABH082':'HydrographySrf', // Hydrography
+    'ABH090':'HydrographySrf', // Hydrography
+    'LBH100':'HydrographyCrv', // Hydrography
+    'ABH100':'HydrographySrf', // Hydrography
+    'LBH110':'HydrographyCrv', // Hydrography
+    'ABH116':'SubterraneanSrf', // Subterranean
+    'PBH120':'HydrographyPnt', // Hydrography
+    'LBH120':'HydrographyCrv', // Hydrography
+    'ABH120':'HydrographySrf', // Hydrography
+    'ABH135':'AgricultureSrf', // Agriculture
+    'LBH140':'HydrographyCrv', // Hydrography
+    'ABH140':'HydrographySrf', // Hydrography
+    'PBH145':'HydrographyPnt', // Hydrography
+    'ABH150':'PhysiographySrf', // Physiography
+    'PBH155':'IndustryPnt', // Industry
+    'ABH155':'IndustrySrf', // Industry
+    'ABH160':'PhysiographySrf', // Physiography
+    'LBH165':'HydrographyCrv', // Hydrography
+    'ABH165':'HydrographySrf', // Hydrography
+    'PBH170':'HydrographyPnt', // Hydrography
+    'ABH170':'HydrographySrf', // Hydrography
+    'PBH180':'HydrographyPnt', // Hydrography
+    'LBH180':'HydrographyCrv', // Hydrography
+    'PBH220':'UtilityInfrastructurePnt', // Utility Infrastructure
+    'ABH220':'UtilityInfrastructureSrf', // Utility Infrastructure
+    'PBH230':'HydrographyPnt', // Hydrography
+    'ABH230':'HydrographySrf', // Hydrography
+    'ABI005':'PortorHarbourSrf', // Port or Harbour
+    'PBI006':'TransportationWaterPnt', // Transportation - Water
+    'LBI006':'TransportationWaterCrv', // Transportation - Water
+    'ABI006':'TransportationWaterSrf', // Transportation - Water
+    'PBI010':'HydrographyPnt', // Hydrography
+    'PBI020':'HydrographyPnt', // Hydrography
+    'LBI020':'HydrographyCrv', // Hydrography
+    'ABI020':'HydrographySrf', // Hydrography
+    'PBI030':'TransportationWaterPnt', // Transportation - Water
+    'LBI030':'TransportationWaterCrv', // Transportation - Water
+    'ABI030':'TransportationWaterSrf', // Transportation - Water
+    'PBI040':'HydrographyPnt', // Hydrography
+    'LBI040':'HydrographyCrv', // Hydrography
+    'PBI044':'HydrographyPnt', // Hydrography
+    'LBI044':'HydrographyCrv', // Hydrography
+    'ABI044':'HydrographySrf', // Hydrography
+    'PBI045':'TransportationWaterPnt', // Transportation - Water
+    'LBI045':'TransportationWaterCrv', // Transportation - Water
+    'PBI050':'HydrographyPnt', // Hydrography
+    'ABI050':'HydrographySrf', // Hydrography
+    'LBI060':'HydrographyCrv', // Hydrography
+    'PBI070':'HydrographyPnt', // Hydrography
+    'ABJ020':'PhysiographySrf', // Physiography
+    'ABJ030':'PhysiographySrf', // Physiography
+    'LBJ031':'PhysiographyCrv', // Physiography
+    'ABJ031':'PhysiographySrf', // Physiography
+    'LBJ040':'PhysiographyCrv', // Physiography
+    'PBJ060':'PhysiographyPnt', // Physiography
+    'ABJ065':'PhysiographySrf', // Physiography
+    'ABJ080':'PhysiographySrf', // Physiography
+    'ABJ099':'PhysiographySrf', // Physiography
+    'ABJ100':'PhysiographySrf', // Physiography
+    'ABJ110':'VegetationSrf', // Vegetation
+    'LCA010':'HypsographyCrv', // Hypsography
+    'PCA030':'HypsographyPnt', // Hypsography
+    'ADA005':'PhysiographySrf', // Physiography
+    'ADA010':'PhysiographySrf', // Physiography
+    'LDB010':'PhysiographyCrv', // Physiography
+    'ADB028':'SubterraneanSrf', // Subterranean
+    'PDB029':'PhysiographyPnt', // Physiography
+    'LDB061':'PhysiographyCrv', // Physiography
+    'ADB061':'PhysiographySrf', // Physiography
+    'LDB070':'PhysiographyCrv', // Physiography
+    'LDB071':'PhysiographyCrv', // Physiography
+    'ADB080':'PhysiographySrf', // Physiography
+    'LDB090':'PhysiographyCrv', // Physiography
+    'ADB090':'PhysiographySrf', // Physiography
+    'LDB100':'PhysiographyCrv', // Physiography
+    'LDB110':'PhysiographyCrv', // Physiography
+    'PDB115':'PhysiographyPnt', // Physiography
+    'ADB115':'PhysiographySrf', // Physiography
+    'PDB150':'PhysiographyPnt', // Physiography
+    'PDB160':'PhysiographyPnt', // Physiography
+    'ADB160':'PhysiographySrf', // Physiography
+    'ADB170':'PhysiographySrf', // Physiography
+    'PDB180':'PhysiographyPnt', // Physiography
+    'ADB180':'PhysiographySrf', // Physiography
+    'LDB190':'PhysiographyCrv', // Physiography
+    'ADB211':'PhysiographySrf', // Physiography
+    'AEA010':'AgricultureSrf', // Agriculture
+    'LEA020':'VegetationCrv', // Vegetation
+    'AEA030':'AgricultureSrf', // Agriculture
+    'AEA031':'CultureSrf', // Culture
+    'AEA040':'AgricultureSrf', // Agriculture
+    'AEA050':'AgricultureSrf', // Agriculture
+    'AEA055':'AgricultureSrf', // Agriculture
+    'AEB010':'VegetationSrf', // Vegetation
+    'AEB020':'VegetationSrf', // Vegetation
+    'AEB070':'VegetationSrf', // Vegetation
+    'PEC005':'VegetationPnt', // Vegetation
+    'AEC010':'AgricultureSrf', // Agriculture
+    'LEC015':'VegetationCrv', // Vegetation
+    'AEC015':'VegetationSrf', // Vegetation
+    'PEC020':'PhysiographyPnt', // Physiography
+    'AEC020':'PhysiographySrf', // Physiography
+    'LEC040':'VegetationCrv', // Vegetation
+    'AEC040':'VegetationSrf', // Vegetation
+    'AEC060':'VegetationSrf', // Vegetation
+    'AED010':'VegetationSrf', // Vegetation
+    'AED020':'VegetationSrf', // Vegetation
+    'AEE010':'VegetationSrf', // Vegetation
+    'AEE030':'PhysiographySrf', // Physiography
+    'PFA012':'CulturePnt', // Culture
+    'AFA012':'CultureSrf', // Culture
+    'PFA015':'MilitaryPnt', // Military
+    'AFA015':'MilitarySrf', // Military
+    'AFA100':'MilitarySrf', // Military
+    'PFA165':'MilitaryPnt', // Military
+    'AFA165':'MilitarySrf', // Military
+    'AFA210':'CultureSrf', // Culture
+    'PGB005':'AeronauticPnt', // Aeronautic
+    'AGB005':'AeronauticSrf', // Aeronautic
+    'AGB015':'AeronauticSrf', // Aeronautic
+    'PGB030':'AeronauticPnt', // Aeronautic
+    'AGB030':'AeronauticSrf', // Aeronautic
+    'PGB035':'AeronauticPnt', // Aeronautic
+    'AGB035':'AeronauticSrf', // Aeronautic
+    'PGB040':'AeronauticPnt', // Aeronautic
+    'AGB040':'AeronauticSrf', // Aeronautic
+    'AGB045':'AeronauticSrf', // Aeronautic
+    'LGB050':'MilitaryCrv', // Military
+    'AGB055':'AeronauticSrf', // Aeronautic
+    'PGB065':'AeronauticPnt', // Aeronautic
+    'AGB065':'AeronauticSrf', // Aeronautic
+    'AGB070':'AeronauticSrf', // Aeronautic
+    'LGB075':'AeronauticCrv', // Aeronautic
+    'AGB075':'AeronauticSrf', // Aeronautic
+    'PGB230':'AeronauticPnt', // Aeronautic
+    'AGB230':'AeronauticSrf', // Aeronautic
+    'PGB250':'AeronauticPnt', // Aeronautic
+    'AGB250':'AeronauticSrf', // Aeronautic
+    'AIA040':'BoundarySrf', // Boundary
+    'PSU001':'MilitaryPnt', // Military
+    'ASU001':'MilitarySrf', // Military
+    'ASU004':'MilitarySrf', // Military
+    'LSU030':'MilitaryCrv', // Military
+    'PZB030':'BoundaryPnt', // Boundary
+    'PZB050':'HypsographyPnt', // Hypsography
+    'AZD020':'InformationSrf', // Information
+    'PZD040':'InformationPnt', // Information
+    'PZD045':'InformationPnt', // Information
+    'LZD045':'InformationCrv', // Information
+    'AZD045':'InformationSrf', // Information
+    'PZD070':'HydrographyPnt', // Hydrography
+    'AZD070':'HydrographySrf', // Hydrography
+    'AZI031':'ResourceSrf', // Resource
+    'AZI039':'MetadataSrf' // Metadata
     }, // End of thematicGroupList
     // ##### End of Thematic Group Rules #####
 
@@ -5075,6 +5132,7 @@ tds40.rules = {
     'AB010':'100008', // Recycling Site
     'AB021':'100009', // Liquid Diffuser
     'AB040':'100010', // Aeration Basin
+    'AB507':'177962', // Waste Heap
     'AC010':'100012', // Blast-furnace
     'AC020':'100013', // Catalytic Cracker
     'AC030':'100014', // Settling Pond
@@ -5091,7 +5149,6 @@ tds40.rules = {
     'AD060':'100687', // Wind Farm
     'AF010':'100025', // Smokestack
     'AF020':'100026', // Conveyor
-    'AF021':'100027', // Bucket Elevator
     'AF030':'100028', // Cooling Tower
     'AF040':'100029', // Crane
     'AF050':'100030', // Excavating Machine
@@ -5106,7 +5163,7 @@ tds40.rules = {
     'AH060':'100038', // Underground Bunker
     'AH070':'100039', // Checkpoint
     'AI020':'100040', // Caravan Park
-    'AI021':'133168', // Mobile Home Park
+    'AI021':'133168', // Manufactured Home Park
     'AI030':'100041', // Camp
     'AJ030':'100043', // Holding Pen
     'AJ050':'100044', // Windmill
@@ -5175,6 +5232,7 @@ tds40.rules = {
     'AL260':'100124', // Wall
     'AL270':'100129', // Industrial Farm
     'AL351':'100126', // Space Facility
+    'AL371':'180086', // Manor House
     'AL375':'100128', // Castle
     'AL376':'132642', // Castle Complex
     'AL510':'100130', // Tethered Balloon
@@ -5198,9 +5256,12 @@ tds40.rules = {
     'AP010':'100150', // Cart Track
     'AP020':'100151', // Road Interchange
     'AP030':'100152', // Road
+    'AP033':'179969', // Engineered Turnaround Site
     'AP040':'100154', // Gate
     'AP041':'100155', // Vehicle Barrier
     'AP050':'100156', // Trail
+    'AP055':'179906', // Tank Trail
+    'AP056':'180006', // Tank Crossing
     'AQ035':'100159', // Sidewalk
     'AQ040':'100161', // Bridge
     'AQ045':'100162', // Bridge Span
@@ -5236,7 +5297,6 @@ tds40.rules = {
     'AQ161':'100195', // Street Lamp
     'AQ162':'100196', // Street Sign
     'AQ170':'100197', // Motor Vehicle Station
-    'AQ180':'100198', // Weigh Station
     'AT005':'100199', // Cable
     'AT010':'100200', // Dish Aerial
     'AT011':'100201', // Aerial
@@ -5316,6 +5376,7 @@ tds40.rules = {
     'DA005':'100356', // Asphalt Lake
     'DA010':'100358', // Soil Surface Region
     'DB010':'100362', // Steep Terrain Face
+    'DB028':'154959', // Cave Chamber
     'DB029':'154961', // Cave Mouth
     'DB061':'100365', // Crevice
     'DB070':'100366', // Cut
@@ -5354,7 +5415,6 @@ tds40.rules = {
     'FA012':'100409', // Contaminated Region
     'FA015':'100410', // Firing Range
     'FA100':'100414', // Test Site
-    'FA110':'100415', // International Date Line
     'FA165':'100416', // Training Site
     'FA210':'100417', // Conservation Area
     'GB005':'100436', // Land Aerodrome
@@ -5363,25 +5423,26 @@ tds40.rules = {
     'GB035':'100442', // Heliport
     'GB040':'100443', // Launch Pad
     'GB045':'100444', // Stopway
-    'GB050':'100446', // Aircraft Revetment
+    'GB050':'100446', // Defensive Revetment
     'GB055':'100448', // Runway
     'GB065':'100452', // Water Aerodrome
     'GB070':'100453', // Seaplane Run
     'GB075':'100454', // Taxiway
     'GB230':'100456', // Aircraft Hangar
     'GB250':'100457', // Hardened Aircraft Shelter
+    'IA040':'100458', // Land Parcel
     'SU001':'100462', // Military Installation
     'SU004':'170162', // Cantonment Area
+    'SU030':'180061', // Installation Boundary
     'ZB030':'100465', // Boundary Monument
-    'ZB035':'100466', // Control Point
+    'ZB050':'177997', // Survey Point
     'ZD020':'100473', // Void Collection Area
-    'ZD030':'100474', // Cultural Context Location
     'ZD040':'100475', // Named Location
     'ZD045':'100476', // Annotated Location
+    'ZD070':'164755', // Water Measurement Location
     'ZI031':'121591', // Dataset
-    'ZI040':'133102', // Non Spatial Metadata Entity Collection
-    'ZI041':'133101', // Spatial Metadata Entity Collection
+    'ZI039':'132721', // Entity Collection Metadata
     }, // End of subtypeList
     // ##### End of ESRI FCSubtype Rules #####
 
-} // End of tds40.rules
+} // End of tds70.rules
