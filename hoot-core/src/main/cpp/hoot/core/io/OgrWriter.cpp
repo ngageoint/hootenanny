@@ -219,14 +219,9 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f
   }
 
   //Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same feature object for sequential insertions
-  LOG_VARI(poFeature->GetFID());
   poFeature->SetFID(-1);
 
-  LOG_INFO("About to write feature");
   errCode = layer->CreateFeature(poFeature);
-
-  LOG_VARI(errCode);
-
   if (errCode != OGRERR_NONE)
   {
     throw HootException(
@@ -301,16 +296,11 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
   }
 
   QString layerName = _prependLayerName + layer->getName();
-  poLayer = _getLayerByName(layerName);
-
-  LOG_VARI(poLayer);
-  LOG_VARI(layerName);
-  LOG_VARI(_appendData);
+  poLayer = _ds->GetLayerByName(layerName.toStdString().c_str());
 
   // We only want to add to a layer IFF the config option "ogr.append.data" set
   if (poLayer != NULL && _appendData)
   {
-    LOG_INFO(" Got Layer and Append");
     // Layer exists
     _layers[layer->getName()] = poLayer;
     // Loop through the fields making sure that they exist in the output. Print a warning if
@@ -318,11 +308,6 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
     OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
     boost::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
 
-    LOG_VARI(fd->getFieldCount());
-    LOG_VARI(poFDefn->GetFieldCount());
-
-    LOG_INFO("new layer name :" + QString(poLayer->GetName()) + ":");
-    LOG_INFO("existing layer name :" + layer->getName() + ":");
 
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
@@ -345,7 +330,6 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
   else
   {
     LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
-    // Layer does not exist
     poLayer = _ds->CreateLayer(layerName.toAscii(),
                   MapProjector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
 
@@ -383,43 +367,6 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
       }
     }
   } // End layer does not exist
-}
-
-// If we upgrade to GDAL 2.3, we could lookup layer by name, instead of
-// iterating through all of them. Of course, layerCount should always be pretty
-// small... like < 100?
-OGRLayer* OgrWriter::_getLayerByName(const QString& layerName)
-{
-  // Check if the layer exists in the output.
-  int layerCount = _ds->GetLayerCount();
-
-  LOG_INFO("Checking for: " + layerName);
-  LOG_VARI(layerCount);
-
-  for (int i = 0; i < layerCount; i++)
-  {
-//    OGRLayer* layer = _ds->GetLayer(i+1);
-    OGRLayer* layer = _ds->GetLayer(i);
-    if (layer != NULL)
-    {
-      QString tmpLayerName = QString(layer->GetName());
-      LOG_INFO("Checking layername: " + tmpLayerName);
-      if (tmpLayerName == layerName)
-      {
-        LOG_INFO("Got a match");
-        return layer;
-      }
-      else
-      {
-        LOG_INFO(":" + tmpLayerName + ": != :" + layerName + ":");
-      }
-    }
-    else
-    {
-      LOG_INFO("Layer is NULL");
-    }
-  }
-  return NULL;
 }
 
 OGRLayer* OgrWriter::_getLayer(const QString& layerName)
@@ -478,7 +425,7 @@ void OgrWriter::createAllLayers()
 {
   if (_createAllLayers)
   {
-    LOG_INFO("Creating layers...");
+    LOG_INFO("Creating all layers...");
     for (size_t i = 0; i < _schema->getLayerCount(); ++i)
     {
       _createLayer(_schema->getLayer(i));
@@ -706,6 +653,7 @@ void OgrWriter::writeTranslatedFeature(boost::shared_ptr<Geometry> g,
   // only write the feature if it wasn't filtered by the translation script.
   for (size_t i = 0; i < tf.size(); i++)
   {
+    LOG_TRACE("Writing feature " + QString::number(i) + "  to " + QString(tf[i].tableName));
     OGRLayer* layer = _getLayer(tf[i].tableName);
     if (layer != 0)
     {
