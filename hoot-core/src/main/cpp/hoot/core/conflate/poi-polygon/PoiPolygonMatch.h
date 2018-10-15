@@ -48,6 +48,8 @@ namespace hoot
 /**
  * This is an additive, rule based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
+ *
+ * @todo This could use some refactoring.
  */
 class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 {
@@ -171,9 +173,11 @@ private:
 
   PoiPolygonAddressScoreExtractor _addressScorer;
   double _addressScore;
+  bool _addressMatchEnabled;
 
   PoiPolygonPhoneNumberScoreExtractor _phoneNumberScorer;
   double _phoneNumberScore;
+  bool _phoneNumberMatchEnabled;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   std::set<ElementId> _polyNeighborIds;
@@ -193,8 +197,6 @@ private:
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   QString _explainText;
-
-  Settings _conf;
 
   static boost::shared_ptr<ToEnglishTranslator> _translator;
 

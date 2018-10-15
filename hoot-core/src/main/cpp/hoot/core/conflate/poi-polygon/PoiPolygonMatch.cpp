@@ -84,6 +84,9 @@ _reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
 _nameScoreThreshold(-1.0),
 _addressScore(-1.0),
+_addressMatchEnabled(true),
+_phoneNumberScore(-1.0),
+_phoneNumberMatchEnabled(true),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _enableAdvancedMatching(false),
@@ -169,7 +172,6 @@ void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
 
 void PoiPolygonMatch::setConfiguration(const Settings& conf)
 {
-  _conf = conf;
   ConfigOptions config = ConfigOptions(conf);
 
   setMatchDistanceThreshold(config.getPoiPolygonMatchDistanceThreshold());
@@ -208,10 +210,18 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   setReviewEvidenceThreshold(reviewEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
 
-  _addressScorer.setConfiguration(conf);
+  _addressMatchEnabled = config.getPoiPolygonAddressMatchEnabled();
+  if (_addressMatchEnabled)
+  {
+    _addressScorer.setConfiguration(conf);
+  }
   _typeScorer.setConfiguration(conf);
   _nameScorer.setConfiguration(conf);
-  _phoneNumberScorer.setConfiguration(conf);
+  _phoneNumberMatchEnabled = config.getPoiPolygonPhoneNumberMatchEnabled();
+  if (_phoneNumberMatchEnabled)
+  {
+    _phoneNumberScorer.setConfiguration(conf);
+  }
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -648,8 +658,14 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 //    return evidence;
 //  }
   evidence += _getTypeEvidence(poi, poly);
-  evidence += _getAddressEvidence(poi, poly);
-  evidence += _getPhoneNumberEvidence(poi, poly);
+  if (_addressMatchEnabled)
+  {
+    evidence += _getAddressEvidence(poi, poly);
+  }
+  if (_phoneNumberMatchEnabled)
+  {
+    evidence += _getPhoneNumberEvidence(poi, poly);
+  }
 
   //We only want to run this if the previous match distance calculation was too large.
   //Tightening up the requirements for running the convex poly calculation here to improve

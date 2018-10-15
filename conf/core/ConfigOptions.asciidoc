@@ -2502,6 +2502,15 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.address.match.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.
+If the data being conflated is known to have poor address data, disabling this option may speed up
+conflation runtime performance.
+
 === poi.polygon.auto.merge.many.poi.to.one.poly.matches
 
 * Data Type: bool
@@ -2623,6 +2632,15 @@ present (null).
 By default, POI/Polygon conflation examines all tags with keys containing the text "phone" for
 phone number comparisons.  You can expand the tag keys searched by populating this list. From the
 command line, separate list items with a semicolon and surround the entire list in double quotes.
+
+=== poi.polygon.phone.number.match.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI/Polygon conflation will compare phone number as one of the criteria for matching
+features.  If the data being conflated is known to have poor telephone number data, disabling this
+option may speed up conflation runtime performance.
 
 === poi.polygon.phone.number.region.code
 
