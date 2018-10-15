@@ -31,6 +31,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/conflate/poi-polygon/extractors/LocalAddressValidationDataSource.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -43,8 +44,14 @@
 #include <libaddressinput/address_formatter.h>
 #include <libaddressinput/address_normalizer.h>
 #include <libaddressinput/address_validator.h>
+#include <libaddressinput/preload_supplier.h>
+#include <libaddressinput/null_storage.h>
+#include <libaddressinput/callback.h>
+#include <libaddressinput/address_field.h>
+#include <libaddressinput/address_problem.h>
 
 using namespace geos::geom;
+using namespace i18n::addressinput;
 
 namespace hoot
 {
@@ -60,7 +67,11 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(runWayTest);
   CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST(translateTagValueTest);
-  CPPUNIT_TEST(addressValidateTest);
+  CPPUNIT_TEST(addressFormatTest);
+  CPPUNIT_TEST(addressNormalizationTest);
+  CPPUNIT_TEST(addressValidation1Test);
+  CPPUNIT_TEST(addressValidation2Test);
+  CPPUNIT_TEST(addressValidation3Test);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -313,15 +324,169 @@ public:
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
-  void addressValidateTest()
+  void addressFormatTest()
   {
-    i18n::addressinput::AddressData address;
     std::string result;
-    i18n::addressinput::GetStreetAddressLinesAsSingleLine(address, &result);
 
-    i18n::addressinput::AddressNormalizer normalizer(NULL);
+    AddressData address1;
+    address1.region_code = "US";
+    address1.administrative_area = "Virginia";
+    address1.locality = "Centreville";
+    address1.postal_code = "20121";
+    address1.address_line.push_back("13937 Winding Ridge Lane");
+    GetStreetAddressLinesAsSingleLine(address1, &result);
+    HOOT_STR_EQUALS("13937 Winding Ridge Lane", result);
 
-    i18n::addressinput::AddressValidator validator(NULL);
+    AddressData address2;
+    address2.region_code = "DE";
+    address2.administrative_area = "";
+    address2.locality = "MÜNCHEN";
+    address2.postal_code = "81379";
+    address2.address_line.push_back("ZENTRALLÄNDE STRASSE 40");
+    GetStreetAddressLinesAsSingleLine(address2, &result);
+    HOOT_STR_EQUALS("ZENTRALLÄNDE STRASSE 40", result);
+
+    GetFormattedNationalAddressLine(address1, &result);
+    LOG_VART(result);
+    GetFormattedNationalAddressLine(address2, &result);
+    LOG_VART(result);
+
+    std::vector<std::string> lines;
+    GetFormattedNationalAddress(address2, &lines);
+    LOG_VART(lines);
+    CPPUNIT_ASSERT_EQUAL(2, (int)lines.size());
+  }
+
+  void addressNormalizationTest()
+  {
+    PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
+    const std::unique_ptr<const PreloadSupplier::Callback> loaded(
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+    const AddressNormalizer normalizer(&supplier);
+    supplier.LoadRules("US", *loaded);
+
+    AddressData address;
+    address.language_code = "en-US";
+    address.region_code = "US";
+    address.administrative_area = "California";
+    address.locality = "Mountain View";
+    normalizer.Normalize(&address);
+    HOOT_STR_EQUALS("CA", address.administrative_area);
+  }
+
+  void addressValidation1Test()
+  {
+    PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
+    const std::unique_ptr<const PreloadSupplier::Callback> loaded(
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+    const std::unique_ptr<const AddressValidator::Callback> validated(
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressValidated1));
+    const AddressValidator validator(&supplier);
+    supplier.LoadRules("US", *loaded);
+
+    AddressData address1;
+    address1.region_code = "US";
+    address1.administrative_area = "Virginia";
+    address1.locality = "Centreville";
+    address1.postal_code = "20121";
+    address1.address_line.push_back("13937 Winding Ridge Lane");
+
+    FieldProblemMap filter;
+    FieldProblemMap problems;
+    validator.Validate(
+      address1,
+      false,
+      false,
+      &filter,
+      &problems,
+      *validated);
+  }
+
+  void addressValidation2Test()
+  {
+    PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
+    const std::unique_ptr<const PreloadSupplier::Callback> loaded(
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+    const std::unique_ptr<const AddressValidator::Callback> validated(
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressValidated2));
+    const AddressValidator validator(&supplier);
+    supplier.LoadRules("US", *loaded);
+
+    AddressData address1;
+    address1.region_code = "US";
+    address1.administrative_area = "blah";
+    address1.locality = "Centreville";
+    address1.postal_code = "2343255";
+    address1.address_line.push_back("13937 Winding Ridge");
+
+    FieldProblemMap filter;
+    FieldProblemMap problems;
+    validator.Validate(
+      address1,
+      false,
+      false,
+      &filter,
+      &problems,
+      *validated);
+  }
+
+  void addressValidation3Test()
+  {
+    PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
+    const std::unique_ptr<const PreloadSupplier::Callback> loaded(
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+    const std::unique_ptr<const AddressValidator::Callback> validated(
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressValidated3));
+    const AddressValidator validator(&supplier);
+    supplier.LoadRules("US", *loaded);
+
+    AddressData address1;
+    address1.region_code = "US";
+    address1.address_line.push_back("13937 Winding Ridge");
+
+    FieldProblemMap filter;
+    FieldProblemMap problems;
+    validator.Validate(
+      address1,
+      false,
+      false,
+      &filter,
+      &problems,
+      *validated);
+  }
+
+private:
+
+  void _onAddressDataLoaded(bool success, const std::string& region_code, int /*num_rules*/)
+  {
+    CPPUNIT_ASSERT(success);
+    HOOT_STR_EQUALS("US", region_code);
+  }
+
+  void _onAddressValidated1(bool success, const AddressData& address,
+                            const FieldProblemMap& problems)
+  {
+    CPPUNIT_ASSERT(success);
+    HOOT_STR_EQUALS("US", address.region_code);
+    CPPUNIT_ASSERT_EQUAL(0, (int)problems.size());
+  }
+
+  void _onAddressValidated2(bool success, const AddressData& address,
+                            const FieldProblemMap& problems)
+  {
+    CPPUNIT_ASSERT(success);
+    HOOT_STR_EQUALS("US", address.region_code);
+    LOG_VART(problems);
+    CPPUNIT_ASSERT_EQUAL(2, (int)problems.size());
+  }
+
+  void _onAddressValidated3(bool success, const AddressData& address,
+                            const FieldProblemMap& problems)
+  {
+    CPPUNIT_ASSERT(success);
+    HOOT_STR_EQUALS("US", address.region_code);
+    LOG_VART(problems);
+    CPPUNIT_ASSERT_EQUAL(3, (int)problems.size());
   }
 };
 
