@@ -30,7 +30,11 @@ import static hoot.services.HootProperties.MAX_QUERY_NODES;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.net.URLDecoder;
 import java.sql.Timestamp;
@@ -40,6 +44,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -955,7 +960,9 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = NotFoundException.class)
+    // 10/09/2018 Since the introduction of HTTP VERBS, when
+    // paths collide, you get NotAllowed instead of NotFound
+    @Test(expected = NotAllowedException.class)
     @Category(UnitTest.class)
     public void testGetMapMissingBounds() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -970,10 +977,9 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (BadRequestException e) {
+        catch (NotAllowedException e) {
             Response r = e.getResponse();
-            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("Error parsing bounding box from bbox param"));
+            assertEquals(Response.Status.METHOD_NOT_ALLOWED, Response.Status.fromStatusCode(r.getStatus()));
             OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }

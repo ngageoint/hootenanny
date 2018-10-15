@@ -200,7 +200,7 @@ public class FolderResource {
      * @return jobId
      */
     @DELETE
-    @Path("/delete/{folderId : \\d+}")
+    @Path("/{folderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteFolder(@Context HttpServletRequest request, @PathParam("folderId") Long folderId) {
@@ -231,7 +231,7 @@ public class FolderResource {
 
     /**
      *
-     * POST hoot-services/osm/api/0.6/map/folders/{folderId}/update/parent/{parentFolderId}
+     * POST hoot-services/osm/api/0.6/map/folders/{folderId}/move/{newParentFolderId}
      *
      *
      * @param folderId
@@ -241,19 +241,19 @@ public class FolderResource {
      * @return jobId Success = True/False
      */
     @PUT
-    @Path("/{folderId : \\d+}/update/parent/{parentFolderId : \\d+}")
+    @Path("/{folderId : \\d+}/move/{newParentFolderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateParentId(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("parentFolderId") Long parentFolderId) {
+    public Response updateParentId(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("newParentFolderId") Long newParentFolderId) {
         Users user = Users.fromRequest(request);
         // handle some ACL logic:
         getFolderForUser(user, folderId);
-        getFolderForUser(user, parentFolderId);
+        getFolderForUser(user, newParentFolderId);
 
         createQuery()
             .update(folders)
             .where(folders.id.eq(folderId))
-            .set(folders.parentId, parentFolderId)
+            .set(folders.parentId, newParentFolderId)
             .execute();
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
@@ -275,10 +275,10 @@ public class FolderResource {
      * @return jobId Success = True/False
      */
     @PUT
-    @Path("/modify/{folderId : \\d+}/{modName}")
+    @Path("/{folderId : \\d+}/rename/{modName}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyName(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("modName") String modName) {
+    public Response renameFolder(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("modName") String modName) {
         Users user = Users.fromRequest(request);
         // handle some ACL logic:
         getFolderForUser(user, folderId);

@@ -41,7 +41,7 @@ public class FolderResourceTest extends OSMResourceTestAbstract {
         assertTrue(folderId.longValue() > 0);
         assertTrue(success);
 
-        Map<String,Object> response1 = target("api/0.6/map/folders/delete/" + folderId)
+        Map<String,Object> response1 = target("api/0.6/map/folders/" + folderId)
             .request(MediaType.APPLICATION_JSON)
             .delete(new GenericType<Map<String, Object>>() {});
 
@@ -72,7 +72,7 @@ public class FolderResourceTest extends OSMResourceTestAbstract {
         assertTrue(folderId.longValue() > 0);
         assertTrue(success);
 
-        target(String.format("api/0.6/map/folders/modify/%d/%s", folderId.longValue(), folderNameRenamed))
+        target(String.format("api/0.6/map/folders/%s/rename/%s", folderId, folderNameRenamed))
             .request(MediaType.APPLICATION_JSON)
             .put(Entity.entity("", MediaType.TEXT_PLAIN));
 
@@ -105,7 +105,7 @@ public class FolderResourceTest extends OSMResourceTestAbstract {
                 assertTrue(childFolderId.longValue() > 0);
                 assertTrue(success1);
 
-            Map<String,Object> response2 = target(String.format("api/0.6/map/folders/%s/update/parent/%s", childFolderId, parentFolderId))
+            Map<String,Object> response2 = target(String.format("api/0.6/map/folders/%s/move/%s", childFolderId, parentFolderId))
                 .request(MediaType.APPLICATION_JSON)
                 .put(Entity.entity("", MediaType.TEXT_PLAIN), new GenericType<Map<String, Object>>() {});
 
@@ -122,7 +122,7 @@ public class FolderResourceTest extends OSMResourceTestAbstract {
             Assert.assertEquals(childFolder.getParentId(), parentFolder.getId());
             Assert.assertEquals(0, parentFolder.getParentId());
 
-            Map<String,Object> response4 = target("api/0.6/map/folders/delete/" + parentFolderId)
+            Map<String,Object> response4 = target("api/0.6/map/folders/" + parentFolderId)
                     .request(MediaType.APPLICATION_JSON)
                     .delete(new GenericType<Map<String, Object>>() {});
 

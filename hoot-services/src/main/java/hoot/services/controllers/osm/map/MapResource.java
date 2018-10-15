@@ -470,9 +470,9 @@ public class MapResource {
     }
 
     @GET
-    @Path("/mbr/{id}")
+    @Path("/{mapId}/mbr")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMBR(@Context HttpServletRequest request, @PathParam("id") String mapId) {
+    public Response getMBR(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
         Map currMap = getMapForRequest(request, mapId, true);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
@@ -541,7 +541,7 @@ public class MapResource {
      * @return id of the deleted map
      */
     @DELETE
-    @Path("/delete/{mapId}")
+    @Path("/{mapId}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteLayers(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
@@ -572,7 +572,7 @@ public class MapResource {
 
     /**
      *
-     * PUT hoot-services/osm/api/0.6/map/modify/123456/New Dataset'
+     * PUT hoot-services/osm/api/0.6/map/123456/rename/new_name'
      *
      * @param mapId
      *            ID of map record or folder to be modified
@@ -583,7 +583,7 @@ public class MapResource {
      * @return jobId Success = True/False
      */
     @PUT
-    @Path("/modify/{mapId}/{name}")
+    @Path("/{mapId}/rename/{name}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response modifyName(@Context HttpServletRequest request, @PathParam("mapId") String mapId, @PathParam("name") String modName) {
@@ -604,17 +604,14 @@ public class MapResource {
      *            ID of folder
      * @param mapId
      *            ID of map
-     * @param updateType
-     *            new: creates new link; update: updates link delete: deletes
-     *            link
+     *
      * @return jobId Success = True/False
      */
     @POST
-    @Path("/link/{mapId}/{updateType : update|new}/folder/{folderId : \\d+}")
+    @Path("/{mapId}/move/{folderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateFolderMapLink(@Context HttpServletRequest request, @PathParam("folderId") Long folderId,
-            @PathParam("mapId") String mapId, @PathParam("updateType") String updateType) {
+    public Response updateFolderMapLink(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("mapId") String mapId) {
 
         Users user = null;
         if(request != null) {
@@ -645,17 +642,17 @@ public class MapResource {
     }
 
     @GET
-    @Path("/tags/{mapId}")
+    @Path("/{mapId}/tags")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTags(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
         Map m = getMapForRequest(request, mapId, true);
-        updateLastAccessed(m.getId());
+
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
-        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(m.getId());
-        if (tags != null) {
-            logger.debug(tags.toString());
-        }
+        java.util.Map<String, String> tags = updateLastAccessed(m.getId());
+        logger.debug(String.format("getTags(): retrieved tags for map with id: '%s': '%s'", mapId, tags));
+
         ret.putAll(tags);
+
         Object oInput1 = ret.get("input1");
         if (oInput1 != null) {
             String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()));
@@ -754,15 +751,16 @@ public class MapResource {
      * @param mapid
      *            id of the maps record
      */
-    public static long updateLastAccessed(Long mapid) {
+    public static java.util.Map<String,String> updateLastAccessed(Long mapid) {
         java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapid);
 
         DateFormat dateFormat = MapLayer.format;
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         tags.put("lastAccessed", dateFormat.format(now));
 
-        return DbUtils.updateMapsTableTags(tags, mapid);
-
+        long rowsAffected = DbUtils.updateMapsTableTags(tags, mapid);
+        assert(rowsAffected > 0); // weird state, should never happen.
+        return tags;
     }
     public static Map getMapForUser(Users user, String mapId, boolean allowOSM) throws WebApplicationException {
         if(!allowOSM && mapId.equals("-1")) {
