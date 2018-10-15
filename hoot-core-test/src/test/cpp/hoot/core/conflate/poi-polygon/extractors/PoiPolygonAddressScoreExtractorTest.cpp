@@ -38,6 +38,12 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+// libaddressinput
+#include <libaddressinput/address_data.h>
+#include <libaddressinput/address_formatter.h>
+#include <libaddressinput/address_normalizer.h>
+#include <libaddressinput/address_validator.h>
+
 using namespace geos::geom;
 
 namespace hoot
@@ -54,6 +60,7 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(runWayTest);
   CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST(translateTagValueTest);
+  CPPUNIT_TEST(addressValidateTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -240,20 +247,6 @@ public:
     map->addRelation(relation1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, relation1), 0.0);
 
-    //not convinced this is a valid test for now...need to see it actually happen in the wild
-//    NodePtr node3(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
-//    node3->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
-//    node3->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
-//    map->addNode(node3);
-//    RelationPtr relation2(new Relation(Status::Unknown2, -2, 15.0));
-//    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-//    way1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
-//    way1->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "main street");
-//    map->addWay(way1);
-//    relation2->addElement("test", way1->getElementId());
-//    map->addRelation(relation2);
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node3, relation2), 0.0);
-
     NodePtr node4(new Node(Status::Unknown1, -4, Coordinate(0.0, 0.0), 15.0));
     node4->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
     node4->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
@@ -318,6 +311,17 @@ public:
     settings.set("poi.polygon.translate.addresses.to.english", "false");
     uut.setConfiguration(settings);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+  }
+
+  void addressValidateTest()
+  {
+    i18n::addressinput::AddressData address;
+    std::string result;
+    i18n::addressinput::GetStreetAddressLinesAsSingleLine(address, &result);
+
+    i18n::addressinput::AddressNormalizer normalizer(NULL);
+
+    i18n::addressinput::AddressValidator validator(NULL);
   }
 };
 
