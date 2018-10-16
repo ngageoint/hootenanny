@@ -607,7 +607,7 @@ public class MapResource {
      *
      * @return jobId Success = True/False
      */
-    @POST
+    @PUT
     @Path("/{mapId}/move/{folderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
