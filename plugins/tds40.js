@@ -1328,6 +1328,10 @@ tds = {
             }
         }
 
+        // Adding a custom rule for malls to override the rules above.
+        // All of the other "shops" are buildings 
+        if (tags.shop == 'mall') attrs.F_CODE = 'AG030';
+
         // Churches etc
         if (tags.building && ! tags.amenity)
         {

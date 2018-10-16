@@ -2099,7 +2099,7 @@ ggdm30.rules = {
     ['FFN','363','use','water_distribution'], // Water Distribution
     ['FFN','370','use','sewerage'], // Sewerage
     ['FFN','372','use','sewerage_screening'], // Sewerage Screening
-    ['FFN','382','amenity','toilets'], // Restroom
+    ['FFN','382','toilets','yes'], // Restroom
     ['FFN','383','use','waste_treatment_and_disposal'], // Waste Treatment and Disposal
     ['FFN','385','use','materials_recovery'], // Materials Recovery
     ['FFN','440','use','commercial'], // Commerce
