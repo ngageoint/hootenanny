@@ -115,8 +115,6 @@ Combined Correct = number of correct matches + number of unnecessary reviews
 
 * improve tag similarity calculation
 * more intelligent POI merging
-* reduce unnecessary reviews
-* more advanced name parsing
 * model based classification
 
 For more information on POI to polygon conflation: https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx

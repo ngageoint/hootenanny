@@ -50,6 +50,18 @@ namespace hoot
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
 
+long PoiPolygonMatch::matchesProcessed = 0;
+long PoiPolygonMatch::distanceMatches = 0;
+long PoiPolygonMatch::typeMatches = 0;
+long PoiPolygonMatch::noTypeFoundCount = 0;
+long PoiPolygonMatch::nameMatches = 0;
+long PoiPolygonMatch::namesProcessed = 0;
+long PoiPolygonMatch::nameMatchCandidates = 0;
+long PoiPolygonMatch::addressesProcessed = 0;
+long PoiPolygonMatch::addressMatches = 0;
+long PoiPolygonMatch::addressMatchCandidates = 0;
+long PoiPolygonMatch::convexPolyDistanceMatches = 0;
+
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf,
                                  const set<ElementId>& polyNeighborIds,
@@ -69,6 +81,7 @@ _reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
 _nameScoreThreshold(-1.0),
 _addressScore(-1.0),
+_addressMatchEnabled(true),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _enableAdvancedMatching(false),
@@ -154,7 +167,6 @@ void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
 
 void PoiPolygonMatch::setConfiguration(const Settings& conf)
 {
-  _conf = conf;
   ConfigOptions config = ConfigOptions(conf);
 
   setMatchDistanceThreshold(config.getPoiPolygonMatchDistanceThreshold());
@@ -193,7 +205,11 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   setReviewEvidenceThreshold(reviewEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
 
-  _addressScorer.setConfiguration(conf);
+  _addressMatchEnabled = config.getPoiPolygonAddressMatchEnabled();
+  if (_addressMatchEnabled)
+  {
+    _addressScorer.setConfiguration(conf);
+  }
   _typeScorer.setConfiguration(conf);
   _nameScorer.setConfiguration(conf);
 }
@@ -332,6 +348,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //    e1->getElementType() == ElementType::Relation ||
 //    e2->getElementType() == ElementType::Relation;
 
+  matchesProcessed++;
   _explainText = "";
   _class.setMiss();
 
@@ -496,9 +513,8 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_distance);
   LOG_VART(_closeDistanceMatch);
 
-  return _distance <= _matchDistanceThreshold ? 2u : 0u;
-
   //Tried weighting distance less when both POI's had specific types, but it hasn't helped so far.
+  return _distance <= _matchDistanceThreshold ? 2u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
@@ -509,26 +525,35 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   LOG_VART(alphaShapeDist);
-  return alphaShapeDist <= _matchDistanceThreshold ? 2u : 0u;
+  const bool convexPolyDistMatch = alphaShapeDist <= _matchDistanceThreshold;
+  if (convexPolyDistMatch)
+  {
+    convexPolyDistanceMatches++;
+  }
+  return convexPolyDistMatch ? 2u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  //don't like these static var inits
-  PoiPolygonTypeScoreExtractor::poiBestKvp = "";
-  PoiPolygonTypeScoreExtractor::polyBestKvp = "";
-  PoiPolygonTypeScoreExtractor::failedMatchRequirements.clear();
   _typeScorer.setFeatureDistance(_distance);
   _typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
   _typeScore = _typeScorer.extract(*_map, poi, poly);
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
+  if (typeMatch)
+  {
+    typeMatches++;
+  }
+  if (_typeScorer.getNoTypeFound())
+  {
+    noTypeFoundCount++;
+  }
 
-  if (_typeScorer.failedMatchRequirements.size() > 0)
+  if (_typeScorer.getFailedMatchRequirements().size() > 0)
   {
     QString failedMatchTypes;
-    for (int i = 0; i < PoiPolygonTypeScoreExtractor::failedMatchRequirements.size(); i++)
+    for (int i = 0; i < _typeScorer.getFailedMatchRequirements().size(); i++)
     {
-      failedMatchTypes += PoiPolygonTypeScoreExtractor::failedMatchRequirements.at(i) + ", ";
+      failedMatchTypes += _typeScorer.getFailedMatchRequirements().at(i) + ", ";
     }
     failedMatchTypes.chop(2);
 
@@ -544,8 +569,6 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   }
 
   LOG_VART(typeMatch);
-  LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
-  LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
 
   return typeMatch ? 1u : 0u;
 }
@@ -556,6 +579,15 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
   _nameScore = _nameScorer.extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
   LOG_VART(nameMatch);
+  if (nameMatch)
+  {
+    nameMatches++;
+  }
+  namesProcessed += _nameScorer.getNamesProcessed();
+  if (_nameScorer.getMatchAttemptMade())
+  {
+    nameMatchCandidates++;
+  }
   return nameMatch ? 1u : 0u;
 }
 
@@ -564,6 +596,15 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
   _addressScore = _addressScorer.extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
   LOG_VART(addressMatch);
+  if (addressMatch)
+  {
+    addressMatches++;
+  }
+  addressesProcessed += _addressScorer.getAddressesProcessed();
+  if (_addressScorer.getMatchAttemptMade())
+  {
+    addressMatchCandidates++;
+  }
   return addressMatch ? 1u : 0u;
 }
 
@@ -577,31 +618,23 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   {
     return 0;
   }
+  distanceMatches++;
 
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
-  //Used to allow for kicking out of the method once enough evidence was accumulated for a match
-  //as an optimization.  However, that results in incomplete scoring information passed to the
-  //review reducer, so have since disabled.
-
   evidence += _getNameEvidence(poi, poly);
-  //if we already have a match, no point in doing more calculations
+  //Used to allow for kicking out of the method once enough evidence was accumulated for a match
+  //as a runtime optimization.  However, that results in incomplete scoring information passed to
+  //the review reducer, so have since disabled.
 //  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
 //  {
 //    return evidence;
 //  }
-
   evidence += _getTypeEvidence(poi, poly);
-//  if (evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
-
-  evidence += _getAddressEvidence(poi, poly);
-//  if (evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
+  if (_addressMatchEnabled)
+  {
+    evidence += _getAddressEvidence(poi, poly);
+  }
 
   //We only want to run this if the previous match distance calculation was too large.
   //Tightening up the requirements for running the convex poly calculation here to improve
