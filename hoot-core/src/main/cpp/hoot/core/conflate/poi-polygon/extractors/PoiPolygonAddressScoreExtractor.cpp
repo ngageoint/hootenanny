@@ -50,7 +50,9 @@ const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2 = "addr:f
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonAddressScoreExtractor::_translator;
 
 PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor() :
-_translateTagValuesToEnglish(false)
+_translateTagValuesToEnglish(false),
+_addressesProcessed(0),
+_matchAttemptMade(false)
 {
 }
 
@@ -114,6 +116,10 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
     LOG_TRACE("No POI addresses.");
     return 0.0;
   }
+
+  _matchAttemptMade = true;
+  _addressesProcessed += poiAddresses.size();
+  _addressesProcessed += polyAddresses.size();
 
   //check for address matches
   for (QList<PoiPolygonAddress>::const_iterator polyAddrItr = polyAddresses.begin();

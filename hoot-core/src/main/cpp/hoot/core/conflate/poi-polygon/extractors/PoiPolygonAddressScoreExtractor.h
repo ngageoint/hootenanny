@@ -98,7 +98,10 @@ public:
   static bool isAddressTagKey(const QString tagKey);
 
   virtual QString getDescription() const
-  { return "Calculates the address similarity score of two features involved in POI/Polygon conflation"; }
+  { return "Scores address similarity for POI/Polygon conflation"; }
+
+  long getAddressesProcessed() const { return _addressesProcessed; }
+  bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
 private:
 
@@ -108,6 +111,8 @@ private:
   bool _translateTagValuesToEnglish;
   // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
   static boost::shared_ptr<ToEnglishTranslator> _translator;
+  mutable long _addressesProcessed;
+  mutable bool _matchAttemptMade;
 
   void _collectAddressesFromElement(const Element& element,
                                     QList<PoiPolygonAddress>& addresses) const;

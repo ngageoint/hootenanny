@@ -66,6 +66,7 @@ public:
    *
    * @param element the element to examine
    * @return the element's name if it has one
+   * @todo move this somewhere else
    */
   static QString getElementName(ConstElementPtr element);
 
@@ -81,7 +82,10 @@ public:
   void setTranslateTagValuesToEnglish(bool translate) { _translateTagValuesToEnglish = translate; }
 
   virtual QString getDescription() const
-  { return "Scores element name similarity for POI/Polygon conflation"; }
+  { return "Scores name similarity for POI/Polygon conflation"; }
+
+  long getNamesProcessed() const { return _namesProcessed; }
+  bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
 private:
 
@@ -94,6 +98,9 @@ private:
   bool _translateTagValuesToEnglish;
   // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
   static boost::shared_ptr<ToEnglishTranslator> _translator;
+
+  mutable long _namesProcessed;
+  mutable bool _matchAttemptMade;
 
   boost::shared_ptr<NameExtractor> _getNameExtractor() const;
 };
