@@ -60,9 +60,6 @@ long PoiPolygonMatch::nameMatchCandidates = 0;
 long PoiPolygonMatch::addressesProcessed = 0;
 long PoiPolygonMatch::addressMatches = 0;
 long PoiPolygonMatch::addressMatchCandidates = 0;
-long PoiPolygonMatch::phoneNumberMatches = 0;
-long PoiPolygonMatch::phoneNumbersProcesed = 0;
-long PoiPolygonMatch::phoneNumberMatchCandidates = 0;
 long PoiPolygonMatch::convexPolyDistanceMatches = 0;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
@@ -85,8 +82,6 @@ _nameScore(-1.0),
 _nameScoreThreshold(-1.0),
 _addressScore(-1.0),
 _addressMatchEnabled(true),
-_phoneNumberScore(-1.0),
-_phoneNumberMatchEnabled(true),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _enableAdvancedMatching(false),
@@ -217,11 +212,6 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   _typeScorer.setConfiguration(conf);
   _nameScorer.setConfiguration(conf);
-  _phoneNumberMatchEnabled = config.getPoiPolygonPhoneNumberMatchEnabled();
-  if (_phoneNumberMatchEnabled)
-  {
-    _phoneNumberScorer.setConfiguration(conf);
-  }
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -618,23 +608,6 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
   return addressMatch ? 1u : 0u;
 }
 
-unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly)
-{
-  _phoneNumberScore = _phoneNumberScorer.extract(*_map, poi, poly);
-  const bool phoneNumberMatch = _phoneNumberScore == 1.0;
-  LOG_VART(phoneNumberMatch);
-  if (phoneNumberMatch)
-  {
-    phoneNumberMatches++;
-  }
-  phoneNumbersProcesed += _phoneNumberScorer.getPhoneNumbersProcessed();
-  if (_phoneNumberScorer.getMatchAttemptMade())
-  {
-    phoneNumberMatchCandidates++;
-  }
-  return phoneNumberMatch ? 1u : 0u;
-}
-
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   unsigned int evidence = 0;
@@ -661,10 +634,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   if (_addressMatchEnabled)
   {
     evidence += _getAddressEvidence(poi, poly);
-  }
-  if (_phoneNumberMatchEnabled)
-  {
-    evidence += _getPhoneNumberEvidence(poi, poly);
   }
 
   //We only want to run this if the previous match distance calculation was too large.

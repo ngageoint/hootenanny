@@ -40,7 +40,6 @@
 #include "PoiPolygonRfClassifier.h"
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
-#include "extractors/PoiPolygonPhoneNumberScoreExtractor.h"
 
 namespace hoot
 {
@@ -124,9 +123,6 @@ public:
   static long addressMatches;
   static long addressesProcessed;
   static long addressMatchCandidates;
-  static long phoneNumberMatches;
-  static long phoneNumbersProcesed;
-  static long phoneNumberMatchCandidates;
   static long convexPolyDistanceMatches;
 
 private:
@@ -175,10 +171,6 @@ private:
   double _addressScore;
   bool _addressMatchEnabled;
 
-  PoiPolygonPhoneNumberScoreExtractor _phoneNumberScorer;
-  double _phoneNumberScore;
-  bool _phoneNumberMatchEnabled;
-
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   std::set<ElementId> _polyNeighborIds;
   std::set<ElementId> _poiNeighborIds;
@@ -210,7 +202,6 @@ private:
   unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
-  unsigned int _getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 

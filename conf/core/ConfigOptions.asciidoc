@@ -85,6 +85,13 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== address.tag.keys.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/addressTagKeys`
+
+Flat file containing tag keys that make up feature address components.
+
 === angle.histogram.extractor.bins
 
 * Data Type: int
@@ -3295,8 +3302,7 @@ Adds the specified status to elements.  Valid values are: 'Unknown1', 'Unknown2'
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/streetTypes`
 
-Flat file containing street types and their abbreviations.  Used in various parts of the
-application.
+Flat file containing street types and their abbreviations.
 
 === tag.ancestor.differencer.name
 
