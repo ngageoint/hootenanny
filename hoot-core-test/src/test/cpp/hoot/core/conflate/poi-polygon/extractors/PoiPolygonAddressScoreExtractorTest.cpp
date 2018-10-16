@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/conflate/poi-polygon/extractors/LocalAddressValidationDataSource.h>
+#include <hoot/core/util/LibPostalInit.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -91,13 +92,6 @@ public:
   PoiPolygonAddressScoreExtractorTest()
   {
     // can't do the libpostal init here, b/c config options hasn't been populated yet
-    //LOG_VART(ConfigOptions().getLibpostalDataDir());
-    //PoiPolygonAddressScoreExtractor::initLibPostal();
-  }
-
-  ~PoiPolygonAddressScoreExtractorTest()
-  {
-    PoiPolygonAddressScoreExtractor::shutDownLibPostal();
   }
 
   void runTagTest()
@@ -524,11 +518,7 @@ public:
 
   void addressParseTest()
   {
-    if (!PoiPolygonAddressScoreExtractor::libPostalStarted)
-    {
-      PoiPolygonAddressScoreExtractor::initLibPostal();
-    }
-
+    LibPostalInit::getInstance();
     libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
     libpostal_address_parser_response_t* parsed =
       libpostal_parse_address(
@@ -544,6 +534,7 @@ public:
       Label: postcode, Component: 11216
       Label: country, Component: usa
      */
+    CPPUNIT_ASSERT_EQUAL(8, (int)parsed->num_components);
     for (size_t i = 0; i < parsed->num_components; i++)
     {
       LOG_TRACE("Label: " << parsed->labels[i] << ", Component: " << parsed->components[i]);
@@ -554,11 +545,7 @@ public:
 
   void addressNormalization2Test()
   {
-    if (!PoiPolygonAddressScoreExtractor::libPostalStarted)
-    {
-      PoiPolygonAddressScoreExtractor::initLibPostal();
-    }
-
+    LibPostalInit::getInstance();
     size_t num_expansions;
     libpostal_normalize_options_t options = libpostal_get_default_options();
     char** expansions =
@@ -569,6 +556,7 @@ public:
      * Expansion: 92 avenue des champs-elysees
        Expansion: 92 avenue des champs elysees
      */
+    CPPUNIT_ASSERT_EQUAL(2, (int)num_expansions);
     for (size_t i = 0; i < num_expansions; i++)
     {
       LOG_TRACE("Expansion: " << expansions[i]);
@@ -612,6 +600,6 @@ private:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonAddressScoreExtractorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonAddressScoreExtractorTest, "slow");
 
 }

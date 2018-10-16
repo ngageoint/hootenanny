@@ -95,11 +95,6 @@ public:
   long getAddressesProcessed() const { return _addressesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
-  // TODO: these will go away and be called internally only
-  static void initLibPostal();
-  static void shutDownLibPostal();
-  static bool libPostalStarted;
-
   static QString getAddressTagValue(const Tags& tags, const QString addressTagType);
 
 private:

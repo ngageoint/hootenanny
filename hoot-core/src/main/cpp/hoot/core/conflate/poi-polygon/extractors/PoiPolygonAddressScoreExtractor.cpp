@@ -33,6 +33,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/LibPostalInit.h>
 #include "PoiPolygonAddress.h"
 
 // libpostal
@@ -49,13 +50,12 @@ QMultiMap<QString, QString> PoiPolygonAddressScoreExtractor::_addressTypeToTagKe
 
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonAddressScoreExtractor::_translator;
 
-bool PoiPolygonAddressScoreExtractor::libPostalStarted = false;
-
 PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor() :
 _translateTagValuesToEnglish(false),
 _addressesProcessed(0),
 _matchAttemptMade(false)
 {
+  LibPostalInit::getInstance();
 }
 
 void PoiPolygonAddressScoreExtractor::_readAddressTagKeys(const QString configFile)
@@ -452,26 +452,6 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(const
       _collectAddressesFromWayNodes(*wayMember, addresses, map);
     }
   }
-}
-
-void PoiPolygonAddressScoreExtractor::initLibPostal()
-{
-  if (!libpostal_setup_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
-      !libpostal_setup_parser_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
-      !libpostal_setup_language_classifier_datadir(
-        ConfigOptions().getLibpostalDataDir().toUtf8().data()))
-  {
-    throw HootException("libpostal setup failed.");
-  }
-  libPostalStarted = true;
-}
-
-void PoiPolygonAddressScoreExtractor::shutDownLibPostal()
-{
-  libpostal_teardown();
-  libpostal_teardown_parser();
-  libpostal_teardown_language_classifier();
-  libPostalStarted = false;
 }
 
 }
