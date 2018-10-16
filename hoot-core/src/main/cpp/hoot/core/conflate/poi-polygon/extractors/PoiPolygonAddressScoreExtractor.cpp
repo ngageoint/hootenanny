@@ -34,6 +34,9 @@
 #include <hoot/core/algorithms/string/MostEnglishName.h>
 #include "PoiPolygonAddress.h"
 
+// libpostal
+#include <libpostal/libpostal.h>
+
 using namespace std;
 
 namespace hoot
@@ -48,6 +51,8 @@ const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME = "address"
 const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonAddressScoreExtractor::_translator;
+
+bool PoiPolygonAddressScoreExtractor::libPostalStarted = false;
 
 PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor() :
 _translateTagValuesToEnglish(false),
@@ -383,7 +388,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
 }
 
 void PoiPolygonAddressScoreExtractor::_collectAddressesFromWayNodes(const Way& way,
-                                                                    QList<PoiPolygonAddress>& addresses,
+                                                                QList<PoiPolygonAddress>& addresses,
                                                                     const OsmMap& map) const
 {
   const vector<long> wayNodeIds = way.getNodeIds();
@@ -394,7 +399,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromWayNodes(const Way& w
 }
 
 void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(const Relation& relation,
-                                                                           QList<PoiPolygonAddress>& addresses,
+                                                                QList<PoiPolygonAddress>& addresses,
                                                                            const OsmMap& map) const
 {
   const vector<RelationData::Entry> relationMembers = relation.getMembers();
@@ -411,6 +416,26 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(const
       _collectAddressesFromWayNodes(*wayMember, addresses, map);
     }
   }
+}
+
+void PoiPolygonAddressScoreExtractor::initLibPostal()
+{
+  if (!libpostal_setup_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
+      !libpostal_setup_parser_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
+      !libpostal_setup_language_classifier_datadir(
+        ConfigOptions().getLibpostalDataDir().toUtf8().data()))
+  {
+    throw HootException("libpostal setup failed.");
+  }
+  libPostalStarted = true;
+}
+
+void PoiPolygonAddressScoreExtractor::shutDownLibPostal()
+{
+  libpostal_teardown();
+  libpostal_teardown_parser();
+  libpostal_teardown_language_classifier();
+  libPostalStarted = false;
 }
 
 }

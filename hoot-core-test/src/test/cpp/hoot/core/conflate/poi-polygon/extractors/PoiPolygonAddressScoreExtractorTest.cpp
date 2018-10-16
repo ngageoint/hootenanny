@@ -49,6 +49,10 @@
 #include <libaddressinput/callback.h>
 #include <libaddressinput/address_field.h>
 #include <libaddressinput/address_problem.h>
+#include <libaddressinput/address_input_helper.h>
+
+// libpostal
+#include <libpostal/libpostal.h>
 
 using namespace geos::geom;
 using namespace i18n::addressinput;
@@ -72,9 +76,24 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(addressValidation1Test);
   CPPUNIT_TEST(addressValidation2Test);
   CPPUNIT_TEST(addressValidation3Test);
+  CPPUNIT_TEST(fillMissingAddressFieldsTest);
+  CPPUNIT_TEST(addressParseTest);
+  CPPUNIT_TEST(addressNormalization2Test);
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  PoiPolygonAddressScoreExtractorTest()
+  {
+    // can't do the libpostal init here, b/c config options hasn't been populated yet
+    //LOG_VART(ConfigOptions().getLibpostalDataDir());
+    //PoiPolygonAddressScoreExtractor::initLibPostal();
+  }
+
+  ~PoiPolygonAddressScoreExtractorTest()
+  {
+    PoiPolygonAddressScoreExtractor::shutDownLibPostal();
+  }
 
   void runTagTest()
   {
@@ -347,9 +366,9 @@ public:
     HOOT_STR_EQUALS("ZENTRALLÄNDE STRASSE 40", result);
 
     GetFormattedNationalAddressLine(address1, &result);
-    LOG_VART(result);
+    HOOT_STR_EQUALS("13937 Winding Ridge Lane, Centreville, Virginia 20121", result);
     GetFormattedNationalAddressLine(address2, &result);
-    LOG_VART(result);
+    HOOT_STR_EQUALS("ZENTRALLÄNDE STRASSE 40, 81379 MÜNCHEN", result);
 
     std::vector<std::string> lines;
     GetFormattedNationalAddress(address2, &lines);
@@ -365,13 +384,25 @@ public:
     const AddressNormalizer normalizer(&supplier);
     supplier.LoadRules("US", *loaded);
 
-    AddressData address;
-    address.language_code = "en-US";
-    address.region_code = "US";
-    address.administrative_area = "California";
-    address.locality = "Mountain View";
-    normalizer.Normalize(&address);
-    HOOT_STR_EQUALS("CA", address.administrative_area);
+    AddressData address1;
+    address1.region_code = "US";
+    address1.administrative_area = "Virginia";
+    normalizer.Normalize(&address1);
+    HOOT_STR_EQUALS("VA", address1.administrative_area);
+
+//    AddressData address2;
+//    address2.region_code = "US";
+//    address2.administrative_area = "VA";
+//    address2.address_line.push_back("13937 Winding Ridge Ln");
+//    normalizer.Normalize(&address2);
+//    LOG_VART(address2.address_line);
+
+//    AddressData address3;
+//    address3.region_code = "US";
+//    address3.administrative_area = "VA";
+//    address3.address_line.push_back("13937 Winding Ridge Lane");
+//    normalizer.Normalize(&address3);
+//    LOG_VART(address3.address_line);
   }
 
   void addressValidation1Test()
@@ -384,17 +415,17 @@ public:
     const AddressValidator validator(&supplier);
     supplier.LoadRules("US", *loaded);
 
-    AddressData address1;
-    address1.region_code = "US";
-    address1.administrative_area = "Virginia";
-    address1.locality = "Centreville";
-    address1.postal_code = "20121";
-    address1.address_line.push_back("13937 Winding Ridge Lane");
+    AddressData address;
+    address.region_code = "US";
+    address.administrative_area = "Virginia";
+    address.locality = "Centreville";
+    address.postal_code = "20121";
+    address.address_line.push_back("13937 Winding Ridge Lane");
 
     FieldProblemMap filter;
     FieldProblemMap problems;
     validator.Validate(
-      address1,
+      address,
       false,
       false,
       &filter,
@@ -412,17 +443,17 @@ public:
     const AddressValidator validator(&supplier);
     supplier.LoadRules("US", *loaded);
 
-    AddressData address1;
-    address1.region_code = "US";
-    address1.administrative_area = "blah";
-    address1.locality = "Centreville";
-    address1.postal_code = "2343255";
-    address1.address_line.push_back("13937 Winding Ridge");
+    AddressData address;
+    address.region_code = "US";
+    address.administrative_area = "blah";
+    address.locality = "Centreville";
+    address.postal_code = "2343255";
+    address.address_line.push_back("13937 Winding Ridge");
 
     FieldProblemMap filter;
     FieldProblemMap problems;
     validator.Validate(
-      address1,
+      address,
       false,
       false,
       &filter,
@@ -440,19 +471,91 @@ public:
     const AddressValidator validator(&supplier);
     supplier.LoadRules("US", *loaded);
 
-    AddressData address1;
-    address1.region_code = "US";
-    address1.address_line.push_back("13937 Winding Ridge");
+    AddressData address;
+    address.region_code = "US";
+    address.address_line.push_back("13937 Winding Ridge");
 
     FieldProblemMap filter;
     FieldProblemMap problems;
     validator.Validate(
-      address1,
+      address,
       false,
       false,
       &filter,
       &problems,
       *validated);
+  }
+
+  void fillMissingAddressFieldsTest()
+  {
+    PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
+    const std::unique_ptr<const PreloadSupplier::Callback> loaded(
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+    const AddressInputHelper missingFieldPopulator(&supplier);
+    supplier.LoadRules("US", *loaded);
+
+//    AddressData address1;
+//    address1.region_code = "US";
+//    address1.administrative_area = "VA";
+//    address1.postal_code = "20121";
+//    address1.address_line.push_back("13937 Winding Ridge Lane");
+//    missingFieldPopulator.FillAddress(&address1);
+//    LOG_VART(address1.locality);
+
+//    AddressData address2;
+//    address2.region_code = "US";
+//    address2.administrative_area = "VA";
+//    address2.locality = "Centreville";
+//    address2.address_line.push_back("13937 Winding Ridge Lane");
+//    missingFieldPopulator.FillAddress(&address2);
+//    LOG_VART(address2.postal_code);
+
+    AddressData address3;
+    address3.region_code = "US";
+    address3.postal_code = "20121";
+    missingFieldPopulator.FillAddress(&address3);
+    HOOT_STR_EQUALS("VA", address3.administrative_area);
+  }
+
+  void addressParseTest()
+  {
+    if (!PoiPolygonAddressScoreExtractor::libPostalStarted)
+    {
+      PoiPolygonAddressScoreExtractor::initLibPostal();
+    }
+
+    libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
+    libpostal_address_parser_response_t* parsed =
+      libpostal_parse_address(
+        (char*)"781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
+
+    for (size_t i = 0; i < parsed->num_components; i++)
+    {
+      LOG_TRACE("Label: " << parsed->labels[i] << ", Component: " << parsed->components[i]);
+    }
+
+    libpostal_address_parser_response_destroy(parsed);
+  }
+
+  void addressNormalization2Test()
+  {
+    if (!PoiPolygonAddressScoreExtractor::libPostalStarted)
+    {
+      PoiPolygonAddressScoreExtractor::initLibPostal();
+    }
+
+    size_t num_expansions;
+    libpostal_normalize_options_t options = libpostal_get_default_options();
+    char** expansions =
+      libpostal_expand_address(
+        (char*)"Quatre-vingt-douze Ave des Champs-Élysées", options, &num_expansions);
+
+    for (size_t i = 0; i < num_expansions; i++)
+    {
+      LOG_TRACE("Expansion: " << expansions[i]);
+    }
+
+    libpostal_expansion_array_destroy(expansions, num_expansions);
   }
 
 private:

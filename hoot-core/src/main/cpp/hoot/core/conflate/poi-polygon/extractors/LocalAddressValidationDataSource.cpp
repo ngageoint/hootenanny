@@ -38,7 +38,8 @@ std::map<std::string, std::string> InitData(const std::string& src_path)
 {
   std::map<std::string, std::string> data;
   std::ifstream file(src_path);
-  if (!file.is_open()) {
+  if (!file.is_open())
+  {
     std::cerr << "Error opening \"" << src_path << "\"." << std::endl;
     std::exit(EXIT_FAILURE);
   }
@@ -52,14 +53,16 @@ std::map<std::string, std::string> InitData(const std::string& src_path)
   auto last_data_it = data.end();
   auto aggregate_data_it = data.end();
 
-  while (file.good()) {
+  while (file.good())
+  {
     // Example line from countryinfo.txt:
     //     data/CH/AG={"name": "Aargau"}
     // Example key:
     //     data/CH/AG
     std::getline(file, key, '=');
 
-    if (!key.empty()) {
+    if (!key.empty())
+    {
       // Example value:
       //     {"name": "Aargau"}
       std::getline(file, value, '\n');
@@ -73,18 +76,22 @@ std::map<std::string, std::string> InitData(const std::string& src_path)
       if (key.compare(0,
                       kDataKeyPrefixLength,
                       kDataKeyPrefix,
-                      kDataKeyPrefixLength) == 0) {
+                      kDataKeyPrefixLength) == 0)
+      {
         // If aggregate_data_it and key have the same prefix, e.g. "data/ZZ".
         if (aggregate_data_it != data.end() &&
             key.compare(0,
                         kAggregateDataKeyLength,
                         aggregate_data_it->first,
                         sizeof kAggregatePrefix,
-                        kAggregateDataKeyLength) == 0) {
+                        kAggregateDataKeyLength) == 0)
+        {
           // Append more data to the aggregate string, for example:
           //     , "data/CH/AG": {"name": "Aargau"}
           aggregate_data_it->second.append(", \"" + key + "\": " + value);
-        } else {
+        }
+        else
+        {
           // The countryinfo.txt file must be sorted so that subkey data
           // follows directly after its parent key data.
           assert(key.size() == kAggregateDataKeyLength);
@@ -98,7 +105,8 @@ std::map<std::string, std::string> InitData(const std::string& src_path)
           //
           //     {"data/CH/AG": {"name": "Aargau"},
           //      "data/CH": {"name": "SWITZERLAND"}}
-          if (aggregate_data_it != data.end()) {
+          if (aggregate_data_it != data.end())
+          {
             aggregate_data_it->second.push_back('}');
           }
 
@@ -117,6 +125,7 @@ std::map<std::string, std::string> InitData(const std::string& src_path)
   }
 
   file.close();
+  LOG_VART(data.size());
   return data;
 }
 
@@ -127,25 +136,34 @@ const std::map<std::string, std::string>& GetData(const std::string& src_path)
 }
 
 LocalAddressValidationDataSource::LocalAddressValidationDataSource(bool aggregate,
-                                                                   const std::string& src_path)
-    : aggregate_(aggregate), src_path_(src_path) {}
+                                                                   const std::string& src_path) :
+aggregate_(aggregate),
+src_path_(src_path)
+{
+}
 
-LocalAddressValidationDataSource::LocalAddressValidationDataSource(bool aggregate)
-    : aggregate_(aggregate), src_path_(kDataFileName) {}
+LocalAddressValidationDataSource::LocalAddressValidationDataSource(bool aggregate) :
+aggregate_(aggregate),
+src_path_(kDataFileName)
+{
+}
 
 LocalAddressValidationDataSource::~LocalAddressValidationDataSource() = default;
 
 void LocalAddressValidationDataSource::Get(const std::string& key,
-                         const Callback& data_ready) const
+                                           const Callback& data_ready) const
 {
   std::string prefixed_key(1, aggregate_ ? kAggregatePrefix : kNormalPrefix);
   prefixed_key += key;
   auto data_it = GetData(src_path_).find(prefixed_key);
   bool success = data_it != GetData(src_path_).end();
   std::string* data = nullptr;
-  if (success) {
+  if (success)
+  {
     data = new std::string(data_it->second);
-  } else {
+  }
+  else
+  {
     // URLs that start with "https://chromium-i18n.appspot.com/ssl-address/" or
     // "https://chromium-i18n.appspot.com/ssl-aggregate-address/" prefix, but do
     // not have associated data will always return "{}" with status code 200.

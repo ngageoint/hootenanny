@@ -122,6 +122,10 @@ LIBPHONENUMBER_INIT()
 m4_include([m4/libaddressinput.m4])
 LIBADDRESSINPUT_INIT()
 
+# libpostal
+m4_include([m4/libpostal.m4])
+LIBPOSTAL_INIT()
+
 ##
 # Optional
 ##
