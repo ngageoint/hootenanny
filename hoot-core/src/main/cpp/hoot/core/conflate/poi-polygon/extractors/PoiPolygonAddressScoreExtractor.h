@@ -47,27 +47,13 @@ class PoiPolygonAddress;
  * Only exact string matches yield a positive score.  This can translate addresses, but doesn't
  * handle abbreviations.
  *
- * types (10/16/18):
- *
- * block
- * full_address
- * number
- * street
- * street_corner
- * street_prefix
- * street_side
- * street_suffix
+ * @todo libaddressinput and libpostal may be able to clean up logic in this class quite a bit
  */
 class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::PoiPolygonAddressScoreExtractor"; }
-
-//  static const QString HOUSE_NUMBER_TAG_NAME;
-//  static const QString STREET_TAG_NAME;
-//  static const QString FULL_ADDRESS_TAG_NAME;
-//  static const QString FULL_ADDRESS_TAG_NAME_2;
 
   PoiPolygonAddressScoreExtractor();
 

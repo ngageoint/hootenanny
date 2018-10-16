@@ -42,12 +42,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonAddressScoreExtractor)
 
-//These seem to be all OSM standard tag names, so don't need to be in a configuration file.
-//const QString PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
-//const QString PoiPolygonAddressScoreExtractor::STREET_TAG_NAME = "addr:street";
-//const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME = "address";
-//const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
-
 QMultiMap<QString, QString> PoiPolygonAddressScoreExtractor::_addressTypeToTagKeys;
 
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonAddressScoreExtractor::_translator;
@@ -198,7 +192,7 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString house
   //with a space (which isn't hard to handle), but also won't worry about it until its seen
   //in the wild.
 
-  //This may be able to be cleaned up with regex's.
+  //This may be able to be cleaned up some with regex's.
 
   QStringList houseNumParts = houseNum.split("-");
   if (houseNumParts.size() == 2)
@@ -234,9 +228,8 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tag
   //parse through the tokens until you come to a number; assume that is the house number and
   //everything before it is the street name
 
-  //This may be able to be cleaned up with regex's.
+  //This may be able to be cleaned up some with regex's.
 
-  //QString addressTagValAltFormatRaw = tags.get(FULL_ADDRESS_TAG_NAME_2).trimmed();
   QString addressTagValAltFormatRaw = getAddressTagValue(tags, "full_address");
   if (!addressTagValAltFormatRaw.isEmpty())
   {
@@ -379,10 +372,8 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
   const Tags tags = element.getTags();
 
   //address parts in separate tags (most common situation)
-  //QString houseNum = tags.get(HOUSE_NUMBER_TAG_NAME).trimmed();
   QString houseNum = getAddressTagValue(tags, "number");
   LOG_VART(houseNum);
-  //QString street = tags.get(STREET_TAG_NAME).trimmed();
   QString street = getAddressTagValue(tags, "street");
   LOG_VART(street);
   if (!houseNum.isEmpty() && !street.isEmpty())
@@ -411,7 +402,6 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
   }
 
   //full address in one tag
-  //QString addressTagVal = tags.get(FULL_ADDRESS_TAG_NAME).trimmed();
   QString addressTagVal = getAddressTagValue(tags, "full_address");
   LOG_VART(addressTagVal);
   if (!addressTagVal.isEmpty())
