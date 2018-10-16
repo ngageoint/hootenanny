@@ -82,8 +82,10 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
     throw geos::util::TopologyException();
   }
 
+  //const QString poiAddress =
+    //poi->getTags().get(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
   const QString poiAddress =
-    poi->getTags().get(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
+    PoiPolygonAddressScoreExtractor::getAddressTagValue(poi->getTags(), "full_address");
   if (poiAddress.isEmpty())
   {
     return false;

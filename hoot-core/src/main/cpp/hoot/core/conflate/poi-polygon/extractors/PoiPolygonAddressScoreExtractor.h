@@ -34,6 +34,9 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 
+// Qt
+#include <QMultiMap>
+
 namespace hoot
 {
 
@@ -43,6 +46,17 @@ class PoiPolygonAddress;
  * Calculates the address similarity score of two features involved in POI/Polygon conflation.
  * Only exact string matches yield a positive score.  This can translate addresses, but doesn't
  * handle abbreviations.
+ *
+ * types (10/16/18):
+ *
+ * block
+ * full_address
+ * number
+ * street
+ * street_corner
+ * street_prefix
+ * street_side
+ * street_suffix
  */
 class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -50,10 +64,10 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonAddressScoreExtractor"; }
 
-  static const QString HOUSE_NUMBER_TAG_NAME;
-  static const QString STREET_TAG_NAME;
-  static const QString FULL_ADDRESS_TAG_NAME;
-  static const QString FULL_ADDRESS_TAG_NAME_2;
+//  static const QString HOUSE_NUMBER_TAG_NAME;
+//  static const QString STREET_TAG_NAME;
+//  static const QString FULL_ADDRESS_TAG_NAME;
+//  static const QString FULL_ADDRESS_TAG_NAME_2;
 
   PoiPolygonAddressScoreExtractor();
 
@@ -89,19 +103,13 @@ public:
    */
   static bool elementHasAddress(const ConstElementPtr& element, const OsmMap& map);
 
-  /**
-   * Determines if text is an OSM address tag key
-   *
-   * @param tagKey input to examine
-   * @return true if the input is an OSM address tag key; false otherwise
-   */
-  static bool isAddressTagKey(const QString tagKey);
-
   virtual QString getDescription() const
   { return "Scores address similarity for POI/Polygon conflation"; }
 
   long getAddressesProcessed() const { return _addressesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
+
+  static QString getAddressTagValue(const Tags& tags, const QString addressTagType);
 
 private:
 
@@ -113,6 +121,8 @@ private:
   static boost::shared_ptr<ToEnglishTranslator> _translator;
   mutable long _addressesProcessed;
   mutable bool _matchAttemptMade;
+
+  static QMultiMap<QString, QString> _addressTypeToTagKeys;
 
   void _collectAddressesFromElement(const Element& element,
                                     QList<PoiPolygonAddress>& addresses) const;
@@ -127,6 +137,7 @@ private:
 
   void _translateAddressToEnglish(QString& address) const;
 
+  static void _readAddressTagKeys(const QString configFile);
 };
 
 }
