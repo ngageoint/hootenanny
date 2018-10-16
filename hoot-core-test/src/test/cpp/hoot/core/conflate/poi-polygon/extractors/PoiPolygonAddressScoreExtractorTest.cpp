@@ -529,6 +529,16 @@ public:
       libpostal_parse_address(
         (char*)"781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
 
+    /*
+     *Label: house_number, Component: 781
+      Label: road, Component: franklin ave
+      Label: suburb, Component: crown heights
+      Label: city_district, Component: brooklyn
+      Label: city, Component: nyc
+      Label: state, Component: ny
+      Label: postcode, Component: 11216
+      Label: country, Component: usa
+     */
     for (size_t i = 0; i < parsed->num_components; i++)
     {
       LOG_TRACE("Label: " << parsed->labels[i] << ", Component: " << parsed->components[i]);
@@ -550,6 +560,10 @@ public:
       libpostal_expand_address(
         (char*)"Quatre-vingt-douze Ave des Champs-Élysées", options, &num_expansions);
 
+    /*
+     * Expansion: 92 avenue des champs-elysees
+       Expansion: 92 avenue des champs elysees
+     */
     for (size_t i = 0; i < num_expansions; i++)
     {
       LOG_TRACE("Expansion: " << expansions[i]);

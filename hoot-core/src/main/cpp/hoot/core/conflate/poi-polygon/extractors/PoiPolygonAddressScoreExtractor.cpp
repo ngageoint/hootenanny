@@ -331,9 +331,6 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
   //We're parsing multiple types of address tags here, b/c its possible that the same feature
   //could have multiple types of address tags with only one of them being accurate.  Parsing just
   //one type does the same on run time, but can be less accurate for the aforementioned reason.
-  //This code assumes that only one type of address will be present on each element.  If that
-  //assumption ever proves false, then this needs to be reworked to throw an error or process only
-  //the first address type found.
 
   const Tags tags = element.getTags();
 
