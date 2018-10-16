@@ -104,10 +104,12 @@ public:
 private:
 
   bool _tokenizeInput;
-  QSet<QString> _streetTypes;
+  static QSet<QString> _streetTypes;
   QRegExp _whiteSpace;
 
   QString _transform(icu::Transliterator* t, const QString& input) const;
+
+  static void _readStreetTypes();
 };
 
 }

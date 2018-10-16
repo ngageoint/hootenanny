@@ -89,6 +89,7 @@ public:
             word = noSymbols;
           }
           // ignore any empty words. This may happen when there are multiple consecutive spaces.
+          // TODO: use QString::simplify?
           if (word.isEmpty() == false)
           {
             _counts[word]++;
@@ -110,7 +111,7 @@ public:
   virtual QString getName() const { return "tag-name-frequencies"; }
 
   virtual QString getDescription() const
-  { return "Prints feature names ordered by frequency"; }
+  { return "Displays feature names ordered by frequency"; }
 
   int runSimple(QStringList args)
   {

@@ -51,7 +51,7 @@ public:
   virtual QString getName() const { return "tag-accuracy-distribution"; }
 
   virtual QString getDescription() const
-  { return "Prints the distribution of feature accuracy tag values"; }
+  { return "Calculates the distribution of feature accuracy tag values"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -64,7 +64,7 @@ public:
     QTime time;
     time.start();
 
-    //TODO: Should we make this work for input formats other than OSM XML?
+    //TODO: Make this work for input formats other than OSM XML - #2671
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

@@ -49,8 +49,7 @@ public:
 
   virtual QString getName() const { return "tag-info"; }
 
-  virtual QString getDescription() const
-  { return "Prints tag keys and values for map data."; }
+  virtual QString getDescription() const { return "Displays tag keys and values for map data"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -104,7 +103,15 @@ public:
       LOG_VART(args);
     }
 
-    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive);
+    bool exactKeyMatch = true;
+    if (args.contains("--partial-key-match"))
+    {
+      exactKeyMatch = false;
+      args.removeAt(args.indexOf("--partial-key-match"));
+      LOG_VART(args);
+    }
+
+    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch);
 
     finalText += "{\n";
 

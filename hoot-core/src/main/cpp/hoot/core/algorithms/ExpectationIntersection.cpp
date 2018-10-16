@@ -122,7 +122,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
   int iteration = 0;
   bool done = false;
 
-  while (!done && iteration++ < _maxIterations)
+  while (!done && iteration < _maxIterations)
   {
     ////
     // Expectation stage
@@ -159,6 +159,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
       done = true;
     }
     visitedSplits.insert(splitsInt);
+    iteration++;
   }
 
   // calculate a more exact split point

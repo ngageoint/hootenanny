@@ -38,6 +38,8 @@
 namespace hoot
 {
 
+class HootNetworkCookieJar;
+
 struct TranslationResult
 {
   QString translatedText;
@@ -91,6 +93,10 @@ protected:
 
   boost::shared_ptr<TranslationInfoProvider> _infoClient;
 
+  //determines whether cookies are used in web requests; should be set to true to support auth,
+  //except when running tests as they don't make web requests that require auth
+  bool _useCookies;
+
 private:
 
   friend class HootServicesTranslatorClientTest;
@@ -127,6 +133,8 @@ private:
 
   QString _id;
 
+  boost::shared_ptr<HootNetworkCookieJar> _cookies;
+
   /**
    * Verifies that every language specified for this translator is supported by the server
    *
@@ -140,8 +148,14 @@ private:
                                const QString type);
 
   QString _getTranslateRequestData(const QString text);
-
   void _parseTranslateResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
+
+  bool _getTranslationFromCache(const QString textToTranslate);
+  void _insertTranslationIntoCache(const QString textToTranslate, const QString translatedText,
+                                   const QString detectedLang);
+
+  bool _textIsTranslatable(const QString textToTranslate) const;
+  bool _textIsEnglish(const QString textToTranslate) const;
 };
 
 }

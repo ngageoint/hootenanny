@@ -52,11 +52,11 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  /**
-    * Adds an additional pair to the search list. If any one of the pairs matches then it is
-    * considered a match.
-    */
-   void addPair(QString key, QString valueSubstring);
+ /**
+   * Adds an additional pair to the search list. If any one of the pairs matches then it is
+   * considered a match.
+   */
+  void addPair(QString key, QString valueSubstring);
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagContainsCriterion()); }
 

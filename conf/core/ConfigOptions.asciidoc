@@ -878,6 +878,50 @@ The highway subline matcher to use when determining matching highway sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
+=== hoot.services.auth.access.token
+
+* Data Type: string
+* Default Value: ``
+
+Hootenanny Web Services public access token required by some Hootenanny commands.  Use the
+Hootenanny 'login' command to retrieve access tokens.
+
+=== hoot.services.auth.access.token.secret
+
+* Data Type: string
+* Default Value: ``
+
+Hootenanny Web Services private access token required by some Hootenanny commands.  Use the
+Hootenanny 'login' command to retrieve access tokens.
+
+=== hoot.services.auth.logout.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/logout`
+
+Hootenanny Web Services endpoint for logging out of Hootenanny.
+
+=== hoot.services.auth.request.token.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/request`
+
+Hootenanny Web Services endpoint for retrieving Hootenanny request tokens.
+
+=== hoot.services.auth.user.name
+
+* Data Type: string
+* Default Value: ``
+
+Hootenanny Web Services user name associated with an authenticated login.
+
+=== hoot.services.auth.verify.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/verify`
+
+Hootenanny Web Services endpoint for logging in a user.
+
 === hootapi.db.writer.copy.bulk.insert
 
 * Data Type: bool
@@ -1044,16 +1088,24 @@ The minimum allowed word length when associating word tokens with tags.
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesCustomRuleList`
 
-Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
-when deriving an implicit tags database from POI names.
+Flat file containing tab separated word key/value pairs to use as custom rules when deriving an
+implicit tags database from POI names.
 
 === implicit.tagging.database.deriver.tag.ignore.file
 
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesTagIgnoreList`
 
-Flat file containing key/value pairs, one per line, to ignore when deriving an implicit tags
-database from POI names.  Use 'key=*' to ignore all tags for a given key.
+Flat file containing key/value pairs to ignore when deriving an implicit tags database from POI
+names.  Use 'key=*' to ignore all tags for a given key.
+
+=== implicit.tagging.database.deriver.translate.names.to.english
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
+rules are derived.
 
 === implicit.tagging.database.deriver.translate.names.to.english
 
@@ -1068,8 +1120,7 @@ rules are derived.
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesWordIgnoreList`
 
-Flat file containing words, one per line, to ignore when deriving an implicit tags database from
-POI names.
+Flat file containing words to ignore when deriving an implicit tags database from POI names.
 
 === implicit.tagging.database.deriver.use.schema.tag.values.for.words.only
 
@@ -1095,6 +1146,14 @@ pass in more nested criterion, use the Hootenanny Javascript interface instead.
 
 If true, the implicit tag raw rules/database derivers will keep all temporary file output.  For
 debugging only.
+
+=== implicit.tagging.name.cleaning.tokens.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesNameCleaningTokens`
+
+Flat file containing tokens that should be ignored in names when deriving implicit type tagging
+rules or when determining whether to type tag an element using implicit tagging.
 
 === implicit.tagging.raw.rules.deriver.skip.filtering
 
@@ -1413,9 +1472,10 @@ Separate keys with a ';' and surround in quotes when passing in from the command
 
 ToEnglishTranslator implementation to use for to English translation.  hoot::DictionaryTranslator,
 the current default, is a simple lookup table primarily used for translation testing and proof of
-concept.  It is set as the default because other implementations, such as
-hoot::HootServicesTranslatorClient, require custom installation procedures and have lengthy startup
-times. Therefore, they are not available in the default Hootenanny installation.
+concept.  Other implementations, such as hoot::HootServicesTranslatorClient, have better
+translation capability but require custom server installation procedures.  If using
+hoot::HootServicesTranslatorClient, the option 'hoot.services.authenticated.username' must be
+populated with a valid value or translation web requests will fail.
 
 === levenshtein.distance.alpha
 
@@ -2682,6 +2742,14 @@ configuration option, 'language.translation.translator', controls which translat
 The minimum similarity the type scores a POI and polygon can have and be considered a type
 match, with 0.0 being the least similar and 1.0 being the most similar.
 
+=== poi.polygon.type.to.names.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonTypeToNames`
+
+Flat file containing OSM types and lists of possible texts features having such a type might
+contain.
+
 === poi.review.threshold
 
 * Data Type: double
@@ -3165,6 +3233,14 @@ status is 'Invalid'.
 Adds the specified status to elements.  Valid values are: 'Unknown1', 'Unknown2', 'Conflated', or
 'Invalid'.  If left empty, all elements will receive tag additions.
 
+=== street.types.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/streetTypes`
+
+Flat file containing street types and their abbreviations.  Used in various parts of the
+application.
+
 === tag.ancestor.differencer.name
 
 * Data Type: string
@@ -3180,6 +3256,13 @@ Primarily, this is useful within the node.js interface.
 
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
+
+=== tag.key.contains.criterion.text
+
+* Data Type: string
+* Default Value: ``
+
+Text that TagKeyContainsCriterion searches a match for.
 
 === tag.criterion.kvps
 

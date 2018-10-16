@@ -88,19 +88,6 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
   LOG_VART(_typeMatch);
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_addressMatch);
-
-  //TODO: move these to a config - #2635
-  _genericLandUseTagVals.append("cemetery");
-  _genericLandUseTagVals.append("commercial");
-  //_genericLandUseTagVals.append("construction");
-  _genericLandUseTagVals.append("farm");
-  _genericLandUseTagVals.append("forest");
-  _genericLandUseTagVals.append("grass");
-  _genericLandUseTagVals.append("industrial");
-  _genericLandUseTagVals.append("meadow");
-  _genericLandUseTagVals.append("residential");
-  _genericLandUseTagVals.append("retail");
-  _genericLandUseTagVals.append("village_green");
 }
 
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
@@ -112,7 +99,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 {
   LOG_TRACE("Checking review reduction rules...");
 
-  //TODO: Many of these rules may be obsolete now after recent additions.
+  // Some of these rules may be obsolete...they need to be checked.
+
+  const Tags& poiTags = poi->getTags();
+  const Tags& polyTags = poly->getTags();
 
   //The rules below are *roughly* ordered by increasing processing expense and by decreasing
   //likelihood of occurrence (probably needs some reordering at this point).
@@ -137,26 +127,31 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  //be a little stricter on place related reviews.
-  if ((poi->getTags().get("place").toLower() == "neighbourhood" ||
-       poi->getTags().get("place").toLower() == "suburb") && !poly->getTags().contains("place"))
+  const QString poiPlaceVal = poiTags.get("place").toLower();
+  const QString polyPlaceVal = polyTags.get("place").toLower();
+
+  //be a little stricter on place related reviews
+  if ((poiPlaceVal == "neighbourhood" || poiPlaceVal == "suburb") && !polyTags.contains("place"))
   {
     LOG_TRACE("Returning miss per review reduction rule #3...");
     return true;
   }
 
-  //TODO: this one will go away
-  if (poi->getTags().get("man_made").toLower() == "mine" &&
-      poly->getTags().get("landuse").toLower() == "quarry" &&
-      poly->getTags().get("man_made").toLower() != "mine")
+  const QString poiLanduseVal = poiTags.get("landuse").toLower();
+  const bool poiHasLanduse = !poiLanduseVal.trimmed().isEmpty();
+  const QString polyLanduseVal = polyTags.get("landuse").toLower();
+  const bool polyHasLanduse = !polyLanduseVal.trimmed().isEmpty();
+
+  // I think this one will eventually go away.
+  if (poiTags.get("man_made").toLower() == "mine" && polyLanduseVal == "quarry" &&
+      polyTags.get("man_made").toLower() != "mine")
   {
     LOG_TRACE("Returning miss per review reduction rule #4...");
     return true;
   }
 
   //points sitting on islands need to have an island type, or the match doesn't make any sense
-  if ((poi->getTags().get("place").toLower() == "island" ||
-       poly->getTags().get("place").toLower() == "island") && !_typeMatch)
+  if ((poiPlaceVal == "island" || polyPlaceVal == "island") && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #5...");
     return true;
@@ -165,9 +160,11 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyIsPark = PoiPolygonTypeScoreExtractor::isPark(poly);
   LOG_VART(polyIsPark);
 
+  const QString poiLeisureVal = poiTags.get("leisure").toLower();
+  const QString polyLeisureVal = polyTags.get("leisure").toLower();
+
   //similar to above, but for gardens
-  if ((poi->getTags().get("leisure").toLower() == "garden" ||
-       poly->getTags().get("leisure").toLower() == "garden") &&
+  if ((poiLeisureVal == "garden" || polyLeisureVal == "garden") &&
        (!_nonDistanceSimilaritiesPresent() ||
         (polyIsPark &&
          !PoiPolygonNameScoreExtractor::getElementName(poly).toLower().contains("garden"))))
@@ -177,7 +174,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //lots of things have fountains, so let's raise the requirements a bit
-  if (poi->getTags().get("amenity") == "fountain" && _nameScore < 0.5)
+  if (poiTags.get("amenity") == "fountain" && _nameScore < 0.5)
   {
     LOG_TRACE("Returning miss per review reduction rule #7...");
     return true;
@@ -188,7 +185,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //handle these types
   const bool poiHasName = !PoiPolygonNameScoreExtractor::getElementName(poi).isEmpty();
   const bool polyHasName = !PoiPolygonNameScoreExtractor::getElementName(poly).isEmpty();
-  if (poi->getTags().get("tourism") == "hotel" && poly->getTags().get("tourism") == "hotel" &&
+  if (poiTags.get("tourism") == "hotel" && polyTags.get("tourism") == "hotel" &&
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #8...");
@@ -220,18 +217,17 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   if (poiNameEndsWithField && polyIsSport)
   {
   }
-  else if ((poi->getTags().get("leisure").toLower() == "pitch" ||
-            poly->getTags().get("leisure").toLower() == "pitch") &&
+  else if ((poiLeisureVal == "pitch" || polyLeisureVal == "pitch") &&
            !_nonDistanceSimilaritiesPresent())
-  {   
+  {
     LOG_TRACE("Returning miss per review reduction rule #10...");
     return true;
   }
 
   //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
   //be more strict with their reviews.
-  if (_genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
-      !_nonDistanceSimilaritiesPresent())
+  if (/*_genericLandUseTagVals.contains(polyTags.get("landuse"))*/
+      polyHasLanduse && !_nonDistanceSimilaritiesPresent())
   {
     LOG_TRACE("Returning miss per review reduction rule #11...");
     return true;
@@ -248,14 +244,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  const bool poiIsNatural = poi->getTags().contains("natural");
-  const bool polyIsNatural = poly->getTags().contains("natural");
+  //TODO: move to type extractor method
+  const bool poiIsNatural = poiTags.contains("natural");
+  const bool polyIsNatural = polyTags.contains("natural");
 
   //Be more strict reviewing natural features and parks against building features.  This could be
   //extended
   if ((polyIsNatural || polyIsPark) &&
-      OsmSchema::getInstance().getCategories(
-        poi->getTags()).intersects(OsmSchemaCategory::building()))
+      OsmSchema::getInstance().getCategories(poiTags).intersects(OsmSchemaCategory::building()))
   {
     LOG_TRACE("Returning miss per review reduction rule #13...");
     return true;
@@ -275,7 +271,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //prevent athletic POIs within a park poly from being reviewed against that park poly
-  if (_distance == 0 && polyIsPark && poi->getTags().get("leisure") == "pitch")
+  if (_distance == 0 && polyIsPark && poiLeisureVal == "pitch")
   {
     LOG_TRACE("Returning miss per review reduction rule #16...");
     return true;
@@ -298,8 +294,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //Similar to previous, except more focused for restrooms.
   if (poiHasType && polyHasType && _typeScore != 1.0 &&
       PoiPolygonTypeScoreExtractor::isRestroom(poi) &&
-      !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
-        OsmSchemaCategory::building()))
+      !OsmSchema::getInstance().getCategories(polyTags).intersects(OsmSchemaCategory::building()))
   {
     LOG_TRACE("Returning miss per review reduction rule #18...");
     return true;
@@ -307,7 +302,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Be more strict reviewing parking lots against other features.
   if (poiHasType && polyHasType && PoiPolygonTypeScoreExtractor::isParking(poly) &&
-      !_typeMatch && poly->getTags().get("parking") != "multi-storey")
+      !_typeMatch && polyTags.get("parking") != "multi-storey")
   {
     LOG_TRACE("Returning miss per review reduction rule #19...");
     return true;
@@ -321,7 +316,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //Need to be stricter on tunnels since we don't want above ground things to review against them.
-  if (poly->getTags().get("tunnel") == "yes" && poiHasType &&
+  if (polyTags.get("tunnel") == "yes" && poiHasType &&
       (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
     LOG_TRACE("Returning miss per review reduction rule #21...");
@@ -354,11 +349,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Don't review park poi's against large non-park polys.
   if (poiHasType && polyHasType && !_nameMatch && !polyIsPark &&
-      (((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
-      (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
-      poly->getTags().get("leisure").toLower() == "common") ||
-      (poly->getTags().get("place").toLower() == "neighborhood" ||
-      poly->getTags().get("place").toLower() == "neighbourhood")) && polyArea > 50000)
+      (((polyHasLanduse && !poiHasLanduse) ||
+       (polyIsNatural && !poiIsNatural) ||
+        polyLeisureVal == "common") ||
+       (polyPlaceVal == "neighborhood" || polyPlaceVal == "neighbourhood")) && polyArea > 50000)
   {
     LOG_TRACE("Returning miss per review reduction rule #22...");
     return true;

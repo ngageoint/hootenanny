@@ -40,6 +40,7 @@ HOOT_FACTORY_REGISTER(TranslationInfoProvider, HootServicesTranslationInfoMockCl
 HootServicesTranslationInfoMockClient::HootServicesTranslationInfoMockClient() :
 HootServicesTranslationInfoClient()
 {
+  _useCookies = false;
 }
 
 /**

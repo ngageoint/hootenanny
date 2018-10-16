@@ -9,6 +9,7 @@ SHELL=/bin/bash
 # If the silent flag is passed to make then make Maven quiet too.
 ifneq (,$(findstring s,$(MAKEFLAGS)))
     MVN_QUIET="-q"
+    SCRIPT_QUIET=> /dev/null 2>&1
 endif
 
 default: build
@@ -57,7 +58,7 @@ clean: config clean-coverage
 clean-db: clean-db-force
 
 clean-db-force:
-	../scripts/database/DeleteAllTables.sh
+	../scripts/database/DeleteAllTables.sh $(SCRIPT_QUIET)
 
 coverage:
 	echo "Generating services code coverage report (runs services tests)..."

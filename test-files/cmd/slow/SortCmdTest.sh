@@ -39,7 +39,6 @@ hoot pbf-is-sorted test-output/cmd/slow/SortCmdTest/pbf-output-2.osm.pbf
 hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE -D element.sorter.external.temp.format=pbf test-files/cmd/slow/SortCmdTest/input.geonames test-output/cmd/slow/SortCmdTest/geonames-output-3.osm
 hoot diff --warn test-files/cmd/slow/SortCmdTest/geonames-output.osm test-output/cmd/slow/SortCmdTest/geonames-output-3.osm
 
-# not working yet
 hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE -D element.sorter.external.temp.format=pbf test-files/cmd/slow/SortCmdTest/input.osm test-output/cmd/slow/SortCmdTest/osm-output-3.osm
 hoot diff --warn test-files/cmd/slow/SortCmdTest/osm-output.osm test-output/cmd/slow/SortCmdTest/osm-output-3.osm
 

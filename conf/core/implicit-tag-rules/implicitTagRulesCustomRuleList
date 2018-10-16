@@ -153,6 +153,7 @@ institute	amenity=school
 insurance company	office=insurance
 internet cafe	amenity=internet_cafe
 junction	junction=yes
+junior high	amenity=school
 justice center	amenity=courthouse
 korean barbecue	amenity=resturant;cuisine=korean
 korean bbq	amenity=resturant;cuisine=korea

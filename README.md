@@ -14,6 +14,39 @@ _Conflation_:
 Hootenanny is an open source conflation tool developed to facilitate automated and semi-automated conflation of critical Foundation 
 GEOINT features in the topographic domain.  In short, it merges multiple maps of geodata into a single seamless map.
 
+# Project Goals
+* Automatically combine geospatial features for decision making
+* Allow for reviewing and manually resolving features which cannot be automatically matched with sufficient certainty
+* Maintain geometry and attribute provenance for combined features
+* Create up-to-date routable transportation networks from multiple sources
+
+# Conflatable Data Types
+* Area polygons
+* Building polygons
+* Points of Interest (POIs)
+* Transportation polylines (roads and railways)
+* Utility polylines (power lines)
+* Waterway polylines
+
+# Feature Summary
+In addition to conflating maps, Hootenanny can also:
+* Add missing type tags to feature data
+* Align map data
+* Clean map data
+* Combine polygon data
+* Compare maps
+* Convert maps between different geodata formats
+* Derive changesets between maps and apply them to external OSM data stores
+* Explore tag data
+* Gather statistics on map features
+* Identify road intersections
+* Perturb map data
+* Plot node feature density
+* Sort map data
+* Translate feature tags using user defined schemas
+* Translate feature tags to English
+
+# Overview
 Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, 
 and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) 
 for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s 
@@ -22,19 +55,13 @@ free tagging system allows the map to include an unlimited number of attributes 
 Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence 
 Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny). 
 
-# Project Goals
-* Automatically combine geospatial features for decision making
-* Allow for reviewing and manually resolving features which cannot be automatically matched with sufficient certainty
-* Maintain geometry and attribute provenance for combined features
-* Create up-to-date routable transportation networks from multiple sources
-
 # Installation
 Hootenanny is supported on Red Hat/CentOS:
 
 [Instructions](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md) to launch a Hootenanny CentOS virtual machine
 
-[Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation to 
-CentOS 7.x.
+[Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation 
+to CentOS 7.x.
 
 # Documentation
 User and technical documentation may be found locally after installation in 'hoot/docs' or 
@@ -50,17 +77,9 @@ If you have any support questions please create an issue in the [Hootenanny GitH
 
 # Command Line User Interface
 A command line user interface for conflation capabilities is available for users who wish to visualize data outside of the web user 
-interface (e.g. JOSM).  It exposes some additional functionality that is not exposed from the web user interface.  For a list of 
-available Hootenanny commands, type 'hoot'.  More detail is provided [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
-
-# Supported Geodata Types
-**Hootenanny can conflate:**
-* Area polygons
-* Building polygons
-* Points of Interest (POIs)
-* Transportation polylines (roads and railways)
-* Utility polylines (power lines)
-* Waterway polylines
+interface (e.g. when using JOSM).  It exposes additional functionality that is not available from the web user interface.  For a list of 
+Hootenanny commands, type 'hoot' from the command line.  The Hootenanny User Documentation contains detailed information about the 
+commands.  More detail on using the CLI is provided [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
 
 # Supported Data Formats
 **Hootenanny can import from:**
@@ -109,13 +128,6 @@ supports automated schema conversion between:
 Users are also able to define their own custom translations.  For custom translations, a specific mapping can be defined based on an 
 uploaded dataset using a semi-automated Translation Assistant.  More details on the translation capabilities of Hootenanny can be 
 found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
-
-# Data Cleaning
-Hootenanny supports a variety of geometric and tag based data cleaning operations.  Hootenanny can also add missing tags to POI data 
-implicitly based on a feature's name.  See the documentation for more details.
-
-# Language Translation
-Hootenanny supports translating tags to the English language.  See the User Guide for more information.
 
 # Contributing
 Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny 

@@ -37,6 +37,8 @@
 namespace hoot
 {
 
+class HootNetworkCookieJar;
+
 /**
  * Retrieves information from the Hootenanny web translation service about available languages
  */
@@ -61,6 +63,10 @@ public:
    */
   virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type);
 
+protected:
+
+  bool _useCookies; //see note in HootServicesTranslatorClient
+
 private:
 
   friend class HootServicesTranslationInfoClientTest;
@@ -75,6 +81,8 @@ private:
   QString _translatableUrl;
   QString _detectorsUrl;
   QString _translatorsUrl;
+
+  boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
   QString _getAvailableLanguagesRequestData(const QStringList apps);
 };

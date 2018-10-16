@@ -96,3 +96,34 @@
 No keys found from input key list.
   }
 }
+{
+  "DcTigerRoads.osm":{
+    "osm":{
+      "highway":[
+        "path",
+        "primary",
+        "road",
+        "secondary",
+        "unclassified"
+        ]
+      }
+  }
+}
+{
+  "DcTigerRoads.osm":{
+No keys found from input key list.
+  }
+}
+{
+  "DcTigerRoads.osm":{
+    "osm":{
+      "highway":[
+        "path",
+        "primary",
+        "road",
+        "secondary",
+        "unclassified"
+        ]
+      }
+  }
+}
