@@ -38,7 +38,7 @@ class LibPostalInit;
 typedef boost::shared_ptr<LibPostalInit> LibPostalInitPtr;
 
 /**
- *
+ * TODO
  */
 class LibPostalInit
 {

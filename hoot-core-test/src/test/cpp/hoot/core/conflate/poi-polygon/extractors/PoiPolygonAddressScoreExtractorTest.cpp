@@ -31,17 +31,12 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/language/DictionaryTranslator.h>
-#include <hoot/core/util/LibAddressInputLocalAddressValidationDataSource.h>
-#include <hoot/core/util/LibPostalInit.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
-
-// libpostal
-#include <libpostal/libpostal.h>
 
 using namespace geos::geom;
 
@@ -59,8 +54,8 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(runWayTest);
   CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST(translateTagValueTest);
-  CPPUNIT_TEST(addressParseTest);
-  CPPUNIT_TEST(addressNormalizationTest);
+  //CPPUNIT_TEST(addressParseTest);
+  //CPPUNIT_TEST(addressNormalizationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -72,7 +67,6 @@ public:
 
   PoiPolygonAddressScoreExtractorTest()
   {
-    // can't do the libpostal init here, b/c config options hasn't been populated yet
   }
 
   void runTagTest()
@@ -290,8 +284,9 @@ public:
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
-    settings.set("poi.polygon.translate.addresses.to.english", "true");
+    settings.set("poi.polygon.address.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::DictionaryTranslator");
+    settings.set("poi.polygon.address.use.default.language.translation.only", "false");
     uut.setConfiguration(settings);
     boost::shared_ptr<DictionaryTranslator> dictTranslator =
       boost::dynamic_pointer_cast<DictionaryTranslator>(
@@ -318,58 +313,9 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
-    settings.set("poi.polygon.translate.addresses.to.english", "false");
+    settings.set("poi.polygon.address.translate.to.english", "false");
     uut.setConfiguration(settings);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
-  }
-
-  void addressParseTest()
-  {
-    LibPostalInit::getInstance();
-    libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
-    libpostal_address_parser_response_t* parsed =
-      libpostal_parse_address(
-        (char*)"781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
-
-    /*
-     *Label: house_number, Component: 781
-      Label: road, Component: franklin ave
-      Label: suburb, Component: crown heights
-      Label: city_district, Component: brooklyn
-      Label: city, Component: nyc
-      Label: state, Component: ny
-      Label: postcode, Component: 11216
-      Label: country, Component: usa
-     */
-    CPPUNIT_ASSERT_EQUAL(8, (int)parsed->num_components);
-    for (size_t i = 0; i < parsed->num_components; i++)
-    {
-      LOG_TRACE("Label: " << parsed->labels[i] << ", Component: " << parsed->components[i]);
-    }
-
-    libpostal_address_parser_response_destroy(parsed);
-  }
-
-  void addressNormalizationTest()
-  {
-    LibPostalInit::getInstance();
-    size_t num_expansions;
-    libpostal_normalize_options_t options = libpostal_get_default_options();
-    char** expansions =
-      libpostal_expand_address(
-        (char*)"Quatre-vingt-douze Ave des Champs-Élysées", options, &num_expansions);
-
-    /*
-     * Expansion: 92 avenue des champs-elysees
-       Expansion: 92 avenue des champs elysees
-     */
-    CPPUNIT_ASSERT_EQUAL(2, (int)num_expansions);
-    for (size_t i = 0; i < num_expansions; i++)
-    {
-      LOG_TRACE("Expansion: " << expansions[i]);
-    }
-
-    libpostal_expansion_array_destroy(expansions, num_expansions);
   }
 };
 

@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * TODO
  */
 class PoiPolygonAddress
 {
@@ -43,8 +43,6 @@ public:
 
   PoiPolygonAddress();
   PoiPolygonAddress(const QString address, const QString translatedAddress = "");
-  //PoiPolygonAddress(const int number, const QString streetName, const QString streetPrefix = "",
-                    //const QString streetSuffix = "");
 
   bool operator==(const PoiPolygonAddress& address) const;
 

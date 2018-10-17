@@ -75,11 +75,11 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("name", "blah");
-    HOOT_STR_EQUALS("blah", PoiPolygonNameScoreExtractor::getElementName(node1));
+    HOOT_STR_EQUALS("blah", PoiPolygonNameScoreExtractor::getElementName(*node1));
 
     NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set("blah", "blah");
-    HOOT_STR_EQUALS("", PoiPolygonNameScoreExtractor::getElementName(node2));
+    HOOT_STR_EQUALS("", PoiPolygonNameScoreExtractor::getElementName(*node2));
   }
 
   void translateTest()
@@ -88,7 +88,7 @@ public:
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
-    settings.set("poi.polygon.translate.names.to.english", "true");
+    settings.set("poi.polygon.name.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::DictionaryTranslator");
     uut.setConfiguration(settings);
     boost::shared_ptr<DictionaryTranslator> dictTranslator =
@@ -104,7 +104,7 @@ public:
     way1->getTags().set("name", "KFC");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    settings.set("poi.polygon.translate.names.to.english", "false");
+    settings.set("poi.polygon.name.trasnalte.to.english", "false");
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.203, uut.extract(*map, node1, way1), 0.001);
   }

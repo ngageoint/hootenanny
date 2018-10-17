@@ -2543,6 +2543,28 @@ If true, POI/Polygon conflation will compare addresses as one of the criteria fo
 If the data being conflated is known to have poor address data, disabling this option may speed up
 conflation runtime performance.
 
+=== poi.polygon.address.translate.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
+address before normalizing it (note that address normalization may involve some form of language
+translation even when this setting is ).  This can have significant impact on the runtime performance of conflation when enabled
+and should only be enabled if the source data is known to have non-English addresses.  The
+configuration option, 'language.translation.translator', controls which translator is used.
+
+=== poi.polygon.address.use.default.language.translation.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI/Polygon conflation will use only libpostal for translating languages in addresses,
+which occurs during address normalization.  If false, and poi.polygon.translate.addresses.to.english
+is enabled, POI/Polygon conflation will use additional to English language translation before
+address normalization.  Disable this only if libpostal's language translation is not adequate for
+your language translation needs.
+
 === poi.polygon.auto.merge.many.poi.to.one.poly.matches
 
 * Data Type: bool
@@ -2655,6 +2677,16 @@ The minimum similarity the name scores of two features can have and be considere
 match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
 present (null).
 
+=== poi.polygon.name.translate.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any name tag.  This can have
+significant impact on the runtime performance of conflation when enabled and should only be enabled
+if the source data is known to have non-English names.  The configuration option,
+'language.translation.translator', controls which translator is used.
+
 === poi.polygon.poi.ignore.tags.file
 
 * Data Type: string
@@ -2745,36 +2777,6 @@ The threshold at which a review is called a review for PoiPolygon. See
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
-=== poi.polygon.translate.addresses.to.english
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
-address.  This can have significant impact on the runtime performance of conflation when enabled
-and should only be enabled if the source data is known to have non-English addresses.  The
-configuration option, 'language.translation.translator', controls which translator is used.
-
-=== poi.polygon.translate.names.to.english
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, Hootenanny will attempt to translate to English the value of any name tag.  This can have
-significant impact on the runtime performance of conflation when enabled and should only be enabled
-if the source data is known to have non-English names.  The configuration option,
-'language.translation.translator', controls which translator is used.
-
-=== poi.polygon.translate.types.to.english
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
-schema.  This can have significant impact on the runtime performance of conflation when enabled
-and should only be enabled if the source data is known to have non-English type values.  The
-configuration option, 'language.translation.translator', controls which translator is used.
-
 === poi.polygon.type.score.threshold
 
 * Data Type: double
@@ -2790,6 +2792,16 @@ match, with 0.0 being the least similar and 1.0 being the most similar.
 
 Flat file containing OSM types and lists of possible texts features having such a type might
 contain.
+
+=== poi.polygon.type.translate.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
+schema.  This can have significant impact on the runtime performance of conflation when enabled
+and should only be enabled if the source data is known to have non-English type values.  The
+configuration option, 'language.translation.translator', controls which translator is used.
 
 === poi.review.threshold
 

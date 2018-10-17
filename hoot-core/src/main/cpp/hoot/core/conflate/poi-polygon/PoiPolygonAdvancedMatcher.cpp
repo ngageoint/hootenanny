@@ -84,7 +84,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
     {
       try
       {
-        const QString poiNeighborName = PoiPolygonNameScoreExtractor::getElementName(poiNeighbor);
+        const QString poiNeighborName = PoiPolygonNameScoreExtractor::getElementName(*poiNeighbor);
         if (!poiNeighborName.isEmpty() && poiNeighborName == poiAddress)
         {
           boost::shared_ptr<Geometry> poiNeighborGeom =

@@ -36,6 +36,7 @@
 
 // Qt
 #include <QMultiMap>
+#include <QSet>
 
 namespace hoot
 {
@@ -44,8 +45,13 @@ class PoiPolygonAddress;
 
 /**
  * Calculates the address similarity score of two features involved in POI/Polygon conflation.
- * Only exact string matches yield a positive score.  This normalizes and translates addresses, but
- * doesn't handle abbreviations.
+ * Only exact string matches yield a positive score.  Address normalization and translation is
+ * handled by libpostal, which uses ML trained on OSM data.  There is an option to do language
+ * translation with a custom translator.
+ *
+ * Since libpostal has built in translation and it has been tuned for addresses, we use that by
+ * default.  Hooks to ToEnglishTranslator are left in for now in the case that it provides value by
+ * supporting some language that libpostal doesn't.
  *
  * Some effort was spent in validating addresses with libaddressinput
  * (https://github.com/googlei18n/libaddressinput).  It was found that yields no utility since the
@@ -99,7 +105,7 @@ public:
   long getAddressesProcessed() const { return _addressesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
-  void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }
+  void setAdditionalTagKeys(QSet<QString> keys) { _additionalTagKeys = keys; }
 
   /**
    * TODO
@@ -123,35 +129,31 @@ private:
 
   friend class PoiPolygonAddressScoreExtractorTest;
 
-  //when enabled, will attempt to translate address tags to English
+  //when enabled, will attempt to translate address tags to English before address normalization
+  //(translation also automatically occurs during normalization)
   bool _translateTagValuesToEnglish;
   // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
   static boost::shared_ptr<ToEnglishTranslator> _translator;
   mutable long _addressesProcessed;
   mutable bool _matchAttemptMade;
-  QStringList _additionalTagKeys;
+  QSet<QString> _additionalTagKeys;
 
   static QMultiMap<QString, QString> _addressTypeToTagKeys;
 
   void _collectAddressesFromElement(const Element& element,
                                     QList<PoiPolygonAddress>& addresses) const;
-  void _collectAddressesFromElement2(const Element& element,
-                                     QList<PoiPolygonAddress>& addresses) const;
   void _collectAddressesFromWayNodes(const Way& way, QList<PoiPolygonAddress>& addresses,
                                      const OsmMap& map) const;
   void _collectAddressesFromRelationMembers(const Relation& relation,
                                             QList<PoiPolygonAddress>& addresses,
                                             const OsmMap& map) const;
-  void _parseAddressesAsRange(const QString houseNum, const QString street,
-                              QList<PoiPolygonAddress>& addresses) const;
+  QSet<QString> _parseAddressAsRange(const QString houseNum, const QString street) const;
   bool _isRangeAddress(const QString houseNum) const;
-  bool _hasFullAddress(const Tags& tags, QString& fullAddress) const;
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
-  void _parseAddressesInAltFormat(const Tags& tags, QList<PoiPolygonAddress>& addresses) const;
-  //this also translates to English
-  void _normalizeAddress(QString& address) const;
-  bool _isValidAddressStr(QString& address) const;
+  QString _parseAddressInAltFormat(const QString address) const;
+  void _normalizeAddress(QString& address) const; //this also translates to English
+  bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street) const;
 
   void _translateAddressToEnglish(QString& address) const;
 

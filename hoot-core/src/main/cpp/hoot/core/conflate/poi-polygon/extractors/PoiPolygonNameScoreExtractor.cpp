@@ -51,9 +51,11 @@ _matchAttemptMade(false)
 void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setLevDist(config.getLevenshteinDistanceAlpha());
-  setTranslateTagValuesToEnglish(config.getPoiPolygonTranslateNamesToEnglish());
+
+  setTranslateTagValuesToEnglish(config.getPoiPolygonNameTranslateToEnglish());
   if (_translateTagValuesToEnglish && !_translator)
   {
     _translator.reset(
@@ -111,16 +113,16 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
   return nameScore;
 }
 
-QString PoiPolygonNameScoreExtractor::getElementName(ConstElementPtr element)
+QString PoiPolygonNameScoreExtractor::getElementName(const Element& element)
 {
-  QString name = element->getTags().get("name").toLower().trimmed();
+  QString name = element.getTags().get("name").toLower().trimmed();
   if (!name.isEmpty())
   {
     return name;
   }
   else
   {
-    QStringList names = element->getTags().getNames();
+    QStringList names = element.getTags().getNames();
     for (int i = 0; i < names.size(); i++)
     {
       name = names.at(i).toLower().trimmed();

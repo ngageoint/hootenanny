@@ -29,7 +29,6 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 
 // libpostal
 #include <libpostal/libpostal.h>
@@ -41,6 +40,7 @@ LibPostalInitPtr LibPostalInit::_theInstance;
 
 LibPostalInit::LibPostalInit()
 {
+  // This init takes several seconds normally.
   if (!libpostal_setup_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
       !libpostal_setup_parser_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
       !libpostal_setup_language_classifier_datadir(

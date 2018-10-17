@@ -68,7 +68,7 @@ public:
    * @return the element's name if it has one
    * @todo move this somewhere else
    */
-  static QString getElementName(ConstElementPtr element);
+  static QString getElementName(const Element& element);
 
   virtual void setConfiguration(const Settings& conf);
 

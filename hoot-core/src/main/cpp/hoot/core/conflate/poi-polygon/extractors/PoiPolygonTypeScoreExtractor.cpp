@@ -62,9 +62,11 @@ _translateTagValuesToEnglish(false)
 void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
   setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
-  _translateTagValuesToEnglish = config.getPoiPolygonTranslateTypesToEnglish();
+
+  _translateTagValuesToEnglish = config.getPoiPolygonTypeTranslateToEnglish();
   if (_translateTagValuesToEnglish && !_translator)
   {
     _translator.reset(
@@ -389,7 +391,8 @@ bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
     return false;
   }
   return
-    _typeHasName("amenity=school", PoiPolygonNameScoreExtractor::getElementName(element).toLower());
+    _typeHasName(
+      "amenity=school", PoiPolygonNameScoreExtractor::getElementName(*element).toLower());
 }
 
 bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
@@ -397,8 +400,8 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
 {
   if (isSpecificSchool(element1) && isSpecificSchool(element2))
   {
-    const QString name1 = PoiPolygonNameScoreExtractor::getElementName(element1).toLower();
-    const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element2).toLower();
+    const QString name1 = PoiPolygonNameScoreExtractor::getElementName(*element1).toLower();
+    const QString name2 = PoiPolygonNameScoreExtractor::getElementName(*element2).toLower();
     if (_haveMatchingTypeNames("amenity=school", name1, name2))
     {
       return true;
