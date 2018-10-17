@@ -11,8 +11,7 @@ _Conflation_:
 
 1. Fancy word for merge
 
-Hootenanny is an open source conflation tool developed to facilitate automated and semi-automated conflation of critical Foundation 
-GEOINT features in the topographic domain.  In short, it merges multiple maps of geodata into a single seamless map.
+Hootenanny is an open source conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain.  In short, it merges multiple maps into a single seamless map.
 
 # Project Goals
 * Automatically combine geospatial features for decision making
@@ -31,9 +30,12 @@ GEOINT features in the topographic domain.  In short, it merges multiple maps of
 # Feature Summary
 In addition to conflating maps, Hootenanny can also:
 * Add missing type tags to feature data
-* Align map data
+* Align two maps together
+* Calculate the extent of map data
 * Clean map data
 * Compare maps
+* Compute bounding tiles based on node density
+* Concatenate maps together
 * Convert maps between different geodata formats (see Supported Data Formats section below)
 * Derive changesets between maps and apply them to external OSM data stores
 * Explore tag data
