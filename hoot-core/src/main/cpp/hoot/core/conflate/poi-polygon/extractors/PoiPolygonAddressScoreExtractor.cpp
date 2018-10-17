@@ -100,6 +100,48 @@ QString PoiPolygonAddressScoreExtractor::getAddressTagValue(const Tags& tags,
   return "";
 }
 
+void PoiPolygonAddressScoreExtractor::_readAddressTagKeys(const QString configFile)
+{
+  const QStringList addressTagKeyEntries = FileUtils::readFileToList(configFile);
+  for (int i = 0; i < addressTagKeyEntries.size(); i++)
+  {
+    const QString addressTagKeyEntry = addressTagKeyEntries.at(i);
+    const QStringList addressTagKeyEntryParts = addressTagKeyEntry.split("=");
+    if (addressTagKeyEntryParts.size() != 2)
+    {
+      throw HootException("Invalid address tag key entry: " + addressTagKeyEntry);
+    }
+    const QString addressType = addressTagKeyEntryParts[0].trimmed().toLower();
+    if (!addressType.isEmpty())
+    {
+      const QStringList addressTags = addressTagKeyEntryParts[1].split(",");
+      for (int j = 0; j < addressTags.size(); j++)
+      {
+        const QString addressTag = addressTags.at(j).trimmed().toLower();
+        if (!addressTag.isEmpty())
+        {
+          _addressTypeToTagKeys.insert(addressType, addressTag);
+        }
+      }
+    }
+  }
+}
+
+QString PoiPolygonAddressScoreExtractor::getAddressTagValue(const Tags& tags,
+                                                            const QString addressTagType)
+{
+  const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
+  for (int i = 0; i < tagKeys.size(); i++)
+  {
+    const QString tagKey = tagKeys.at(i);
+    if (tags.contains(tagKey))
+    {
+      return tags.get(tagKey);
+    }
+  }
+  return "";
+}
+
 void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
