@@ -102,28 +102,29 @@ public:
   virtual QString getDescription() const
   { return "Scores address similarity for POI/Polygon conflation"; }
 
-  long getAddressesProcessed() const { return _addressesProcessed; }
-  bool getMatchAttemptMade() const { return _matchAttemptMade; }
-
-  void setAdditionalTagKeys(QSet<QString> keys) { _additionalTagKeys = keys; }
-
   /**
-   * TODO
+   * Returns an address tag value for an address type
    *
-   * @param tags
-   * @param addressTagType
-   * @return
+   * @param tags tags to search for address value
+   * @param addressTagType address tag type as defined in the address tag keys config file
+   * @return an address value
    */
   static QString getAddressTagValue(const Tags& tags, const QString addressTagType);
 
   /**
-   * TODO
+   * Determines whether two addresses match despite subletter differences
+   *
+   * So, allow "34 elm street" to match "34a elm street".
    *
    * @param polyAddress
    * @param poiAddress
    * @return
    */
-  static bool addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress);
+  static bool addressesMatchesOnSubLetter(const QString address1, const QString address2);
+
+  long getAddressesProcessed() const { return _addressesProcessed; }
+  bool getMatchAttemptMade() const { return _matchAttemptMade; }
+  void setAdditionalTagKeys(QSet<QString> keys) { _additionalTagKeys = keys; }
 
 private:
 
@@ -137,8 +138,9 @@ private:
   mutable long _addressesProcessed;
   mutable bool _matchAttemptMade;
   QSet<QString> _additionalTagKeys;
-
   static QMultiMap<QString, QString> _addressTypeToTagKeys;
+
+  static void _readAddressTagKeys(const QString configFile);
 
   void _collectAddressesFromElement(const Element& element,
                                     QList<PoiPolygonAddress>& addresses) const;
@@ -147,18 +149,25 @@ private:
   void _collectAddressesFromRelationMembers(const Relation& relation,
                                             QList<PoiPolygonAddress>& addresses,
                                             const OsmMap& map) const;
+
+  //normalize also translates to English
+  QSet<QString> _normalizeAddress(const QString address) const;
+
+  void _translateAddressToEnglish(QString& address) const;
+
   QSet<QString> _parseAddressAsRange(const QString houseNum, const QString street) const;
   bool _isRangeAddress(const QString houseNum) const;
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
   QString _parseAddressInAltFormat(const QString address) const;
-  //normalize also translates to English
-  QSet<QString> _normalizeAddress(const QString address) const;
+
   bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street) const;
+  QString _parseFullAddress(const QString address, QString& houseNum, QString& street) const;
+  QSet<QString> _parseAddressFromComponents(const Tags& tags, QString& houseNum,
+                                            QString& street) const;
+  QString _parseAddressFromAltTags(const Tags& tags, QString& houseNum, QString& street) const;
 
-  void _translateAddressToEnglish(QString& address) const;
-
-  static void _readAddressTagKeys(const QString configFile);
+  static QString _getSubLetterCleanedAddress(const QString address);
 };
 
 }
