@@ -2524,13 +2524,15 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.address.country.code
+=== poi.polygon.address.additional.tag.keys
 
-* Data Type: string
-* Default Value: `US`
+* Data Type: list
+* Default Value:
+** ``
 
-ISO 3166-2 country code used when comparing addresses. TODO: is this absolutely needed, and if so,
-can it be combined with the phone number region code?
+By default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the
+addressTagKeys file).  You can expand the tag keys searched by populating this list. From the
+command line, separate list items with a semicolon and surround the entire list in double quotes.
 
 === poi.polygon.address.match.enabled
 

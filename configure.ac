@@ -114,10 +114,6 @@ AC_CHECK_LIB([icutu], [main], [], [echo "Error! icutu (libicu) is required."; ex
 AC_CHECK_LIB([icuuc], [main], [], [echo "Error! icuuc (libicu) is required."; exit -1])
 #AC_CHECK_LIB([pthread], [main], [], [echo "Error! pthread is required."; exit -1])
 
-# libaddressinput
-m4_include([m4/libaddressinput.m4])
-LIBADDRESSINPUT_INIT()
-
 # libpostal
 m4_include([m4/libpostal.m4])
 LIBPOSTAL_INIT()

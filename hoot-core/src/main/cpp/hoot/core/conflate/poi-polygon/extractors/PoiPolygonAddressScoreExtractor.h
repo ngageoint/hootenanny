@@ -37,13 +37,6 @@
 // Qt
 #include <QMultiMap>
 
-// libaddressinput
-#include <libaddressinput/address_normalizer.h>
-#include <libaddressinput/address_validator.h>
-#include <libaddressinput/address_data.h>
-
-using namespace i18n::addressinput;
-
 namespace hoot
 {
 
@@ -51,10 +44,14 @@ class PoiPolygonAddress;
 
 /**
  * Calculates the address similarity score of two features involved in POI/Polygon conflation.
- * Only exact string matches yield a positive score.  This can translate addresses, but doesn't
- * handle abbreviations.
+ * Only exact string matches yield a positive score.  This normalizes and translates addresses, but
+ * doesn't handle abbreviations.
  *
- * @todo libaddressinput and libpostal may be able to clean up logic in this class quite a bit
+ * Some effort was spent in validating addresses with libaddressinput
+ * (https://github.com/googlei18n/libaddressinput).  It was found that yields no utility since the
+ * features we are comparing are geographically close, don't need higher level address info
+ * (state, city, etc.), and we basically assume feature address are valid anyway...we're just trying
+ * to match them to each other.
  */
 class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -102,6 +99,8 @@ public:
   long getAddressesProcessed() const { return _addressesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
+  void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }
+
   /**
    * TODO
    *
@@ -130,14 +129,9 @@ private:
   static boost::shared_ptr<ToEnglishTranslator> _translator;
   mutable long _addressesProcessed;
   mutable bool _matchAttemptMade;
+  QStringList _additionalTagKeys;
 
   static QMultiMap<QString, QString> _addressTypeToTagKeys;
-
-  static boost::shared_ptr<AddressNormalizer> _addressNormalizer;
-  static boost::shared_ptr<AddressValidator> _addressValidator;
-  static std::unique_ptr<const AddressValidator::Callback> _addressValidatedCallback;
-
-  static void _initLibAddressInput(const Settings& conf);
 
   void _collectAddressesFromElement(const Element& element,
                                     QList<PoiPolygonAddress>& addresses) const;
@@ -155,14 +149,13 @@ private:
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
   void _parseAddressesInAltFormat(const Tags& tags, QList<PoiPolygonAddress>& addresses) const;
+  //this also translates to English
+  void _normalizeAddress(QString& address) const;
+  bool _isValidAddressStr(QString& address) const;
 
   void _translateAddressToEnglish(QString& address) const;
 
   static void _readAddressTagKeys(const QString configFile);
-
-  void _onAddressRulesLoaded(bool success, const std::string& region_code, int num_rules);
-  void _onAddressValidated(bool success, const AddressData& address,
-                           const FieldProblemMap& problems);
 };
 
 }
