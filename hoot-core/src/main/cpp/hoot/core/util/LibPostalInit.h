@@ -38,7 +38,7 @@ class LibPostalInit;
 typedef boost::shared_ptr<LibPostalInit> LibPostalInitPtr;
 
 /**
- * TODO
+ * Singleton access for initializing/destroying libpostal
  */
 class LibPostalInit
 {

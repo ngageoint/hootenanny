@@ -34,7 +34,10 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Encapsulates an address from the perspective of POI/Polygon conflation
+ *
+ * @todo Not sure keeping both the to English translated address string and the untranslated
+ * address string still makes sense
  */
 class PoiPolygonAddress
 {

@@ -370,6 +370,7 @@ bool PoiPolygonAddressScoreExtractor::_isParseableAddressFromComponents(const Ta
                                                                         QString& houseNum,
                                                                         QString& street) const
 {
+  // we only require a valid street address...no other higher order parts, like city, state, etc.
   houseNum = getAddressTagValue(tags, "number");
   street = getAddressTagValue(tags, "street");
   if (!houseNum.isEmpty() && !street.isEmpty())
@@ -398,6 +399,7 @@ QSet<QString> PoiPolygonAddressScoreExtractor::_normalizeAddress(const QString a
   char** expansions =
     libpostal_expand_address(address.toUtf8().data(), libpostal_get_default_options(),
     &num_expansions);
+  // add all the normalizations libpostal finds as possible addresses
   for (size_t i = 0; i < num_expansions; i++)
   {
     const QString normalizedAddress = QString::fromUtf8(expansions[i]);
@@ -412,6 +414,7 @@ QSet<QString> PoiPolygonAddressScoreExtractor::_normalizeAddress(const QString a
 bool PoiPolygonAddressScoreExtractor::_isValidAddressStr(QString& address, QString& houseNum,
                                                          QString& street) const
 {
+  // use libpostal to break down the address string
   libpostal_address_parser_response_t* parsed =
     libpostal_parse_address(
       address.toUtf8().data(), libpostal_get_address_parser_default_options());
@@ -449,9 +452,10 @@ bool PoiPolygonAddressScoreExtractor::_isValidAddressStr(QString& address, QStri
 QString PoiPolygonAddressScoreExtractor::_parseFullAddress(const QString address,
                                                            QString& houseNum, QString& street) const
 {
+  QString fullAddress = address;
+
   //try to parse in an alternate format that libpostal doesn't handle first before using the val
   //as is
-  QString fullAddress = address;
   QString parsedAddress = _parseAddressInAltFormat(fullAddress);
   if (parsedAddress.isEmpty())
   {
@@ -469,6 +473,7 @@ QString PoiPolygonAddressScoreExtractor::_parseFullAddress(const QString address
     msg += " full address: " + fullAddress;
     LOG_TRACE(msg);
   }
+
   return parsedAddress;
 }
 
@@ -478,7 +483,7 @@ QSet<QString> PoiPolygonAddressScoreExtractor::_parseAddressFromComponents(const
 {
   QSet<QString> parsedAddresses;
 
-  // try to parse from individual tags
+  //TODO: parse block/corner/intersection addresses
   if (_isParseableAddressFromComponents(tags, houseNum, street))
   {
     if (_isRangeAddress(houseNum))
@@ -503,8 +508,6 @@ QString PoiPolygonAddressScoreExtractor::_parseAddressFromAltTags(const Tags& ta
 {
   QString parsedAddress;
 
-  //look for the address in alt fields
-
   //let's always look in the name field; arguably, we could look in all of them instead of just
   //one...
   QSet<QString> additionalTagKeys = _additionalTagKeys;
@@ -527,23 +530,22 @@ QString PoiPolygonAddressScoreExtractor::_parseAddressFromAltTags(const Tags& ta
   return parsedAddress;
 }
 
-void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element& element,
-                                                          QList<PoiPolygonAddress>& addresses) const
+QSet<QString> PoiPolygonAddressScoreExtractor::_parseAddresses(const Element& element,
+                                                               QString& houseNum,
+                                                               QString& street) const
 {
-  //TODO: parse block/corner/intersection addresses
-
   QSet<QString> parsedAddresses;
-  QString houseNum;
-  QString street;
 
-  // look for full address tag
+  // look for a full address tag first
   QString fullAddress = getAddressTagValue(element.getTags(), "full_address");
   if (fullAddress.isEmpty())
   {
+    // if we don't have that, let's try to get it from parts
     parsedAddresses = _parseAddressFromComponents(element.getTags(), houseNum, street);
   }
   else
   {
+    // if we do have a full address tag, let's parse and validate it
     const QString parsedAddress = _parseFullAddress(fullAddress, houseNum, street);
     if (!parsedAddress.isEmpty())
     {
@@ -553,6 +555,8 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
 
   if (parsedAddresses.isEmpty())
   {
+    // we didn't find anything in the standard address tags, so let's try names and any user
+    // defined tags to search
     const QString parsedAddress = _parseAddressFromAltTags(element.getTags(), houseNum, street);
     if (!parsedAddress.isEmpty())
     {
@@ -560,13 +564,23 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
     }
   }
 
-  // add the parsed addresses to a collection in which they will be compared to each other
+  return parsedAddresses;
+}
+
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element& element,
+                                                          QList<PoiPolygonAddress>& addresses) const
+{
+  QString houseNum;
+  QString street;
+  const QSet<QString> parsedAddresses = _parseAddresses(element, houseNum, street);
+
+  // add the parsed addresses to a collection in which they will later be compared to each other
   for (QSet<QString>::const_iterator parsedAddressItr = parsedAddresses.begin();
        parsedAddressItr != parsedAddresses.end(); ++parsedAddressItr)
   {
     const QString parsedAddress = *parsedAddressItr;
 
-    //optional additional lang pre-translation
+    //optional additional lang pre-normalization translation
     assert(!street.isEmpty());
     QString preTranslatedAddress = parsedAddress;
     if (_translateTagValuesToEnglish)
@@ -577,9 +591,9 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
       preTranslatedAddress = houseNum + " " + preTranslatedStreet;
     }
 
-    //normalize and translate
-    QSet<QString> normalizedAddresses = _normalizeAddress(parsedAddress);
-    //TODO: not sure about this yet
+    //normalize and translate the address strings, so we end up comparing apples to apples
+    const QSet<QString> normalizedAddresses = _normalizeAddress(parsedAddress);
+    //TODO: not sure about disabling this yet
 //    if (preTranslatedAddress != parsedAddress)
 //    {
 //      normalizedAddresses = normalizedAddresses.unite(_normalizeAddress(preTranslatedAddress));
@@ -590,9 +604,8 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
     {
       const QString normalizedAddress = *normalizedAddressItr;
       // If the additional translation wasn't enabled, both inputs to PoiPolygonAddress will be
-      // identical.
+      // identical. TODO: does that make sense?
       PoiPolygonAddress address(normalizedAddress, preTranslatedAddress);
-      //PoiPolygonAddress address(normalizedAddress, normalizedAddress);
       LOG_TRACE("Adding address: " << address);
       addresses.append(address);
     }

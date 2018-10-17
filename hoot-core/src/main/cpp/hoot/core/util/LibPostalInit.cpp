@@ -40,7 +40,7 @@ LibPostalInitPtr LibPostalInit::_theInstance;
 
 LibPostalInit::LibPostalInit()
 {
-  // This init takes several seconds normally.
+  // This init takes ~5 seconds normally.
   if (!libpostal_setup_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
       !libpostal_setup_parser_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
       !libpostal_setup_language_classifier_datadir(

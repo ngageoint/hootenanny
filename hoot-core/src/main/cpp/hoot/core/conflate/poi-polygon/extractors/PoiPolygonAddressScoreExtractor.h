@@ -155,6 +155,7 @@ private:
 
   void _translateAddressToEnglish(QString& address) const;
 
+  QSet<QString> _parseAddresses(const Element& element, QString& houseNum, QString& street) const;
   QSet<QString> _parseAddressAsRange(const QString houseNum, const QString street) const;
   bool _isRangeAddress(const QString houseNum) const;
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,

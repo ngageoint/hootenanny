@@ -66,7 +66,6 @@ public:
    *
    * @param element the element to examine
    * @return the element's name if it has one
-   * @todo move this somewhere else
    */
   static QString getElementName(const Element& element);
 
