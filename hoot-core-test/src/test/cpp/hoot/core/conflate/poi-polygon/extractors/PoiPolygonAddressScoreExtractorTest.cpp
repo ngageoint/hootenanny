@@ -54,8 +54,10 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(runWayTest);
   CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST(translateTagValueTest);
-  //CPPUNIT_TEST(addressParseTest);
-  //CPPUNIT_TEST(addressNormalizationTest);
+  CPPUNIT_TEST(additionalTagsTest);
+  CPPUNIT_TEST(invalidFullAddressTest);
+  CPPUNIT_TEST(invalidComponentAddressTest);
+  CPPUNIT_TEST(addressNormalizationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -316,6 +318,141 @@ public:
     settings.set("poi.polygon.address.translate.to.english", "false");
     uut.setConfiguration(settings);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+  }
+
+  void additionalTagsTest()
+  {
+    PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
+    QSet<QString> additionalTags;
+    additionalTags.insert("note");
+    additionalTags.insert("description");
+    uut.setAdditionalTagKeys(additionalTags);
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node1);
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    map->addWay(way1);
+
+    node1->getTags().set("note", "123 Main Street");
+    way1->getTags().set("note", "123 main St");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    node1->getTags().clear();
+    node1->getTags().set("description", "123 Main Street");
+    way1->getTags().clear();
+    way1->getTags().set("description", "123 main St");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    node1->getTags().clear();
+    node1->getTags().set("blah", "123 Main Street");
+    way1->getTags().clear();
+    way1->getTags().set("blah", "123 main St");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+
+    // name gets parsed by default
+    node1->getTags().clear();
+    node1->getTags().set("name", "123 Main Street");
+    way1->getTags().clear();
+    way1->getTags().set("name", "123 main St");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+  }
+
+  void invalidFullAddressTest()
+  {
+    PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node1);
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    map->addWay(way1);
+
+    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    way1->getTags().set(FULL_ADDRESS_TAG_NAME, "this isn't an address");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+
+    node1->getTags().clear();
+    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "this isn't an address");
+    way1->getTags().clear();
+    way1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+
+    node1->getTags().clear();
+    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 this isn't an address");
+    way1->getTags().clear();
+    way1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+
+    node1->getTags().clear();
+    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "this isn't an address street");
+    way1->getTags().clear();
+    way1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+  }
+
+  void invalidComponentAddressTest()
+  {
+    PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node1);
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    map->addWay(way1);
+
+    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+
+    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
+    way1->getTags().set(STREET_TAG_NAME, "this isn't an address");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+
+    way1->getTags().clear();
+    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "blah");
+    way1->getTags().set(STREET_TAG_NAME, "main street");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+
+    way1->getTags().clear();
+    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "blah");
+    way1->getTags().set(STREET_TAG_NAME, "street");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+
+    way1->getTags().clear();
+    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "");
+    way1->getTags().set(STREET_TAG_NAME, "main street");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+
+    way1->getTags().clear();
+    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
+    way1->getTags().set(STREET_TAG_NAME, "");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+  }
+
+  void addressNormalizationTest()
+  {
+    PoiPolygonAddressScoreExtractor uut;
+    uut.setConfiguration(conf());
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node1);
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    map->addWay(way1);
+
+    node1->getTags().set(
+      FULL_ADDRESS_TAG_NAME, QString::fromUtf8("Quatre-vingt-douze Ave des Champs-Élysées"));
+    way1->getTags().set(FULL_ADDRESS_TAG_NAME, QString::fromUtf8("92 avenue des champs-elysees"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    node1->getTags().clear();
+    node1->getTags().set(
+      FULL_ADDRESS_TAG_NAME, QString::fromUtf8("Quatre-vingt-douze Ave des Champs-Élysées"));
+    way1->getTags().clear();
+    way1->getTags().set(FULL_ADDRESS_TAG_NAME, QString::fromUtf8("92 avenue des champs elysees"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
   }
 };
 

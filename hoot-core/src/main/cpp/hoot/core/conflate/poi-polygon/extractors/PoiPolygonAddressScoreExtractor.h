@@ -152,7 +152,8 @@ private:
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
   QString _parseAddressInAltFormat(const QString address) const;
-  void _normalizeAddress(QString& address) const; //this also translates to English
+  //normalize also translates to English
+  QSet<QString> _normalizeAddress(const QString address) const;
   bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street) const;
 
   void _translateAddressToEnglish(QString& address) const;
