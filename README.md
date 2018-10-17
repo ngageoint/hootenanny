@@ -33,14 +33,13 @@ In addition to conflating maps, Hootenanny can also:
 * Add missing type tags to feature data
 * Align map data
 * Clean map data
-* Combine polygon data
 * Compare maps
-* Convert maps between different geodata formats
+* Convert maps between different geodata formats (see Supported Data Formats section below)
 * Derive changesets between maps and apply them to external OSM data stores
 * Explore tag data
 * Gather statistics on map features
 * Identify road intersections
-* Perturb map data
+* Perturb map data for testing purposes
 * Plot node feature density
 * Sort map data
 * Translate feature tags using user defined schemas
@@ -76,18 +75,15 @@ If you have any support questions please create an issue in the [Hootenanny GitH
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience. 
 
 # Command Line User Interface
-A command line user interface for conflation capabilities is available for users who wish to visualize data outside of the web user 
-interface (e.g. when using JOSM).  It exposes additional functionality that is not available from the web user interface.  For a list of 
-Hootenanny commands, type 'hoot' from the command line.  The Hootenanny User Documentation contains detailed information about the 
-commands.  More detail on using the CLI is provided [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
+A command line user interface for conflation capabilities is available for users who do not require the Hootenanny web user interface or want to work with a different user interface (e.g. JOSM).  It exposes additional functionality that is not available from the web user interface.  For a list of Hootenanny commands, type 'hoot' from the command line.  The Hootenanny User Documentation contains detailed information about the commands.  More detail on using the CLI is provided [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
 
 # Supported Data Formats
 **Hootenanny can import from:**
 * ESRI File Geodatabase (.gdb)
-* GeoJSON (.geojson) (M)
+* GeoJSON (.geojson) **(M)**
 * geonames.org (.geonames)
 * Hootenanny API Database (hootapidb://)
-* JSON file (.json; similar to Overpass JSON) (M)
+* JSON file (.json; similar to Overpass JSON) **(M)**
 * OpenStreetMap XML (.osm)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
@@ -97,13 +93,13 @@ commands.  More detail on using the CLI is provided [here](https://github.com/ng
 
 **Hootenanny can export to:** 
 * ESRI File Geodatabase (.gdb)
-* GeoJSON (.geojson) (M)
+* GeoJSON (.geojson) **(M)**
 * Hootenanny API Database (hootapidb://)
-* JSON file (.json; similar to Overpass JSON) (M)
-* OpenStreetMap XML file (.osm) (*)
+* JSON file (.json; similar to Overpass JSON) **(M)**
+* OpenStreetMap XML file (.osm) **(*)**
 * OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
-* Shapefile (.shp) (M)
+* Shapefile (.shp) **(M)**
 * Additional OGR supported formats
 
 **Hootenanny can export changesets to:** 
@@ -112,8 +108,8 @@ commands.  More detail on using the CLI is provided [here](https://github.com/ng
 * OpenStreetMap XML changeset file (.osc)
 
 Notes:
-* (M) = format requires reading entire dataset into memory during processing
-* (*) = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
+* **(M)** = format requires reading entire dataset into memory during processing
+* **(*)** = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
 # Tag Schemas
