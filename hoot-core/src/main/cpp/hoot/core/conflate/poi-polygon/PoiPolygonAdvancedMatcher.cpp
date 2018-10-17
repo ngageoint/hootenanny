@@ -56,18 +56,6 @@ _poiNeighborIds(poiNeighborIds),
 _distance(distance),
 _badGeomCount(0)
 {
-  //TODO: can probably get rid of this list and make the logic work against all landuse
-  _genericLandUseTagVals.append("cemetery");
-  _genericLandUseTagVals.append("commercial");
-  _genericLandUseTagVals.append("construction");
-  _genericLandUseTagVals.append("farm");
-  _genericLandUseTagVals.append("forest");
-  _genericLandUseTagVals.append("grass");
-  _genericLandUseTagVals.append("industrial");
-  _genericLandUseTagVals.append("meadow");
-  _genericLandUseTagVals.append("residential");
-  _genericLandUseTagVals.append("retail");
-  _genericLandUseTagVals.append("village_green");
 }
 
 bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
@@ -82,8 +70,6 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
     throw geos::util::TopologyException();
   }
 
-  //const QString poiAddress =
-    //poi->getTags().get(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
   const QString poiAddress =
     PoiPolygonAddressScoreExtractor::getAddressTagValue(poi->getTags(), "full_address");
   if (poiAddress.isEmpty())

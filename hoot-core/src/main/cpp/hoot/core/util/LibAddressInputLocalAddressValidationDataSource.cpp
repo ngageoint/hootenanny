@@ -1,6 +1,10 @@
 
-#include "LocalAddressValidationDataSource.h"
+#include "LibAddressInputLocalAddressValidationDataSource.h"
 
+// hoot
+#include <hoot/core/util/ConfigOptions.h>
+
+// std
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
@@ -135,23 +139,24 @@ const std::map<std::string, std::string>& GetData(const std::string& src_path)
   return kData;
 }
 
-LocalAddressValidationDataSource::LocalAddressValidationDataSource(bool aggregate,
-                                                                   const std::string& src_path) :
+LibAddressInputLocalAddressValidationDataSource::LibAddressInputLocalAddressValidationDataSource(
+  bool aggregate, const std::string& src_path) :
 aggregate_(aggregate),
 src_path_(src_path)
 {
 }
 
-LocalAddressValidationDataSource::LocalAddressValidationDataSource(bool aggregate) :
+LibAddressInputLocalAddressValidationDataSource::LibAddressInputLocalAddressValidationDataSource(
+  bool aggregate) :
 aggregate_(aggregate),
 src_path_(kDataFileName)
 {
 }
 
-LocalAddressValidationDataSource::~LocalAddressValidationDataSource() = default;
+LibAddressInputLocalAddressValidationDataSource::~LibAddressInputLocalAddressValidationDataSource() = default;
 
-void LocalAddressValidationDataSource::Get(const std::string& key,
-                                           const Callback& data_ready) const
+void LibAddressInputLocalAddressValidationDataSource::Get(const std::string& key,
+                                                          const Callback& data_ready) const
 {
   std::string prefixed_key(1, aggregate_ ? kAggregatePrefix : kNormalPrefix);
   prefixed_key += key;
@@ -172,6 +177,12 @@ void LocalAddressValidationDataSource::Get(const std::string& key,
     data = new std::string("{}");
   }
   data_ready(success, key, data);
+}
+
+void LibAddressInputLocalAddressValidationDataSource::setConfiguration(const Settings& conf)
+{
+  ConfigOptions config = ConfigOptions(conf);
+  src_path_ = config.getLibaddressInputAddressRulesFile().toStdString();
 }
 
 }

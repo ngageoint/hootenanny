@@ -34,12 +34,24 @@
 #include <hoot/core/algorithms/string/MostEnglishName.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/LibPostalInit.h>
+#include <hoot/core/algorithms/ExactStringDistance.h>
+#include <hoot/core/util/LibAddressInputLocalAddressValidationDataSource.h>
 #include "PoiPolygonAddress.h"
+
+// libaddressinput
+#include <libaddressinput/address_formatter.h>
+#include <libaddressinput/preload_supplier.h>
+#include <libaddressinput/null_storage.h>
+#include <libaddressinput/callback.h>
+#include <libaddressinput/address_field.h>
+#include <libaddressinput/address_problem.h>
+//#include <libaddressinput/address_input_helper.h>
 
 // libpostal
 #include <libpostal/libpostal.h>
 
 using namespace std;
+using namespace i18n::addressinput;
 
 namespace hoot
 {
@@ -50,12 +62,61 @@ QMultiMap<QString, QString> PoiPolygonAddressScoreExtractor::_addressTypeToTagKe
 
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonAddressScoreExtractor::_translator;
 
+boost::shared_ptr<AddressNormalizer> PoiPolygonAddressScoreExtractor::_addressNormalizer;
+boost::shared_ptr<AddressValidator> PoiPolygonAddressScoreExtractor::_addressValidator;
+std::unique_ptr<const AddressValidator::Callback> PoiPolygonAddressScoreExtractor::_addressValidatedCallback;
+
 PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor() :
 _translateTagValuesToEnglish(false),
 _addressesProcessed(0),
 _matchAttemptMade(false)
 {
   LibPostalInit::getInstance();
+}
+
+void PoiPolygonAddressScoreExtractor::_initLibAddressInput(const Settings& conf)
+{
+  LibAddressInputLocalAddressValidationDataSource* rules =
+    new LibAddressInputLocalAddressValidationDataSource(true);
+  rules->setConfiguration(conf);
+  //supplier takes ownership of the source and storage
+  boost::shared_ptr<PreloadSupplier> supplier(new PreloadSupplier(rules, new NullStorage()));
+  std::unique_ptr<const PreloadSupplier::Callback> loaded(
+    BuildCallback(this, &PoiPolygonAddressScoreExtractor::_onAddressRulesLoaded));
+  ConfigOptions config = ConfigOptions(conf);
+  supplier->LoadRules(config.getPoiPolygonAddressCountryCode(), *loaded);
+
+  //these do *not* take ownership of supplier
+  _addressNormalizer.reset(new AddressNormalizer(supplier.get()));
+  _addressValidator.reset(new AddressValidator(supplier.get()));
+  _addressValidatedCallback.reset(
+    BuildCallback(this, &PoiPolygonAddressScoreExtractor::_onAddressValidated));
+}
+
+void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions config = ConfigOptions(conf);
+
+  _translateTagValuesToEnglish = config.getPoiPolygonTranslateAddressesToEnglish();
+  if (_translateTagValuesToEnglish && !_translator)
+  {
+    _translator.reset(
+      Factory::getInstance().constructObject<ToEnglishTranslator>(
+        config.getLanguageTranslationTranslator()));
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
+    _translator->setId(QString::fromStdString(className()));
+  }
+
+  if (_addressTypeToTagKeys.isEmpty())
+  {
+    _readAddressTagKeys(config.getAddressTagKeysFile());
+  }
+
+  if (!_addressNormalizer || !_addressValidator)
+  {
+    _initLibAddressInput(conf);
+  }
 }
 
 void PoiPolygonAddressScoreExtractor::_readAddressTagKeys(const QString configFile)
@@ -98,27 +159,6 @@ QString PoiPolygonAddressScoreExtractor::getAddressTagValue(const Tags& tags,
     }
   }
   return "";
-}
-
-void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
-{
-  ConfigOptions config = ConfigOptions(conf);
-
-  _translateTagValuesToEnglish = config.getPoiPolygonTranslateAddressesToEnglish();
-  if (_translateTagValuesToEnglish && !_translator)
-  {
-    _translator.reset(
-      Factory::getInstance().constructObject<ToEnglishTranslator>(
-        config.getLanguageTranslationTranslator()));
-    _translator->setConfiguration(conf);
-    _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
-    _translator->setId(QString::fromStdString(className()));
-  }
-
-  if (_addressTypeToTagKeys.isEmpty())
-  {
-    _readAddressTagKeys(config.getAddressTagKeysFile());
-  }
 }
 
 double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& poi,
@@ -364,6 +404,184 @@ void PoiPolygonAddressScoreExtractor::_translateAddressToEnglish(QString& addres
   }
 }
 
+bool PoiPolygonAddressScoreExtractor::_hasFullAddress(const Tags& tags, QString& fullAddress) const
+{
+  fullAddress = getAddressTagValue(tags, "full_address");
+  if (!fullAddress.isEmpty())
+  {
+    return true;
+  }
+  return false;
+}
+
+bool PoiPolygonAddressScoreExtractor::_isParseableAddressFromComponents(const Tags& tags,
+                                                                        QString& houseNum,
+                                                                        QString& street)
+{
+  houseNum = getAddressTagValue(tags, "number");
+  LOG_VART(houseNum);
+  street = getAddressTagValue(tags, "street");
+  LOG_VART(street);
+  if (!houseNum.isEmpty() && !street.isEmpty())
+  {
+    QString translatedStreet = street;
+    if (_translateTagValuesToEnglish)
+    {
+      _translateAddressToEnglish(translatedStreet);
+    }
+    street = street.toLower();
+    houseNum = houseNum.replace(QRegExp("[a-z]+"), "");
+    LOG_VART(houseNum);
+    LOG_VART(street);
+    return true;
+  }
+  return false;
+}
+
+bool PoiPolygonAddressScoreExtractor::_isRangeAddress(const QString houseNum) const
+{
+  return houseNum.contains("-");
+}
+
+void PoiPolygonAddressScoreExtractor::_onAddressRulesLoaded(bool success,
+                                                            const std::string& /*region_code*/,
+                                                            int /*num_rules*/)
+{
+  if (!success)
+  {
+    throw HootException("Unable to load libaddressinput rules.");
+  }
+}
+
+void PoiPolygonAddressScoreExtractor::_onAddressValidated(bool success,
+                                                          const AddressData& /*address*/,
+                                                          const FieldProblemMap& /*problems*/)
+{
+  LOG_VART(success);
+}
+
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement2(const Element& element,
+                                                          QList<PoiPolygonAddress>& addresses) const
+{
+    /*
+     *  AddressData address1;
+    address1.region_code = "US";
+    address1.administrative_area = "Virginia";
+    normalizer.Normalize(&address1);
+
+    AddressData address;
+    address.region_code = "US";
+    address.administrative_area = "Virginia";
+    address.locality = "Centreville";
+    address.postal_code = "20121";
+    address.address_line.push_back("13937 Winding Ridge Lane");
+
+    FieldProblemMap filter;
+    FieldProblemMap problems;
+    validator.Validate(
+      address,
+      false,
+      false,
+      &filter,
+      &problems,
+      *validated);
+
+      libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
+    libpostal_address_parser_response_t* parsed =
+      libpostal_parse_address(
+        (char*)"781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", options);
+    for (size_t i = 0; i < parsed->num_components; i++)
+    {
+      LOG_TRACE("Label: " << parsed->labels[i] << ", Component: " << parsed->components[i]);
+    }
+    libpostal_address_parser_response_destroy(parsed);
+
+    size_t num_expansions;
+    libpostal_normalize_options_t options = libpostal_get_default_options();
+    char** expansions =
+      libpostal_expand_address(
+        (char*)"Quatre-vingt-douze Ave des Champs-Élysées", options, &num_expansions);
+    CPPUNIT_ASSERT_EQUAL(2, (int)num_expansions);
+    for (size_t i = 0; i < num_expansions; i++)
+    {
+      LOG_TRACE("Expansion: " << expansions[i]);
+    }
+    libpostal_expansion_array_destroy(expansions, num_expansions);
+     */
+
+  //figure out range after testing (later: block/corner/intersection)
+
+  //if has full address field
+    //use the value as the address
+  //else if f element has enough partial address fields
+    //manually construct an address string to use as the address ??
+  //else try name and other configurable fields to find an address (whole string only; no searching)
+  //normalize the address with libpostal
+  //parse the address with libpostal - OPTIONAL?
+  //validate the address with libaddressinput - OPTIONAL?
+
+  QString address;
+  if (!_hasFullAddress(element.getTags(), address))
+  {
+    QString houseNum;
+    QString street;
+    if (_isParseableAddressFromComponents(element.getTags(), houseNum, street))
+    {
+      if (_isRangeAddress(houseNum))
+      {
+        _parseAddressesAsRange(houseNum, street, addresses);
+      }
+      else
+      {
+        address = houseNum + " " + street;
+      }
+    }
+  }
+
+  if (!address.isEmpty())
+  {
+    //normalize and translate the address
+    size_t num_expansions;
+    libpostal_normalize_options_t options = libpostal_get_default_options();
+    char** expansions =
+      libpostal_expand_address(address.toUtf8().data(), options, &num_expansions);
+    //just taking the first one for now
+    if (num_expansions > 0)
+    {
+      fullAddress = expansions[0];
+    }
+    libpostal_expansion_array_destroy(expansions, num_expansions);
+
+    //parse the address
+    libpostal_address_parser_response_t* parsed =
+    libpostal_parse_address(
+      fullAddress.toUtf8().data(), libpostal_get_address_parser_default_options());
+      /*
+       * Label: house_number, Component: 781
+        Label: road, Component: franklin ave
+        Label: suburb, Component: crown heights
+        Label: city_district, Component: brooklyn
+        Label: city, Component: nyc
+        Label: state, Component: ny
+        Label: postcode, Component: 11216
+        Label: country, Component: usa
+       */
+    for (size_t i = 0; i < parsed->num_components; i++)
+    {
+      AddressData address;
+      const QString label = parsed->labels[i];
+      const QString component = parsed->components[i];
+      if (label == "house_number")
+      {
+
+      }
+    }
+    libpostal_address_parser_response_destroy(parsed);
+
+
+  }
+}
+
 void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element& element,
                                                           QList<PoiPolygonAddress>& addresses) const
 {
@@ -452,6 +670,68 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(const
       _collectAddressesFromWayNodes(*wayMember, addresses, map);
     }
   }
+}
+
+bool PoiPolygonAddressScoreExtractor::addressesMatchesOnSubLetter(const QString polyAddress,
+                                                                  const QString poiAddress)
+{
+  LOG_VART(polyAddress);
+  LOG_VART(poiAddress);
+
+  /* we're also going to allow sub letter differences be matches; ex "34 elm street" matches
+   * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses by
+   * accident, and we'd like to at least end up with a review in that situation.
+   */
+
+  //a lot in here may be able to be cleaned up with better use of regex's
+  const QStringList polyAddressParts = polyAddress.split(QRegExp("\\s"));
+  if (polyAddressParts.length() == 0)
+  {
+    return false;
+  }
+  const QStringList poiAddressParts = poiAddress.split(QRegExp("\\s"));
+  if (poiAddressParts.length() == 0)
+  {
+    return false;
+  }
+
+  QString polyAddressTemp = polyAddressParts[0];
+  const QString polyHouseNumStr = polyAddressTemp.replace(QRegExp("[a-z]+"), "");
+  LOG_VART(polyHouseNumStr);
+  bool polyHouseNumOk = false;
+  /*const int polyHouseNum = */polyHouseNumStr.toInt(&polyHouseNumOk);
+
+  QString poiAddressTemp = poiAddressParts[0];
+  const QString poiHouseNumStr = poiAddressTemp.replace(QRegExp("[a-z]+"), "");
+  bool poiHouseNumOk = false;
+  /*const int poiHouseNum = */polyHouseNumStr.toInt(&poiHouseNumOk);
+
+  //don't think this check is needed since the addresses have already been parsed...but will
+  //leave it here for now
+  if (polyHouseNumOk && poiHouseNumOk)
+  {
+    QString subletterCleanedPolyAddress = polyHouseNumStr;
+    for (int k = 1; k < polyAddressParts.length(); k++)
+    {
+      subletterCleanedPolyAddress += " " + polyAddressParts[k];
+    }
+    LOG_VART(subletterCleanedPolyAddress);
+
+    QString subletterCleanedPoiAddress = poiHouseNumStr;
+    for (int k = 1; k < poiAddressParts.length(); k++)
+    {
+      subletterCleanedPoiAddress += " " + poiAddressParts[k];
+    }
+    LOG_VART(subletterCleanedPoiAddress);
+
+    if (ExactStringDistance().compare(
+          subletterCleanedPolyAddress, subletterCleanedPoiAddress) == 1.0)
+    {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 }

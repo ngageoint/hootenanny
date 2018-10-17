@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/language/DictionaryTranslator.h>
-#include <hoot/core/conflate/poi-polygon/extractors/LocalAddressValidationDataSource.h>
+#include <hoot/core/util/LibAddressInputLocalAddressValidationDataSource.h>
 #include <hoot/core/util/LibPostalInit.h>
 
 // CPP Unit
@@ -377,9 +377,10 @@ public:
 
   void addressNormalizationTest()
   {
-    PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
+    PreloadSupplier supplier(
+      new LibAddressInputLocalAddressValidationDataSource(true), new NullStorage());
     const std::unique_ptr<const PreloadSupplier::Callback> loaded(
-      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressRulesLoaded));
     const AddressNormalizer normalizer(&supplier);
     supplier.LoadRules("US", *loaded);
 
@@ -406,9 +407,10 @@ public:
 
   void addressValidation1Test()
   {
-    PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
+    PreloadSupplier supplier(
+      new LibAddressInputLocalAddressValidationDataSource(true), new NullStorage());
     const std::unique_ptr<const PreloadSupplier::Callback> loaded(
-      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressRulesLoaded));
     const std::unique_ptr<const AddressValidator::Callback> validated(
       BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressValidated1));
     const AddressValidator validator(&supplier);
@@ -436,7 +438,7 @@ public:
   {
     PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
     const std::unique_ptr<const PreloadSupplier::Callback> loaded(
-      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressRulesLoaded));
     const std::unique_ptr<const AddressValidator::Callback> validated(
       BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressValidated2));
     const AddressValidator validator(&supplier);
@@ -464,7 +466,7 @@ public:
   {
     PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
     const std::unique_ptr<const PreloadSupplier::Callback> loaded(
-      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressRulesLoaded));
     const std::unique_ptr<const AddressValidator::Callback> validated(
       BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressValidated3));
     const AddressValidator validator(&supplier);
@@ -489,7 +491,7 @@ public:
   {
     PreloadSupplier supplier(new LocalAddressValidationDataSource(true), new NullStorage());
     const std::unique_ptr<const PreloadSupplier::Callback> loaded(
-      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressDataLoaded));
+      BuildCallback(this, &PoiPolygonAddressScoreExtractorTest::_onAddressRulesLoaded));
     const AddressInputHelper missingFieldPopulator(&supplier);
     supplier.LoadRules("US", *loaded);
 
@@ -567,7 +569,7 @@ public:
 
 private:
 
-  void _onAddressDataLoaded(bool success, const std::string& region_code, int /*num_rules*/)
+  void _onAddressRulesLoaded(bool success, const std::string& region_code, int /*num_rules*/)
   {
     CPPUNIT_ASSERT(success);
     HOOT_STR_EQUALS("US", region_code);

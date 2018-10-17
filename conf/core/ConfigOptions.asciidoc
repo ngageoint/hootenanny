@@ -274,7 +274,7 @@ See also:
 * Data Type: bool
 * Default Value: `false`
 
-If true, any buildings in the secondary layer will be automatically reviewed against potentially
+f true, any buildings in the secondary layer will be automatically reviewed against potentially
 matching features in the reference layer if they are marked with a more recent date than that of the
 reference feature.
 
@@ -1496,6 +1496,13 @@ The default alpha value of 1.15 was determined through experimentation with a Ja
 using MeanWordSetDistance as the container classes. See Redmine ticket #2349 for some experiment
 details.  The "best" value varies depending on the input data as well as how the data is being used.
 
+=== libaddressinput.address.rules.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/countryinfo.txt`
+
+JSON rules file used by libaddressinput for address normalization/validation.
+
 === libpostal.data.dir
 
 * Data Type: string
@@ -2516,6 +2523,14 @@ The threshold at which a miss is called a miss for POIs.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.address.country.code
+
+* Data Type: string
+* Default Value: `US`
+
+ISO 3166-2 country code used when comparing addresses. TODO: is this absolutely needed, and if so,
+can it be combined with the phone number region code?
 
 === poi.polygon.address.match.enabled
 

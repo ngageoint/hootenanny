@@ -43,6 +43,8 @@ public:
 
   PoiPolygonAddress();
   PoiPolygonAddress(const QString address, const QString translatedAddress = "");
+  //PoiPolygonAddress(const int number, const QString streetName, const QString streetPrefix = "",
+                    //const QString streetSuffix = "");
 
   bool operator==(const PoiPolygonAddress& address) const;
 
@@ -54,8 +56,6 @@ private:
   QString _address;
   QString _translatedAddress;
   ExactStringDistance _addrComp;
-
-  bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress) const;
 };
 
 }

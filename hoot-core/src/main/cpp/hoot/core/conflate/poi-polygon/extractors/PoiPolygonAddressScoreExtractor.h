@@ -37,6 +37,13 @@
 // Qt
 #include <QMultiMap>
 
+// libaddressinput
+#include <libaddressinput/address_normalizer.h>
+#include <libaddressinput/address_validator.h>
+#include <libaddressinput/address_data.h>
+
+using namespace i18n::addressinput;
+
 namespace hoot
 {
 
@@ -95,7 +102,23 @@ public:
   long getAddressesProcessed() const { return _addressesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
+  /**
+   * TODO
+   *
+   * @param tags
+   * @param addressTagType
+   * @return
+   */
   static QString getAddressTagValue(const Tags& tags, const QString addressTagType);
+
+  /**
+   * TODO
+   *
+   * @param polyAddress
+   * @param poiAddress
+   * @return
+   */
+  static bool addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress);
 
 private:
 
@@ -110,8 +133,16 @@ private:
 
   static QMultiMap<QString, QString> _addressTypeToTagKeys;
 
+  static boost::shared_ptr<AddressNormalizer> _addressNormalizer;
+  static boost::shared_ptr<AddressValidator> _addressValidator;
+  static std::unique_ptr<const AddressValidator::Callback> _addressValidatedCallback;
+
+  static void _initLibAddressInput(const Settings& conf);
+
   void _collectAddressesFromElement(const Element& element,
                                     QList<PoiPolygonAddress>& addresses) const;
+  void _collectAddressesFromElement2(const Element& element,
+                                     QList<PoiPolygonAddress>& addresses) const;
   void _collectAddressesFromWayNodes(const Way& way, QList<PoiPolygonAddress>& addresses,
                                      const OsmMap& map) const;
   void _collectAddressesFromRelationMembers(const Relation& relation,
@@ -119,11 +150,19 @@ private:
                                             const OsmMap& map) const;
   void _parseAddressesAsRange(const QString houseNum, const QString street,
                               QList<PoiPolygonAddress>& addresses) const;
+  bool _isRangeAddress(const QString houseNum) const;
+  bool _hasFullAddress(const Tags& tags, QString& fullAddress) const;
+  bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
+                                         QString& street) const;
   void _parseAddressesInAltFormat(const Tags& tags, QList<PoiPolygonAddress>& addresses) const;
 
   void _translateAddressToEnglish(QString& address) const;
 
   static void _readAddressTagKeys(const QString configFile);
+
+  void _onAddressRulesLoaded(bool success, const std::string& region_code, int num_rules);
+  void _onAddressValidated(bool success, const AddressData& address,
+                           const FieldProblemMap& problems);
 };
 
 }
