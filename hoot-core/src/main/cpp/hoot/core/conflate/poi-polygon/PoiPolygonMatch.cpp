@@ -610,6 +610,9 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
 
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  //LOG_VART(poi);
+  //LOG_VART(poly);
+
   unsigned int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
