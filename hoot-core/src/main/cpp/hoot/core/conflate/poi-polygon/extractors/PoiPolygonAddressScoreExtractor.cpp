@@ -140,6 +140,7 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
 
   QList<PoiPolygonAddress> polyAddresses;
   //see if the poly has any address
+  LOG_TRACE("Collecting addresses from polygon...");
   _collectAddressesFromElement(*poly, polyAddresses);
   if (polyAddresses.size() == 0)
   {
@@ -147,15 +148,16 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
     if (poly->getElementType() == ElementType::Way)
     {
       ConstWayPtr wayPoly = boost::dynamic_pointer_cast<const Way>(poly);
-      _collectAddressesFromWayNodes(*wayPoly, polyAddresses, map);
+      _collectAddressesFromWayNodes(*wayPoly, polyAddresses, map, poi->getElementId());
     }
     //if still no luck, try to find the address from a poly way node that is a relation member
     else if (poly->getElementType() == ElementType::Relation)
     {
       ConstRelationPtr relationPoly = boost::dynamic_pointer_cast<const Relation>(poly);
-      _collectAddressesFromRelationMembers(*relationPoly, polyAddresses, map);
+      _collectAddressesFromRelationMembers(*relationPoly, polyAddresses, map, poi->getElementId());
     }
   }
+  LOG_VART(polyAddresses.size());
   if (polyAddresses.size() == 0)
   {
     LOG_TRACE("No poly addresses.");
@@ -163,8 +165,10 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
   }
 
   //see if the poi has an address
+  LOG_TRACE("Collecting addresses from POI...");
   QList<PoiPolygonAddress> poiAddresses;
   _collectAddressesFromElement(*poi, poiAddresses);
+  LOG_VART(poiAddresses.size());
   if (poiAddresses.size() == 0)
   {
     LOG_TRACE("No POI addresses.");
@@ -232,47 +236,6 @@ QSet<QString> PoiPolygonAddressScoreExtractor::_parseAddressAsRange(const QStrin
     }
   }
   return parsedAddresses;
-}
-
-QString PoiPolygonAddressScoreExtractor::_parseAddressInAltFormat(const QString address) const
-{
-  //street name and house num reversed: ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN
-  //parse through the tokens until you come to a number; assume that is the house number and
-  //everything before it is the street name
-
-  //This may be able to be cleaned up some with regex's.
-
-  if (!address.isEmpty())
-  {
-    LOG_TRACE("Attempting to parse address in alt format: " << address << "...");
-    QString parsedAddress = address.toLower();
-    const QStringList addressParts = parsedAddress.split(QRegExp("\\s"));
-    if (addressParts.length() >= 2)
-    {
-      QString addressTagValAltFormat = "";
-      bool ok = false;
-      int ctr = 1;
-      while (ctr < addressParts.length() && !ok)
-      {
-        addressParts[ctr].toInt(&ok);
-        ctr++;
-      }
-      if (ok && ctr > 1)
-      {
-        const QString houseNum = addressParts[ctr - 1];
-        addressTagValAltFormat += houseNum;
-        for (int i = 0; i < (ctr - 1); i++)
-        {
-          addressTagValAltFormat += " ";
-          addressTagValAltFormat += addressParts[i];
-        }
-        parsedAddress = addressTagValAltFormat.trimmed();
-        LOG_TRACE("Parsed address in alt format: " << parsedAddress);
-        return parsedAddress;
-      }
-    }
-  }
-  return "";
 }
 
 bool PoiPolygonAddressScoreExtractor::nodeHasAddress(const Node& node)
@@ -377,7 +340,7 @@ bool PoiPolygonAddressScoreExtractor::_isParseableAddressFromComponents(const Ta
   {
     houseNum = houseNum.replace(QRegExp("[a-z]+"), "");
     street = street.toLower();
-    LOG_TRACE("Parsed address from components: " << houseNum << ", " << street << ".");
+    LOG_TRACE("Found address from components: " << houseNum << ", " << street << ".");
     return true;
   }
   return false;
@@ -454,25 +417,19 @@ QString PoiPolygonAddressScoreExtractor::_parseFullAddress(const QString address
 {
   QString fullAddress = address;
 
-  //try to parse in an alternate format that libpostal doesn't handle first before using the val
-  //as is
-  QString parsedAddress = _parseAddressInAltFormat(fullAddress);
-  if (parsedAddress.isEmpty())
+  QString msg = "Found";
+  // validate the full address
+  if (_isValidAddressStr(fullAddress, houseNum, street))
   {
-    QString msg = "Found";
-    // validate the full address
-    if (_isValidAddressStr(fullAddress, houseNum, street))
-    {
-      parsedAddress = fullAddress;
-      msg += " valid";
-    }
-    else
-    {
-      msg += " invalid";
-    }
-    msg += " full address: " + fullAddress;
-    LOG_TRACE(msg);
+    parsedAddress = fullAddress;
+    msg += " valid";
   }
+  else
+  {
+    msg += " invalid";
+  }
+  msg += " full address: " + fullAddress;
+  LOG_TRACE(msg);
 
   return parsedAddress;
 }
@@ -505,7 +462,7 @@ QSet<QString> PoiPolygonAddressScoreExtractor::_parseAddressFromComponents(const
         parsedAddress += " " + streetPrefix;
       }
       parsedAddresses.insert(parsedAddress);
-      LOG_TRACE("Found address parts from component tags: " << parsedAddress << ".");
+      LOG_TRACE("Parsed address parts from component tags: " << parsedAddress << ".");
     }
   }
 
@@ -583,72 +540,89 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
   QString houseNum;
   QString street;
   const QSet<QString> parsedAddresses = _parseAddresses(element, houseNum, street);
+  LOG_VART(parsedAddresses);
 
   // add the parsed addresses to a collection in which they will later be compared to each other
   for (QSet<QString>::const_iterator parsedAddressItr = parsedAddresses.begin();
        parsedAddressItr != parsedAddresses.end(); ++parsedAddressItr)
   {
-    const QString parsedAddress = *parsedAddressItr;
+    QString parsedAddress = *parsedAddressItr;
+    LOG_VART(parsedAddress);
 
     //optional additional lang pre-normalization translation
-    assert(!street.isEmpty());
-    QString preTranslatedAddress = parsedAddress;
     if (_translateTagValuesToEnglish)
     {
       //only translating the street portion of the address string...the number isn't translatable
+       assert(!street.isEmpty());
       QString preTranslatedStreet = street;
       _translateAddressToEnglish(preTranslatedStreet);
-      preTranslatedAddress = houseNum + " " + preTranslatedStreet;
+      parsedAddress = houseNum + " " + preTranslatedStreet;
     }
+    LOG_VART(parsedAddress);
 
     //normalize and translate the address strings, so we end up comparing apples to apples
     const QSet<QString> normalizedAddresses = _normalizeAddress(parsedAddress);
-    //TODO: not sure about disabling this yet
-//    if (preTranslatedAddress != parsedAddress)
-//    {
-//      normalizedAddresses = normalizedAddresses.unite(_normalizeAddress(preTranslatedAddress));
-//    }
+    LOG_VART(normalizedAddresses);
 
     for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
          normalizedAddressItr != normalizedAddresses.end(); ++normalizedAddressItr)
     {
       const QString normalizedAddress = *normalizedAddressItr;
+      LOG_VART(normalizedAddress);
       // If the additional translation wasn't enabled, both inputs to PoiPolygonAddress will be
       // identical. TODO: does that make sense?
-      PoiPolygonAddress address(normalizedAddress, preTranslatedAddress);
-      LOG_TRACE("Adding address: " << address);
-      addresses.append(address);
+      PoiPolygonAddress address(normalizedAddress);
+      if (!addresses.contains(address))
+      {
+        LOG_TRACE("Adding address: " << address);
+        addresses.append(address);
+      }
     }
   }
 }
 
 void PoiPolygonAddressScoreExtractor::_collectAddressesFromWayNodes(const Way& way,
                                                                 QList<PoiPolygonAddress>& addresses,
-                                                                    const OsmMap& map) const
+                                                                    const OsmMap& map,
+                                                                    const ElementId& poiId) const
 {
+  LOG_TRACE("Collecting addresses from way nodes...");
   const vector<long> wayNodeIds = way.getNodeIds();
   for (size_t i = 0; i < wayNodeIds.size(); i++)
   {
-    _collectAddressesFromElement(*(map.getElement(ElementType::Node, wayNodeIds.at(i))), addresses);
+    ConstElementPtr wayNode = map.getElement(ElementType::Node, wayNodeIds.at(i));
+    // see explanation for this check in _collectAddressesFromRelationMembers
+    if (poiId.isNull() || wayNode->getElementId() != poiId)
+    {
+      _collectAddressesFromElement(*wayNode, addresses);
+    }
   }
 }
 
 void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(const Relation& relation,
                                                                 QList<PoiPolygonAddress>& addresses,
-                                                                           const OsmMap& map) const
+                                                                           const OsmMap& map,
+                                                                       const ElementId& poiId) const
 {
+  LOG_TRACE("Collecting addresses from relation members...");
   const vector<RelationData::Entry> relationMembers = relation.getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
     ConstElementPtr member = map.getElement(relationMembers[i].getElementId());
-    if (member->getElementType() == ElementType::Node)
+    // If the poly contains the poi being compared to as a way node or relation member, then the
+    // POI's address will be added to both the poly and poi group of addresses and yield a fake
+    // address match
+    if (poiId.isNull() || member->getElementId() != poiId)
     {
-      _collectAddressesFromElement(*member, addresses);
-    }
-    else if (member->getElementType() == ElementType::Way)
-    {
-      ConstWayPtr wayMember = boost::dynamic_pointer_cast<const Way>(member);
-      _collectAddressesFromWayNodes(*wayMember, addresses, map);
+      if (member->getElementType() == ElementType::Node)
+      {
+        _collectAddressesFromElement(*member, addresses);
+      }
+      else if (member->getElementType() == ElementType::Way)
+      {
+        ConstWayPtr wayMember = boost::dynamic_pointer_cast<const Way>(member);
+        _collectAddressesFromWayNodes(*wayMember, addresses, map, poiId);
+      }
     }
   }
 }

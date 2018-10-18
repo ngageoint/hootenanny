@@ -30,19 +30,16 @@
 #include <hoot/core/util/Log.h>
 #include "PoiPolygonAddressScoreExtractor.h"
 
-
 namespace hoot
 {
 
 PoiPolygonAddress::PoiPolygonAddress() :
-_address(""),
-_translatedAddress("")
+_address("")
 {
 }
 
-PoiPolygonAddress::PoiPolygonAddress(const QString address, const QString translatedAddress) :
-_address(address),
-_translatedAddress(translatedAddress)
+PoiPolygonAddress::PoiPolygonAddress(const QString address) :
+_address(address)
 {
 }
 
@@ -50,38 +47,12 @@ bool PoiPolygonAddress::operator==(const PoiPolygonAddress& address) const
 {
   LOG_VART(_address);
   LOG_VART(address._address);
-  LOG_VART(_translatedAddress);
-  LOG_VART(address._translatedAddress);
 
-  bool areEqual = false;
-  if (!_address.isEmpty() &&
+  return
+    !_address.isEmpty() &&
       (_addrComp.compare(_address, address._address) == 1.0 ||
-       _addrComp.compare(_address, address._translatedAddress) == 1.0))
-  {
-    areEqual = true;
-  }
-  else if (!_translatedAddress.isEmpty() &&
-           (_addrComp.compare(_translatedAddress, address._translatedAddress) == 1.0 ||
-            _addrComp.compare(_translatedAddress, address._address) == 1.0))
-  {
-    areEqual = true;
-  }
-  else if (PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
-             _address, address._address) ||
-           PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
-             _address, address._translatedAddress))
-  {
-    areEqual = true;
-  }
-  else if (PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
-             _translatedAddress, address._translatedAddress) ||
-           PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
-             _translatedAddress, address._address))
-  {
-    areEqual = true;
-  }
-  LOG_VART(areEqual);
-  return areEqual;
+       PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
+         _address, address._address));
 }
 
 }

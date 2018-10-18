@@ -35,9 +35,6 @@ namespace hoot
 
 /**
  * Encapsulates an address from the perspective of POI/Polygon conflation
- *
- * @todo Not sure keeping both the to English translated address string and the untranslated
- * address string still makes sense
  */
 class PoiPolygonAddress
 {
@@ -45,17 +42,15 @@ class PoiPolygonAddress
 public:
 
   PoiPolygonAddress();
-  PoiPolygonAddress(const QString address, const QString translatedAddress = "");
+  PoiPolygonAddress(const QString address);
 
   bool operator==(const PoiPolygonAddress& address) const;
 
-  QString toString() const
-  { return "Address: " + _address + ", translated address: " + _translatedAddress; }
+  QString toString() const { return "Address: " + _address; }
 
 private:
 
   QString _address;
-  QString _translatedAddress;
   ExactStringDistance _addrComp;
 };
 

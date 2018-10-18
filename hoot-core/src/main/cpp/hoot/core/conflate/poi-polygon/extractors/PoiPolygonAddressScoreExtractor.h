@@ -145,10 +145,11 @@ private:
   void _collectAddressesFromElement(const Element& element,
                                     QList<PoiPolygonAddress>& addresses) const;
   void _collectAddressesFromWayNodes(const Way& way, QList<PoiPolygonAddress>& addresses,
-                                     const OsmMap& map) const;
+                                     const OsmMap& map, const ElementId& poiId = ElementId()) const;
   void _collectAddressesFromRelationMembers(const Relation& relation,
                                             QList<PoiPolygonAddress>& addresses,
-                                            const OsmMap& map) const;
+                                            const OsmMap& map,
+                                            const ElementId& poiId = ElementId()) const;
 
   //normalize also translates to English
   QSet<QString> _normalizeAddress(const QString address) const;
@@ -160,8 +161,6 @@ private:
   bool _isRangeAddress(const QString houseNum) const;
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
-  QString _parseAddressInAltFormat(const QString address) const;
-
   bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street) const;
   QString _parseFullAddress(const QString address, QString& houseNum, QString& street) const;
   QSet<QString> _parseAddressFromComponents(const Tags& tags, QString& houseNum,

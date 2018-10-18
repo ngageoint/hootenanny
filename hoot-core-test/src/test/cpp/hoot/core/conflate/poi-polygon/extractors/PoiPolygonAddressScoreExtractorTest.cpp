@@ -182,6 +182,15 @@ public:
       FULL_ADDRESS_TAG_NAME_2, "first street 567");
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
+
+    NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node3->getTags().set(
+      FULL_ADDRESS_TAG_NAME_2, "ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN");
+    map->addNode(node3);
+    WayPtr way3(new Way(Status::Unknown2, -1, 15.0));
+    way3->getTags().set(FULL_ADDRESS_TAG_NAME_2, "40 ZENTRALLÄNDSTRASSE");
+    map->addWay(way3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node3, way3), 0.0);
   }
 
   void runSubLetterTest()
