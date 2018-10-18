@@ -80,7 +80,10 @@ If you have any support questions please create an issue in the [Hootenanny GitH
 Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  See the User Documentation for more details.
 
 # Command Line
-Command line access for conflation capabilities is available for users who do not require the Hootenanny web user interface (e.g. work within JOSM).  The command line exposes some additional functionality that is not available from iD Editor.  See the "Usage" section below for examples and the User Documentation.
+Command line access is available and exposes additional functionalities not available from the web user interface.  See the "Usage" section below for examples, as well as the User Documentation.
+
+# Bindings
+Hootenanny has nodejs bindings available which expose core conflation capabilities.
 
 # Supported Data Formats
 **Hootenanny can import from:**
