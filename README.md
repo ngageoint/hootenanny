@@ -326,7 +326,17 @@ found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
     18 (0.015) : pennsylvania
     ...
     
-    # Metadata
+    # Language Translation
+    
+    # Translate "name" and "alt_name" tags from German or Spanish to English
+    hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de;es" \
+      -D language.translation.to.translate.tag.keys="name;alt_name" input.osm output.osm
+      
+    # Translate "name" tags to English and let the source language be detected
+    hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="detect" \ 
+      -D language.translation.to.translate.tag.keys="name" input.osm output.osm
+      
+    # Application Metadata
     
     # Lists all configuration option names
     hoot info --config-options
@@ -358,16 +368,6 @@ found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
     # List all available tag mergers
     hoot info --tag-mergers
     
-    # Language Translation
-    
-    # Translate "name" and "alt_name" tags from German or Spanish to English
-    hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de;es" \
-      -D language.translation.to.translate.tag.keys="name;alt_name" input.osm output.osm
-      
-    # Translate "name" tags to English and let the source language be detected
-    hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="detect" \ 
-      -D language.translation.to.translate.tag.keys="name" input.osm output.osm
-      
     # List all available language detectors
     hoot languages --detectors
     
