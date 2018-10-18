@@ -653,8 +653,8 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(const
   }
 }
 
-bool PoiPolygonAddressScoreExtractor::addressesMatchesOnSubLetter(const QString address1,
-                                                                  const QString address2)
+bool PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(const QString address1,
+                                                                          const QString address2)
 {
   LOG_VART(address1);
   LOG_VART(address2);

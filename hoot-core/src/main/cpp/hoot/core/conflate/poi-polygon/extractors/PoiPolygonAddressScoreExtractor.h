@@ -116,11 +116,11 @@ public:
    *
    * So, allow "34 elm street" to match "34a elm street".
    *
-   * @param polyAddress
-   * @param poiAddress
-   * @return
+   * @param address1 first address to compare
+   * @param address2 second address to compare
+   * @return true if the address match despite subletter differences; false otherwise
    */
-  static bool addressesMatchesOnSubLetter(const QString address1, const QString address2);
+  static bool addressesMatchDespiteSubletterDiffs(const QString address1, const QString address2);
 
   long getAddressesProcessed() const { return _addressesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }

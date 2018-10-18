@@ -66,15 +66,16 @@ bool PoiPolygonAddress::operator==(const PoiPolygonAddress& address) const
   {
     areEqual = true;
   }
-  else if (PoiPolygonAddressScoreExtractor::addressesMatchesOnSubLetter(_address, address._address) ||
-           PoiPolygonAddressScoreExtractor::addressesMatchesOnSubLetter(
+  else if (PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
+             _address, address._address) ||
+           PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
              _address, address._translatedAddress))
   {
     areEqual = true;
   }
-  else if (PoiPolygonAddressScoreExtractor::addressesMatchesOnSubLetter(
+  else if (PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
              _translatedAddress, address._translatedAddress) ||
-           PoiPolygonAddressScoreExtractor::addressesMatchesOnSubLetter(
+           PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
              _translatedAddress, address._address))
   {
     areEqual = true;
