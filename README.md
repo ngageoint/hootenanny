@@ -134,6 +134,9 @@ found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
 
     # Display available commands
     hoot
+    
+    # Display help for the conflate command
+    hoot help conflate
 
     # Conflate two maps
     hoot conflate input1.osm input2.osm output.osm
