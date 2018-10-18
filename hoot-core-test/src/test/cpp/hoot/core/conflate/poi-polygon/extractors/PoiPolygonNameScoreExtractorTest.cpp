@@ -104,7 +104,7 @@ public:
     way1->getTags().set("name", "KFC");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    settings.set("poi.polygon.name.trasnalte.to.english", "false");
+    settings.set("poi.polygon.name.translate.to.english", "false");
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.203, uut.extract(*map, node1, way1), 0.001);
   }
