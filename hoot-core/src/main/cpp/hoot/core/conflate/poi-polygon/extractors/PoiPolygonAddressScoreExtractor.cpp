@@ -371,7 +371,7 @@ bool PoiPolygonAddressScoreExtractor::_isParseableAddressFromComponents(const Ta
                                                                         QString& street) const
 {
   // we only require a valid street address...no other higher order parts, like city, state, etc.
-  houseNum = getAddressTagValue(tags, "number");
+  houseNum = getAddressTagValue(tags, "house_number");
   street = getAddressTagValue(tags, "street");
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
@@ -483,7 +483,6 @@ QSet<QString> PoiPolygonAddressScoreExtractor::_parseAddressFromComponents(const
 {
   QSet<QString> parsedAddresses;
 
-  //TODO: parse block/corner/intersection addresses
   if (_isParseableAddressFromComponents(tags, houseNum, street))
   {
     if (_isRangeAddress(houseNum))
@@ -493,7 +492,18 @@ QSet<QString> PoiPolygonAddressScoreExtractor::_parseAddressFromComponents(const
     }
     else
     {
-      const QString parsedAddress = houseNum + " " + street;
+      QString parsedAddress = houseNum + " ";
+      const QString streetPrefix = getAddressTagValue(tags, "street_prefix");
+      if (!streetPrefix.isEmpty())
+      {
+        parsedAddress += streetPrefix + " ";
+      }
+      parsedAddress += street;
+      const QString streetSuffix = getAddressTagValue(tags, "street_suffix");
+      if (!streetSuffix.isEmpty())
+      {
+        parsedAddress += " " + streetPrefix;
+      }
       parsedAddresses.insert(parsedAddress);
       LOG_TRACE("Found address parts from component tags: " << parsedAddress << ".");
     }
@@ -540,12 +550,12 @@ QSet<QString> PoiPolygonAddressScoreExtractor::_parseAddresses(const Element& el
   QString fullAddress = getAddressTagValue(element.getTags(), "full_address");
   if (fullAddress.isEmpty())
   {
-    // if we don't have that, let's try to get it from parts
+    // if we don't have the full address, let's try to get an address from parts
     parsedAddresses = _parseAddressFromComponents(element.getTags(), houseNum, street);
   }
   else
   {
-    // if we do have a full address tag, let's parse and validate it
+    // if we do have a full address, let's parse and validate it
     const QString parsedAddress = _parseFullAddress(fullAddress, houseNum, street);
     if (!parsedAddress.isEmpty())
     {
@@ -555,8 +565,8 @@ QSet<QString> PoiPolygonAddressScoreExtractor::_parseAddresses(const Element& el
 
   if (parsedAddresses.isEmpty())
   {
-    // we didn't find anything in the standard address tags, so let's try names and any user
-    // defined tags to search
+    // we didn't find anything in the standard address tags, so let's try feature names and any user
+    // defined tags
     const QString parsedAddress = _parseAddressFromAltTags(element.getTags(), houseNum, street);
     if (!parsedAddress.isEmpty())
     {
@@ -653,8 +663,6 @@ bool PoiPolygonAddressScoreExtractor::addressesMatchesOnSubLetter(const QString 
    * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses by
    * accident, and we'd like to at least end up with a review in that situation.
    */
-
-
 
   const QString subletterCleanedAddress1 = _getSubLetterCleanedAddress(address1);
   const QString subletterCleanedAddress2 = _getSubLetterCleanedAddress(address2);
