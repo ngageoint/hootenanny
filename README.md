@@ -135,15 +135,21 @@ found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
     # Display available commands
     hoot
     
-    # Display help for the conflate command
+    # Display help for a command
     hoot help conflate
 
-    # Conflate two maps
+    # Conflate two maps into a single map
     hoot conflate input1.osm input2.osm output.osm
+    
+    # Applying Changes
 
     # Derive a changeset between two maps and write the result back to a Rails Port instance
     hoot changeset-derive inputData1.osm inputData2.osm changeset.osc
-    hoot changeset-apply changeset.osc http://railsPortUrl
+    hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
+    
+    # Derive a changeset between two maps and write the result directly to an OSM API database
+    hoot changeset-derive inputData1.osm inputData2.osm changeset.osc.sql
+    hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
     
     # Data Transformation
     
