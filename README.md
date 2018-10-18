@@ -76,8 +76,11 @@ If you have any support questions please create an issue in the [Hootenanny GitH
 [Hootenanny's web user interface](https://github.com/ngageoint/hootenanny-ui) is built upon the open source 
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience. 
 
-# Command Line User Interface
-A command line user interface for conflation capabilities is available for users who do not require the Hootenanny web user interface or want to work with a different user interface (e.g. JOSM).  It exposes additional functionality that is not available from the web user interface.  For a list of Hootenanny commands, type 'hoot' from the command line.  The Hootenanny User Documentation contains detailed information about the commands.  More detail on using the CLI is provided [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
+# Web Services API
+Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  See the User Documentation for more details.
+
+# Command Line
+Command line access for conflation capabilities is available for users who do not require the Hootenanny web user interface (e.g. work within JOSM).  The command line exposes some additional functionality that is not available from iD Editor.  See the "Usage" section below for examples and the User Documentation.
 
 # Supported Data Formats
 **Hootenanny can import from:**
@@ -128,6 +131,9 @@ uploaded dataset using a semi-automated Translation Assistant.  More details on 
 found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
 
 # Usage
+
+    # Display available commands
+    hoot
 
     # Conflate two maps
     hoot conflate input1.osm input2.osm output.osm
