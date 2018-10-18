@@ -412,23 +412,22 @@ bool PoiPolygonAddressScoreExtractor::_isValidAddressStr(QString& address, QStri
   return !address.isEmpty();
 }
 
-QString PoiPolygonAddressScoreExtractor::_parseFullAddress(const QString address,
+QString PoiPolygonAddressScoreExtractor::_parseFullAddress(const QString fullAddress,
                                                            QString& houseNum, QString& street) const
 {
-  QString fullAddress = address;
+  QString parsedAddress = fullAddress;
 
   QString msg = "Found";
   // validate the full address
-  if (_isValidAddressStr(fullAddress, houseNum, street))
+  if (_isValidAddressStr(parsedAddress, houseNum, street))
   {
-    parsedAddress = fullAddress;
     msg += " valid";
   }
   else
   {
     msg += " invalid";
   }
-  msg += " full address: " + fullAddress;
+  msg += " address: " + parsedAddress + " from full address: " + fullAddress;
   LOG_TRACE(msg);
 
   return parsedAddress;

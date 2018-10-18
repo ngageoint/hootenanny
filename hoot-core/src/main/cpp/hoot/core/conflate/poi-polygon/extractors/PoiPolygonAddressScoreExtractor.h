@@ -162,7 +162,7 @@ private:
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
   bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street) const;
-  QString _parseFullAddress(const QString address, QString& houseNum, QString& street) const;
+  QString _parseFullAddress(const QString fullAddress, QString& houseNum, QString& street) const;
   QSet<QString> _parseAddressFromComponents(const Tags& tags, QString& houseNum,
                                             QString& street) const;
   QString _parseAddressFromAltTags(const Tags& tags, QString& houseNum, QString& street) const;
