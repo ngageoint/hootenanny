@@ -36,10 +36,12 @@ import java.io.Writer;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -137,8 +139,8 @@ public class MapResource {
             user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
         }
 
-        SQLQuery<Maps> q = createQuery()
-            .select(maps)
+        SQLQuery<Tuple> q = createQuery()
+            .select(maps, folders.id)
             .from(maps)
             .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
             .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
@@ -152,9 +154,21 @@ public class MapResource {
                             )
                     );
         }
-        List<Maps> mapLayerRecords = q.fetch();
+        List<Tuple> mapLayerRecords = q.fetch();
 
-        return Map.mapLayerRecordsToLayers(mapLayerRecords);
+        // The query above is only a rough filter, we need to make sure
+        // that the folder is recursively visible to the user based on folder
+        // visibility:
+        List<Maps> mapLayersOut = new ArrayList<Maps>(mapLayerRecords.size());
+        Set<Long> foldersTheUserCanSee = FolderResource.getFolderIdsForUser(user);
+        for(Tuple t : mapLayerRecords) {
+            Long parentFolder = t.get(folders.id);
+            if(parentFolder == null || parentFolder.equals(0L) || foldersTheUserCanSee.contains(parentFolder)) {
+                Maps m = t.get(maps);
+                mapLayersOut.add(m);
+            }
+        }
+        return Map.mapLayerRecordsToLayers(mapLayersOut);
     }
 
     private static Document generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat) {
@@ -625,7 +639,12 @@ public class MapResource {
 
         // Additionally, you must be the owner to move the map:
         if(user != null && !user.getId().equals(m.getUserId())) {
-            throw new NotAuthorizedException("HTTP ");
+            // this is a little frustrating, but the NotAuthorizedException
+            // is behaving a little different that other WebApplicationExceptions:
+            // the status message was being overwritten w/ a generic message,
+            // so i had to build a response object to get the custom message
+            // passed back to the front end.
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).entity("You must own the map to move it.").build());
         }
 
         // Delete any existing to avoid duplicate entries

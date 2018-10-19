@@ -153,5 +153,4 @@ public class Users {
         }
         return (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
     }
-
 }

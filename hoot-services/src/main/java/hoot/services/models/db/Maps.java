@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,7 +26,12 @@
  */
 package hoot.services.models.db;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Generated;
+
+import org.json.simple.JSONObject;
 
 /**
  * Maps is a Querydsl bean type
@@ -93,6 +98,15 @@ public class Maps {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-
+    @Override
+    public String toString() {
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("createdAt", createdAt);
+        map.put("tags", tags);
+        map.put("id", id);
+        map.put("displayName", displayName);
+        map.put("userId", createdAt);
+        map.put("publicCol", publicCol);
+        return new JSONObject(map).toJSONString();
+    }
 }
-

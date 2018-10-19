@@ -34,9 +34,12 @@ import static hoot.services.utils.DbUtils.createQuery;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -73,44 +76,42 @@ public class FolderResource {
     private static final Logger logger = LoggerFactory.getLogger(FolderResource.class);
 
     public static boolean folderIsPublic(List<Folders> folders, Folders f, Users user) {
-        if(user == null) {
-            return f.getPublicCol().booleanValue();
+        // If its public & attached to root (0)
+        if(f.isPublic() && f.getParentId().equals(0L)) {
+            return true;
         }
-
-        if(f.getPublicCol().booleanValue() == true && f.getParentId().equals(0L)) {
+        // if we have a user, and folder is private, but its owned by this user:
+        if(user != null && f.isPrivate() && f.getUserId().equals(user.getId())) {
             return true;
         }
 
-        if(f.getPublicCol().booleanValue() == false && f.getUserId().equals(user.getId())) {
-            return true;
-        }
-
-        Folders p = null;
-        for(Folders f1 : folders) {
-            if(f.getParentId().equals(f1.getId())) {
-                p = f1;
+        // Look for this folder's parent in the list:
+        Folders parentFolder = null;
+        for(Folders currentFolder : folders) {
+            // if we find it, stop:
+            if(f.getParentId().equals(currentFolder.getId())) {
+                parentFolder = currentFolder;
                 break;
             }
         }
-        if(p != null) {
-            return folderIsPublic(folders, p, user);
+        // We found the parent in the list, recurse down:
+        if(parentFolder != null) {
+            return folderIsPublic(folders, parentFolder, user);
         }
 
+        // We did not find the parent, this means that the parent
+        // was not visible to us -so- neither should this folder be:
         return false;
     }
-
-    /**
-     * Returns a list of all folders in the services database.
-     *
-     * GET hoot-services/osm/api/0.6/map/folders
-     *
-     * @return a JSON object containing a list of folders
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public FolderRecords getFolders(@Context HttpServletRequest request) {
-        Users user = Users.fromRequest(request);
-
+    static public Set<Long> getFolderIdsForUser(Users user) {
+        List<Folders> folders = getFoldersForUser(user);
+        Set<Long> out = new HashSet<Long>(folders.size());
+        for(Folders f : folders) {
+            out.add(f.getId());
+        }
+        return out;
+    }
+    static public List<Folders> getFoldersForUser(Users user) {
         SQLQuery<Folders> sql = createQuery()
                 .select(folders)
                 .from(folders);
@@ -127,7 +128,21 @@ public class FolderResource {
                 out.add(f);
             }
         }
-        return mapFolderRecordsToFolders(out);
+        return out;
+    }
+
+    /**
+     * Returns a list of all folders in the services database.
+     *
+     * GET hoot-services/osm/api/0.6/map/folders
+     *
+     * @return a JSON object containing a list of folders
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public FolderRecords getFolders(@Context HttpServletRequest request) {
+        Users user = Users.fromRequest(request);
+        return mapFolderRecordsToFolders(getFoldersForUser(user));
     }
 
     /**
@@ -167,8 +182,18 @@ public class FolderResource {
             // public or folder owned by current user
             sql.where(folders.publicCol.isTrue().or(folders.userId.eq(user.getId())));
         }
-        List<FolderMapMappings> linkRecordSet = sql.orderBy(folderMapMappings.folderId.asc()).fetch();
-        linkRecords = mapLinkRecordsToLinks(linkRecordSet);
+        List<FolderMapMappings> links = sql.orderBy(folderMapMappings.folderId.asc()).fetch();
+        List<FolderMapMappings> linksOut = new ArrayList<FolderMapMappings>(links.size());
+
+        // The above query is only a rough filter, we need to filter
+        // recursively:
+        Set<Long> foldersUserCanSee = FolderResource.getFolderIdsForUser(user);
+        for(FolderMapMappings link : links) {
+            if(foldersUserCanSee.contains(link.getFolderId())) {
+                linksOut.add(link);
+            }
+        }
+        linkRecords = mapLinkRecordsToLinks(linksOut);
         return linkRecords;
     }
 
@@ -190,16 +215,21 @@ public class FolderResource {
     @Path("/add/{parentId : \\d+}/{folderName}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addFolder(@Context HttpServletRequest request, @PathParam("folderName") String folderName, @PathParam("parentId") Long parentId, @DefaultValue("true") @QueryParam("isPublic") Boolean isPublic) {
+    public Response addFolder(@Context HttpServletRequest request, @PathParam("folderName") String folderName,
+            @PathParam("parentId") Long parentId,
+            @DefaultValue("true") @QueryParam("isPublic") boolean isPublic) {
         Users user = Users.fromRequest(request);
         Long userid = -1L;
         if(user != null) {
             userid = user.getId();
         }
 
-        // handles some ACL logic for us...
-        // (to be sure we can see the parent folder)
-        getFolderForUser(user, parentId);
+        // getFolderForUser() will perform ACLs, additionally
+        // don't allow public folders to be created under private folders:
+        Folders parentFolder = getFolderForUser(user, parentId);
+        if(isPublic && parentFolder.isPrivate()) {
+            throw new BadRequestException("public folders cannot be created under private folders");
+        }
 
 
         Long newId = createQuery()
@@ -391,12 +421,9 @@ public class FolderResource {
         if(folder == null) {
             throw new NotFoundException();
         }
-        if(user == null || user.getId().longValue() == folder.getUserId().longValue() || folder.getPublicCol().booleanValue()) {
+        if(user == null || user.getId().equals(folder.getUserId()) || folder.isPublic()) {
             return folder;
         }
-        System.out.println(user.getId());
-        System.out.println(folder.getUserId());
-        System.out.println(folder.getPublicCol().booleanValue());
         throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
     }
 }

@@ -26,9 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
-import static hoot.services.models.db.QFolders.folders;
-import static hoot.services.models.db.QMaps.maps;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.tuple;
 import static hoot.services.HootProperties.MAP_QUERY_DIMENSIONS;
@@ -37,6 +34,9 @@ import static hoot.services.HootProperties.OSMAPI_DB_NAME;
 import static hoot.services.HootProperties.OSM_API_DB_ENABLED;
 import static hoot.services.HootProperties.replaceSensitiveData;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
+import static hoot.services.models.db.QFolders.folders;
+import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
@@ -696,18 +696,21 @@ public class Map extends Maps {
 
     public boolean isVisibleTo(Users user) {
         Tuple t = createQuery()
-            .select(maps.userId, folderMapMappings.folderId, folders.publicCol)
+            .select(maps.userId, maps.displayName, folderMapMappings.folderId, folders.publicCol)
             .from(maps)
             .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(QMaps.maps.id))
             .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
             .where(maps.id.eq(this.getId()))
             .fetchFirst();
 
-        Long ownerId = t.get(0, Long.class);
-        Long folderId = t.get(1, Long.class);
-        Boolean isPublic = t.get(2, Boolean.class);
+        Long ownerId = t.get(maps.userId);
+        Long folderId = t.get(folderMapMappings.folderId);
+        Boolean isPublic = t.get(maps.publicCol);
+
 
         this.setPublicCol(isPublic);
+        this.setUserId(ownerId);
+        this.setDisplayName(t.get(maps.displayName));
 
         // Owned by the current user, or has no folder -or- at root, in public folder:
         return user.getId().equals(ownerId) || (folderId == null || folderId.equals(0L)) || (isPublic == null || isPublic.booleanValue() == true);
