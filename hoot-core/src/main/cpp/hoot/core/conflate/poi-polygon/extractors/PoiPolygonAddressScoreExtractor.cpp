@@ -407,9 +407,16 @@ bool PoiPolygonAddressScoreExtractor::_isValidAddressStr(QString& address, QStri
   }
   libpostal_address_parser_response_destroy(parsed);
 
-  address = houseNum + " " + street;
-  address = address.trimmed();
-  return !address.isEmpty();
+  if (!houseNum.isEmpty() && !street.isEmpty())
+  {
+    address = houseNum + " " + street;
+    address = address.trimmed();
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 QString PoiPolygonAddressScoreExtractor::_parseFullAddress(const QString fullAddress,
@@ -568,8 +575,6 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
     {
       const QString normalizedAddress = *normalizedAddressItr;
       LOG_VART(normalizedAddress);
-      // If the additional translation wasn't enabled, both inputs to PoiPolygonAddress will be
-      // identical. TODO: does that make sense?
       PoiPolygonAddress address(normalizedAddress);
       if (!addresses.contains(address))
       {
