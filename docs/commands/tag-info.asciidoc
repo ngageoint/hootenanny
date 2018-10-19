@@ -41,7 +41,7 @@ hoot tag-info input.osm --keys "key" --partial-key-match
 
 === Example Output
 
--------------------------------------
+---------------------------------------
 .{
   "ca-Transmission_Line-state-gov.shp":{
     "ca-Transmission_Line-state-gov":{

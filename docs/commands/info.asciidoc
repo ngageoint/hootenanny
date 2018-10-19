@@ -9,10 +9,10 @@ Only one of the following options can be passed to the command:
 * +--config-options+     - Prints available configuration options
 * +--feature-extractors+ - Prints feature extractors used for conflation model building
 * +--formats+            - Prints supported data formats
-* +--matchers+           - Prints available matchers used with conflation
-* +--mergers+            - Prints available mergers used with conflation
+* +--matchers+           - Prints available feature matchers used with conflation
+* +--mergers+            - Prints available feature mergers used with conflation
 * +--operators+          - Prints inline operators that can be applied to map datasets
-* +--tag-mergers+        - Prints available tag mergers used with conflation
+* +--tag-mergers+        - Prints available feature tag mergers used with conflation
 
 Each of the following sections describes an option that may be used with this command and its input parameters.
 
@@ -83,7 +83,7 @@ The +--formats+ option prints out supported data formats.
 
 --------------------------------------
 info --formats [--input] [--output]
----------------------------------------
+--------------------------------------
 
 ==== Example
 

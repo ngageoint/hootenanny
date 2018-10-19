@@ -80,7 +80,7 @@ Write directly to a database and reserve a range of record IDs so that you can e
 hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
-Write directly to a database, eserve a range of record IDs so that you can execute the SQL at a later time against a live database safely, and retain the SQL output file:
+Write directly to a database, reserve a range of record IDs so that you can execute the SQL at a later time against a live database safely, and retain the SQL output file:
 -----------------
 hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
