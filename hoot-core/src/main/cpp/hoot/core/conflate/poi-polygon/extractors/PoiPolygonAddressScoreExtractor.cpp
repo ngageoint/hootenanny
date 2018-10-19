@@ -32,6 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
+#include <hoot/core/util/FileUtils.h>
 #include "PoiPolygonAddress.h"
 
 using namespace std;
@@ -41,22 +42,63 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonAddressScoreExtractor)
 
-//These seem to be all OSM standard tag names, so don't need to be in a configuration file.
-const QString PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
-const QString PoiPolygonAddressScoreExtractor::STREET_TAG_NAME = "addr:street";
-const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME = "address";
-const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
+QMultiMap<QString, QString> PoiPolygonAddressScoreExtractor::_addressTypeToTagKeys;
 
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonAddressScoreExtractor::_translator;
 
 PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor() :
-_translateTagValuesToEnglish(false)
+_translateTagValuesToEnglish(false),
+_addressesProcessed(0),
+_matchAttemptMade(false)
 {
+}
+
+void PoiPolygonAddressScoreExtractor::_readAddressTagKeys(const QString configFile)
+{
+  const QStringList addressTagKeyEntries = FileUtils::readFileToList(configFile);
+  for (int i = 0; i < addressTagKeyEntries.size(); i++)
+  {
+    const QString addressTagKeyEntry = addressTagKeyEntries.at(i);
+    const QStringList addressTagKeyEntryParts = addressTagKeyEntry.split("=");
+    if (addressTagKeyEntryParts.size() != 2)
+    {
+      throw HootException("Invalid address tag key entry: " + addressTagKeyEntry);
+    }
+    const QString addressType = addressTagKeyEntryParts[0].trimmed().toLower();
+    if (!addressType.isEmpty())
+    {
+      const QStringList addressTags = addressTagKeyEntryParts[1].split(",");
+      for (int j = 0; j < addressTags.size(); j++)
+      {
+        const QString addressTag = addressTags.at(j).trimmed().toLower();
+        if (!addressTag.isEmpty())
+        {
+          _addressTypeToTagKeys.insert(addressType, addressTag);
+        }
+      }
+    }
+  }
+}
+
+QString PoiPolygonAddressScoreExtractor::getAddressTagValue(const Tags& tags,
+                                                            const QString addressTagType)
+{
+  const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
+  for (int i = 0; i < tagKeys.size(); i++)
+  {
+    const QString tagKey = tagKeys.at(i);
+    if (tags.contains(tagKey))
+    {
+      return tags.get(tagKey);
+    }
+  }
+  return "";
 }
 
 void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   _translateTagValuesToEnglish = config.getPoiPolygonTranslateAddressesToEnglish();
   if (_translateTagValuesToEnglish && !_translator)
   {
@@ -67,12 +109,11 @@ void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
     _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
     _translator->setId(QString::fromStdString(className()));
   }
-}
 
-bool PoiPolygonAddressScoreExtractor::isAddressTagKey(const QString tagKey)
-{
-  return
-    tagKey.toLower().startsWith("addr:") || tagKey == FULL_ADDRESS_TAG_NAME;
+  if (_addressTypeToTagKeys.isEmpty())
+  {
+    _readAddressTagKeys(config.getAddressTagKeysFile());
+  }
 }
 
 double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& poi,
@@ -115,6 +156,10 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
     return 0.0;
   }
 
+  _matchAttemptMade = true;
+  _addressesProcessed += poiAddresses.size();
+  _addressesProcessed += polyAddresses.size();
+
   //check for address matches
   for (QList<PoiPolygonAddress>::const_iterator polyAddrItr = polyAddresses.begin();
        polyAddrItr != polyAddresses.end(); ++polyAddrItr)
@@ -147,7 +192,7 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString house
   //with a space (which isn't hard to handle), but also won't worry about it until its seen
   //in the wild.
 
-  //This may be able to be cleaned up with regex's.
+  //This may be able to be cleaned up some with regex's.
 
   QStringList houseNumParts = houseNum.split("-");
   if (houseNumParts.size() == 2)
@@ -183,9 +228,9 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tag
   //parse through the tokens until you come to a number; assume that is the house number and
   //everything before it is the street name
 
-  //This may be able to be cleaned up with regex's.
+  //This may be able to be cleaned up some with regex's.
 
-  QString addressTagValAltFormatRaw = tags.get(FULL_ADDRESS_TAG_NAME_2).trimmed();
+  QString addressTagValAltFormatRaw = getAddressTagValue(tags, "full_address");
   if (!addressTagValAltFormatRaw.isEmpty())
   {
     addressTagValAltFormatRaw = addressTagValAltFormatRaw.toLower();
@@ -327,9 +372,9 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
   const Tags tags = element.getTags();
 
   //address parts in separate tags (most common situation)
-  QString houseNum = tags.get(HOUSE_NUMBER_TAG_NAME).trimmed();
+  QString houseNum = getAddressTagValue(tags, "number");
   LOG_VART(houseNum);
-  QString street = tags.get(STREET_TAG_NAME).trimmed();
+  QString street = getAddressTagValue(tags, "street");
   LOG_VART(street);
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
@@ -357,7 +402,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
   }
 
   //full address in one tag
-  QString addressTagVal = tags.get(FULL_ADDRESS_TAG_NAME).trimmed();
+  QString addressTagVal = getAddressTagValue(tags, "full_address");
   LOG_VART(addressTagVal);
   if (!addressTagVal.isEmpty())
   {
