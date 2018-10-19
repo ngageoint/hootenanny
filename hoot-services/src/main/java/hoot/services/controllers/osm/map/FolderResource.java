@@ -230,6 +230,10 @@ public class FolderResource {
         if(isPublic && parentFolder.isPrivate()) {
             throw new BadRequestException("public folders cannot be created under private folders");
         }
+        // don't allow private folders to be create under public folders -except- root.
+        if(!isPublic && parentFolder.isPublic() && !parentFolder.getId().equals(0L)) {
+            throw new BadRequestException("private folders cannot be create under public folders");
+        }
 
 
         Long newId = createQuery()
