@@ -144,8 +144,8 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
     # Display help for a command
     hoot help conflate
-    
-    # CONFLATION
+   
+### Conflation
 
     # Conflate two maps into a single map
     hoot conflate input1.osm input2.osm output.osm
@@ -153,13 +153,13 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Conflate and only add data to output from the second input that does not conflict with data in the first input
     hoot conflate --differential input1.osm input2.osm output.osm
     
-    # APPLYING CHANGES
+### Applying Changes
 
     # Derive a changeset between two maps and write the result back to a Rails Port instance
     hoot changeset-derive inputData1.osm inputData2.osm changeset.osc
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
     
-    # DATA TRANSFORMATION
+### Data Transformation
     
     # Convert an OSM file to a file geodatabase and apply a schema translation
     hoot convert input.osm output.gdb --trans MyTranslation.js
@@ -180,7 +180,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Convert a shapefile that is stored inside the a Zip file:
     hoot convert /vsizip//gis-data/input.zip/tds/LAP030.shp output.osm --trans translation.js
     
-    # UTILITIES
+### Utilities
     
     # Clean erroneous data from two maps
     hoot clean input.osm output.osm
@@ -202,7 +202,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Concatenate two maps
     hoot cat input1.osm input2.osm output.osm
     
-    # COMPARISON
+### Comparison
     
     # Calculate the difference between two maps
     hoot diff input1.osm input2.osm
@@ -230,7 +230,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     |        name=<NULL> |                    |              |           4 |                |
     |     name=<SIMILAR> |                    |              |             |             24 |
     
-    # STATISTICS
+### Statistics
     
     # Display a set of statistics for a map
     hoot stats input.osm
@@ -246,7 +246,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
 
 ## Advanced
 
-    # CONFLATION
+### Conflation
     
     # Conflate only the buildings from the input maps
     hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \
@@ -268,13 +268,13 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot conflate -D unify.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 -D cookie.cutter.alpha.shape.buffer=0 \
       -D cookie.cutter.output.crop=false
     
-    # APPLYING CHANGES
+### Applying Changes
     
     # Derive a changeset between two maps and write the result directly to an OSM API database
     hoot changeset-derive inputData1.osm inputData2.osm changeset.osc.sql
     hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
     
-    # DATA TRANSFORMATION
+### Data Transformation
     
     # Convert an OSM file to a shape file, allowing the export columns to be automatically selected based on frequency
     hoot convert input.osm output.shp --cols
@@ -334,7 +334,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot convert -D convert.ops="hoot::AddAttributesVisitor" -D add.attributes.visitor.kvps="changeset=1" \
       input.osm output.osm
       
-    # UTILITIES
+### Utilities
     
     # Sort data to the OSM standard on disk
     hoot sort -D element.sorter.element.buffer.size=10000 input.osm output.osm 
@@ -359,7 +359,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Calculate a set of irregular shaped files that will fit at most 1000 nodes each for a map
     hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000
     
-    # STATISTICS
+### Statistics
     
     # count all features
     hoot count input.osm
@@ -422,7 +422,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     18 (0.015) : pennsylvania
     ...
     
-    # ADD MISSING TYPE TAGS
+### Add Missing Type Tags
     
     # Attempt to add type tags to POI and building features that are missing them
     hoot convert -D convert.ops=hoot::ImplicitPoiPolygonTypeTagger input.osm output.osm
@@ -440,7 +440,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="detect" \ 
       -D language.translation.to.translate.tag.keys="name" input.osm output.osm
       
-    # APPLICATION METAINFO
+# MetaInfo
     
     # Lists all configuration option names
     hoot info --config-options
