@@ -623,6 +623,11 @@ public class MapResource {
         Map m = getMapForUser(user, mapId, true);
         FolderResource.getFolderForUser(user, folderId);
 
+        // Additionally, you must be the owner to move the map:
+        if(user != null && !user.getId().equals(m.getUserId())) {
+            throw new NotAuthorizedException("HTTP ");
+        }
+
         // Delete any existing to avoid duplicate entries
         createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(m.getId())).execute();
 
@@ -781,7 +786,6 @@ public class MapResource {
             throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
         }
         return m;
-
     }
     public static Map getMapForRequest(HttpServletRequest request, String mapId, boolean allowOSM) throws WebApplicationException {
         Users user = null;

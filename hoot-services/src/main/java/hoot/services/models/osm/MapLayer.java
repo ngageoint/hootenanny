@@ -39,6 +39,7 @@ public class MapLayer {
     private Timestamp date;
     private String lastAccessed;
     private boolean canExportToOsmApiDb;
+    private boolean isPublic;
     public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     public MapLayer() {}

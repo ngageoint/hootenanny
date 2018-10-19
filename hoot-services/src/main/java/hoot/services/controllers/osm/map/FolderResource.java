@@ -72,6 +72,33 @@ import hoot.services.models.db.Users;
 public class FolderResource {
     private static final Logger logger = LoggerFactory.getLogger(FolderResource.class);
 
+    public static boolean folderIsPublic(List<Folders> folders, Folders f, Users user) {
+        if(user == null) {
+            return f.getPublicCol().booleanValue();
+        }
+
+        if(f.getPublicCol().booleanValue() == true && f.getParentId().equals(0L)) {
+            return true;
+        }
+
+        if(f.getPublicCol().booleanValue() == false && f.getUserId().equals(user.getId())) {
+            return true;
+        }
+
+        Folders p = null;
+        for(Folders f1 : folders) {
+            if(f.getParentId().equals(f1.getId())) {
+                p = f1;
+                break;
+            }
+        }
+        if(p != null) {
+            return folderIsPublic(folders, p, user);
+        }
+
+        return false;
+    }
+
     /**
      * Returns a list of all folders in the services database.
      *
@@ -83,7 +110,6 @@ public class FolderResource {
     @Produces(MediaType.APPLICATION_JSON)
     public FolderRecords getFolders(@Context HttpServletRequest request) {
         Users user = Users.fromRequest(request);
-        FolderRecords folderRecords = null;
 
         SQLQuery<Folders> sql = createQuery()
                 .select(folders)
@@ -94,8 +120,14 @@ public class FolderResource {
             );
         }
         List<Folders> folderRecordSet = sql.orderBy(folders.displayName.asc()).fetch();
-        folderRecords = mapFolderRecordsToFolders(folderRecordSet);
-        return folderRecords;
+
+        List<Folders> out = new ArrayList<Folders>();
+        for(Folders f : folderRecordSet) {
+            if(folderIsPublic(folderRecordSet, f, user)) {
+                out.add(f);
+            }
+        }
+        return mapFolderRecordsToFolders(out);
     }
 
     /**
@@ -309,6 +341,7 @@ public class FolderResource {
             folder.setId(folderRecord.getId());
             folder.setName(folderRecord.getDisplayName());
             folder.setParentId(folderRecord.getParentId());
+            folder.setPublic(folderRecord.getPublicCol());
             folderRecordList.add(folder);
         }
 

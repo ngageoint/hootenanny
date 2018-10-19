@@ -703,9 +703,14 @@ public class Map extends Maps {
             .where(maps.id.eq(this.getId()))
             .fetchFirst();
 
+        Long ownerId = t.get(0, Long.class);
         Long folderId = t.get(1, Long.class);
+        Boolean isPublic = t.get(2, Boolean.class);
+
+        this.setPublicCol(isPublic);
+
         // Owned by the current user, or has no folder -or- at root, in public folder:
-        return t.get(0, Long.class) == user.getId() || (folderId == null || folderId == 0L) || t.get(2, Boolean.class) == true;
+        return user.getId().equals(ownerId) || (folderId == null || folderId.equals(0L)) || (isPublic == null || isPublic.booleanValue() == true);
     }
 
     public static boolean mapExists(long id) {

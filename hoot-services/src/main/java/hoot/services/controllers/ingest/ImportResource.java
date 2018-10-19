@@ -32,11 +32,13 @@ import static hoot.services.controllers.ingest.UploadClassification.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.POST;
@@ -44,6 +46,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -63,6 +66,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.models.db.Users;
 import hoot.services.utils.MultipartSerializer;
 
 
@@ -107,14 +111,19 @@ public class ImportResource {
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response processFileUpload(@QueryParam("TRANSLATION") String translation,
+    public Response processFileUpload(@Context HttpServletRequest request,
+                                      @QueryParam("TRANSLATION") String translation,
                                       @QueryParam("INPUT_TYPE") String inputType,
                                       @QueryParam("INPUT_NAME") String inputName,
                                       @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
-        JSONArray response = new JSONArray();
+        Users user = null;
+        if(request != null) {
+            user = Users.fromRequest(request);
+        }
+        List<Map<String,Object>> results = new ArrayList<Map<String,Object>>();
 
         try {
             String jobId = UUID.randomUUID().toString();
@@ -194,21 +203,20 @@ public class ImportResource {
                     shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
 
             ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
-                    etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass());
+                    etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
 
-            ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, etlName, this.getClass());
+            ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, etlName, this.getClass(), user);
 
             Command[] workflow = { importCommand, exportRenderDBCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
 
-            JSONObject res = new JSONObject();
+            Map<String, Object> res = new HashMap<String, Object>();
             res.put("jobid", jobId);
             res.put("input", StringUtils.join(fileNames.toArray(), ';'));
             res.put("output", etlName);
             res.put("status", "success");
-
-            response.add(res);
+            results.add(res);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -221,6 +229,6 @@ public class ImportResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(response.toJSONString()).build();
+        return Response.ok(results).build();
     }
 }
