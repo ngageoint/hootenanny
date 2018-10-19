@@ -240,6 +240,9 @@ See the Hootenanny User Guide for more usage examples and details on command inp
 
     # count all POIs
     hoot count "input1.osm;input2.osm" hoot::PoiCriterion
+    
+    # Find the largest ID in a set of elements
+    hoot stat input.osm hoot::MaxIdVisitor
 
 ## Advanced
 
@@ -345,11 +348,16 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Create a node density plot
     hoot node-density-plot input.osm output.png 100
     
-    # Make a perturbed copy of data for testing purposes
-    hoot perty -D perty.search.distance=20 -D perty.way.generalize.probability=0.7 input.osm output.osm
+    # Make a perturbed copy of a map, conflate the original map against the perturbed copy, and score how well \
+      the conflation performed
+    hoot perty -D perty.search.distance=20 -D perty.way.generalize.probability=0.7 input.osm perturbed.osm
+    hoot perty --score input.osm perturbed.osm
     
     # Display the internal tag schema Hootenanny uses
     hoot tag-schema
+    
+    # Calculate a set of irregular shaped files that will fit at most 1000 nodes each for a map
+    hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000
     
     # STATISTICS
     
@@ -364,9 +372,6 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
     # Calculate the numerical average of all "accuracy" tags
     hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
-    
-    # Find the largest ID in a set of elements
-    hoot stat input.osm hoot::MaxIdVisitor
     
     # Display the accuracy distribution for a map; output shows that 14 ways were found with an accuracy 
     # of 15 meters and the value of 15 meters represents 100% of the ways examined
