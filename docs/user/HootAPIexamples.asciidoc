@@ -62,7 +62,7 @@ hoot convert -D api.db.email='test@test.com' hootapidb://hoot:hoottest@localhost
 
 * translation file - a translation file used to translate source data attribution
 * input - input postgres dataset name
-* output - output dataset (e.g. .shp, .fgdb, .csv, etc..)
+* output - output dataset (e.g. .shp, .fgdb, etc..)
 
 File Geodatabase export:
 

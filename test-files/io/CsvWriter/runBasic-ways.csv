@@ -1,0 +1,5 @@
+way_id,changeset_id,timestamp,version,visible,redaction_id,tags
+-4,0,1970-01-01T00:00:00Z,0,t,,note=>2,highway=>road
+-3,0,1970-01-01T00:00:00Z,0,t,,note=>0,highway=>road
+-2,0,1970-01-01T00:00:00Z,0,t,,note=>3,highway=>road
+-1,0,1970-01-01T00:00:00Z,0,t,,note=>1,highway=>road
