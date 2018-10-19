@@ -42,7 +42,8 @@ class PoiPolygonAddress
 public:
 
   PoiPolygonAddress();
-  PoiPolygonAddress(const QString address);
+  PoiPolygonAddress(const QString address,
+                    const bool allowLenientHouseNumberMatching = true);
 
   bool operator==(const PoiPolygonAddress& address) const;
 
@@ -52,6 +53,7 @@ private:
 
   QString _address;
   ExactStringDistance _addrComp;
+  bool _allowLenientHouseNumberMatching;
 };
 
 }

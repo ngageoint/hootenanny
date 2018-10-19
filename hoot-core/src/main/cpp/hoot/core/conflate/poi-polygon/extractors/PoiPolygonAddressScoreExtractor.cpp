@@ -63,6 +63,9 @@ void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
 
+  //poi.polygon.address.allow.lenient.house.number.matching
+  _allowLenientHouseNumberMatching = config.getPoiPolygonAddressAllowLenientHouseNumberMatching();
+
   _translateTagValuesToEnglish = config.getPoiPolygonAddressTranslateToEnglish();
   // The default translation is what libpostal does during normalization and is always done.  We're
   // providing an option to some additional translation before normalization with a
@@ -575,7 +578,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element
     {
       const QString normalizedAddress = *normalizedAddressItr;
       LOG_VART(normalizedAddress);
-      PoiPolygonAddress address(normalizedAddress);
+      PoiPolygonAddress address(normalizedAddress, _allowLenientHouseNumberMatching);
       if (!addresses.contains(address))
       {
         LOG_TRACE("Adding address: " << address);

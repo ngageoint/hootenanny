@@ -2534,6 +2534,14 @@ By default, POI/Polygon conflation examines standard OSM tags for address compar
 addressTagKeys file).  You can expand the tag keys searched by populating this list. From the
 command line, separate list items with a semicolon and surround the entire list in double quotes.
 
+=== poi.polygon.address.allow.lenient.house.number.matching
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI/Polygon conflation will allow house number subletter mismatches for the addresses with
+the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
+
 === poi.polygon.address.match.enabled
 
 * Data Type: bool

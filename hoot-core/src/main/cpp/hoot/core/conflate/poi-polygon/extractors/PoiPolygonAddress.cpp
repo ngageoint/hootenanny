@@ -34,12 +34,15 @@ namespace hoot
 {
 
 PoiPolygonAddress::PoiPolygonAddress() :
-_address("")
+_address(""),
+_allowLenientHouseNumberMatching(true)
 {
 }
 
-PoiPolygonAddress::PoiPolygonAddress(const QString address) :
-_address(address)
+PoiPolygonAddress::PoiPolygonAddress(const QString address,
+                                     const bool allowLenientHouseNumberMatching) :
+_address(address),
+_allowLenientHouseNumberMatching(allowLenientHouseNumberMatching)
 {
 }
 
@@ -51,8 +54,9 @@ bool PoiPolygonAddress::operator==(const PoiPolygonAddress& address) const
   return
     !_address.isEmpty() &&
       (_addrComp.compare(_address, address._address) == 1.0 ||
-       PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
-         _address, address._address));
+       (_allowLenientHouseNumberMatching &&
+        PoiPolygonAddressScoreExtractor::addressesMatchDespiteSubletterDiffs(
+          _address, address._address)));
 }
 
 }

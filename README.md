@@ -462,6 +462,11 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="detect" \ 
       -D language.translation.to.translate.tag.keys="name" input.osm output.osm
+
+    # Translate "name" tags to English and let the source language be detected before conflating
+    hoot conflate -D conflate.pre.ops="hoot::ToEnglishTranslationVisitor" \
+      -D language.translation.source.languages="detect" \ 
+      -D language.translation.to.translate.tag.keys="name" input1.osm input2.osm output.osm
       
 ### MetaInfo
     

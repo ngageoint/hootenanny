@@ -139,6 +139,7 @@ private:
   mutable bool _matchAttemptMade;
   QSet<QString> _additionalTagKeys;
   static QMultiMap<QString, QString> _addressTypeToTagKeys;
+  bool _allowLenientHouseNumberMatching;
 
   static void _readAddressTagKeys(const QString configFile);
 
