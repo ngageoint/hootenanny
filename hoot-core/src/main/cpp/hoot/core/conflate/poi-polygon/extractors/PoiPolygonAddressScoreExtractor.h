@@ -125,6 +125,7 @@ public:
   long getAddressesProcessed() const { return _addressesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
   void setAdditionalTagKeys(QSet<QString> keys) { _additionalTagKeys = keys; }
+  void setAllowLenientHouseNumberMatching(bool allow) { _allowLenientHouseNumberMatching = allow; }
 
 private:
 
@@ -167,7 +168,6 @@ private:
   QSet<QString> _parseAddressFromComponents(const Tags& tags, QString& houseNum,
                                             QString& street) const;
   QString _parseAddressFromAltTags(const Tags& tags, QString& houseNum, QString& street) const;
-
   static QString _getSubLetterCleanedAddress(const QString address);
 };
 

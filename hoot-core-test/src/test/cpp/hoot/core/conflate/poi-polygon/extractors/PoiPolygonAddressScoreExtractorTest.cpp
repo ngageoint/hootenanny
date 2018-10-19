@@ -207,7 +207,12 @@ public:
     way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123a");
     way1->getTags().set(STREET_TAG_NAME, "main street");
     map->addWay(way1);
+
+    uut.setAllowLenientHouseNumberMatching(true);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    uut.setAllowLenientHouseNumberMatching(false);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
   void runWayTest()
