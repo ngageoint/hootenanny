@@ -29,7 +29,9 @@ package hoot.services.controllers.export;
 
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -68,7 +70,7 @@ public class DeriveChangesetCommandTest {
         exportParams.setOutputType("shp");
         exportParams.setBounds(aoi);
 
-        DeriveChangesetCommand deriveChangesetCommand = new DeriveChangesetCommand(jobId, exportParams, debugLevel, caller);
+        DeriveChangesetCommand deriveChangesetCommand = new DeriveChangesetCommand(jobId, exportParams, debugLevel, caller, null);
 
         List<String> options = deriveChangesetCommand.getCommonExportHootOptions();
         options.add("convert.bounding.box=" + aoi);
@@ -127,7 +129,7 @@ public class DeriveChangesetCommandTest {
         exportParams.setBounds(aoi);
         exportParams.setUserId(String.valueOf(userId));
 
-        DeriveChangesetCommand deriveChangesetCommand = new DeriveChangesetCommand(jobId, exportParams, debugLevel, caller);
+        DeriveChangesetCommand deriveChangesetCommand = new DeriveChangesetCommand(jobId, exportParams, debugLevel, caller, null);
 
         List<String> options = deriveChangesetCommand.getCommonExportHootOptions();
         options.add("convert.bounding.box=" + aoi);
@@ -192,7 +194,7 @@ public class DeriveChangesetCommandTest {
             exportParams.setOutputType("osc");
             exportParams.setBounds(aoi);
 
-            DeriveChangesetCommand exportCommand = new DeriveChangesetCommand(jobId, exportParams, debugLevel, caller);
+            DeriveChangesetCommand exportCommand = new DeriveChangesetCommand(jobId, exportParams, debugLevel, caller, null);
             ExternalCommandRunner externalCommandRunner = new ExternalCommandRunnerImpl();
             CommandResult commandResult = externalCommandRunner.exec(exportCommand.getCommand(), exportCommand.getSubstitutionMap(),
                     exportCommand.getJobId(), this.getClass().getName(), exportCommand.getWorkDir(), false);

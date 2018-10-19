@@ -44,7 +44,6 @@ public abstract class ExternalCommand implements Command {
     private Map<String, ?> substitutionMap;
     private File workDir;
     private Boolean trackable;
-
     private String jobId;
 
     protected ExternalCommand() {}

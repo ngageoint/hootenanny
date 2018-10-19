@@ -28,10 +28,9 @@ package hoot.services.controllers.export;
 
 
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
-import static org.junit.Assert.*;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -40,16 +39,11 @@ import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hoot.services.UnitTest;
 
 
 public class CalculateTilesCommandTest {
-
-	private static final Logger logger = LoggerFactory.getLogger(CalculateTilesCommandTest.class);
-
     @Test
     @Category(UnitTest.class)
     public void testCalculateTilesCommand() {
@@ -69,7 +63,7 @@ public class CalculateTilesCommandTest {
         jobParams.setMaxNodeCountPerTile(1000);
         jobParams.setPixelSize(0.001);
 
-        CalculateTilesCommand command = new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);
+        CalculateTilesCommand command = new CalculateTilesCommand(jobId, jobParams, debugLevel, caller, null);
 
         List<String> options = new LinkedList<>();
         options.add("api.db.email=test@test.com");
@@ -127,7 +121,7 @@ public class CalculateTilesCommandTest {
         jobParams.setOutputType("tiles");
         jobParams.setBounds(aoi);
 
-        CalculateTilesCommand command = new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);
+        CalculateTilesCommand command = new CalculateTilesCommand(jobId, jobParams, debugLevel, caller, null);
 
         List<String> options = new LinkedList<>();
         options.add("api.db.email=test@test.com");
@@ -182,7 +176,7 @@ public class CalculateTilesCommandTest {
             jobParams.setBounds(aoi);
             jobParams.setMaxNodeCountPerTile(1000);
 
-            new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);
+            new CalculateTilesCommand(jobId, jobParams, debugLevel, caller, null);
     	}
     	catch (IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("If either max node count per tile or pixel size is specified, then both input parameters must be specified."));
@@ -210,7 +204,7 @@ public class CalculateTilesCommandTest {
             jobParams.setBounds(aoi);
             jobParams.setPixelSize(0.001);
 
-            new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);
+            new CalculateTilesCommand(jobId, jobParams, debugLevel, caller, null);
     	}
     	catch (IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("If either max node count per tile or pixel size is specified, then both input parameters must be specified."));
