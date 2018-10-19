@@ -463,7 +463,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       -D language.translation.source.languages="detect" \ 
       -D language.translation.to.translate.tag.keys="name" input.osm output.osm
       
-# MetaInfo
+### MetaInfo
     
     # Lists all configuration option names
     hoot info --config-options
