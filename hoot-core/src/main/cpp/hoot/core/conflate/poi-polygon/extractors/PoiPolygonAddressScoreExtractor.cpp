@@ -338,11 +338,9 @@ bool PoiPolygonAddressScoreExtractor::_isParseableAddressFromComponents(const Ta
 {
   // we only require a valid street address...no other higher order parts, like city, state, etc.
   houseNum = getAddressTagValue(tags, "house_number");
-  street = getAddressTagValue(tags, "street");
+  street = getAddressTagValue(tags, "street").toLower();
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
-    houseNum = houseNum.replace(QRegExp("[a-z]+"), "");
-    street = street.toLower();
     LOG_TRACE("Found address from components: " << houseNum << ", " << street << ".");
     return true;
   }

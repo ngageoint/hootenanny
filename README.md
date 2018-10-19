@@ -452,6 +452,8 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       output.osm
     
 ### Language Translation
+
+Requires language translation server installation.  See the Hootenanny Install Guide for details.
     
     # Translate "name" and "alt_name" tags from German or Spanish to English
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
