@@ -150,8 +150,8 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Conflate two maps into a single map
     hoot conflate input1.osm input2.osm output.osm
     
-    # Conflate and only add data to output from the second input that does not conflict with data in
-    # the first input
+    # Conflate and only add data to output from the second map that does not conflict with data in
+    # the first map
     hoot conflate --differential input1.osm input2.osm output.osm
     
 ### Applying Changes
@@ -168,22 +168,22 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Convert an OSM file to a file geodatabase and apply a schema translation
     hoot convert input.osm output.gdb --trans MyTranslation.js
     
-    # Convert an OSM database to a file geodatabase and apply a schema translation
+    # Convert an OSM API database to a file geodatabase and apply a schema translation
     hoot convert PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" \ 
       output.gdb --trans MyTranslation.js
     
-    # Convert an OSM file to a shape file specifying export columns
+    # Convert an OSM file to a shape file while specifying export columns
     hoot convert input.osm output.shp --cols "highway,surface,name,alt_name,oneway,bridge"
     
     # Convert multiple shape files to an OSM file with schema translation
     hoot convert input1.shp input2.shp output.osm --trans translation.js
     
-    # Convert roads, bridges, overpasses and tunnels from a File Geodatabase into a single .osm 
+    # Convert roads, bridges, overpasses and tunnels from a file geodatabase into a single .osm 
     # file with schema translation
     hoot convert input.gdb;ROAD_L input.gdb;BRIDGE_OVERPASS_L input.gdb;TUNNEL_L output.osm \
       --trans translation.js
     
-    # Convert a shapefile that is stored inside the a Zip file:
+    # Convert and translate a shape file that is stored inside of a zip file
     hoot convert /vsizip//gis-data/input.zip/tds/LAP030.shp output.osm --trans translation.js
     
 ### Utilities
@@ -194,15 +194,15 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Crop a map
     hoot crop input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
     
-    # Bring two datasets closer in alignment
+    # Bring two maps closer in alignment
     hoot rubber-sheet input1.osm input2.osm output.osm
     
-    # Display the extent of map data
+    # Display the extent of a map
     hoot extent input.osm
     
     Map extent (minx,miny,maxx,maxy): -104.902,38.8532,-104.896,38.855
     
-    # Sort data to the OSM standard in memory
+    # Sort a map to the OSM standard in memory
     hoot sort input.osm output.osm
     
     # Concatenate two maps
@@ -241,24 +241,27 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Display a set of statistics for a map
     hoot stats input.osm
     
-    # Count all elements
+    # Count all features in a map
+    hoot count input.osm
+    
+    # Count all elements in a map
     hoot count input.osm --all-elements
 
-    # Count all POIs
+    # Count all POIs in a map
     hoot count "input1.osm;input2.osm" hoot::PoiCriterion
     
-    # Find the largest ID in a set of elements
+    # Find the largest element ID in a map
     hoot stat input.osm hoot::MaxIdVisitor
 
 ## Advanced
 
 ### Conflation
     
-    # Conflate only the buildings from the input maps
+    # Conflate only buildings
     hoot conflate -D match.creators="hoot::BuildingMatchCreator" \
       -D merger.creators="hoot::BuildingMergerCreator" input1.osm input2.osm output.osm
       
-    # Filter input datasets down to POIs only before conflating them
+    # Filter maps down to POIs only before conflating them
     hoot conflate -D conflate.pre.ops="hoot::RemoveElementsVisitor" \ 
       -D remove.elements.visitor.element.criterion="hoot::PoiCriterion" input1.osm input2.osm \
       output.osm
@@ -267,13 +270,13 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot conflate -D conflate.pre.ops="hoot::TranslationOp" \
       -D translation.script=myTranslation.js input1.osm input2.osm output.osm
       
-    # Align a second input map towards the first input map before conflating them
+    # Align a second map towards a first map before conflating them
     hoot conflate -D conflate.pre.ops="hoot::RubberSheet" -D rubber.sheet.ref=true input1.osm \
       input2.osm output.osm
     
-    # Assuming the first input map is superior to the second, cut out the shape of the first input 
-    # map from the data being conflated so that only data from the second input map is stitched in
-    # around it
+    # Assuming a first map is superior to a second, cut out the shape of the first map out from 
+    # the area being conflated so that only data from the second map is stitched in around the 
+    # first map
     hoot conflate -D unify.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 \
       -D cookie.cutter.alpha.shape.buffer=0 -D cookie.cutter.output.crop=false
     
@@ -289,7 +292,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # based on frequency
     hoot convert input.osm output.shp --cols
     
-    # Bulk write to an offline OSM API database
+    # Bulk write a map to an offline OSM API database
     hoot convert -D changeset.user.id=1 \
       -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true \
       -D osmapidb.bulk.inserter.disable.database.indexes.during.write=true \
@@ -297,12 +300,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       -D apidb.bulk.inserter.starting.way.id=10 -D apidb.bulk.inserter.starting.relation.id=10 \
       input.osm.pbf osmapidb://username:password@localhost:5432/database
       
-    # Bulk write to an online OSM API database
+    # Bulk write a map to an online OSM API database
     hoot convert -D changeset.user.id=1 \
       -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true \
       input.osm.pbf osmapidb://username:password@localhost:5432/database
     
-    # Write only nodes from an input file to output
+    # Write only nodes to an output map
     hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \ 
       -D remove.elements.visitor.element.criterion="hoot::NodeCriterion" input.osm output.osm
       
@@ -356,7 +359,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Combine sets of polygons together
     hoot union-polygons input1.osm input2.osm output.osm
     
-    # Detect road intersections and write them to output
+    # Detect road intersections
     hoot find-intersections input.osm output.osm
     
     # Create a node density plot
@@ -368,16 +371,13 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       perturbed.osm
     hoot perty --score input.osm perturbed.osm
     
-    # Display the internal tag schema Hootenanny uses
+    # Display the internal tag schema that Hootenanny uses
     hoot tag-schema
     
     # Calculate a set of irregular shaped tiles that will fit at most 1000 nodes each for a map
     hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000
     
 ### Statistics
-    
-    # Count all features
-    hoot count input.osm
 
     # Count all elements that are not POIs
     hoot count -D element.criterion.negate=true "input1.osm;input2.osm" hoot::PoiCriterion \
@@ -389,8 +389,8 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Calculate the numerical average of all "accuracy" tags
     hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
     
-    # Display the accuracy distribution for a map; output shows that 14 ways were found with an 
-    # accuracy of 15 meters and the value of 15 meters represents 100% of the ways examined
+    # Display the accuracy distribution for a map; This output shows that 14 ways were found 
+    # with an accuracy of 15 meters.
     hoot tag-accuracy-distribution input.osm
     
     15 : 14 (1)
@@ -426,7 +426,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
         ...
     }}
     
-    # Display frequences of feature names
+    # Display frequencies of feature names
     hoot tag-name-frequencies input.osm
     
     Total word count: 1163
@@ -440,11 +440,10 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
 ### Add Missing Type Tags
     
-    # Attempt to add type tags to POI and building features that are missing them
+    # Attempt to add missing type tags to POIs and buildings
     hoot convert -D convert.ops=hoot::ImplicitPoiPolygonTypeTagger input.osm output.osm
     
-    # Attempt to add type tags to POI and building features that are missing them before 
-    # conflating them
+    # Attempt to add missing type tags to POIs and buildings before conflating them
     hoot convert -D conflate.pre.ops=hoot::ImplicitPoiPolygonTypeTagger input1.osm input2.osm \
       output.osm
     
@@ -495,7 +494,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # List all available language detectors
     hoot languages --detectors
     
-    # List all availabe language translators
+    # List all available language translators
     hoot languages --translators
     
     # List all detectable langauges
