@@ -150,7 +150,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Conflate two maps into a single map
     hoot conflate input1.osm input2.osm output.osm
     
-    # Conflate and only add data to output from the second map that does not conflict with data in
+    # Conflate, adding data from the second map to output that does not conflict with data in 
     # the first map
     hoot conflate --differential input1.osm input2.osm output.osm
     
@@ -256,6 +256,10 @@ See the Hootenanny User Guide for more usage examples and details on command inp
 ## Advanced
 
 ### Conflation
+    
+    # Conflate, adding geometry data from the second map to output that does not conflict 
+    # with data in the first map (tags may be overwritten)
+    hoot conflate --differential --include-tags input1.osm input2.osm output.osm
     
     # Conflate only buildings
     hoot conflate -D match.creators="hoot::BuildingMatchCreator" \
