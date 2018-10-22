@@ -305,8 +305,7 @@ public:
     settings.set("poi.polygon.address.use.default.language.translation.only", "false");
     uut.setConfiguration(settings);
     boost::shared_ptr<DictionaryTranslator> dictTranslator =
-      boost::dynamic_pointer_cast<DictionaryTranslator>(
-        PoiPolygonAddressScoreExtractor::_translator);
+      boost::dynamic_pointer_cast<DictionaryTranslator>(AddressTranslator::_translator);
     dictTranslator->setTokenizeInput(false);
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -341,7 +340,7 @@ public:
     QSet<QString> additionalTags;
     additionalTags.insert("note");
     additionalTags.insert("description");
-    uut.setAdditionalTagKeys(additionalTags);
+    uut._addressParser.setAdditionalTagKeys(additionalTags);
 
     OsmMapPtr map(new OsmMap());
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));

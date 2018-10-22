@@ -36,9 +36,9 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/algorithms/AddressParser.h>
 
 #include "extractors/PoiPolygonNameScoreExtractor.h"
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -70,8 +70,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
     throw geos::util::TopologyException();
   }
 
-  const QString poiAddress =
-    PoiPolygonAddressScoreExtractor::getAddressTagValue(poi->getTags(), "full_address");
+  const QString poiAddress = AddressParser::getAddressTagValue(poi->getTags(), "full_address");
   if (poiAddress.isEmpty())
   {
     return false;
