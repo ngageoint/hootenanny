@@ -1,8 +1,8 @@
 ****Quick Stats****
-20:58:00.604 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+15:23:48.247 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-20:58:00.668 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-20:58:00.669 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
+15:23:48.289 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+15:23:48.289 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -13,28 +13,28 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-20:58:01.211 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+15:23:48.742 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-20:58:01.270 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-20:58:01.540 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-20:58:01.542 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+15:23:48.784 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+15:23:49.048 INFO  ...hoot3/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
+15:23:49.051 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-20:58:01.543 INFO  ...mdisk/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-20:58:01.546 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+15:23:49.052 INFO  ...e/dg/hoot3/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
+15:23:49.054 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-20:58:01.547 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-20:58:02.319 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
-20:58:05.596 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+15:23:49.055 INFO  "/home/dg/hoot3/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+15:23:49.354 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /home/dg/hoot3/translations/TDSv61.js
+15:23:50.523 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
 
-20:58:05.639 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-20:58:05.644 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-20:58:05.645 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+15:23:50.559 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+15:23:50.562 INFO  ...hoot3/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
+15:23:50.565 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-20:58:05.647 INFO  ...mdisk/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-20:58:05.648 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+15:23:50.565 INFO  ...e/dg/hoot3/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
+15:23:50.568 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-20:58:05.649 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-20:58:07.231 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
+15:23:50.568 INFO  "/home/dg/hoot3/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+15:23:50.830 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /home/dg/hoot3/translations/TDSv61.js
 {
     "Node Count":
     [
@@ -667,17 +667,17 @@ Maximum Relation ID	-9.223372036854776e+18
     "Translated Populated Tag Percent":
     [
         "0.05080545229244114",
-        "0.04772937905468026"
+        "0.04819277108433735"
     ],
     "Translated Populated Tag Count":
     [
         "123",
-        "103"
+        "104"
     ],
     "Translated Default Tag Count":
     [
         "1754",
-        "1545"
+        "1544"
     ],
     "Translated Null Tag Count":
     [
@@ -687,7 +687,7 @@ Maximum Relation ID	-9.223372036854776e+18
     "Building Translated Populated Tag Percent":
     [
         "0.0505050505050505",
-        "0.04924242424242424"
+        "0.0505050505050505"
     ],
     "Highway Translated Populated Tag Percent":
     [
@@ -712,6 +712,6 @@ Maximum Relation ID	-9.223372036854776e+18
     "Polygon Translated Populated Tag Percent":
     [
         "0.0505050505050505",
-        "0.04924242424242424"
+        "0.0505050505050505"
     ]
 }

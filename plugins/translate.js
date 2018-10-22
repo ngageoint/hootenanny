@@ -311,18 +311,42 @@ translate = {
                     // Debug:
                     // print('row[0]=' + row[0] + '  row[0]+endChar=' + row[0] + endChar);
 
-                    // Drop all of the undefined values
+                    // Drop all of the undefined values and only continue if we have a value
                     if (row[0])
                     {
-                        outList[row[0]] = row[1];
-                        // Debug
-                        //print('Used:' + col + ' = ' + inList[col]);
-                        delete inList[col];
+                        // Make sure that we don't stomp on already assigned values
+                        // NOTE: we could add a verify step to this to make sure that the XXX2, XXX3 values
+                        // are valid
+                        if (! outList[row[0]])
+                        {
+                            outList[row[0]] = row[1];
+                            // Debug
+                            // print('Used:' + col + ' = ' + inList[col]);
+                            delete inList[col];
+                        }
+                        else if (! outList[row[0] + '2'])
+                        {
+                            outList[row[0] + '2'] = row[1];
+                            // Debug
+                            // print('Used:' + col + ' = ' + inList[col] + ' as 2nd');
+                            delete inList[col];
+                        }
+                        else if (! outList[row[0] + '3'])
+                        {
+                            outList[row[0] + '3'] = row[1];
+                            // Debug
+                            // print('Used:' + col + ' = ' + inList[col] + ' as 3rd');
+                            delete inList[col];
+                        }
+                        else
+                        {
+                            hoot.logWarn('Could not assign: ' + col + ' = ' + inList[col] + ' to the 4th or greater value of ' + row[0]);
+                        }
                     }
                     else
                     {
                         // Debug
-                        //print('UsedUndef:' + col + ' = ' + inList[col]);
+                        // print('UsedUndef:' + col + ' = ' + inList[col]);
                         delete inList[col];
                     }
 
@@ -412,7 +436,19 @@ translate = {
 
                     if (row[0])
                     {
-                        outTags[row[0] + ':' + endChar] = row[1];
+                        // If we don't already have one of these tags, assign it.
+                        if (! outTags[row[0]])
+                        {
+                            outTags[row[0]] = row[1];
+                        }
+                        else
+                        {
+                            // Check for duplicate attributes
+                            if (outTags[row[0]] !== row[1])
+                            {
+                                outTags[row[0] + ':' + endChar] = row[1];
+                            }
+                        }
                         // Debug
                         //print('New Tag:' + row[0] + ':' + endChar+ ' = ' + outTags[row[0] + ':' + endChar] );
                         delete inAttrs[col];
