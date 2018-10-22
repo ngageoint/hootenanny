@@ -79,8 +79,8 @@ describe('TranslationServer', function () {
                             <nd ref="-13" />\
                             <nd ref="-10" />\
                             <tag k="F_CODE" v="AQ170"/>\
-                            <tag k="FFN" v="470"/>\
-                            <tag k="FFN2" v="382"/>\
+                            <tag k="FFN2" v="470"/>\
+                            <tag k="FFN" v="382"/>\
                         </way>\
                     </osm>';
 
@@ -100,7 +100,7 @@ describe('TranslationServer', function () {
 
         var tags = gj.features[0].properties;
         assert.equal(tags["amenity"], "fuel");
-        assert.equal(tags["toilets:2"], "yes");
+        assert.equal(tags["toilets"], "yes");
 
         var tds_xml = server.handleInputs({
             osm: osm_xml,
@@ -118,8 +118,8 @@ describe('TranslationServer', function () {
 
         var tags = gj.features[0].properties;
         assert.equal(tags["F_CODE"], "AQ170");
-        assert.equal(tags["FFN"], "470");
-        assert.equal(tags["FFN2"], "382");
+        assert.equal(tags["FFN2"], "470");
+        assert.equal(tags["FFN"], "382");
 
     });
 });
