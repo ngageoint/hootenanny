@@ -52,6 +52,7 @@ private:
 
   QString _address;
   ExactStringDistance _addrComp;
+  //see AddressParser::addressesMatchDespiteSubletterDiffs
   bool _allowLenientHouseNumberMatching;
 };
 

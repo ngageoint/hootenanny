@@ -32,18 +32,20 @@
 #include <hoot/core/util/LibPostalInit.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/conflate/Address.h>
 
 // libpostal
 #include <libpostal/libpostal.h>
-
 
 namespace hoot
 {
 
 QMultiMap<QString, QString> AddressParser::_addressTypeToTagKeys;
 
-AddressParser::AddressParser()
+AddressParser::AddressParser() :
+_allowLenientHouseNumberMatching(true),
+_preTranslateTagValuesToEnglish(false)
 {
   LibPostalInit::getInstance();
 }
@@ -55,6 +57,16 @@ void AddressParser::setConfiguration(const Settings& conf)
   if (_addressTypeToTagKeys.isEmpty())
   {
     _readAddressTagKeys(config.getAddressTagKeysFile());
+  }
+  setPreTranslateTagValuesToEnglish(_preTranslateTagValuesToEnglish, conf);
+}
+
+void AddressParser::setPreTranslateTagValuesToEnglish(bool translate, const Settings& conf)
+{
+  _preTranslateTagValuesToEnglish = translate;
+  if (_preTranslateTagValuesToEnglish)
+  {
+    _addressTranslator.setConfiguration(conf);
   }
 }
 
@@ -84,6 +96,138 @@ void AddressParser::_readAddressTagKeys(const QString configFile)
     }
   }
   LOG_VART(_addressTypeToTagKeys.size());
+}
+
+bool AddressParser::hasAddress(const Node& node)
+{
+  AddressParser addressParser;
+  // We're just getting a count here, so translation isn't needed (can be expensive).
+  addressParser._preTranslateTagValuesToEnglish = false;
+  return addressParser.parseAddresses(node).size() > 0;
+}
+
+bool AddressParser::hasAddress(const ConstElementPtr& element, const OsmMap& map)
+{
+  AddressParser addressParser;
+  // We're just getting a count here, so translation isn't needed (can be expensive).
+  addressParser._preTranslateTagValuesToEnglish = false;
+  QList<Address> addresses;
+  if (element->getElementType() == ElementType::Node)
+  {
+    return hasAddress(*boost::dynamic_pointer_cast<const Node>(element));
+  }
+  else if (element->getElementType() == ElementType::Way)
+  {
+    addresses = addressParser.parseAddressesFromWayNodes(
+      *boost::dynamic_pointer_cast<const Way>(element), map);
+  }
+  else if (element->getElementType() == ElementType::Relation)
+  {
+    addresses = addressParser.parseAddressesFromRelationMembers(
+      *boost::dynamic_pointer_cast<const Relation>(element), map);
+  }
+  return addresses.size() > 0;
+}
+
+QList<Address> AddressParser::parseAddresses(const Element& element) const
+{
+  QList<Address> addresses;
+
+  QString houseNum;
+  QString street;
+  const QSet<QString> parsedAddresses = _parseAddresses(element, houseNum, street);
+  LOG_VART(parsedAddresses);
+
+  // add the parsed addresses to a collection in which they will later be compared to each other
+  for (QSet<QString>::const_iterator parsedAddressItr = parsedAddresses.begin();
+       parsedAddressItr != parsedAddresses.end(); ++parsedAddressItr)
+  {
+    QString parsedAddress = *parsedAddressItr;
+    LOG_VART(parsedAddress);
+
+    //optional additional lang pre-normalization translation
+    if (_preTranslateTagValuesToEnglish)
+    {
+      //only translating the street portion of the address string...the number isn't translatable
+       assert(!street.isEmpty());
+      const QString preTranslatedStreet = _addressTranslator.translateToEnglish(street);
+      if (!preTranslatedStreet.isEmpty())
+      {
+        parsedAddress = houseNum + " " + preTranslatedStreet;
+      }
+      else
+      {
+        parsedAddress = houseNum + " " + street;
+      }
+    }
+    LOG_VART(parsedAddress);
+
+    //normalize and translate the address strings, so we end up comparing apples to apples
+    const QSet<QString> normalizedAddresses = _normalizeAddress(parsedAddress);
+    LOG_VART(normalizedAddresses);
+
+    for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
+         normalizedAddressItr != normalizedAddresses.end(); ++normalizedAddressItr)
+    {
+      const QString normalizedAddress = *normalizedAddressItr;
+      LOG_VART(normalizedAddress);
+      Address address(normalizedAddress, _allowLenientHouseNumberMatching);
+      if (!addresses.contains(address))
+      {
+        LOG_TRACE("Adding address: " << address);
+        addresses.append(address);
+      }
+    }
+  }
+
+  return addresses;
+}
+
+QList<Address> AddressParser::parseAddressesFromWayNodes(const Way& way, const OsmMap& map,
+                                                         const ElementId& skipElementId) const
+{
+  QList<Address> addresses;
+  LOG_TRACE("Collecting addresses from way nodes...");
+  const std::vector<long> wayNodeIds = way.getNodeIds();
+  for (size_t i = 0; i < wayNodeIds.size(); i++)
+  {
+    ConstElementPtr wayNode = map.getElement(ElementType::Node, wayNodeIds.at(i));
+    // see explanation for this check in _collectAddressesFromRelationMembers
+    if (skipElementId.isNull() || wayNode->getElementId() != skipElementId)
+    {
+      addresses = parseAddresses(*wayNode);
+    }
+  }
+  return addresses;
+}
+
+QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& relation,
+                                                                const OsmMap& map,
+                                                                const ElementId& skipElementId) const
+{
+  QList<Address> addresses;
+  LOG_TRACE("Collecting addresses from relation members...");
+  const std::vector<RelationData::Entry> relationMembers = relation.getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map.getElement(relationMembers[i].getElementId());
+    // If the poly contains the poi being compared to as a way node or relation member, then the
+    // POI's address will be added to both the poly and poi group of addresses and yield a fake
+    // address match
+    if (skipElementId.isNull() || member->getElementId() != skipElementId)
+    {
+      if (member->getElementType() == ElementType::Node)
+      {
+        addresses = parseAddresses(*member);
+      }
+      else if (member->getElementType() == ElementType::Way)
+      {
+        ConstWayPtr wayMember = boost::dynamic_pointer_cast<const Way>(member);
+        addresses = parseAddressesFromWayNodes(*wayMember, map, skipElementId);
+      }
+    }
+  }
+  return addresses;
 }
 
 QString AddressParser::getAddressTagValue(const Tags& tags, const QString addressTagType)
@@ -157,7 +301,7 @@ bool AddressParser::_isRangeAddress(const QString houseNum) const
   return houseNum.contains("-");
 }
 
-QSet<QString> AddressParser::normalizeAddress(const QString address) const
+QSet<QString> AddressParser::_normalizeAddress(const QString address) const
 {
   QSet<QString> normalizedAddresses;
 
@@ -308,8 +452,8 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
   return parsedAddress;
 }
 
-QSet<QString> AddressParser::parseAddresses(const Element& element, QString& houseNum,
-                                            QString& street) const
+QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& houseNum,
+                                             QString& street) const
 {
   QSet<QString> parsedAddresses;
 

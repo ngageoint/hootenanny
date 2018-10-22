@@ -44,6 +44,7 @@ using namespace boost;
 // Hoot
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Node.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OsmSchemaLoaderFactory.h>
 #include <hoot/core/util/ConfPath.h>
@@ -53,7 +54,7 @@ using namespace boost;
 #include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/algorithms/AddressParser.h>
 
 // Qt
 #include <QDomDocument>
@@ -1708,10 +1709,13 @@ bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagI
   LOG_VART(tags.getNames());
   LOG_VART(isPoi);
 
-  if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
-      PoiPolygonAddressScoreExtractor::nodeHasAddress(*boost::dynamic_pointer_cast<const Node>(e)))
+  if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois())
   {
-    isPoi = true;
+    ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(e);
+    if (AddressParser::hasAddress(*node))
+    {
+      isPoi = true;
+    }
   }
 
   //LOG_VART(e);

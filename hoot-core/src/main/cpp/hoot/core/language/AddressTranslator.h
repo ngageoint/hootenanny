@@ -35,9 +35,9 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Translates addresses to English
  */
-class AddressTranslator
+class AddressTranslator : public Configurable
 {
 public:
 
@@ -48,11 +48,11 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * TODO
+   * Translates an address to English
    *
-   * @param address
+   * @param address a complete address string
    */
-  void translateAddressToEnglish(QString& address) const;
+  QString translateToEnglish(const QString address) const;
 
 private:
 

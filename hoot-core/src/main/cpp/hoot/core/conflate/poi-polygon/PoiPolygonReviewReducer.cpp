@@ -40,10 +40,10 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/algorithms/AddressParser.h>
 
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 #include <float.h>
 
@@ -114,8 +114,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //if both have addresses and they explicitly contradict each other, throw out the review; don't
   //do it if the poly has more than one address, like in many multi-use buildings
-  if (!_addressMatch && PoiPolygonAddressScoreExtractor::elementHasAddress(poi, *_map) &&
-      PoiPolygonAddressScoreExtractor::elementHasAddress(poly, *_map))
+  if (!_addressMatch && AddressParser::hasAddress(poi, *_map) &&
+      AddressParser::hasAddress(poly, *_map))
   {
     LOG_TRACE("Returning miss per review reduction rule #1...");
     return true;

@@ -59,7 +59,7 @@ void AddressTranslator::setConfiguration(const Settings& conf)
   }
 }
 
-void AddressTranslator::translateAddressToEnglish(QString& address) const
+QString AddressTranslator::translateToEnglish(const QString address) const
 {
   const QStringList addressParts = address.simplified().split(" ");
   //Try to translate blocks of consecutive address tokens to cut down on the number of
@@ -107,12 +107,12 @@ void AddressTranslator::translateAddressToEnglish(QString& address) const
   if (anyAddressPartWasTranslated)
   {
     LOG_TRACE("Translated address from " << address << " to " << translatedAddress);
-    address = translatedAddress;
+    return translatedAddress;
   }
   else
   {
     LOG_TRACE("Address " << address << " could not be translated.");
-    address = "";
+    return "";
   }
 }
 
