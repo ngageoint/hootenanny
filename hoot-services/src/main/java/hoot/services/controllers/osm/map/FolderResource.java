@@ -30,7 +30,12 @@ import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
+import static hoot.services.utils.DbUtils.getConnection;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +60,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -357,6 +363,79 @@ public class FolderResource {
 
         return Response.ok().build();
     }
+
+    @PUT
+    @Path("/{folderId : \\d+}/visibility/{visibility : (public|private)}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateVisibility(@Context HttpServletRequest request,
+            @PathParam("folderId") Long folderId,
+            @PathParam("visibility") String visibility) throws SQLException {
+        Users user = Users.fromRequest(request);
+
+        // handle some ACL logic:
+        getFolderForUser(user, folderId);
+        String query = String.format("with recursive related_folders as (" +
+                "     select id,parent_id,display_name,user_id,public,created_at from folders where id = %d" +
+                "     union" +
+                "     select f.id,f.parent_id,f.display_name,f.user_id,f.public,f.created_at from folders f" +
+                "     inner join related_folders rf on (" +
+                "          f.parent_id = rf.id" +
+                "          OR" +
+                "          f.id = rf.parent_id" +
+                "     )" +
+                ")" +
+                "update folders x set public = %s " +
+                "where x.id in (select id from related_folders)", folderId, visibility.equals("public"));
+        long updated = 0;
+        try(Connection conn = getConnection() ) {
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+            updated = stmt.getUpdateCount();
+
+            if(!conn.getAutoCommit()) {
+                conn.commit();
+            }
+        }
+
+        java.util.Map<String, Object> r = new HashMap<String,Object>();
+        r.put("updated", updated);
+        return Response.status(Status.OK).entity(r).build();
+    }
+
+
+    @GET
+    @Path("/{folderId : \\d+}/visibility")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVisibility(@Context HttpServletRequest request,
+            @PathParam("folderId") Long folderId) throws SQLException {
+        Users user = Users.fromRequest(request);
+        // handle some ACL logic:
+        getFolderForUser(user, folderId);
+        List<Folders> affectedFolders = new ArrayList<Folders>();
+        try(Connection conn = getConnection() ) {
+            Statement stmt = conn.createStatement();
+            String query = String.format("with recursive related_folders as (" +
+                    "    select id,parent_id,display_name,user_id,public,created_at from folders where id = %d" +
+                    "    union" +
+                    "    select f.id,f.parent_id,f.display_name,f.user_id,f.public,f.created_at from folders f" +
+                    "    inner join related_folders rf on (" +
+                    "     f.parent_id = rf.id" +
+                    "     OR" +
+                    "     f.id = rf.parent_id" +
+                    "    )" +
+                    ")" +
+                    "select * from related_folders order by id asc;", folderId.longValue());
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                affectedFolders.add(Folders.fromResultSet(rs));
+            }
+            rs.close();
+            stmt.close();
+        }
+
+        return Response.status(Status.OK).entity(affectedFolders).build();
+    }
+
 
     /**
      * Converts a set of folder database records into an object returnable by a

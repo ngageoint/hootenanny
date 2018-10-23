@@ -26,7 +26,13 @@
  */
 package hoot.services.models.db;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Folders is a Querydsl bean type
@@ -78,6 +84,7 @@ public class Folders {
         this.parentId = parentId;
     }
 
+    @JsonProperty("public")
     public Boolean getPublicCol() {
         return publicCol;
     }
@@ -93,12 +100,24 @@ public class Folders {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-
+    @JsonIgnore
     public boolean isPrivate() {
         return !this.publicCol.booleanValue();
     }
+    @JsonIgnore
     public boolean isPublic() {
         return this.publicCol.booleanValue();
+    }
+
+    public static Folders fromResultSet(ResultSet rs) throws SQLException {
+        Folders f = new Folders();
+        f.setCreatedAt(rs.getTimestamp("created_at"));
+        f.setDisplayName(rs.getString("display_name"));
+        f.setId(rs.getLong("id"));
+        f.setParentId(rs.getLong("parent_id"));
+        f.setPublicCol(rs.getBoolean("public"));
+        f.setUserId(rs.getLong("user_id"));
+        return f;
     }
 
 }
