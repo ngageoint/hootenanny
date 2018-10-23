@@ -37,7 +37,6 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
-#include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 using namespace geos::geom;
@@ -96,7 +95,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
     {
       try
       {
-        const QString poiNeighborName = PoiPolygonNameScoreExtractor::getElementName(poiNeighbor);
+        const QString poiNeighborName = poiNeighbor->getName();
         if (!poiNeighborName.isEmpty() && poiNeighborName == poiAddress)
         {
           boost::shared_ptr<Geometry> poiNeighborGeom =

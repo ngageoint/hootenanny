@@ -5,6 +5,7 @@
 // hoot
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/algorithms/PhoneNumberParser.h>
 
 // Qt
 #include <QList>
@@ -15,18 +16,8 @@ namespace hoot
 class OsmMap;
 class Element;
 
-struct ElementPhoneNumber
-{
-  QString name;
-  QString tagKey;
-  QString tagValue;
-};
-
 /**
- * Scores phone number similarity between features.  Looks at tag keys containing "phone" by deafult
- * and can be expanded with additional tag keys.
- *
- * This class is generic enough that it could be used outside of POI/Poly conflation, if needed.
+ * Scores phone number similarity between features.
  */
 class PoiPolygonPhoneNumberScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -47,24 +38,17 @@ public:
   virtual QString getDescription() const
   { return "Scores phone number similarity for POI/Polygon conflation"; }
 
-  void setRegionCode(QString code);
-  void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }
-  void setSearchInText(bool search);
-
-  long getPhoneNumbersProcessed() const { return _phoneNumbersProcessed; }
+  long getPhoneNumbersProcessed() const { return _phoneNumberParser.getPhoneNumbersProcessed(); }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
 private:
 
-  QString _regionCode;
-  QStringList _additionalTagKeys;
-  bool _searchInText;
+  friend class PoiPolygonPhoneNumberScoreExtractorTest;
+
   mutable long _phoneNumbersProcessed;
   mutable bool _matchAttemptMade;
 
-  QList<ElementPhoneNumber> _getPhoneNumbers(const ConstElementPtr& element) const;
-  void _addPhoneNumber(const QString name, const QString tagKey, const QString tagValue,
-                       QList<ElementPhoneNumber>& phoneNumbers) const;
+  PhoneNumberParser _phoneNumberParser;
 };
 
 }

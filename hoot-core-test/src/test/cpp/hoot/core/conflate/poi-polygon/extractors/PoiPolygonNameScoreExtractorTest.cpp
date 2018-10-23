@@ -71,15 +71,16 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.10669, uut.extract(*map, node1, way2), 0.001);
   }
 
+  //TODO: move this test
   void elementNameTest()
   {
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("name", "blah");
-    HOOT_STR_EQUALS("blah", PoiPolygonNameScoreExtractor::getElementName(node1));
+    HOOT_STR_EQUALS("blah", node1->getName());
 
     NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set("blah", "blah");
-    HOOT_STR_EQUALS("", PoiPolygonNameScoreExtractor::getElementName(node2));
+    HOOT_STR_EQUALS("", node2->getName());
   }
 
   void translateTest()

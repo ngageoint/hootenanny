@@ -54,10 +54,10 @@ public:
     node1->getTags().set("phone", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
 
-    uut.setRegionCode("US");
+    uut._phoneNumberParser.setRegionCode("US");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    uut.setRegionCode("CH");
+    uut._phoneNumberParser.setRegionCode("CH");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
 
     node1->getTags().set("phone", "+41 44 668 1800");
@@ -97,7 +97,7 @@ public:
     QString exceptionMsg("");
     try
     {
-      uut.setRegionCode("blah");
+      uut._phoneNumberParser.setRegionCode("blah");
     }
     catch (const HootException& e)
     {
@@ -117,10 +117,10 @@ public:
     node1->getTags().set("note", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
 
-    uut.setAdditionalTagKeys(QStringList("note"));
+    uut._phoneNumberParser.setAdditionalTagKeys(QStringList("note"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    uut.setAdditionalTagKeys(QStringList());
+    uut._phoneNumberParser.setAdditionalTagKeys(QStringList());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
@@ -137,11 +137,11 @@ public:
       "this is some text with a phone number: (123) 456 7890; and here's another one: 123 456 7890");
     way1->getTags().set("phone", "123 456 7890");
 
-    uut.setRegionCode("US");
-    uut.setSearchInText(true);
+    uut._phoneNumberParser.setRegionCode("US");
+    uut._phoneNumberParser.setSearchInText(true);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    uut.setSearchInText(false);
+    uut._phoneNumberParser.setSearchInText(false);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 };

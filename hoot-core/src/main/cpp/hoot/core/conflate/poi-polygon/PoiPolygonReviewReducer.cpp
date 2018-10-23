@@ -166,8 +166,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //similar to above, but for gardens
   if ((poiLeisureVal == "garden" || polyLeisureVal == "garden") &&
        (!_nonDistanceSimilaritiesPresent() ||
-        (polyIsPark &&
-         !PoiPolygonNameScoreExtractor::getElementName(poly).toLower().contains("garden"))))
+        (polyIsPark && !poly->getName().toLower().contains("garden"))))
   {
     LOG_TRACE("Returning miss per review reduction rule #6...");
     return true;
@@ -183,8 +182,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //these seem to be clustered together tightly a lot in cities, so up the requirement a bit
   //TODO: using custom match/review distances or custom score requirements may be a better way to
   //handle these types
-  const bool poiHasName = !PoiPolygonNameScoreExtractor::getElementName(poi).isEmpty();
-  const bool polyHasName = !PoiPolygonNameScoreExtractor::getElementName(poly).isEmpty();
+  const bool poiHasName = !poi->getName().isEmpty();
+  const bool polyHasName = !poly->getName().isEmpty();
   if (poiTags.get("tourism") == "hotel" && polyTags.get("tourism") == "hotel" &&
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
   {
@@ -207,8 +206,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //similar to above, but for sport fields
-  const bool poiNameEndsWithField =
-    PoiPolygonNameScoreExtractor::getElementName(poi).toLower().endsWith("field");
+  const bool poiNameEndsWithField = poi->getName().toLower().endsWith("field");
   LOG_VART(poiNameEndsWithField);
   const bool polyIsSport = PoiPolygonTypeScoreExtractor::isSport(poly);
   LOG_VART(polyIsSport);

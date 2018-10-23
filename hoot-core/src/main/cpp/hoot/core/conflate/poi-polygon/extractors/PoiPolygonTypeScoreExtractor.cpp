@@ -34,7 +34,6 @@
 #include <hoot/core/algorithms/string/MostEnglishName.h>
 #include <hoot/core/util/FileUtils.h>
 
-#include "PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonAddressScoreExtractor.h"
 #include "../PoiPolygonDistanceTruthRecorder.h"
 
@@ -388,8 +387,7 @@ bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
   {
     return false;
   }
-  return
-    _typeHasName("amenity=school", PoiPolygonNameScoreExtractor::getElementName(element).toLower());
+  return _typeHasName("amenity=school", element->getName().toLower());
 }
 
 bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
@@ -397,8 +395,8 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
 {
   if (isSpecificSchool(element1) && isSpecificSchool(element2))
   {
-    const QString name1 = PoiPolygonNameScoreExtractor::getElementName(element1).toLower();
-    const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element2).toLower();
+    const QString name1 = element1->getName().toLower();
+    const QString name2 = element2->getName().toLower();
     if (_haveMatchingTypeNames("amenity=school", name1, name2))
     {
       return true;
