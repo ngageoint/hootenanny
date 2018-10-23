@@ -214,7 +214,7 @@ public class FolderResource {
      *            The parent folder of the new folder. If at root level, is
      *            equal to 0.
      * @param isPublic
-     *            Default true
+     *            Default derived from parent
      * @return jobId Success = True/False
      */
     @POST
@@ -223,7 +223,7 @@ public class FolderResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addFolder(@Context HttpServletRequest request, @PathParam("folderName") String folderName,
             @PathParam("parentId") Long parentId,
-            @DefaultValue("true") @QueryParam("isPublic") boolean isPublic) {
+            @QueryParam("isPublic") Boolean isPublic) {
         Users user = Users.fromRequest(request);
         Long userid = -1L;
         if(user != null) {
@@ -233,14 +233,21 @@ public class FolderResource {
         // getFolderForUser() will perform ACLs, additionally
         // don't allow public folders to be created under private folders:
         Folders parentFolder = getFolderForUser(user, parentId);
-        if(isPublic && parentFolder.isPrivate()) {
-            throw new BadRequestException("public folders cannot be created under private folders");
-        }
-        // don't allow private folders to be create under public folders -except- root.
-        if(!isPublic && parentFolder.isPublic() && !parentFolder.getId().equals(0L)) {
-            throw new BadRequestException("private folders cannot be create under public folders");
-        }
+        // If the API user didn't specify a visibility level, inherit from the parent
+        // folder:
+        if(isPublic == null) {
+            isPublic = new Boolean(parentFolder.isPublic());
 
+        // If the user did specify verify visibility:
+        } else {
+            if(isPublic && parentFolder.isPrivate()) {
+                throw new BadRequestException("public folders cannot be created under private folders");
+            }
+            // don't allow private folders to be create under public folders -except- root.
+            if(!isPublic && parentFolder.isPublic() && !parentFolder.getId().equals(0L)) {
+                throw new BadRequestException("private folders cannot be create under public folders");
+            }
+        }
 
         Long newId = createQuery()
                 .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
