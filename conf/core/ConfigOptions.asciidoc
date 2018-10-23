@@ -1496,13 +1496,6 @@ The default alpha value of 1.15 was determined through experimentation with a Ja
 using MeanWordSetDistance as the container classes. See Redmine ticket #2349 for some experiment
 details.  The "best" value varies depending on the input data as well as how the data is being used.
 
-=== libaddressinput.address.rules.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/countryinfo.txt`
-
-JSON rules file used by libaddressinput for address normalization/validation.
-
 === libpostal.data.dir
 
 * Data Type: string
