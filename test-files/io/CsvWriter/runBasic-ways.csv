@@ -1,5 +1,24 @@
-way_id,changeset_id,timestamp,version,visible,redaction_id,tags
--4,0,1970-01-01T00:00:00Z,0,t,,note=>2,highway=>road
--3,0,1970-01-01T00:00:00Z,0,t,,note=>0,highway=>road
--2,0,1970-01-01T00:00:00Z,0,t,,note=>3,highway=>road
--1,0,1970-01-01T00:00:00Z,0,t,,note=>1,highway=>road
+way_id,changeset_id,timestamp,version,visible,tags
+-23,0,1970-01-01T00:00:00Z,1,t,note=>3,hoot:status=>1,highway=>road
+-22,1,1970-01-01T00:00:00Z,1,t,REF1=>Cheddar's,hoot:status=>3,hoot:building:match=>true,alt_name=>Cheddars,building=>yes,name=>"Cheddar's Casual Cafe",amenity=>restaurant
+-21,1,1970-01-01T00:00:00Z,1,t,REF1=>Biondi,hoot:status=>3,hoot:building:match=>true,building=>yes
+-20,1,1970-01-01T00:00:00Z,1,t,REF1=>Freddy's,hoot:status=>1,building=>yes,name=>Freddy's
+-19,1,1970-01-01T00:00:00Z,1,t,REF1=>Target,hoot:status=>3,hoot:building:match=>true,alt_name=>"Target - Aurora South;Target Grocery;Target Pharmacy",building=>yes,name=>Target
+-18,0,1970-01-01T00:00:00Z,1,t,REF1=>"Convoluted No Match 1",hoot:status=>1,building=>yes,name=>"Convoluted Example"
+-17,0,1970-01-01T00:00:00Z,1,t,hoot:status=>1,building=>yes,name=>"Bad Pair"
+-16,1,1970-01-01T00:00:00Z,1,t,hoot:status=>1,building=>yes,name=>"Bad Pair"
+-15,1,1970-01-01T00:00:00Z,1,t,hoot:status=>1,building=>yes,name=>"Bad Pair"
+-14,1,1970-01-01T00:00:00Z,1,t,hoot:status=>1,building=>yes,name=>"Bad Pair"
+-13,0,1970-01-01T00:00:00Z,1,t,hoot:status=>2,building=>yes,name=>"Best Buy"
+-12,0,1970-01-01T00:00:00Z,1,t,hoot:status=>2,building:part=>yes
+-11,0,1970-01-01T00:00:00Z,1,t,hoot:status=>2,building:part=>yes
+-10,0,1970-01-01T00:00:00Z,1,t,note=>0,hoot:status=>3,highway=>road
+-9,0,1970-01-01T00:00:00Z,1,t,note=>0,hoot:status=>3,highway=>road
+-8,0,1970-01-01T00:00:00Z,1,t,note=>0,hoot:status=>3,highway=>road
+-7,0,1970-01-01T00:00:00Z,1,t,note=>0,hoot:status=>1,highway=>road
+-6,0,1970-01-01T00:00:00Z,1,t,note=>0,hoot:status=>3,highway=>road
+-5,0,1970-01-01T00:00:00Z,1,t,note=>0,hoot:status=>3,highway=>road
+-4,0,1970-01-01T00:00:00Z,1,t,note=>2,hoot:status=>3,highway=>road
+-3,0,1970-01-01T00:00:00Z,1,t,note=>2,hoot:status=>3,highway=>road
+-2,0,1970-01-01T00:00:00Z,1,t,note=>1,hoot:status=>3,highway=>road
+-1,0,1970-01-01T00:00:00Z,1,t,REF1=>Panera,hoot:status=>3,hoot:building:match=>true,alt_name=>"Maid-Rite Diner;Panera Bread",building=>yes,name=>"Maid-Rite"

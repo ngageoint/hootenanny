@@ -44,7 +44,7 @@
 namespace hoot
 {
 
-class OsmCsvWriter : public PartialOsmMapWriter, Configurable
+class OsmCsvWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
   static std::string className() { return "hoot::OsmCsvWriter"; }
@@ -52,41 +52,88 @@ public:
   OsmCsvWriter();
   virtual ~OsmCsvWriter();
 
+  /**
+   * @brief isSupported returns true if the URL is likely supported
+   * @param url Filename ending in ".cvs"
+   * @return
+   */
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".csv"); }
+  /**
+   * @brief supportedFormats
+   * @return
+   */
   virtual QString supportedFormats() { return ".csv"; }
-
+  /**
+   * @brief open
+   * @param url
+   */
   virtual void open(QString url);
-
+  /**
+   * @brief close
+   */
   void close();
-
+  /**
+   * @brief toString Write map to one large string containing all CSV files,
+   * @param map Pointer to map object to write CSV data to a string
+   * @return
+   */
   static QString toString(const ConstOsmMapPtr& map);
-
+  /**
+   * @brief write Write map to set of CSV files
+   * @param map Pointer to map object to write to CSV
+   */
   virtual void write(ConstOsmMapPtr map);
-
+  /**
+   * @brief writePartial Write a single node/way/relation to the correct stream
+   * @param n/w/r - Pointer to the node/way/relation to write to CSV
+   */
   virtual void writePartial(const ConstNodePtr& n);
   virtual void writePartial(const ConstWayPtr& w);
   virtual void writePartial(const ConstRelationPtr& r);
+  /**
+   * @brief finalizePartial Finalize the map write
+   */
   virtual void finalizePartial();
-
+  /**
+   * @brief setConfiguration allows configuration settings to override the defaults
+   * @param conf Configuration settings object
+   */
   virtual void setConfiguration(const Settings& conf);
 
 private:
+  /**
+   * @brief _initFiles Initialize the file headers
+   */
   void _initFiles();
-  QString _getTags(const ConstWayPtr& w);
+  /**
+   * @brief _getTags Convert the tags to `hstore` formatted text
+   * @param e Pointer to the element
+   * @return `hstore` formatted string of tags
+   */
+  QString _getTags(const ConstElementPtr& e);
 
+  /** Decimal precision for output from configuration */
   int _precision;
+  /** Configurable field separator, defaults to comma */
   QString _separator;
+  /** Configurable end of line, defaults to '\n' */
   QString _endl;
-
-  QTextStream _nodes;
-  QTextStream _ways;
-  QTextStream _waynodes;
-
-  boost::shared_ptr<QFile> _n;
-  boost::shared_ptr<QFile> _w;
-  boost::shared_ptr<QFile> _wn;
-
-
+  /**
+   * @brief The FileType enum - File type indices for stream and file arrays below (note type int)
+   */
+  enum FileType : int
+  {
+    Nodes = 0,
+    Ways,
+    WayNodes,
+    Relations,
+    RelationMembers,
+    MaxFileType
+  };
+  /** Array of streams, one for each output file type */
+  std::array<QTextStream, FileType::MaxFileType> _streams;
+  /** Array of files, one for each output file type */
+  std::array<boost::shared_ptr<QFile>, FileType::MaxFileType> _files;
 };
 
 }

@@ -60,7 +60,7 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyTestA.osm", map);
+    reader.read("test-files/ScoreMatchRef1.osm", map);
 
     OsmCsvWriter writer;
     writer.open("test-output/io/CsvWriter/runBasic.csv");
@@ -74,6 +74,10 @@ public:
                      QString("test-output/io/CsvWriter/runBasic-ways.csv"));
     HOOT_FILE_EQUALS(QString("test-files/io/CsvWriter/runBasic-waynodes.csv"),
                      QString("test-output/io/CsvWriter/runBasic-waynodes.csv"));
+    HOOT_FILE_EQUALS(QString("test-files/io/CsvWriter/runBasic-relations.csv"),
+                     QString("test-output/io/CsvWriter/runBasic-relations.csv"));
+    HOOT_FILE_EQUALS(QString("test-files/io/CsvWriter/runBasic-relationmembers.csv"),
+                     QString("test-output/io/CsvWriter/runBasic-relationmembers.csv"));
   }
 
   void runString()
@@ -85,7 +89,7 @@ public:
 
     QString output = OsmCsvWriter::toString(map);
     //  Compare the results
-    HOOT_STR_EQUALS(output, expected_runString);
+    HOOT_STR_EQUALS(expected_runString, output);
   }
 
   void runEscapeTags()
@@ -100,46 +104,63 @@ public:
     WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
     way->setTags(tags);
 
+    QList<ElementPtr> nodes;
+    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.1), 15));
+    node1->getTags().appendValue("name", "test1");
+    nodes.append(node1);
+
+    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.1, 0.0), 15));
+    node2->getTags().appendValue("name", "test2");
+    nodes.append(node2);
+
+    RelationPtr relation = TestUtils::createRelation(map, nodes);
+    relation->setType("review");
+    relation->getTags().appendValue("name", "Test Review");
+    std::vector<RelationData::Entry> members = relation->getMembers();
+    members[0].role = "reviewee";
+    members[1].role = "reviewee";
+    relation->setMembers(members);
+
     QString output = OsmCsvWriter::toString(map);
     //  Compare the results
-    HOOT_STR_EQUALS(output, expected_runEscapeTags);
+    HOOT_STR_EQUALS(expected_runEscapeTags, output);
   }
 
   QString expected_runString =
-      "node_id,latitude,longitude,changeset_id,visible,timestamp,tile,version,redaction_id\n"
-      "-24,38.8922829731610307,-104.7571242107038501,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-23,38.8921263906740933,-104.7570871002226340,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-22,38.8909086840196778,-104.7569933474280219,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-21,38.8907414567564302,-104.7569953006112513,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-20,38.8905100588100012,-104.7552970957371627,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-19,38.8906218568842945,-104.7554296822108739,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-18,38.8904004105277679,-104.7559406925781644,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-17,38.8902778622473306,-104.7566367715649847,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-16,38.8902198465279980,-104.7570020119788126,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-15,38.8901811134555260,-104.7572472217875656,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-14,38.8900306150730160,-104.7580095940112273,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-13,38.8908004699918735,-104.7586007087063962,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-12,38.8908255427122072,-104.7573050338473735,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-11,38.8908255427121929,-104.7569936423757184,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-10,38.8908311144266534,-104.7565891913838385,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-9,38.8908450437108044,-104.7560916808716485,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-8,38.8908951891112054,-104.7555619574486201,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-7,38.8918145151778489,-104.7570437513481778,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-6,38.8914495720119433,-104.7570008008003555,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-5,38.8911188362054361,-104.7569942966839562,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-4,38.8904717379506977,-104.7570008008003555,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-3,38.8898142693043027,-104.7570115384373111,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-2,38.8908278806533190,-104.7568782149722182,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-1,38.8908235807431026,-104.7571019546465294,0,t,1970-01-01T00:00:00Z,,0,\n"
+      "node_id,latitude,longitude,changeset_id,visible,timestamp,version,tags\n"
+      "-24,38.8922829731610307,-104.7571242107038501,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-23,38.8921263906740933,-104.7570871002226340,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-22,38.8909086840196778,-104.7569933474280219,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-21,38.8907414567564302,-104.7569953006112513,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-20,38.8905100588100012,-104.7552970957371627,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-19,38.8906218568842945,-104.7554296822108739,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-18,38.8904004105277679,-104.7559406925781644,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-17,38.8902778622473306,-104.7566367715649847,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-16,38.8902198465279980,-104.7570020119788126,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-15,38.8901811134555260,-104.7572472217875656,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-14,38.8900306150730160,-104.7580095940112273,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-13,38.8908004699918735,-104.7586007087063962,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-12,38.8908255427122072,-104.7573050338473735,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-11,38.8908255427121929,-104.7569936423757184,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-10,38.8908311144266534,-104.7565891913838385,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-9,38.8908450437108044,-104.7560916808716485,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-8,38.8908951891112054,-104.7555619574486201,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-7,38.8918145151778489,-104.7570437513481778,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-6,38.8914495720119433,-104.7570008008003555,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-5,38.8911188362054361,-104.7569942966839562,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-4,38.8904717379506977,-104.7570008008003555,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-3,38.8898142693043027,-104.7570115384373111,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-2,38.8908278806533190,-104.7568782149722182,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-1,38.8908235807431026,-104.7571019546465294,0,t,1970-01-01T00:00:00Z,0,\n"
       "\n"
-      "way_id,changeset_id,timestamp,version,visible,redaction_id,tags\n"
-      "-7,0,1970-01-01T00:00:00Z,0,t,,note=>2,highway=>primary\n"
-      "-6,0,1970-01-01T00:00:00Z,0,t,,highway=>unclassified\n"
-      "-5,0,1970-01-01T00:00:00Z,0,t,,highway=>primary\n"
-      "-4,0,1970-01-01T00:00:00Z,0,t,,highway=>unclassified\n"
-      "-3,0,1970-01-01T00:00:00Z,0,t,,highway=>unclassified\n"
-      "-2,0,1970-01-01T00:00:00Z,0,t,,highway=>primary\n"
-      "-1,0,1970-01-01T00:00:00Z,0,t,,highway=>primary\n"
+      "way_id,changeset_id,timestamp,version,visible,tags\n"
+      "-7,0,1970-01-01T00:00:00Z,0,t,note=>2,highway=>primary\n"
+      "-6,0,1970-01-01T00:00:00Z,0,t,highway=>unclassified\n"
+      "-5,0,1970-01-01T00:00:00Z,0,t,highway=>primary\n"
+      "-4,0,1970-01-01T00:00:00Z,0,t,highway=>unclassified\n"
+      "-3,0,1970-01-01T00:00:00Z,0,t,highway=>unclassified\n"
+      "-2,0,1970-01-01T00:00:00Z,0,t,highway=>primary\n"
+      "-1,0,1970-01-01T00:00:00Z,0,t,highway=>primary\n"
       "\n"
       "way_id,node_id,version,sequence_id\n"
       "-7,-7,0,1\n"
@@ -171,26 +192,39 @@ public:
       "-2,-8,0,8\n"
       "-1,-24,0,1\n"
       "-1,-23,0,2\n"
-      "-1,-7,0,3\n";
+      "-1,-7,0,3\n"
+      "\n"
+      "relation_id,changeset_id,timestamp,version,visible,tags\n"
+      "\n"
+      "relation_id,member_type,member_id,member_role,version,sequence_id\n";
 
   QString expected_runEscapeTags =
-      "node_id,latitude,longitude,changeset_id,visible,timestamp,tile,version,redaction_id\n"
-      "-4,0.0000000000000000,1.0000000000000000,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-3,1.0000000000000000,1.0000000000000000,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-2,1.0000000000000000,0.0000000000000000,0,t,1970-01-01T00:00:00Z,,0,\n"
-      "-1,0.0000000000000000,0.0000000000000000,0,t,1970-01-01T00:00:00Z,,0,\n"
+      "node_id,latitude,longitude,changeset_id,visible,timestamp,version,tags\n"
+      "-6,0.0000000000000000,0.1000000000000000,0,t,1970-01-01T00:00:00Z,0,name=>test2\n"
+      "-5,0.1000000000000000,0.0000000000000000,0,t,1970-01-01T00:00:00Z,0,name=>test1\n"
+      "-4,0.0000000000000000,1.0000000000000000,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-3,1.0000000000000000,1.0000000000000000,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-2,1.0000000000000000,0.0000000000000000,0,t,1970-01-01T00:00:00Z,0,\n"
+      "-1,0.0000000000000000,0.0000000000000000,0,t,1970-01-01T00:00:00Z,0,\n"
       "\n"
-      "way_id,changeset_id,timestamp,version,visible,redaction_id,tags\n"
-      "-1,0,1970-01-01T00:00:00Z,0,t,,note=>\"<2>\",full_name=>\"\\\"Hacksaw\\\" Jim Duggan\",\"first name\"=>\"first name goes here\",aerialway=>\"t-bar\"\n"
+      "way_id,changeset_id,timestamp,version,visible,tags\n"
+      "-1,0,1970-01-01T00:00:00Z,0,t,note=>\"<2>\",full_name=>\"\\\"Hacksaw\\\" Jim Duggan\",\"first name\"=>\"first name goes here\",aerialway=>\"t-bar\"\n"
       "\n"
       "way_id,node_id,version,sequence_id\n"
       "-1,-1,0,1\n"
       "-1,-2,0,2\n"
       "-1,-3,0,3\n"
-      "-1,-4,0,4\n";
+      "-1,-4,0,4\n"
+      "\n"
+      "relation_id,changeset_id,timestamp,version,visible,tags\n"
+      "-1,0,1970-01-01T00:00:00Z,0,t,name=>\"Test Review\"\n"
+      "\n"
+      "relation_id,member_type,member_id,member_role,version,sequence_id\n"
+      "-1,Node,-5,reviewee,0,1\n"
+      "-1,Node,-6,reviewee,0,2\n";
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmCsvWriterTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmCsvWriterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmCsvWriterTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmCsvWriterTest, "current");
 
 }
