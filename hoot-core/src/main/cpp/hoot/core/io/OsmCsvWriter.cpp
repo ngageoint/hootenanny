@@ -197,7 +197,7 @@ void OsmCsvWriter::writePartial(const hoot::ConstNodePtr& n)
       << QString::number(n->getX(), 'f', _precision) << _separator
       << n->getChangeset() << _separator
       << (n->getVisible() ? 't' : 'f') << _separator
-      << OsmUtils::toTimeString(n->getTimestamp()) << _separator
+      << (n->getTimestamp() != ElementData::TIMESTAMP_EMPTY ? OsmUtils::toTimeString(n->getTimestamp()) : "") << _separator
       << n->getVersion() << _separator
       << _getTags(n) << _endl;
 }
@@ -209,7 +209,7 @@ void OsmCsvWriter::writePartial(const hoot::ConstWayPtr& w)
   _streams[FileType::Ways]
       << w->getId() << _separator
       << w->getChangeset() << _separator
-      << OsmUtils::toTimeString(w->getTimestamp()) << _separator
+      << (w->getTimestamp() != ElementData::TIMESTAMP_EMPTY ? OsmUtils::toTimeString(w->getTimestamp()) : "") << _separator
       << w->getVersion() << _separator
       << (w->getVisible() ? 't' : 'f') << _separator
       << _getTags(w) << _endl;
@@ -232,7 +232,7 @@ void OsmCsvWriter::writePartial(const hoot::ConstRelationPtr& r)
   _streams[FileType::Relations]
       << r->getId() << _separator
       << r->getChangeset() << _separator
-      << OsmUtils::toTimeString(r->getTimestamp()) << _separator
+      << (r->getTimestamp() != ElementData::TIMESTAMP_EMPTY ? OsmUtils::toTimeString(r->getTimestamp()) : "") << _separator
       << r->getVersion() << _separator
       << (r->getVisible() ? 't' : 'f') << _separator
       << _getTags(r) << _endl;
