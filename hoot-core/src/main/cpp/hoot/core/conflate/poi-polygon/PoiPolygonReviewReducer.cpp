@@ -95,6 +95,22 @@ bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
   return _typeScore > 0.03 || _nameScore > 0.35 || _addressMatch;
 }
 
+bool PoiPolygonReviewReducer::_polyContainsPoiAsMember(ConstElementPtr poly,
+                                                       ConstElementPtr poi) const
+{
+  ConstWayPtr polyWay = boost::dynamic_pointer_cast<const Way>(poly);
+  if (polyWay && polyWay->containsNodeId(poi->getId()))
+  {
+    return true;
+  }
+  ConstRelationPtr polyRelation = boost::dynamic_pointer_cast<const Relation>(poly);
+  if (polyRelation && polyRelation->contains(ElementId(ElementType::Node, poi->getId())))
+  {
+    return true;
+  }
+  return false;
+}
+
 bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
 {
   LOG_TRACE("Checking review reduction rules...");
@@ -112,13 +128,23 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
 
+  const int numPolyAddresses = AddressParser::hasAddress(poly, *_map);
+  const bool polyHasAddress = numPolyAddresses > 0;
+
   //if both have addresses and they explicitly contradict each other, throw out the review; don't
-  //do it if the poly has more than one address, like in many multi-use buildings
-  if (!_addressMatch && AddressParser::hasAddress(poi, *_map) &&
-      AddressParser::hasAddress(poly, *_map))
+  //do it if the poly has more than one address, like in many multi-use buildings.
+  if (!_addressMatch && AddressParser::hasAddress(poi, *_map) && polyHasAddress)
   {
-    LOG_TRACE("Returning miss per review reduction rule #1...");
-    return true;
+    //check to make sure the only address the poly has isn't the poi itself as a way node /
+    //relation member
+    if (_polyContainsPoiAsMember(poly, poi) && numPolyAddresses < 2)
+    {
+    }
+    else
+    {
+      LOG_TRACE("Returning miss per review reduction rule #1...");
+      return true;
+    }
   }
 
   if (OsmSchema::getInstance().isMultiUse(*poly) && poiHasType && _typeScore < 0.4)
@@ -228,8 +254,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
   //be more strict with their reviews.
-  if (/*_genericLandUseTagVals.contains(polyTags.get("landuse"))*/
-      polyHasLanduse && !_nonDistanceSimilaritiesPresent())
+  if (polyHasLanduse && !_nonDistanceSimilaritiesPresent())
   {
     LOG_TRACE("Returning miss per review reduction rule #11...");
     return true;

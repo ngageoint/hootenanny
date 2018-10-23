@@ -102,6 +102,8 @@ private:
    * is increased.
    */
   bool _poiNeighborIsCloserToPolyThanPoi(ConstElementPtr poi, ConstElementPtr poly);
+
+  bool _polyContainsPoiAsMember(ConstElementPtr poly, ConstElementPtr poi) const;
 };
 
 }

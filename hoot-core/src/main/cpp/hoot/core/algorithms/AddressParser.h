@@ -113,6 +113,15 @@ public:
   static bool hasAddress(const ConstElementPtr& element, const OsmMap& map);
 
   /**
+   * Counts the number of address an element contains
+   *
+   * @param element the element to examine for addresses
+   * @param map map the element being examined belongs to
+   * @return the number of addresses the element contains
+   */
+  static int numAddresses(const ConstElementPtr& element, const OsmMap& map);
+
+  /**
    * Returns an address tag value for an address type
    *
    * @param tags tags to search for address value

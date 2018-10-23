@@ -108,6 +108,11 @@ bool AddressParser::hasAddress(const Node& node)
 
 bool AddressParser::hasAddress(const ConstElementPtr& element, const OsmMap& map)
 {
+  return numAddresses(element, map) > 0;
+}
+
+int AddressParser::numAddresses(const ConstElementPtr& element, const OsmMap& map)
+{
   AddressParser addressParser;
   // We're just getting a count here, so translation isn't needed (can be expensive).
   addressParser._preTranslateTagValuesToEnglish = false;
@@ -126,7 +131,7 @@ bool AddressParser::hasAddress(const ConstElementPtr& element, const OsmMap& map
     addresses = addressParser.parseAddressesFromRelationMembers(
       *boost::dynamic_pointer_cast<const Relation>(element), map);
   }
-  return addresses.size() > 0;
+  return addresses.size();
 }
 
 QList<Address> AddressParser::parseAddresses(const Element& element) const
