@@ -140,7 +140,7 @@ public class MapResource {
         }
 
         SQLQuery<Tuple> q = createQuery()
-            .select(maps, folders.id)
+            .select(maps, folders.id, folders.publicCol)
             .from(maps)
             .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
             .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
@@ -163,8 +163,15 @@ public class MapResource {
         Set<Long> foldersTheUserCanSee = FolderResource.getFolderIdsForUser(user);
         for(Tuple t : mapLayerRecords) {
             Long parentFolder = t.get(folders.id);
+            Boolean parentFolderIsPublic = t.get(folders.publicCol);
+            // [!] If data set in root folder (0L), publicCol will be null
+            // fall back to public.
+            if(parentFolderIsPublic == null) {
+                parentFolderIsPublic = new Boolean(true);
+            }
             if(parentFolder == null || parentFolder.equals(0L) || foldersTheUserCanSee.contains(parentFolder)) {
                 Maps m = t.get(maps);
+                m.setPublicCol(parentFolderIsPublic);
                 mapLayersOut.add(m);
             }
         }
