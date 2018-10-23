@@ -83,6 +83,9 @@ ScriptTranslator* ScriptTranslatorFactory::createTranslator(QString scriptPath)
       if (result == 0 && st[i]->isValidScript())
       {
         result = st[i];
+        LOG_TRACE("Found a valid translator");
+        LOG_VART(result);
+        break;
       }
       else
       {

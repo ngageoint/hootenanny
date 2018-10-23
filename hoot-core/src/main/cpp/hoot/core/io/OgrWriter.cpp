@@ -219,8 +219,13 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f
   }
 
   //Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same feature object for sequential insertions
+  LOG_VARI(poFeature->GetFID());
   poFeature->SetFID(-1);
+
+  LOG_INFO("About to write feature");
   errCode = layer->CreateFeature(poFeature);
+
+  LOG_VARI(errCode);
 
   if (errCode != OGRERR_NONE)
   {
@@ -298,16 +303,27 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
   QString layerName = _prependLayerName + layer->getName();
   poLayer = _getLayerByName(layerName);
 
+  LOG_VARI(poLayer);
+  LOG_VARI(layerName);
+  LOG_VARI(_appendData);
+
   // We only want to add to a layer IFF the config option "ogr.append.data" set
   if (poLayer != NULL && _appendData)
   {
+    LOG_INFO(" Got Layer and Append");
     // Layer exists
     _layers[layer->getName()] = poLayer;
     // Loop through the fields making sure that they exist in the output. Print a warning if
     // they don't exist
     OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-
     boost::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+
+    LOG_VARI(fd->getFieldCount());
+    LOG_VARI(poFDefn->GetFieldCount());
+
+    LOG_INFO("new layer name :" + QString(poLayer->GetName()) + ":");
+    LOG_INFO("existing layer name :" + layer->getName() + ":");
+
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
       boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
@@ -377,16 +393,30 @@ OGRLayer* OgrWriter::_getLayerByName(const QString& layerName)
   // Check if the layer exists in the output.
   int layerCount = _ds->GetLayerCount();
 
+  LOG_INFO("Checking for: " + layerName);
+  LOG_VARI(layerCount);
+
   for (int i = 0; i < layerCount; i++)
   {
-    OGRLayer* layer = _ds->GetLayer(i+1);
+//    OGRLayer* layer = _ds->GetLayer(i+1);
+    OGRLayer* layer = _ds->GetLayer(i);
     if (layer != NULL)
     {
       QString tmpLayerName = QString(layer->GetName());
+      LOG_INFO("Checking layername: " + tmpLayerName);
       if (tmpLayerName == layerName)
       {
+        LOG_INFO("Got a match");
         return layer;
       }
+      else
+      {
+        LOG_INFO(":" + tmpLayerName + ": != :" + layerName + ":");
+      }
+    }
+    else
+    {
+      LOG_INFO("Layer is NULL");
     }
   }
   return NULL;
@@ -496,7 +526,6 @@ void OgrWriter::setConfiguration(const Settings& conf)
   setPrependLayerName(configOptions.getOgrWriterPreLayerName());
 
   _appendData = configOptions.getOgrAppendData();
-
   QString strictStr = configOptions.getOgrStrictChecking();
   if (strictStr == "on")
   {
