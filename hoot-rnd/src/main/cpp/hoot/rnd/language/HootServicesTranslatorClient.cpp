@@ -198,7 +198,7 @@ void HootServicesTranslatorClient::_validateAvailableLangs(
   }
 }
 
-QString HootServicesTranslatorClient::_getTranslateRequestData(const QString text)
+QString HootServicesTranslatorClient::_getRequestData(const QString text)
 {
   boost::property_tree::ptree requestObj;
   requestObj.put("translator", _translator.toStdString());
@@ -210,29 +210,15 @@ QString HootServicesTranslatorClient::_getTranslateRequestData(const QString tex
   const QString performExhaustiveSearchStr = _performExhaustiveSearch ? "true" : "false";
   requestObj.put("performExhaustiveTranslationSearchWithNoDetection",
     performExhaustiveSearchStr.toStdString());
-  boost::property_tree::ptree detectors;
-  for (int i = 0; i < _detectors.size(); i++)
-  {
-    boost::property_tree::ptree detector;
-    detector.put("", _detectors.at(i).toStdString());
-    detectors.push_back(std::make_pair("", detector));
-  }
-  requestObj.add_child("detectors", detectors);
-  boost::property_tree::ptree sourceLangCodes;
-  for (int i = 0; i < _sourceLangs.size(); i++)
-  {
-    boost::property_tree::ptree sourceLangCode;
-    sourceLangCode.put("", _sourceLangs.at(i).toStdString());
-    sourceLangCodes.push_back(std::make_pair("", sourceLangCode));
-  }
-  requestObj.add_child("sourceLangCodes", sourceLangCodes);
+  requestObj.add_child("detectors", *StringUtils::stringListToJsonStringArray(_detectors));
+  requestObj.add_child("sourceLangCodes", *StringUtils::stringListToJsonStringArray(_sourceLangs));
 
   std::stringstream requestStrStrm;
   boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
   return QString::fromStdString(requestStrStrm.str());
 }
 
-void HootServicesTranslatorClient::_parseTranslateResponse(
+void HootServicesTranslatorClient::_parseResponse(
   boost::shared_ptr<boost::property_tree::ptree> replyObj)
 {
   _translatedText =
@@ -329,8 +315,7 @@ QString HootServicesTranslatorClient::translate(const QString text)
 
   if (!_textIsTranslatable(text))
   {
-    LOG_TRACE(
-      "Text to be translated is not translatable; text: " << text);
+    LOG_TRACE("Text to be translated is not translatable; text: " << text);
     _translatedText = "";
     return "";
   }
@@ -348,7 +333,6 @@ QString HootServicesTranslatorClient::translate(const QString text)
     return "";
   }
 
-  //create and execute the request
   QUrl url(_translationUrl);
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
@@ -362,27 +346,25 @@ QString HootServicesTranslatorClient::translate(const QString text)
   {
     request.networkRequest(
       url, headers, QNetworkAccessManager::Operation::PostOperation,
-      _getTranslateRequestData(text).toUtf8());
+      _getRequestData(text).toUtf8());
   }
   catch (const HootException& e)
   {
     throw HootException("Error translating text: " + text + ". error: " + e.what());
   }
-
-  //check for a response error
   if (request.getHttpStatus() != 200)
   {
     throw HootException("Error translating text: " + text + ". error: " + request.getErrorString());
   }
 
-  //parse the response data
-  _parseTranslateResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()));
+  _parseResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()));
 
   if (text.toLower() == _translatedText.toLower())
   {
     _translatedText = "";
   }
 
+  //update the cache
   if (_cache && !_cache->contains(text))
   {
     _insertTranslationIntoCache(text, _translatedText, _detectedLang);

@@ -41,26 +41,27 @@ HOOT_FACTORY_REGISTER(LanguageDetector, HootServicesLanguageDetectorMockClient)
 HootServicesLanguageDetectorMockClient::HootServicesLanguageDetectorMockClient() :
 HootServicesLanguageDetectorClient()
 {
-  _mockDetections[QString::fromUtf8("wie alt bist du")] =
-    QString::fromUtf8("de");
-  _mockDetections[QString::fromUtf8("buenos noches")] =
-    QString::fromUtf8("es");
-  _mockDetections[QString::fromUtf8("computer store")] =
-    QString::fromUtf8("en");
+  _mockDetections[QString::fromUtf8("wie alt bist du")] = QString::fromUtf8("de");
+  _mockDetections[QString::fromUtf8("wie heissen sie")] = QString::fromUtf8("de");
+  _mockDetections[QString::fromUtf8("buenos noches")] = QString::fromUtf8("es");
+  _mockDetections[QString::fromUtf8("buenos dias")] = QString::fromUtf8("es");
+  _mockDetections[QString::fromUtf8("computer store")] = QString::fromUtf8("en");
 
   _useCookies = false;
 }
 
 QString HootServicesLanguageDetectorMockClient::detect(const QString text)
 {
-  LOG_VART(text);
+  LOG_DEBUG("Detecting source language for text: " << text << "...");
   if (!_mockDetections.contains(text.normalized(QString::NormalizationForm_D)))
   {
     throw HootException("No mock translation available.");
   }
 
-  LOG_DEBUG("Detecting source language for text: " << text << "...");
-  return _mockDetections[text];
+
+  const QString detection = _mockDetections[text];
+  LOG_DEBUG("Detected source language: " << detection << " for text: " << text);
+  return detection;
 }
 
 }

@@ -53,7 +53,7 @@ public:
    * @param text
    * @return
    */
-  QString detect(const QString text);
+  virtual QString detect(const QString text) = 0;
 };
 
 }

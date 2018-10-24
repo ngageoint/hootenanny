@@ -107,9 +107,11 @@ QMap<QString, QString> HootServicesTranslationInfoResponseParser::getLangCodesTo
   {
     const QString langCode =
       QString::fromStdString(language.second.get<std::string>("iso6391Code"));
+    LOG_VART(langCode);
     const QString name =
       QUrl::fromPercentEncoding(
         QString::fromStdString(language.second.get<std::string>("name")).toUtf8());
+    LOG_VART(name);
     langCodesToLangs[langCode] = name;
   }
   return langCodesToLangs;

@@ -1327,8 +1327,15 @@ other tags from elements.
 
 LanguageDetector implementation to use for detecting source languages.  If using
 hoot::HootServicesLanguageDetectorClient, the option 'hoot.services.authenticated.username' must be
-populated with a valid value or translation web requests will fail. TODO: this default will have
-to change
+populated with a valid value or translation web requests will fail.
+
+=== language.detection.write.detected.lang.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, source languages detected for tags will be written in new tags to output.  If false, then
+only a summary of the source languages found will be printed.
 
 === language.hoot.services.detectable.languages.endpoint
 

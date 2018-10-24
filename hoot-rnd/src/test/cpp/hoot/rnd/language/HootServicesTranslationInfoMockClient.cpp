@@ -43,32 +43,18 @@ HootServicesTranslationInfoClient()
   _useCookies = false;
 }
 
-/**
- * Retrieves available language apps
- *
- * @param type type of app to retrieve; "translator" or "detector"
- * @return a property tree containing the language app information
- */
 boost::shared_ptr<boost::property_tree::ptree>
-  HootServicesTranslationInfoMockClient::getAvailableApps(const QString type)
+  HootServicesTranslationInfoMockClient::getAvailableApps(const QString /*type*/)
 {
-  LOG_DEBUG("Checking apps available for: " << type << "...");
   const QString jsonStr =
     "{\"apps\":[{\"name\":\"TikaLanguageDetector\",\"description\":\"The language detection portion of a library which detects and extracts metadata and text from many different file types\",\"url\":\"https://tika.apache.org\"},{\"name\":\"OpenNlpLanguageDetector\",\"description\":\"The language detector portion of a machine learning based toolkit for the processing of natural language text\",\"url\":\"https://opennlp.apache.org\"}]}";
   return StringUtils::jsonStringToPropTree(jsonStr);
 }
 
-/**
- * Retrieves translation available languages info
- *
- * @param type type of language information to retrieve; "translatable" or "detectable"
- * @return a property tree containing the language information
- */
 boost::shared_ptr<boost::property_tree::ptree>
-  HootServicesTranslationInfoMockClient::getAvailableLanguages(const QString type)
+  HootServicesTranslationInfoMockClient::getAvailableLanguages(const QString /*type*/)
 {
-  LOG_DEBUG("Checking languages available for: " << type << "...");
-  const QString jsonStr = "{\"languages\":[{\"name\":\"Arabic\",\"available\":false,\"iso6391Code\":\"ar\",\"iso6392Code\":\"ara\"},{\"name\":\"Amharic\",\"available\":false,\"iso6391Code\":\"am\",\"iso6392Code\":\"afr\"}]}";
+  const QString jsonStr = "{\"languages\":[{\"name\":\"German\",\"available\":true,\"iso6391Code\":\"de\",\"iso6392Code\":\"deu\"},{\"name\":\"Spanish\",\"available\":true,\"iso6391Code\":\"es\",\"iso6392Code\":\"spa\"}]}";
   return StringUtils::jsonStringToPropTree(jsonStr);
 }
 

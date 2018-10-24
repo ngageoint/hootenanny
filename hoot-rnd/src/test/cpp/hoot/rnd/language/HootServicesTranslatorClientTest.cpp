@@ -61,8 +61,9 @@ public:
     boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
     HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runBuildRequestTest").trimmed(),
-        uut->_getTranslateRequestData("text to translate").trimmed());
+      FileUtils::readFully(
+        testInputRoot + "/runBuildRequestTest").trimmed(),
+        uut->_getRequestData("text to translate").trimmed());
   }
 
   void runParseResponseTest()
@@ -73,7 +74,7 @@ public:
     const QString jsonStr = "{ \"translatedText\": \"How%20old%20are%20you\", \"performExhaustiveTranslationSearchWithNoDetection\": false, \"detectorUsed\": \"TikaLanguageDetector\", \"sourceLangCodes\": [ \"de\",\"es\" ], \"detectedLangCode\": \"de\", \"detectedLangAvailableForTranslation\": true, \"translator\": \"HootLanguageTranslator\", \"sourceText\": \"wie alt bist du\", \"detectedLang\": \"German\", \"detectedLanguageOverridesSpecifiedSourceLanguages\": false }";
     boost::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(jsonStr);
-    uut->_parseTranslateResponse(response);
+    uut->_parseResponse(response);
 
     HOOT_STR_EQUALS("How old are you", uut->getTranslatedText());
     HOOT_STR_EQUALS("German", uut->getDetectedLanguage());

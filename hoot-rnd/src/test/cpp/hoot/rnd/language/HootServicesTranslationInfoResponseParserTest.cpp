@@ -43,7 +43,7 @@ namespace hoot
 static const QString testInputRoot =
   "test-files/language/HootServicesTranslationInfoResponseParserTest";
 
-static const QString langsStr = "{\"languages\":[{\"name\":\"Arabic\",\"available\":false,\"iso6391Code\":\"ar\",\"iso6392Code\":\"ara\"},{\"name\":\"Amharic\",\"available\":false,\"iso6391Code\":\"am\",\"iso6392Code\":\"afr\"}]}";
+static const QString langsStr = "{\"languages\":[{\"name\":\"German\",\"available\":true,\"iso6391Code\":\"de\",\"iso6392Code\":\"deu\"},{\"name\":\"Spanish\",\"available\":true,\"iso6391Code\":\"es\",\"iso6392Code\":\"spa\"}]}";
 
 class HootServicesTranslationInfoResponseParserTest : public HootTestFixture
 {
@@ -109,8 +109,8 @@ public:
       HootServicesTranslationInfoResponseParser::getLangCodesToLangs(response);
 
     CPPUNIT_ASSERT_EQUAL(2, langCodesToLangs.size());
-    HOOT_STR_EQUALS("Arabic", langCodesToLangs["ar"]);
-    HOOT_STR_EQUALS("Amharic", langCodesToLangs["am"]);
+    HOOT_STR_EQUALS("German", langCodesToLangs["de"]);
+    HOOT_STR_EQUALS("Spanish", langCodesToLangs["es"]);
   }
 };
 

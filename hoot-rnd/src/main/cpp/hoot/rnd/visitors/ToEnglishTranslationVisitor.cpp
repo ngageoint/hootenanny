@@ -99,18 +99,36 @@ void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
   _currentElementHasSuccessfulTagTranslation = false;
 
   const Tags& tags = e->getTags();
+  bool elementProcessed = false;
   for (int i = 0; i < _toTranslateTagKeys.size(); i++)
   {
     const QString toTranslateTagKey = _toTranslateTagKeys.at(i);
     if (tags.contains(toTranslateTagKey))
-    {
-      _translate(e, toTranslateTagKey);
-
-      _numProcessedElements++;
-      if (_numProcessedElements % _taskStatusUpdateInterval == 0)
+    {     
+      //making skipping tags that already have an english translated tag optional, b/c a many of the
+      //OSM english translations I've seen are either just copies of the foreign language text or are
+      //not very good translations
+      const QString preTranslatedTagKey = toTranslateTagKey + ":en";
+      if (_ignorePreTranslatedTags && tags.contains(preTranslatedTagKey))
       {
-        PROGRESS_INFO("Attempted tag translation for " << _numProcessedElements << " elements.");
+        LOG_TRACE(
+          "Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" <<
+          tags.get(toTranslateTagKey).trimmed());
       }
+      else
+      {
+        _translate(e, toTranslateTagKey);
+        elementProcessed = true;
+      }
+    }
+  }
+
+  if (elementProcessed)
+  {
+    _numProcessedElements++;
+    if (_numProcessedElements % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO("Attempted tag translation for " << _numProcessedElements << " elements.");
     }
   }
 
@@ -124,23 +142,12 @@ void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
 bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
                                              const QString toTranslateTagKey)
 {
-  const Tags& tags = e->getTags();
-  _toTranslateTagKey = toTranslateTagKey;
-  _element = e;
-  _toTranslateVal = tags.get(toTranslateTagKey).trimmed();
-  LOG_VART(_toTranslateVal);
+  bool translationMade = false;
 
-  //making skipping tags that already have an english translated tag optional, b/c a many of the
-  //OSM english translations I've seen are either just copies of the foreign language text or are
-  //not very good translation
-  const QString preTranslatedTagKey = _toTranslateTagKey + ":en";
-  if (_ignorePreTranslatedTags && tags.contains(preTranslatedTagKey))
-  {
-    LOG_TRACE(
-      "Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" <<
-      _toTranslateVal);
-    return false;
-  }
+  _toTranslateTagKey = toTranslateTagKey;
+  _toTranslateVal = e->getTags().get(toTranslateTagKey).trimmed();
+  LOG_VART(_toTranslateVal);
+  _element = e;
 
   _translatedText = _translatorClient->translate(_toTranslateVal).trimmed();
   LOG_VART(_translatedText);
@@ -173,11 +180,11 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     _numTagTranslationsMade++;
     if (_numTagTranslationsMade % _taskStatusUpdateInterval == 0)
     {
-      PROGRESS_DEBUG("Translated " << _numProcessedTags << " tags.");
+      PROGRESS_DEBUG("Translated " << _numTagTranslationsMade << " tags.");
     }
     _currentElementHasSuccessfulTagTranslation = true;
 
-    return true;
+    translationMade = true;
   }
   else
   {
@@ -191,15 +198,15 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
     {
       LOG_TRACE("Unable to translate text: " << _toTranslateVal);
     }
-
-    _numProcessedTags++;
-    if (_numProcessedTags % _taskStatusUpdateInterval == 0)
-    {
-      PROGRESS_DEBUG("Processed " << _numProcessedTags << " tags.");
-    }
-
-    return false;
   }
+
+  _numProcessedTags++;
+  if (_numProcessedTags % _taskStatusUpdateInterval == 0)
+  {
+    PROGRESS_DEBUG("Processed " << _numProcessedTags << " tags.");
+  }
+
+  return translationMade;
 }
 
 }

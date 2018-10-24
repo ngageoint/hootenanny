@@ -41,6 +41,7 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, NonEnglishLanguageDetectionVisitor)
 
 NonEnglishLanguageDetectionVisitor::NonEnglishLanguageDetectionVisitor() :
 _ignorePreTranslatedTags(false),
+_writeDetectedLangTags(false),
 _currentElementHasSuccessfulTagDetection(false),
 _numTagDetectionsMade(0),
 _numElementsWithSuccessfulTagDetection(0),
@@ -70,6 +71,29 @@ NonEnglishLanguageDetectionVisitor::~NonEnglishLanguageDetectionVisitor()
     _numTotalElements << " elements encountered.");
 
   _printLangCounts();
+}
+
+void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts(conf);
+
+  _infoClient.reset(
+    Factory::getInstance().constructObject<TranslationInfoProvider>(
+      opts.getLanguageInfoProvider()));
+  _infoClient->setConfiguration(conf);
+  _langCodesToLangs =
+    HootServicesTranslationInfoResponseParser::getLangCodesToLangs(
+      _infoClient->getAvailableLanguages("detectable"));
+
+  _langDetector.reset(
+    Factory::getInstance().constructObject<LanguageDetector>(
+      opts.getLanguageDetectionDetector()));
+  _langDetector->setConfiguration(conf);
+
+  _tagKeys = opts.getLanguageTagKeys();
+  _ignorePreTranslatedTags = opts.getLanguageIgnorePreTranslatedTags();
+  _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
+  _writeDetectedLangTags = opts.getLanguageDetectionWriteDetectedLangTags();
 }
 
 void NonEnglishLanguageDetectionVisitor::_printLangCounts()
@@ -105,28 +129,6 @@ void NonEnglishLanguageDetectionVisitor::_printLangCounts()
   LOG_INFO(langsStr);
 }
 
-void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
-{
-  ConfigOptions opts(conf);
-
-  _infoClient.reset(
-    Factory::getInstance().constructObject<TranslationInfoProvider>(
-      opts.getLanguageInfoProvider()));
-  _infoClient->setConfiguration(conf);
-  _langCodesToLangs =
-    HootServicesTranslationInfoResponseParser::getLangCodesToLangs(
-      _infoClient->getAvailableLanguages("detectable"));
-
-  _langDetector.reset(
-    Factory::getInstance().constructObject<LanguageDetector>(
-      opts.getLanguageDetectionDetector()));
-  _langDetector->setConfiguration(conf);
-
-  _tagKeys = opts.getLanguageTagKeys();
-  _ignorePreTranslatedTags = opts.getLanguageIgnorePreTranslatedTags();
-  _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
-}
-
 void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   LOG_VART(e);
@@ -139,36 +141,55 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
   _currentElementHasSuccessfulTagDetection = false;
 
   const Tags& tags = e->getTags();
+  bool elementProcessed = false;
   for (int i = 0; i < _tagKeys.size(); i++)
   {
     const QString tagKey = _tagKeys.at(i);
     if (tags.contains(tagKey))
-    {
+    {  
       const QString preTranslatedTagKey = tagKey + ":en";
       if (_ignorePreTranslatedTags && tags.contains(preTranslatedTagKey))
       {
         LOG_TRACE(
           "Skipping language detection for element with pre-translated tag: " <<
           preTranslatedTagKey << "=" << tags.get(preTranslatedTagKey));
-        return;
       }
-
-      const QString detectedLangCode = _langDetector->detect(tags.get(tagKey));
-
-      if (detectedLangCode == "en")
+      else
       {
-        LOG_TRACE("Skipping element with detected English source language.");
-        return;
-      }
+        elementProcessed = true;
 
-      _numTagDetectionsMade++;
-      _currentElementHasSuccessfulTagDetection = true;
+        const QString detectedLangCode = _langDetector->detect(tags.get(tagKey));
+        if (!detectedLangCode.isEmpty())
+        {
+          if (_writeDetectedLangTags)
+          {
+            e->getTags().appendValue(
+              "hoot:detected:source:language:" + tagKey, _langCodesToLangs[detectedLangCode]);
+          }
 
-      _numProcessedElements++;
-      if (_numProcessedElements % _taskStatusUpdateInterval == 0)
-      {
-        PROGRESS_INFO("Attempted tag translation for " << _numProcessedElements << " elements.");
+          _numTagDetectionsMade++;
+          if (_numTagDetectionsMade % _taskStatusUpdateInterval == 0)
+          {
+            PROGRESS_DEBUG("Made " << _numTagDetectionsMade << " language detections.");
+          }
+          _currentElementHasSuccessfulTagDetection = true;
+        }
+
+        _numProcessedTags++;
+        if (_numProcessedTags % _taskStatusUpdateInterval == 0)
+        {
+          PROGRESS_DEBUG("Processed " << _numProcessedTags << " tags.");
+        }
       }
+    }
+  }
+
+  if (elementProcessed)
+  {
+    _numProcessedElements++;
+    if (_numProcessedElements % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO("Attempted language detection for " << _numProcessedElements << " elements.");
     }
   }
 

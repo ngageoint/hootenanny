@@ -42,7 +42,9 @@ namespace hoot
 {
 
 static const QString testInputRoot =
-  "test-files/visitors/NonEnglishLanguageDetectionVisitor";
+  "test-files/visitors/ToEnglishTranslationVisitorTest";
+static const QString testInputRoot2 =
+  "test-files/visitors/NonEnglishLanguageDetectionVisitorTest";
 static const QString testOutputRoot =
   "test-output/visitors/NonEnglishLanguageDetectionVisitor";
 
@@ -50,7 +52,8 @@ class NonEnglishLanguageDetectionVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NonEnglishLanguageDetectionVisitorTest);
   CPPUNIT_TEST(runDetectTest);
-  CPPUNIT_TEST(runSkipPreTranslatedTagsTest);
+  CPPUNIT_TEST(runIgnorePreTranslatedTagsTest);
+  CPPUNIT_TEST(runDetectWithTagWriteTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -63,22 +66,48 @@ public:
 
   void runDetectTest()
   {
-    const QString testName = "runDetectTest";
-    _runDetectTest(
-      _getDefaultConfig(),
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot + "/" + testName + "-gold.osm");
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, testInputRoot + "/ToEnglishTranslationVisitorTest.osm", false, Status::Unknown1);
+
+    NonEnglishLanguageDetectionVisitor visitor;
+    visitor.setConfiguration(_getDefaultConfig());
+
+    map->visitRw(visitor);
+
+    CPPUNIT_ASSERT_EQUAL(5L, visitor._numTagDetectionsMade); //4
+    CPPUNIT_ASSERT_EQUAL(3L, visitor._numElementsWithSuccessfulTagDetection); //3
+    CPPUNIT_ASSERT_EQUAL(4L, visitor._numTotalElements); //4
+    CPPUNIT_ASSERT_EQUAL(5L, visitor._numProcessedTags); //7
+    CPPUNIT_ASSERT_EQUAL(4L, visitor._numProcessedElements); //3
+
+    CPPUNIT_ASSERT_EQUAL(2, visitor._langCounts.size());
+    CPPUNIT_ASSERT_EQUAL(1, visitor._langCounts["de"]);
+    CPPUNIT_ASSERT_EQUAL(1, visitor._langCounts["es"]);
+    CPPUNIT_ASSERT(!visitor._langCounts.contains("en"));
   }
 
-  void runSkipPreTranslatedTagsTest()
+  void runDetectWithTagWriteTest()
   {
-    const QString testName = "runSkipPreTranslatedTagsTest";
+    const QString testName = "runDetectWithTagWriteTest";
     Settings conf = _getDefaultConfig();
-    conf.set("language.ignore.pre.translated.tags", true);
+    conf.set("language.detection.write.detected.lang.tags", true);
     _runDetectTest(
       conf,
       testOutputRoot + "/" + testName + ".osm",
-      testInputRoot + "/" + testName + "-gold.osm");
+      testInputRoot2 + "/" + testName + "-gold.osm");
+  }
+
+  void runIgnorePreTranslatedTagsTest()
+  {
+    const QString testName = "runIgnorePreTranslatedTagsTest";
+    Settings conf = _getDefaultConfig();
+    conf.set("language.ignore.pre.translated.tags", true);
+    conf.set("language.detection.write.detected.lang.tags", true);
+    _runDetectTest(
+      conf,
+      testOutputRoot + "/" + testName + ".osm",
+      testInputRoot2 + "/" + testName + "-gold.osm");
   }
 
 private:

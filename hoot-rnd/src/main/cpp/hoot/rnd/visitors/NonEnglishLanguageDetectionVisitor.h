@@ -55,18 +55,21 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  //language.detection.detector
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const
-  { return ""; }
+  { return "Detects source languages for selected tags"; }
 
 private:
+
+  friend class NonEnglishLanguageDetectionVisitorTest;
 
   QMap<QString, int> _langCounts;
   QMap<QString, QString> _langCodesToLangs;
   QStringList _tagKeys;
   bool _ignorePreTranslatedTags;
+  bool _writeDetectedLangTags;
+
   bool _currentElementHasSuccessfulTagDetection;
   long _numTagDetectionsMade;
   long _numElementsWithSuccessfulTagDetection;

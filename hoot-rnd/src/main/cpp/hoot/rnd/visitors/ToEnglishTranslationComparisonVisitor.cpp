@@ -87,7 +87,9 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
   for (int i = 0; i < _preTranslatedTagKeys.size(); i++)
   {
     const QString toTranslateTagKey = _toTranslateTagKeys.at(i);
+    LOG_VART(toTranslateTagKey);
     const QString preTranslatedTagKey = _preTranslatedTagKeys.at(i);
+    LOG_VART(preTranslatedTagKey);
     //only care about features that have both the pre-translated tag and the tag we want to compare
     //our translation to it with
     if (tags.contains(toTranslateTagKey) && tags.contains(preTranslatedTagKey))

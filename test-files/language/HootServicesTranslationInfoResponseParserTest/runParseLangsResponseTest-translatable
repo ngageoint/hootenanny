@@ -1,12 +1,12 @@
 translatable languages:
 
-Code: ar
-Name: Arabic
-Available: no
+Code: de
+Name: German
+Available: yes
 
-Code: am
-Name: Amharic
-Available: no
+Code: es
+Name: Spanish
+Available: yes
 
 2 languages are supported for translation.
-Currently, 0 of those languages are available for translation.
+Currently, 2 of those languages are available for translation.

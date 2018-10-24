@@ -56,20 +56,24 @@ bool HootServicesLanguageDetectorClient::_loggedCacheMaxReached = false;
 HootServicesLanguageDetectorClient::HootServicesLanguageDetectorClient() :
 _useCookies(true),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_numDetectionsAttempted(0),
+_undetectableWords(0),
 _numDetectionsMade(0),
-_numEnglishWordsSkipped(0),
+_numEnglishTextsSkipped(0),
+_cacheHits(0),
+_cacheSize(0),
+_cacheMaxSize(0),
 _skipWordsInEnglishDict(true)
 {
 }
 
 HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
 {
-  //TODO: finish
   LOG_INFO(
     "Made " << _numDetectionsMade << " successful language detections on " <<
     _numDetectionsAttempted << " attempts.");
   LOG_INFO(_undetectableWords << " words were not detectable.");
-  LOG_INFO(_numEnglishWordsSkipped << " English words were skipped.");
+  LOG_INFO(_numEnglishTextsSkipped << " English words were skipped.");
   LOG_INFO("Language detections made: " << _numDetectionsMade);
   if (_cache)
   {
@@ -128,16 +132,17 @@ QString HootServicesLanguageDetectorClient::detect(const QString text)
   }
 
   // see related note in HootServicesTranslatorClient::translate
+  bool englishTextSkipped = false;
   if (_skipWordsInEnglishDict && LanguageUtils::normalizeAndDetermineIfTextIsEnglish(text))
   {
     LOG_TRACE(
       "Text for language being detected determined to already be in English.  Skipping " <<
       "language detection for text: " << text);
-    _numEnglishWordsSkipped++;
+    _numEnglishTextsSkipped++;
+    englishTextSkipped = true;
     return "";
   }
 
-  //create and execute the request
   QUrl url(_url);
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
@@ -157,15 +162,12 @@ QString HootServicesLanguageDetectorClient::detect(const QString text)
   {
     throw HootException("Error detecting language for text: " + text + ". error: " + e.what());
   }
-
-  //check for a response error
   if (request.getHttpStatus() != 200)
   {
     throw HootException(
       "Error detecting language for text: " + text + ". error: " + request.getErrorString());
   }
 
-  //parse the response data
   QString detectedLangCode =
     _parseResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()));
 
@@ -173,6 +175,14 @@ QString HootServicesLanguageDetectorClient::detect(const QString text)
   if (!detectedLangCode.isEmpty() && _cache && !_cache->contains(text))
   {
     _insertLangIntoCache(text, detectedLangCode);
+  }
+
+  if (detectedLangCode == "en")
+  {
+    LOG_TRACE("Source language for text: " << text << " detected as English.");
+    _numEnglishTextsSkipped++;
+    englishTextSkipped = true;
+    detectedLangCode = "";
   }
 
   if (!detectedLangCode.isEmpty())
@@ -184,7 +194,7 @@ QString HootServicesLanguageDetectorClient::detect(const QString text)
       PROGRESS_DEBUG("Made " << _numDetectionsMade << " language detections.");
     }
   }
-  else
+  else if (!englishTextSkipped)
   {
     LOG_TRACE("Source language for text: " << text << " could not be detected.");
   }

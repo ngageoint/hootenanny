@@ -123,6 +123,7 @@ private:
   long _untranslatableWords;
   long _numDetectionsMade;
   long _numEnglishWordsSkipped;
+
   long _cacheHits;
   long _cacheMaxSize;
   long _cacheSize;
@@ -147,8 +148,8 @@ private:
   void _validateAvailableLangs(boost::shared_ptr<boost::property_tree::ptree> replyObj,
                                const QString type);
 
-  QString _getTranslateRequestData(const QString text);
-  void _parseTranslateResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
+  QString _getRequestData(const QString text);
+  void _parseResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
 
   bool _getTranslationFromCache(const QString text);
   void _insertTranslationIntoCache(const QString text, const QString translatedText,

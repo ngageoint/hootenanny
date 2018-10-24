@@ -66,11 +66,11 @@ QString HootServicesTranslatorMockClient::translate(const QString textToTranslat
   LOG_VART(textToTranslate);
   if (_sourceLangs.size() == 0)
   {
-    throw HootException("Cannot determine source language.");
+    throw HootException("No source languages populated.");
   }
   if (!_mockTranslations.contains(textToTranslate.normalized(QString::NormalizationForm_D)))
   {
-    throw HootException("No mock translation available.");
+    throw HootException("No mock translation available for: " + textToTranslate);
   }
 
   LOG_DEBUG(

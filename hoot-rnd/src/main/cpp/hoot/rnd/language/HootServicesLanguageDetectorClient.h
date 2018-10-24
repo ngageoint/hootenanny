@@ -74,6 +74,8 @@ protected:
 
 private:
 
+  friend class HootServicesLanguageDetectorClientTest;
+
   //detector implementations to use server side; if left empty, the server will try to use as many
   //of them as necessary to detect the language
   QStringList _detectors;
@@ -86,10 +88,11 @@ private:
   long _numDetectionsAttempted;
   long _undetectableWords;
   long _numDetectionsMade;
-  long _numEnglishWordsSkipped;
+  long _numEnglishTextsSkipped;
+
   long _cacheHits;
-  long _cacheMaxSize;
   long _cacheSize;
+  long _cacheMaxSize;
 
   bool _skipWordsInEnglishDict;
 

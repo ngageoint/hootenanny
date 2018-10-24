@@ -51,7 +51,7 @@ class ToEnglishTranslationVisitorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ToEnglishTranslationVisitorTest);
   CPPUNIT_TEST(runTranslateTest);
   CPPUNIT_TEST(runNoSourceLangsTest);
-  CPPUNIT_TEST(runSkipPreTranslatedTagsTest);
+  CPPUNIT_TEST(runIgnorePreTranslatedTagsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -89,12 +89,12 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
-      QString("Cannot determine source language.").toStdString(), exceptionMsg.toStdString());
+      QString("No source languages populated.").toStdString(), exceptionMsg.toStdString());
   }
 
-  void runSkipPreTranslatedTagsTest()
+  void runIgnorePreTranslatedTagsTest()
   {
-    const QString testName = "runSkipPreTranslatedTagsTest";
+    const QString testName = "runIgnorePreTranslatedTagsTest";
     Settings conf = _getDefaultConfig();
     conf.set("language.ignore.pre.translated.tags", true);
     _runTranslationTest(

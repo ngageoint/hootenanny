@@ -92,7 +92,6 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  }
  LOG_VARD(urlStr);
 
- //create and execute the request
  QUrl url(urlStr);
  HootNetworkRequest request;
  if (_useCookies)
@@ -109,14 +108,11 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
    const QString errorMsg = e.what();
    throw HootException("Error getting available translation apps. error: " + errorMsg);
  }
-
- //check for a response error
  if (request.getHttpStatus() != 200)
  {
    throw HootException(QString("Reply error:\n%1").arg(request.getErrorString()));
  }
 
- //parse the response data
  return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
@@ -140,7 +136,6 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
   LOG_VARD(urlStr);
   LOG_VARD(apps);
 
-  //create and execute the request
   QUrl url(urlStr);
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
@@ -160,28 +155,18 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
     const QString errorMsg = e.what();
     throw HootException("Error getting available translation languages. error: " + errorMsg);
   }
-
-  //check for a response error
   if (request.getHttpStatus() != 200)
   {
     throw HootException(QString("Reply error:\n%1").arg(request.getErrorString()));
   }
 
-  //parse the response data
   return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
 QString HootServicesTranslationInfoClient::_getAvailableLanguagesRequestData(const QStringList apps)
 { 
   boost::property_tree::ptree requestObj;
-  boost::property_tree::ptree appsObj;
-  for (int i = 0; i < apps.size(); i++)
-  {
-    boost::property_tree::ptree appObj;
-    appObj.put("", apps.at(i).toStdString());
-    appsObj.push_back(std::make_pair("", appObj));
-  }
-  requestObj.add_child("apps", appsObj);
+  requestObj.add_child("apps", *StringUtils::stringListToJsonStringArray(apps));
 
   std::stringstream requestStrStrm;
   boost::property_tree::json_parser::write_json(requestStrStrm, requestObj);
