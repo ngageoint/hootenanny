@@ -99,4 +99,20 @@ QString HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(co
   return displayStr.trimmed();
 }
 
+QMap<QString, QString> HootServicesTranslationInfoResponseParser::getLangCodesToLangs(
+  boost::shared_ptr<boost::property_tree::ptree> response)
+{
+  QMap<QString, QString> langCodesToLangs;
+  BOOST_FOREACH (boost::property_tree::ptree::value_type& language, response->get_child("languages"))
+  {
+    const QString langCode =
+      QString::fromStdString(language.second.get<std::string>("iso6391Code"));
+    const QString name =
+      QUrl::fromPercentEncoding(
+        QString::fromStdString(language.second.get<std::string>("name")).toUtf8());
+    langCodesToLangs[langCode] = name;
+  }
+  return langCodesToLangs;
+}
+
 }

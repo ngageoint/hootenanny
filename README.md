@@ -456,12 +456,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Translate "name" and "alt_name" tags from German or Spanish to English
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="de;es" \
-      -D language.translation.to.translate.tag.keys="name;alt_name" input.osm output.osm
+      -D language.tag.keys="name;alt_name" input.osm output.osm
       
     # Translate "name" tags to English and let the source language be detected
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="detect" \ 
-      -D language.translation.to.translate.tag.keys="name" input.osm output.osm
+      -D language.tag.keys="name" input.osm output.osm
       
 ### MetaInfo
     

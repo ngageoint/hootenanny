@@ -57,7 +57,7 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
 
   ToEnglishTranslationVisitor::setConfiguration(conf);
 
-  if (_skipPreTranslatedTags ||
+  if (_ignorePreTranslatedTags ||
       opts.getLanguageTranslationDetectedLanguageOverridesSpecifiedSourceLanguages() ||
       opts.getLanguageTranslationPerformExhaustiveSearchWithNoDetection())
   {
@@ -65,7 +65,7 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
       "ToEnglishTranslationComparisonVisitor does not support enabling any of the following options:\n"
       "language.translation.detected.language.overrides.specified.source.languages\n"
       "language.translation.perform.exhaustive.search.with.no.detection\n"
-      "language.translation.skip.pre.translated.tags\nDisabling the options.");
+      "language.ignore.pre.translated.tags\nDisabling the options.");
   }
 
   _translationScorer.reset(
@@ -73,7 +73,7 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
       opts.getLanguageTranslationComparisonScorer()));
 
   _preTranslatedTagKeys = opts.getLanguageTranslationComparisonPretranslatedTagKeys();
-  if (_preTranslatedTagKeys.size() != opts.getLanguageTranslationToTranslateTagKeys().size())
+  if (_preTranslatedTagKeys.size() != opts.getLanguageTagKeys().size())
   {
     throw HootException(
       QString("When preforming language translation comparison, the number of pre-translated ") +

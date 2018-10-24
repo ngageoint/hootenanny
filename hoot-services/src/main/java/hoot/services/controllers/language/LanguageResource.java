@@ -356,7 +356,7 @@ public class LanguageResource
      * The text sent in for translation should be URL encoded and in UTF-8.  
      * Language names and the original source text are returned URL encoded and in UTF-8.
 
-     curl -X POST -H "Content-Type: application/json" -d '{ "text": "wie alt bist du" }' localhost:8080/hoot-services/language/detect
+     curl -X POST -H "Content-Type: application/json" -d '{ "text": "wie%20alt%20bist%20du" }' localhost:8080/hoot-services/language/detect
      curl -X POST -H "Content-Type: application/json" -d '{ "detectors": ["TikaLanguageDetector"], "text": "wie%20alt%20bist%20du" }' 
        localhost:8080/hoot-services/language/detect
 

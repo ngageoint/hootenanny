@@ -42,14 +42,13 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationVisitor)
 
 ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
-_skipPreTranslatedTags(false),
+_ignorePreTranslatedTags(false),
 _numTotalElements(0),
 _currentElementHasSuccessfulTagTranslation(false),
 _numTagTranslationsMade(0),
 _numElementsWithSuccessfulTagTranslation(0),
 _numProcessedTags(0),
 _numProcessedElements(0),
-//_numDetectionsMade(0),
 _taskStatusUpdateInterval(10000)
 {
 }
@@ -83,8 +82,8 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   _translatorClient->setConfiguration(conf);
   _translatorClient->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
 
-  _toTranslateTagKeys = opts.getLanguageTranslationToTranslateTagKeys();
-  _skipPreTranslatedTags = opts.getLanguageTranslationSkipPreTranslatedTags();
+  _toTranslateTagKeys = opts.getLanguageTagKeys();
+  _ignorePreTranslatedTags = opts.getLanguageIgnorePreTranslatedTags();
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
 
@@ -135,7 +134,7 @@ bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
   //OSM english translations I've seen are either just copies of the foreign language text or are
   //not very good translation
   const QString preTranslatedTagKey = _toTranslateTagKey + ":en";
-  if (_skipPreTranslatedTags && tags.contains(preTranslatedTagKey))
+  if (_ignorePreTranslatedTags && tags.contains(preTranslatedTagKey))
   {
     LOG_TRACE(
       "Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" <<

@@ -134,8 +134,8 @@ private:
   {
     Settings conf;
 
-    conf.set("language.translation.skip.words.in.english.dictionary", true);
-    conf.set("language.translation.skip.pre.translated.tags", false);
+    conf.set("language.skip.words.in.english.dictionary", true);
+    conf.set("language.ignore.pre.translated.tags", false);
     QStringList sourceLangs;
     sourceLangs.append("de");
     conf.set("language.translation.source.languages", sourceLangs);
@@ -146,9 +146,9 @@ private:
     QStringList toTranslateTagKeys;
     toTranslateTagKeys.append("name");
     toTranslateTagKeys.append("alt_name");
-    conf.set("language.translation.to.translate.tag.keys", toTranslateTagKeys);
+    conf.set("language.tag.keys", toTranslateTagKeys);
     conf.set("language.translation.translator", "hoot::HootServicesTranslatorMockClient");
-    conf.set("language.translation.info.provider", "hoot::HootServicesTranslationInfoMockClient");
+    conf.set("language.info.provider", "hoot::HootServicesTranslationInfoMockClient");
     conf.set("hoot.services.auth.user.name", "ToEnglishTranslationComparisonVisitorTest");
     conf.set("hoot.services.auth.access.token", "testAccessToken");
     conf.set("hoot.services.auth.access.token.secret", "testAccessTokenSecret");

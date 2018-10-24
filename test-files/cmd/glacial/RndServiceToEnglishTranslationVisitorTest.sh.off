@@ -20,6 +20,6 @@ hoot languages --detectors
 hoot languages --translatable
 hoot languages --translators
 
-hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.translator=hoot::HootServicesTranslatorClient -D language.translation.source.languages="de;es" -D language.translation.to.translate.tag.keys="name;alt_name" -D language.translation.perform.exhaustive.search.with.no.detection=false -D language.translation.detected.language.overrides.specified.source.languages=false $INPUT_FILE $OUTPUT_FILE
+hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.translator=hoot::HootServicesTranslatorClient -D language.translation.source.languages="de;es" -D language.tag.keys="name;alt_name" -D language.translation.perform.exhaustive.search.with.no.detection=false -D language.translation.detected.language.overrides.specified.source.languages=false $INPUT_FILE $OUTPUT_FILE
 
 hoot diff $GOLD_FILE $OUTPUT_FILE

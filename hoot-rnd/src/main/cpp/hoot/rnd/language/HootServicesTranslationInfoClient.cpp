@@ -60,11 +60,11 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
 
   _translator = opts.getLanguageTranslationHootServicesTranslator();
-  _detectors = opts.getLanguageTranslationHootServicesDetectors();
-  _detectableUrl = opts.getLanguageTranslationHootServicesDetectableLanguagesEndpoint();
-  _translatableUrl = opts.getLanguageTranslationHootServicesTranslatableLanguagesEndpoint();
-  _detectorsUrl = opts.getLanguageTranslationHootServicesDetectorsEndpoint();
-  _translatorsUrl = opts.getLanguageTranslationHootServicesTranslatorsEndpoint();
+  _detectors = opts.getLanguageHootServicesDetectors();
+  _detectableUrl = opts.getLanguageHootServicesDetectableLanguagesEndpoint();
+  _translatableUrl = opts.getLanguageHootServicesTranslatableLanguagesEndpoint();
+  _detectorsUrl = opts.getLanguageHootServicesDetectorsEndpoint();
+  _translatorsUrl = opts.getLanguageHootServicesTranslatorsEndpoint();
   if (_useCookies)
   {
     // get a session cookie associated with the user information passed into the command calling

@@ -25,72 +25,62 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef TO_ENGLISH_TRANSLATION_VISITOR_H
-#define TO_ENGLISH_TRANSLATION_VISITOR_H
+#ifndef NON_ENGLISH_LANGUAGE_DETECTION_VISITOR_H
+#define NON_ENGLISH_LANGUAGE_DETECTION_VISITOR_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/language/LanguageDetector.h>
+#include <hoot/rnd/language/TranslationInfoProvider.h>
+
+// Qt
+#include <QMap>
 
 namespace hoot
 {
 
 /**
- * Translates selected tag values to English
+ *
  */
-class ToEnglishTranslationVisitor : public ElementOsmMapVisitor, public Configurable
+class NonEnglishLanguageDetectionVisitor : public ElementOsmMapVisitor, public Configurable
 {
 
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslationVisitor"; }
+  static std::string className() { return "hoot::NonEnglishLanguageDetectionVisitor"; }
 
-  ToEnglishTranslationVisitor();
-  virtual ~ToEnglishTranslationVisitor();
+  NonEnglishLanguageDetectionVisitor();
+  virtual ~NonEnglishLanguageDetectionVisitor();
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
+  //language.detection.detector
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const
-  { return "Translates selected tag values to English"; }
-
-protected:
-
-  boost::shared_ptr<ToEnglishTranslator> _translatorClient;
-
-  QStringList _toTranslateTagKeys;
-  QString _toTranslateTagKey;
-  ElementPtr _element;
-
-  bool _ignorePreTranslatedTags;
-
-  long _numTotalElements;
-
-  QString _translatedText;
-
-  /**
-   * Translates a tag for an element
-   *
-   * @param e element containing the tag to translate
-   * @param toTranslateTagKey the key of the tag whose value is to be translated
-   * @return true if a successul translation was made; false otherwise
-   */
-  bool _translate(const ElementPtr& e, const QString toTranslateTagKey);
+  { return ""; }
 
 private:
 
-  QString _toTranslateVal;
-
-  bool _currentElementHasSuccessfulTagTranslation;
-  long _numTagTranslationsMade;
-  long _numElementsWithSuccessfulTagTranslation;
+  QMap<QString, int> _langCounts;
+  QMap<QString, QString> _langCodesToLangs;
+  QStringList _tagKeys;
+  bool _ignorePreTranslatedTags;
+  bool _currentElementHasSuccessfulTagDetection;
+  long _numTagDetectionsMade;
+  long _numElementsWithSuccessfulTagDetection;
+  long _numTotalElements;
   long _numProcessedTags;
   long _numProcessedElements;
   int _taskStatusUpdateInterval;
+
+  boost::shared_ptr<TranslationInfoProvider> _infoClient;
+  boost::shared_ptr<LanguageDetector> _langDetector;
+
+  void _printLangCounts();
 };
 
 }
 
-#endif // TO_ENGLISH_TRANSLATION_VISITOR_H
+#endif // NON_ENGLISH_LANGUAGE_DETECTION_VISITOR_H

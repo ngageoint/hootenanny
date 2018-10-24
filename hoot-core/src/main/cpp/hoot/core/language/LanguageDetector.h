@@ -26,8 +26,8 @@
  */
 
 
-#ifndef TO_ENGLISH_TRANSLATOR_H
-#define TO_ENGLISH_TRANSLATOR_H
+#ifndef LANGUAGE_DETECTOR_H
+#define LANGUAGE_DETECTOR_H
 
 // Hoot
 #include <hoot/core/util/Configurable.h>
@@ -39,52 +39,23 @@ namespace hoot
 {
 
 /**
- * Interface for a to English language translator
+ *
  */
-class ToEnglishTranslator : public Configurable
+class LanguageDetector : public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslator"; }
+  static std::string className() { return "hoot::LanguageDetector"; }
 
   /**
-   * Returns the translators source languages
    *
-   * @return list of ISO-639-1 language codes
-   */
-  virtual QStringList getSourceLanguages() const = 0;
-
-  /**
-   * Set the source language for the translator
    *
-   * @param langCode an ISO-639-1 language code
+   * @param text
+   * @return
    */
-  virtual void setSourceLanguages(const QStringList langCodes) = 0;
-
-  /**
-   * Translates text to English
-   *
-   * @param text the text to translate
-   * @return translated text
-   */
-  virtual QString translate(const QString text) = 0;
-
-  /**
-   * Returns the language detected by the translator if language detection was performed
-   *
-   * @return a language name if a language was detected; an empty string otherwise
-   */
-  virtual QString getDetectedLanguage() const = 0;
-
-  /**
-   * Sets a unique ID for the translator; useful when many callers use different translator
-   * instantiations during the same execution
-   *
-   * @param id
-   */
-  virtual void setId(const QString id) = 0;
+  QString detect(const QString text);
 };
 
 }
 
-#endif // TO_ENGLISH_TRANSLATOR_H
+#endif // LANGUAGE_DETECTOR_H

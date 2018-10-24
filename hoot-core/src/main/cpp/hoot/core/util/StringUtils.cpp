@@ -108,4 +108,17 @@ boost::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree
   return jsonObj;
 }
 
+boost::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
+  const QStringList stringList)
+{
+  boost::shared_ptr<boost::property_tree::ptree> strArr(new boost::property_tree::ptree());
+  for (int i = 0; i < stringList.size(); i++)
+  {
+    boost::property_tree::ptree str;
+    str.put("", stringList.at(i).toStdString());
+    strArr->push_back(std::make_pair("", str));
+  }
+  return strArr;
+}
+
 }

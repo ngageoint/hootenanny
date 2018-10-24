@@ -66,10 +66,10 @@ public:
   /**
    * Translates text given a source language
    *
-   * @param textToTranslate the text to translate
+   * @param text the text to translate
    * @return translated text or an empty string if a translation could not be made
    */
-  virtual QString translate(const QString textToTranslate);
+  virtual QString translate(const QString text);
 
   virtual QString getDetectedLanguage() const { return _detectedLang; }
 
@@ -114,7 +114,7 @@ private:
   //against all available translatable languages (expensive)
   bool _performExhaustiveSearch;
 
-  boost::shared_ptr<QCache<QString, TranslationResult>> _translateCache;
+  boost::shared_ptr<QCache<QString, TranslationResult>> _cache;
 
   int _statusUpdateInterval;
 
@@ -123,9 +123,9 @@ private:
   long _untranslatableWords;
   long _numDetectionsMade;
   long _numEnglishWordsSkipped;
-  long _translationCacheHits;
-  long _translationCacheMaxSize;
-  long _translationCacheSize;
+  long _cacheHits;
+  long _cacheMaxSize;
+  long _cacheSize;
 
   bool _skipWordsInEnglishDict;
 
@@ -150,12 +150,12 @@ private:
   QString _getTranslateRequestData(const QString text);
   void _parseTranslateResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
 
-  bool _getTranslationFromCache(const QString textToTranslate);
-  void _insertTranslationIntoCache(const QString textToTranslate, const QString translatedText,
+  bool _getTranslationFromCache(const QString text);
+  void _insertTranslationIntoCache(const QString text, const QString translatedText,
                                    const QString detectedLang);
 
-  bool _textIsTranslatable(const QString textToTranslate) const;
-  bool _textIsEnglish(const QString textToTranslate) const;
+  bool _textIsTranslatable(const QString text) const;
+  bool _textIsEnglish(const QString text) const;
 };
 
 }

@@ -34,7 +34,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/visitors/ToEnglishTranslationVisitor.h>
+#include <hoot/rnd/visitors/NonEnglishLanguageDetectionVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
@@ -42,54 +42,32 @@ namespace hoot
 {
 
 static const QString testInputRoot =
-  "test-files/visitors/ToEnglishTranslationVisitorTest";
+  "test-files/visitors/NonEnglishLanguageDetectionVisitor";
 static const QString testOutputRoot =
-  "test-output/visitors/ToEnglishTranslationVisitorTest";
+  "test-output/visitors/NonEnglishLanguageDetectionVisitor";
 
-class ToEnglishTranslationVisitorTest : public HootTestFixture
+class NonEnglishLanguageDetectionVisitorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(ToEnglishTranslationVisitorTest);
-  CPPUNIT_TEST(runTranslateTest);
-  CPPUNIT_TEST(runNoSourceLangsTest);
+  CPPUNIT_TEST_SUITE(NonEnglishLanguageDetectionVisitorTest);
+  CPPUNIT_TEST(runDetectTest);
   CPPUNIT_TEST(runSkipPreTranslatedTagsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  ToEnglishTranslationVisitorTest()
+  NonEnglishLanguageDetectionVisitorTest()
   {
     setResetType(ResetBasic);
     TestUtils::mkpath(testOutputRoot);
   }
 
-  void runTranslateTest()
+  void runDetectTest()
   {
-    const QString testName = "runTranslateTest";
-    _runTranslationTest(
+    const QString testName = "runDetectTest";
+    _runDetectTest(
       _getDefaultConfig(),
       testOutputRoot + "/" + testName + ".osm",
       testInputRoot + "/" + testName + "-gold.osm");
-  }
-
-  void runNoSourceLangsTest()
-  {
-    const QString testName = "runNoSourceLangsTest";
-    Settings conf = _getDefaultConfig();
-    conf.set("language.translation.source.languages", QStringList());
-    QString exceptionMsg("");
-    try
-    {
-      _runTranslationTest(
-        conf,
-        testOutputRoot + "/" + testName + ".osm",
-        testInputRoot + "/" + testName + "-gold.osm");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Cannot determine source language.").toStdString(), exceptionMsg.toStdString());
   }
 
   void runSkipPreTranslatedTagsTest()
@@ -97,7 +75,7 @@ public:
     const QString testName = "runSkipPreTranslatedTagsTest";
     Settings conf = _getDefaultConfig();
     conf.set("language.ignore.pre.translated.tags", true);
-    _runTranslationTest(
+    _runDetectTest(
       conf,
       testOutputRoot + "/" + testName + ".osm",
       testInputRoot + "/" + testName + "-gold.osm");
@@ -111,27 +89,23 @@ private:
 
     conf.set("language.skip.words.in.english.dictionary", true);
     conf.set("language.ignore.pre.translated.tags", false);
-    QStringList sourceLangs;
-    sourceLangs.append("de");
-    sourceLangs.append("es");
-    conf.set("language.translation.source.languages", sourceLangs);
-    QStringList toTranslateTagKeys;
-    toTranslateTagKeys.append("name");
-    toTranslateTagKeys.append("alt_name");
-    conf.set("language.tag.keys", toTranslateTagKeys);
-    conf.set("language.translation.translator", "hoot::HootServicesTranslatorMockClient");
+    QStringList tagKeys;
+    tagKeys.append("name");
+    tagKeys.append("alt_name");
+    conf.set("language.tag.keys", tagKeys);
+    conf.set("language.detection.detector", "hoot::HootServicesLanguageDetectorMockClient");
     conf.set("language.info.provider", "hoot::HootServicesTranslationInfoMockClient");
 
     return conf;
   }
 
-  void _runTranslationTest(Settings config, const QString outputFile, const QString goldFile)
+  void _runDetectTest(Settings config, const QString outputFile, const QString goldFile)
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map, testInputRoot + "/ToEnglishTranslationVisitorTest.osm", false, Status::Unknown1);
 
-    ToEnglishTranslationVisitor visitor;
+    NonEnglishLanguageDetectionVisitor visitor;
     visitor.setConfiguration(config);
 
     map->visitRw(visitor);
@@ -142,7 +116,7 @@ private:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ToEnglishTranslationVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NonEnglishLanguageDetectionVisitorTest, "quick");
 
 }
 

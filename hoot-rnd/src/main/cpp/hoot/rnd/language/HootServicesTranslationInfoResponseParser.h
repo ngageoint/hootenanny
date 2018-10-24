@@ -35,6 +35,7 @@
 
 // Qt
 #include <QString>
+#include <QMap>
 
 namespace hoot
 {
@@ -65,6 +66,15 @@ public:
    */
   static QString parseAvailableAppsResponse(const QString type,
                                           boost::shared_ptr<boost::property_tree::ptree> response);
+
+  /**
+   *
+   *
+   * @param response
+   * @return
+   */
+  static QMap<QString, QString> getLangCodesToLangs(
+    boost::shared_ptr<boost::property_tree::ptree> response);
 };
 
 }

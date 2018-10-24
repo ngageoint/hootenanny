@@ -43,20 +43,22 @@ namespace hoot
 static const QString testInputRoot =
   "test-files/language/HootServicesTranslationInfoResponseParserTest";
 
+static const QString langsStr = "{\"languages\":[{\"name\":\"Arabic\",\"available\":false,\"iso6391Code\":\"ar\",\"iso6392Code\":\"ara\"},{\"name\":\"Amharic\",\"available\":false,\"iso6391Code\":\"am\",\"iso6392Code\":\"afr\"}]}";
+
 class HootServicesTranslationInfoResponseParserTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesTranslationInfoResponseParserTest);
   CPPUNIT_TEST(runParseLangsResponseTest);
   CPPUNIT_TEST(runParseAppsResponseTest);
+  CPPUNIT_TEST(runLangCodesToLangsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void runParseLangsResponseTest()
   {
-    const QString jsonStr = "{\"languages\":[{\"name\":\"Arabic\",\"available\":false,\"iso6391Code\":\"ar\",\"iso6392Code\":\"ara\"},{\"name\":\"Amharic\",\"available\":false,\"iso6391Code\":\"am\",\"iso6392Code\":\"afr\"}]}";
     boost::shared_ptr<boost::property_tree::ptree> response =
-      StringUtils::jsonStringToPropTree(jsonStr);
+      StringUtils::jsonStringToPropTree(langsStr);
 
     QString responseStr =
       HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
@@ -97,6 +99,18 @@ public:
     HOOT_STR_EQUALS(
       FileUtils::readFully(testInputRoot + "/runParseAppsResponseTest-translators").trimmed(),
       responseStr.trimmed());
+  }
+
+  void runLangCodesToLangsTest()
+  {
+    boost::shared_ptr<boost::property_tree::ptree> response =
+      StringUtils::jsonStringToPropTree(langsStr);
+    const QMap<QString, QString> langCodesToLangs =
+      HootServicesTranslationInfoResponseParser::getLangCodesToLangs(response);
+
+    CPPUNIT_ASSERT_EQUAL(2, langCodesToLangs.size());
+    HOOT_STR_EQUALS("Arabic", langCodesToLangs["ar"]);
+    HOOT_STR_EQUALS("Amharic", langCodesToLangs["am"]);
   }
 };
 

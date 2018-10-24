@@ -111,12 +111,12 @@ private:
 
     Settings conf;
     conf.set("language.translation.translator", "hoot::HootServicesTranslatorClient");
-    conf.set("language.translation.hoot.services.translation.endpoint", "http://localhost/test");
-    conf.set("language.translation.hoot.services.translator", "HootLanguageTranslator");
-    conf.set("language.translation.hoot.services.detectors", QStringList("TikaLanguageDetector"));
+    conf.set("language.hoot.services.translation.endpoint", "http://localhost/test");
+    conf.set("language.hoot.services.translator", "HootLanguageTranslator");
+    conf.set("language.hoot.services.detectors", QStringList("TikaLanguageDetector"));
     conf.set("language.translation.detected.language.overrides.specified.source.languages", false);
     conf.set("language.translation.perform.exhaustive.search.with.no.detection", true);
-    conf.set("language.translation.info.provider", "hoot::HootServicesTranslationInfoMockClient");
+    conf.set("language.info.provider", "hoot::HootServicesTranslationInfoMockClient");
     client->setConfiguration(conf);
 
     QStringList sourceLangs;
