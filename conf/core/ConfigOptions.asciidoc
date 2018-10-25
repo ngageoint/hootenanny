@@ -1328,7 +1328,8 @@ other tags from elements.
 LanguageDetector implementation to use for detecting source languages.  The default value,
 hoot::HootServicesLanguageDetectorMockClient, is used for demonstration purposes only.  If using
 hoot::HootServicesLanguageDetectorClient, which performs useful detection, a translation server
-must be set up and valid OAuth credentials used.
+must be set up and valid OAuth credentials used.  Also, be sure to use an appropriate value for
+the 'language.info.provider' option, if needed.
 
 === language.detection.write.detected.lang.tags
 
@@ -1528,7 +1529,8 @@ the command line.
 ToEnglishTranslator implementation to use for to English translation.  hoot::DictionaryTranslator,
 the current default value, is a simple lookup table primarily used for translation testing and
 proof of concept.  hoot::HootServicesTranslatorClient, which performs more useful translation,
-requires a translation server be set up and valid OAuth credentials used.
+requires a translation server be set up and valid OAuth credentials used.  Also, be sure to use an
+appropriate value for the 'language.info.provider' option, if needed.
 
 === levenshtein.distance.alpha
 
