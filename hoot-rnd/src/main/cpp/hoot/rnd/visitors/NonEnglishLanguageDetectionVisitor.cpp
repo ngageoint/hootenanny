@@ -132,6 +132,11 @@ void NonEnglishLanguageDetectionVisitor::_printLangCounts()
 
 void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>& e)
 {
+  if (_tagKeys.isEmpty())
+  {
+    throw HootException("No tag keys specified for language detection.");
+  }
+
   LOG_VART(e);
 
   //if this var was set while parsing the previous element, increment the counter now

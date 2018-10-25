@@ -53,6 +53,7 @@ class NonEnglishLanguageDetectionVisitorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(NonEnglishLanguageDetectionVisitorTest);
   CPPUNIT_TEST(runDetectTest);
   CPPUNIT_TEST(runIgnorePreTranslatedTagsTest);
+  CPPUNIT_TEST(runNoTagKeysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -82,6 +83,26 @@ public:
       conf,
       testOutputRoot + "/" + testName + ".osm",
       testInputRoot2 + "/" + testName + "-gold.osm");
+  }
+
+  void runNoTagKeysTest()
+  {
+    const QString testName = "runNoTagKeysTest";
+    Settings conf = _getDefaultConfig();
+    conf.set("language.tag.keys", QStringList());
+    QString exceptionMsg("");
+    try
+    {
+      _runDetectTest(
+        conf,
+        testOutputRoot + "/" + testName + ".osm",
+        testInputRoot2 + "/" + testName + "-gold.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("No tag keys specified"));
   }
 
 private:

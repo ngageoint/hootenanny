@@ -89,6 +89,11 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 
 void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
 {
+  if (_toTranslateTagKeys.isEmpty())
+  {
+    throw HootException("No tag keys specified for language translation.");
+  }
+
   LOG_VART(e);
 
   //if this var was set while parsing the previous element, increment the counter now

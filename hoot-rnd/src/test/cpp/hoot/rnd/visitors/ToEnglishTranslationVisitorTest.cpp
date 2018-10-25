@@ -52,6 +52,7 @@ class ToEnglishTranslationVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runTranslateTest);
   CPPUNIT_TEST(runNoSourceLangsTest);
   CPPUNIT_TEST(runIgnorePreTranslatedTagsTest);
+  CPPUNIT_TEST(runNoTagKeysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -101,6 +102,26 @@ public:
       conf,
       testOutputRoot + "/" + testName + ".osm",
       testInputRoot + "/" + testName + "-gold.osm");
+  }
+
+  void runNoTagKeysTest()
+  {
+    const QString testName = "runNoTagKeysTest";
+    Settings conf = _getDefaultConfig();
+    conf.set("language.tag.keys", QStringList());
+    QString exceptionMsg("");
+    try
+    {
+      _runTranslationTest(
+        conf,
+        testOutputRoot + "/" + testName + ".osm",
+        testInputRoot + "/" + testName + "-gold.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("No tag keys specified"));
   }
 
 private:
