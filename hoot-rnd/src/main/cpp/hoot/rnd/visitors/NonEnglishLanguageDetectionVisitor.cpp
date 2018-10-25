@@ -84,6 +84,7 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
   _langCodesToLangs =
     HootServicesTranslationInfoResponseParser::getLangCodesToLangs(
       _infoClient->getAvailableLanguages("detectable"));
+  LOG_VART(_langCodesToLangs.size());
 
   _langDetector.reset(
     Factory::getInstance().constructObject<LanguageDetector>(
@@ -105,7 +106,7 @@ void NonEnglishLanguageDetectionVisitor::_printLangCounts()
     langCountsSwapped.insert(langCountsItr.value(), langCountsItr.key());
   }
 
-  QString langsStr;
+  QString langsStr = "Non-English language tag counts:\n";
   QList<int> counts = langCountsSwapped.keys();
   for (QList<int>::const_iterator countsItr = counts.begin(); countsItr != counts.end();
        ++countsItr)
@@ -148,7 +149,7 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
     if (tags.contains(tagKey))
     {  
       const QString preTranslatedTagKey = tagKey + ":en";
-      if (_ignorePreTranslatedTags && tags.contains(preTranslatedTagKey))
+      if (!_ignorePreTranslatedTags && tags.contains(preTranslatedTagKey))
       {
         LOG_TRACE(
           "Skipping language detection for element with pre-translated tag: " <<

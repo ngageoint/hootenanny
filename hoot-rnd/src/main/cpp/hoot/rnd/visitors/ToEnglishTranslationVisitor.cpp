@@ -109,7 +109,7 @@ void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
       //OSM english translations I've seen are either just copies of the foreign language text or are
       //not very good translations
       const QString preTranslatedTagKey = toTranslateTagKey + ":en";
-      if (_ignorePreTranslatedTags && tags.contains(preTranslatedTagKey))
+      if (!_ignorePreTranslatedTags && tags.contains(preTranslatedTagKey))
       {
         LOG_TRACE(
           "Skipping element with pre-translated tag: " << preTranslatedTagKey << "=" <<

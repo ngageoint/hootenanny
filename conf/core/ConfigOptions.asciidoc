@@ -1323,19 +1323,20 @@ other tags from elements.
 === language.detection.detector
 
 * Data Type: string
-* Default Value: `hoot::HootServicesLanguageDetectorClient`
+* Default Value: `hoot::HootServicesLanguageDetectorMockClient`
 
-LanguageDetector implementation to use for detecting source languages.  If using
-hoot::HootServicesLanguageDetectorClient, the option 'hoot.services.authenticated.username' must be
-populated with a valid value or translation web requests will fail.
+LanguageDetector implementation to use for detecting source languages.  The default value,
+hoot::HootServicesLanguageDetectorMockClient, is used for demonstration purposes only.  If using
+hoot::HootServicesLanguageDetectorClient, which performs useful detection, a translation server
+must be set up and valid OAuth credentials used.
 
 === language.detection.write.detected.lang.tags
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
-If true, source languages detected for tags will be written in new tags to output.  If false, then
-only a summary of the source languages found will be printed.
+If true, source languages detected for tags will be written in new tags to output.  If false, no
+tags are written and only a summary of the source languages found will be printed at completion.
 
 === language.hoot.services.detectable.languages.endpoint
 
@@ -1401,10 +1402,13 @@ HootServicesTranslatorClient
 === language.info.provider
 
 * Data Type: string
-* Default Value: `hoot::HootServicesTranslationInfoClient`
+* Default Value: `hoot::HootServicesTranslationInfoMockClient`
 
 TranslationInfoProvider implementation to use for determining language information needed by to
-English translation.  Not all to English translators will make use of this capability.
+English translation.   The default value,
+hoot::HootServicesTranslationInfoMockClient, is used for demonstration purposes only.  If using
+hoot::HootServicesTranslationInfoClient, a translation server must be set up and valid OAuth
+credentials used. Not all to English translators will make use of this capability.
 
 === language.max.cache.size
 
@@ -1422,10 +1426,10 @@ cache.
 
 If true and performing a to English translation with ToEnglishTranslationVisitor, the translator
 will skip attempting to translate any tags whose owning elements have a pre-translated English tag
-(key=<tag name>:en).  If true and performing a non-English source language detection with
+(key=<tag name>:en). If true and performing a non-English source language detection with
 NonEnglishLanguageDetectionVisitor, the detector will ignore the fact that an English pre-translated
-tag already exists on the associated element and attempt to detect the source language of tags
-anyway.
+tag already exists on the associated element and attempt to detect the source language of the
+pre-translated tag.
 
 === language.skip.words.in.english.dictionary
 
@@ -1510,11 +1514,9 @@ the command line.
 * Default Value: `hoot::DictionaryTranslator`
 
 ToEnglishTranslator implementation to use for to English translation.  hoot::DictionaryTranslator,
-the current default, is a simple lookup table primarily used for translation testing and proof of
-concept.  Other implementations, such as hoot::HootServicesTranslatorClient, have better
-translation capability but require custom server installation procedures.  If using
-hoot::HootServicesTranslatorClient, the option 'hoot.services.authenticated.username' must be
-populated with a valid value or translation web requests will fail.
+the current default value, is a simple lookup table primarily used for translation testing and
+proof of concept.  hoot::HootServicesTranslatorClient, which performs more useful translation,
+requires a translation server be set up and valid OAuth credentials used.
 
 === levenshtein.distance.alpha
 
