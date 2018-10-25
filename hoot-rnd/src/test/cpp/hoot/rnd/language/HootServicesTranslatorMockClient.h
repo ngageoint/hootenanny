@@ -49,7 +49,7 @@ public:
 
   HootServicesTranslatorMockClient();
 
-  virtual QString translate(const QString textToTranslate);
+  virtual QString translate(const QString text);
   virtual void setSourceLanguages(const QStringList langCodes);
 
 private:

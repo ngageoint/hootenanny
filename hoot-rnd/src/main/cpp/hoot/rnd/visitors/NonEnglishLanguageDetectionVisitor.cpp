@@ -99,27 +99,43 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
 
 void NonEnglishLanguageDetectionVisitor::_printLangCounts()
 {
+  LOG_VART(_langCounts.size());
   QMultiMap<int, QString> langCountsSwapped;
-  QMapIterator<QString, int> langCountsItr(_langCounts);
-  while (langCountsItr.hasNext())
+  for (QMap<QString, int>::const_iterator langCountsItr = _langCounts.begin();
+       langCountsItr != _langCounts.end(); ++langCountsItr)
   {
+    LOG_VART(langCountsItr.key());
+    assert(langCountsItr.key() != "en");
+    LOG_VART(langCountsItr.value());
     langCountsSwapped.insert(langCountsItr.value(), langCountsItr.key());
   }
+  LOG_VART(langCountsSwapped.size());
+
+  std::list<int> countsStl = langCountsSwapped.keys().toStdList();
+  LOG_VART(countsStl.size());
+  std::reverse(countsStl.begin(), countsStl.end());
+  QList<int> counts = QList<int>::fromStdList(countsStl);
+  LOG_VART(counts);
 
   QString langsStr = "Non-English language tag counts:\n";
-  QList<int> counts = langCountsSwapped.keys();
   for (QList<int>::const_iterator countsItr = counts.begin(); countsItr != counts.end();
        ++countsItr)
   {
     const int count = *countsItr;
+    LOG_VART(count);
 
     QStringList langNamesForCount;
     QMap<int, QString>::const_iterator langCodesForCountItr = langCountsSwapped.constFind(count);
     while (langCodesForCountItr != langCountsSwapped.end() && langCodesForCountItr.key() == count)
     {
-      langNamesForCount.append(_langCodesToLangs[*langCodesForCountItr]);
+      const QString langCode = *langCodesForCountItr;
+      LOG_VART(langCode);
+      langNamesForCount.append(_langCodesToLangs[langCode]);
+      ++langCodesForCountItr;
     }
+    LOG_VART(langNamesForCount.size());
     langNamesForCount.sort();
+    LOG_VART(langNamesForCount);
 
     for (int i = 0; i < langNamesForCount.size(); i++)
     {
@@ -171,6 +187,15 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
           {
             e->getTags().appendValue(
               "hoot:detected:source:language:" + tagKey, _langCodesToLangs[detectedLangCode]);
+          }
+
+          if (_langCounts.contains(detectedLangCode))
+          {
+            _langCounts[detectedLangCode] = _langCounts[detectedLangCode] + 1;
+          }
+          else
+          {
+            _langCounts[detectedLangCode] = 1;
           }
 
           _numTagDetectionsMade++;

@@ -61,26 +61,34 @@ void HootServicesTranslatorMockClient::setSourceLanguages(const QStringList lang
   _sourceLangs = langCodes;
 }
 
-QString HootServicesTranslatorMockClient::translate(const QString textToTranslate)
+QString HootServicesTranslatorMockClient::translate(const QString text)
 {
-  LOG_VART(textToTranslate);
+  _numTranslationsAttempted++;
+  LOG_VART(text);
   if (_sourceLangs.size() == 0)
   {
     throw HootException("No source languages populated.");
   }
-  if (!_mockTranslations.contains(textToTranslate.normalized(QString::NormalizationForm_D)))
+  if (!_mockTranslations.contains(text.normalized(QString::NormalizationForm_D)))
   {
-    throw HootException("No mock translation available for: " + textToTranslate);
+    LOG_TRACE("No mock translation available for: " + text);
+    return "";
   }
 
-  LOG_DEBUG(
+  LOG_TRACE(
     "Translating to English with specified source languages: " <<
-     _sourceLangs.join(",") << "; text: " << textToTranslate);
+     _sourceLangs.join(",") << "; text: " << text);
 
-  _translatedText = _mockTranslations[textToTranslate].split(";")[0];
-  _detectedLang = _mockTranslations[textToTranslate].split(";")[1];
+  if (_skipWordsInEnglishDict && text.toLower() == "computer store")
+  {
+    _numEnglishTextsSkipped++;
+  }
+
+  _translatedText = _mockTranslations[text].split(";")[0];
+  _detectedLang = _mockTranslations[text].split(";")[1];
   _detectorUsed = "TikaLanguageDetector";
   _detectedLangAvailableForTranslation = true;
+  _numTranslationsMade++;
 
   return _translatedText;
 }

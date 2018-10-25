@@ -53,15 +53,29 @@ HootServicesLanguageDetectorClient()
 QString HootServicesLanguageDetectorMockClient::detect(const QString text)
 {
   LOG_DEBUG("Detecting source language for text: " << text << "...");
+  _numDetectionsAttempted++;
   if (!_mockDetections.contains(text.normalized(QString::NormalizationForm_D)))
   {
-    throw HootException("No mock translation available.");
+    LOG_TRACE("No mock translation available.");
+    return "";
   }
 
+  QString detectedLangCode = _mockDetections[text];
 
-  const QString detection = _mockDetections[text];
-  LOG_DEBUG("Detected source language: " << detection << " for text: " << text);
-  return detection;
+  if (detectedLangCode == "en")
+  {
+    LOG_TRACE("Source language for text: " << text << " detected as English.");
+    _numEnglishTextsSkipped++;
+    detectedLangCode = "";
+  }
+
+  if (!detectedLangCode.isEmpty())
+  {
+    _numDetectionsMade++;
+    LOG_DEBUG("Detected source language: " << detectedLangCode << " for text: " << text);
+  }
+
+  return detectedLangCode;
 }
 
 }

@@ -55,15 +55,15 @@ bool HootServicesLanguageDetectorClient::_loggedCacheMaxReached = false;
 
 HootServicesLanguageDetectorClient::HootServicesLanguageDetectorClient() :
 _useCookies(true),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _numDetectionsAttempted(0),
-_undetectableWords(0),
 _numDetectionsMade(0),
 _numEnglishTextsSkipped(0),
+_skipWordsInEnglishDict(true),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_undetectableWords(0),
 _cacheHits(0),
 _cacheSize(0),
-_cacheMaxSize(0),
-_skipWordsInEnglishDict(true)
+_cacheMaxSize(0)
 {
 }
 

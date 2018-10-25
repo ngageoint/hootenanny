@@ -91,11 +91,17 @@ protected:
   QString _detectorUsed;
   bool _detectedLangAvailableForTranslation;
 
-  boost::shared_ptr<TranslationInfoProvider> _infoClient;
-
   //determines whether cookies are used in web requests; should be set to true to support auth,
   //except when running tests as they don't make web requests that require auth
   bool _useCookies;
+
+  long _numTranslationsMade;
+  long _numTranslationsAttempted;
+  long _numEnglishTextsSkipped;
+
+  bool _skipWordsInEnglishDict;
+
+  boost::shared_ptr<TranslationInfoProvider> _infoClient;
 
 private:
 
@@ -118,17 +124,12 @@ private:
 
   int _statusUpdateInterval;
 
-  long _numTranslationsMade;
-  long _numTranslationsAttempted;
   long _untranslatableWords;
   long _numDetectionsMade;
-  long _numEnglishWordsSkipped;
 
   long _cacheHits;
   long _cacheMaxSize;
   long _cacheSize;
-
-  bool _skipWordsInEnglishDict;
 
   static bool _loggedCacheMaxReached;
 

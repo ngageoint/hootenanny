@@ -72,6 +72,12 @@ protected:
   //except when running tests as they don't make web requests that require auth
   bool _useCookies;
 
+  long _numDetectionsAttempted;
+  long _numDetectionsMade;
+  long _numEnglishTextsSkipped;
+
+  bool _skipWordsInEnglishDict;
+
 private:
 
   friend class HootServicesLanguageDetectorClientTest;
@@ -85,16 +91,11 @@ private:
 
   int _statusUpdateInterval;
 
-  long _numDetectionsAttempted;
   long _undetectableWords;
-  long _numDetectionsMade;
-  long _numEnglishTextsSkipped;
 
   long _cacheHits;
   long _cacheSize;
   long _cacheMaxSize;
-
-  bool _skipWordsInEnglishDict;
 
   static bool _loggedCacheMaxReached;
 

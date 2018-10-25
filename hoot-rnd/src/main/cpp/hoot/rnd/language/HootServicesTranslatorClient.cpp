@@ -61,18 +61,18 @@ HootServicesTranslatorClient::HootServicesTranslatorClient() :
 _detectedLang(""),
 _detectedLangAvailableForTranslation(false),
 _useCookies(true),
+_numTranslationsMade(0),
+_numTranslationsAttempted(0),
+_numEnglishTextsSkipped(0),
+_skipWordsInEnglishDict(true),
 _detectedLangOverrides(false),
 _performExhaustiveSearch(false),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_numTranslationsMade(0),
-_numTranslationsAttempted(0),
 _untranslatableWords(0),
 _numDetectionsMade(0),
-_numEnglishWordsSkipped(0),
 _cacheHits(0),
 _cacheMaxSize(-1),
-_cacheSize(0),
-_skipWordsInEnglishDict(true)
+_cacheSize(0)
 {
 }
 
@@ -83,7 +83,7 @@ HootServicesTranslatorClient::~HootServicesTranslatorClient()
     "Made " << _numTranslationsMade << " successful translations on " <<
     _numTranslationsAttempted << " attempts.");
   LOG_INFO(_untranslatableWords << " words were not translatable.");
-  LOG_INFO(_numEnglishWordsSkipped << " English words were skipped.");
+  LOG_INFO(_numEnglishTextsSkipped << " English words were skipped.");
   LOG_INFO("Language detections made: " << _numDetectionsMade);
   if (_cache)
   {
@@ -328,7 +328,7 @@ QString HootServicesTranslatorClient::translate(const QString text)
     LOG_TRACE(
       "Text to be translated determined to already be in English.  Skipping " <<
       "translation for text: " << text);
-    _numEnglishWordsSkipped++;
+    _numEnglishTextsSkipped++;
     _translatedText = "";
     return "";
   }

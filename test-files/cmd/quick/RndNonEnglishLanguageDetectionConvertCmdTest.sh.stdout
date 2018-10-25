@@ -1,0 +1,13 @@
+16:25:18.894 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/visitors/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest.osm to test-output/cmd/quick/NonEnglishLanguageDetectionVisitorTest/output.osm...
+16:25:18.906 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ionVisitorTest/ToEnglishTranslationVisitorTest.osm...
+16:25:18.907 INFO  ...hoot/core/io/DataConverter.cpp( 574) Applying conversion operations...
+16:25:18.907 INFO  ...shLanguageDetectionVisitor.cpp(  65) 2 successful tag detections made on 2 different elements.
+16:25:18.907 INFO  ...shLanguageDetectionVisitor.cpp(  68) Detected languages for 2 tags out of 3 encountered.
+16:25:18.908 INFO  ...shLanguageDetectionVisitor.cpp(  71) Attempted to detect languages on tags for 3 elements out of 4 elements encountered.
+16:25:18.908 INFO  ...shLanguageDetectionVisitor.cpp( 163) Non-English language tag counts:
+German: 2
+16:25:18.908 INFO  ...icesLanguageDetectorClient.cpp(  74) Made 2 successful language detections on 3 attempts.
+16:25:18.908 INFO  ...icesLanguageDetectorClient.cpp(  75) 0 words were not detectable.
+16:25:18.908 INFO  ...icesLanguageDetectorClient.cpp(  76) 1 English words were skipped.
+16:25:18.908 INFO  ...icesLanguageDetectorClient.cpp(  77) Language detections made: 2
+16:25:18.908 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/quick/NonEnglishLanguageDetectionVisitorTest/output.osm...
