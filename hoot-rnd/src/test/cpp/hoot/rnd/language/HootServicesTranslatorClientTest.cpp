@@ -62,7 +62,7 @@ public:
 
     HOOT_STR_EQUALS(
       FileUtils::readFully(
-        testInputRoot + "/runBuildRequestTest").trimmed(),
+        testInputRoot + "/runRequestDataTest").trimmed(),
         uut->_getRequestData("text to translate").trimmed());
   }
 
