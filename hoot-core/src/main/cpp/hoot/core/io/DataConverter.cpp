@@ -184,7 +184,7 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 
   //We require that a translation be present when converting to OGR.  We may be able to absorb this
   //logic into _convert (see notes below).
-  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output) && !_translation.isEmpty())
+  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output,true) && !_translation.isEmpty())
   {
     _convertToOgr(inputs.at(0), output);
   }
