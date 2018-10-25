@@ -36,12 +36,17 @@
 
 // Qt
 #include <QMap>
+#include <QSet>
 
 namespace hoot
 {
 
 /**
+ * Detects the source language of tag values
  *
+ * Even though ToEnglishTranslationVisitor has the option of doing both translation and detection,
+ * this class is useful if you're uncertain which source languages to declare for translation and
+ * don't have the resources to stand up a translation server for every possible language.
  */
 class NonEnglishLanguageDetectionVisitor : public ElementOsmMapVisitor, public Configurable
 {
@@ -78,11 +83,12 @@ private:
 
   QMap<QString, int> _langNamesToCounts;
   QMap<QString, QString> _langCodesToLangs;
-  QStringList _tagKeys;
+  QSet<QString> _tagKeys;
   bool _ignorePreTranslatedTags;
   bool _writeDetectedLangTags;
-  QString _detectionSummary;
+  bool _parseNames;
 
+  QString _detectionSummary;
   bool _currentElementHasSuccessfulTagDetection;
   long _numTagDetectionsMade;
   long _numElementsWithSuccessfulTagDetection;

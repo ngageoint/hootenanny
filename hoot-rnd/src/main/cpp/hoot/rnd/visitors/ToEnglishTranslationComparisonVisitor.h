@@ -60,6 +60,7 @@ private:
   //scores the similarity of the pre-translated and translated texts
   StringDistancePtr _translationScorer;
 
+  QStringList _tagKeysAsList;
   QStringList _preTranslatedTagKeys;
   QString _preTranslatedVal;
 };

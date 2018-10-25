@@ -43,6 +43,7 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationVisitor)
 
 ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
 _ignorePreTranslatedTags(false),
+_parseNames(false),
 _numTotalElements(0),
 _currentElementHasSuccessfulTagTranslation(false),
 _numTagTranslationsMade(0),
@@ -82,14 +83,19 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   _translatorClient->setConfiguration(conf);
   _translatorClient->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
 
-  _toTranslateTagKeys = opts.getLanguageTagKeys();
+  _tagKeys = opts.getLanguageTagKeys().toSet();
   _ignorePreTranslatedTags = opts.getLanguageIgnorePreTranslatedTags();
+  _parseNames = opts.getLanguageParseNames();
+  if (_parseNames)
+  {
+    _tagKeys = _tagKeys.unite(Tags::getNameKeys().toSet());
+  }
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
 
 void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
 {
-  if (_toTranslateTagKeys.isEmpty())
+  if (_tagKeys.isEmpty())
   {
     throw HootException("No tag keys specified for language translation.");
   }
@@ -105,9 +111,10 @@ void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
 
   const Tags& tags = e->getTags();
   bool elementProcessed = false;
-  for (int i = 0; i < _toTranslateTagKeys.size(); i++)
+  for (QSet<QString>::const_iterator tagKeysItr = _tagKeys.begin();
+       tagKeysItr != _tagKeys.end(); ++tagKeysItr)
   {
-    const QString toTranslateTagKey = _toTranslateTagKeys.at(i);
+    const QString toTranslateTagKey = *tagKeysItr;
     if (tags.contains(toTranslateTagKey))
     {     
       //making skipping tags that already have an english translated tag optional, b/c a many of the

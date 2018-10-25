@@ -7,10 +7,12 @@
   </node>
   <node id="5794174454" lat="48.8023512" lon="9.7977350">
     <tag k="name" v="wie heissen sie"/>
+    <tag k="tag1" v="wie heissen sie"/>
   </node>
   <node id="5801935555" lat="48.1400416" lon="11.5303757">
     <tag k="name" v="buenos noches"/>
     <tag k="name:en" v="good night"/>
+    <tag k="tag2" v="buenos noches"/>
   </node>
   <node id="5801935553" lat="48.1400421" lon="11.5303761">
     <tag k="name" v="computer store"/>

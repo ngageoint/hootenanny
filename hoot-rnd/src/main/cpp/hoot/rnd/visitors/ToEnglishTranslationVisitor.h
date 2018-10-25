@@ -33,6 +33,9 @@
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
 
+// Qt
+#include <QSet>
+
 namespace hoot
 {
 
@@ -60,11 +63,12 @@ protected:
 
   boost::shared_ptr<ToEnglishTranslator> _translatorClient;
 
-  QStringList _toTranslateTagKeys;
+  QSet<QString> _tagKeys;
   QString _toTranslateTagKey;
   ElementPtr _element;
 
   bool _ignorePreTranslatedTags;
+  bool _parseNames;
 
   long _numTotalElements;
 

@@ -53,6 +53,8 @@ class ToEnglishTranslationVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runNoSourceLangsTest);
   CPPUNIT_TEST(runIgnorePreTranslatedTagsTest);
   CPPUNIT_TEST(runNoTagKeysTest);
+  CPPUNIT_TEST(runNamesTest);
+  CPPUNIT_TEST(runNamesTestWithAdditionalTagKeys);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -122,6 +124,29 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT(exceptionMsg.startsWith("No tag keys specified"));
+  }
+
+  void runNamesTest()
+  {
+    const QString testName = "runNamesTest";
+    Settings conf = _getDefaultConfig();
+    conf.set("language.parse.names", true);
+    _runTranslationTest(
+      conf,
+      testOutputRoot + "/" + testName + ".osm",
+      testInputRoot + "/" + testName + "-gold.osm");
+  }
+
+  void runNamesTestWithAdditionalTagKeys()
+  {
+    const QString testName = "runNamesTestWithAdditionalTagKeys";
+    Settings conf = _getDefaultConfig();
+    conf.set("language.parse.names", true);
+    conf.set("language.tag.keys", "tag1;tag2");
+    _runTranslationTest(
+      conf,
+      testOutputRoot + "/" + testName + ".osm",
+      testInputRoot + "/" + testName + "-gold.osm");
   }
 
 private:

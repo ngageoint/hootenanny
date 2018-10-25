@@ -42,6 +42,7 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, NonEnglishLanguageDetectionVisitor)
 NonEnglishLanguageDetectionVisitor::NonEnglishLanguageDetectionVisitor() :
 _ignorePreTranslatedTags(false),
 _writeDetectedLangTags(false),
+_parseNames(false),
 _currentElementHasSuccessfulTagDetection(false),
 _numTagDetectionsMade(0),
 _numElementsWithSuccessfulTagDetection(0),
@@ -91,10 +92,16 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
       opts.getLanguageDetectionDetector()));
   _langDetector->setConfiguration(conf);
 
-  _tagKeys = opts.getLanguageTagKeys();
+  _tagKeys = opts.getLanguageTagKeys().toSet();
   _ignorePreTranslatedTags = opts.getLanguageIgnorePreTranslatedTags();
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
   _writeDetectedLangTags = opts.getLanguageDetectionWriteDetectedLangTags();
+  _parseNames = opts.getLanguageParseNames();
+  if (_parseNames)
+  {
+    _tagKeys = _tagKeys.unite(Tags::getNameKeys().toSet());
+  }
+  LOG_VARD(_tagKeys);
 }
 
 QString NonEnglishLanguageDetectionVisitor::getLangCountsSortedByFrequency() const
@@ -169,9 +176,10 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
 
   const Tags& tags = e->getTags();
   bool elementProcessed = false;
-  for (int i = 0; i < _tagKeys.size(); i++)
+  for (QSet<QString>::const_iterator tagKeysItr = _tagKeys.begin();
+       tagKeysItr != _tagKeys.end(); ++tagKeysItr)
   {
-    const QString tagKey = _tagKeys.at(i);
+    const QString tagKey = *tagKeysItr;
     if (tags.contains(tagKey))
     {  
       const QString preTranslatedTagKey = tagKey + ":en";

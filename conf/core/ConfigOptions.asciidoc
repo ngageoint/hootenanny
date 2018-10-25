@@ -1431,6 +1431,18 @@ NonEnglishLanguageDetectionVisitor, the detector will ignore the fact that an En
 tag already exists on the associated element and attempt to detect the source language of the
 pre-translated tag.
 
+=== language.parse.names
+
+* Data Type: bool
+* Default Value: `false`
+
+When performing a to English translation or source language detection, the translator/detector
+by default uses the required 'language.tag.keys' configuration option to determine which tags to
+translate or detect source languages for.  If this option is enabled, 'language.tag.keys' is no
+longer a required option and all name tags will be parsed during translation/detection.  If
+'language.tag.keys' is populated in addition to enabling this option, then any tag keys in
+'language.tag.keys' that are not names will be parsed in addition to the name tags.
+
 === language.skip.words.in.english.dictionary
 
 * Data Type: bool
@@ -1445,8 +1457,8 @@ will skip the translation of any tags whose value is in an English dictionary.
 * Default Value:
 ** ``
 
-A list of keys of tags whose values are to either be translated to English by the
-ToEnglishTranslationVisitor or just have their source languages detected by the the
+A list of keys of tags whose values are to either be translated to English by a
+ToEnglishTranslationVisitor or just have their source languages detected by a
 LanguageDetectionVisitor depending on the operation being performed. Separate keys with a ';' and
 surround in quotes when passing in from the command line.
 
@@ -1456,9 +1468,9 @@ surround in quotes when passing in from the command line.
 * Default Value:
 ** ``
 
-A list of tag keys known to have been previously translated to the desired target language.  The
-list ordering should correspond to that of language..tag.keys.  Separate keys with a ';' and
-surround in quotes when passing in from the command line.
+A list of tag keys whose values are known to have been previously translated to the desired target
+language.  The list ordering should correspond to that of language.tag.keys.  Separate keys with a
+';' and surround in quotes when passing in from the command line.
 
 === language.translation.comparison.scorer
 
