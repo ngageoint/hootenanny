@@ -60,15 +60,28 @@ public:
   virtual QString getDescription() const
   { return "Detects source languages for selected tags"; }
 
+  /**
+   *
+   *
+   * @return
+   */
+  QString getLangCountsSortedByFrequency() const;
+
+  /**
+   *
+   *
+   * @return
+   */
+  QString getLangCountsSortedByLangName() const;
+
 private:
 
-  friend class NonEnglishLanguageDetectionVisitorTest;
-
-  QMap<QString, int> _langCounts;
+  QMap<QString, int> _langNamesToCounts;
   QMap<QString, QString> _langCodesToLangs;
   QStringList _tagKeys;
   bool _ignorePreTranslatedTags;
   bool _writeDetectedLangTags;
+  QString _detectionSummary;
 
   bool _currentElementHasSuccessfulTagDetection;
   long _numTagDetectionsMade;
@@ -80,8 +93,6 @@ private:
 
   boost::shared_ptr<TranslationInfoProvider> _infoClient;
   boost::shared_ptr<LanguageDetector> _langDetector;
-
-  void _printLangCounts();
 };
 
 }
