@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "OsmCsvWriter.h"
+#include "OsmPgCsvWriter.h"
 
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -38,24 +38,24 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, OsmCsvWriter)
+HOOT_FACTORY_REGISTER(OsmMapWriter, OsmPgCsvWriter)
 
-OsmCsvWriter::OsmCsvWriter()
+OsmPgCsvWriter::OsmPgCsvWriter()
   : _precision(ConfigOptions().getWriterPrecision()),
     _separator(","),
     _endl("\n")
 {
 }
 
-OsmCsvWriter::~OsmCsvWriter()
+OsmPgCsvWriter::~OsmPgCsvWriter()
 {
 }
 
-void OsmCsvWriter::open(QString url)
+void OsmPgCsvWriter::open(QString url)
 {
   QFileInfo path(url);
   QString base = QString("%1/%2").arg(path.absolutePath()).arg(path.baseName());
-  //  Create new filenames, i.e. /path/filename.csv turns into /path/filename-nodes.csv
+  //  Create new filenames, i.e. /path/filename.pgcsv turns into /path/filename-nodes.pgcsv
   array<QString, FileType::MaxFileType> filenames;
   filenames[FileType::Nodes] = base + QString("-nodes.") + path.completeSuffix();
   filenames[FileType::Ways] = base + QString("-ways.") + path.completeSuffix();
@@ -74,9 +74,9 @@ void OsmCsvWriter::open(QString url)
   _initFiles();
 }
 
-QString OsmCsvWriter::toString(const ConstOsmMapPtr& map)
+QString OsmPgCsvWriter::toString(const ConstOsmMapPtr& map)
 {
-  OsmCsvWriter writer;
+  OsmPgCsvWriter writer;
   array<QString, FileType::MaxFileType> buffers;
   for (int i = 0; i < FileType::MaxFileType; ++i)
     writer._streams[i].setString(&buffers[i]);
@@ -93,7 +93,7 @@ QString OsmCsvWriter::toString(const ConstOsmMapPtr& map)
 }
 
 
-void OsmCsvWriter::_initFiles()
+void OsmPgCsvWriter::_initFiles()
 {
   //  Write out the nodes file header
   _streams[FileType::Nodes].setCodec("UTF-8");
@@ -142,7 +142,7 @@ void OsmCsvWriter::_initFiles()
       << "sequence_id" << _endl;
 }
 
-void OsmCsvWriter::close()
+void OsmPgCsvWriter::close()
 {
   //  Flush the stream then flush and close the file
   for (int i = 0; i < FileType::MaxFileType; ++i)
@@ -156,7 +156,7 @@ void OsmCsvWriter::close()
   }
 }
 
-void OsmCsvWriter::write(ConstOsmMapPtr map)
+void OsmPgCsvWriter::write(ConstOsmMapPtr map)
 {
   QList<long> ids;
   //  Start with the nodes
@@ -187,7 +187,7 @@ void OsmCsvWriter::write(ConstOsmMapPtr map)
     writePartial(map->getRelation(ids[i]));
 }
 
-void OsmCsvWriter::writePartial(const hoot::ConstNodePtr& n)
+void OsmPgCsvWriter::writePartial(const hoot::ConstNodePtr& n)
 {
   //  Node
   //  node_id,latitude,longitude,changeset_id,visible,timestamp,version,tags
@@ -202,7 +202,7 @@ void OsmCsvWriter::writePartial(const hoot::ConstNodePtr& n)
       << _getTags(n) << _endl;
 }
 
-void OsmCsvWriter::writePartial(const hoot::ConstWayPtr& w)
+void OsmPgCsvWriter::writePartial(const hoot::ConstWayPtr& w)
 {
   //  Way
   //  way_id,changeset_id,timestamp,version,visible,tags
@@ -225,7 +225,7 @@ void OsmCsvWriter::writePartial(const hoot::ConstWayPtr& w)
   }
 }
 
-void OsmCsvWriter::writePartial(const hoot::ConstRelationPtr& r)
+void OsmPgCsvWriter::writePartial(const hoot::ConstRelationPtr& r)
 {
   //  Relation
   //  relation_id,changeset_id,timestamp,version,visible,tags
@@ -250,7 +250,7 @@ void OsmCsvWriter::writePartial(const hoot::ConstRelationPtr& r)
   }
 }
 
-QString OsmCsvWriter::_getTags(const ConstElementPtr& e)
+QString OsmPgCsvWriter::_getTags(const ConstElementPtr& e)
 {
   QString buffer;
   QTextStream stream(&buffer);
@@ -277,12 +277,12 @@ QString OsmCsvWriter::_getTags(const ConstElementPtr& e)
   return stream.readAll();
 }
 
-void OsmCsvWriter::finalizePartial()
+void OsmPgCsvWriter::finalizePartial()
 {
   close();
 }
 
-void OsmCsvWriter::setConfiguration(const Settings& conf)
+void OsmPgCsvWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);
   _precision = config.getWriterPrecision();

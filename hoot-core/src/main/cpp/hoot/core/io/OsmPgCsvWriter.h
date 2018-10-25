@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMCSVWRITER_H
-#define OSMCSVWRITER_H
+#ifndef OSMPGCSVWRITER_H
+#define OSMPGCSVWRITER_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -44,25 +44,25 @@
 namespace hoot
 {
 
-class OsmCsvWriter : public PartialOsmMapWriter, public Configurable
+class OsmPgCsvWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
   static std::string className() { return "hoot::OsmCsvWriter"; }
 
-  OsmCsvWriter();
-  virtual ~OsmCsvWriter();
+  OsmPgCsvWriter();
+  virtual ~OsmPgCsvWriter();
 
   /**
    * @brief isSupported returns true if the URL is likely supported
-   * @param url Filename ending in ".cvs"
+   * @param url Filename ending in ".pgcsv"
    * @return
    */
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".csv"); }
+  virtual bool isSupported(QString url) { return url.toLower().endsWith(".pgcsv"); }
   /**
    * @brief supportedFormats
    * @return
    */
-  virtual QString supportedFormats() { return ".csv"; }
+  virtual QString supportedFormats() { return ".pgcsv"; }
   /**
    * @brief open
    * @param url
@@ -73,19 +73,19 @@ public:
    */
   void close();
   /**
-   * @brief toString Write map to one large string containing all CSV files,
-   * @param map Pointer to map object to write CSV data to a string
+   * @brief toString Write map to one large string containing all PGCSV files,
+   * @param map Pointer to map object to write PGCSV data to a string
    * @return
    */
   static QString toString(const ConstOsmMapPtr& map);
   /**
-   * @brief write Write map to set of CSV files
-   * @param map Pointer to map object to write to CSV
+   * @brief write Write map to set of PGCSV files
+   * @param map Pointer to map object to write to PGCSV
    */
   virtual void write(ConstOsmMapPtr map);
   /**
    * @brief writePartial Write a single node/way/relation to the correct stream
-   * @param n/w/r - Pointer to the node/way/relation to write to CSV
+   * @param n/w/r - Pointer to the node/way/relation to write to PGCSV
    */
   virtual void writePartial(const ConstNodePtr& n);
   virtual void writePartial(const ConstWayPtr& w);
@@ -138,4 +138,4 @@ private:
 
 }
 
-#endif  //  OSMCSVWRITER_H
+#endif  //  OSMPGCSVWRITER_H

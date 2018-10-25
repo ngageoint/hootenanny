@@ -27,7 +27,7 @@
 
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OsmCsvWriter.h>
+#include <hoot/core/io/OsmPgCsvWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 
@@ -39,9 +39,9 @@ using namespace geos::geom;
 namespace hoot
 {
 
-class OsmCsvWriterTest : public HootTestFixture
+class OsmPgCsvWriterTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(OsmCsvWriterTest);
+  CPPUNIT_TEST_SUITE(OsmPgCsvWriterTest);
   CPPUNIT_TEST(runBasic);
   CPPUNIT_TEST(runString);
   CPPUNIT_TEST(runEscapeTags);
@@ -49,10 +49,10 @@ class OsmCsvWriterTest : public HootTestFixture
 
 public:
 
-  OsmCsvWriterTest()
+  OsmPgCsvWriterTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/CsvWriter");
+    TestUtils::mkpath("test-output/io/PgCsvWriter");
   }
 
   void runBasic()
@@ -62,22 +62,22 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ScoreMatchRef1.osm", map);
 
-    OsmCsvWriter writer;
-    writer.open("test-output/io/CsvWriter/runBasic.csv");
+    OsmPgCsvWriter writer;
+    writer.open("test-output/io/PgCsvWriter/runBasic.pgcsv");
     writer.write(map);
     writer.close();
 
     //  Check the results
-    HOOT_FILE_EQUALS(QString("test-files/io/CsvWriter/runBasic-nodes.csv"),
-                     QString("test-output/io/CsvWriter/runBasic-nodes.csv"));
-    HOOT_FILE_EQUALS(QString("test-files/io/CsvWriter/runBasic-ways.csv"),
-                     QString("test-output/io/CsvWriter/runBasic-ways.csv"));
-    HOOT_FILE_EQUALS(QString("test-files/io/CsvWriter/runBasic-waynodes.csv"),
-                     QString("test-output/io/CsvWriter/runBasic-waynodes.csv"));
-    HOOT_FILE_EQUALS(QString("test-files/io/CsvWriter/runBasic-relations.csv"),
-                     QString("test-output/io/CsvWriter/runBasic-relations.csv"));
-    HOOT_FILE_EQUALS(QString("test-files/io/CsvWriter/runBasic-relationmembers.csv"),
-                     QString("test-output/io/CsvWriter/runBasic-relationmembers.csv"));
+    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-nodes.pgcsv"),
+                     QString("test-output/io/PgCsvWriter/runBasic-nodes.pgcsv"));
+    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-ways.pgcsv"),
+                     QString("test-output/io/PgCsvWriter/runBasic-ways.pgcsv"));
+    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-waynodes.pgcsv"),
+                     QString("test-output/io/PgCsvWriter/runBasic-waynodes.pgcsv"));
+    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-relations.pgcsv"),
+                     QString("test-output/io/PgCsvWriter/runBasic-relations.pgcsv"));
+    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-relationmembers.pgcsv"),
+                     QString("test-output/io/PgCsvWriter/runBasic-relationmembers.pgcsv"));
   }
 
   void runString()
@@ -87,7 +87,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/UndividedHighwayPreSplit.osm", map);
 
-    QString output = OsmCsvWriter::toString(map);
+    QString output = OsmPgCsvWriter::toString(map);
     //  Compare the results
     HOOT_STR_EQUALS(expected_runString, output);
   }
@@ -121,7 +121,7 @@ public:
     members[1].role = "reviewee";
     relation->setMembers(members);
 
-    QString output = OsmCsvWriter::toString(map);
+    QString output = OsmPgCsvWriter::toString(map);
     //  Compare the results
     HOOT_STR_EQUALS(expected_runEscapeTags, output);
   }
@@ -224,7 +224,7 @@ public:
       "-1,Node,-6,reviewee,0,2\n";
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmCsvWriterTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmCsvWriterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmPgCsvWriterTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmPgCsvWriterTest, "current");
 
 }
