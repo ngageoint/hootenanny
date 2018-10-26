@@ -1,25 +1,27 @@
 #!/bin/bash
 set -e
 
-# This test requires Joshua, and its not feasible to install automatically with hoot right now.  So, this test remains off and just gets 
+# This test requires Joshua, and its not feasible to install automatically with hoot right now.  So, this test remains turned off and just gets 
 # checked manually from time to time.  German and Spanish Joshua translation services need to be enabled in the config and Tomcat 
-# restarted to enable them for this test to pass.
+# restarted to enable them for this test to pass.  Also, populate your OAuth keys in HOOT_OPTS.
 
-INPUT_DIR=test-files/cmd/glacial/RndServiceToEnglishTranslationVisitorConvertCmdTest
+INPUT_DIR=test-files/cmd/glacial/ServiceToEnglishTranslationVisitorConvertCmdTest
 #TODO: will eventually need a better input file that supports testing detection and multiple translation languages
-INPUT_FILE=$INPUT_DIR/RndServiceToEnglishTranslationVisitorConvertCmdTest-in.osm
-GOLD_FILE=$INPUT_DIR/RndServiceToEnglishTranslationVisitorConvertCmdTest-out.osm
-OUTPUT_DIR=test-output/cmd/glacial/RndServiceToEnglishTranslationVisitorConvertCmdTest
-OUTPUT_FILE=$OUTPUT_DIR/RndServiceToEnglishTranslationVisitorConvertCmdTest-out.osm
+INPUT_FILE=$INPUT_DIR/ServiceToEnglishTranslationVisitorConvertCmdTest-in.osm
+GOLD_FILE=$INPUT_DIR/ServiceToEnglishTranslationVisitorConvertCmdTest-out.osm
+OUTPUT_DIR=test-output/cmd/glacial/ServiceToEnglishTranslationVisitorConvertCmdTest
+OUTPUT_FILE=$OUTPUT_DIR/ServiceToEnglishTranslationVisitorConvertCmdTest-out.osm
 
 mkdir -p $OUTPUT_DIR
 
-# These can change per installation but are likely to remain unchanged for the time being.
-hoot info --languages --detectable
-hoot info --languages --detectors
-hoot info --languages --translatable
-hoot info --languages --translators
+HOOT_OPTS="-D language.ignore.pre.translated.tags=true -D language.translation.source.languages=de;es -D language.tag.keys=name;alt_name -D language.translation.perform.exhaustive.search.with.no.detection=false -D language.translation.detected.language.overrides.specified.source.languages=false -D hoot.services.auth.user.name= -D hoot.services.auth.access.token= -D hoot.services.auth.access.token.secret="
 
-hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.translation.source.languages="de;es" -D language.tag.keys="name;alt_name" -D language.translation.perform.exhaustive.search.with.no.detection=false -D language.translation.detected.language.overrides.specified.source.languages=false $INPUT_FILE $OUTPUT_FILE
+# These can change per installation but are likely to remain unchanged for the time being.
+hoot info $HOOT_OPTS --languages --detectable
+hoot info $HOOT_OPTS --languages --detectors
+hoot info $HOOT_OPTS --languages --translatable
+hoot info $HOOT_OPTS --languages --translators
+
+hoot convert $HOOT_OPTS -D convert.ops="hoot::ToEnglishTranslationVisitor" $INPUT_FILE $OUTPUT_FILE
 
 hoot diff $GOLD_FILE $OUTPUT_FILE
