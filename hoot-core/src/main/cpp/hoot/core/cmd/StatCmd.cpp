@@ -76,7 +76,8 @@ public:
     const double stat = _calcStat(input, visClassName);
     LOG_VART(stat);
 
-    std::cout << "Calculated statistic: " << stat << std::endl;
+    // see note in CountCmd about the preceding endline
+    std::cout << std::endl << "Calculated statistic: " << stat << std::endl;
 
     return 0;
   }
@@ -146,6 +147,7 @@ private:
       /*ConstElementPtr element = */filteredInputStream->readNextElement();
       numElementsParsed++;
 
+      // see related note in CountCmd progress update
       if (numElementsParsed % _taskStatusUpdateInterval == 0)
       {
         PROGRESS_INFO("Calculated statistic for: " << numElementsParsed << " elements.");

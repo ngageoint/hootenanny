@@ -61,6 +61,7 @@ NonEnglishLanguageDetectionVisitor::~NonEnglishLanguageDetectionVisitor()
     _numElementsWithSuccessfulTagDetection++;
   }
 
+  LOG_INFO("");
   LOG_INFO(
     _numTagDetectionsMade << " successful tag detections made on " <<
     _numElementsWithSuccessfulTagDetection << " different elements.");

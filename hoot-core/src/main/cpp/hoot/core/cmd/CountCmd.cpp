@@ -96,7 +96,8 @@ public:
     }
     LOG_VART(_total);
 
-    std::cout << "Total: " << _total << std::endl;
+    //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
+    std::cout << std::endl << "Total: " << _total << std::endl;
 
     return 0;
   }
@@ -217,6 +218,9 @@ private:
       /*ConstElementPtr element = */filteredInputStream->readNextElement();
       inputTotal = (int)counter->getStat();
 
+      // It would be nice if we could display information on the total elements processed, as well
+      // as the ones counted, but since the element stream is already filtered by this point would
+      // take some extra work.
       const long runningTotal = _total + inputTotal;
       if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
       {
@@ -227,7 +231,7 @@ private:
         }
         else
         {
-           msg += " elements.";
+          msg += " elements.";
         }
         PROGRESS_INFO(msg);
       }
