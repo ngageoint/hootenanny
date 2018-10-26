@@ -22,30 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include <boost/shared_ptr.hpp>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include "ElementVisitorInputStream.h"
+#include "ConstElementVisitorInputStream.h"
 
 namespace hoot
 {
 
-ElementVisitorInputStream::ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
-    const ElementVisitorPtr& visitor) :
+ConstElementVisitorInputStream::ConstElementVisitorInputStream(
+  const ElementInputStreamPtr& elementSource, const ConstElementVisitorPtr& visitor) :
 _elementSource(elementSource),
 _visitor(visitor)
 {
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementVisitorInputStream::getProjection() const
+boost::shared_ptr<OGRSpatialReference> ConstElementVisitorInputStream::getProjection() const
 {
   return _elementSource->getProjection();
 }
 
-ElementPtr ElementVisitorInputStream::readNextElement()
+ElementPtr ConstElementVisitorInputStream::readNextElement()
 {
   ElementPtr element = _elementSource->readNextElement();
   _visitor->visit(element);
