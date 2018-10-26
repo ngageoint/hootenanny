@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "ElementCriterionVisitorInputStream.h"
+#include "ConstElementCriterionVisitorInputStream.h"
 
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -33,9 +33,9 @@
 namespace hoot
 {
 
-ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
+ConstElementCriterionVisitorInputStream::ConstElementCriterionVisitorInputStream(
   const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
-  const ElementVisitorPtr& visitor) :
+  const ConstElementVisitorPtr& visitor) :
 _elementSource(elementSource),
 _criterion(criterion),
 _numFeaturesTotal(0),
@@ -44,9 +44,9 @@ _numFeaturesPassingCriterion(0)
   _visitors.append(visitor);
 }
 
-ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
+ConstElementCriterionVisitorInputStream::ConstElementCriterionVisitorInputStream(
   const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
-  const QList<ElementVisitorPtr>& visitors) :
+  const QList<ConstElementVisitorPtr>& visitors) :
 _elementSource(elementSource),
 _criterion(criterion),
 _numFeaturesTotal(0),
@@ -55,29 +55,29 @@ _visitors(visitors)
 {
 }
 
-ElementCriterionVisitorInputStream::~ElementCriterionVisitorInputStream()
+ConstElementCriterionVisitorInputStream::~ConstElementCriterionVisitorInputStream()
 {
   close();
 }
 
-void ElementCriterionVisitorInputStream::close()
+void ConstElementCriterionVisitorInputStream::close()
 {
   _elementSource->close();
   _numFeaturesTotal = 0;
   _numFeaturesPassingCriterion = 0;
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getProjection() const
+boost::shared_ptr<OGRSpatialReference> ConstElementCriterionVisitorInputStream::getProjection() const
 {
   return _elementSource->getProjection();
 }
 
-bool ElementCriterionVisitorInputStream::hasMoreElements()
+bool ConstElementCriterionVisitorInputStream::hasMoreElements()
 {
   return _elementSource->hasMoreElements();
 }
 
-ElementPtr ElementCriterionVisitorInputStream::readNextElement()
+ElementPtr ConstElementCriterionVisitorInputStream::readNextElement()
 {
   do
   {
@@ -89,10 +89,10 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
     {
       _numFeaturesPassingCriterion++;
       //LOG_VART(_numFeaturesPassingCriterion);
-      for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin();
+      for (QList<ConstElementVisitorPtr>::const_iterator itr = _visitors.begin();
            itr != _visitors.end(); ++itr)
       {
-        ElementVisitorPtr visitor = *itr;
+        ConstElementVisitorPtr visitor = *itr;
         //LOG_VART(visitor->toString());
         visitor->visit(element);
       }
