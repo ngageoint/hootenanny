@@ -78,6 +78,15 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
   LOG_VART(_recursive);
 }
 
+void RemoveElementsVisitor::setOsmMap(OsmMap* map)
+{
+  _map = map;
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(_criterion.get());
+  if (consumer != 0)
+    consumer->setOsmMap(map);
+}
+
+
 void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 {
   if (!_negateCriterion)
@@ -93,6 +102,7 @@ void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 {
   assert(_criterion);
+
   ElementType type = e->getElementType();
   long id = e->getId();
   LOG_VART(id);
