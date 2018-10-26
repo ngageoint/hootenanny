@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTCRITERIONVISITORINPUTSTREAM_H
-#define ELEMENTCRITERIONVISITORINPUTSTREAM_H
+#ifndef CONSTELEMENTCRITERIONVISITORINPUTSTREAM_H
+#define CONSTELEMENTCRITERIONVISITORINPUTSTREAM_H
 
 // Hoot
 #include <hoot/core/io/ElementInputStream.h>
@@ -43,7 +43,7 @@ namespace hoot
  * Combination of ElementCriterionInputStream and ElementCriterionInputStream where a criterion
  * is first checked for each element, then one or more visitors are applied to the element.
  */
-class ElementCriterionVisitorInputStream : public ElementInputStream
+class ConstElementCriterionVisitorInputStream : public ElementInputStream
 {
 public:
 
@@ -54,9 +54,9 @@ public:
    * @param criterion
    * @param visitor
    */
-  ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
-                                     const ElementCriterionPtr& criterion,
-                                     const ElementVisitorPtr& visitor);
+  ConstElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                                          const ElementCriterionPtr& criterion,
+                                          const ConstElementVisitorPtr& visitor);
 
   /**
    * @brief ElementCriterionInputStream
@@ -66,11 +66,11 @@ public:
    * @param visitors The operations that should be performed on elements that are read from the
    * input source before being returned
    */
-  ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
-                                     const ElementCriterionPtr& criterion,
-                                     const QList<ElementVisitorPtr>& visitors);
+  ConstElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                                          const ElementCriterionPtr& criterion,
+                                          const QList<ConstElementVisitorPtr>& visitors);
 
-  virtual ~ElementCriterionVisitorInputStream();
+  virtual ~ConstElementCriterionVisitorInputStream();
 
   /**
    * @brief close
@@ -108,9 +108,9 @@ private:
   long _numFeaturesTotal;
   long _numFeaturesPassingCriterion;
 
-  QList<ElementVisitorPtr> _visitors;
+  QList<ConstElementVisitorPtr> _visitors;
 };
 
 }
 
-#endif // ELEMENTCRITERIONVISITORINPUTSTREAM_H
+#endif // CONSTELEMENTCRITERIONVISITORINPUTSTREAM_H

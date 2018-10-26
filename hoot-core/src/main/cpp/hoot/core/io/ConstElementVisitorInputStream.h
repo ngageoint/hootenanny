@@ -22,30 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTVISITORINPUTSTREAM_H
-#define ELEMENTVISITORINPUTSTREAM_H
+#ifndef CONSTELEMENTVISITORINPUTSTREAM_H
+#define CONSTELEMENTVISITORINPUTSTREAM_H
 
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
 
-class ElementVisitorInputStream : public ElementInputStream
+class ConstElementVisitorInputStream : public ElementInputStream
 {
 public:
 
   /**
-   * @brief ElementVisitorInputStream
+   * @brief ConstElementVisitorInputStream
    * @param elementSource The stream used to read elements from
    * @param visitor The operation that should be performed on elements that are read from the input
    * source before being returned
    */
-  ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
-                            const ElementVisitorPtr& visitor);
+  ConstElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                                 const ConstElementVisitorPtr& visitor);
 
   /**
    * @brief close
@@ -74,9 +74,9 @@ public:
 private:
 
   ElementInputStreamPtr _elementSource;
-  ElementVisitorPtr _visitor;
+  ConstElementVisitorPtr _visitor;
 };
 
 }
 
-#endif // ELEMENTVISITORINPUTSTREAM_H
+#endif // CONSTELEMENTVISITORINPUTSTREAM_H
