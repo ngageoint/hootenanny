@@ -109,6 +109,8 @@ private:
 
   boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
   {
+    LOG_TRACE("Getting reader...");
+
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(input));
@@ -118,10 +120,12 @@ private:
     return reader;
   }
 
-  boost::shared_ptr<ElementCriterion> _getCriterion(const QString criterionClassName,
+  ElementCriterionPtr _getCriterion(const QString criterionClassName,
                                                     const bool negate)
   {
-    boost::shared_ptr<ElementCriterion> crit;
+    LOG_TRACE("Getting criterion...");
+
+    ElementCriterionPtr crit;
 
     try
     {
@@ -153,62 +157,82 @@ private:
     return crit;
   }
 
+  ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
+                                                const QString criterionClassName,
+                                                boost::shared_ptr<ConstElementVisitor> countVis)
+  {
+    LOG_TRACE("Getting filtered input stream...");
+
+    ElementInputStreamPtr filteredInputStream;
+
+    LOG_TRACE("Creating stream...");
+    if (!criterionClassName.trimmed().isEmpty())
+    {
+      ElementCriterionPtr crit =
+        _getCriterion(criterionClassName, ConfigOptions().getElementCriterionNegate());
+      filteredInputStream.reset(
+        new ConstElementCriterionVisitorInputStream(inputStream, crit, countVis));
+    }
+    else
+    {
+      filteredInputStream.reset(new ConstElementVisitorInputStream(inputStream, countVis));
+    }
+
+    return filteredInputStream;
+  }
+
+  ConstElementVisitorPtr _getCountVis(const bool countFeaturesOnly)
+  {
+    ConstElementVisitorPtr countVis;
+    if (countFeaturesOnly)
+    {
+      countVis.reset(new FeatureCountVisitor());
+    }
+    else
+    {
+      countVis.reset(new ElementCountVisitor());
+    }
+    return countVis;
+  }
+
   long _count(const QString input, const bool countFeaturesOnly, const QString criterionClassName)
   {
     long inputTotal = 0;
 
     boost::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
 
-    ElementInputStreamPtr filteredInputStream;
-    ElementInputStreamPtr inputStream = boost::dynamic_pointer_cast<ElementInputStream>(reader);
+    ConstElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
 
-    boost::shared_ptr<ElementCountVisitor> elementCtr(new ElementCountVisitor());
-    boost::shared_ptr<FeatureCountVisitor> featureCtr(new FeatureCountVisitor());
+    ElementInputStreamPtr filteredInputStream =
+      _getFilteredInputStream(
+        boost::dynamic_pointer_cast<ElementInputStream>(reader),
+        criterionClassName,
+        countVis);
 
-    if (!criterionClassName.trimmed().isEmpty())
-    {
-      boost::shared_ptr<ElementCriterion> crit =
-        _getCriterion(criterionClassName, ConfigOptions().getElementCriterionNegate());
-      if (countFeaturesOnly)
-      {
-        filteredInputStream.reset(
-          new ConstElementCriterionVisitorInputStream(inputStream, crit, featureCtr));
-      }
-      else
-      {
-        filteredInputStream.reset(
-          new ConstElementCriterionVisitorInputStream(inputStream, crit, elementCtr));
-      }
-    }
-    else
-    {
-      if (countFeaturesOnly)
-      {
-        filteredInputStream.reset(new ConstElementVisitorInputStream(inputStream, featureCtr));
-      }
-      else
-      {
-        filteredInputStream.reset(new ConstElementVisitorInputStream(inputStream, elementCtr));
-      }
-    }
+    boost::shared_ptr<SingleStatistic> counter =
+      boost::dynamic_pointer_cast<SingleStatistic>(countVis);
+    LOG_VART(counter.get());
 
+    LOG_TRACE("Counting...");
     while (filteredInputStream->hasMoreElements())
     {
       /*ConstElementPtr element = */filteredInputStream->readNextElement();
-
-      if (countFeaturesOnly)
-      {
-        inputTotal = (int)featureCtr->getStat();
-      }
-      else
-      {
-        inputTotal = (int)elementCtr->getStat();
-      }
+      inputTotal = (int)counter->getStat();
+      LOG_VART(inputTotal);
 
       const long runningTotal = _total + inputTotal;
       if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
       {
-        PROGRESS_INFO("Counted " << runningTotal << " elements.");
+        QString msg = "Counted " + QString::number(runningTotal);
+        if (countFeaturesOnly)
+        {
+          msg += " features.";
+        }
+        else
+        {
+           msg += " elements.";
+        }
+        PROGRESS_INFO(msg);
       }
     }
     LOG_VART(inputTotal);
