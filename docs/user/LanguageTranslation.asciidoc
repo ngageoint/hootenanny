@@ -37,7 +37,7 @@ hoot convert -D language.parse.names=true -D convert.ops="hoot::PoiCriterion;hoo
 
 Next, determine what languages are available for translation.  This will list them:
 -----------------------
-hoot languages --translatable
+hoot infolanguages --translatable
 -----------------------
 
 If the language you wish to translate to English from is not in the list of returned languages, then it is not currently supported.  Talk
@@ -110,7 +110,7 @@ only other hoot services language translator available is JoshuaLanguageTranslat
 JoshuaLanguageTranslator internally for its translation and adds detection on top of that, you won't gain to much by switching over to 
 JoshuaLanguageTranslator.  However, if additional translators become available at any time, you can list them with this:
 -----------------------
-hoot languages --translators
+hoot info --languages --translators
 -----------------------
 
 Then, to use a different service translator you can do this (only one translator may be specified):
@@ -123,7 +123,7 @@ hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.tran
 Service language detectors are configurable in a similar fashion to translators.  By default when language detection is used, translators 
 attempt to deploy all available language detectors until a detection is made.  To list available language detectors:
 -----------------------
-hoot languages --detectors
+hoot info --languages --detectors
 -----------------------
 
 Then, you can modify which service detectors are used with this (multiple detectors may be specified):

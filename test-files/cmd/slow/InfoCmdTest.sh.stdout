@@ -3610,6 +3610,64 @@ Listing an output format...
 
 .shp
 
+Listing detectable languages...
+
+detectable languages:
+
+Code: de
+Name: German
+Available: yes
+
+Code: es
+Name: Spanish
+Available: yes
+
+2 languages are supported for detection.
+Currently, 2 of those languages are available for detection.
+
+Listing translatable languages...
+
+translatable languages:
+
+Code: de
+Name: German
+Available: yes
+
+Code: es
+Name: Spanish
+Available: yes
+
+2 languages are supported for translation.
+Currently, 2 of those languages are available for translation.
+
+Listing available language detectors...
+
+Available language detectors:
+
+Name: TikaLanguageDetector
+Description: The language detection portion of a library which detects and extracts metadata and text from many different file types
+URL: https://tika.apache.org
+
+Name: OpenNlpLanguageDetector
+Description: The language detector portion of a machine learning based toolkit for the processing of natural language text
+URL: https://opennlp.apache.org
+
+2 detectors are available.
+
+Listing available to English language translators...
+
+Available language detectors:
+
+Name: TikaLanguageDetector
+Description: The language detection portion of a library which detects and extracts metadata and text from many different file types
+URL: https://tika.apache.org
+
+Name: OpenNlpLanguageDetector
+Description: The language detector portion of a machine learning based toolkit for the processing of natural language text
+URL: https://opennlp.apache.org
+
+2 translators are available.
+
 Listing a match creator...
 
   HighwayMatchCreator                             matches roads with the non-greedy algorithm

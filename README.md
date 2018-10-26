@@ -508,16 +508,16 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot info --tag-mergers
     
     # List all available language detectors
-    hoot languages --detectors
+    hoot info --languages --detectors
     
     # List all available language translators
-    hoot languages --translators
+    hoot info --languages --translators
     
     # List all detectable langauges
-    hoot languages --detectable
+    hoot info --languages --detectable
     
     # List all translatable languages
-    hoot languages --translatable
+    hoot info --languages --translatable
 
 # Contributing
 Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny 
