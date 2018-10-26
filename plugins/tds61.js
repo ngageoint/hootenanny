@@ -671,6 +671,8 @@ tds61 = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
+        print(geometryType);
+        print(layerName);
         // Drop the FCSUBTYPE since we don't use it
         if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
@@ -1151,6 +1153,13 @@ tds61 = {
             // Debug
             // print('Adding area=yes');
             tags.area = 'yes';
+        }
+
+        if (geometryType == 'Area' && tags.waterway == 'river')
+        {
+            // Debug
+            print('Changing river to riverbank');
+            tags.waterway = 'riverbank';
         }
 
         // Fix the ZI020_GE4X Values

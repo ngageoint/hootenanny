@@ -14,7 +14,8 @@ describe('TranslationServer', function () {
     var cases = {
         GB055: {aeroway: 'runway'},
         AD030: {power: 'substation'},
-        AQ170: {ford: 'yes'}
+        AQ170: {ford: 'yes'},
+        BH140: {waterway: 'riverbank'}
     }
 
     Object.keys(cases).forEach(k => {
