@@ -25,11 +25,11 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef HOOT_SERVICES_TRANSLATION_INFO_CLIENT_H
-#define HOOT_SERVICES_TRANSLATION_INFO_CLIENT_H
+#ifndef HOOT_SERVICES_LANGUAGE_INFO_CLIENT_H
+#define HOOT_SERVICES_LANGUAGE_INFO_CLIENT_H
 
 // hoot
-#include <hoot/rnd/language/TranslationInfoProvider.h>
+#include <hoot/core/language/LanguageInfoProvider.h>
 
 // Qt
 #include <QStringList>
@@ -42,24 +42,24 @@ class HootNetworkCookieJar;
 /**
  * Retrieves information from the Hootenanny web translation service about available languages
  */
-class HootServicesTranslationInfoClient : public TranslationInfoProvider
+class HootServicesLanguageInfoClient : public LanguageInfoProvider
 {
 public:
 
-  static std::string className() { return "hoot::HootServicesTranslationInfoClient"; }
+  static std::string className() { return "hoot::HootServicesLanguageInfoClient"; }
 
-  HootServicesTranslationInfoClient();
-  virtual ~HootServicesTranslationInfoClient() {}
+  HootServicesLanguageInfoClient();
+  virtual ~HootServicesLanguageInfoClient() {}
 
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * @see TranslationInfoProvider
+   * @see LanguageInfoProvider
    */
   virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type);
 
   /**
-   * @see TranslationInfoProvider
+   * @see LanguageInfoProvider
    */
   virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type);
 
@@ -69,7 +69,7 @@ protected:
 
 private:
 
-  friend class HootServicesTranslationInfoClientTest;
+  friend class HootServicesLanguageInfoClientTest;
 
   //a single translator used to determine what translatable languages are supported
   QString _translator;
@@ -89,4 +89,4 @@ private:
 
 }
 
-#endif // HOOT_SERVICES_TRANSLATION_INFO_CLIENT_H
+#endif // HOOT_SERVICES_LANGUAGE_INFO_CLIENT_H

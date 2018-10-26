@@ -29,8 +29,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/language/HootServicesTranslationInfoClient.h>
-#include <hoot/rnd/language/HootServicesTranslationInfoResponseParser.h>
+#include <hoot/core/language/HootServicesLanguageInfoClient.h>
+#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -95,13 +95,13 @@ public:
     if (type == "translatable" || type == "detectable")
     {
       displayStr =
-        HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
+        HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
           type, _client.getAvailableLanguages(type));
     }
     else
     {
       displayStr =
-        HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(
+        HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
           type, _client.getAvailableApps(type));
     }
     std::cout << displayStr << std::endl;
@@ -111,7 +111,7 @@ public:
 
 private:
 
-  HootServicesTranslationInfoClient _client;
+  HootServicesLanguageInfoClient _client;
 
   QStringList _getSupportedOptions() const
   {

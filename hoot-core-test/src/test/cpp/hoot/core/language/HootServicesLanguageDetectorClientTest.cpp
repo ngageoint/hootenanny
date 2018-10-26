@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/language/HootServicesLanguageDetectorMockClient.h>
+#include <hoot/core/language/HootServicesLanguageDetectorMockClient.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>

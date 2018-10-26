@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/language/HootServicesTranslationInfoResponseParser.h>
+#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -41,13 +41,13 @@ namespace hoot
 {
 
 static const QString testInputRoot =
-  "test-files/language/HootServicesTranslationInfoResponseParserTest";
+  "test-files/language/HootServicesLanguageInfoResponseParserTest";
 
 static const QString langsStr = "{\"languages\":[{\"name\":\"German\",\"available\":true,\"iso6391Code\":\"de\",\"iso6392Code\":\"deu\"},{\"name\":\"Spanish\",\"available\":true,\"iso6391Code\":\"es\",\"iso6392Code\":\"spa\"}]}";
 
-class HootServicesTranslationInfoResponseParserTest : public HootTestFixture
+class HootServicesLanguageInfoResponseParserTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(HootServicesTranslationInfoResponseParserTest);
+  CPPUNIT_TEST_SUITE(HootServicesLanguageInfoResponseParserTest);
   CPPUNIT_TEST(runParseLangsResponseTest);
   CPPUNIT_TEST(runParseAppsResponseTest);
   CPPUNIT_TEST(runLangCodesToLangsTest);
@@ -61,7 +61,7 @@ public:
       StringUtils::jsonStringToPropTree(langsStr);
 
     QString responseStr =
-      HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
+      HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
         "detectable", response);
     LOG_VART(responseStr);
     HOOT_STR_EQUALS(
@@ -69,7 +69,7 @@ public:
       responseStr.trimmed());
 
     responseStr =
-      HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
+      HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
         "translatable", response);
     LOG_VART(responseStr);
     HOOT_STR_EQUALS(
@@ -85,7 +85,7 @@ public:
       StringUtils::jsonStringToPropTree(jsonStr);
 
     QString responseStr =
-      HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(
+      HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
         "detectors", response);
     LOG_VART(responseStr);
     HOOT_STR_EQUALS(
@@ -93,7 +93,7 @@ public:
       responseStr.trimmed());
 
     responseStr =
-      HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(
+      HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
         "translators", response);
     LOG_VART(responseStr);
     HOOT_STR_EQUALS(
@@ -106,7 +106,7 @@ public:
     boost::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(langsStr);
     const QMap<QString, QString> langCodesToLangs =
-      HootServicesTranslationInfoResponseParser::getLangCodesToLangs(response);
+      HootServicesLanguageInfoResponseParser::getLangCodesToLangs(response);
 
     CPPUNIT_ASSERT_EQUAL(2, langCodesToLangs.size());
     HOOT_STR_EQUALS("German", langCodesToLangs["de"]);
@@ -114,7 +114,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootServicesTranslationInfoResponseParserTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootServicesLanguageInfoResponseParserTest, "quick");
 
 }
 

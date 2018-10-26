@@ -34,7 +34,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/visitors/ToEnglishTranslationComparisonVisitor.h>
+#include <hoot/core/visitors/ToEnglishTranslationComparisonVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
@@ -148,7 +148,7 @@ private:
     toTranslateTagKeys.append("alt_name");
     conf.set("language.tag.keys", toTranslateTagKeys);
     conf.set("language.translation.translator", "hoot::HootServicesTranslatorMockClient");
-    conf.set("language.info.provider", "hoot::HootServicesTranslationInfoMockClient");
+    conf.set("language.info.provider", "hoot::HootServicesLanguageInfoMockClient");
     conf.set("hoot.services.auth.user.name", "ToEnglishTranslationComparisonVisitorTest");
     conf.set("hoot.services.auth.access.token", "testAccessToken");
     conf.set("hoot.services.auth.access.token.secret", "testAccessTokenSecret");

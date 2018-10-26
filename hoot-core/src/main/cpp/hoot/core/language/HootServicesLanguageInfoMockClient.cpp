@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "HootServicesTranslationInfoMockClient.h"
+#include "HootServicesLanguageInfoMockClient.h"
 
 // hoot
 #include <hoot/core/util/Log.h>
@@ -35,16 +35,16 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(TranslationInfoProvider, HootServicesTranslationInfoMockClient)
+HOOT_FACTORY_REGISTER(LanguageInfoProvider, HootServicesLanguageInfoMockClient)
 
-HootServicesTranslationInfoMockClient::HootServicesTranslationInfoMockClient() :
-HootServicesTranslationInfoClient()
+HootServicesLanguageInfoMockClient::HootServicesLanguageInfoMockClient() :
+HootServicesLanguageInfoClient()
 {
   _useCookies = false;
 }
 
 boost::shared_ptr<boost::property_tree::ptree>
-  HootServicesTranslationInfoMockClient::getAvailableApps(const QString /*type*/)
+  HootServicesLanguageInfoMockClient::getAvailableApps(const QString /*type*/)
 {
   const QString jsonStr =
     "{\"apps\":[{\"name\":\"TikaLanguageDetector\",\"description\":\"The language detection portion of a library which detects and extracts metadata and text from many different file types\",\"url\":\"https://tika.apache.org\"},{\"name\":\"OpenNlpLanguageDetector\",\"description\":\"The language detector portion of a machine learning based toolkit for the processing of natural language text\",\"url\":\"https://opennlp.apache.org\"}]}";
@@ -52,7 +52,7 @@ boost::shared_ptr<boost::property_tree::ptree>
 }
 
 boost::shared_ptr<boost::property_tree::ptree>
-  HootServicesTranslationInfoMockClient::getAvailableLanguages(const QString /*type*/)
+  HootServicesLanguageInfoMockClient::getAvailableLanguages(const QString /*type*/)
 {
   const QString jsonStr = "{\"languages\":[{\"name\":\"German\",\"available\":true,\"iso6391Code\":\"de\",\"iso6392Code\":\"deu\"},{\"name\":\"Spanish\",\"available\":true,\"iso6391Code\":\"es\",\"iso6392Code\":\"spa\"}]}";
   return StringUtils::jsonStringToPropTree(jsonStr);

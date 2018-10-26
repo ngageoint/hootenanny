@@ -108,7 +108,7 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
   _skipWordsInEnglishDict = opts.getLanguageSkipWordsInEnglishDictionary();
 
   _infoClient.reset(
-    Factory::getInstance().constructObject<TranslationInfoProvider>(
+    Factory::getInstance().constructObject<LanguageInfoProvider>(
       opts.getLanguageInfoProvider()));
   _infoClient->setConfiguration(conf);
 

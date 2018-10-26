@@ -32,7 +32,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/language/LanguageDetector.h>
-#include <hoot/rnd/language/TranslationInfoProvider.h>
+#include <hoot/core/language/LanguageInfoProvider.h>
 
 // Qt
 #include <QMap>
@@ -97,7 +97,7 @@ private:
   long _numProcessedElements;
   int _taskStatusUpdateInterval;
 
-  boost::shared_ptr<TranslationInfoProvider> _infoClient;
+  boost::shared_ptr<LanguageInfoProvider> _infoClient;
   boost::shared_ptr<LanguageDetector> _langDetector;
 };
 

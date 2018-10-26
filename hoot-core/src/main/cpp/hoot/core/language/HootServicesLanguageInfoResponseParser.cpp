@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "HootServicesTranslationInfoResponseParser.h"
+#include "HootServicesLanguageInfoResponseParser.h"
 
 // Qt
 #include <QString>
@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-QString HootServicesTranslationInfoResponseParser::parseAvailableLanguagesResponse(
+QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
   const QString type,  boost::shared_ptr<boost::property_tree::ptree> response)
 {
   QString displayStr;
@@ -78,7 +78,7 @@ QString HootServicesTranslationInfoResponseParser::parseAvailableLanguagesRespon
   return displayStr.trimmed();
 }
 
-QString HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(const QString type,
+QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(const QString type,
   boost::shared_ptr<boost::property_tree::ptree> response)
 {
   QString displayStr;
@@ -99,7 +99,7 @@ QString HootServicesTranslationInfoResponseParser::parseAvailableAppsResponse(co
   return displayStr.trimmed();
 }
 
-QMap<QString, QString> HootServicesTranslationInfoResponseParser::getLangCodesToLangs(
+QMap<QString, QString> HootServicesLanguageInfoResponseParser::getLangCodesToLangs(
   boost::shared_ptr<boost::property_tree::ptree> response)
 {
   QMap<QString, QString> langCodesToLangs;

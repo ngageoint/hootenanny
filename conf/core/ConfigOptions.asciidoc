@@ -1323,13 +1323,12 @@ other tags from elements.
 === language.detection.detector
 
 * Data Type: string
-* Default Value: `hoot::HootServicesLanguageDetectorMockClient`
+* Default Value: `hoot::HootServicesLanguageDetectorClient`
 
-LanguageDetector implementation to use for detecting source languages.  The default value,
-hoot::HootServicesLanguageDetectorMockClient, is used for demonstration purposes only.  If using
-hoot::HootServicesLanguageDetectorClient, which performs useful detection, a translation server
-must be set up and valid OAuth credentials used.  Also, be sure to use an appropriate value for
-the 'language.info.provider' option, if needed.
+LanguageDetector implementation to use for detecting source languages.  If using
+hoot::HootServicesLanguageDetectorClient, a translation server must be set up and valid OAuth
+credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
+option.
 
 === language.detection.write.detected.lang.tags
 
@@ -1403,13 +1402,11 @@ HootServicesTranslatorClient
 === language.info.provider
 
 * Data Type: string
-* Default Value: `hoot::HootServicesTranslationInfoMockClient`
+* Default Value: `hoot::HootServicesLanguageInfoClient`
 
-TranslationInfoProvider implementation to use for determining language information needed by to
-English translation.   The default value,
-hoot::HootServicesTranslationInfoMockClient, is used for demonstration purposes only.  If using
-hoot::HootServicesTranslationInfoClient, a translation server must be set up and valid OAuth
-credentials used. Not all to English translators will make use of this capability.
+LanguageInfoProvider implementation to use for determining language information needed by to
+English translation. If using hoot::HootServicesLanguageInfoClient, a translation server must be
+set up and valid OAuth credentials used.
 
 === language.max.cache.size
 
@@ -1524,13 +1521,12 @@ the command line.
 === language.translation.translator
 
 * Data Type: string
-* Default Value: `hoot::DictionaryTranslator`
+* Default Value: `hoot::HootServicesTranslatorClient`
 
-ToEnglishTranslator implementation to use for to English translation.  hoot::DictionaryTranslator,
-the current default value, is a simple lookup table primarily used for translation testing and
-proof of concept.  hoot::HootServicesTranslatorClient, which performs more useful translation,
-requires a translation server be set up and valid OAuth credentials used.  Also, be sure to use an
-appropriate value for the 'language.info.provider' option, if needed.
+ToEnglishTranslator implementation to use for to English translation.
+hoot::HootServicesTranslatorClient, requires a translation server be set up and valid OAuth
+credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
+option.
 
 === levenshtein.distance.alpha
 

@@ -26,8 +26,8 @@
  */
 
 
-#ifndef HOOT_SERVICES_TRANSLATION_INFO_RESPONSE_PARSER_H
-#define HOOT_SERVICES_TRANSLATION_INFO_RESPONSE_PARSER_H
+#ifndef HOOT_SERVICES_LANGUAGE_INFO_RESPONSE_PARSER_H
+#define HOOT_SERVICES_LANGUAGE_INFO_RESPONSE_PARSER_H
 
 // Boost
 #include <boost/foreach.hpp>
@@ -43,7 +43,7 @@ namespace hoot
 /**
  * Prints response info from the hoot translation service
  */
-class HootServicesTranslationInfoResponseParser
+class HootServicesLanguageInfoResponseParser
 {
 public:
 
@@ -79,4 +79,4 @@ public:
 
 }
 
-#endif // HOOT_SERVICES_TRANSLATION_INFO_RESPONSE_PARSER_H
+#endif // HOOT_SERVICES_LANGUAGE_INFO_RESPONSE_PARSER_H

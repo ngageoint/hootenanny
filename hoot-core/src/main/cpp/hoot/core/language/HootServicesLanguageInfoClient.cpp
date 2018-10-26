@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "HootServicesTranslationInfoClient.h"
+#include "HootServicesLanguageInfoClient.h"
 
 // hoot
 #include <hoot/core/util/HootException.h>
@@ -46,14 +46,14 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(TranslationInfoProvider, HootServicesTranslationInfoClient)
+HOOT_FACTORY_REGISTER(LanguageInfoProvider, HootServicesLanguageInfoClient)
 
-HootServicesTranslationInfoClient::HootServicesTranslationInfoClient() :
+HootServicesLanguageInfoClient::HootServicesLanguageInfoClient() :
 _useCookies(true)
 {
 }
 
-void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
+void HootServicesLanguageInfoClient::setConfiguration(const Settings& conf)
 {
   LOG_DEBUG("Setting configuration options...");
 
@@ -76,7 +76,7 @@ void HootServicesTranslationInfoClient::setConfiguration(const Settings& conf)
   }
 }
 
-boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableApps(
+boost::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableApps(
  const QString type)
 {
  LOG_DEBUG("Checking apps available for: " << type << "...");
@@ -116,7 +116,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
  return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
-boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient::getAvailableLanguages(
+boost::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableLanguages(
   const QString type)
 {
   LOG_DEBUG("Checking languages available for: " << type << "...");
@@ -163,7 +163,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesTranslationInfoClient
   return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
-QString HootServicesTranslationInfoClient::_getAvailableLanguagesRequestData(const QStringList apps)
+QString HootServicesLanguageInfoClient::_getAvailableLanguagesRequestData(const QStringList apps)
 { 
   boost::property_tree::ptree requestObj;
   requestObj.add_child("apps", *StringUtils::stringListToJsonStringArray(apps));

@@ -32,7 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/language/HootServicesTranslationInfoResponseParser.h>
+#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 
 namespace hoot
 {
@@ -79,11 +79,11 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
 
   _infoClient.reset(
-    Factory::getInstance().constructObject<TranslationInfoProvider>(
+    Factory::getInstance().constructObject<LanguageInfoProvider>(
       opts.getLanguageInfoProvider()));
   _infoClient->setConfiguration(conf);
   _langCodesToLangs =
-    HootServicesTranslationInfoResponseParser::getLangCodesToLangs(
+    HootServicesLanguageInfoResponseParser::getLangCodesToLangs(
       _infoClient->getAvailableLanguages("detectable"));
   LOG_VART(_langCodesToLangs.size());
 

@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/language/HootServicesTranslatorMockClient.h>
+#include <hoot/core/language/HootServicesTranslatorMockClient.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
@@ -117,7 +117,7 @@ private:
     conf.set("language.hoot.services.detectors", QStringList("TikaLanguageDetector"));
     conf.set("language.translation.detected.language.overrides.specified.source.languages", false);
     conf.set("language.translation.perform.exhaustive.search.with.no.detection", true);
-    conf.set("language.info.provider", "hoot::HootServicesTranslationInfoMockClient");
+    conf.set("language.info.provider", "hoot::HootServicesLanguageInfoMockClient");
     client->setConfiguration(conf);
 
     QStringList sourceLangs;

@@ -25,37 +25,42 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H
-#define HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/rnd/language/HootServicesLanguageDetectorClient.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/language/HootServicesLanguageInfoClient.h>
 
-// Qt
-#include <QMap>
+// Std
+#include <sstream>
 
 namespace hoot
 {
 
-/**
- *
- */
-class HootServicesLanguageDetectorMockClient : public HootServicesLanguageDetectorClient
+class HootServicesLanguageInfoClientTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(HootServicesLanguageInfoClientTest);
+  CPPUNIT_TEST(runRequestDataTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  static std::string className() { return "hoot::HootServicesLanguageDetectorMockClient"; }
+  void runRequestDataTest()
+  {
+    HootServicesLanguageInfoClient uut;
 
-  HootServicesLanguageDetectorMockClient();
-
-  virtual QString detect(const QString text);
-
-private:
-
-  QMap<QString, QString> _mockDetections;
+    HOOT_STR_EQUALS(
+      "{ \"apps\": [ \"TikaLanguageDetector\" ] }",
+      uut._getAvailableLanguagesRequestData(QStringList("TikaLanguageDetector")).simplified());
+  }
 };
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootServicesLanguageInfoClientTest, "quick");
 
 }
 
-#endif // HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H
+

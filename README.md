@@ -462,6 +462,18 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="detect" \ 
       -D language.tag.keys="name" input.osm output.osm
+
+    # Let Hootenanny automatically determine all the name tags in the source map and then 
+    # translate those tags to English, allowing the source language be detected
+    hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
+      -D language.translation.source.languages="detect" \ 
+      -D language.parse.names=true input.osm output.osm
+
+    # Determine the most prevalent source languages for non-English POI names in a map. Use 
+    # that information to set up English translation services for those languages
+    hoot convert -D language.parse.names=true \
+      -D convert.ops="hoot::PoiCriterion;hoot::NonEnglishLanguageDetectionVisitor" \
+      input.osm output.osm
       
 ### MetaInfo
     

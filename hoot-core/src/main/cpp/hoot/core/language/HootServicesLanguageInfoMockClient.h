@@ -25,31 +25,30 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
+#ifndef HOOT_SERVICES_LANGUAGE_INFO_MOCK_CLIENT_H
+#define HOOT_SERVICES_LANGUAGE_INFO_MOCK_CLIENT_H
 
-#ifndef TRANSLATION_INFO_PROVIDER_H
-#define TRANSLATION_INFO_PROVIDER_H
-
-// Hoot
-#include <hoot/core/util/Configurable.h>
+// hoot
+#include <hoot/core/language/HootServicesLanguageInfoClient.h>
 
 // Qt
-#include <QString>
-
-// Boost
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * Interface for providing info about available to English translation capabilities
+ * This is used to mock the behavior of the class that makes calls to hoot services to
+ * get translation language information.
  */
-class TranslationInfoProvider : public Configurable
+class HootServicesLanguageInfoMockClient : public HootServicesLanguageInfoClient
 {
+
 public:
 
-  static std::string className() { return "hoot::TranslationInfoProvider"; }
+  static std::string className() { return "hoot::HootServicesLanguageInfoMockClient"; }
+
+  HootServicesLanguageInfoMockClient();
 
   /**
    * Retrieves available language apps
@@ -57,7 +56,7 @@ public:
    * @param type type of app to retrieve; "translator" or "detector"
    * @return a property tree containing the language app information
    */
-  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type) = 0;
+  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type);
 
   /**
    * Retrieves translation available languages info
@@ -65,9 +64,9 @@ public:
    * @param type type of language information to retrieve; "translatable" or "detectable"
    * @return a property tree containing the language information
    */
-  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type) = 0;
+  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type);
 };
 
 }
 
-#endif // TRANSLATION_INFO_PROVIDER_H
+#endif // HOOT_SERVICES_LANGUAGE_INFO_MOCK_CLIENT_H

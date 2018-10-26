@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/language/ToEnglishTranslator.h>
-#include <hoot/rnd/language/TranslationInfoProvider.h>
+#include <hoot/core/language/LanguageInfoProvider.h>
 
 // Qt
 #include <QCache>
@@ -101,7 +101,7 @@ protected:
 
   bool _skipWordsInEnglishDict;
 
-  boost::shared_ptr<TranslationInfoProvider> _infoClient;
+  boost::shared_ptr<LanguageInfoProvider> _infoClient;
 
 private:
 
