@@ -399,6 +399,29 @@ QStringList Tags::getNames() const
   return result;
 }
 
+QString Tags::getName() const
+{
+  QString name = get("name").toLower().trimmed();
+  if (!name.isEmpty())
+  {
+    return name;
+  }
+  else
+  {
+    QStringList names = getNames();
+    for (int i = 0; i < names.size(); i++)
+    {
+      name = names.at(i).toLower().trimmed();
+      //arbitrarily returning the first name here
+      if (!name.isEmpty())
+      {
+        return name;
+      }
+    }
+  }
+  return "";
+}
+
 const QStringList& Tags::getNameKeys()
 {
   // getting the name tags can be a bit expensive so we'll just do it once.

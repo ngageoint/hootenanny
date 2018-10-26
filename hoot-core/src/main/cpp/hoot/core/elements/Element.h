@@ -181,14 +181,6 @@ public:
    */
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor) = 0;
 
-  /**
-   * Returns an element's name
-   *
-   * @param element the element to examine
-   * @return the first element name found, if it has one
-   */
-  QString getName() const;
-
 protected:
 
   Status _status;

@@ -117,7 +117,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const ConstElemen
         // least one digit (vanity numbers can have letters).
         if (StringUtils::hasDigit(tagValue))
         {
-          _addPhoneNumber(element->getName(), tagKey, tagValue, parsedPhoneNums);
+          _addPhoneNumber(element->getTags().getName(), tagKey, tagValue, parsedPhoneNums);
         }
       }
       else
@@ -129,7 +129,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const ConstElemen
           if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(
                 tagValue.toStdString(), _regionCode.toStdString()))
           {
-            _addPhoneNumber(element->getName(), tagKey, tagValue, parsedPhoneNums);
+            _addPhoneNumber(element->getTags().getName(), tagKey, tagValue, parsedPhoneNums);
           }
         }
         else
@@ -150,7 +150,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const ConstElemen
             PhoneNumberMatch match;
             numberFinder.Next(&match);
             const QString parsedNum = QString::fromStdString(match.raw_string());
-            _addPhoneNumber(element->getName(), tagKey, parsedNum, parsedPhoneNums);
+            _addPhoneNumber(element->getTags().getName(), tagKey, parsedNum, parsedPhoneNums);
             parserFinds++;
           }
           LOG_TRACE("Number finder found " << parserFinds << " numbers.");

@@ -220,7 +220,8 @@ inline OsmSchemaCategory operator|(const OsmSchemaCategory t1, const OsmSchemaCa
 }
 
 // explicitly put these types in their own name scope. Use with OsmGeometries::Node, etc.
-struct OsmGeometries {
+struct OsmGeometries
+{
   enum e
   {
     Node=0x01,

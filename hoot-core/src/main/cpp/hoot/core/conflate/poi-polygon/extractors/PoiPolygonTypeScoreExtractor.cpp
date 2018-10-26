@@ -387,7 +387,7 @@ bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
   {
     return false;
   }
-  return _typeHasName("amenity=school", element->getName().toLower());
+  return _typeHasName("amenity=school", element->getTags().getName().toLower());
 }
 
 bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
@@ -395,8 +395,8 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
 {
   if (isSpecificSchool(element1) && isSpecificSchool(element2))
   {
-    const QString name1 = element1->getName().toLower();
-    const QString name2 = element2->getName().toLower();
+    const QString name1 = element1->getTags().getName().toLower();
+    const QString name2 = element2->getTags().getName().toLower();
     if (_haveMatchingTypeNames("amenity=school", name1, name2))
     {
       return true;
