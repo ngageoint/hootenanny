@@ -34,7 +34,6 @@
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/visitors/FeatureCountVisitor.h>
@@ -120,8 +119,7 @@ private:
     return reader;
   }
 
-  ElementCriterionPtr _getCriterion(const QString criterionClassName,
-                                                    const bool negate)
+  ElementCriterionPtr _getCriterion(const QString criterionClassName, const bool negate)
   {
     LOG_TRACE("Getting criterion...");
 
@@ -159,7 +157,7 @@ private:
 
   ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
                                                 const QString criterionClassName,
-                                                boost::shared_ptr<ConstElementVisitor> countVis)
+                                                ConstElementVisitorPtr countVis)
   {
     LOG_TRACE("Getting filtered input stream...");
 
@@ -218,7 +216,6 @@ private:
     {
       /*ConstElementPtr element = */filteredInputStream->readNextElement();
       inputTotal = (int)counter->getStat();
-      LOG_VART(inputTotal);
 
       const long runningTotal = _total + inputTotal;
       if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
