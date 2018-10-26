@@ -102,7 +102,6 @@ void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 {
   assert(_criterion);
-
   ElementType type = e->getElementType();
   long id = e->getId();
   LOG_VART(id);
