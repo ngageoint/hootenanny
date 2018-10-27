@@ -30,6 +30,7 @@ package hoot.services.language.tika;
 import org.apache.tika.langdetect.OptimaizeLangDetector;
 import org.apache.tika.language.detect.LanguageResult;
 import org.apache.tika.exception.TikaException;
+import org.apache.tika.language.detect.LanguageConfidence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ import hoot.services.language.SupportedLanguageConsumer;
 import hoot.services.language.LanguageAppInfo;
 import hoot.services.language.SupportedLanguagesConfigReader;
 import hoot.services.language.SupportedLanguage;
+import hoot.services.language.LanguageUtils;
 
 /**
  * Detects languages using Tika
@@ -65,6 +67,8 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
     new OptimaizeLangDetector();
 
   private static TikaLanguageDetector instance;
+
+  private LanguageUtils.DetectionConfidence confidence;
 
   private TikaLanguageDetector() throws Exception
   {
@@ -158,6 +162,11 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
   }
 
   /**
+   * 
+   */
+  public LanguageUtils.DetectionConfidence getConfidence() { return confidence; }
+
+  /**
    * Detects the language of the provided text
    *
    * @param text text for which to detect a language
@@ -166,12 +175,26 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
   {
     long startTime = System.currentTimeMillis();
 
-    logger.debug("Detecting language with " + getClass().getName() + "; " + text + "...");
-    String detectedLang = detector.detect(text).getLanguage();
+    logger.trace("Detecting language with " + getClass().getName() + "; " + text + "...");
+    LanguageResult detectionResult = detector.detect(text);
+    try
+    {
+      confidence = LanguageUtils.fromTikaDetectionConfidence(detectionResult.getConfidence());
+    }
+    catch (Exception e)
+    {
+      confidence = LanguageUtils.DetectionConfidence.NONE_AVAILABLE;
+    }
+    logger.trace("confidence: " + confidence);
+    String detectedLang = detectionResult.getLanguage();
     if (!detectedLang.isEmpty())
     {
-      logger.debug(
+      logger.trace(
         getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
+    }
+    else
+    {
+      logger.trace("No language detection found for: " + text + " with TikaLanguageDetector.");
     }
 
     logger.trace("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000);    

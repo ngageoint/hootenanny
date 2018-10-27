@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, NonEnglishLanguageDetectionVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, NonEnglishLanguageDetectionVisitor)
 
 NonEnglishLanguageDetectionVisitor::NonEnglishLanguageDetectionVisitor() :
 _ignorePreTranslatedTags(false),
@@ -71,8 +71,16 @@ NonEnglishLanguageDetectionVisitor::~NonEnglishLanguageDetectionVisitor()
   LOG_INFO(
     "Attempted to detect languages on tags for " << _numProcessedElements << " elements out of " <<
     _numTotalElements << " elements encountered.");
-  LOG_INFO(getLangCountsSortedByFrequency());
-  LOG_INFO(getLangCountsSortedByLangName());
+  const QString freqSortedCounts = getLangCountsSortedByFrequency();
+  if (!freqSortedCounts.isEmpty())
+  {
+    LOG_INFO(freqSortedCounts);
+  }
+  const QString nameSortedCounts = getLangCountsSortedByLangName();
+  if (!nameSortedCounts.isEmpty())
+  {
+    LOG_INFO(nameSortedCounts);
+  }
 }
 
 void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
@@ -107,6 +115,8 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
 
 QString NonEnglishLanguageDetectionVisitor::getLangCountsSortedByFrequency() const
 {
+  QString langsStr;
+
   LOG_VART(_langNamesToCounts.size());
   QMultiMap<int, QString> langCountsSwapped;
   for (QMap<QString, int>::const_iterator langCountsItr = _langNamesToCounts.begin();
@@ -125,24 +135,27 @@ QString NonEnglishLanguageDetectionVisitor::getLangCountsSortedByFrequency() con
   QList<int> counts = QList<int>::fromStdList(countsStl);
   LOG_VART(counts);
 
-  QString langsStr = "Non-English language tag counts (sorted by reverse frequency):\n";
-
-  for (QList<int>::const_iterator countsItr = counts.begin(); countsItr != counts.end();
-         ++countsItr)
+  if (counts.size() > 0)
   {
-    const int count = *countsItr;
-    LOG_VART(count);
+    langsStr = "Non-English language tag counts (sorted by reverse frequency):\n";
 
-    QMap<int, QString>::const_iterator langNamesForCountItr = langCountsSwapped.constFind(count);
-    while (langNamesForCountItr != langCountsSwapped.end() && langNamesForCountItr.key() == count)
+    for (QList<int>::const_iterator countsItr = counts.begin(); countsItr != counts.end();
+         ++countsItr)
     {
-      const QString langName = *langNamesForCountItr;
-      LOG_VART(langName);
-      langsStr += langName + ": " + QString::number(count) + "\n";
-      ++langNamesForCountItr;
+      const int count = *countsItr;
+      LOG_VART(count);
+
+      QMap<int, QString>::const_iterator langNamesForCountItr = langCountsSwapped.constFind(count);
+      while (langNamesForCountItr != langCountsSwapped.end() && langNamesForCountItr.key() == count)
+      {
+        const QString langName = *langNamesForCountItr;
+        LOG_VART(langName);
+        langsStr += langName + ": " + QString::number(count) + "\n";
+        ++langNamesForCountItr;
+      }
     }
+    langsStr.chop(1);
   }
-  langsStr.chop(1);
 
   return langsStr;
 }

@@ -27,6 +27,8 @@
 
 package hoot.services.language;
 
+import hoot.services.language.LanguageUtils;
+
 /**
  * Interface for language detectors
  */
@@ -39,4 +41,9 @@ public interface LanguageDetector
    * @return an ISO-639-1 code
    */
   String detect(String text);
+
+  /**
+   *
+   */
+  LanguageUtils.DetectionConfidence getConfidence();
 }

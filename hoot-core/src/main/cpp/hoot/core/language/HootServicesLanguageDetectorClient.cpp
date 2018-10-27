@@ -81,6 +81,14 @@ HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
     LOG_DEBUG("Language detection cache size: " << _cacheSize);
     LOG_DEBUG("Language detection cache max possible size: " << _cacheMaxSize);
   }
+  if (_langCodesWithNoLangNamesAvailable.size() > 0)
+  {
+    LOG_INFO(_getUnvailableLangNamesStr());
+  }
+  if (_confidenceCounts.size() > 0)
+  {
+    LOG_INFO(_getConfidenceCountsStr());
+  }
 }
 
 void HootServicesLanguageDetectorClient::setConfiguration(const Settings& conf)
@@ -108,6 +116,44 @@ void HootServicesLanguageDetectorClient::setConfiguration(const Settings& conf)
         opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
         opts.getHootServicesAuthAccessTokenSecret(), _url);
   }
+}
+
+QString HootServicesLanguageDetectorClient::_getUnvailableLangNamesStr() const
+{
+  QString str = "Language codes for which no name was available:\n";
+
+  for (QMap<QString, QSet<QString>>::const_iterator itr = _langCodesWithNoLangNamesAvailable.begin();
+       itr != _langCodesWithNoLangNamesAvailable.end(); ++itr)
+  {
+    const QString detector = itr.key();
+    str += detector + ":\n";
+    const QSet<QString> unvailableLangNames = itr.value();
+    for (QSet<QString>::const_iterator itr2 = unvailableLangNames.begin();
+         itr2 != unvailableLangNames.end(); ++itr2)
+    {
+      const QString langCode = *itr2;
+      str += langCode + "\n";
+    }
+  }
+  str.chop(1);
+
+  return str;
+}
+
+QString HootServicesLanguageDetectorClient::_getConfidenceCountsStr() const
+{
+  QString str = "Detection confidence counts:\n";
+
+  for (QMap<QString, int>::const_iterator itr = _confidenceCounts.begin();
+       itr != _confidenceCounts.end(); ++itr)
+  {
+    const QString confidence = itr.key();
+    const int count = itr.value();
+    str += confidence + ": " + QString::number(count) + "\n";
+  }
+  str.chop(1);
+
+ return str;
 }
 
 QString HootServicesLanguageDetectorClient::detect(const QString text)
@@ -165,11 +211,14 @@ QString HootServicesLanguageDetectorClient::detect(const QString text)
   if (request.getHttpStatus() != 200)
   {
     throw HootException(
-      "Error detecting language for text: " + text + ". error: " + request.getErrorString());
+      "Error detecting language for text: " + text + ".  HTTP status: " +
+      QString::number(request.getHttpStatus()) + "; error: " + request.getErrorString());
   }
 
+  QString detectorUsed;
   QString detectedLangCode =
-    _parseResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()));
+    _parseResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()), detectorUsed);
+  LOG_VART(detectorUsed);
 
   // update the cache
   if (!detectedLangCode.isEmpty() && _cache && !_cache->contains(text))
@@ -221,9 +270,32 @@ QString HootServicesLanguageDetectorClient::_getRequestData(const QString text) 
 }
 
 QString HootServicesLanguageDetectorClient::_parseResponse(
-  boost::shared_ptr<boost::property_tree::ptree> replyObj) const
+  boost::shared_ptr<boost::property_tree::ptree> replyObj, QString& detectorUsed) /*const*/
 {
-  return QString::fromStdString(replyObj->get<std::string>("detectedLangCode"));
+  const QString detectedLangCode =
+    QString::fromStdString(replyObj->get<std::string>("detectedLangCode")).trimmed();
+  if (!detectedLangCode.isEmpty())
+  {
+    detectorUsed = QString::fromStdString(replyObj->get<std::string>("detectorUsed"));
+    const QString langName = QString::fromStdString(replyObj->get<std::string>("detectedLang"));
+    LOG_VART(langName);
+    if (langName.toLower() == "unvailable")
+    {
+      _langCodesWithNoLangNamesAvailable[detectorUsed].insert(detectedLangCode);
+    }
+    const QString detectionConfidence =
+      QString::fromStdString(replyObj->get<std::string>("detectionConfidence"));
+    LOG_VART(detectionConfidence);
+    if (_confidenceCounts.contains(detectionConfidence))
+    {
+      _confidenceCounts[detectionConfidence] = _confidenceCounts[detectionConfidence] + 1;
+    }
+    else
+    {
+      _confidenceCounts[detectionConfidence] = 1;
+    }
+  }
+  return detectedLangCode;
 }
 
 QString HootServicesLanguageDetectorClient::_getLangFromCache(const QString text)

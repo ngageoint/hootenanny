@@ -33,11 +33,14 @@
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/io/ConstElementVisitorInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMapConsumer.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -49,9 +52,12 @@ bool ElementStreamer::isStreamableIo(const QString input, const QString output)
   {
     writerName = OsmMapWriterFactory::getWriterName(output);
   }
-  LOG_VART(writerName);
-  LOG_TRACE(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
-  LOG_TRACE(ConfigUtils::boundsOptionEnabled());
+  LOG_VARD(writerName);
+  LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
+  LOG_VARD(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
+  LOG_VARD(ConfigUtils::boundsOptionEnabled());
+  LOG_VARD(ConfigOptions().getWriterXmlSortById());
+  LOG_VARD(ConfigUtils::boundsOptionEnabled());
 
   return
       OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
@@ -78,15 +84,18 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
         {
+          LOG_DEBUG("Unstreamable criterion op: " << opName);
           return false;
         }
       }
-      else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+      else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()) ||
+               Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString()))
       {
         // good, pass
       }
       else
       {
+        LOG_DEBUG("Unstreamable op: " << opName);
         return false;
       }
     }
@@ -136,6 +145,17 @@ void ElementStreamer::stream(const QString in, const QString out, const QStringL
         ElementCriterionPtr criterion(
           Factory::getInstance().constructObject<ElementCriterion>(opName));
 
+        boost::shared_ptr<Configurable> critConfig;
+        if (criterion.get())
+        {
+          critConfig = boost::dynamic_pointer_cast<Configurable>(criterion);
+        }
+        LOG_VART(critConfig.get());
+        if (critConfig.get())
+        {
+          critConfig->setConfiguration(conf());
+        }
+
         streamReader.reset(new ElementCriterionInputStream(streamReader, criterion));
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
@@ -143,7 +163,37 @@ void ElementStreamer::stream(const QString in, const QString out, const QStringL
         LOG_INFO("Visiting input with: " << opName);
         ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));
 
+        boost::shared_ptr<Configurable> visConfig;
+        if (visitor.get())
+        {
+          visConfig = boost::dynamic_pointer_cast<Configurable>(visitor);
+        }
+        LOG_VART(visConfig.get());
+        if (visConfig.get())
+        {
+          visConfig->setConfiguration(conf());
+        }
+
         streamReader.reset(new ElementVisitorInputStream(streamReader, visitor));
+      }
+      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString()))
+      {
+        LOG_INFO("Visiting input with: " << opName);
+        ConstElementVisitorPtr visitor(
+          Factory::getInstance().constructObject<ConstElementVisitor>(opName));
+
+        boost::shared_ptr<Configurable> visConfig;
+        if (visitor.get())
+        {
+          visConfig = boost::dynamic_pointer_cast<Configurable>(visitor);
+        }
+        LOG_VART(visConfig.get());
+        if (visConfig.get())
+        {
+          visConfig->setConfiguration(conf());
+        }
+
+        streamReader.reset(new ConstElementVisitorInputStream(streamReader, visitor));
       }
       else
       {

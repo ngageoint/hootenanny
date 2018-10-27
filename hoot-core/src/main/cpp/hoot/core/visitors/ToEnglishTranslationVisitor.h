@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
 
 // Qt
@@ -42,7 +42,7 @@ namespace hoot
 /**
  * Translates selected tag values to English
  */
-class ToEnglishTranslationVisitor : public ElementOsmMapVisitor, public Configurable
+class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable
 {
 
 public:

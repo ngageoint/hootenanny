@@ -33,6 +33,8 @@
 
 // Qt
 #include <QCache>
+#include <QMap>
+#include <QSet>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -92,6 +94,8 @@ private:
   int _statusUpdateInterval;
 
   long _undetectableWords;
+  QMap<QString, QSet<QString>> _langCodesWithNoLangNamesAvailable;
+  QMap<QString, int> _confidenceCounts;
 
   long _cacheHits;
   long _cacheSize;
@@ -102,12 +106,16 @@ private:
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
   QString _getRequestData(const QString text) const;
-  QString _parseResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj) const;
+  QString _parseResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj,
+                         QString& detectorUsed) /*const*/;
 
   QString _getLangFromCache(const QString text);
   void _insertLangIntoCache(const QString text, const QString detectedLangCode);
 
   bool _textIsDetectable(const QString text) const;
+
+  QString _getUnvailableLangNamesStr() const;
+  QString _getConfidenceCountsStr() const;
 };
 
 }

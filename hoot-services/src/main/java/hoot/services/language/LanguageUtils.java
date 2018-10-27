@@ -36,11 +36,18 @@ import org.apache.commons.lang3.ClassUtils;
 
 import hoot.services.utils.ReflectUtils;
 
+import org.apache.tika.language.detect.LanguageConfidence;
+
 /**
  * Various general utilities for language detection/translation
  */
 public class LanguageUtils 
 {
+  public enum DetectionConfidence 
+  { 
+    HIGH, LOW, MEDIUM, NONE, NONE_AVAILABLE; 
+  }
+
   private static Map<String, String> simpleClassNamesToFullClassNamesCache = 
     new HashMap<String, String>();
 
@@ -63,5 +70,81 @@ public class LanguageUtils
       simpleClassNamesToFullClassNamesCache.put(simpleClassName, fullClassName);
     }
     return fullClassName;
+  }
+
+  /**
+   *
+   */
+  public static DetectionConfidence fromTikaDetectionConfidence(
+    LanguageConfidence confidence) throws Exception
+  {
+    switch (confidence)
+    {
+      case HIGH:
+        return DetectionConfidence.HIGH;
+
+      case LOW:
+        return DetectionConfidence.LOW;
+
+      case MEDIUM:
+        return DetectionConfidence.MEDIUM;
+
+      case NONE:
+        return DetectionConfidence.NONE;
+    
+      default: 
+        throw new Exception("Invalid Tika language detection confidence.");
+    }
+  }
+
+  /**
+   *
+   */
+  public static String confidenceToString(DetectionConfidence confidence) throws Exception
+  {
+    switch (confidence)
+    {
+      case HIGH:
+        return "high";
+
+      case LOW:
+        return "low";
+
+      case MEDIUM:
+        return "medium";
+
+      case NONE:
+        return "none";
+
+      case NONE_AVAILABLE:
+        return "none available";
+    
+      default: 
+        throw new Exception("Invalid language detection confidence.");
+    }
+  }
+
+  /**
+   *
+   */
+  public static String tikaConfidenceToString(LanguageConfidence confidence) throws Exception
+  {
+    switch (confidence)
+    {
+      case HIGH:
+        return "high";
+
+      case LOW:
+        return "low";
+
+      case MEDIUM:
+        return "medium";
+
+      case NONE:
+        return "none";
+    
+      default: 
+        throw new Exception("Invalid Tika language detection confidence.");
+    }
   }
 }

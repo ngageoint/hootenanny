@@ -1330,7 +1330,6 @@ bool HootApiDb::accessTokensAreValid(const QString userName, const QString acces
 {
   LOG_VART(userName);
   LOG_VART(accessToken);
-  LOG_VART(accessTokenSecret);
 
   if (_accessTokensAreValid == 0)
   {
@@ -1440,7 +1439,6 @@ QString HootApiDb::getAccessTokenSecretByUserId(const long userId)
   }
   _getAccessTokenSecretByUserId->finish();
 
-  LOG_VART(accessTokenSecret);
   return accessTokenSecret;
 }
 

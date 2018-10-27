@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/language/LanguageDetector.h>
 #include <hoot/core/language/LanguageInfoProvider.h>
 
@@ -48,7 +48,7 @@ namespace hoot
  * this class is useful if you're uncertain which source languages to declare for translation and
  * don't have the resources to stand up a translation server for every possible language.
  */
-class NonEnglishLanguageDetectionVisitor : public ElementOsmMapVisitor, public Configurable
+class NonEnglishLanguageDetectionVisitor : public ElementVisitor, public Configurable
 {
 
 public:

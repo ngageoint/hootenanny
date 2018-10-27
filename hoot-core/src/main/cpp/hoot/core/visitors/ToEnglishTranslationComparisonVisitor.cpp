@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationComparisonVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, ToEnglishTranslationComparisonVisitor)
 
 ToEnglishTranslationComparisonVisitor::ToEnglishTranslationComparisonVisitor() :
 ToEnglishTranslationVisitor()

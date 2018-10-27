@@ -74,7 +74,9 @@ public:
     boost::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(jsonStr);
 
-    HOOT_STR_EQUALS("de", uut->_parseResponse(response));
+    QString detectorUsed;
+    HOOT_STR_EQUALS("de", uut->_parseResponse(response, detectorUsed));
+    HOOT_STR_EQUALS("TikaLanguageDetector", detectorUsed);
   }
 
 private:

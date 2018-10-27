@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/util/Configurable.h>

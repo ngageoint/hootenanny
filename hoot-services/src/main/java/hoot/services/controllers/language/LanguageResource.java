@@ -68,6 +68,7 @@ import hoot.services.language.SupportedLanguage;
 import hoot.services.language.SupportedLanguageConsumer;
 import hoot.services.language.LanguageAppInfo;
 import hoot.services.language.LanguageApp;
+import hoot.services.language.LanguageUtils;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -365,6 +366,7 @@ public class LanguageResource
        "detectedLangCode":"de",
        "sourceText":"wie%20alt%20bist%20du",
        "detectedLang":"German"
+       "detectionConfidence":"HIGH"
      }
    */
   @POST
@@ -381,23 +383,33 @@ public class LanguageResource
       String detectedLangCode = "";
       String detectingDetector = "";
       String detectedLangName = "";
+      String detectionConfidence = "NONE";
 
       List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
       for (String detectorClassName : detectorClassNames)
       {
-        logger.trace("detectorClassName: " + detectorClassName);
         if (detectedLangCode.isEmpty())
         {
+          logger.trace("detectorClassName: " + detectorClassName);
           LanguageDetector detector = LanguageDetectorFactory.create(detectorClassName);
           detectingDetector = detectorClassName;
           logger.trace("detectingDetector: " + detectorClassName);
           detectedLangCode = detector.detect(requestText);
           logger.trace("detectedLangCode: " + detectedLangCode);
-          if (!detectedLangCode.isEmpty())
+          if (!detectedLangCode.isEmpty()) 
           {
             detectedLangName = 
               ((SupportedLanguageConsumer)detector).getLanguageName(detectedLangCode);
             logger.trace("detectedLangName: " + detectedLangName);
+            if (StringUtils.trimToNull(detectedLangName) == null)
+            {
+              //Some detectors seem to detect more languages than what they advertise (Tika),
+              //so doing this for now to avoid an error.  Later, can find all instances of an 
+              //unavailable lang name and update the appropriate config files.
+              detectedLangName = "unavailable";
+            }
+            detectionConfidence = LanguageUtils.confidenceToString(detector.getConfidence());
+            logger.trace("detectionConfidence: " + detectionConfidence);
           }
         }
       }
@@ -409,6 +421,7 @@ public class LanguageResource
       {
         entity.put("detectedLang", encodeText(detectedLangName));
         entity.put("detectorUsed", detectingDetector);
+        entity.put("detectionConfidence", detectionConfidence);
       } 
       logger.trace(entity.toJSONString());
       return Response.ok(entity.toJSONString()).build();

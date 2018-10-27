@@ -171,7 +171,6 @@ void HootServicesLoginManager::getAccessTokens(const long userId, QString& acces
   accessToken = db.getAccessTokenByUserId(userId);
   LOG_VARD(accessToken);
   accessTokenSecret = db.getAccessTokenSecretByUserId(userId);
-  LOG_VARD(accessTokenSecret);
   db.close();
 }
 
