@@ -58,6 +58,9 @@ public:
   NonEnglishLanguageDetectionVisitor();
   virtual ~NonEnglishLanguageDetectionVisitor();
 
+  /**
+   * @see ElementVisitor
+   */
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings& conf);
@@ -65,14 +68,9 @@ public:
   virtual QString getDescription() const
   { return "Detects source languages for selected tags"; }
 
-  /**
-   *
-   *
-   * @return
-   */
-  QString getLangCountsSortedByLangName() const;
-
 private:
+
+  friend class NonEnglishLanguageDetectionVisitorTest;
 
   QMap<QString, int> _langNamesToCounts;
   QMap<QString, QString> _langCodesToLangs;
@@ -92,6 +90,8 @@ private:
 
   boost::shared_ptr<LanguageInfoProvider> _infoClient;
   boost::shared_ptr<LanguageDetector> _langDetector;
+
+  QString _getLangCountsSortedByLangName() const;
 };
 
 }

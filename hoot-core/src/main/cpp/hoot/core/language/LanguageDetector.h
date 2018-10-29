@@ -39,7 +39,7 @@ namespace hoot
 {
 
 /**
- *
+ * Detects a source language, given text
  */
 class LanguageDetector : public Configurable
 {
@@ -48,10 +48,10 @@ public:
   static std::string className() { return "hoot::LanguageDetector"; }
 
   /**
+   * Detects the source language of text
    *
-   *
-   * @param text
-   * @return
+   * @param text text to detect the language of
+   * @return an ISO-6391- language code
    */
   virtual QString detect(const QString text) = 0;
 };

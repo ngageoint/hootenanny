@@ -90,7 +90,7 @@ HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
   }
   else
   {
-    LOG_INFO("No language codes return without language names.");
+    LOG_INFO("No language codes returned without language names.");
   }
   if (_confidenceCounts.size() > 0)
   {

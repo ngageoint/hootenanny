@@ -53,7 +53,8 @@ struct DetectionResult
 };
 
 /**
- *
+ * Detects non-English languages given using language detection technologies integrated into the
+ * Hootenanny web services.
  */
 class HootServicesLanguageDetectorClient : public LanguageDetector
 {
@@ -67,6 +68,9 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  /**
+   * @see LanguageDetector
+   */
   virtual QString detect(const QString text);
 
 protected:

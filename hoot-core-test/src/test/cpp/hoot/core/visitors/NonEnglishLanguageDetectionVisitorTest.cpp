@@ -52,11 +52,11 @@ static const QString testOutputRoot =
 class NonEnglishLanguageDetectionVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NonEnglishLanguageDetectionVisitorTest);
-  //CPPUNIT_TEST(runDetectTest);
+  CPPUNIT_TEST(runDetectTest);
   CPPUNIT_TEST(runIgnorePreTranslatedTagsTest);
-  //CPPUNIT_TEST(runNoTagKeysTest);
-  //CPPUNIT_TEST(runNamesTest);
-  //CPPUNIT_TEST(runNamesTestWithAdditionalTagKeys);
+  CPPUNIT_TEST(runNoTagKeysTest);
+  CPPUNIT_TEST(runNamesTest);
+  CPPUNIT_TEST(runNamesTestWithAdditionalTagKeys);
   CPPUNIT_TEST_SUITE_END();
 
 public:

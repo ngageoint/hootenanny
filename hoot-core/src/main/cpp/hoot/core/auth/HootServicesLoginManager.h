@@ -94,9 +94,9 @@ public:
   bool logout(const QString userName, const QString accessToken, const QString accessTokenSecret);
 
   /**
+   * Returns the base URL used to access Hootenanny Web Services
    *
-   *
-   * @return
+   * @return a URL string
    */
   static QString getBaseUrl();
 

@@ -71,7 +71,7 @@ NonEnglishLanguageDetectionVisitor::~NonEnglishLanguageDetectionVisitor()
   LOG_INFO(
     "Attempted to detect languages on tags for " << _numProcessedElements << " elements out of " <<
     _numTotalElements << " elements encountered.");
-  const QString nameSortedCounts = getLangCountsSortedByLangName();
+  const QString nameSortedCounts = _getLangCountsSortedByLangName();
   if (!nameSortedCounts.isEmpty())
   {
     LOG_INFO(nameSortedCounts);
@@ -108,7 +108,7 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
   LOG_VARD(_tagKeys);
 }
 
-QString NonEnglishLanguageDetectionVisitor::getLangCountsSortedByLangName() const
+QString NonEnglishLanguageDetectionVisitor::_getLangCountsSortedByLangName() const
 {
   LOG_VART(_langNamesToCounts.keys().size());
   QString langsStr = "Non-English language tag counts:\n";
