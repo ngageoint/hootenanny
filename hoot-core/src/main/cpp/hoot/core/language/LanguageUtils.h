@@ -28,27 +28,22 @@
 #ifndef LANGUAGE_UTILS_H
 #define LANGUAGE_UTILS_H
 
-// hoot
-
-
-// Qt
-
 
 namespace hoot
 {
 
 /**
- *
+ * Various utilities used in Hootenanny when translating/detecting spoken languages
  */
 class LanguageUtils
 {
 public:
 
   /**
+   * Determines if text is English text
    *
-   *
-   * @param text
-   * @return
+   * @param text text to examine
+   * @return true if the text is English; false otherwise
    */
   static bool normalizeAndDetermineIfTextIsEnglish(const QString text);
 };

@@ -73,7 +73,10 @@ public class LanguageUtils
   }
 
   /**
-   *
+   * Returns a Hootenanny Services language detection confidence level given a Tika language 
+   * detection confidence level
+   * 
+   * @param confidence a Hootenanny Services language detection confidence level
    */
   public static DetectionConfidence fromTikaDetectionConfidence(
     LanguageConfidence confidence) throws Exception
@@ -98,7 +101,9 @@ public class LanguageUtils
   }
 
   /**
-   *
+   * Returns a string representation of a Hootenanny Services language detection confidence level
+   * 
+   * @param confidence a hoot language detection confidence level
    */
   public static String confidenceToString(DetectionConfidence confidence) throws Exception
   {
@@ -125,7 +130,9 @@ public class LanguageUtils
   }
 
   /**
-   *
+   * Returns a string representation of a Tika language detection confidence level
+   * 
+   * @param confidence a Tika language detection confidence level
    */
   public static String tikaConfidenceToString(LanguageConfidence confidence) throws Exception
   {

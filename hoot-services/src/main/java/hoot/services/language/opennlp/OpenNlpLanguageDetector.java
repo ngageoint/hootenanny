@@ -178,7 +178,7 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
   }
 
   /**
-   * 
+   * @see LanguageDetector
    */
   public LanguageUtils.DetectionConfidence getConfidence() 
   { return LanguageUtils.DetectionConfidence.NONE_AVAILABLE; }

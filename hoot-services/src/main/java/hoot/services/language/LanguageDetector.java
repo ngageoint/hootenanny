@@ -43,7 +43,8 @@ public interface LanguageDetector
   String detect(String text);
 
   /**
-   *
+   * Returns the confidence of the detected language
+   * @return a confidence level
    */
   LanguageUtils.DetectionConfidence getConfidence();
 }

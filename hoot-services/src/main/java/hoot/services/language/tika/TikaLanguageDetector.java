@@ -162,7 +162,7 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
   }
 
   /**
-   * 
+   * @see LanguageDetector
    */
   public LanguageUtils.DetectionConfidence getConfidence() { return confidence; }
 

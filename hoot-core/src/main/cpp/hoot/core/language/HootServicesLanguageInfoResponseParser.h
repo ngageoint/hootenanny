@@ -68,10 +68,10 @@ public:
                                           boost::shared_ptr<boost::property_tree::ptree> response);
 
   /**
+   * Returns a mapping of ISO-6391-1 language codes to language names
    *
-   *
-   * @param response
-   * @return
+   * @param response a languages info response
+   * @return a mapping of ISO-6391-1 language codes to language names
    */
   static QMap<QString, QString> getLangCodesToLangs(
     boost::shared_ptr<boost::property_tree::ptree> response);

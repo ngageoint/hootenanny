@@ -48,11 +48,6 @@ bool LanguageDetectionConfidenceLevel::operator==(LanguageDetectionConfidenceLev
   return l._level == _level;
 }
 
-bool LanguageDetectionConfidenceLevel::operator!=(LanguageDetectionConfidenceLevel l) const
-{
-  return l._level != _level;
-}
-
 QString LanguageDetectionConfidenceLevel::toString() const
 {
   switch (_level)

@@ -99,8 +99,10 @@ protected:
   long _numTranslationsAttempted;
   long _numEnglishTextsSkipped;
 
+  //uses the local English dict to prevent unnecessary translation server calls
   bool _skipWordsInEnglishDict;
 
+  //used to retrieve info about what languages are translatable, etc.
   boost::shared_ptr<LanguageInfoProvider> _infoClient;
 
 private:
@@ -123,6 +125,7 @@ private:
 
   int _statusUpdateInterval;
 
+  //number of words that were deemed untranslatable (contained numbers, etc.)
   long _untranslatableWords;
   long _numDetectionsMade;
 
@@ -130,10 +133,13 @@ private:
   long _cacheMaxSize;
   long _cacheSize;
 
+  //if true, we've hit our cache limit and it will start flushing older entries
   static bool _loggedCacheMaxReached;
 
+  //useful when trying to figure out who invoked this translator throughout the lifecycle of the app
   QString _id;
 
+  //persistent session is required by hoot services
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
   static QString _getTranslateUrl();

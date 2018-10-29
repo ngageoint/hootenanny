@@ -38,8 +38,8 @@ namespace hoot
 {
 
 /**
- * This is used to mock the behavior of the class that makes calls to hoot services to
- * get translation language information.
+ * This is used during testing to mock the behavior of the class that makes calls to hoot services
+ * to get translation language information.
  */
 class HootServicesLanguageInfoMockClient : public HootServicesLanguageInfoClient
 {

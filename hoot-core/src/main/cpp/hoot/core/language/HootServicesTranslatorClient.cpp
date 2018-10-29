@@ -322,6 +322,7 @@ QString HootServicesTranslatorClient::translate(const QString text)
   {
     LOG_TRACE("Text to be translated is not translatable; text: " << text);
     _translatedText = "";
+    _untranslatableWords++;
     return "";
   }
 

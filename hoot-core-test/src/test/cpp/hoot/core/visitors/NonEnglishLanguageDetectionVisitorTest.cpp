@@ -90,8 +90,8 @@ public:
 
     const QString detectionSummaryFile =
       testOutputRoot + "/runIgnorePreTranslatedTagsTest-DetectionSummary-out";
-    LOG_VART(visitor->getLangCountsSortedByLangName());
-    FileUtils::writeFully(detectionSummaryFile, visitor->getLangCountsSortedByLangName() + "\n");
+    LOG_VART(visitor->_getLangCountsSortedByLangName());
+    FileUtils::writeFully(detectionSummaryFile, visitor->_getLangCountsSortedByLangName() + "\n");
     HOOT_FILE_EQUALS(
       testInputRoot2 + "/runIgnorePreTranslatedTagsTest-DetectionSummary-gold",
       detectionSummaryFile);

@@ -97,25 +97,35 @@ private:
 
   int _statusUpdateInterval;
 
+  //number of words that were deemed untranslatable (contained numbers, etc.)
   long _undetectableWords;
+  //have some issues where the server returns lang codes w/ no lang names due to the detector
+  //being able to detect more langs than advertise; can use this to track down those instances and
+  //properly update the server side lang configs
   QMap<QString, QSet<QString>> _langCodesWithNoLangNamesAvailable;
+  //number of each time of detection confidence returned
   QMap<QString, int> _confidenceCounts;
+  //the minimum allowed confidence level to declare a valid detected language (not all server side
+  //detectors support confidence)
   LanguageDetectionConfidenceLevel _minConfidence;
+  //the number of times different server side detectors were used
   QMap<QString, int> _detectorUsedCounts;
 
   long _cacheHits;
   long _cacheSize;
   long _cacheMaxSize;
 
+  //if true, we've hit our cache limit and it will start flushing older entries
   static bool _loggedCacheMaxReached;
 
+  //persistent session is required by hoot services
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
   static QString _getDetectUrl();
 
   QString _getRequestData(const QString text) const;
   QString _parseResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj,
-                         QString& detectorUsed) /*const*/;
+                         QString& detectorUsed);
 
   QString _getLangFromCache(const QString text);
   void _insertLangIntoCache(const QString text, const QString detectedLangCode);

@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * The confidence attributed to a positive source language detection
  */
 class LanguageDetectionConfidenceLevel
 {
@@ -51,13 +51,29 @@ public:
   LanguageDetectionConfidenceLevel();
   LanguageDetectionConfidenceLevel(Level level);
 
+  /**
+   * Determines whether two language detection confidence level are equal
+   *
+   * @param l the level to compare with
+   * @return true if this level and the level passed in are equal to each other; false otherwise
+   */
   bool operator==(LanguageDetectionConfidenceLevel l) const;
-  bool operator!=(LanguageDetectionConfidenceLevel l) const;
 
   Level getEnum() const { return _level; }
 
+  /**
+   * Returns a string respresentation of language detection confidence level
+   *
+   * @return a confidence level string
+   */
   QString toString() const;
 
+  /**
+   * Creates a language detection confidence level from its string representation
+   *
+   * @param levelString a string representation of language detection confidence level
+   * @return a language detection confidence level
+   */
   static Level fromString(QString levelString);
 
 private:

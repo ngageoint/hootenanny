@@ -190,6 +190,7 @@ QString HootServicesLanguageDetectorClient::detect(const QString text)
 
   if (!_textIsDetectable(text))
   {
+    _undetectableWords++;
     LOG_TRACE(
       "Text for language being detected is not detectable; text: " << text);
     return "";
@@ -297,7 +298,7 @@ QString HootServicesLanguageDetectorClient::_getRequestData(const QString text) 
 }
 
 QString HootServicesLanguageDetectorClient::_parseResponse(
-  boost::shared_ptr<boost::property_tree::ptree> replyObj, QString& detectorUsed) /*const*/
+  boost::shared_ptr<boost::property_tree::ptree> replyObj, QString& detectorUsed)
 {
   QString detectedLangCode =
     QString::fromStdString(replyObj->get<std::string>("detectedLangCode")).trimmed();
