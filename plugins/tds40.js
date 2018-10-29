@@ -1987,27 +1987,21 @@ tds = {
         // Fix ZI001_SSD
         if (attrs.F_CODE == 'ZI040') // Spatial Metadata Entity Collection
         {
-            // NOTE: We are going to override the normal source:datetime with what we get from JOSM
-            if (tags['source:imagery:datetime'])
-            {
-                attrs.ZI001_SSD = tags['source:imagery:datetime'];
-                delete notUsedTags['source:imagery:datetime'];
-            }
-
-            // Now try using tags from Taginfo
+            //Map alternate source date tags to ZI001_SSD in order of precedence
+            //default is 'source:datetime'
             if (! attrs.ZI001_SSD)
-            {
-                if (tags['source:date']) 
-                {
-                    attrs.ZI001_SSD = tags['source:date'];
-                    delete notUsedTags['source:date'];
-                }
-                else if (tags['source:geometry:date'])
-                {
-                    attrs.ZI001_SSD = tags['source:geometry:date'];
-                    delete notUsedTags['source:geometry:date'];
-                }
-            }
+                attrs.ZI001_SSD = tags['source:imagery:datetime']
+                    || tags['source:date']
+                    || tags['source:geometry:date']
+                    || '';
+
+            //Map alternate source tags to ZI001_SSN in order of precedence
+            //default is 'source'
+            if (! attrs.ZI001_SSN)
+                attrs.ZI001_SSN = tags['source:imagery']
+                    || tags['source:description']
+                    || '';
+
         }
 
         // Stop some Religion tags from stomping on Denomination tags
