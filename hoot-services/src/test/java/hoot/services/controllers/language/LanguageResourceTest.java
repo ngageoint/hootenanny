@@ -63,7 +63,8 @@ import hoot.services.language.tika.TikaLanguageDetector;
 import hoot.services.controllers.language.LanguageTranslateRequest;
 import hoot.services.language.ToEnglishTranslatorFactory;
 import hoot.services.language.LanguageDetectorFactory;
-import hoot.services.language.LanguageApp;
+import hoot.services.language.LanguageDetectionApp;
+import hoot.services.language.LanguageTranslationApp;
 import hoot.services.controllers.language.SupportedLanguagesRequest;
 import hoot.services.controllers.language.SupportedLanguagesResponse;
 import hoot.services.language.SupportedLanguage;
@@ -90,6 +91,8 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
   @Category(UnitTest.class)
   public void testGetDetectors() throws Exception 
   {
+    //TODO: update for confidence
+
     //This has to be mocked separately within this test since there we're testing multiple types of 
     //LanguageAppInfo implementations.
     TikaLanguageDetector detector = (TikaLanguageDetector)LanguageTestUtils.mockTika();
@@ -97,11 +100,11 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     PowerMockito.when(appInfo.getDescription()).thenReturn("blah1");
     PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/TikaLanguageDetector");
 
-    LanguageAppsResponse response =
+    LanguageDetectorsResponse response =
       target("toEnglishTranslation/detectors")
         .request(MediaType.APPLICATION_JSON)
-        .get(LanguageAppsResponse.class);
-    LanguageApp[] apps = response.getApps();
+        .get(LanguageDetectorsResponse.class);
+    LanguageDetectionApp[] apps = response.getApps();
 
     //Since LanguageDetectorFactory.getSimpleClassNames is mocked, this doesn't need 
     //to be updated if new apps are added.
@@ -122,11 +125,11 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     PowerMockito.when(appInfo.getDescription()).thenReturn("blah2");
     PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/JoshuaLanguageTranslator");
 
-    LanguageAppsResponse response =
+    LanguageTranslatorsResponse response =
       target("toEnglishTranslation/translators")
         .request(MediaType.APPLICATION_JSON)
-        .get(LanguageAppsResponse.class);
-    LanguageApp[] apps = response.getApps();
+        .get(LanguageTranslatorsResponse.class);
+    LanguageTranslationApp[] apps = response.getApps();
 
     //Since ToEnglishTranslatorFactory.getSimpleClassNames is mocked, this doesn't need 
     //to be updated if new apps are added.

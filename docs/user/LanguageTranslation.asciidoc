@@ -28,16 +28,20 @@ hoot info --config-options language.translation --option-details
 -------------------
 
 Optionally, since a translation service must be set up manually for each language being translated from and may consume significant 
-resources, you may want to first scan your data for which non-English languages are most prevalent.  Language detection will not, 
-however, be completely accurate but should give you a good idea of the untranslated state of the data.  For example, to determine the 
+resources, you may want to first scan your data for which non-English languages are most prevalent.  Language detection will not
+be completely accurate but should give you a good idea of the untranslated state of the data.  For example, to determine the 
 most prevalent source languages for non-English POI names in a map:
 -----------------------
-hoot convert -D language.parse.names=true -D convert.ops="hoot::PoiCriterion;hoot::NonEnglishLanguageDetectionVisitor" input.osm output.osm
+hoot convert -D language.parse.names=true -D language.hoot.services.detection.min.confidence.threshold=high -D convert.ops="hoot::PoiCriterion;hoot::NonEnglishLanguageDetectionVisitor" input.osm output.osm
 -----------------------
+
+Some language detectors support returning a confidence value with their detections.  In the example above, only high confidence detections
+are being used.  To determine which server side language detectors support confidence, see the later section with an example showing how to
+list language detectors.
 
 Next, determine what languages are available for translation.  This will list them:
 -----------------------
-hoot infolanguages --translatable
+hoot info --languages --translatable
 -----------------------
 
 If the language you wish to translate to English from is not in the list of returned languages, then it is not currently supported.  Talk

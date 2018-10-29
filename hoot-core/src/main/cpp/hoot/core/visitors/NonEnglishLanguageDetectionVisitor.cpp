@@ -236,11 +236,11 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
           }
         }
 
-//        _numProcessedTags++;
-//        if (_numProcessedTags % _taskStatusUpdateInterval == 0)
-//        {
-//          PROGRESS_DEBUG("Processed " << _numProcessedTags << " tags.");
-//        }
+        _numProcessedTags++;
+        if (_numProcessedTags % _taskStatusUpdateInterval == 0)
+        {
+          PROGRESS_DEBUG("Processed " << _numProcessedTags << " tags.");
+        }
       }
     }
   }
