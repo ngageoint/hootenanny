@@ -147,7 +147,6 @@ private:
       /*ConstElementPtr element = */filteredInputStream->readNextElement();
       numElementsParsed++;
 
-      // see related note in CountCmd progress update
       if (numElementsParsed % _taskStatusUpdateInterval == 0)
       {
         PROGRESS_INFO("Calculated statistic for: " << numElementsParsed << " elements.");
