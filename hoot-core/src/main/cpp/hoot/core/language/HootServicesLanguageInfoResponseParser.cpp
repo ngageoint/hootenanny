@@ -83,13 +83,20 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(const
 {
   QString displayStr;
 
-  displayStr += "Available language detectors:\n\n";
+  displayStr += "Available language " + type + ":\n\n";
   int appCtr = 0;
   BOOST_FOREACH (boost::property_tree::ptree::value_type& app, response->get_child("apps"))
   {
     displayStr += "Name: " + QString::fromStdString(app.second.get<std::string>("name")) + "\n";
-    displayStr += "Description: " + QString::fromStdString(app.second.get<std::string>("description")) + "\n";
+    displayStr += "Description: " +
+      QString::fromStdString(app.second.get<std::string>("description")) + "\n";
     displayStr += "URL: " + QString::fromStdString(app.second.get<std::string>("url")) + "\n";
+    if (type == "detectors")
+    {
+      const bool supportsConfidence = app.second.get<bool>("supportsConfidence");
+      const QString supportsConfidenceStr = supportsConfidence ? "yes" : "no";
+      displayStr += "Supports confidence: " + supportsConfidenceStr + "\n";
+    }
     displayStr += "\n";
     appCtr++;
   }

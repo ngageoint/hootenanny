@@ -30,6 +30,7 @@
 
 // hoot
 #include <hoot/core/language/LanguageDetector.h>
+#include "LanguageDetectionConfidenceLevel.h"
 
 // Qt
 #include <QCache>
@@ -87,7 +88,6 @@ private:
   //detector implementations to use server side; if left empty, the server will try to use as many
   //of them as necessary to detect the language
   QStringList _detectors;
-  QString _url;
 
   boost::shared_ptr<QCache<QString, DetectionResult>> _cache;
 
@@ -96,6 +96,7 @@ private:
   long _undetectableWords;
   QMap<QString, QSet<QString>> _langCodesWithNoLangNamesAvailable;
   QMap<QString, int> _confidenceCounts;
+  LanguageDetectionConfidenceLevel _minConfidence;
 
   long _cacheHits;
   long _cacheSize;
@@ -104,6 +105,8 @@ private:
   static bool _loggedCacheMaxReached;
 
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
+
+  static QString _getDetectUrl();
 
   QString _getRequestData(const QString text) const;
   QString _parseResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj,

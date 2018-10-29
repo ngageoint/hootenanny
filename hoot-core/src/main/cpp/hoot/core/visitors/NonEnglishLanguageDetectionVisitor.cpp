@@ -227,18 +227,20 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
           }
 
           _numTagDetectionsMade++;
+          _currentElementHasSuccessfulTagDetection = true;
           if (_numTagDetectionsMade % _taskStatusUpdateInterval == 0)
           {
-            PROGRESS_DEBUG("Made " << _numTagDetectionsMade << " language detections.");
+            PROGRESS_INFO(
+              _numTagDetectionsMade << " / " << _numProcessedTags << " tag language detections " <<
+               "made on  " << _numProcessedElements << " / " << _numTotalElements << " elements.");
           }
-          _currentElementHasSuccessfulTagDetection = true;
         }
 
-        _numProcessedTags++;
-        if (_numProcessedTags % _taskStatusUpdateInterval == 0)
-        {
-          PROGRESS_DEBUG("Processed " << _numProcessedTags << " tags.");
-        }
+//        _numProcessedTags++;
+//        if (_numProcessedTags % _taskStatusUpdateInterval == 0)
+//        {
+//          PROGRESS_DEBUG("Processed " << _numProcessedTags << " tags.");
+//        }
       }
     }
   }
@@ -246,17 +248,17 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
   if (elementProcessed)
   {
     _numProcessedElements++;
-    if (_numProcessedElements % _taskStatusUpdateInterval == 0)
-    {
-      PROGRESS_INFO("Attempted language detection for " << _numProcessedElements << " elements.");
-    }
+//    if (_numProcessedElements % _taskStatusUpdateInterval == 0)
+//    {
+//      PROGRESS_INFO("Attempted language detection for " << _numProcessedElements << " elements.");
+//    }
   }
 
   _numTotalElements++;
-  if (_numTotalElements % _taskStatusUpdateInterval == 0)
-  {
-    PROGRESS_INFO("Visited " << _numTotalElements << " elements.");
-  }
+//  if (_numTotalElements % _taskStatusUpdateInterval == 0)
+//  {
+//    PROGRESS_INFO("Visited " << _numTotalElements << " elements.");
+//  }
 }
 
 }

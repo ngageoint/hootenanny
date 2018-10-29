@@ -25,39 +25,23 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H
-#define HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H
+package hoot.services.controllers.language;
 
-// hoot
-#include <hoot/core/language/HootServicesLanguageDetectorClient.h>
-
-// Qt
-#include <QMap>
-
-namespace hoot
-{
+import hoot.services.language.LanguageTranslationApp;
 
 /**
- *
+ * Response to a request for information about available language translators
  */
-class HootServicesLanguageDetectorMockClient : public HootServicesLanguageDetectorClient
+public class LanguageTranslatorsResponse 
 {
+  private LanguageTranslationApp[] apps;
 
-public:
+  public LanguageTranslatorsResponse() {}
+  public LanguageTranslatorsResponse(LanguageTranslationApp[] apps) 
+  {
+    this.apps = apps;
+  }
 
-  static std::string className() { return "hoot::HootServicesLanguageDetectorMockClient"; }
-
-  HootServicesLanguageDetectorMockClient();
-
-  virtual QString detect(const QString text);
-
-private:
-
-  friend class HootServicesLanguageDetectorClientTest;
-
-  QMap<QString, QString> _mockDetections;
-};
-
+  public LanguageTranslationApp[] getApps() { return apps; }
+  public void setApps(LanguageTranslationApp[] apps) { this.apps = apps; }
 }
-
-#endif // HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H

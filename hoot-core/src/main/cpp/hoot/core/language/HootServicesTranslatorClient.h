@@ -112,7 +112,6 @@ private:
   //detector implementations to use server side; if left empty, the server will try to use as many
   //of them as necessary to detect the language
   QStringList _detectors;
-  QString _translationUrl;
   //if true and a detected lang doesn't match a specified lang, then the detected lang takes
   //priority
   bool _detectedLangOverrides;
@@ -136,6 +135,8 @@ private:
   QString _id;
 
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
+
+  static QString _getTranslateUrl();
 
   /**
    * Verifies that every language specified for this translator is supported by the server

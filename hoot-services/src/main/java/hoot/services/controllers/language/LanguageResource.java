@@ -68,6 +68,8 @@ import hoot.services.language.SupportedLanguage;
 import hoot.services.language.SupportedLanguageConsumer;
 import hoot.services.language.LanguageAppInfo;
 import hoot.services.language.LanguageApp;
+import hoot.services.language.LanguageTranslationApp;
+import hoot.services.language.LanguageDetectionApp;
 import hoot.services.language.LanguageUtils;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -92,7 +94,6 @@ public class LanguageResource
     {
       //The Joshua init can take a long time, so let's do it here vs having it happen the very 
       //first time a translation is made.
-      logger.info("Initializing Joshua...");
       MethodUtils.invokeStaticMethod(
         Class.forName("hoot.services.language.joshua.JoshuaLanguageTranslator"), "getInstance", null);
     }
@@ -112,7 +113,6 @@ public class LanguageResource
   {
     try
     {
-      logger.info("Closing Joshua...");
       Object joshuaTranslator = 
         MethodUtils.invokeStaticMethod(
           Class.forName("hoot.services.language.joshua.JoshuaLanguageTranslator"), "getInstance", null);
@@ -136,12 +136,14 @@ public class LanguageResource
       {
          "name":"TikaLanguageDetector",
          "description":"The language detection portion of a library which detects and extracts metadata and text from many different file types",
-         "url":"https://tika.apache.org/"
+         "url":"https://tika.apache.org/",
+         "supportsConfidence":true
       },
       {
          "name":"OpenNlpLanguageDetector",
          "description":"The language detector portion of a machine learning based toolkit for the processing of natural language text",
-         "url":"https://opennlp.apache.org/"
+         "url":"https://opennlp.apache.org/",
+         "supportsConfidence":false
       }
      ]
     }
@@ -149,20 +151,20 @@ public class LanguageResource
   @GET
   @Path("/detectors")
   @Produces(MediaType.APPLICATION_JSON)
-  public LanguageAppsResponse getDetectors()
+  public LanguageDetectorsResponse getDetectors()
   {
     try
     {
       Set<String> detectorClassNames = LanguageDetectorFactory.getSimpleClassNames();
       logger.trace("detectorClassNames.size(): " + detectorClassNames.size());
-      List<LanguageApp> apps = new ArrayList<LanguageApp>();
+      List<LanguageDetectionApp> apps = new ArrayList<LanguageDetectionApp>();
       for (String detectorClassName : detectorClassNames)
       {
         logger.trace("detectorClassName: " + detectorClassName);
-        apps.add(languageEntityToApp(detectorClassName));
+        apps.add((LanguageDetectionApp)languageEntityToApp(detectorClassName));
       }
       logger.trace("apps.size(): " + apps.size());
-      return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
+      return new LanguageDetectorsResponse(apps.toArray(new LanguageDetectionApp[]{}));
     }
     catch (Exception e)
     {
@@ -199,19 +201,19 @@ public class LanguageResource
   @GET
   @Path("/translators")
   @Produces(MediaType.APPLICATION_JSON)
-  public LanguageAppsResponse getTranslators()
+  public LanguageTranslatorsResponse getTranslators()
   {
     try
     {
       Set<String> translatorClassNames = ToEnglishTranslatorFactory.getSimpleClassNames();
       logger.trace("translatorClassNames.size(): " + translatorClassNames.size());
-      List<LanguageApp> apps = new ArrayList<LanguageApp>();
+      List<LanguageTranslationApp> apps = new ArrayList<LanguageTranslationApp>();
       for (String translatorClassName : translatorClassNames)
       {
         logger.trace("translatorClassName: " + translatorClassName);
-        apps.add(languageEntityToApp(translatorClassName));
+        apps.add((LanguageTranslationApp)languageEntityToApp(translatorClassName));
       }
-      return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
+      return new LanguageTranslatorsResponse(apps.toArray(new LanguageTranslationApp[]{}));
     }
     catch (Exception e)
     {
@@ -366,7 +368,7 @@ public class LanguageResource
        "detectedLangCode":"de",
        "sourceText":"wie%20alt%20bist%20du",
        "detectedLang":"German"
-       "detectionConfidence":"HIGH"
+       "detectionConfidence":"high"
      }
    */
   @POST
@@ -383,7 +385,7 @@ public class LanguageResource
       String detectedLangCode = "";
       String detectingDetector = "";
       String detectedLangName = "";
-      String detectionConfidence = "NONE";
+      String detectionConfidence = "none";
 
       List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
       for (String detectorClassName : detectorClassNames)
@@ -593,22 +595,29 @@ public class LanguageResource
   private LanguageApp languageEntityToApp(String appName) throws Exception
   {
     LanguageAppInfo appInfo = null;
+    LanguageApp app = null;
     if (ToEnglishTranslatorFactory.getSimpleClassNames().contains(appName))
     {
       appInfo = (LanguageAppInfo)ToEnglishTranslatorFactory.create(appName);
+      app = new LanguageTranslationApp();
     }
     else
     {
       appInfo = (LanguageAppInfo)LanguageDetectorFactory.create(appName);
+      app = new LanguageDetectionApp();
     }
     assert(appInfo != null);
     logger.trace(appInfo.getDescription());
     logger.trace(appInfo.getUrl());
 
-    LanguageApp app = new LanguageApp();
     app.setName(appName);
     app.setDescription(appInfo.getDescription());
     app.setUrl(appInfo.getUrl());
+    if (app instanceof LanguageDetectionApp)
+    {
+      LanguageDetectionApp detectionApp = (LanguageDetectionApp)app;
+      detectionApp.setSupportsConfidence(appName.equals("TikaLanguageDetector"));
+    }
     return app;
   }
 

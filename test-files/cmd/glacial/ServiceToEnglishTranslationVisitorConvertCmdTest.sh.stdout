@@ -1,5 +1,13 @@
 detectable languages:
 
+Code: be
+Name: Belarusian
+Available: yes
+
+Code: ca
+Name: Catalan
+Available: yes
+
 Code: da
 Name: Danish
 Available: yes
@@ -16,6 +24,10 @@ Code: en
 Name: English
 Available: yes
 
+Code: eo
+Name: Esperanto
+Available: yes
+
 Code: es
 Name: Spanish
 Available: yes
@@ -24,12 +36,20 @@ Code: et
 Name: Estonian
 Available: yes
 
+Code: fa
+Name: Persian
+Available: yes
+
 Code: fi
 Name: Finnish
 Available: yes
 
 Code: fr
 Name: French
+Available: yes
+
+Code: gl
+Name: Galician
 Available: yes
 
 Code: hu
@@ -42,6 +62,10 @@ Available: yes
 
 Code: it
 Name: Italian
+Available: yes
+
+Code: lt
+Name: Lithuanian
 Available: yes
 
 Code: nl
@@ -60,8 +84,20 @@ Code: pt
 Name: Portuguese
 Available: yes
 
+Code: ro
+Name: Romanian
+Available: yes
+
 Code: ru
 Name: Russian
+Available: yes
+
+Code: sk
+Name: Slovakian
+Available: yes
+
+Code: sl
+Name: Slovakian
 Available: yes
 
 Code: sv
@@ -72,6 +108,58 @@ Code: th
 Name: Thai
 Available: yes
 
+Code: uk
+Name: Ukranian
+Available: yes
+
+Code: an
+Name: Aragonese
+Available: yes
+
+Code: ast
+Name: Asturian
+Available: yes
+
+Code: br
+Name: Breton
+Available: yes
+
+Code: cy
+Name: Welsh
+Available: yes
+
+Code: eu
+Name: Basque
+Available: yes
+
+Code: ga
+Name: Irish
+Available: yes
+
+Code: id
+Name: Indonesian
+Available: yes
+
+Code: ms
+Name: Malay
+Available: yes
+
+Code: oc
+Name: Occitan
+Available: yes
+
+Code: so
+Name: Somali
+Available: yes
+
+Code: sw
+Name: Swahili
+Available: yes
+
+Code: tl
+Name: Tagalog
+Available: yes
+
 Code: af
 Name: Afrikaans
 Available: yes
@@ -80,20 +168,12 @@ Code: ar
 Name: Arabic
 Available: yes
 
-Code: ast
-Name: Asturian
-Available: yes
-
 Code: az
 Name: Azerbaijani
 Available: yes
 
 Code: ba
 Name: Bashkir
-Available: yes
-
-Code: be
-Name: Belarusian
 Available: yes
 
 Code: bg
@@ -106,14 +186,6 @@ Available: yes
 
 Code: bs
 Name: Bosnian
-Available: yes
-
-Code: br
-Name: Breton
-Available: yes
-
-Code: ca
-Name: Catalan
 Available: yes
 
 Code: ceb
@@ -132,40 +204,16 @@ Code: cmn
 Name: Mandarin Chinese
 Available: yes
 
-Code: cy
-Name: Welsh
-Available: yes
-
 Code: ekk
 Name: Standard Estonian
-Available: yes
-
-Code: eo
-Name: Esperanto
-Available: yes
-
-Code: eu
-Name: Basque
 Available: yes
 
 Code: fo
 Name: Faroese
 Available: yes
 
-Code: fa
-Name: Persian
-Available: yes
-
 Code: fy
 Name: Western Frisian
-Available: yes
-
-Code: ga
-Name: Irish
-Available: yes
-
-Code: gl
-Name: Galician
 Available: yes
 
 Code: gsw
@@ -190,10 +238,6 @@ Available: yes
 
 Code: hy
 Name: Armenian
-Available: yes
-
-Code: id
-Name: Indonesian
 Available: yes
 
 Code: ja
@@ -236,10 +280,6 @@ Code: li
 Name: Limburgan
 Available: yes
 
-Code: lt
-Name: Lithuanian
-Available: yes
-
 Code: lv
 Name: Latvian
 Available: yes
@@ -272,10 +312,6 @@ Code: min
 Name: Minangkabau
 Available: yes
 
-Code: ms
-Name: Malay
-Available: yes
-
 Code: mt
 Name: Maltese
 Available: yes
@@ -300,10 +336,6 @@ Code: nn
 Name: Norwegian Nynorsk
 Available: yes
 
-Code: oc
-Name: Occitan
-Available: yes
-
 Code: pa
 Name: Panjabi
 Available: yes
@@ -324,28 +356,12 @@ Code: ps
 Name: Pushto
 Available: yes
 
-Code: ro
-Name: Romanian
-Available: yes
-
 Code: sa
 Name: Sanskrit
 Available: yes
 
 Code: si
 Name: Sinhala
-Available: yes
-
-Code: sk
-Name: Slovak
-Available: yes
-
-Code: sl
-Name: Slovenian
-Available: yes
-
-Code: so
-Name: Somali
 Available: yes
 
 Code: sq
@@ -358,10 +374,6 @@ Available: yes
 
 Code: su
 Name: Sundanese
-Available: yes
-
-Code: sw
-Name: Swahili
 Available: yes
 
 Code: ta
@@ -380,16 +392,8 @@ Code: tg
 Name: Tajik
 Available: yes
 
-Code: tl
-Name: Tagalog
-Available: yes
-
 Code: tr
 Name: Turkish
-Available: yes
-
-Code: uk
-Name: Ukrainian
 Available: yes
 
 Code: ur
@@ -416,19 +420,23 @@ Code: zu
 Name: Zulu
 Available: yes
 
-104 languages are supported for detection.
-Currently, 104 of those languages are available for detection.
+105 languages are supported for detection.
+Currently, 105 of those languages are available for detection.
+
 Available language detectors:
 
 Name: OpenNlpLanguageDetector
 Description: The language detector portion of a machine learning based toolkit for the processing of natural language text
 URL: https://opennlp.apache.org
+Supports confidence: no
 
 Name: TikaLanguageDetector
 Description: The language detection portion of a library which detects and extracts metadata and text from many different file types
 URL: https://tika.apache.org
+Supports confidence: yes
 
 2 detectors are available.
+
 translatable languages:
 
 Code: ar
@@ -669,7 +677,8 @@ Available: no
 
 59 languages are supported for translation.
 Currently, 2 of those languages are available for translation.
-Available language detectors:
+
+Available language translators:
 
 Name: HootLanguageTranslator
 Description: A custom translator that combines language detection into its workflow.  See the Hootenanny User Documentation for more details.
@@ -680,12 +689,18 @@ Description: A statistical machine translation decoder for phrase-based, hierarc
 URL: https://cwiki.apache.org/confluence/display/JOSHUA
 
 2 translators are available.
-14:40:32.158 INFO  ...hoot/core/io/DataConverter.cpp(  72) Converting test-files/cmd/glacial/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest-in.osm to test-output/cmd/glacial/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest-out.osm...
-14:40:32.173 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from VisitorTest/ToEnglishTranslationVisitorTest-in.osm...
-14:40:32.206 INFO  ...hoot/core/io/DataConverter.cpp( 415) Applying conversion operations...
-14:40:36.438 INFO  ...oEnglishTranslationVisitor.cpp(  63) Language detections made: 602
-14:40:36.438 INFO  ...oEnglishTranslationVisitor.cpp(  66) 492 successful tag translations made on 486 different elements.
-14:40:36.438 INFO  ...oEnglishTranslationVisitor.cpp(  69) Attempted to translate tags for 602 elements out of 763 elements encountered.
-14:40:36.439 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/glacial/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest-out.osm...
-14:40:37.083 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from isitorTest/ToEnglishTranslationVisitorTest-out.osm...
-14:40:37.147 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from isitorTest/ToEnglishTranslationVisitorTest-out.osm...
+
+17:30:18.560 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting iceToEnglishTranslationVisitorConvertCmdTest/ServiceToEnglishTranslationVisitorConvertCmdTest-in.osm to ceToEnglishTranslationVisitorConvertCmdTest/ServiceToEnglishTranslationVisitorConvertCmdTest-out.osm...
+17:30:18.578 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ceToEnglishTranslationVisitorConvertCmdTest-in.osm...
+17:30:18.610 INFO  ...hoot/core/io/DataConverter.cpp( 576) Applying conversion operations...
+17:30:41.940 INFO  ...oEnglishTranslationVisitor.cpp(  67) 326 successful tag translations made on 324 different elements.
+17:30:41.940 INFO  ...oEnglishTranslationVisitor.cpp(  70) Translated 326 tags out of 661 encountered.
+17:30:41.940 INFO  ...oEnglishTranslationVisitor.cpp(  73) Attempted to translate tags for 651 elements out of 763 elements encountered.
+17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  82) ID: 
+17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  85) Made 330 successful translations on 608 attempts.
+17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  86) 0 words were not translatable.
+17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  87) 53 English words were skipped.
+17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  88) Language detections made: 571
+17:30:41.941 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/glacial/ServiceToEnglishTranslationVisitorConvertCmdTest/ServiceToEnglishTranslationVisitorConvertCmdTest-out.osm...
+17:30:42.551 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from eToEnglishTranslationVisitorConvertCmdTest-out.osm...
+17:30:42.598 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from eToEnglishTranslationVisitorConvertCmdTest-out.osm...

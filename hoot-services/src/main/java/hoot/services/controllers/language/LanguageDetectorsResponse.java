@@ -27,21 +27,21 @@
 
 package hoot.services.controllers.language;
 
-import hoot.services.language.LanguageApp;
+import hoot.services.language.LanguageDetectionApp;
 
 /**
- * Response to a request for information about available language applications
+ * Response to a request for information about available language detectors
  */
-public class LanguageAppsResponse 
+public class LanguageDetectorsResponse 
 {
-  private LanguageApp[] apps;
+  private LanguageDetectionApp[] apps;
 
-  public LanguageAppsResponse() {}
-  public LanguageAppsResponse(LanguageApp[] apps) 
+  public LanguageDetectorsResponse() {}
+  public LanguageDetectorsResponse(LanguageDetectionApp[] apps) 
   {
     this.apps = apps;
   }
 
-  public LanguageApp[] getApps() { return apps; }
-  public void setApps(LanguageApp[] apps) { this.apps = apps; }
+  public LanguageDetectionApp[] getApps() { return apps; }
+  public void setApps(LanguageDetectionApp[] apps) { this.apps = apps; }
 }

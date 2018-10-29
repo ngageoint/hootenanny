@@ -3645,26 +3645,28 @@ Listing available language detectors...
 Available language detectors:
 
 Name: TikaLanguageDetector
-Description: The language detection portion of a library which detects and extracts metadata and text from many different file types
+Description: blah
 URL: https://tika.apache.org
+Supports confidence: yes
 
 Name: OpenNlpLanguageDetector
-Description: The language detector portion of a machine learning based toolkit for the processing of natural language text
+Description: more blah
 URL: https://opennlp.apache.org
+Supports confidence: no
 
 2 detectors are available.
 
 Listing available to English language translators...
 
-Available language detectors:
+Available language translators:
 
-Name: TikaLanguageDetector
-Description: The language detection portion of a library which detects and extracts metadata and text from many different file types
-URL: https://tika.apache.org
+Name: JoshuaLanguageTranslator
+Description: blah
+URL: https://cwiki.apache.org/confluence/display/JOSHUA
 
-Name: OpenNlpLanguageDetector
-Description: The language detector portion of a machine learning based toolkit for the processing of natural language text
-URL: https://opennlp.apache.org
+Name: HootLanguageTranslator
+Description: more blah
+URL: N/A
 
 2 translators are available.
 

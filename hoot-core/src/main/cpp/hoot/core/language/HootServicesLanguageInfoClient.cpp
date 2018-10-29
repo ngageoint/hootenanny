@@ -35,6 +35,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/NetworkUtils.h>
+#include <hoot/core/auth/HootServicesLoginManager.h>
 
 // Qt
 #include <QVariant>
@@ -53,6 +54,31 @@ _useCookies(true)
 {
 }
 
+QString HootServicesLanguageInfoClient::_getBaseUrl()
+{
+  return HootServicesLoginManager::getBaseUrl() + "/language/toEnglishTranslation";
+}
+
+QString HootServicesLanguageInfoClient::_getDetectableUrl()
+{
+  return _getBaseUrl() + "/detectable";
+}
+
+QString HootServicesLanguageInfoClient::_getTranslatableUrl()
+{
+  return _getBaseUrl() + "/translatable";
+}
+
+QString HootServicesLanguageInfoClient::_getDetectorsUrl()
+{
+  return _getBaseUrl() + "/detectors";
+}
+
+QString HootServicesLanguageInfoClient::_getTranslatorsUrl()
+{
+  return _getBaseUrl() + "/translators";
+}
+
 void HootServicesLanguageInfoClient::setConfiguration(const Settings& conf)
 {
   LOG_DEBUG("Setting configuration options...");
@@ -61,10 +87,6 @@ void HootServicesLanguageInfoClient::setConfiguration(const Settings& conf)
 
   _translator = opts.getLanguageTranslationHootServicesTranslator();
   _detectors = opts.getLanguageHootServicesDetectors();
-  _detectableUrl = opts.getLanguageHootServicesDetectableLanguagesEndpoint();
-  _translatableUrl = opts.getLanguageHootServicesTranslatableLanguagesEndpoint();
-  _detectorsUrl = opts.getLanguageHootServicesDetectorsEndpoint();
-  _translatorsUrl = opts.getLanguageHootServicesTranslatorsEndpoint();
   if (_useCookies)
   {
     // get a session cookie associated with the user information passed into the command calling
@@ -72,7 +94,7 @@ void HootServicesLanguageInfoClient::setConfiguration(const Settings& conf)
     _cookies =
       NetworkUtils::getUserSessionCookie(
         opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
-        opts.getHootServicesAuthAccessTokenSecret(), _detectableUrl);
+        opts.getHootServicesAuthAccessTokenSecret(), _getDetectableUrl());
   }
 }
 
@@ -84,11 +106,11 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::g
  QString urlStr;
  if (type == "translators")
  {
-   urlStr = _translatorsUrl;
+   urlStr = _getTranslatorsUrl();
  }
  else
  {
-   urlStr = _detectorsUrl;
+   urlStr = _getDetectorsUrl();
  }
  LOG_VARD(urlStr);
 
@@ -125,12 +147,12 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::g
   QStringList apps;
   if (type == "translatable")
   {
-    urlStr = _translatableUrl;
+    urlStr = _getTranslatableUrl();
     apps = QStringList(_translator);
   }
   else
   {
-    urlStr = _detectableUrl;
+    urlStr = _getDetectableUrl();
     apps = _detectors;
   }
   LOG_VARD(urlStr);

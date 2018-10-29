@@ -39,6 +39,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/UuidHelper.h>
+#include <hoot/core/language/LanguageDetectionConfidenceLevel.h>
 
 namespace hoot
 {
@@ -46,11 +47,16 @@ namespace hoot
 static const QString testInputRoot =
   "test-files/language/HootServicesLanguageDetectorClientTest";
 
+//see comment in StringUtilsTest::jsonParseTest about the formatting of this string
+static const QString responseStr =
+  "{ \"detectorUsed\": \"TikaLanguageDetector\", \"detectedLangCode\": \"de\", \"sourceText\": \"wie%20alt%20bist%20du\", \"detectedLang\": \"German\", \"detectionConfidence\": \"medium\" }";
+
 class HootServicesLanguageDetectorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesLanguageDetectorClientTest);
   CPPUNIT_TEST(runRequestDataTest);
   CPPUNIT_TEST(runParseResponseTest);
+  CPPUNIT_TEST(runConfidenceTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -68,14 +74,24 @@ public:
   void runParseResponseTest()
   {
     boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
-
-    //see comment in StringUtilsTest::jsonParseTest about the formatting of this string
-    const QString jsonStr = "{ \"detectorUsed\": \"TikaLanguageDetector\", \"detectedLangCode\": \"de\", \"sourceText\": \"wie%20alt%20bist%20du\", \"detectedLang\": \"German\"}";
     boost::shared_ptr<boost::property_tree::ptree> response =
-      StringUtils::jsonStringToPropTree(jsonStr);
+      StringUtils::jsonStringToPropTree(responseStr);
 
     QString detectorUsed;
     HOOT_STR_EQUALS("de", uut->_parseResponse(response, detectorUsed));
+    HOOT_STR_EQUALS("TikaLanguageDetector", detectorUsed);
+  }
+
+  void runConfidenceTest()
+  {
+    boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
+    uut->_minConfidence = LanguageDetectionConfidenceLevel::High;
+
+    boost::shared_ptr<boost::property_tree::ptree> response =
+      StringUtils::jsonStringToPropTree(responseStr);
+
+    QString detectorUsed;
+    HOOT_STR_EQUALS("", uut->_parseResponse(response, detectorUsed));
     HOOT_STR_EQUALS("TikaLanguageDetector", detectorUsed);
   }
 
@@ -87,8 +103,10 @@ private:
       new HootServicesLanguageDetectorMockClient());
 
     Settings conf;
-    conf.set("language.hoot.services.detection.endpoint", "http://localhost/test");
+    conf.set("hoot.services.auth.host", "localhost");
+    conf.set("hoot.services.auth.port", "8080");
     conf.set("language.hoot.services.detectors", QStringList("TikaLanguageDetector"));
+    conf.set("language.hoot.services.detection.min.confidence.threshold", "low");
     client->setConfiguration(conf);
 
     return client;

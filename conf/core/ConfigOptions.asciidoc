@@ -901,19 +901,20 @@ Hootenanny 'login' command to retrieve access tokens.
 Hootenanny Web Services private access token required by some Hootenanny commands.  Use the
 Hootenanny 'login' command to retrieve access tokens.
 
-=== hoot.services.auth.logout.endpoint
+=== hoot.services.auth.host
 
 * Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/logout`
+* Default Value: `localhost`
 
-Hootenanny Web Services endpoint for logging out of Hootenanny.
+Host name of the machine the Hootenanny Web Services are located on.
 
-=== hoot.services.auth.request.token.endpoint
+=== hoot.services.auth.port
 
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/request`
+* Data Type: int
+* Default Value: `8080`
 
-Hootenanny Web Services endpoint for retrieving Hootenanny request tokens.
+Port of the machine the Hootenanny Web Services are located on.  If left empty, port 80 will be
+used.
 
 === hoot.services.auth.user.name
 
@@ -921,13 +922,6 @@ Hootenanny Web Services endpoint for retrieving Hootenanny request tokens.
 * Default Value: ``
 
 Hootenanny Web Services user name associated with an authenticated login.
-
-=== hoot.services.auth.verify.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/verify`
-
-Hootenanny Web Services endpoint for logging in a user.
 
 === hootapi.db.writer.copy.bulk.insert
 
@@ -1338,13 +1332,16 @@ option.
 If true, source languages detected for tags will be written in new tags to output.  If false, no
 tags are written and only a summary of the source languages found will be printed at completion.
 
-=== language.hoot.services.detectable.languages.endpoint
+=== language.hoot.services.detection.min.confidence.threshold
 
 * Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectable`
+* Default Value: `low`
 
-Service endpoint for retrieving detectable languages supported by Hootenanny Web Services language
-detection/translation (when using HootServicesTranslatorClient or HootServicesLanguageDetectorClient).
+The minimum language detection confidence threshold to use when detecting languages in text using
+hoot::HootServicesLanguageDetectorClient.  Valid values are: 'low', 'medium', and 'high'.  Not all
+server side language detectors specified in 'language.hoot.services.detectors' support detection
+confidence.  When listing server side detectors via the API, confidence support information is
+included.
 
 === language.hoot.services.detectors
 
@@ -1360,44 +1357,6 @@ values are 'TikaLanguageDetector' and 'OpenNlpLanguageDetector'.  If no detector
 then language translation will attempt to use as many detectors as needed, in a pre-determined
 order, to get a positive detection. Separate values with a ';' and surround in quotes when passing
 in from the command line.
-
-=== language.hoot.services.detection.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detect`
-
-Service language detection endpoint used by HootServicesTranslatorClient and
-HootServicesLanguageDetectorClient
-
-=== language.hoot.services.detectors.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectors`
-
-Service endpoint for retrieving available language detector implementations supported by
-HootServicesTranslatorClient and HootServicesLanguageDetectorClient
-
-=== language.hoot.services.translatable.languages.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translatable`
-
-Service endpoint for retrieving translatable languages supported by HootServicesTranslatorClient
-
-=== language.hoot.services.translation.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translate`
-
-Web service translation endpoint used by the HootServicesTranslatorClient
-
-=== language.hoot.services.translators.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translators`
-
-Service endpoint for retrieving available translator implementations supported by
-HootServicesTranslatorClient
 
 === language.info.provider
 

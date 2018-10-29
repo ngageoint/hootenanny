@@ -34,6 +34,7 @@
 // hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
+#include <hoot/core/language/HootServicesLanguageInfoMockClient.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -42,8 +43,6 @@ namespace hoot
 
 static const QString testInputRoot =
   "test-files/language/HootServicesLanguageInfoResponseParserTest";
-
-static const QString langsStr = "{\"languages\":[{\"name\":\"German\",\"available\":true,\"iso6391Code\":\"de\",\"iso6392Code\":\"deu\"},{\"name\":\"Spanish\",\"available\":true,\"iso6391Code\":\"es\",\"iso6392Code\":\"spa\"}]}";
 
 class HootServicesLanguageInfoResponseParserTest : public HootTestFixture
 {
@@ -58,7 +57,7 @@ public:
   void runParseLangsResponseTest()
   {
     boost::shared_ptr<boost::property_tree::ptree> response =
-      StringUtils::jsonStringToPropTree(langsStr);
+      StringUtils::jsonStringToPropTree(HootServicesLanguageInfoMockClient::LANGS_STR);
 
     QString responseStr =
       HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
@@ -79,11 +78,8 @@ public:
 
   void runParseAppsResponseTest()
   {
-    const QString jsonStr =
-      "{\"apps\":[{\"name\":\"TikaLanguageDetector\",\"description\":\"blah\",\"url\":\"https://tika.apache.org\"},{\"name\":\"OpenNlpLanguageDetector\",\"description\":\"more blah\",\"url\":\"https://opennlp.apache.org\"}]}";
     boost::shared_ptr<boost::property_tree::ptree> response =
-      StringUtils::jsonStringToPropTree(jsonStr);
-
+      StringUtils::jsonStringToPropTree(HootServicesLanguageInfoMockClient::DETECTORS_STR);
     QString responseStr =
       HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
         "detectors", response);
@@ -92,6 +88,8 @@ public:
       FileUtils::readFully(testInputRoot + "/runParseAppsResponseTest-detectors").trimmed(),
       responseStr.trimmed());
 
+    response =
+      StringUtils::jsonStringToPropTree(HootServicesLanguageInfoMockClient::TRANSLATORS_STR);
     responseStr =
       HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
         "translators", response);
@@ -104,7 +102,7 @@ public:
   void runLangCodesToLangsTest()
   {
     boost::shared_ptr<boost::property_tree::ptree> response =
-      StringUtils::jsonStringToPropTree(langsStr);
+      StringUtils::jsonStringToPropTree(HootServicesLanguageInfoMockClient::LANGS_STR);
     const QMap<QString, QString> langCodesToLangs =
       HootServicesLanguageInfoResponseParser::getLangCodesToLangs(response);
 

@@ -84,6 +84,12 @@ private:
 
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
 
+  static QString _getBaseUrl();
+  static QString _getDetectableUrl();
+  static QString _getTranslatableUrl();
+  static QString _getDetectorsUrl();
+  static QString _getTranslatorsUrl();
+
   QString _getAvailableLanguagesRequestData(const QStringList apps);
 };
 

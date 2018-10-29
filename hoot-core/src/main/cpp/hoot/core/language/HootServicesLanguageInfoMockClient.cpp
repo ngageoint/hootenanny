@@ -35,6 +35,13 @@
 namespace hoot
 {
 
+const QString HootServicesLanguageInfoMockClient::LANGS_STR =
+  "{\"languages\":[{\"name\":\"German\",\"available\":true,\"iso6391Code\":\"de\",\"iso6392Code\":\"deu\"},{\"name\":\"Spanish\",\"available\":true,\"iso6391Code\":\"es\",\"iso6392Code\":\"spa\"}]}";
+const QString HootServicesLanguageInfoMockClient::DETECTORS_STR =
+  "{\"apps\":[{\"name\":\"TikaLanguageDetector\",\"description\":\"blah\",\"url\":\"https://tika.apache.org\",\"supportsConfidence\":true},{\"name\":\"OpenNlpLanguageDetector\",\"description\":\"more blah\",\"url\":\"https://opennlp.apache.org\",\"supportsConfidence\":false}]}";
+const QString HootServicesLanguageInfoMockClient::TRANSLATORS_STR =
+  "{\"apps\":[{\"name\":\"JoshuaLanguageTranslator\",\"description\":\"blah\",\"url\":\"https://cwiki.apache.org/confluence/display/JOSHUA\"},{\"name\":\"HootLanguageTranslator\",\"description\":\"more blah\",\"url\":\"N/A\"}]}";
+
 HOOT_FACTORY_REGISTER(LanguageInfoProvider, HootServicesLanguageInfoMockClient)
 
 HootServicesLanguageInfoMockClient::HootServicesLanguageInfoMockClient() :
@@ -44,18 +51,22 @@ HootServicesLanguageInfoClient()
 }
 
 boost::shared_ptr<boost::property_tree::ptree>
-  HootServicesLanguageInfoMockClient::getAvailableApps(const QString /*type*/)
+  HootServicesLanguageInfoMockClient::getAvailableApps(const QString type)
 {
-  const QString jsonStr =
-    "{\"apps\":[{\"name\":\"TikaLanguageDetector\",\"description\":\"The language detection portion of a library which detects and extracts metadata and text from many different file types\",\"url\":\"https://tika.apache.org\"},{\"name\":\"OpenNlpLanguageDetector\",\"description\":\"The language detector portion of a machine learning based toolkit for the processing of natural language text\",\"url\":\"https://opennlp.apache.org\"}]}";
-  return StringUtils::jsonStringToPropTree(jsonStr);
+  if (type == "detectors")
+  {
+    return StringUtils::jsonStringToPropTree(DETECTORS_STR);
+  }
+  else
+  {
+    return StringUtils::jsonStringToPropTree(TRANSLATORS_STR);
+  }
 }
 
 boost::shared_ptr<boost::property_tree::ptree>
   HootServicesLanguageInfoMockClient::getAvailableLanguages(const QString /*type*/)
 {
-  const QString jsonStr = "{\"languages\":[{\"name\":\"German\",\"available\":true,\"iso6391Code\":\"de\",\"iso6392Code\":\"deu\"},{\"name\":\"Spanish\",\"available\":true,\"iso6391Code\":\"es\",\"iso6392Code\":\"spa\"}]}";
-  return StringUtils::jsonStringToPropTree(jsonStr);
+  return StringUtils::jsonStringToPropTree(LANGS_STR);
 }
 
 }

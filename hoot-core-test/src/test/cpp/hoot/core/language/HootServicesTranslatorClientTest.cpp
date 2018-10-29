@@ -112,7 +112,8 @@ private:
 
     Settings conf;
     conf.set("language.translation.translator", "hoot::HootServicesTranslatorClient");
-    conf.set("language.hoot.services.translation.endpoint", "http://localhost/test");
+    conf.set("hoot.services.auth.host", "localhost");
+    conf.set("hoot.services.auth.port", "8080");
     conf.set("language.hoot.services.translator", "HootLanguageTranslator");
     conf.set("language.hoot.services.detectors", QStringList("TikaLanguageDetector"));
     conf.set("language.translation.detected.language.overrides.specified.source.languages", false);

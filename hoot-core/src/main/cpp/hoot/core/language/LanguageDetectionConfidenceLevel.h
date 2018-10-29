@@ -22,17 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-#ifndef HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H
-#define HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H
-
-// hoot
-#include <hoot/core/language/HootServicesLanguageDetectorClient.h>
+#ifndef LANGUAGE_DETECTION_CONFIDENCE_LEVEL_H
+#define LANGUAGE_DETECTION_CONFIDENCE_LEVEL_H
 
 // Qt
-#include <QMap>
+#include <QString>
 
 namespace hoot
 {
@@ -40,24 +36,35 @@ namespace hoot
 /**
  *
  */
-class HootServicesLanguageDetectorMockClient : public HootServicesLanguageDetectorClient
+class LanguageDetectionConfidenceLevel
 {
-
 public:
 
-  static std::string className() { return "hoot::HootServicesLanguageDetectorMockClient"; }
+  typedef enum Level
+  {
+    None = 0,
+    Low,
+    Medium,
+    High
+  } Level;
 
-  HootServicesLanguageDetectorMockClient();
+  LanguageDetectionConfidenceLevel();
+  LanguageDetectionConfidenceLevel(Level level);
 
-  virtual QString detect(const QString text);
+  bool operator==(LanguageDetectionConfidenceLevel l) const;
+  bool operator!=(LanguageDetectionConfidenceLevel l) const;
+
+  Level getEnum() const { return _level; }
+
+  QString toString() const;
+
+  static Level fromString(QString levelString);
 
 private:
 
-  friend class HootServicesLanguageDetectorClientTest;
-
-  QMap<QString, QString> _mockDetections;
+  LanguageDetectionConfidenceLevel::Level _level;
 };
 
 }
 
-#endif // HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H
+#endif // LANGUAGE_DETECTION_CONFIDENCE_LEVEL_H

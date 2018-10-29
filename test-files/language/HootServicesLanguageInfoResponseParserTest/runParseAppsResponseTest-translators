@@ -1,11 +1,11 @@
-Available language detectors:
+Available language translators:
 
-Name: TikaLanguageDetector
+Name: JoshuaLanguageTranslator
 Description: blah
-URL: https://tika.apache.org
+URL: https://cwiki.apache.org/confluence/display/JOSHUA
 
-Name: OpenNlpLanguageDetector
+Name: HootLanguageTranslator
 Description: more blah
-URL: https://opennlp.apache.org
+URL: N/A
 
 2 translators are available.

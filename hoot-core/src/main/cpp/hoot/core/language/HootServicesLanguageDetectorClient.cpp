@@ -35,6 +35,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/NetworkUtils.h>
+#include <hoot/core/auth/HootServicesLoginManager.h>
 #include "LanguageUtils.h"
 
 // Qt
@@ -61,6 +62,7 @@ _numEnglishTextsSkipped(0),
 _skipWordsInEnglishDict(true),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _undetectableWords(0),
+_minConfidence(LanguageDetectionConfidenceLevel::Level::None),
 _cacheHits(0),
 _cacheSize(0),
 _cacheMaxSize(0)
@@ -91,6 +93,11 @@ HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
   }
 }
 
+QString HootServicesLanguageDetectorClient::_getDetectUrl()
+{
+  return HootServicesLoginManager::getBaseUrl() + "/language/toEnglishTranslation/detect";
+}
+
 void HootServicesLanguageDetectorClient::setConfiguration(const Settings& conf)
 {
   LOG_DEBUG("Setting configuration...");
@@ -98,8 +105,12 @@ void HootServicesLanguageDetectorClient::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
 
   _detectors = opts.getLanguageHootServicesDetectors();
-  _url = opts.getLanguageHootServicesDetectionEndpoint();
   _skipWordsInEnglishDict = opts.getLanguageSkipWordsInEnglishDictionary();
+  const QString minConfidenceStr = opts.getLanguageHootServicesDetectionMinConfidenceThreshold();
+  if (!minConfidenceStr.trimmed().isEmpty())
+  {
+    _minConfidence = LanguageDetectionConfidenceLevel::fromString(minConfidenceStr);
+  }
 
   _cacheMaxSize = opts.getLanguageMaxCacheSize();
   if (_cacheMaxSize != -1)
@@ -114,7 +125,7 @@ void HootServicesLanguageDetectorClient::setConfiguration(const Settings& conf)
     _cookies =
       NetworkUtils::getUserSessionCookie(
         opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
-        opts.getHootServicesAuthAccessTokenSecret(), _url);
+        opts.getHootServicesAuthAccessTokenSecret(), _getDetectUrl());
   }
 }
 
@@ -189,7 +200,7 @@ QString HootServicesLanguageDetectorClient::detect(const QString text)
     return "";
   }
 
-  QUrl url(_url);
+  QUrl url(_getDetectUrl());
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
   HootNetworkRequest request;
@@ -272,7 +283,7 @@ QString HootServicesLanguageDetectorClient::_getRequestData(const QString text) 
 QString HootServicesLanguageDetectorClient::_parseResponse(
   boost::shared_ptr<boost::property_tree::ptree> replyObj, QString& detectorUsed) /*const*/
 {
-  const QString detectedLangCode =
+  QString detectedLangCode =
     QString::fromStdString(replyObj->get<std::string>("detectedLangCode")).trimmed();
   if (!detectedLangCode.isEmpty())
   {
@@ -283,17 +294,32 @@ QString HootServicesLanguageDetectorClient::_parseResponse(
     {
       _langCodesWithNoLangNamesAvailable[detectorUsed].insert(detectedLangCode);
     }
-    const QString detectionConfidence =
+
+    const QString detectionConfidenceStr =
       QString::fromStdString(replyObj->get<std::string>("detectionConfidence"));
-    LOG_VART(detectionConfidence);
-    if (_confidenceCounts.contains(detectionConfidence))
+    LOG_VART(detectionConfidenceStr);
+    if (!detectionConfidenceStr.isEmpty() && detectionConfidenceStr != "none available" &&
+        detectionConfidenceStr != "none")
     {
-      _confidenceCounts[detectionConfidence] = _confidenceCounts[detectionConfidence] + 1;
+      const LanguageDetectionConfidenceLevel detectionConfidence =
+        LanguageDetectionConfidenceLevel::fromString(detectionConfidenceStr);
+      if (detectionConfidence.getEnum() < _minConfidence.getEnum())
+      {
+        LOG_TRACE(
+          "Detected language with confidence threshold: " << detectionConfidenceStr << " did " <<
+          "not meet the minimum threshold of " << _minConfidence.toString() << ".");
+        detectedLangCode = "";
+      }
+      if (_confidenceCounts.contains(detectionConfidenceStr))
+      {
+        _confidenceCounts[detectionConfidenceStr] = _confidenceCounts[detectionConfidenceStr] + 1;
+      }
+      else
+      {
+        _confidenceCounts[detectionConfidenceStr] = 1;
+      }
     }
-    else
-    {
-      _confidenceCounts[detectionConfidence] = 1;
-    }
+
   }
   return detectedLangCode;
 }

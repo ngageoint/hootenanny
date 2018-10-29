@@ -35,6 +35,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/NetworkUtils.h>
+#include <hoot/core/auth/HootServicesLoginManager.h>
 #include "LanguageUtils.h"
 
 // Qt
@@ -93,6 +94,11 @@ HootServicesTranslatorClient::~HootServicesTranslatorClient()
   }
 }
 
+QString HootServicesTranslatorClient::_getTranslateUrl()
+{
+  return HootServicesLoginManager::getBaseUrl() + "/language/toEnglishTranslation/translate";
+}
+
 void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
 {
   LOG_DEBUG("Setting configuration...");
@@ -104,7 +110,6 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
   _performExhaustiveSearch = opts.getLanguageTranslationPerformExhaustiveSearchWithNoDetection();
   _translator = opts.getLanguageTranslationHootServicesTranslator();
   _detectors = opts.getLanguageHootServicesDetectors();
-  _translationUrl = opts.getLanguageHootServicesTranslationEndpoint();
   _skipWordsInEnglishDict = opts.getLanguageSkipWordsInEnglishDictionary();
 
   _infoClient.reset(
@@ -125,7 +130,7 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
     _cookies =
       NetworkUtils::getUserSessionCookie(
         opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
-        opts.getHootServicesAuthAccessTokenSecret(), _translationUrl);
+        opts.getHootServicesAuthAccessTokenSecret(), _getTranslateUrl());
   }
 }
 
@@ -333,7 +338,7 @@ QString HootServicesTranslatorClient::translate(const QString text)
     return "";
   }
 
-  QUrl url(_translationUrl);
+  QUrl url(_getTranslateUrl());
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
   headers[QNetworkRequest::ContentTypeHeader] = "application/json";
   HootNetworkRequest request;

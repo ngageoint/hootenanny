@@ -47,8 +47,10 @@
 // Qt
 #include <QString>
 
-namespace geos {
-  namespace geom {
+namespace geos
+{
+  namespace geom
+  {
     class Envelope;
   }
 }

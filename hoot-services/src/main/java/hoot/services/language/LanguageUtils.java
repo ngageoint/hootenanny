@@ -45,7 +45,7 @@ public class LanguageUtils
 {
   public enum DetectionConfidence 
   { 
-    HIGH, LOW, MEDIUM, NONE, NONE_AVAILABLE; 
+    HIGH, MEDIUM, LOW, NONE, NONE_AVAILABLE; 
   }
 
   private static Map<String, String> simpleClassNamesToFullClassNamesCache = 

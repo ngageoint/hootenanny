@@ -46,6 +46,10 @@ class HootServicesLanguageInfoMockClient : public HootServicesLanguageInfoClient
 
 public:
 
+  static const QString LANGS_STR;
+  static const QString DETECTORS_STR;
+  static const QString TRANSLATORS_STR;
+
   static std::string className() { return "hoot::HootServicesLanguageInfoMockClient"; }
 
   HootServicesLanguageInfoMockClient();
