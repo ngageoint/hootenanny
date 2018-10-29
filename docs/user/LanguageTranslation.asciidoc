@@ -35,9 +35,10 @@ most prevalent source languages for non-English POI names in a map:
 hoot convert -D language.parse.names=true -D language.hoot.services.detection.min.confidence.threshold=high -D convert.ops="hoot::PoiCriterion;hoot::NonEnglishLanguageDetectionVisitor" input.osm output.osm
 -----------------------
 
-Some language detectors support returning a confidence value with their detections.  In the example above, only high confidence detections
-are being used.  To determine which server side language detectors support confidence, see the later section with an example showing how to
-list language detectors.
+Some language detectors support returning a confidence value with their detections, as indicated by the use of the configuration option,
+'language.hoot.services.detection.min.confidence.threshold', above.  In the example above, only high confidence detections are being used.  
+To determine which server side language detectors support confidence, see the later section with an example showing how to list language 
+detectors.
 
 Next, determine what languages are available for translation.  This will list them:
 -----------------------

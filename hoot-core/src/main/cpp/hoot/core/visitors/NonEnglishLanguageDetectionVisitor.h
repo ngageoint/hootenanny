@@ -70,13 +70,6 @@ public:
    *
    * @return
    */
-  QString getLangCountsSortedByFrequency() const;
-
-  /**
-   *
-   *
-   * @return
-   */
   QString getLangCountsSortedByLangName() const;
 
 private:

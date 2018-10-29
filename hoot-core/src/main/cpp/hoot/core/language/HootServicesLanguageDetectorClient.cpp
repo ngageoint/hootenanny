@@ -71,6 +71,7 @@ _cacheMaxSize(0)
 
 HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
 {
+  LOG_INFO("Minimum confidence threshold: " << _minConfidence.toString());
   LOG_INFO(
     "Made " << _numDetectionsMade << " successful language detections on " <<
     _numDetectionsAttempted << " attempts.");
@@ -87,10 +88,15 @@ HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
   {
     LOG_INFO(_getUnvailableLangNamesStr());
   }
+  else
+  {
+    LOG_INFO("No language codes return without language names.");
+  }
   if (_confidenceCounts.size() > 0)
   {
-    LOG_INFO(_getConfidenceCountsStr());
+    LOG_INFO(_getCountsStr("Detection confidence counts", _confidenceCounts));
   }
+  LOG_INFO(_getCountsStr("Detectors used", _detectorUsedCounts));
 }
 
 QString HootServicesLanguageDetectorClient::_getDetectUrl()
@@ -151,12 +157,13 @@ QString HootServicesLanguageDetectorClient::_getUnvailableLangNamesStr() const
   return str;
 }
 
-QString HootServicesLanguageDetectorClient::_getConfidenceCountsStr() const
+QString HootServicesLanguageDetectorClient::_getCountsStr(const QString title,
+                                                          QMap<QString, int> data) const
 {
-  QString str = "Detection confidence counts:\n";
+  QString str = title + ":\n";
 
-  for (QMap<QString, int>::const_iterator itr = _confidenceCounts.begin();
-       itr != _confidenceCounts.end(); ++itr)
+  for (QMap<QString, int>::const_iterator itr = data.begin();
+       itr != data.end(); ++itr)
   {
     const QString confidence = itr.key();
     const int count = itr.value();
@@ -230,6 +237,15 @@ QString HootServicesLanguageDetectorClient::detect(const QString text)
   QString detectedLangCode =
     _parseResponse(StringUtils::jsonStringToPropTree(request.getResponseContent()), detectorUsed);
   LOG_VART(detectorUsed);
+  assert(!detectorUsed.trimmed().isEmpty());
+  if (_detectorUsedCounts.contains(detectorUsed))
+  {
+    _detectorUsedCounts[detectorUsed] = _detectorUsedCounts[detectorUsed] + 1;
+  }
+  else
+  {
+    _detectorUsedCounts[detectorUsed] = 1;
+  }
 
   // update the cache
   if (!detectedLangCode.isEmpty() && _cache && !_cache->contains(text))
@@ -319,7 +335,6 @@ QString HootServicesLanguageDetectorClient::_parseResponse(
         _confidenceCounts[detectionConfidenceStr] = 1;
       }
     }
-
   }
   return detectedLangCode;
 }

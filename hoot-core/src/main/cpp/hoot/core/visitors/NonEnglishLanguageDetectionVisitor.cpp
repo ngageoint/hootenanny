@@ -71,11 +71,6 @@ NonEnglishLanguageDetectionVisitor::~NonEnglishLanguageDetectionVisitor()
   LOG_INFO(
     "Attempted to detect languages on tags for " << _numProcessedElements << " elements out of " <<
     _numTotalElements << " elements encountered.");
-  const QString freqSortedCounts = getLangCountsSortedByFrequency();
-  if (!freqSortedCounts.isEmpty())
-  {
-    LOG_INFO(freqSortedCounts);
-  }
   const QString nameSortedCounts = getLangCountsSortedByLangName();
   if (!nameSortedCounts.isEmpty())
   {
@@ -113,56 +108,10 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
   LOG_VARD(_tagKeys);
 }
 
-QString NonEnglishLanguageDetectionVisitor::getLangCountsSortedByFrequency() const
-{
-  QString langsStr;
-
-  LOG_VART(_langNamesToCounts.size());
-  QMultiMap<int, QString> langCountsSwapped;
-  for (QMap<QString, int>::const_iterator langCountsItr = _langNamesToCounts.begin();
-       langCountsItr != _langNamesToCounts.end(); ++langCountsItr)
-  {
-    LOG_VART(langCountsItr.key());
-    assert(langCountsItr.key() != "en");
-    LOG_VART(langCountsItr.value());
-    langCountsSwapped.insert(langCountsItr.value(), langCountsItr.key());
-  }
-  LOG_VART(langCountsSwapped.size());
-
-  std::list<int> countsStl = langCountsSwapped.keys().toStdList();
-  LOG_VART(countsStl.size());
-  std::reverse(countsStl.begin(), countsStl.end());
-  QList<int> counts = QList<int>::fromStdList(countsStl);
-  LOG_VART(counts);
-
-  if (counts.size() > 0)
-  {
-    langsStr = "Non-English language tag counts (sorted by reverse frequency):\n";
-
-    for (QList<int>::const_iterator countsItr = counts.begin(); countsItr != counts.end();
-         ++countsItr)
-    {
-      const int count = *countsItr;
-      LOG_VART(count);
-
-      QMap<int, QString>::const_iterator langNamesForCountItr = langCountsSwapped.constFind(count);
-      while (langNamesForCountItr != langCountsSwapped.end() && langNamesForCountItr.key() == count)
-      {
-        const QString langName = *langNamesForCountItr;
-        LOG_VART(langName);
-        langsStr += langName + ": " + QString::number(count) + "\n";
-        ++langNamesForCountItr;
-      }
-    }
-    langsStr.chop(1);
-  }
-
-  return langsStr;
-}
-
 QString NonEnglishLanguageDetectionVisitor::getLangCountsSortedByLangName() const
 {
-  QString langsStr = "Non-English language tag counts (sorted by name):\n";
+  LOG_VART(_langNamesToCounts.keys().size());
+  QString langsStr = "Non-English language tag counts:\n";
   for (QMap<QString, int>::const_iterator langsItr = _langNamesToCounts.begin();
        langsItr != _langNamesToCounts.end(); ++langsItr)
   {
@@ -180,6 +129,11 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
   }
 
   LOG_VART(e);
+  // Why would the element ever be null here?
+  if (!e)
+  {
+    return;
+  }
 
   //if this var was set while parsing the previous element, increment the counter now
   if (_currentElementHasSuccessfulTagDetection)
@@ -225,6 +179,7 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
           {
             _langNamesToCounts[langName] = 1;
           }
+          LOG_VART(_langNamesToCounts.keys().size());
 
           _numTagDetectionsMade++;
           _currentElementHasSuccessfulTagDetection = true;
@@ -248,17 +203,9 @@ void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>&
   if (elementProcessed)
   {
     _numProcessedElements++;
-//    if (_numProcessedElements % _taskStatusUpdateInterval == 0)
-//    {
-//      PROGRESS_INFO("Attempted language detection for " << _numProcessedElements << " elements.");
-//    }
   }
 
   _numTotalElements++;
-//  if (_numTotalElements % _taskStatusUpdateInterval == 0)
-//  {
-//    PROGRESS_INFO("Visited " << _numTotalElements << " elements.");
-//  }
 }
 
 }

@@ -1327,7 +1327,7 @@ option.
 === language.detection.write.detected.lang.tags
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, source languages detected for tags will be written in new tags to output.  If false, no
 tags are written and only a summary of the source languages found will be printed at completion.
@@ -1335,13 +1335,13 @@ tags are written and only a summary of the source languages found will be printe
 === language.hoot.services.detection.min.confidence.threshold
 
 * Data Type: string
-* Default Value: `low`
+* Default Value: `high`
 
 The minimum language detection confidence threshold to use when detecting languages in text using
-hoot::HootServicesLanguageDetectorClient.  Valid values are: 'low', 'medium', and 'high'.  Not all
-server side language detectors specified in 'language.hoot.services.detectors' support detection
-confidence.  When listing server side detectors via the API, confidence support information is
-included.
+hoot::HootServicesLanguageDetectorClient.  Valid values are: 'low', 'medium', 'high', or 'none'.  A
+value of 'none' or an empty string disables the threshold.  Not all server side language detectors
+specified in 'language.hoot.services.detectors' support detection confidence.  When listing server
+side detectors via the API, confidence support information is included.
 
 === language.hoot.services.detectors
 

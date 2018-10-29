@@ -690,17 +690,64 @@ URL: https://cwiki.apache.org/confluence/display/JOSHUA
 
 2 translators are available.
 
-17:30:18.560 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting iceToEnglishTranslationVisitorConvertCmdTest/ServiceToEnglishTranslationVisitorConvertCmdTest-in.osm to ceToEnglishTranslationVisitorConvertCmdTest/ServiceToEnglishTranslationVisitorConvertCmdTest-out.osm...
-17:30:18.578 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ceToEnglishTranslationVisitorConvertCmdTest-in.osm...
-17:30:18.610 INFO  ...hoot/core/io/DataConverter.cpp( 576) Applying conversion operations...
-17:30:41.940 INFO  ...oEnglishTranslationVisitor.cpp(  67) 326 successful tag translations made on 324 different elements.
-17:30:41.940 INFO  ...oEnglishTranslationVisitor.cpp(  70) Translated 326 tags out of 661 encountered.
-17:30:41.940 INFO  ...oEnglishTranslationVisitor.cpp(  73) Attempted to translate tags for 651 elements out of 763 elements encountered.
-17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  82) ID: 
-17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  85) Made 330 successful translations on 608 attempts.
-17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  86) 0 words were not translatable.
-17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  87) 53 English words were skipped.
-17:30:41.940 INFO  ...otServicesTranslatorClient.cpp(  88) Language detections made: 571
-17:30:41.941 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/glacial/ServiceToEnglishTranslationVisitorConvertCmdTest/ServiceToEnglishTranslationVisitorConvertCmdTest-out.osm...
-17:30:42.551 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from eToEnglishTranslationVisitorConvertCmdTest-out.osm...
-17:30:42.598 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from eToEnglishTranslationVisitorConvertCmdTest-out.osm...
+19:46:45.934 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/cmd/glacial/ServiceLanguageConvertCmdTest/ServiceLanguageConvertCmdTest-in.osm to test-output/cmd/glacial/ServiceLanguageConvertCmdTest/ServiceLanguageConvertCmdTest-detect-out.osm...
+19:46:45.952 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from onvertCmdTest/ServiceLanguageConvertCmdTest-in.osm...
+19:46:45.987 INFO  ...hoot/core/io/DataConverter.cpp( 576) Applying conversion operations...
+19:46:53.146 INFO  ...shLanguageDetectionVisitor.cpp(  64) 
+19:46:53.146 INFO  ...shLanguageDetectionVisitor.cpp(  67) 446 successful tag detections made on 443 different elements.
+19:46:53.146 INFO  ...shLanguageDetectionVisitor.cpp(  70) Detected languages for 446 tags out of 661 encountered.
+19:46:53.146 INFO  ...shLanguageDetectionVisitor.cpp(  73) Attempted to detect languages on tags for 651 elements out of 763 elements encountered.
+19:46:53.146 INFO  ...shLanguageDetectionVisitor.cpp(  77) Non-English language tag counts:
+: 1
+Afrikaans: 1
+Aragonese: 1
+Basque: 6
+Czech: 2
+Dutch: 1
+Estonian: 1
+Finnish: 2
+French: 2
+German: 395
+Icelandic: 1
+Irish: 1
+Italian: 8
+Lithuanian: 1
+Malay: 5
+Maltese: 1
+Norwegian: 4
+Polish: 1
+Portuguese: 1
+Romanian: 1
+Swahili: 1
+Swedish: 3
+Tagalog: 3
+Turkish: 1
+Welsh: 2
+19:46:53.146 INFO  ...icesLanguageDetectorClient.cpp(  74) Minimum confidence threshold: high
+19:46:53.146 INFO  ...icesLanguageDetectorClient.cpp(  77) Made 478 successful language detections on 640 attempts.
+19:46:53.146 INFO  ...icesLanguageDetectorClient.cpp(  78) 0 words were not detectable.
+19:46:53.146 INFO  ...icesLanguageDetectorClient.cpp(  79) 70 English words were skipped.
+19:46:53.146 INFO  ...icesLanguageDetectorClient.cpp(  80) Language detections made: 478
+19:46:53.146 INFO  ...icesLanguageDetectorClient.cpp(  93) No language codes return without language names.
+19:46:53.146 INFO  ...icesLanguageDetectorClient.cpp(  97) Detection confidence counts:
+high: 463
+medium: 145
+19:46:53.146 INFO  ...icesLanguageDetectorClient.cpp(  99) Detectors used:
+TikaLanguageDetector: 608
+19:46:53.148 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/glacial/ServiceLanguageConvertCmdTest/ServiceLanguageConvertCmdTest-detect-out.osm...
+19:46:53.739 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from dTest/ServiceLanguageConvertCmdTest-detect-out.osm...
+19:46:53.785 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from dTest/ServiceLanguageConvertCmdTest-detect-out.osm...
+19:46:54.130 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/cmd/glacial/ServiceLanguageConvertCmdTest/ServiceLanguageConvertCmdTest-in.osm to est-output/cmd/glacial/ServiceLanguageConvertCmdTest/ServiceLanguageConvertCmdTest-translate-out.osm...
+19:46:54.142 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from onvertCmdTest/ServiceLanguageConvertCmdTest-in.osm...
+19:46:54.175 INFO  ...hoot/core/io/DataConverter.cpp( 576) Applying conversion operations...
+19:47:04.628 INFO  ...oEnglishTranslationVisitor.cpp(  67) 326 successful tag translations made on 324 different elements.
+19:47:04.628 INFO  ...oEnglishTranslationVisitor.cpp(  70) Translated 326 tags out of 661 encountered.
+19:47:04.628 INFO  ...oEnglishTranslationVisitor.cpp(  73) Attempted to translate tags for 651 elements out of 763 elements encountered.
+19:47:04.629 INFO  ...otServicesTranslatorClient.cpp(  82) ID: 
+19:47:04.629 INFO  ...otServicesTranslatorClient.cpp(  85) Made 330 successful translations on 608 attempts.
+19:47:04.629 INFO  ...otServicesTranslatorClient.cpp(  86) 0 words were not translatable.
+19:47:04.630 INFO  ...otServicesTranslatorClient.cpp(  87) 53 English words were skipped.
+19:47:04.630 INFO  ...otServicesTranslatorClient.cpp(  88) Language detections made: 571
+19:47:04.641 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/glacial/ServiceLanguageConvertCmdTest/ServiceLanguageConvertCmdTest-translate-out.osm...
+19:47:05.698 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from st/ServiceLanguageConvertCmdTest-translate-out.osm...
+19:47:05.744 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from st/ServiceLanguageConvertCmdTest-translate-out.osm...

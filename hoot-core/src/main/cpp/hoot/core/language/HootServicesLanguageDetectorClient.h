@@ -97,6 +97,7 @@ private:
   QMap<QString, QSet<QString>> _langCodesWithNoLangNamesAvailable;
   QMap<QString, int> _confidenceCounts;
   LanguageDetectionConfidenceLevel _minConfidence;
+  QMap<QString, int> _detectorUsedCounts;
 
   long _cacheHits;
   long _cacheSize;
@@ -117,8 +118,8 @@ private:
 
   bool _textIsDetectable(const QString text) const;
 
+  QString _getCountsStr(const QString title, QMap<QString, int> data) const;
   QString _getUnvailableLangNamesStr() const;
-  QString _getConfidenceCountsStr() const;
 };
 
 }
