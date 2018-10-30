@@ -97,7 +97,7 @@ void elementTranslatorThread::run()
   }
 
   LOG_INFO("Done Translating");
-} // end run
+}
 
 void ogrWriterThread::run()
 {
@@ -160,7 +160,7 @@ void ogrWriterThread::run()
   ogrWriter->close();
 
   LOG_INFO("Done Writing Features");
-} // end run
+}
 
 unsigned int DataConverter::logWarnCount = 0;
 
@@ -184,7 +184,7 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 
   //We require that a translation be present when converting to OGR.  We may be able to absorb this
   //logic into _convert (see notes below).
-  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output,true) && !_translation.isEmpty())
+  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output, true) && !_translation.isEmpty())
   {
     _convertToOgr(inputs.at(0), output);
   }

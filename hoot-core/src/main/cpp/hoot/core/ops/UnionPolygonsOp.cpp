@@ -22,44 +22,45 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#include "UnionPolygonsOp.h"
 
-// Hoot
+// hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/io/MultiaryIngester.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/visitors/UnionPolygonsVisitor.h>
+
+// geos
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryFactory.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
 
-class MultiaryPoiIngestCmd : public BaseCommand
+HOOT_FACTORY_REGISTER(OsmMapOperation, UnionPolygonsOp)
+
+UnionPolygonsOp::UnionPolygonsOp()
 {
-public:
+}
 
-  static std::string className() { return "hoot::MultiaryPoiIngestCmd"; }
+void UnionPolygonsOp::apply(boost::shared_ptr<OsmMap>& map)
+{
+  UnionPolygonsVisitor v;
+  map->visitRo(v);
+  boost::shared_ptr<Geometry> g = v.getUnion();
+  LOG_VART(g.get());
 
-  virtual QString getName() const { return "multiary-poi-ingest"; }
+  OsmMapPtr result(new OsmMap());
+  GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, -1);
 
-  virtual QString getDescription() const
-  { return "Ingests POI data for use by the multiary-conflate command (experimental) "; }
-
-  virtual QString getType() const { return "rnd"; }
-
-  virtual int runSimple(QStringList args)
-  {
-    if (args.size() != 4)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
-    }
-
-    MultiaryIngester().ingest(args[0], args[1], args[2], args[3]);
-
-    return 0;
-  }
-};
-
-HOOT_FACTORY_REGISTER(Command, MultiaryPoiIngestCmd)
+  map.reset(new OsmMap(result));
+  LOG_VART(map.get());
+}
 
 }

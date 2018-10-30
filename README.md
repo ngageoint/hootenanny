@@ -345,7 +345,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       -D remove.tags.visitor.element.criterion=hoot::TagCriterion \
       -D tag.criterion.kvps="power=line" -D element.criterion.negate=true input.osm output.osm
       
-    # For all features with a "voltage" tag between 1 and 45k, set the tag "power=minor_line"
+    # For all features with a "voltage" tag between 1 and 45k volts, set the tag "power=minor_line"
     hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.key=power \ 
       -D set.tag.value.visitor.value=minor_line \
       -D set.tag.value.visitor.element.criterion=hoot::TagValueNumericRangeCriterion \

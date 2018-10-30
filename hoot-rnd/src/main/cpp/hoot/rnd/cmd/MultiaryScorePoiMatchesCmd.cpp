@@ -103,7 +103,7 @@ public:
   virtual QString getName() const { return "multiary-score-poi-matches"; }
 
   virtual QString getDescription() const
-  { return "(experimental) Scores the performance of multiary-conflate"; }
+  { return "Scores the performance of multiary-conflate (experimental) "; }
 
   virtual QString getType() const { return "rnd"; }
 

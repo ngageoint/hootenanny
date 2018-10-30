@@ -22,44 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef UNION_POLYGONS_OP_H
+#define UNION_POLYGONS_OP_H
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/io/MultiaryIngester.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class MultiaryPoiIngestCmd : public BaseCommand
+class OsmMap;
+
+/**
+ * A map operation making use of UnionPolyonsVisitor
+ */
+class UnionPolygonsOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::MultiaryPoiIngestCmd"; }
+  static std::string className() { return "hoot::UnionPolygonsOp"; }
 
-  virtual QString getName() const { return "multiary-poi-ingest"; }
+  UnionPolygonsOp();
+
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
+
+  virtual std::string getClassName() const { return className(); }
 
   virtual QString getDescription() const
-  { return "Ingests POI data for use by the multiary-conflate command (experimental) "; }
-
-  virtual QString getType() const { return "rnd"; }
-
-  virtual int runSimple(QStringList args)
-  {
-    if (args.size() != 4)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
-    }
-
-    MultiaryIngester().ingest(args[0], args[1], args[2], args[3]);
-
-    return 0;
-  }
+  { return "Unions all area elements that are visited to create a single geometry"; }
 };
 
-HOOT_FACTORY_REGISTER(Command, MultiaryPoiIngestCmd)
-
 }
+
+#endif // UNION_POLYGONS_OP_H

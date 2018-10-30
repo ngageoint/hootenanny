@@ -208,6 +208,7 @@ void OsmPbfWriter::_initBlob()
 
 void OsmPbfWriter::initializePartial(ostream* strm)
 {
+  LOG_DEBUG("Initializing partial...");
   _out = strm;
   _writeOsmHeader(false, false);
   _initBlob();
@@ -284,6 +285,8 @@ void OsmPbfWriter::write(ConstOsmMapPtr map)
 
 void OsmPbfWriter::write(ConstOsmMapPtr map, ostream* strm)
 {
+  LOG_DEBUG("Writing stream...");
+
   _out = strm;
   _map = map;
 
@@ -315,6 +318,8 @@ void OsmPbfWriter::write(ConstOsmMapPtr map, const QString& path)
 
 void OsmPbfWriter::writeHeader(ostream* strm, bool includeBounds, bool sorted)
 {
+  LOG_DEBUG("Writing header...");
+
   _out = strm;
 
   _rawSize = 0;
@@ -590,6 +595,8 @@ void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)
 void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
 {
   LOG_TRACE("Writing the OSM header...");
+  LOG_VART(includeBounds);
+  LOG_VART(sorted);
 
   // create the header block
   _d->headerBlock.Clear();

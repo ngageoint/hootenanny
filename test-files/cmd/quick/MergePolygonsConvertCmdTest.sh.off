@@ -1,10 +1,10 @@
 #!/bin/bash
 #set -e
 
-#DEBUG_OPT="--trace"
+DEBUG_OPT="--trace"
 
-INPUTFILEDIR=$HOOT_HOME/test-files/cmd/quick/MergePolygonsCmdTest
-OUTPUTFILEDIR=$HOOT_HOME/test-output/cmd/quick/MergePolygonsCmdTest
+INPUTFILEDIR=test-files/cmd/quick/MergePolygonsCmdTest
+OUTPUTFILEDIR=test-output/cmd/quick/MergePolygonsCmdTest
 
 mkdir -p $OUTPUTFILEDIR
 
@@ -13,9 +13,11 @@ mkdir -p $OUTPUTFILEDIR
 INPUTFILE1=$INPUTFILEDIR/square_polygon.osm
 INPUTFILE2=$INPUTFILEDIR/diamond_polygon.osm
 OUTPUTFILE=$OUTPUTFILEDIR/union_polygon.osm
+OUTPUTFILE_TEMP=$OUTPUTFILEDIR/union_polygon-temp.osm.pbf
 COMPAREFILE=$INPUTFILEDIR/union_polygon.osm
 
-hoot merge-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
+hoot cat $DEBUG_OPT $OUTPUTFILE_TEMP $INPUTFILE1 $INPUTFILE2 
+hoot convert $DEBUG_OPT -D convert.ops="hoot::UnionPolygonsOp" $OUTPUTFILE_TEMP $OUTPUTFILE
 hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 
 # Input: 2 x multipolygons
@@ -23,7 +25,9 @@ hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 INPUTFILE1=$INPUTFILEDIR/multi_polygon1.osm
 INPUTFILE2=$INPUTFILEDIR/multi_polygon2.osm
 OUTPUTFILE=$OUTPUTFILEDIR/union_multi_both.osm
+OUTPUTFILE_TEMP=$OUTPUTFILEDIR/union_multi_both-temp.osm.pbf
 COMPAREFILE=$INPUTFILEDIR/union_multi_both.osm
 
-hoot merge-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
+hoot cat $DEBUG_OPT $OUTPUTFILE_TEMP $INPUTFILE1 $INPUTFILE2 
+hoot convert $DEBUG_OPT -D convert.ops="hoot::UnionPolygonsOp" $OUTPUTFILE_TEMP $OUTPUTFILE
 hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE

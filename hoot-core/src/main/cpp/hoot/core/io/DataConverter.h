@@ -47,29 +47,31 @@ class elementTranslatorThread : public QThread
   Q_OBJECT
   void run();
 
-  public:
-    QString _translation;
-    QQueue<ElementPtr> * _pElementQ;
-    QMutex * _pTransFeaturesQMutex;
-    QMutex * _pInitMutex;
-    QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
-    bool * _pFinishedTranslating;
-    ElementCachePtr _pElementCache;
-}; // end class
+public:
+
+  QString _translation;
+  QQueue<ElementPtr> * _pElementQ;
+  QMutex * _pTransFeaturesQMutex;
+  QMutex * _pInitMutex;
+  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
+  bool * _pFinishedTranslating;
+  ElementCachePtr _pElementCache;
+};
 
 class ogrWriterThread : public QThread
 {
   Q_OBJECT
   void run();
 
-  public:
-    QString _translation;
-    QString _output;
-    QMutex * _pTransFeaturesQMutex;
-    QMutex * _pInitMutex;
-    QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
-    bool * _pFinishedTranslating;
-}; // end class
+public:
+
+  QString _translation;
+  QString _output;
+  QMutex * _pTransFeaturesQMutex;
+  QMutex * _pInitMutex;
+  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
+  bool * _pFinishedTranslating;
+};
 
 
 /**

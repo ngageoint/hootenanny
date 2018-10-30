@@ -53,7 +53,7 @@ public:
 
   virtual QString getName() const { return "perty"; }
 
-  virtual QString getDescription() const { return "Perturbs map data using PERTY"; }
+  virtual QString getDescription() const { return "Perturbs a map using PERTY"; }
 
   virtual QString getType() const { return "rnd"; }
 

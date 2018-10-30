@@ -70,7 +70,7 @@ public:
   virtual QString getName() const { return "multiary-poi-conflate"; }
 
   virtual QString getDescription() const
-  { return "(experimental) Conflates two or more POI map sources into a single map"; }
+  { return "Conflates two or more POI maps into a single map (experimental) "; }
 
   virtual QString getType() const { return "rnd"; }
 

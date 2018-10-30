@@ -57,7 +57,7 @@ public:
 
   virtual QString getName() const { return "merge-polygons"; }
 
-  virtual QString getDescription() const { return "Combines like polygons"; }
+  virtual QString getDescription() const { return "Combines similar polygons"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -85,8 +85,6 @@ public:
     GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, -1);
 
     IoUtils::saveMap(result, output);
-
-    LOG_INFO("Done writing file.");
 
     return 0;
   }

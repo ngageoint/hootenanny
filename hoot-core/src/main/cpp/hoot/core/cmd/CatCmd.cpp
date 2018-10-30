@@ -54,7 +54,7 @@ public:
 
   virtual QString getName() const { return "cat"; }
 
-  virtual QString getDescription() const { return "Concatenates two map files"; }
+  virtual QString getDescription() const { return "Concatenates two maps"; }
 
   virtual int runSimple(QStringList args)
   {

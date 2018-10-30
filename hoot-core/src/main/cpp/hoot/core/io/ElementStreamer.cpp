@@ -60,14 +60,14 @@ bool ElementStreamer::isStreamableIo(const QString input, const QString output)
   LOG_VARD(ConfigUtils::boundsOptionEnabled());
 
   return
-      OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
-      OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
-      //the XML writer can't keep sorted output when streaming, so require an additional config
-      //option be specified in order to stream when writing that format
-      (writerName != "hoot::OsmXmlWriter" ||
-      (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
-      //none of the convert bounding box supports are able to do streaming I/O at this point
-      !ConfigUtils::boundsOptionEnabled();
+    OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
+    OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
+    //the XML writer can't keep sorted output when streaming, so require an additional config
+    //option be specified in order to stream when writing that format
+    (writerName != "hoot::OsmXmlWriter" ||
+    (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
+    //none of the convert bounding box supports are able to do streaming I/O at this point
+    !ConfigUtils::boundsOptionEnabled();
 }
 
 bool ElementStreamer::areValidStreamingOps(const QStringList ops)
