@@ -47,7 +47,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
@@ -223,16 +222,18 @@ public class FolderResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addFolder(@Context HttpServletRequest request, @PathParam("folderName") String folderName,
             @PathParam("parentId") Long parentId,
-            @QueryParam("isPublic") Boolean isPublic) {
+            @QueryParam("isPublic") Boolean isPublic) throws SQLException {
         Users user = Users.fromRequest(request);
         Long userid = -1L;
         if(user != null) {
             userid = user.getId();
         }
 
-        // getFolderForUser() will perform ACLs, additionally
-        // don't allow public folders to be created under private folders:
-        Folders parentFolder = getFolderForUser(user, parentId);
+        // The user should own the entire folder chain, in the case of root
+        // we will get a list w/ a single folder.
+        List<Folders> folderChain = getFolderChainForUser(user, parentId);
+        Folders parentFolder = folderFromList(folderChain, parentId);
+
         // If the API user didn't specify a visibility level, inherit from the parent
         // folder:
         if(isPublic == null) {
@@ -380,7 +381,12 @@ public class FolderResource {
         Users user = Users.fromRequest(request);
 
         // handle some ACL logic:
-        getFolderForUser(user, folderId);
+        Folders f = getFolderForUser(user, folderId);
+        // User must also -own- the folder:
+        if(!f.getUserId().equals(user.getId())) {
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to set/view it's attributes").build());
+        }
+
         String query = String.format("with recursive related_folders as (" +
                 "     select id,parent_id,display_name,user_id,public,created_at from folders where id = %d" +
                 "     union" +
@@ -417,7 +423,11 @@ public class FolderResource {
             @PathParam("folderId") Long folderId) throws SQLException {
         Users user = Users.fromRequest(request);
         // handle some ACL logic:
-        getFolderForUser(user, folderId);
+        Folders f = getFolderForUser(user, folderId);
+        // User must also -own- the folder:
+        if(!f.getUserId().equals(user.getId())) {
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to set/view it's attributes").build());
+        }
         List<Folders> affectedFolders = new ArrayList<Folders>();
         try(Connection conn = getConnection() ) {
             Statement stmt = conn.createStatement();
@@ -514,6 +524,58 @@ public class FolderResource {
         if(user == null || user.getId().equals(folder.getUserId()) || folder.isPublic()) {
             return folder;
         }
-        throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+        throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to modify it").build());
+    }
+    public static Folders folderFromList(List<Folders> folders, Long folderId) {
+        for(Folders folder : folders) {
+            if(folder.getId().equals(folderId)) {
+                return folder;
+            }
+        }
+
+        return null;
+    }
+    public static List<Folders> getFolderChainForUser(Users user, Long folderId) throws SQLException {
+        List<Folders> out = new ArrayList<Folders>();
+
+        // special case, root folder:
+        if(folderId.equals(0L)) {
+            out.add(getFolderForUser(user, folderId));
+            return out;
+        }
+
+        String query = String.format(""
+
+                + "with recursive related_folders as ( " +
+                "        select id,parent_id,display_name,user_id,public,created_at from folders where id = %d " +
+                "        union " +
+                "        select f.id,f.parent_id,f.display_name,f.user_id,f.public,f.created_at from folders f " +
+                "        inner join related_folders rf on ( " +
+                "                f.parent_id = rf.id " +
+                "                OR " +
+                "                f.id = rf.parent_id " +
+                "        ) " +
+                ") " +
+                "select * from related_folders;"
+
+                + "", folderId);
+        try(Connection conn = getConnection() ) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                out.add(Folders.fromResultSet(rs));
+            }
+            rs.close();
+            stmt.close();
+        }
+        if(out.size() == 0) {
+            throw new NotFoundException();
+        }
+        for(Folders f : out) {
+            if(user != null && !f.getUserId().equals(user.getId())) {
+                throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to modify it.").build());
+            }
+        }
+        return out;
     }
 }

@@ -651,7 +651,7 @@ public class MapResource {
             // the status message was being overwritten w/ a generic message,
             // so i had to build a response object to get the custom message
             // passed back to the front end.
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).entity("You must own the map to move it.").build());
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the map to move it.").build());
         }
 
         // Delete any existing to avoid duplicate entries
