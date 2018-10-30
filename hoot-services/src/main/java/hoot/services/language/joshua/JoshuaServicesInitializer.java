@@ -81,7 +81,7 @@ public class JoshuaServicesInitializer
 
   public void init() throws Exception
   {
-    logger.error("Initializing Joshua services...");
+    logger.info("Initializing Joshua services...");
 
     //read the services configuration file
     services = readServicesConfig();

@@ -68,7 +68,7 @@ public final class TikaLanguageDetector implements LanguageDetector, SupportedLa
 
   private static TikaLanguageDetector instance;
 
-  private LanguageUtils.DetectionConfidence confidence;
+  private LanguageUtils.DetectionConfidence confidence = LanguageUtils.DetectionConfidence.NONE;
 
   private TikaLanguageDetector() throws Exception
   {

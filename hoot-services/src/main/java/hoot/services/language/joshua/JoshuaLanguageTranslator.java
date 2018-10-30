@@ -89,7 +89,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
 
   private JoshuaLanguageTranslator() throws Exception
   {
-    logger.trace("Initializing translator...");
+    logger.info("Initializing translator...");
 
     //launch all of our services
     servicesInitializer.init();
@@ -110,7 +110,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
       connectionPool = null;
     }
 
-    logger.trace("Translator initialized.");
+    logger.info("Translator initialized.");
   }
 
   public void setConfig(Object config) {}
@@ -171,7 +171,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
 
   private void readSupportedLangsConfig() throws Exception
   {
-    logger.error("Reading JoshuaLanguageTranslator languages config...");
+    logger.debug("Reading JoshuaLanguageTranslator languages config...");
     InputStream supportedLangsConfigStrm = null;
     try
     {
@@ -187,7 +187,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
         supportedLangsConfigStrm.close();
       }
     }
-    logger.error(
+    logger.debug(
       "Read " + langsConfigReader.getSupportedLanguages().length + 
       " languages from config for JoshuaLanguageTranslator.");
   }

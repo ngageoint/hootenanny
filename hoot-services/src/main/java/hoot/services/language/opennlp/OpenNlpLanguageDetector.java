@@ -192,16 +192,16 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
   {
     long startTime = System.currentTimeMillis();
 
-    logger.error("Detecting language with " + getClass().getName() + "; " + text + "...");
+    logger.trace("Detecting language with " + getClass().getName() + "; " + text + "...");
     String detectedLang = detector.predictLanguage(text).getLang();
     if (!detectedLang.isEmpty())
     {
-      logger.error(
+      logger.trace(
         getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
     }
     else
     {
-      logger.error("No language detection found for: " + text + " with TikaLanguageDetector.");
+      logger.trace("No language detection found for: " + text + " with TikaLanguageDetector.");
     }
 
     logger.trace("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000); 

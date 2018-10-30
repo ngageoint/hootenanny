@@ -91,8 +91,6 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
   @Category(UnitTest.class)
   public void testGetDetectors() throws Exception 
   {
-    //TODO: update for confidence
-
     //This has to be mocked separately within this test since there we're testing multiple types of 
     //LanguageAppInfo implementations.
     TikaLanguageDetector detector = (TikaLanguageDetector)LanguageTestUtils.mockTika();
@@ -112,6 +110,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     Assert.assertEquals("TikaLanguageDetector", apps[0].getName());
     Assert.assertEquals("blah1", apps[0].getDescription());
     Assert.assertEquals("http://localhost/TikaLanguageDetector", apps[0].getUrl());
+    Assert.assertEquals(true, apps[0].getSupportsConfidence());
   }
 
   @Test
@@ -232,6 +231,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     Assert.assertEquals(
       "Spanish", URLDecoder.decode(responseObj.get("detectedLang").toString()));
     Assert.assertEquals("TikaLanguageDetector", responseObj.get("detectorUsed").toString());
+    Assert.assertEquals("high", responseObj.get("detectionConfidence").toString());
   }
 
   @Test
