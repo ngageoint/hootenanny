@@ -362,14 +362,14 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Sort data to the OSM standard that is too large to fit in memory
     hoot sort -D element.sorter.element.buffer.size=10000 input.osm output.osm 
     
-    # Combine sets of like polygons together
+    # Combine like polygons together without using full-fledged conflation
     hoot merge-polygons input1.osm input2.osm output.osm
 
-    # Combine sets of like points together
+    # Combine like points together without using full-fledged conflation
     hoot convert -D convert.ops="hoot::MergeNearbyNodes" input.osm output.osm
     
     # Detect road intersections
-    hoot find-intersections input.osm output.osm
+    hoot convert -D convert.ops="hoot::FindHighwayIntersectionsOp" input.osm output.osm
     
     # Create a node density plot
     hoot node-density-plot input.osm output.png 100

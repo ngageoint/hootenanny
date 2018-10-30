@@ -114,13 +114,13 @@ private:
     cout << "For detailed help on the following commands type: hoot help (command name)\n"
             "\n";
     _printCommands(cmds, "core");
-    cout << "Advanced:" << endl << endl;
+    cout << endl << "Advanced:" << endl << endl;
     _printCommands(cmds, "rnd");
 
     return 0;
   }
 
-  void _printCommands(const vector<string>& cmds, const QString type)
+  void _printCommands(vector<string>& cmds, const QString type)
   {
     sort(cmds.begin(), cmds.end(), commandCompare);
 

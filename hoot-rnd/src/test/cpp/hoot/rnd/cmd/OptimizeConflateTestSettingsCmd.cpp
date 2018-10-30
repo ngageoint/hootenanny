@@ -51,6 +51,8 @@ public:
   virtual QString getDescription() const
   { return "Determines optimal network conflation settings"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() < 6 || args.size() > 7)
