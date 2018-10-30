@@ -34,7 +34,7 @@ namespace hoot
 {
 
 ElementCriterionInputStream::ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
-    const ElementCriterionPtr& criterion) :
+  const ElementCriterionPtr& criterion) :
 _elementSource(elementSource),
 _criterion(criterion)
 {
@@ -47,7 +47,8 @@ boost::shared_ptr<OGRSpatialReference> ElementCriterionInputStream::getProjectio
 
 ElementPtr ElementCriterionInputStream::readNextElement()
 {
-  do {
+  do
+  {
     ElementPtr e = _elementSource->readNextElement();
     if (_criterion->isSatisfied(e))
     {
@@ -57,6 +58,5 @@ ElementPtr ElementCriterionInputStream::readNextElement()
 
   return ElementPtr();
 }
-
 
 }

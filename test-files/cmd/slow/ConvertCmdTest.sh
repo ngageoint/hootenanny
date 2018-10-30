@@ -4,12 +4,15 @@ set -e
 rm -rf test-output/cmd/ConvertCmdTest
 mkdir -p test-output/cmd/ConvertCmdTest
 
+#TODO: multiple OSM to one
+
 echo "PBF to OSM..."
 hoot convert test-files/ToyTestA.osm.pbf test-output/cmd/ConvertCmdTest/ToyTestA.osm
 cat test-output/cmd/ConvertCmdTest/ToyTestA.osm
 
 echo "PBF to SHP..."
 hoot convert test-files/ToyTestA.osm.pbf test-output/cmd/ConvertCmdTest/ToyTestA.shp
+
 echo "SHP to OSM..."
 # comparing shapefiles is kinda hard. We'll convert it to a .osm file first.
 hoot convert test-output/cmd/ConvertCmdTest/ToyTestA.shp test-output/cmd/ConvertCmdTest/ToyTestAShp.osm

@@ -163,6 +163,9 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
     
 ### Data Transformation
+
+    # Combine multiple OSM files into a single file:
+    hoot convert input1.osm input2.osm output.osm
     
     # Convert a geonames file to an OSM file
     hoot convert input.geonames output.osm

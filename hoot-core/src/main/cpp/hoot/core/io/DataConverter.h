@@ -108,7 +108,7 @@ private:
 
   void _convertToOgr(const QString input, const QString output);
   void _convertFromOgr(const QStringList inputs, const QString output);
-  void _convert(const QString input, const QString output);
+  void _convert(const QStringList inputs, const QString output);
   void _exportToShapeWithCols(const QString output, const QStringList cols, OsmMapPtr map);
 
   void _fillElementCache(QString inputUrl,
