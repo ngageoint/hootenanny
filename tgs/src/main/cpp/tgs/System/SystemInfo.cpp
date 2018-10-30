@@ -43,7 +43,7 @@
 #include <string>
 #include <sstream>
 
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 
 namespace Tgs
 {

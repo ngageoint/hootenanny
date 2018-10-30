@@ -37,7 +37,7 @@
 // Tgs
 #include <tgs/HashMap.h>
 
-#include "TileWorker.h"
+#include <hoot/core/conflate/tile/TileWorker.h>
 
 namespace hoot
 {

@@ -30,10 +30,9 @@
 // Standard
 #include <deque>
 
-#include "linearreference/WaySublineMatchString.h"
-
 // hoot
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 
 namespace hoot
 {

@@ -27,8 +27,8 @@
 #ifndef MULTITHREADEDRANDOMFORESTMANAGER_H
 #define MULTITHREADEDRANDOMFORESTMANAGER_H
 
-#include "BaseRandomForestManager.h"
-#include "MultithreadedRandomForest.h"
+#include <tgs/RandomForest/BaseRandomForestManager.h>
+#include <tgs/RandomForest/MultithreadedRandomForest.h>
 
 namespace Tgs
 {

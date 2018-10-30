@@ -30,7 +30,7 @@
 // Standard Includes
 using namespace std;
 
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 
 namespace Tgs
 {

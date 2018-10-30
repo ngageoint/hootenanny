@@ -27,8 +27,7 @@
 #ifndef CONTAINSNODECRITERION_H
 #define CONTAINSNODECRITERION_H
 
-#include "ElementCriterion.h"
-
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -38,7 +37,6 @@ namespace hoot
  */
 class ContainsNodeCriterion : public ElementCriterion
 {
-
 public:
 
   ContainsNodeCriterion() {}

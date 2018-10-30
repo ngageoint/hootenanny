@@ -28,7 +28,7 @@
 #define FEATUREDEFINITION_H
 
 // Qt
-class QString;
+#include <QString>
 
 // Standard
 #include <vector>

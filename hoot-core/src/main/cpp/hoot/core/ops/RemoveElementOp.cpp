@@ -24,12 +24,13 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
 #include "RemoveElementOp.h"
-#include "RemoveNodeOp.h"
-#include "RemoveWayOp.h"
-#include "RemoveRelationOp.h"
 
 // hoot
+#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot

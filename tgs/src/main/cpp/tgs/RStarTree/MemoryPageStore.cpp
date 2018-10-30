@@ -25,9 +25,9 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-
 #include "MemoryPageStore.h"
-#include "Page.h"
+
+#include <tgs/RStarTree/Page.h>
 
 namespace Tgs
 {

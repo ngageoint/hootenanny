@@ -29,8 +29,8 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
-#include "ReleaseTest.h"
-#include "PertyTest.h"
+#include <hoot/rnd/conflate/opt/PertyTest.h>
+#include <hoot/rnd/conflate/opt/ReleaseTest.h>
 
 // Qt
 #include <QDir>

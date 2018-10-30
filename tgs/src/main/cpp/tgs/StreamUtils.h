@@ -44,9 +44,9 @@ namespace NEWMAT {
 }
 #endif
 
-#include "HashMap.h"
-#include "TgsException.h"
-#include "TgsExport.h"
+#include <tgs/HashMap.h>
+#include <tgs/TgsException.h>
+#include <tgs/TgsExport.h>
 
 #ifdef QT_CORE_LIB
 # include <QHash>
@@ -63,7 +63,7 @@ namespace Tgs
   TGS_EXPORT std::ostream& operator<<(std::ostream & o, const NEWMAT::Matrix& matrix);
 #endif
 
-#include "StreamUtils.hh"
+#include <tgs/StreamUtils.hh>
 
 }
 

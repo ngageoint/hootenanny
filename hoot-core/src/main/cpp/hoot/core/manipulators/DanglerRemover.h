@@ -28,17 +28,9 @@
 #ifndef DANGLERREMOVER_H
 #define DANGLERREMOVER_H
 
-#include <hoot/core/conflate/Conflator.h>
-#include "WayManipulator.h"
-
-// GEOS
-namespace geos {
-  namespace geom {
-    class LineString;
-  }
-}
-
 // Hoot
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/manipulators/WayManipulator.h>
 #include <hoot/core/util/Units.h>
 
 namespace hoot

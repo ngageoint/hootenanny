@@ -28,7 +28,7 @@
 #define OSMAPIDBSQLCHANGESETAPPLIER_H
 
 // hoot
-#include "OsmApiDb.h"
+#include <hoot/core/io/OsmApiDb.h>
 
 namespace hoot
 {

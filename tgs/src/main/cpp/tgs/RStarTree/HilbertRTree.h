@@ -25,11 +25,10 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-
 #ifndef __TGS__HILBERT_R_TREE_H__
 #define __TGS__HILBERT_R_TREE_H__
 
-#include "RStarTree.h"
+#include <tgs/RStarTree/RStarTree.h>
 
 namespace Tgs
 {

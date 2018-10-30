@@ -38,11 +38,11 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 
-#include "Way.h"
 
 using namespace geos::geom;
 using namespace std;

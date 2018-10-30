@@ -27,7 +27,7 @@
 
 #include "ShortestPath.h"
 
-#include "DirectedGraph.h"
+#include <hoot/core/scoring/DirectedGraph.h>
 
 namespace hoot
 {

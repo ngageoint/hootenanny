@@ -27,7 +27,7 @@
 #ifndef MAXIMALNEARESTSUBLINEMATCHER_H
 #define MAXIMALNEARESTSUBLINEMATCHER_H
 
-#include "SublineMatcher.h"
+#include <hoot/core/algorithms/SublineMatcher.h>
 
 namespace hoot
 {

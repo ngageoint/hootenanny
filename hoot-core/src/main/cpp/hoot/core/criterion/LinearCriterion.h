@@ -28,7 +28,7 @@
 #ifndef LINEARCRITERION_H
 #define LINEARCRITERION_H
 
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {

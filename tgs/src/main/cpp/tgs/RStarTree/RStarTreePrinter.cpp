@@ -27,8 +27,8 @@
 
 #include "RStarTreePrinter.h"
 
-#include "RStarTree.h"
-#include "RTreeNode.h"
+#include <tgs/RStarTree/RStarTree.h>
+#include <tgs/RStarTree/RTreeNode.h>
 
 using namespace std;
 

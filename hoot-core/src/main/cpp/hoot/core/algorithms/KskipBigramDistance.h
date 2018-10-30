@@ -41,8 +41,6 @@
 namespace hoot
 {
 
-class HootException;
-
 /** Work based on:
  *  A Closer Look at Skip-gram Modelling
  *  David Guthrie, Ben Allison, Wei Liu, Louise Guthrie, Yorick Wilks

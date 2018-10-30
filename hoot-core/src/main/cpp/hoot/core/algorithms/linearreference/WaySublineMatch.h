@@ -27,7 +27,7 @@
 #ifndef WAYMATCHLOCATION_H
 #define WAYMATCHLOCATION_H
 
-#include "WaySubline.h"
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 namespace hoot
 {

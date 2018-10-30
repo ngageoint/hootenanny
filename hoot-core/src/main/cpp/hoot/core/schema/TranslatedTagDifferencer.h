@@ -27,13 +27,12 @@
 #ifndef TRANSLATEDTAGDIFFERENCER_H
 #define TRANSLATEDTAGDIFFERENCER_H
 
-#include "TagDifferencer.h"
-
 // boost
 #include <boost/shared_ptr.hpp>
 
 // hoot
 #include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt

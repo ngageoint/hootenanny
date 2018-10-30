@@ -28,7 +28,7 @@
 #ifndef ELEMENTLISTENER_H
 #define ELEMENTLISTENER_H
 
-#include "Element.h"
+#include <hoot/core/elements/Element.h>
 
 namespace hoot {
 

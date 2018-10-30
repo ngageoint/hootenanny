@@ -27,7 +27,7 @@
 #ifndef NAIVEWAYMATCHSTRINGMAPPING_H
 #define NAIVEWAYMATCHSTRINGMAPPING_H
 
-#include "WayMatchStringMapping.h"
+#include <hoot/core/algorithms/linearreference/WayMatchStringMapping.h>
 
 namespace hoot
 {

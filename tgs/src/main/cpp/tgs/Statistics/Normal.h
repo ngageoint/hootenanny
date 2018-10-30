@@ -28,7 +28,7 @@
 #ifndef NORMAL_H
 #define NORMAL_H
 
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {

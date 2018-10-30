@@ -31,8 +31,8 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Settings.h>
-#include "RegressionTestSuite.h"
-#include "AbstractRegressionTest.h"
+#include <hoot/rnd/conflate/opt/RegressionTestSuite.h>
+#include <hoot/rnd/conflate/opt/AbstractRegressionTest.h>
 
 // Qt
 #include <QFileInfo>

@@ -14,6 +14,7 @@ TEMPLATE = lib
 DEPENDPATH += \
     ../tbs/src/main/cpp/ \
     ../tgs/src/main/cpp/ \
+    ../hoot-js/src/main/cpp/ \
     src/main/cpp/ \
 
 INCLUDEPATH += \

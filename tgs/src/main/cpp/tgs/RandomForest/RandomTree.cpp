@@ -40,7 +40,7 @@
 #include <vector>
 
 //TGS Includes
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 #include <tgs/Statistics/Random.h>
 
 namespace Tgs

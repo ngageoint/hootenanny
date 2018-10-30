@@ -28,12 +28,11 @@
 #define COLUMN_H
 
 // hoot
+#include <hoot/core/io/schema/StrictChecking.h>
 #include <hoot/core/util/HootException.h>
 
 // Qt
 #include <QVariant>
-
-#include "StrictChecking.h"
 
 namespace hoot
 {

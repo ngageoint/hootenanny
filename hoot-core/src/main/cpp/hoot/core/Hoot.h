@@ -59,7 +59,7 @@ public:
   /**
    * Load the specified library if it exists using QLibrary.
    */
-  void loadLibrary(QString name);
+  void loadLibrary(const QString& name);
 
   /**
    * Reinitialize hootenanny based on configuration changes.

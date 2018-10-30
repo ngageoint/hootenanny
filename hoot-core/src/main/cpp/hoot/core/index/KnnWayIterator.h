@@ -41,7 +41,6 @@ namespace hoot
 {
 
 class Way;
-class OsmMapIndex;
 
 /**
  */

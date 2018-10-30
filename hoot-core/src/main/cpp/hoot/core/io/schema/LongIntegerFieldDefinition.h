@@ -30,7 +30,7 @@
 // Standard
 #include <set>
 
-#include "FieldDefinition.h"
+#include <hoot/core/io/schema/FieldDefinition.h>
 
 namespace hoot
 {

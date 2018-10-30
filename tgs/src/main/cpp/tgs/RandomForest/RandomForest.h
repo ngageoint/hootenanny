@@ -36,10 +36,10 @@
 #include <vector>
 
 //Urgent Includes
-#include "../TgsExport.h"
-#include "BaseRandomForest.h"
-#include "DataFrame.h"
-#include "RandomTree.h"
+#include <tgs/TgsExport.h>
+#include <tgs/RandomForest/BaseRandomForest.h>
+#include <tgs/RandomForest/DataFrame.h>
+#include <tgs/RandomForest/RandomTree.h>
 
 namespace Tgs
 {

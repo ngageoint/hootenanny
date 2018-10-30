@@ -37,9 +37,9 @@
 #include <queue>
 #include <set>
 
-#include "../TgsException.h"
-#include "MemoryPageStore.h"
-#include "FilePageStore.h"
+#include <tgs/TgsException.h>
+#include <tgs/RStarTree/MemoryPageStore.h>
+#include <tgs/RStarTree/FilePageStore.h>
 
 using namespace Tgs;
 

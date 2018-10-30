@@ -27,7 +27,7 @@
 #ifndef OSM_SCHEMAFILELOADER_H
 #define OSM_SCHEMAFILELOADER_H
 
-#include "OsmSchema.h"
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {

@@ -28,7 +28,7 @@
 #ifndef STRINGDISTANCECONSUMER_H
 #define STRINGDISTANCECONSUMER_H
 
-#include "StringDistance.h"
+#include <hoot/core/algorithms/StringDistance.h>
 
 namespace hoot
 {

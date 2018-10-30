@@ -33,11 +33,11 @@
 // GDAL
 class OGRSpatialReference;
 
-#include "ElementId.h"
-#include "Element.h"
-#include "Node.h"
-#include "Way.h"
-#include "Relation.h"
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Relation.h>
 
 namespace hoot
 {

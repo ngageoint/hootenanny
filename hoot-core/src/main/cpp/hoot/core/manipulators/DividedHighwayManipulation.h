@@ -28,12 +28,11 @@
 #ifndef DIVIDEDHIGHWAYMANIPULATION_H
 #define DIVIDEDHIGHWAYMANIPULATION_H
 
-#include "Manipulation.h"
-
 // GEOS
 #include <geos/geom/Geometry.h>
 
 // Hoot
+#include <hoot/core/manipulators/Manipulation.h>
 #include <hoot/core/util/Units.h>
 
 namespace hoot

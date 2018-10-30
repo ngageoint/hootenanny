@@ -28,7 +28,7 @@
 #ifndef __TGS__VERSION_H__
 #define __TGS__VERSION_H__
 
-#include "TgsExport.h"
+#include <tgs/TgsExport.h>
 
 #ifdef SWIG
 %{

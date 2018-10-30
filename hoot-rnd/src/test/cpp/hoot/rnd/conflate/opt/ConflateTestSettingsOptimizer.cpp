@@ -27,11 +27,11 @@
 #include "ConflateTestSettingsOptimizer.h"
 
 // Hoot
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
-#include "AbstractRegressionTestFitnessFunction.h"
+#include <hoot/rnd/conflate/opt/AbstractRegressionTestFitnessFunction.h>
 
 // Qt
 #include <QTextStream>

@@ -50,7 +50,7 @@
 #include <string>
 #include <vector>
 
-#include "geom2d.h"
+#include <tgs/DelaunayTriangulation/geom2d.h>
 
 namespace Tgs
 {

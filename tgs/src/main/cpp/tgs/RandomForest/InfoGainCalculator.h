@@ -28,9 +28,8 @@
 #ifndef __INFO_GAIN_CALCULATOR_H__
 #define __INFO_GAIN_CALCULATOR_H__
 
-#include "DataFrame.h"
-
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
+#include <tgs/RandomForest/DataFrame.h>
 
 namespace Tgs
 {

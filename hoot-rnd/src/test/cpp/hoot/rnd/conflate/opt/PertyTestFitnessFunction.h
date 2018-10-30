@@ -29,7 +29,7 @@
 #define __PERTYTESTFITNESSFUNCTION_H__
 
 // Hoot
-#include "AbstractRegressionTestFitnessFunction.h"
+#include <hoot/rnd/conflate/opt/AbstractRegressionTestFitnessFunction.h>
 
 namespace hoot
 {

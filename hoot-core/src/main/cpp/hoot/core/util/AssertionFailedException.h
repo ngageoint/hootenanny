@@ -29,7 +29,7 @@
 #define ASSERTIONFAILEDEXCEPTION_H
 
 // Hoot
-#include "HootException.h"
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {

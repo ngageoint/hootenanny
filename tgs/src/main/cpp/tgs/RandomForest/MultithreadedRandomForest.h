@@ -30,7 +30,7 @@
 //Qt Includes
 #include <QDomElement>
 
-#include "BaseRandomForest.h"
+#include <tgs/RandomForest/BaseRandomForest.h>
 
 namespace Tgs
 {

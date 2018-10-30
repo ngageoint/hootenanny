@@ -33,8 +33,8 @@
 // Qt includes
 #include <QFile>
 
-#include "DataFrame.h"
-#include "RandomTree.h"
+#include <tgs/RandomForest/DataFrame.h>
+#include <tgs/RandomForest/RandomTree.h>
 
 namespace Tgs
 {

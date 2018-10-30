@@ -27,14 +27,11 @@
 #ifndef BIGMAPSTXXL_H
 #define BIGMAPSTXXL_H
 
-#include "BasicBloomFilter.h"
-
 // Standard
 #include <memory>
 #include <sstream>
 
 // STXXL
-//#include <stxxl/bits/mng/diskallocator.h>
 #include <stxxl/map>
 #include <stxxl/vector>
 
@@ -43,8 +40,9 @@
 
 // TGS
 #include <tgs/TgsConfig.h>
-#include <tgs/System/DisableCout.h>
 #include <tgs/TgsException.h>
+#include <tgs/BigContainers/BasicBloomFilter.h>
+#include <tgs/System/DisableCout.h>
 
 namespace Tgs
 {

@@ -26,7 +26,7 @@
  */
 #include "WaySublineMatch.h"
 
-#include "WaySublineCollection.h"
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 namespace hoot
 {

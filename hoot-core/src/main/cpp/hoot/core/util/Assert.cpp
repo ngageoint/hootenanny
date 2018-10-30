@@ -27,7 +27,7 @@
 
 #include "Assert.h"
 
-#include "AssertionFailedException.h"
+#include <hoot/core/util/AssertionFailedException.h>
 
 namespace hoot
 {

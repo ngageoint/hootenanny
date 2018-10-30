@@ -38,8 +38,8 @@
 #include <utility>
 #include <vector>
 
-#include "BaseRandomForestManager.h"
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
+#include <tgs/RandomForest/BaseRandomForestManager.h>
 
 namespace Tgs
 {

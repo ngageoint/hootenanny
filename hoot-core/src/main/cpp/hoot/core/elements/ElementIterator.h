@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ELEMENTPROVIDER_H
-#define ELEMENTPROVIDER_H
+#ifndef ELEMENTITERATOR_H
+#define ELEMENTITERATOR_H
 
 
 // Standard
@@ -77,4 +77,4 @@ private:
 
 }
 
-#endif // ELEMENTPROVIDER_H
+#endif // ELEMENTITERATOR_H

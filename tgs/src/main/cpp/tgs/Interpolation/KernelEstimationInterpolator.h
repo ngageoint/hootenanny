@@ -30,7 +30,7 @@
 // Qt
 #include <QIODevice>
 
-#include "BaseInterpolator.h"
+#include <tgs/Interpolation/BaseInterpolator.h>
 
 namespace Tgs
 {

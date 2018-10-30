@@ -28,11 +28,11 @@
 #include "DictionaryTranslator.h"
 
 // Hoot
+#include <hoot/core/language/TranslateDictionary.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include "TranslateDictionary.h"
 
 // Qt
 #include <QMap>

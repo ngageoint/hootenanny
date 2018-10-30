@@ -31,7 +31,7 @@
 #include <QMap>
 #include <QSet>
 
-#include "StateDescription.h"
+#include <tgs/Optimization/StateDescription.h>
 
 namespace Tgs
 {

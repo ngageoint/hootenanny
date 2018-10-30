@@ -40,8 +40,6 @@
 namespace hoot
 {
 
-class Way;
-
 class ProbabilityOfMatch
 {
 public:

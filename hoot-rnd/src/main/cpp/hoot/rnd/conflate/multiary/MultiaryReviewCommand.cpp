@@ -26,11 +26,15 @@
  */
 
 #include "MultiaryReviewCommand.h"
+
+//  Std
 #include <sstream>
-#include "hoot/core/io/OsmJsonWriter.h"
-#include "hoot/core/io/OsmJsonReader.h"
-#include "hoot/core/util/Log.h"
-#include "hoot/core/visitors/CalculateHashVisitor.h"
+
+//  Hoot
+#include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>

@@ -25,9 +25,10 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include <hoot/core/util/Log.h>
-#include "ElementInputStream.h"
 #include "ElementOutputStream.h"
+
+#include <hoot/core/util/Log.h>
+#include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot
 {

@@ -25,12 +25,11 @@
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-
 #include "Element.h"
 
-#include "ElementListener.h"
+// Hoot
+#include <hoot/core/elements/ElementListener.h>
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {

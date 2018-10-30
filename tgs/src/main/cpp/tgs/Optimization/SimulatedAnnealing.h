@@ -31,10 +31,9 @@
 #include <QSet>
 
 // Tgs
+#include <tgs/Optimization/FitnessFunction.h>
+#include <tgs/Optimization/State.h>
 #include <tgs/Statistics/Random.h>
-
-#include "FitnessFunction.h"
-#include "State.h"
 
 namespace Tgs
 {

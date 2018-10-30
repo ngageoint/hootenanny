@@ -28,8 +28,8 @@
 #include "WayHeading.h"
 
 // Hoot
-#include "WayDiscretizer.h"
-#include "linearreference/WayLocation.h"
+#include <hoot/core/algorithms/WayDiscretizer.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 
 // Standard
 #include <math.h>

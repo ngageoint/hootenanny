@@ -27,7 +27,7 @@
 #ifndef CONSTELEMENTCONSUMER_H
 #define CONSTELEMENTCONSUMER_H
 
-#include "ElementConsumer.h"
+#include <hoot/core/elements/ElementConsumer.h>
 
 namespace hoot
 {

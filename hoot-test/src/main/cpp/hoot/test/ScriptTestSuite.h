@@ -27,7 +27,7 @@
 #ifndef SCRIPTTESTSUITE_H
 #define SCRIPTTESTSUITE_H
 
-#include "ScriptTest.h"
+#include <hoot/test/ScriptTest.h>
 
 // Standard
 #include <vector>

@@ -32,10 +32,6 @@
 
 // Hoot
 #include <hoot/core/util/Units.h>
-namespace hoot
-{
-  class OsmMap;
-}
 
 // Standard
 #include <deque>
@@ -44,6 +40,7 @@ namespace hoot
 {
 
 class Manipulation;
+class OsmMap;
 class Status;
 
 /**

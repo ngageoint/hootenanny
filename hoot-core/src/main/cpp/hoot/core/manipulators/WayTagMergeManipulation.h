@@ -28,7 +28,7 @@
 #ifndef WAYTAGMERGEMANIPULATION_H
 #define WAYTAGMERGEMANIPULATION_H
 
-#include "WayMergeManipulation.h"
+#include <hoot/core/manipulators/WayMergeManipulation.h>
 
 namespace hoot
 {

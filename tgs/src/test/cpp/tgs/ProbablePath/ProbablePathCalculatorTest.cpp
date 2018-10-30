@@ -36,9 +36,10 @@ using namespace std;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// #include "../../../../Sbase/src/RasterIo/GdalRasterLoader.h"
-
+//  TGS test
 #include "../PluginFactory.h"
+
+//  TGS
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
 
 namespace Tgs

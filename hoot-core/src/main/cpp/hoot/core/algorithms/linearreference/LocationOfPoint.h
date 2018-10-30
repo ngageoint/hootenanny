@@ -33,7 +33,7 @@
 #include <geos/geom/LineSegment.h>
 
 // Hoot
-#include "WayLocation.h"
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 
 namespace hoot
 {

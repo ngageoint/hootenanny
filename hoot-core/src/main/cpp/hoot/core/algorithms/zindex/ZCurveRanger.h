@@ -28,8 +28,8 @@
 #define ZCURVERANGER_H
 
 //Hoot Includes
-#include "LongBox.h"
-#include "ZValue.h"
+#include <hoot/core/algorithms/zindex/LongBox.h>
+#include <hoot/core/algorithms/zindex/ZValue.h>
 
 namespace hoot
 {

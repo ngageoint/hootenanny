@@ -30,7 +30,7 @@
 // Standard Includes
 #include <malloc.h>
 
-#include "PageStore.h"
+#include <tgs/RStarTree/PageStore.h>
 
 namespace Tgs
 {

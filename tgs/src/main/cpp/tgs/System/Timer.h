@@ -27,7 +27,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "Time.h"
+#include <tgs/System/Time.h>
 
 namespace Tgs
 {

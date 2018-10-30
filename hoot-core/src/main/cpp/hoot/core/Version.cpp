@@ -28,7 +28,7 @@
 #include "Version.h"
 
 // hoot
-#include "VersionDefines.h"
+#include <hoot/core/VersionDefines.h>
 
 // Qt
 #include <QString>

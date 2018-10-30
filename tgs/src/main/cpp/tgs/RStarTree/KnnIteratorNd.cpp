@@ -37,7 +37,7 @@
 #include <queue>
 #include <set>
 
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 
 using namespace Tgs;
 

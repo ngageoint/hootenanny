@@ -27,8 +27,8 @@
 #ifndef WAYMATCHSTRINGMAPPINGCONVERTER_H
 #define WAYMATCHSTRINGMAPPINGCONVERTER_H
 
-#include "WayMatchStringMapping.h"
-#include "WaySublineMatchString.h"
+#include <hoot/core/algorithms/linearreference/WayMatchStringMapping.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 
 namespace hoot
 {

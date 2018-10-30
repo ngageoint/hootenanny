@@ -27,7 +27,7 @@
 #include "RStarTreeWrapper.h"
 
 //TGS Includes
-#include "InternalRStarTreeWrapper.h"
+#include <tgs/RStarTree/InternalRStarTreeWrapper.h>
 
 namespace Tgs
 {

@@ -28,7 +28,7 @@
 #ifndef RSTARTREEPRINTER_H
 #define RSTARTREEPRINTER_H
 
-#include "RStarTree.h"
+#include <tgs/RStarTree/RStarTree.h>
 
 // Standard
 #include <iostream>

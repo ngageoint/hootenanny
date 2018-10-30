@@ -27,7 +27,7 @@
 #ifndef FINDNODESINWAYFACTORY_H
 #define FINDNODESINWAYFACTORY_H
 
-#include "GeometryConverter.h"
+#include <hoot/core/util/GeometryConverter.h>
 
 namespace hoot
 {

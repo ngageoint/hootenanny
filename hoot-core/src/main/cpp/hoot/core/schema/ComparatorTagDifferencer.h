@@ -27,7 +27,7 @@
 #ifndef COMPARATORTAGDIFFERENCER_H
 #define COMPARATORTAGDIFFERENCER_H
 
-#include "TagDifferencer.h"
+#include <hoot/core/schema/TagDifferencer.h>
 
 namespace hoot
 {

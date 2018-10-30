@@ -27,7 +27,7 @@
 #ifndef FITNESSFUNCTION_H
 #define FITNESSFUNCTION_H
 
-#include "State.h"
+#include <tgs/Optimization/State.h>
 
 namespace Tgs
 {

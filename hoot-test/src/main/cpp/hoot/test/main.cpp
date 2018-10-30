@@ -55,6 +55,8 @@ using namespace geos::geom;
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/v8Engine.h>
+#include <hoot/test/ProcessPool.h>
+#include <hoot/test/ScriptTestSuite.h>
 using namespace hoot;
 
 // Qt
@@ -70,9 +72,6 @@ using namespace std;
 
 // Tgs
 #include <tgs/System/Time.h>
-
-#include "ScriptTestSuite.h"
-#include "ProcessPool.h"
 
 typedef boost::shared_ptr<CppUnit::Test> TestPtr;
 

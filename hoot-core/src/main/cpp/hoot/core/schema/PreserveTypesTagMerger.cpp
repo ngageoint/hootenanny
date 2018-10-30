@@ -27,10 +27,9 @@
 #include "PreserveTypesTagMerger.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
-
-#include "TagComparator.h"
+#include <hoot/core/schema/TagComparator.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QStringBuilder>

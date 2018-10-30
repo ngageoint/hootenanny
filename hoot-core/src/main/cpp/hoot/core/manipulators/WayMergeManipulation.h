@@ -28,14 +28,15 @@
 #ifndef WAYMERGEMANIPULATION_H
 #define WAYMERGEMANIPULATION_H
 
-#include "Manipulation.h"
-#include "ManipulationDetails.h"
+#include <hoot/core/manipulators/Manipulation.h>
+#include <hoot/core/manipulators/ManipulationDetails.h>
 
 // Hoot
 #include <hoot/core/util/Units.h>
 
 namespace hoot
 {
+
 class Way;
 
 class WayMergeManipulation : public Manipulation, public ManipulationDetails

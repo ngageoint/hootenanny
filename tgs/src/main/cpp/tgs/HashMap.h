@@ -46,7 +46,7 @@
 #include <QHash>
 #include <QString>
 
-#include "SharedPtr.h"
+#include <tgs/SharedPtr.h>
 
 namespace Tgs
 {

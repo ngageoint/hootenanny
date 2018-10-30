@@ -27,7 +27,7 @@
 #ifndef HIGHWAYEXPERTCLASSIFIER_H
 #define HIGHWAYEXPERTCLASSIFIER_H
 
-#include "HighwayClassifier.h"
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
 
 namespace hoot
 {

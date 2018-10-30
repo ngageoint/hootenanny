@@ -28,7 +28,7 @@
 #ifndef WAYTAGMERGER_H
 #define WAYTAGMERGER_H
 
-#include "WayMerger.h"
+#include <hoot/core/manipulators/WayMerger.h>
 
 namespace hoot
 {

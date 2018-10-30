@@ -28,6 +28,6 @@
 #ifndef NOTIMPLEMENTEDEXCEPTION_H
 #define NOTIMPLEMENTEDEXCEPTION_H
 
-#include "HootException.h"
+#include <hoot/core/util/HootException.h>
 
 #endif // NOTIMPLEMENTEDEXCEPTION_H

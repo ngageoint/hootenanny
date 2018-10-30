@@ -26,7 +26,7 @@
  */
 #include "RandomForestThread.h"
 
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 
 namespace Tgs
 {

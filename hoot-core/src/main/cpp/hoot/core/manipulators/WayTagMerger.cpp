@@ -28,9 +28,9 @@
 #include "WayTagMerger.h"
 
 // Hoot
+#include <hoot/core/manipulators/WayTagMergeManipulation.h>
 #include <hoot/core/util/Factory.h>
 
-#include "WayTagMergeManipulation.h"
 
 namespace hoot
 {

@@ -31,7 +31,7 @@
 #include <QSqlQuery>
 #include <QStringList>
 
-#include "BulkDelete.h"
+#include <hoot/core/io/BulkDelete.h>
 
 class QSqlDatabase;
 

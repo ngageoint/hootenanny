@@ -29,12 +29,10 @@
 
 // hoot
 #include <hoot/core/elements/ElementIterator.h>
-#include "OsmPbfReader.h"
+#include <hoot/core/io/OsmPbfReader.h>
 
 namespace hoot
 {
-
-class OsmPbfReader;
 
 class PbfElementIterator : public ElementIterator
 {

@@ -34,15 +34,14 @@
 using namespace geos::geom;
 
 // Hoot
+#include <hoot/core/algorithms/Distance.h>
+#include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/elements/Way.h>
 
 // Standard
 #include <iostream>
 #include <vector>
 using namespace std;
-
-#include "Distance.h"
-#include "WayDiscretizer.h"
 
 // TGS
 #include <tgs/StreamUtils.h>

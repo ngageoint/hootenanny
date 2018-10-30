@@ -40,10 +40,6 @@ namespace geos {
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Units.h>
-namespace hoot {
-  class Way;
-  class WayLocation;
-}
 
 // Standard
 #include <vector>
@@ -53,6 +49,8 @@ namespace hoot {
 
 namespace hoot
 {
+
+class WayLocation;
 
 class WayDiscretizer
 {

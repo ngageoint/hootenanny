@@ -27,9 +27,8 @@
 #ifndef MEANWORDSETDISTANCE_H
 #define MEANWORDSETDISTANCE_H
 
-#include "StringDistanceConsumer.h"
-
 // hoot
+#include <hoot/core/algorithms/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 
 // Tgs

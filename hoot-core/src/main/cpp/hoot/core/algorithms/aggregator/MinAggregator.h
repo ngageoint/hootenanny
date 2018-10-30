@@ -27,7 +27,7 @@
 #ifndef MINAGGREGATOR_H
 #define MINAGGREGATOR_H
 
-#include "ValueAggregator.h"
+#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 
 namespace hoot
 {

@@ -30,7 +30,7 @@
 // Standard
 #include <string>
 
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {

@@ -29,11 +29,11 @@
 
 // Tgs
 #include <tgs/SharedPtr.h>
-
-#include "Interpolator.h"
+#include <tgs/Interpolation/Interpolator.h>
 
 namespace Tgs
 {
+
 class HilbertRTree;
 
 class BaseInterpolator : public Interpolator

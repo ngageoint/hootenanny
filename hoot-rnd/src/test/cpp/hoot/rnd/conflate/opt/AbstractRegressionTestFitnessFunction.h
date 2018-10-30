@@ -29,7 +29,7 @@
 #define __ABSTRACTREGRESSIONTESTFITNESSFUNCTION_H__
 
 // Hoot
-#include "AbstractTestFitnessFunction.h"
+#include <hoot/rnd/conflate/opt/AbstractTestFitnessFunction.h>
 
 // Qt
 #include <QMap>

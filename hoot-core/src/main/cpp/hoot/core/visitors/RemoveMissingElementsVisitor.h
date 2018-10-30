@@ -28,12 +28,10 @@
 #define REMOVEMISSINGELEMENTSVISITOR_H
 
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include "ReportMissingElementsVisitor.h"
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 namespace hoot
 {
-
-class ReportMissingElementsVisitor;
 
 class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {

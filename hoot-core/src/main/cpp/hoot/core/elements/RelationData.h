@@ -27,8 +27,8 @@
 #ifndef RELATIONDATA_H
 #define RELATIONDATA_H
 
-#include "ElementData.h"
-#include "ElementId.h"
+#include <hoot/core/elements/ElementData.h>
+#include <hoot/core/elements/ElementId.h>
 
 // Standard
 #include <ostream>

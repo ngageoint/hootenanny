@@ -30,17 +30,17 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
+#include <hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistance.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-#include "PoiPolygonDistance.h"
-#include "PoiPolygonAdvancedMatcher.h"
-#include "PoiPolygonDistanceTruthRecorder.h"
-#include "extractors/PoiPolygonDistanceExtractor.h"
-#include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
-#include "PoiPolygonTagIgnoreListReader.h"
-#include "PoiPolygonReviewReducer.h"
 
 using namespace std;
 

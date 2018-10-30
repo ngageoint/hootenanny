@@ -26,7 +26,8 @@
  */
 
 #include "RandomForestManager.h"
-#include "RandomForest.h"
+
+#include <tgs/RandomForest/RandomForest.h>
 
 //STD Includes
 #include <exception>

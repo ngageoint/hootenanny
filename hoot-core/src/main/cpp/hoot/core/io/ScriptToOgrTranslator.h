@@ -44,7 +44,6 @@
 namespace hoot
 {
 
-class Feature;
 class Schema;
 class Tags;
 

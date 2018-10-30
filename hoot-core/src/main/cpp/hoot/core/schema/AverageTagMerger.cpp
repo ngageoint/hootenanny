@@ -27,9 +27,8 @@
 #include "AverageTagMerger.h"
 
 // hoot
+#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
-
-#include "TagComparator.h"
 
 namespace hoot
 {

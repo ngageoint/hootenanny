@@ -27,7 +27,7 @@
 #ifndef __TGS__TIME_H__
 #define __TGS__TIME_H__
 
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {

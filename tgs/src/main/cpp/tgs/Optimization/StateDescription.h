@@ -30,7 +30,7 @@
 // Qt
 #include <QList>
 
-#include "VariableDescription.h"
+#include <tgs/Optimization/VariableDescription.h>
 
 namespace Tgs
 {

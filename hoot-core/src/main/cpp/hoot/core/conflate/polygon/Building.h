@@ -36,6 +36,8 @@
 namespace hoot
 {
 
+class OsmMap;
+
 class Building
 {
 public:

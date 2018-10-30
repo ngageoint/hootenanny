@@ -33,8 +33,8 @@
 #include <math.h>
 using namespace std;
 
-#include "../TgsException.h"
-#include "RTreeNodeStore.h"
+#include <tgs/TgsException.h>
+#include <tgs/RStarTree/RTreeNodeStore.h>
 
 using namespace Tgs;
 

@@ -31,7 +31,7 @@
 #include <QSqlQuery>
 #include <QStringList>
 
-#include "BulkInsert.h"
+#include <hoot/core/io/BulkInsert.h>
 
 class QSqlDatabase;
 

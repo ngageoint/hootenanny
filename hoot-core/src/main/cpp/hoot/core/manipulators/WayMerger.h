@@ -28,24 +28,15 @@
 #ifndef WAYMERGER_H
 #define WAYMERGER_H
 
-#include <hoot/core/conflate/Conflator.h>
-#include "WayManipulator.h"
-
-// GEOS
-namespace geos {
-  namespace geom {
-    class LineString;
-  }
-}
-
 // Hoot
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/manipulators/WayManipulator.h>
 #include <hoot/core/util/Units.h>
 
 namespace hoot
 {
 
 class OsmMap;
-class Node;
 class Way;
 
 /**

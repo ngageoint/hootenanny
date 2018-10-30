@@ -27,7 +27,7 @@
 #ifndef EXACTTAGDIFFERENCER_H
 #define EXACTTAGDIFFERENCER_H
 
-#include "TagDifferencer.h"
+#include <hoot/core/schema/TagDifferencer.h>
 
 namespace hoot
 {

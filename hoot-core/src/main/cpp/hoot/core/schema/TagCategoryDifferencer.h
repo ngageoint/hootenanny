@@ -27,9 +27,8 @@
 #ifndef TAGCATEGORYDIFFERENCER_H
 #define TAGCATEGORYDIFFERENCER_H
 
-#include "TagFilteredDifferencer.h"
-
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/TagFilteredDifferencer.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

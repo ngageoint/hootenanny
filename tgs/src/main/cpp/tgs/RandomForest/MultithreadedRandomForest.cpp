@@ -34,7 +34,7 @@
 #include <QThreadPool>
 
 
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 
 namespace Tgs
 {

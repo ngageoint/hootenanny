@@ -32,7 +32,7 @@
 //Std Includes
 #include <cmath>
 
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 
 using namespace std;
 

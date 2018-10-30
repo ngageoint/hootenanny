@@ -29,7 +29,7 @@
 #define __CASETESTFITNESSFUNCTION_H__
 
 // Hoot
-#include "AbstractTestFitnessFunction.h"
+#include <hoot/rnd/conflate/opt/AbstractTestFitnessFunction.h>
 
 // Qt
 #include <QTemporaryFile>

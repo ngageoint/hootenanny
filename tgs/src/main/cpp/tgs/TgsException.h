@@ -28,7 +28,7 @@
 #ifndef __SA_URGENT_EXCEPTION_H__
 #define __SA_URGENT_EXCEPTION_H__
 
-#include "TgsExport.h"
+#include <tgs/TgsExport.h>
 
 //STD Includes
 #include <exception>

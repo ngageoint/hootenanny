@@ -36,13 +36,8 @@
 // Qt
 #include <QString>
 
-// Standard
-#include <memory>
-
 namespace hoot
 {
-
-class OsmMapOperation;
 
 /**
  * The ElementJs class wraps objects of type Element. It is an abstract base class.

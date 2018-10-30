@@ -29,7 +29,7 @@
 //Std Includes
 #include <algorithm>
 
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 
 namespace Tgs
 {

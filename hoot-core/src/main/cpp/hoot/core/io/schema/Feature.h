@@ -33,7 +33,7 @@
 // Tgs
 #include <tgs/SharedPtr.h>
 
-#include "StrictChecking.h"
+#include <hoot/core/io/schema/StrictChecking.h>
 
 namespace hoot
 {

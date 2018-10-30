@@ -27,9 +27,8 @@
 #ifndef MAXWORDSETDISTANCE_H
 #define MAXWORDSETDISTANCE_H
 
-#include "StringDistanceConsumer.h"
-
 // hoot
+#include <hoot/core/algorithms/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 
 // Tgs

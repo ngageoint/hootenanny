@@ -30,11 +30,10 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/rnd/conflate/multiary/MultiaryCluster.h>
 
 // Qt
 #include <QSet>
-
-#include "MultiaryCluster.h"
 
 namespace hoot
 {

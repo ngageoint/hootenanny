@@ -27,8 +27,7 @@
 #ifndef MAXIMALSUBLINEMATCHER_H
 #define MAXIMALSUBLINEMATCHER_H
 
-#include "SublineMatcher.h"
-
+#include <hoot/core/algorithms/SublineMatcher.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

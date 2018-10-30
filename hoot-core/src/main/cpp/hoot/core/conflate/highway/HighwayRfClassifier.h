@@ -27,7 +27,7 @@
 #ifndef HIGHWAYRFCLASSIFIER_H
 #define HIGHWAYRFCLASSIFIER_H
 
-#include "HighwayClassifier.h"
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>

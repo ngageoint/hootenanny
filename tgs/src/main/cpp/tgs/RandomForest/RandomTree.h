@@ -37,10 +37,10 @@
 #include <string>
 #include <vector>
 
-#include "../TgsException.h"
-#include "DataFrame.h"
-#include "InfoGainCalculator.h"
-#include "TreeNode.h"
+#include <tgs/TgsException.h>
+#include <tgs/RandomForest/DataFrame.h>
+#include <tgs/RandomForest/InfoGainCalculator.h>
+#include <tgs/RandomForest/TreeNode.h>
 
 namespace Tgs
 {

@@ -27,10 +27,9 @@
 #ifndef POSITIVEIDGENERATOR_H
 #define POSITIVEIDGENERATOR_H
 
-#include "IdGenerator.h"
-
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/IdGenerator.h>
 
 // standard
 #include <algorithm>

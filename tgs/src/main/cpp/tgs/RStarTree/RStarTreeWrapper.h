@@ -28,7 +28,7 @@
 #define __R_STAR_TREE_WRAPPER_H__
 
 //TGS Includes
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
 
 //Std Includes
 #include <vector>

@@ -27,7 +27,7 @@
 #ifndef SUBTREECALLBACK_H
 #define SUBTREECALLBACK_H
 
-#include "Node.h"
+#include <hoot/core/index/metric-hybrid/Node.h>
 
 // Standard
 #include <set>

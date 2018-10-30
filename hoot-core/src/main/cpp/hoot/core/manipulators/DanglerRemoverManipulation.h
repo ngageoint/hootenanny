@@ -28,9 +28,8 @@
 #ifndef DANGLERREMOVERMANIPULATION_H
 #define DANGLERREMOVERMANIPULATION_H
 
-#include "Manipulation.h"
-
 // Hoot
+#include <hoot/core/manipulators/Manipulation.h>
 #include <hoot/core/util/Units.h>
 
 namespace hoot

@@ -30,8 +30,7 @@
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "RngConsumer.h"
+#include <hoot/rnd/perty/RngConsumer.h>
 
 namespace hoot
 {

@@ -32,7 +32,7 @@
 #include <QRunnable>
 #include <QSharedPointer>
 
-#include "RandomTree.h"
+#include <tgs/RandomForest/RandomTree.h>
 
 namespace Tgs
 {

@@ -27,9 +27,8 @@
 #ifndef TRANSLATIONOP_H
 #define TRANSLATIONOP_H
 
-#include "OsmMapOperation.h"
-
 // hoot
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 
@@ -38,7 +37,6 @@
 
 namespace hoot
 {
-class ScriptTranslator;
 
 /**
  * Applies a translation to the given map.

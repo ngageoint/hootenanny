@@ -33,8 +33,7 @@
 // Tgs
 #include <tgs/TgsException.h>
 #include <tgs/DelaunayTriangulation/DelaunayTriangulation.h>
-
-#include "BaseInterpolator.h"
+#include <tgs/Interpolation/BaseInterpolator.h>
 
 namespace Tgs
 {

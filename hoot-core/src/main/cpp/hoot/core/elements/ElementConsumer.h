@@ -27,7 +27,7 @@
 #ifndef ELEMENTCONSUMER_H
 #define ELEMENTCONSUMER_H
 
-#include "Element.h"
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {

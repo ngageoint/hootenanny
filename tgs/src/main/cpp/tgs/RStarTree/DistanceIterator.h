@@ -25,73 +25,71 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-
 #ifndef __TGS__DISTANCE_ITERATOR_H__
 #define __TGS__DISTANCE_ITERATOR_H__
 
 // Standard Includes
 #include <list>
 
-#include "Box.h"
-#include "Iterator.h"
+#include <tgs/RStarTree/Box.h>
+#include <tgs/RStarTree/Iterator.h>
 
 namespace Tgs
 {
-  class BoxInternalData;
-  class RTreeNode;
-  class RStarTree;
 
-  /**
-   * This class returns all items from an RStarTree that fall within a specified distance.
-   * Distance is calculated as a simple euclidean distance in n dimensional space. This is probably
-   * not what you desire.
-   */
-  class TGS_EXPORT DistanceIterator : public Iterator
+class RStarTree;
+
+/**
+ * This class returns all items from an RStarTree that fall within a specified distance.
+ * Distance is calculated as a simple euclidean distance in n dimensional space. This is probably
+ * not what you desire.
+ */
+class TGS_EXPORT DistanceIterator : public Iterator
+{
+public:
+  DistanceIterator(RStarTree* tree, const std::vector<double>& point, double distance);
+
+  virtual ~DistanceIterator() {}
+
+  virtual const Box& getBox() const;
+
+  virtual int getId() const;
+
+  virtual bool hasNext();
+
+  virtual bool next();
+
+  /// @todo remove me
+  int nodeHits;
+  int distCalcs;
+
+protected:
+  double _calculateDistance(const std::vector<double>& point, const Box& box);
+
+private:
+  class Result
   {
   public:
-    DistanceIterator(RStarTree* tree, const std::vector<double>& point, double distance);
 
-    virtual ~DistanceIterator() {}
+    Result() : id(-1) { }
 
-    virtual const Box& getBox() const;
+    Result(const Box& box, int id) : box(box), id(id) { }
 
-    virtual int getId() const;
-
-    virtual bool hasNext();
-
-    virtual bool next();
-
-    /// @todo remove me
-    int nodeHits;
-    int distCalcs;
-
-  protected:
-    double _calculateDistance(const std::vector<double>& point, const Box& box);
-
-  private:
-    class Result
-    {
-    public:
-
-      Result() : id(-1) { }
-
-      Result(const Box& box, int id) : box(box), id(id) { }
-
-      Box box;
-      int id;
-    };
-
-    RStarTree* _tree;
-    std::vector<double> _point;
-    double _distance;
-    bool _done;
-    std::list<int> _pendingNodes;
-    std::list<Result> _pendingResults;
-    Result _currentResult;
-
-    void _populateNext();
+    Box box;
+    int id;
   };
-}
 
+  RStarTree* _tree;
+  std::vector<double> _point;
+  double _distance;
+  bool _done;
+  std::list<int> _pendingNodes;
+  std::list<Result> _pendingResults;
+  Result _currentResult;
+
+  void _populateNext();
+};
+
+}
 
 #endif

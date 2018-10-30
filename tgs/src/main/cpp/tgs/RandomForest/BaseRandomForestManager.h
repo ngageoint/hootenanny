@@ -33,8 +33,8 @@
 //Std Includes
 #include <fstream>
 
-#include "BaseRandomForest.h"
-#include "DataFrame.h"
+#include <tgs/RandomForest/BaseRandomForest.h>
+#include <tgs/RandomForest/DataFrame.h>
 
 namespace Tgs
 {

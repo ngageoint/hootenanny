@@ -27,7 +27,7 @@
 #ifndef TAGFILTEREDDIFFERENCER_H
 #define TAGFILTEREDDIFFERENCER_H
 
-#include "TagDifferencer.h"
+#include <hoot/core/schema/TagDifferencer.h>
 
 namespace hoot
 {

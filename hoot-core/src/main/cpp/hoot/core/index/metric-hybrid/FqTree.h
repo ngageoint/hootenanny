@@ -28,6 +28,8 @@
 #define FQTREE_H
 
 // hoot
+#include <hoot/core/index/metric-hybrid/Node.h>
+#include <hoot/core/index/metric-hybrid/SubTreeCallback.h>
 #include <hoot/core/util/Log.h>
 
 // Standard
@@ -37,9 +39,6 @@
 // TGS
 #include <tgs/HashMap.h>
 #include <tgs/Statistics/Random.h>
-
-#include "Node.h"
-#include "SubTreeCallback.h"
 
 namespace hoot
 {

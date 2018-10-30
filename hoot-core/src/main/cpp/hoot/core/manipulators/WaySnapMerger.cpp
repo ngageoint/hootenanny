@@ -27,9 +27,8 @@
 #include "WaySnapMerger.h"
 
 // Hoot
+#include <hoot/core/manipulators/WaySnapMergeManipulation.h>
 #include <hoot/core/util/Factory.h>
-
-#include "WaySnapMergeManipulation.h"
 
 namespace hoot
 {

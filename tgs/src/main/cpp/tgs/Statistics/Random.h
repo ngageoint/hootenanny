@@ -34,7 +34,7 @@
 //  Boost Includes
 #include <boost/shared_ptr.hpp>
 
-#include "tgs/TgsExport.h"
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {

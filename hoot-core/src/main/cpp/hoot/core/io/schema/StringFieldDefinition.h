@@ -27,7 +27,7 @@
 #ifndef STRINGFIELDDEFINITION_H
 #define STRINGFIELDDEFINITION_H
 
-#include "FieldDefinition.h"
+#include <hoot/core/io/schema/FieldDefinition.h>
 
 namespace hoot
 {

@@ -29,8 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-
-#include "MultiaryClusterAlgorithm.h"
+#include <hoot/rnd/conflate/multiary/MultiaryClusterAlgorithm.h>
 
 namespace hoot
 {

@@ -27,7 +27,7 @@
 #ifndef CONSTOSMMAPCONSUMER_H
 #define CONSTOSMMAPCONSUMER_H
 
-#include "OsmMapConsumer.h"
+#include <hoot/core/OsmMapConsumer.h>
 
 namespace hoot
 {

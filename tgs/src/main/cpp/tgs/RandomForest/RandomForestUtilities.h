@@ -32,8 +32,8 @@
 #include <string>
 #include <vector>
 
-#include "RandomForestManager.h"
-#include "MultithreadedRandomForestManager.h"
+#include <tgs/RandomForest/RandomForestManager.h>
+#include <tgs/RandomForest/MultithreadedRandomForestManager.h>
 
 namespace Tgs
 {

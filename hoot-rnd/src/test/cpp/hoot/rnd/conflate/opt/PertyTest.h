@@ -28,7 +28,7 @@
 #define PERTYTEST_H
 
 // Hoot
-#include "AbstractRegressionTest.h"
+#include <hoot/rnd/conflate/opt/AbstractRegressionTest.h>
 
 namespace hoot
 {

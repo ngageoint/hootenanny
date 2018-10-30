@@ -39,20 +39,21 @@ using namespace geos::geom;
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/WorkingMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
+#include <hoot/core/conflate/WorkingMap.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/manipulators/WayMergeManipulation.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot::elements;
@@ -68,7 +69,6 @@ using namespace std;
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
 
-#include "WayMergeManipulation.h"
 
 namespace hoot
 {

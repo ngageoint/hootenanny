@@ -29,8 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-
-#include "SublineStringMatcher.h"
+#include <hoot/core/algorithms/SublineStringMatcher.h>
 
 namespace hoot
 {

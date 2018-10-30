@@ -27,8 +27,8 @@
 #ifndef RFQHYBRIDTREE_H
 #define RFQHYBRIDTREE_H
 
-#include "FqTree.h"
-#include "RTree.h"
+#include <hoot/core/index/metric-hybrid/FqTree.h>
+#include <hoot/core/index/metric-hybrid/RTree.h>
 
 // boost
 #include <boost/pool/object_pool.hpp>

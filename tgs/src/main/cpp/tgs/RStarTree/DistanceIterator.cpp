@@ -29,8 +29,8 @@
 // Standard Includes
 #include <math.h>
 
-#include "RStarTree.h"
-#include "RTreeNode.h"
+#include <tgs/RStarTree/RStarTree.h>
+#include <tgs/RStarTree/RTreeNode.h>
 
 namespace Tgs
 {

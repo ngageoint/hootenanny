@@ -27,7 +27,7 @@
 #ifndef IOSINGLESTAT_H
 #define IOSINGLESTAT_H
 
-#include "SingleStat.h"
+#include <hoot/core/ops/stats/SingleStat.h>
 
 namespace hoot
 {

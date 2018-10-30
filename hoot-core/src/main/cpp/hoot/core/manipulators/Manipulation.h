@@ -44,9 +44,6 @@
 namespace hoot
 {
 
-class OsmMap;
-class WorkingMap;
-
 class Manipulation
 {
 public:
