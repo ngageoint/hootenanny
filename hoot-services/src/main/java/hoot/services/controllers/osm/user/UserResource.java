@@ -29,8 +29,10 @@ package hoot.services.controllers.osm.user;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
 
+import java.sql.Timestamp;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -39,24 +41,23 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.User;
 import hoot.services.utils.DbUtils;
-import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -64,12 +65,24 @@ import hoot.services.utils.XmlDocumentBuilder;
  * Service endpoint for OSM user information
  */
 @Controller
-@Path("/user/{userId}")
+@Path("/user")
 @Transactional
 public class UserResource {
-    private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
-
     public UserResource() {
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response get(@Context HttpServletRequest request) {
+         Users user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+         if(user == null) {
+             user = new Users();
+             user.setDisplayName("Test User");
+             user.setEmail("test@hootenanny");
+             user.setId(-1L);
+             user.setHootservicesCreatedAt(new Timestamp(System.currentTimeMillis()));
+         }
+         return Response.ok().entity(user).build();
     }
 
     /**
@@ -86,6 +99,7 @@ public class UserResource {
      * @return Response with the requested user's information
      */
     @GET
+    @Path("/{userId}")
     @Produces(MediaType.TEXT_XML)
     public Response get(@PathParam("userId") String userId) {
         Document responseDoc;
