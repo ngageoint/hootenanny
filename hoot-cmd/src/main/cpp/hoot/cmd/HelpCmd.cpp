@@ -113,11 +113,21 @@ private:
     cout << endl;
     cout << "For detailed help on the following commands type: hoot help (command name)\n"
             "\n";
+    _printCommands(cmds, "core");
+    cout << "Advanced:" << endl << endl;
+    _printCommands(cmds, "rnd");
+
+    return 0;
+  }
+
+  void _printCommands(const vector<string>& cmds, const QString type)
+  {
     sort(cmds.begin(), cmds.end(), commandCompare);
+
     for (size_t i = 0; i < cmds.size(); i++)
     {
       boost::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
-      if (c->displayInHelp())
+      if (c->displayInHelp() && c->getType() == type)
       {
         //spacing here is roughly the size of the longest command name plus a small buffer
         const int spaceSize = 30 - c->getName().size();
@@ -125,8 +135,6 @@ private:
         cout << "  " << line << endl;
       }
     }
-
-    return 0;
   }
 
   int _printVerbose()

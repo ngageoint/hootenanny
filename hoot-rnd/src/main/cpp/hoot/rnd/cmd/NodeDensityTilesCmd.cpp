@@ -63,6 +63,8 @@ public:
   virtual QString getDescription() const
   { return "(experimental) Calculates geospatial bounding box partitions based on node density"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() < 2)

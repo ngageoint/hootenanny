@@ -50,6 +50,7 @@ class OsmMap;
 class MergeNearbyNodes : public OsmMapOperation, public Serializable, public Boundable
 {
 public:
+
   static std::string className() { return "hoot::MergeNearbyNodes"; }
 
   static QString distanceKey() { return "merge.nearby.nodes.distance"; }

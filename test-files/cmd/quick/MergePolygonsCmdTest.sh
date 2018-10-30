@@ -5,8 +5,8 @@
 #DEBUG_OPT="--trace"
 
 
-INPUTFILEDIR=$HOOT_HOME/test-files/cmd/quick/UnionPolygonCmdTest
-OUTPUTFILEDIR=$HOOT_HOME/test-output/cmd/quick/UnionPolygonCmdTest
+INPUTFILEDIR=$HOOT_HOME/test-files/cmd/quick/MergePolygonsCmdTest
+OUTPUTFILEDIR=$HOOT_HOME/test-output/cmd/quick/MergePolygonsCmdTest
 
 mkdir -p $OUTPUTFILEDIR
 
@@ -19,7 +19,7 @@ mkdir -p $OUTPUTFILEDIR
 # OUTPUTFILE=$OUTPUTFILEDIR/union_relation.osm
 # COMPAREFILE=$INPUTFILEDIR/union_polygon.osm
 
-# hoot union-polygons $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
+# hoot merge-polygons $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
 # hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 
 # Input: 2 x polygons
@@ -29,7 +29,7 @@ INPUTFILE2=$INPUTFILEDIR/diamond_polygon.osm
 OUTPUTFILE=$OUTPUTFILEDIR/union_polygon.osm
 COMPAREFILE=$INPUTFILEDIR/union_polygon.osm
 
-hoot union-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
+hoot merge-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
 hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 
 
@@ -40,7 +40,7 @@ hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 # OUTPUTFILE=$OUTPUTFILEDIR/union_multi_one.osm
 # COMPAREFILE=$INPUTFILEDIR/union_multi_one.osm
 
-# hoot union-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
+# hoot merge-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
 # hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 
 
@@ -51,5 +51,5 @@ INPUTFILE2=$INPUTFILEDIR/multi_polygon2.osm
 OUTPUTFILE=$OUTPUTFILEDIR/union_multi_both.osm
 COMPAREFILE=$INPUTFILEDIR/union_multi_both.osm
 
-hoot union-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
+hoot merge-polygons $DEBUG_OPT $OUTPUTFILE $INPUTFILE1 $INPUTFILE2
 hoot diff $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE

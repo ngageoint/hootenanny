@@ -32,12 +32,9 @@
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OgrReader.h>
-//#include <hoot/core/ops/MergeNearbyNodes.h>
-//#include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
-//#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/IoUtils.h>
 
@@ -50,17 +47,17 @@ using namespace std;
 namespace hoot
 {
 
-class UnionPolygonsCmd : public BaseCommand
+class MergePolygonsCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::UnionPolygonsCmd"; }
+  static string className() { return "hoot::MergePolygonsCmd"; }
 
-  UnionPolygonsCmd() { }
+  MergePolygonsCmd() { }
 
-  virtual QString getName() const { return "union-polygons"; }
+  virtual QString getName() const { return "merge-polygons"; }
 
-  virtual QString getDescription() const { return "Combines polygons"; }
+  virtual QString getDescription() const { return "Combines like polygons"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -95,7 +92,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, UnionPolygonsCmd)
+HOOT_FACTORY_REGISTER(Command, MergePolygonsCmd)
 
 }
 

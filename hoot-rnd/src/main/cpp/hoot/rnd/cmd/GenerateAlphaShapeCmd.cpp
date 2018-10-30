@@ -54,6 +54,8 @@ public:
   virtual QString getDescription() const
   { return "Generates a concave hull for a set of points"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   int runSimple(QStringList args)
   {
     if (args.size() != 4)

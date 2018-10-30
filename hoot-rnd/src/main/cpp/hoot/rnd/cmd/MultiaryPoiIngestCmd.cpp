@@ -44,6 +44,8 @@ public:
   virtual QString getDescription() const
   { return "(experimental) Ingests POI data for use by the multiary-conflate command"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() != 4)

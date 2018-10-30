@@ -105,6 +105,8 @@ public:
   virtual QString getDescription() const
   { return "(experimental) Scores the performance of multiary-conflate"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList args)
   {
     bool showConfusion = false;

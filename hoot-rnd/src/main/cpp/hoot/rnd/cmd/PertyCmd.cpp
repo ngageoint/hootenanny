@@ -55,6 +55,8 @@ public:
 
   virtual QString getDescription() const { return "Perturbs map data using PERTY"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList args)
   {
     LOG_VARD(args.size());

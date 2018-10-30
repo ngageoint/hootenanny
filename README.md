@@ -19,13 +19,15 @@ Hootenanny is an open source conflation tool developed with machine learning tec
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
-# Conflatable Data Types
+# Conflatable Feature Types
 * Area polygons
 * Building polygons
 * Points of Interest (POIs)
 * Transportation polylines (roads and railways)
 * Utility polylines (power lines)
 * Waterway polylines
+
+Additional feature types can be made conflatable using Hootenanny's pluggable architecture.  See the Hootenanny Developer Guide for details.
 
 # Feature Summary
 In addition to conflating maps, Hootenanny can also:
@@ -360,8 +362,11 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Sort data to the OSM standard that is too large to fit in memory
     hoot sort -D element.sorter.element.buffer.size=10000 input.osm output.osm 
     
-    # Combine sets of polygons together
-    hoot union-polygons input1.osm input2.osm output.osm
+    # Combine sets of like polygons together
+    hoot merge-polygons input1.osm input2.osm output.osm
+
+    # Combine sets of like points together
+    hoot convert -D convert.ops="hoot::MergeNearbyNodes" input.osm output.osm
     
     # Detect road intersections
     hoot find-intersections input.osm output.osm

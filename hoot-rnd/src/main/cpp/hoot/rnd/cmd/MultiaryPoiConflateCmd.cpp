@@ -72,6 +72,8 @@ public:
   virtual QString getDescription() const
   { return "(experimental) Conflates two or more POI map sources into a single map"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   int runSimple(QStringList args)
   {
     Timer totalTime;
