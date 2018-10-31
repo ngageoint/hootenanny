@@ -48,9 +48,9 @@ public:
 
   TagSchemaCmd() {}
 
-  virtual QString getName() const { return "tag-schema"; }
+  virtual QString getName() const { return "schema"; }
 
-  virtual QString getDescription() const { return "Displays OSM tag documentation"; }
+  virtual QString getDescription() const { return "Displays the tag schema that Hootenanny uses"; }
 
   virtual int runSimple(QStringList args)
   {

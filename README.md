@@ -210,9 +210,6 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Sort a map to the OSM standard in memory
     hoot sort input.osm output.osm
     
-    # Concatenate two maps
-    hoot cat input1.osm input2.osm output.osm
-    
 ### Comparison
     
     # Calculate the difference between two maps
@@ -329,6 +326,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
     # Remove elements that contain no useful information
     hoot convert -D convert.ops="hoot::NoInformationElementRemover" input.osm output.osm
+
+    # Combine like polygons together without using full-fledged conflation
+    hoot convert -D convert.ops="hoot::UnionPolygonsOp" input.osm output.osm
+
+    # Combine like points together without using full-fledged conflation
+    hoot convert -D convert.ops="hoot::MergeNearbyNodes" input.osm output.osm
     
     # Add the tag "error:circular=5.0" to all elements
     hoot convert -D convert.ops=hoot::SetTagVisitor -D set.tag.visitor.key=error:circular \
@@ -365,12 +368,6 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Sort data to the OSM standard that is too large to fit in memory
     hoot sort -D element.sorter.element.buffer.size=10000 input.osm output.osm 
     
-    # Combine like polygons together without using full-fledged conflation
-    hoot merge-polygons input1.osm input2.osm output.osm
-
-    # Combine like points together without using full-fledged conflation
-    hoot convert -D convert.ops="hoot::MergeNearbyNodes" input.osm output.osm
-    
     # Detect road intersections
     hoot convert -D convert.ops="hoot::FindHighwayIntersectionsOp" input.osm output.osm
     
@@ -384,7 +381,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot perty --score input.osm perturbed.osm
     
     # Display the internal tag schema that Hootenanny uses
-    hoot tag-schema
+    hoot schema
     
     # Calculate a set of irregular shaped tiles that will fit at most 1000 nodes each for a map
     hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000

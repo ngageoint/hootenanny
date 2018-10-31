@@ -4,7 +4,9 @@ set -e
 rm -rf test-output/cmd/ConvertCmdTest
 mkdir -p test-output/cmd/ConvertCmdTest
 
-#TODO: multiple OSM to one
+echo "Multiple OSM to single OSM..."
+hoot convert test-files/ToyTestA.osm test-files/ToyTestB.osm test-output/cmd/ConvertCmdTest/ToyTestC.osm
+hoot diff test-files/cmd/slow/ConvertCmdTest/ToyTestC.osm test-output/cmd/ConvertCmdTest/ToyTestC.osm
 
 echo "PBF to OSM..."
 hoot convert test-files/ToyTestA.osm.pbf test-output/cmd/ConvertCmdTest/ToyTestA.osm
