@@ -522,7 +522,7 @@ less confident matches.
 === contains.node.criterion.id
 
 * Data Type: long
-* Default Value: ``
+* Default Value: `0`
 
 ID of the node that ContainsNodeCriterion should search for.
 
@@ -637,7 +637,7 @@ searching for nodes.
 === distance.node.criterion.distance
 
 * Data Type: double
-* Default Value: ``
+* Default Value: `-1.0`
 
 Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
 specified by 'distance.node.criterion.center'.

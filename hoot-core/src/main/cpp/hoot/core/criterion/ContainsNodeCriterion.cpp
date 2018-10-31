@@ -52,6 +52,11 @@ void ContainsNodeCriterion::setConfiguration(const Settings& s)
 {
   ConfigOptions opts(s);
   _nodeId = opts.getContainsNodeCriterionId();
+  if (_nodeId == 0)
+  {
+    throw HootException(
+      "Invalid node ID passed to ContainsNodeCriterion: " + QString::number(_nodeId));
+  }
 }
 
 bool ContainsNodeCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
