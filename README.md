@@ -19,13 +19,15 @@ Hootenanny is an open source conflation tool developed with machine learning tec
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
-# Conflatable Data Types
+# Conflatable Feature Types
 * Area polygons
 * Building polygons
 * Points of Interest (POIs)
 * Transportation polylines (roads and railways)
 * Utility polylines (power lines)
 * Waterway polylines
+
+Additional feature types can be made conflatable using Hootenanny's pluggable architecture.  See the Hootenanny Developer Guide for details.
 
 # Feature Summary
 In addition to conflating maps, Hootenanny can also:
@@ -161,6 +163,9 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
     
 ### Data Transformation
+
+    # Combine multiple OSM files into a single file:
+    hoot convert input1.osm input2.osm output.osm
     
     # Convert a geonames file to an OSM file
     hoot convert input.geonames output.osm
@@ -204,9 +209,6 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
     # Sort a map to the OSM standard in memory
     hoot sort input.osm output.osm
-    
-    # Concatenate two maps
-    hoot cat input1.osm input2.osm output.osm
     
 ### Comparison
     
@@ -324,6 +326,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
     # Remove elements that contain no useful information
     hoot convert -D convert.ops="hoot::NoInformationElementRemover" input.osm output.osm
+
+    # Combine like polygons together without using full-fledged conflation
+    hoot convert -D convert.ops="hoot::UnionPolygonsOp" input.osm output.osm
+
+    # Combine like points together without using full-fledged conflation
+    hoot convert -D convert.ops="hoot::MergeNearbyNodes" input.osm output.osm
     
     # Add the tag "error:circular=5.0" to all elements
     hoot convert -D convert.ops=hoot::SetTagVisitor -D set.tag.visitor.key=error:circular \
@@ -343,7 +351,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       -D remove.tags.visitor.element.criterion=hoot::TagCriterion \
       -D tag.criterion.kvps="power=line" -D element.criterion.negate=true input.osm output.osm
       
-    # For all features with a "voltage" tag between 1 and 45k, set the tag "power=minor_line"
+    # For all features with a "voltage" tag between 1 and 45k volts, set the tag "power=minor_line"
     hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.key=power \ 
       -D set.tag.value.visitor.value=minor_line \
       -D set.tag.value.visitor.element.criterion=hoot::TagValueNumericRangeCriterion \
@@ -360,11 +368,8 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Sort data to the OSM standard that is too large to fit in memory
     hoot sort -D element.sorter.element.buffer.size=10000 input.osm output.osm 
     
-    # Combine sets of polygons together
-    hoot union-polygons input1.osm input2.osm output.osm
-    
     # Detect road intersections
-    hoot find-intersections input.osm output.osm
+    hoot convert -D convert.ops="hoot::FindHighwayIntersectionsOp" input.osm output.osm
     
     # Create a node density plot
     hoot node-density-plot input.osm output.png 100
@@ -376,7 +381,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot perty --score input.osm perturbed.osm
     
     # Display the internal tag schema that Hootenanny uses
-    hoot tag-schema
+    hoot schema
     
     # Calculate a set of irregular shaped tiles that will fit at most 1000 nodes each for a map
     hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000

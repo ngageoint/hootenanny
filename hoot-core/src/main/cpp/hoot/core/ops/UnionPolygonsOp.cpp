@@ -22,41 +22,45 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include <boost/shared_ptr.hpp>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include "ElementCriterionInputStream.h"
+#include "UnionPolygonsOp.h"
+
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/visitors/UnionPolygonsVisitor.h>
+
+// geos
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryFactory.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
 
-ElementCriterionInputStream::ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
-  const ElementCriterionPtr& criterion) :
-_elementSource(elementSource),
-_criterion(criterion)
+HOOT_FACTORY_REGISTER(OsmMapOperation, UnionPolygonsOp)
+
+UnionPolygonsOp::UnionPolygonsOp()
 {
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementCriterionInputStream::getProjection() const
+void UnionPolygonsOp::apply(boost::shared_ptr<OsmMap>& map)
 {
-  return _elementSource->getProjection();
-}
+  UnionPolygonsVisitor v;
+  map->visitRo(v);
+  boost::shared_ptr<Geometry> g = v.getUnion();
+  LOG_VART(g.get());
 
-ElementPtr ElementCriterionInputStream::readNextElement()
-{
-  do
-  {
-    ElementPtr e = _elementSource->readNextElement();
-    if (_criterion->isSatisfied(e))
-    {
-      return e;
-    }
-  } while (hasMoreElements());
+  OsmMapPtr result(new OsmMap());
+  GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, -1);
 
-  return ElementPtr();
+  map.reset(new OsmMap(result));
+  LOG_VART(map.get());
 }
 
 }

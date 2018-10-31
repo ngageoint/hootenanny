@@ -49,6 +49,8 @@ public:
   virtual QString getDescription() const
   { return "(experimental) Conflates three or more maps into a single map"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList args)
   {
     //TODO: make this work with stats

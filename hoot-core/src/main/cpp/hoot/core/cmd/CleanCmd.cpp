@@ -51,8 +51,7 @@ public:
 
   virtual QString getName() const { return "clean"; }
 
-  virtual QString getDescription() const
-  { return "Corrects common erroneous map data scenarios"; }
+  virtual QString getDescription() const { return "Corrects erroneous map data"; }
 
   virtual int runSimple(QStringList args)
   {

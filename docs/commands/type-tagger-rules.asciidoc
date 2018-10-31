@@ -1,8 +1,8 @@
-== implicit-type-tagging-rules
+== type-tagger-rules
 
 === Description
 
-The +implicit-type-tagging-rules+ command allows for creating an implicit tag rules database that can be used to implicitly add type 
+The +type-tagger-rules+ command allows for creating an implicit tag rules database that can be used to implicitly add type 
 tags to features based on their names.  See the "Implicit Element Type Tagging Based On Name" section in the Hootenanny User Guide for 
 more information.
 
@@ -20,13 +20,13 @@ Relevant configuration options are those beginning with implicit.tagging.raw.rul
 ==== Usage
 
 --------------------------------------
-implicit-type-tagging-rules --create-raw (inputs) (translations) (output)
+type-tagger-rules --create-raw (inputs) (translations) (output)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot implicit-type-tagging-rules --create-raw "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" \
+hoot type-tagger-rules --create-raw "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" \
 myRules.implicitTagRules
 --------------------------------------
 
@@ -43,13 +43,13 @@ implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
 ==== Usage
 
 --------------------------------------
-implicit-type-tagging-rules --create-db (input) (output)
+type-tagger-rules --create-db (input) (output)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot implicit-type-tagging-rules --create-db myInput.implicitTagRules implicitTagRules.sqlite
+hoot type-tagger-rules --create-db myInput.implicitTagRules implicitTagRules.sqlite
 --------------------------------------
 
 === Showing Rules Database Statistics
@@ -61,11 +61,11 @@ Statistics for a rules database can be displayed with the --db-stats option:
 ==== Usage
 
 --------------------------------------
-implicit-type-tagging-rules --db-stats (input)
+type-tagger-rules --db-stats (input)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot implicit-type-tagging-rules --db-stats implicitTagRules.sqlite
+hoot type-tagger-rules --db-stats implicitTagRules.sqlite
 --------------------------------------

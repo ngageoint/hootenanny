@@ -61,7 +61,9 @@ public:
   virtual QString getName() const { return "node-density-tiles"; }
 
   virtual QString getDescription() const
-  { return "(experimental) Calculates geospatial bounding box partitions based on node density"; }
+  { return "Calculates geospatial bounding box partitions based on map's node density (experimental) "; }
+
+  virtual QString getType() const { return "rnd"; }
 
   virtual int runSimple(QStringList args)
   {

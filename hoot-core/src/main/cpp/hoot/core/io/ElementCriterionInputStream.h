@@ -39,6 +39,7 @@ class ConstElementVisitor;
 class ElementCriterionInputStream : public ElementInputStream
 {
 public:
+
   /**
    * @brief ElementCriterionInputStream
    * @param elementSource The stream used to read elements from
@@ -46,7 +47,7 @@ public:
    *    element is dropped.
    */
   ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
-                            const ElementCriterionPtr& criterion);
+                              const ElementCriterionPtr& criterion);
 
   /**
    * @brief close
@@ -72,8 +73,8 @@ public:
    */
   virtual ElementPtr readNextElement();
 
-
 private:
+
   ElementInputStreamPtr _elementSource;
   ElementCriterionPtr _criterion;
 };

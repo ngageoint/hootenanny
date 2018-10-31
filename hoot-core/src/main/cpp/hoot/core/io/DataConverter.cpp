@@ -97,7 +97,7 @@ void elementTranslatorThread::run()
   }
 
   LOG_INFO("Done Translating");
-} // end run
+}
 
 void ogrWriterThread::run()
 {
@@ -160,7 +160,7 @@ void ogrWriterThread::run()
   ogrWriter->close();
 
   LOG_INFO("Done Writing Features");
-} // end run
+}
 
 unsigned int DataConverter::logWarnCount = 0;
 
@@ -184,12 +184,11 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 
   //We require that a translation be present when converting to OGR.  We may be able to absorb this
   //logic into _convert (see notes below).
-  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output,true) && !_translation.isEmpty())
+  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output, true) && !_translation.isEmpty())
   {
     _convertToOgr(inputs.at(0), output);
   }
   /* We require that a translation be present when converting from OGR.
-   * Also, converting to OGR is the only situation where we support multiple inputs.
    * Would like to be absorb some or all of this logic into _convert but not sure its feasible.
    */
   else if (inputs.size() >= 1 && !_translation.isEmpty() &&
@@ -199,14 +198,9 @@ void DataConverter::convert(const QStringList inputs, const QString output)
   }
   //If this wasn't a to/from OGR conversion OR no translation was specified, just call the general
   //convert routine (a translation will be applied to non-OGR inputs, if present).
-  else if (inputs.size() == 1)
-  {
-    _convert(inputs.at(0), output);
-  }
   else
   {
-    //shouldn't ever get here
-    throw HootException("Invalid input arguments.");
+    _convert(inputs, output);
   }
 }
 
@@ -528,14 +522,14 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   progress.set(1.0, "Successful", true, "Finished successfully.");
 }
 
-void DataConverter::_convert(const QString input, const QString output)
+void DataConverter::_convert(const QStringList inputs, const QString output)
 {
   LOG_TRACE("general convert");
 
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
-  LOG_VART(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
+  //LOG_VART(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
 
   //For non OGR conversions, the translation must be passed in as an op.
   if (!_translation.trimmed().isEmpty())
@@ -553,25 +547,30 @@ void DataConverter::_convert(const QString input, const QString output)
     LOG_VART(conf().get(ConfigOptions().getTranslationScriptKey()));
   }
 
-  //try to stream the i/o
-  if (ElementStreamer::isStreamableIo(input, output) &&
-      ElementStreamer::areValidStreamingOps(_convertOps))
+  //check to see if all of the i/o can be streamed
+  const bool isStreamable =
+    ElementStreamer::areValidStreamingOps(_convertOps) &&
+    ElementStreamer::areStreamableIo(inputs, output);
+  if (isStreamable)
   {
     //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
     //it is ever made streamable, then we'd have to refactor this.
     assert(!_colsArgSpecified);
 
-    ElementStreamer::stream(input, output);
+    //stream the i/o
+    ElementStreamer::stream(inputs, output);
   }
-  //can't stream the i/o
   else
   {
     LOG_DEBUG("Unable to stream I/O.");
 
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(
-      map, input, ConfigOptions().getReaderUseDataSourceIds(),
-      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      IoUtils::loadMap(
+        map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
+        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+    }
 
     LOG_INFO("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);

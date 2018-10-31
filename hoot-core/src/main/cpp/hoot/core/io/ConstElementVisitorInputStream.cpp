@@ -24,10 +24,9 @@
  *
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include <boost/shared_ptr.hpp>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/elements/Element.h>
+
 #include "ConstElementVisitorInputStream.h"
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
@@ -48,7 +47,6 @@ ElementPtr ConstElementVisitorInputStream::readNextElement()
 {
   ElementPtr element = _elementSource->readNextElement();
   _visitor->visit(element);
-
   return element;
 }
 
