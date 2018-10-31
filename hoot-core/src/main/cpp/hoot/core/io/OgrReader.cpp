@@ -43,6 +43,7 @@ using namespace geos::geom;
 #include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OgrUtilities.h>
+#include <hoot/core/io/PythonTranslator.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -59,9 +60,6 @@ using namespace geos::geom;
 #include <QDir>
 #include <QFileInfo>
 #include <QDateTime>
-
-// #include "JavaScriptTranslator.h"
-#include "PythonTranslator.h"
 
 using namespace std;
 

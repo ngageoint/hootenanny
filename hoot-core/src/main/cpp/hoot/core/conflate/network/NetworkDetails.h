@@ -29,16 +29,16 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/conflate/network/EdgeMatch.h>
 #include <hoot/core/conflate/network/EdgeString.h>
+#include <hoot/core/conflate/network/EdgeSublineMatch.h>
+#include <hoot/core/conflate/network/EidMapper.h>
 #include <hoot/core/conflate/network/LegacyVertexMatcher.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
 #include <hoot/core/conflate/network/SearchRadiusProvider.h>
-#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/util/Configurable.h>
 
-#include "EdgeSublineMatch.h"
-#include "EidMapper.h"
 
 namespace hoot
 {

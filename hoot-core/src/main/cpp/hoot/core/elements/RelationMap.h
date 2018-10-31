@@ -33,7 +33,6 @@
 
 namespace hoot
 {
-  class Relation;
   typedef HashMap<long, RelationPtr> RelationMap;
 }
 

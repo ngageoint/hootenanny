@@ -29,9 +29,9 @@
 
 // Hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/Node.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include "Node.h"
 
 // Boost
 using namespace boost;

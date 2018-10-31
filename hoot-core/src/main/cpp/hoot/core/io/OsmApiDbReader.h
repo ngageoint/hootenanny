@@ -27,8 +27,8 @@
 #ifndef OSMAPIDBREADER_H
 #define OSMAPIDBREADER_H
 
-#include "ApiDbReader.h"
-#include "OsmApiDb.h"
+#include <hoot/core/io/ApiDbReader.h>
+#include <hoot/core/io/OsmApiDb.h>
 
 namespace hoot
 {

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ZCURVERANGER_H
 #define ZCURVERANGER_H
 
 //Hoot Includes
-#include "LongBox.h"
-#include "ZValue.h"
+#include <hoot/core/algorithms/zindex/LongBox.h>
+#include <hoot/core/algorithms/zindex/ZValue.h>
 
 namespace hoot
 {

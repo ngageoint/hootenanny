@@ -27,7 +27,7 @@
 #ifndef ELEMENTID_H
 #define ELEMENTID_H
 
-#include "ElementType.h"
+#include <hoot/core/elements/ElementType.h>
 
 // Standard
 #include <limits>

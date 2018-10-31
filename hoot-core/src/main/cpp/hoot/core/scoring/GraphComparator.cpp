@@ -27,9 +27,6 @@
 
 #include "GraphComparator.h"
 
-#include "DirectedGraph.h"
-#include "ShortestPath.h"
-
 // GEOS
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
@@ -39,16 +36,18 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/util/GeometryPainter.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/scoring/DirectedGraph.h>
+#include <hoot/core/scoring/ShortestPath.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/GeometryPainter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QDebug>

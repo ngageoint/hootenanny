@@ -27,7 +27,7 @@
 #ifndef OVERWRITETAGMERGER_H
 #define OVERWRITETAGMERGER_H
 
-#include "TagMerger.h"
+#include <hoot/core/schema/TagMerger.h>
 
 namespace hoot
 {

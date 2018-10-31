@@ -27,7 +27,7 @@
 #ifndef NETWORKVERTEXSCORE_H
 #define NETWORKVERTEXSCORE_H
 
-#include "NetworkVertex.h"
+#include <hoot/core/conflate/network/NetworkVertex.h>
 
 namespace hoot
 {

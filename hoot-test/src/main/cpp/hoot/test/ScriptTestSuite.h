@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTTESTSUITE_H
 #define SCRIPTTESTSUITE_H
 
-#include "ScriptTest.h"
+#include <hoot/test/ScriptTest.h>
 
 // Standard
 #include <vector>

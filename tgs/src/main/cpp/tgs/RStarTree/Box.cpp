@@ -34,7 +34,7 @@
 #include <sstream>
 #include <stdlib.h>
 
-#include "RTreeNode.h"
+#include <tgs/RStarTree/RTreeNode.h>
 
 namespace Tgs
 {

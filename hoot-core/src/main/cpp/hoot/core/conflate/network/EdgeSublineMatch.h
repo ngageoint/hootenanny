@@ -27,7 +27,7 @@
 #ifndef EDGESUBLINEMATCH_H
 #define EDGESUBLINEMATCH_H
 
-#include "EdgeSubline.h"
+#include <hoot/core/conflate/network/EdgeSubline.h>
 
 namespace hoot
 {

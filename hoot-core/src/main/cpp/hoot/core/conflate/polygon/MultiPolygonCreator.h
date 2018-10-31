@@ -30,13 +30,10 @@
 // hoot
 #include <hoot/core/elements/ElementProvider.h>
 
-namespace geos
-{
-namespace geom
-{
-class CoordinateSequence;
-}
-}
+// geos
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/LinearRing.h>
 
 namespace hoot
 {

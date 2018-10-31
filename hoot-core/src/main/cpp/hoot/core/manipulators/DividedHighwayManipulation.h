@@ -22,18 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DIVIDEDHIGHWAYMANIPULATION_H
 #define DIVIDEDHIGHWAYMANIPULATION_H
 
-#include "Manipulation.h"
-
 // GEOS
 #include <geos/geom/Geometry.h>
 
 // Hoot
+#include <hoot/core/manipulators/Manipulation.h>
 #include <hoot/core/util/Units.h>
 
 namespace hoot

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ASSERTIONFAILEDEXCEPTION_H
 #define ASSERTIONFAILEDEXCEPTION_H
 
 // Hoot
-#include "HootException.h"
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {

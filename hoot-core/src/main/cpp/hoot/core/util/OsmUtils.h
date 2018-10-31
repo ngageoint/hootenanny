@@ -43,7 +43,6 @@
 namespace hoot
 {
 
-class OsmMap;
 class Node;
 class Status;
 

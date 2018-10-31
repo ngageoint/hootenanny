@@ -28,12 +28,11 @@
 #define NETWORKMATCH_H
 
 // hoot
+#include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/highway/HighwayMatch.h>
-
-#include "EdgeMatch.h"
-#include "NetworkDetails.h"
+#include <hoot/core/conflate/network/EdgeMatch.h>
+#include <hoot/core/conflate/network/NetworkDetails.h>
 
 namespace hoot
 {

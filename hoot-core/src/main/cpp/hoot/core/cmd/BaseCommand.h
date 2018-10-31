@@ -28,12 +28,11 @@
 #ifndef BASECOMMAND_H
 #define BASECOMMAND_H
 
-#include "Command.h"
-
 // geos
 #include <geos/geom/Envelope.h>
 
 // Hoot
+#include <hoot/core/cmd/Command.h>
 #include <hoot/core/elements/Status.h>
 
 // Tgs
@@ -41,8 +40,6 @@
 
 namespace hoot
 {
-
-class OsmMap;
 
 class BaseCommand : public Command
 {

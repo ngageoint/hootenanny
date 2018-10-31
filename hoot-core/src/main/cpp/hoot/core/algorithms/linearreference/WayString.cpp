@@ -27,8 +27,8 @@
 #include "WayString.h"
 
 // hoot
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include "WayLocation.h"
 #include <hoot/core/util/Log.h>
 
 using namespace std;

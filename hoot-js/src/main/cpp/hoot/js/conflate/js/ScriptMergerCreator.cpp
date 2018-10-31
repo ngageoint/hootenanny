@@ -26,13 +26,11 @@
  */
 #include "ScriptMergerCreator.h"
 
-#include "ScriptMatch.h"
-#include "ScriptMerger.h"
-
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
+#include <hoot/js/conflate/js/ScriptMerger.h>
 
 using namespace std;
 using namespace v8;

@@ -26,7 +26,7 @@
  */
 #include "WayData.h"
 
-#include "Way.h"
+#include <hoot/core/elements/Way.h>
 
 // Boost
 using namespace boost;
