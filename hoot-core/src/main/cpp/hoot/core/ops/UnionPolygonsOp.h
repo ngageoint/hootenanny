@@ -22,41 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include <boost/shared_ptr.hpp>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include "ElementCriterionInputStream.h"
+#ifndef UNION_POLYGONS_OP_H
+#define UNION_POLYGONS_OP_H
+
+// Hoot
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-ElementCriterionInputStream::ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
-  const ElementCriterionPtr& criterion) :
-_elementSource(elementSource),
-_criterion(criterion)
+class OsmMap;
+
+/**
+ * A map operation making use of UnionPolyonsVisitor
+ */
+class UnionPolygonsOp : public OsmMapOperation
 {
-}
+public:
 
-boost::shared_ptr<OGRSpatialReference> ElementCriterionInputStream::getProjection() const
-{
-  return _elementSource->getProjection();
-}
+  static std::string className() { return "hoot::UnionPolygonsOp"; }
 
-ElementPtr ElementCriterionInputStream::readNextElement()
-{
-  do
-  {
-    ElementPtr e = _elementSource->readNextElement();
-    if (_criterion->isSatisfied(e))
-    {
-      return e;
-    }
-  } while (hasMoreElements());
+  UnionPolygonsOp();
 
-  return ElementPtr();
-}
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
+
+  virtual std::string getClassName() const { return className(); }
+
+  virtual QString getDescription() const
+  { return "Unions all area elements that are visited to create a single geometry"; }
+};
 
 }
+
+#endif // UNION_POLYGONS_OP_H

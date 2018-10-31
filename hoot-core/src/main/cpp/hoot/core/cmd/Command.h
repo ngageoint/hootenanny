@@ -84,6 +84,14 @@ public:
    * BaseCommand for an example implementation.
    */
   virtual int run(char* argv[], int argc) = 0;
+
+  /**
+   * The 'type' of command; e.g. 'core' or 'rnd'
+   *
+   * @return the command typedef
+   * @todo there may be a better way to do this
+   */
+  virtual QString getType() const { return "core"; }
 };
 
 typedef boost::shared_ptr<Command> CommandPtr;
