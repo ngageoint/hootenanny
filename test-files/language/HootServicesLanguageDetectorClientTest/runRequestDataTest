@@ -1,0 +1,7 @@
+{
+    "text": "text%20to%20detect",
+    "detectors":
+    [
+        "TikaLanguageDetector"
+    ]
+}

@@ -48,11 +48,12 @@ class ConstElementCriterionVisitorInputStream : public ElementInputStream
 public:
 
   /**
-   *
-   *
-   * @param elementSource
-   * @param criterion
-   * @param visitor
+   * @brief ElementCriterionInputStream
+   * @param elementSource The stream used to read elements from
+   * @param criterion If this criterion is satisfied then the element is included, otherwise the
+   * element is dropped.
+   * @param visitor The operation that should be performed on elements that are read from the
+   * input source before being returned
    */
   ConstElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
                                           const ElementCriterionPtr& criterion,

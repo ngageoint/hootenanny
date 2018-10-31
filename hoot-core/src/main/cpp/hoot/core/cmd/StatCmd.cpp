@@ -76,7 +76,8 @@ public:
     const double stat = _calcStat(input, visClassName);
     LOG_VART(stat);
 
-    std::cout << "Calculated statistic: " << stat << std::endl;
+    // see note in CountCmd about the preceding endline
+    std::cout << std::endl << "Calculated statistic: " << stat << std::endl;
 
     return 0;
   }

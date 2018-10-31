@@ -49,6 +49,7 @@ namespace hoot
 class ElementId
 {
 public:
+
   static std::string className() { return "ElementId"; }
 
   ElementId() : _type(ElementType::Unknown), _id(-std::numeric_limits<int>::max()) {}
@@ -109,6 +110,7 @@ public:
   static ElementId way(long wid) { return ElementId(ElementType::Way, wid); }
 
 private:
+
   ElementType _type;
   long _id;
 };

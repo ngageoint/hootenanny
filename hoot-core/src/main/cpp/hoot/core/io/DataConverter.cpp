@@ -566,6 +566,8 @@ void DataConverter::_convert(const QString input, const QString output)
   //can't stream the i/o
   else
   {
+    LOG_DEBUG("Unable to stream I/O.");
+
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(
       map, input, ConfigOptions().getReaderUseDataSourceIds(),

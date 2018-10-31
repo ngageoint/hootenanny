@@ -1373,7 +1373,7 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
   assert(element.get());
   _elementsRead++;
 
-  LOG_TRACE("Read " << element->getElementId());
+  //LOG_TRACE("Read " << element->getElementId());
   return element;
 }
 

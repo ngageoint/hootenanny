@@ -29,7 +29,7 @@
 #define STRINGUTILS_H
 
 // Qt
-#include <QString>
+#include <QStringList>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -77,6 +77,15 @@ public:
    * @return a Boost property tree
    */
   static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
+
+  /**
+   * Creates a JSON array from a strings
+   *
+   * @param stringList a list of strings
+   * @return a Boost JSON property tree containing a string array
+   */
+  static boost::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
+    const QStringList stringList);
 
   /**
    * Determines if text is a number
