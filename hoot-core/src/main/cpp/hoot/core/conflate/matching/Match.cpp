@@ -27,10 +27,10 @@
 #include "Match.h"
 
 // hoot
-#include "MatchThreshold.h"
-#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include "MatchClassification.h"
+#include <hoot/core/elements/ElementId.h>
 
 namespace hoot
 {

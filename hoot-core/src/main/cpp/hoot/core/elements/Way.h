@@ -28,8 +28,8 @@
 #define __ELEMENT_WAY_H__
 
 // Local
-#include "WayData.h"
-#include "Element.h"
+#include <hoot/core/elements/WayData.h>
+#include <hoot/core/elements/Element.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -45,8 +45,6 @@
 
 namespace hoot
 {
-
-class Node;
 
 class Way : public Element
 {

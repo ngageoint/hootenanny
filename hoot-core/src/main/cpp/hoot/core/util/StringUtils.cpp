@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QLocale>
@@ -118,6 +119,19 @@ boost::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree
     throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
   }
   return jsonObj;
+}
+
+boost::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
+  const QStringList stringList)
+{
+  boost::shared_ptr<boost::property_tree::ptree> strArr(new boost::property_tree::ptree());
+  for (int i = 0; i < stringList.size(); i++)
+  {
+    boost::property_tree::ptree str;
+    str.put("", stringList.at(i).toStdString());
+    strArr->push_back(std::make_pair("", str));
+  }
+  return strArr;
 }
 
 }

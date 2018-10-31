@@ -28,7 +28,7 @@
 #define TAGKEYCRITERION_H
 
 // Hoot
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
 #include <QStringList>

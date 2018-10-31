@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTVISITORINPUTSTREAM_H
 #define ELEMENTVISITORINPUTSTREAM_H
@@ -34,15 +34,15 @@
 namespace hoot
 {
 
-class ConstElementVisitor;
-
 class ElementVisitorInputStream : public ElementInputStream
 {
 public:
+
   /**
    * @brief ElementVisitorInputStream
    * @param elementSource The stream used to read elements from
-   * @param visitor The operation that should be performed on elements that are read from the input source before being returned
+   * @param visitor The operation that should be performed on elements that are read from the input
+   * source before being returned
    */
   ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
                             const ElementVisitorPtr& visitor);
@@ -71,8 +71,8 @@ public:
    */
   virtual ElementPtr readNextElement();
 
-
 private:
+
   ElementInputStreamPtr _elementSource;
   ElementVisitorPtr _visitor;
 };

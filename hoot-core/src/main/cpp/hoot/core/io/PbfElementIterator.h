@@ -22,19 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PBFELEMENTITERATOR_H
 #define PBFELEMENTITERATOR_H
 
 // hoot
 #include <hoot/core/elements/ElementIterator.h>
-#include "OsmPbfReader.h"
+#include <hoot/core/io/OsmPbfReader.h>
 
 namespace hoot
 {
-
-class OsmPbfReader;
 
 class PbfElementIterator : public ElementIterator
 {

@@ -27,7 +27,7 @@
 #ifndef PARALLELSCOREEXTRACTOR_H
 #define PARALLELSCOREEXTRACTOR_H
 
-#include "WayFeatureExtractor.h"
+#include <hoot/core/conflate/extractors/WayFeatureExtractor.h>
 
 namespace hoot
 {

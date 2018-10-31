@@ -27,7 +27,7 @@
 #ifndef LENGTHSCOREEXTRACTOR_H
 #define LENGTHSCOREEXTRACTOR_H
 
-#include "WayFeatureExtractor.h"
+#include <hoot/core/conflate/extractors/WayFeatureExtractor.h>
 
 namespace hoot
 {

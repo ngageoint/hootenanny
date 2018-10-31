@@ -63,7 +63,8 @@ import hoot.services.language.tika.TikaLanguageDetector;
 import hoot.services.controllers.language.LanguageTranslateRequest;
 import hoot.services.language.ToEnglishTranslatorFactory;
 import hoot.services.language.LanguageDetectorFactory;
-import hoot.services.language.LanguageApp;
+import hoot.services.language.LanguageDetectionApp;
+import hoot.services.language.LanguageTranslationApp;
 import hoot.services.controllers.language.SupportedLanguagesRequest;
 import hoot.services.controllers.language.SupportedLanguagesResponse;
 import hoot.services.language.SupportedLanguage;
@@ -97,11 +98,11 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     PowerMockito.when(appInfo.getDescription()).thenReturn("blah1");
     PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/TikaLanguageDetector");
 
-    LanguageAppsResponse response =
+    LanguageDetectorsResponse response =
       target("toEnglishTranslation/detectors")
         .request(MediaType.APPLICATION_JSON)
-        .get(LanguageAppsResponse.class);
-    LanguageApp[] apps = response.getApps();
+        .get(LanguageDetectorsResponse.class);
+    LanguageDetectionApp[] apps = response.getApps();
 
     //Since LanguageDetectorFactory.getSimpleClassNames is mocked, this doesn't need 
     //to be updated if new apps are added.
@@ -109,6 +110,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     Assert.assertEquals("TikaLanguageDetector", apps[0].getName());
     Assert.assertEquals("blah1", apps[0].getDescription());
     Assert.assertEquals("http://localhost/TikaLanguageDetector", apps[0].getUrl());
+    Assert.assertEquals(true, apps[0].getSupportsConfidence());
   }
 
   @Test
@@ -122,11 +124,11 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     PowerMockito.when(appInfo.getDescription()).thenReturn("blah2");
     PowerMockito.when(appInfo.getUrl()).thenReturn("http://localhost/JoshuaLanguageTranslator");
 
-    LanguageAppsResponse response =
+    LanguageTranslatorsResponse response =
       target("toEnglishTranslation/translators")
         .request(MediaType.APPLICATION_JSON)
-        .get(LanguageAppsResponse.class);
-    LanguageApp[] apps = response.getApps();
+        .get(LanguageTranslatorsResponse.class);
+    LanguageTranslationApp[] apps = response.getApps();
 
     //Since ToEnglishTranslatorFactory.getSimpleClassNames is mocked, this doesn't need 
     //to be updated if new apps are added.
@@ -229,6 +231,7 @@ public class LanguageResourceTest extends HootServicesJerseyTestAbstract
     Assert.assertEquals(
       "Spanish", URLDecoder.decode(responseObj.get("detectedLang").toString()));
     Assert.assertEquals("TikaLanguageDetector", responseObj.get("detectorUsed").toString());
+    Assert.assertEquals("high", responseObj.get("detectionConfidence").toString());
   }
 
   @Test

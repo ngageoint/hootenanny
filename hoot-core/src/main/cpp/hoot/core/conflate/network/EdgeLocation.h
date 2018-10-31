@@ -28,7 +28,7 @@
 #define EDGELOCATION_H
 
 // hoot
-#include "NetworkEdge.h"
+#include <hoot/core/conflate/network/NetworkEdge.h>
 
 // Qt
 #include <QHash>

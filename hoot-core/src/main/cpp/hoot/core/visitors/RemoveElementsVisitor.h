@@ -63,7 +63,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  virtual void setOsmMap(OsmMap* map);
 
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 

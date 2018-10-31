@@ -1,0 +1,12 @@
+detectable languages:
+
+Code: de
+Name: German
+Available: yes
+
+Code: es
+Name: Spanish
+Available: yes
+
+2 languages are supported for detection.
+Currently, 2 of those languages are available for detection.

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BASERANDOMFOREST_H
 #define BASERANDOMFOREST_H
@@ -33,8 +33,8 @@
 // Qt includes
 #include <QFile>
 
-#include "DataFrame.h"
-#include "RandomTree.h"
+#include <tgs/RandomForest/DataFrame.h>
+#include <tgs/RandomForest/RandomTree.h>
 
 namespace Tgs
 {

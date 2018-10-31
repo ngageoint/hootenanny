@@ -27,7 +27,7 @@
 #ifndef ORCRITERION_H
 #define ORCRITERION_H
 
-#include "ChainCriterion.h"
+#include <hoot/core/criterion/ChainCriterion.h>
 
 namespace hoot
 {

@@ -36,6 +36,8 @@
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/ConstElementVisitorInputStream.h>
 
 namespace hoot
 {
@@ -46,7 +48,10 @@ public:
 
   static std::string className() { return "hoot::StatCmd"; }
 
-  StatCmd() { }
+  StatCmd() :
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+  {
+  }
 
   virtual QString getName() const { return "stat"; }
 
@@ -62,51 +67,51 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    const QStringList inputs = args[0].split(";");
-    LOG_VART(inputs.size());
-    OsmMapPtr map(new OsmMap());
-    _readInputs(inputs, map);
+    const QString input = args[0];
+    LOG_VART(input);
 
-    LOG_VARD(args[1]);
-    _applyOperator(args[1], map);
+    const QString visClassName = args[1];
+    LOG_VARD(visClassName);
+
+    const double stat = _calcStat(input, visClassName);
+    LOG_VART(stat);
+
+    // see note in CountCmd about the preceding endline
+    std::cout << std::endl << "Calculated statistic: " << stat << std::endl;
 
     return 0;
   }
 
 private:
 
-  void _readInputs(const QStringList inputs, OsmMapPtr map)
+  int _taskStatusUpdateInterval;
+
+  boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
   {
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      const QString input = inputs.at(i);
-      boost::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::getInstance().createReader(input, true, Status::Unknown1);
-      reader->open(input);
-      reader->read(map);
-    }
+    LOG_TRACE("Getting reader...");
+
+    boost::shared_ptr<PartialOsmMapReader> reader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(input));
+    reader->setUseDataSourceIds(true);
+    reader->open(input);
+    reader->initializePartial();
+    return reader;
   }
 
-  void _applyOperator(const QString visClassName, OsmMapPtr map)
+  ConstElementVisitorPtr _getStatCollector(const QString visClassName)
   {
-    double total = 0;
-
-    //filter the elements
-
     boost::shared_ptr<ConstElementVisitor> statsCollector;
-    boost::shared_ptr<SingleStatistic> singleStat;
+
     try
     {
       statsCollector.reset(
         Factory::getInstance().constructObject<ConstElementVisitor>(visClassName));
-      singleStat = boost::dynamic_pointer_cast<SingleStatistic>(statsCollector);
     }
     catch (const boost::bad_any_cast&)
     {
       throw IllegalArgumentException("Invalid visitor: " + visClassName);
     }
-    LOG_VART(statsCollector.get());
-    LOG_VART(singleStat.get());
 
     boost::shared_ptr<Configurable> visConfig =
       boost::dynamic_pointer_cast<Configurable>(statsCollector);
@@ -116,12 +121,45 @@ private:
       visConfig->setConfiguration(conf());
     }
 
-    LOG_TRACE("Using visitor with SingleStatistic...");
-    map->visitRo(*statsCollector);
-    total = singleStat->getStat();
-    LOG_VART(total);
+    return statsCollector;
+  }
 
-    std::cout << "Total: " << total << std::endl;
+  double _calcStat(const QString input, const QString visClassName)
+  {
+    double stat;
+
+    boost::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
+
+    ConstElementVisitorPtr statCollector = _getStatCollector(visClassName);
+
+    ElementInputStreamPtr filteredInputStream(
+      new ConstElementVisitorInputStream(
+        boost::dynamic_pointer_cast<ElementInputStream>(reader), statCollector));
+
+    boost::shared_ptr<SingleStatistic> counter =
+      boost::dynamic_pointer_cast<SingleStatistic>(statCollector);
+    LOG_VART(counter.get());
+
+    LOG_TRACE("Calculating statistic...");
+    long numElementsParsed = 0;
+    while (filteredInputStream->hasMoreElements())
+    {
+      /*ConstElementPtr element = */filteredInputStream->readNextElement();
+      numElementsParsed++;
+
+      if (numElementsParsed % _taskStatusUpdateInterval == 0)
+      {
+        PROGRESS_INFO("Calculated statistic for: " << numElementsParsed << " elements.");
+      }
+    }
+
+    stat = counter->getStat();
+
+    reader->finalizePartial();
+    reader->close();
+    filteredInputStream->close();
+
+    return stat;
   }
 };
 

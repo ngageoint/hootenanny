@@ -28,14 +28,13 @@
 #include "Factory.h"
 
 // Hoot Includes
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 
 // Standard Include
 #include <iostream>
 using namespace std;
-
-#include "Exception.h"
 
 using namespace boost;
 

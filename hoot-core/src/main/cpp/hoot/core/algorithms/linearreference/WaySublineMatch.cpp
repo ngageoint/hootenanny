@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySublineMatch.h"
 
-#include "WaySublineCollection.h"
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 namespace hoot
 {

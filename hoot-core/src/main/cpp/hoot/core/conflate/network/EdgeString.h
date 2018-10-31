@@ -29,10 +29,9 @@
 
 // hoot
 #include <hoot/core/algorithms/linearreference/WayString.h>
-
-#include "EdgeSubline.h"
-#include "NetworkEdge.h"
-#include "NetworkVertex.h"
+#include <hoot/core/conflate/network/EdgeSubline.h>
+#include <hoot/core/conflate/network/NetworkEdge.h>
+#include <hoot/core/conflate/network/NetworkVertex.h>
 
 namespace hoot
 {

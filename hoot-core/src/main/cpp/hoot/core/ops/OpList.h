@@ -34,8 +34,7 @@
 // hoot
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/Boundable.h>
-
-#include "OsmMapOperation.h"
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {

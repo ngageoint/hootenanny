@@ -27,11 +27,10 @@
 #ifndef HOOTAPIDBWRITER_H
 #define HOOTAPIDBWRITER_H
 
-#include "PartialOsmMapWriter.h"
-#include "HootApiDb.h"
-#include "OsmChangeWriter.h"
-
 // hoot
+#include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/OsmChangeWriter.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
 
 // Tgs

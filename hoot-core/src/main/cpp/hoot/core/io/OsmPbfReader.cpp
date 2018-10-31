@@ -30,17 +30,18 @@
 #include <arpa/inet.h>
 
 // Hoot Includes
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/elements/Element.h>
-#include "ElementInputStream.h"
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 using namespace hoot::pb;
 
@@ -61,8 +62,6 @@ using namespace hoot::pb;
 
 // ZLib Includes
 #include <zlib.h>
-
-#include "PbfConstants.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -1374,7 +1373,7 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
   assert(element.get());
   _elementsRead++;
 
-  LOG_TRACE("Read " << element->getElementId());
+  //LOG_TRACE("Read " << element->getElementId());
   return element;
 }
 

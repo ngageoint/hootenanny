@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SQLBULKINSERT_H
 #define SQLBULKINSERT_H
@@ -31,7 +31,7 @@
 #include <QSqlQuery>
 #include <QStringList>
 
-#include "BulkInsert.h"
+#include <hoot/core/io/BulkInsert.h>
 
 class QSqlDatabase;
 

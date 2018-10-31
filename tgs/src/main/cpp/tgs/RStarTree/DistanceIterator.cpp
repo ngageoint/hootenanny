@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DistanceIterator.h"
 
 // Standard Includes
 #include <math.h>
 
-#include "RStarTree.h"
-#include "RTreeNode.h"
+#include <tgs/RStarTree/RStarTree.h>
+#include <tgs/RStarTree/RTreeNode.h>
 
 namespace Tgs
 {

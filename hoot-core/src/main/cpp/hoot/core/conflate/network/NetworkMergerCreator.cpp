@@ -27,19 +27,18 @@
 #include "NetworkMergerCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/conflate/network/NetworkMatch.h>
+#include <hoot/core/conflate/network/PartialNetworkMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <typeinfo>
-
-#include "NetworkMatch.h"
-#include "PartialNetworkMerger.h"
 
 using namespace std;
 

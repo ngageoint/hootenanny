@@ -54,13 +54,9 @@
 namespace hoot
 {
 
-class BulkInsert;
-class InternalIdReserver;
-class HootApiDbWriterTest;
 class Element;
 class Tags;
 class ElementId;
-class OsmMap;
 class Node;
 class Way;
 class Relation;

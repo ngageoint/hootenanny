@@ -26,25 +26,25 @@
  */
 #include "DataConverter.h"
 
-#include <hoot/core/util/Log.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/IoUtils.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/io/OgrReader.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/ElementCacheLRU.h>
-#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
+#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <../hoot-js/src/main/cpp/hoot/js/v8Engine.h>
+#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/Progress.h>
+#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
+#include <hoot/js/v8Engine.h>
 
 // std
 #include <vector>
@@ -566,6 +566,8 @@ void DataConverter::_convert(const QString input, const QString output)
   //can't stream the i/o
   else
   {
+    LOG_DEBUG("Unable to stream I/O.");
+
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(
       map, input, ConfigOptions().getReaderUseDataSourceIds(),

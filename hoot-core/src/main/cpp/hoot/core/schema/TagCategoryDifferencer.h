@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCATEGORYDIFFERENCER_H
 #define TAGCATEGORYDIFFERENCER_H
 
-#include "TagFilteredDifferencer.h"
-
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/TagFilteredDifferencer.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

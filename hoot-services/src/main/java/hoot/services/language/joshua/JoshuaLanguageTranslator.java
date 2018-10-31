@@ -89,8 +89,9 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
 
   private JoshuaLanguageTranslator() throws Exception
   {
+    logger.info("Initializing translator...");
+
     //launch all of our services
-    
     servicesInitializer.init();
 
     //determine which languages we support (can be a superset of the languages made available by 
@@ -108,6 +109,8 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
     {
       connectionPool = null;
     }
+
+    logger.info("Translator initialized.");
   }
 
   public void setConfig(Object config) {}
@@ -168,17 +171,14 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
 
   private void readSupportedLangsConfig() throws Exception
   {
+    logger.debug("Reading JoshuaLanguageTranslator languages config...");
     InputStream supportedLangsConfigStrm = null;
     try
     {
-      logger.debug("Reading JoshuaLanguageTranslator languages config...");
       supportedLangsConfigStrm = 
         JoshuaLanguageTranslator.class.getClassLoader().getResourceAsStream(
           "language-translation/joshuaLanguages");
       langsConfigReader.readConfig(supportedLangsConfigStrm);
-      logger.debug(
-        "Read " + langsConfigReader.getSupportedLanguages().length + 
-        " languages from config for JoshuaLanguageTranslator.");
     }
     finally 
     {  
@@ -187,6 +187,9 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
         supportedLangsConfigStrm.close();
       }
     }
+    logger.debug(
+      "Read " + langsConfigReader.getSupportedLanguages().length + 
+      " languages from config for JoshuaLanguageTranslator.");
   }
 
   /**
@@ -287,6 +290,7 @@ public final class JoshuaLanguageTranslator implements ToEnglishTranslator,
    */
   public void close() throws Exception
   {
+    logger.info("Closing Joshua...");
     if (connectionPool != null)
     {
       connectionPool.close();

@@ -28,9 +28,8 @@
 #define IDWINTERPOLATOR_H
 
 // tgs
+#include <tgs/Interpolation/BaseInterpolator.h>
 #include <tgs/RStarTree/HilbertRTree.h>
-
-#include "BaseInterpolator.h"
 
 namespace Tgs
 {

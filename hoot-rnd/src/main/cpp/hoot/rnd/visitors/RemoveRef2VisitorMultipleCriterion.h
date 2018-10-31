@@ -28,7 +28,7 @@
 #ifndef REMOVEREF2VISITORMULTIPLECRITERION_H
 #define REMOVEREF2VISITORMULTIPLECRITERION_H
 
-#include "RemoveRef2Visitor.h"
+#include <hoot/rnd/visitors/RemoveRef2Visitor.h>
 
 namespace hoot
 {

@@ -27,7 +27,7 @@
 #ifndef REMOVEINVALIDREVIEWRELATIONSVISITOR_H
 #define REMOVEINVALIDREVIEWRELATIONSVISITOR_H
 
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {

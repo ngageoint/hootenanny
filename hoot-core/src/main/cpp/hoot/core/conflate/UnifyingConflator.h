@@ -49,7 +49,6 @@ class MatchFactory;
 class MatchThreshold;
 class Merger;
 class MergerFactory;
-class Settings;
 class ElementId;
 
 /**

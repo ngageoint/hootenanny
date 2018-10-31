@@ -131,6 +131,9 @@ public class LanguageTestUtils
     PowerMockito.when(detector.detect("DB Reisezentrum")).thenReturn("de");
     PowerMockito.when(detector.detect("Buenos días")).thenReturn("es");
 
+    PowerMockito.when(
+      detector.getConfidence()).thenReturn(LanguageUtils.DetectionConfidence.HIGH);
+
     PowerMockito.mockStatic(LanguageDetectorFactory.class);
     PowerMockito
       .when(LanguageDetectorFactory.create("TikaLanguageDetector"))

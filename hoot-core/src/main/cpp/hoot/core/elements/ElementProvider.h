@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_PROVIDER_H__
 #define __ELEMENT_PROVIDER_H__
@@ -33,11 +33,11 @@
 // GDAL
 class OGRSpatialReference;
 
-#include "ElementId.h"
-#include "Element.h"
-#include "Node.h"
-#include "Way.h"
-#include "Relation.h"
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Relation.h>
 
 namespace hoot
 {

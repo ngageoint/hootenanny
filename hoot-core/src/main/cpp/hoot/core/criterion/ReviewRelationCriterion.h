@@ -28,9 +28,9 @@
 #define REVIEWRELATIONCRITERION_H
 
 // Hoot
-#include "ElementCriterion.h"
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {

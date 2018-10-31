@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DirectionFinder.h"
@@ -34,15 +34,14 @@
 using namespace geos::geom;
 
 // Hoot
+#include <hoot/core/algorithms/Distance.h>
+#include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/elements/Way.h>
 
 // Standard
 #include <iostream>
 #include <vector>
 using namespace std;
-
-#include "Distance.h"
-#include "WayDiscretizer.h"
 
 // TGS
 #include <tgs/StreamUtils.h>

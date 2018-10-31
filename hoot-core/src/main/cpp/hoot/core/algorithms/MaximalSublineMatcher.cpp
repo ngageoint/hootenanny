@@ -27,11 +27,11 @@
 #include "MaximalSublineMatcher.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/algorithms/MaximalSubline.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Units.h>
 
-#include "MaximalSubline.h"
 
 using namespace std;
 
