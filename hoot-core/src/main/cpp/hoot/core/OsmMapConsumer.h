@@ -34,6 +34,7 @@ class OsmMap;
 class OsmMapConsumer
 {
 public:
+
   virtual ~OsmMapConsumer() {}
 
   virtual void setOsmMap(OsmMap* map) = 0;

@@ -100,8 +100,9 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
           return false;
         }
       }
-      else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()) ||
-               Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString()))
+      // Allowing ConstElementVisitor here is causing convert crashes.  May be fixed by #2705.
+      else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()) /*||
+               Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString())*/)
       {
         // good, pass
       }
@@ -251,7 +252,7 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
   if (partialWriter.get())
   {
     partialWriter->finalizePartial();
-  };
+  }
 }
 
 }

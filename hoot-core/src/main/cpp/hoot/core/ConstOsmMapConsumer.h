@@ -36,6 +36,7 @@ class OsmMap;
 class ConstOsmMapConsumer : public OsmMapConsumer
 {
 public:
+
   virtual void setOsmMap(const OsmMap* map) = 0;
 
   virtual void setOsmMap(OsmMap* map)
