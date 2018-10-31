@@ -140,6 +140,11 @@ Users are also able to define their own custom translations.  For custom transla
 uploaded dataset using a semi-automated Translation Assistant.  More details on the translation capabilities of Hootenanny can be 
 found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
 
+# Data Exploration
+
+Hootenanny has a pluggable architecture that allows you to create your own code for gleaning information from map data, as illustrated in 
+examples in the Usage section.  See the Hootenanny Developer Guide for more details on customization. 
+
 # Usage
 
 See the Hootenanny User Guide for more usage examples and details on command input parameters.
