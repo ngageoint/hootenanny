@@ -8,7 +8,7 @@ conversion.  The process may be memory bound depending upon the formats selected
 supported formats.
 
 * +input(s)+ - Input path(s) to convert from; Wildcard paths can be used for multiple inputs within the same directory.  
-               1) When converting from an OGR format, one or more inputs are supported.  Each input is made up of a file 
+               Multiple inputs are supported unless converting to an OGR format.  Each input is made up of a file 
                name and, optionally, a layer name.  Use a single space to separate each input and a ';' between 
                inputs and layer (<filename>;<layer name>).  2) For all other conversions, the input must be a 
                single path (e.g. .osm file, etc.).
@@ -44,6 +44,14 @@ can prevent memory issues:
 * `element.cache.size.way`
 
 === Examples
+
+==== Combining Data
+
+Combine multiple OSM files into a single file:
+
+--------------------------------------
+hoot convert input1.osm input2.osm output.osm
+--------------------------------------
 
 ==== Converting OSM Files to Geodatabases
 

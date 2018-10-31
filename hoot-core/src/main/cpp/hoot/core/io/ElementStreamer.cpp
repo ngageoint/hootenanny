@@ -60,14 +60,26 @@ bool ElementStreamer::isStreamableIo(const QString input, const QString output)
   LOG_VARD(ConfigUtils::boundsOptionEnabled());
 
   return
-      OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
-      OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
-      //the XML writer can't keep sorted output when streaming, so require an additional config
-      //option be specified in order to stream when writing that format
-      (writerName != "hoot::OsmXmlWriter" ||
-      (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
-      //none of the convert bounding box supports are able to do streaming I/O at this point
-      !ConfigUtils::boundsOptionEnabled();
+    OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
+    OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
+    //the XML writer can't keep sorted output when streaming, so require an additional config
+    //option be specified in order to stream when writing that format
+    (writerName != "hoot::OsmXmlWriter" ||
+    (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
+    //none of the convert bounding box supports are able to do streaming I/O at this point
+    !ConfigUtils::boundsOptionEnabled();
+}
+
+bool ElementStreamer::areStreamableIo(const QStringList inputs, const QString output)
+{
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    if (!ElementStreamer::isStreamableIo(inputs.at(i), output))
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 bool ElementStreamer::areValidStreamingOps(const QStringList ops)
@@ -105,44 +117,26 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
   return true;
 }
 
-void ElementStreamer::stream(const QString in, const QString out, const QStringList convertOps)
+ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
+  boost::shared_ptr<OsmMapReader> reader, const QStringList ops)
 {
-  LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
-
-  boost::shared_ptr<OsmMapReader> reader =
-    OsmMapReaderFactory::getInstance().createReader(
-      in, ConfigOptions().getReaderUseDataSourceIds(),
-      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
-  reader->open(in);
-  boost::shared_ptr<ElementInputStream> streamReader =
+  ElementInputStreamPtr filteredInputStream =
     boost::dynamic_pointer_cast<ElementInputStream>(reader);
 
-  boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
-  writer->open(out);
-  boost::shared_ptr<ElementOutputStream> streamWriter =
-    boost::dynamic_pointer_cast<ElementOutputStream>(writer);
-  boost::shared_ptr<PartialOsmMapWriter> partialWriter =
-    boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+  if (ops.size() == 0)
+  {
+    return  filteredInputStream;
+  }
 
-  // add visitor/criterion operations if any of the convert ops are visitors.
-  //this check is a little out of place in this class but not hurting anything...may be able to
-  //move it back to ConvertCmd somehow at some point
-  QStringList convertOpsToUse;
-  if (convertOps.isEmpty())
+  LOG_VARD(ops);
+  foreach (QString opName, ops)
   {
-    convertOpsToUse = ConfigOptions().getConvertOps();
-  }
-  else
-  {
-    convertOpsToUse = convertOps;
-  }
-  foreach (QString opName, convertOpsToUse)
-  {
+    LOG_VARD(opName);
     if (!opName.trimmed().isEmpty())
     {
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
-        LOG_INFO("Filtering input with: " << opName);
+        LOG_INFO("Filtering input with: " << opName << "...");
         ElementCriterionPtr criterion(
           Factory::getInstance().constructObject<ElementCriterion>(opName));
 
@@ -157,11 +151,11 @@ void ElementStreamer::stream(const QString in, const QString out, const QStringL
           critConfig->setConfiguration(conf());
         }
 
-        streamReader.reset(new ElementCriterionInputStream(streamReader, criterion));
+        filteredInputStream.reset(new ElementCriterionInputStream(filteredInputStream, criterion));
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
       {
-        LOG_INFO("Visiting input with: " << opName);
+        LOG_INFO("Visiting input with: " << opName << "...");
         ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));
 
         boost::shared_ptr<Configurable> visConfig;
@@ -175,11 +169,11 @@ void ElementStreamer::stream(const QString in, const QString out, const QStringL
           visConfig->setConfiguration(conf());
         }
 
-        streamReader.reset(new ElementVisitorInputStream(streamReader, visitor));
+        filteredInputStream.reset(new ElementVisitorInputStream(filteredInputStream, visitor));
       }
       else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString()))
       {
-        LOG_INFO("Visiting input with: " << opName);
+        LOG_INFO("Visiting input with: " << opName << "...");
         ConstElementVisitorPtr visitor(
           Factory::getInstance().constructObject<ConstElementVisitor>(opName));
 
@@ -194,7 +188,7 @@ void ElementStreamer::stream(const QString in, const QString out, const QStringL
           visConfig->setConfiguration(conf());
         }
 
-        streamReader.reset(new ConstElementVisitorInputStream(streamReader, visitor));
+        filteredInputStream.reset(new ConstElementVisitorInputStream(filteredInputStream, visitor));
       }
       else
       {
@@ -203,13 +197,56 @@ void ElementStreamer::stream(const QString in, const QString out, const QStringL
     }
   }
 
-  ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
+  return filteredInputStream;
+}
 
-  boost::shared_ptr<PartialOsmMapReader> partialReader =
-    boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
-  if (partialReader.get())
+void ElementStreamer::stream(const QString input, const QString out, const QStringList convertOps)
+{
+  stream(QStringList(input), out, convertOps);
+}
+
+void ElementStreamer::stream(const QStringList inputs, const QString out,
+                             const QStringList convertOps)
+{
+  boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
+  writer->open(out);
+  boost::shared_ptr<ElementOutputStream> streamWriter =
+    boost::dynamic_pointer_cast<ElementOutputStream>(writer);
+  boost::shared_ptr<PartialOsmMapWriter> partialWriter =
+    boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+
+  for (int i = 0; i < inputs.size(); i++)
   {
-    partialReader->finalizePartial();
+    const QString in = inputs.at(i);
+    LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
+
+    boost::shared_ptr<OsmMapReader> reader =
+      OsmMapReaderFactory::getInstance().createReader(
+        in, ConfigOptions().getReaderUseDataSourceIds(),
+        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+    reader->open(in);
+
+    // add visitor/criterion operations if any of the convert ops are visitors.
+    QStringList convertOpsToUse;
+    if (convertOps.isEmpty())
+    {
+      convertOpsToUse = ConfigOptions().getConvertOps();
+    }
+    else
+    {
+      convertOpsToUse = convertOps;
+    }
+    LOG_VARD(convertOps);
+    ElementInputStreamPtr streamReader = _getFilteredInputStream(reader, convertOpsToUse);
+
+    ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
+
+    boost::shared_ptr<PartialOsmMapReader> partialReader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    if (partialReader.get())
+    {
+      partialReader->finalizePartial();
+    }
   }
 
   if (partialWriter.get())
