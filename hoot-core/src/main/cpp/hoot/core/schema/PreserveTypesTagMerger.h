@@ -27,7 +27,7 @@
 #ifndef PRESERVETYPESTAGMERGER_H
 #define PRESERVETYPESTAGMERGER_H
 
-#include "TagMerger.h"
+#include <hoot/core/schema/TagMerger.h>
 
 namespace hoot
 {

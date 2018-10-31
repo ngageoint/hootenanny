@@ -34,7 +34,7 @@
 // Tgs
 #include <tgs/SharedPtr.h>
 
-#include "Layer.h"
+#include <hoot/core/io/schema/Layer.h>
 
 namespace hoot
 {

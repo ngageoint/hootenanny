@@ -27,7 +27,7 @@
 #ifndef AVERAGETAGMERGER_H
 #define AVERAGETAGMERGER_H
 
-#include "TagMerger.h"
+#include <hoot/core/schema/TagMerger.h>
 
 namespace hoot
 {

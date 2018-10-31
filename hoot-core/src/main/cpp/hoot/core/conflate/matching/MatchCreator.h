@@ -42,7 +42,6 @@ namespace hoot
 {
 
 class Match;
-class ElementCriterion;
 
 class MatchCreator
 {

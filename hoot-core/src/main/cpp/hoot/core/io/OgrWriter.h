@@ -32,21 +32,18 @@
 #include <boost/shared_ptr.hpp>
 
 // hoot
-#include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/ElementCache.h>
-#include <hoot/core/io/schema/StrictChecking.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/io/schema/StrictChecking.h>
+#include <hoot/core/util/Configurable.h>
 
 // GDAL
 #include <ogr_spatialref.h>
-class OGRDataSource;
-class OGRLayer;
 
 // Qt
 #include <QHash>
 #include <QString>
-class QString;
 
 // Standard
 #include <vector>
@@ -56,9 +53,6 @@ namespace hoot
 
 class Feature;
 class Layer;
-class OsmMap;
-class ScriptTranslator;
-class ElementInputStream;
 class ElementProvider;
 
 /**

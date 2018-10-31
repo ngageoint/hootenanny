@@ -27,7 +27,7 @@
 #ifndef SIGMAAGGREGATOR_H
 #define SIGMAAGGREGATOR_H
 
-#include "ValueAggregator.h"
+#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 
 namespace hoot
 {

@@ -37,11 +37,6 @@
 // tgs
 #include <tgs/SharedPtr.h>
 
-namespace Tgs
-{
-  class RandomForest;
-}
-
 namespace hoot
 {
 

@@ -36,13 +36,8 @@
 // Qt
 #include <QString>
 
-// Standard
-#include <memory>
-
 namespace hoot
 {
-
-class OsmMapOperation;
 
 /**
  * This wraps the tags object. Unlike most of the other wrappers there is no smart pointer to the

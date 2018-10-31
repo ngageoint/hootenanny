@@ -27,7 +27,7 @@
 #ifndef CONFLATECASETESTSUITE_H
 #define CONFLATECASETESTSUITE_H
 
-#include "AbstractTestSuite.h"
+#include <hoot/core/test/AbstractTestSuite.h>
 
 namespace hoot
 {

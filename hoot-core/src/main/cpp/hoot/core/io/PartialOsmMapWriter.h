@@ -27,13 +27,11 @@
 #ifndef PARTIALOSMMAPWRITER_H
 #define PARTIALOSMMAPWRITER_H
 
-#include "OsmMapWriter.h"
-#include "ElementOutputStream.h"
+#include <hoot/core/io/ElementOutputStream.h>
+#include <hoot/core/io/OsmMapWriter.h>
 
 namespace hoot
 {
-
-class ElementInputStream;
 
 /**
  * Partial writing will be initialized by a call to OsmMapWriter::open. The partial writer should

@@ -27,11 +27,11 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
-#include "ElementData.h"
-#include "ElementId.h"
-#include "ElementType.h"
-#include "Status.h"
-#include "Tags.h"
+#include <hoot/core/elements/ElementData.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/ElementType.h>
+#include <hoot/core/elements/Status.h>
+#include <hoot/core/elements/Tags.h>
 
 // Hoot
 #include <hoot/core/util/Units.h>
@@ -59,7 +59,6 @@ namespace hoot
 class ElementListener;
 class ElementProvider;
 class ConstElementVisitor;
-class OsmMap;
 
 /**
  * Base class for OSM elements -- node, way and relation.

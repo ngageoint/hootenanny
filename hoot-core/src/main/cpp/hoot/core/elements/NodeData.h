@@ -27,7 +27,7 @@
 #ifndef _ELEMENTS_NODE_DATA_H_
 #define _ELEMENTS_NODE_DATA_H_
 
-#include "ElementData.h"
+#include <hoot/core/elements/ElementData.h>
 
 namespace hoot
 {

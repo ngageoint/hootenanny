@@ -28,7 +28,7 @@
 #ifndef HAUSDORFFDISTANCEMATCHER_H
 #define HAUSDORFFDISTANCEMATCHER_H
 
-#include "AbstractDistanceExtractor.h"
+#include <hoot/core/conflate/extractors/AbstractDistanceExtractor.h>
 
 namespace hoot
 {

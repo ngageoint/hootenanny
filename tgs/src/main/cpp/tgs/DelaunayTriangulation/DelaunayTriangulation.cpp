@@ -42,8 +42,6 @@ namespace Tgs
 /// An internal check for robustness so we don't get caught in an endless loop
 const int MAX_LOOPS = 100000;
 
-class QuadEdge;
-
 class InternalEdge
 {
   friend class QuadEdge;

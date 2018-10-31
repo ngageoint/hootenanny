@@ -28,15 +28,15 @@
 #define OSMXMLREADER_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/Tags.h>
-#include "PartialOsmMapReader.h"
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QHash>
+#include <QString>
 #include <QXmlDefaultHandler>
 #include <QXmlStreamReader>
-class QString;
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -48,7 +48,6 @@ namespace hoot
 {
 
 class OsmMap;
-class ElementData;
 class Element;
 
 /**

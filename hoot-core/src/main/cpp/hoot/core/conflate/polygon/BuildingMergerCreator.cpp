@@ -27,11 +27,10 @@
 #include "BuildingMergerCreator.h"
 
 // hoot
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
+#include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-
-#include "BuildingMatch.h"
-#include "BuildingMerger.h"
 
 using namespace std;
 

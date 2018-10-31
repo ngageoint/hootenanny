@@ -36,14 +36,15 @@ using namespace geos::geom;
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/criterion/ParallelWayCriterion.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/elements/Way.h>
 
 // Standard
 #include <vector>
@@ -53,8 +54,6 @@ using namespace std;
 #include <tgs/StreamUtils.h>
 #include <tgs/Statistics/Normal.h>
 using namespace Tgs;
-
-#include "WayDiscretizer.h"
 
 namespace hoot
 {

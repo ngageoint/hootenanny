@@ -33,6 +33,8 @@
 namespace hoot
 {
 
+class IntegerProgrammingSolver;
+
 /**
  * A class for determining a subset of matches that meet a set of constraints (isConflicting) and
  * attempting to maximize the quality of the matches chosen.

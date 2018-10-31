@@ -28,12 +28,10 @@
 
 // hoot
 #include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
-
-#include "MarkForReviewMerger.h"
 
 using namespace std;
 

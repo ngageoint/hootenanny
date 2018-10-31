@@ -36,7 +36,6 @@
 #include <QString>
 #include <QStringList>
 #include <QXmlDefaultHandler>
-class QString;
 
 #include <boost/shared_ptr.hpp>
 
@@ -48,9 +47,7 @@ class QString;
 namespace hoot
 {
 
-class OsmMap;
 class ElementIterator;
-class Tags;
 class Progress;
 class OgrReaderInternal;
 class Settings;

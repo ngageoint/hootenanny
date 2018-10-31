@@ -27,9 +27,8 @@
 #ifndef WAYSUBLINE_H
 #define WAYSUBLINE_H
 
-#include "WayLocation.h"
-
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/GeometryConverter.h>
 
 namespace hoot

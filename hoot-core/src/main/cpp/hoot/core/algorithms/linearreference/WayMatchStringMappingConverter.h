@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYMATCHSTRINGMAPPINGCONVERTER_H
 #define WAYMATCHSTRINGMAPPINGCONVERTER_H
 
-#include "WayMatchStringMapping.h"
-#include "WaySublineMatchString.h"
+#include <hoot/core/algorithms/linearreference/WayMatchStringMapping.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 
 namespace hoot
 {

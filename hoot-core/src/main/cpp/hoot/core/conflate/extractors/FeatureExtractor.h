@@ -43,6 +43,8 @@
 namespace hoot
 {
 
+class OsmMap;
+
 /**
  * Extracts a single feature (AKA factor) for a given element pair.
  */

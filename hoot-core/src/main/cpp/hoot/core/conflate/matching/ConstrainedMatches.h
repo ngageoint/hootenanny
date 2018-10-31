@@ -40,7 +40,6 @@
 namespace hoot
 {
 
-class IntegerProgrammingSolver;
 class Match;
 
 /**

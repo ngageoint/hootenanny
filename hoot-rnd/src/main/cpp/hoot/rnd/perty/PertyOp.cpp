@@ -27,21 +27,20 @@
 #include "PertyOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/util/ConfigOptions.h>
-
-#include "PertyDuplicatePoiOp.h"
-#include "PertyNameVisitor.h"
-#include "PertyRemoveTagVisitor.h"
-#include "PertyRemoveRandomElementVisitor.h"
-#include "PermuteGridCalculator.h"
-#include "DirectSequentialSimulation.h"
+#include <hoot/rnd/perty/DirectSequentialSimulation.h>
+#include <hoot/rnd/perty/PertyDuplicatePoiOp.h>
+#include <hoot/rnd/perty/PertyNameVisitor.h>
+#include <hoot/rnd/perty/PertyRemoveTagVisitor.h>
+#include <hoot/rnd/perty/PertyRemoveRandomElementVisitor.h>
+#include <hoot/rnd/perty/PermuteGridCalculator.h>
 
 //Qt
 #include <QVector>

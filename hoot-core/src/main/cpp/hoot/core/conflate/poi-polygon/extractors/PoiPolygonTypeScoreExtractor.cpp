@@ -27,16 +27,15 @@
 #include "PoiPolygonTypeScoreExtractor.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-
-#include "PoiPolygonNameScoreExtractor.h"
-#include "PoiPolygonAddressScoreExtractor.h"
-#include "../PoiPolygonDistanceTruthRecorder.h"
+#include <hoot/core/util/MetadataTags.h>
 
 // Qt
 #include <QSet>

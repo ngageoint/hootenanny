@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RandomForest.h"
@@ -35,7 +35,7 @@
 #include <map>
 #include <utility>
 
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 #include <tgs/Statistics/Random.h>
 
 using namespace std;

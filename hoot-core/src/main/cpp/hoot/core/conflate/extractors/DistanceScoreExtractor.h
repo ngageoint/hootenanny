@@ -27,7 +27,7 @@
 #ifndef DISTANCESCOREEXTRACTOR_H
 #define DISTANCESCOREEXTRACTOR_H
 
-#include "WayFeatureExtractor.h"
+#include <hoot/core/conflate/extractors/WayFeatureExtractor.h>
 
 namespace hoot
 {

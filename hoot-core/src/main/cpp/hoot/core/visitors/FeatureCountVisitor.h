@@ -30,8 +30,7 @@
 
 // hoot
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {

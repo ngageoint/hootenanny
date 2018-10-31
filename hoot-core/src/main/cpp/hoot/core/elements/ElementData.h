@@ -27,13 +27,8 @@
 #ifndef ELEMENT_DATA_H
 #define ELEMENT_DATA_H
 
-#include "Tags.h"
-
-// Boost
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-
 // Hoot
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Units.h>
 
 // Standard

@@ -27,8 +27,8 @@
 #ifndef EDGEMATCHSETFINDER_H
 #define EDGEMATCHSETFINDER_H
 
-#include "IndexedEdgeMatchSet.h"
-#include "NetworkDetails.h"
+#include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
+#include <hoot/core/conflate/network/NetworkDetails.h>
 
 namespace hoot
 {
