@@ -42,7 +42,7 @@ public:
   virtual QString getName() const { return "multiary-poi-ingest"; }
 
   virtual QString getDescription() const
-  { return "Ingests POI data for use by the multiary-conflate command (experimental) "; }
+  { return "Ingests POIs for use by the multiary-conflate command (experimental) "; }
 
   virtual QString getType() const { return "rnd"; }
 
