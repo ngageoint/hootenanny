@@ -519,6 +519,13 @@ This is the minimum valid manipulation score in the legacy greedy optimization r
 the value lower will create more (likely overzealous) matches. Setting the value higher will drop
 less confident matches.
 
+=== contains.node.criterion.id
+
+* Data Type: long
+* Default Value: ``
+
+ID of the node that ContainsNodeCriterion should search for.
+
 === convert.bounding.box
 
 * Data Type: string
@@ -618,6 +625,22 @@ Debugging: The filename to use when saving the debug map during conflation.
 ** `source:imagery`
 
 List of tags to ignore when performing differential conflation with tags.
+
+=== distance.node.criterion.center
+
+* Data Type: string
+* Default Value: ``
+
+WGS84 coordinate in the format: "x,y" that the DistanceNodeCriterion should use as a center when
+searching for nodes.
+
+=== distance.node.criterion.distance
+
+* Data Type: double
+* Default Value: ``
+
+Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
+specified by 'distance.node.criterion.center'.
 
 === dual.way.splitter.driving.side
 

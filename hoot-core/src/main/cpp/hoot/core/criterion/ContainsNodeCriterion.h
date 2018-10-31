@@ -28,25 +28,23 @@
 #define CONTAINSNODECRITERION_H
 
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
- * A criterion that determines if an element contains the given nodeId
+ * A criterion that determines if an element contains the given node ID
  */
-class ContainsNodeCriterion : public ElementCriterion
+class ContainsNodeCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  ContainsNodeCriterion() {}
+  ContainsNodeCriterion();
 
   static std::string className() { return "hoot::ContainsNodeCriterion"; }
 
-  explicit ContainsNodeCriterion(long nodeId): _nodeId(nodeId)
-  {
-    // This space intentionally left blank
-  }
+  explicit ContainsNodeCriterion(long nodeId);
 
   bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
@@ -56,10 +54,11 @@ public:
   virtual QString getDescription() const
   { return "Determines if an element contains the given node ID"; }
 
+  virtual void setConfiguration(const Settings& s);
+
 private:
 
   long _nodeId;
-
 };
 
 }

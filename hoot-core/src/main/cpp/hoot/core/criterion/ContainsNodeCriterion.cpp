@@ -31,11 +31,28 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ContainsNodeCriterion)
+
+ContainsNodeCriterion::ContainsNodeCriterion()
+{
+  setConfiguration(conf());
+}
+
+ContainsNodeCriterion::ContainsNodeCriterion(long nodeId) :
+_nodeId(nodeId)
+{
+}
+
+void ContainsNodeCriterion::setConfiguration(const Settings& s)
+{
+  ConfigOptions opts(s);
+  _nodeId = opts.getContainsNodeCriterionId();
+}
 
 bool ContainsNodeCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {

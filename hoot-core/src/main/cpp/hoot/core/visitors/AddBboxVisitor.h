@@ -42,8 +42,8 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getDescription() const { return "Adds a bounding box tag to each applicable element"; }
-
+  virtual QString getDescription() const
+  { return "Adds a bounding box tag to each applicable element"; }
 };
 
 }

@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -43,13 +44,13 @@ class Element;
 /**
  * isSatisfied returns true if an element is within the specified distance of the given center
  */
-class DistanceNodeCriterion : public ElementCriterion
+class DistanceNodeCriterion : public ElementCriterion, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::DistanceNodeCriterion"; }
 
-  DistanceNodeCriterion() {}
+  DistanceNodeCriterion();
   DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
@@ -59,6 +60,8 @@ public:
 
   virtual QString getDescription() const
   { return "Returns true if an element is within the specified distance of the given center"; }
+
+  virtual void setConfiguration(const Settings& s);
 
 private:
 

@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 using namespace geos::geom;
 
@@ -38,11 +39,42 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, DistanceNodeCriterion)
 
-DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance):
-  _center(center),
-  _distance(distance)
+DistanceNodeCriterion::DistanceNodeCriterion()
 {
-  // Blank
+  setConfiguration(conf());
+}
+
+void DistanceNodeCriterion::setConfiguration(const Settings& s)
+{
+  ConfigOptions opts(s);
+
+  _distance = opts.getDistanceNodeCriterionDistance();
+
+  const QString errorMsg = "Invalid center value: " + opts.getDistanceNodeCriterionCenter();
+  const QStringList centerParts = opts.getDistanceNodeCriterionCenter().split(",");
+  if (centerParts.size() == 0)
+  {
+    throw HootException(errorMsg);
+  }
+  bool ok = false;
+  const double x = centerParts[0].toDouble(&ok);
+  if (!ok)
+  {
+    throw HootException(errorMsg);
+  }
+  _center.x = x;
+  const double y = centerParts[1].toDouble(&ok);
+  if (!ok)
+  {
+     throw HootException(errorMsg);
+  }
+  _center.y = y;
+}
+
+DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance):
+_center(center),
+_distance(distance)
+{
 }
 
 bool DistanceNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
