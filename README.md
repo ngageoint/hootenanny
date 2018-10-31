@@ -27,24 +27,27 @@ Hootenanny is an open source conflation tool developed with machine learning tec
 * Utility polylines (power lines)
 * Waterway polylines
 
-Additional feature types can be made conflatable using Hootenanny's pluggable architecture.  See the Hootenanny Developer Guide for details.
+Additional feature types can be made conflatable using Hootenanny's pluggable conflation architecture.  See the Hootenanny Developer Guide for details.
 
 # Feature Summary
 In addition to conflating maps, Hootenanny can also:
-* Add missing type tags to feature data
-* Align two maps together
-* Calculate the extent of map data
+* Add missing type tags to features
+* Align two maps with each other
+* Apply pluggable data transformation operations to a map
+* Calculate the geospatial extent of a map
 * Clean map data
-* Compare maps
+* Combine maps together
+* Compare maps with each other
 * Compute bounding tiles based on node density
-* Concatenate maps together
 * Convert maps between different geodata formats (see Supported Data Formats section below)
-* Derive changesets between maps and apply them to external OSM data stores
+* Crop a map to a geospatial extent
+* Derive changesets between maps and apply the changesets to external OSM data stores
+* Detect spoken languages in a map's tag data
 * Explore tag data
-* Gather statistics on map features
-* Identify road intersections
+* Gather statistics for a map
+* Identify road intersections in a map
 * Perturb map data for testing purposes
-* Plot node feature density
+* Plot node density
 * Sort map data
 * Translate feature tags using user defined schemas
 * Translate feature tags to English
@@ -121,6 +124,8 @@ Notes:
 * **(M)** = format requires reading entire dataset into memory during processing
 * **(*)** = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
+
+Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer Guide for details.
 
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas.  By default, Hootenanny 
