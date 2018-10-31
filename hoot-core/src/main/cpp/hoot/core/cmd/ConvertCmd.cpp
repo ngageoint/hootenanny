@@ -50,7 +50,8 @@ public:
 
   virtual QString getName() const { return "convert"; }
 
-  virtual QString getDescription() const { return "Converts between map formats"; }
+  virtual QString getDescription() const
+  { return "Converts between map formats and applies transformations"; }
 
   virtual int runSimple(QStringList args)
   {

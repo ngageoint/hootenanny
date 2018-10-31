@@ -50,7 +50,7 @@ public:
 
   virtual QString getName() const { return "cookie-cut"; }
 
-  virtual QString getDescription() const { return "Cuts out a portion of a map"; }
+  virtual QString getDescription() const { return "Cuts out a portion from a map"; }
 
   int runSimple(QStringList args)
   {

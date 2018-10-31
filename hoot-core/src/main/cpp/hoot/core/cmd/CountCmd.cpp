@@ -60,7 +60,7 @@ public:
   virtual QString getName() const { return "count"; }
 
   virtual QString getDescription() const
-  { return "Counts the number of elements matching a criterion"; }
+  { return "Counts the number of elements meeting a criterion"; }
 
   virtual int runSimple(QStringList args)
   {
