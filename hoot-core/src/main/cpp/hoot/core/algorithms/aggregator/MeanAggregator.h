@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MEANAGGREGATOR_H
 #define MEANAGGREGATOR_H
 
-#include "ValueAggregator.h"
+#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 
 namespace hoot
 {

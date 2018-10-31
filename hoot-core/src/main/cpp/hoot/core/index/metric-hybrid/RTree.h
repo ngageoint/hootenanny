@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOT_HYBRID_RTREE_H
 #define HOOT_HYBRID_RTREE_H
@@ -31,6 +31,8 @@
 #include <geos/geom/Envelope.h>
 
 // hoot
+#include <hoot/core/index/metric-hybrid/Node.h>
+#include <hoot/core/index/metric-hybrid/SubTreeCallback.h>
 #include <hoot/core/util/Log.h>
 
 // Standard
@@ -41,9 +43,6 @@
 // TGS
 #include <tgs/HashMap.h>
 #include <tgs/RStarTree/HilbertCurve.h>
-
-#include "Node.h"
-#include "SubTreeCallback.h"
 
 namespace hoot
 {

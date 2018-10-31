@@ -31,12 +31,11 @@
 // hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QString>
-
-#include "OsmMapOperation.h"
 
 namespace hoot
 {

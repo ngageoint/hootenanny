@@ -28,7 +28,7 @@
 #define AREACRITERION_H
 
 // hoot
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {

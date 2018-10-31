@@ -29,14 +29,14 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
+#include <hoot/core/conflate/matching/MatchGraph.h>
+#include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/ops/Boundable.h>
+#include <hoot/core/ops/stats/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/conflate/matching/MatchGraph.h>
-#include <hoot/core/ops/stats/SingleStat.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -45,11 +45,8 @@ namespace hoot
 {
 
 class Match;
-class MatchClassification;
 class MatchFactory;
 class MatchThreshold;
-class Settings;
-class ElementId;
 
 /**
  * Re-entrant but not thread safe.

@@ -33,69 +33,69 @@
 
 namespace Tgs
 {
-  class Page;
+
+/**
+ * PageStore is an abstraction that allows the saving and retrieving of blocks of data. These
+ * blocks of data are typically stored out to file, but could conceivably be any form of
+ * persistent store.
+ */
+class TGS_EXPORT PageStore
+{
+public:
 
   /**
-   * PageStore is an abstraction that allows the saving and retrieving of blocks of data. These
-   * blocks of data are typically stored out to file, but could conceivably be any form of
-   * persistent store.
+   * All page shared pointers should be freed before the PageStore is destroyed.
    */
-  class  TGS_EXPORT PageStore
-  {
-  public:
+  virtual ~PageStore() {}
 
-    /**
-     * All page shared pointers should be freed before the PageStore is destroyed.
-     */
-    virtual ~PageStore() {}
+  /**
+   * Creates a new page w/ a new id and returns the page. All page shared pointers should be
+   * freed before the PageStore is destroyed.
+   */
+  virtual boost::shared_ptr<Page> createPage() = 0;
 
-    /**
-     * Creates a new page w/ a new id and returns the page. All page shared pointers should be
-     * freed before the PageStore is destroyed.
-     */
-    virtual boost::shared_ptr<Page> createPage() = 0;
+  /**
+   * Saves all dirty pages and frees all memory.
+   */
+  virtual void flush() = 0;
 
-    /**
-     * Saves all dirty pages and frees all memory.
-     */
-    virtual void flush() = 0;
+  /**
+   * Returns the page with the given id.
+   */
+  virtual boost::shared_ptr<Page> getPage(int id) = 0;
 
-    /**
-     * Returns the page with the given id.
-     */
-    virtual boost::shared_ptr<Page> getPage(int id) = 0;
+  /**
+   * Returns the number of pages in this page store
+   */
+  virtual int getPageCount() const = 0;
 
-    /**
-     * Returns the number of pages in this page store
-     */
-    virtual int getPageCount() const = 0;
+  /**
+   * Returns the size of the pages in bytes.
+   */
+  virtual int getPageSize() const = 0;
 
-    /**
-     * Returns the size of the pages in bytes.
-     */
-    virtual int getPageSize() const = 0;
+  /**
+   * Saves all dirty pages, but doesn't necessarily free the associated memory.
+   */
+  virtual void save() = 0;
 
-    /**
-     * Saves all dirty pages, but doesn't necessarily free the associated memory.
-     */
-    virtual void save() = 0;
+protected:
 
-  protected:
+  Page* _createPage(PageStore* parent, int id, char* data, int size)
+  { return new Page(parent, id, data, size); }
+  void _setPageClean(Page * p){p->_setClean();}
 
-    Page* _createPage(PageStore* parent, int id, char* data, int size)
-    { return new Page(parent, id, data, size); }
-    void _setPageClean(Page * p){p->_setClean();}
+private:
 
-  private:
+  friend class Page;
 
-    friend class Page;
+  /**
+   * Save the page with the specified page ID. This is only called by Page right before it
+   * is destructed.
+   */
+  virtual void _savePage(int id, char *) = 0;
+};
 
-    /**
-     * Save the page with the specified page ID. This is only called by Page right before it
-     * is destructed.
-     */
-    virtual void _savePage(int id, char *) = 0;
-  };
 }
 
 #endif

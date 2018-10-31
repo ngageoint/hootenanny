@@ -28,7 +28,7 @@
 #define CONFLATOR_H
 
 // Local Includes
-#include "WorkingMap.h"
+#include <hoot/core/conflate/WorkingMap.h>
 #include <hoot/core/manipulators/Manipulation.h>
 
 // Boost Includes

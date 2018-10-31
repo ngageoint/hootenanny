@@ -31,9 +31,12 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/BulkDelete.h>
+#include <hoot/core/io/BulkInsert.h>
 
 namespace hoot
 {
+
+class InternalIdReserver;
 
 /**
  * Used for interaction with an Hootenanny API database (Hootenanny's internal customized version

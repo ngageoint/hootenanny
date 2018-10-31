@@ -37,16 +37,15 @@
 #include <hoot/core/algorithms/aggregator/SigmaAggregator.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
+#include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
-
-#include "HighwayClassifier.h"
 
 using namespace std;
 

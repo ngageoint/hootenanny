@@ -31,8 +31,7 @@
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {

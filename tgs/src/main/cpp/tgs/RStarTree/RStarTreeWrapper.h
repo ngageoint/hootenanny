@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __R_STAR_TREE_WRAPPER_H__
 #define __R_STAR_TREE_WRAPPER_H__
 
 //TGS Includes
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
 
 //Std Includes
 #include <vector>

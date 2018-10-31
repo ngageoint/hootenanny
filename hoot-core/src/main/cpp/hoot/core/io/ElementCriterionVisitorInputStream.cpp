@@ -35,12 +35,23 @@ namespace hoot
 
 ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
   const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
+  const ElementVisitorPtr& visitor) :
+_elementSource(elementSource),
+_criterion(criterion),
+_numFeaturesTotal(0),
+_numFeaturesPassingCriterion(0)
+{
+  _visitors.append(visitor);
+}
+
+ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
+  const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
   const QList<ElementVisitorPtr>& visitors) :
 _elementSource(elementSource),
 _criterion(criterion),
-_visitors(visitors),
 _numFeaturesTotal(0),
-_numFeaturesPassingCriterion(0)
+_numFeaturesPassingCriterion(0),
+_visitors(visitors)
 {
 }
 
@@ -84,7 +95,6 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
         ElementVisitorPtr visitor = *itr;
         //LOG_VART(visitor->toString());
         visitor->visit(element);
-        //LOG_VART(element->getTags().contains(MetadataTags::HootHash()));
       }
       return element;
     }

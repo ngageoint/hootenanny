@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __RELEASETESTFITNESSFUNCTION_H__
 #define __RELEASETESTFITNESSFUNCTION_H__
 
 // Hoot
-#include "AbstractRegressionTestFitnessFunction.h"
+#include <hoot/rnd/conflate/opt/AbstractRegressionTestFitnessFunction.h>
 
 namespace hoot
 {

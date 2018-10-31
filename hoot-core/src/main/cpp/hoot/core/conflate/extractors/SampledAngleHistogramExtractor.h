@@ -32,14 +32,6 @@
 #include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/util/Configurable.h>
 
-namespace geos
-{
-namespace geom
-{
-class Geometry;
-}
-}
-
 namespace hoot
 {
 

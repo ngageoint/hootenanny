@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_SCHEMAFILELOADER_H
 #define OSM_SCHEMAFILELOADER_H
 
-#include "OsmSchema.h"
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {

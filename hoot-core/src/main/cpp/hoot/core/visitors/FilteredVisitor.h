@@ -31,8 +31,7 @@
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-
-#include "ElementVisitorConsumer.h"
+#include <hoot/core/visitors/ElementVisitorConsumer.h>
 
 namespace hoot
 {

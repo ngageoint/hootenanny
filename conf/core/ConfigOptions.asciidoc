@@ -901,19 +901,20 @@ Hootenanny 'login' command to retrieve access tokens.
 Hootenanny Web Services private access token required by some Hootenanny commands.  Use the
 Hootenanny 'login' command to retrieve access tokens.
 
-=== hoot.services.auth.logout.endpoint
+=== hoot.services.auth.host
 
 * Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/logout`
+* Default Value: `localhost`
 
-Hootenanny Web Services endpoint for logging out of Hootenanny.
+Host name of the machine the Hootenanny Web Services are located on.
 
-=== hoot.services.auth.request.token.endpoint
+=== hoot.services.auth.port
 
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/request`
+* Data Type: int
+* Default Value: `8080`
 
-Hootenanny Web Services endpoint for retrieving Hootenanny request tokens.
+Port of the machine the Hootenanny Web Services are located on.  If left empty, port 80 will be
+used.
 
 === hoot.services.auth.user.name
 
@@ -921,13 +922,6 @@ Hootenanny Web Services endpoint for retrieving Hootenanny request tokens.
 * Default Value: ``
 
 Hootenanny Web Services user name associated with an authenticated login.
-
-=== hoot.services.auth.verify.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/verify`
-
-Hootenanny Web Services endpoint for logging in a user.
 
 === hootapi.db.writer.copy.bulk.insert
 
@@ -1320,15 +1314,120 @@ large to query at once (see `json.reader.http.bbox.max.size`).
 A list of tag keys for which the KeepTagsVisitor will retain on elements, while removing all
 other tags from elements.
 
+=== language.detection.detector
+
+* Data Type: string
+* Default Value: `hoot::HootServicesLanguageDetectorClient`
+
+LanguageDetector implementation to use for detecting source languages.  If using
+hoot::HootServicesLanguageDetectorClient, a translation server must be set up and valid OAuth
+credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
+option.
+
+=== language.detection.write.detected.lang.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, source languages detected for tags will be written in new tags to output.  If false, no
+tags are written and only a summary of the source languages found will be printed at completion.
+
+=== language.hoot.services.detection.min.confidence.threshold
+
+* Data Type: string
+* Default Value: `high`
+
+The minimum language detection confidence threshold to use when detecting languages in text using
+hoot::HootServicesLanguageDetectorClient.  Valid values are: 'low', 'medium', 'high', or 'none'.  A
+value of 'none' or an empty string disables the threshold.  Not all server side language detectors
+specified in 'language.hoot.services.detectors' support detection confidence.  When listing server
+side detectors via the API, confidence support information is included.
+
+=== language.hoot.services.detectors
+
+* Data Type: list
+* Default Value:
+** `TikaLanguageDetector`
+** `OpenNlpLanguageDetector`
+
+When using 'HootServicesTranslatorClient' as the to English language translator or
+HootServicesLanguageDetectorClient as a source language detector, one or more hoot-services Java
+class names implementing LanguageDetector.  Language detectors are used in order of entry.  Valid
+values are 'TikaLanguageDetector' and 'OpenNlpLanguageDetector'.  If no detectors are specified,
+then language translation will attempt to use as many detectors as needed, in a pre-determined
+order, to get a positive detection. Separate values with a ';' and surround in quotes when passing
+in from the command line.
+
+=== language.info.provider
+
+* Data Type: string
+* Default Value: `hoot::HootServicesLanguageInfoClient`
+
+LanguageInfoProvider implementation to use for determining language information needed by to
+English translation. If using hoot::HootServicesLanguageInfoClient, a translation server must be
+set up and valid OAuth credentials used.
+
+=== language.max.cache.size
+
+* Data Type: long
+* Default Value: `10000`
+
+Maximum result cache sized used for to English translation and source language detection.  Not
+necessarily honored by all translators/detectors.  A cache size of -1 disables the translation
+cache.
+
+=== language.ignore.pre.translated.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+If true and performing a to English translation with ToEnglishTranslationVisitor, the translator
+will skip attempting to translate any tags whose owning elements have a pre-translated English tag
+(key=<tag name>:en). If true and performing a non-English source language detection with
+NonEnglishLanguageDetectionVisitor, the detector will ignore the fact that an English pre-translated
+tag already exists on the associated element and attempt to detect the source language of the
+pre-translated tag.
+
+=== language.parse.names
+
+* Data Type: bool
+* Default Value: `false`
+
+When performing a to English translation or source language detection, the translator/detector
+by default uses the required 'language.tag.keys' configuration option to determine which tags to
+translate or detect source languages for.  If this option is enabled, 'language.tag.keys' is no
+longer a required option and all name tags will be parsed during translation/detection.  If
+'language.tag.keys' is populated in addition to enabling this option, then any tag keys in
+'language.tag.keys' that are not names will be parsed in addition to the name tags.
+
+=== language.skip.words.in.english.dictionary
+
+* Data Type: bool
+* Default Value: `true`
+
+When performing a to English translation or source language detection, the translator/detector
+will skip the translation of any tags whose value is in an English dictionary.
+
+=== language.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of keys of tags whose values are to either be translated to English by a
+ToEnglishTranslationVisitor or just have their source languages detected by a
+LanguageDetectionVisitor depending on the operation being performed. Separate keys with a ';' and
+surround in quotes when passing in from the command line.
+
 === language.translation.comparison.pretranslated.tag.keys
 
 * Data Type: list
 * Default Value:
 ** ``
 
-A list of tag keys known to have been previously translated to the desired target language.  The
-list ordering should correspond to that of language.translation.comparison.to.translate.tag.keys.
-Separate keys with a ';' and surround in quotes when passing in from the command line.
+A list of tag keys whose values are known to have been previously translated to the desired target
+language.  The list ordering should correspond to that of language.tag.keys.  Separate keys with a
+';' and surround in quotes when passing in from the command line.
 
 === language.translation.comparison.scorer
 
@@ -1346,81 +1445,14 @@ If source languages are specified that do not match the detected language for pi
 translation, setting this to true allows the detected language to override the specified source
 languages.
 
-=== language.translation.hoot.services.detectable.languages.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectable`
-
-Service endpoint for retrieving detectable languages supported by HootServicesTranslatorClient
-
-=== language.translation.hoot.services.detectors
-
-* Data Type: list
-* Default Value:
-** `TikaLanguageDetector`
-** `OpenNlpLanguageDetector`
-
-When using 'HootServicesTranslatorClient' as the to English language translator, one or more
-hoot-services Java class names implementing LanguageDetector.  Language detectors used
-during a to English language translation in order of entry.  Valid values are 'TikaLanguageDetector'
-and 'OpenNlpLanguageDetector'.  If no detectors are specified, then language translation will
-attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection .
-Separate values with a ';' and surround in quotes when passing in from the command line.
-
-=== language.translation.hoot.services.detectors.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectors`
-
-Service endpoint for retrieving available detector implementations supported by
-HootServicesTranslatorClient
-
-=== language.translation.hoot.services.translatable.languages.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translatable`
-
-Service endpoint for retrieving translatable languages supported by HootServicesTranslatorClient
-
-=== language.translation.hoot.services.translation.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translate`
-
-Web service translation endpoint used by the HootServicesTranslatorClient
-
 === language.translation.hoot.services.translator
 
 * Data Type: string
 * Default Value: `HootLanguageTranslator`
 
-When using 'HootServicesTranslatorClient' as the to English language translator, a hoot-services
-Java class names implementing ToEnglishTranslator.  Valid values are 'JoshuaLanguageTranslator' and
-'HootLanguageTranslator'.
-
-=== language.translation.hoot.services.translators.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translators`
-
-Service endpoint for retrieving available translator implementations supported by
-HootServicesTranslatorClient
-
-=== language.translation.info.provider
-
-* Data Type: string
-* Default Value: `hoot::HootServicesTranslationInfoClient`
-
-TranslationInfoProvider implementation to use for determining language information needed by to
-English translation.  Not all to English translators will make use of this capability.
-
-=== language.translation.max.cache.size
-
-* Data Type: long
-* Default Value: `10000`
-
-Maximum result cache sized used for to English translation and transliteration.  Not honored by all
-translators.  A cache size of -1 disables the translation cache.
+When using 'hoot::HootServicesTranslatorClient' as the to English language translator, a
+hoot-services Java class names implementing ToEnglishTranslator.  Valid values are
+'JoshuaLanguageTranslator' and 'HootLanguageTranslator'.
 
 === language.translation.perform.exhaustive.search.with.no.detection
 
@@ -1431,22 +1463,6 @@ If more than one source language is specified for to English translation and the
 source language cannot be detected, translation attempts will be made against each specified
 languages until a translation is found.  Enabling this option can have a large impact on translation
 performance due to language detection cost.
-
-=== language.translation.skip.pre.translated.tags
-
-* Data Type: bool
-* Default Value: `false`
-
-When performing a to English translation , the translator will skip the translation of any tags
-whose owning elements have a pre-translated English tag (key=<tag name>:en).
-
-=== language.translation.skip.words.in.english.dictionary
-
-* Data Type: bool
-* Default Value: `true`
-
-When performing a to English translation, the translator will skip the translation of any tags whose
-value is in an English dictionary.
 
 === language.translation.source.languages
 
@@ -1461,28 +1477,15 @@ multiple source languages can have a large impact on translation performance due
 detection cost.  Separate list items with a ';' and surround in quotes when passing them in from
 the command line.
 
-=== language.translation.to.translate.tag.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-A list of keys of tags whose values are to be translated to English.  The translations of these
-tags are compared against the list of pre-translated tags in the option
-language.translation.comparison.pretranslated.tag.keys (list sizes should be equal to each other).
-Separate keys with a ';' and surround in quotes when passing in from the command line.
-
 === language.translation.translator
 
 * Data Type: string
-* Default Value: `hoot::DictionaryTranslator`
+* Default Value: `hoot::HootServicesTranslatorClient`
 
-ToEnglishTranslator implementation to use for to English translation.  hoot::DictionaryTranslator,
-the current default, is a simple lookup table primarily used for translation testing and proof of
-concept.  Other implementations, such as hoot::HootServicesTranslatorClient, have better
-translation capability but require custom server installation procedures.  If using
-hoot::HootServicesTranslatorClient, the option 'hoot.services.authenticated.username' must be
-populated with a valid value or translation web requests will fail.
+ToEnglishTranslator implementation to use for to English translation.
+hoot::HootServicesTranslatorClient, requires a translation server be set up and valid OAuth
+credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
+option.
 
 === levenshtein.distance.alpha
 

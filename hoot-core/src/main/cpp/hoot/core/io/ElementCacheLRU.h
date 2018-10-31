@@ -32,9 +32,9 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-#include "ElementCache.h"
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/io/ElementCache.h>
 
 #include <ogr_spatialref.h>
 

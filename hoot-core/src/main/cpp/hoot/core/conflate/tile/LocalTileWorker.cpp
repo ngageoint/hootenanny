@@ -28,32 +28,30 @@
 #include "LocalTileWorker.h"
 
 // hoot
-#include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/OsmMapListener.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/conflate/NodeReplacements.h>
+#include <hoot/core/conflate/OutsideBoundsRemover.h>
+#include <hoot/core/conflate/highway/ImpliedDividedMarker.h>
+#include <hoot/core/conflate/splitter/DualWaySplitter.h>
+#include <hoot/core/conflate/splitter/LargeWaySplitter.h>
+#include <hoot/core/conflate/tile/LocalTileWorker.h>
+#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/DuplicateNameRemover.h>
 #include <hoot/core/ops/DuplicateWayRemover.h>
-#include <hoot/core/conflate/highway/ImpliedDividedMarker.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/NodeReplacements.h>
-#include <hoot/core/conflate/OutsideBoundsRemover.h>
-#include <hoot/core/conflate/splitter/LargeWaySplitter.h>
-#include <hoot/core/conflate/tile/LocalTileWorker.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/UnlikelyIntersectionRemover.h>
-#include <hoot/core/conflate/splitter/DualWaySplitter.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/NodeReplacements.h>
-
-#include "TileBoundsCalculator.h"
 
 using namespace geos::geom;
 using namespace std;

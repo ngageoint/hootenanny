@@ -28,10 +28,9 @@
 #define SETTAGVALUEVISITOR_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {

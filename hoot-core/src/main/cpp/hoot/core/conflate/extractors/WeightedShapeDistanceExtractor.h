@@ -27,7 +27,7 @@
 #ifndef WEIGHTEDSHAPEDISTANCEEXTRACTOR_H
 #define WEIGHTEDSHAPEDISTANCEEXTRACTOR_H
 
-#include "WayFeatureExtractor.h"
+#include <hoot/core/conflate/extractors/WayFeatureExtractor.h>
 
 namespace hoot
 {

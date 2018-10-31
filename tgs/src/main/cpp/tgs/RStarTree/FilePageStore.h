@@ -40,49 +40,50 @@
 namespace Tgs
 {
     
-  /**
-   */
-  class  TGS_EXPORT FilePageStore : public PageStore
-  {
-  public:
-    FilePageStore(int pageSize, const char * fileName, bool readOnly = false);
+/**
+ */
+class TGS_EXPORT FilePageStore : public PageStore
+{
+public:
+  FilePageStore(int pageSize, const char * fileName, bool readOnly = false);
 
-    virtual ~FilePageStore();
+  virtual ~FilePageStore();
 
-    virtual boost::shared_ptr<Page> createPage();
+  virtual boost::shared_ptr<Page> createPage();
 
-    virtual void flush();
+  virtual void flush();
 
-    virtual boost::shared_ptr<Page> getPage(int id);
+  virtual boost::shared_ptr<Page> getPage(int id);
 
-    virtual int getPageCount() const;
+  virtual int getPageCount() const;
 
-    virtual int getPageSize() const;
+  virtual int getPageSize() const;
 
-    virtual void save();
+  virtual void save();
 
-  private:
+private:
 
-    int _determinePageCount();
-    void _writePage(const int, char *);
-    bool _readPage(const int, char *);
+  int _determinePageCount();
+  void _writePage(const int, char *);
+  bool _readPage(const int, char *);
 
-    int _pageSize;
-    
-    typedef HashMap<int, boost::weak_ptr<Page> > PageMap;
-    PageMap _pagesMap;
-    bool _readOnly;
-    int _pageCount;
+  int _pageSize;
 
-    virtual void _savePage(int, char *);
-    std::string _getError(const std::string& error);
+  typedef HashMap<int, boost::weak_ptr<Page> > PageMap;
+  PageMap _pagesMap;
+  bool _readOnly;
+  int _pageCount;
 
-    bool _bDestructing;
+  virtual void _savePage(int, char *);
+  std::string _getError(const std::string& error);
 
-    FILE * _pageFile;
+  bool _bDestructing;
 
-    std::string _fileName;
-  };
+  FILE * _pageFile;
+
+  std::string _fileName;
+};
+
 }
 
 #endif

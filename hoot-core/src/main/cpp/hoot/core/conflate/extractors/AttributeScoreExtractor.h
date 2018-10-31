@@ -27,8 +27,7 @@
 #ifndef ATTRIBUTESCOREEXTRACTOR_H
 #define ATTRIBUTESCOREEXTRACTOR_H
 
-#include "WayFeatureExtractor.h"
-
+#include <hoot/core/conflate/extractors/WayFeatureExtractor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

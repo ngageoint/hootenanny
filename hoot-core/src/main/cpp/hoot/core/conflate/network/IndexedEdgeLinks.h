@@ -27,7 +27,7 @@
 #ifndef INDEXEDEDGELINKS_H
 #define INDEXEDEDGELINKS_H
 
-#include "EdgeMatch.h"
+#include <hoot/core/conflate/network/EdgeMatch.h>
 
 namespace hoot
 {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DIRECTIONFINDER_H
 #define DIRECTIONFINDER_H
@@ -31,10 +31,6 @@
 #include <boost/shared_ptr.hpp>
 
 #include <hoot/core/OsmMap.h>
-
-namespace hoot {
-  class Way;
-}
 
 namespace hoot {
 

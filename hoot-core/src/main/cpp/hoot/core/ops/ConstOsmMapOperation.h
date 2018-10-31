@@ -27,7 +27,7 @@
 #ifndef CONSTOSMMAPOPERATION_H
 #define CONSTOSMMAPOPERATION_H
 
-#include "OsmMapOperation.h"
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {

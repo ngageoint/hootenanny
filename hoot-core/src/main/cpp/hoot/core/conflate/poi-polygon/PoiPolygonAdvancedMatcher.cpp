@@ -33,11 +33,11 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 using namespace geos::geom;
 using namespace std;

@@ -43,6 +43,7 @@
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/conflate/js/ScriptMatch.h>
 
 // Qt
 #include <QFileInfo>
@@ -59,8 +60,6 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
-#include "ScriptMatch.h"
-
 using namespace geos::geom;
 using namespace std;
 using namespace Tgs;
@@ -70,8 +69,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(MatchCreator, ScriptMatchCreator)
-
-class ScriptMatchVisitor;
 
 /**
  * Searches the specified map for any match potentials.

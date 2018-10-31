@@ -44,7 +44,6 @@
 
 // Qt
 #include <QLibrary>
-#include <QString>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -129,7 +128,7 @@ void Hoot::_init()
   Log::getInstance().setLevel(Log::Info);
 }
 
-void Hoot::loadLibrary(QString name)
+void Hoot::loadLibrary(const QString& name)
 {
   // this library sticks around in ram even after the object is destroyed.
   QLibrary lib(name);

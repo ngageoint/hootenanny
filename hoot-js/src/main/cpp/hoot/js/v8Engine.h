@@ -27,7 +27,7 @@
 #ifndef V8ENGINE_H
 #define V8ENGINE_H
 
-#include "HootJsStable.h"
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {

@@ -64,10 +64,10 @@ public:
   /**
    * Translates text to English
    *
-   * @param textToTranslate the text to translate
+   * @param text the text to translate
    * @return translated text
    */
-  virtual QString translate(const QString textToTranslate) = 0;
+  virtual QString translate(const QString text) = 0;
 
   /**
    * Returns the language detected by the translator if language detection was performed

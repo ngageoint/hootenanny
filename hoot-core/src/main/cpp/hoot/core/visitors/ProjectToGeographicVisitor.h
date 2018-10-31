@@ -31,7 +31,7 @@
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
 
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {

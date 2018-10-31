@@ -25,13 +25,13 @@
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonRfClassifier.h"
-#include "extractors/PoiPolygonNameScoreExtractor.h"
-#include "extractors/PoiPolygonTypeScoreExtractor.h"
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
-#include "extractors/PoiPolygonDistanceExtractor.h"
-#include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
 
 // hoot
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace std;

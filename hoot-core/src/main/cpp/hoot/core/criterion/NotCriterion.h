@@ -27,8 +27,8 @@
 #ifndef NOTCRITERION_H
 #define NOTCRITERION_H
 
-#include "ElementCriterion.h"
-#include "ElementCriterionConsumer.h"
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {

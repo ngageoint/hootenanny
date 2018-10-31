@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
+import hoot.services.language.LanguageUtils;
 
 public class TikaLanguageDetectorTest
 {
@@ -54,6 +55,8 @@ public class TikaLanguageDetectorTest
     Assert.assertEquals("German", detector.getLanguageName("de"));
     Assert.assertEquals("https://tika.apache.org", detector.getUrl());
     Assert.assertTrue(!detector.getDescription().isEmpty());
+    Assert.assertEquals(
+      "none", LanguageUtils.confidenceToString(detector.getConfidence()));
     Assert.assertEquals("de", detector.detect("wie alt bist du"));
   }
 }

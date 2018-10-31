@@ -28,7 +28,7 @@
 #include "DataFrame.h"
 
 //Qt Includes
-#include "QStringList"
+#include <QStringList>
 #include <qnumeric.h>
 
 //STD Includes
@@ -44,10 +44,8 @@
 #include <stdexcept>
 using namespace std;
 
-//Urgent Includes
-#include "../TgsException.h"
-
 // Tgs
+#include <tgs/TgsException.h>
 #include <tgs/Statistics/Random.h>
 
 namespace Tgs

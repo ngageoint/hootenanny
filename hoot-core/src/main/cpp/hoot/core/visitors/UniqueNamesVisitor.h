@@ -29,11 +29,10 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 // Qt
 #include <QSet>
-
-#include "SingleStatistic.h"
 
 namespace hoot
 {

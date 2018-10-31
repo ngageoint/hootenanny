@@ -37,7 +37,6 @@
 #include <QString>
 #include <QStringList>
 #include <QXmlDefaultHandler>
-class QString;
 
 // Standard
 #include <vector>

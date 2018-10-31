@@ -27,7 +27,7 @@
 #ifndef NETWORKEDGESCORE_H
 #define NETWORKEDGESCORE_H
 
-#include "EdgeMatch.h"
+#include <hoot/core/conflate/network/EdgeMatch.h>
 
 namespace hoot
 {

@@ -30,11 +30,10 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
 
 // Standard
 #include <set>
-
-#include "ConstOsmMapOperation.h"
 
 namespace hoot
 {

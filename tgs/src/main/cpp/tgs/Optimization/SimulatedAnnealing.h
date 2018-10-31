@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SIMULATEDANNEALING_H
 #define SIMULATEDANNEALING_H
@@ -31,10 +31,9 @@
 #include <QSet>
 
 // Tgs
+#include <tgs/Optimization/FitnessFunction.h>
+#include <tgs/Optimization/State.h>
 #include <tgs/Statistics/Random.h>
-
-#include "FitnessFunction.h"
-#include "State.h"
 
 namespace Tgs
 {

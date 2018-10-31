@@ -31,8 +31,8 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include "ConstOsmMapOperation.h"
-#include "stats/SingleStat.h"
+#include <hoot/core/ops/ConstOsmMapOperation.h>
+#include <hoot/core/ops/stats/SingleStat.h>
 
 // Qt
 #include <QList>
