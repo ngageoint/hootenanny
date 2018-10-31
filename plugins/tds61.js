@@ -2435,7 +2435,7 @@ tds61 = {
         if (!(tds61.AttrLookup[gFcode.toUpperCase()]))
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (tds61.configOut.getOgrThrowError == 'true')
+            if (tds61.configOut.OgrThrowError == 'true')
             {
                 if (! attrs.F_CODE)
                 {
