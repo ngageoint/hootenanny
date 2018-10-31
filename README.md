@@ -256,9 +256,6 @@ See the Hootenanny User Guide for more usage examples and details on command inp
 
     # Count all POIs in a map
     hoot count "input1.osm;input2.osm" hoot::PoiCriterion
-    
-    # Find the largest element ID in a map
-    hoot stat input.osm hoot::MaxIdVisitor
 
 ## Advanced
 
@@ -322,6 +319,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       
     # Remove all duplicate ways from a map
     hoot convert -D convert.ops="hoot::DuplicateWayRemover" input.osm output.osm
+    
+    # Remove all duplicate areas from a map
+    hoot convert -D convert.ops="hoot::RemoveDuplicateAreaVisitor" input.osm output.osm
+    
+    # Remove all empty areas from a map
+    hoot convert -D convert.ops="hoot::RemoveEmptyAreasVisitor" input.osm output.osm
     
     # Remove duplicate name tags from features
     hoot convert -D convert.ops="hoot::DuplicateNameRemover" input.osm output.osm
@@ -399,6 +402,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
 
     # Count all features which have a tag whose key contains the text "phone"
     hoot count -D tag.key.contains.criterion.text="phone" input1.osm hoot::TagKeyContainsCriterion
+    
+    # Calculate the area of all features in a map
+    hoot stat input.osm hoot::CalculateAreaVisitor
+    
+    # Calculate the length of all ways in a map
+    hoot stat input.osm hoot::LengthOfWaysVisitor
     
     # Calculate the numerical average of all "accuracy" tags
     hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
