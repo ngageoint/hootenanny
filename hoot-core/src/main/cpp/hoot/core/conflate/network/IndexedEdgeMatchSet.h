@@ -27,7 +27,7 @@
 #ifndef __INDEXED_EDGE_MATCH_SET_H__
 #define __INDEXED_EDGE_MATCH_SET_H__
 
-#include "EdgeMatchSet.h"
+#include <hoot/core/conflate/network/EdgeMatchSet.h>
 
 namespace hoot
 {

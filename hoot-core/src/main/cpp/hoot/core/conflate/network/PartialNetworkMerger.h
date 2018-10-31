@@ -30,10 +30,9 @@
 // hoot
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
 #include <hoot/core/conflate/merging/MergerBase.h>
-
-#include "EdgeMatch.h"
-#include "EidMapper.h"
-#include "NetworkDetails.h"
+#include <hoot/core/conflate/network/EdgeMatch.h>
+#include <hoot/core/conflate/network/EidMapper.h>
+#include <hoot/core/conflate/network/NetworkDetails.h>
 
 namespace hoot
 {

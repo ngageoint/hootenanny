@@ -31,10 +31,10 @@
 #include <queue>
 
 //Hoot Inlcudes
+#include <hoot/core/algorithms/zindex/BBox.h>
+#include <hoot/core/algorithms/zindex/Range.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include "Range.h"
-#include "BBox.h"
 
 //Boost Includes
 #include <boost/make_shared.hpp>
@@ -47,7 +47,6 @@ using namespace std;
 
 namespace hoot
 {
-class LongBox;
 /**
 * Used when experimenting with various range decomposition approaches.
 */

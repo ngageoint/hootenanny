@@ -35,18 +35,21 @@
 #include <geos/geom/MultiPolygon.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/elements/RelationData.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/RelationData.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/ElementCacheLRU.h>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/io/OgrUtilities.h>
+#include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/Feature.h>
@@ -59,15 +62,10 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/elements/ElementProvider.h>
-
-#include "OgrOptions.h"
 
 using namespace geos::geom;
 using namespace std;

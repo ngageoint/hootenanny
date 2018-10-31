@@ -29,9 +29,8 @@
 
 // hoot
 #include <hoot/core/conflate/merging/MergerBase.h>
-
-#include "EdgeMatch.h"
-#include "NetworkDetails.h"
+#include <hoot/core/conflate/network/EdgeMatch.h>
+#include <hoot/core/conflate/network/NetworkDetails.h>
 
 namespace hoot
 {

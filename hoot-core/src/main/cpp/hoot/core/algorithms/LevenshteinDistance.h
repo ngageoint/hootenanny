@@ -42,8 +42,6 @@
 namespace hoot
 {
 
-class HootException;
-
 class LevenshteinDistance : public StringDistance, public Configurable
 {
 public:

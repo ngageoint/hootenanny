@@ -30,7 +30,7 @@
 // Standard
 #include <memory>
 
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {

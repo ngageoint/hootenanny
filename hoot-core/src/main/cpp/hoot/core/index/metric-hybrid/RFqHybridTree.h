@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RFQHYBRIDTREE_H
 #define RFQHYBRIDTREE_H
 
-#include "FqTree.h"
-#include "RTree.h"
+#include <hoot/core/index/metric-hybrid/FqTree.h>
+#include <hoot/core/index/metric-hybrid/RTree.h>
 
 // boost
 #include <boost/pool/object_pool.hpp>

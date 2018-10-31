@@ -28,7 +28,7 @@
 #ifndef ELEMENTINIDLISTCRITERION_H
 #define ELEMENTINIDLISTCRITERION_H
 
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Std
 #include <set>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef KSKIPBIGRAMDISTANCE_H
@@ -40,8 +40,6 @@
 
 namespace hoot
 {
-
-class HootException;
 
 /** Work based on:
  *  A Closer Look at Skip-gram Modelling

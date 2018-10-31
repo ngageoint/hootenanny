@@ -29,7 +29,7 @@
 #define DICTIONARY_TRANSLATOR_H
 
 // Hoot
-#include "ToEnglishTranslator.h"
+#include <hoot/core/language/ToEnglishTranslator.h>
 
 // Qt
 #include <QRegExp>

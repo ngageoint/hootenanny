@@ -36,7 +36,7 @@
 #include <boost/shared_ptr.hpp>
 
 // Qt
-class QString;
+#include <QString>
 
 namespace hoot
 {

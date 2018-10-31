@@ -29,7 +29,7 @@
 
 #include <tgs/HashMap.h>
 
-#include "EdgeString.h"
+#include <hoot/core/conflate/network/EdgeString.h>
 
 namespace hoot
 {

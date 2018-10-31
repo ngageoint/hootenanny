@@ -28,11 +28,10 @@
 #define CALCULATEAREAVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {

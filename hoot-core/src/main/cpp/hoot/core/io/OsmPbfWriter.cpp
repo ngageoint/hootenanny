@@ -27,10 +27,9 @@
 
 #include "OsmPbfWriter.h"
 
-#include <arpa/inet.h>
-
 // Hoot Includes
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
 #include <hoot/core/util/Factory.h>
@@ -54,7 +53,8 @@ using namespace hoot::pb;
 // ZLib Includes
 #include <zlib.h>
 
-#include "PbfConstants.h"
+//  htonl
+#include <arpa/inet.h>
 
 using namespace geos::geom;
 using namespace std;

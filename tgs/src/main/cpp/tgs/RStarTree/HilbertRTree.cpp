@@ -34,15 +34,13 @@
 #include <iostream>
 using namespace std;
 
-#include "HilbertCurve.h"
-#include "PageStore.h"
-#include "RTreeNode.h"
-
-using namespace Tgs;
-
 // Tgs
+#include <tgs/RStarTree/HilbertCurve.h>
+#include <tgs/RStarTree/PageStore.h>
+#include <tgs/RStarTree/RTreeNode.h>
 #include <tgs/Statistics/Random.h>
 
+using namespace Tgs;
 
 HilbertRTree::HilbertRTree(boost::shared_ptr<PageStore> ps, int dimensions) :
   RStarTree(ps, dimensions)

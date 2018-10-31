@@ -27,10 +27,9 @@
 #ifndef EDGEDISTANCEEXTRACTOR_H
 #define EDGEDISTANCEEXTRACTOR_H
 
-#include "AbstractDistanceExtractor.h"
-
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregatorConsumer.h>
+#include <hoot/core/conflate/extractors/AbstractDistanceExtractor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {

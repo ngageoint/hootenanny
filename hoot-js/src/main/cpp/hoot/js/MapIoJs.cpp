@@ -32,13 +32,12 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/js/JsRegistrar.h>
+#include <hoot/js/OsmMapJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
-
-#include "JsRegistrar.h"
-#include "OsmMapJs.h"
 
 using namespace v8;
 using namespace node;

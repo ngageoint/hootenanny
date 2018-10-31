@@ -38,8 +38,6 @@
 namespace hoot
 {
 
-class OsmMapOperation;
-
 /**
  *
  */

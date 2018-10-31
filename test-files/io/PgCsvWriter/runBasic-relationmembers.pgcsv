@@ -1,0 +1,4 @@
+relation_id,member_type,member_id,member_role,version,sequence_id
+-1,Way,-11,part,1,1
+-1,Way,-12,part,1,2
+-1,Way,-1,outline,1,3

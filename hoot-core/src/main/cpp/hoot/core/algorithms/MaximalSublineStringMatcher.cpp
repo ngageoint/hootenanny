@@ -30,21 +30,20 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/algorithms/MaximalSubline.h>
 #include <hoot/core/algorithms/MaximalSublineMatcher.h>
+#include <hoot/core/algorithms/SublineMatcher.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
-#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
-#include <hoot/core/algorithms/SublineMatcher.h>
 
 // Standard
 #include <algorithm>
-
-#include "MaximalSubline.h"
 
 using namespace std;
 

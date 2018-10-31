@@ -29,9 +29,8 @@
 
 // hoot
 #include <hoot/core/algorithms/aggregator/ValueAggregatorConsumer.h>
+#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/elements/Way.h>
-
-#include "FeatureExtractorBase.h"
 
 namespace hoot
 {

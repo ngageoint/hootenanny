@@ -28,15 +28,16 @@
 
 // hoot
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/io/ElementCacheLRU.h>
+#include <hoot/core/io/InternalIdReserver.h>
+#include <hoot/core/io/SqlBulkDelete.h>
 #include <hoot/core/io/SqlBulkInsert.h>
+#include <hoot/core/io/TableType.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/io/TableType.h>
-#include <hoot/core/util/DbUtils.h>
-#include <hoot/core/io/SqlBulkDelete.h>
 
 // qt
 #include <QStringList>
@@ -51,8 +52,6 @@
 
 // tgs
 #include <tgs/System/Time.h>
-
-#include "InternalIdReserver.h"
 
 using namespace geos::geom;
 using namespace std;

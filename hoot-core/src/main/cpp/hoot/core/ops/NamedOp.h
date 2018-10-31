@@ -28,9 +28,8 @@
 #define NAMEDOP_H
 
 // hoot
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "OsmMapOperation.h"
 
 // Qt
 #include <QStringList>

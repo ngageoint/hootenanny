@@ -27,10 +27,9 @@
 #ifndef HOOTAPIDBREADER_H
 #define HOOTAPIDBREADER_H
 
-#include "ApiDbReader.h"
-#include "HootApiDb.h"
-
-#include "EnvelopeProvider.h"
+#include <hoot/core/io/ApiDbReader.h>
+#include <hoot/core/io/EnvelopeProvider.h>
+#include <hoot/core/io/HootApiDb.h>
 
 namespace hoot
 {

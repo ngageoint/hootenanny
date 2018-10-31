@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -36,9 +36,10 @@ using namespace std;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// #include "../../../../Sbase/src/RasterIo/GdalRasterLoader.h"
-
+//  TGS test
 #include "../PluginFactory.h"
+
+//  TGS
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
 
 namespace Tgs

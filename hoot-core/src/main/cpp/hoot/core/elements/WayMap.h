@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-  class Way;
   typedef HashMap<long, WayPtr> WayMap;
 }
 

@@ -27,16 +27,15 @@
 #include "PoiPolygonMatchCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/OsmSchema.h>
-
-#include "PoiPolygonMatch.h"
-#include "visitors/PoiPolygonMatchVisitor.h"
-#include "PoiPolygonTagIgnoreListReader.h"
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

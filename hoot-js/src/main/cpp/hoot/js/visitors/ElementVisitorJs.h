@@ -40,7 +40,6 @@ namespace hoot
 {
 
 class ConstElementVisitor;
-class OsmMapOperation;
 
 class ElementVisitorJs : public node::ObjectWrap
 {

@@ -27,7 +27,7 @@
 #ifndef HIGHWAYCRITERION_H
 #define HIGHWAYCRITERION_H
 
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {

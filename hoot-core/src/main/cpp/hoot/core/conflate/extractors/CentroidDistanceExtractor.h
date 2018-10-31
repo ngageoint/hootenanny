@@ -28,7 +28,7 @@
 #ifndef CENTROIDDISTANCEEXTRACTOR_H
 #define CENTROIDDISTANCEEXTRACTOR_H
 
-#include "AbstractDistanceExtractor.h"
+#include <hoot/core/conflate/extractors/AbstractDistanceExtractor.h>
 
 namespace hoot
 {

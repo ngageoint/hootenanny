@@ -39,17 +39,16 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/algorithms/StringDistanceJs.h>
-#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>
 #include <hoot/js/criterion/ElementCriterionJs.h>
 #include <hoot/js/criterion/JsFunctionCriterion.h>
+#include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/JsFunctionConsumer.h>
+#include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
-#include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
-
-#include "StringUtilsJs.h"
 
 namespace hoot
 {

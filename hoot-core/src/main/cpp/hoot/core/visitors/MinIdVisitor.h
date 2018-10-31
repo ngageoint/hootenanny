@@ -30,11 +30,10 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 // Standard
 #include <limits>
-
-#include "SingleStatistic.h"
 
 namespace hoot
 {

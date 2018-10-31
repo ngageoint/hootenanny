@@ -28,28 +28,18 @@
 #ifndef DIVIDEDHIGHWAYMERGER_H
 #define DIVIDEDHIGHWAYMERGER_H
 
-#include <hoot/core/conflate/Conflator.h>
-#include "Manipulator.h"
-
-// GEOS
-namespace geos {
-  namespace geom {
-    class LineString;
-  }
-}
-
 // Hoot
-#include <hoot/core/util/Units.h>
+#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-namespace hoot {
-  class OsmMap;
-  class Node;
-  class Way;
-}
-
+#include <hoot/core/manipulators/Manipulator.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
+
+class OsmMap;
+class Node;
+class Way;
 
 /**
  * This class merges roads that are mapped as divided highways with roads in the companion data set

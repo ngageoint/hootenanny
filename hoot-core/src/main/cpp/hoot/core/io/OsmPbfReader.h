@@ -44,7 +44,7 @@ class OGRSpatialReference;
 #include <vector>
 
 // hoot
-#include "PartialOsmMapReader.h"
+#include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/Configurable.h>
 
 // tgs
