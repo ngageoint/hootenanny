@@ -72,7 +72,9 @@ bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowDir)
     //The only zip file format we support are ones containing OGR inputs.
     if (input.toLower().endsWith(".zip") ||
         //We only support this type of postgres URL for OGR inputs.
-        input.toLower().startsWith("pg:"))
+        input.toLower().startsWith("pg:") ||
+        // Or, OGDI Vectors. Things like VPF (DNC, VMAP etc)
+        input.toLower().startsWith("gltp:"))
     {
       return true;
     }
