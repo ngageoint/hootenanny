@@ -727,17 +727,6 @@ set.tag.value.visitor.element.criterion, etc.
 The maximum number of elements allowed to be in memory during element sorting.  A value of -1
 indicates no limit.
 
-=== element.sorter.external.temp.format
-
-* Data Type: string
-* Default Value: `pbf`
-
-The OSM format to use for writing sorted temp files during element external sorting.  Valid values
-are 'osm' and 'pbf'.  Using 'pbf' will result in better performance for larger datasets and uses
-the OpenStreetMap default resolution of 100 nanodegrees. 'osm' may be less performant and but allows
-for using the higher Hootenanny internal resolution of .01 nanodegrees (same as used by the
-Hootenanny API database).
-
 === english.words.files
 
 * Data Type: list
