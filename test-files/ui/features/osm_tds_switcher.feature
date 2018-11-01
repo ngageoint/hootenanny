@@ -45,11 +45,11 @@ Feature: OSM/TDS Switcher
         And I should see a "g.tag-leisure-park" on the map
         And I click the "map" at "400","400"
 
-        # Translate this point to TDSv61 and get Feature out of spec error
+        # Translate this point to TDSv61 and get translation error
         When I select a node map feature with class "tag-leisure-park"
         And I should see "Edit feature: "
         And I select the "TDSv61" option labelled "Tag Schema"
-        Then I wait 10 "seconds" to see "Feature out of spec"
+        Then I wait 10 "seconds" to see "Point geometry is not valid for AK120 in TDSv61"
 
         # Add a point with TDSv61 schema
         When I click the "add-point" button
