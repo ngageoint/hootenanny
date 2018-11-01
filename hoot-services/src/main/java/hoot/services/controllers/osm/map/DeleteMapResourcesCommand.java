@@ -38,11 +38,14 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.ws.rs.NotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
+import hoot.services.utils.DbUtils;
 
 
 public class DeleteMapResourcesCommand implements InternalCommand {
@@ -79,15 +82,20 @@ public class DeleteMapResourcesCommand implements InternalCommand {
     }
 
     private static void deleteLayerBy(String mapName) {
-        Long mapId = getMapIdByName(mapName);
-
-        if (mapId == null) {
+        Long mapIdNum = -2L;
+        try {
+            mapIdNum = Long.parseLong(mapName);
+        }
+        catch (NumberFormatException ignored) {
+            mapIdNum = DbUtils.getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
+        }
+        if(mapIdNum == null || mapIdNum < 0) {
             throw new IllegalArgumentException(mapName + " doesn't have a corresponding map ID associated with it!");
         }
 
-        deleteBookmarksBy(mapId);
-        deleteRenderDBBy(mapName, mapId);
-        deleteOSMRecordByName(mapId);
+        deleteBookmarksBy(mapIdNum);
+        deleteRenderDBBy(mapName, mapIdNum);
+        deleteOSMRecordByName(mapIdNum);
     }
 
     /**

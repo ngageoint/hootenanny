@@ -119,7 +119,8 @@ public class FolderResource {
     static public List<Folders> getFoldersForUser(Users user) {
         SQLQuery<Folders> sql = createQuery()
                 .select(folders)
-                .from(folders);
+                .from(folders)
+                .where(folders.id.ne(0L));
         if(user != null) {
             sql.where(
                     folders.userId.eq(user.getId()).or(folders.publicCol.isTrue())
@@ -182,7 +183,8 @@ public class FolderResource {
         SQLQuery<FolderMapMappings> sql = createQuery()
                 .select(folderMapMappings)
                 .from(folderMapMappings)
-                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId));
+                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
+                .where(folders.id.ne(0L));
         if(user != null) {
             // public or folder owned by current user
             sql.where(folders.publicCol.isTrue().or(folders.userId.eq(user.getId())));
@@ -237,8 +239,7 @@ public class FolderResource {
         // If the API user didn't specify a visibility level, inherit from the parent
         // folder:
         if(isPublic == null) {
-            isPublic = new Boolean(parentFolder.isPublic());
-
+            isPublic = parentFolder.isPublic();
         // If the user did specify verify visibility:
         } else {
             if(isPublic && parentFolder.isPrivate()) {
@@ -284,8 +285,15 @@ public class FolderResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteFolder(@Context HttpServletRequest request, @PathParam("folderId") Long folderId) {
+        if(folderId.equals(0L)) {
+            throw new BadRequestException();
+        }
         Users user = Users.fromRequest(request);
         Folders folder = getFolderForUser(user, folderId);
+
+        if(user != null && !folder.getUserId().equals(user.getId())) {
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to delete it").build());
+        }
 
         createQuery()
             .update(folders)
@@ -325,10 +333,22 @@ public class FolderResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateParentId(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("newParentFolderId") Long newParentFolderId) {
+        if(folderId.equals(0L)) {
+            throw new BadRequestException();
+        }
         Users user = Users.fromRequest(request);
         // handle some ACL logic:
-        getFolderForUser(user, folderId);
-        getFolderForUser(user, newParentFolderId);
+        Folders targetFolder = getFolderForUser(user, folderId);
+        Folders parentFolder = getFolderForUser(user, newParentFolderId);
+
+        if(user != null && (
+                !targetFolder.getUserId().equals(user.getId())
+                ||
+                !parentFolder.getUserId().equals(user.getId())
+        )) {
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own both folders in this request").build());
+        }
+
 
         createQuery()
             .update(folders)
@@ -361,7 +381,11 @@ public class FolderResource {
     public Response renameFolder(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("modName") String modName) {
         Users user = Users.fromRequest(request);
         // handle some ACL logic:
-        getFolderForUser(user, folderId);
+        Folders targetFolder = getFolderForUser(user, folderId);
+
+        if(user != null && !targetFolder.getUserId().equals(user.getId())) {
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to rename it").build());
+        }
 
         createQuery()
             .update(folders)
@@ -510,6 +534,7 @@ public class FolderResource {
             Folders f = new Folders();
             f.setId(0L);
             f.setPublicCol(true);
+            f.setUserId(user.getId());
             return f;
         }
         Folders folder = createQuery()
@@ -556,7 +581,7 @@ public class FolderResource {
                 "                f.id = rf.parent_id " +
                 "        ) " +
                 ") " +
-                "select * from related_folders;"
+                "select * from related_folders where id != 0;"
 
                 + "", folderId);
         try(Connection conn = getConnection() ) {

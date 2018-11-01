@@ -95,6 +95,7 @@ import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.models.db.Folders;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
@@ -167,7 +168,7 @@ public class MapResource {
             // [!] If data set in root folder (0L), publicCol will be null
             // fall back to public.
             if(parentFolderIsPublic == null) {
-                parentFolderIsPublic = new Boolean(true);
+                parentFolderIsPublic = Boolean.valueOf(true);
             }
             if(parentFolder == null || parentFolder.equals(0L) || foldersTheUserCanSee.contains(parentFolder)) {
                 Maps m = t.get(maps);
@@ -337,7 +338,7 @@ public class MapResource {
                     .header("Content-Disposition", "attachment; filename=\"map.osm\"").build();
 
         }
-        Map currMap = getMapForRequest(request, mapId, true);
+        Map currMap = getMapForRequest(request, mapId, true, false);
         String bbox = BBox;
         String[] Coords = bbox.split(",");
         if (Coords.length != 4) {
@@ -494,7 +495,7 @@ public class MapResource {
     @Path("/{mapId}/mbr")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMBR(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
-        Map currMap = getMapForRequest(request, mapId, true);
+        Map currMap = getMapForRequest(request, mapId, true, false);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         if (mapId.equals("-1")) {
@@ -567,7 +568,7 @@ public class MapResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteLayers(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
         // handles some ACL logic for us...
-        getMapForRequest(request, mapId, false);
+        getMapForRequest(request, mapId, false, true);
 
         String jobId = UUID.randomUUID().toString();
         try {
@@ -608,7 +609,7 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response modifyName(@Context HttpServletRequest request, @PathParam("mapId") String mapId, @PathParam("name") String modName) {
-        Map m = getMapForRequest(request, mapId, false);
+        Map m = getMapForRequest(request, mapId, false, true);
         createQuery().update(maps).where(maps.id.eq(m.getId())).set(maps.displayName, modName).execute();
 
         logger.debug("Renamed map with id {} {}...", mapId, modName);
@@ -641,17 +642,15 @@ public class MapResource {
 
         // These functions ensure the map + folder are
         // either owned by the user -or- public.
-        Map m = getMapForUser(user, mapId, true);
-        FolderResource.getFolderForUser(user, folderId);
-
-        // Additionally, you must be the owner to move the map:
-        if(user != null && !user.getId().equals(m.getUserId())) {
+        Map m = getMapForUser(user, mapId, true, true);
+        Folders f = FolderResource.getFolderForUser(user, folderId);
+        if(!f.getId().equals(0L) && user != null && !f.getUserId().equals(user.getId())) {
             // this is a little frustrating, but the NotAuthorizedException
             // is behaving a little different that other WebApplicationExceptions:
             // the status message was being overwritten w/ a generic message,
             // so i had to build a response object to get the custom message
             // passed back to the front end.
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the map to move it.").build());
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the destination folder").build());
         }
 
         // Delete any existing to avoid duplicate entries
@@ -676,7 +675,7 @@ public class MapResource {
     @Path("/{mapId}/tags")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTags(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
-        Map m = getMapForRequest(request, mapId, true);
+        Map m = getMapForRequest(request, mapId, true, false);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         java.util.Map<String, String> tags = updateLastAccessed(m.getId());
@@ -793,7 +792,7 @@ public class MapResource {
         assert(rowsAffected > 0); // weird state, should never happen.
         return tags;
     }
-    public static Map getMapForUser(Users user, String mapId, boolean allowOSM) throws WebApplicationException {
+    public static Map getMapForUser(Users user, String mapId, boolean allowOSM, boolean userDesiresModify) throws WebApplicationException {
         if(!allowOSM && mapId.equals("-1")) {
             throw new BadRequestException();
         }
@@ -811,14 +810,17 @@ public class MapResource {
         if(user != null && !m.isVisibleTo(user)) {
             throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
         }
+        if(user != null && userDesiresModify && !m.getUserId().equals(user.getId())) {
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the map to modify it").build());
+        }
         return m;
     }
-    public static Map getMapForRequest(HttpServletRequest request, String mapId, boolean allowOSM) throws WebApplicationException {
+    public static Map getMapForRequest(HttpServletRequest request, String mapId, boolean allowOSM, boolean userDesiresModify) throws WebApplicationException {
         Users user = null;
         if(request != null) {
             user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
         }
 
-        return getMapForUser(user, mapId, allowOSM);
+        return getMapForUser(user, mapId, allowOSM, userDesiresModify);
     }
 }
