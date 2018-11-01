@@ -29,8 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {

@@ -48,6 +48,17 @@ class ElementCriterionVisitorInputStream : public ElementInputStream
 public:
 
   /**
+   *
+   *
+   * @param elementSource
+   * @param criterion
+   * @param visitor
+   */
+  ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                                     const ElementCriterionPtr& criterion,
+                                     const ElementVisitorPtr& visitor);
+
+  /**
    * @brief ElementCriterionInputStream
    * @param elementSource The stream used to read elements from
    * @param criterion If this criterion is satisfied then the element is included, otherwise the
@@ -58,6 +69,7 @@ public:
   ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
                                      const ElementCriterionPtr& criterion,
                                      const QList<ElementVisitorPtr>& visitors);
+
   virtual ~ElementCriterionVisitorInputStream();
 
   /**
@@ -92,10 +104,11 @@ private:
 
   ElementInputStreamPtr _elementSource;
   ElementCriterionPtr _criterion;
-  QList<ElementVisitorPtr> _visitors;
 
   long _numFeaturesTotal;
   long _numFeaturesPassingCriterion;
+
+  QList<ElementVisitorPtr> _visitors;
 };
 
 }

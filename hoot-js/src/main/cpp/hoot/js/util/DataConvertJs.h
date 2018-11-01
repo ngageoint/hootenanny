@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/js/util/StreamUtilsJs.h>
 
 // Qt
 #include <QHash>
@@ -38,7 +39,6 @@
 // v8
 #include <hoot/js/HootJsStable.h>
 
-#include "StreamUtilsJs.h"
 
 namespace hoot
 {

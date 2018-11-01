@@ -29,7 +29,11 @@ package hoot.services.controllers.ingest;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.SCRIPT_FOLDER;
-import static hoot.services.controllers.ingest.UploadClassification.*;
+import static hoot.services.controllers.ingest.UploadClassification.FGDB;
+import static hoot.services.controllers.ingest.UploadClassification.GEONAMES;
+import static hoot.services.controllers.ingest.UploadClassification.OSM;
+import static hoot.services.controllers.ingest.UploadClassification.SHP;
+import static hoot.services.controllers.ingest.UploadClassification.ZIP;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +49,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
+import hoot.services.models.db.Users;
 
 
 class ImportCommand extends ExternalCommand {
@@ -54,7 +59,7 @@ class ImportCommand extends ExternalCommand {
 
     ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
-                  Class<?> caller) {
+                  Class<?> caller, Users user) {
         super(jobId);
         this.workDir = workDir;
 
@@ -72,7 +77,11 @@ class ImportCommand extends ExternalCommand {
         List<String> options = new LinkedList<>();
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("api.db.email=test@test.com");
+        if(user != null) {
+            options.add("api.db.email=" + user.getEmail());
+        } else {
+            options.add("api.db.email=test@test.com");
+        }
 
         //if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
             //options.add("convert.ops=hoot::TranslationOp");

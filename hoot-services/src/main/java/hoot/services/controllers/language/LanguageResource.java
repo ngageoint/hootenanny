@@ -68,6 +68,9 @@ import hoot.services.language.SupportedLanguage;
 import hoot.services.language.SupportedLanguageConsumer;
 import hoot.services.language.LanguageAppInfo;
 import hoot.services.language.LanguageApp;
+import hoot.services.language.LanguageTranslationApp;
+import hoot.services.language.LanguageDetectionApp;
+import hoot.services.language.LanguageUtils;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -91,7 +94,6 @@ public class LanguageResource
     {
       //The Joshua init can take a long time, so let's do it here vs having it happen the very 
       //first time a translation is made.
-      logger.info("Initializing Joshua...");
       MethodUtils.invokeStaticMethod(
         Class.forName("hoot.services.language.joshua.JoshuaLanguageTranslator"), "getInstance", null);
     }
@@ -111,7 +113,6 @@ public class LanguageResource
   {
     try
     {
-      logger.info("Closing Joshua...");
       Object joshuaTranslator = 
         MethodUtils.invokeStaticMethod(
           Class.forName("hoot.services.language.joshua.JoshuaLanguageTranslator"), "getInstance", null);
@@ -135,12 +136,14 @@ public class LanguageResource
       {
          "name":"TikaLanguageDetector",
          "description":"The language detection portion of a library which detects and extracts metadata and text from many different file types",
-         "url":"https://tika.apache.org/"
+         "url":"https://tika.apache.org/",
+         "supportsConfidence":true
       },
       {
          "name":"OpenNlpLanguageDetector",
          "description":"The language detector portion of a machine learning based toolkit for the processing of natural language text",
-         "url":"https://opennlp.apache.org/"
+         "url":"https://opennlp.apache.org/",
+         "supportsConfidence":false
       }
      ]
     }
@@ -148,20 +151,20 @@ public class LanguageResource
   @GET
   @Path("/detectors")
   @Produces(MediaType.APPLICATION_JSON)
-  public LanguageAppsResponse getDetectors()
+  public LanguageDetectorsResponse getDetectors()
   {
     try
     {
       Set<String> detectorClassNames = LanguageDetectorFactory.getSimpleClassNames();
       logger.trace("detectorClassNames.size(): " + detectorClassNames.size());
-      List<LanguageApp> apps = new ArrayList<LanguageApp>();
+      List<LanguageDetectionApp> apps = new ArrayList<LanguageDetectionApp>();
       for (String detectorClassName : detectorClassNames)
       {
         logger.trace("detectorClassName: " + detectorClassName);
-        apps.add(languageEntityToApp(detectorClassName));
+        apps.add((LanguageDetectionApp)languageEntityToApp(detectorClassName));
       }
       logger.trace("apps.size(): " + apps.size());
-      return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
+      return new LanguageDetectorsResponse(apps.toArray(new LanguageDetectionApp[]{}));
     }
     catch (Exception e)
     {
@@ -198,19 +201,19 @@ public class LanguageResource
   @GET
   @Path("/translators")
   @Produces(MediaType.APPLICATION_JSON)
-  public LanguageAppsResponse getTranslators()
+  public LanguageTranslatorsResponse getTranslators()
   {
     try
     {
       Set<String> translatorClassNames = ToEnglishTranslatorFactory.getSimpleClassNames();
       logger.trace("translatorClassNames.size(): " + translatorClassNames.size());
-      List<LanguageApp> apps = new ArrayList<LanguageApp>();
+      List<LanguageTranslationApp> apps = new ArrayList<LanguageTranslationApp>();
       for (String translatorClassName : translatorClassNames)
       {
         logger.trace("translatorClassName: " + translatorClassName);
-        apps.add(languageEntityToApp(translatorClassName));
+        apps.add((LanguageTranslationApp)languageEntityToApp(translatorClassName));
       }
-      return new LanguageAppsResponse(apps.toArray(new LanguageApp[]{}));
+      return new LanguageTranslatorsResponse(apps.toArray(new LanguageTranslationApp[]{}));
     }
     catch (Exception e)
     {
@@ -356,7 +359,7 @@ public class LanguageResource
      * The text sent in for translation should be URL encoded and in UTF-8.  
      * Language names and the original source text are returned URL encoded and in UTF-8.
 
-     curl -X POST -H "Content-Type: application/json" -d '{ "text": "wie alt bist du" }' localhost:8080/hoot-services/language/detect
+     curl -X POST -H "Content-Type: application/json" -d '{ "text": "wie%20alt%20bist%20du" }' localhost:8080/hoot-services/language/detect
      curl -X POST -H "Content-Type: application/json" -d '{ "detectors": ["TikaLanguageDetector"], "text": "wie%20alt%20bist%20du" }' 
        localhost:8080/hoot-services/language/detect
 
@@ -365,6 +368,7 @@ public class LanguageResource
        "detectedLangCode":"de",
        "sourceText":"wie%20alt%20bist%20du",
        "detectedLang":"German"
+       "detectionConfidence":"high"
      }
    */
   @POST
@@ -381,23 +385,33 @@ public class LanguageResource
       String detectedLangCode = "";
       String detectingDetector = "";
       String detectedLangName = "";
+      String detectionConfidence = "none";
 
       List<String> detectorClassNames = getAppClassNamesFromRequest(request, "detector");
       for (String detectorClassName : detectorClassNames)
       {
-        logger.trace("detectorClassName: " + detectorClassName);
         if (detectedLangCode.isEmpty())
         {
+          logger.trace("detectorClassName: " + detectorClassName);
           LanguageDetector detector = LanguageDetectorFactory.create(detectorClassName);
           detectingDetector = detectorClassName;
           logger.trace("detectingDetector: " + detectorClassName);
           detectedLangCode = detector.detect(requestText);
           logger.trace("detectedLangCode: " + detectedLangCode);
-          if (!detectedLangCode.isEmpty())
+          if (!detectedLangCode.isEmpty()) 
           {
             detectedLangName = 
               ((SupportedLanguageConsumer)detector).getLanguageName(detectedLangCode);
             logger.trace("detectedLangName: " + detectedLangName);
+            if (StringUtils.trimToNull(detectedLangName) == null)
+            {
+              //Some detectors seem to detect more languages than what they advertise (Tika),
+              //so doing this for now to avoid an error.  Later, can find all instances of an 
+              //unavailable lang name and update the appropriate config files.
+              detectedLangName = "unavailable";
+            }
+            detectionConfidence = LanguageUtils.confidenceToString(detector.getConfidence());
+            logger.trace("detectionConfidence: " + detectionConfidence);
           }
         }
       }
@@ -409,6 +423,7 @@ public class LanguageResource
       {
         entity.put("detectedLang", encodeText(detectedLangName));
         entity.put("detectorUsed", detectingDetector);
+        entity.put("detectionConfidence", detectionConfidence);
       } 
       logger.trace(entity.toJSONString());
       return Response.ok(entity.toJSONString()).build();
@@ -580,22 +595,29 @@ public class LanguageResource
   private LanguageApp languageEntityToApp(String appName) throws Exception
   {
     LanguageAppInfo appInfo = null;
+    LanguageApp app = null;
     if (ToEnglishTranslatorFactory.getSimpleClassNames().contains(appName))
     {
       appInfo = (LanguageAppInfo)ToEnglishTranslatorFactory.create(appName);
+      app = new LanguageTranslationApp();
     }
     else
     {
       appInfo = (LanguageAppInfo)LanguageDetectorFactory.create(appName);
+      app = new LanguageDetectionApp();
     }
     assert(appInfo != null);
     logger.trace(appInfo.getDescription());
     logger.trace(appInfo.getUrl());
 
-    LanguageApp app = new LanguageApp();
     app.setName(appName);
     app.setDescription(appInfo.getDescription());
     app.setUrl(appInfo.getUrl());
+    if (app instanceof LanguageDetectionApp)
+    {
+      LanguageDetectionApp detectionApp = (LanguageDetectionApp)app;
+      detectionApp.setSupportsConfidence(appName.equals("TikaLanguageDetector"));
+    }
     return app;
   }
 

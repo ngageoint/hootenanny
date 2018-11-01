@@ -22,18 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BASEINTERPOLATOR_H
 #define BASEINTERPOLATOR_H
 
 // Tgs
 #include <tgs/SharedPtr.h>
-
-#include "Interpolator.h"
+#include <tgs/Interpolation/Interpolator.h>
 
 namespace Tgs
 {
+
 class HilbertRTree;
 
 class BaseInterpolator : public Interpolator

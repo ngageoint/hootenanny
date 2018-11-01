@@ -43,6 +43,7 @@ namespace hoot
 class ElementVisitor
 {
 public:
+
   virtual ~ElementVisitor() {}
 
   static std::string className() { return "hoot::ElementVisitor"; }
@@ -58,9 +59,9 @@ public:
    * Returns a one sentence description for the visitor.
    *
    * Keep this as short as possible, capitalize the first letter, and check to see that it stays
-   * on one line when displayed with the 'operators' command.
+   * on one line when displayed with the 'info --operators' command.
    *
-   * To prevent a visitor from being displayed by the 'operators' command, this
+   * To prevent a visitor from being displayed by the 'info --operators' command, this
    * may be implemented as returning an empty string.
    */
   virtual QString getDescription() const = 0;

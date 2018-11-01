@@ -31,8 +31,8 @@
 #include <vector>
 
 // Hoot
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/util/Units.h>
-#include "WaySubline.h"
 
 // Qt
 #include <QString>

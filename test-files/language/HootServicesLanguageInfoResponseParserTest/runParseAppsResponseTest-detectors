@@ -1,0 +1,13 @@
+Available language detectors:
+
+Name: TikaLanguageDetector
+Description: blah
+URL: https://tika.apache.org
+Supports confidence: yes
+
+Name: OpenNlpLanguageDetector
+Description: more blah
+URL: https://opennlp.apache.org
+Supports confidence: no
+
+2 detectors are available.

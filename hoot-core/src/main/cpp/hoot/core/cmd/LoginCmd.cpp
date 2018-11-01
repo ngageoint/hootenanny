@@ -74,14 +74,13 @@ public:
     QString accessTokenSecret;
     loginManager.getAccessTokens(userId, accessToken, accessTokenSecret);
     std::cout << std::endl;
-    std::cout << "user name=" << userName << std::endl;
-    std::cout << "oauth_token=" << accessToken << std::endl;
-    std::cout << "oauth_token_secret=" << accessTokenSecret << std::endl;
-    std::cout << std::endl;
-    std::cout << "Use the above information with all Hootenanny commands that require use of the Hootenanny Web Services:" << std::endl;
-    std::cout << "-D hoot.services.auth.user.name=" << userName << std::endl;
-    std::cout << "-D hoot.services.auth.access.token=" << accessToken << std::endl;
-    std::cout << "-D hoot.services.auth.access.token.secret=" << accessTokenSecret << std::endl;
+    std::cout << "Use the information below with all Hootenanny commands that require use of the Hootenanny Web Services:"
+              << std::endl << std::endl;
+    std::cout << "-D hoot.services.auth.user.name=" << userName << " ";
+    std::cout << "-D hoot.services.auth.access.token=" << accessToken << " ";
+    std::cout << "-D hoot.services.auth.access.token.secret=" << accessTokenSecret << std::endl
+              << std::endl;
+    std::cout << "The access tokens will continue to be valid until you log out of the Hootenanny Web Services with 'hoot logout' or they expire due to a session timeout." << std::endl;
 
     return 0;
   }

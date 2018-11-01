@@ -35,6 +35,7 @@
 #include <geos/geom/Envelope.h>
 
 // hoot
+#include <hoot/core/conflate/tile/TileWorker.h>
 #include <hoot/core/util/Units.h>
 
 // Qt
@@ -45,8 +46,6 @@
 
 // TGS
 #include <tgs/HashMap.h>
-
-#include "TileWorker.h"
 
 namespace hoot
 {

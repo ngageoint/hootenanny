@@ -28,7 +28,7 @@
 #define __ELEMENT_WAY_DATA_H__
 
 // Local
-#include "ElementData.h"
+#include <hoot/core/elements/ElementData.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>

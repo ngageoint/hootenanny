@@ -44,7 +44,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         // TODO Auto-generated method stub
         if (authException != null) {
-            logger.warn(authException.toString());
+            logger.warn("commence()", authException);
             // response.sendError(401);
         }
 

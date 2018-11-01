@@ -31,7 +31,7 @@
 #include <boost/random/linear_congruential.hpp>
 
 // hoot
-#include "PermuteGridCalculator.h"
+#include <hoot/rnd/perty/PermuteGridCalculator.h>
 
 namespace hoot
 {

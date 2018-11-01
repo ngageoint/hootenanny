@@ -2105,28 +2105,20 @@ tds61 = {
             }
         } // End for GE4 loop
 
-        // Fix ZI001_SDV
-        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
-        if (tags['source:imagery:datetime'])
-        {
-            attrs.ZI001_SDV = tags['source:imagery:datetime'];
-            // delete notUsedTags['source:imagery:datetime'];
-        }
-        
-        // Now try using tags from Taginfo
+        //Map alternate source date tags to ZI001_SDV in order of precedence
+        //default is 'source:datetime'
         if (! attrs.ZI001_SDV)
-        {
-            if (tags['source:date']) 
-            {
-                attrs.ZI001_SDV = tags['source:date'];
-                // delete notUsedTags['source:date'];
-            }
-            else if (tags['source:geometry:date'])
-            {
-                attrs.ZI001_SDV = tags['source:geometry:date'];
-                // delete notUsedTags['source:geometry:date'];
-            }
-        }
+            attrs.ZI001_SDV = tags['source:imagery:datetime']
+                || tags['source:date']
+                || tags['source:geometry:date']
+                || '';
+
+        //Map alternate source tags to ZI001_SDP in order of precedence
+        //default is 'source'
+        if (! attrs.ZI001_SDP)
+            attrs.ZI001_SDP = tags['source:imagery']
+                || tags['source:description']
+                || '';
 
          // Amusement Parks
         if (attrs.F_CODE == 'AK030' && !(attrs.FFN))
@@ -2464,7 +2456,7 @@ tds61 = {
         if (!(tds61.AttrLookup[gFcode.toUpperCase()]))
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (tds61.configOut.getOgrThrowError == 'true')
+            if (tds61.configOut.OgrThrowError == 'true')
             {
                 if (! attrs.F_CODE)
                 {

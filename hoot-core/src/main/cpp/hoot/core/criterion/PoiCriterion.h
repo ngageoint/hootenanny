@@ -27,8 +27,7 @@
 #ifndef POICRITERION_H
 #define POICRITERION_H
 
-#include "ElementCriterion.h"
-
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {

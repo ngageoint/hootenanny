@@ -1,8 +1,8 @@
 ****Quick Stats****
-15:23:48.247 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+12:31:13.082 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-15:23:48.289 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-15:23:48.289 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
+12:31:13.321 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+12:31:13.322 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -13,28 +13,28 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-15:23:48.742 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+12:31:15.396 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-15:23:48.784 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-15:23:49.048 INFO  ...hoot3/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-15:23:49.051 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+12:31:15.585 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+12:31:16.581 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
+12:31:16.589 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-15:23:49.052 INFO  ...e/dg/hoot3/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-15:23:49.054 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+12:31:16.591 INFO  ...grant/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
+12:31:16.594 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-15:23:49.055 INFO  "/home/dg/hoot3/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-15:23:49.354 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /home/dg/hoot3/translations/TDSv61.js
-15:23:50.523 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+12:31:16.596 INFO  ...vagrant/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+12:31:17.940 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/TDSv61.js
+12:31:21.905 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
 
-15:23:50.559 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-15:23:50.562 INFO  ...hoot3/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-15:23:50.565 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+12:31:22.033 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+12:31:22.037 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
+12:31:22.040 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-15:23:50.565 INFO  ...e/dg/hoot3/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-15:23:50.568 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+12:31:22.041 INFO  ...grant/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
+12:31:22.043 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-15:23:50.568 INFO  "/home/dg/hoot3/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-15:23:50.830 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /home/dg/hoot3/translations/TDSv61.js
+12:31:22.044 INFO  ...vagrant/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+12:31:22.886 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/TDSv61.js
 {
     "Node Count":
     [
@@ -666,18 +666,18 @@ Maximum Relation ID	-9.223372036854776e+18
     ],
     "Translated Populated Tag Percent":
     [
-        "0.05080545229244114",
-        "0.04819277108433735"
+        "0.0698058653448988",
+        "0.06672845227062095"
     ],
     "Translated Populated Tag Count":
     [
-        "123",
-        "104"
+        "169",
+        "144"
     ],
     "Translated Default Tag Count":
     [
-        "1754",
-        "1544"
+        "1708",
+        "1504"
     ],
     "Translated Null Tag Count":
     [
@@ -686,18 +686,18 @@ Maximum Relation ID	-9.223372036854776e+18
     ],
     "Building Translated Populated Tag Percent":
     [
-        "0.0505050505050505",
-        "0.0505050505050505"
+        "0.0707070707070707",
+        "0.0707070707070707"
     ],
     "Highway Translated Populated Tag Percent":
     [
-        "0.03184713375796178",
-        "0.02547770700636943"
+        "0.04458598726114649",
+        "0.03821656050955414"
     ],
     "POI Translated Populated Tag Percent":
     [
-        "0.06600249066002491",
-        "0.06504065040650407"
+        "0.08841843088418432",
+        "0.08672086720867209"
     ],
     "Waterway Translated Populated Tag Percent":
     [
@@ -706,12 +706,12 @@ Maximum Relation ID	-9.223372036854776e+18
     ],
     "Polygon Conflatable POI Translated Populated Tag Percent":
     [
-        "0.06504065040650407",
-        "0.0625"
+        "0.08672086720867209",
+        "0.08223684210526316"
     ],
     "Polygon Translated Populated Tag Percent":
     [
-        "0.0505050505050505",
-        "0.0505050505050505"
+        "0.0707070707070707",
+        "0.0707070707070707"
     ]
 }

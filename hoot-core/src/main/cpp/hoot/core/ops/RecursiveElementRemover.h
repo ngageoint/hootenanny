@@ -28,14 +28,13 @@
 #define RECURSIVEELEMENTREMOVER_H
 
 // hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
 
 // Standard
 #include <set>
-
-#include "ConstOsmMapOperation.h"
 
 namespace hoot
 {

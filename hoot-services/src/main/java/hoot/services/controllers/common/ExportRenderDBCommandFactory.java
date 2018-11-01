@@ -22,18 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.common;
 
 
 import org.springframework.stereotype.Component;
 
+import hoot.services.models.db.Users;
+
 
 @Component
 public class ExportRenderDBCommandFactory {
 
+    public ExportRenderDBCommand build(String jobId, String name, Class<?> caller, Users user) {
+        return new ExportRenderDBCommand(jobId, name, caller, user);
+    }
     public ExportRenderDBCommand build(String jobId, String name, Class<?> caller) {
-        return new ExportRenderDBCommand(jobId, name, caller);
+        return build(jobId, name, caller, null);
     }
 }

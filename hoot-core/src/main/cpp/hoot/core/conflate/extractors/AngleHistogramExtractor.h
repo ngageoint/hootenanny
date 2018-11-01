@@ -33,16 +33,9 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 
-namespace geos
-{
-namespace geom
-{
-class Geometry;
-}
-}
-
 namespace hoot
 {
+
 class Histogram;
 
 /**

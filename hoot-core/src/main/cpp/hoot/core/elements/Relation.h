@@ -29,25 +29,14 @@
 
 #include <tgs/SharedPtr.h>
 
-#include "Element.h"
-#include "RelationData.h"
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/RelationData.h>
 
 // hoot
 #include <hoot/core/util/MetadataTags.h>
 
-namespace geos
-{
-  namespace geom
-  {
-    class Geometry;
-    class LinearRing;
-  }
-}
-
 namespace hoot
 {
-
-class Way;
 
 /**
  * This is not a complete implementation of a Relation, but it should be enough to do basic multi-

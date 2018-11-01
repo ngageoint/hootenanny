@@ -30,8 +30,7 @@
 // hoot
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/merging/MergerBase.h>
-
-#include "MultiaryClusterAlgorithm.h"
+#include <hoot/rnd/conflate/multiary/MultiaryClusterAlgorithm.h>
 
 namespace hoot
 {

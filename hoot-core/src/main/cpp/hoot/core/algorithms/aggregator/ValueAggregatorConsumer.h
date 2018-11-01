@@ -28,7 +28,7 @@
 #ifndef VALUEAGGREGATORCONSUMER_H
 #define VALUEAGGREGATORCONSUMER_H
 
-#include "ValueAggregator.h"
+#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 
 namespace hoot
 {

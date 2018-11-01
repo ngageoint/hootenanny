@@ -17,7 +17,7 @@ DEPENDPATH += \
   ../hoot-core/src/main/cpp/ \
   ../hoot-core-test/src/test/cpp/ \
   ../hoot-js/src/main/cpp/ \
-  ../hoot-test/src/main/cpp/hoot/test \
+  ../hoot-test/src/main/cpp \
 
 INCLUDEPATH += \
   $${DEPENDPATH}

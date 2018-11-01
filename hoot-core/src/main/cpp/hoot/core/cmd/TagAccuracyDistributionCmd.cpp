@@ -51,7 +51,7 @@ public:
   virtual QString getName() const { return "tag-accuracy-distribution"; }
 
   virtual QString getDescription() const
-  { return "Calculates the distribution of feature accuracy tag values"; }
+  { return "Calculates the distribution of feature accuracy tag values for a map"; }
 
   virtual int runSimple(QStringList args)
   {

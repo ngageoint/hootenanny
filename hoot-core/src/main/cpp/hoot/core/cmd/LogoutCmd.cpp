@@ -31,6 +31,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/auth/HootServicesLoginManager.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -50,15 +51,16 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    if (args.size() != 0)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes zero parameters.").arg(getName()));
     }
 
-    const QString userName = args[0];
-    const QString accessToken = args[1];
-    const QString accessTokenSecret = args[2];
+    ConfigOptions config(conf());
+    const QString userName = config.getHootServicesAuthUserName();
+    const QString accessToken = config.getHootServicesAuthAccessToken();
+    const QString accessTokenSecret = config.getHootServicesAuthAccessTokenSecret();
 
     const bool success =
       HootServicesLoginManager().logout(userName, accessToken, accessTokenSecret);

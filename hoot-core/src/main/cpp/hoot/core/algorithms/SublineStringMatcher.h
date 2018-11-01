@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SUBLINESTRINGMATCHER_H
 #define SUBLINESTRINGMATCHER_H
@@ -30,10 +30,9 @@
 // Standard
 #include <deque>
 
-#include "linearreference/WaySublineMatchString.h"
-
 // hoot
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 
 namespace hoot
 {

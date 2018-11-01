@@ -26,10 +26,9 @@
  */
 #include "EdgeMatchSetFinder.h"
 
-#include "EdgeMatch.h"
-#include "EdgeSublineMatch.h"
-
 // hoot
+#include <hoot/core/conflate/network/EdgeMatch.h>
+#include <hoot/core/conflate/network/EdgeSublineMatch.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot

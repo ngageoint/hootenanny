@@ -27,7 +27,7 @@
 #ifndef UNIONPOLYGONSVISITOR_H
 #define UNIONPOLYGONSVISITOR_H
 
-#include "ElementConstOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // geos
 #include <geos/geom/Geometry.h>

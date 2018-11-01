@@ -44,6 +44,10 @@
             <AppenderRef ref="Console"/>
         </Logger>
 
+        <Logger name="org.reflections" level="ERROR" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
         <Logger name="org.glassfish.jersey" level="INFO" additivity="false">
             <Filters>
                 <BrokenPipeFilter/>

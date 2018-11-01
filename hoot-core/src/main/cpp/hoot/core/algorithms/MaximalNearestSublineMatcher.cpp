@@ -30,11 +30,10 @@
 #include <geos/geom/LineString.h>
 
 // hoot
+#include <hoot/core/algorithms/MaximalNearestSubline.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-
-#include "MaximalNearestSubline.h"
 
 using namespace geos::geom;
 using namespace std;

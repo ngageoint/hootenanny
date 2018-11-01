@@ -45,7 +45,7 @@ public:
 
   virtual QString getName() const { return "rubber-sheet"; }
 
-  virtual QString getDescription() const { return "Brings two map datasets into alignment"; }
+  virtual QString getDescription() const { return "Brings two maps into alignment"; }
 
   virtual int runSimple(QStringList args)
   {

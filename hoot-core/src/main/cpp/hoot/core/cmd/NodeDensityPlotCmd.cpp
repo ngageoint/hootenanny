@@ -59,7 +59,7 @@ class NodeDensityPlotCmd : public BaseCommand
 
     virtual QString getName() const { return "node-density-plot"; }
 
-    virtual QString getDescription() const { return "Creates a node density plot"; }
+    virtual QString getDescription() const { return "Creates a node density plot for a map"; }
 
     Envelope getEnvelope(boost::shared_ptr<OsmMapReader> reader)
     {

@@ -19,7 +19,7 @@ Hootenanny is an open source conflation tool developed with machine learning tec
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
-# Conflatable Data Types
+# Conflatable Feature Types
 * Area polygons
 * Building polygons
 * Points of Interest (POIs)
@@ -27,22 +27,27 @@ Hootenanny is an open source conflation tool developed with machine learning tec
 * Utility polylines (power lines)
 * Waterway polylines
 
+Additional feature types can be made conflatable using Hootenanny's pluggable conflation architecture.  See the Hootenanny Developer Guide for details.
+
 # Feature Summary
 In addition to conflating maps, Hootenanny can also:
-* Add missing type tags to feature data
-* Align two maps together
-* Calculate the extent of map data
+* Add missing type tags to features
+* Align two maps with each other
+* Apply pluggable data transformation operations to a map
+* Calculate the geospatial extent of a map
 * Clean map data
-* Compare maps
+* Combine maps together
+* Compare maps with each other
 * Compute bounding tiles based on node density
-* Concatenate maps together
 * Convert maps between different geodata formats (see Supported Data Formats section below)
-* Derive changesets between maps and apply them to external OSM data stores
+* Crop a map to a geospatial extent
+* Derive changesets between maps and apply the changesets to external OSM data stores
+* Detect spoken languages in a map's tag data
 * Explore tag data
-* Gather statistics on map features
-* Identify road intersections
+* Gather statistics for a map
+* Identify road intersections in a map
 * Perturb map data for testing purposes
-* Plot node feature density
+* Plot node density
 * Sort map data
 * Translate feature tags using user defined schemas
 * Translate feature tags to English
@@ -120,6 +125,8 @@ Notes:
 * **(*)** = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
+Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer Guide for details.
+
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas.  By default, Hootenanny 
 supports automated schema conversion between: 
@@ -161,6 +168,9 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
     
 ### Data Transformation
+
+    # Combine multiple OSM files into a single file:
+    hoot convert input1.osm input2.osm output.osm
     
     # Convert a geonames file to an OSM file
     hoot convert input.geonames output.osm
@@ -205,9 +215,6 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Sort a map to the OSM standard in memory
     hoot sort input.osm output.osm
     
-    # Concatenate two maps
-    hoot cat input1.osm input2.osm output.osm
-    
 ### Comparison
     
     # Calculate the difference between two maps
@@ -249,9 +256,6 @@ See the Hootenanny User Guide for more usage examples and details on command inp
 
     # Count all POIs in a map
     hoot count "input1.osm;input2.osm" hoot::PoiCriterion
-    
-    # Find the largest element ID in a map
-    hoot stat input.osm hoot::MaxIdVisitor
 
 ## Advanced
 
@@ -316,6 +320,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Remove all duplicate ways from a map
     hoot convert -D convert.ops="hoot::DuplicateWayRemover" input.osm output.osm
     
+    # Remove all duplicate areas from a map
+    hoot convert -D convert.ops="hoot::RemoveDuplicateAreaVisitor" input.osm output.osm
+    
+    # Remove all empty areas from a map
+    hoot convert -D convert.ops="hoot::RemoveEmptyAreasVisitor" input.osm output.osm
+    
     # Remove duplicate name tags from features
     hoot convert -D convert.ops="hoot::DuplicateNameRemover" input.osm output.osm
     
@@ -324,6 +334,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
     # Remove elements that contain no useful information
     hoot convert -D convert.ops="hoot::NoInformationElementRemover" input.osm output.osm
+
+    # Combine like polygons together without using full-fledged conflation
+    hoot convert -D convert.ops="hoot::UnionPolygonsOp" input.osm output.osm
+
+    # Combine like points together without using full-fledged conflation
+    hoot convert -D convert.ops="hoot::MergeNearbyNodes" input.osm output.osm
     
     # Add the tag "error:circular=5.0" to all elements
     hoot convert -D convert.ops=hoot::SetTagVisitor -D set.tag.visitor.key=error:circular \
@@ -343,7 +359,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       -D remove.tags.visitor.element.criterion=hoot::TagCriterion \
       -D tag.criterion.kvps="power=line" -D element.criterion.negate=true input.osm output.osm
       
-    # For all features with a "voltage" tag between 1 and 45k, set the tag "power=minor_line"
+    # For all features with a "voltage" tag between 1 and 45k volts, set the tag "power=minor_line"
     hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.key=power \ 
       -D set.tag.value.visitor.value=minor_line \
       -D set.tag.value.visitor.element.criterion=hoot::TagValueNumericRangeCriterion \
@@ -360,11 +376,8 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Sort data to the OSM standard that is too large to fit in memory
     hoot sort -D element.sorter.element.buffer.size=10000 input.osm output.osm 
     
-    # Combine sets of polygons together
-    hoot union-polygons input1.osm input2.osm output.osm
-    
     # Detect road intersections
-    hoot find-intersections input.osm output.osm
+    hoot convert -D convert.ops="hoot::FindHighwayIntersectionsOp" input.osm output.osm
     
     # Create a node density plot
     hoot node-density-plot input.osm output.png 100
@@ -376,7 +389,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot perty --score input.osm perturbed.osm
     
     # Display the internal tag schema that Hootenanny uses
-    hoot tag-schema
+    hoot schema
     
     # Calculate a set of irregular shaped tiles that will fit at most 1000 nodes each for a map
     hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000
@@ -389,6 +402,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
 
     # Count all features which have a tag whose key contains the text "phone"
     hoot count -D tag.key.contains.criterion.text="phone" input1.osm hoot::TagKeyContainsCriterion
+    
+    # Calculate the area of all features in a map
+    hoot stat input.osm hoot::CalculateAreaVisitor
+    
+    # Calculate the length of all ways in a map
+    hoot stat input.osm hoot::LengthOfWaysVisitor
     
     # Calculate the numerical average of all "accuracy" tags
     hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
@@ -456,12 +475,24 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Translate "name" and "alt_name" tags from German or Spanish to English
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="de;es" \
-      -D language.translation.to.translate.tag.keys="name;alt_name" input.osm output.osm
+      -D language.tag.keys="name;alt_name" input.osm output.osm
       
     # Translate "name" tags to English and let the source language be detected
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="detect" \ 
-      -D language.translation.to.translate.tag.keys="name" input.osm output.osm
+      -D language.tag.keys="name" input.osm output.osm
+
+    # Let Hootenanny automatically determine all the name tags in the source map and then 
+    # translate those tags to English, allowing the source language be detected
+    hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
+      -D language.translation.source.languages="detect" \ 
+      -D language.parse.names=true input.osm output.osm
+
+    # Determine the most prevalent source languages for non-English POI names in a map. Use 
+    # that information to set up English translation services for those languages
+    hoot convert -D language.parse.names=true \
+      -D convert.ops="hoot::PoiCriterion;hoot::NonEnglishLanguageDetectionVisitor" \
+      input.osm output.osm
       
 ### MetaInfo
     
@@ -496,16 +527,16 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot info --tag-mergers
     
     # List all available language detectors
-    hoot languages --detectors
+    hoot info --languages --detectors
     
     # List all available language translators
-    hoot languages --translators
+    hoot info --languages --translators
     
     # List all detectable langauges
-    hoot languages --detectable
+    hoot info --languages --detectable
     
     # List all translatable languages
-    hoot languages --translatable
+    hoot info --languages --translatable
 
 # Contributing
 Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny 

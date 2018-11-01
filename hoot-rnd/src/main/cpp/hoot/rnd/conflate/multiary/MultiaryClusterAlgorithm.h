@@ -29,13 +29,12 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/rnd/conflate/multiary/MultiaryCluster.h>
+#include <hoot/rnd/conflate/multiary/MultiaryPoiMergeCache.h>
+#include <hoot/rnd/conflate/multiary/MultiaryScoreCache.h>
 
 // Standard
 #include <queue>
-
-#include "MultiaryCluster.h"
-#include "MultiaryPoiMergeCache.h"
-#include "MultiaryScoreCache.h"
 
 namespace hoot
 {
@@ -53,7 +52,7 @@ public:
   /**
    * Represents a link between two clusters.
    */
-  class  ClusterLink
+  class ClusterLink
   {
   public:
     /**

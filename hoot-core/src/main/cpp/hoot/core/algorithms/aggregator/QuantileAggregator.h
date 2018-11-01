@@ -28,9 +28,8 @@
 #define QUANTILEAGGREGATOR_H
 
 // Hoot
+#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "ValueAggregator.h"
 
 namespace hoot
 {

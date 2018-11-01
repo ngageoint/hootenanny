@@ -28,12 +28,12 @@
 #include "IoUtils.h"
 
 // Hoot
-#include <hoot/core/io/OgrUtilities.h>
-#include "FileUtils.h"
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OgrReader.h>
+#include <hoot/core/io/OgrUtilities.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
 
 // Qt

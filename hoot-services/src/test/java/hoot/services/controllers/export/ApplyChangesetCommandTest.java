@@ -29,7 +29,9 @@ package hoot.services.controllers.export;
 
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.HashMap;
@@ -80,7 +82,7 @@ public class ApplyChangesetCommandTest {
         tags.put("osm_api_db_export_time", conflictTimestamp);
         DbUtils.updateMapsTableTags(tags, mapId);
 
-        ApplyChangesetCommand exportCommand = new ApplyChangesetCommand(jobId, exportParams, debugLevel, caller);
+        ApplyChangesetCommand exportCommand = new ApplyChangesetCommand(jobId, exportParams, debugLevel, caller, null);
 
         List<String> options = exportCommand.getCommonExportHootOptions();
         List<String> hootOptions = new LinkedList<>();

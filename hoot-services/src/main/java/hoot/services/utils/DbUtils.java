@@ -41,6 +41,9 @@ import java.util.Map;
 
 import javax.inject.Provider;
 import javax.sql.DataSource;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.WebApplicationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +57,7 @@ import com.querydsl.sql.PostgreSQLTemplates;
 import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
+import com.querydsl.sql.namemapping.PreConfiguredNameMapping;
 import com.querydsl.sql.spring.SpringConnectionProvider;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
 import com.querydsl.sql.types.EnumAsObjectType;
@@ -115,12 +119,15 @@ public final class DbUtils {
 
     private static void overrideTable(String mapId, Configuration config) {
         if (config != null) {
-            config.registerTableOverride("current_relation_members", "current_relation_members_" + mapId);
-            config.registerTableOverride("current_relations", "current_relations_" + mapId);
-            config.registerTableOverride("current_way_nodes", "current_way_nodes_" + mapId);
-            config.registerTableOverride("current_ways", "current_ways_" + mapId);
-            config.registerTableOverride("current_nodes", "current_nodes_" + mapId);
-            config.registerTableOverride("changesets", "changesets_" + mapId);
+
+            PreConfiguredNameMapping tablemapping = new PreConfiguredNameMapping();
+            tablemapping.registerTableOverride("current_relation_members", "current_relation_members_" + mapId);
+            tablemapping.registerTableOverride("current_relations", "current_relations_" + mapId);
+            tablemapping.registerTableOverride("current_way_nodes", "current_way_nodes_" + mapId);
+            tablemapping.registerTableOverride("current_ways", "current_ways_" + mapId);
+            tablemapping.registerTableOverride("current_nodes", "current_nodes_" + mapId);
+            tablemapping.registerTableOverride("changesets", "changesets_" + mapId);
+            config.setDynamicNameMapping(tablemapping);
         }
     }
 
@@ -333,7 +340,7 @@ public final class DbUtils {
         long id;
         try {
             id = getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
-        } catch (IllegalArgumentException ex) {
+        } catch (WebApplicationException ex) {
             id = -1;
         }
         return (id > -1);
@@ -353,10 +360,10 @@ public final class DbUtils {
      *         its ID is returned
      */
     public static long getRecordIdForInputString(String input, RelationalPathBase<?> table,
-            NumberPath<Long> idField, StringPath nameField) {
+            NumberPath<Long> idField, StringPath nameField) throws WebApplicationException {
 
         if (org.apache.commons.lang3.StringUtils.isEmpty(input)) {
-            throw new IllegalArgumentException("No record exists with ID: " + input
+            throw new BadRequestException("No record exists with ID: " + input
                     + ".  Please specify a valid record.");
         }
 
@@ -371,8 +378,8 @@ public final class DbUtils {
                     .fetchCount();
 
             if (recordCount == 0) {
-                throw new IllegalArgumentException("No record exists with ID = " + input +
-                        " in '" + table + "' table.  Please specify a valid record.");
+                throw new NotFoundException("No record exists with ID = " + input +
+                        " in '" + table + "' table. Please specify a valid record.");
             }
 
             if (recordCount == 1) {
@@ -380,8 +387,8 @@ public final class DbUtils {
             }
 
             if (recordCount > 1) {
-                throw new IllegalArgumentException("Multiple records exist with ID " + " = " + input
-                        + " in '" + table + "' table.  Please specify a single, valid record.");
+                throw new BadRequestException("Multiple records exist with ID = " + input + " in '" + table
+                        + "' table. Please specify a single, valid record.");
             }
         }
         else { // input wasn't parsed as a numeric ID, so let's try it as a name
@@ -397,8 +404,8 @@ public final class DbUtils {
                     .fetch();
 
             if (records.isEmpty()) {
-                throw new IllegalArgumentException("No record exists with NAME = " + input +
-                        " in '" + table + "' table.  Please specify a valid record.");
+                throw new NotFoundException("No record exists with NAME = " + input +
+                        " in '" + table + "' table. Please specify a valid record.");
             }
 
             if (records.size() == 1) {
@@ -406,8 +413,8 @@ public final class DbUtils {
             }
 
             if (records.size() > 1) {
-                throw new IllegalArgumentException("Multiple records exist with NAME " + " = " + input
-                        + " in '" + table + "' table.  Please specify a single, valid record.");
+                throw new BadRequestException("Multiple records exist with NAME = " + input
+                        + " in '" + table + "' table. Please specify a single, valid record.");
             }
         }
 

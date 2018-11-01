@@ -40,16 +40,17 @@ using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/WorkingMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
+#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/conflate/WorkingMap.h>
+#include <hoot/core/criterion/UnknownCriterion.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/criterion/UnknownCriterion.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/manipulators/DanglerRemoverManipulation.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot::elements;
 
 // Qt
@@ -62,8 +63,6 @@ using namespace std;
 // Tgs
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
-
-#include "DanglerRemoverManipulation.h"
 
 namespace hoot
 {

@@ -50,7 +50,7 @@ public:
 
   virtual QString getName() const { return "sort"; }
 
-  virtual QString getDescription() const { return "Sorts map data to the OSM standard"; }
+  virtual QString getDescription() const { return "Sorts a map to the OSM standard"; }
 
   virtual int runSimple(QStringList args)
   {
