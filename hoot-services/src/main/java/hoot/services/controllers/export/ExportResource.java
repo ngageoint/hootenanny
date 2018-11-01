@@ -22,17 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -42,6 +47,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -50,10 +56,6 @@ import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +67,7 @@ import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -73,13 +76,11 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Path("/export")
 @Transactional
 public class ExportResource {
-    private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
-
     @Autowired
     private JobProcessor jobProcessor;
 
     @Autowired
-    private ExportCommandFactory exportCommandFactory;
+    private UserAwareExportCommandFactory userAwareExportCommandFactory;
 
     public ExportResource() {}
 
@@ -112,9 +113,15 @@ public class ExportResource {
     @Path("/execute")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response export(ExportParams params,
+    public Response export(ExportParams params, @Context HttpServletRequest request,
                            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+        Users user = Users.fromRequest(request);
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
+
+        // ensure valid email address in `params`:
+        if(user != null) {
+            params.setUserEmail(user.getEmail());
+        }
 
         try {
             String outputType = params.getOutputType();
@@ -128,8 +135,8 @@ public class ExportResource {
             List<Command> workflow = new LinkedList<>();
 
             if (outputType.equalsIgnoreCase("osm")) {
-                ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, params, debugLevel,
-                        ExportOSMCommand.class, this.getClass());
+                ExternalCommand exportOSMCommand = userAwareExportCommandFactory.build(jobId, params, debugLevel,
+                        ExportOSMCommand.class, this.getClass(), user);
 
                 workflow.add(exportOSMCommand);
 
@@ -139,36 +146,36 @@ public class ExportResource {
                 }
             }
             else if (outputType.equalsIgnoreCase("osm.pbf")) {
-                ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, params, debugLevel,
-                        ExportOSMCommand.class, this.getClass());
+                ExternalCommand exportOSMCommand = userAwareExportCommandFactory.build(jobId, params, debugLevel,
+                        ExportOSMCommand.class, this.getClass(), user);
 
                 workflow.add(exportOSMCommand);
             }
             else if (outputType.equalsIgnoreCase("osc")) {
-                ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
-                        debugLevel, DeriveChangesetCommand.class, this.getClass());
+                ExternalCommand deriveChangesetCommand = userAwareExportCommandFactory.build(jobId, params,
+                        debugLevel, DeriveChangesetCommand.class, this.getClass(), user);
 
                 workflow.add(deriveChangesetCommand);
             }
             else if (outputType.equalsIgnoreCase("osm_api_db")) {
-                ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
-                        debugLevel, DeriveChangesetCommand.class, this.getClass());
+                ExternalCommand deriveChangesetCommand = userAwareExportCommandFactory.build(jobId, params,
+                        debugLevel, DeriveChangesetCommand.class, this.getClass(), user);
 
-                ExternalCommand applyChangesetCommand = exportCommandFactory.build(jobId, params,
-                        debugLevel, ApplyChangesetCommand.class, this.getClass());
+                ExternalCommand applyChangesetCommand = userAwareExportCommandFactory.build(jobId, params,
+                        debugLevel, ApplyChangesetCommand.class, this.getClass(), user);
 
                 workflow.add(deriveChangesetCommand);
                 workflow.add(applyChangesetCommand);
             }
             else if (outputType.startsWith("tiles")) {
-                ExternalCommand calculateTilesCommand = exportCommandFactory.build(jobId, params,
-                        debugLevel, CalculateTilesCommand.class, this.getClass());
+                ExternalCommand calculateTilesCommand = userAwareExportCommandFactory.build(jobId, params,
+                        debugLevel, CalculateTilesCommand.class, this.getClass(), user);
 
                 workflow.add(calculateTilesCommand);
             }
             else { //else Shape/FGDB
-                ExternalCommand exportCommand = exportCommandFactory.build(jobId, params,
-                        debugLevel, ExportCommand.class, this.getClass());
+                ExternalCommand exportCommand = userAwareExportCommandFactory.build(jobId, params,
+                        debugLevel, ExportCommand.class, this.getClass(), user);
 
                 workflow.add(exportCommand);
 
@@ -191,7 +198,7 @@ public class ExportResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject json = new JSONObject();
+        java.util.Map<String, Object> json = new HashMap<String, Object>();
         json.put("jobid", jobId);
 
         //Update last accessed timestamp for db datasets on export
@@ -200,7 +207,7 @@ public class ExportResource {
             MapResource.updateLastAccessed(mapid);
         }
 
-        return Response.ok(json.toJSONString()).build();
+        return Response.ok(json).build();
     }
 
     /**
@@ -342,21 +349,21 @@ public class ExportResource {
             transExtPath = TRANSLATION_EXT_PATH;
         }
 
-        JSONArray exportResources = new JSONArray();
+        List<java.util.Map<String,Object>> exportResources = new ArrayList<java.util.Map<String,Object>>(2);
         try {
-            JSONObject json = new JSONObject();
+            java.util.Map<String, Object> json = new HashMap<String, Object>();
             json.put("name", "TDS");
             json.put("description", "LTDS 4.0");
             exportResources.add(json);
 
-            json = new JSONObject();
+            json = new HashMap<String, Object>();
             json.put("name", "MGCP");
             json.put("description", "MGCP");
             exportResources.add(json);
 
             File file = new File(transExtPath);
             if (file.exists() && file.isDirectory()) {
-                json = new JSONObject();
+                json = new HashMap<String, Object>();
                 json.put("name", "UTP");
                 json.put("description", "UTP");
                 exportResources.add(json);
@@ -367,7 +374,7 @@ public class ExportResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(exportResources.toJSONString()).build();
+        return Response.ok(exportResources).build();
     }
 
     private Command getZIPCommand(File workDir, String outputName, String outputType) {

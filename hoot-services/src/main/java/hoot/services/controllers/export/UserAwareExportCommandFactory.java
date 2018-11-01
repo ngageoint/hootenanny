@@ -22,19 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.clipping;
+package hoot.services.controllers.export;
+
+import java.lang.reflect.Constructor;
 
 import org.springframework.stereotype.Component;
 
 import hoot.services.models.db.Users;
 
-
 @Component
-class ClipDatasetCommandFactory {
-
-    ClipDatasetCommand build(String jobId, ClipDatasetParams params, String debugLevel, Class<?> caller, Users user) {
-        return new ClipDatasetCommand(jobId, params, debugLevel, caller, user);
+public class UserAwareExportCommandFactory {
+    ExportCommand build(String jobId, ExportParams params, String debugLevel, Class<? extends ExportCommand> exportCommandClass, Class<?> caller, Users user) {
+        try {
+            Constructor<? extends ExportCommand> constuctor =
+                    exportCommandClass.getDeclaredConstructor(String.class, ExportParams.class, String.class, Class.class, Users.class);
+            return constuctor.newInstance(jobId, params, debugLevel, caller, user);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to instantiate an instance of class: " + exportCommandClass.getName(), e);
+        }
     }
 }

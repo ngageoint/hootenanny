@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.common;
 
@@ -58,7 +58,7 @@ public class ExportRenderDBCommandTest {
         long userId = MapUtils.insertUser();
         long mapId = MapUtils.insertMap(userId);
 
-        ExportRenderDBCommand exportRenderDBCommand = new ExportRenderDBCommand(jobId, "map-with-id-" + mapId, caller);
+        ExportRenderDBCommand exportRenderDBCommand = new ExportRenderDBCommand(jobId, "map-with-id-" + mapId, caller, null);
         exportRenderDBCommand.execute();
 
         assertEquals(true, exportRenderDBCommand.getTrackable());

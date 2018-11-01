@@ -32,16 +32,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import hoot.services.models.db.Users;
 
 
 class ApplyChangesetCommand extends ExportCommand {
-    private static final Logger logger = LoggerFactory.getLogger(ApplyChangesetCommand.class);
-
-    ApplyChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+    ApplyChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller, Users user) {
         super(jobId, params);
-
+        // ensure valid email address in `params`:
+        if(user != null) {
+            params.setUserEmail(user.getEmail());
+        }
         List<String> hootOptions = toHootOptions(super.getCommonExportHootOptions());
 
         Long mapId = Long.parseLong(params.getInput());

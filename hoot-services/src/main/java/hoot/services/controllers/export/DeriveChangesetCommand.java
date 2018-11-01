@@ -26,23 +26,22 @@
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.OSMAPI_DB_URL;
 import static hoot.services.HootProperties.CHANGESET_DERIVE_BUFFER;
+import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import hoot.services.models.db.Users;
 
 
 class DeriveChangesetCommand extends ExportCommand {
-    private static final Logger logger = LoggerFactory.getLogger(DeriveChangesetCommand.class);
-
-    DeriveChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+    DeriveChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller, Users user) {
         super(jobId, params);
-
+        if(user != null) {
+            params.setUserEmail(user.getEmail());
+        }
         Long mapId = Long.parseLong(params.getInput());
         hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapId);
 
@@ -51,7 +50,11 @@ class DeriveChangesetCommand extends ExportCommand {
         //This is set up for the XML changeset workflow.
         List<String> options = super.getCommonExportHootOptions();
         options.add("convert.bounding.box=" + aoi);
-        options.add("api.db.email=test@test.com");
+        if(user == null) {
+            options.add("api.db.email=test@test.com");
+        } else {
+            options.add("api.db.email=" + user.getEmail());
+        }
         options.add("reader.use.file.status=true");
         options.add("reader.keep.status.tag=true");
         double changesetBufferSize = Double.parseDouble(CHANGESET_DERIVE_BUFFER); //in degrees
