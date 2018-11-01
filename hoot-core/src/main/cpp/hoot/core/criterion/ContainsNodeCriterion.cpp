@@ -40,7 +40,6 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ContainsNodeCriterion)
 
 ContainsNodeCriterion::ContainsNodeCriterion()
 {
-  setConfiguration(conf());
 }
 
 ContainsNodeCriterion::ContainsNodeCriterion(long nodeId) :

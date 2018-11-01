@@ -41,7 +41,6 @@ HOOT_FACTORY_REGISTER(ElementCriterion, DistanceNodeCriterion)
 
 DistanceNodeCriterion::DistanceNodeCriterion()
 {
-  setConfiguration(conf());
 }
 
 void DistanceNodeCriterion::setConfiguration(const Settings& s)
