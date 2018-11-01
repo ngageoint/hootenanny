@@ -534,7 +534,7 @@ public class FolderResource {
             Folders f = new Folders();
             f.setId(0L);
             f.setPublicCol(true);
-            f.setUserId(user.getId());
+            f.setUserId(user == null ? -1 : user.getId());
             return f;
         }
         Folders folder = createQuery()
