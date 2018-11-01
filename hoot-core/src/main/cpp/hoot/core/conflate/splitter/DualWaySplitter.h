@@ -48,7 +48,9 @@ class Way;
 
 /**
  * Splits all "divided=yes" highways into two oneway streets. All intersections should be split
- * before this method is called. Failure to do so will result in undefined behavior.
+ * before this method is called. Failure to do so will result in undefined behavior. A number of
+ * assumptions must be made to do this including assumptions about the direction of travel on
+ * roads (right or left hand drivers).
  */
 class DualWaySplitter : public OsmMapOperation
 {
@@ -76,7 +78,7 @@ public:
   void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual QString getDescription() const
-  { return "Splits all 'divided=yes'' highways into two oneway streets"; }
+  { return "Splits all 'divided=yes'' highways into two one way streets"; }
 
 private:
 

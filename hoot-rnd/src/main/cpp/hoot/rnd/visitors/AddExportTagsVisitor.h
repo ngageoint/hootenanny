@@ -51,7 +51,7 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getDescription() const { return "Adds tags needed for exporting map data"; }
+  virtual QString getDescription() const { return "Adds tags needed for exporting"; }
 
 private:
 

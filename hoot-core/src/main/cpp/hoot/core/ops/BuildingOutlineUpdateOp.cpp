@@ -60,6 +60,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOutlineUpdateOp)
 class NodeIdVisitor : public ConstElementVisitor
 {
 public:
+
   set<long>& allNodes;
 
   NodeIdVisitor(set<long>& nodes) : allNodes(nodes) {}
@@ -78,6 +79,7 @@ public:
 class NodeReplaceVisitor : public ConstElementVisitor
 {
 public:
+
   NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo) : _fromTo(fromTo), _map(map)
   {}
 
@@ -115,6 +117,7 @@ public:
   virtual QString getDescription() const { return ""; }
 
 private:
+
   const map<long, long>& _fromTo;
   OsmMap& _map;
 };

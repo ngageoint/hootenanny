@@ -73,8 +73,7 @@ public:
 
   virtual void visit(const ConstWayPtr& w);
 
-  virtual QString getDescription() const
-  { return "Creates a multi-linestring out of all ways that are visited"; }
+  virtual QString getDescription() const { return "Creates a multi-linestring out of ways"; }
 
 protected:
 

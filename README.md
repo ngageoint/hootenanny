@@ -140,6 +140,11 @@ Users are also able to define their own custom translations.  For custom transla
 uploaded dataset using a semi-automated Translation Assistant.  More details on the translation capabilities of Hootenanny can be 
 found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
 
+# Data Exploration
+
+Hootenanny has a pluggable architecture that allows you to create your information gathering features for gleaning information from map 
+data, as illustrated in examples in the Usage section.  See the Hootenanny Developer Guide for more details on data exploration customization. 
+
 # Usage
 
 See the Hootenanny User Guide for more usage examples and details on command input parameters.
@@ -408,6 +413,13 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
     # Calculate the length of all ways in a map
     hoot stat input.osm hoot::LengthOfWaysVisitor
+
+    # Count the number of features containing a node by specifying its ID
+    hoot count -D contains.node.criterion.id=-234 input.osm hoot::ContainsNodeCriterion
+
+    # Count the number of nodes within 25 meters of a coordinate
+    hoot count -D distance.node.criterion.center=-77.3453,38.3456 \
+      -D distance.node.criterion.distance=25.0 input.osm hoot::DistanceNodeCriterion
     
     # Calculate the numerical average of all "accuracy" tags
     hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor

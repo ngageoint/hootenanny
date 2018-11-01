@@ -56,9 +56,7 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new OrCriterion(_criteria[0]->clone(), _criteria[1]->clone())); }
 
-  virtual QString getDescription() const
-  { return "Allows for combining criterion with the logical OR operation"; }
-
+  virtual QString getDescription() const { return "Allows for combining criteria (logical OR )"; }
 };
 
 }

@@ -92,7 +92,7 @@ vector<CreatorDescription> HighwaySnapMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
   result.push_back(
-    CreatorDescription(className(), "merges roads conflated with the non-greedy algorithm", false));
+    CreatorDescription(className(), "Merges roads conflated with the non-greedy algorithm", false));
   return result;
 }
 

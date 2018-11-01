@@ -57,7 +57,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const
-  { return "Removes all elements that are not Nodes with meaningful tags"; }
+  { return "Removes all elements that are not nodes with meaningful tags"; }
 
 private:
 

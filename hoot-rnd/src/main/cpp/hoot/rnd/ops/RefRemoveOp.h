@@ -57,7 +57,7 @@ public:
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual QString getDescription() const
-  { return "Removes all elements that meet a specified criterion"; }
+  { return "Removes elements meeting a criterion and updates REF tags"; }
 
 private:
 

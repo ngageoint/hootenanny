@@ -168,7 +168,7 @@ vector<CreatorDescription> NetworkMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
   result.push_back(
-    CreatorDescription(className(), "merges roads conflated with the network algorithm", false));
+    CreatorDescription(className(), "Merges roads conflated with the network algorithm", false));
   return result;
 }
 

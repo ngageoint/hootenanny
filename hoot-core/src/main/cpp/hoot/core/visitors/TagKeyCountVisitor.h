@@ -55,7 +55,7 @@ public:
   virtual double getStat() const { return _keyCount; }
 
   virtual QString getDescription() const
-  { return "Counts the number of tags in all elements with the given keys"; }
+  { return "Counts the number of tags with the given keys"; }
 
   virtual void setConfiguration(const Settings& conf);
 
