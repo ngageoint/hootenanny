@@ -37,10 +37,11 @@ namespace hoot
 {
 /**
  * Searches for multiple ways that share two or more consecutive nodes if they are found, then
- * it attempts to remove the duplicate bits of the longer way. There may be some scenarios that
- * this is destructive, but in most cases it is probably useful. This routine also doesn't handle
- * the case where two ways have multiple overlapping sections. In that case only the longest
- * duplicate section will be removed.
+ * it attempts to remove the duplicate bits of the longer way. If the lines partially overlap with
+ * exactly the same geometry then only the partial overlap is removed from the more complex
+ * geometry. There may be some scenarios that this is destructive, but in most cases it is probably
+ * useful. This routine also doesn't handle the case where two ways have multiple overlapping
+ * sections. In that case only the longest duplicate section will be removed.
  *
  * Area ways will be ignored.
  */

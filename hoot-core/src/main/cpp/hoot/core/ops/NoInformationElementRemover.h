@@ -40,7 +40,8 @@ namespace hoot
 
 /**
  * Recursively removes all elements that do not contain any information and are not in use by
-   another element.
+   another element (e.g. only contains UUID and source, but not FCODE equivalent or other
+   informative tags).
  */
 class NoInformationElementRemover : public OsmMapOperation
 {

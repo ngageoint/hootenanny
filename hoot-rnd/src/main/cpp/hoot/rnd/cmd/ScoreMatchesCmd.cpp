@@ -242,7 +242,8 @@ public:
     {
       double score;
       boost::shared_ptr<MatchThreshold> mt;
-      QString result = evaluateThreshold(maps, output, mt, showConfusion, score/*, numManualMatches*/);
+      const QString result =
+        evaluateThreshold(maps, output, mt, showConfusion, score/*, numManualMatches*/);
 
       cout << result;
     }

@@ -142,8 +142,8 @@ found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
 
 # Data Exploration
 
-Hootenanny has a pluggable architecture that allows you to create your own code for gleaning information from map data, as illustrated in 
-examples in the Usage section.  See the Hootenanny Developer Guide for more details on customization. 
+Hootenanny has a pluggable architecture that allows you to create your information gathering features for gleaning information from map 
+data, as illustrated in examples in the Usage section.  See the Hootenanny Developer Guide for more details on data exploration customization. 
 
 # Usage
 

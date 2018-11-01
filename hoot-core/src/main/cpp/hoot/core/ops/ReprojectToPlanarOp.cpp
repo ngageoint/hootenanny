@@ -50,12 +50,10 @@ void ReprojectToPlanarOp::apply(boost::shared_ptr<OsmMap> &map)
 
 void ReprojectToPlanarOp::readObject(QDataStream& /*is*/)
 {
-  // no parameters to read
 }
 
 void ReprojectToPlanarOp::writeObject(QDataStream& /*os*/) const
 {
-  // no parameters to write
 }
 
 }

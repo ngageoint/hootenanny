@@ -48,6 +48,9 @@ class Way;
 /**
  * Locates intersections that are likely mistakes and separates them. This is typically a problem
  * with data ingested into OSM (e.g. goverment data such as TIGER).
+ *
+ * For example, a motorway overpass intersecting a residential street at a 90° is considered
+ * unlikely and "unsnapped". The geometry location is not modified.
  */
 class UnlikelyIntersectionRemover : public OsmMapOperation
 {
@@ -76,7 +79,6 @@ protected:
   double _pIntersection(long intersectingNode, boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
 
   void _splitIntersection(long intersectingNode, const std::vector< boost::shared_ptr<Way> >& g2);
-
 };
 
 }
