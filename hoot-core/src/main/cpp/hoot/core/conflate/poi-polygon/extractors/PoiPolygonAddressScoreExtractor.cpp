@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/algorithms/string/MostEnglishName.h>
-#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddress.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
