@@ -29,6 +29,7 @@ package hoot.services.models.db;
 import java.sql.Timestamp;
 
 import javax.annotation.Generated;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.oauth.consumer.OAuthConsumerToken;
 
@@ -146,4 +147,10 @@ public class Users {
         return this.displayName;
     }
 
+    public static Users fromRequest(HttpServletRequest request) {
+        if(request == null) {
+            return null;
+        }
+        return (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+    }
 }

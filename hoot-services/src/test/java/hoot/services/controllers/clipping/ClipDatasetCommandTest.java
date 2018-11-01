@@ -28,7 +28,9 @@ package hoot.services.controllers.clipping;
 
 
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -54,7 +56,7 @@ public class ClipDatasetCommandTest {
         params.setOutputName(output);
         params.setBounds(bounds);
 
-        ClipDatasetCommand clipDatasetCommand = new ClipDatasetCommand(jobId, params, debugLevel, caller);
+        ClipDatasetCommand clipDatasetCommand = new ClipDatasetCommand(jobId, params, debugLevel, caller, null);
 
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.overwrite.map=true");

@@ -651,9 +651,8 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
               if (err) console.log(err)
               // tree that cannot be translated...
-              assert.equal(result.osm.way[4].tag[0].$.k, 'tag1')
-              // assert.equal(result.osm.way[4].tag[0].$.k, 'FCODE')
-              // assert.equal(result.osm.way[4].tag[0].$.v, 'Not found')
+              assert.equal(result.osm.way[4].tag[0].$.k, 'error')
+              assert.equal(result.osm.way[4].tag[0].$.v, 'Area geometry is not valid for EC005 in TDSv61')
             })
         });
 

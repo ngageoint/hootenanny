@@ -26,25 +26,24 @@
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.*;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hoot.services.HootProperties;
+import hoot.services.models.db.Users;
 
 
 class ExportOSMCommand extends ExportCommand {
-    private static final Logger logger = LoggerFactory.getLogger(ExportOSMCommand.class);
-
-    ExportOSMCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+    ExportOSMCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller, Users user) {
         super(jobId, params);
+        if(user != null) {
+            // ensure user's email set properly.
+            params.setUserEmail(user.getEmail());
+        }
+
 
         List<String> options = new LinkedList<>();
         options.add("api.db.email=" + params.getUserEmail());
