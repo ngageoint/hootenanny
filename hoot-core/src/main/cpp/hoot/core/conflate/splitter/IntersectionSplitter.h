@@ -67,7 +67,7 @@ public:
   void splitIntersections();
 
   virtual QString getDescription() const
-  { return "Makes all intersections contain only way end nodes"; }
+  { return "Makes all road intersections contain only way end nodes"; }
 
 private:
 

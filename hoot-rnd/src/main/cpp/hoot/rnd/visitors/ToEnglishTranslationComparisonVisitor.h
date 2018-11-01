@@ -53,7 +53,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const
-  { return "Scores selected tag value English translations against known translated tags"; }
+  { return "Translates selected tags to English and scores them against known translations"; }
 
 private:
 

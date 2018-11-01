@@ -58,7 +58,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Counts the number of manual matches"; }
+  virtual QString getDescription() const { return "Counts manual matches"; }
 
 private:
 

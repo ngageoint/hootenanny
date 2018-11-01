@@ -59,7 +59,7 @@ public:
   { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
 
   virtual QString getDescription() const
-  { return "Returns true if an element is within the specified distance of the given center"; }
+  { return "Determines if an element is within the specified distance of a point"; }
 
   virtual void setConfiguration(const Settings& s);
 

@@ -80,7 +80,7 @@ public:
   virtual std::string getClassName() const { return className(); }
 
   virtual QString getDescription() const
-  { return "Custom operation for filtering parts out of buildings"; }
+  { return "Allows for filtering building parts out of buildings"; }
 
 private:
 

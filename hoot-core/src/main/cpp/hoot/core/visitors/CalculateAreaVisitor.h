@@ -64,7 +64,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Calculates feature areas"; }
+  virtual QString getDescription() const { return "Calculates feature area totals"; }
 
 private:
 

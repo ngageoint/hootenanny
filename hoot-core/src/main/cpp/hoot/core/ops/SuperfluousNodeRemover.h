@@ -77,7 +77,7 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
-  virtual QString getDescription() const { return "Removes superfluous nodes"; }
+  virtual QString getDescription() const { return "Removes all nodes no part of a way"; }
 
 protected:
 

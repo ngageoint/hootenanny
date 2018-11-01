@@ -72,7 +72,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const
-  { return "Determines if a feature is completely contained within a map"; }
+  { return "Determines if a element is completely contained within a map"; }
 
 protected:
 

@@ -56,7 +56,7 @@ class NoInformationElementRemover : public OsmMapOperation
     void apply(boost::shared_ptr<OsmMap>& map);
 
     virtual QString getDescription() const
-    { return "Removes elements containing no information"; }
+    { return "Removes elements containing no information in tags"; }
 
   protected:
 

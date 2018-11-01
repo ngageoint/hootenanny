@@ -53,7 +53,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatusCriterion(_status)); }
 
-  virtual QString getDescription() const { return "Filters based on element status"; }
+  virtual QString getDescription() const { return "Identifies elements with a particular status"; }
 
 private:
 

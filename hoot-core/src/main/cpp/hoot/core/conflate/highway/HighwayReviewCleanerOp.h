@@ -54,7 +54,7 @@ public:
   virtual QString toString() const { return QString::fromStdString(className()); }
 
   virtual QString getDescription() const
-  { return "Finds highway reviews that are impossible due to a lack of string match"; }
+  { return "Identifies highway reviews that are impossible due to a lack of string match"; }
 
 private:
 
