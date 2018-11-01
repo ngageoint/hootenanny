@@ -37,7 +37,7 @@ pipeline {
         }
         stage("Setup") {
             steps {
-                
+
                 // Make sure we have the tags info because figuring out the version is required in the build process
                 // Remove any screenshots from previous runs
                 sh '''
@@ -59,15 +59,18 @@ pipeline {
                     SYS_URL = SYS_URL.trim()
                     echo "System under test version ${SYS_VER}  http://${SYS_URL}:8080/hootenanny-id/"
                 }
-            }       
+            }
         }
         stage("Test Configure") {
-            when { 
+            when {
                 anyOf {
                     expression { return params.Configure_Tests }
-                    // Work around to run certain tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
-                    // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
-                    expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 } 
+                    allOf {
+                        // Work around to run certain tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
+                        // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
+                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 }
+                        anyOf { branch 'master'; branch 'develop' }
+                    }
                 }
             }
             steps {
@@ -103,7 +106,7 @@ pipeline {
             steps {
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
-            }       
+            }
         }
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
