@@ -1286,7 +1286,7 @@ tds61 = {
             ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
             ["t.water == 'river'","t.waterway = 'river'"],
-            ["t.waterway == 'riverbank'","t.waterway = 'river'"],
+            ["t.waterway == 'riverbank'","t.waterway = 'river' ; t.area = 'yes'"],
             ["t.waterway == 'vanishing_point' && t['water:sink:type'] == 'sinkhole'","t.natural = 'sinkhole'; delete t.waterway; delete t['water:sink:type']"]
             ];
 
@@ -2157,6 +2157,7 @@ tds61 = {
     // This is the main routine to convert _TO_ OSM
     toOsm : function(attrs, layerName, geometryType)
     {
+        print(JSON.stringify(attrs));
         tags = {};  // The final output Tag list
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
