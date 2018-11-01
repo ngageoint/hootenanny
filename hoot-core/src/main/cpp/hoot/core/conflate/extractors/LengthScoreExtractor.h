@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * See exporatory funds report for details.
+ * See the exploratory funds report for details.
  */
 class LengthScoreExtractor : public WayFeatureExtractor
 {
