@@ -64,6 +64,7 @@ pipeline {
         stage("Test Configure") {
             when {
                 anyOf {
+                    branch 'test-jenkins-file';
                     expression { return params.Configure_Tests }
                     allOf {
                         // Work around to run certain tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
