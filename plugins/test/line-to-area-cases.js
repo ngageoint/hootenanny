@@ -155,8 +155,8 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(trans2tds61, function(err, result) {
                 if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "tag1");
-                assert.equal(result.osm.way[0].tag[0].$.v, '{"man_made":"watercourse_crossing","uuid":"{10ffeed9-b866-412d-8d77-2378d2147a03}"}');
+                assert.equal(result.osm.way[0].tag[0].$.k, "error");
+                assert.equal(result.osm.way[0].tag[0].$.v, 'Line geometry is not valid for AQ111 in TDSv61');
             });
         });
         it('should handle OSM to MGCP', function() {
