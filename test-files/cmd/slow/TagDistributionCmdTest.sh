@@ -1,20 +1,32 @@
 #!/bin/bash
 set -e
 
-hoot tag-distribution --warn $HOOT_HOME/test-files/DcGisRoads.osm highway
+INPUT_DIR=$HOOT_HOME/test-files
 
-hoot tag-distribution --warn $HOOT_HOME/test-files/DcGisRoads.osm highway --sort-by-value
+echo ""
+echo "#1:"
+hoot tag-distribution --warn $INPUT_DIR/DcGisRoads.osm highway
 
-hoot tag-distribution --warn $HOOT_HOME/test-files/DcGisRoads.osm highway hoot::HighwayCriterion
+echo ""
+echo "#2:"
+hoot tag-distribution --warn $INPUT_DIR/DcGisRoads.osm highway --sort-by-value
 
-hoot tag-distribution --warn $HOOT_HOME/test-files/DcGisRoads.osm highway hoot::HighwayCriterion --sort-by-value
+echo ""
+echo "#3:"
+hoot tag-distribution --warn $INPUT_DIR/DcGisRoads.osm highway hoot::PoiCriterion
 
-hoot tag-distribution --warn $HOOT_HOME/test-files/DcGisRoads.osm name
+echo ""
+echo "#4:"
+hoot tag-distribution --warn $INPUT_DIR/DcGisRoads.osm --names
 
-hoot tag-distribution --warn $HOOT_HOME/test-files/DcGisRoads.osm name --sort-by-value
+echo ""
+echo "#5:"
+hoot tag-distribution --warn $INPUT_DIR/DcGisRoads.osm --names --limit 5
 
-hoot tag-distribution --warn $HOOT_HOME/test-files/DcGisRoads.osm name hoot::HighwayCriterion
+echo ""
+echo "#6:"
+hoot tag-distribution --warn "$INPUT_DIR/DcGisRoads.osm;$INPUT_DIR/DcTigerRoads.osm" "highway;name"
 
-hoot tag-distribution --warn $HOOT_HOME/test-files/DcGisRoads.osm name hoot::HighwayCriterion --sort-by-value
-
-hoot tag-distribution --warn $HOOT_HOME/test-files/DcGisRoads.osm blah
+echo ""
+echo "#7:"
+hoot tag-distribution --warn $INPUT_DIR/DcGisRoads.osm blah

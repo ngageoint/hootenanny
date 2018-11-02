@@ -44,6 +44,7 @@ namespace hoot
 class SqliteWordWeightDictionary : public WordWeightDictionary
 {
 public:
+
   SqliteWordWeightDictionary(const QString filePath);
 
   virtual double getMinWeight() const { return 1.0 / (double)_count; }
@@ -51,6 +52,7 @@ public:
   virtual double getWeight(const QString& word) const;
 
 private:
+
   // some white box testing.
   friend class TextFileWordWeightDictionaryTest;
 

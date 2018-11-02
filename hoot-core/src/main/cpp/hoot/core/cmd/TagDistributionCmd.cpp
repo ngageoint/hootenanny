@@ -61,12 +61,13 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() < 2 || args.size() > 4)
+    bool nameKeysOnly = false;
+    if (args.contains("--names"))
     {
-      LOG_VAR(args);
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two to four parameters.").arg(getName()));
+      nameKeysOnly = true;
+      args.removeAt(args.indexOf("--names"));
     }
+    LOG_VARD(nameKeysOnly);
 
     bool sortByFrequency = true;
     if (args.contains("--sort-by-value"))
@@ -76,9 +77,50 @@ public:
     }
     LOG_VARD(sortByFrequency);
 
+    int limit = -1;
+    if (args.contains("--limit"))
+    {
+      int limitIndex = args.indexOf("--limit");
+      if (args.size() < limitIndex + 1)
+      {
+        throw HootException(
+          QString("No limit value specified with --limit option.").arg(getName()));
+      }
+      bool ok;
+      limit = args.at(limitIndex + 1).toInt(&ok);
+      if (!ok)
+      {
+        throw HootException(
+          QString("Invalid limit value specified: " +  args.at(limitIndex + 1)).arg(getName()));
+      }
+      args.removeAt(args.indexOf("--limit"));
+    }
+    LOG_VARD(sortByFrequency);
+
+    if (!nameKeysOnly && (args.size() < 2 || args.size() > 3))
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(
+        QString("%1 takes two to three parameters when --names is not specified.").arg(getName()));
+    }
+    else if (nameKeysOnly && (args.size() < 1 || args.size() > 2))
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(
+        QString("%1 takes one to two parameters when --names is specified.").arg(getName()));
+    }
+
     const QStringList inputs = args[0].split(";");
     LOG_VART(inputs.size());
-    const QString tagKey = args[1];
+    QStringList tagKeys;
+    if (nameKeysOnly)
+    {
+      tagKeys = Tags::getNameKeys();
+    }
+    else
+    {
+      tagKeys = args[1].split(";");
+    }
     QString criterionClassName;
     if (args.size() == 3)
     {
@@ -88,18 +130,18 @@ public:
     std::map<QString, int> tagCounts;
     for (int i = 0; i < inputs.size(); i++)
     {
-      _count(inputs.at(i), tagKey, criterionClassName, tagCounts);
+      _count(inputs.at(i), tagKeys, criterionClassName, tagCounts);
     }
 
     //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
     std::cout << std::endl;
     if (tagCounts.size() == 0)
     {
-      std::cout << "No tags with key: " << tagKey << " were found." << std::endl;
+      std::cout << "No tags with keys: " << tagKeys.join(",") << " were found." << std::endl;
     }
     else
     {
-      _printResults(tagCounts, sortByFrequency);
+      _printResults(tagCounts, sortByFrequency, limit);
     }
 
     return 0;
@@ -110,8 +152,10 @@ private:
   long _total;
   int _taskStatusUpdateInterval;
 
-  void _printResults(const std::map<QString, int>& tagCounts, const bool sortByFrequency)
+  void _printResults(const std::map<QString, int>& tagCounts, const bool sortByFrequency,
+                     const int limit)
   {
+    int ctr = 0;
     if (!sortByFrequency)
     {
       for (std::map<QString, int>::const_iterator itr = tagCounts.begin(); itr != tagCounts.end();
@@ -121,7 +165,13 @@ private:
         const int count = itr->second;
         const double percentageOfTotal = (double)count / (double)_total;
         std::cout << tagValue << " : " << QString::number(count) << " (" <<
-          QString::number(percentageOfTotal, 'g', 4) << ")" << std::endl;
+          QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << std::endl;
+
+        ctr++;
+        if (ctr == limit)
+        {
+          break;
+        }
       }
     }
     else
@@ -134,12 +184,18 @@ private:
         const int count = itr->first;
         const double percentageOfTotal = (double)count / (double)_total;
         std::cout << tagValue << " : " << QString::number(count) << " (" <<
-          QString::number(percentageOfTotal, 'g', 4) << ")" << std::endl;
+          QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << std::endl;
+
+        ctr++;
+        if (ctr == limit)
+        {
+          break;
+        }
       }
     }
   }
 
-  void _count(const QString input, const QString tagKey, const QString criterionClassName,
+  void _count(const QString input, const QStringList tagKeys, const QString criterionClassName,
               std::map<QString, int>& tagCounts)
   {
     long inputTotal = 0;
@@ -150,34 +206,40 @@ private:
       _getFilteredInputStream(
         boost::dynamic_pointer_cast<ElementInputStream>(reader), criterionClassName);
 
-    LOG_TRACE("Counting...");
     long elementCtr = 0;
     while (filteredInputStream->hasMoreElements())
     {
       ElementPtr element = filteredInputStream->readNextElement();
-      elementCtr++;
-      _total++;
-
-      const Tags& tags = element->getTags();
-      if (tags.contains(tagKey))
+      if (element)
       {
-        const QString tagValue = tags.get(tagKey);
-        if (tagCounts.find(tagValue) != tagCounts.end())
-        {
-          tagCounts[tagValue]++;
-        }
-        else
-        {
-          tagCounts[tagValue] = 1;
-        }
-      }
+        elementCtr++;
+        _total++;
 
-      // see status logging note in corresponding location in CountCmd::_count
-      const long runningTotal = _total + elementCtr;
-      if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
-      {
-        QString msg = "Processed " + QString::number(runningTotal) + " elements.";
-        PROGRESS_INFO(msg);
+        const Tags& tags = element->getTags();
+        for (int i = 0; i < tagKeys.size(); i++)
+        {
+          const QString tagKey = tagKeys.at(i);
+          if (tags.contains(tagKey))
+          {
+            const QString tagValue = tags.get(tagKey).toLower();
+            if (tagCounts.find(tagValue) != tagCounts.end())
+            {
+              tagCounts[tagValue]++;
+            }
+            else
+            {
+              tagCounts[tagValue] = 1;
+            }
+          }
+        }
+
+        // see status logging note in corresponding location in CountCmd::_count
+        const long runningTotal = _total + elementCtr;
+        if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
+        {
+          QString msg = "Processed " + QString::number(runningTotal) + " elements.";
+          PROGRESS_INFO(msg);
+        }
       }
     }
     LOG_VART(inputTotal);
@@ -190,8 +252,6 @@ private:
   ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
                                                 const QString criterionClassName)
   {
-    LOG_TRACE("Getting filtered input stream...");
-
     ElementInputStreamPtr filteredInputStream;
 
     if (!criterionClassName.trimmed().isEmpty())
@@ -210,8 +270,6 @@ private:
 
   boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
   {
-    LOG_TRACE("Getting reader...");
-
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(input));
@@ -223,8 +281,6 @@ private:
 
   ElementCriterionPtr _getCriterion(const QString criterionClassName, const bool negate)
   {
-    LOG_TRACE("Getting criterion...");
-
     ElementCriterionPtr crit;
 
     try
