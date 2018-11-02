@@ -72,7 +72,7 @@ public:
   void setSpacing(const double spacing);
 
   virtual QString getDescription() const
-  { return "Calculates the distance from one set of lines to the other set of lines"; }
+  { return "Calculates the distance from one set of lines to another"; }
 
 private:
 

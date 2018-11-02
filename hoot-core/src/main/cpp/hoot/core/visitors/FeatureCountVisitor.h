@@ -55,7 +55,7 @@ public:
   virtual void visit(const boost::shared_ptr<const Element>& e);
 
   virtual QString getDescription() const
-  { return "Counts the number of elements with an information tag count greater than zero"; }
+  { return "Counts the number of elements having at least one information tag"; }
 
 private:
 

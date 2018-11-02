@@ -53,7 +53,7 @@ public:
 
   std::vector<long>& getIntersections() { return _ids; }
 
-  virtual QString getDescription() const { return "Identifies intersections"; }
+  virtual QString getDescription() const { return "Identifies road intersections"; }
 
 private:
 

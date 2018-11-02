@@ -82,7 +82,7 @@ public:
    */
   void removeRoundabouts(std::vector<RoundaboutPtr> &removed);
 
-  virtual QString getDescription() const { return "Removes roundabouts from road data"; }
+  virtual QString getDescription() const { return "Removes roundabouts from roads"; }
 
 private:
 

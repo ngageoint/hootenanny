@@ -113,7 +113,7 @@ public:
    */
   static void removeElementNoCheck(OsmMapPtr map, ElementId eId);
 
-  virtual QString getDescription() const { return "Removes an element from a map"; }
+  virtual QString getDescription() const { return "Removes elements"; }
 
 private:
 

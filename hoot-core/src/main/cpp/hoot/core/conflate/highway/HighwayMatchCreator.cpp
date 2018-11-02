@@ -312,7 +312,7 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "matches roads with the non-greedy algorithm", CreatorDescription::Highway,
+      className(), "Matches roads with the non-greedy algorithm", CreatorDescription::Highway,
       false));
   return result;
 }

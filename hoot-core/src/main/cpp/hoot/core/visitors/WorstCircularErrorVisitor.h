@@ -60,7 +60,7 @@ public:
   static Meters getWorstCircularError(const ConstOsmMapPtr& map);
 
   virtual QString getDescription() const
-  { return "Determines the highest circular error value in a map"; }
+  { return "Determines the highest circular error value"; }
 
 private:
 

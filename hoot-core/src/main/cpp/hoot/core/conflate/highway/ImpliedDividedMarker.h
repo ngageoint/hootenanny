@@ -49,7 +49,9 @@ class Way;
 /**
  * Locates sections that implicitly appear to be divided highways. Primarily this is bridges and
  * tunnels that are divided before and after the bridge/tunnel, but not tagged appropriately in
- * the tunnel.
+ * the tunnel. If two roads implicitly should be marked as divided based on the surrounding roads,
+ * mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to
+ * be marked as divided.
  */
 class ImpliedDividedMarker : public OsmMapOperation
 {
@@ -71,7 +73,7 @@ public:
   boost::shared_ptr<OsmMap> markDivided();
 
   virtual QString getDescription() const
-  { return "Locates sections that implicitly appear to be divided highways"; }
+  { return "Locates road sections that implicitly appear to be divided highways"; }
 
 protected:
 
