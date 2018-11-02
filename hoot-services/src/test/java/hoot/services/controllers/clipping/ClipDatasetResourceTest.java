@@ -35,7 +35,6 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-import hoot.services.controllers.common.ExportRenderDBCommand;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 import hoot.services.job.Job;
 
@@ -61,6 +60,5 @@ public class ClipDatasetResourceTest extends HootServicesJerseyTestAbstract {
         assertNotNull(job);
         assertEquals(2, job.getCommands().length);
         assertEquals(ClipDatasetCommand.class, job.getCommands()[0].getClass());
-        assertEquals(ExportRenderDBCommand.class, job.getCommands()[1].getClass());
     }
 }
