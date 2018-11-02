@@ -1,0 +1,34 @@
+== tag-distribution
+
+=== Description
+
+The +tag-distribution+ command prints out a distribution count for all values of a specified tag key, including a percentage of the 
+value frequeency compared to all data processed.
+
+* +inputs+           - One or more OSM data inputs; specify multiple inputs by separating them with a semicolon and surrounding them with quotes
+* +tagKey+           - The name of a single tag key to gather statistics for.
+* +criterion+        - (optional) The criterion must be a single class name of a Hootenanny criterion inherting from ElementCriterion.  A 
+                       criterion can be negated using the element.criterion.negate configuration option. Use the +info --operators+ command to 
+                       obtain a list of available Hootenanny criteria.
+* +--sort-by-value   - If specified, results are sorted alphabetically by tag value.  If not specified, results are sorted by decreasing 
+                       tag value occurrence frequency.  
+
+=== Usage
+
+--------------------------------------
+tag-distribution (input1;input2...) (tagKey) [criterion] [--sort-by-value]
+--------------------------------------
+
+==== Example Usage
+
+--------------------------------------
+hoot tag-distribution test-files/DcGisRoads.osm highway hoot::HighwayCriterion
+--------------------------------------
+
+==== Example Output
+
+--------------------------------------
+road : 365 (0.9759)
+motorway : 9 (0.02406)
+--------------------------------------
+

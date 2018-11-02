@@ -427,11 +427,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Calculate the numerical average of all "accuracy" tags
     hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
     
-    # Display the accuracy distribution for a map; This output shows that 14 ways were found 
-    # with an accuracy of 15 meters.
-    hoot tag-accuracy-distribution input.osm
+    # Display the distribution tag counts for roads in a map; This result shows that 
+    # highway=road made up over 97% of all highway tags
+    hoot tag-distribution input.osm highway hoot::HighwayCriterion
     
-    15 : 14 (1)
+    road : 365 (0.9759)
+    motorway : 9 (0.02406)
     
     # Display tag schema information for a map
     hoot tag-info input.osm
