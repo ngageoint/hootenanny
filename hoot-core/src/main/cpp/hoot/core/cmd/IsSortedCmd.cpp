@@ -29,6 +29,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/IsSortedVisitor.h>
 
 // Qt
 #include <QFile>
@@ -37,18 +39,18 @@
 namespace hoot
 {
 
-class PbfIsSortedCmd : public BaseCommand
+class IsSortedCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::PbfIsSortedCmd"; }
+  static std::string className() { return "hoot::IsSortedCmd"; }
 
-  PbfIsSortedCmd() {}
+  IsSortedCmd() {}
 
-  virtual QString getName() const { return "pbf-is-sorted"; }
+  virtual QString getName() const { return "is-sorted"; }
 
   virtual QString getDescription() const
-  { return "Determines if an OSM PBF map has been sorted"; }
+  { return "Determines if a map is sorted to the OSM standard"; }
 
   int runSimple(QStringList args)
   {
@@ -65,7 +67,41 @@ public:
       throw HootException("Specified input: " + input + " does not exist.");
     }
 
-    if (OsmPbfReader().isSorted(input))
+    bool result = true;
+    if (OsmPbfReader().isSupported(input))
+    {
+      result = OsmPbfReader().isSorted(input);
+    }
+    else
+    {
+      boost::shared_ptr<PartialOsmMapReader> reader =
+        boost::dynamic_pointer_cast<PartialOsmMapReader>(
+          OsmMapReaderFactory::getInstance().createReader(input));
+      reader->setUseDataSourceIds(true);
+      reader->open(input);
+      reader->initializePartial();
+
+      IsSortedVisitor vis;
+      while (reader->hasMoreElements())
+      {
+        ElementPtr element = reader->readNextElement();
+        if (element)
+        {
+          vis.visit(element);
+          if (!vis.getIsSorted())
+          {
+            result = false;
+            LOG_VART(result);
+            break;
+          }
+        }
+      }
+
+      reader->finalizePartial();
+      reader->close();
+    }
+
+    if (result)
     {
       std::cout << input << " is sorted." << std::endl;
     }
@@ -78,6 +114,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, PbfIsSortedCmd)
+HOOT_FACTORY_REGISTER(Command, IsSortedCmd)
 
 }

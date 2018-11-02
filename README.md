@@ -216,6 +216,9 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot extent input.osm
     
     Map extent (minx,miny,maxx,maxy): -104.902,38.8532,-104.896,38.855
+
+    # Determine if a map is sorted to the OSM standard
+    hoot is-sorted input.osm
     
     # Sort a map to the OSM standard in memory
     hoot sort input.osm output.osm
