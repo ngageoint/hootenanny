@@ -18,11 +18,6 @@ Vagrant.configure(2) do |config|
     mergePort = '8096'
   end
 
-  mapnikPort = ENV['NODE_MAPNIK_SERVER_PORT']
-  if mapnikPort.nil?
-    mapnikPort = '8000'
-  end
-
   disableForwarding = ENV['DISABLE_VAGRANT_FORWARDING']
   if disableForwarding.nil?
     # tomcat service
@@ -31,8 +26,6 @@ Vagrant.configure(2) do |config|
     config.vm.network "forwarded_port", guest: 8094, host: transPort
     # merge nodejs service
     config.vm.network "forwarded_port", guest: 8096, host: mergePort
-    # node-mapnik-server nodejs service
-    config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
   end
 
   def aws_provider(config, os)
@@ -70,13 +63,11 @@ Vagrant.configure(2) do |config|
       if os == 'CentOS7'
         override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvisionCentOS7.sh'
         tomcat_script = 'sudo systemctl restart tomcat8'
-#        mapnik_script = 'sudo systemctl restart node-mapnik'
       end
 
       override.vm.provision 'build', type: 'shell', :privileged => false, :path => 'VagrantBuild.sh'
       override.vm.provision 'EGD', type: 'shell', :privileged => false, :inline  => '([ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat ~/ActivateEGDplugin.sh /var/lib/tomcat8) || true'
       override.vm.provision 'tomcat', type: 'shell', :privileged => false, :inline => tomcat_script, run: 'always'
-#      override.vm.provision 'mapnik', type: 'shell', :privileged => false, :inline => mapnik_script, run: 'always'
 
       # TODO: Why is node-export only on CentOS?
       if os.start_with?('CentOS')
@@ -94,7 +85,6 @@ Vagrant.configure(2) do |config|
     hoot_centos7_prov.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
     hoot_centos7_prov.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
     hoot_centos7_prov.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-#    hoot_centos7_prov.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
     hoot_centos7_prov.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
 
     aws_provider(hoot_centos7_prov, 'CentOS7')
@@ -109,7 +99,6 @@ Vagrant.configure(2) do |config|
     hoot_centos7.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
     hoot_centos7.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
     hoot_centos7.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-#    hoot_centos7.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
     hoot_centos7.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
 
     aws_provider(hoot_centos7, 'CentOS7')
@@ -121,7 +110,6 @@ Vagrant.configure(2) do |config|
     config.vm.network "forwarded_port", guest: 8080, host: tomcatPort, disabled: true
     config.vm.network "forwarded_port", guest: 8094, host: transPort, disabled: true
     config.vm.network "forwarded_port", guest: 8096, host: mergePort, disabled: true
-    config.vm.network "forwarded_port", guest: 8000, host: mapnikPort, disabled: true
 
     hoot_centos7_core.vm.box = "bento/centos-7.2"
     hoot_centos7_core.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.2"
@@ -161,7 +149,6 @@ Vagrant.configure(2) do |config|
     dockcentos72.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
 
     dockcentos72.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-#    dockcentos72.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
     dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
   end
 
