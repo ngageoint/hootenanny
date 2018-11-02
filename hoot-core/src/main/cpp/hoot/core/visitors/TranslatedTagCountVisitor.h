@@ -68,7 +68,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const
-  { return "Counts the number of tags that were able to be translated"; }
+  { return "Counts the number of tags translated to a schema"; }
 
 private:
 

@@ -69,8 +69,7 @@ public:
 
   virtual double getStat() const;
 
-  virtual QString getDescription() const
-  { return "Averages numeric tag values with specified keys"; }
+  virtual QString getDescription() const { return "Calculates the average of numeric tag values"; }
 
   virtual void setConfiguration(const Settings& conf);
 

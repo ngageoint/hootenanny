@@ -449,31 +449,31 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::ReplaceRoundabouts` - Replaces any roundabouts that were removed, pre-conflation.
-** `hoot::RemoveMissingElementsVisitor` - Removes non-existent element references from relations or ways with negative IDs.
-** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
-** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
-** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
-** `hoot::WayJoinerOp` - Join up any previously split ways that can be rejoined.
-** `hoot::RemoveInvalidRelationVisitor` - Removes invalid multilinestring/review relations and duplicate members.
-** `hoot::RemoveInvalidMultilineStringMembersVisitor` - Removes invalid multilinestring relation members.
-** `hoot::SuperfluousWayRemover` - Remove all ways that contain no nodes or all the nodes are exactly the same.
-** `hoot::RemoveDuplicateWayNodesVisitor` - Remove all nodes that are unnecessarily duplicated in a way.
-** `hoot::RemoveEmptyRelationsOp` - Removes empty relations.
-** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews.  By processing reviews in sorted order the results are a little more logically ordered.
+** `hoot::ReplaceRoundabouts`
+** `hoot::RemoveMissingElementsVisitor`
+** `hoot::RemoveInvalidReviewRelationsVisitor`
+** `hoot::RemoveDuplicateReviewsOp`
+** `hoot::BuildingOutlineUpdateOp`
+** `hoot::WayJoinerOp`
+** `hoot::RemoveInvalidRelationVisitor`
+** `hoot::RemoveInvalidMultilineStringMembersVisitor`
+** `hoot::SuperfluousWayRemover`
+** `hoot::RemoveDuplicateWayNodesVisitor`
+** `hoot::RemoveEmptyRelationsOp`
+** `hoot::AddHilbertReviewSortOrderOp`
 
-List of operations to run in the conflate command after data is conflated, after the ops in
-unify.post.ops (if using Unifying Conflation), but before exporting.
+List of operations to run in the conflate command after data is conflated, after the ops in unify.post.ops (if using Unifying Conflation), 
+but before exporting. 'hoot info --operators' displays information about the available operations.
 
 === conflate.pre.ops
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingOutlineRemoveOp` - Updates the outline of the building by taking the union of all the building parts.
-** `hoot::MapCleaner` - Performs a collection of map cleaning operations.
+** `hoot::BuildingOutlineRemoveOp`
+** `hoot::MapCleaner`
 
-Runs in the conflate command after data is loaded, but before the conflation and before the ops in
-unify.pre.ops (if using Unifying Conflation).
+Runs in the conflate command after data is loaded, but before the conflation and before the ops in unify.pre.ops (if using Unifying 
+Conflation). 'hoot info --operators' displays information about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
@@ -507,8 +507,8 @@ List of manipulators to enable in the conflator.
 
 Some of the possible options include:
 
-* `hoot::WayMerger` -
-* `hoot::WayTagMerger` -
+* `hoot::WayMerger`
+* `hoot::WayTagMerger`
 
 === conflator.min.valid.score
 
@@ -518,6 +518,13 @@ Some of the possible options include:
 This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
 the value lower will create more (likely overzealous) matches. Setting the value higher will drop
 less confident matches.
+
+=== contains.node.criterion.id
+
+* Data Type: long
+* Default Value: `0`
+
+ID of the node that ContainsNodeCriterion should search for.
 
 === convert.bounding.box
 
@@ -559,8 +566,8 @@ the convert.bounding.box setting for OSM API database data sources only.
 * Default Value:
 ** ``
 
-Specifies one or more semi-colon delimited map operations or visitors to apply before writing
-converted data.  This is only applicable to the convert command.
+Specifies one or more semi-colon delimited map operations or visitors to apply before writing converted data.  This is only applicable to 
+the convert command. 'hoot info --operators' displays information about the available operations.
 
 === cookie.cutter.alpha
 
@@ -612,12 +619,28 @@ Debugging: The filename to use when saving the debug map during conflation.
 
 * Data Type: list
 * Default Value:
-** `uuid` - Ignore UUID changes
-** `source:datetime` - Ignore source:datetime changes
+** `uuid`
+** `source:datetime`
 ** `license`
 ** `source:imagery`
 
 List of tags to ignore when performing differential conflation with tags.
+
+=== distance.node.criterion.center
+
+* Data Type: string
+* Default Value: ``
+
+WGS84 coordinate in the format: "x,y" that the DistanceNodeCriterion should use as a center when
+searching for nodes.
+
+=== distance.node.criterion.distance
+
+* Data Type: double
+* Default Value: `-1.0`
+
+Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
+specified by 'distance.node.criterion.center'.
 
 === dual.way.splitter.driving.side
 
@@ -1350,13 +1373,11 @@ side detectors via the API, confidence support information is included.
 ** `TikaLanguageDetector`
 ** `OpenNlpLanguageDetector`
 
-When using 'HootServicesTranslatorClient' as the to English language translator or
-HootServicesLanguageDetectorClient as a source language detector, one or more hoot-services Java
-class names implementing LanguageDetector.  Language detectors are used in order of entry.  Valid
-values are 'TikaLanguageDetector' and 'OpenNlpLanguageDetector'.  If no detectors are specified,
-then language translation will attempt to use as many detectors as needed, in a pre-determined
-order, to get a positive detection. Separate values with a ';' and surround in quotes when passing
-in from the command line.
+When using 'HootServicesTranslatorClient' as the to English language translator or HootServicesLanguageDetectorClient as a source 
+language detector, one or more hoot-services Java class names implementing LanguageDetector.  Language detectors are used in order of 
+entry. 'hoot info --languages --detectors' displays information about the available server side detectors. If no detectors are specified, then 
+language translation will attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection. 
+Separate values with a ';' and surround in quotes when passing in from the command line.
 
 === language.info.provider
 
@@ -1547,20 +1568,21 @@ Not necessarily utilized by all parts of the application.
 
 * Data Type: list
 * Default Value:
-** `hoot::ReprojectToPlanarOp` - Before any cleaning, reproject to a planar projection (e.g. UTM).
-** `hoot::DuplicateWayRemover` - Remove duplicate ways (lines) that are exact duplicates. If the lines partially overlap with exactly the same geometry then only the partial overlap is removed from the more complex geometry.
-** `hoot::SuperfluousWayRemover` - Remove all ways that contain no nodes or all the nodes are exactly the same.
-** `hoot::IntersectionSplitter` - Split all highway type ways that intersect.
-** `hoot::UnlikelyIntersectionRemover` - Remove implied intersections that are likely incorrect. For example, a motorway overpass intersecting a residential street at a 90° is considered unlikely and "unsnapped". The geometry location is not modified.
-** `hoot::DualWaySplitter` - Split highway types that are marked as divided into two separate geometries marked as oneway roads. A number of assumptions must be made to do this including assumptions about the direction of travel on roads (right or left hand drivers).
-** `hoot::ImpliedDividedMarker` - If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.
-** `hoot::DuplicateNameRemover` - Remove any duplicate names. See `duplicate.name.case.sensitive` for modifying the case sensitivity.
-** `hoot::SmallWayMerger` - Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.way.merger.threshold` for setting the threshold value.
-** `hoot::RemoveEmptyAreasVisitor` - Remove all area elements that have a area of zero.
-** `hoot::RemoveDuplicateAreaVisitor` - Remove any area elements that are essentially the same.
-** `hoot::NoInformationElementRemover` - Remove any elements that don't have any tags with information. (E.g. only contains UUID and source, but not FCODE equivalent or other informative tags).
+** `hoot::ReprojectToPlanarOp`
+** `hoot::DuplicateWayRemover`
+** `hoot::SuperfluousWayRemover`
+** `hoot::IntersectionSplitter`
+** `hoot::UnlikelyIntersectionRemover`
+** `hoot::DualWaySplitter`
+** `hoot::ImpliedDividedMarker`
+** `hoot::DuplicateNameRemover`
+** `hoot::SmallWayMerger`
+** `hoot::RemoveEmptyAreasVisitor`
+** `hoot::RemoveDuplicateAreaVisitor`
+** `hoot::NoInformationElementRemover`
 
-A list of map operations to be applied to a map for cleaning purposes, in order.
+A list of map operations to be applied to a map for cleaning purposes, in order.  'hoot info --operators' displays information about 
+the available transforms.
 
 [[match.creators]]
 === match.creators
@@ -1568,22 +1590,8 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 * Data Type: string
 * Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js;hoot::ScriptMatchCreator,Railway.js;hoot::ScriptMatchCreator,PowerLine.js`
 
-List of match creators to use during conflation. This can modify what features will be conflated
-(e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
-
-Some of the possible options include:
-
-* `hoot::BuildingMatchCreator` - matches building polygons
-* `hoot::HighwayMatchCreator` - matches roads using the non-greedy algorithm
-* `hoot::NetworkMatchCreator` - matches roads using the Network algorithm.
-* `hoot::PoiPolygonMatchCreator` - matches POIs with buildings or areas
-* `hoot::ScriptMatchCreator,Area.js` - matches areas (non-building polygons marked as areas=yes).
-* `hoot::ScriptMatchCreator,LinearWaterway.js` - matches linear rivers and streams
-* `hoot::ScriptMatchCreator,PoiGeneric.js` - matches POIs using Generic Conflation
-* `hoot::ScriptMatchCreator,PowerLine.js` - matches power lines using Generic Conflation
-* `hoot::ScriptMatchCreator,Railway.js` - matches railways using Generic Conflation
-* `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The script should be
-  in `$HOOT_HOME/rules/<yourscript.js>`.
+List of match creators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).  The 
+ordering must match that in merger.creators.  'hoot info --matchers' displays information about the available matchers.
 
 === match.parallel.exponent
 
@@ -1645,22 +1653,8 @@ are identical. Units in meters and defaults to 1.0m.
 * Data Type: string
 * Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator;hoot::ScriptMergerCreator;hoot::ScriptMergerCreator`
 
-List of merger creators to use during conflation. This can modify what features will be conflated
-(e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
-
-Possible values include:
-
-* `hoot::BuildingMergerCreator` - Required if `hoot::BuildingMatchCreator` is
-  specified in `match.creators`.
-* `hoot::HighwaySnapMergerCreator` - Required if `hoot::HighwayMatchCreator`
-  is specified in `match.creators`.
-* `hoot::NetworkMergerCreator` - Required if `hoot::NetworkMatchCreator`
-is specified in `match.creators`.
-* `hoot::PoiPolygonMergerCreator` - Required if `hoot::PoiPolygonMatchCreator`
-  is specified in `match.creators`.
-* `hoot::ScriptMergerCreator` - Required if one or more instances of
-  `hoot::ScriptMatchCreator` is specified in `match.creators`. Note that the
-  script name is not specified in this parameter.
+List of merger creators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).  The ordering 
+must match that in match.creators. 'hoot info --mergers' displays information about the available mergers.
 
 === network.conflicts.aggression
 
@@ -2251,14 +2245,15 @@ The probability that a name will be modified.
 
 * Data Type: list
 * Default Value:
-** `hoot::PertyWaySplitVisitor` - Randomly splits ways.
-** `hoot::PertyWayGeneralizeVisitor` - Randomly generalizes ways.
-** `hoot::PertyRemoveRandomElementVisitor` - Randomly removes elements.
-** `hoot::PertyDuplicatePoiOp` - Randomly adds duplicated POIs.
-** `hoot::PertyRemoveTagVisitor` - Randomly removes element tags.
-** `hoot::PertyNameVisitor` - Randomly modifies element name tags.
+** `hoot::PertyWaySplitVisitor`
+** `hoot::PertyWayGeneralizeVisitor`
+** `hoot::PertyRemoveRandomElementVisitor`
+** `hoot::PertyDuplicatePoiOp`
+** `hoot::PertyRemoveTagVisitor`
+** `hoot::PertyNameVisitor`
 
-A list of operations that should be applied after the geometries have been shifted by PERTY.
+A list of operations that should be applied after the geometries have been shifted by PERTY.  'hoot info --operators | grep Perty' 
+displays information about the available operations.
 
 === perty.random.error.x
 
@@ -3297,19 +3292,8 @@ E.g. "highway=road;amenity=school"
 * Default Value: `hoot::OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
-depending on the specifics of the merger.
-
-Possible options include:
-
-* <<Average-Tags,`hoot::AverageTagMerger`>> - Attempts to take the average of the two tag sets.
-* <<Generalize-Tag-Merger,`hoot::GeneralizeTagMerger`>> - Attempt to take the most general
-  interpretation of the tags.
-* `hoot::OverwriteTagMerger` - Aliased to `hoot::OverwriteTag2Merger`
-* <<Overwrite-Tag-1,`hoot::OverwriteTag1Merger`>> - Overwrite the tags in the first input.
-* <<Overwrite-Tag-2,`hoot::OverwriteTag2Merger`>> - Overwrite the tags in the second input.
-* <<Provenance-Aware-Overwrite-Tag-Merger,`hoot::ProvenanceAwareOverwriteTagMerger`>> - Overwrite
-the tags in the first input except the provenance tag, hoot:source, which will be merged using
-values from both features.
+depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the 
+available mergers.
 
 === tag.printing.format
 
@@ -3539,11 +3523,11 @@ problematic if you're doing testing or expecting repeatable output for other.
 
 * Data Type: list
 * Default Value:
-** `hoot::SuperfluousNodeRemover` - Removes all the nodes from a map that aren't part of a way.
-** `hoot::SmallWayMerger` - Merges small ways using the threshold determined by the small.way.merger.threshold setting along with other criteria.
+** `hoot::SuperfluousNodeRemover`
+** `hoot::SmallWayMerger`
 
-List of operations to apply immediately after conflation when using Unifying Conflation only.  Runs
-before the operations in `conflate.post.ops`.
+List of operations to apply immediately after conflation when using Unifying Conflation only.  Runs before the operations in 
+`conflate.post.ops`. 'hoot info --operators' displays information about the available operations.
 
 === unify.pre.ops
 
@@ -3552,7 +3536,7 @@ before the operations in `conflate.post.ops`.
 ** ``
 
 List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
-after the operations in `conflate.pre.ops`.
+after the operations in `conflate.pre.ops`. 'hoot info --operators' displays information about the available operations.
 
 === uuid.helper.repeatable
 

@@ -58,7 +58,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getDescription() const { return "Removes tags with matching keys"; }
+  virtual QString getDescription() const { return "Removes tags by key"; }
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 

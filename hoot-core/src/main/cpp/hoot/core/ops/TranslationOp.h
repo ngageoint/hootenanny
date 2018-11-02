@@ -60,7 +60,7 @@ public:
    */
   void setPath(QString path) { _translator.setPath(path); }
 
-  virtual QString getDescription() const { return "Translates features in a map"; }
+  virtual QString getDescription() const { return "Translates features to a schema"; }
 
 private:
 

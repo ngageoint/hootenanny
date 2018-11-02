@@ -60,7 +60,7 @@ public:
     return ElementCriterionPtr(new NonConflatableCriterion());
   }
 
-  virtual QString getDescription() const { return "Identifies features that are not conflatable by hootenanny"; }
+  virtual QString getDescription() const { return "Identifies features that are not conflatable"; }
 
 };
 

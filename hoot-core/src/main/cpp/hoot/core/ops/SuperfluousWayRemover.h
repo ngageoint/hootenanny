@@ -68,7 +68,7 @@ public:
   void removeWays();
 
   virtual QString getDescription() const
-  { return "Removes ways not in relations, contain zero nodes, or all nodes are identical"; }
+  { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
 protected:
 

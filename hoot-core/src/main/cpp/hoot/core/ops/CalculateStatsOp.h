@@ -118,7 +118,7 @@ private:
                              const long poisMergedIntoPolys);
 
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
-      const CreatorDescription::BaseFeatureType& featureType);
+    const CreatorDescription::BaseFeatureType& featureType);
 };
 
 }

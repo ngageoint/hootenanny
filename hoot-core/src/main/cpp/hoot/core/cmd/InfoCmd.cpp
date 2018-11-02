@@ -197,28 +197,40 @@ public:
 
       ConfigOptions opts = ConfigOptions(conf());
 
-      boost::shared_ptr<LanguageInfoProvider> client;
-      client.reset(
-        Factory::getInstance().constructObject<LanguageInfoProvider>(
-          opts.getLanguageInfoProvider()));
-      client->setConfiguration(conf());
-
-      const QString type = args[0].replace("--", "").toLower();
-
-      QString displayStr;
-      if (type == "translatable" || type == "detectable")
+      try
       {
-        displayStr =
-          HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
-            type, client->getAvailableLanguages(type));
+        boost::shared_ptr<LanguageInfoProvider> client;
+        client.reset(
+          Factory::getInstance().constructObject<LanguageInfoProvider>(
+            opts.getLanguageInfoProvider()));
+        client->setConfiguration(conf());
+
+        const QString type = args[0].replace("--", "").toLower();
+
+        QString displayStr;
+        if (type == "translatable" || type == "detectable")
+        {
+          displayStr =
+            HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
+              type, client->getAvailableLanguages(type));
+        }
+        else
+        {
+          displayStr =
+            HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
+              type, client->getAvailableApps(type));
+        }
+        std::cout << displayStr << std::endl;
       }
-      else
+      catch (const HootException& e)
       {
-        displayStr =
-          HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
-            type, client->getAvailableApps(type));
+        LOG_VART(e.getWhat());
+        if (e.getWhat().contains("Access tokens for user"))
+        {
+          LOG_ERROR(
+            "You must log in to the Hootenanny Web Services before displaying supported language information.")
+        }
       }
-      std::cout << displayStr << std::endl;
     }
     //feature-extractors, operators, matchers, mergers, or tag mergers
     else if (specifiedOpts.size() == 1)

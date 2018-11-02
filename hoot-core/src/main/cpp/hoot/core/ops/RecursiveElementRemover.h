@@ -85,7 +85,7 @@ public:
    */
   virtual void apply(const boost::shared_ptr<OsmMap>& map);
 
-  virtual QString getDescription() const { return "Recursively removes elements from a map"; }
+  virtual QString getDescription() const { return "Recursively removes elements"; }
 
 private:
 

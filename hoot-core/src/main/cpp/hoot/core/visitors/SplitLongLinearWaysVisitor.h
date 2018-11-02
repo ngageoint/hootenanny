@@ -63,7 +63,7 @@ public:
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
 
   virtual QString getDescription() const
-  { return "Splits ways containing more way nodes than OSM supports"; }
+  { return "Splits ways containing more nodes than OSM supports"; }
 
 private:
 
@@ -72,7 +72,6 @@ private:
   // Actual max is 2000, but in order to allow editors to insert nodes without issues,
   //    leaving some breathing room
   static const unsigned int _defaultMaxNodesPerWay = 1900;
-
 };
 
 }
