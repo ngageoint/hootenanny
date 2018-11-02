@@ -72,8 +72,7 @@ echo "logFile: " $logFile
 #exit 0
 
 # Updates all the copyright headers in all source directories.
-# for i in $HOOT_HOME/hoot-cmd $HOOT_HOME/hoot-core $HOOT_HOME/hoot-core-test $HOOT_HOME/hoot-js $HOOT_HOME/hoot-rnd $HOOT_HOME/hoot-services $HOOT_HOME/hoot-test $HOOT_HOME/tbs $HOOT_HOME/tgs
-for i in $HOOT_HOME/hoot-services
+for i in $HOOT_HOME/hoot-cmd $HOOT_HOME/hoot-core $HOOT_HOME/hoot-core-test $HOOT_HOME/hoot-js $HOOT_HOME/hoot-rnd $HOOT_HOME/hoot-services $HOOT_HOME/hoot-test $HOOT_HOME/tbs $HOOT_HOME/tgs
 do
     #echo $i
     cd $i
