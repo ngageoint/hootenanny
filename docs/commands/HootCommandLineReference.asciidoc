@@ -60,4 +60,5 @@ include::tag-distribution.asciidoc[]
 include::tag-info.asciidoc[]
 include::type-tagger-rules.asciidoc[]
 include::version.asciidoc[]
+include::write-name-counts.asciidoc[]
 :leveloffset: 0

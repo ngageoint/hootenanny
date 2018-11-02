@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-INPUT_DIR=$HOOT_HOME/test-files
+INPUT_DIR=test-files
 
 echo ""
 echo "#1:"
@@ -25,8 +25,12 @@ hoot tag-distribution --warn $INPUT_DIR/DcGisRoads.osm --names --limit 5
 
 echo ""
 echo "#6:"
-hoot tag-distribution --warn "$INPUT_DIR/DcGisRoads.osm;$INPUT_DIR/DcTigerRoads.osm" "highway;name"
+hoot tag-distribution --warn $INPUT_DIR/DcGisRoads.osm --names --tokenize --limit 5
 
 echo ""
 echo "#7:"
+hoot tag-distribution --warn "$INPUT_DIR/DcGisRoads.osm;$INPUT_DIR/DcTigerRoads.osm" "highway;name"
+
+echo ""
+echo "#8:"
 hoot tag-distribution --warn $INPUT_DIR/DcGisRoads.osm blah

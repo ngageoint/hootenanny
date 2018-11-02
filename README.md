@@ -465,17 +465,14 @@ See the Hootenanny User Guide for more usage examples and details on command inp
         ...
     }}
     
-    # Display frequencies of feature names
-    hoot tag-name-frequencies input.osm
+    # Display occurrence frequencies of tokenized feature names
+    hoot tag-distribution input.osm --names --tokenize --limit 5
     
-    Total word count: 1163
-    320 (0.28) : nw
-    246 (0.21) : st
-    80 (0.069) : ave
-    45 (0.039) : sw
-    18 (0.015) : h
-    18 (0.015) : pennsylvania
-    ...
+    nw : 320 (6.811%)
+    st : 246 (5.236%)
+    ave : 80 (1.703%)
+    sw : 45 (0.9579%)
+    h : 18 (0.3831%)
     
 ### Add Missing Type Tags
     

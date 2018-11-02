@@ -34,8 +34,6 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QtAlgorithms>
-#include <QFile>
 #include <QtSql/QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -86,29 +84,6 @@ void WordCountWriter::write(QString basePath, QVector<WordCount> words)
 
   DbUtils::execNoPrepare(db, "COMMIT");
   LOG_INFO("Committed");
-}
-
-void WordCountWriter::_writeFile(QString path, long totalCount, QVector<WordCount> words,
-  long maxSize)
-{
-  QFile fp(path);
-
-  if (fp.open(QIODevice::WriteOnly) == false)
-  {
-    throw HootException("Error opening file: " + path);
-  }
-
-  fp.write(QString("%1\t%2\n").arg(totalWordCount()).arg(totalCount).toUtf8());
-
-  for (int i = 0; i < words.size(); i++)
-  {
-    QByteArray line = QString("%1\t%2\n").arg(words[i].word).arg(words[i].count).toUtf8();
-    if (maxSize >= 0 && fp.pos() + line.size() > maxSize)
-    {
-      return;
-    }
-    fp.write(line);
-  }
 }
 
 }

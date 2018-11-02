@@ -32,8 +32,6 @@
 #include <QVector>
 #include <QString>
 
-class QSqlDatabase;
-
 namespace hoot
 {
 
@@ -46,25 +44,7 @@ public:
   static QString totalWordCount() { return QString("Total word count:"); }
 
   /**
-   * Create two files that contain a dictionary of words and their frequency. The frequent words
-   * are designed to be read entirely into RAM and the .all words are intended to be randomly
-   * accessed as needed.
-   *
-   * The first line of each file contains where ### is the total number of words that were counted.
-   * This will be the same number in both files.
-   *
-   * Total word count:\t###\n
-   *
-   * The .all file is sorted by word. The .frequent file is sorted by count, descending. Both files
-   * are structured as UTF-8 with one line per word/count combo. The word/count is tab delimited and
-   * ends with a \n. E.g.
-   *
-   * Total word count:\t3\n
-   * bar\t2\n
-   * foo\t1\n
-   *
-   * @param basePath Base path for writing data. A .frequent and .all file will be created.
-   * @param maxFrequent Maximum size of frequent words in bytes.
+   * Writes word counts to a database
    */
   WordCountWriter(long maxFrequent) : _maxFrequent(maxFrequent) {}
 
@@ -75,8 +55,6 @@ public:
 private:
 
   long _maxFrequent;
-
-  void _writeFile(QString path, long totalCount, QVector<WordCount> words, long maxSize);
 };
 
 }

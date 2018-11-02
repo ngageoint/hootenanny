@@ -28,16 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/ElementCriterionInputStream.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/util/Configurable.h>
-
-// Qt
-#include <QMap>
+#include <hoot/core/schema/TagDistribution.h>
 
 namespace hoot
 {
@@ -48,11 +39,7 @@ public:
 
   static std::string className() { return "hoot::TagDistributionCmd"; }
 
-  TagDistributionCmd() :
-  _total(0),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
-  {
-  }
+  TagDistributionCmd() {}
 
   virtual QString getName() const { return "tag-distribution"; }
 
@@ -67,7 +54,6 @@ public:
       nameKeysOnly = true;
       args.removeAt(args.indexOf("--names"));
     }
-    LOG_VARD(nameKeysOnly);
 
     bool sortByFrequency = true;
     if (args.contains("--sort-by-value"))
@@ -75,7 +61,13 @@ public:
       sortByFrequency = false;
       args.removeAt(args.indexOf("--sort-by-value"));
     }
-    LOG_VARD(sortByFrequency);
+
+    bool tokenize = false;
+    if (args.contains("--tokenize"))
+    {
+      tokenize = true;
+      args.removeAt(args.indexOf("--tokenize"));
+    }
 
     int limit = -1;
     if (args.contains("--limit"))
@@ -93,10 +85,12 @@ public:
         throw HootException(
           QString("Invalid limit value specified: " +  args.at(limitIndex + 1)).arg(getName()));
       }
-      args.removeAt(args.indexOf("--limit"));
+      args.removeAt(limitIndex + 1);
+      args.removeAt(limitIndex);
     }
     LOG_VARD(sortByFrequency);
 
+    LOG_VARD(args.size());
     if (!nameKeysOnly && (args.size() < 2 || args.size() > 3))
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -127,190 +121,16 @@ public:
       criterionClassName = args[2];
     }
 
-    std::map<QString, int> tagCounts;
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      _count(inputs.at(i), tagKeys, criterionClassName, tagCounts);
-    }
+    TagDistribution tagDist;
+    tagDist.setCriterionClassName(criterionClassName);
+    tagDist.setLimit(limit);
+    tagDist.setSortByFrequency(sortByFrequency);
+    tagDist.setTagKeys(tagKeys);
+    tagDist.setTokenize(tokenize);
 
-    //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
-    std::cout << std::endl;
-    if (tagCounts.size() == 0)
-    {
-      std::cout << "No tags with keys: " << tagKeys.join(",") << " were found." << std::endl;
-    }
-    else
-    {
-      _printResults(tagCounts, sortByFrequency, limit);
-    }
+    tagDist.printTagCounts(tagDist.getTagCounts(inputs));
 
     return 0;
-  }
-
-private:
-
-  long _total;
-  int _taskStatusUpdateInterval;
-
-  void _printResults(const std::map<QString, int>& tagCounts, const bool sortByFrequency,
-                     const int limit)
-  {
-    int ctr = 0;
-    if (!sortByFrequency)
-    {
-      for (std::map<QString, int>::const_iterator itr = tagCounts.begin(); itr != tagCounts.end();
-           ++itr)
-      {
-        const QString tagValue = itr->first;
-        const int count = itr->second;
-        const double percentageOfTotal = (double)count / (double)_total;
-        std::cout << tagValue << " : " << QString::number(count) << " (" <<
-          QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << std::endl;
-
-        ctr++;
-        if (ctr == limit)
-        {
-          break;
-        }
-      }
-    }
-    else
-    {
-      std::multimap<int, QString> sortedMap = CollectionUtils::flipMap(tagCounts);
-      for (std::multimap<int, QString>::reverse_iterator itr = sortedMap.rbegin();
-           itr != sortedMap.rend(); ++itr)
-      {
-        const QString tagValue = itr->second;
-        const int count = itr->first;
-        const double percentageOfTotal = (double)count / (double)_total;
-        std::cout << tagValue << " : " << QString::number(count) << " (" <<
-          QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << std::endl;
-
-        ctr++;
-        if (ctr == limit)
-        {
-          break;
-        }
-      }
-    }
-  }
-
-  void _count(const QString input, const QStringList tagKeys, const QString criterionClassName,
-              std::map<QString, int>& tagCounts)
-  {
-    long inputTotal = 0;
-
-    boost::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
-
-    ElementInputStreamPtr filteredInputStream =
-      _getFilteredInputStream(
-        boost::dynamic_pointer_cast<ElementInputStream>(reader), criterionClassName);
-
-    long elementCtr = 0;
-    while (filteredInputStream->hasMoreElements())
-    {
-      ElementPtr element = filteredInputStream->readNextElement();
-      if (element)
-      {
-        elementCtr++;
-        _total++;
-
-        const Tags& tags = element->getTags();
-        for (int i = 0; i < tagKeys.size(); i++)
-        {
-          const QString tagKey = tagKeys.at(i);
-          if (tags.contains(tagKey))
-          {
-            const QString tagValue = tags.get(tagKey).toLower();
-            if (tagCounts.find(tagValue) != tagCounts.end())
-            {
-              tagCounts[tagValue]++;
-            }
-            else
-            {
-              tagCounts[tagValue] = 1;
-            }
-          }
-        }
-
-        // see status logging note in corresponding location in CountCmd::_count
-        const long runningTotal = _total + elementCtr;
-        if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
-        {
-          QString msg = "Processed " + QString::number(runningTotal) + " elements.";
-          PROGRESS_INFO(msg);
-        }
-      }
-    }
-    LOG_VART(inputTotal);
-
-    reader->finalizePartial();
-    reader->close();
-    filteredInputStream->close();
-  }
-
-  ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
-                                                const QString criterionClassName)
-  {
-    ElementInputStreamPtr filteredInputStream;
-
-    if (!criterionClassName.trimmed().isEmpty())
-    {
-      ElementCriterionPtr crit =
-        _getCriterion(criterionClassName, ConfigOptions().getElementCriterionNegate());
-      filteredInputStream.reset(new ElementCriterionInputStream(inputStream, crit));
-    }
-    else
-    {
-      filteredInputStream = inputStream;
-    }
-
-    return filteredInputStream;
-  }
-
-  boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
-  {
-    boost::shared_ptr<PartialOsmMapReader> reader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(input));
-    reader->setUseDataSourceIds(true);
-    reader->open(input);
-    reader->initializePartial();
-    return reader;
-  }
-
-  ElementCriterionPtr _getCriterion(const QString criterionClassName, const bool negate)
-  {
-    ElementCriterionPtr crit;
-
-    try
-    {
-      crit.reset(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
-    }
-    catch (const boost::bad_any_cast&)
-    {
-      throw IllegalArgumentException("Invalid criterion: " + criterionClassName);
-    }
-
-    if (negate)
-    {
-      crit.reset(new NotCriterion(crit));
-    }
-    LOG_VART(crit.get());
-
-    boost::shared_ptr<Configurable> critConfig;
-    if (crit.get())
-    {
-      critConfig = boost::dynamic_pointer_cast<Configurable>(crit);
-    }
-    LOG_VART(critConfig.get());
-    if (critConfig.get())
-    {
-      critConfig->setConfiguration(conf());
-    }
-
-    return crit;
   }
 };
 

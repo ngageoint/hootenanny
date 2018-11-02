@@ -16,11 +16,12 @@ each value's frequency compared to all tag values processed for the key.
 * +--sort-by-value   - If specified, results are sorted alphabetically by tag value.  If not specified, results are sorted by decreasing 
                        tag value occurrence frequency.  
 * +--limit+          - Limits the number of results returned.
+* +--tokenize+       - Breaks tag values up into individual tokens.
 
 === Usage
 
 --------------------------------------
-tag-distribution (input1;input2...) (tagKeys) [criterion] [--names] [--sort-by-value] [--limit] 
+tag-distribution (input1;input2...) (tagKeys) [criterion] [--names] [--sort-by-value] [--limit]  [--tokenize]
 --------------------------------------
 
 ==== Example Usage
