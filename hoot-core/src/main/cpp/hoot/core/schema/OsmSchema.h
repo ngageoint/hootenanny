@@ -56,23 +56,22 @@ enum EdgeType
 };
 
 struct OsmSchemaCategory {
-  typedef enum Type
+  enum Type
   {
-    Empty = 0,
-    Poi = 1,
-    Building = 2,
-    Transportation = 4,
-    Use = 8,
-    Name = 16,
-    PseudoName = 32,
-    // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
-    HgisPoi = 64,
-    Multiuse = 128,
+    Empty =           0x00,
+    Poi =             0x01,
+    Building =        0x02,
+    Transportation =  0x04,
+    Use =             0x08,
+    Name =            0x10,
+    PseudoName =      0x20,
+    HgisPoi =         0x40, // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
+    Multiuse =        0x80,
     All = Poi | Building | Transportation | Use | Name | HgisPoi | Multiuse
-  } Type;
+  };
 
   OsmSchemaCategory() : _type(Empty) {}
-  OsmSchemaCategory(OsmSchemaCategory::Type t) : _type(t) {}
+  OsmSchemaCategory(Type t) : _type(t) {}
 
   static OsmSchemaCategory building() { return OsmSchemaCategory(Building); }
   static OsmSchemaCategory hgisPoi() { return OsmSchemaCategory(HgisPoi); }
@@ -196,42 +195,34 @@ struct OsmSchemaCategory {
 
 private:
 
-  OsmSchemaCategory::Type _type;
+  Type _type;
 };
 
 inline OsmSchemaCategory operator&(const OsmSchemaCategory t1, const OsmSchemaCategory t2)
 {
-  return OsmSchemaCategory((OsmSchemaCategory::Type)((int)t1.getEnum() & (int)t2.getEnum()));
+  return OsmSchemaCategory((OsmSchemaCategory::Type)(t1.getEnum() & t2.getEnum()));
 }
 
 inline OsmSchemaCategory operator|(const OsmSchemaCategory t1, const OsmSchemaCategory t2)
 {
-  return OsmSchemaCategory((OsmSchemaCategory::Type)((int)t1.getEnum() | (int)t2.getEnum()));
-}
-
-inline OsmSchemaCategory operator|(const OsmSchemaCategory::Type t1, const OsmSchemaCategory t2)
-{
-  return OsmSchemaCategory((OsmSchemaCategory::Type)((int)t1 | (int)t2.getEnum()));
-}
-
-inline OsmSchemaCategory operator|(const OsmSchemaCategory t1, const OsmSchemaCategory::Type t2)
-{
-  return OsmSchemaCategory((OsmSchemaCategory::Type)((int)t1.getEnum() | (int)t2));
+  return OsmSchemaCategory((OsmSchemaCategory::Type)(t1.getEnum() | t2.getEnum()));
 }
 
 // explicitly put these types in their own name scope. Use with OsmGeometries::Node, etc.
 struct OsmGeometries {
-  enum e
+  enum Type : uint16_t
   {
-    Node=0x01,
-    Area=0x02,
-    LineString=0x04,
-    ClosedWay=0x08,
-    Way=Area | LineString | ClosedWay,
-    Relation=0x10
+    Empty =       0x00,
+    Node =        0x01,
+    Area =        0x02,
+    LineString =  0x04,
+    ClosedWay =   0x08,
+    Way =         Area | LineString | ClosedWay,
+    Relation =    0x10,
+    All =         Relation | Way | Node
   };
 
-  static uint16_t fromString(const QString& s);
+  static Type fromString(const QString& s);
 };
 
 struct TagEdge
@@ -353,6 +344,9 @@ public:
 
   bool isAreaForStats(const Tags& t, const ElementType& type) const;
   bool isAreaForStats(const ConstElementPtr& e) const;
+
+  bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries);
+  bool allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries);
 
   bool isNonBuildingArea(const ConstElementPtr& e) const;
 
