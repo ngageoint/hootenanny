@@ -2,7 +2,7 @@
 # If the silent flag is passed to make then make Maven and npm quiet too.
 ifneq (,$(findstring s,$(MAKEFLAGS)))
 	MVN_QUIET='-q'
-	NPM_QUIET='-s' # > /dev/null'
+	NPM_QUIET=-s > /dev/null 2>&1
 else
 	HOOT_TEST_DIFF='--diff'
 endif
