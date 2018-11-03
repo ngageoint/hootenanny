@@ -427,11 +427,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Calculate the numerical average of all "accuracy" tags
     hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
     
-    # Display the accuracy distribution for a map; This output shows that 14 ways were found 
-    # with an accuracy of 15 meters.
-    hoot tag-accuracy-distribution input.osm
+    # Display the distribution of highway tags for roads in a map; This result shows that 
+    # highway=road made up over 97% of all highway tags in the data.
+    hoot tag-distribution input.osm highway hoot::HighwayCriterion
     
-    15 : 14 (1)
+    road : 365 (0.9759)
+    motorway : 9 (0.02406)
     
     # Display tag schema information for a map
     hoot tag-info input.osm
@@ -464,17 +465,14 @@ See the Hootenanny User Guide for more usage examples and details on command inp
         ...
     }}
     
-    # Display frequencies of feature names
-    hoot tag-name-frequencies input.osm
+    # Display occurrence frequencies of tokenized feature names
+    hoot tag-distribution input.osm --names --tokenize --limit 5
     
-    Total word count: 1163
-    320 (0.28) : nw
-    246 (0.21) : st
-    80 (0.069) : ave
-    45 (0.039) : sw
-    18 (0.015) : h
-    18 (0.015) : pennsylvania
-    ...
+    nw : 320 (6.811%)
+    st : 246 (5.236%)
+    ave : 80 (1.703%)
+    sw : 45 (0.9579%)
+    h : 18 (0.3831%)
     
 ### Add Missing Type Tags
     

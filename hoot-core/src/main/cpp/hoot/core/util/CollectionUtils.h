@@ -22,50 +22,49 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "SqliteWordWeightDictionary.h"
-
-// hoot
-#include <hoot/core/util/HootException.h>
+#ifndef COLLECTION_UTILS_H
+#define COLLECTION_UTILS_H
 
 // Qt
-#include <QFile>
-#include <QStringList>
+#include <QString>
 
 namespace hoot
 {
 
-SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString filePath) : _reader(filePath)
+/**
+ * General utilities needed when working with collections
+ */
+class CollectionUtils
 {
-  _count = 1;
-  _nonWord.setPattern("[^\\w]");
-}
 
-double SqliteWordWeightDictionary::getWeight(const QString& word) const
-{
-  LOG_VART(word);
-  QString normalized = word.toLower().normalized(QString::NormalizationForm_C);
-  normalized.replace(_nonWord, "");
-  WeightHash::const_iterator it = _weights.find(normalized);
+public:
 
-  long c;
-  if (it == _weights.end())
+  /**
+   * Flips a map, making its keys the values and its values the keys
+   *
+   * @param src a map
+   * @return a flipped map
+   */
+  template<typename A, typename B>
+  static std::multimap<B,A> flipMap(const std::map<A,B>& src)
   {
-    long c = _reader.readCount(normalized);
-    if (c > 0)
-    {
-      _weights[normalized] = c;
-    }
-    return c;
-  }
-  else
-  {
-    c = it->second;
+    std::multimap<B,A> dst;
+    std::transform(src.begin(), src.end(), std::inserter(dst, dst.begin()), _flipPair<A,B>);
+    return dst;
   }
 
-  return c / (double)_count;
-}
+private:
+
+  template<typename A, typename B>
+  static std::pair<B,A> _flipPair(const std::pair<A,B>& p)
+  {
+    return std::pair<B,A>(p.second, p.first);
+  }
+};
 
 }
+
+#endif // COLLECTION_UTILS_H

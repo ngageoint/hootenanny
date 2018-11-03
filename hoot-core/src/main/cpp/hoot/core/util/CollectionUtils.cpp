@@ -22,50 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "SqliteWordWeightDictionary.h"
+#include "CollectionUtils.h"
 
-// hoot
+// Hoot
 #include <hoot/core/util/HootException.h>
-
-// Qt
-#include <QFile>
-#include <QStringList>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
-
-SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString filePath) : _reader(filePath)
-{
-  _count = 1;
-  _nonWord.setPattern("[^\\w]");
-}
-
-double SqliteWordWeightDictionary::getWeight(const QString& word) const
-{
-  LOG_VART(word);
-  QString normalized = word.toLower().normalized(QString::NormalizationForm_C);
-  normalized.replace(_nonWord, "");
-  WeightHash::const_iterator it = _weights.find(normalized);
-
-  long c;
-  if (it == _weights.end())
-  {
-    long c = _reader.readCount(normalized);
-    if (c > 0)
-    {
-      _weights[normalized] = c;
-    }
-    return c;
-  }
-  else
-  {
-    c = it->second;
-  }
-
-  return c / (double)_count;
-}
 
 }
