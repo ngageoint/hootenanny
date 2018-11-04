@@ -60,7 +60,7 @@ public:
   virtual QString getName() const { return "count"; }
 
   virtual QString getDescription() const
-  { return "Counts the number of features in a map meeting a criterion"; }
+  { return "Counts the number of features in a map that meet a criterion"; }
 
   virtual int runSimple(QStringList args)
   {

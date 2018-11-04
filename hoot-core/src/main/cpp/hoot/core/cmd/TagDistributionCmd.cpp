@@ -44,7 +44,7 @@ public:
   virtual QString getName() const { return "tag-distribution"; }
 
   virtual QString getDescription() const
-  { return "Calculates the distribution of specified tag values for a map"; }
+  { return "Calculates the distribution of values for specified tags in a map"; }
 
   virtual int runSimple(QStringList args)
   {
