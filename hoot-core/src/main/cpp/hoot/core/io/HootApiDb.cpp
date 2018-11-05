@@ -304,9 +304,6 @@ void HootApiDb::deleteMap(long mapId)
 {
   LOG_TRACE("Deleting map: " << mapId << "...");
 
-  // Drop related renderDB First
-  dropDatabase(_getRenderDBName(mapId));
-
   // Drop related sequences
   dropSequence(getCurrentRelationMembersSequenceName(mapId));
   dropSequence(getCurrentRelationsSequenceName(mapId));
@@ -1869,26 +1866,6 @@ long HootApiDb::reserveElementId(const ElementType::Type type)
   }
 
   return retVal;
-}
-
-QString HootApiDb::_getRenderDBName(long mapId)
-{
-  // Get current database & maps.display_name
-  QString table = ApiDb::getMapsTableName();
-  QString dbName = "";
-  QString mapDisplayName = "";
-  QString mapIdNumber = QString::number(mapId);
-  QString sql = "SELECT current_database(), " + table + ".display_name "
-                "FROM " + table + " WHERE " + table + ".id=" + mapIdNumber;
-  QSqlQuery q = _exec(sql);
-
-  if (q.next())
-  {
-    dbName = q.value(0).toString();
-    mapDisplayName = q.value(1).toString();
-  }
-
-  return (dbName + "_renderdb_" + mapIdNumber);
 }
 
 QUrl HootApiDb::getBaseUrl()

@@ -48,7 +48,6 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
-import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.models.db.Users;
@@ -63,9 +62,6 @@ public class ConflateResource {
 
     @Autowired
     private ConflateCommandFactory conflateCommandFactory;
-
-    @Autowired
-    private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
 
     @Autowired
     private UpdateTagsCommandFactory updateTagsCommandFactory;
@@ -122,9 +118,8 @@ public class ConflateResource {
         try {
             ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
             InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, params, this.getClass());
-            ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, params.getOutputName(), this.getClass());
 
-            Command[] workflow = { conflateCommand, updateTagsCommand, exportRenderDBCommand };
+            Command[] workflow = { conflateCommand, updateTagsCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }

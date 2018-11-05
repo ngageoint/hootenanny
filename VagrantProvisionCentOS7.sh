@@ -322,19 +322,6 @@ fi
 
 # Making sure we know where we are
 cd ~
-
-##### These two are next to do.
-echo "### Installing node-mapnik-server..."
-sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
-sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-mapnik.service
-sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-mapnik.service
-# Make sure all npm modules are installed
-cd $HOOT_HOME/node-mapnik-server
-#NOTE: Re-enable once installation works
-#npm install --silent
-# Clean up after the npm install
-rm -rf ~/tmp
-
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
 sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-export.service

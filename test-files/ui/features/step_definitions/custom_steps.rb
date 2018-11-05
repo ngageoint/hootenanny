@@ -582,7 +582,7 @@ When(/^I change the reference layer color to ([^"]*)$/) do |color|
   swatch = page.first('a[data-color="' + color + '"')
   rgb = swatch.native.css_value('background').split(")").first + ')'
   swatch.click
-  expect(page.first('path.stroke.tag-hoot').native.css_value('stroke')).to eq(rgb)
+  expect(page.first('path.way.line.stroke').native.css_value('stroke')).to eq(rgb)
 end
 
 When(/^I change the secondary layer color to ([^"]*)$/) do |color|
@@ -590,7 +590,7 @@ When(/^I change the secondary layer color to ([^"]*)$/) do |color|
   swatch = page.all('a[data-color="' + color + '"').last
   rgb = swatch.native.css_value('background').split(")").first + ')'
   swatch.click
-  expect(page.all('path.stroke.tag-hoot').last.native.css_value('stroke')).to eq(rgb)
+  expect(page.all('path.way.line.stroke').last.native.css_value('stroke')).to eq(rgb)
 end
 
 When(/^I scroll element into view and press "([^"]*)"$/) do |id|

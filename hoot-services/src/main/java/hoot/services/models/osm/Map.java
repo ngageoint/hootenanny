@@ -639,6 +639,7 @@ public class Map extends Maps {
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             mapLayer.setDate(ts);
             mapLayer.setLastAccessed(MapLayer.format.format(ts));
+            mapLayer.setPublicCol(Boolean.valueOf(true));
             mapLayerList.add(mapLayer);
         }
 

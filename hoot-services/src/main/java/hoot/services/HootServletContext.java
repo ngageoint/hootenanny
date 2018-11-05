@@ -26,7 +26,12 @@
  */
 package hoot.services;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.BASEMAPS_FOLDER;
+import static hoot.services.HootProperties.BASEMAPS_TILES_FOLDER;
+import static hoot.services.HootProperties.RPT_STORE_PATH;
+import static hoot.services.HootProperties.SCRIPT_FOLDER;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,8 +54,6 @@ public class HootServletContext implements ServletContextListener {
         // Some third-party components use Java Util Logging (JUL). We want to
         // route those calls through SLF4J.
         initSLF4JBridgeHandler();
-
-        HootProperties.init();
 
         createFolders();
 

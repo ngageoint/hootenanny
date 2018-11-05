@@ -57,8 +57,6 @@ dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 # Translation javascript path
 translationScriptPath=$(homeFolder)/translations
 
-exportRenderDBScript=exportrenderdb.sh
-
 # Enable access to a single OSM API database configured by DatabaseConfig.sh.
 osmApiDbEnabled=true
 
