@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -34,6 +34,7 @@ public class FolderRecord {
     private long id;
     private long parentId;
     private String name;
+    private boolean isPublic;
 
     public FolderRecord() {}
 
@@ -59,5 +60,12 @@ public class FolderRecord {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setPublic(Boolean publicCol) {
+        isPublic = publicCol.booleanValue();
+    }
+    public boolean getPublic() {
+        return isPublic;
     }
 }

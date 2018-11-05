@@ -30,7 +30,7 @@ hoot convert -D convert.ops="hoot::ImplicitTagEligiblePoiPolyCriterion" planet.o
 Next, you need to generate a raw rules flat file from the input data.  Here is an example:
 
 ---------------------------
-hoot implicit-type-tagging-rules --create-raw "planet.osm.pbf;allCountries.geonames" "none;translations/GeoNames.js" \
+hoot type-tagger-rules --create-raw "planet.osm.pbf;allCountries.geonames" "none;translations/GeoNames.js" \
 osm-geonames.implicitTagRules
 ----------------------------
 
@@ -38,7 +38,7 @@ If you already performed the optional pre-filtering and translation from the pre
 time which bypasses filtering and translation:
 
 ---------------------------
-hoot implicit-type-tagging-rules --create-raw -D implicit.tagging.raw.rules.deriver.skip.filtering=true \
+hoot type-tagger-rules --create-raw -D implicit.tagging.raw.rules.deriver.skip.filtering=true \
 "planet-filtered.osm.pbf;allCountries-filtered.geonames" "none;none" osm-geonames-poi.implicitTagRules
 ----------------------------
 
@@ -47,13 +47,13 @@ hoot implicit-type-tagging-rules --create-raw -D implicit.tagging.raw.rules.deri
 Finally, you need to generate the implicit tag rules database.  An example:
 
 ---------------------------
-hoot implicit-type-tagging-rules --create-db osm-geonames-poi.implicitTagRules osm-geonames-poi-rules.sqlite
+hoot type-tagger-rules --create-db osm-geonames-poi.implicitTagRules osm-geonames-poi-rules.sqlite
 ---------------------------------
 
 You can check the results of a generated database with:
 
 -------------------------
-hoot implicit-type-tagging-rules --db-stats osm-geonames-poi.implicitTagRules
+hoot type-tagger-rules --db-stats osm-geonames-poi.implicitTagRules
 ------------------------
 
 Also, you can examine the output rules database in a Sqlite database viewer, such as DB Browser for SQLite. 

@@ -28,7 +28,9 @@ package hoot.services.controllers.conflation;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -44,7 +46,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
-import hoot.services.controllers.common.ExportRenderDBCommand;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.job.Job;
@@ -203,6 +204,5 @@ public class ConflationResourceTest extends HootServicesJerseyTestAbstract {
         assertEquals(3, job.getCommands().length);
         assertEquals(ConflateCommand.class, job.getCommands()[0].getClass());
         assertEquals(UpdateMapTagsCommand.class, job.getCommands()[1].getClass());
-        assertEquals(ExportRenderDBCommand.class, job.getCommands()[2].getClass());
     }
 }

@@ -52,7 +52,9 @@ public:
   virtual QString getName() const { return "generate-alpha-shape"; }
 
   virtual QString getDescription() const
-  { return "Generates a concave hull for a set of points"; }
+  { return "Generates a concave hull for a set of points; useful in cookie cutting"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   int runSimple(QStringList args)
   {

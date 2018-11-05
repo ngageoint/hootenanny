@@ -118,7 +118,9 @@ public:
   virtual QString getName() const { return "score-matches"; }
 
   virtual QString getDescription() const
-  { return "Scores conflation performance against manually matched data"; }
+  { return "Scores conflation performance against a manually matched map"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   class ScoreFunction : public Tgs::NelderMead::Function
   {
@@ -240,7 +242,8 @@ public:
     {
       double score;
       boost::shared_ptr<MatchThreshold> mt;
-      QString result = evaluateThreshold(maps, output, mt, showConfusion, score/*, numManualMatches*/);
+      const QString result =
+        evaluateThreshold(maps, output, mt, showConfusion, score/*, numManualMatches*/);
 
       cout << result;
     }

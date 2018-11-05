@@ -36,6 +36,7 @@ namespace hoot
 class AttributeComparator : public BaseComparator
 {
 public:
+
   AttributeComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
 
   virtual ~AttributeComparator() {}
@@ -53,6 +54,7 @@ public:
   void setIterations(int i) { _iterations = i; }
 
 private:
+
   int _iterations;
   geos::geom::Coordinate _r;
   double _median;
@@ -61,7 +63,6 @@ private:
   double _ci;
   // sampled standard deviation
   double _s;
-
 };
 
 }

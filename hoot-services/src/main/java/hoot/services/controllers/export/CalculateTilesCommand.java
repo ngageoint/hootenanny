@@ -33,13 +33,16 @@ import java.util.List;
 import java.util.Map;
 
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.Users;
 
 
 class CalculateTilesCommand extends ExportCommand {
 
-    CalculateTilesCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+    CalculateTilesCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller, Users user) {
         super(jobId, params);
-
+        if(user != null) {
+            params.setUserEmail(user.getEmail());
+        }
         // if one of these is specified, then both must be
         if (((params.getMaxNodeCountPerTile() == -1) && (params.getPixelSize() != -1.0))
                 || ((params.getPixelSize() == -1.0) && (params.getMaxNodeCountPerTile() != -1))) {
@@ -48,7 +51,11 @@ class CalculateTilesCommand extends ExportCommand {
         }
 
         List<String> options = new LinkedList<>();
-        options.add("api.db.email=test@test.com");
+        if(user == null) {
+            options.add("api.db.email=test@test.com");
+        } else {
+            options.add("api.db.email=" + user.getEmail());
+        }
 
         // bounding box is optional for this command; if not specified, the
         // command will calculate for the combined extent of all input datasets which, of course, can

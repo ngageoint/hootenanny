@@ -50,8 +50,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const
-  { return "Finds the tag with the longest value character size"; }
+  virtual QString getDescription() const { return "Identifies the tag with the largest text size"; }
 
 private:
 

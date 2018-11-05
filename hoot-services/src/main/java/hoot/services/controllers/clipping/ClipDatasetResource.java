@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.clipping;
 
+import java.util.HashMap;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.POST;
@@ -35,35 +37,28 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.models.db.Users;
 
 
 @Controller
 @Path("/clipdataset")
 public class ClipDatasetResource {
-    private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
-
     @Autowired
     private JobProcessor jobProcessor;
 
     @Autowired
     private ClipDatasetCommandFactory clipDatasetCommandFactory;
-
-    @Autowired
-    private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
 
 
     /**
@@ -94,16 +89,15 @@ public class ClipDatasetResource {
     @Path("/execute")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response clipDataset(ClipDatasetParams params,
+    public Response clipDataset(@Context HttpServletRequest request, ClipDatasetParams params,
                                 @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
-
+        Users user = Users.fromRequest(request);
         String jobId = UUID.randomUUID().toString();
 
         try {
-            ExternalCommand clipCommand = clipDatasetCommandFactory.build(jobId, params, debugLevel, this.getClass());
-            ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, params.getOutputName(), this.getClass());
+            ExternalCommand clipCommand = clipDatasetCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
 
-            Command[] workflow = { clipCommand, exportRenderDBCommand };
+            Command[] workflow = { clipCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }
@@ -115,9 +109,8 @@ public class ClipDatasetResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject json = new JSONObject();
-        json.put("jobid", jobId);
-
-        return Response.ok(json.toJSONString()).build();
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("jobid", jobId);
+        return Response.ok(ret).build();
     }
 }

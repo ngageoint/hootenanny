@@ -53,14 +53,12 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getDescription() const
-  { return "Renames all keys for all elements with the specified key to a new key"; }
+  virtual QString getDescription() const { return "Renames tag keys"; }
 
 private:
 
   QString _oldKey;
   QString _newKey;
-
 };
 
 }

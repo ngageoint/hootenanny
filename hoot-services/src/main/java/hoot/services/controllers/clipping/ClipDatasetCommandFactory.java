@@ -22,17 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.clipping;
 
 import org.springframework.stereotype.Component;
 
+import hoot.services.models.db.Users;
+
 
 @Component
 class ClipDatasetCommandFactory {
 
-    ClipDatasetCommand build(String jobId, ClipDatasetParams params, String debugLevel, Class<?> caller) {
-        return new ClipDatasetCommand(jobId, params, debugLevel, caller);
+    ClipDatasetCommand build(String jobId, ClipDatasetParams params, String debugLevel, Class<?> caller, Users user) {
+        return new ClipDatasetCommand(jobId, params, debugLevel, caller, user);
     }
 }

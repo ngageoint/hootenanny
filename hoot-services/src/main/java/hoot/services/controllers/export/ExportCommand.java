@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,19 +38,16 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.common.UnTARFileCommand;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.Users;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 
 
 class ExportCommand extends ExternalCommand {
-    private static final Logger logger = LoggerFactory.getLogger(ExportCommand.class);
-
     private final ExportParams params;
 
     ExportCommand(String jobId, ExportParams exportParams) {
@@ -56,9 +55,11 @@ class ExportCommand extends ExternalCommand {
         this.params = exportParams;
     }
 
-    ExportCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+    ExportCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller, Users user) {
         this(jobId, params);
-
+        if(user != null) {
+            params.setUserEmail(user.getEmail());
+        }
         if (params.getAppend()) {
             appendToFGDB();
         }

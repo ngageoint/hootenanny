@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 
-mkdir -p test-output/cmd/slow/SortCmdTest
+INPUT_DIR=test-files/cmd/slow/SortCmdTest
+OUTPUT_DIR=test-output/cmd/slow/SortCmdTest
+mkdir -p $OUTPUT_DIR
 
 BUFFER_SIZE=3
 
@@ -9,40 +11,55 @@ BUFFER_SIZE=3
 
 # in memory sorting tests
 
-hoot sort --warn test-files/cmd/slow/SortCmdTest/input.geonames test-output/cmd/slow/SortCmdTest/geonames-output-1.osm
-hoot diff --warn test-files/cmd/slow/SortCmdTest/geonames-output.osm test-output/cmd/slow/SortCmdTest/geonames-output-1.osm
+echo "Sorting geonames in memory..."
+echo ""
+hoot is-sorted $INPUT_DIR/input.geonames
+hoot sort --warn $INPUT_DIR/input.geonames $OUTPUT_DIR/geonames-output-1.osm
+hoot is-sorted $OUTPUT_DIR/geonames-output-1.osm
+hoot diff --warn $INPUT_DIR/geonames-output.osm $OUTPUT_DIR/geonames-output-1.osm
+echo ""
 
-hoot sort --warn test-files/cmd/slow/SortCmdTest/input.osm test-output/cmd/slow/SortCmdTest/osm-output-1.osm
-hoot diff --warn test-files/cmd/slow/SortCmdTest/osm-output.osm test-output/cmd/slow/SortCmdTest/osm-output-1.osm
+echo "Sorting xml in memory..."
+echo ""
+hoot is-sorted $INPUT_DIR/input.osm
+hoot sort --warn $INPUT_DIR/input.osm $OUTPUT_DIR/osm-output-1.osm
+hoot is-sorted $OUTPUT_DIR/osm-output-1.osm
+hoot diff --warn $INPUT_DIR/osm-output.osm $OUTPUT_DIR/osm-output-1.osm
+echo ""
 
-hoot pbf-is-sorted test-files/cmd/slow/SortCmdTest/input.osm.pbf
-hoot sort --warn test-files/cmd/slow/SortCmdTest/input.osm.pbf test-output/cmd/slow/SortCmdTest/pbf-output-1.osm.pbf
-hoot diff --warn test-files/cmd/slow/SortCmdTest/pbf-output.osm.pbf test-output/cmd/slow/SortCmdTest/pbf-output-1.osm.pbf
-hoot pbf-is-sorted test-output/cmd/slow/SortCmdTest/pbf-output-1.osm.pbf
+echo "Sorting pbf in memory..."
+echo ""
+hoot is-sorted $INPUT_DIR/input.osm.pbf
+hoot sort --warn $INPUT_DIR/input.osm.pbf $OUTPUT_DIR/pbf-output-1.osm.pbf
+hoot is-sorted $OUTPUT_DIR/pbf-output-1.osm.pbf
+hoot diff --warn $INPUT_DIR/pbf-output.osm.pbf $OUTPUT_DIR/pbf-output-1.osm.pbf
+echo ""
 
 # external merge sorting tests
 
 # The element not found warnings are expected here, as during the external sorting the temp files may have partial maps in them.  We just
 # need to be sure the final output matches what is expected
 
-hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE -D element.sorter.external.temp.format=osm test-files/cmd/slow/SortCmdTest/input.geonames test-output/cmd/slow/SortCmdTest/geonames-output-2.osm
-hoot diff --warn test-files/cmd/slow/SortCmdTest/geonames-output.osm test-output/cmd/slow/SortCmdTest/geonames-output-2.osm
+echo "Sorting geonames on disk..."
+echo ""
+hoot is-sorted $INPUT_DIR/input.geonames
+hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE $INPUT_DIR/input.geonames $OUTPUT_DIR/geonames-output-2.osm
+hoot is-sorted $OUTPUT_DIR/geonames-output-2.osm
+hoot diff --warn $INPUT_DIR/geonames-output.osm $OUTPUT_DIR/geonames-output-2.osm
+echo ""
 
-hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE -D element.sorter.external.temp.format=osm test-files/cmd/slow/SortCmdTest/input.osm test-output/cmd/slow/SortCmdTest/osm-output-2.osm
-hoot diff --warn test-files/cmd/slow/SortCmdTest/osm-output.osm test-output/cmd/slow/SortCmdTest/osm-output-2.osm
+echo "Sorting xml on disk..."
+echo ""
+hoot is-sorted $INPUT_DIR/input.osm
+hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE $INPUT_DIR/input.osm $OUTPUT_DIR/osm-output-2.osm
+hoot is-sorted $OUTPUT_DIR/osm-output-2.osm
+hoot diff --warn $INPUT_DIR/osm-output.osm $OUTPUT_DIR/osm-output-2.osm
+echo ""
 
-hoot pbf-is-sorted test-files/cmd/slow/SortCmdTest/input.osm.pbf
-hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE -D element.sorter.external.temp.format=osm test-files/cmd/slow/SortCmdTest/input.osm.pbf test-output/cmd/slow/SortCmdTest/pbf-output-2.osm.pbf
-hoot diff --warn test-files/cmd/slow/SortCmdTest/pbf-output.osm.pbf test-output/cmd/slow/SortCmdTest/pbf-output-2.osm.pbf
-hoot pbf-is-sorted test-output/cmd/slow/SortCmdTest/pbf-output-2.osm.pbf
-
-hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE -D element.sorter.external.temp.format=pbf test-files/cmd/slow/SortCmdTest/input.geonames test-output/cmd/slow/SortCmdTest/geonames-output-3.osm
-hoot diff --warn test-files/cmd/slow/SortCmdTest/geonames-output.osm test-output/cmd/slow/SortCmdTest/geonames-output-3.osm
-
-hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE -D element.sorter.external.temp.format=pbf test-files/cmd/slow/SortCmdTest/input.osm test-output/cmd/slow/SortCmdTest/osm-output-3.osm
-hoot diff --warn test-files/cmd/slow/SortCmdTest/osm-output.osm test-output/cmd/slow/SortCmdTest/osm-output-3.osm
-
-hoot pbf-is-sorted test-files/cmd/slow/SortCmdTest/input.osm.pbf
-hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE -D element.sorter.external.temp.format=pbf test-files/cmd/slow/SortCmdTest/input.osm.pbf test-output/cmd/slow/SortCmdTest/pbf-output-3.osm.pbf
-hoot diff --warn test-files/cmd/slow/SortCmdTest/pbf-output.osm.pbf test-output/cmd/slow/SortCmdTest/pbf-output-3.osm.pbf
-hoot pbf-is-sorted test-output/cmd/slow/SortCmdTest/pbf-output-3.osm.pbf
+echo "Sorting pbf on disk..."
+echo ""
+hoot is-sorted $INPUT_DIR/input.osm.pbf
+hoot sort --warn -D element.sorter.element.buffer.size=$BUFFER_SIZE $INPUT_DIR/input.osm.pbf $OUTPUT_DIR/pbf-output-2.osm.pbf
+hoot is-sorted $OUTPUT_DIR/pbf-output-2.osm.pbf
+hoot diff --warn $INPUT_DIR/pbf-output.osm.pbf $OUTPUT_DIR/pbf-output-2.osm.pbf
+echo ""

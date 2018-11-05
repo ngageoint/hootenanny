@@ -28,7 +28,6 @@
 #include "SqliteWordWeightDictionary.h"
 
 // hoot
-#include <hoot/core/io/WordCountReader.h>
 #include <hoot/core/util/HootException.h>
 
 // Qt
