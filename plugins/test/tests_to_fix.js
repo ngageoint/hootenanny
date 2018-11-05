@@ -12,7 +12,9 @@ var server = require('../TranslationServer.js');
 describe('TranslationServer', function () {
 
     var cases = {
-        GB055: {aeroway: 'runway'},
+        // GB055: {aeroway: 'runway'},
+        // AP030: {highway: 'road'},
+        // AL013: {building: 'yes'},
         // BH070: {ford: 'yes'},
         BH140: {waterway: 'riverbank'}
     }
@@ -36,6 +38,7 @@ describe('TranslationServer', function () {
                                 <nd ref="-12" />\
                                 <nd ref="-13" />\
                                 <nd ref="-10" />\
+                                <tag k="WCC" v="7"/>\
                                 <tag k="F_CODE" v="' + fcode + '"/>\
                             </way>\
                         </osm>';
@@ -56,7 +59,6 @@ describe('TranslationServer', function () {
 
             var tags = gj.features[0].properties;
             assert.equal(tags[tagKey], tag[tagKey]);
-            // assert.equal(tags.area, "yes");
 
             var tds_xml = server.handleInputs({
                 osm: osm_xml,
@@ -74,26 +76,24 @@ describe('TranslationServer', function () {
 
             var tags = gj.features[0].properties;
             assert.equal(tags["F_CODE"], fcode);
-            // assert.equal(tags["ZI006_MEM"], '<OSM>{"area":"yes"}</OSM>');
 
 
-            // osm_xml = server.handleInputs({
-            //     osm: xml,
-            //     method: 'POST',
-            //     translation: 'TDSv61',
-            //     path: '/translateFrom'
-            // });
+            osm_xml = server.handleInputs({
+                osm: tds_xml,
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateFrom'
+            });
 
-            // console.log(osm_xml);
+            console.log(osm_xml);
 
-            // var xml = parser.parseFromString(osm_xml);
-            // var gj = osmtogeojson(xml);
+            var xml = parser.parseFromString(osm_xml);
+            var gj = osmtogeojson(xml);
 
-            // assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
 
-            // var tags = gj.features[0].properties;
-            // assert.equal(tags[tagKey], tag[tagKey]);
-            // assert.equal(tags.area, "yes");
+            var tags = gj.features[0].properties;
+            assert.equal(tags[tagKey], tag[tagKey]);
 
         });
 
