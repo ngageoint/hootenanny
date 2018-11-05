@@ -671,8 +671,6 @@ tds61 = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
-        print(geometryType);
-        print(layerName);
         // Drop the FCSUBTYPE since we don't use it
         if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
@@ -2150,6 +2148,8 @@ tds61 = {
     toOsm : function(attrs, layerName, geometryType)
     {
         print(JSON.stringify(attrs));
+        print(geometryType);
+
         tags = {};  // The final output Tag list
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
@@ -2300,6 +2300,9 @@ tds61 = {
     // This is the main routine to convert _TO_ TDS
     toTds : function(tags, elementType, geometryType)
     {
+        print(JSON.stringify(tags));
+        print(geometryType);
+
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
         attrs = {}; // The output attributes
