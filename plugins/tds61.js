@@ -2147,8 +2147,6 @@ tds61 = {
     // This is the main routine to convert _TO_ OSM
     toOsm : function(attrs, layerName, geometryType)
     {
-        print(JSON.stringify(attrs));
-        print(geometryType);
 
         tags = {};  // The final output Tag list
 
@@ -2300,8 +2298,6 @@ tds61 = {
     // This is the main routine to convert _TO_ TDS
     toTds : function(tags, elementType, geometryType)
     {
-        print(JSON.stringify(tags));
-        print(geometryType);
 
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
