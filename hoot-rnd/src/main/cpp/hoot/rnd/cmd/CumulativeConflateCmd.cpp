@@ -47,7 +47,7 @@ public:
   virtual QString getName() const { return "conflate-cumulative"; }
 
   virtual QString getDescription() const
-  { return "Conflates three or more maps into a single map (experimental) "; }
+  { return "Conflates three or more maps into a single map, retaining feature provenance (experimental) "; }
 
   virtual QString getType() const { return "rnd"; }
 
