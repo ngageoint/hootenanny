@@ -86,7 +86,7 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
 vector<CreatorDescription> BuildingMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(CreatorDescription(className(), "merges buildings together", false));
+  result.push_back(CreatorDescription(className(), "Merges buildings together", false));
   return result;
 }
 

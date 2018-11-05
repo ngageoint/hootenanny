@@ -139,7 +139,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
 vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(CreatorDescription(className(), "merges POIs into polygons", false));
+  result.push_back(CreatorDescription(className(), "Merges POIs into polygons", false));
   return result;
 }
 

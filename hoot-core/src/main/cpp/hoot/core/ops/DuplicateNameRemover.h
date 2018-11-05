@@ -62,7 +62,7 @@ public:
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
-  virtual QString getDescription() const { return "Removes duplicated names from a feature"; }
+  virtual QString getDescription() const { return "Removes duplicate name tags from a feature"; }
 
 protected:
 

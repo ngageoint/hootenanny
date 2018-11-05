@@ -9,8 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3",
-    "express-http-proxy": "^1.2.0",
+    "express": "^4.16.4",
+    "express-http-proxy": "^1.4.0",
+    "http-parser-js": "^0.5.0",
     "minimist": "^1.2.0"
   }
 }

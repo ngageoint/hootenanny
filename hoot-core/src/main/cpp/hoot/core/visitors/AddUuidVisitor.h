@@ -61,7 +61,7 @@ public:
    */
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Adds UUID tags"; }
+  virtual QString getDescription() const { return "Adds unique ID tags"; }
 
 private:
 

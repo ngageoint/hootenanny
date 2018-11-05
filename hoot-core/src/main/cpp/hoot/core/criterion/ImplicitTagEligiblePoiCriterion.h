@@ -67,7 +67,7 @@ public:
   virtual bool hasEligibleKvp(const Tags& tags) const;
 
   virtual QString getDescription() const
-  { return "Returns true if a POI is eligible for type tag addition"; }
+  { return "Identifies POIs eligible for type tag addition"; }
 };
 
 }

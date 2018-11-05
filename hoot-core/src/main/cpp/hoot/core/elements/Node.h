@@ -139,7 +139,6 @@ protected:
   virtual ElementData& _getElementData() { return _nodeData; }
 
   virtual const ElementData& _getElementData() const { return _nodeData; }
-
 };
 
 typedef boost::shared_ptr<Node> NodePtr;

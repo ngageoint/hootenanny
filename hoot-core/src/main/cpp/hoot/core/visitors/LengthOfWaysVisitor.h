@@ -63,7 +63,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Sums the length of all the ways"; }
+  virtual QString getDescription() const { return "Calculates the length of all ways"; }
 
 private:
 

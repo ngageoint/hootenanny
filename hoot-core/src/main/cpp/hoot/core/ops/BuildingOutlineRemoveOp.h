@@ -59,15 +59,13 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  virtual QString getDescription() const
-  { return "Updates the outline of buildings by taking the union of all the parts"; }
+  virtual QString getDescription() const { return "Removes the outline around buildings"; }
 
 private:
 
   boost::shared_ptr<OsmMap> _map;
 
   void _removeOutline(const boost::shared_ptr<Relation>& building);
-
 };
 
 }
