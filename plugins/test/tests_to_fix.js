@@ -13,7 +13,7 @@ describe('TranslationServer', function () {
 
     var cases = {
         GB055: {aeroway: 'runway'},
-        AP030: {highway: 'road'},
+        // AP030: {highway: 'road'},
         AL013: {building: 'yes'},
         // BH070: {ford: 'yes'},
         BH140: {waterway: 'riverbank'}
@@ -28,11 +28,11 @@ describe('TranslationServer', function () {
         it('should translate ' + fcode + ' from tdsv61 -> osm -> tdsv61', function() {
 
             var data = '<osm version="0.6" upload="true" generator="hootenanny">\
-                            <node id="-10" action="modify" visible="true" lat="0.68307256979" lon="18.45073925651" />\
-                            <node id="-11" action="modify" visible="true" lat="0.68341620728" lon="18.45091527847" />\
-                            <node id="-12" action="modify" visible="true" lat="0.68306209303" lon="18.45157116983" />\
-                            <node id="-13" action="modify" visible="true" lat="0.68270797876" lon="18.45141400736" />\
-                            <way id="-19" action="modify" visible="true">\
+                            <node id="-10" lat="0.68307256979" lon="18.45073925651" />\
+                            <node id="-11" lat="0.68341620728" lon="18.45091527847" />\
+                            <node id="-12" lat="0.68306209303" lon="18.45157116983" />\
+                            <node id="-13" lat="0.68270797876" lon="18.45141400736" />\
+                            <way id="-19" >\
                                 <nd ref="-10" />\
                                 <nd ref="-11" />\
                                 <nd ref="-12" />\

@@ -1167,7 +1167,7 @@ tds61 = {
         if (geometryType == 'Area' && tags.waterway == 'river')
         {
             // Debug
-            print('Changing river to riverbank');
+            // print('Changing river to riverbank');
             tags.waterway = 'riverbank';
         }
 
