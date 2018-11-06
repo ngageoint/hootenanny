@@ -274,7 +274,7 @@ See also:
 * Data Type: bool
 * Default Value: `false`
 
-f true, any buildings in the secondary layer will be automatically reviewed against potentially
+If true, any buildings in the secondary layer will be automatically reviewed against potentially
 matching features in the reference layer if they are marked with a more recent date than that of the
 reference feature.
 
