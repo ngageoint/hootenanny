@@ -1774,21 +1774,25 @@ bool OsmSchema::isAreaForStats(const ConstElementPtr& e) const
 
 bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/, OsmGeometries::Type geometries)
 {
-static int allows_for = 0;
   //  Empty tags shouldn't allow for anything
   if (t.size() == 0)
     return false;
+  int usableTags = 0;
   OsmGeometries::Type value = OsmGeometries::All;
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
     const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
-    value = static_cast<OsmGeometries::Type>(value & tv.geometries);
+    //  Unknown vertex types aren't usable tags
+    if (tv.getType() != SchemaVertex::UnknownVertexType)
+    {
+      value = static_cast<OsmGeometries::Type>(value & tv.geometries);
+      usableTags++;
+    }
   }
-  if ((value & geometries) != OsmGeometries::Empty)
-  {
-    allows_for++;
-    LOG_INFO("allowsFor() == true: " << allows_for);
-  }
+  //  Unusable tags shouldn't allow for anything
+  if (usableTags == 0)
+    return false;
+  //  Check geometries against usable tags
   return (value & geometries) != OsmGeometries::Empty;
 }
 

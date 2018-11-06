@@ -322,7 +322,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
         else if (r->isReview())
           return GEOS_GEOMETRYCOLLECTION;
         // MultiPoint comes from GeoJSON
-        else if (r->getType() == "multipoint")
+        else if (r->getType() == MetadataTags::RelationMultiPoint())
           return GEOS_MULTIPOINT;
       }
 
