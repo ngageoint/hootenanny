@@ -102,6 +102,7 @@ mgcp.rules = {
     // ['F_CODE','AL105','place','isolated_dwelling'], // From OSM
     ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
+    ['F_CODE','AL260','barrier','city_wall'], // Wall
     ['F_CODE','AP050','highway','footway'],
     ['F_CODE','AP050','highway','bridleway'],
     ['F_CODE','AP050','highway','cycleway'],
