@@ -27,7 +27,17 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
-import static hoot.services.controllers.ingest.UploadClassification.*;
+import static hoot.services.controllers.ingest.UploadClassification.FGDB;
+import static hoot.services.controllers.ingest.UploadClassification.FGDB_ZIP;
+import static hoot.services.controllers.ingest.UploadClassification.GEONAMES;
+import static hoot.services.controllers.ingest.UploadClassification.GEONAMES_ZIP;
+import static hoot.services.controllers.ingest.UploadClassification.OSM;
+import static hoot.services.controllers.ingest.UploadClassification.OSM_ZIP;
+import static hoot.services.controllers.ingest.UploadClassification.OTHER;
+import static hoot.services.controllers.ingest.UploadClassification.SHAPE_ZIP;
+import static hoot.services.controllers.ingest.UploadClassification.SHP;
+import static hoot.services.controllers.ingest.UploadClassification.TXT;
+import static hoot.services.controllers.ingest.UploadClassification.ZIP;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,17 +63,12 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.models.db.Users;
@@ -74,16 +79,11 @@ import hoot.services.utils.MultipartSerializer;
 @Path("/ingest")
 @Transactional
 public class ImportResource {
-    private static final Logger logger = LoggerFactory.getLogger(ImportResource.class);
-
     @Autowired
     private JobProcessor jobProcessor;
 
     @Autowired
     private ImportCommandFactory fileETLCommandFactory;
-
-    @Autowired
-    private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
 
     /**
      * Purpose of this service is to provide ingest service for uploading shape
@@ -205,9 +205,7 @@ public class ImportResource {
             ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
 
-            ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, etlName, this.getClass(), user);
-
-            Command[] workflow = { importCommand, exportRenderDBCommand };
+            Command[] workflow = { importCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
 

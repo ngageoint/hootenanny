@@ -61,7 +61,7 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagContainsCriterion()); }
 
   virtual QString getDescription() const
-  { return "Identifies elements by tag key and tag value substring"; }
+  { return "Identifies elements having a particular tag key and tag value substring"; }
 
 private:
 

@@ -3,7 +3,7 @@
  * This generic conflation script supports conflation of POI data
  */
 
-exports.description = "matches POIs";
+exports.description = "Matches POIs";
 exports.experimental = false;
 exports.baseFeatureType = "POI";
 

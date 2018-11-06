@@ -46,7 +46,6 @@ import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.models.db.Users;
@@ -60,9 +59,6 @@ public class ClipDatasetResource {
 
     @Autowired
     private ClipDatasetCommandFactory clipDatasetCommandFactory;
-
-    @Autowired
-    private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
 
 
     /**
@@ -100,9 +96,8 @@ public class ClipDatasetResource {
 
         try {
             ExternalCommand clipCommand = clipDatasetCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
-            ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, params.getOutputName(), this.getClass());
 
-            Command[] workflow = { clipCommand, exportRenderDBCommand };
+            Command[] workflow = { clipCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }

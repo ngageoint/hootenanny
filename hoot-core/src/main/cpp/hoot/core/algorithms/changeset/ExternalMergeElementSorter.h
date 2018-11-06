@@ -113,7 +113,6 @@ public:
   virtual ElementPtr readNextElement();
 
   void setMaxElementsPerFile(long max) { _maxElementsPerFile = max; }
-  void setTempFormat(QString format);
   void setRetainTempFiles(bool retain) { _retainTempFiles = retain; }
   int getNumTempFiles() const { return _tempOutputFiles.size(); }
 
@@ -132,9 +131,6 @@ private:
 
   //set true for debugging contents of temp files only
   bool _retainTempFiles;
-
-  //what format to use for the temp files
-  QString _tempFormat;
 
   //pre-merged temp files; auto-deleted on exit
   QList<boost::shared_ptr<QTemporaryFile>> _tempOutputFiles;

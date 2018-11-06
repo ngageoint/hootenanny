@@ -42,25 +42,22 @@ namespace hoot
  */
 class NonConflatableElementRemover : public OsmMapOperation
 {
-  public:
+public:
 
-    static std::string className() { return "hoot::NonConflatableElementRemover"; }
+  static std::string className() { return "hoot::NonConflatableElementRemover"; }
 
-    NonConflatableElementRemover();
+  NonConflatableElementRemover();
 
-    /**
-      @see OsmMapOperation
-    */
-    void apply(boost::shared_ptr<OsmMap>& map);
+  /**
+    @see OsmMapOperation
+  */
+  void apply(boost::shared_ptr<OsmMap>& map);
 
-    virtual QString getDescription() const
-    {
-      return "Removes elements that are non-conflatable by hootenanny";
-    }
+  virtual QString getDescription() const { return "Removes elements that are not conflatable"; }
 
-  private:
+private:
 
-    boost::shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 };
 
 }

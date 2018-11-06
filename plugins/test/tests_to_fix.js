@@ -12,9 +12,9 @@ var server = require('../TranslationServer.js');
 describe('TranslationServer', function () {
 
     var cases = {
-        // GB055: {aeroway: 'runway'},
-        // AP030: {highway: 'road'},
-        // AL013: {building: 'yes'},
+        GB055: {aeroway: 'runway'},
+        AP030: {highway: 'road'},
+        AL013: {building: 'yes'},
         // BH070: {ford: 'yes'},
         BH140: {waterway: 'riverbank'}
     }
@@ -38,7 +38,6 @@ describe('TranslationServer', function () {
                                 <nd ref="-12" />\
                                 <nd ref="-13" />\
                                 <nd ref="-10" />\
-                                <tag k="WCC" v="7"/>\
                                 <tag k="F_CODE" v="' + fcode + '"/>\
                             </way>\
                         </osm>';
@@ -50,7 +49,7 @@ describe('TranslationServer', function () {
                 path: '/translateFrom'
             });
 
-            console.log(osm_xml);
+            // console.log(osm_xml);
 
             var xml = parser.parseFromString(osm_xml);
             var gj = osmtogeojson(xml);
@@ -67,7 +66,7 @@ describe('TranslationServer', function () {
                 path: '/translateTo'
             });
 
-            console.log(tds_xml);
+            // console.log(tds_xml);
             
             xml = parser.parseFromString(tds_xml);
             gj = osmtogeojson(xml);
@@ -85,7 +84,7 @@ describe('TranslationServer', function () {
                 path: '/translateFrom'
             });
 
-            console.log(osm_xml);
+            // console.log(osm_xml);
 
             var xml = parser.parseFromString(osm_xml);
             var gj = osmtogeojson(xml);

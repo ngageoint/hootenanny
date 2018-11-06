@@ -1113,6 +1113,17 @@ tds = {
         if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
+        // AK030 - Amusement Parks
+        // F_CODE translation == tourism but FFN translation could be leisure.
+        // E.g. water parks
+        if (attrs.F_CODE == 'AK030')
+        {
+            if (tags.leisure && tags.tourism)
+            {
+                delete tags.tourism;
+            }
+        }
+
         // Unpack the ZI006_MEM field
         if (tags.note)
         {

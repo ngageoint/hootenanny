@@ -40,7 +40,8 @@ namespace hoot
 
 /**
  * Recursively removes all elements that do not contain any information and are not in use by
-   another element.
+   another element (e.g. only contains UUID and source, but not FCODE equivalent or other
+   informative tags).
  */
 class NoInformationElementRemover : public OsmMapOperation
 {
@@ -56,7 +57,7 @@ class NoInformationElementRemover : public OsmMapOperation
     void apply(boost::shared_ptr<OsmMap>& map);
 
     virtual QString getDescription() const
-    { return "Removes elements containing no information"; }
+    { return "Removes elements containing no information in tags"; }
 
   protected:
 
