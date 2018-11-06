@@ -1115,15 +1115,7 @@ names.  Use 'key=*' to ignore all tags for a given key.
 === implicit.tagging.database.deriver.translate.names.to.english
 
 * Data Type: bool
-* Default Value: `true`
-
-If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
-rules are derived.
-
-=== implicit.tagging.database.deriver.translate.names.to.english
-
-* Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
 rules are derived.
@@ -1188,7 +1180,7 @@ are -1 or 1 up to the number of available processors.
 === implicit.tagging.translate.names.to.english
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, all implicit taggers will translate element name words to English before querying the
 corresponding implicit tag rules database.
@@ -1804,8 +1796,8 @@ strict.
 ** ``
 
 List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
-TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in quotes when passing
-in from the command line.
+TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in double quotes when
+passing in from the command line.
 
 === ogr.append.data
 
@@ -2617,6 +2609,46 @@ The minimum similarity the name scores of two features can have and be considere
 match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
 present (null).
 
+=== poi.polygon.phone.number.additional.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+By default, POI/Polygon conflation examines all tags with keys containing the text "phone" for
+phone number comparisons.  You can expand the tag keys searched by populating this list. From the
+command line, separate list items with a semicolon and surround the entire list in double quotes.
+
+=== poi.polygon.phone.number.match.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI/Polygon conflation will compare phone number as one of the criteria for matching
+features.  If the data being conflated is known to have poor telephone number data, disabling this
+option may speed up conflation runtime performance.
+
+=== poi.polygon.phone.number.region.code
+
+* Data Type: string
+* Default Value: ``
+
+Optional geographical region code used when comparing phone numbers.   See:
+http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region
+code, if known for the input data, may increase phone number matching accuracy but may also have
+runtime performance implications.
+
+=== poi.polygon.phone.number.search.in.text
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text
+that may contain things other than phone numbers.  If false, the conflation will assume the tag
+value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must
+be set to a valid region code when enabling this option.  Enabling this option may have runtime
+performance implications.
+
 === poi.polygon.poi.ignore.tags.file
 
 * Data Type: string
@@ -3008,7 +3040,7 @@ nested criterion, use the Hootenanny Javascript interface instead.
 ** ``
 
 A list of tag keys the RemoveTagsVisitor will remove on elements.  From the command line, separate
-list items with a semicolon and surround the entire list in quotes.
+list items with a semicolon and surround the entire list in double quotes.
 
 === replace.tag.visitor.match.tag
 
@@ -3272,7 +3304,7 @@ Text that TagKeyContainsCriterion searches a match for.
 * Default Value: ``
 
 Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
-delimit multiple key/value pairs with ';' and surround the entire list in quotes.
+delimit multiple key/value pairs with ';' and surround the entire list in double quotes.
 E.g. "highway=road;amenity=school"
 
 === tag.merger.default
@@ -3323,7 +3355,7 @@ renaming existing tag keys on all elements in a map.
 
 The keys the TagValueNumericRangeCriterion examines the numeric value of.  Tags for all keys must
 meet the numeric range requirement for the criterion to be met.  Separate multiple keys with a
-semicolon from the command line and surround the entire list in quotes.
+semicolon from the command line and surround the entire list in double quotes.
 
 === tag.value.numeric.range.criterion.max
 

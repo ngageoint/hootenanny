@@ -37,6 +37,7 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonPhoneNumberScoreExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/util/Configurable.h>
@@ -123,6 +124,9 @@ public:
   static long addressMatches;
   static long addressesProcessed;
   static long addressMatchCandidates;
+  static long phoneNumberMatches;
+  static long phoneNumbersProcesed;
+  static long phoneNumberMatchCandidates;
   static long convexPolyDistanceMatches;
 
 private:
@@ -171,6 +175,10 @@ private:
   double _addressScore;
   bool _addressMatchEnabled;
 
+  PoiPolygonPhoneNumberScoreExtractor _phoneNumberScorer;
+  double _phoneNumberScore;
+  bool _phoneNumberMatchEnabled;
+
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   std::set<ElementId> _polyNeighborIds;
   std::set<ElementId> _poiNeighborIds;
@@ -202,6 +210,7 @@ private:
   unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 

@@ -80,6 +80,18 @@ bool StringUtils::hasAlphabeticCharacter(const QString input)
   return false;
 }
 
+bool StringUtils::hasDigit(const QString input)
+{
+  for (int i = 0; i < input.length(); i++)
+  {
+    if (input.at(i).isDigit())
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool StringUtils::isNumber(const QString input)
 {
   bool isNumber = false;

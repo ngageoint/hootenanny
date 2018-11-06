@@ -63,6 +63,7 @@ tds.rules = {
     ['F_CODE','AL241','man_made','mast'], // OSM
     ['F_CODE','AL241','tower','communication'],
     ['F_CODE','AL241','tower','yes'], // OSM
+    ['F_CODE','AL260','barrier','city_wall'], // Wall
     ['F_CODE','AM080','tower:type','water'],
     ['F_CODE','AN060','railway','yes'], // Rail yards
     ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway

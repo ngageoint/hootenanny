@@ -106,6 +106,7 @@ sudo yum -y install \
     java-1.8.0-openjdk \
     perl-XML-LibXML \
     hoot-postgis24_95 \
+    libphonenumber-devel \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
