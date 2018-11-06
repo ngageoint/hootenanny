@@ -1115,15 +1115,7 @@ names.  Use 'key=*' to ignore all tags for a given key.
 === implicit.tagging.database.deriver.translate.names.to.english
 
 * Data Type: bool
-* Default Value: `true`
-
-If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
-rules are derived.
-
-=== implicit.tagging.database.deriver.translate.names.to.english
-
-* Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
 rules are derived.
@@ -1188,7 +1180,7 @@ are -1 or 1 up to the number of available processors.
 === implicit.tagging.translate.names.to.english
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, all implicit taggers will translate element name words to English before querying the
 corresponding implicit tag rules database.
