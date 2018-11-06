@@ -114,6 +114,10 @@ AC_CHECK_LIB([icutu], [main], [], [echo "Error! icutu (libicu) is required."; ex
 AC_CHECK_LIB([icuuc], [main], [], [echo "Error! icuuc (libicu) is required."; exit -1])
 #AC_CHECK_LIB([pthread], [main], [], [echo "Error! pthread is required."; exit -1])
 
+# libphonenumber
+m4_include([m4/libphonenumber.m4])
+LIBPHONENUMBER_INIT()
+
 ##
 # Optional
 ##
