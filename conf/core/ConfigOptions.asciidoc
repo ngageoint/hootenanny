@@ -2706,6 +2706,9 @@ runtime performance implications.
 
 === poi.polygon.phone.number.search.in.text
 
+* Data Type: bool
+* Default Value: `false`
+
 If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text
 that may contain things other than phone numbers.  If false, the conflation will assume the tag
 value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must
