@@ -118,6 +118,10 @@ AC_CHECK_LIB([icuuc], [main], [], [echo "Error! icuuc (libicu) is required."; ex
 m4_include([m4/libpostal.m4])
 LIBPOSTAL_INIT()
 
+# libphonenumber
+m4_include([m4/libphonenumber.m4])
+LIBPHONENUMBER_INIT()
+
 ##
 # Optional
 ##

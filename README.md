@@ -27,24 +27,27 @@ Hootenanny is an open source conflation tool developed with machine learning tec
 * Utility polylines (power lines)
 * Waterway polylines
 
-Additional feature types can be made conflatable using Hootenanny's pluggable architecture.  See the Hootenanny Developer Guide for details.
+Additional feature types can be made conflatable using Hootenanny's pluggable conflation architecture.  See the Hootenanny Developer Guide for details.
 
 # Feature Summary
 In addition to conflating maps, Hootenanny can also:
-* Add missing type tags to feature data
-* Align two maps together
-* Calculate the extent of map data
+* Add missing type tags to features
+* Align two maps with each other
+* Apply pluggable data transformation operations to a map
+* Calculate the geospatial extent of a map
 * Clean map data
-* Compare maps
+* Combine maps together
+* Compare maps with each other
 * Compute bounding tiles based on node density
-* Concatenate maps together
 * Convert maps between different geodata formats (see Supported Data Formats section below)
-* Derive changesets between maps and apply them to external OSM data stores
+* Crop a map to a geospatial extent
+* Derive changesets between maps and apply the changesets to external OSM data stores
+* Detect spoken languages in a map's tag data
 * Explore tag data
-* Gather statistics on map features
-* Identify road intersections
+* Gather statistics for a map
+* Identify road intersections in a map
 * Perturb map data for testing purposes
-* Plot node feature density
+* Plot node density
 * Sort map data
 * Translate feature tags using user defined schemas
 * Translate feature tags to English
@@ -122,6 +125,8 @@ Notes:
 * **(*)** = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
+Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer Guide for details.
+
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas.  By default, Hootenanny 
 supports automated schema conversion between: 
@@ -134,6 +139,11 @@ supports automated schema conversion between:
 Users are also able to define their own custom translations.  For custom translations, a specific mapping can be defined based on an 
 uploaded dataset using a semi-automated Translation Assistant.  More details on the translation capabilities of Hootenanny can be 
 found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
+
+# Data Exploration
+
+Hootenanny has a pluggable architecture that allows you to create your information gathering features for gleaning information from map 
+data, as illustrated in examples in the Usage section.  See the Hootenanny Developer Guide for more details on data exploration customization. 
 
 # Usage
 
@@ -206,6 +216,9 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     hoot extent input.osm
     
     Map extent (minx,miny,maxx,maxy): -104.902,38.8532,-104.896,38.855
+
+    # Determine if a map is sorted to the OSM standard
+    hoot is-sorted input.osm
     
     # Sort a map to the OSM standard in memory
     hoot sort input.osm output.osm
@@ -251,9 +264,6 @@ See the Hootenanny User Guide for more usage examples and details on command inp
 
     # Count all POIs in a map
     hoot count "input1.osm;input2.osm" hoot::PoiCriterion
-    
-    # Find the largest element ID in a map
-    hoot stat input.osm hoot::MaxIdVisitor
 
 ## Advanced
 
@@ -317,6 +327,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       
     # Remove all duplicate ways from a map
     hoot convert -D convert.ops="hoot::DuplicateWayRemover" input.osm output.osm
+    
+    # Remove all duplicate areas from a map
+    hoot convert -D convert.ops="hoot::RemoveDuplicateAreaVisitor" input.osm output.osm
+    
+    # Remove all empty areas from a map
+    hoot convert -D convert.ops="hoot::RemoveEmptyAreasVisitor" input.osm output.osm
     
     # Remove duplicate name tags from features
     hoot convert -D convert.ops="hoot::DuplicateNameRemover" input.osm output.osm
@@ -395,14 +411,28 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Count all features which have a tag whose key contains the text "phone"
     hoot count -D tag.key.contains.criterion.text="phone" input1.osm hoot::TagKeyContainsCriterion
     
+    # Calculate the area of all features in a map
+    hoot stat input.osm hoot::CalculateAreaVisitor
+    
+    # Calculate the length of all ways in a map
+    hoot stat input.osm hoot::LengthOfWaysVisitor
+
+    # Count the number of features containing a node by specifying its ID
+    hoot count -D contains.node.criterion.id=-234 input.osm hoot::ContainsNodeCriterion
+
+    # Count the number of nodes within 25 meters of a coordinate
+    hoot count -D distance.node.criterion.center=-77.3453,38.3456 \
+      -D distance.node.criterion.distance=25.0 input.osm hoot::DistanceNodeCriterion
+    
     # Calculate the numerical average of all "accuracy" tags
     hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
     
-    # Display the accuracy distribution for a map; This output shows that 14 ways were found 
-    # with an accuracy of 15 meters.
-    hoot tag-accuracy-distribution input.osm
+    # Display the distribution of highway tags for roads in a map; This result shows that 
+    # highway=road made up over 97% of all highway tags in the data.
+    hoot tag-distribution input.osm highway hoot::HighwayCriterion
     
-    15 : 14 (1)
+    road : 365 (0.9759)
+    motorway : 9 (0.02406)
     
     # Display tag schema information for a map
     hoot tag-info input.osm
@@ -435,17 +465,14 @@ See the Hootenanny User Guide for more usage examples and details on command inp
         ...
     }}
     
-    # Display frequencies of feature names
-    hoot tag-name-frequencies input.osm
+    # Display occurrence frequencies of tokenized feature names
+    hoot tag-distribution input.osm --names --tokenize --limit 5
     
-    Total word count: 1163
-    320 (0.28) : nw
-    246 (0.21) : st
-    80 (0.069) : ave
-    45 (0.039) : sw
-    18 (0.015) : h
-    18 (0.015) : pennsylvania
-    ...
+    nw : 320 (6.811%)
+    st : 246 (5.236%)
+    ave : 80 (1.703%)
+    sw : 45 (0.9579%)
+    h : 18 (0.3831%)
     
 ### Add Missing Type Tags
     

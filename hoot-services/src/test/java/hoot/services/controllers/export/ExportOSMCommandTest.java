@@ -22,13 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
 
-import static hoot.services.HootProperties.*;
-import static org.junit.Assert.*;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -53,7 +55,7 @@ public class ExportOSMCommandTest {
         exportParams.setInputType("file");
         exportParams.setOutputType("shp");
 
-        ExportOSMCommand exportCommand = new ExportOSMCommand(jobId, exportParams, debugLevel, caller);
+        ExportOSMCommand exportCommand = new ExportOSMCommand(jobId, exportParams, debugLevel, caller, null);
 
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.create.user=true");

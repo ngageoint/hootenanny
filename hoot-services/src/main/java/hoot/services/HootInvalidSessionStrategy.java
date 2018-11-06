@@ -30,6 +30,8 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 
 import org.springframework.security.web.RedirectStrategy;
 
@@ -37,7 +39,9 @@ public class HootInvalidSessionStrategy implements RedirectStrategy {
 
     @Override
     public void sendRedirect(HttpServletRequest request, HttpServletResponse response, String url) throws IOException {
-        response.sendError(401);
+        response.resetBuffer();
+        response.setStatus(Status.UNAUTHORIZED.getStatusCode());
+        response.setContentType(MediaType.TEXT_PLAIN);
     }
 
 }

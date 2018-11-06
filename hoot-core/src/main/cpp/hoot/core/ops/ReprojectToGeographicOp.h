@@ -58,7 +58,7 @@ public:
   virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const
-  { return "Reprojects a map to a geographic projection"; }
+  { return "Reprojects to a geographic projection"; }
 };
 
 }

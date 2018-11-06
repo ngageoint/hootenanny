@@ -129,10 +129,12 @@ public:
         if (refId != _refSet.end())
         {
           // Loop through the element Id's in REF2
-          for (set<ElementId>::const_iterator eid = refId->second.begin(); eid != refId->second.end(); ++eid)
+          for (set<ElementId>::const_iterator eid = refId->second.begin();
+               eid != refId->second.end(); ++eid)
           {
             // Loop through the Tags in REF1
-            for (Tags::const_iterator tag1 = e->getTags().begin(); tag1 != e->getTags().end(); ++tag1 )
+            for (Tags::const_iterator tag1 = e->getTags().begin(); tag1 != e->getTags().end();
+                 ++tag1)
             {
               QString kvp1 = OsmSchema::getInstance().toKvp(tag1.key(),tag1.value());
 
@@ -140,12 +142,14 @@ public:
               if (OsmSchema::getInstance().getTagVertex(kvp1).valueType == hoot::Enumeration)
               {
                 // Get the value from the corresponding tag in REF2
-                QString kvp2 = OsmSchema::getInstance().toKvp(tag1.key(), _map->getElement(*eid)->getTags()[tag1.key()]);
+                QString kvp2 =
+                  OsmSchema::getInstance().toKvp(
+                    tag1.key(), _map->getElement(*eid)->getTags()[tag1.key()]);
 
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
                 _coOccurrence[kvp1][kvp2]++;
               }
-            } // End for REF1 tag list
+            }
 
             // now loop through the REF2 tag list and fill in any missing tags.
             for (Tags::const_iterator tag2 = _map->getElement(*eid)->getTags().begin();
@@ -165,7 +169,7 @@ public:
                 _coOccurrence[kvp1][kvp2]++;
               }
 
-            } // End for REF2 tag list
+            }
 
             // now try matching up the "name" fields
             QString name1 = e->getTags()["name"];
@@ -205,16 +209,11 @@ public:
                 _coOccurrence[kvpNonNull][kvpNonNull]++;
               }
             }
-
-          } // End for ref2 Element ID's
-
-        } // End refId != End
-
-      } // End refs > 0
-
-    } // End contains "REF1"
-
-  } // End Visit
+          }
+        }
+      }
+    }
+  }
 
 private:
 

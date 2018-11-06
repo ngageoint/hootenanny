@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/**
+ * Removes non-existent element references from relations or ways with negative IDs.
+ */
 class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
@@ -51,7 +54,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const
-  { return "Removes references to any elements that do not exist in a map"; }
+  { return "Removes references to any elements that do not exist"; }
 
 private:
 

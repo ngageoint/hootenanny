@@ -40,7 +40,8 @@ namespace hoot
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CalculateAreaVisitor : public ConstElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+class CalculateAreaVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
+  public SingleStatistic
 {
 public:
 
@@ -63,7 +64,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Calculates feature areas"; }
+  virtual QString getDescription() const { return "Calculates feature area totals"; }
 
 private:
 

@@ -1,0 +1,23 @@
+== write-name-counts
+
+=== Description
+
+The +write-name-counts+ writes tokenized name counts to a database file.  This data can be used as input to conflation routines to aid in
+matching features.
+
+* +inputs+ - One or more supported data inputs; specify multiple inputs by separating them with a semicolon and surrounding them 
+             with quotes
+* +output+ - A Sqlite database file
+
+=== Usage
+
+--------------------------------------
+write-name-counts (input1;input2...) (output)
+--------------------------------------
+
+==== Example Usage
+
+--------------------------------------
+hoot write-name-counts test-files/DcGisRoads.osm output.osm
+--------------------------------------
+

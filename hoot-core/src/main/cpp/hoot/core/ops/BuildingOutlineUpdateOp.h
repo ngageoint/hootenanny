@@ -63,7 +63,7 @@ public:
   virtual void writeObject(QDataStream& /*os*/) const {}
 
   virtual QString getDescription() const
-  { return "Updates the outline of buildings by taking the union of all the parts"; }
+  { return "Updates any multi-part building outlines that may have changed during conflation"; }
 
 private:
 

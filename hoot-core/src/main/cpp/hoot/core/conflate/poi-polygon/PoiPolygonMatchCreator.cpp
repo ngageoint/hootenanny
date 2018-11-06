@@ -108,6 +108,10 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
      PoiPolygonMatch::addressMatchCandidates << " candidate matches.  " <<
      PoiPolygonMatch::addressesProcessed << " total addresses processed.");
   LOG_INFO(
+    "POI/Polygon phone number matches: " << PoiPolygonMatch::phoneNumberMatches << " / " <<
+    PoiPolygonMatch::phoneNumberMatchCandidates << " candidate matches.  " <<
+    PoiPolygonMatch::phoneNumbersProcesed << " total phone numbers processed.");
+  LOG_INFO(
     "POI/Polygon convex polygon distance matches: " << PoiPolygonMatch::convexPolyDistanceMatches);
 }
 
@@ -117,7 +121,7 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
   result.push_back(
     CreatorDescription(
       className(),
-      "matches POIs to polygons",
+      "Matches POIs to polygons",
       //this match creator has two conflatable types, so arbitrarily just picking one of them as
       //the base feature type; stats class will handle the logic to deal with both poi and polygon
       //input types

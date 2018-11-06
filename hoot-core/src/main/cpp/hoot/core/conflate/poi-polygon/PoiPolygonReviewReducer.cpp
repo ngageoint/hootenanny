@@ -189,8 +189,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const QString poiLeisureVal = poiTags.get("leisure").toLower();
   const QString polyLeisureVal = polyTags.get("leisure").toLower();
 
-  const QString poiName = PoiPolygonNameScoreExtractor::getElementName(*poi);
-  const QString polyName = PoiPolygonNameScoreExtractor::getElementName(*poly);
+  const QString poiName = poi->getTags().getName().toLower();
+  const QString polyName = poly->getTags().getName().toLower();
   const bool poiHasName = !poiName.isEmpty();
   const bool polyHasName = !polyName.isEmpty();
 
@@ -213,7 +213,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //these seem to be clustered together tightly a lot in cities, so up the requirement a bit
   //TODO: using custom match/review distances or custom score requirements may be a better way to
   //handle these types
-
   if (poiTags.get("tourism") == "hotel" && polyTags.get("tourism") == "hotel" &&
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
   {
@@ -236,7 +235,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //similar to above, but for sport fields
-  const bool poiNameEndsWithField = poiName.toLower().endsWith("field");
+  const bool poiNameEndsWithField = poiName.endsWith("field");
   LOG_VART(poiNameEndsWithField);
   const bool polyIsSport = PoiPolygonTypeScoreExtractor::isSport(poly);
   LOG_VART(polyIsSport);

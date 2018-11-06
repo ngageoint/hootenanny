@@ -44,25 +44,11 @@ _maxElementsPerFile(ConfigOptions().getElementSorterElementBufferSize()),
 _retainTempFiles(false),
 _logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
-  setTempFormat(ConfigOptions().getElementSorterExternalTempFormat());
 }
 
 ExternalMergeElementSorter::~ExternalMergeElementSorter()
 {
   close();
-}
-
-void ExternalMergeElementSorter::setTempFormat(QString format)
-{
-  _tempFormat = format.toLower();
-  if (!_tempFormat.endsWith("osm") && !_tempFormat.endsWith("pbf"))
-  {
-    throw IllegalArgumentException("Invalid external sort temporary format: " + format);
-  }
-  if (_tempFormat.toLower() == "pbf")
-  {
-    _tempFormat = "osm.pbf";
-  }
 }
 
 void ExternalMergeElementSorter::close()
@@ -97,7 +83,6 @@ ElementPtr ExternalMergeElementSorter::readNextElement()
 
 void ExternalMergeElementSorter::sort(ElementInputStreamPtr input)
 {
-  LOG_VART(_tempFormat);
   LOG_VART(_maxElementsPerFile);
 
   if (_maxElementsPerFile < 1)
@@ -177,7 +162,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
       boost::shared_ptr<QTemporaryFile> tempOutputFile(
         new QTemporaryFile(
           ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME +
-          "." + _tempFormat));
+          ".osm"));
       tempOutputFile->setAutoRemove(!_retainTempFiles);
       if (!tempOutputFile->open())
       {
@@ -331,10 +316,9 @@ boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutp
 {
   LOG_DEBUG("Initializing final output...");
 
-  _sortFinalOutput.reset(
-    new QTemporaryFile(
-      ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + "." +
-      _tempFormat));
+  const QString tempFile =
+    ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + ".osm";
+  _sortFinalOutput.reset(new QTemporaryFile(tempFile));
   _sortFinalOutput->setAutoRemove(!_retainTempFiles);
   if (!_sortFinalOutput->open())
   {

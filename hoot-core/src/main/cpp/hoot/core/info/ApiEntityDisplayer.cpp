@@ -139,11 +139,11 @@ void printApiEntities2(const std::string& apiEntityClassName)
       {
         const int indentAfterName = maxNameSize - name.size();
         QString line = "  " + name + QString(indentAfterName, ' ');
+        line += description.description;
         if (description.experimental)
         {
-          line += "(experimental) ";
+          line += " (experimental)";
         }
-        line += description.description;
         LOG_VARD(line);
         output.append(line);
       }

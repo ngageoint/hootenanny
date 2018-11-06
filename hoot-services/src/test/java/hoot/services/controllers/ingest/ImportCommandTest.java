@@ -66,11 +66,11 @@ public class ImportCommandTest {
         options.add("api.db.email=test@test.com");
 
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
-                                      etlName, isNoneTranslation, debugLevel, SHP, caller);
+                                      etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
         String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
-        
+
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
         assertNotNull(importCommand.getSubstitutionMap());
@@ -85,7 +85,7 @@ public class ImportCommandTest {
 
         isNoneTranslation = true;
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
-                                          etlName, isNoneTranslation, debugLevel, SHP, caller);
+                                          etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
         assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
@@ -121,7 +121,7 @@ public class ImportCommandTest {
         options.add("api.db.email=test@test.com");
 
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
-                etlName, isNoneTranslation, debugLevel, FGDB, caller);
+                etlName, isNoneTranslation, debugLevel, FGDB, caller, null);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
         String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} ";
@@ -140,7 +140,7 @@ public class ImportCommandTest {
 
         isNoneTranslation = true;
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
-                etlName, isNoneTranslation, debugLevel, SHP, caller);
+                etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
         assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
@@ -177,7 +177,7 @@ public class ImportCommandTest {
         options.add("api.db.email=test@test.com");
 
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
-                etlName, isNoneTranslation, debugLevel, ZIP, caller);
+                etlName, isNoneTranslation, debugLevel, ZIP, caller, null);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
         String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
@@ -199,7 +199,7 @@ public class ImportCommandTest {
 
         isNoneTranslation = true;
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
-                etlName, isNoneTranslation, debugLevel, ZIP, caller);
+                etlName, isNoneTranslation, debugLevel, ZIP, caller, null);
 
         assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
@@ -242,7 +242,7 @@ public class ImportCommandTest {
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
-                                          etlName, isNoneTranslation, debugLevel, OSM, caller);
+                                          etlName, isNoneTranslation, debugLevel, OSM, caller, null);
 
         assertEquals(hootConvertCommand, importCommand.getCommand());
 
@@ -287,7 +287,7 @@ public class ImportCommandTest {
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
-                etlName, isNoneTranslation, debugLevel, OSM, caller);
+                etlName, isNoneTranslation, debugLevel, OSM, caller, null);
 
         assertEquals(hootConvertCommand, importCommand.getCommand());
 

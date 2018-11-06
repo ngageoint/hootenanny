@@ -4,7 +4,7 @@
 
 The +tag-info+ command prints out unique feature tag values grouped by tag key.
 
-* +input+              - One or more inputs.  If using an OGR layer within a data source, then delimit the data source and layer 
+* +inputs+             - One or more inputs.  If using an OGR layer within a data source, then delimit the data source and layer 
                          with a semicolon.
 * +--tag-values-limit+ - Limits the number of unique tag values printed per tag key.  By default, there is no limit.  This option is ignored 
                          if --keys-only is specified. 

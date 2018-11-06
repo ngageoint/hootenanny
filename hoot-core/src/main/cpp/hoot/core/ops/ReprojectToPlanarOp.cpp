@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReprojectToPlanarOp.h"
 
@@ -50,12 +50,10 @@ void ReprojectToPlanarOp::apply(boost::shared_ptr<OsmMap> &map)
 
 void ReprojectToPlanarOp::readObject(QDataStream& /*is*/)
 {
-  // no parameters to read
 }
 
 void ReprojectToPlanarOp::writeObject(QDataStream& /*os*/) const
 {
-  // no parameters to write
 }
 
 }

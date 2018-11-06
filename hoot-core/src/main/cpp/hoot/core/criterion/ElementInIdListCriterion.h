@@ -53,7 +53,7 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ElementInIdListCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies elements in a list of IDs"; }
+  virtual QString getDescription() const { return "Filters elements with a list of IDs"; }
 
 private:
 

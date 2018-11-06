@@ -51,8 +51,7 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual QString getDescription() const
-  { return "Unions all area elements that are visited to create a single geometry"; }
+  virtual QString getDescription() const { return "Combines all areas"; }
 };
 
 }
