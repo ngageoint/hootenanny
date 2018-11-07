@@ -49,6 +49,7 @@ class WeightedWordDistance : public StringDistance, public StringDistanceConsume
   public Configurable
 {
 public:
+
   static std::string className() { return "hoot::WeightedWordDistance"; }
 
   WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary);
@@ -62,7 +63,11 @@ public:
 
   virtual QString toString() const { return "WeightedWordDistance " + _d->toString(); }
 
+  virtual QString getDescription()
+  { return "Returns a score based on the best pairwise comparison within two sets of words"; }
+
 private:
+
   StringDistancePtr _d;
   WordWeightDictionaryPtr _dictionary;
   StringTokenizer _tokenizer;

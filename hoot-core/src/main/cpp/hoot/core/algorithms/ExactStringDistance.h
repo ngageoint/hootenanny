@@ -53,6 +53,9 @@ public:
   virtual double compare(const QString& s1, const QString& s2) const;
 
   QString toString() const { return "ExactStringDistance"; }
+
+  virtual QString getDescription()
+  { return "Returns a matching string comparison score only if the strings match exactly (ignoring case)"; }
 };
 
 }

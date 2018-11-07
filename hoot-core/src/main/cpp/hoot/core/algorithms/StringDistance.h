@@ -57,6 +57,8 @@ public:
   virtual double compare(const QString& s1, const QString& s2) const = 0;
 
   virtual QString toString() const = 0;
+
+  virtual QString getDescription() = 0;
 };
 
 typedef boost::shared_ptr<StringDistance> StringDistancePtr;

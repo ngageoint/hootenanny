@@ -77,6 +77,9 @@ public:
   static QString toDigit(QChar c);
 
   QString toString() const { return "Soundex"; }
+
+  virtual QString getDescription()
+  { return "Returns a string comparison score based on the Soundex algorithm"; }
 };
 
 }

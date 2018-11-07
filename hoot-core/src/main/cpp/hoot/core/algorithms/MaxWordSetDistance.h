@@ -43,6 +43,7 @@ namespace hoot
 class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::MaxWordSetDistance"; }
 
   MaxWordSetDistance(StringDistancePtr d);
@@ -56,7 +57,11 @@ public:
 
   virtual QString toString() const { return "MaxWordSet " + _d->toString(); }
 
+  virtual QString getDescription()
+  { return "Returns a score based on the max (best) pairwise word comparison within two sets of words"; }
+
 private:
+
   StringDistancePtr _d;
   StringTokenizer _tokenizer;
 };

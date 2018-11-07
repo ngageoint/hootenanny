@@ -71,6 +71,9 @@ public:
   void setTokenize(bool tokenize) { _tokenize = tokenize; }
   void setTranslateAll(bool translateAll) { _translateAll = translateAll; }
 
+  virtual QString getDescription()
+  { return "Returns a string comparison score based on the associated string comparator after first translating to English"; }
+
 private:
 
   StringDistancePtr _d;

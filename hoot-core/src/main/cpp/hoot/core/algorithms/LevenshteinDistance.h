@@ -116,6 +116,9 @@ public:
 
   QString toString() const { return QString("Levenshtein %1").arg(_alpha); }
 
+  virtual QString getDescription()
+  { return "Returns a string comparison score derived using Levenshtein Distance"; }
+
 private:
 
   double _alpha;

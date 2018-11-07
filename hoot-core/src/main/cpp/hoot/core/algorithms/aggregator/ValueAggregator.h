@@ -54,6 +54,8 @@ public:
   virtual double aggregate(std::vector<double>& d) const = 0;
 
   virtual QString toString() const = 0;
+
+  virtual QString getDescription() = 0;
 };
 
 typedef boost::shared_ptr<ValueAggregator> ValueAggregatorPtr;
