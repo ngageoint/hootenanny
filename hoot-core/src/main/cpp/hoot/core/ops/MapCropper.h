@@ -104,7 +104,6 @@ private:
 
   void _cropWay(boost::shared_ptr<OsmMap> map, long wid);
 
-
   /**
    * Finds the node with coordinate c. Throws an exception if multiple nodes are found with the
    * same coordinate. If no node is found then numeric_limits<long>::max() is returned.

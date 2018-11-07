@@ -248,6 +248,8 @@ void MapCropper::crop(OsmMapPtr map, const boost::shared_ptr<const Geometry>& g,
 
 void MapCropper::_cropWay(OsmMapPtr map, long wid)
 {
+  LOG_TRACE("Cropping way: " << wid << "...");
+
   boost::shared_ptr<Way> way = map->getWay(wid);
 
   boost::shared_ptr<Geometry> fg = ElementConverter(map).convertToGeometry(way);
@@ -284,8 +286,9 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
   boost::shared_ptr<FindNodesInWayFactory> nodeFactory(new FindNodesInWayFactory(way));
   GeometryConverter gc(map);
   gc.setNodeFactory(nodeFactory);
-  boost::shared_ptr<Element> e = gc.convertGeometryToElement(g.get(), way->getStatus(),
-    way->getCircularError());
+  boost::shared_ptr<Element> e =
+    gc.convertGeometryToElement(g.get(), way->getStatus(), way->getCircularError());
+  LOG_VART(e.get());
 
   if (e == 0)
   {
@@ -293,6 +296,7 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
   }
   else
   {
+    LOG_TRACE("Replacing way: " << way->getId() << "...");
     e->setTags(way->getTags());
     map->replace(way, e);
   }
