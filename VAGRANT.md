@@ -8,6 +8,10 @@
 
 In some cases, you may have to install a newer version of Vagrant or VirtualBox than what is available in the public repositories for your host operating system in order to launch the virtual machine.
 
+You will also need some Vagrant plugins:
+
+    vagrant plugin install vagrant-bindfs
+
 You may also need to enable hardware virtualization extensions in your BIOS.
 
 # Setting Up Hootenanny
