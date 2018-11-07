@@ -29,16 +29,16 @@ package hoot.services.controllers.osm.user;
 import static hoot.services.utils.DbUtils.createQuery;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.ws.rs.NotAllowedException;
+import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
@@ -52,7 +52,6 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
 import hoot.services.models.db.QChangesets;
 import hoot.services.models.osm.Changeset;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlUtils;
 
 
@@ -85,7 +84,7 @@ public class UserResourceTest extends OSMResourceTestAbstract {
 	@Category(UnitTest.class)
 	public void testGetByName() throws Exception {
 		final String display_name = userId + "::MapUtils::insertUser()";
-		Document responseData = target("user/" + display_name).request(MediaType.TEXT_XML).get(Document.class);
+		Document responseData = target("user/name/" + display_name).request(MediaType.TEXT_XML).get(Document.class);
 
 		assertNotNull(responseData);
 
@@ -176,33 +175,32 @@ public class UserResourceTest extends OSMResourceTestAbstract {
 		catch (NotFoundException e) {
 			Response r = e.getResponse();
 			assertEquals(404, r.getStatus());
-			assertTrue(r.readEntity(String.class).contains("No user exists with ID"));
 			throw e;
 		}
 	}
 
-	@Test(expected = NotFoundException.class)
+	@Test(expected = NotAcceptableException.class)
 	@Category(UnitTest.class)
 	public void testGetEmptyUserId() throws Exception {
 		try {
 			target("user/").request(MediaType.TEXT_XML).get(Document.class);
 		}
-		catch (NotAllowedException e) {
+		catch (NotAcceptableException e) {
 			Response r = e.getResponse();
-			assertEquals(404, r.getStatus());
+			assertEquals(Status.NOT_ACCEPTABLE.getStatusCode(), r.getStatus());
 			throw e;
 		}
 	}
 
-	@Test(expected = NotFoundException.class)
+	@Test(expected = NotAcceptableException.class)
 	@Category(UnitTest.class)
 	public void testGetMissingUserId() throws Exception {
 		try {
 			target("user").request(MediaType.TEXT_XML).get(Document.class);
 		}
-		catch (NotAllowedException e) {
+		catch (NotAcceptableException e) {
 			Response r = e.getResponse();
-			assertEquals(404, r.getStatus());
+			assertEquals(Status.NOT_ACCEPTABLE.getStatusCode(), r.getStatus());
 			throw e;
 		}
 	}
