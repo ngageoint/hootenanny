@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VALUEAGGREGATOR_H
 #define VALUEAGGREGATOR_H
@@ -54,6 +54,8 @@ public:
   virtual double aggregate(std::vector<double>& d) const = 0;
 
   virtual QString toString() const = 0;
+
+  virtual QString getDescription() = 0;
 };
 
 typedef boost::shared_ptr<ValueAggregator> ValueAggregatorPtr;

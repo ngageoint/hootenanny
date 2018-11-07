@@ -53,6 +53,8 @@ public:
 
   virtual QString toString() const { return QString("QuantileAggregator %1").arg(_quantile); }
 
+  virtual QString getDescription() { return "Aggregates data based on the quantile value"; }
+
 private:
 
   double _quantile;
