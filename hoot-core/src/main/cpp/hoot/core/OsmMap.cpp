@@ -394,8 +394,11 @@ bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
   return false;
 }
 
-void OsmMap::replace(const boost::shared_ptr<const Element>& from, const boost::shared_ptr<Element>& to)
+void OsmMap::replace(const boost::shared_ptr<const Element>& from,
+                     const boost::shared_ptr<Element>& to)
 {
+  LOG_TRACE("Replacing: " << from->getElementId() << " with: " << to->getElementId() << "...");
+
   const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // do some error checking before we add the new element.
