@@ -60,7 +60,8 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                  double nameScore, bool nameMatch,
                                                  bool exactNameMatch, double typeScoreThreshold,
                                                  double typeScore, bool typeMatch,
-                                                 double matchDistanceThreshold, bool addressMatch) :
+                                                 double matchDistanceThreshold, bool addressMatch,
+                                                 bool addressParsingEnabled) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
@@ -75,7 +76,8 @@ _typeMatch(typeMatch),
 _matchDistanceThreshold(matchDistanceThreshold),
 _addressMatch(addressMatch),
 _badGeomCount(0),
-_keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
+_keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly()),
+_addressParsingEnabled(addressParsingEnabled)
 {
   LOG_VART(_polyNeighborIds.size());
   LOG_VART(_poiNeighborIds.size());
@@ -88,6 +90,7 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
   LOG_VART(_typeMatch);
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_addressMatch);
+  LOG_VART(_addressParsingEnabled);
 }
 
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
@@ -128,22 +131,25 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
 
-  const int numPolyAddresses = AddressParser::hasAddress(poly, *_map);
-  const bool polyHasAddress = numPolyAddresses > 0;
-
-  //if both have addresses and they explicitly contradict each other, throw out the review; don't
-  //do it if the poly has more than one address, like in many multi-use buildings.
-  if (!_addressMatch && AddressParser::hasAddress(poi, *_map) && polyHasAddress)
+  if (_addressParsingEnabled)
   {
-    //check to make sure the only address the poly has isn't the poi itself as a way node /
-    //relation member
-    if (_polyContainsPoiAsMember(poly, poi) && numPolyAddresses < 2)
+    const int numPolyAddresses = AddressParser::hasAddress(poly, *_map);
+    const bool polyHasAddress = numPolyAddresses > 0;
+
+    //if both have addresses and they explicitly contradict each other, throw out the review; don't
+    //do it if the poly has more than one address, like in many multi-use buildings.
+    if (!_addressMatch && AddressParser::hasAddress(poi, *_map) && polyHasAddress)
     {
-    }
-    else
-    {
-      LOG_TRACE("Returning miss per review reduction rule #1...");
-      return true;
+      //check to make sure the only address the poly has isn't the poi itself as a way node /
+      //relation member
+      if (_polyContainsPoiAsMember(poly, poi) && numPolyAddresses < 2)
+      {
+      }
+      else
+      {
+        LOG_TRACE("Returning miss per review reduction rule #1...");
+        return true;
+      }
     }
   }
 

@@ -84,7 +84,8 @@ _reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
 _nameScoreThreshold(-1.0),
 _addressScore(-1.0),
-_addressMatchEnabled(true),
+//leaving this false by default due to libpostals startup time
+_addressMatchEnabled(false),
 _phoneNumberScore(-1.0),
 _phoneNumberMatchEnabled(true),
 _polyNeighborIds(polyNeighborIds),
@@ -392,7 +393,8 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
-      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0);
+      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
+      _addressMatchEnabled);
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;

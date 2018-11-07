@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-HOOT_OPTS="-D uuid.helper.repeatable=true -D poi.polygon.address.match.enabled=false"
+HOOT_OPTS="-D uuid.helper.repeatable=true"
 
 export INPUTS="test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm"
 export OUTPUT_DIR=test-output/cmd/ConflateConsistencyTest

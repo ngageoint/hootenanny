@@ -1504,10 +1504,10 @@ details.  The "best" value varies depending on the input data as well as how the
 === libpostal.data.dir
 
 * Data Type: string
-* Default Value: `/home/vagrant/libpostal-data/libpostal`
+* Default Value: `/home/vagrant/libpostal-data`
 
-Absolute path to the directory where the libpostal library, used for POI/Polygon address parsing,
-stores its data.
+Absolute path to the directory where the libpostal library, used for address parsing, stores its
+data.
 
 === log.format
 
@@ -2517,11 +2517,13 @@ the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
 === poi.polygon.address.match.enabled
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.
 If the data being conflated is known to have poor address data, disabling this option may speed up
-conflation runtime performance.
+conflation runtime performance.  This option is left turned off by default due to the small startup
+time required to use libpostal (~5s), which would be wasteful for small datasets known to have no
+addresses in them.  The startup time is incurred only once per Hootenanny command invocation.
 
 === poi.polygon.address.translate.to.english
 

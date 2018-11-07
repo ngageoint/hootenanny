@@ -4,19 +4,17 @@ set -e
 mkdir -p $HOOT_HOME/tmp/
 mkdir -p test-output/cmd/DiffConflateCmdTest
 
-HOOT_OPTS="-D poi.polygon.address.match.enabled=false"
-
 # Run differential conflation to produce a map output
-hoot conflate -C Diff.conf $HOOT_OPTS test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output.osm --differential
+hoot conflate -C Diff.conf test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output.osm --differential
 
 # Run changeset w/tags to produce a unified changeset output (geometry and tags)
-hoot conflate -C Diff.conf $HOOT_OPTS test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output_unified.osc --differential --include-tags
+hoot conflate -C Diff.conf test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output_unified.osc --differential --include-tags
 
 # Run changeset w/tags to produce a unified map (osm) output
-hoot conflate -C Diff.conf $HOOT_OPTS test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output_unified.osm --differential --include-tags
+hoot conflate -C Diff.conf test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output_unified.osm --differential --include-tags
 
 # Run changeset w/tags to produce seperate outputs for geometry and tags
-hoot conflate -C Diff.conf $HOOT_OPTS test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output.osc --differential --include-tags --separate-output
+hoot conflate -C Diff.conf test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output.osc --differential --include-tags --separate-output
 
 # Check differential output
 echo "Checking differential output"
@@ -54,5 +52,5 @@ echo "Checking unified geometry+tag diff osm"
 hoot diff test-output/cmd/DiffConflateCmdTest/output_unified.osm test-files/cmd/slow/DiffConflateCmdTest/output_unified.osm || diff test-output/cmd/DiffConflateCmdTest/output_unified.osm test-files/cmd/slow/DiffConflateCmdTest/output_unified.osm 
 
 # Check to make sure we don't bomb out on empty files
-hoot conflate -C Diff.conf $HOOT_OPTS --warn test-files/Empty.osm test-files/Empty.osm tmp/dum.osm
+hoot conflate -C Diff.conf --warn test-files/Empty.osm test-files/Empty.osm tmp/dum.osm
 hoot diff test-files/Empty.osm tmp/dum.osm || cat tmp/dum.osm

@@ -47,7 +47,6 @@ AddressParser::AddressParser() :
 _allowLenientHouseNumberMatching(true),
 _preTranslateTagValuesToEnglish(false)
 {
-  LibPostalInit::getInstance();
 }
 
 void AddressParser::setConfiguration(const Settings& conf)
@@ -136,6 +135,8 @@ int AddressParser::numAddresses(const ConstElementPtr& element, const OsmMap& ma
 
 QList<Address> AddressParser::parseAddresses(const Element& element) const
 {
+  LibPostalInit::getInstance();
+
   QList<Address> addresses;
 
   QString houseNum;
