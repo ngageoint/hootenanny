@@ -43,6 +43,8 @@ public:
   virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return "MaxAggregator"; }
+
+  virtual QString getDescription() { return "Aggregates data based on the maximum value"; }
 };
 
 }

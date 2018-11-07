@@ -2,18 +2,22 @@
 
 The +info+ command displays information about Hootenanny capabilities.  
 
+For further information on how to use this information see both the Hootenanny User and Developer Guides.
+
 === Option Overview
 
 Only one of the following options can be passed to the command:
 
-* +--config-options+     - Prints available configuration options
-* +--feature-extractors+ - Prints feature extractors used for conflation model building
-* +--formats+            - Prints supported data formats
-* +--languages+          - Prints information about translatable/detectable languages
-* +--matchers+           - Prints available matchers used with conflation
-* +--mergers+            - Prints available mergers used with conflation
-* +--operators+          - Prints inline operators that can be applied to map datasets
-* +--tag-mergers+        - Prints available tag mergers used with conflation
+* +--config-options+     - Displays available configuration options
+* +--feature-extractors+ - Displays available feature extractors used in conflation model building
+* +--formats+            - Displays supported data input/output formats
+* +--languages+          - Displays information about translatable/detectable spoken languages
+* +--matchers+           - Displays available feature matchers used during conflation
+* +--mergers+            - Displays available feature mergers used during conflation
+* +--operators+          - Displays available inline operators that can be applied to map datasets
+* +--string-comparators+ - Displays available string comparators
+* +--tag-mergers+        - Displays available feature tag mergers used during conflation
+* +--value-aggregators+  - Displays available feature tag value aggregators used in conflation model building
 
 Each of the following sections describes an option that may be used with this command and its input parameters.
 
@@ -61,7 +65,8 @@ hoot info --config-options poi.polygon --option-details
 
 === Feature Extractors
 
-The +--feature-extractors+ option prints out available feature extractors that can be used when building a model with map training data. 
+The +--feature-extractors+ option prints out available feature extractors that can be used when building a conflation model with 
+manually matched map training data. 
 
 ==== Usage
 
@@ -72,7 +77,6 @@ info --feature-extractors
 ==== Example
 
 --------------------------------------
-# prints all
 hoot info --feature-extractors
 --------------------------------------
 
@@ -115,7 +119,6 @@ Only one of the following options can be passed to the command:
 * +--detectors+     - Prints all available language detector implementations for the translation service
 * +--translatable+  - Prints all spoken languages that Hootenanny translate from to English and the translators that can translate them
 * +--translators+   - Prints all available language translator implementations for the translation service
-
 
 The +--detectors+ option prints out all available language detectors that can be used with the Hootenanny web services.
 
@@ -187,7 +190,6 @@ info --matchers
 ==== Example
 
 --------------------------------------
-# lists all
 hoot info --matchers
 --------------------------------------
 
@@ -204,7 +206,6 @@ info --mergers
 ==== Example
 
 --------------------------------------
-# lists all
 hoot info --mergers
 --------------------------------------
 
@@ -240,6 +241,22 @@ hoot convert -D convert.ops="hoot::DuplicateWayRemover" input1.osm input2.osm ou
 hoot convert -D convert.ops="hoot::RemoveTagsVisitor" -D remove.tags.visitor.element.criterion="hoot::WayCriterion" -D remove.tags.visitor.keys="source;error:circular" input1.osm input2.osm output.osm
 --------------------------------------
 
+=== String Comparators
+
+The +--string-comparators+ option prints out available string comparators that can be used during conflation when comparing tag string values. 
+
+==== Usage
+
+--------------------------------------
+info --string-comparators
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --string-comparators
+--------------------------------------
+
 === Tag Mergers
 
 The +--tag-mergers+ option prints out available tag mergers that may be applied when conflating data.
@@ -253,14 +270,29 @@ info --tag-mergers
 ==== Example
 
 --------------------------------------
-# lists all
 hoot info --tag-mergers
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-# lists all
 hoot info --tag-mergers
+--------------------------------------
+
+=== Value Aggregators
+
+The +--value-aggregators+ option prints out available tag value aggregation methods that can be used when building a conflation model with 
+manually matched map training data. 
+
+==== Usage
+
+--------------------------------------
+info --value-aggregators
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --value-aggregators
 --------------------------------------
 
