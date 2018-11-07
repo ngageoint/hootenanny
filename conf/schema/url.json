@@ -1,11 +1,6 @@
 [
     {
         "dataType": "text",
-        "geometries": [
-            "node",
-            "way",
-            "relation"
-        ],
         "name": "url",
         "objectType": "tag"
     }

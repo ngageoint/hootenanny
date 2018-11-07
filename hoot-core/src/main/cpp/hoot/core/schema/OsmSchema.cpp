@@ -1783,7 +1783,7 @@ bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/, OsmGeometr
   {
     const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
     //  Unknown vertex types aren't usable tags
-    if (tv.getType() != SchemaVertex::UnknownVertexType)
+    if (tv.getType() != SchemaVertex::UnknownVertexType && tv.geometries != OsmGeometries::Empty)
     {
       value = static_cast<OsmGeometries::Type>(value & tv.geometries);
       usableTags++;

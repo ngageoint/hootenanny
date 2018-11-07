@@ -1,11 +1,6 @@
 [
     {
         "dataType": "text",
-        "geometries": [
-            "node",
-            "way",
-	    "relation"
-        ],
         "name": "abstract_is_in",
         "influence": 1,
         "objectType": "tag"

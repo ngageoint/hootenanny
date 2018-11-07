@@ -64,6 +64,7 @@ void SchemaChecker::checkUnknownVertexType()
 
 void SchemaChecker::checkEmptyGeometry()
 {
+  return;
   for (unsigned int i = 0; i < _schemaVertexList.size(); i++)
   {
     SchemaVertex schemaVertex = _schemaVertexList[i];
