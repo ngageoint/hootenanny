@@ -61,6 +61,7 @@ tds61.rules = {
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','tower','communication'],
     ['F_CODE','AL241','tower','yes'],
+    ['F_CODE','AL260','barrier','city_wall'], // Wall
     ['F_CODE','AM080','tower:type','water'],
     ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
     ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
@@ -1529,6 +1530,7 @@ tds61.rules = {
     ['FFN','912','use','sports_centre'], // Sports Centre
     ['FFN','913','leisure','fitness_centre'], // Fitness Centre
     ['FFN','914','sport','shooting_range'], // Shooting Range
+    ['FFN','915','leisure','water_park'], // Water Park
     ['FFN','919','use','animal_boarding'], // Animal Boarding
     ['FFN','921','use','recreation'], // Recreation
     ['FFN','922','use','amusement'], // Amusement

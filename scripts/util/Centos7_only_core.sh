@@ -736,15 +736,6 @@ fi
 # Making sure we know where we are
 cd ~
 
-##### These two are next to do.
-# echo "### Installing node-mapnik-server..."
-# sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
-# # Make sure all npm modules are installed
-# cd $HOOT_HOME/node-mapnik-server
-# npm install --silent
-# # Clean up after the npm install
-# rm -rf ~/tmp
-#
 # echo "### Installing node-export-server..."
 # sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
 # # Make sure all npm modules are installed

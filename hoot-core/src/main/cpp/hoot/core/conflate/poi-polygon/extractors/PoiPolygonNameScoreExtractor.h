@@ -61,15 +61,6 @@ public:
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
 
-  /**
-   * Returns an element's name
-   *
-   * @param element the element to examine
-   * @return the element's name if it has one
-   * @todo move this somewhere else
-   */
-  static QString getElementName(ConstElementPtr element);
-
   virtual void setConfiguration(const Settings& conf);
 
   double getNameScoreThreshold() const { return _nameScoreThreshold; }

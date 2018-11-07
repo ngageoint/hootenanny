@@ -305,7 +305,7 @@ cd $HOOT_HOME
 # need to source this to run glpsol
 source ./SetupEnv.sh
 cd ..
-# check to see if a version previously compiled from source different than the one 
+# check to see if a version previously compiled from source different than the one
 # we're trying to install needs to first be removed
 if glpsol | grep --quiet v; then
     INSTALLED_GLPK_VERSION=`glpsol | grep v | awk '{print $5}' | sed 's/v//g'`
@@ -453,20 +453,6 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
 fi
 
 cd ~
-
-#
-# NOTE: Hadoop install has been removed
-#
-
-#echo "### Installing node-mapnik-server..."
-#sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-#sudo chmod a+x /etc/init.d/node-mapnik-server
-# Make sure all npm modules are installed
-#cd $HOOT_HOME/node-mapnik-server
-#npm install --silent
-# Clean up after the npm install
-rm -rf ~/tmp/*
-
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
 sudo chmod a+x /etc/init.d/node-export-server
