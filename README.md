@@ -549,11 +549,17 @@ Requires language translation server installation.  See the Hootenanny Install G
     # List all available language translators
     hoot info --languages --translators
     
-    # List all detectable langauges
+    # List all detectable languages
     hoot info --languages --detectable
     
     # List all translatable languages
     hoot info --languages --translatable
+
+    # List all available string comparators
+    hoot info --string-comparators
+
+    # List all available tag value aggregators
+    hoot info --value-aggregators
 
 # Contributing
 Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny 

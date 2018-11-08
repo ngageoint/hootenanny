@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SOUNDEX_H
 #define SOUNDEX_H
@@ -77,6 +77,9 @@ public:
   static QString toDigit(QChar c);
 
   QString toString() const { return "Soundex"; }
+
+  virtual QString getDescription()
+  { return "Returns a string comparison score based on the Soundex algorithm"; }
 };
 
 }

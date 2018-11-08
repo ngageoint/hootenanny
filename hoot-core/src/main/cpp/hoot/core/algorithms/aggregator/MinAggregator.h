@@ -43,6 +43,8 @@ public:
   virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return "MinAggregator"; }
+
+  virtual QString getDescription() { return "Aggregates data based on the minimum value"; }
 };
 
 }
