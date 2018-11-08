@@ -58,11 +58,14 @@ RemoveDuplicateAreaVisitor::RemoveDuplicateAreaVisitor()
   _diff.reset(
     Factory::getInstance().constructObject<TagDifferencer>(
       ConfigOptions().getRemoveDuplicateAreasDiff()));
+  _visitedRelationIds.clear();
 }
 
-boost::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(const boost::shared_ptr<Element>& e1)
+boost::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(
+  const boost::shared_ptr<Element>& e1)
 {
-  QHash<ElementId, boost::shared_ptr<Geometry> >::const_iterator it = _geoms.find(e1->getElementId());
+  QHash<ElementId, boost::shared_ptr<Geometry> >::const_iterator it =
+    _geoms.find(e1->getElementId());
   if (it != _geoms.end())
   {
     return it.value();
@@ -130,7 +133,8 @@ bool RemoveDuplicateAreaVisitor::_equals(const boost::shared_ptr<Element>& e1,
   return true;
 }
 
-void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1, boost::shared_ptr<Element> e2)
+void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1,
+                                            boost::shared_ptr<Element> e2)
 {
   if (e1->getTags().size() > e2->getTags().size())
   {
@@ -152,6 +156,11 @@ void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1, boost
 
 void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
 {
+  if (!e.get())
+  {
+    return;
+  }
+
   if (e->getElementType() != ElementType::Node)
   {
     boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
@@ -161,6 +170,25 @@ void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
 
 void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
 {
+  if (!e1.get())
+  {
+    return;
+  }
+  LOG_VART(e1->getElementId());
+
+  if (e1->getElementType() == ElementType::Relation)
+  {
+    if (!_visitedRelationIds.contains(e1->getId()))
+    {
+      _visitedRelationIds.append(e1->getId());
+    }
+    else
+    {
+      LOG_DEBUG("Circular reference: " << e1->getId());
+      return;
+    }
+  }
+
   OsmSchema& schema = OsmSchema::getInstance();
 
   boost::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
@@ -169,6 +197,7 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
       CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||
       schema.isArea(e1) == false)
   {
+    LOG_TRACE("Envelope null or incomplete element.");
     return;
   }
   set<ElementId> neighbors = _map->getIndex().findWayRelations(*env);
@@ -182,10 +211,9 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
 
       // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
       // a parent.
-      if (e2 != 0 &&
-          schema.isArea(e2) &&
-          _equals(e1, e2))
+      if (e2 != 0 && schema.isArea(e2) && _equals(e1, e2))
       {
+        LOG_TRACE("e2 is area and e1/e2 equal.");
         // remove the crummier one.
         _removeOne(e1, e2);
         // if we've deleted the element we're visiting.

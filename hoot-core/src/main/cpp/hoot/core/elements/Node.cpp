@@ -76,13 +76,11 @@ void Node::clear()
 boost::shared_ptr<Node> Node::cloneSp() const
 {
   NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
-
   result->_nodeData = _nodeData;
-
   return result;
 }
 
-Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider> &/*ep*/) const
+Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider>& /*ep*/) const
 {
   return new Envelope(getX(), getX(), getY(), getY());
 }
@@ -100,9 +98,7 @@ void Node::setY(double y)
 boost::shared_ptr<geos::geom::Point> Node::toPoint() const
 {
   Coordinate c(getX(), getY());
-
   boost::shared_ptr<Point> result(GeometryFactory::getDefaultInstance()->createPoint(c));
-
   return result;
 }
 

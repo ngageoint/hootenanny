@@ -62,7 +62,6 @@ public:
 protected:
 
   double _x, _y;
-
 };
 
 inline void NodeData::init(long id, double x, double y, long changeset, long version,

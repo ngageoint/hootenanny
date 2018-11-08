@@ -76,6 +76,8 @@ private:
 
   boost::shared_ptr<TagDifferencer> _diff;
   QHash<ElementId, boost::shared_ptr<geos::geom::Geometry> > _geoms;
+
+  QList<long> _visitedRelationIds;
 };
 
 }

@@ -90,7 +90,6 @@ Relation::Relation(const Relation& from) :
 Element(from.getStatus()),
 _relationData(from._relationData)
 {
-
 }
 
 void Relation::addElement(const QString& role, const boost::shared_ptr<const Element>& e)
@@ -133,12 +132,26 @@ bool Relation::contains(ElementId eid) const
   return false;
 }
 
-Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider> &ep) const
+int Relation::numElementsByRole(const QString role) const
+{
+  const vector<RelationData::Entry>& members = getMembers();
+  int roleCtr = 0;
+  for (size_t i = 0; i < members.size(); i++)
+  {
+    if (members[i].getRole() == role)
+    {
+      roleCtr++;
+    }
+  }
+  return roleCtr;
+}
+
+Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const
 {
   return new Envelope(getEnvelopeInternal(ep));
 }
 
-Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProvider> &ep) const
+Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProvider>& ep) const
 {
   Envelope result;
   result.init();
@@ -307,7 +320,6 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
     }
   }
 }
-
 
 void Relation::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {

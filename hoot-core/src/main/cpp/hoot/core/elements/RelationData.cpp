@@ -43,7 +43,6 @@ ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd.getChangeset(), 
 _type(rd._type),
 _members(rd._members)
 {
-
 }
 
 void RelationData::addElement(const QString& role, ElementId eid)

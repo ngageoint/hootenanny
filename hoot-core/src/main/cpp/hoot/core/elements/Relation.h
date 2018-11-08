@@ -82,7 +82,15 @@ public:
    */
   bool contains(ElementId eid) const;
 
-  const std::vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
+  /**
+   * @brief numElementsByRole
+   * @param role
+   * @return
+   */
+  int numElementsByRole(const QString role) const;
+
+  const std::vector<RelationData::Entry>& getMembers() const
+  { return _relationData->getElements(); }
 
   virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
@@ -165,7 +173,6 @@ private:
 
   void _visitRw(ElementProvider &map, ConstElementVisitor& filter,
     QList<long> &visitedRelations);
-
 };
 
 template<typename IT>

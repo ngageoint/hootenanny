@@ -1559,6 +1559,7 @@ Not necessarily utilized by all parts of the application.
 ** `hoot::DuplicateNameRemover`
 ** `hoot::SmallWayMerger`
 ** `hoot::RemoveEmptyAreasVisitor`
+** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveDuplicateAreaVisitor`
 ** `hoot::NoInformationElementRemover`
 

@@ -47,6 +47,7 @@ class NodeToWayMap;
 class OsmMapIndex : public ElementListener
 {
 public:
+
   OsmMapIndex(const OsmMap& map);
 
   void addNode(const ConstNodePtr& n);
@@ -140,6 +141,7 @@ public:
   bool validate() const;
 
 private:
+
   const OsmMap& _map;
 
   Meters _indexSlush;

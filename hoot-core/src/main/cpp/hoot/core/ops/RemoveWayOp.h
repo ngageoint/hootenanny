@@ -98,7 +98,6 @@ private:
 
   void _removeWay(OsmMapPtr &map, long wId);
   void _removeWayFully(OsmMapPtr &map, long wId);
-
 };
 
 }
