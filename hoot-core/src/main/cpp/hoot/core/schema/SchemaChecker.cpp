@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SchemaChecker.h"
@@ -64,22 +64,8 @@ void SchemaChecker::checkUnknownVertexType()
 
 void SchemaChecker::checkEmptyGeometry()
 {
-  for (unsigned int i = 0; i < _schemaVertexList.size(); i++)
-  {
-    SchemaVertex schemaVertex = _schemaVertexList[i];
-    if (schemaVertex.geometries == 0)
-    {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Warning: empty geometries. " << schemaVertex.name);
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-    }
-  }
+  //  Empty geometries are ok
+  return;
 }
 
 void SchemaChecker::check()
