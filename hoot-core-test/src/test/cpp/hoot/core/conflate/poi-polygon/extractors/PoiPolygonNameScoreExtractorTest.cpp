@@ -89,7 +89,7 @@ public:
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
-    settings.set("poi.polygon.translate.names.to.english", "true");
+    settings.set("poi.polygon.name.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::DictionaryTranslator");
     uut.setConfiguration(settings);
     boost::shared_ptr<DictionaryTranslator> dictTranslator =
@@ -105,7 +105,7 @@ public:
     way1->getTags().set("name", "KFC");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    settings.set("poi.polygon.translate.names.to.english", "false");
+    settings.set("poi.polygon.name.translate.to.english", "false");
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.203, uut.extract(*map, node1, way1), 0.001);
   }

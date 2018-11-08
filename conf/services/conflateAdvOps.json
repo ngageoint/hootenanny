@@ -804,6 +804,15 @@
                 "hoot_key":"merger.creators"
             },
             {
+        	"id":"poipolygon_address_additional_tag_keys",
+        	"elem_type":"string",
+        	"description":"BBy default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the addressTagKeys file).  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
+        	"name":"Address Additional Tag Keys",
+        	"defaultvalue":"",
+        	"hoot_key":"poi.polygon.address.additional.tag.keys",
+        	"onchange":"true"
+    	    },
+            {
         	"id":"poipolygon_address_match_enabled",
         	"elem_type":"bool",
         	"defaultvalue":"true",

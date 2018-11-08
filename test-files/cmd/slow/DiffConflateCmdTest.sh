@@ -52,5 +52,5 @@ echo "Checking unified geometry+tag diff osm"
 hoot diff test-output/cmd/DiffConflateCmdTest/output_unified.osm test-files/cmd/slow/DiffConflateCmdTest/output_unified.osm || diff test-output/cmd/DiffConflateCmdTest/output_unified.osm test-files/cmd/slow/DiffConflateCmdTest/output_unified.osm 
 
 # Check to make sure we don't bomb out on empty files
-hoot conflate --warn test-files/Empty.osm test-files/Empty.osm tmp/dum.osm
+hoot conflate -C Diff.conf --warn test-files/Empty.osm test-files/Empty.osm tmp/dum.osm
 hoot diff test-files/Empty.osm tmp/dum.osm || cat tmp/dum.osm

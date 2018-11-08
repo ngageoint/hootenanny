@@ -111,6 +111,7 @@ public:
   { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
   void setSourceTagKey(const QString key) { _sourceTagKey = key; }
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
+  void setAddressMatchingEnabled(const bool enabled) { _addressMatchEnabled = enabled; }
 
   //summary of match types found; assumes one invocation of this class per executed process; would
   //like to handle these in a different way

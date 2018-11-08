@@ -61,9 +61,11 @@ _translateTagValuesToEnglish(false)
 void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
   setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
-  _translateTagValuesToEnglish = config.getPoiPolygonTranslateTypesToEnglish();
+
+  _translateTagValuesToEnglish = config.getPoiPolygonTypeTranslateToEnglish();
   if (_translateTagValuesToEnglish && !_translator)
   {
     _translator.reset(

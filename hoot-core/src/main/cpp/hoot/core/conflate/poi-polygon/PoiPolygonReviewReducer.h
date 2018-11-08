@@ -57,7 +57,8 @@ public:
                           const std::set<ElementId>& poiNeighborIds, double distance,
                           double nameScoreThreshold, double nameScore, bool nameMatch,
                           bool exactNameMatch, double typeScoreThreshold, double typeScore,
-                          bool typeMatch, double matchDistanceThreshold, bool addressMatch);
+                          bool typeMatch, double matchDistanceThreshold, bool addressMatch,
+                          bool addressParsingEnabled);
 
   /**
    * Determines whether the input features trigger a rule which precludes them from being matched or
@@ -94,6 +95,8 @@ private:
 
   bool _keepClosestMatchesOnly;
 
+  bool _addressParsingEnabled;
+
   bool _nonDistanceSimilaritiesPresent() const;
 
   /*
@@ -102,6 +105,8 @@ private:
    * is increased.
    */
   bool _poiNeighborIsCloserToPolyThanPoi(ConstElementPtr poi, ConstElementPtr poly);
+
+  bool _polyContainsPoiAsMember(ConstElementPtr poly, ConstElementPtr poi) const;
 };
 
 }

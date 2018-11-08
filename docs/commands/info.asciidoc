@@ -88,7 +88,7 @@ The +--formats+ option prints out supported data formats.
 
 --------------------------------------
 info --formats [--input] [--output]
----------------------------------------
+--------------------------------------
 
 ==== Example
 

@@ -274,6 +274,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+
       QStringList reviewIfMatchedTypes;
       reviewIfMatchedTypes.append("area=yes");
       reviewIfMatchedTypes.append("blah=bleh");
@@ -295,6 +296,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+
       QStringList reviewIfMatchedTypes;
       reviewIfMatchedTypes.append("building=yes");
       reviewIfMatchedTypes.append("blah=bleh");
@@ -316,6 +318,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+
       QStringList reviewIfMatchedTypes;
       reviewIfMatchedTypes.append("blah=bleh");
       uut.setReviewIfMatchedTypes(reviewIfMatchedTypes);
