@@ -107,6 +107,8 @@ sudo yum -y install \
     perl-XML-LibXML \
     hoot-postgis24_95 \
     libphonenumber-devel \
+    libpostal-data \
+    libpostal-devel \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
