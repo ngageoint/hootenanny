@@ -1504,7 +1504,7 @@ details.  The "best" value varies depending on the input data as well as how the
 === libpostal.data.dir
 
 * Data Type: string
-* Default Value: `/home/vagrant/libpostal-data`
+* Default Value: `/usr/share/libpostal`
 
 Absolute path to the directory where the libpostal library, used for address parsing, stores its
 data.
