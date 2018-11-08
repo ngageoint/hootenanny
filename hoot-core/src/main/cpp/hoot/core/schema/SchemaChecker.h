@@ -61,11 +61,6 @@ public:
   void checkUnknownVertexType();
 
   /**
-   * Print out error message if schemavertex has empty geometry.
-   */
-  void checkEmptyGeometry();
-
-  /**
    * Print out error message if schemavertex has empty geometry or geometries are empty
    */
   void check();

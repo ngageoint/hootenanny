@@ -62,16 +62,9 @@ void SchemaChecker::checkUnknownVertexType()
   }
 }
 
-void SchemaChecker::checkEmptyGeometry()
-{
-  //  Empty geometries are ok
-  return;
-}
-
 void SchemaChecker::check()
 {
   checkUnknownVertexType();
-  checkEmptyGeometry();
 }
 
 }
