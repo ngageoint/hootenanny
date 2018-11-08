@@ -69,6 +69,7 @@ echo "### Installing dependencies from repos..."
 sudo yum -y install \
     asciidoc \
     autoconf \
+    autoconf-archive \
     automake \
     bc \
     boost-devel \
