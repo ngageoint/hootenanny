@@ -181,4 +181,3 @@ private:
 HOOT_FACTORY_REGISTER(Command, CountCmd)
 
 }
-

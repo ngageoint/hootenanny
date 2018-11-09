@@ -796,6 +796,38 @@
                 "onchange":"true"
             },
             {
+            	"id":"poi_poly_match_creator_unifying",
+                "elem_type":"string",
+                "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+		"name":"Match Creator",
+                "required":"true",
+                "defaultvalue":"hoot::PoiPolygonMatchCreator",
+                "override":{
+                	"defaultvalue":"hoot::PoiPolygonMatchCreator"
+                	},
+                "hoot_key":"match.creators"
+            },
+            {
+            	"id":"poi_poly_merger_creator_unifying",
+                "elem_type":"string",
+                "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+                "name":"Merger Creator",
+                "required":"true",
+                "defaultvalue":"hoot::PoiPolygonMergerCreator",
+                "override":{
+                	"defaultvalue":"hoot::PoiPolygonMergerCreator"
+                },
+                "hoot_key":"merger.creators"
+            },
+            {
+        	"id":"poipolygon_address_match_enabled",
+        	"elem_type":"bool",
+        	"defaultvalue":"true",
+        	"description":"If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.  If the data being conflated is known to have poor address data, disabling this option may speed up conflation runtime performance.",
+        	"name":"Address Match Enabled",
+        	"hoot_key":"poi.polygon.address.match.enabled"
+    	    },
+            {
         	"id":"poipolygon_disable_same_source_conflation",
         	"elem_type":"bool",
         	"defaultvalue":"false",
@@ -819,18 +851,6 @@
                 "name":"Keep Closest Matches Only",
         	"hoot_key":"poi.polygon.keep.closest.matches.only"
     	    },
-            {
-            	"id":"poi_poly_match_creator_unifying",
-                "elem_type":"string",
-                "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-		"name":"Match Creator",
-                "required":"true",
-                "defaultvalue":"hoot::PoiPolygonMatchCreator",
-                "override":{
-                	"defaultvalue":"hoot::PoiPolygonMatchCreator"
-                	},
-                "hoot_key":"match.creators"
-            },
             {
         	"id":"poipolygon_match_distance_threshold",
         	"elem_type":"int",
@@ -859,18 +879,6 @@
 		"name":"Merge Many POI to Single Polygon Matches",
         	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
     	    },
-            {
-            	"id":"poi_poly_merger_creator_unifying",
-                "elem_type":"string",
-                "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-                "name":"Merger Creator",
-                "required":"true",
-                "defaultvalue":"hoot::PoiPolygonMergerCreator",
-                "override":{
-                	"defaultvalue":"hoot::PoiPolygonMergerCreator"
-                },
-                "hoot_key":"merger.creators"
-            },
             {
             	"id":"poipolygon_name_score_threshold",
                 "elem_type":"double",

@@ -27,6 +27,9 @@
 #ifndef IMPLICITTAGUTILS_H
 #define IMPLICITTAGUTILS_H
 
+// Hoot
+#include <hoot/core/language/ToEnglishTranslator.h>
+
 // Qt
 #include <QStringList>
 
@@ -53,14 +56,21 @@ public:
   /**
    * Translates all input names to English
    *
-   * The hoot translator doesn't seem to perform as well as it should, though.
-   *
    * @param names names to translate
    * @param tags tags to retrieve additional names from
+   * @param translator a to English word translator
    * @return a collection of translated name strings
    */
-  static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags);
+  static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags,
+                                             boost::shared_ptr<ToEnglishTranslator> translator);
 
+private:
+
+  static QStringList _nameCleaningTokens;
+  static QStringList _streetTypes;
+
+  static void _modifyUndesirableTokens(QString& name);
+  static void _filterOutStreets(QString& name);
 };
 
 }

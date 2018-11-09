@@ -161,7 +161,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   removeRef1Visitor.setRecursive(true);
   _pMap->visitRw(removeRef1Visitor);
 
-
   LOG_INFO("Applying post-diff conflation operations...");
   NamedOp(ConfigOptions().getUnifyPostOps()).apply(_pMap);
 
@@ -329,8 +328,8 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement,
 
   // Need to merge tags into the new element
   // Keeps all names, chooses tags1 in event of a conflict.
-  Tags newTags = TagComparator::getInstance().overwriteAllMerge(pNewElement->getTags(),
-                                                                 pOldElement->getTags());
+  Tags newTags = TagComparator::getInstance().overwriteMerge(pNewElement->getTags(),
+                                                             pOldElement->getTags());
   pChangeElement->setTags(newTags);
 
   // Create the change

@@ -160,7 +160,8 @@ private:
   MatchComparator::UuidToEid _uuidToEid;
 };
 
-MatchComparator::MatchComparator()
+MatchComparator::MatchComparator() :
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _tagErrors = true;
 
@@ -272,6 +273,8 @@ double MatchComparator::getPertyScore() const
 
 double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPtr& conflated)
 {
+  LOG_DEBUG("Evaluating matches...");
+
   _clearCache();
   // determine the pairwise UUID expected matches
   _findExpectedMatches(in);
@@ -287,6 +290,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
   allPairs.insert(_actual.begin(), _actual.end());
   allPairs.insert(_expected.begin(), _expected.end());
 
+  long numPairsParsed = 0;
   for (set<UuidPair>::const_iterator it = allPairs.begin(); it != allPairs.end(); ++it)
   {
     int expectedIndex;
@@ -385,6 +389,12 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
     }
 
     _confusion[actualIndex][expectedIndex]++;
+
+    numPairsParsed++;
+    if (numPairsParsed % _statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO("Processed " << numPairsParsed << " / " << allPairs.size() << " match pairs.");
+    }
   }
 
   _setElementWrongCounts(conflated);

@@ -107,8 +107,8 @@ public:
 
     if (_ignoreUUID)
     {
-      in1.set("uuid","None");  // Wipe out the UUID's
-      in2.set("uuid","None");
+      in1.set("uuid", "None");  // Wipe out the UUID's
+      in2.set("uuid", "None");
     }
 
     // By default, hoot will usually set these tags when ingesting a file
@@ -116,11 +116,11 @@ public:
     // have the option to ignore it here.
     if (!_useDateTime)
     {
-      in1.set("source:ingest:datetime","None");  // Wipe out the ingest datetime
-      in2.set("source:ingest:datetime","None");
+      in1.set("source:ingest:datetime", "None");  // Wipe out the ingest datetime
+      in2.set("source:ingest:datetime", "None");
 
-      in1.set("source:datetime","None");  // Wipe out the ingest datetime
-      in2.set("source:datetime","None");
+      in1.set("source:datetime", "None");  // Wipe out the ingest datetime
+      in2.set("source:datetime", "None");
     }
 
     if (in1 != in2)
@@ -244,11 +244,30 @@ MapComparator::MapComparator():
 
 bool MapComparator::isMatch(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test)
 {
-  if (ref->getNodes().size() != test->getNodes().size() ||
-      ref->getWays().size() != test->getWays().size() ||
-      ref->getRelations().size() != test->getRelations().size())
+  bool mismatch = false;
+  if (ref->getNodes().size() != test->getNodes().size())
   {
-    LOG_WARN("Number of elements does not match.");
+    LOG_WARN(
+      "Number of nodes does not match (1: " << ref->getNodes().size() << "; 2: " <<
+      test->getNodes().size() << ")");
+    mismatch = true;
+  }
+  else if (ref->getWays().size() != test->getWays().size())
+  {
+    LOG_WARN(
+      "Number of ways does not match (1: " << ref->getWays().size() << "; 2: " <<
+      test->getWays().size() << ")");
+    mismatch = true;
+  }
+  else if (ref->getRelations().size() != test->getRelations().size())
+  {
+    LOG_WARN(
+      "Number of relations does not match (1: " << ref->getRelations().size() << "; 2: " <<
+      test->getRelations().size() << ")");
+    mismatch = true;
+  }
+  if (mismatch)
+  {
     return false;
   }
 

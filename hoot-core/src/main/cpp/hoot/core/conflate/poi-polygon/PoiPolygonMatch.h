@@ -35,9 +35,11 @@
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/ConfigOptions.h>
-
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include "extractors/PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonRfClassifier.h"
+#include "extractors/PoiPolygonTypeScoreExtractor.h"
+#include "extractors/PoiPolygonNameScoreExtractor.h"
 
 namespace hoot
 {
@@ -45,6 +47,8 @@ namespace hoot
 /**
  * This is an additive, rule based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
+ *
+ * @todo This could use some refactoring.
  */
 class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 {
@@ -107,6 +111,20 @@ public:
   void setSourceTagKey(const QString key) { _sourceTagKey = key; }
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
 
+  //summary of match types found; assumes one invocation of this class per executed process; would
+  //like to handle these in a different way
+  static long matchesProcessed;
+  static long distanceMatches;
+  static long typeMatches;
+  static long noTypeFoundCount;
+  static long nameMatches;
+  static long namesProcessed;
+  static long nameMatchCandidates;
+  static long addressMatches;
+  static long addressesProcessed;
+  static long addressMatchCandidates;
+  static long convexPolyDistanceMatches;
+
 private:
 
   static QString _matchName;
@@ -138,14 +156,20 @@ private:
   //requirement for matching
   bool _closeDistanceMatch;
 
+  //TODO: should be able to shrink some of this scorer code down with some abstraction
+
+  PoiPolygonTypeScoreExtractor _typeScorer;
   double _typeScore;
   double _typeScoreThreshold;
   QStringList _reviewIfMatchedTypes;
 
+  PoiPolygonNameScoreExtractor _nameScorer;
   double _nameScore;
   double _nameScoreThreshold;
 
+  PoiPolygonAddressScoreExtractor _addressScorer;
   double _addressScore;
+  bool _addressMatchEnabled;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   std::set<ElementId> _polyNeighborIds;
@@ -165,6 +189,8 @@ private:
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   QString _explainText;
+
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 

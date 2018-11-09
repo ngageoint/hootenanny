@@ -72,9 +72,11 @@ public:
   virtual QString errorString() const { return _errorString; }
 
   virtual bool endElement(const QString &namespaceURI, const QString &localName,
-                  const QString &qName);
+                          const QString &qName);
 
   virtual bool fatalError(const QXmlParseException &exception);
+
+  virtual void initializePartial() {}
 
   virtual void finalizePartial();
 
@@ -101,27 +103,32 @@ public:
   virtual bool startElement(const QString &namespaceURI, const QString &localName,
                             const QString &qName, const QXmlAttributes &attributes);
 
-  void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
-  void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
   void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
   void setDefaultAccuracy(Meters circularError) { _circularError = circularError; } 
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
   virtual QString supportedFormats() { return ".osm;.osm.bz2;.osm.gz"; }
 
+  /**
+   * This will adds child refs to elements when they aren't present in the source data.  This is
+   * only useful when dealing with disconnected chunks of map data, as in external sorting, and
+   * should only be activated in that circumstance.  Some verification should be done after
+   * reading data with the parameter enabled to ensure all child data is actually present (reading
+   * the data a second time will log warnings if any data is missing).
+   */
+  void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
+  { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
+
 private:
 
   bool _osmFound;
-  double _x, _y;
-  long _id;
 
-  std::deque<long> _nodeIds;
   /// Maps from old node ids to new node ids.
   QHash<long, long> _nodeIdMap;
   QHash<long, long> _relationIdMap;
   QHash<long, long> _wayIdMap;
 
-  hoot::Tags _tags;
   QString _errorString;
   OsmMapPtr _map;
   boost::shared_ptr<Element> _element;
@@ -155,6 +162,9 @@ private:
   // QHash goes away when the reading is done, but the memory sharing remains.
   QHash<QString, QString> _strings;
 
+  //adds child refs to elements when they aren't present in the source data
+  bool _addChildRefsWhenMissing;
+
   void _createNode(const QXmlAttributes &attributes);
   void _createWay(const QXmlAttributes &attributes);
   void _createRelation(const QXmlAttributes &attributes);
@@ -173,7 +183,6 @@ private:
   long _getRelationId(long fileId);
 
   double _parseDouble(QString s);
-  int _parseInt(QString s);
   long _parseLong(QString s);
 
   const QString& _saveMemory(const QString& s);

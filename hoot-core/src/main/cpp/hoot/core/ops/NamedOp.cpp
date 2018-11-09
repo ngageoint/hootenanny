@@ -71,7 +71,8 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     {
       LOG_VARD(map->getElementCount());
       LOG_DEBUG("Applying operation: " << s);
-      boost::shared_ptr<OsmMapOperation> t(Factory::getInstance().constructObject<OsmMapOperation>(s));
+      boost::shared_ptr<OsmMapOperation> t(
+        Factory::getInstance().constructObject<OsmMapOperation>(s));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
@@ -92,8 +93,8 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     {
       LOG_VARD(map->getElementCount());
       LOG_DEBUG("Applying visitor: " << s);
-      boost::shared_ptr<ConstElementVisitor> t(Factory::getInstance().
-        constructObject<ConstElementVisitor>(s));
+      boost::shared_ptr<ConstElementVisitor> t(
+        Factory::getInstance().constructObject<ConstElementVisitor>(s));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
@@ -115,12 +116,12 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     {
       LOG_VARD(map->getElementCount());
       LOG_DEBUG("Applying visitor: " << s);
-      boost::shared_ptr<ElementVisitor> t(Factory::getInstance().
-        constructObject<ElementVisitor>(s));
+      boost::shared_ptr<ElementVisitor> t(
+        Factory::getInstance().constructObject<ElementVisitor>(s));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
-      LOG_VARD(c == 0);
-      LOG_VARD(_conf == 0);
+      LOG_VART(c == 0);
+      LOG_VART(_conf == 0);
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);

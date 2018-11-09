@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMCHANGEWRITER_H
 #define OSMCHANGEWRITER_H
 
 // hoot
-#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 
 namespace hoot
 {

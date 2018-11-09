@@ -28,40 +28,113 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {
 
+QStringList ImplicitTagUtils::_nameCleaningTokens;
+QStringList ImplicitTagUtils::_streetTypes;
+
 void ImplicitTagUtils::cleanName(QString& name)
 {
+  name = name.simplified();
   if (name.startsWith("-"))
   {
     name = name.replace(0, 1, "");
   }
-  name =
-    name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
-        .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
-        .replace("(historical)", "").replace("-", " ");
+  _modifyUndesirableTokens(name);
   if (name.startsWith("_"))
   {
     name = name.replace(0, 1, "");
   }
 
-  //another possibility here might be to replace name multiple spaces with one
+  _filterOutStreets(name);
+}
 
-  //This needs to be expanded.
-  if (!name.isEmpty() && name.at(0).isDigit() &&
-      (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") ||
-       name.endsWith("ave") || name.endsWith("avenue") || name.endsWith("st") ||
-       name.endsWith("street") || name.endsWith("pl") || name.endsWith("plaza")))
+void ImplicitTagUtils::_modifyUndesirableTokens(QString& name)
+{
+  // This assumes these file will be populated with at least one entry.  Having the option of
+  // disabling use of these files completely would require different logic.
+  if (_nameCleaningTokens.isEmpty())
   {
-    name = "";
+    _nameCleaningTokens =
+      FileUtils::readFileToList(ConfigOptions().getImplicitTaggingNameCleaningTokensFile());
+  }
+
+  for (int i = 0; i < _nameCleaningTokens.size(); i++)
+  {
+    const QString replacementEntry = _nameCleaningTokens.at(i);
+    const QStringList replacementEntryParts = replacementEntry.split("\t");
+    if (replacementEntryParts.size() != 2)
+    {
+      throw HootException(
+        "Invalid implicit tag rules name cleaning token entry: " + replacementEntry);
+    }
+    const QString replaceText = replacementEntryParts.at(1);
+    if (replaceText.trimmed().isEmpty())
+    {
+      throw HootException(
+          "Empty text specified for implicit tag rules name cleaning token entry.");
+    }
+    else if (replaceText == "e")
+    {
+      name = name.replace(replacementEntryParts.at(0), "");
+    }
+    else if (replaceText == "s")
+    {
+      name = name.replace(replacementEntryParts.at(0), " ");
+    }
+    else
+    {
+      name = name.replace(replacementEntryParts.at(0), replaceText);
+    }
   }
 }
 
-QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, const Tags& tags)
+void ImplicitTagUtils::_filterOutStreets(QString& name)
 {
+  if (name.isEmpty() || !name.at(0).isDigit())
+  {
+    return;
+  }
+  //TODO: This one seems kind of awkward and probably needs to be rethought or expanded somehow...
+  //apparently its to catch address parts like "2nd" or "3rd"
+  else if (name.endsWith("th") || name.endsWith("nd"))
+  {
+    name = "";
+  }
+  else
+  {
+    // see related note in _modifyUndesirableTokens
+    if (_streetTypes.isEmpty())
+    {
+      _streetTypes = FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+    }
+
+    // This list could be expanded.  See the note in the associated config file.
+    for (int i = 0; i < _streetTypes.size(); i++)
+    {
+      const QString streetTypeEntry = _streetTypes.at(i);
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      if (streetTypeEntryParts.size() != 2)
+      {
+        throw HootException("Invalid street type entry: " + streetTypeEntry);
+      }
+      if (name.endsWith(streetTypeEntryParts.at(0)) || name.endsWith(streetTypeEntryParts.at(1)))
+      {
+        name = "";
+        break;
+      }
+    }
+  }
+}
+
+QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, const Tags& tags,
+                                                 boost::shared_ptr<ToEnglishTranslator> translator)
+{
+  LOG_VART(translator.get());
   QStringList filteredNames;
   if (tags.contains("name:en"))
   {
@@ -77,12 +150,21 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
       LOG_VART(name);
       if (name != altName)
       {
-        const QString englishName = Translator::getInstance().toEnglish(name);
+        const QString englishName = translator->translate(name);
         LOG_VART(englishName);
-        filteredNames.append(englishName);
+        if (!englishName.isEmpty())
+        {
+          filteredNames.append(englishName);
+        }
+        else
+        {
+          filteredNames.append(name);
+        }
         break;
       }
     }
+
+    LOG_VART(filteredNames.size());
     if (filteredNames.isEmpty() && !altName.isEmpty())
     {
       if (altName.contains(";"))
@@ -90,11 +172,19 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
         altName = altName.split(";")[0];
       }
       LOG_VART(altName);
-      const QString englishName = Translator::getInstance().toEnglish(altName);
+      const QString englishName = translator->translate(altName);
       LOG_VART(englishName);
-      filteredNames.append(englishName);
+      if (!englishName.isEmpty())
+      {
+        filteredNames.append(englishName);
+      }
+      else
+      {
+        filteredNames.append(altName);
+      }
     }
   }
+  LOG_VART(filteredNames.size());
   LOG_VART(filteredNames);
 
   return filteredNames;

@@ -46,7 +46,7 @@
 #include <hoot/core/conflate/extractors/OverlapExtractor.h>
 #include <hoot/core/conflate/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
+#include <hoot/core/language/TranslateStringDistance.h>
 
 // Standard
 #include <sstream>

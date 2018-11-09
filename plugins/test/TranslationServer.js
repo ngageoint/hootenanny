@@ -104,6 +104,41 @@ describe('TranslationServer', function () {
                 })
             }, Error, 'TDSv61 for Area with fcode=FB123 not found');
         });
+        it('builds intersection of between geometry schemas', function() {
+            var pointSchema = server.handleInputs({
+                idval: 'AL013',
+                geom: 'Point',
+                translation: 'TDSv61',
+                idelem: 'fcode',
+                method: 'GET',
+                path: '/translateTo'
+            });
+    
+            var areaSchema = server.handleInputs({
+                idval: 'AL013',
+                geom: 'Area',
+                translation: 'TDSv61',
+                idelem: 'fcode',
+                method: 'GET',
+                path: '/translateTo'
+            });
+            var allSchema = server.handleInputs({
+                idval: 'AL013',
+                geom: 'Area,Point',
+                translation: 'TDSv61',
+                idelem: 'fcode',
+                method: 'GET',
+                path: '/translateTo'
+            });
+    
+            var pointSchemaColumns = pointSchema.columns.map(function(col) { return col.name; });
+            var areaSchemaColumns = areaSchema.columns.map(function(col) { return col.name; } );
+            var allSchemaColumns = allSchema.columns.map(function(col) { return col.name; });
+    
+            var intersection = pointSchemaColumns.filter(function(col) { return areaSchemaColumns.indexOf(col) !== -1 }).length > 0;
+            assert.equal(allSchemaColumns.length > 0, true);
+            assert.equal(intersection, true);
+        })
 
         it('should handle translateFrom GET for TDSv61', function() {
             //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv61
@@ -1058,9 +1093,6 @@ describe('TranslationServer', function () {
         assert.equal(response.statusCode, '200');
         done();
       });
-    });
-
-    describe('translateTo', function () {
       it('should return 200', function (done) {
         var request  = httpMocks.createRequest({
             method: 'GET',
@@ -1077,6 +1109,23 @@ describe('TranslationServer', function () {
         assert.equal(response.statusCode, '200');
         done();
       });
+    });
+
+    describe('supportedGeometries', function() {
+        it ('replies supported geometries for provided feature code', function() {
+            var baseParams = {
+                method: 'GET',
+                path: '/supportedGeometries',
+            }
+            var tds61Building = Object.assign(baseParams, { translation: 'TDSv61', fcode: 'AL013' });
+            assert.deepEqual(server.handleInputs(tds61Building), ['Point', 'Area']);            
+            var tds40Wall = Object.assign(baseParams, { translation: 'TDSv40', fcode: 'AL260' })
+            assert.deepEqual(server.handleInputs(tds40Wall), [ 'Line' ]);
+            var mgcpFord = Object.assign(baseParams, { translation: 'MGCP', fcode: 'BH070' });
+            assert.deepEqual(server.handleInputs(mgcpFord), [ 'Line', 'Point' ]);
+            var ggdm30Tower = Object.assign(baseParams, { translation: 'GGDMv30' , fcode: 'AL241'})
+            assert.deepEqual(server.handleInputs(ggdm30Tower), [ 'Point', 'Area' ]); 
+        })
     });
 
     describe('not found', function () {

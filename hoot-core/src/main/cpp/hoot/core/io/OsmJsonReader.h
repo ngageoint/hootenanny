@@ -34,15 +34,17 @@
 #include <QString>
 
 // Standard
+#include <mutex>
 #include <string>
 
 // Boost
 #include <boost/property_tree/ptree.hpp>
 
 // Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/io/OsmMapReader.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include "hoot/core/OsmMap.h"
-#include "hoot/core/io/OsmMapReader.h"
 
 namespace hoot
 {
@@ -103,7 +105,7 @@ namespace hoot
  * Be careful if you want to use it with large datasets.
  */
 
-class OsmJsonReader : public OsmMapReader
+class OsmJsonReader : public OsmMapReader, Configurable
 {
 public:
 
@@ -222,6 +224,11 @@ public:
 
   virtual QString supportedFormats() { return ".json"; }
 
+  /**
+   * Set the configuration for this object.
+   */
+  virtual void setConfiguration(const Settings& conf);
+
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -287,6 +294,33 @@ protected:
   void _addTags(const boost::property_tree::ptree &item,
                 hoot::ElementPtr pElement);
 
+  /**
+   * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON to the _results list or
+   *   spawns a thread pool to query bounding boxes
+   */
+  void _readFromHttp();
+  /**
+   * @brief _doHttpRequestFunc Thread processing function that loops processing a bounding box from the
+   *   list until the queue is empty.
+   */
+  void _doHttpRequestFunc();
+
+  /** List of JSON strings, one for each HTTP response */
+  QStringList _results;
+  /** Mutex guarding the results list */
+  std::mutex _resultsMutex;
+  /** Essentially the work queue of bounding boxes that the threads query from */
+  QList<geos::geom::Envelope> _bboxes;
+  /** Mutex guarding the bounding box list */
+  std::mutex _bboxMutex;
+  /** Flag indicating that the _bboxes list is still being loaded, set to false when completely loaded */
+  bool _bboxContinue;
+  /** Flag indicating whether or not the bounding box (if it exists) should be split and run in parallel */
+  bool _runParallel;
+  /** Grid division size (0.25 degrees lat/lon default) */
+  double _coordGridSize;
+  /** Number of threads to process the HTTP requests */
+  int _threadCount;
 };
 
 }

@@ -107,6 +107,8 @@ void ApiDb::_resetQueries()
   _selectRelationIdsByMemberIds.reset();
   _selectChangesetsCreatedAfterTime.reset();
   _userExists.reset();
+  _getUserIdByName.reset();
+  _getUserNameById.reset();
 
   for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _maxIdQueries.begin();
        itr != _maxIdQueries.end(); ++itr)
@@ -224,6 +226,85 @@ void ApiDb::rollback()
   _inTransaction = false;
 }
 
+long ApiDb::getUserIdByName(const QString userName)
+{
+  LOG_VART(userName);
+  if (_getUserIdByName == 0)
+  {
+    _getUserIdByName.reset(new QSqlQuery(_db));
+    _getUserIdByName->prepare(
+      "SELECT id FROM " + ApiDb::getUsersTableName() + " WHERE display_name = :displayName");
+  }
+  _getUserIdByName->bindValue(":displayName", userName);
+  if (!_getUserIdByName->exec())
+  {
+    throw HootException(
+      "Error finding user with user name: " + userName + " " + _getUserIdByName->lastError().text());
+  }
+
+  long userId = -1;
+  //should only be one result
+  if (_getUserIdByName->next())
+  {
+    bool ok;
+    userId = _getUserIdByName->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Error executing user ID query for " + userName);
+    }
+  }
+  else
+  {
+    LOG_TRACE("No user ID available for user name: " << userName);
+    _getUserIdByName->finish();
+    return -1;
+  }
+  _getUserIdByName->finish();
+
+  LOG_VART(userId);
+  return userId;
+}
+
+QString ApiDb::getUserNameById(const long userId)
+{
+  LOG_VART(userId);
+  if (_getUserNameById == 0)
+  {
+    _getUserNameById.reset(new QSqlQuery(_db));
+    _getUserNameById->prepare(
+      "SELECT display_name FROM " + ApiDb::getUsersTableName() + " WHERE id = :userId");
+  }
+  _getUserNameById->bindValue(":userId", (qlonglong)userId);
+  if (!_getUserNameById->exec())
+  {
+    throw HootException(
+      "Error finding user with ID: " + QString::number(userId) + " " +
+      _getUserNameById->lastError().text());
+  }
+
+  QString userName = "";
+  //should only be one result
+  if (_getUserNameById->next())
+  {
+    userName = _getUserNameById->value(0).toString();
+  }
+  else
+  {
+    LOG_TRACE("No user name available for ID: " << userId);
+    _getUserNameById->finish();
+    return "";
+  }
+  _getUserNameById->finish();
+
+  LOG_VART(userName);
+  return userName;
+}
+
+bool ApiDb::userExists(const QString userName)
+{
+  return userExists(getUserIdByName(userName));
+}
+
 bool ApiDb::userExists(const long id)
 {
   LOG_VART(id);
@@ -249,6 +330,10 @@ bool ApiDb::userExists(const long id)
     {
       return false;
     }
+  }
+  else
+  {
+    return false;
   }
   LOG_VART(result);
 
@@ -438,9 +523,7 @@ Tags ApiDb::unescapeTags(const QVariant &v)
     if ((pos = rxValue.indexIn(str, pos)) != -1)
     {
       QString key = rxKey.cap(1);
-      LOG_VART(key);
       QString value = rxValue.cap(1).trimmed();
-      LOG_VART(value);
       if (!value.isEmpty())
       {
         // Unescape the actual key/value pairs
@@ -980,6 +1063,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& element
     _selectAllQueries[elementTableName].reset(new QSqlQuery(_db));
     _selectAllQueries[elementTableName]->setForwardOnly(true);
     const QString sql = "SELECT * FROM " + elementTableName + " WHERE visible = true ORDER BY id";
+    LOG_VARD(sql);
     _selectAllQueries[elementTableName]->prepare(sql);
   }
   LOG_VARD(_selectAllQueries[elementTableName]->lastQuery());
@@ -1005,11 +1089,20 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementTyp
   {
     _selectQueries[elementTableName].reset(new QSqlQuery(_db));
     _selectQueries[elementTableName]->setForwardOnly(true);
+    //This query uses the ORDER BY with LIMIT to ensure that we consistently see unique pages
+    //of data returned. However, the data coming back won't necessarily be strictly sorted by
+    //element ID.  I *believe* this is because we have no index on element ID (or maybe this just
+    //how PG optimizes it?).  This is ok, though, b/c if we needed all elements returned strictly
+    //sorted by ID (e.g. changeset derivation) we can just do that after retrieving them. - BDW
     const QString sql =
-      "SELECT * FROM " + elementTableName + " WHERE visible = true AND id > :minId ORDER BY id " +
+      "SELECT * FROM " + elementTableName +
+      " WHERE visible = true AND id > :minId ORDER BY id " +
       "LIMIT " + QString::number(_maxElementsPerPartialMap);
     LOG_VARD(sql);
-    _selectQueries[elementTableName]->prepare(sql);
+    if (!_selectQueries[elementTableName]->prepare(sql))
+    {
+      throw HootException("Unable to prepare query: " + sql);
+    }
   }
   _selectQueries[elementTableName]->bindValue(":minId", (qlonglong)minId);
   LOG_VARD(_selectQueries[elementTableName]->lastQuery());

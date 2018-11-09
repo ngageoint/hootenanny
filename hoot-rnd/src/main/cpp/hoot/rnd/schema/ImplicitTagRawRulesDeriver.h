@@ -33,6 +33,7 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
 
 // Qt
 #include <QString>
@@ -79,7 +80,7 @@ public:
   void setSkipFiltering(bool skip) { _skipFiltering = skip; }
   void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
-  void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
+  void setTranslateNamesToEnglish(bool translate) { _translateNamesToEnglish = translate; }
   void setElementCriterion(QString criterionName);
 
 private:
@@ -100,7 +101,7 @@ private:
   bool _keepTempFiles;
   QString _tempFileDir;
   //if true; all element names are first translated to english before a raw rule is derived
-  bool _translateAllNamesToEnglish;
+  bool _translateNamesToEnglish;
 
   //contains the word/tag occurrence counts at various stages; line format:
   //<count>\t<word>\t<key=value>
@@ -124,6 +125,9 @@ private:
   //controls which elements have tags harvested from them
   boost::shared_ptr<ImplicitTagEligibleCriterion> _elementCriterion;
 
+  //translates names to English
+  boost::shared_ptr<ToEnglishTranslator> _translator;
+
   void _init();
   void _validateInputs(const QStringList inputs, const QStringList translationScripts,
                        const QString output);
@@ -139,7 +143,6 @@ private:
    */
   QStringList _getPoiKvps(const Tags& tags) const;
 
-  QStringList _translateNamesToEnglish(const QStringList names, const Tags& tags);
   void _parseNames(const QStringList names, const QStringList kvps);
   void _parseNameToken(QString& nameToken, const QStringList kvps);
 

@@ -31,7 +31,8 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
-
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/conflate/extractors/NameExtractor.h>
 
 namespace hoot
 {
@@ -65,25 +66,43 @@ public:
    *
    * @param element the element to examine
    * @return the element's name if it has one
+   * @todo move this somewhere else
    */
   static QString getElementName(ConstElementPtr element);
 
   virtual void setConfiguration(const Settings& conf);
 
-  double getNameScoreThreshold() { return _nameScoreThreshold; }
+  double getNameScoreThreshold() const { return _nameScoreThreshold; }
   void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
 
-  double getLevDist() { return _levDist; }
+  double getLevDist() const { return _levDist; }
   void setLevDist(double dist) { _levDist = dist; }
 
+  bool getTranslateTagValuesToEnglish() const { return _translateTagValuesToEnglish; }
+  void setTranslateTagValuesToEnglish(bool translate) { _translateTagValuesToEnglish = translate; }
+
   virtual QString getDescription() const
-  { return "Scores element name similarity for POI/Polygon conflation"; }
+  { return "Scores name similarity for POI/Polygon conflation"; }
+
+  long getNamesProcessed() const { return _namesProcessed; }
+  bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
 private:
+
+  friend class PoiPolygonNameScoreExtractorTest;
 
   double _nameScoreThreshold;
   double _levDist;
 
+  //when enabled, will attempt to translate address tags to English
+  bool _translateTagValuesToEnglish;
+  // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
+
+  mutable long _namesProcessed;
+  mutable bool _matchAttemptMade;
+
+  boost::shared_ptr<NameExtractor> _getNameExtractor() const;
 };
 
 }

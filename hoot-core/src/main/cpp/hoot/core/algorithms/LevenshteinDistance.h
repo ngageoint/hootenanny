@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LEVENSHTEINDISTANCE_H
@@ -115,8 +115,6 @@ public:
   void setAlpha(double alpha);
 
   virtual void setConfiguration(const Settings& conf);
-
-  static QString toEnglish(const QString& s);
 
   QString toString() const { return QString("Levenshtein %1").arg(_alpha); }
 

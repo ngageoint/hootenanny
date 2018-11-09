@@ -103,7 +103,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedHootDbVersion() { return "18:dmitriy.mylov"; }
+  static QString expectedHootDbVersion() { return "20:arni.sumarlidason"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
@@ -159,12 +159,12 @@ public:
   virtual boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
 
   /**
-   * Returns a results iterator to all OSM elements for a given map and element type in the services
-   * database, sorted by element ID.
+   * Returns a paged results iterator to all OSM elements for a given element type in the services
+   * database.
    *
    * @param elementType the element type to query for
    * @param minId the minimum element ID to return; this is more efficient than using an offset when
-   * dealing with very large record sets sorted by ID
+   * dealing with very large record sets
    * @return a result iterator to the elements
    */
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
@@ -423,6 +423,30 @@ public:
    */
   bool isOpen() const { return _db.isOpen(); }
 
+  /**
+   * Returns a user ID given a user name
+   *
+   * @param userName user name of the user
+   * @return a user ID or -1 if no user with the given user name was found
+   */
+  long getUserIdByName(const QString userName);
+
+  /**
+   * Returns a user name given a user ID
+   *
+   * @param userId ID of the user
+   * @return a user name or an empty string if not user with the given user ID was found
+   */
+  QString getUserNameById(const long userId);
+
+  /**
+   * Determines whether a user exists
+   *
+   * @param userName user name of the user
+   * @return true if the user exists; false otherwise
+   */
+  bool userExists(const QString userName);
+
 protected:
 
   //osm api db stores coords as integers and hoot api db as floating point
@@ -458,6 +482,8 @@ private:
   boost::shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
   boost::shared_ptr<QSqlQuery> _userExists;
+  boost::shared_ptr<QSqlQuery> _getUserIdByName;
+  boost::shared_ptr<QSqlQuery> _getUserNameById;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;

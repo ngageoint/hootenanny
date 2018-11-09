@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -31,8 +31,13 @@ import java.lang.reflect.Modifier;
 
 import hoot.services.HootProperties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public final class HootCustomPropertiesSetter {
+
+    private static final Logger logger = LoggerFactory.getLogger(HootCustomPropertiesSetter.class);
 
     private HootCustomPropertiesSetter() {}
 
@@ -41,6 +46,7 @@ public final class HootCustomPropertiesSetter {
             setProperty(key, value, HootProperties.class);
         }
         catch (Exception e) {
+            //logger.error(e.getMessage());
             throw new RuntimeException("Error setting " + key + " to " + value, e);
         }
     }

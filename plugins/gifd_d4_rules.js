@@ -325,8 +325,8 @@ gifd.rules = {
        'NAM':'name', // Name
        'NFI':'gndb_id:2', // Named Feature Identifier
        'NFN':'gndb_id', // Name Identifier
-       'NM3':'raw:NM3', // Name 3
-       'NM4':'raw:NM4', // Name 4
+       'NM3':'name:three', // Name 3
+       'NM4':'name:four', // Name 4
        'OPERATOR':'source:operator_id', // Operator ID
        'ORIGINATOR':'source:originator', // Agency that Supplied the Data
        'ORIG_SOURCE_DATE':'source:datetime', // Originating Source Date
@@ -1354,25 +1354,25 @@ gifd.rules = {
        ['COE','999','existance','other'], // Other
 
        // COF - Complex Outline Function
-       ['COF','0','raw:COF','unknown'], // Unknown
-       ['COF','1','raw:COF','agricultural'], // Agricultural
-       ['COF','2','raw:COF','commercial'], // Commercial
-       ['COF','3','raw:COF','communications'], // Communications
-       ['COF','4','raw:COF','diplomatic'], // Diplomatic
-       ['COF','5','raw:COF','educational'], // Educational
-       ['COF','6','raw:COF','governmental'], // Governmental
-       ['COF','7','raw:COF','industrial'], // Industrial
-       ['COF','8','raw:COF','medical'], // Medical
-       ['COF','9','raw:COF','military'], // Military
-       ['COF','10','raw:COF','mixed_urban'], // Mixed Urban
-       ['COF','11','raw:COF','recreational'], // Recreational
-       ['COF','12','raw:COF','religious'], // Religious
-       ['COF','13','raw:COF','reserve'], // Reserve
-       ['COF','14','raw:COF','residential'], // Residential
-       ['COF','15','raw:COF','transportation'], // Transportation
-       ['COF','16','raw:COF','utilities'], // Utilities
-       ['COF','17','raw:COF','maritime'], // Maritime
-       ['COF','999','raw:COF','other'], // Other
+       ['COF','0','facility:type','unknown'], // Unknown
+       ['COF','1','facility:type','agricultural'], // Agricultural
+       ['COF','2','facility:type','commercial'], // Commercial
+       ['COF','3','facility:type','communications'], // Communications
+       ['COF','4','facility:type','diplomatic'], // Diplomatic
+       ['COF','5','facility:type','educational'], // Educational
+       ['COF','6','facility:type','governmental'], // Governmental
+       ['COF','7','facility:type','industrial'], // Industrial
+       ['COF','8','facility:type','medical'], // Medical
+       ['COF','9','facility:type','military'], // Military
+       ['COF','10','facility:type','mixed_urban'], // Mixed Urban
+       ['COF','11','facility:type','recreational'], // Recreational
+       ['COF','12','facility:type','religious'], // Religious
+       ['COF','13','facility:type','reserve'], // Reserve
+       ['COF','14','facility:type','residential'], // Residential
+       ['COF','15','facility:type','transportation'], // Transportation
+       ['COF','16','facility:type','utilities'], // Utilities
+       ['COF','17','facility:type','maritime'], // Maritime
+       ['COF','999','facility:type','other'], // Other
 
        // COMPLETENESS_CODE - Completeness Code
        ['COMPLETENESS_CODE','0','gifd:completeness_code','not_complete'], // Not Complete
@@ -2011,9 +2011,9 @@ gifd.rules = {
        ['ICL','998','raw:ICL','not_applicable'], // Not Applicable
 
        // IWO - Inland Water Obstruction
-       ['IWO','0','raw:IWO','unknown'], // Unknown
-       ['IWO','1','raw:IWO','obstruction'], // Obstruction
-       ['IWO','2','raw:IWO','not_an_obstruction'], // Not an obstruction
+       ['IWO','0','waterway:obstruction','unknown'], // Unknown
+       ['IWO','1','waterway:obstruction','yes'], // Obstruction
+       ['IWO','2','waterway:obstruction','no'], // Not an obstruction
 
        // LAF - Line Associated Features
        ['LAF','0','navigation_line_feature','unknown'], // Unknown
@@ -2162,90 +2162,90 @@ gifd.rules = {
        ['LWI','997',undefined,undefined], // Unpopulated
 
        // MAC - Maritime Area Category
-       ['MAC','0','raw:MAC','unknown'], // Unknown
-       ['MAC','2','raw:MAC','dredged_channel/dredged_area'], // Dredged Channel/Dredged Area
-       ['MAC','4','raw:MAC','mine_danger_area'], // Mine Danger Area
-       ['MAC','5','raw:MAC','prohibited_shipping_area/entry_prohibited'], // Prohibited Shipping Area/Entry Prohibited
-       ['MAC','6','raw:MAC','reclamation_area'], // Reclamation Area
-       ['MAC','9','raw:MAC','works_in_progress_area'], // Works in Progress Area
-       ['MAC','11','raw:MAC','anchorage_(general)'], // Anchorage (general)
-       ['MAC','12','raw:MAC','anchoring_berths'], // Anchoring Berths
-       ['MAC','13','raw:MAC','explosives_anchorage'], // Explosives anchorage
-       ['MAC','14','raw:MAC','large_vessel/deep_water/deep_draft_anchorage'], // Large Vessel/Deep Water/Deep Draft anchorage
-       ['MAC','15','raw:MAC','anchoring_prohibited'], // Anchoring Prohibited
-       ['MAC','16','raw:MAC','quarantine_anchorage'], // Quarantine Anchorage
-       ['MAC','17','raw:MAC','reserved_anchorage'], // Reserved Anchorage
-       ['MAC','19','raw:MAC','tanker_anchorage'], // Tanker Anchorage
-       ['MAC','20','raw:MAC','submarine_cable_area'], // Submarine Cable Area
-       ['MAC','21','raw:MAC','pipeline_area'], // Pipeline Area
-       ['MAC','22','raw:MAC','fishing_prohibited'], // Fishing Prohibited
-       ['MAC','23','raw:MAC','cable_and_pipeline_area'], // Cable and Pipeline Area
-       ['MAC','24','raw:MAC','turning_area/swinging_circle'], // Turning Area/Swinging Circle
-       ['MAC','25','raw:MAC','spoil_area/spoil_ground_(see_ops_for_status)'], // Spoil Area/Spoil Ground (See OPS for status)
-       ['MAC','26','raw:MAC','unsurveyed_area'], // Unsurveyed Area
-       ['MAC','27','raw:MAC','submarine_exercise_area'], // Submarine Exercise Area
-       ['MAC','28','raw:MAC','mine_laying_practice_area'], // Mine Laying Practice Area
-       ['MAC','29','raw:MAC','firing_danger_area'], // Firing Danger Area
-       ['MAC','30','raw:MAC','dumping_ground_for_hazardous_materials'], // Dumping Ground for Hazardous Materials
-       ['MAC','31','raw:MAC','incineration_area'], // Incineration Area
-       ['MAC','32','raw:MAC','oil_field'], // Oil Field
-       ['MAC','33','raw:MAC','gas_field'], // Gas Field
-       ['MAC','35','raw:MAC','explosive_dumping_ground'], // Explosive Dumping Ground
-       ['MAC','37','raw:MAC','safety_zone'], // Safety Zone
-       ['MAC','40','raw:MAC','roundabout_zone_(tss)'], // Roundabout Zone (TSS)
-       ['MAC','41','raw:MAC','inshore_traffic_zone_(tss)'], // Inshore Traffic Zone (TSS)
-       ['MAC','42','raw:MAC','precautionary_area'], // Precautionary Area
-       ['MAC','43','raw:MAC','area_to_be_avoided'], // Area to be avoided
-       ['MAC','44','raw:MAC','degaussing_range'], // Degaussing Range
-       ['MAC','45','raw:MAC','outfall_area'], // Outfall Area
-       ['MAC','46','raw:MAC','intake_area'], // Intake Area
-       ['MAC','48','raw:MAC','pilot_boarding_area'], // Pilot Boarding Area
-       ['MAC','49','raw:MAC','cargo_transshipment_area'], // Cargo Transshipment Area
-       ['MAC','53','raw:MAC','seaplane'], // Seaplane
-       ['MAC','54','raw:MAC','time_limited'], // Time Limited
-       ['MAC','55','raw:MAC','fairway'], // Fairway
-       ['MAC','56','raw:MAC','fish_trap_area'], // Fish Trap Area
-       ['MAC','57','raw:MAC','marine_farm'], // Marine Farm
-       ['MAC','58','raw:MAC','dredging_area'], // Dredging Area
-       ['MAC','61','raw:MAC','sewer_area'], // Sewer Area
-       ['MAC','101','raw:MAC','marine_sanctuary'], // Marine Sanctuary
-       ['MAC','102','raw:MAC','waiting_area'], // Waiting Area
-       ['MAC','103','raw:MAC','mineswept_channel'], // Mineswept Channel
-       ['MAC','104','raw:MAC','major_navy_operating_area'], // Major Navy Operating Area
-       ['MAC','105','raw:MAC','minor_navy_operating_area'], // Minor Navy Operating Area
-       ['MAC','106','raw:MAC','asw_operating_area'], // ASW Operating Area
-       ['MAC','107','raw:MAC','submarine_operating_area'], // Submarine Operating Area
-       ['MAC','108','raw:MAC','submarine_transit_lane_(submerged)'], // Submarine Transit Lane (Submerged)
-       ['MAC','109','raw:MAC','submarine_transit_lane_(surface)'], // Submarine Transit Lane (Surface)
-       ['MAC','110','raw:MAC','surface_free_lane'], // Surface Free Lane
-       ['MAC','111','raw:MAC','surface_operating_area_(major)'], // Surface Operating Area (Major)
-       ['MAC','113','raw:MAC','anchoring_and_fishing_prohibited'], // Anchoring and fishing prohibited
-       ['MAC','114','raw:MAC','sea_test_range'], // Sea Test Range
-       ['MAC','115','raw:MAC','submarine_and_gunnery_exercise_area'], // Submarine and Gunnery Exercise Area
-       ['MAC','116','raw:MAC','named_operating_area'], // Named Operating Area
-       ['MAC','123','raw:MAC','caution_area'], // Caution Area
-       ['MAC','140','raw:MAC','exercise_area_limit'], // Exercise Area Limit
-       ['MAC','141','raw:MAC','unexploded_ordinance'], // Unexploded Ordinance
-       ['MAC','142','raw:MAC','submarine_warning_area'], // Submarine Warning Area
-       ['MAC','143','raw:MAC','naval_operations_area'], // Naval Operations Area
-       ['MAC','144','raw:MAC','inwater_tracking_range'], // Inwater Tracking Range
-       ['MAC','145','raw:MAC','foracs_v_limits'], // FORACS V Limits
-       ['MAC','146','raw:MAC','missile_test_area'], // Missile Test Area
-       ['MAC','147','raw:MAC','bombing_and_strafing_targets_area'], // Bombing and Strafing Targets Area
-       ['MAC','148','raw:MAC','drill_minefield'], // Drill Minefield
-       ['MAC','149','raw:MAC','abandoned_drill_minefield'], // Abandoned Drill Minefield
-       ['MAC','150','raw:MAC','acronym_area_-_purple'], // Acronym Area - Purple
-       ['MAC','151','raw:MAC','acronym_area_-_brown'], // Acronym Area - Brown
-       ['MAC','152','raw:MAC','acronym_area_-_blue'], // Acronym Area - Blue
-       ['MAC','153','raw:MAC','landing_craft_air_cushion_(lcac)'], // Landing Craft Air Cushion (LCAC)
-       ['MAC','154','raw:MAC','area_foxtrot'], // Area FOXTROT
-       ['MAC','155','raw:MAC','submarine_danger_area'], // Submarine Danger Area
-       ['MAC','156','raw:MAC','surface_ship_safety_lane'], // Surface Ship Safety Lane
-       ['MAC','157','raw:MAC','atlantic_fleet_weapons_range'], // Atlantic Fleet Weapons Range
-       ['MAC','158','raw:MAC','naval_defense_sea_area'], // Naval Defense Sea Area
-       ['MAC','159','raw:MAC','uqc/wqc_test_area'], // UQC/WQC Test Area
+       ['MAC','0','maritime_area:type','unknown'], // Unknown
+       ['MAC','2','maritime_area:type','dredged_channel/dredged_area'], // Dredged Channel/Dredged Area
+       ['MAC','4','maritime_area:type','mine_danger_area'], // Mine Danger Area
+       ['MAC','5','maritime_area:type','prohibited_shipping_area/entry_prohibited'], // Prohibited Shipping Area/Entry Prohibited
+       ['MAC','6','maritime_area:type','reclamation_area'], // Reclamation Area
+       ['MAC','9','maritime_area:type','works_in_progress_area'], // Works in Progress Area
+       ['MAC','11','maritime_area:type','anchorage_(general)'], // Anchorage (general)
+       ['MAC','12','maritime_area:type','anchoring_berths'], // Anchoring Berths
+       ['MAC','13','maritime_area:type','explosives_anchorage'], // Explosives anchorage
+       ['MAC','14','maritime_area:type','large_vessel/deep_water/deep_draft_anchorage'], // Large Vessel/Deep Water/Deep Draft anchorage
+       ['MAC','15','maritime_area:type','anchoring_prohibited'], // Anchoring Prohibited
+       ['MAC','16','maritime_area:type','quarantine_anchorage'], // Quarantine Anchorage
+       ['MAC','17','maritime_area:type','reserved_anchorage'], // Reserved Anchorage
+       ['MAC','19','maritime_area:type','tanker_anchorage'], // Tanker Anchorage
+       ['MAC','20','maritime_area:type','submarine_cable_area'], // Submarine Cable Area
+       ['MAC','21','maritime_area:type','pipeline_area'], // Pipeline Area
+       ['MAC','22','maritime_area:type','fishing_prohibited'], // Fishing Prohibited
+       ['MAC','23','maritime_area:type','cable_and_pipeline_area'], // Cable and Pipeline Area
+       ['MAC','24','maritime_area:type','turning_area/swinging_circle'], // Turning Area/Swinging Circle
+       ['MAC','25','maritime_area:type','spoil_area/spoil_ground_(see_ops_for_status)'], // Spoil Area/Spoil Ground (See OPS for status)
+       ['MAC','26','maritime_area:type','unsurveyed_area'], // Unsurveyed Area
+       ['MAC','27','maritime_area:type','submarine_exercise_area'], // Submarine Exercise Area
+       ['MAC','28','maritime_area:type','mine_laying_practice_area'], // Mine Laying Practice Area
+       ['MAC','29','maritime_area:type','firing_danger_area'], // Firing Danger Area
+       ['MAC','30','maritime_area:type','dumping_ground_for_hazardous_materials'], // Dumping Ground for Hazardous Materials
+       ['MAC','31','maritime_area:type','incineration_area'], // Incineration Area
+       ['MAC','32','maritime_area:type','oil_field'], // Oil Field
+       ['MAC','33','maritime_area:type','gas_field'], // Gas Field
+       ['MAC','35','maritime_area:type','explosive_dumping_ground'], // Explosive Dumping Ground
+       ['MAC','37','maritime_area:type','safety_zone'], // Safety Zone
+       ['MAC','40','maritime_area:type','roundabout_zone_(tss)'], // Roundabout Zone (TSS)
+       ['MAC','41','maritime_area:type','inshore_traffic_zone_(tss)'], // Inshore Traffic Zone (TSS)
+       ['MAC','42','maritime_area:type','precautionary_area'], // Precautionary Area
+       ['MAC','43','maritime_area:type','area_to_be_avoided'], // Area to be avoided
+       ['MAC','44','maritime_area:type','degaussing_range'], // Degaussing Range
+       ['MAC','45','maritime_area:type','outfall_area'], // Outfall Area
+       ['MAC','46','maritime_area:type','intake_area'], // Intake Area
+       ['MAC','48','maritime_area:type','pilot_boarding_area'], // Pilot Boarding Area
+       ['MAC','49','maritime_area:type','cargo_transshipment_area'], // Cargo Transshipment Area
+       ['MAC','53','maritime_area:type','seaplane'], // Seaplane
+       ['MAC','54','maritime_area:type','time_limited'], // Time Limited
+       ['MAC','55','maritime_area:type','fairway'], // Fairway
+       ['MAC','56','maritime_area:type','fish_trap_area'], // Fish Trap Area
+       ['MAC','57','maritime_area:type','marine_farm'], // Marine Farm
+       ['MAC','58','maritime_area:type','dredging_area'], // Dredging Area
+       ['MAC','61','maritime_area:type','sewer_area'], // Sewer Area
+       ['MAC','101','maritime_area:type','marine_sanctuary'], // Marine Sanctuary
+       ['MAC','102','maritime_area:type','waiting_area'], // Waiting Area
+       ['MAC','103','maritime_area:type','mineswept_channel'], // Mineswept Channel
+       ['MAC','104','maritime_area:type','major_navy_operating_area'], // Major Navy Operating Area
+       ['MAC','105','maritime_area:type','minor_navy_operating_area'], // Minor Navy Operating Area
+       ['MAC','106','maritime_area:type','asw_operating_area'], // ASW Operating Area
+       ['MAC','107','maritime_area:type','submarine_operating_area'], // Submarine Operating Area
+       ['MAC','108','maritime_area:type','submarine_transit_lane_(submerged)'], // Submarine Transit Lane (Submerged)
+       ['MAC','109','maritime_area:type','submarine_transit_lane_(surface)'], // Submarine Transit Lane (Surface)
+       ['MAC','110','maritime_area:type','surface_free_lane'], // Surface Free Lane
+       ['MAC','111','maritime_area:type','surface_operating_area_(major)'], // Surface Operating Area (Major)
+       ['MAC','113','maritime_area:type','anchoring_and_fishing_prohibited'], // Anchoring and fishing prohibited
+       ['MAC','114','maritime_area:type','sea_test_range'], // Sea Test Range
+       ['MAC','115','maritime_area:type','submarine_and_gunnery_exercise_area'], // Submarine and Gunnery Exercise Area
+       ['MAC','116','maritime_area:type','named_operating_area'], // Named Operating Area
+       ['MAC','123','maritime_area:type','caution_area'], // Caution Area
+       ['MAC','140','maritime_area:type','exercise_area_limit'], // Exercise Area Limit
+       ['MAC','141','maritime_area:type','unexploded_ordinance'], // Unexploded Ordinance
+       ['MAC','142','maritime_area:type','submarine_warning_area'], // Submarine Warning Area
+       ['MAC','143','maritime_area:type','naval_operations_area'], // Naval Operations Area
+       ['MAC','144','maritime_area:type','inwater_tracking_range'], // Inwater Tracking Range
+       ['MAC','145','maritime_area:type','foracs_v_limits'], // FORACS V Limits
+       ['MAC','146','maritime_area:type','missile_test_area'], // Missile Test Area
+       ['MAC','147','maritime_area:type','bombing_and_strafing_targets_area'], // Bombing and Strafing Targets Area
+       ['MAC','148','maritime_area:type','drill_minefield'], // Drill Minefield
+       ['MAC','149','maritime_area:type','abandoned_drill_minefield'], // Abandoned Drill Minefield
+       ['MAC','150','maritime_area:type','acronym_area_-_purple'], // Acronym Area - Purple
+       ['MAC','151','maritime_area:type','acronym_area_-_brown'], // Acronym Area - Brown
+       ['MAC','152','maritime_area:type','acronym_area_-_blue'], // Acronym Area - Blue
+       ['MAC','153','maritime_area:type','landing_craft_air_cushion_(lcac)'], // Landing Craft Air Cushion (LCAC)
+       ['MAC','154','maritime_area:type','area_foxtrot'], // Area FOXTROT
+       ['MAC','155','maritime_area:type','submarine_danger_area'], // Submarine Danger Area
+       ['MAC','156','maritime_area:type','surface_ship_safety_lane'], // Surface Ship Safety Lane
+       ['MAC','157','maritime_area:type','atlantic_fleet_weapons_range'], // Atlantic Fleet Weapons Range
+       ['MAC','158','maritime_area:type','naval_defense_sea_area'], // Naval Defense Sea Area
+       ['MAC','159','maritime_area:type','uqc/wqc_test_area'], // UQC/WQC Test Area
        ['MAC','997',undefined,undefined], // Unpopulated
-       ['MAC','999','raw:MAC','other'], // Other
+       ['MAC','999','maritime_area:type','other'], // Other
 
        // MAS - Maintenance Status
        ['MAS','0','maintained','unknown'], // Unknown
@@ -2353,56 +2353,56 @@ gifd.rules = {
        ['MCC','999','material','other'], // Other
 
        // MCS - Material Composition Secondary
-       ['MCS','0','raw:MCS','unknown'], // Unknown
-       ['MCS','4','raw:MCS','ash'], // Ash
-       ['MCS','8','raw:MCS','boulders'], // Boulders
-       ['MCS','12','raw:MCS','chalk'], // Chalk
-       ['MCS','14','raw:MCS','cinders'], // Cinders
-       ['MCS','15','raw:MCS','cirripedia'], // Cirripedia
-       ['MCS','16','raw:MCS','clay'], // Clay
-       ['MCS','18','raw:MCS','cobble'], // Cobble
-       ['MCS','24','raw:MCS','coral'], // Coral
-       ['MCS','25','raw:MCS','coral_head'], // Coral Head
-       ['MCS','28','raw:MCS','diatoms'], // Diatoms
-       ['MCS','36','raw:MCS','foraminifera'], // Foraminifera
-       ['MCS','37','raw:MCS','fucus'], // Fucus
-       ['MCS','41','raw:MCS','globigerina'], // Globigerina
-       ['MCS','45','raw:MCS','grass_/thatch'], // Grass /Thatch
-       ['MCS','46','raw:MCS','gravel'], // Gravel
-       ['MCS','48','raw:MCS','ground'], // Ground
-       ['MCS','52','raw:MCS','lava'], // Lava
-       ['MCS','55','raw:MCS','loess'], // Loess
-       ['MCS','58','raw:MCS','madrepores'], // Madrepores
-       ['MCS','59','raw:MCS','manganese'], // Manganese
-       ['MCS','61','raw:MCS','marl'], // Marl
-       ['MCS','63','raw:MCS','mattes'], // Mattes
-       ['MCS','65','raw:MCS','mud'], // Mud
-       ['MCS','66','raw:MCS','mussels'], // Mussels
-       ['MCS','69','raw:MCS','ooze'], // Ooze
-       ['MCS','70','raw:MCS','oysters'], // Oysters
-       ['MCS','73','raw:MCS','pebbles'], // Pebbles
-       ['MCS','75','raw:MCS','polyzoa'], // Polyzoa
-       ['MCS','78','raw:MCS','pteropods'], // Pteropods
-       ['MCS','79','raw:MCS','pumice'], // Pumice
-       ['MCS','80','raw:MCS','quartz'], // Quartz
-       ['MCS','81','raw:MCS','radiolaria'], // Radiolaria
-       ['MCS','84','raw:MCS','rock/rocky'], // Rock/Rocky
-       ['MCS','88','raw:MCS','sand'], // Sand
-       ['MCS','90','raw:MCS','schist'], // Schist
-       ['MCS','92','raw:MCS','scoria'], // Scoria
-       ['MCS','93','raw:MCS','sea_tangle'], // Sea Tangle
-       ['MCS','94','raw:MCS','seaweed'], // Seaweed
-       ['MCS','96','raw:MCS','shells'], // Shells
-       ['MCS','98','raw:MCS','shingle'], // Shingle
-       ['MCS','99','raw:MCS','silt'], // Silt
-       ['MCS','104','raw:MCS','soil'], // Soil
-       ['MCS','105','raw:MCS','spicules'], // Spicules
-       ['MCS','106','raw:MCS','sponge'], // Sponge
-       ['MCS','108','raw:MCS','stone'], // Stone
-       ['MCS','111','raw:MCS','tufa'], // Tufa
-       ['MCS','115','raw:MCS','volcanic_ash'], // Volcanic Ash
+       ['MCS','0','material:2','unknown'], // Unknown
+       ['MCS','4','material:2','ash'], // Ash
+       ['MCS','8','material:2','boulders'], // Boulders
+       ['MCS','12','material:2','chalk'], // Chalk
+       ['MCS','14','material:2','cinders'], // Cinders
+       ['MCS','15','material:2','cirripedia'], // Cirripedia
+       ['MCS','16','material:2','clay'], // Clay
+       ['MCS','18','material:2','cobble'], // Cobble
+       ['MCS','24','material:2','coral'], // Coral
+       ['MCS','25','material:2','coral_head'], // Coral Head
+       ['MCS','28','material:2','diatoms'], // Diatoms
+       ['MCS','36','material:2','foraminifera'], // Foraminifera
+       ['MCS','37','material:2','fucus'], // Fucus
+       ['MCS','41','material:2','globigerina'], // Globigerina
+       ['MCS','45','material:2','grass_/thatch'], // Grass /Thatch
+       ['MCS','46','material:2','gravel'], // Gravel
+       ['MCS','48','material:2','ground'], // Ground
+       ['MCS','52','material:2','lava'], // Lava
+       ['MCS','55','material:2','loess'], // Loess
+       ['MCS','58','material:2','madrepores'], // Madrepores
+       ['MCS','59','material:2','manganese'], // Manganese
+       ['MCS','61','material:2','marl'], // Marl
+       ['MCS','63','material:2','mattes'], // Mattes
+       ['MCS','65','material:2','mud'], // Mud
+       ['MCS','66','material:2','mussels'], // Mussels
+       ['MCS','69','material:2','ooze'], // Ooze
+       ['MCS','70','material:2','oysters'], // Oysters
+       ['MCS','73','material:2','pebbles'], // Pebbles
+       ['MCS','75','material:2','polyzoa'], // Polyzoa
+       ['MCS','78','material:2','pteropods'], // Pteropods
+       ['MCS','79','material:2','pumice'], // Pumice
+       ['MCS','80','material:2','quartz'], // Quartz
+       ['MCS','81','material:2','radiolaria'], // Radiolaria
+       ['MCS','84','material:2','rock/rocky'], // Rock/Rocky
+       ['MCS','88','material:2','sand'], // Sand
+       ['MCS','90','material:2','schist'], // Schist
+       ['MCS','92','material:2','scoria'], // Scoria
+       ['MCS','93','material:2','sea_tangle'], // Sea Tangle
+       ['MCS','94','material:2','seaweed'], // Seaweed
+       ['MCS','96','material:2','shells'], // Shells
+       ['MCS','98','material:2','shingle'], // Shingle
+       ['MCS','99','material:2','silt'], // Silt
+       ['MCS','104','material:2','soil'], // Soil
+       ['MCS','105','material:2','spicules'], // Spicules
+       ['MCS','106','material:2','sponge'], // Sponge
+       ['MCS','108','material:2','stone'], // Stone
+       ['MCS','111','material:2','tufa'], // Tufa
+       ['MCS','115','material:2','volcanic_ash'], // Volcanic Ash
        ['MCS','997',undefined,undefined], // Unpopulated
-       ['MCS','999','raw:MCS','other'], // Other
+       ['MCS','999','material:2','other'], // Other
 
        // MCU - Material Composition Underlying
        ['MCU','0','raw:MCU','unknown'], // Unknown
@@ -3188,9 +3188,9 @@ gifd.rules = {
        ['PPC','999','raw:PPC','other'], // Other
 
        // PPT - Populated Place Type
-       ['PPT','0','raw:PPT','unknown'], // Unknown
-       ['PPT','3','raw:PPT','tent_dwellings'], // Tent Dwellings
-       ['PPT','999','raw:PPT','other'], // Other
+       ['PPT','0','populated_place:type','unknown'], // Unknown
+       ['PPT','3','populated_place:type','tent_dwellings'], // Tent Dwellings
+       ['PPT','999','populated_place:type','other'], // Other
 
        // PR1 - Periodic Restriction Beginning
        ['PR1','1','raw:PR1','beginning_seasonal_limit_-_jan.'], // Beginning seasonal limit - Jan.
@@ -3751,16 +3751,16 @@ gifd.rules = {
        ['SHO','8','raw:SHO','ice_coast'], // Ice Coast
 
        // SHP - Shape of Beacon
-       ['SHP','0','raw:SHP','undefined'], // Undefined
-       ['SHP','1','raw:SHP','stake/pole'], // Stake/Pole
-       ['SHP','2','raw:SHP','withy'], // Withy
-       ['SHP','3','raw:SHP','beacon_tower'], // Beacon Tower
-       ['SHP','4','raw:SHP','lattice_beacon'], // Lattice Beacon
-       ['SHP','5','raw:SHP','pile_beacon'], // Pile Beacon
-       ['SHP','7','raw:SHP','buoyant_beacon'], // Buoyant Beacon
-       ['SHP','8','raw:SHP','daymark_board_-_square'], // Daymark Board - Square
-       ['SHP','9','raw:SHP','daymark_board_-_triangle'], // Daymark Board - Triangle
-       ['SHP','10','raw:SHP','daymark_board_-_rectangle'], // Daymark Board - Rectangle
+       ['SHP','0','seamark:beacon:shape','undefined'], // Undefined
+       ['SHP','1','seamark:beacon:shape','stake_or_pole'], // Stake/Pole
+       ['SHP','2','seamark:beacon:shape','withy'], // Withy
+       ['SHP','3','seamark:beacon:shape','tower'], // Beacon Tower
+       ['SHP','4','seamark:beacon:shape','lattice'], // Lattice Beacon
+       ['SHP','5','seamark:beacon:shape','pile'], // Pile Beacon
+       ['SHP','7','seamark:beacon:shape','buoyant'], // Buoyant Beacon
+       ['SHP','8','seamark:daymark:shape','square'], // Daymark Board - Square
+       ['SHP','9','seamark:daymark:shape','triangle'], // Daymark Board - Triangle
+       ['SHP','10','seamark:daymark:shape','rectangle'], // Daymark Board - Rectangle
 
        // SHR - Shoreline Type Right
        ['SHR','0','raw:SHR','unknown'], // Unknown

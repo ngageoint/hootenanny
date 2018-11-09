@@ -7,8 +7,12 @@
 
     <!--contextConfigLocation has to be explicitly specified to successfully integrate Jersey and Spring -->
     <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:applicationContext.xml</param-value>
+	<param-name>contextConfigLocation</param-name>
+	<param-value>
+		classpath:applicationContext.xml
+		classpath:security-applicationContext.xml
+		/WEB-INF/spring/*.xml
+    </param-value>
     </context-param>
     <context-param>
         <param-name>spring.profiles.active</param-name>
@@ -38,9 +42,29 @@
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
-        <dispatcher>ASYNC</dispatcher><!-- Servlet 3.0 w/ disabled auto-initialization only; not supported in 2.5 -->
     </filter-mapping>
-
+	<filter>
+		<filter-name>springSessionRepositoryFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSessionRepositoryFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>contextAttribute</param-name>
+			<param-value>org.springframework.web.context.WebApplicationContext.ROOT</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
     <servlet>
         <servlet-name>hoot-services</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -54,6 +78,8 @@
         <servlet-name>hoot-services</servlet-name>
         <url-pattern>/osm/*</url-pattern>
         <url-pattern>/job/*</url-pattern>
+        <url-pattern>/jobs/*</url-pattern>
+        <url-pattern>/auth/*</url-pattern>
         <url-pattern>/info/*</url-pattern>
         <url-pattern>/ogr/*</url-pattern>
         <url-pattern>/ingest/*</url-pattern>
@@ -78,6 +104,8 @@
     <servlet-mapping>
         <servlet-name>config</servlet-name>
         <url-pattern>/config/*</url-pattern>
+        <url-pattern>/language/*</url-pattern>
+        <!-- [!] new url-pattern's added here should be considered for security-applicationContext.xml [!] -->
     </servlet-mapping>
 
     <!-- EVWHS - DG's imagery service for non-commercial clients.
@@ -97,6 +125,16 @@
     <servlet-mapping>
         <servlet-name>evwhs</servlet-name>
         <url-pattern>/evwhs/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- This allows hoot-core to auth via command line. -->
+    <servlet>
+      <servlet-name>out-of-band</servlet-name>
+      <jsp-file>/out-of-band.html</jsp-file>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>out-of-band</servlet-name>
+      <url-pattern>/out-of-band.html</url-pattern>
     </servlet-mapping>
 
 </web-app>

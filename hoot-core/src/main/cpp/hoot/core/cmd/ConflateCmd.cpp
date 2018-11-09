@@ -52,9 +52,9 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/io/ElementSorter.h>
+#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
-#include <hoot/core/io/MultipleChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 
 // Standard
 #include <fstream>
@@ -85,8 +85,11 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
 // Convenience function used when deriving a changeset
 boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
 {
-  ElementSorterPtr sorted1(new ElementSorter(pMap1));
-  ElementSorterPtr sorted2(new ElementSorter(pMap2));
+  //Conflation requires all data to be in memory, so no point in adding support for
+  //ExternalMergeElementSorter here.
+
+  InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
+  InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
   boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
   return delta;
 }
@@ -295,16 +298,19 @@ int ConflateCmd::runSimple(QStringList args)
 
   // Figure out what to write
   if (isDiffConflate && output.endsWith(".osc"))
-  { // Write a changeset
+  {
+    // Write a changeset
     ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(result);
 
     if (!conflateTags)
-    { // only one changeset to write
+    {
+      // only one changeset to write
       OsmXmlChangesetFileWriter writer;
       writer.write(output, pGeoChanges);
     }
-    else if(separateOutput)
-    { // write two changesets
+    else if (separateOutput)
+    {
+      // write two changesets
       OsmXmlChangesetFileWriter writer;
       writer.write(output, pGeoChanges);
 
@@ -315,7 +321,8 @@ int ConflateCmd::runSimple(QStringList args)
       tagChangeWriter.write(outFileName, pTagChanges);
     }
     else
-    { // write unified output
+    {
+      // write unified output
       MultipleChangesetProviderPtr pChanges(new MultipleChangesetProvider(result->getProjection()));
       pChanges->addChangesetProvider(pGeoChanges);
       pChanges->addChangesetProvider(pTagChanges);

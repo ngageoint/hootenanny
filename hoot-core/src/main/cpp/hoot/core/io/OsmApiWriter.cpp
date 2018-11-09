@@ -73,7 +73,7 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
 bool OsmApiWriter::apply()
 {
   Timer timer;
-  OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
+  HootNetworkRequestPtr request(new HootNetworkRequest());
   //  Validate API capabilites
   if (!queryCapabilities(request))
   {
@@ -177,7 +177,7 @@ bool OsmApiWriter::apply()
 
 void OsmApiWriter::_changesetThreadFunc()
 {
-  OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
+  HootNetworkRequestPtr request(new HootNetworkRequest());
   //
   long id = -1;
   //  Iterate until all elements are sent and updated
@@ -195,9 +195,22 @@ void OsmApiWriter::_changesetThreadFunc()
 
     if (workInfo)
     {
-      //  Create the changeset for the first changeset
-      if (id == -1)
+      //  Create the changeset ID if required
+      if (id < 1)
         id = _createChangeset(request, _description);
+      //  An ID of less than 1 isn't valid, try to fix it
+      if (id < 1)
+      {
+        _workQueueMutex.lock();
+        _workQueue.push(workInfo);
+        _workQueueMutex.unlock();
+        //  Reset the network request object and sleep it off
+        request.reset(new HootNetworkRequest());
+        LOG_WARN("Bad changeset ID. Resetting network request object.");
+        this_thread::sleep_for(chrono::milliseconds(100));
+        //  Try a new create changeset request
+        continue;
+      }
       //  Display the changeset in TRACE mode
       LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << _changeset.getChangesetString(workInfo, id));
       //  Upload the changeset
@@ -235,6 +248,26 @@ void OsmApiWriter::_changesetThreadFunc()
               _workQueue.push(split);
               _workQueue.push(workInfo);
               _workQueueMutex.unlock();
+            }
+            else
+            {
+              if (!workInfo->getChangesetIssuesResolved())
+              {
+                //  Set the issues resolved flag
+                workInfo->setChangesetIssuesResolved(true);
+                //  Try to automatically resolve certain issues, like out of date version
+                if (_resolveIssues(request, workInfo))
+                {
+                  _workQueueMutex.lock();
+                  _workQueue.push(workInfo);
+                  _workQueueMutex.unlock();
+                }
+                else
+                {
+                  //  Set the element in the changeset to failed because the issues couldn't be resolved
+                  _changeset.updateFailedChangeset(workInfo);
+                }
+              }
             }
           }
           break;
@@ -285,7 +318,7 @@ bool OsmApiWriter::isSupported(const QUrl &url)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
-bool OsmApiWriter::queryCapabilities(OsmApiNetworkRequestPtr request)
+bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
 {
   try
   {
@@ -306,7 +339,7 @@ bool OsmApiWriter::queryCapabilities(OsmApiNetworkRequestPtr request)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
-bool OsmApiWriter::validatePermissions(OsmApiNetworkRequestPtr request)
+bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
 {
   bool success = false;
   try
@@ -398,7 +431,7 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
-long OsmApiWriter::_createChangeset(OsmApiNetworkRequestPtr request, const QString& description)
+long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request, const QString& description)
 {
   try
   {
@@ -426,7 +459,7 @@ long OsmApiWriter::_createChangeset(OsmApiNetworkRequestPtr request, const QStri
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
-void OsmApiWriter::_closeChangeset(OsmApiNetworkRequestPtr request, long id)
+void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
 {
   try
   {
@@ -457,15 +490,42 @@ void OsmApiWriter::_closeChangeset(OsmApiNetworkRequestPtr request, long id)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
-bool OsmApiWriter::_uploadChangeset(OsmApiNetworkRequestPtr request, long id, const QString& changeset)
+/**
+ * POSSIBLE HTTP error codes and explanations
+ * HTTP status code 400 (Bad Request) - text/plain
+ *  When there are errors parsing the XML. A text message explaining the error is returned.
+ *   This can also happen if you forget to pass the Content-Length header.
+ *  When a changeset ID is missing (unfortunately the error messages are not consistent)
+ *  When a node is outside the world
+ *  When there are too many nodes for a way
+ *  When the version of the provided element does not match the current database version of the element
+ * HTTP status code 409 (Conflict) - text/plain
+ *  If the changeset in question has already been closed (either by the user itself or as a result of the auto-closing feature).
+ *   A message with the format "The changeset #id was closed at #closed_at." is returned
+ *  Or if the user trying to update the changeset is not the same as the one that created it
+ * HTTP status code 404 (Not Found)
+ *  When no element with the given id could be found
+ * HTTP status code 412 (Precondition Failed)
+ *  When a way has nodes that do not exist or are not visible (i.e. deleted):
+ *   "Way #{id} requires the nodes with id in (#{missing_ids}), which either do not exist, or are not visible."
+ *  When a relation has elements that do not exist or are not visible:
+ *   "Relation with id #{id} cannot be saved due to #{element} with id #{element.id}"
+ */
+bool OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset)
 {
   bool success = false;
+  //  Don't even attempt if the ID is bad
+  if (id < 1)
+    return false;
   try
   {
     QUrl change = _url;
     change.setPath(API_PATH_UPLOAD_CHANGESET.arg(id));
 
-    request->networkRequest(change, QNetworkAccessManager::Operation::PostOperation, changeset.toUtf8());
+    QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
+    headers[QNetworkRequest::ContentTypeHeader] = "text/xml";
+
+    request->networkRequest(change, headers, QNetworkAccessManager::Operation::PostOperation, changeset.toUtf8());
 
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
 
@@ -483,6 +543,9 @@ bool OsmApiWriter::_uploadChangeset(OsmApiNetworkRequestPtr request, long id, co
     case 409:
       LOG_WARN("Changeset conflict: " << responseXml);
       break;
+    case 412:
+      LOG_WARN("Changeset precondition failed: " << responseXml);
+      break;
     default:
       LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());
       break;
@@ -493,6 +556,85 @@ bool OsmApiWriter::_uploadChangeset(OsmApiNetworkRequestPtr request, long id, co
     LOG_WARN(ex.what());
   }
   return success;
+}
+
+bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset)
+{
+  bool success = false;
+  //  Can only work on changesets of size 1
+  if (changeset->size() != 1)
+    return false;
+  for(int elementType = 0; elementType < ElementType::Type::Unknown; ++elementType)
+  {
+    for (int changesetType = 0; changesetType < XmlChangeset::ChangesetType::TypeMax; ++changesetType)
+    {
+      ChangesetInfo::iterator element = changeset->begin((ElementType::Type)elementType, (XmlChangeset::ChangesetType)changesetType);
+      if (element != changeset->end((ElementType::Type)elementType, (XmlChangeset::ChangesetType)changesetType))
+      {
+        long id = *element;
+        QString update = "";
+        //  Get the element from the OSM API
+        if (elementType == ElementType::Node)
+          update = _getNode(request, id);
+        else if (elementType == ElementType::Way)
+          update = _getWay(request, id);
+        else if (elementType == ElementType::Relation)
+          update = _getRelation(request, id);
+        //  Fix the changeset with the node/way/relation from the OSM API
+        success |= _changeset.fixChangeset(update);
+      }
+    }
+  }
+  return success;
+}
+
+QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id)
+{
+  //  Check for a valid ID to query against
+  if (id < 1)
+    return "";
+  //  Get the node by ID
+  return _getElement(request, QString(API_PATH_GET_ELEMENT).arg("node").arg(id));
+}
+
+QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id)
+{
+  //  Check for a valid ID to query against
+  if (id < 1)
+    return "";
+  //  Get the way by ID
+  return _getElement(request, QString(API_PATH_GET_ELEMENT).arg("way").arg(id));
+}
+
+QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id)
+{
+  //  Check for a valid ID to query against
+  if (id < 1)
+    return "";
+  //  Get the relation by ID
+  return _getElement(request, QString(API_PATH_GET_ELEMENT).arg("relation").arg(id));
+}
+
+QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& endpoint)
+{
+  //  Don't follow an uninitialized URL or empty endpoint
+  if (endpoint == API_PATH_GET_ELEMENT || endpoint == "")
+    return "";
+  try
+  {
+    QUrl get = _url;
+    get.setPath(endpoint);
+    request->networkRequest(get);
+    if (request->getHttpStatus() == 200)
+      return QString::fromUtf8(request->getResponseContent().data());
+    else
+      LOG_WARN("GET error: " << QString::fromUtf8(request->getResponseContent().data()));
+  }
+  catch (const HootException& ex)
+  {
+    LOG_WARN(ex.what());
+  }
+  return "";
 }
 
 }

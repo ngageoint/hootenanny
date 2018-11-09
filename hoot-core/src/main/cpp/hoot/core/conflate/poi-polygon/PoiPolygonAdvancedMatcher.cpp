@@ -35,7 +35,6 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/util/Log.h>
 
 #include "extractors/PoiPolygonNameScoreExtractor.h"
@@ -84,7 +83,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
   }
 
   const QString poiAddress =
-    poi->getTags().get(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
+    PoiPolygonAddressScoreExtractor::getAddressTagValue(poi->getTags(), "full_address");
   if (poiAddress.isEmpty())
   {
     return false;

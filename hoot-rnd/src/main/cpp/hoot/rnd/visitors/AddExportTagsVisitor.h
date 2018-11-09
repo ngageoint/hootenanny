@@ -41,7 +41,7 @@ namespace hoot
  *
  * @todo refactor all existing writers to use this visitor.
  */
-class AddExportTagsVisitor : ElementVisitor
+class AddExportTagsVisitor : public ElementVisitor
 {
 public:
 

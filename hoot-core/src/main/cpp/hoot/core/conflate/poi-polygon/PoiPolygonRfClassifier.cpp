@@ -55,6 +55,7 @@ void PoiPolygonRfClassifier::_createExtractors()
   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
   boost::shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(
     new PoiPolygonAddressScoreExtractor());
+  addressExtractor1->setConfiguration(conf());
   _extractors.push_back(addressExtractor1);
 }
 

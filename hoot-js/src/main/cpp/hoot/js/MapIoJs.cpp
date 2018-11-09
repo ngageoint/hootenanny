@@ -130,7 +130,7 @@ void MapIoJs::loadMapFromStringPreserveIdAndStatus(const FunctionCallbackInfo<Va
 
   OsmXmlReader reader;
   reader.setUseDataSourceIds(true);
-  reader.setUseStatusFromFile(true);
+  reader.setUseFileStatus(true);
   reader.readFromString(mapXml, map->getMap());
 
   args.GetReturnValue().SetUndefined();

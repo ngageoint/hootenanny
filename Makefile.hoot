@@ -1,0 +1,511 @@
+
+# If the silent flag is passed to make then make Maven and npm quiet too.
+ifneq (,$(findstring s,$(MAKEFLAGS)))
+	MVN_QUIET='-q'
+	NPM_QUIET='-s' # > /dev/null'
+else
+	HOOT_TEST_DIFF='--diff'
+endif
+
+SHELL=/bin/bash
+
+.PHONY: clean-ccache
+
+# If you're adding another schema file be sure and update the archive target
+# too.
+SCHEMA_FILES=plugins/tds61_schema.js plugins/tds61_full_schema.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds40_schema.js plugins/tds40_full_schema.js plugins/etds40_rules.js plugins/etds40_osm_rules.js plugins/mgcp_schema.js plugins/emgcp_rules.js plugins/emgcp_osm_rules.js plugins/ggdm30_schema.js plugins/ggdm30_full_schema.js plugins/eggdm30_rules.js plugins/eggdm30_osm_rules.js
+
+-include Makefile.inc
+
+default: build
+
+all: build
+always:
+
+build: core ui-build ui2x-build
+
+core: makedirs js-make qt-make services-build model-build conf/dictionary/words.sqlite osmapidb \
+	conf/dictionary/WordsAbridged.sqlite hoot-services/src/main/resources/language-translation/langdetect-183.bin
+
+makedirs: 
+	mkdir -p $$HOOT_HOME/userfiles/customscript
+	mkdir -p $$HOOT_HOME/userfiles/ingest/processed/BASEMAP
+	mkdir -p $$HOOT_HOME/userfiles/ingest/upload/BASEMAP
+	mkdir -p $$HOOT_HOME/userfiles/reports
+	mkdir -p $$HOOT_HOME/userfiles/tmp/upload
+
+clean: Makefile.qmake ui-clean services-clean clean-coverage
+	$(MAKE) -f Makefile.qmake clean 2>&1 \
+	  | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	  || true \
+	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
+	rm -f `find . -name Makefile.qmake`
+	rm -f `find . -name \*.gcov`
+	rm -f lib/*
+	rm -rf test-output/*
+	rm -rf tgs/libTgs.a
+	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/*
+	rm -rf bin/*
+	rm -f plugins/config.js
+	rm -f translations/*.pyc
+	rm -f $(SCHEMA_FILES)
+	rm -f hoot-core/src/main/cpp/hoot/core/HootConfig.h
+	# The following bits are due to moving files in git. Since the Output.osm
+	# file is written to the test-files/cases/**/ directory git won't remove
+	# the directory. Doing this as part of clean will ensure that the
+	# directories are removed.
+	# remove any empty test cases
+	find test-files/cases -type f -name Output.osm -exec rm {} \;
+	# call this command 3 times b/c there may be sub-dirs that need deleteing.
+	rm -rf `find test-files/cases -type d -empty`
+	rm -rf `find test-files/cases -type d -empty`
+	rm -rf `find test-files/cases -type d -empty`
+	cd docs; $(MAKE) clean
+ifeq ($(BUILD_SERVICES),services)
+	scripts/database/CleanOsmApiDB.sh
+	rm -f scripts/database/blank_osmapidb.sql
+endif
+ifeq ($(BUILD_UI_TESTS),uitests)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean
+endif
+
+clean-db: services-clean-db
+
+# start over as close to a new build as is reasonable
+clean-all: clean clean-db clean-ccache
+
+clean-coverage: services-clean-coverage ui-clean-coverage
+	rm -rf coverage
+	rm -f `find . -name *.gcda`
+
+# clean-all should call `ccache -C` to clear the cache if ccache is available
+clean-ccache:
+ifneq (, $(shell command -v ccache))
+	@ccache -C >/dev/null 2>&1
+endif
+
+check: test
+test: build services-test plugins-test
+	bin/HootTest $(HOOT_TEST_DIFF) --slow --parallel $$(nproc)
+
+docs: always HOOT_VERSION_FILE services-docs
+	echo Building documentation...
+	cd docs; $(MAKE)
+
+test-quick: build
+	bin/HootTest $(HOOT_TEST_DIFF) --quick --parallel $$(nproc)
+
+test-all-core: services-test-all plugins-test
+	# Don't run services tests at the same time as glacial -- that may stomp
+	# on each other's DB changes.
+	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel $$(nproc)
+
+test-all-no-core: services-test-all plugins-test
+	$(MAKE) ui-test
+
+test-all: test-all-no-core
+	# Don't run services tests at the same time as glacial -- that may stomp
+	# on each other's DB changes.
+	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel $$(nproc)
+
+licenses:
+	scripts/copyright/UpdateAllCopyrightHeaders.sh
+
+plugins-test: build
+ifneq ($(shell which mocha),)
+	cd plugins; npm install && npm test
+else
+	@echo Skipping mocha tests
+endif
+
+# Prepend HOOT_ to all config variables.
+hoot-core/src/main/cpp/hoot/core/HootConfig.h: config.h
+	echo "#ifndef __HOOT_CONFIG_H__" > hoot-core/src/main/cpp/hoot/core/HootConfig.h
+	echo "#define __HOOT_CONFIG_H__" >> hoot-core/src/main/cpp/hoot/core/HootConfig.h
+	/bin/sed -r -e 's/^(#[ \t]*define) /\1 HOOT_/' config.h >> hoot-core/src/main/cpp/hoot/core/HootConfig.h
+	echo "#endif" >> hoot-core/src/main/cpp/hoot/core/HootConfig.h
+
+hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h: hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h
+hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h: conf/core/ConfigOptions.asciidoc scripts/core/CreateConfigCode.py
+	python scripts/core/CreateConfigCode.py conf/core/ConfigOptions.asciidoc hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
+
+plugins/config.js: conf/core/ConfigOptions.asciidoc scripts/core/CreateJsConfigCode.py
+	python scripts/core/CreateJsConfigCode.py conf/core/ConfigOptions.asciidoc plugins/config.js
+
+tgs/src/main/cpp/tgs/TgsConfig.h: config.h
+	echo "#ifndef __TGS_CONFIG_H__" > tgs/src/main/cpp/tgs/TgsConfig.h
+	echo "#define __TGS_CONFIG_H__" >> tgs/src/main/cpp/tgs/TgsConfig.h
+	/bin/sed -r -e 's/^(#[ \t]*define) /\1 TGS_/' config.h >> tgs/src/main/cpp/tgs/TgsConfig.h
+	echo "#endif" >> tgs/src/main/cpp/tgs/TgsConfig.h
+
+# We now have different versions of the NFDD Schema that are built from Excel files:
+# LTDSv40.csv.gz - Local TDS v4.0
+# SUTDSv40.csv.gz - Specialized Urban TDS v4.0
+# TDSv40.csv.gz - Full TDS v4.0
+# The default is to use the LTDSv40 file so we can append to existing LTDS templates
+#
+# The MGCP schema is built from an XML file
+#
+# The Macro's are for Jason :-)
+
+##### MGCP
+# Build the MGCP schema
+plugins/mgcp_schema.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+	mkdir -p $(@D)
+	$^ > $@ || (rm -f $@ ; exit -1)
+
+# Build the MGCP  "To English" rules
+plugins/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+	mkdir -p $(@D)
+	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the MGCP "From English" rules
+plugins/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+#### TDSv40
+plugins/tds40_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
+	mkdir -p $(@D)
+	$^ > $@ || (rm -f $@ ; exit -1)
+
+plugins/tds40_full_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
+	mkdir -p $(@D)
+	$< --fullschema $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the TDS40 "To English" rules
+# This need to be full TDS so we have access to the full range of attributes
+plugins/etds40_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
+	mkdir -p $(@D)
+	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the TDS40 "From English" rules
+plugins/etds40_osm_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+#### TDSv61
+# TDSv61 is built from the TDSv60 spec with NGA's extensions
+plugins/tds61_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+# TDSv61 full schema is built from the TDSv60 spec with NGA's extensions.
+# This one has all of the Text Enumerations
+plugins/tds61_full_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the TDS61 "To English" rules
+plugins/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the TDS61 "From English" rules
+plugins/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+#### GGDMv30
+# GGDMv30 is built from the GGDMv30 spec with additional layers and values files
+plugins/ggdm30_schema.js: scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
+	mkdir -p $(@D)
+	$< $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
+
+# GGDMv30 full schema
+# This one has all of the Text Enumerations
+plugins/ggdm30_full_schema.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
+	mkdir -p $(@D)
+	$< --fullschema $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the GGDMv30 "To English" rules
+plugins/eggdm30_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
+	mkdir -p $(@D)
+	$< --toenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the GGDMv30 "From English" rules
+plugins/eggdm30_osm_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
+
+
+# Build osmapi db
+osmapidb:
+ifeq ($(BUILD_SERVICES),services)
+	scripts/database/SetupOsmApiDB.sh
+endif
+
+# Build automatically generated JS files
+js-make: $(SCHEMA_FILES) plugins/config.js
+
+# Only PoiModel.rf is being generated this way at this time. The older .arff
+# files don't have the precision to recreate the exact model. That is a
+# task for another time.
+ARFFS=$(wildcard conf/models/*.arff.bz2)
+RF_MODELS=$(ARFFS:.arff.bz2=.rf)
+BASE_MODELS=$(ARFFS:.arff.bz2=)
+model-build: $(RF_MODELS)
+
+# These are not cleaned b/c they take a long time to build and it would simply
+# be unnecessary. Use the appropriate git command if you want everything
+# cleaned.
+conf/models/%.rf: conf/models/%.arff.bz2 qt-make always
+	if test ! -e $@ || \
+	   test $< -nt $@ ||\
+	   (test -e $(@:.rf=.sha1sum) && test "$$(sha1sum $@)" != "$$(cat $(@:.rf=.sha1sum))"); then \
+	     test -e $(@:.rf=.sha1sum) || echo "Please create a sha1sum for $@."; \
+	     ( test -e $(@:.rf=.sha1sum) && test -e $@ && test "$$(sha1sum $@)" != "$$(cat $(@:.rf=.sha1sum))" ) && echo "Rebuilding $@ due to mismatched sha1sum." ; \
+	     hoot build-model $< $@ ; \
+	     sha1sum $@ > $(@:.rf=.sha1sum); \
+	fi
+
+qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootConfig.h tgs/src/main/cpp/tgs/TgsConfig.h hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h bin/hoot bin/HootTest
+	$(MAKE) -f Makefile.qmake 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	  || true \
+	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
+
+services-build:	HOOT_VERSION_FILE
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile build
+endif
+
+services-docs:
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile docs
+endif
+
+services-clean:
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile clean
+endif
+
+services-clean-db:
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile clean-db
+endif
+
+services-clean-coverage:
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile clean-coverage
+endif
+
+services-coverage:
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile coverage
+endif
+
+services-test: services-build
+ifeq ($(BUILD_SERVICES),services)
+	echo "Running services tests..."
+	cd hoot-services && $(MAKE) -f Makefile test
+endif
+
+services-test-all: services-build
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile test-all
+endif
+
+ui-build: HOOT_VERSION_FILE
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-ui && $(MAKE) -f Makefile clean && $(MAKE) -f Makefile all
+endif
+
+ui-clean:
+ifeq ($(BUILD_UI_TESTS),uitests)
+	cd test-files/ui && $(MAKE) -f Makefile clean
+endif
+
+ui2x-build:
+ifeq ($(BUILD_UI_TESTS),uitests)
+	cd hoot-ui-2x \
+	npm i $(NPM_QUIET) \
+	npm run production $(NPM_QUIET)
+endif
+
+ui-test: services-build build
+ifeq ($(BUILD_UI_TESTS),uitests)
+ifeq ($(BUILD_SERVICES),services)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test CUKE_OPTS=--fail-fast
+else
+	echo "UI tests must specify both --with-services and --with-uitests."
+endif
+else
+	echo "UI tests must specify both --with-services and --with-uitests."
+endif
+
+ui-coverage: services-build build
+ifeq ($(BUILD_UI_TESTS),uitests)
+ifeq ($(BUILD_SERVICES),services)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile coverage
+else
+	echo "UI coverage must specify both --with-services and --with-uitests."
+endif
+else
+	echo "UI coverage must specify both --with-services and --with-uitests."
+endif
+
+ui-clean-coverage:
+ifeq ($(BUILD_UI_TESTS),uitests)
+ifeq ($(BUILD_SERVICES),services)
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean-coverage
+else
+	echo "UI clean coverage must specify both --with-services and --with-uitests."
+endif
+else
+	echo "UI clean coverage must specify both --with-services and --with-uitests."
+endif
+
+FORCE: vagrant
+
+HOOT_VERSION_FILE: FORCE
+	$(SHELL_PATH) ./HOOT_VERSION_GEN;
+-include HOOT_VERSION_FILE
+
+rebuild-db:
+	scripts/database/DeleteAllTables.sh
+	cd hoot-services && $(MAKE) -f Makefile build
+
+HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
+JAVADOC_TARBALL=docs/hootenanny-services-javadoc-$(HOOT_VERSION).tar.gz
+dist: archive
+archive: js-make services-docs docs
+	mkdir -p $(HOOT_TARNAME)/docs/
+	if [ "$(BUILD_SERVICES)" == "services" ]; then \
+	  tar czf $(HOOT_TARNAME)/$(JAVADOC_TARBALL) hoot-services/target/site/apidocs; fi
+	rm -f $(HOOT_TARNAME).tar.gz
+	scripts/git/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
+	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
+	# Put the docs in their own compressed file
+	tar czf hootenanny-documentation-$(HOOT_VERSION).tar.gz $(HOOT_TARNAME)
+	cp Makefile.in missing aclocal.m4 configure config.h.in $(HOOT_TARNAME)
+	# Copy the protocol buffer generated files. Eases a dependency when building
+	# on CentOS
+	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
+	# Copy the auto-generated schema definitions. This eases another dependency on CentOS
+	mkdir -p $(HOOT_TARNAME)/plugins/
+	# TDSv40
+	cp plugins/tds40_schema.js $(HOOT_TARNAME)/plugins/tds40_schema.js
+	cp plugins/tds40_full_schema.js $(HOOT_TARNAME)/plugins/tds40_full_schema.js
+	cp plugins/etds40_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
+	cp plugins/etds40_osm_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
+	# TDSv61
+	cp plugins/tds61_schema.js $(HOOT_TARNAME)/plugins/tds61_schema.js
+	cp plugins/tds61_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
+	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
+	cp plugins/etds61_osm_rules.js $(HOOT_TARNAME)/plugins/etds61_osm_rules.js
+	# MGCP
+	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
+	cp plugins/emgcp_rules.js $(HOOT_TARNAME)/plugins/emgcp_rules.js
+	cp plugins/emgcp_osm_rules.js $(HOOT_TARNAME)/plugins/emgcp_osm_rules.js
+	# GGDMv30
+	cp plugins/ggdm30_schema.js $(HOOT_TARNAME)/plugins/ggdm30_schema.js
+	cp plugins/ggdm30_full_schema.js $(HOOT_TARNAME)/plugins/ggdm30_full_schema.js
+	cp plugins/eggdm30_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
+	cp plugins/eggdm30_osm_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
+	# Don't include RF files at this time, to speed up archive
+	#mkdir -p $(HOOT_TARNAME)/conf/models/
+	#cp conf/models/BuildingModel.rf $(HOOT_TARNAME)/conf/models/BuildingModel.rf
+	#cp conf/models/HighwayModel.rf $(HOOT_TARNAME)/conf/models/HighwayModel.rf
+	#cp conf/models/PoiModel.rf $(HOOT_TARNAME)/conf/models/PoiModel.rf
+	# Create the version file
+	echo $(HOOT_VERSION) > $(HOOT_TARNAME)/version
+	# tar the file and zip it
+	tar rf $(HOOT_TARNAME).tar $(HOOT_TARNAME)/*
+	rm -rf $(HOOT_TARNAME)
+	gzip -9 $(HOOT_TARNAME).tar
+
+LocalConfig.pri:
+	cp LocalConfig.pri.orig LocalConfig.pri
+
+Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
+	# suppress the harmless warning about generated HootSwig.cxx
+	# All the true craziness is so we use the qmake return code rather than
+	# the grep code.
+	qmake-qt4 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	  || true \
+	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
+
+tmp/schema.dot: qt-make
+	HootTest --single hoot::OsmSchemaTest
+
+tmp/schema.png: tmp/schema.dot
+	neato -Tpng -Gsize=50,50\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gconcentrate=true -Gdpi=50 -Goverlap=false -Elen=3 -o tmp/schema.png tmp/schema.dot
+
+# Code Coverage
+
+IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\* \*core/proto\*
+
+# Passing the --quiet switch to lcov when -s is present is causing errors, so writing out to a log every time instead.
+
+coverage/core/core/index.html:
+	echo "Generating core code coverage report..."
+	mkdir -p coverage/core/core
+	rm -f coverage/core/core/log
+	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file coverage/core/core/Core.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov -r coverage/core/core/Core.info $(IGNORED) \*tbs/src\* -o coverage/core/core/CoreTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/core/CoreTrimmed.info --output-directory coverage/core/core/ 2>&1 | grep -v -F "geninfo" >> coverage/core/core/log
+
+coverage/core/tbs/index.html:
+	echo "Generating core tbs code coverage report..."
+	mkdir -p coverage/core/tbs
+	rm -f coverage/core/tbs/log
+	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file coverage/core/tbs/Tbs.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
+	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
+	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
+
+core-rnd-coverage:
+ifeq ($(BUILD_RND),rnd)
+	echo "Generating core rnd code coverage report..."
+	mkdir -p coverage/core/rnd
+	rm -f coverage/core/rnd/log
+	lcov --capture --ignore-errors source -d hoot-rnd/tmp/debug -b hoot-rnd/ --output-file coverage/core/rnd/Rnd.info 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
+	lcov -r coverage/core/rnd/Rnd.info $(IGNORED) -o coverage/core/rnd/RndTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
+	genhtml coverage/core/rnd/RndTrimmed.info --output-directory coverage/core/rnd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
+endif
+
+core-coverage: coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html core-rnd-coverage
+
+coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html core-rnd-coverage
+
+conf/dictionary/WordsAbridged.sqlite: conf/dictionary/WordsAbridged.sqlite.gz
+	gunzip -c $^ > $@
+
+conf/dictionary/words.sqlite: conf/dictionary/words1.sqlite
+	rm -f conf/dictionary/words.sqlite
+	[ -e $^ ] && ln -s words1.sqlite conf/dictionary/words.sqlite
+
+# If you create a new words.sqlite please just increment the number rather than
+# replacing the old file. This way we can maintain the history.
+conf/dictionary/words1.sqlite:
+	([ -e /tmp/words1.sqlite.bz2 ] && \
+	 test "`sha1sum /tmp/words1.sqlite.bz2`" == 'cdf47302fec4c8ec6c576849ae877feb1a9cf220  /tmp/words1.sqlite.bz2' && \
+	 bzcat /tmp/words1.sqlite.bz2 > conf/dictionary/words1.sqlite) || \
+	(wget --quiet -N -P /tmp/ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2 && \
+	 bzcat /tmp/words1.sqlite.bz2 > conf/dictionary/words1.sqlite) || \
+	echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
+
+hoot-services/src/main/resources/language-translation/langdetect-183.bin:
+	if [ ! -f $@ ]; then echo "Downloading OpenNLP language detection model..."; wget --quiet -O $@ https://s3.amazonaws.com/hoot-rpms/support-files/langdetect-183.bin; fi 
+	test "`sha1sum hoot-services/src/main/resources/language-translation/langdetect-183.bin`" == 'be8bf56c1b8cb1ecddecc3009c7a3020f149987f  hoot-services/src/main/resources/language-translation/langdetect-183.bin' || echo "OpenNLP language detection not available due to failure downloading model."
+
+bin/HootEnv.sh: scripts/HootEnv.sh
+	mkdir -p bin
+	cp scripts/HootEnv.sh bin/HootEnv.sh
+
+bin/HootTest: scripts/HootTest.sh bin/HootEnv.sh
+	mkdir -p bin
+	cp scripts/HootTest.sh bin/HootTest
+
+bin/hoot: scripts/RunHoot.sh bin/HootEnv.sh
+	mkdir -p bin
+	cp scripts/RunHoot.sh bin/hoot
+	chmod +x bin/hoot
+
+eclipse:
+ifeq ($(BUILD_SERVICES),services)
+	scripts/maven/mvn-build $(MVN_QUIET) eclipse
+endif
+
+vagrant:
+	# Check the Vagrant.marker file data to see if provisioning needs to run
+	if [ -f Vagrant.marker ]; then if [ Vagrant.marker -ot VagrantProvision.sh ]; then echo; echo; echo "New dependencies have been added to Vagrant!"; echo "Please exit the vm and run 'vagrant provision' or"; echo "run 'touch Vagrant.marker' and re-run 'make' to continue."; echo; echo; false; fi fi

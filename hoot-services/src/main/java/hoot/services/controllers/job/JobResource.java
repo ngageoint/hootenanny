@@ -22,12 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
-import java.util.List;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -35,6 +34,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -46,7 +46,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.job.JobStatus;
 import hoot.services.job.JobStatusManager;
-import hoot.services.models.db.CommandStatus;
 
 
 @Controller
@@ -65,7 +64,7 @@ public class JobResource {
      * This service allows for tracking the status of Hootenanny jobs launched by other web services.
      *
      * GET hoot-services/job/status/{Job Id}
-     * 
+     *
      * @param jobId
      *            ID of the job to track.
      *
@@ -77,26 +76,24 @@ public class JobResource {
     @GET
     @Path("/status/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public JobStatusResponse getJobStatus(@PathParam("jobId") String jobId,
-                                          @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
-        JobStatusResponse response = new JobStatusResponse();
+    public JobStatusResponse getJobStatus(@Context HttpServletRequest request, @PathParam("jobId") String jobId,
+            @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
+        // Users user = (Users)
+        // request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        JobStatusResponse response = null;
 
         try {
             hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
 
             if (jobStatus != null) {
-                response.setJobId(jobId);
-                response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());
-                response.setStatusDetail(jobStatus.getStatusDetail());
-                response.setPercentComplete(jobStatus.getPercentComplete());
-                response.setLastText(jobStatus.getStatusDetail());
-
-                if (includeCommandDetail) {
-                    List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId);
-                    response.setCommandDetail(commandDetail);
-                }
+            	if(includeCommandDetail) {
+            		response = jobStatus.toJobStatusResponse(this.jobStatusManager);
+            	} else {
+            		response = jobStatus.toJobStatusResponse();
+            	}
             }
             else {
+            	response = new JobStatusResponse();
                 response.setJobId(jobId);
                 response.setStatus(JobStatus.UNKNOWN.toString());
             }

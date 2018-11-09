@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LevenshteinDistance.h"
 
 // Hoot
-#include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
@@ -76,12 +75,5 @@ void LevenshteinDistance::setConfiguration(const Settings& conf)
 {
   setAlpha(ConfigOptions(conf).getLevenshteinDistanceAlpha());
 }
-
-QString LevenshteinDistance::toEnglish(const QString& s)
-{
-  QString result = Translator::getInstance().toEnglish(s);
-  return result;
-}
-
 
 }

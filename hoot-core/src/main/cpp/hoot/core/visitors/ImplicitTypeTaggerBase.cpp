@@ -32,9 +32,9 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSet>
@@ -53,7 +53,7 @@ _numFeaturesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
-_translateAllNamesToEnglish(true),
+_translateNamesToEnglish(true),
 _matchEndOfNameSingleTokenFirst(true),
 _additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
 _maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
@@ -72,7 +72,7 @@ _numFeaturesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
-_translateAllNamesToEnglish(true),
+_translateNamesToEnglish(true),
 _matchEndOfNameSingleTokenFirst(true),
 _additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
 _maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
@@ -93,7 +93,7 @@ ImplicitTypeTaggerBase::~ImplicitTypeTaggerBase()
 
   LOG_INFO(
     "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags to " <<
-    StringUtils::formatLargeNumber(_numFeaturesModified) << " features / " <<
+    StringUtils::formatLargeNumber(_numFeaturesModified) << " / " <<
     StringUtils::formatLargeNumber(_numFeaturesParsed)  << " total features.");
   LOG_INFO(
     StringUtils::formatLargeNumber(_numFeaturesInvolvedInMultipleRules) <<
@@ -116,13 +116,23 @@ void ImplicitTypeTaggerBase::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
-  setTranslateAllNamesToEnglish(confOptions.getImplicitTaggingTranslateAllNamesToEnglish());
+  setTranslateNamesToEnglish(confOptions.getImplicitTaggingTranslateNamesToEnglish());
   setMatchEndOfNameSingleTokenFirst(confOptions.getImplicitTaggerMatchEndOfNameSingleTokenFirst());
   setAllowTaggingSpecificFeatures(confOptions.getImplicitTaggerAllowTaggingSpecificEntities());
 
   _ruleReader->setAddTopTagOnly(confOptions.getImplicitTaggerAddTopTagOnly());
   _ruleReader->setAllowWordsInvolvedInMultipleRules(
     confOptions.getImplicitTaggerAllowWordsInvolvedInMultipleRules());
+
+  if (_translateNamesToEnglish)
+  {
+    _translator.reset(
+      Factory::getInstance().constructObject<ToEnglishTranslator>(
+        confOptions.getLanguageTranslationTranslator()));
+    _translator->setConfiguration(conf);
+    _translator->setSourceLanguages(confOptions.getLanguageTranslationSourceLanguages());
+    _translator->setId("ImplicitTypeTaggerBase");
+  }
 }
 
 QStringList ImplicitTypeTaggerBase::_getNames(const Tags& tags) const
@@ -155,12 +165,17 @@ bool caseInsensitiveLessThan(const QString s1, const QString s2)
 
 void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 {
+  if (_translateNamesToEnglish && !_translator.get())
+  {
+    throw HootException("To English translation enabled but no translator was specified.");
+  }
+
   if (_visitElement(e))
   {
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
 
-    //TODO: this is temp for testing until it gets fixed with a translation
+    //TODO: this is temp for testing until it gets fixed with a schema translation
     if (e->getTags().get("gnis:feature_type").toLower() == "mine")
     {
       LOG_TRACE("Using custom tagging rule...");
@@ -298,7 +313,8 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
     if (_numFeaturesParsed % (_statusUpdateInterval / 10) == 0)
     {
       PROGRESS_INFO(
-        "Parsed " << StringUtils::formatLargeNumber(_numFeaturesParsed) << " features from input.");
+        "Parsed " << StringUtils::formatLargeNumber(_numFeaturesParsed) <<
+        " features from input for type tagging.");
     }
   }
 }
@@ -351,9 +367,9 @@ QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)
   {
     LOG_VART("Removed former name tag.");
   }
-  if (_translateAllNamesToEnglish)
+  if (_translateNamesToEnglish)
   {
-    names = ImplicitTagUtils::translateNamesToEnglish(names, tags);
+    names = ImplicitTagUtils::translateNamesToEnglish(names, tags, _translator);
   }
   LOG_VART(names);
   QStringList filteredNames;
@@ -396,12 +412,15 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
   for (int i = 0; i < nameTokensList.size() - 1; i++)
   {
     QString nameToken = nameTokensList.at(i) + " " + nameTokensList.at(i + 1);
-    if (_translateAllNamesToEnglish)
+    if (_translateNamesToEnglish)
     {
       //TODO: can this be combined with the ImplicitTagUtils translate method?
-      const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-      nameToken = englishNameToken;
+      const QString englishNameToken = _translator->translate(nameToken);
       LOG_VART(englishNameToken);
+      if (!englishNameToken.isEmpty())
+      {
+        nameToken = englishNameToken;
+      }
     }
     nameTokensListGroupSizeTwo.append(nameToken);
   }
@@ -474,7 +493,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
 
   LOG_TRACE("Attempting match with token group size of 1...");
 
-  if (_translateAllNamesToEnglish)
+  if (_translateNamesToEnglish)
   {
     QStringList translatedNameTokens;
     for (int i = 0; i < nameTokensList.size(); i++)
@@ -482,9 +501,16 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
       const QString word = nameTokensList.at(i);
       LOG_VART(word);
       //TODO: can this be combined with the ImplicitTagUtils translate method?
-      const QString englishNameToken = Translator::getInstance().toEnglish(word);
+      const QString englishNameToken = _translator->translate(word);
       LOG_VART(englishNameToken);
-      translatedNameTokens.append(englishNameToken);
+      if (!englishNameToken.isEmpty())
+      {
+        translatedNameTokens.append(englishNameToken);
+      }
+      else
+      {
+        translatedNameTokens.append(word);
+      }
     }
     nameTokensList = translatedNameTokens;
   }
@@ -696,7 +722,7 @@ void ImplicitTypeTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& t
 
 QStringList ImplicitTypeTaggerBase::_getNameTokens(const QStringList names) const
 {
-  if (_translateAllNamesToEnglish)
+  if (_translateNamesToEnglish)
   {
     assert(names.size() == 1);
   }

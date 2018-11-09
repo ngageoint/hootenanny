@@ -60,6 +60,9 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString path,
 {
   LOG_DEBUG("Writing changeset to " << path);
 
+  LOG_VARD(path);
+  LOG_VARD(changesetProvider->hasMoreChanges());
+
   _changesetBounds.init();
 
   _outputSql.setFileName(path);

@@ -1,0 +1,86 @@
+== languages
+
+The +languages+ command displays information about Hootenanny language translation/detection capabilities.  
+
+The command makes use of configuration options named language.translation.*, requires that both the Hootenanny Web Services the Hootenanny 
+RND libraries be enabled, and requires that you be logged into the Hootenanny Web Services.  
+
+All uses of the +languages+ command require the following configuration options to be populated: 
+* hoot.services.auth.user.name
+* hoot.services.auth.access.token
+* hoot.services.auth.access.token.secret 
+
+For more information on logging into the web services, see the 'login' command documentation.  Those options are omitted from the 
+following command examples.
+
+Only one of the following options can be passed to the command:
+
+* +--detectable+    - Prints all spoken languages that Hootenanny can detect and the detectors that can detect them
+* +--detectors+     - Prints all available language detector implementations for the translation service
+* +--translatable+  - Prints all spoken languages that Hootenanny translate from to English and the translators that can translate them
+* +--translators+   - Prints all available language translator implementations for the translation service
+
+=== Detectors
+
+The +--detectors+ option prints out all available language detectors that can be used with the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+languages --detectors
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot languages --detectors
+--------------------------------------
+
+=== Translators
+
+The +--translators+ option prints out all available language translators that can be used with the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+languages --translators
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot languages --translators
+--------------------------------------
+
+=== Detectable Languages
+
+The +--detectable+ option prints out spoken languages which Hootenanny can detect when using the Hootenanny web services.
+
+==== Usage
+
+--------------------------------------
+languages --detectable
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot languages --detectable
+--------------------------------------
+
+=== Translatable Languages
+
+The +--translatable+ option prints out spoken languages which Hootenanny can translate from to English when using the Hootenanny web 
+services.
+
+==== Usage
+
+--------------------------------------
+languages --translatable
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot languages --translatable
+--------------------------------------

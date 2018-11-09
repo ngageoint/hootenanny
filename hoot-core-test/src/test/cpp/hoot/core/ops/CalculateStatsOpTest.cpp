@@ -433,7 +433,7 @@ private:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.setUseStatusFromFile(true);
+    reader.setUseFileStatus(true);
     reader.setUseDataSourceIds(true);
     reader.read(inputFile, map);
 

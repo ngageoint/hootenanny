@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
 
 
 /**
@@ -62,8 +62,8 @@ public final class GeoUtils {
      * @return tile integer
      */
     public static long tileForPoint(double latitude,double longitude) {
-        int lonInt = (int) MathUtils.round((((longitude + 180.0) * 65535.0) / 360.0), 0);
-        int latInt = (int) MathUtils.round((((latitude + 90.0) * 65535.0) / 180.0), 0);
+        int lonInt = (int) Precision.round((((longitude + 180.0) * 65535.0) / 360.0), 0);
+        int latInt = (int) Precision.round((((latitude + 90.0) * 65535.0) / 180.0), 0);
 
         // use a long here, because java doesn't have unsigned int
         long tileUnsigned = 0;

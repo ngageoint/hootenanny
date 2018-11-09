@@ -1766,13 +1766,13 @@ ggdm30.rules = {
 
     // DKS - Daymark Shape
     // ['DKS','-999999',undefined,undefined], // No Information
-    ['DKS','1','daymark_shape','rectangle'], // Rectangle
-    ['DKS','2','daymark_shape','square'], // Square
-    ['DKS','3','daymark_shape','triangle'], // Triangle
-    ['DKS','4','daymark_shape','cage'], // Cage
-    ['DKS','5','daymark_shape','diamond'], // Diamond
-    ['DKS','6','daymark_shape','circular'], // Circular
-    ['DKS','7','daymark_shape','trapezoidal'], // Trapezoidal
+    ['DKS','1','seamark:daymark:shape','rectangle'], // Rectangle
+    ['DKS','2','seamark:daymark:shape','square'], // Square
+    ['DKS','3','seamark:daymark:shape','triangle'], // Triangle
+    ['DKS','4','seamark:daymark:shape','cage'], // Cage
+    ['DKS','5','seamark:daymark:shape','diamond'], // Diamond
+    ['DKS','6','seamark:daymark:shape','circle'], // Circular
+    ['DKS','7','seamark:daymark:shape','trapezium'], // Trapezoidal
 
     // DMBC - Undergrowth Density <interval closure>
     ['DMBC','2','undergrowth:density:closure','open_interval'], // Open Interval
@@ -2099,7 +2099,7 @@ ggdm30.rules = {
     ['FFN','363','use','water_distribution'], // Water Distribution
     ['FFN','370','use','sewerage'], // Sewerage
     ['FFN','372','use','sewerage_screening'], // Sewerage Screening
-    ['FFN','382','amenity','toilets'], // Restroom
+    ['FFN','382','toilets','yes'], // Restroom
     ['FFN','383','use','waste_treatment_and_disposal'], // Waste Treatment and Disposal
     ['FFN','385','use','materials_recovery'], // Materials Recovery
     ['FFN','440','use','commercial'], // Commerce

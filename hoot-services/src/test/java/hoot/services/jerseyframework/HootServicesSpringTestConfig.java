@@ -29,7 +29,7 @@ package hoot.services.jerseyframework;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -41,6 +41,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.security.oauth.consumer.BaseProtectedResourceDetails;
+import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
+import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
+import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -55,7 +59,7 @@ import hoot.services.job.JobProcessorImplStub;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"hoot.services"},
-               excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE))
+excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE))
 @PropertySource("classpath:db/db.properties")
 @ActiveProfiles("test")
 public class HootServicesSpringTestConfig {
@@ -75,15 +79,16 @@ public class HootServicesSpringTestConfig {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://" + env.getProperty("HOOTAPI_DB_HOST") + ":" +
-                                                 env.getProperty("HOOTAPI_DB_PORT") + "/" +
-                                                 env.getProperty("HOOTAPI_DB_NAME"));
+                env.getProperty("HOOTAPI_DB_PORT") + "/" +
+                env.getProperty("HOOTAPI_DB_NAME"));
         dataSource.setUsername(env.getProperty("HOOTAPI_DB_USER"));
         dataSource.setPassword(env.getProperty("HOOTAPI_DB_PASSWORD"));
         dataSource.setInitialSize(5);
-        dataSource.setMaxActive(10);
+        dataSource.setMaxTotal(10);
         dataSource.setMaxIdle(2);
         dataSource.setDefaultAutoCommit(false);
-        dataSource.setRemoveAbandoned(true);
+        dataSource.setRemoveAbandonedOnBorrow(true);
+        dataSource.setRemoveAbandonedOnMaintenance(true);
         dataSource.setLogAbandoned(true);
         return dataSource;
     }
@@ -111,5 +116,19 @@ public class HootServicesSpringTestConfig {
     @Bean
     public ExternalCommandManager externalCommandManager() {
         return new ExternalCommandManagerImplStub();
+    }
+
+    @Primary
+    @Bean
+    public OAuthRestTemplate oauthRestTemplate() {
+        BaseProtectedResourceDetails r = new BaseProtectedResourceDetails();
+        OAuthRestTemplate restTemplate = new OAuthRestTemplate(r);
+        return restTemplate;
+    }
+
+    @Primary
+    @Bean
+    public OAuthConsumerTokenServices tokenServices() {
+        return new HttpSessionBasedTokenServices();
     }
 }

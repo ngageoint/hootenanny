@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo;
 
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -87,10 +87,10 @@ public class BoundingBox {
             BoundingBox objBounds = (BoundingBox) obj;
 
             // allowing for a small amount of error here
-            return MathUtils.equals(this.maxLat, objBounds.getMaxLat(), BOUNDS_ERROR)
-                    && MathUtils.equals(this.maxLon, objBounds.getMaxLon(), BOUNDS_ERROR)
-                    && MathUtils.equals(this.minLat, objBounds.getMinLat(), BOUNDS_ERROR)
-                    && MathUtils.equals(this.minLon, objBounds.getMinLon(), BOUNDS_ERROR);
+            return Precision.equals(this.maxLat, objBounds.getMaxLat(), BOUNDS_ERROR)
+                    && Precision.equals(this.maxLon, objBounds.getMaxLon(), BOUNDS_ERROR)
+                    && Precision.equals(this.minLat, objBounds.getMinLat(), BOUNDS_ERROR)
+                    && Precision.equals(this.minLon, objBounds.getMinLon(), BOUNDS_ERROR);
         }
         else {
             return false;

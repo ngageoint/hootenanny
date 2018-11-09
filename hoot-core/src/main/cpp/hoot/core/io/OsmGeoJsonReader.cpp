@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -43,11 +44,6 @@
 // Qt
 #include <QTextStream>
 #include <QTextCodec>
-#include <QEventLoop>
-#include <QTextStream>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkAccessManager>
 
 // Standard
 #include <string>
@@ -103,36 +99,20 @@ bool OsmGeoJsonReader::isSupported(QString url)
 void OsmGeoJsonReader::read(OsmMapPtr map)
 {
   _map = map;
-  QString jsonStr;
   if (_isFile)
   {
     QTextStream instream(&_file);
-    jsonStr = instream.readAll();
+    _results.append(instream.readAll());
   }
   else
+    _readFromHttp();
+  //  Process all of the result strings
+  for (int i = 0; i < _results.size(); ++i)
   {
-    //  Do HTTP GET request
-    boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
-    QNetworkRequest request(_url);
-    boost::shared_ptr<QNetworkReply> pReply(pNAM->get(request));
-
-    //  Wait for finished signal from reply object
-    QEventLoop loop;
-    QObject::connect(pReply.get(), SIGNAL(finished()), &loop, SLOT(quit()));
-    loop.exec();
-
-    //  Check error status on our reply
-    if (QNetworkReply::NoError != pReply->error())
-    {
-      QString errMsg = pReply->errorString();
-      throw HootException(QString("Network error for GET request (%1): %2").arg(_url.toString()).arg(errMsg));
-    }
-
-    QByteArray data = pReply->readAll();
-    jsonStr = QString::fromAscii(data.data());
+    // This will throw a hoot exception if JSON is invalid
+    _loadJSON(_results[i]);
+    _parseGeoJson();
   }
-  _loadJSON(jsonStr);
-  _parseGeoJson();
 }
 
 OsmMapPtr OsmGeoJsonReader::loadFromString(QString jsonStr)
@@ -158,7 +138,6 @@ OsmMapPtr OsmGeoJsonReader::loadFromFile(QString path)
   _parseGeoJson();
   return _map;
 }
-
 
 void OsmGeoJsonReader::_parseGeoJson()
 {
@@ -273,7 +252,17 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
   //  Get info we need to construct our node
   long node_id = -1;
   if (_useDataSourceIds)
-    node_id = boost::lexical_cast<long>(id);
+  {
+    //  Try to cast the ID to a long, if unsuccessful create a new ID
+    try
+    {
+      node_id = boost::lexical_cast<long>(id);
+    }
+    catch (const boost::bad_lexical_cast&)
+    {
+      node_id = _map->createNextNodeId();
+    }
+  }
   else
     node_id = _map->createNextNodeId();
   //  Parse the geometry
@@ -310,7 +299,17 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   //  Get info we need to construct our way
   long way_id = -1;
   if (_useDataSourceIds)
-    way_id = boost::lexical_cast<long>(id);
+  {
+    //  Try to cast the ID to a long, if unsuccessful create a new ID
+    try
+    {
+      way_id = boost::lexical_cast<long>(id);
+    }
+    catch (const boost::bad_lexical_cast&)
+    {
+      way_id = _map->createNextWayId();
+    }
+  }
   else
     way_id = _map->createNextWayId();
   //  Construct Way
@@ -344,7 +343,17 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   //  Get info we need to construct our relation
   long relation_id = -1;
   if (_useDataSourceIds)
-    relation_id = boost::lexical_cast<long>(id);
+  {
+    //  Try to cast the ID to a long, if unsuccessful create a new ID
+    try
+    {
+      relation_id = boost::lexical_cast<long>(id);
+    }
+    catch (const boost::bad_lexical_cast&)
+    {
+      relation_id = _map->createNextRelationId();
+    }
+  }
   else
     relation_id = _map->createNextRelationId();
   //  Create an empty set of properties

@@ -33,16 +33,14 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-#include "extractors/PoiPolygonTypeScoreExtractor.h"
-#include "extractors/PoiPolygonNameScoreExtractor.h"
+#include <hoot/core/util/Factory.h>
 #include "PoiPolygonDistance.h"
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
-#include "PoiPolygonReviewReducer.h"
 #include "PoiPolygonAdvancedMatcher.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
 #include "extractors/PoiPolygonDistanceExtractor.h"
 #include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
 #include "PoiPolygonTagIgnoreListReader.h"
+#include "PoiPolygonReviewReducer.h"
 
 using namespace std;
 
@@ -50,6 +48,19 @@ namespace hoot
 {
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
+boost::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
+
+long PoiPolygonMatch::matchesProcessed = 0;
+long PoiPolygonMatch::distanceMatches = 0;
+long PoiPolygonMatch::typeMatches = 0;
+long PoiPolygonMatch::noTypeFoundCount = 0;
+long PoiPolygonMatch::nameMatches = 0;
+long PoiPolygonMatch::namesProcessed = 0;
+long PoiPolygonMatch::nameMatchCandidates = 0;
+long PoiPolygonMatch::addressesProcessed = 0;
+long PoiPolygonMatch::addressMatches = 0;
+long PoiPolygonMatch::addressMatchCandidates = 0;
+long PoiPolygonMatch::convexPolyDistanceMatches = 0;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf,
@@ -70,6 +81,7 @@ _reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
 _nameScoreThreshold(-1.0),
 _addressScore(-1.0),
+_addressMatchEnabled(true),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _enableAdvancedMatching(false),
@@ -192,6 +204,14 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   setReviewEvidenceThreshold(reviewEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
+
+  _addressMatchEnabled = config.getPoiPolygonAddressMatchEnabled();
+  if (_addressMatchEnabled)
+  {
+    _addressScorer.setConfiguration(conf);
+  }
+  _typeScorer.setConfiguration(conf);
+  _nameScorer.setConfiguration(conf);
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -311,57 +331,6 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
   }
 
   QStringList reviewTypeIgnoreList;
-//  reviewTypeIgnoreList.append("leisure=park");
-//  reviewTypeIgnoreList.append("leisure=playground");
-//  reviewTypeIgnoreList.append("amenity=university");
-//  reviewTypeIgnoreList.append("building=train_station");
-//  reviewTypeIgnoreList.append("amenity=parking");
-//  reviewTypeIgnoreList.append("amenity=bicycle_parking");
-//  reviewTypeIgnoreList.append("building=retail");
-//  reviewTypeIgnoreList.append("building=residential");
-//  reviewTypeIgnoreList.append("building=station");
-//  reviewTypeIgnoreList.append("shop=department_store");
-//  reviewTypeIgnoreList.append("building=terrace");
-//  reviewTypeIgnoreList.append("landuse=construction");
-//  reviewTypeIgnoreList.append("railway=station");
-//  reviewTypeIgnoreList.append("public_transport=station");
-//  reviewTypeIgnoreList.append("tourism=hotel");
-//  reviewTypeIgnoreList.append("building=office");
-//  reviewTypeIgnoreList.append("landuse=retail");
-//  reviewTypeIgnoreList.append("sport=*");
-//  reviewTypeIgnoreList.append("amenity=school");
-//  reviewTypeIgnoreList.append("man_made=water_works");
-//  reviewTypeIgnoreList.append("amenity=bus_station");
-//  reviewTypeIgnoreList.append("amenity=hospital");
-//  reviewTypeIgnoreList.append("building=apartments");
-//  reviewTypeIgnoreList.append("building=civic");
-//  reviewTypeIgnoreList.append("building=commercial");
-//  reviewTypeIgnoreList.append("building=public");
-//  reviewTypeIgnoreList.append("building=retail");
-//  reviewTypeIgnoreList.append("landuse=commercial");
-  //reviewTypeIgnoreList.append("landuse=forest");
-//  reviewTypeIgnoreList.append("landuse=industrial");
-//  reviewTypeIgnoreList.append("landuse=residential");
-//  reviewTypeIgnoreList.append("landuse=recreation_ground");
-//  reviewTypeIgnoreList.append("leisure=common");
-//  reviewTypeIgnoreList.append("leisure=garden");
-//  reviewTypeIgnoreList.append("leisure=golf_course");
-//  reviewTypeIgnoreList.append("natural=water");
-//  reviewTypeIgnoreList.append("place=neighbourhood");
-//  reviewTypeIgnoreList.append("shop=mall");
-//  reviewTypeIgnoreList.append("shop=department_store");
-//  reviewTypeIgnoreList.append("tourism=attraction");
-//  reviewTypeIgnoreList.append("tourism=zoo");
-//  reviewTypeIgnoreList.append("tourism=museum");
-//  reviewTypeIgnoreList.append("building=roof");
-//  reviewTypeIgnoreList.append("building=school");
-//  reviewTypeIgnoreList.append("amenity=arts_centre");
-//  reviewTypeIgnoreList.append("amenity=restaurant");
-//  reviewTypeIgnoreList.append("building=house");
-//  reviewTypeIgnoreList.append("tourism=camp_site");
-//  reviewTypeIgnoreList.append("landuse=quarry");
-  //reviewTypeIgnoreList.append("landuse=forest_reserve");
-
   if (_poi->getTags().hasAnyKvp(reviewTypeIgnoreList) ||
       _poly->getTags().hasAnyKvp(reviewTypeIgnoreList))
   {
@@ -379,6 +348,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //    e1->getElementType() == ElementType::Relation ||
 //    e2->getElementType() == ElementType::Relation;
 
+  matchesProcessed++;
   _explainText = "";
   _class.setMiss();
 
@@ -408,7 +378,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   //no point in trying to reduce reviews if we're still at a miss here
   if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
-    //TODO: this constructor has gotten a little out of hand
+    //this constructor has gotten a little out of hand
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
@@ -543,29 +513,8 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_distance);
   LOG_VART(_closeDistanceMatch);
 
+  //Tried weighting distance less when both POI's had specific types, but it hasn't helped so far.
   return _distance <= _matchDistanceThreshold ? 2u : 0u;
-
-  //The idea here was to weight distance less when both POI's had specific types, but it hasn't
-  //helped so far.
-//  if (_distance > _matchDistanceThreshold)
-//  {
-//    return 0u;
-//  }
-//  else if (_distance <= _matchDistanceThreshold)
-//  {
-//    const bool bothElementsHaveSpecificType =
-//      PoiPolygonTypeScoreExtractor::hasSpecificType(poi) &&
-//      PoiPolygonTypeScoreExtractor::hasSpecificType(poly);
-//    if (bothElementsHaveSpecificType)
-//    {
-//      return 1u;
-//    }
-//    else
-//    {
-//      return 2u;
-//    }
-//  }
-//  return 0u;
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
@@ -576,27 +525,35 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   LOG_VART(alphaShapeDist);
-  return alphaShapeDist <= _matchDistanceThreshold ? 2u : 0u;
+  const bool convexPolyDistMatch = alphaShapeDist <= _matchDistanceThreshold;
+  if (convexPolyDistMatch)
+  {
+    convexPolyDistanceMatches++;
+  }
+  return convexPolyDistMatch ? 2u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  //don't like these static var inits
-  PoiPolygonTypeScoreExtractor::poiBestKvp = "";
-  PoiPolygonTypeScoreExtractor::polyBestKvp = "";
-  PoiPolygonTypeScoreExtractor::failedMatchRequirements.clear();
-  PoiPolygonTypeScoreExtractor typeScorer;
-  typeScorer.setFeatureDistance(_distance);
-  typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
-  _typeScore = typeScorer.extract(*_map, poi, poly);
+  _typeScorer.setFeatureDistance(_distance);
+  _typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
+  _typeScore = _typeScorer.extract(*_map, poi, poly);
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
+  if (typeMatch)
+  {
+    typeMatches++;
+  }
+  if (_typeScorer.getNoTypeFound())
+  {
+    noTypeFoundCount++;
+  }
 
-  if (typeScorer.failedMatchRequirements.size() > 0)
+  if (_typeScorer.getFailedMatchRequirements().size() > 0)
   {
     QString failedMatchTypes;
-    for (int i = 0; i < typeScorer.failedMatchRequirements.size(); i++)
+    for (int i = 0; i < _typeScorer.getFailedMatchRequirements().size(); i++)
     {
-      failedMatchTypes += typeScorer.failedMatchRequirements.at(i) + ", ";
+      failedMatchTypes += _typeScorer.getFailedMatchRequirements().at(i) + ", ";
     }
     failedMatchTypes.chop(2);
 
@@ -612,27 +569,42 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   }
 
   LOG_VART(typeMatch);
-  LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
-  LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
 
   return typeMatch ? 1u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  PoiPolygonNameScoreExtractor nameScorer;
-  nameScorer.setNameScoreThreshold(_nameScoreThreshold);
-  _nameScore = nameScorer.extract(*_map, poi, poly);
+  _nameScorer.setNameScoreThreshold(_nameScoreThreshold);
+  _nameScore = _nameScorer.extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
   LOG_VART(nameMatch);
+  if (nameMatch)
+  {
+    nameMatches++;
+  }
+  namesProcessed += _nameScorer.getNamesProcessed();
+  if (_nameScorer.getMatchAttemptMade())
+  {
+    nameMatchCandidates++;
+  }
   return nameMatch ? 1u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  _addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
+  _addressScore = _addressScorer.extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
   LOG_VART(addressMatch);
+  if (addressMatch)
+  {
+    addressMatches++;
+  }
+  addressesProcessed += _addressScorer.getAddressesProcessed();
+  if (_addressScorer.getMatchAttemptMade())
+  {
+    addressMatchCandidates++;
+  }
   return addressMatch ? 1u : 0u;
 }
 
@@ -646,31 +618,23 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   {
     return 0;
   }
+  distanceMatches++;
 
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
-  //Used to allow for kicking out of the method once enough evidence was accumulated for a match
-  //as an optimization.  However, that results in incomplete scoring information passed to the
-  //review reducer, so have since disabled.
-
   evidence += _getNameEvidence(poi, poly);
-  //if we already have a match, no point in doing more calculations
+  //Used to allow for kicking out of the method once enough evidence was accumulated for a match
+  //as a runtime optimization.  However, that results in incomplete scoring information passed to
+  //the review reducer, so have since disabled.
 //  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
 //  {
 //    return evidence;
 //  }
-
   evidence += _getTypeEvidence(poi, poly);
-//  if (evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
-
-  evidence += _getAddressEvidence(poi, poly);
-//  if (evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
+  if (_addressMatchEnabled)
+  {
+    evidence += _getAddressEvidence(poi, poly);
+  }
 
   //We only want to run this if the previous match distance calculation was too large.
   //Tightening up the requirements for running the convex poly calculation here to improve
@@ -688,18 +652,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       return evidence;
     }
   }
-
-//  if (evidence < _matchEvidenceThreshold)
-//  {
-//    //if poi has field in the name and on a sport field, then match...need a better place to put
-//    //this maybe
-//    if (PoiPolygonNameScoreExtractor::getElementName(poi).toLower().contains("field") &&
-//        PoiPolygonTypeScoreExtractor::isSport(poly))
-//    {
-//      LOG_TRACE("Matching on sport field name.");
-//      evidence = _matchEvidenceThreshold;
-//    }
-//  }
 
   //no point in trying to increase evidence if we're already at a match
   if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)

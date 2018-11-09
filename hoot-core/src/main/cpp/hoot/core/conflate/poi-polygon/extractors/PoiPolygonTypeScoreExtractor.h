@@ -31,6 +31,11 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/schema/OsmSchema.h>
+
+// Qt
+#include <QMultiHash>
 
 namespace hoot
 {
@@ -41,15 +46,6 @@ namespace hoot
 class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
-
-  //hacks to get around constness of extract method
-
-  //best type kvp match for the poi
-  static QString poiBestKvp;
-  //best type kvp match for the poly
-  static QString polyBestKvp;
-  //custom type matching types that failed
-  static QStringList failedMatchRequirements;
 
   static std::string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
@@ -80,16 +76,14 @@ public:
   static bool isParkish(ConstElementPtr element);
   static bool isPlayground(ConstElementPtr element);
   static bool isSport(ConstElementPtr element);
+  static bool isSport(const Tags& tags);
   static bool isRestroom(ConstElementPtr element);
   static bool isParking(ConstElementPtr element);
-
   static bool isSchool(ConstElementPtr element);
   static bool isSpecificSchool(ConstElementPtr element);
   static bool specificSchoolMatch(ConstElementPtr element1, ConstElementPtr element2);
-
   static bool isReligion(ConstElementPtr element);
   static bool isReligion(const Tags& tags);
-
   static bool isRestaurant(ConstElementPtr element);
   static bool isRestaurant(const Tags& tags);
 
@@ -123,18 +117,54 @@ public:
   virtual QString getDescription() const
   { return "Scores element type similarity for POI/Polygon conflation"; }
 
+  QStringList getFailedMatchRequirements() const { return _failedMatchRequirements; }
+  bool getNoTypeFound() const { return _noTypeFound; }
+
 private:
 
   double _typeScoreThreshold;
   static QSet<QString> _allTagKeys;
   double _featureDistance;
   bool _printMatchDistanceTruth;
+  static QMap<QString, QSet<QString>> _categoriesToSchemaTagValues;
+
+  //when enabled, will scan through all tags and, for any tag keys recognized in the schema, will
+  //attempt to translate their values to English if not determined already to be in English
+  bool _translateTagValuesToEnglish;
+  // This translator is static due to the fact this class gets init'd many times by
+  // PoiPolygonMatchCreator via PoiPolygonMatch.  Constructing it from a factory for every
+  // instantiation causes performance to suffer.  Arguably, it could be made a static variable on
+  // PoiPolygonMatch and then set on each score extractor individually.  However, doing that won't
+  // allow you to see the the final statistics printed out individually by translators, like
+  // HootServicesTranslatorClient.
+  static boost::shared_ptr<ToEnglishTranslator> _translator;
+  //maps an OSM kvp to multiple possible strings such a feature's name might contain
+  static QMultiHash<QString, QString> _typeToNames;
+
+  //best type kvp match for the poi
+  mutable QString _poiBestKvp;
+  //best type kvp match for the poly
+  mutable QString _polyBestKvp;
+  //custom type matching types that failed
+  mutable QStringList _failedMatchRequirements;
+  mutable bool _noTypeFound;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
   bool _failsCuisineMatch(const Tags& t1, const Tags& t2) const;
   bool _failsSportMatch(const Tags& t1, const Tags& t2) const;
   bool _failsReligionMatch(const Tags& t1, const Tags& t2) const;
+
+  void _translateTagValue(const QString tagKey, QString& tagValue) const;
+  static QSet<QString> _getTagValueTokens(const QString category);
+
+  static void _readTypeToNames();
+  static bool _typeHasName(const QString kvp, const QString name);
+  static QString _getMatchingTypeName(const QString kvp, const QString name);
+  static bool _haveMatchingTypeNames(const QString kvp, const QString name1, const QString name2);
+
+  bool _haveConflictingTags(const QString tagKey, const Tags& t1, const Tags& t2, QString& tag1Val,
+                            QString& tag2Val) const;
 };
 
 }

@@ -371,7 +371,7 @@ void ImplicitTagRulesSqliteReader::_queryWords(const QSet<QString>& words,
 void ImplicitTagRulesSqliteReader::_cacheTags(const QSet<QString>& words, const Tags& tags)
 {
   QStringList wordsList = words.toList();
-  Tags* tagsToCache(new Tags(tags));
+  Tags* tagsToCache = new Tags(tags);
   _tagsCache.insert(wordsList.join(";"), tagsToCache);
 }
 

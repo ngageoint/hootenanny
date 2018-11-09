@@ -50,6 +50,8 @@ class FeatureExtractor
 {
 public:
 
+  virtual ~FeatureExtractor() {}
+
   static std::string className() { return "hoot::FeatureExtractor"; }
 
   static double nullValue() { return -999999999; }

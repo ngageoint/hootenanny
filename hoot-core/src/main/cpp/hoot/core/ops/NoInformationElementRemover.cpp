@@ -31,7 +31,6 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/NoInformationCriterion.h>

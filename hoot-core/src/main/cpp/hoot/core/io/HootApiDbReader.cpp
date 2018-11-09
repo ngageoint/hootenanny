@@ -66,13 +66,14 @@ Envelope HootApiDbReader::calculateEnvelope() const
 
 void HootApiDbReader::open(QString urlStr)
 {
-  if (!isSupported(urlStr))
+  _url = urlStr;
+  if (!isSupported(_url))
   {
-    throw HootException("An unsupported URL was passed in to HootApiDbReader: " + urlStr);
+    throw HootException("An unsupported URL was passed in to HootApiDbReader: " + _url);
   }
   initializePartial();
 
-  QUrl url(urlStr);
+  QUrl url(_url);
   QStringList pList = url.path().split("/");
   LOG_DEBUG("Opening database for reader at: " << url.path() << "...");
   bool ok;
@@ -118,10 +119,8 @@ void HootApiDbReader::open(QString urlStr)
 
 NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
-  LOG_TRACE("Converting query result to node...");
-
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
-  LOG_VART(ElementId(ElementType::Node, nodeId));
+  LOG_TRACE("Reading node with ID: " << nodeId);
 
   // Timestamp
   QDateTime dt = resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime();
@@ -155,11 +154,10 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
 
 WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
-  LOG_TRACE("Converting query result to way...");
-
   const long wayId = resultIterator.value(0).toLongLong();
-  const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
-  LOG_VART(ElementId(ElementType::Way, wayId));
+  const long newWayId =
+    _mapElementId(map, ElementId::way(resultIterator.value(0).toLongLong())).getId();
+  LOG_TRACE("Reading way with ID: " << newWayId);
 
   // Timestamp
   QDateTime dt = resultIterator.value(ApiDb::WAYS_TIMESTAMP).toDateTime();
@@ -196,11 +194,9 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
 
 RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map)
 {
-  LOG_TRACE("Converting query result to relation...");
-
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
-  LOG_VART(ElementId(ElementType::Relation, relationId));
+  LOG_TRACE("Reading relation with ID: " << newRelationId);
 
   // Timestamp
   QDateTime dt = resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime();

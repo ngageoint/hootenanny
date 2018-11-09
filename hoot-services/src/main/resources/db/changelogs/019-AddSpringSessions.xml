@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="arni.sumarlidason" id="19"
+		context="default">
+		<comment>Spring Sessions tables for hoot service</comment>
+
+		<createTable tableName="spring_session">
+			<column name="session_id"
+				type="character(36)">
+                <constraints unique="true" primaryKey="true" nullable="false" />
+		</column>
+			<column name="creation_time" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="last_access_time" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_inactive_interval" type="integer">
+				<constraints nullable="false" />
+			</column>
+			<column name="principal_name" type="varchar(100)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+		<createTable tableName="spring_session_attributes">
+			<column name="session_id" type="character(36)">
+				<constraints nullable="false" />
+			</column>
+			<column name="attribute_name" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="attribute_bytes" type="bytea">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addPrimaryKey columnNames="session_id, attribute_name"
+			constraintName="spring_session_attributes_pk"
+			tableName="spring_session_attributes" />
+		<addForeignKeyConstraint
+			baseColumnNames="session_id"
+			baseTableName="spring_session_attributes"
+			constraintName="spring_session_attributes_fk" onDelete="CASCADE"
+			referencedColumnNames="session_id"
+			referencedTableName="spring_session" />
+	</changeSet>
+</databaseChangeLog>

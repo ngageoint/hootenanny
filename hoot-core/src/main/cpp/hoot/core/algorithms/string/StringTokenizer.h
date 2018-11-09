@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef STRINGTOKENIZER_H
@@ -40,15 +40,17 @@ namespace hoot
 class StringTokenizer : public Configurable
 {
 public:
+
   StringTokenizer(QString sepRegex);
 
   StringTokenizer();
 
   void setConfiguration(const Settings& conf);
 
-  QStringList tokenize(QString s) const;
+  QStringList tokenize(const QString s) const;
 
 private:
+
   QRegExp _sep;
   bool _keepNonWords;
   int _minSize;

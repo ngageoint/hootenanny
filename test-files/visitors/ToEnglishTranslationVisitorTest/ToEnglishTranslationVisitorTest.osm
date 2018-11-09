@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?><osm version="0.6" generator="Overpass API 0.7.55.4 3079d8ea">
+<meta osm_base="2018-08-01T17:38:03Z"/>
+  <node id="5791509354" lat="48.7831809" lon="9.1823960">
+    <tag k="name" v="wie alt bist du"/>
+    <tag k="name:en" v="how old are you"/>
+    <tag k="alt_name" v="wie alt bist du"/>
+  </node>
+  <node id="5794174454" lat="48.8023512" lon="9.7977350">
+    <tag k="name" v="wie heissen sie"/>
+  </node>
+  <node id="5801935555" lat="48.1400416" lon="11.5303757">
+    <tag k="name" v="buenos noches"/>
+    <tag k="name:en" v="good night"/>
+  </node>
+  <node id="5801935553" lat="48.1400421" lon="11.5303761">
+    <tag k="name" v="computer store"/>
+  </node>
+</osm>

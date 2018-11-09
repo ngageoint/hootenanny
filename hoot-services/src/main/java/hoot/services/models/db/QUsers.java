@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,20 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.db;
 
-import static com.querydsl.core.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
-import com.querydsl.core.types.dsl.*;
-
-import com.querydsl.core.types.PathMetadata;
-import javax.annotation.Generated;
-import com.querydsl.core.types.Path;
-
-import com.querydsl.sql.ColumnMetadata;
 import java.sql.Types;
+
+import javax.annotation.Generated;
+
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.PathMetadata;
+import com.querydsl.core.types.dsl.DateTimePath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.ColumnMetadata;
 
 
 
@@ -50,11 +52,21 @@ public class QUsers extends com.querydsl.sql.RelationalPathBase<Users> {
 
     public static final QUsers users = new QUsers("users");
 
-    public final StringPath displayName = createString("displayName");
-
     public final StringPath email = createString("email");
 
+    public final StringPath displayName = createString("displayName");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final StringPath provider_access_key = createString("provider_access_key");
+    public final StringPath provider_access_token = createString("provider_access_token");
+
+    public final DateTimePath<java.sql.Timestamp> hootservices_last_authorize = createDateTime(
+            "hootservices_last_authorize", java.sql.Timestamp.class);
+    public final DateTimePath<java.sql.Timestamp> hootservices_created_at = createDateTime("hootservices_created_at",
+            java.sql.Timestamp.class);
+    public final DateTimePath<java.sql.Timestamp> provider_created_at = createDateTime("provider_created_at",
+            java.sql.Timestamp.class);
 
     public final com.querydsl.sql.PrimaryKey<Users> usersPk = createPrimaryKey(id);
 
@@ -79,10 +91,23 @@ public class QUsers extends com.querydsl.sql.RelationalPathBase<Users> {
     }
 
     public void addMetadata() {
-        addMetadata(displayName, ColumnMetadata.named("display_name").withIndex(3).ofType(Types.VARCHAR).withSize(255).notNull());
         addMetadata(email, ColumnMetadata.named("email").withIndex(1).ofType(Types.VARCHAR).withSize(255).notNull());
         addMetadata(id, ColumnMetadata.named("id").withIndex(2).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(displayName,
+                ColumnMetadata.named("display_name").withIndex(3).ofType(Types.VARCHAR).withSize(255).notNull());
+
+        addMetadata(provider_access_key,
+                ColumnMetadata.named("provider_access_key").withIndex(4).ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(provider_access_token, ColumnMetadata.named("provider_access_token").withIndex(5)
+                .ofType(Types.VARCHAR).withSize(255).notNull());
+        addMetadata(hootservices_last_authorize, ColumnMetadata.named("hootservices_last_authorize").withIndex(6)
+                .ofType(Types.TIMESTAMP).withSize(29).withDigits(6).notNull());
+        addMetadata(hootservices_created_at, ColumnMetadata.named("hootservices_created_at").withIndex(7)
+                .ofType(Types.TIMESTAMP).withSize(29).withDigits(6).notNull());
+        addMetadata(provider_created_at, ColumnMetadata.named("provider_created_at").withIndex(8)
+                .ofType(Types.TIMESTAMP).withSize(29).withDigits(6).notNull());
     }
 
 }
+
 

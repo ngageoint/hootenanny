@@ -1,0 +1,71 @@
+# All languages supported by JoshuaLanguageTranslator
+#
+# https://cwiki.apache.org/confluence/display/JOSHUA
+#
+# Note: no entry for English, since Hootenanny only translates to English and not from it
+# 
+# format: ISO-639-1\tISO-639-2\tname
+#
+# listed alphabetically by ISO-639-1
+#
+# Last updated: 8/8/18
+
+ar	ara	Arabic
+am	afr	Amharic
+az	aze	Azerbaijani
+bg	bul	Bulgarian
+bn	ben	Bengali
+bs	bos	Bosnian
+ca	cat	Catalan
+cs	ces	Czech
+da	dan	Danish
+de	deu	German
+dv	div	Dhivehi
+el	ell	Greek
+es	spa	Spanish
+et	est	Estonian
+eu	eus	Basque
+fa	fas	Persian
+fi	fin	Finnish
+fr	fra	French
+ga	gle	Irish
+gl	glg	Galician
+ha	hau	Hausa
+he	heb	Hebrew
+hi	hin	Hindi
+hr	hrv	Croatian
+hu	hun	Hungarian
+id	ind	Indonesian
+is	isl	Icelandic
+it	ita	Italian
+ka	kat	Georgian
+ku	kur	Kurdish
+lt	lit	Lithuanian
+lv	lav	Latvian
+mg	mlg	Malagasy
+ml	mal	Malayalam
+ms	msa	Malay
+mt	mlt	Maltese
+nl	nld	Dutch
+no	nor	Norwegian
+pl	pol	Polish
+pt	por	Portuguese
+ro	ron	Romanian
+ru	rus	Russian
+sd	snd	Sindhi
+si	sin	Sinhala
+sk	slk	Slovak
+sl	slv	Slovenian
+so	som	Somali
+sq	sqi	Albanian
+sr	srp	Serbian
+sv	swe	Swedish
+sw	swa	Swahili
+ta	tam	Tamil
+te	tel	Telugu
+tg	tgk	Tajik
+tt	tat	Tatar
+ug	uig	Uighur
+uk	ukr	Ukrainian
+ur	urd	Urdu
+vi	vie	Vietnamese

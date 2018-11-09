@@ -27,10 +27,10 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
-#include <hoot/core/io/TestOsmChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/TestOsmChangesetProvider.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot

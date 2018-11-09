@@ -69,7 +69,7 @@ HootApiDbBulkInserter::~HootApiDbBulkInserter()
 
 bool HootApiDbBulkInserter::isSupported(QString urlStr)
 {
-  LOG_VARD(urlStr);
+  LOG_VART(urlStr);
   QUrl url(urlStr);
   return _database.isSupported(url) && _copyBulkInsertActivated;
 }

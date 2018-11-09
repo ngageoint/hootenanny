@@ -85,6 +85,13 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== address.tag.keys.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/addressTagKeys`
+
+Flat file containing tag keys that make up feature address components.
+
 === angle.histogram.extractor.bins
 
 * Data Type: int
@@ -299,6 +306,24 @@ If true, changesets derived can issue delete statements for the reference datase
 passed to the changeset deriver).  If false, no delete statements will be issued for the reference
 dataset.
 
+=== changeset.apidb.max.writers
+
+* Data Type: long
+* Default Value: `10`
+
+The maximum number of writers to spawn for writing changesets in parallel to an OSM API database.
+
+=== changeset.apidb.max.size
+
+* Data Type: long
+* Default Value: `1000`
+
+This is the maximum number of elements to write to an OSM API database in a changeset. This value
+is used when splitting a changeset into smaller pieces.
+
+NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
+database can handle in a single changeset.
+
 === changeset.buffer
 
 * Data Type: double
@@ -315,28 +340,13 @@ derivation time.
 
 The text description that is written to the OSM API database with a changeset.
 
-=== changeset.apidb.max.writers
-
-* Data Type: long
-* Default Value: `10`
-
-The maximum number of writers to spawn for writing changesets in parallel to an OSM API database.
-
-=== changeset.apidb.max.size
-
-* Data Type: long
-* Default Value: `1000`
-
-This is the maximum number of elements to write to an OSM API database in a changeset. This value is used when splitting a changeset into smaller pieces.
-
-NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the database can handle in a single changeset.
-
 === changeset.max.size
 
 * Data Type: long
 * Default Value: `50000`
 
-The maximum allowed element size of an OSM changeset that can be written to an OSM API database in a single changeset.
+The maximum allowed element size of an OSM changeset that can be written to an OSM API database
+in a single changeset.
 
 === changeset.user.id
 
@@ -357,7 +367,7 @@ purposes.
 === circular.error.default.value
 
 * Data Type: double
-* Default Value: `15`
+* Default Value: `15.0`
 
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
@@ -686,6 +696,25 @@ honored by all ElementCriterionConsumers.  Example setting which pass element cr
 ElementCriterionConsumers: remove.elements.visitor.element.criterion,
 set.tag.value.visitor.element.criterion, etc.
 
+=== element.sorter.element.buffer.size
+
+* Data Type: long
+* Default Value: `-1`
+
+The maximum number of elements allowed to be in memory during element sorting.  A value of -1
+indicates no limit.
+
+=== element.sorter.external.temp.format
+
+* Data Type: string
+* Default Value: `pbf`
+
+The OSM format to use for writing sorted temp files during element external sorting.  Valid values
+are 'osm' and 'pbf'.  Using 'pbf' will result in better performance for larger datasets and uses
+the OpenStreetMap default resolution of 100 nanodegrees. 'osm' may be less performant and but allows
+for using the higher Hootenanny internal resolution of .01 nanodegrees (same as used by the
+Hootenanny API database).
+
 === english.words.files
 
 * Data Type: list
@@ -856,6 +885,50 @@ The highway subline matcher to use when determining matching highway sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
+=== hoot.services.auth.access.token
+
+* Data Type: string
+* Default Value: ``
+
+Hootenanny Web Services public access token required by some Hootenanny commands.  Use the
+Hootenanny 'login' command to retrieve access tokens.
+
+=== hoot.services.auth.access.token.secret
+
+* Data Type: string
+* Default Value: ``
+
+Hootenanny Web Services private access token required by some Hootenanny commands.  Use the
+Hootenanny 'login' command to retrieve access tokens.
+
+=== hoot.services.auth.logout.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/logout`
+
+Hootenanny Web Services endpoint for logging out of Hootenanny.
+
+=== hoot.services.auth.request.token.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/request`
+
+Hootenanny Web Services endpoint for retrieving Hootenanny request tokens.
+
+=== hoot.services.auth.user.name
+
+* Data Type: string
+* Default Value: ``
+
+Hootenanny Web Services user name associated with an authenticated login.
+
+=== hoot.services.auth.verify.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/verify`
+
+Hootenanny Web Services endpoint for logging in a user.
+
 === hootapi.db.writer.copy.bulk.insert
 
 * Data Type: bool
@@ -1022,24 +1095,39 @@ The minimum allowed word length when associating word tokens with tags.
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesCustomRuleList`
 
-Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
-when deriving an implicit tags database from POI names.
+Flat file containing tab separated word key/value pairs to use as custom rules when deriving an
+implicit tags database from POI names.
 
 === implicit.tagging.database.deriver.tag.ignore.file
 
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesTagIgnoreList`
 
-Flat file containing key/value pairs, one per line, to ignore when deriving an implicit tags
-database from POI names.  Use 'key=*' to ignore all tags for a given key.
+Flat file containing key/value pairs to ignore when deriving an implicit tags database from POI
+names.  Use 'key=*' to ignore all tags for a given key.
+
+=== implicit.tagging.database.deriver.translate.names.to.english
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
+rules are derived.
+
+=== implicit.tagging.database.deriver.translate.names.to.english
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
+rules are derived.
 
 === implicit.tagging.database.deriver.word.ignore.file
 
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesWordIgnoreList`
 
-Flat file containing words, one per line, to ignore when deriving an implicit tags database from
-POI names.
+Flat file containing words to ignore when deriving an implicit tags database from POI names.
 
 === implicit.tagging.database.deriver.use.schema.tag.values.for.words.only
 
@@ -1066,6 +1154,14 @@ pass in more nested criterion, use the Hootenanny Javascript interface instead.
 If true, the implicit tag raw rules/database derivers will keep all temporary file output.  For
 debugging only.
 
+=== implicit.tagging.name.cleaning.tokens.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesNameCleaningTokens`
+
+Flat file containing tokens that should be ignored in names when deriving implicit type tagging
+rules or when determining whether to type tag an element using implicit tagging.
+
 === implicit.tagging.raw.rules.deriver.skip.filtering
 
 * Data Type: bool
@@ -1083,15 +1179,13 @@ The number of parallel processes used when sorting output by the implicit tag ra
 The default value of -1 uses a count equal to the number of processors on the machine.  Valid values
 are -1 or 1 up to the number of available processors.
 
-=== implicit.tagging.translate.all.names.to.english
+=== implicit.tagging.translate.names.to.english
 
 * Data Type: bool
 * Default Value: `true`
 
-If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
-rules are derived.  Also, all implicit taggers will translate element name words to English before
-querying the corresponding implicit tag rules database.  The value of this setting should be set the
-same way when deriving raw implicit tag rules as it is when tagging elements with an implicit tagger.
+If true, all implicit taggers will translate element name words to English before querying the
+corresponding implicit tag rules database.
 
 === javascript.translator.path
 
@@ -1194,6 +1288,29 @@ Write out empty OSM tags to JSON such as `"text":""`
 
 Write out JSON in a more legible manner
 
+=== json.reader.http.bbox.max.size
+
+* Data Type: double
+* Default Value: `0.25`
+
+Maximum size of an HTTP request's bounding box in degrees before it is split up into smaller bounding
+boxes and run in parallel
+
+=== json.reader.http.bbox.parallel
+
+* Data Type: bool
+* Default Value: `false`
+
+Split the bounding box of an HTTP read request into smaller bounding boxes that can be run in parallel
+
+=== json.reader.http.bbox.thread.count
+
+* Data Type: int
+* Default Value: `8`
+
+Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are too
+large to query at once (see `json.reader.http.bbox.max.size`).
+
 === keep.tags.visitor.keys
 
 * Data Type: list
@@ -1202,6 +1319,170 @@ Write out JSON in a more legible manner
 
 A list of tag keys for which the KeepTagsVisitor will retain on elements, while removing all
 other tags from elements.
+
+=== language.translation.comparison.pretranslated.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of tag keys known to have been previously translated to the desired target language.  The
+list ordering should correspond to that of language.translation.comparison.to.translate.tag.keys.
+Separate keys with a ';' and surround in quotes when passing in from the command line.
+
+=== language.translation.comparison.scorer
+
+* Data Type: string
+* Default Value: `hoot::LevenshteinDistance`
+
+StringDistance implementation used to score to English translated tag values
+
+=== language.translation.detected.language.overrides.specified.source.languages
+
+* Data Type: bool
+* Default Value: `false`
+
+If source languages are specified that do not match the detected language for piece of text during
+translation, setting this to true allows the detected language to override the specified source
+languages.
+
+=== language.translation.hoot.services.detectable.languages.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectable`
+
+Service endpoint for retrieving detectable languages supported by HootServicesTranslatorClient
+
+=== language.translation.hoot.services.detectors
+
+* Data Type: list
+* Default Value:
+** `TikaLanguageDetector`
+** `OpenNlpLanguageDetector`
+
+When using 'HootServicesTranslatorClient' as the to English language translator, one or more
+hoot-services Java class names implementing LanguageDetector.  Language detectors used
+during a to English language translation in order of entry.  Valid values are 'TikaLanguageDetector'
+and 'OpenNlpLanguageDetector'.  If no detectors are specified, then language translation will
+attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection .
+Separate values with a ';' and surround in quotes when passing in from the command line.
+
+=== language.translation.hoot.services.detectors.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectors`
+
+Service endpoint for retrieving available detector implementations supported by
+HootServicesTranslatorClient
+
+=== language.translation.hoot.services.translatable.languages.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translatable`
+
+Service endpoint for retrieving translatable languages supported by HootServicesTranslatorClient
+
+=== language.translation.hoot.services.translation.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translate`
+
+Web service translation endpoint used by the HootServicesTranslatorClient
+
+=== language.translation.hoot.services.translator
+
+* Data Type: string
+* Default Value: `HootLanguageTranslator`
+
+When using 'HootServicesTranslatorClient' as the to English language translator, a hoot-services
+Java class names implementing ToEnglishTranslator.  Valid values are 'JoshuaLanguageTranslator' and
+'HootLanguageTranslator'.
+
+=== language.translation.hoot.services.translators.endpoint
+
+* Data Type: string
+* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translators`
+
+Service endpoint for retrieving available translator implementations supported by
+HootServicesTranslatorClient
+
+=== language.translation.info.provider
+
+* Data Type: string
+* Default Value: `hoot::HootServicesTranslationInfoClient`
+
+TranslationInfoProvider implementation to use for determining language information needed by to
+English translation.  Not all to English translators will make use of this capability.
+
+=== language.translation.max.cache.size
+
+* Data Type: long
+* Default Value: `10000`
+
+Maximum result cache sized used for to English translation and transliteration.  Not honored by all
+translators.  A cache size of -1 disables the translation cache.
+
+=== language.translation.perform.exhaustive.search.with.no.detection
+
+* Data Type: bool
+* Default Value: `false`
+
+If more than one source language is specified for to English translation and the correct
+source language cannot be detected, translation attempts will be made against each specified
+languages until a translation is found.  Enabling this option can have a large impact on translation
+performance due to language detection cost.
+
+=== language.translation.skip.pre.translated.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+When performing a to English translation , the translator will skip the translation of any tags
+whose owning elements have a pre-translated English tag (key=<tag name>:en).
+
+=== language.translation.skip.words.in.english.dictionary
+
+* Data Type: bool
+* Default Value: `true`
+
+When performing a to English translation, the translator will skip the translation of any tags whose
+value is in an English dictionary.
+
+=== language.translation.source.languages
+
+* Data Type: list
+* Default Value:
+** ``
+
+ISO-639-1 language codes for the source languages for to English translation
+(https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).  Also, you can specify a single list item,
+"detect", to attempt to auto-detect the appropriate source language before translation.  Specifying
+multiple source languages can have a large impact on translation performance due to language
+detection cost.  Separate list items with a ';' and surround in quotes when passing them in from
+the command line.
+
+=== language.translation.to.translate.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of keys of tags whose values are to be translated to English.  The translations of these
+tags are compared against the list of pre-translated tags in the option
+language.translation.comparison.pretranslated.tag.keys (list sizes should be equal to each other).
+Separate keys with a ';' and surround in quotes when passing in from the command line.
+
+=== language.translation.translator
+
+* Data Type: string
+* Default Value: `hoot::DictionaryTranslator`
+
+ToEnglishTranslator implementation to use for to English translation.  hoot::DictionaryTranslator,
+the current default, is a simple lookup table primarily used for translation testing and proof of
+concept.  Other implementations, such as hoot::HootServicesTranslatorClient, have better
+translation capability but require custom server installation procedures.  If using
+hoot::HootServicesTranslatorClient, the option 'hoot.services.authenticated.username' must be
+populated with a valid value or translation web requests will fail.
 
 === levenshtein.distance.alpha
 
@@ -1530,14 +1811,15 @@ Determines how strictly the angle should be considered when calculating intersec
 rubber sheeting. A value of 0 will ignore angle entirely. Large will make the angle comparison more
 strict.
 
-=== numeric.tags.visitor.keys
+=== tags.visitor.keys
 
 * Data Type: list
 * Default Value:
 ** ``
 
-List of tag keys for which the AverageNumericTagsVisitor or SumNumericTagsVisitor calculates
-numeric values.  Separate keys with a ';' when passing in from the command line.
+List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
+TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in quotes when passing
+in from the command line.
 
 === ogr.append.data
 
@@ -2227,6 +2509,15 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.address.match.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.
+If the data being conflated is known to have poor address data, disabling this option may speed up
+conflation runtime performance.
+
 === poi.polygon.auto.merge.many.poi.to.one.poly.matches
 
 * Data Type: bool
@@ -2402,7 +2693,7 @@ require it.
 
 List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always
 review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.
-e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from
+e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'.  Also, when specifying the list from
 the command line, surround the entire value string in double quotes.
 
 === poi.polygon.review.multiuse.buildings
@@ -2429,6 +2720,36 @@ The threshold at which a review is called a review for PoiPolygon. See
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
+=== poi.polygon.translate.addresses.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
+address.  This can have significant impact on the runtime performance of conflation when enabled
+and should only be enabled if the source data is known to have non-English addresses.  The
+configuration option, 'language.translation.translator', controls which translator is used.
+
+=== poi.polygon.translate.names.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any name tag.  This can have
+significant impact on the runtime performance of conflation when enabled and should only be enabled
+if the source data is known to have non-English names.  The configuration option,
+'language.translation.translator', controls which translator is used.
+
+=== poi.polygon.translate.types.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
+schema.  This can have significant impact on the runtime performance of conflation when enabled
+and should only be enabled if the source data is known to have non-English type values.  The
+configuration option, 'language.translation.translator', controls which translator is used.
+
 === poi.polygon.type.score.threshold
 
 * Data Type: double
@@ -2436,6 +2757,14 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 
 The minimum similarity the type scores a POI and polygon can have and be considered a type
 match, with 0.0 being the least similar and 1.0 being the most similar.
+
+=== poi.polygon.type.to.names.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonTypeToNames`
+
+Flat file containing OSM types and lists of possible texts features having such a type might
+contain.
 
 === poi.review.threshold
 
@@ -2692,7 +3021,7 @@ nested criterion, use the Hootenanny Javascript interface instead.
 ** ``
 
 A list of tag keys the RemoveTagsVisitor will remove on elements.  From the command line, separate
-list items with a semicolon.
+list items with a semicolon and surround the entire list in quotes.
 
 === replace.tag.visitor.match.tag
 
@@ -2920,6 +3249,13 @@ status is 'Invalid'.
 Adds the specified status to elements.  Valid values are: 'Unknown1', 'Unknown2', 'Conflated', or
 'Invalid'.  If left empty, all elements will receive tag additions.
 
+=== street.types.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/streetTypes`
+
+Flat file containing street types and their abbreviations.
+
 === tag.ancestor.differencer.name
 
 * Data Type: string
@@ -2936,13 +3272,21 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
+=== tag.key.contains.criterion.text
+
+* Data Type: string
+* Default Value: ``
+
+Text that TagKeyContainsCriterion searches a match for.
+
 === tag.criterion.kvps
 
 * Data Type: list
 * Default Value: ``
 
 Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
-delimit multiple key/value pairs with ';'.  E.g. 'highway=road;amenity=school'
+delimit multiple key/value pairs with ';' and surround the entire list in quotes.
+E.g. "highway=road;amenity=school"
 
 === tag.merger.default
 
@@ -3003,7 +3347,7 @@ renaming existing tag keys on all elements in a map.
 
 The keys the TagValueNumericRangeCriterion examines the numeric value of.  Tags for all keys must
 meet the numeric range requirement for the criterion to be met.  Separate multiple keys with a
-semicolon from the command line.
+semicolon from the command line and surround the entire list in quotes.
 
 === tag.value.numeric.range.criterion.max
 
@@ -3021,8 +3365,8 @@ Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to b
 
 === task.status.update.interval
 
-* Data Type: long
-* Default Value: `10000`
+* Data Type: int
+* Default Value: `1000`
 
 For commands supporting it, the iteration count at which a status message should be logged. This
 setting may have a negative impact on performance if set to a very low value.
@@ -3092,6 +3436,16 @@ options.
 * Default Value: `true`
 
 Set to true if the strings should be tokenized (split into words) before translating the values.
+Only applies if language.translation.translator is set to hoot::DictionaryTranslator.
+
+=== translate.string.distance.translate.all
+
+* Data Type: bool
+* Default Value: `true`
+
+If true and language.translation.translator is set to hoot::DictionaryTranslator, will attempt to
+retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
+translation is retrieved.
 
 === translated.tag.differencer.ignore.list
 
@@ -3146,6 +3500,14 @@ NOTE: This assumes that you know exactly what tags you want to modify/delete
 * Default Value: ``
 
 The script used by the TranslationVisitor for translation.
+
+=== transliteration.max.cache.size
+
+* Data Type: int
+* Default Value: `-1`
+
+The maximum size of the cache used by DictionaryTranslator for transliterations.  A cache size of -1
+disables the transliteration cache.
 
 === unify.enable.optimal.constrained.matches
 

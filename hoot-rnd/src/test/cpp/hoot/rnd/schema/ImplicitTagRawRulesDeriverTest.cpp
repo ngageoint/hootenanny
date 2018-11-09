@@ -28,6 +28,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 #include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 
 // Qt
 #include <QTemporaryFile>
@@ -35,11 +36,15 @@
 namespace hoot
 {
 
+/*
+ * The tests in this class will fail with any translator other than the current default,
+ * DictionaryTranslator.
+ */
 class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
 
-  //TODO: fix these - keep showing up as diff output even though its identical
+  //TODO: fix these - keep showing up as diff output even though its identical - #2634
   //CPPUNIT_TEST(runBasicPoiTest);
   //CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
 
@@ -71,7 +76,9 @@ public:
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
-    rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    rawRulesDeriver.setTranslateNamesToEnglish(true);
+    rawRulesDeriver._translator =
+      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -96,7 +103,9 @@ public:
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
-    rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    rawRulesDeriver.setTranslateNamesToEnglish(true);
+    rawRulesDeriver._translator =
+      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -136,7 +145,9 @@ public:
     rawRulesDeriver.setKeepTempFiles(true);
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
-    rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    rawRulesDeriver.setTranslateNamesToEnglish(true);
+    rawRulesDeriver._translator =
+      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver._sortedCountFile = sortedCountFile;
     rawRulesDeriver._removeDuplicatedKeyTypes();
@@ -167,7 +178,9 @@ public:
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
-    rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    rawRulesDeriver.setTranslateNamesToEnglish(true);
+    rawRulesDeriver._translator =
+      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -188,7 +201,9 @@ public:
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
-    rawRulesDeriver.setTranslateAllNamesToEnglish(false);
+    rawRulesDeriver.setTranslateNamesToEnglish(false);
+    rawRulesDeriver._translator =
+      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -207,7 +222,9 @@ public:
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
-    rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    rawRulesDeriver.setTranslateNamesToEnglish(true);
+    rawRulesDeriver._translator =
+      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
 
     try
     {

@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/io/MemChangesetProvider.h>
+#include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/Configurable.h>
@@ -198,11 +198,6 @@ private:
     }
     ic.clear();
   }
-
-  void _removeWholeGroups(std::vector<const Match *> &matches, MatchSetVector &matchSets,
-    const OsmMapPtr &map);
-
-  void _replaceElementIds(const std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that

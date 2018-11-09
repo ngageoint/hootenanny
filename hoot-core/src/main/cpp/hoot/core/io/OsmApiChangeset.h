@@ -73,6 +73,12 @@ public:
    */
   void updateChangeset(const QString& changes);
   /**
+   * @brief fixChangeset Update the underlying element to fix changeset upload errors
+   * @param update - OSM XML from OSM API to fix changeset errors
+   * @return True if a change was made to fix the changeset
+   */
+  bool fixChangeset(const QString& update);
+  /**
    * @brief hasElementsToSend Checks if all elements have been marked as sent
    * @return true if there are elements that haven't been sent yet
    */
@@ -103,6 +109,11 @@ public:
    * @return pointer to half of the subset to be sent back to the OSM API
    */
   ChangesetInfoPtr splitChangeset(ChangesetInfoPtr changeset);
+  /**
+   * @brief updateFailedChangeset Update the changeset to mark elements as failed if the ChangesetInfo object has been "fixed"
+   * @param changeset - Pointer to changeset info object with one element that has failed
+   */
+  void updateFailedChangeset(ChangesetInfoPtr changeset);
   /**
    * @brief getChangesetString Get the .OSC formatted string for this subset of the changeset with the changeset ID in it
    * @param changeset - Subset of the changeset to render
@@ -175,12 +186,21 @@ public:
 private:
   /**
    * @brief updateElement Update the element ID map with the new ID and update the version of the element
-   * @param map Old ID to new ID map
+   * @param map Map of elements (nodes/ways/relations)
    * @param old_id
    * @param new_id
    * @param version New version of the element
    */
   void updateElement(ChangesetTypeMap& map, long old_id, long new_id, long version);
+  /**
+   * @brief fixElement Fix the element with ID by updating the version of the element
+   *     Could expand in the future to correct other issues but for now just fix the version
+   * @param map Map of elements (nodes/ways/relations)
+   * @param id ID of the element to fix
+   * @param version Latest version from OSM API
+   * @return True if a change was made to fix the element
+   */
+  bool fixElement(ChangesetTypeMap& map, long id, long version);
   /**
    * @brief loadElements Load elements from the XML reader of type 'type'
    * @param reader XML reader of the file
@@ -392,9 +412,14 @@ public:
     return s;
   }
 
+  bool getChangesetIssuesResolved() { return _changesetIssuesResolved; }
+  void setChangesetIssuesResolved(bool resolved) { _changesetIssuesResolved = resolved; }
+
 private:
   /** 3x3 array of containers for elements in this subset */
   std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;
+  /** Flag set after attempt to resolve changeset issues has completed. */
+  bool _changesetIssuesResolved;
 };
 
 }

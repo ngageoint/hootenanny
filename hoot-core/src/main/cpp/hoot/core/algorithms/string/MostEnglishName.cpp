@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MostEnglishName.h"
 
@@ -116,11 +116,28 @@ const QSet<QString>& MostEnglishName::_getWords()
       logWarnCount++;
     }
 
-    LOG_DEBUG("Unique (case-insensitive) words: " + QString::number(_englishWords.size()));
+    LOG_TRACE("Unique (case-insensitive) words: " + QString::number(_englishWords.size()));
     _initialized = true;
   }
 
   return _englishWords;
+}
+
+bool MostEnglishName::isInDictionary(const QString text)
+{
+  return _getWords().contains(text.toLower());
+}
+
+bool MostEnglishName::areAllInDictionary(const QStringList texts)
+{
+  for (int i = 0; i < texts.size(); i++)
+  {
+    if (!_getWords().contains(texts.at(i).toLower()))
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 long MostEnglishName::_loadEnglishWords(QString path)
@@ -158,9 +175,14 @@ long MostEnglishName::_loadEnglishWords(QString path)
   return wordCount;
 }
 
-double MostEnglishName::scoreName(QString n)
+bool MostEnglishName::isEnglishText(const QString text)
 {
-  QStringList words = _tokenizer.tokenize(n);
+  return scoreName(text) == 1.0;
+}
+
+double MostEnglishName::scoreName(const QString text)
+{
+  QStringList words = _tokenizer.tokenize(text);
 
   double score = 0;
   int characters = 0;
@@ -196,7 +218,16 @@ double MostEnglishName::scoreName(QString n)
     }
   }
 
-  return characters == 0 ? 0 : score / characters;
+  if (characters == 0)
+  {
+    score = 0.0;
+  }
+  else
+  {
+    score = score / characters;
+  }
+
+  return score;
 }
 
 void MostEnglishName::setConfiguration(const Settings& conf)
