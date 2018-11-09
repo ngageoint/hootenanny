@@ -1,11 +1,6 @@
 [
     {
         "dataType": "real",
-        "geometries": [
-            "node",
-            "way",
-            "relation"
-        ],
         "name": "ele",
         "objectType": "tag"
     }

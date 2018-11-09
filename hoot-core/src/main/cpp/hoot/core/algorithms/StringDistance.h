@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STRINGDISTANCE_H
 #define STRINGDISTANCE_H
@@ -57,6 +57,8 @@ public:
   virtual double compare(const QString& s1, const QString& s2) const = 0;
 
   virtual QString toString() const = 0;
+
+  virtual QString getDescription() = 0;
 };
 
 typedef boost::shared_ptr<StringDistance> StringDistancePtr;

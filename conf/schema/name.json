@@ -4,11 +4,6 @@
             "name"
         ],
         "dataType": "text",
-        "geometries": [
-            "node",
-            "way",
-            "relation"
-        ],
         "influence": 2,
         "name": "abstract_name",
         "objectType": "tag"
@@ -58,11 +53,6 @@
             "pseudoname"
         ],
         "dataType": "text",
-        "geometries": [
-            "node",
-            "way",
-            "relation"
-        ],
         "influence": 1,
         "name": "pseudo_name",
         "objectType": "tag"

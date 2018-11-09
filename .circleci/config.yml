@@ -5,7 +5,7 @@ jobs:
   archive-create:
     working_directory: '/rpmbuild/hootenanny'
     docker:
-      - image: hootenanny/rpmbuild-hoot-release@sha256:b205057e5f906d8e89ee5e1189ed006cb0d0eac4c194c76101d2f415869a8727
+      - image: hootenanny/rpmbuild-hoot-release@sha256:31eebbffaf447159224318992582dc42785c62565fb00f79c6ca8bd2f1d1ea7e
     steps:
       - checkout
       - run:
@@ -27,7 +27,7 @@ jobs:
   archive-upload:
     working_directory: '/rpmbuild/hootenanny'
     docker:
-      - image: hootenanny/rpmbuild-repo@sha256:372dfcd47fb8273ee71bb34b0e2869407e08d779a5968b4ff696602cba94e674
+      - image: hootenanny/rpmbuild-repo@sha256:562b0eae74337a591280178bc064d61bf508193e102bd9cae6dfc932ab7cbb26
         user: rpmbuild
     steps:
       - attach_workspace:
@@ -39,7 +39,7 @@ jobs:
   copyright:
     working_directory: '/rpmbuild/hootenanny'
     docker:
-      - image: hootenanny/rpmbuild-generic@sha256:dd1b636fa3294e1bb0cbec44b2e14af040610535e51be7da42cb8fa57a371f77
+      - image: hootenanny/rpmbuild-generic@sha256:4743f645ce4b7d6f29013c158881a035088b3eb4cab36d674c1b501e8690418a
         user: rpmbuild
         environment:
           HOOT_HOME: '/rpmbuild/hootenanny'

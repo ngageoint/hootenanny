@@ -51,9 +51,11 @@ _matchAttemptMade(false)
 void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setLevDist(config.getLevenshteinDistanceAlpha());
-  setTranslateTagValuesToEnglish(config.getPoiPolygonTranslateNamesToEnglish());
+
+  setTranslateTagValuesToEnglish(config.getPoiPolygonNameTranslateToEnglish());
   if (_translateTagValuesToEnglish && !_translator)
   {
     _translator.reset(

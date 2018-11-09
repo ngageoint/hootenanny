@@ -275,12 +275,16 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
       {
         if (w->isValidPolygon() && OsmSchema::getInstance().isAreaForStats(w->getTags(), ElementType::Way))
           return GEOS_POLYGON;
+        else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
+          return GEOS_POLYGON;
         else
           return GEOS_LINESTRING;
       }
       else
       {
         if (w->isValidPolygon() && OsmSchema::getInstance().isArea(w->getTags(), ElementType::Way))
+          return GEOS_POLYGON;
+        else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
           return GEOS_POLYGON;
         else
           return GEOS_LINESTRING;
@@ -318,7 +322,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
         else if (r->isReview())
           return GEOS_GEOMETRYCOLLECTION;
         // MultiPoint comes from GeoJSON
-        else if (r->getType() == "multipoint")
+        else if (r->getType() == MetadataTags::RelationMultiPoint())
           return GEOS_MULTIPOINT;
       }
 

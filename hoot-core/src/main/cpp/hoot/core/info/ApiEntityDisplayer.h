@@ -35,8 +35,9 @@ namespace hoot
 {
 
 /**
- * ApiEntity refers to aspects of the hoot API  e.g. FeatureExtractor.  Maybe it could be named
- * better.
+ * ApiEntity refers to aspects of the hoot API; e.g. FeatureExtractor.
+ *
+ * See notes in InfoCmd about how registration of associated classes could be made simpler for this.
  */
 class ApiEntityDisplayer
 {

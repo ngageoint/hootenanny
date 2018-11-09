@@ -42,6 +42,12 @@
 namespace hoot
 {
 
+/*
+ * Although, the types of things this command display aren't expected to grow in regular fashion
+ * from this point forward, Some time should probably be spent exploring ways to make the classes
+ * containing the information printed out by this command auto-register themselves in a more
+ * extensible way.
+ */
 class InfoCmd : public BaseCommand
 {
 public:
@@ -232,7 +238,7 @@ public:
         }
       }
     }
-    //feature-extractors, operators, matchers, mergers, or tag mergers
+    //everything else
     else if (specifiedOpts.size() == 1)
     {
       QString apiEntityType;
@@ -286,7 +292,9 @@ private:
     options.append("--matchers");
     options.append("--mergers");
     options.append("--operators");
+    options.append("--string-comparators");
     options.append("--tag-mergers");
+    options.append("--value-aggregators");
     return options;
   }
 };

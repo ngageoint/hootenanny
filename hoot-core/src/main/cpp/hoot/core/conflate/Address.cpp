@@ -24,40 +24,37 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POI_POLYGON_ADDRESSS_H
-#define POI_POLYGON_ADDRESSS_H
+#include "Address.h"
 
 // hoot
-#include <hoot/core/algorithms/ExactStringDistance.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/algorithms/AddressParser.h>
 
 namespace hoot
 {
 
-/**
- *
- */
-class PoiPolygonAddress
+Address::Address() :
+_address(""),
+_allowLenientHouseNumberMatching(true)
 {
-
-public:
-
-  PoiPolygonAddress();
-  PoiPolygonAddress(const QString address, const QString translatedAddress = "");
-
-  bool operator==(const PoiPolygonAddress& address) const;
-
-  QString toString() const
-  { return "Address: " + _address + ", translated address: " + _translatedAddress; }
-
-private:
-
-  QString _address;
-  QString _translatedAddress;
-  ExactStringDistance _addrComp;
-
-  bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress) const;
-};
-
 }
 
-#endif // POI_POLYGON_ADDRESSS_H
+Address::Address(const QString address, const bool allowLenientHouseNumberMatching) :
+_address(address),
+_allowLenientHouseNumberMatching(allowLenientHouseNumberMatching)
+{
+}
+
+bool Address::operator==(const Address& address) const
+{
+  LOG_VART(_address);
+  LOG_VART(address._address);
+
+  return
+    !_address.isEmpty() &&
+      (_addrComp.compare(_address, address._address) == 1.0 ||
+       (_allowLenientHouseNumberMatching &&
+        AddressParser::addressesMatchDespiteSubletterDiffs(_address, address._address)));
+}
+
+}

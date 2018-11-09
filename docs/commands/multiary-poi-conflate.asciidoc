@@ -12,7 +12,7 @@ The +multiary-poi-conflate+ command conflates two or more POI map sources into a
 
 --------------------------------------
 multiary-poi-conflate (input1) (input2) [input3, ...] (output)
----------------------------------
+--------------------------------------
 
 ==== Example
 
