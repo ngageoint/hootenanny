@@ -1,12 +1,6 @@
 [
     {
         "dataType": "text",
-        "geometries": [
-            "node",
-            "area",
-            "way",
-            "relation"
-        ],
         "influence": 2,
         "mismatchScore": 0.25,
         "name": "abstract_address",

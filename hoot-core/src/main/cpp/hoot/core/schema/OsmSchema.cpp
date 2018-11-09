@@ -198,21 +198,18 @@ OsmSchemaCategory OsmSchemaCategory::fromStringList(const QStringList &s)
   return result;
 }
 
-uint16_t OsmGeometries::fromString(const QString& s)
+OsmGeometries::Type OsmGeometries::fromString(const QString& s)
 {
-  uint16_t result = 0;
+  Type result = Empty;
 
-  // breaking coding convention for the sake of readability/brevity.
-  if (s == "node") result = Node;
-  else if (s == "area") result = Area;
+  if (s == "node")            result = Node;
+  else if (s == "area")       result = Area;
   else if (s == "linestring") result = LineString;
-  else if (s == "closedway") result = ClosedWay;
-  else if (s == "way") result = Way;
-  else if (s == "relation") result = Relation;
+  else if (s == "closedway")  result = ClosedWay;
+  else if (s == "way")        result = Way;
+  else if (s == "relation")   result = Relation;
   else
-  {
     throw HootException("Unexpected enumerated type when parsing OsmGeometries: " + s);
-  }
 
   return result;
 }
@@ -1777,6 +1774,35 @@ bool OsmSchema::isAreaForStats(const Tags& t, const ElementType& type) const
 bool OsmSchema::isAreaForStats(const ConstElementPtr& e) const
 {
   return isAreaForStats(e->getTags(), e->getElementType());
+}
+
+bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/, OsmGeometries::Type geometries)
+{
+  //  Empty tags shouldn't allow for anything
+  if (t.size() == 0)
+    return false;
+  int usableTags = 0;
+  OsmGeometries::Type value = OsmGeometries::All;
+  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  {
+    const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
+    //  Unknown vertex types aren't usable tags
+    if (tv.getType() != SchemaVertex::UnknownVertexType && tv.geometries != OsmGeometries::Empty)
+    {
+      value = static_cast<OsmGeometries::Type>(value & tv.geometries);
+      usableTags++;
+    }
+  }
+  //  Unusable tags shouldn't allow for anything
+  if (usableTags == 0)
+    return false;
+  //  Check geometries against usable tags
+  return (value & geometries) != OsmGeometries::Empty;
+}
+
+bool OsmSchema::allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries)
+{
+  return allowsFor(e->getTags(), e->getElementType(), geometries);
 }
 
 bool OsmSchema::isBuilding(const Tags& t, const ElementType& type) const

@@ -349,6 +349,11 @@ bool Way::isFirstLastNodeIdentical() const
   return ( getFirstNodeId() == getLastNodeId() );
 }
 
+bool Way::isClosedArea() const
+{
+  return getNodeCount() > 3 && getFirstNodeId() == getLastNodeId();
+}
+
 long Way::getPid(const ConstWayPtr& p, const ConstWayPtr& c)
 {
   if (!p && !c)   return WayData::PID_EMPTY;
