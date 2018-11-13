@@ -278,13 +278,15 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
+    //logging these as debug now that we have a cleaner in the pipeline to remove these types
+    //of circular refs
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+      LOG_DEBUG("Invalid data. This relation contains a circular reference. " + toString());
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      LOG_DEBUG(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
     logWarnCount++;
     return;
