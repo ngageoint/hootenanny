@@ -173,19 +173,21 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
   {
     return;
   }
-  LOG_VARD(e1->getElementId());
+  LOG_VART(e1->getElementId());
 
   OsmSchema& schema = OsmSchema::getInstance();
   boost::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
+  LOG_VART(env.get());
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
       CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||
       schema.isArea(e1) == false)
   {
-    LOG_DEBUG("Envelope null or incomplete element.");
+    LOG_TRACE("Envelope null or incomplete element.");
     return;
   }
   set<ElementId> neighbors = _map->getIndex().findWayRelations(*env);
+  LOG_VART(neighbors.size());
 
   for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
   {
@@ -198,7 +200,7 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
       // a parent.
       if (e2 != 0 && schema.isArea(e2) && _equals(e1, e2))
       {
-        LOG_DEBUG("e2 is area and e1/e2 equal.");
+        LOG_TRACE("e2 is area and e1/e2 equal.");
         // remove the crummier one.
         _removeOne(e1, e2);
         // if we've deleted the element we're visiting.

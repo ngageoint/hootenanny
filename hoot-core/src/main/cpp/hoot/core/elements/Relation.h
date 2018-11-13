@@ -162,6 +162,8 @@ private:
 
   boost::shared_ptr<RelationData> _relationData;
 
+  ElementId _lastEnvelopeId;
+
   virtual ElementData& _getElementData() { _makeWritable(); return *_relationData; }
 
   virtual const ElementData& _getElementData() const { return *_relationData; }

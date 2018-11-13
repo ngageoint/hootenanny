@@ -155,18 +155,35 @@ Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProv
 {
   Envelope result;
   result.init();
+
   const vector<RelationData::Entry>& members = getMembers();
 
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry& m = members[i];
+    LOG_VART(m.getElementId());
+
+    if (m.getElementId() == getElementId())
+    {
+      LOG_TRACE("Skipping relation that contains itself: " << m.getElementId() << "...")
+      result.setToNull();
+      return result;
+    }
+
     // if any of the elements don't exist then return an empty envelope.
     if (ep->containsElement(m.getElementId()) == false)
     {
       result.setToNull();
       return result;
     }
+
     const boost::shared_ptr<const Element> e = ep->getElement(m.getElementId());
+    if (e->getElementId() == m.getElementId())
+    {
+      LOG_TRACE("Skipping recursive relation reference: " << e->getElementId() << "...")
+      result.setToNull();
+      return result;
+    }
     boost::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
 
     if (childEnvelope->isNull())
@@ -184,7 +201,7 @@ Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProv
 void Relation::_makeWritable()
 {
   // make sure we're the only one with a reference to the data before we modify it.
-  if(_relationData.use_count() > 1)
+  if (_relationData.use_count() > 1)
   {
     _relationData.reset(new RelationData(*_relationData));
   }

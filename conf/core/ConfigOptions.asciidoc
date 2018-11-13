@@ -1569,6 +1569,7 @@ Not necessarily utilized by all parts of the application.
 ** `hoot::RemoveEmptyAreasVisitor`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RelationCircularRefRemover`
+** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RemoveDuplicateAreaVisitor`
 ** `hoot::NoInformationElementRemover`
 

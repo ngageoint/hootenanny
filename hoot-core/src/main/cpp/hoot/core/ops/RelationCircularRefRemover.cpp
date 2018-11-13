@@ -63,7 +63,13 @@ void RelationCircularRefRemover::apply(OsmMapPtr& map)
         LOG_VART(_relationIdsToRelationMemberIds.size());
         LOG_VART(_relationIdsToRelationMemberIds.values(memberRelationId).size());
 
-        if (_relationIdsToRelationMemberIds.values(memberRelationId).contains(relationId))
+        if (relationId == memberRelationId)
+        {
+          LOG_TRACE(
+            "Removing relation that contains itself as a member: " << memberRelationId << "...");
+          relation->removeElement(ElementId(ElementType::Relation, memberRelationId));
+        }
+        else if (_relationIdsToRelationMemberIds.values(memberRelationId).contains(relationId))
         {
           // This could leave some empty relations, but we'll let the empty relation removal
           // op/visitor handle that elsewhere.

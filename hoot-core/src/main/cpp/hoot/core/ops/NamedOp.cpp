@@ -70,7 +70,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     else if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
       LOG_VARD(map->getElementCount());
-      LOG_DEBUG("Applying operation: " << s);
+      LOG_INFO("Applying operation: " << s);
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
 
@@ -92,7 +92,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     else if (f.hasBase<ConstElementVisitor>(s.toStdString()))
     {
       LOG_VARD(map->getElementCount());
-      LOG_DEBUG("Applying visitor: " << s);
+      LOG_INFO("Applying visitor: " << s);
       boost::shared_ptr<ConstElementVisitor> t(
         Factory::getInstance().constructObject<ConstElementVisitor>(s));
 
@@ -115,7 +115,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
       LOG_VARD(map->getElementCount());
-      LOG_DEBUG("Applying visitor: " << s);
+      LOG_INFO("Applying visitor: " << s);
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
 

@@ -161,7 +161,6 @@ public:
    *
    * "this" is guaranteed to be visited last.
    */
-
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor) const = 0;
 
   /**
@@ -191,13 +190,10 @@ protected:
   Element(Status s);
 
   virtual ElementData& _getElementData() = 0;
-
   virtual const ElementData& _getElementData() const = 0;
 
   void _postGeometryChange();
-
   void _preGeometryChange();
-
 };
 
 typedef boost::shared_ptr<Element> ElementPtr;
