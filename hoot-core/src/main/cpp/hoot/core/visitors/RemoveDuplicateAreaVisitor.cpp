@@ -58,7 +58,6 @@ RemoveDuplicateAreaVisitor::RemoveDuplicateAreaVisitor()
   _diff.reset(
     Factory::getInstance().constructObject<TagDifferencer>(
       ConfigOptions().getRemoveDuplicateAreasDiff()));
-  _visitedRelationIds.clear();
 }
 
 boost::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(
@@ -176,21 +175,7 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
   }
   LOG_VARD(e1->getElementId());
 
-  if (e1->getElementType() == ElementType::Relation)
-  {
-    if (!_visitedRelationIds.contains(e1->getId()))
-    {
-      _visitedRelationIds.append(e1->getId());
-    }
-    else
-    {
-      LOG_DEBUG("Circular reference: " << e1->getId());
-      return;
-    }
-  }
-
   OsmSchema& schema = OsmSchema::getInstance();
-
   boost::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
