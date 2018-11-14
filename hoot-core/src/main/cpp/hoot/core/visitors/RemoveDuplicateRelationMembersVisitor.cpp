@@ -34,7 +34,7 @@
 
 // Qt
 #include <QVector>
-#include <QSet>
+#include <QList>
 
 namespace hoot
 {
@@ -49,20 +49,22 @@ void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)
   {
-    LOG_TRACE("Looking for duplicate relation members...");
-
     RelationPtr relation = boost::dynamic_pointer_cast<Relation>(e);
-    assert(relation.get());
     const std::vector<RelationData::Entry>& members = relation->getMembers();
     LOG_VART(members.size());
     if (members.size() > 1)
     {
-      QSet<RelationData::Entry> parsedMembers;
+      // We want to retain the ordering of the members here, so won't use a set.
+      QList<RelationData::Entry> parsedMembers;
       for (size_t i = 0; i < members.size(); i++)
       {
-        parsedMembers.insert(members[i]);
+        const RelationData::Entry& member = members[i];
+        if (!parsedMembers.contains(member))
+        {
+          parsedMembers.append(member);
+        }
       }
-      relation->setMembers(parsedMembers.toList().toVector().toStdVector());
+      relation->setMembers(parsedMembers.toVector().toStdVector());
     }
   }
 }
