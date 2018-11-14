@@ -36,6 +36,7 @@ namespace hoot
 class SingleStat
 {
 public:
+
   QString name;
   double value;
 

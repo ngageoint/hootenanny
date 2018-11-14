@@ -58,8 +58,6 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual void setConfiguration(const Settings& conf);
-
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
 
   virtual QString getDescription() const
