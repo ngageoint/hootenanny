@@ -64,7 +64,7 @@ public:
     reader.setUseDataSourceIds(true);
     //TODO: add a relation that contains itself to test data
     reader.read(
-      "test-files/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest.osm",
+      "test-files/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest-in.osm",
       map);
 
     RelationCircularRefRemover uut;
@@ -77,7 +77,7 @@ public:
       "test-output/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest-out.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest.osm",
+      "test-files/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest-out.osm",
       "test-output/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest-out.osm");
   }
 };
