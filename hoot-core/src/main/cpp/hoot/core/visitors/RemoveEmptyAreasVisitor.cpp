@@ -41,7 +41,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveEmptyAreasVisitor)
 
-RemoveEmptyAreasVisitor::RemoveEmptyAreasVisitor()
+RemoveEmptyAreasVisitor::RemoveEmptyAreasVisitor() :
+_numRemoved(0)
 {
 }
 
@@ -69,6 +70,7 @@ void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
     if (g->getArea() == 0.0)
     {
       RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
+      _numRemoved++;
     }
   }
 }

@@ -51,11 +51,17 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
+  virtual QString getInitStatusMessage() { return "Removing empty areas..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numRemoved) + " empty areas"; }
+
   virtual QString getDescription() const { return "Removes empty areas"; }
 
 private:
 
   boost::shared_ptr<ElementConverter> _ec;
+  int _numRemoved;
 };
 
 }

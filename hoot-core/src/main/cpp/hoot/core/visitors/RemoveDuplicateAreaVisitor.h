@@ -64,18 +64,22 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e1);
 
+  virtual QString getInitStatusMessage() { return "Removing duplicate areas..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numDuplicates) + " duplicate areas"; }
+
   virtual QString getDescription() const { return "Removes duplicate areas"; }
 
 private:
 
-  boost::shared_ptr<geos::geom::Geometry> _convertToGeometry(const boost::shared_ptr<Element>& e1);
-
-  bool _equals(const boost::shared_ptr<Element>& e1, const boost::shared_ptr<Element> &e2);
-
-  void _removeOne(boost::shared_ptr<Element> e1, boost::shared_ptr<Element> e2);
-
+  int _numDuplicates;
   boost::shared_ptr<TagDifferencer> _diff;
   QHash<ElementId, boost::shared_ptr<geos::geom::Geometry> > _geoms;
+
+  boost::shared_ptr<geos::geom::Geometry> _convertToGeometry(const boost::shared_ptr<Element>& e1);
+  bool _equals(const boost::shared_ptr<Element>& e1, const boost::shared_ptr<Element> &e2);
+  void _removeOne(boost::shared_ptr<Element> e1, boost::shared_ptr<Element> e2);
 };
 
 }

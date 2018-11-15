@@ -72,14 +72,21 @@ public:
 
   boost::shared_ptr<OsmMap> markDivided();
 
+  virtual QString getInitStatusMessage()
+  { return "Marking road sections that appear to be divided highways..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Marked " + QString::number(_numMarked) + " road sections as divided highways"; }
+
   virtual QString getDescription() const
-  { return "Locates road sections that implicitly appear to be divided highways"; }
+  { return "Marks road sections that implicitly appear to be divided highways"; }
 
 protected:
 
   boost::shared_ptr<const OsmMap> _inputMap;
   boost::shared_ptr<OsmMap> _result;
   boost::shared_ptr<NodeToWayMap> _n2w;
+  int _numMarked;
 
   /**
    * Returns true if the given way has a divider highway connected on both ends.

@@ -71,9 +71,18 @@ public:
   virtual boost::any getResult() { boost::any ptr; return ptr; }
 
   /**
-    Returns a string representation of the operation
+    Returns a user friendly message indicating the operation has begun its work
+
+    e.g. "Removing duplicate ways..."
     */
-  virtual QString toString() { return ""; }
+  virtual QString getInitStatusMessage() { return ""; }
+
+  /**
+    Returns a user friendly message indicating a summary of the work performed by the operation
+
+    e.g. "Removed 20 duplicate ways."
+    */
+  virtual QString getCompletedStatusMessage() { return ""; }
 
   /**
    * Returns a one sentence description for the operation.

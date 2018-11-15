@@ -62,8 +62,11 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getInitStatusMessage()
+  { return "Updating building outlines that changed during conflation..."; }
+
   virtual QString getDescription() const
-  { return "Updates any multi-part building outlines that may have changed during conflation"; }
+  { return "Updates any multi-part building outlines that changed during conflation"; }
 
 private:
 

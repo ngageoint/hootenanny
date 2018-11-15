@@ -67,7 +67,6 @@ public:
   } DrivingSide;
 
   DualWaySplitter();
-
   DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide, Meters splitSize);
 
   boost::shared_ptr<OsmMap> splitAll();
@@ -76,6 +75,12 @@ public:
                                             DrivingSide drivingSide, Meters defaultSplitSize);
 
   void apply(boost::shared_ptr<OsmMap>& map);
+
+  virtual QString getInitStatusMessage()
+  { return "Splitting divided highways into two one way streets..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Split " + QString::number(_numSplitWays) + " divided highways"; }
 
   virtual QString getDescription() const
   { return "Splits all 'divided=yes'' highways into two one way streets"; }
@@ -87,6 +92,7 @@ private:
   boost::shared_ptr<const OsmMap> _map;
   boost::shared_ptr<OsmMap> _result;
   std::unordered_set<long> _nodes;
+  int _numSplitWays;
 
   // temporary variables for convenience
   boost::shared_ptr<Way> _left, _right;

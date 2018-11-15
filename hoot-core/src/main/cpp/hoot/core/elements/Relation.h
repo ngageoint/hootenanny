@@ -83,9 +83,10 @@ public:
   bool contains(ElementId eid) const;
 
   /**
-   * @brief numElementsByRole
-   * @param role
-   * @return
+   * Returns the number of member elements with the given relation role
+   *
+   * @param role role by which to examine elements
+   * @return the number of member elements with the specified role
    */
   int numElementsByRole(const QString role) const;
 
@@ -161,8 +162,6 @@ public:
 private:
 
   boost::shared_ptr<RelationData> _relationData;
-
-  ElementId _lastEnvelopeId;
 
   virtual ElementData& _getElementData() { _makeWritable(); return *_relationData; }
 

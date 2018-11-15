@@ -47,12 +47,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOutlineRemoveOp)
 
-BuildingOutlineRemoveOp::BuildingOutlineRemoveOp()
+BuildingOutlineRemoveOp::BuildingOutlineRemoveOp() :
+_numRemoved(0)
 {
 }
 
 void BuildingOutlineRemoveOp::apply(boost::shared_ptr<OsmMap>& map)
 {
+  _numRemoved = 0;
   _map = map;
 
   // go through all the relations
@@ -77,6 +79,7 @@ void BuildingOutlineRemoveOp::_removeOutline(const boost::shared_ptr<Relation> &
     {
       building->removeElement(entries[i].role, entries[i].getElementId());
       RecursiveElementRemover(entries[i].getElementId()).apply(_map);
+      _numRemoved++;
     }
   }
 }

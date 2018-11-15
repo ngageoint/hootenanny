@@ -106,11 +106,6 @@ public:
     _minNodeSpacing = spacing;
   }
 
-  /**
-    @see ConstElementVisitor
-    */
-  virtual QString toString();
-
   virtual QString getDescription() const { return "Randomly splits ways"; }
 
 private:

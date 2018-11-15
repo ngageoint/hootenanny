@@ -49,7 +49,16 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
+  virtual QString getInitStatusMessage() { return "Removing duplicate relation members..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numDuplicateMembers) + " duplicate relation members"; }
+
   virtual QString getDescription() const { return "Removes duplicate relation members"; }
+
+private:
+
+  int _numDuplicateMembers;
 };
 
 }

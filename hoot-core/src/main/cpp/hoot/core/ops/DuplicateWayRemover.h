@@ -73,6 +73,8 @@ public:
     _strictTagMatching = strictTagMatching;
   }
 
+  virtual QString getInitStatusMessage() { return "Removing duplicate ways..."; }
+
   virtual QString getDescription() const { return "Removes duplicate ways from a map"; }
 
 protected:

@@ -46,14 +46,21 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  virtual QString getInitStatusMessage()
+  { return "Adding geospatial sorting tags to review relations..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Added " + QString::number(_numTagsAdded) + " sorting tags"; }
+
   virtual QString getDescription() const
-  { return "Sorts reviewable features geospatially"; }
+  { return "Adds tags that enable sorting reviewable features geospatially"; }
 
 private:
 
-  int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const std::set<ElementId> eids);
-
+  int _numTagsAdded;
   boost::shared_ptr<geos::geom::Envelope> _mapEnvelope;
+
+  int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const std::set<ElementId> eids);
 };
 
 }

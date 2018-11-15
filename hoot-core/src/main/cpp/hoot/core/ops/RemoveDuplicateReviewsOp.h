@@ -57,6 +57,8 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getInitStatusMessage() { return "Removing duplicate review relations..."; }
+
   virtual QString getDescription() const { return "Removes duplicate reviews"; }
 
 private:

@@ -40,14 +40,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousWayRemover)
 
-SuperfluousWayRemover::SuperfluousWayRemover()
+SuperfluousWayRemover::SuperfluousWayRemover() :
+_numWaysRemoved(0)
 {
 
 }
 
-SuperfluousWayRemover::SuperfluousWayRemover(boost::shared_ptr<OsmMap> map)
+SuperfluousWayRemover::SuperfluousWayRemover(boost::shared_ptr<OsmMap> map) :
+_inputMap(map),
+_numWaysRemoved(0)
 {
-  _inputMap = map;
 }
 
 
@@ -61,6 +63,7 @@ void SuperfluousWayRemover::removeWays()
 {
   LOG_DEBUG("Removing superfluous ways...");
 
+  _numWaysRemoved = 0;
   boost::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
 
   // make a copy of the ways to avoid issues when removing.
@@ -95,6 +98,7 @@ void SuperfluousWayRemover::removeWays()
     {  
       LOG_TRACE("Removing superflous way: " << w->getElementId() << "...");
       RemoveWayOp::removeWayFully(_inputMap, w->getId());
+      _numWaysRemoved++;
     }
   }
 }

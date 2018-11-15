@@ -56,7 +56,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SmallWayMerger)
 
-SmallWayMerger::SmallWayMerger(Meters threshold)
+SmallWayMerger::SmallWayMerger(Meters threshold) :
+_numMerged(0)
 {
   ConfigOptions opts = ConfigOptions();
   if (threshold >= 0)
@@ -72,6 +73,7 @@ SmallWayMerger::SmallWayMerger(Meters threshold)
 
 void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
 {
+  _numMerged = 0;
   _map = map;
 
   // create a map from nodes to ways
@@ -218,6 +220,8 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       RecursiveElementRemover(next->getElementId()).apply(_map);
 
       LOG_VART(_map->containsElement(next->getElementId()));
+
+      _numMerged++;
     }
   }
 }

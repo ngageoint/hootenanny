@@ -67,12 +67,21 @@ public:
 
   void removeWays();
 
+  virtual QString getInitStatusMessage() { return "Removing superfluous ways..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numWaysRemoved) + " superfluous ways"; }
+
   virtual QString getDescription() const
   { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
 protected:
 
   boost::shared_ptr<OsmMap> _inputMap;
+
+private:
+
+  int _numWaysRemoved;
 };
 
 }

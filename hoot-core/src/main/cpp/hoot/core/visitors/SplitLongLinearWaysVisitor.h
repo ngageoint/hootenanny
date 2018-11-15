@@ -31,7 +31,6 @@
 #include <cassert>
 
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -40,7 +39,7 @@ class OsmMap;
 class Element;
 class Settings;
 
-class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor, public Configurable
+class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
 {
 public:
 

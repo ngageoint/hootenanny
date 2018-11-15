@@ -62,6 +62,11 @@ public:
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
+  virtual QString getInitStatusMessage() { return "Removing duplicate name tags..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numNamesRemoved) + " duplicate name tags"; }
+
   virtual QString getDescription() const { return "Removes duplicate name tags from a feature"; }
 
 protected:
@@ -73,6 +78,7 @@ protected:
 private:
 
   bool _caseSensitive;
+  int _numNamesRemoved;
 };
 
 }

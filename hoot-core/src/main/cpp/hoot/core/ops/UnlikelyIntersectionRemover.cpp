@@ -50,14 +50,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnlikelyIntersectionRemover)
 
-UnlikelyIntersectionRemover::UnlikelyIntersectionRemover()
+UnlikelyIntersectionRemover::UnlikelyIntersectionRemover() :
+_numRemoved(0)
 {
-
 }
 
 void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const set<long>& wayIds)
 {
-  //
   // This evaluate and split method uses a simple heuristic for finding a split. It also assumes
   // that there are at most two intersections at a given node. While this is reasonable for most
   // real world scenarios there may be some edge cases where this falls apart (e.g. an overpass
@@ -66,7 +65,6 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // The split heuristic simply looks at the first way vs. all the other ways. In complex
   // situations with more than two ways this may be non-optimal, but again, for most real world
   // scenarios this should be just fine.
-  //
 
   // create two groups for the ways
   vector< boost::shared_ptr<Way> > g1, g2;
@@ -103,6 +101,7 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // otherwise split the intersection into two groups.
   else
   {
+    _numRemoved = g2.size();
     LOG_TRACE("Splitting intersection for ways: " << g2 << " at node " << intersectingNode);
     _splitIntersection(intersectingNode, g2);
   }
@@ -197,6 +196,7 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
 
 void UnlikelyIntersectionRemover::apply(boost::shared_ptr<OsmMap>& map)
 {
+  _numRemoved = 0;
   _result = map;
 
   NodeToWayMap n2w(*_result);

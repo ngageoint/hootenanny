@@ -79,6 +79,9 @@ public:
    */
   void replaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
 
+  virtual QString getInitStatusMessage()
+  { return "Replacing roundabouts with simple intersections..."; }
+
   virtual QString getDescription() const
   { return "Replaces road roundabouts with simple intersections"; }
 

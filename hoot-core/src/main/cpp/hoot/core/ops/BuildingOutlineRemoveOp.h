@@ -59,11 +59,17 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getInitStatusMessage() { return "Removing outlines around buildings..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numRemoved) + " building outlines"; }
+
   virtual QString getDescription() const { return "Removes the outline around buildings"; }
 
 private:
 
   boost::shared_ptr<OsmMap> _map;
+  int _numRemoved;
 
   void _removeOutline(const boost::shared_ptr<Relation>& building);
 };

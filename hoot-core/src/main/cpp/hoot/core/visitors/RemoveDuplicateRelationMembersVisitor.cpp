@@ -34,14 +34,15 @@
 
 // Qt
 #include <QVector>
-#include <QList>
+#include <QSet>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveDuplicateRelationMembersVisitor)
 
-RemoveDuplicateRelationMembersVisitor::RemoveDuplicateRelationMembersVisitor()
+RemoveDuplicateRelationMembersVisitor::RemoveDuplicateRelationMembersVisitor() :
+_numDuplicateMembers(0)
 {
 }
 
@@ -51,20 +52,22 @@ void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
   {
     RelationPtr relation = boost::dynamic_pointer_cast<Relation>(e);
     const std::vector<RelationData::Entry>& members = relation->getMembers();
-    LOG_VART(members.size());
     if (members.size() > 1)
     {
-      // We want to retain the ordering of the members here, so won't use a set.
-      QList<RelationData::Entry> parsedMembers;
-      for (size_t i = 0; i < members.size(); i++)
+      QSet<RelationData::Entry> uniqueMembers;
+      for (std::vector<RelationData::Entry>::const_iterator it = members.begin();
+           it != members.end(); ++it)
       {
-        const RelationData::Entry& member = members[i];
-        if (!parsedMembers.contains(member))
-        {
-          parsedMembers.append(member);
-        }
+        uniqueMembers.insert(*it);
       }
-      relation->setMembers(parsedMembers.toVector().toStdVector());
+
+      // no point in updating them members if there were no dupes
+      if (uniqueMembers.size() < (int)members.size())
+      {
+        _numDuplicateMembers += ((int)members.size() - uniqueMembers.size());
+        LOG_VARD(_numDuplicateMembers);
+        relation->setMembers(uniqueMembers.toList().toVector().toStdVector());
+      }
     }
   }
 }

@@ -66,8 +66,6 @@ public:
 
   void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
 
-  QString toString();
-
   virtual QString getDescription() const { return "Randomly removes feature tags"; }
 
 private:

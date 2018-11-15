@@ -52,7 +52,12 @@ public:
 
   long getNumRemoved() const { return _numRemoved; }
 
-  virtual QString getDescription() const { return "Removes empty relations"; }
+  virtual QString getInitStatusMessage() { return "Removing empty relations..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numRemoved) + " empty relations"; }
+
+  virtual QString getDescription() const { return "Removes relations with no members"; }
 
 private:
 

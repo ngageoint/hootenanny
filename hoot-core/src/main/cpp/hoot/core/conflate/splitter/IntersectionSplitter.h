@@ -66,6 +66,11 @@ public:
 
   void splitIntersections();
 
+  virtual QString getInitStatusMessage() { return "Splitting road intersections..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Split " + QString::number(_numSplitsMade) + " road intersections"; }
+
   virtual QString getDescription() const
   { return "Makes all road intersections contain only way end nodes"; }
 
@@ -74,6 +79,7 @@ private:
   boost::shared_ptr<OsmMap> _map;
   QMultiHash<long, long> _nodeToWays;
   QSet<long> _todoNodes;
+  int _numSplitsMade;
 
   void _mapNodesToWays();
 

@@ -50,12 +50,22 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
+  virtual QString getInitStatusMessage()
+  { return "Removing invalid and multiline string relations..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numMembersRemoved) + " relation members and " +
+    QString::number(_numRelationsRemoved) + " relations"; }
+
   virtual QString getDescription() const
   {
     return "Removes duplicate ways in relations and invalid relations";
   }
 
 private:
+
+  int _numMembersRemoved;
+  int _numRelationsRemoved;
 
   void _removeDuplicates(const RelationPtr& r);
 };

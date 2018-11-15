@@ -39,7 +39,8 @@ namespace hoot
 {
 
 /**
- *
+ * Removes relations members that have cross references between relations as well as well as
+ * relation members that reference themselves
  */
 class RelationCircularRefRemover : public OsmMapOperation
 {
@@ -51,12 +52,20 @@ public:
 
   void apply(OsmMapPtr& map);
 
+  virtual QString getInitStatusMessage()
+  { return "Removing relation members with circular references..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numMembersInvolvedInCircRefs) +
+           " relation members involved in circular references"; }
+
   virtual QString getDescription() const
   { return "Removes one half of a relation pair, both of which reference each other, from a map"; }
 
 private:
 
-  QMultiMap<long, long> _relationIdsToRelationMemberIds;
+  int _numMembersInvolvedInCircRefs;
+  QMultiMap<long, long> _relationIdsToRelationMemberIds; 
 };
 
 }

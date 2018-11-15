@@ -76,12 +76,18 @@ public:
    */
   static void mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold);
 
-  virtual QString getDescription() const { return "Merges small ways"; }
+  virtual QString getInitStatusMessage() { return "Merging very small ways..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Merged " + QString::number(_numMerged) + " very small ways"; }
+
+  virtual QString getDescription() const { return "Merges very small ways"; }
 
 protected:
 
   boost::shared_ptr<OsmMap> _map;
 
+  int _numMerged;
   double _threshold;
   NodeToWayMap* _n2w;
   boost::shared_ptr<TagDifferencer> _diff;

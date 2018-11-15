@@ -92,11 +92,6 @@ public:
     */
   void setEpsilon(double epsilon) { _epsilon = epsilon; }
 
-  /**
-    @see ConstElementVisitor
-    */
-  virtual QString toString();
-
   virtual QString getDescription() const { return "Randomly generalizes ways"; }
 
 private:

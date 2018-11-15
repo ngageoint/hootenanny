@@ -163,13 +163,6 @@ Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProv
     const RelationData::Entry& m = members[i];
     LOG_VART(m.getElementId());
 
-    if (m.getElementId() == getElementId())
-    {
-      LOG_TRACE("Skipping relation that contains itself: " << m.getElementId() << "...")
-      result.setToNull();
-      return result;
-    }
-
     // if any of the elements don't exist then return an empty envelope.
     if (ep->containsElement(m.getElementId()) == false)
     {
@@ -178,12 +171,6 @@ Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProv
     }
 
     const boost::shared_ptr<const Element> e = ep->getElement(m.getElementId());
-    if (e->getElementId() == m.getElementId())
-    {
-      LOG_TRACE("Skipping recursive relation reference: " << e->getElementId() << "...")
-      result.setToNull();
-      return result;
-    }
     boost::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
 
     if (childEnvelope->isNull())

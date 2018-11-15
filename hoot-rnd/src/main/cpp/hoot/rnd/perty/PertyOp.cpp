@@ -199,16 +199,6 @@ void PertyOp::setConfiguration(const Settings& conf)
   _configure();
 }
 
-QString PertyOp::toString()
-{
-  QString str = "_permuteAlgorithm: " + _permuteAlgorithm;
-  if (_gridCalculator.get())
-  {
-    str += ", " + _gridCalculator->toString();
-  }
-  return str;
-}
-
 void PertyOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   // permute the data first

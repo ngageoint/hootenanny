@@ -53,7 +53,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveDuplicateAreaVisitor)
 
-RemoveDuplicateAreaVisitor::RemoveDuplicateAreaVisitor()
+RemoveDuplicateAreaVisitor::RemoveDuplicateAreaVisitor() :
+_numDuplicates(0)
 {
   _diff.reset(
     Factory::getInstance().constructObject<TagDifferencer>(
@@ -151,6 +152,7 @@ void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1,
   {
     RecursiveElementRemover(e2->getElementId()).apply(_map->shared_from_this());
   }
+  _numDuplicates++;
 }
 
 void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)

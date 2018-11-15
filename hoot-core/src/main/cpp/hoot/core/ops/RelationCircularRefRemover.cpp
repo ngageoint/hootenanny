@@ -38,7 +38,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RelationCircularRefRemover)
 
-RelationCircularRefRemover::RelationCircularRefRemover()
+RelationCircularRefRemover::RelationCircularRefRemover() :
+_numMembersInvolvedInCircRefs(0)
 {
   _relationIdsToRelationMemberIds.clear();
 }
@@ -68,6 +69,7 @@ void RelationCircularRefRemover::apply(OsmMapPtr& map)
           LOG_TRACE(
             "Removing relation that contains itself as a member: " << memberRelationId << "...");
           relation->removeElement(ElementId(ElementType::Relation, memberRelationId));
+          _numMembersInvolvedInCircRefs++;
         }
         else if (_relationIdsToRelationMemberIds.values(memberRelationId).contains(relationId))
         {
@@ -77,6 +79,7 @@ void RelationCircularRefRemover::apply(OsmMapPtr& map)
             "Removing relation member element with ID: " << memberRelationId <<
             " from relation with id: " << relationId << "...");
           relation->removeElement(ElementId(ElementType::Relation, memberRelationId));
+          _numMembersInvolvedInCircRefs++;
         }
         else
         {
