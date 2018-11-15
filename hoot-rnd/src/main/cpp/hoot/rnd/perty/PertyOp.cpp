@@ -237,8 +237,6 @@ boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& m
   MapProjector::projectToPlanar(map);
   boost::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
 
-  LOG_INFO(toString());
-
   geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
   LOG_INFO("env: " << env.toString());
 
