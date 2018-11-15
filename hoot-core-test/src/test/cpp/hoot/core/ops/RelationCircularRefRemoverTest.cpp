@@ -62,7 +62,6 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
-    //TODO: add a relation that contains itself to test data
     reader.read(
       "test-files/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest-in.osm",
       map);
