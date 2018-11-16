@@ -562,8 +562,6 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
   }
   else
   {
-    LOG_DEBUG("Unable to stream I/O.");
-
     OsmMapPtr map(new OsmMap());
     for (int i = 0; i < inputs.size(); i++)
     {
@@ -572,7 +570,7 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     }
 
-    LOG_INFO("Applying conversion operations...");
+    LOG_DEBUG("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
     MapProjector::projectToWgs84(map);
 

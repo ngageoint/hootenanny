@@ -76,6 +76,9 @@ bool ElementStreamer::areStreamableIo(const QStringList inputs, const QString ou
   {
     if (!ElementStreamer::isStreamableIo(inputs.at(i), output))
     {
+      LOG_INFO(
+        "Unable to stream I/O due to input: " << inputs.at(i).right(25) << " and/or output: " <<
+        output.right(25));
       return false;
     }
   }
@@ -89,6 +92,8 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
   {
     if (!opName.trimmed().isEmpty())
     {
+      //TODO: can this be cleaned up?
+
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
         ElementCriterionPtr criterion(
@@ -96,19 +101,36 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
         {
-          LOG_DEBUG("Unstreamable criterion op: " << opName);
+          LOG_INFO("Unable to stream I/O due to criterion op: " << opName);
           return false;
         }
       }
-      // Allowing ConstElementVisitor here is causing convert crashes.  May be fixed by #2705.
-      else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()) /*||
-               Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString())*/)
+      else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
       {
-        // good, pass
+        ElementVisitorPtr vis(
+          Factory::getInstance().constructObject<ElementVisitor>(opName));
+        // when streaming we can't provide a reliable OsmMap.
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
+        {
+          LOG_INFO("Unable to stream I/O due to visitor op: " << opName);
+          return false;
+        }
       }
+      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString()))
+      {
+        ConstElementVisitorPtr vis(
+          Factory::getInstance().constructObject<ConstElementVisitor>(opName));
+        // when streaming we can't provide a reliable OsmMap.
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
+        {
+          LOG_INFO("Unable to stream I/O due to visitor op: " << opName);
+          return false;
+        }
+      }
+      // OsmMapOperation isn't streamable.
       else
       {
-        LOG_DEBUG("Unstreamable op: " << opName);
+        LOG_INFO("Unable to stream I/O due to: " << opName);
         return false;
       }
     }
@@ -125,7 +147,7 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
 
   if (ops.size() == 0)
   {
-    return  filteredInputStream;
+    return filteredInputStream;
   }
 
   LOG_VARD(ops);
@@ -134,6 +156,8 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
     LOG_VARD(opName);
     if (!opName.trimmed().isEmpty())
     {
+      //TODO: can this be cleaned up?
+
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
         LOG_INFO("Filtering input with: " << opName << "...");
