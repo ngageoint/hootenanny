@@ -46,8 +46,6 @@ public:
 
   AddRef1Visitor();
 
-  virtual ~AddRef1Visitor() {}
-
   virtual void setConfiguration(const Settings& conf);
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }

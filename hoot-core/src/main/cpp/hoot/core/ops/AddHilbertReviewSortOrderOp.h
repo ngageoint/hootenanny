@@ -30,11 +30,12 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
-class AddHilbertReviewSortOrderOp : public OsmMapOperation
+class AddHilbertReviewSortOrderOp : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -50,14 +51,13 @@ public:
   { return "Adding geospatial sorting tags to review relations..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Added " + QString::number(_numTagsAdded) + " sorting tags"; }
+  { return "Added " + QString::number(_numAffected) + " sorting tags"; }
 
   virtual QString getDescription() const
   { return "Adds tags that enable sorting reviewable features geospatially"; }
 
 private:
 
-  int _numTagsAdded;
   boost::shared_ptr<geos::geom::Envelope> _mapEnvelope;
 
   int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const std::set<ElementId> eids);

@@ -29,6 +29,7 @@
 
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -36,15 +37,14 @@ namespace hoot
 /**
  * Removes non-existent element references from relations or ways with negative IDs.
  */
-class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
+  public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
 
   RemoveMissingElementsVisitor();
-
-  virtual ~RemoveMissingElementsVisitor() {}
 
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
 
@@ -57,7 +57,7 @@ public:
   { return "Removing references to elements that do not exist..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Removed " + QString::number(_v->getMissingCount()) + " missing elements"; }
+  { return "Removed " + QString::number(_numAffected) + " missing elements"; }
 
   virtual QString getDescription() const
   { return "Removes references to any elements that do not exist"; }

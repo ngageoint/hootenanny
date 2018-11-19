@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -43,7 +44,7 @@ namespace hoot
    another element (e.g. only contains UUID and source, but not FCODE equivalent or other
    informative tags).
  */
-class NoInformationElementRemover : public OsmMapOperation
+class NoInformationElementRemover : public OsmMapOperation, public OperationStatusInfo
 {
   public:
 
@@ -58,6 +59,10 @@ class NoInformationElementRemover : public OsmMapOperation
 
     virtual QString getInitStatusMessage()
     { return "Removing elements with no information tags..."; }
+
+    //TODO: finish; wasn't obvious how to count the total affected
+    virtual QString getCompletedStatusMessage()
+    { return ""; }
 
     virtual QString getDescription() const
     { return "Removes elements containing no information in tags"; }

@@ -28,6 +28,7 @@
 #define ELEMENTCRITERION_H
 
 #include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -48,7 +49,7 @@ class Element;
  * meet the criteria, rather than apply it to those that don't meet the criteria). Look at the
  * NotCriterion for an example to negate criterion.
  */
-class ElementCriterion
+class ElementCriterion : public ApiEntityInfo
 {
 public:
 
@@ -65,17 +66,6 @@ public:
    * Use the clone pattern for all classes based on the ElementCriterion class
    */
   virtual boost::shared_ptr<ElementCriterion> clone() = 0;
-
-  /**
-   * Returns a one sentence description for the criterion.
-   *
-   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
-   * on one line when displayed with the 'operators' command.
-   *
-   * To prevent a criterion from being displayed by the inline-operators command, this implemented
-   * as returning an empty string.
-   */
-  virtual QString getDescription() const = 0;
 };
 
 typedef boost::shared_ptr<ElementCriterion> ElementCriterionPtr;

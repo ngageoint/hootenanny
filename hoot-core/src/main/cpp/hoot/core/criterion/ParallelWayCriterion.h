@@ -51,7 +51,6 @@ public:
   ParallelWayCriterion(const ConstOsmMapPtr& map,
                        ConstWayPtr baseWay,
                        bool isParallel = true);
-
   virtual ~ParallelWayCriterion();
 
   Radians calculateDifference(const ConstWayPtr& w) const;

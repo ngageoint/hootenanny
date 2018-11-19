@@ -46,8 +46,6 @@ public:
 
   FeatureCountVisitor() : _count(0) {}
 
-  virtual ~FeatureCountVisitor() {}
-
   int getCount() const { return _count; }
 
   double getStat() const { return _count; }

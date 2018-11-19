@@ -43,8 +43,6 @@ public:
 
   static std::string className() { return "hoot::CalculateHashVisitor2"; }
 
-  virtual ~CalculateHashVisitor2();
-
   virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const

@@ -36,13 +36,14 @@ namespace hoot
 class WayTagMerger : public WayMerger
 {
 public:
+
   static std::string className() { return "hoot::WayTagMerger"; }
 
   WayTagMerger();
-
   virtual ~WayTagMerger() {}
 
 protected:
+
   virtual Manipulation* _createManipulation(long leftId, long rightId, ConstOsmMapPtr map,
     Meters minSplitSize);
 };

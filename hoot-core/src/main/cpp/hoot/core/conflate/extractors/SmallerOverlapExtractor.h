@@ -29,7 +29,7 @@
 #define SMALLEROVERLAPEXTRACTOR_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 
 namespace hoot
 {
@@ -50,7 +50,7 @@ class Element;
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
  * appropriate data structures.
  */
-class SmallerOverlapExtractor : public FeatureExtractor
+class SmallerOverlapExtractor : public FeatureExtractorBase
 {
 public:
 
@@ -59,13 +59,6 @@ public:
   static std::string className() { return "hoot::SmallerOverlapExtractor"; }
 
   virtual std::string getClassName() const { return SmallerOverlapExtractor::className(); }
-
-  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
-
-  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
-  {
-    return Tgs::DataFrame::NullAsMissingValue;
-  }
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;

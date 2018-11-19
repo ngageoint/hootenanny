@@ -54,7 +54,7 @@ public:
 
   QString toString() const { return "ExactStringDistance"; }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Returns a matching string comparison score only if the strings match exactly (ignoring case)"; }
 };
 

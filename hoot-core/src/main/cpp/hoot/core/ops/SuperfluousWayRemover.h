@@ -32,6 +32,7 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -48,14 +49,13 @@ class OsmMap;
  * Removes all ways that are not being used by relations that contain zero nodes, or all the nodes
  * are identical.
  */
-class SuperfluousWayRemover : public OsmMapOperation
+class SuperfluousWayRemover : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover();
-
   SuperfluousWayRemover(boost::shared_ptr<OsmMap> map);
 
   void apply(boost::shared_ptr<OsmMap>& map);
@@ -70,7 +70,7 @@ public:
   virtual QString getInitStatusMessage() { return "Removing superfluous ways..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Removed " + QString::number(_numWaysRemoved) + " superfluous ways"; }
+  { return "Removed " + QString::number(_numAffected) + " superfluous ways"; }
 
   virtual QString getDescription() const
   { return "Removes ways not in relations or containing zero or all identical nodes"; }
@@ -78,10 +78,6 @@ public:
 protected:
 
   boost::shared_ptr<OsmMap> _inputMap;
-
-private:
-
-  int _numWaysRemoved;
 };
 
 }

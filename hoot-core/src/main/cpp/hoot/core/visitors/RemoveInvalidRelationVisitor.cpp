@@ -47,8 +47,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveInvalidRelationVisitor)
 
 RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor() :
-_numMembersRemoved(0),
-_numRelationsRemoved(0)
+_numMembersRemoved(0)
 {
 }
 
@@ -81,7 +80,7 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
         }
         //  Delete the relation
         RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
-        _numRelationsRemoved++;
+        _numAffected++;
       }
     }
   }

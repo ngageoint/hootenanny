@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QMultiMap>
@@ -42,7 +43,7 @@ namespace hoot
  * Removes relations members that have cross references between relations as well as well as
  * relation members that reference themselves
  */
-class RelationCircularRefRemover : public OsmMapOperation
+class RelationCircularRefRemover : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -56,7 +57,7 @@ public:
   { return "Removing relation members with circular references..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Removed " + QString::number(_numMembersInvolvedInCircRefs) +
+  { return "Removed " + QString::number(_numAffected) +
            " relation members involved in circular references"; }
 
   virtual QString getDescription() const
@@ -64,7 +65,6 @@ public:
 
 private:
 
-  int _numMembersInvolvedInCircRefs;
   QMultiMap<long, long> _relationIdsToRelationMemberIds; 
 };
 

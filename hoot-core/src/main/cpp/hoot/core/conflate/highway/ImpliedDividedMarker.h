@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -53,7 +54,7 @@ class Way;
  * mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to
  * be marked as divided.
  */
-class ImpliedDividedMarker : public OsmMapOperation
+class ImpliedDividedMarker : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -76,7 +77,7 @@ public:
   { return "Marking road sections that appear to be divided highways..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Marked " + QString::number(_numMarked) + " road sections as divided highways"; }
+  { return "Marked " + QString::number(_numAffected) + " road sections as divided highways"; }
 
   virtual QString getDescription() const
   { return "Marks road sections that implicitly appear to be divided highways"; }
@@ -86,7 +87,6 @@ protected:
   boost::shared_ptr<const OsmMap> _inputMap;
   boost::shared_ptr<OsmMap> _result;
   boost::shared_ptr<NodeToWayMap> _n2w;
-  int _numMarked;
 
   /**
    * Returns true if the given way has a divider highway connected on both ends.

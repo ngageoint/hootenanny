@@ -22,33 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIGMAAGGREGATOR_H
-#define SIGMAAGGREGATOR_H
-
-#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
+#ifndef OPERATION_STATUS_INFO_H
+#define OPERATION_STATUS_INFO_H
 
 namespace hoot
 {
 
-class SigmaAggregator : public ValueAggregator
+/**
+ * Interface to describe information about an operation performed on data.  e.g. OsmMapOperation,
+ * ElementVisitor, etc.
+ *
+ * Implementing this interface may not make sense on some operations.  If desired, implementers
+ * can force a subset of any of the status messages to not be displayed by returning an empty
+ * string.
+ */
+class OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::SigmaAggregator"; }
+  virtual ~OperationStatusInfo() {}
 
-  SigmaAggregator() {}
+  /**
+    Returns a user friendly message indicating the visitor has begun its work
 
-  virtual double aggregate(std::vector<double>& d) const;
+    e.g. "Removing duplicate ways..."
+    */
+  virtual QString getInitStatusMessage() = 0;
 
-  virtual QString toString() const { return QString("Sigma Aggregator"); }
+  /**
+    Returns a user friendly message indicating a summary of the work performed by the visitor
 
-  virtual QString getDescription() const
-  { return "Aggregates data based on the unbiased Standard Deviation value"; }
+    e.g. "Removed 20 duplicate ways"
+    */
+  virtual QString getCompletedStatusMessage() = 0;
 };
 
 }
 
-
-#endif // SIGMAAGGREGATOR_H
+#endif // OPERATION_STATUS_INFO_H

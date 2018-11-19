@@ -34,6 +34,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -73,9 +74,11 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
 
-      if (!t->getInitStatusMessage().trimmed().isEmpty())
+      boost::shared_ptr<OperationStatusInfo> statusInfo =
+        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO(t->getInitStatusMessage());
+        LOG_INFO(statusInfo->getInitStatusMessage());
       }
       else
       {
@@ -90,10 +93,11 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 
       t->apply(map);
 
-      if (!t->getCompletedStatusMessage().trimmed().isEmpty())
+      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {
         LOG_INFO(
-          t->getCompletedStatusMessage() + " in " + StringUtils::secondsToDhms(timer.elapsed()));
+          statusInfo->getCompletedStatusMessage() + " in " +
+          StringUtils::secondsToDhms(timer.elapsed()));
       }
     }
     else if (f.hasBase<ConstElementVisitor>(s.toStdString()))
@@ -101,9 +105,11 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
       boost::shared_ptr<ConstElementVisitor> t(
         Factory::getInstance().constructObject<ConstElementVisitor>(s));
 
-      if (!t->getInitStatusMessage().trimmed().isEmpty())
+      boost::shared_ptr<OperationStatusInfo> statusInfo =
+        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO(t->getInitStatusMessage());
+        LOG_INFO(statusInfo->getInitStatusMessage());
       }
       else
       {
@@ -119,10 +125,11 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
       boost::shared_ptr<OsmMapOperation> op(new VisitorOp(t));
       op->apply(map);
 
-      if (!t->getCompletedStatusMessage().trimmed().isEmpty())
+      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {
         LOG_INFO(
-          t->getCompletedStatusMessage() + " in " + StringUtils::secondsToDhms(timer.elapsed()));
+          statusInfo->getCompletedStatusMessage() + " in " +
+          StringUtils::secondsToDhms(timer.elapsed()));
       }
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
@@ -130,9 +137,11 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
-      if (!t->getInitStatusMessage().trimmed().isEmpty())
+      boost::shared_ptr<OperationStatusInfo> statusInfo =
+        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO(t->getInitStatusMessage());
+        LOG_INFO(statusInfo->getInitStatusMessage());
       }
       else
       {
@@ -147,10 +156,11 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 
       map->visitRw(*t);
 
-      if (!t->getCompletedStatusMessage().trimmed().isEmpty())
+      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {
         LOG_INFO(
-          t->getCompletedStatusMessage() + " in " + StringUtils::secondsToDhms(timer.elapsed()));
+          statusInfo->getCompletedStatusMessage() + " in " +
+          StringUtils::secondsToDhms(timer.elapsed()));
       }
     }
     else

@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QMultiHash>
@@ -46,11 +47,8 @@ class Way;
  * Given an OsmMap intersection splitter makes all intersections contain only way end nodes. For
  * example, if two ways make a four way intesection the intersection splitter will convert that
  * into four ways that meet at a four way intersection. No nodes are modified in this process.
- *
- *   - OsmSchema::isHighway or OsmSchema::isLinearWaterway must return true for a way to be
- *     considered for splitting.
  */
-class IntersectionSplitter : public OsmMapOperation
+class IntersectionSplitter : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -69,7 +67,7 @@ public:
   virtual QString getInitStatusMessage() { return "Splitting road intersections..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Split " + QString::number(_numSplitsMade) + " road intersections"; }
+  { return "Split " + QString::number(_numAffected) + " road intersections"; }
 
   virtual QString getDescription() const
   { return "Makes all road intersections contain only way end nodes"; }
@@ -79,7 +77,6 @@ private:
   boost::shared_ptr<OsmMap> _map;
   QMultiHash<long, long> _nodeToWays;
   QSet<long> _todoNodes;
-  int _numSplitsMade;
 
   void _mapNodesToWays();
 

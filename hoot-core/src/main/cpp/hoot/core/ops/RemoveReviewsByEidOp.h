@@ -53,8 +53,6 @@ public:
    */
   RemoveReviewsByEidOp() {}
 
-  virtual ~RemoveReviewsByEidOp() {}
-
   /**
    * If the elements aren't specified in the constructor this must be called exactly two times. Once
    * for 'from' and a second time for 'to'.

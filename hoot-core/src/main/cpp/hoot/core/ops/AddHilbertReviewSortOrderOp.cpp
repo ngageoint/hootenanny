@@ -61,8 +61,7 @@ bool reviewLess(const pair<ElementId, int64_t>& p1, const pair<ElementId, int64_
   }
 }
 
-AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp() :
-_numTagsAdded(0)
+AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
 {
 }
 
@@ -76,7 +75,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
     return;
   }
 
-  _numTagsAdded = 0;
+  _numAffected = 0;
   _mapEnvelope.reset();
   MapProjector::projectToPlanar(map);
 
@@ -117,7 +116,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
     RelationPtr r = map->getRelation(reviewOrder[i].first.getId());
 
     r->getTags().set(MetadataTags::HootReviewSortOrder(), (long)i);
-    _numTagsAdded++;
+    _numAffected++;
   }
 }
 

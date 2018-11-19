@@ -47,8 +47,6 @@ public:
   AddUuidVisitor() {}
   AddUuidVisitor(QString key);
 
-  virtual ~AddUuidVisitor() {}
-
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   /**

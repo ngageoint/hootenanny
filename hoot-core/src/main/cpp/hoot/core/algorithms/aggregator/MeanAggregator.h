@@ -44,7 +44,7 @@ public:
 
   virtual QString toString() const { return "MeanAggregator"; }
 
-  virtual QString getDescription() { return "Aggregates data based on the mean value"; }
+  virtual QString getDescription() const { return "Aggregates data based on the mean value"; }
 };
 
 }

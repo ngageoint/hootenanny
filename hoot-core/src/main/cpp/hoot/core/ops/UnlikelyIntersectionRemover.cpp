@@ -50,8 +50,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnlikelyIntersectionRemover)
 
-UnlikelyIntersectionRemover::UnlikelyIntersectionRemover() :
-_numRemoved(0)
+UnlikelyIntersectionRemover::UnlikelyIntersectionRemover()
 {
 }
 
@@ -101,7 +100,7 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // otherwise split the intersection into two groups.
   else
   {
-    _numRemoved = g2.size();
+    _numAffected = g2.size();
     LOG_TRACE("Splitting intersection for ways: " << g2 << " at node " << intersectingNode);
     _splitIntersection(intersectingNode, g2);
   }
@@ -196,7 +195,7 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
 
 void UnlikelyIntersectionRemover::apply(boost::shared_ptr<OsmMap>& map)
 {
-  _numRemoved = 0;
+  _numAffected = 0;
   _result = map;
 
   NodeToWayMap n2w(*_result);

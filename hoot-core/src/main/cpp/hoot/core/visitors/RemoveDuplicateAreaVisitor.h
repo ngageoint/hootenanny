@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -52,7 +53,7 @@ class TagDifferencer;
  *
  * RecursiveElementRemover is used to remove the element.
  */
-class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor
+class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -61,19 +62,17 @@ public:
   RemoveDuplicateAreaVisitor();
 
   virtual void visit(const ConstElementPtr& e);
-
   virtual void visit(const boost::shared_ptr<Element>& e1);
 
   virtual QString getInitStatusMessage() { return "Removing duplicate areas..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Removed " + QString::number(_numDuplicates) + " duplicate areas"; }
+  { return "Removed " + QString::number(_numAffected) + " duplicate areas"; }
 
   virtual QString getDescription() const { return "Removes duplicate areas"; }
 
 private:
 
-  int _numDuplicates;
   boost::shared_ptr<TagDifferencer> _diff;
   QHash<ElementId, boost::shared_ptr<geos::geom::Geometry> > _geoms;
 

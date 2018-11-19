@@ -49,15 +49,14 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateNameRemover)
 
 DuplicateNameRemover::DuplicateNameRemover() :
-_caseSensitive(true),
-_numNamesRemoved(0)
+_caseSensitive(true)
 {
   setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
 
 void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
 {
-  _numNamesRemoved = 0;
+  _numAffected = 0;
   _map = map;
 
   WayMap wm = _map->getWays();
@@ -102,7 +101,7 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
       }
     }
 
-    _numNamesRemoved = list.size() - filtered.size();
+    _numAffected = list.size() - filtered.size();
 
     if (filtered.size() > 0)
     {

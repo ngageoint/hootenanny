@@ -40,6 +40,8 @@ class ElementVisitorConsumer
 {
 public:
 
+  virtual ~ElementVisitorConsumer(){}
+
   virtual void addVisitor(const ConstElementVisitorPtr& e) = 0;
 };
 

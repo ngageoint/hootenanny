@@ -45,8 +45,6 @@ public:
 
   KeepNodesVisitor() {}
 
-  virtual ~KeepNodesVisitor() {}
-
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   /**

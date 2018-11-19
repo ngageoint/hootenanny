@@ -52,8 +52,6 @@ public:
 
   TranslationVisitor();
 
-  virtual ~TranslationVisitor() {}
-
   /**
    * @see Configurable
    */

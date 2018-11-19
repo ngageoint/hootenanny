@@ -51,8 +51,6 @@ public:
     _split(split)
   {}
 
-  virtual ~GetTagValuesVisitor() {}
-
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Puts all values for the given key into a bag"; }

@@ -27,6 +27,9 @@
 #ifndef STRINGDISTANCE_H
 #define STRINGDISTANCE_H
 
+// Hoot
+#include <hoot/core/info/ApiEntityInfo.h>
+
 // Qt
 #include <QString>
 
@@ -40,14 +43,15 @@ namespace hoot
 {
 
 /**
- * An interface to determining the distance between two strings.
+ * An interface to determining the similarity of two strings.
  */
-class StringDistance
+class StringDistance : public ApiEntityInfo
 {
 public:
 
   static std::string className() { return "hoot::StringDistance"; }
 
+  StringDistance() {}
   virtual ~StringDistance() {}
 
   /**
@@ -57,8 +61,6 @@ public:
   virtual double compare(const QString& s1, const QString& s2) const = 0;
 
   virtual QString toString() const = 0;
-
-  virtual QString getDescription() = 0;
 };
 
 typedef boost::shared_ptr<StringDistance> StringDistancePtr;

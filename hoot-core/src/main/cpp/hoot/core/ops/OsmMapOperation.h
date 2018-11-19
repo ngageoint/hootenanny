@@ -28,6 +28,9 @@
 #ifndef OsmMapOperation_H
 #define OsmMapOperation_H
 
+// Hoot
+#include <hoot/core/info/ApiEntityInfo.h>
+
 // Standard
 #include <string>
 
@@ -48,12 +51,13 @@ class OsmMap;
 /**
  * Modifies an OsmMap in some way.
  */
-class OsmMapOperation
+class OsmMapOperation : public ApiEntityInfo
 {
 public:
 
   static std::string className() { return "hoot::OsmMapOperation"; }
 
+  OsmMapOperation() : _numAffected(0) {}
   virtual ~OsmMapOperation() {}
 
   /**
@@ -70,30 +74,10 @@ public:
    */
   virtual boost::any getResult() { boost::any ptr; return ptr; }
 
-  /**
-    Returns a user friendly message indicating the operation has begun its work
+protected:
 
-    e.g. "Removing duplicate ways..."
-    */
-  virtual QString getInitStatusMessage() { return ""; }
-
-  /**
-    Returns a user friendly message indicating a summary of the work performed by the operation
-
-    e.g. "Removed 20 duplicate ways."
-    */
-  virtual QString getCompletedStatusMessage() { return ""; }
-
-  /**
-   * Returns a one sentence description for the operation.
-   *
-   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
-   * on one line when displayed with the 'inline-operators' command.
-   *
-   * To prevent an operation from being displayed by the inline-operators command, this may be
-   * implemented as returning an empty string.
-   */
-  virtual QString getDescription() const = 0;
+  // This will only be used by those implementing OperationStatusInfo.
+  long _numAffected;
 };
 
 }

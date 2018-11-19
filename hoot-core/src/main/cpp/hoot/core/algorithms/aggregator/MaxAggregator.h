@@ -44,7 +44,7 @@ public:
 
   virtual QString toString() const { return "MaxAggregator"; }
 
-  virtual QString getDescription() { return "Aggregates data based on the maximum value"; }
+  virtual QString getDescription() const { return "Aggregates data based on the maximum value"; }
 };
 
 }

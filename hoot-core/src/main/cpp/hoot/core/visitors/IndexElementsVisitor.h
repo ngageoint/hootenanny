@@ -54,9 +54,7 @@ namespace hoot
  */
 class ElementCriterion;
 
-class IndexElementsVisitor :
-    public ConstElementVisitor,
-    public ElementCriterionConsumer
+class IndexElementsVisitor : public ConstElementVisitor, public ElementCriterionConsumer
 {
 public:
 

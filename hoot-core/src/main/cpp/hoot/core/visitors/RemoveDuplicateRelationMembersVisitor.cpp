@@ -41,8 +41,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveDuplicateRelationMembersVisitor)
 
-RemoveDuplicateRelationMembersVisitor::RemoveDuplicateRelationMembersVisitor() :
-_numDuplicateMembers(0)
+RemoveDuplicateRelationMembersVisitor::RemoveDuplicateRelationMembersVisitor()
 {
 }
 
@@ -64,8 +63,8 @@ void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
       // no point in updating them members if there were no dupes
       if (uniqueMembers.size() < (int)members.size())
       {
-        _numDuplicateMembers += ((int)members.size() - uniqueMembers.size());
-        LOG_VARD(_numDuplicateMembers);
+        _numAffected += ((int)members.size() - uniqueMembers.size());
+        LOG_VARD(_numAffected);
         relation->setMembers(uniqueMembers.toList().toVector().toStdVector());
       }
     }

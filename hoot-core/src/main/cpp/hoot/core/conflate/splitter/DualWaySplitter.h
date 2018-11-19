@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Tgs
 #include <tgs/SharedPtr.h>
@@ -52,7 +53,7 @@ class Way;
  * assumptions must be made to do this including assumptions about the direction of travel on
  * roads (right or left hand drivers).
  */
-class DualWaySplitter : public OsmMapOperation
+class DualWaySplitter : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -80,7 +81,7 @@ public:
   { return "Splitting divided highways into two one way streets..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Split " + QString::number(_numSplitWays) + " divided highways"; }
+  { return "Split " + QString::number(_numAffected) + " divided highways"; }
 
   virtual QString getDescription() const
   { return "Splits all 'divided=yes'' highways into two one way streets"; }
@@ -92,7 +93,6 @@ private:
   boost::shared_ptr<const OsmMap> _map;
   boost::shared_ptr<OsmMap> _result;
   std::unordered_set<long> _nodes;
-  int _numSplitWays;
 
   // temporary variables for convenience
   boost::shared_ptr<Way> _left, _right;

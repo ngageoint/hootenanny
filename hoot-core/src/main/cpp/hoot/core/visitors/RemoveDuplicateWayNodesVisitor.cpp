@@ -39,8 +39,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveDuplicateWayNodesVisitor)
 
-RemoveDuplicateWayNodesVisitor::RemoveDuplicateWayNodesVisitor() :
-_numDuplicateNodes(0)
+RemoveDuplicateWayNodesVisitor::RemoveDuplicateWayNodesVisitor()
 {
 }
 
@@ -82,7 +81,7 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
         LOG_TRACE("Found duplicate way node: " << nodeId);
         duplicateWayNodeIds.append(nodeId);
         foundDuplicateWayNode = true;
-        _numDuplicateNodes++;
+        _numAffected++;
       }
     }
     if (foundDuplicateWayNode)

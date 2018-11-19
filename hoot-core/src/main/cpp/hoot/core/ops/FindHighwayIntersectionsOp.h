@@ -50,8 +50,6 @@ public:
 
   FindHighwayIntersectionsOp();
 
-  virtual ~FindHighwayIntersectionsOp() {}
-
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual QString getDescription() const { return "Identifies road intersections"; }

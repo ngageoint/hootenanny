@@ -71,6 +71,7 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
       {
         LOG_TRACE("Removing review relation with ID: " << r->getId());
         RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+        _numAffected++;
       }
     }
   }

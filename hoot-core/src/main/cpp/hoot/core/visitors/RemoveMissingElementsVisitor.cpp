@@ -44,6 +44,7 @@ RemoveMissingElementsVisitor::RemoveMissingElementsVisitor()
 void RemoveMissingElementsVisitor::visit(const ConstElementPtr& e)
 {
   _v->visit(e);
+  _numAffected = _v->getMissingCount();
 }
 
 }

@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -41,7 +42,8 @@ class OsmMap;
 /**
  * Goes through all relations and check if there are any duplicate reviews.
  */
-class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable
+class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable,
+  public OperationStatusInfo
 {
 public:
 
@@ -58,6 +60,10 @@ public:
   virtual void writeObject(QDataStream& /*os*/) const {}
 
   virtual QString getInitStatusMessage() { return "Removing duplicate review relations..."; }
+
+  //TODO: finish; wasn't obvious how to count the total affected
+  virtual QString getCompletedStatusMessage()
+  { return ""; }
 
   virtual QString getDescription() const { return "Removes duplicate reviews"; }
 

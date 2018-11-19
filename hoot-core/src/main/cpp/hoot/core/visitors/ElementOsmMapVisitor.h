@@ -45,7 +45,6 @@ class ElementOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsu
 public:
 
   ElementOsmMapVisitor() {}
-
   virtual ~ElementOsmMapVisitor() {}
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }

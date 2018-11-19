@@ -51,15 +51,12 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ImpliedDividedMarker)
 
-ImpliedDividedMarker::ImpliedDividedMarker() :
-_numMarked(0)
+ImpliedDividedMarker::ImpliedDividedMarker()
 {
-
 }
 
 ImpliedDividedMarker::ImpliedDividedMarker(boost::shared_ptr<const OsmMap> map) :
-_inputMap(map),
-_numMarked(0)
+_inputMap(map)
 {
 }
 
@@ -106,7 +103,7 @@ boost::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided(boost::shared_ptr<co
 
 boost::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
 {
-  _numMarked = 0;
+  _numAffected = 0;
   boost::shared_ptr<OsmMap> result(new OsmMap(_inputMap));
   _result = result;
 
@@ -128,7 +125,7 @@ boost::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
     {
       // mark this tunnel/bridge as divided.
       w->setTag("divider", "yes");
-      _numMarked++;
+      _numAffected++;
     }
   }
 

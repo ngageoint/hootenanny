@@ -47,8 +47,6 @@ public:
 
   TagRenameKeyVisitor(const QString oldKey, const QString newKey);
 
-  virtual ~TagRenameKeyVisitor() {}
-
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings& conf);

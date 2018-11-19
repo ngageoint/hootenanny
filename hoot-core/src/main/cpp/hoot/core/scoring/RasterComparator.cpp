@@ -118,6 +118,7 @@ void RasterComparator::_dumpImage(cv::Mat& image)
 class PaintVisitor : public ConstElementVisitor
 {
 public:
+
   PaintVisitor(OsmMapPtr map, GeometryPainter& gp, QPainter& pt, QMatrix& m) :
     _map(map), _gp(gp), _pt(pt), _m(m) { }
 
@@ -134,6 +135,7 @@ public:
   virtual QString getDescription() const { return ""; }
 
 private:
+
   OsmMapPtr _map;
   GeometryPainter& _gp;
   QPainter& _pt;

@@ -49,8 +49,6 @@ public:
 
   SplitLongLinearWaysVisitor();
 
-  virtual ~SplitLongLinearWaysVisitor() { }
-
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   virtual void setOsmMap(const OsmMap*) { assert(false); }

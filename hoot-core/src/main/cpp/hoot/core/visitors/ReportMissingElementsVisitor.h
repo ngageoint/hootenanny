@@ -51,8 +51,6 @@ public:
   ReportMissingElementsVisitor(bool removeMissing = false,
                                int maxReport = Log::getWarnMessageLimit());
 
-  virtual ~ReportMissingElementsVisitor() {}
-
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   virtual void setOsmMap(const OsmMap* map) { assert(!_removeMissing); _constMap = map; }

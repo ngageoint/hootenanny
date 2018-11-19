@@ -28,6 +28,7 @@
 #define FEATUREEXTRACTORBASE_H
 
 #include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -36,7 +37,7 @@ namespace hoot
  * Similar to Shape Distance as described in [1].
  * 1. Savary & Zeitouni, 2005
  */
-class FeatureExtractorBase : public FeatureExtractor
+class FeatureExtractorBase : public FeatureExtractor, public ApiEntityInfo
 {
 public:
 

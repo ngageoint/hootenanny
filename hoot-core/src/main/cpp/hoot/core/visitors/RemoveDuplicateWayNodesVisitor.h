@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -42,7 +43,7 @@ namespace hoot
  * duplicated nodes appears to be in the conflation routines somewhere and should be found and
  * fixed.  If that happens, this visitor could be removed from the post conflation ops.
  */
-class RemoveDuplicateWayNodesVisitor : public ElementOsmMapVisitor
+class RemoveDuplicateWayNodesVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -55,13 +56,9 @@ public:
   virtual QString getInitStatusMessage() { return "Removing duplicate way nodes..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Removed " + QString::number(_numDuplicateNodes) + " duplicate way nodes"; }
+  { return "Removed " + QString::number(_numAffected) + " duplicate way nodes"; }
 
   virtual QString getDescription() const { return "Removes duplicate way nodes"; }
-
-private:
-
-  int _numDuplicateNodes;
 };
 
 }

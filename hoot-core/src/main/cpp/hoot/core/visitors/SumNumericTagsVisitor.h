@@ -52,8 +52,6 @@ public:
   SumNumericTagsVisitor();
   explicit SumNumericTagsVisitor(const QStringList keys);
 
-  virtual ~SumNumericTagsVisitor() {}
-
   /**
    * Given a set of tag keys and for all features having those tags, sums the numerical values of
    * the tags.  If the tag value cannot be converted to a number, a warning is logged and the tag

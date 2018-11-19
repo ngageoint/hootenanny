@@ -44,7 +44,7 @@ public:
 
   virtual QString toString() const { return "MinAggregator"; }
 
-  virtual QString getDescription() { return "Aggregates data based on the minimum value"; }
+  virtual QString getDescription() const { return "Aggregates data based on the minimum value"; }
 };
 
 }

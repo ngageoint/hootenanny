@@ -57,7 +57,7 @@ public:
 
   virtual QString toString() const { return "MaxWordSet " + _d->toString(); }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Returns a score based on the max (best) pairwise word comparison within two sets of words"; }
 
 private:

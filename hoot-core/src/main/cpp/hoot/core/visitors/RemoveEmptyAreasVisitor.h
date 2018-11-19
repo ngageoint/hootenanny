@@ -31,6 +31,7 @@
 #include <memory>
 
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,7 +40,7 @@ class ElementConverter;
 /**
  * Removes all "area" elements that have an area of zero.
  */
-class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor
+class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -54,14 +55,13 @@ public:
   virtual QString getInitStatusMessage() { return "Removing empty areas..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Removed " + QString::number(_numRemoved) + " empty areas"; }
+  { return "Removed " + QString::number(_numAffected) + " empty areas"; }
 
   virtual QString getDescription() const { return "Removes empty areas"; }
 
 private:
 
   boost::shared_ptr<ElementConverter> _ec;
-  int _numRemoved;
 };
 
 }

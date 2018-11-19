@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -52,7 +53,7 @@ class Way;
  * For example, a motorway overpass intersecting a residential street at a 90° is considered
  * unlikely and "unsnapped". The geometry location is not modified.
  */
-class UnlikelyIntersectionRemover : public OsmMapOperation
+class UnlikelyIntersectionRemover : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -70,14 +71,13 @@ public:
   virtual QString getInitStatusMessage() { return "Removing unlikely intersections..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Removed " + QString::number(_numRemoved) + " unlikely intersections"; }
+  { return "Removed " + QString::number(_numAffected) + " unlikely intersections"; }
 
   virtual QString getDescription() const
   { return "Removes road intersections that are likely mistakes"; }
 
 protected:
 
-  int _numRemoved;
   boost::shared_ptr<OsmMap> _result;
 
   void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);

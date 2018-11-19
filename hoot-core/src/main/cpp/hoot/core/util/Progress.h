@@ -34,9 +34,9 @@ namespace hoot
 class Progress
 {
 public:
+
   Progress(QString source);
 
-  // getters
   QString getSource() { return _source; }
   QString getReportType() { return _reportType; }
   float getPercentComplete() { return _percentComplete; }
@@ -48,7 +48,6 @@ public:
   // the polling method calls this getter
   QString getMessage();
 
-  // setters
   void setSource(QString source) { _source = source; }
   void setReportType(QString reportType) { _reportType = reportType; }
   void setPercentComplete(float percentComplete) { _percentComplete = percentComplete; }
@@ -65,6 +64,7 @@ public:
                        QString userMessage);
 
 protected:
+
   // source command
   QString _source;
 
@@ -96,6 +96,6 @@ protected:
   bool _readyToSend();
 };
 
-} // end namespace hoot
+}
 
 #endif // HOOT_PROGRESS_H

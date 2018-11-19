@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -40,40 +41,21 @@ namespace hoot
  * honored in the same was as a ConstElementVisitor. Developers are encouraged to add ElementVisitor
  * support wherever it is relevant.
  */
-class ElementVisitor
+class ElementVisitor : public ApiEntityInfo
 {
 public:
 
+  ElementVisitor() : _numAffected(0) {}
   virtual ~ElementVisitor() {}
 
   static std::string className() { return "hoot::ElementVisitor"; }
 
   virtual void visit(const ElementPtr& e) = 0;
 
-  /**
-    Returns a user friendly message indicating the visitor has begun its work
+protected:
 
-    e.g. "Removing duplicate ways..."
-    */
-  virtual QString getInitStatusMessage() { return ""; }
-
-  /**
-    Returns a user friendly message indicating a summary of the work performed by the visitor
-
-    e.g. "Removed 20 duplicate ways."
-    */
-  virtual QString getCompletedStatusMessage() { return ""; }
-
-  /**
-   * Returns a one sentence description for the visitor.
-   *
-   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
-   * on one line when displayed with the 'info --operators' command.
-   *
-   * To prevent a visitor from being displayed by the 'info --operators' command, this
-   * may be implemented as returning an empty string.
-   */
-  virtual QString getDescription() const = 0;
+  // This will only be used by those implementing OperationStatusInfo.
+  long _numAffected;
 };
 
 typedef boost::shared_ptr<ElementVisitor> ElementVisitorPtr;

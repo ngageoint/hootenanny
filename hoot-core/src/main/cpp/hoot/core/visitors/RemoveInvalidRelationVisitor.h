@@ -31,6 +31,7 @@
 //  Hoot
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -40,7 +41,7 @@ namespace hoot
  * and multilinestring relation that has less that two members thus
  * making them not "multi" linestrings.
  */
-class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor
+class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -55,7 +56,7 @@ public:
 
   virtual QString getCompletedStatusMessage()
   { return "Removed " + QString::number(_numMembersRemoved) + " relation members and " +
-    QString::number(_numRelationsRemoved) + " relations"; }
+    QString::number(_numAffected) + " relations"; }
 
   virtual QString getDescription() const
   {
@@ -64,8 +65,9 @@ public:
 
 private:
 
+  // one of the few OperatStatusInfo implementers recording two stats, so we'll add an extra var
+  // to track
   int _numMembersRemoved;
-  int _numRelationsRemoved;
 
   void _removeDuplicates(const RelationPtr& r);
 };

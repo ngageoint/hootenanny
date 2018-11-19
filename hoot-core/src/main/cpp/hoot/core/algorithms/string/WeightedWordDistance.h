@@ -63,7 +63,7 @@ public:
 
   virtual QString toString() const { return "WeightedWordDistance " + _d->toString(); }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Returns a score based on the best pairwise comparison within two sets of words"; }
 
 private:

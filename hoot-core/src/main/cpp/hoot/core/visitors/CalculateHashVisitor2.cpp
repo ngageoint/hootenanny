@@ -37,10 +37,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor2)
 
-CalculateHashVisitor2::~CalculateHashVisitor2()
-{
-}
-
 void CalculateHashVisitor2::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Node)

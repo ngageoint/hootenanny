@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,7 +40,8 @@ namespace hoot
  *
  * See notes on RelationData::_members.
  */
-class RemoveDuplicateRelationMembersVisitor : public ElementOsmMapVisitor
+class RemoveDuplicateRelationMembersVisitor : public ElementOsmMapVisitor,
+  public OperationStatusInfo
 {
 public:
 
@@ -52,13 +54,9 @@ public:
   virtual QString getInitStatusMessage() { return "Removing duplicate relation members..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Removed " + QString::number(_numDuplicateMembers) + " duplicate relation members"; }
+  { return "Removed " + QString::number(_numAffected) + " duplicate relation members"; }
 
   virtual QString getDescription() const { return "Removes duplicate relation members"; }
-
-private:
-
-  int _numDuplicateMembers;
 };
 
 }

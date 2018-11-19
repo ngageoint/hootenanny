@@ -56,8 +56,6 @@ public:
   AverageNumericTagsVisitor();
   explicit AverageNumericTagsVisitor(const QStringList keys);
 
-  virtual ~AverageNumericTagsVisitor() {}
-
   /**
    * Given a set of tag keys and for all features having those tags, averages the numerical values of
    * the tags.  If the tag value cannot be converted to a number, a warning is logged and the tag

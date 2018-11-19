@@ -22,33 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIGMAAGGREGATOR_H
-#define SIGMAAGGREGATOR_H
-
-#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
+#ifndef API_ENTITY_INFO_H
+#define API_ENTITY_INFO_H
 
 namespace hoot
 {
 
-class SigmaAggregator : public ValueAggregator
+/**
+ * Interface to describe the functionality of various Hoot API entities. e.g. OsmMapOperation,
+ * ElementVisitor, ValueAggregator, etc.
+ */
+class ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::SigmaAggregator"; }
+  virtual ~ApiEntityInfo() {}
 
-  SigmaAggregator() {}
-
-  virtual double aggregate(std::vector<double>& d) const;
-
-  virtual QString toString() const { return QString("Sigma Aggregator"); }
-
-  virtual QString getDescription() const
-  { return "Aggregates data based on the unbiased Standard Deviation value"; }
+  /**
+   * Returns a one sentence description for the entity.
+   *
+   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
+   * on one line when displayed with the 'info --operators' command.
+   *
+   * To prevent a description from being displayed by the 'info' command, this may be implemented
+   * as returning an empty string.
+   */
+  virtual QString getDescription() const = 0;
 };
 
 }
 
-
-#endif // SIGMAAGGREGATOR_H
+#endif // API_ENTITY_INFO_H

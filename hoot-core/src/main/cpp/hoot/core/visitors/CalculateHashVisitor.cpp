@@ -42,11 +42,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor)
 
 CalculateHashVisitor::CalculateHashVisitor()
 {
-
-}
-
-CalculateHashVisitor::~CalculateHashVisitor()
-{
 }
 
 QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
