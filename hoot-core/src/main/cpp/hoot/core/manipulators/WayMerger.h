@@ -46,10 +46,10 @@ class Way;
 class WayMerger : public WayManipulator
 {
 public:
+
   static std::string className() { return "hoot::WayMerger"; }
 
   WayMerger();
-
   virtual ~WayMerger() {}
 
   virtual const std::vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
@@ -59,6 +59,7 @@ public:
           ConstOsmMapPtr map, const std::vector<long>& wids);
 
 protected:
+
   /**
    * Creates a new manipulation and returns it. This may be delegated to a subclass.
    */
@@ -78,7 +79,6 @@ private:
   std::vector<long> _findOtherWays(ConstWayPtr way);
 
   void _findMatches(long baseWayId);
-
 };
 
 }

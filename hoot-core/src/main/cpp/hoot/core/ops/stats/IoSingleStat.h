@@ -35,6 +35,7 @@ namespace hoot
 class IoSingleStat : public SingleStat
 {
 public:
+
   enum Type {
     RChar,
     WChar,

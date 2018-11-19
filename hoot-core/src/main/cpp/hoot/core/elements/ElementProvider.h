@@ -71,7 +71,6 @@ public:
   virtual bool containsRelation(long id) const = 0;
 
   virtual bool containsWay(long id) const = 0;
-
 };
 
 typedef boost::shared_ptr<const ElementProvider> ConstElementProviderPtr;

@@ -41,6 +41,7 @@
 #include <hoot/core/schema/TagMerger.h>
 #include <hoot/core/algorithms/StringDistance.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -80,8 +81,17 @@ void printApiEntities(const std::string& apiEntityClassName, const QString apiEn
     LOG_VARD(cmds[i]);
     boost::shared_ptr<ApiEntity> c(
       Factory::getInstance().constructObject<ApiEntity>(cmds[i]));
-    LOG_VARD(c->getDescription());
-    if (!c->getDescription().isEmpty())
+
+    boost::shared_ptr<ApiEntityInfo> entityInfo =
+      boost::dynamic_pointer_cast<ApiEntityInfo>(c);
+    if (!entityInfo.get())
+    {
+      throw HootException(
+        "Calls to printApiEntities must be made with classes that implement ApiEntityInfo.");
+    }
+
+    LOG_VARD(entityInfo->getDescription());
+    if (!entityInfo->getDescription().isEmpty())
     {
       bool supportsSingleStat = false;
       boost::shared_ptr<SingleStatistic> singleStat =
@@ -104,7 +114,7 @@ void printApiEntities(const std::string& apiEntityClassName, const QString apiEn
       {
         line += apiEntityType + QString(indentAfterType, ' ');
       }
-      line += c->getDescription();
+      line += entityInfo->getDescription();
       LOG_VARD(line);
       std::cout << line << std::endl;
     }

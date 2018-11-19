@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMMAPINDEX_H
@@ -47,6 +47,7 @@ class NodeToWayMap;
 class OsmMapIndex : public ElementListener
 {
 public:
+
   OsmMapIndex(const OsmMap& map);
 
   void addNode(const ConstNodePtr& n);
@@ -140,6 +141,7 @@ public:
   bool validate() const;
 
 private:
+
   const OsmMap& _map;
 
   Meters _indexSlush;

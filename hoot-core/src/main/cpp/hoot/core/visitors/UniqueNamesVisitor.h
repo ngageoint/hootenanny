@@ -48,8 +48,6 @@ public:
 
   UniqueNamesVisitor() {}
 
-  virtual ~UniqueNamesVisitor() {}
-
   QSet<QString> getUniqueNames() const { return _names; }
 
   double getStat() const { return _names.size(); }

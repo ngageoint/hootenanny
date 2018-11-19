@@ -33,7 +33,7 @@
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 
 
 namespace hoot
@@ -49,7 +49,7 @@ class OsmMap;
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
  * appropriate data structures.
  */
-class AbstractDistanceExtractor : public FeatureExtractor
+class AbstractDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
@@ -64,14 +64,6 @@ public:
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
-
-  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
-
-  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
-  {
-    return Tgs::DataFrame::NullAsMissingValue;
-  }
-
 };
 
 }

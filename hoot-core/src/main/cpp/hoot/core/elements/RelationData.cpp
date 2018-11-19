@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RelationData.h"
 
@@ -43,7 +43,6 @@ ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd.getChangeset(), 
 _type(rd._type),
 _members(rd._members)
 {
-
 }
 
 void RelationData::addElement(const QString& role, ElementId eid)

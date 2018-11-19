@@ -60,12 +60,6 @@ PertyDuplicatePoiOp::PertyDuplicatePoiOp()
   setConfiguration(conf());
 }
 
-QString PertyDuplicatePoiOp::toString()
-{
-  return "_p: " + QString::number(_p) + ", _duplicateSigma: " + QString::number(_duplicateSigma) +
-    ", _moveMultiplier: "  + QString::number(_moveMultiplier);
-}
-
 void PertyDuplicatePoiOp::apply(OsmMapPtr& map)
 {
   MapProjector::projectToPlanar(map);

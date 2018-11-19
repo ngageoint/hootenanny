@@ -83,11 +83,6 @@ public:
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-  /**
-    @see OsmMapOperation
-    */
-  QString toString();
-
   virtual QString getDescription() const
   { return "Duplicates a POI with some random error"; }
 

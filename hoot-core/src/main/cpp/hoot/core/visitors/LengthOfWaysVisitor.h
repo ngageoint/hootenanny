@@ -51,8 +51,6 @@ public:
 
   LengthOfWaysVisitor() : _total(0) {}
 
-  virtual ~LengthOfWaysVisitor() {}
-
   static Meters getLengthOfWays(const OsmMapPtr& map, ElementPtr e);
 
   Meters getLengthOfWays() const { return _total; }

@@ -81,7 +81,7 @@ unsigned int DualWaySplitter::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapOperation, DualWaySplitter)
 
 DualWaySplitter::DualWaySplitter()
-{
+{ 
   ConfigOptions opts = ConfigOptions();
   if (opts.getDualWaySplitterDrivingSideDefaultValue().toLower() == "left")
   {
@@ -97,15 +97,15 @@ DualWaySplitter::DualWaySplitter()
 }
 
 DualWaySplitter::DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
-  Meters defaultSplitSize)
+  Meters defaultSplitSize) :
+_defaultSplitSize(defaultSplitSize),
+_drivingSide(drivingSide),
+_map(map)
 {
-  _map = map;
-  _drivingSide = drivingSide;
-  _defaultSplitSize = defaultSplitSize;
 }
 
-boost::shared_ptr<Way> DualWaySplitter::_createOneWay(boost::shared_ptr<const Way> w, Meters bufferSize,
-                                               bool left)
+boost::shared_ptr<Way> DualWaySplitter::_createOneWay(boost::shared_ptr<const Way> w,
+                                                      Meters bufferSize, bool left)
 {
   boost::shared_ptr<const LineString> ls = ElementConverter(_result).convertToLineString(w);
 
@@ -267,6 +267,7 @@ boost::shared_ptr<OsmMap> DualWaySplitter::splitAll(boost::shared_ptr<const OsmM
 
 boost::shared_ptr<OsmMap> DualWaySplitter::splitAll()
 {
+  _numAffected = 0;
   boost::shared_ptr<OsmMap> result(new OsmMap(_map));
   _result = result;
 
@@ -284,6 +285,7 @@ boost::shared_ptr<OsmMap> DualWaySplitter::splitAll()
     }
     _splitWay(wayIds[i]);
   }
+  _numAffected = wayIds.size();
 
   if (Log::getInstance().isInfoEnabled() && todoLogged)
   {

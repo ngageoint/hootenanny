@@ -42,8 +42,6 @@ public:
 
   LongestTagVisitor() : _longestTag() {}
 
-  virtual ~LongestTagVisitor() {}
-
   double getStat() const { return _longestTag; }
 
   QString getLongestTag() const { return _tag; }

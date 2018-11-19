@@ -52,8 +52,6 @@ public:
 
   TranslationVisitor();
 
-  virtual ~TranslationVisitor() {}
-
   /**
    * @see Configurable
    */
@@ -65,8 +63,6 @@ public:
   void setPath(QString path);
 
   virtual void visit(const ElementPtr& e);
-
-  virtual QString toString() { return "hoot::TranslationVisitor"; }
 
   virtual QString getDescription() const { return "Translates features to a schema"; }
 

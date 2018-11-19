@@ -29,6 +29,7 @@
 
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <ostream>
@@ -40,6 +41,7 @@ namespace hoot
 class RelationData : public ElementData
 {
 public:
+
   struct Entry
   {
     QString role;
@@ -54,12 +56,19 @@ public:
     void setElementId(ElementId eid) { _eid = eid; }
     const QString& getRole() const { return role; }
 
+    bool operator!=(const Entry& other) const { return !(*this == other); }
+    bool operator==(const Entry& other) const
+    {
+      return getElementId() == other.getElementId() && getRole() == other.getRole();
+    }
+
     QString toString() const
     {
       return QString("Entry: role: %1, eid: %2").arg(role).arg(_eid.toString());
     }
 
   private:
+
     ElementId _eid;
   };
 
@@ -107,6 +116,11 @@ private:
 
   QString _type;
 
+  //The argument could be made to change this from a vector to a set to eliminate the possibilty of
+  //duplicates.  Have decided against that change for now, until the performance impacts can be
+  //determined.  The workaround is to use RemoveDuplicateRelationMembersVisitor.  There's also an
+  //additional argument to change this to a linked list, as described in replaceElements, which
+  //would rule out using the set.
   std::vector<Entry> _members;
 };
 
@@ -155,6 +169,10 @@ void RelationData::replaceElements(Entry old, IT start, IT end)
   }
 }
 
+inline uint qHash(const RelationData::Entry& entry)
+{
+  return qHash(entry.toString());
+}
 
 }
 

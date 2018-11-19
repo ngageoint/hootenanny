@@ -44,7 +44,7 @@ RemoveRelationOp::RemoveRelationOp()
 }
 
 RemoveRelationOp::RemoveRelationOp(long rId):
-  _rIdToRemove(rId)
+_rIdToRemove(rId)
 {
 }
 
@@ -55,8 +55,9 @@ void RemoveRelationOp::apply(OsmMapPtr& map)
   {
     // determine if this relation is a part of any other relations
     // make a copy of the rids in case the index gets changed.
-    const set<long> rids = map->_index->getElementToRelationMap()->
-      getRelationByElement(ElementId::relation(_rIdToRemove));
+    const set<long> rids =
+      map->_index->getElementToRelationMap()->getRelationByElement(
+        ElementId::relation(_rIdToRemove));
     LOG_VART(rids);
 
     // remove this relation from all other parent relations.

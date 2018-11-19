@@ -49,8 +49,6 @@ public:
 
   CalculateAreaForStatsVisitor() : _total(0) {}
 
-  virtual ~CalculateAreaForStatsVisitor() {}
-
   /**
    * Returns the area in meters squared.
    */

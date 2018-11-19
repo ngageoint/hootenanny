@@ -62,11 +62,6 @@ public:
   virtual void visit(const ConstElementPtr& e);
   virtual void visit(const boost::shared_ptr<Element>& /*e*/) {}
 
-  /**
-    @see ConstElementVisitor
-    */
-  QString toString();
-
   virtual QString getDescription() const { return "Randomly removes elements from a map"; }
 
 private:

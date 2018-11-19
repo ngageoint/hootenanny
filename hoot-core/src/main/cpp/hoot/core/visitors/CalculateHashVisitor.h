@@ -51,8 +51,6 @@ public:
 
   CalculateHashVisitor();
 
-  virtual ~CalculateHashVisitor();
-
   virtual void visit(const ElementPtr &e);
 
   static QString toJsonString(const ConstElementPtr& e);

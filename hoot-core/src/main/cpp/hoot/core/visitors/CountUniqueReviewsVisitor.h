@@ -52,8 +52,6 @@ public:
 
   CountUniqueReviewsVisitor() {}
 
-  virtual ~CountUniqueReviewsVisitor() {}
-
   double getStat() const { return _reviews.size(); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }

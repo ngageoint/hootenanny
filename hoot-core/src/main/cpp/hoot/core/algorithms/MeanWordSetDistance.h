@@ -67,7 +67,7 @@ public:
   virtual QString toString() const
   { return QString("MeanWordSet %1 %2").arg(_p).arg(_d->toString()); }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Returns a score based on the mean distance between two sets of words"; }
 
 private:

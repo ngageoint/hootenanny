@@ -98,7 +98,7 @@ public:
 
   QString toString() const { return QString("%1-skip bi-gram").arg(_k); }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Returns a string comparison score derived using Skip-gram modelling"; }
 
 private:

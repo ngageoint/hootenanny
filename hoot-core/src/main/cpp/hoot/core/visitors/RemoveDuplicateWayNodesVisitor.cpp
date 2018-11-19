@@ -81,6 +81,7 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
         LOG_TRACE("Found duplicate way node: " << nodeId);
         duplicateWayNodeIds.append(nodeId);
         foundDuplicateWayNode = true;
+        _numAffected++;
       }
     }
     if (foundDuplicateWayNode)

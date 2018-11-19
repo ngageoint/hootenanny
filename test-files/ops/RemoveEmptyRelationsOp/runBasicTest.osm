@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+  <osm version='0.6'>
+    <relation visible="true" id="7674393" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="relation" ref="7674395" role=""/>
+        <tag k="type" v="building"/>
+        <tag k="name" v="FacultadIngenieriaUASD3D"/>
+        <tag k="source:datetime" v="2017-10-23T19:11:17.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+    <relation visible="true" id="7674395" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="relation" ref="7674393" role=""/>
+        <tag k="type" v="building"/>
+        <tag k="name" v="FacultadIngenieriaUASD3D"/>
+        <tag k="source:datetime" v="2017-11-27T20:01:53.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+    <relation visible="true" id="7674402" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="relation" ref="7674393" role=""/>
+        <tag k="route" v="road"/>
+        <tag k="type" v="site"/>
+        <tag k="source:datetime" v="2017-10-23T19:11:17.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+    <relation visible="true" id="7730094" timestamp="1970-01-01T00:00:00Z" version="1">
+        <tag k="public_transport" v="stop_area"/>
+        <tag k="type" v="public_transport"/>
+        <tag k="name" v="Pedro Mir"/>
+        <tag k="source:datetime" v="2017-11-13T11:40:25.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+  </osm>

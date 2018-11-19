@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="0" minlon="0" maxlat="0" maxlon="0"/>
+    <relation visible="true" id="7674393" version="1">
+        <member type="relation" ref="7674395" role=""/>
+        <tag k="name" v="FacultadIngenieriaUASD3D"/>
+        <tag k="type" v="building"/>
+    </relation>
+    <relation visible="true" id="7674395" version="1">
+        <member type="relation" ref="7674393" role=""/>
+        <tag k="name" v="FacultadIngenieriaUASD3D"/>
+        <tag k="type" v="building"/>
+    </relation>
+    <relation visible="true" id="7674402" version="1">
+        <member type="relation" ref="7674393" role=""/>
+        <tag k="route" v="road"/>
+        <tag k="type" v="site"/>
+    </relation>
+    <relation visible="true" id="7730094" version="1">
+        <member type="relation" ref="7730094" role=""/>
+        <tag k="public_transport" v="stop_area"/>
+        <tag k="name" v="Pedro Mir"/>
+        <tag k="type" v="public_transport"/>
+    </relation>
+</osm>

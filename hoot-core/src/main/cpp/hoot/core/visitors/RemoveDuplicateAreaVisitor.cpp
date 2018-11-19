@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateAreaVisitor.h"
 
@@ -60,9 +60,11 @@ RemoveDuplicateAreaVisitor::RemoveDuplicateAreaVisitor()
       ConfigOptions().getRemoveDuplicateAreasDiff()));
 }
 
-boost::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(const boost::shared_ptr<Element>& e1)
+boost::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(
+  const boost::shared_ptr<Element>& e1)
 {
-  QHash<ElementId, boost::shared_ptr<Geometry> >::const_iterator it = _geoms.find(e1->getElementId());
+  QHash<ElementId, boost::shared_ptr<Geometry> >::const_iterator it =
+    _geoms.find(e1->getElementId());
   if (it != _geoms.end())
   {
     return it.value();
@@ -130,7 +132,8 @@ bool RemoveDuplicateAreaVisitor::_equals(const boost::shared_ptr<Element>& e1,
   return true;
 }
 
-void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1, boost::shared_ptr<Element> e2)
+void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1,
+                                            boost::shared_ptr<Element> e2)
 {
   if (e1->getTags().size() > e2->getTags().size())
   {
@@ -148,10 +151,16 @@ void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1, boost
   {
     RecursiveElementRemover(e2->getElementId()).apply(_map->shared_from_this());
   }
+  _numAffected++;
 }
 
 void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
 {
+  if (!e.get())
+  {
+    return;
+  }
+
   if (e->getElementType() != ElementType::Node)
   {
     boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
@@ -161,17 +170,25 @@ void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
 
 void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  if (!e1.get())
+  {
+    return;
+  }
+  LOG_VART(e1->getElementId());
 
+  OsmSchema& schema = OsmSchema::getInstance();
   boost::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
+  LOG_VART(env.get());
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
       CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||
       schema.isArea(e1) == false)
   {
+    LOG_TRACE("Envelope null or incomplete element.");
     return;
   }
   set<ElementId> neighbors = _map->getIndex().findWayRelations(*env);
+  LOG_VART(neighbors.size());
 
   for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
   {
@@ -182,10 +199,9 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
 
       // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
       // a parent.
-      if (e2 != 0 &&
-          schema.isArea(e2) &&
-          _equals(e1, e2))
+      if (e2 != 0 && schema.isArea(e2) && _equals(e1, e2))
       {
+        LOG_TRACE("e2 is area and e1/e2 equal.");
         // remove the crummier one.
         _removeOne(e1, e2);
         // if we've deleted the element we're visiting.

@@ -29,7 +29,7 @@
 #define BUFFEREDOVERLAPEXTRACTOR_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -49,7 +49,7 @@ class Element;
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
  * appropriate data structures.
  */
-class BufferedOverlapExtractor : public FeatureExtractor, public Configurable
+class BufferedOverlapExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
@@ -66,13 +66,6 @@ public:
   virtual std::string getClassName() const { return BufferedOverlapExtractor::className(); }
 
   virtual std::string getName() const;
-
-  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
-
-  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
-  {
-    return Tgs::DataFrame::NullAsMissingValue;
-  }
 
   virtual void setConfiguration(const Settings& conf);
 

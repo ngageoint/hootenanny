@@ -78,7 +78,7 @@ public:
 
   QString toString() const { return "Soundex"; }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Returns a string comparison score based on the Soundex algorithm"; }
 };
 

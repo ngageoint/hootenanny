@@ -44,8 +44,6 @@ public:
 
   ElementIdSetVisitor() {}
 
-  virtual ~ElementIdSetVisitor() {}
-
   /**
    * Returns a set containing all the ElementIds visited.
    */
