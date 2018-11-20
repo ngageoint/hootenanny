@@ -127,20 +127,21 @@ void printApiEntities(const std::string& apiEntityBaseClassName, const QString a
   std::cout << std::endl;
 }
 
-QString ApiEntityDisplayer::_apiEntityTypeForBaseClass(const QString baseClassName)
+QString ApiEntityDisplayer::_apiEntityTypeForBaseClass(const QString className)
 {
-  if (baseClassName.toStdString() == OsmMapOperation::className() ||
-      Factory::getInstance().hasBase<OsmMapOperation>(baseClassName.toStdString()))
+  LOG_VARD(className);
+  if (className.toStdString() == OsmMapOperation::className() ||
+      Factory::getInstance().hasBase<OsmMapOperation>(className.toStdString()))
   {
     return "operation";
   }
-  else if (baseClassName.toStdString() == ElementVisitor::className() ||
-           Factory::getInstance().hasBase<ElementVisitor>(baseClassName.toStdString()))
+  else if (className.toStdString() == ElementVisitor::className() ||
+           Factory::getInstance().hasBase<ElementVisitor>(className.toStdString()))
   {
     return "visitor";
   }
-  else if (baseClassName.toStdString() == ConstElementVisitor::className() ||
-           Factory::getInstance().hasBase<ConstElementVisitor>(baseClassName.toStdString()))
+  else if (className.toStdString() == ConstElementVisitor::className() ||
+           Factory::getInstance().hasBase<ConstElementVisitor>(className.toStdString()))
   {
     return "visitor (const)";
   }
@@ -274,18 +275,11 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
     printApiEntities<ElementCriterion>(
       ElementCriterion::className(), "criterion", true, MAX_NAME_SIZE);
     printApiEntities<OsmMapOperation>(
-      OsmMapOperation::className(),
-      _apiEntityTypeForBaseClass(QString::fromStdString(OsmMapOperation::className())), true,
-      MAX_NAME_SIZE);
+      OsmMapOperation::className(), "operation", true, MAX_NAME_SIZE);
     //would like to combine these visitors into one method call somehow
-    printApiEntities<ElementVisitor>(
-      ElementVisitor::className(),
-      _apiEntityTypeForBaseClass(QString::fromStdString(ElementVisitor::className())), true,
-      MAX_NAME_SIZE);
+    printApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
     printApiEntities<ConstElementVisitor>(
-      ConstElementVisitor::className(),
-      _apiEntityTypeForBaseClass(QString::fromStdString(ConstElementVisitor::className())), true,
-      MAX_NAME_SIZE);
+      ConstElementVisitor::className(), "visitor (const)", true, MAX_NAME_SIZE);
   }
   // this is pretty repetitive :-(
   else if (apiEntityType == "feature-extractors")

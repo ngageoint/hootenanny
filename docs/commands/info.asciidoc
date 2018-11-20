@@ -30,13 +30,13 @@ The +--cleaning-operations+ option prints out the currently configured map clean
 ==== Usage
 
 --------------------------------------
-info --cleaning-operattions
+info --cleaning-operations
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot info --cleaning-operattions
+hoot info --cleaning-operations
 --------------------------------------
 
 === Configuration Options
