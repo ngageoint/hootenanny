@@ -61,7 +61,7 @@ public:
            " relation members involved in circular references"; }
 
   virtual QString getDescription() const
-  { return "Removes one half of a relation pair, both of which reference each other, from a map"; }
+  { return "Removes half of a relation pair, that reference each other, from a map"; }
 
 private:
 

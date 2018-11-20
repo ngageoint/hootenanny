@@ -233,10 +233,15 @@ public:
         LOG_VART(e.getWhat());
         if (e.getWhat().contains("Access tokens for user"))
         {
-          LOG_ERROR(
-            "You must log in to the Hootenanny Web Services before displaying supported language information.")
+          std::cout <<
+            "You must log in to the Hootenanny Web Services before displaying supported language information." <<
+            std::endl;
         }
       }
+    }
+    else if (specifiedOpts.contains("--cleaning-operations"))
+    {
+      ApiEntityDisplayer::displayCleaningOps();
     }
     //everything else
     else if (specifiedOpts.size() == 1)
@@ -285,6 +290,7 @@ private:
   QStringList _getSupportedOptions() const
   {
     QStringList options;
+    options.append("--cleaning-operations");
     options.append("--config-options");
     options.append("--feature-extractors");
     options.append("--formats");
