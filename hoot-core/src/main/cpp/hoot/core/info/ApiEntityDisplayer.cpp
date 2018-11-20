@@ -42,6 +42,7 @@
 #include <hoot/core/algorithms/StringDistance.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -61,65 +62,89 @@ public:
   }
 };
 
+static const int MAX_NAME_SIZE = 45;
+static const int MAX_TYPE_SIZE = 18;
+
 template<typename ApiEntity>
-void printApiEntities(const std::string& apiEntityClassName, const QString apiEntityType,
+void printApiEntities(const std::string& apiEntityBaseClassName, const QString apiEntityType,
                       const bool displayType,
                       //the size of the longest names plus a 3 space buffer; the value passed in
                       //here by callers may have to be adjusted over time for some entity types
                       const int maxNameSize)
 {
-  const int maxTypeSize = 18;
-
-  LOG_VARD(apiEntityClassName);
-  std::vector<std::string> cmds =
-    Factory::getInstance().getObjectNamesByBase(apiEntityClassName);
-  LOG_VARD(cmds);
+  LOG_VARD(apiEntityBaseClassName);
+  std::vector<std::string> classNames =
+    Factory::getInstance().getObjectNamesByBase(apiEntityBaseClassName);
+  LOG_VARD(classNames);
   ApiEntityNameComparator<ApiEntity> apiEntityNameComparator;
-  std::sort(cmds.begin(), cmds.end(), apiEntityNameComparator);
-  for (size_t i = 0; i < cmds.size(); i++)
-  {
-    LOG_VARD(cmds[i]);
-    boost::shared_ptr<ApiEntity> c(
-      Factory::getInstance().constructObject<ApiEntity>(cmds[i]));
+  std::sort(classNames.begin(), classNames.end(), apiEntityNameComparator);
 
-    boost::shared_ptr<ApiEntityInfo> entityInfo =
-      boost::dynamic_pointer_cast<ApiEntityInfo>(c);
-    if (!entityInfo.get())
+  for (size_t i = 0; i < classNames.size(); i++)
+  {
+    const std::string className = classNames[i];
+    LOG_VARD(className);
+
+    boost::shared_ptr<ApiEntity> apiEntity(
+      Factory::getInstance().constructObject<ApiEntity>(className));
+
+    boost::shared_ptr<ApiEntityInfo> apiEntityInfo =
+      boost::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
+    if (!apiEntityInfo.get())
     {
       throw HootException(
         "Calls to printApiEntities must be made with classes that implement ApiEntityInfo.");
     }
 
-    LOG_VARD(entityInfo->getDescription());
-    if (!entityInfo->getDescription().isEmpty())
+    LOG_VARD(apiEntityInfo->getDescription());
+    if (!apiEntityInfo->getDescription().isEmpty())
     {
       bool supportsSingleStat = false;
       boost::shared_ptr<SingleStatistic> singleStat =
-        boost::dynamic_pointer_cast<SingleStatistic>(c);
+        boost::dynamic_pointer_cast<SingleStatistic>(apiEntity);
       if (singleStat.get())
       {
         supportsSingleStat = true;
       }
 
-      QString name = QString::fromStdString(cmds[i]).replace("hoot::", "");
+      QString name = QString::fromStdString(className).replace("hoot::", "");
       //append '*' to the names of visitors that support the SingleStatistic interface
       if (supportsSingleStat)
       {
         name += "*";
       }
       const int indentAfterName = maxNameSize - name.size();
-      const int indentAfterType = maxTypeSize - apiEntityType.size();
+      const int indentAfterType = MAX_TYPE_SIZE - apiEntityType.size();
       QString line = "  " + name + QString(indentAfterName, ' ');
       if (displayType)
       {
         line += apiEntityType + QString(indentAfterType, ' ');
       }
-      line += entityInfo->getDescription();
+      line += apiEntityInfo->getDescription();
       LOG_VARD(line);
       std::cout << line << std::endl;
     }
   }
   std::cout << std::endl;
+}
+
+QString ApiEntityDisplayer::_apiEntityTypeForBaseClass(const QString baseClassName)
+{
+  if (baseClassName.toStdString() == OsmMapOperation::className() ||
+      Factory::getInstance().hasBase<OsmMapOperation>(baseClassName.toStdString()))
+  {
+    return "operation";
+  }
+  else if (baseClassName.toStdString() == ElementVisitor::className() ||
+           Factory::getInstance().hasBase<ElementVisitor>(baseClassName.toStdString()))
+  {
+    return "visitor";
+  }
+  else if (baseClassName.toStdString() == ConstElementVisitor::className() ||
+           Factory::getInstance().hasBase<ConstElementVisitor>(baseClassName.toStdString()))
+  {
+    return "visitor (const)";
+  }
+  return "";
 }
 
 //matchers/mergers have a more roundabout way to get at the description, so we'll create a new
@@ -174,6 +199,68 @@ void printApiEntities2(const std::string& apiEntityClassName)
   }
 }
 
+void ApiEntityDisplayer::displayCleaningOps()
+{
+  ConfigOptions opts = ConfigOptions(conf());
+  const QStringList cleaningOps = opts.getMapCleanerTransforms();
+  for (int i = 0; i < cleaningOps.size(); i++)
+  {   
+    QString className = cleaningOps[i];
+    LOG_VARD(className);
+
+    // There's a lot of duplicated code in here when compared with printApiEntities.  Haven't
+    // figured out a good way to combine the two yet.
+
+    boost::shared_ptr<ApiEntityInfo> apiEntityInfo;
+    const QString apiEntityType = _apiEntityTypeForBaseClass(className);
+    boost::shared_ptr<SingleStatistic> singleStat;
+    // :-( this is messy...
+    if (Factory::getInstance().hasBase<OsmMapOperation>(className.toStdString()))
+    {
+      boost::shared_ptr<OsmMapOperation> apiEntity(
+        Factory::getInstance().constructObject<OsmMapOperation>(className.toStdString()));
+      apiEntityInfo = boost::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
+      singleStat = boost::dynamic_pointer_cast<SingleStatistic>(apiEntity);
+    }
+    else if (Factory::getInstance().hasBase<ElementVisitor>(className.toStdString()))
+    {
+      boost::shared_ptr<ElementVisitor> apiEntity(
+        Factory::getInstance().constructObject<ElementVisitor>(className.toStdString()));
+      apiEntityInfo = boost::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
+      singleStat = boost::dynamic_pointer_cast<SingleStatistic>(apiEntity);
+    }
+    else if (Factory::getInstance().hasBase<ConstElementVisitor>(className.toStdString()))
+    {
+      boost::shared_ptr<ConstElementVisitor> apiEntity(
+        Factory::getInstance().constructObject<ConstElementVisitor>(className.toStdString()));
+      apiEntityInfo = boost::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
+      singleStat = boost::dynamic_pointer_cast<SingleStatistic>(apiEntity);
+    }
+
+    if (!apiEntityInfo.get())
+    {
+      throw HootException(
+        "Calls to displayCleaningOps must be made with classes that implement ApiEntityInfo.");
+    }
+    const bool supportsSingleStat = singleStat.get();
+
+    QString name = className.replace("hoot::", "");
+    //append '*' to the names of visitors that support the SingleStatistic interface
+    if (supportsSingleStat)
+    {
+      name += "*";
+    }
+    const int indentAfterName = MAX_NAME_SIZE - name.size();
+    const int indentAfterType = MAX_TYPE_SIZE - apiEntityType.size();
+    QString line = "  " + name + QString(indentAfterName, ' ');
+    line += apiEntityType + QString(indentAfterType, ' ');
+    line += apiEntityInfo->getDescription();
+    LOG_VARD(line);
+    std::cout << line << std::endl;
+  }
+  std::cout << std::endl;
+}
+
 void ApiEntityDisplayer::display(const QString apiEntityType)
 {
   DisableLog dl;
@@ -184,22 +271,30 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
     msg.prepend("Operators");
     std::cout << msg << std::endl << std::endl;
 
-    const int maxNameSize = 45;
     printApiEntities<ElementCriterion>(
-      ElementCriterion::className(), "criterion", true, maxNameSize);
-    printApiEntities<OsmMapOperation>(OsmMapOperation::className(), "operation", true, maxNameSize);
-    //would like to combine these visitors into one, as far as the display is concerned, somehow
-    printApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true, maxNameSize);
+      ElementCriterion::className(), "criterion", true, MAX_NAME_SIZE);
+    printApiEntities<OsmMapOperation>(
+      OsmMapOperation::className(),
+      _apiEntityTypeForBaseClass(QString::fromStdString(OsmMapOperation::className())), true,
+      MAX_NAME_SIZE);
+    //would like to combine these visitors into one method call somehow
+    printApiEntities<ElementVisitor>(
+      ElementVisitor::className(),
+      _apiEntityTypeForBaseClass(QString::fromStdString(ElementVisitor::className())), true,
+      MAX_NAME_SIZE);
     printApiEntities<ConstElementVisitor>(
-      ConstElementVisitor::className(), "visitor (const)", true, maxNameSize);
+      ConstElementVisitor::className(),
+      _apiEntityTypeForBaseClass(QString::fromStdString(ConstElementVisitor::className())), true,
+      MAX_NAME_SIZE);
   }
+  // this is pretty repetitive :-(
   else if (apiEntityType == "feature-extractors")
   {
     msg += "):";
     msg.prepend("Feature Extractors");
     std::cout << msg << std::endl << std::endl;
     printApiEntities<FeatureExtractor>(
-      FeatureExtractor::className(), "feature extractor", false, 45);
+      FeatureExtractor::className(), "feature extractor", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "matchers")
   {
@@ -220,7 +315,7 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
     msg += "):";
     msg.prepend("Tag Mergers");
     std::cout << msg << std::endl << std::endl;
-    printApiEntities<TagMerger>(TagMerger::className(), "tag merger", false, 35);
+    printApiEntities<TagMerger>(TagMerger::className(), "tag merger", false, MAX_NAME_SIZE - 10);
   }
   else if (apiEntityType == "string-comparators")
   {
@@ -228,7 +323,7 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
     msg.prepend("String Comparators");
     std::cout << msg << std::endl << std::endl;
     printApiEntities<StringDistance>(
-      StringDistance::className(), "string comparator", false, 30);
+      StringDistance::className(), "string comparator", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "value-aggregators")
   {
@@ -236,7 +331,7 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
     msg.prepend("Value Aggregators");
     std::cout << msg << std::endl << std::endl;
     printApiEntities<ValueAggregator>(
-      ValueAggregator::className(), "value aggregator", false, 35);
+      ValueAggregator::className(), "value aggregator", false, MAX_NAME_SIZE - 10);
   }
 }
 

@@ -60,6 +60,7 @@ public:
   virtual std::string getName() = 0;
 
 private:
+
   ObjectCreator(const ObjectCreator& oc);
   ObjectCreator& operator=(const ObjectCreator& oc);
 };
@@ -68,6 +69,7 @@ template<class Base, class T>
 class ObjectCreatorTemplate : public ObjectCreator
 {
 public:
+
   ObjectCreatorTemplate(std::string baseName, std::string name)
     : _name(name), _baseName(baseName)
   {
@@ -89,12 +91,14 @@ public:
   std::string getName() { return _name; }
 
 private:
+
   std::string _name, _baseName;
 };
 
 class Factory
 {
 public:
+
   virtual ~Factory();
 
   static Factory& getInstance();
@@ -167,6 +171,7 @@ public:
   void registerCreator(boost::shared_ptr<ObjectCreator> oc, bool baseClass = false);
 
 private:
+
   Factory();
 
   static Factory* _theInstance;
@@ -180,6 +185,7 @@ template<class Base, class T>
 class AutoRegister
 {
 public:
+
   /** Auto-register the suite factory in the global registry.
    */
   AutoRegister(std::string baseName, std::string name, bool baseClass = false)
@@ -200,7 +206,6 @@ public:
 #define HOOT_FACTORY_REGISTER_BASE(Base)      \
   static hoot::AutoRegister<Base, Base> Base##AutoRegister(Base::className(), \
     Base::className(), true);
-
 }
 
 #endif // _HOOT_FACTORY_H
