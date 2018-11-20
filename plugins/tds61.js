@@ -1120,7 +1120,7 @@ tds61 = {
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
         // AK030 - Amusement Parks
-        // F_CODE translation == tourism but FFN translation could be leisure.
+        // F_CODE translation == tourism but FFN translation could be leisure. 
         // E.g. water parks
         if (attrs.F_CODE == 'AK030')
         {
@@ -1162,6 +1162,13 @@ tds61 = {
             // Debug
             // print('Adding area=yes');
             tags.area = 'yes';
+        }
+
+        if (geometryType == 'Area' && tags.waterway == 'river')
+        {
+            // Debug
+            // print('Changing river to riverbank');
+            tags.waterway = 'riverbank';
         }
 
         // Fix the ZI020_GE4X Values
@@ -2140,6 +2147,7 @@ tds61 = {
     // This is the main routine to convert _TO_ OSM
     toOsm : function(attrs, layerName, geometryType)
     {
+
         tags = {};  // The final output Tag list
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
@@ -2290,6 +2298,7 @@ tds61 = {
     // This is the main routine to convert _TO_ TDS
     toTds : function(tags, elementType, geometryType)
     {
+
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
         attrs = {}; // The output attributes

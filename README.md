@@ -484,22 +484,26 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       output.osm
     
 ### Language Translation
+
+Requires language translation server installation.  See the Hootenanny Install Guide for details.
     
     # Translate "name" and "alt_name" tags from German or Spanish to English
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="de;es" \
       -D language.tag.keys="name;alt_name" input.osm output.osm
       
-    # Translate "name" tags to English and let the source language be detected
-    hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
-      -D language.translation.source.languages="detect" \ 
-      -D language.tag.keys="name" input.osm output.osm
-
     # Let Hootenanny automatically determine all the name tags in the source map and then 
-    # translate those tags to English, allowing the source language be detected
+    # translate those tags to English, allowing the source language to first be detected
     hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="detect" \ 
       -D language.parse.names=true input.osm output.osm
+
+    # Translate names to English before conflation, allowing the source language to first be 
+    # detected
+    hoot conflate -D conflate.pre.ops="hoot::ToEnglishTranslationVisitor" \
+      -D language.translation.source.languages="detect" \ 
+      -D language.translation.to.translate.tag.keys="name" input1.osm input2.osm output.osm
+      -D language.tag.keys="name" input.osm output.osm
 
     # Determine the most prevalent source languages for non-English POI names in a map. Use 
     # that information to set up English translation services for those languages
@@ -545,11 +549,17 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # List all available language translators
     hoot info --languages --translators
     
-    # List all detectable langauges
+    # List all detectable languages
     hoot info --languages --detectable
     
     # List all translatable languages
     hoot info --languages --translatable
+
+    # List all available string comparators
+    hoot info --string-comparators
+
+    # List all available tag value aggregators
+    hoot info --value-aggregators
 
 # Contributing
 Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny 

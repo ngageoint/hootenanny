@@ -45,7 +45,6 @@ public:
   static std::string className() { return "hoot::RelationCriterion"; }
 
   RelationCriterion() {}
-
   explicit RelationCriterion(ConstOsmMapPtr& map) : _map(map) { }
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;

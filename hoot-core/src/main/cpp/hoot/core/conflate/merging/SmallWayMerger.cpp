@@ -218,6 +218,8 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       RecursiveElementRemover(next->getElementId()).apply(_map);
 
       LOG_VART(_map->containsElement(next->getElementId()));
+
+      _numAffected++;
     }
   }
 }

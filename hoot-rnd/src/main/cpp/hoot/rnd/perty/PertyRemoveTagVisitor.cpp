@@ -54,13 +54,6 @@ PertyRemoveTagVisitor::PertyRemoveTagVisitor()
   setConfiguration(conf());
 }
 
-QString PertyRemoveTagVisitor::toString()
-{
-  return "_p: " + QString::number(_p) + ", _exemptTagKeys: " + _exemptTagKeys.join(";") +
-    ", _replacementTagKeys: " + _replacementTagKeys.join(";") +
-    ", _replacementTagValues: " + _replacementTagValues.join(";");
-}
-
 void PertyRemoveTagVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);

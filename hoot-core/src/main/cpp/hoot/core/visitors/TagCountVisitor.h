@@ -46,8 +46,6 @@ public:
 
   TagCountVisitor();
 
-  virtual ~TagCountVisitor() {}
-
   long getInformationCount() const { return _informationCount; }
 
   virtual double getStat() const { return _totalCount; }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateHashVisitor2.h"
 
@@ -36,10 +36,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor2)
-
-CalculateHashVisitor2::~CalculateHashVisitor2()
-{
-}
 
 void CalculateHashVisitor2::visit(const ElementPtr& e)
 {

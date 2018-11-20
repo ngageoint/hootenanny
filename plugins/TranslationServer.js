@@ -261,6 +261,8 @@ var postHandler = function(data) {
     var translation = data.transMap[data.transDir][data.translation];
     hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
     hoot.Settings.set({"ogr.note.extra": "attribute"});
+    hoot.Settings.set({"reader.add.source.datetime": "false"});
+
     if (data.transDir === "toogr") {
         hoot.Settings.set({"osm.map.writer.schema": data.translation});
     } else {

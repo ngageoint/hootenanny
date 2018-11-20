@@ -108,11 +108,6 @@ public:
    */
   void setSystematicError(Meters sigmaX, Meters sigmaY) { _sigmaSx = sigmaX; _sigmaSy = sigmaY; }
 
-  /**
-    @see OsmMapOperation
-    */
-  QString toString();
-
   virtual QString getDescription() const { return "Perturbs map data"; }
 
 private:

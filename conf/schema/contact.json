@@ -1,11 +1,6 @@
 [
     {
         "dataType": "text",
-        "geometries": [
-            "node",
-            "way",
-            "relation"
-        ],
         "name": "contact:phone",
         "objectType": "tag"
     }

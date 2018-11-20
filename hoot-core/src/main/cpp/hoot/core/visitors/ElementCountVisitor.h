@@ -45,8 +45,6 @@ public:
 
   ElementCountVisitor() : _count(0) {}
 
-  virtual ~ElementCountVisitor() {}
-
   int getCount() const { return _count; }
 
   double getStat() const { return _count; }

@@ -43,7 +43,7 @@ public:
   NotCriterion(ElementCriterion* c) : _child(c) {}
   NotCriterion(ElementCriterionPtr c) : _child(c) {}
 
-  virtual ~NotCriterion() {}
+  //virtual ~NotCriterion() {}
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 

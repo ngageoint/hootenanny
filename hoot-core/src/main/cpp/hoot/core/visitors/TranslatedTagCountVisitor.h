@@ -50,8 +50,6 @@ public:
   TranslatedTagCountVisitor() {}
   TranslatedTagCountVisitor(boost::shared_ptr<ScriptTranslator> t);
 
-  virtual ~TranslatedTagCountVisitor() {}
-
   long getPopulatedCount() const { return _populatedCount; }
 
   long getDefaultCount() const { return _defaultCount; }

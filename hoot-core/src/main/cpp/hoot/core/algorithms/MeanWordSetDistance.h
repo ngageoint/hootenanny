@@ -49,6 +49,7 @@ class MeanWordSetDistance : public StringDistance, public StringDistanceConsumer
   public Configurable
 {
 public:
+
   /**
    * @param portion The portion parameter passed off to ScoreMatrix.
    */
@@ -63,9 +64,14 @@ public:
 
   virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
 
-  virtual QString toString() const { return QString("MeanWordSet %1 %2").arg(_p).arg(_d->toString()); }
+  virtual QString toString() const
+  { return QString("MeanWordSet %1 %2").arg(_p).arg(_d->toString()); }
+
+  virtual QString getDescription() const
+  { return "Returns a score based on the mean distance between two sets of words"; }
 
 private:
+
   StringDistancePtr _d;
   StringTokenizer _tokenizer;
   double _p;

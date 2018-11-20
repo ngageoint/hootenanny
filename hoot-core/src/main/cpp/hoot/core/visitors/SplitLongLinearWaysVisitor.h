@@ -31,7 +31,6 @@
 #include <cassert>
 
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -40,7 +39,7 @@ class OsmMap;
 class Element;
 class Settings;
 
-class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor, public Configurable
+class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -50,15 +49,11 @@ public:
 
   SplitLongLinearWaysVisitor();
 
-  virtual ~SplitLongLinearWaysVisitor() { }
-
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   virtual void setOsmMap(const OsmMap*) { assert(false); }
 
   virtual void visit(const boost::shared_ptr<Element>& e);
-
-  virtual void setConfiguration(const Settings& conf);
 
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
 

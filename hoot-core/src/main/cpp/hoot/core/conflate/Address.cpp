@@ -22,27 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.osm.user;
+#include "Address.h"
 
-import hoot.services.models.db.Users;
+// hoot
+#include <hoot/core/util/Log.h>
+#include <hoot/core/algorithms/AddressParser.h>
 
+namespace hoot
+{
 
-public class UserSaveResponse {
-    private Users user;
+Address::Address() :
+_address(""),
+_allowLenientHouseNumberMatching(true)
+{
+}
 
-    public UserSaveResponse() {}
+Address::Address(const QString address, const bool allowLenientHouseNumberMatching) :
+_address(address),
+_allowLenientHouseNumberMatching(allowLenientHouseNumberMatching)
+{
+}
 
-    public UserSaveResponse(Users u) {
-        user = u;
-    }
+bool Address::operator==(const Address& address) const
+{
+  LOG_VART(_address);
+  LOG_VART(address._address);
 
-    public Users getUser() {
-        return user;
-    }
+  return
+    !_address.isEmpty() &&
+      (_addrComp.compare(_address, address._address) == 1.0 ||
+       (_allowLenientHouseNumberMatching &&
+        AddressParser::addressesMatchDespiteSubletterDiffs(_address, address._address)));
+}
 
-    public void setUser(Users u) {
-        user = u;
-    }
 }

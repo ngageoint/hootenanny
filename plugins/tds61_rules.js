@@ -61,6 +61,7 @@ tds61.rules = {
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','tower','communication'],
     ['F_CODE','AL241','tower','yes'],
+    ['F_CODE','AL260','barrier','city_wall'], // Wall
     ['F_CODE','AM080','tower:type','water'],
     ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
     ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway

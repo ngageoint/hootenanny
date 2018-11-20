@@ -34,6 +34,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -59,87 +60,115 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
   Factory& f = Factory::getInstance();
 
   QElapsedTimer timer;
-  LOG_DEBUG("Applying map operations...");
   foreach (QString s, _namedOps)
   {
-    timer.restart();
     if (s.isEmpty())
     {
-      // pass
+      return;
     }
-    else if (f.hasBase<OsmMapOperation>(s.toStdString()))
+
+    timer.restart();
+    LOG_DEBUG("Element count before operation: " << map->getElementCount());
+    if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
-      LOG_VARD(map->getElementCount());
-      LOG_DEBUG("Applying operation: " << s);
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
+
+      boost::shared_ptr<OperationStatusInfo> statusInfo =
+        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
+      {
+        LOG_INFO(statusInfo->getInitStatusMessage());
+      }
+      else
+      {
+        LOG_INFO("Applying operation: " << s);
+      }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
-      }
-
-      if (!t->toString().trimmed().isEmpty())
-      {
-        LOG_TRACE("Details: " << t->toString());
       }
 
       t->apply(map);
 
-      LOG_VARD(map->getElementCount());
+      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
+      {
+        LOG_INFO(
+          statusInfo->getCompletedStatusMessage() + " in " +
+          StringUtils::secondsToDhms(timer.elapsed()));
+      }
     }
     else if (f.hasBase<ConstElementVisitor>(s.toStdString()))
     {
-      LOG_VARD(map->getElementCount());
-      LOG_DEBUG("Applying visitor: " << s);
       boost::shared_ptr<ConstElementVisitor> t(
         Factory::getInstance().constructObject<ConstElementVisitor>(s));
+
+      boost::shared_ptr<OperationStatusInfo> statusInfo =
+        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
+      {
+        LOG_INFO(statusInfo->getInitStatusMessage());
+      }
+      else
+      {
+        LOG_INFO("Applying visitor: " << s);
+      }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
-      }
-
-      if (!t->toString().trimmed().isEmpty())
-      {
-        LOG_TRACE("Details: " << t->toString());
       }
 
       boost::shared_ptr<OsmMapOperation> op(new VisitorOp(t));
       op->apply(map);
 
-      LOG_VARD(map->getElementCount());
+      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
+      {
+        LOG_INFO(
+          statusInfo->getCompletedStatusMessage() + " in " +
+          StringUtils::secondsToDhms(timer.elapsed()));
+      }
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
-      LOG_VARD(map->getElementCount());
-      LOG_DEBUG("Applying visitor: " << s);
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
+      boost::shared_ptr<OperationStatusInfo> statusInfo =
+        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
+      {
+        LOG_INFO(statusInfo->getInitStatusMessage());
+      }
+      else
+      {
+        LOG_INFO("Applying operation: " << s);
+      }
+
       Configurable* c = dynamic_cast<Configurable*>(t.get());
-      LOG_VART(c == 0);
-      LOG_VART(_conf == 0);
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
       }
 
-      if (!t->toString().trimmed().isEmpty())
-      {
-        LOG_TRACE("Details: " << t->toString());
-      }
-
       map->visitRw(*t);
+
+      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
+      {
+        LOG_INFO(
+          statusInfo->getCompletedStatusMessage() + " in " +
+          StringUtils::secondsToDhms(timer.elapsed()));
+      }
     }
     else
     {
       throw HootException("Unexpected named operation: " + s);
     }
 
-    LOG_DEBUG("Time elapsed: " << StringUtils::secondsToDhms(timer.elapsed()));
+    LOG_DEBUG("Element count after operation: " << map->getElementCount());
   }
 }
 

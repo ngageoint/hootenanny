@@ -76,12 +76,6 @@ void PertyWaySplitVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-QString PertyWaySplitVisitor::toString()
-{
-  return "_waySplitProbability: " + QString::number(_waySplitProbability) +
-    ", _minNodeSpacing: " + QString::number(_minNodeSpacing);
-}
-
 void PertyWaySplitVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   LOG_TRACE(e->getElementType());

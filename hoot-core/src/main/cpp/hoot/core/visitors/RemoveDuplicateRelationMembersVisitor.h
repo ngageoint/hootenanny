@@ -22,42 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POI_POLYGON_ADDRESSS_H
-#define POI_POLYGON_ADDRESSS_H
 
-// hoot
-#include <hoot/core/algorithms/ExactStringDistance.h>
+#ifndef REMOVE_DUPLICATE_RELATION_MEMBER_VISITOR_H
+#define REMOVE_DUPLICATE_RELATION_MEMBER_VISITOR_H
+
+// Hoot
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
 /**
+ * This removes duplicated members from a relation.
  *
+ * See notes on RelationData::_members.
  */
-class PoiPolygonAddress
+class RemoveDuplicateRelationMembersVisitor : public ElementOsmMapVisitor,
+  public OperationStatusInfo
 {
-
 public:
 
-  PoiPolygonAddress();
-  PoiPolygonAddress(const QString address, const QString translatedAddress = "");
+  static std::string className() { return "hoot::RemoveDuplicateRelationMembersVisitor"; }
 
-  bool operator==(const PoiPolygonAddress& address) const;
+  RemoveDuplicateRelationMembersVisitor();
 
-  QString toString() const
-  { return "Address: " + _address + ", translated address: " + _translatedAddress; }
+  virtual void visit(const ElementPtr& e);
 
-private:
+  virtual QString getInitStatusMessage() { return "Removing duplicate relation members..."; }
 
-  QString _address;
-  QString _translatedAddress;
-  ExactStringDistance _addrComp;
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numAffected) + " duplicate relation members"; }
 
-  bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress) const;
+  virtual QString getDescription() const { return "Removes duplicate relation members"; }
 };
 
 }
 
-#endif // POI_POLYGON_ADDRESSS_H
+#endif // REMOVE_DUPLICATE_RELATION_MEMBER_VISITOR_H

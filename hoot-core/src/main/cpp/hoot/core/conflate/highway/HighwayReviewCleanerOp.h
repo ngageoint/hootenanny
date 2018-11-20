@@ -51,8 +51,6 @@ public:
 
   virtual void apply(OsmMapPtr& map);
 
-  virtual QString toString() const { return QString::fromStdString(className()); }
-
   virtual QString getDescription() const
   { return "Identifies highway reviews that are impossible due to a lack of string match"; }
 

@@ -24,6 +24,7 @@ PoiPolygonDistance::getReviewDistanceForType.
 ** the names of the two features are similar according to a configurable threshold OR
 ** the types of the two features are similar according to a configurable threshold OR
 ** the address of the two features are an exact match (standard OSM address tags are used; see PoiPolygonAddressScoreExtractor)
+** the phone number of the two features are a match (standard OSM and configurable phone number tags are used; see PoiPolygonPhoneNumberScoreExtractor)
 ** If the Euclidean match distance requirement is not met, Hootenanny will also calculate the distance from the POI to a convex 
 polygon shape (alpha shape) derived from the polygon feature and use that value for the distance (certain restrictions 
 apply; see PoiPolygonMatch::_calculateEvidence).
@@ -85,14 +86,14 @@ how many matches it correctly made.
 .POI to Polygon Test Data Sources
 [options="header"]
 |======
-| Test | Region | Schema 1 | Schema 2 | Geospatial Accuracy | Type Attribution | Name Attribution | Address Attribution
-| 1 | KisMaayo, Somalia | MGCP | UTP | good | good | poor | none
-| 2 | KisMaayo, Somalia | MGCP | OSM | good | good | poor in MGCP; average in OSM | none
-| 3 | San Francisco, USA | OSM | city govt | good | average | average | poor in OSM; none in city govt 
-| 4 | Munich, Germany | OSM | NAVTEQ | good in OSM; poor near intersections for NAVTEQ | average for OSM; good for NAVTEQ | good | average 
-| 5 | Cairo, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none
-| 6 | Alexandria, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none
-| 7 | Rafah, Syria | N/A | N/A | good | good | poor for polys; good for POIs | none 
+| Test | Region | Schema 1 | Schema 2 | Geospatial Accuracy | Type Attribution | Name Attribution | Address Attribution | Phone Number Attribution
+| 1 | KisMaayo, Somalia | MGCP | UTP | good | good | poor | none | none
+| 2 | KisMaayo, Somalia | MGCP | OSM | good | good | poor in MGCP; average in OSM | none | none
+| 3 | San Francisco, USA | OSM | city govt | good | average | average | poor in OSM; none in city govt | average
+| 4 | Munich, Germany | OSM | NAVTEQ | good in OSM; poor near intersections for NAVTEQ | average for OSM; good for NAVTEQ | good | average | average  
+| 5 | Cairo, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none | average
+| 6 | Alexandria, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none | poor
+| 7 | Rafah, Syria | N/A | N/A | good | good | poor for polys; good for POIs | none | none
 |======
 
 .POI to Polygon Test Results

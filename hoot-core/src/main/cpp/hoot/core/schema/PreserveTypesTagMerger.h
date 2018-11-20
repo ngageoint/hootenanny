@@ -47,11 +47,9 @@ public:
 
   PreserveTypesTagMerger();
 
-  virtual ~PreserveTypesTagMerger() {}
-
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Keeps tags from both features and preserves overlapping type tags"; }
 
 private:

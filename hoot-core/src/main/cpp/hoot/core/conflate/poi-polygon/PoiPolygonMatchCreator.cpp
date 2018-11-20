@@ -94,20 +94,24 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   {
     PoiPolygonMatch::printMatchDistanceInfo();
   }
-  LOG_INFO(
+  LOG_DEBUG(
     "POI/Polygon total match pair candidates processed: " << PoiPolygonMatch::matchesProcessed);
-  LOG_INFO("POI/Polygon distance matches: " << PoiPolygonMatch::distanceMatches);
-  LOG_INFO("POI/Polygon type matches: " << PoiPolygonMatch::typeMatches);
-  LOG_INFO("POI/Polygon match pairs with no relevant type: " << PoiPolygonMatch::noTypeFoundCount);
-  LOG_INFO(
+  LOG_DEBUG("POI/Polygon distance matches: " << PoiPolygonMatch::distanceMatches);
+  LOG_DEBUG("POI/Polygon type matches: " << PoiPolygonMatch::typeMatches);
+  LOG_DEBUG("POI/Polygon match pairs with no relevant type: " << PoiPolygonMatch::noTypeFoundCount);
+  LOG_DEBUG(
     "POI/Polygon name matches: " << PoiPolygonMatch::nameMatches << " / " <<
     PoiPolygonMatch::nameMatchCandidates << " match candidates.  " <<
     PoiPolygonMatch::namesProcessed << " total names processed.");
-  LOG_INFO(
+  LOG_DEBUG(
     "POI/Polygon address matches: " << PoiPolygonMatch::addressMatches << " / " <<
      PoiPolygonMatch::addressMatchCandidates << " candidate matches.  " <<
      PoiPolygonMatch::addressesProcessed << " total addresses processed.");
-  LOG_INFO(
+  LOG_DEBUG(
+    "POI/Polygon phone number matches: " << PoiPolygonMatch::phoneNumberMatches << " / " <<
+    PoiPolygonMatch::phoneNumberMatchCandidates << " candidate matches.  " <<
+    PoiPolygonMatch::phoneNumbersProcesed << " total phone numbers processed.");
+  LOG_DEBUG(
     "POI/Polygon convex polygon distance matches: " << PoiPolygonMatch::convexPolyDistanceMatches);
 }
 

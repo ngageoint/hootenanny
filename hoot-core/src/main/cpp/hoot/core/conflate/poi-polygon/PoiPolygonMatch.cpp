@@ -60,6 +60,9 @@ long PoiPolygonMatch::nameMatchCandidates = 0;
 long PoiPolygonMatch::addressesProcessed = 0;
 long PoiPolygonMatch::addressMatches = 0;
 long PoiPolygonMatch::addressMatchCandidates = 0;
+long PoiPolygonMatch::phoneNumberMatches = 0;
+long PoiPolygonMatch::phoneNumbersProcesed = 0;
+long PoiPolygonMatch::phoneNumberMatchCandidates = 0;
 long PoiPolygonMatch::convexPolyDistanceMatches = 0;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
@@ -81,7 +84,10 @@ _reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
 _nameScoreThreshold(-1.0),
 _addressScore(-1.0),
-_addressMatchEnabled(true),
+//leaving this false by default due to libpostals startup time
+_addressMatchEnabled(false),
+_phoneNumberScore(-1.0),
+_phoneNumberMatchEnabled(true),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _enableAdvancedMatching(false),
@@ -212,6 +218,11 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   _typeScorer.setConfiguration(conf);
   _nameScorer.setConfiguration(conf);
+  _phoneNumberMatchEnabled = config.getPoiPolygonPhoneNumberMatchEnabled();
+  if (_phoneNumberMatchEnabled)
+  {
+    _phoneNumberScorer.setConfiguration(conf);
+  }
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -382,7 +393,8 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
-      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0);
+      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
+      _addressMatchEnabled);
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
@@ -608,8 +620,28 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
   return addressMatch ? 1u : 0u;
 }
 
+unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly)
+{
+  _phoneNumberScore = _phoneNumberScorer.extract(*_map, poi, poly);
+  const bool phoneNumberMatch = _phoneNumberScore == 1.0;
+  LOG_VART(phoneNumberMatch);
+  if (phoneNumberMatch)
+  {
+    phoneNumberMatches++;
+  }
+  phoneNumbersProcesed += _phoneNumberScorer.getPhoneNumbersProcessed();
+  if (_phoneNumberScorer.getMatchAttemptMade())
+  {
+    phoneNumberMatchCandidates++;
+  }
+  return phoneNumberMatch ? 1u : 0u;
+}
+
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  //LOG_VART(poi);
+  //LOG_VART(poly);
+
   unsigned int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
@@ -634,6 +666,10 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   if (_addressMatchEnabled)
   {
     evidence += _getAddressEvidence(poi, poly);
+  }
+  if (_phoneNumberMatchEnabled)
+  {
+    evidence += _getPhoneNumberEvidence(poi, poly);
   }
 
   //We only want to run this if the previous match distance calculation was too large.

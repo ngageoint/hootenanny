@@ -1,11 +1,6 @@
 [
     {
         "dataType": "text",
-        "geometries": [
-            "node",
-            "way",
-            "relation"
-        ],
         "influence": 1,
         "name": "REF2",
         "objectType": "tag"

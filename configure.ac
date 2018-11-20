@@ -7,6 +7,10 @@ AC_INIT([hootenanny], [VERSION_NUMBER], [https://github.com/ngageoint/hootenanny
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hoot-core/src])
 
+# use C++ 11
+AC_LANG([C++])
+AX_CXX_COMPILE_STDCXX_11([], [mandatory])
+
 ###
 # Checks for programs.
 ###
@@ -97,10 +101,6 @@ AC_LANG_POP
 m4_include([m4/boost.m4])
 AX_LIB_BOOST()
 
-# Hadoop
-#m4_include([m4/ax_lib_hadoop.m4])
-#AX_LIB_HADOOP()
-
 # Qt
 AC_CHECK_HEADERS([qt4/QtCore/QXmlStreamWriter])
 
@@ -113,6 +113,14 @@ AC_CHECK_LIB([iculx], [main], [], [echo "Error! iculx (libicu) is required."; ex
 AC_CHECK_LIB([icutu], [main], [], [echo "Error! icutu (libicu) is required."; exit -1])
 AC_CHECK_LIB([icuuc], [main], [], [echo "Error! icuuc (libicu) is required."; exit -1])
 #AC_CHECK_LIB([pthread], [main], [], [echo "Error! pthread is required."; exit -1])
+
+# libpostal
+m4_include([m4/libpostal.m4])
+LIBPOSTAL_INIT()
+
+# libphonenumber
+m4_include([m4/libphonenumber.m4])
+LIBPHONENUMBER_INIT()
 
 ##
 # Optional

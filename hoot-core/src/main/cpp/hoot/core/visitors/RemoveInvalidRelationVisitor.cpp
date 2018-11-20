@@ -46,7 +46,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveInvalidRelationVisitor)
 
-RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor()
+RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor() :
+_numMembersRemoved(0)
 {
 }
 
@@ -79,6 +80,7 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
         }
         //  Delete the relation
         RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+        _numAffected++;
       }
     }
   }
@@ -107,6 +109,7 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
       r->removeElement(eid);
       if (membersMap.find(id) == membersMap.end())
         membersMap[id] = *it;
+      _numMembersRemoved++;
     }
   }
   //  Reinsert the members that were duplicates but all instances were deleted

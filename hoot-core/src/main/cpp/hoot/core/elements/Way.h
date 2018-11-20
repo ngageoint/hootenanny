@@ -156,6 +156,12 @@ public:
   bool isFirstLastNodeIdentical() const;
 
   /**
+   * Returns true if there are more than 3 nodes and the first and last nodes in the Way are the
+   * same.  Otherwise returns false
+   */
+  bool isClosedArea() const;
+
+  /**
    * Remove all instances of the node with the specified id. If the node isn't in this way then
    * nothing happens.
    */

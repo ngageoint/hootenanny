@@ -32,6 +32,7 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -44,7 +45,8 @@ class OsmMap;
  * Goes through all building relations and updates the outline of the building by taking the union
  * of all the building parts.
  */
-class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable
+class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable,
+  public OperationStatusInfo
 {
 public:
 
@@ -62,8 +64,15 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getInitStatusMessage()
+  { return "Updating building outlines that changed during conflation..."; }
+
+  //TODO: finish; wasn't obvious how to count the total affected
+  virtual QString getCompletedStatusMessage()
+  { return ""; }
+
   virtual QString getDescription() const
-  { return "Updates any multi-part building outlines that may have changed during conflation"; }
+  { return "Updates any multi-part building outlines that changed during conflation"; }
 
 private:
 

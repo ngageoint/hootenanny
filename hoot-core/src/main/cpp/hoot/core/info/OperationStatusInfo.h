@@ -22,29 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.osm.user;
+#ifndef OPERATION_STATUS_INFO_H
+#define OPERATION_STATUS_INFO_H
 
-import java.util.List;
+namespace hoot
+{
 
-import hoot.services.models.db.Users;
+/**
+ * Interface to describe information about an operation performed on data.  e.g. OsmMapOperation,
+ * ElementVisitor, etc.
+ *
+ * Implementing this interface may not make sense on some operations.  If desired, implementers
+ * can force a subset of any of the status messages to not be displayed by returning an empty
+ * string.
+ */
+class OperationStatusInfo
+{
+public:
 
+  virtual ~OperationStatusInfo() {}
 
-public class UsersGetResponse {
-    private List<Users> users;
+  /**
+    Returns a user friendly message indicating the visitor has begun its work
 
-    public UsersGetResponse() {}
+    e.g. "Removing duplicate ways..."
+    */
+  virtual QString getInitStatusMessage() = 0;
 
-    public UsersGetResponse(List<Users> users) {
-        this.users = users;
-    }
+  /**
+    Returns a user friendly message indicating a summary of the work performed by the visitor
 
-    public List<Users> getUsers() {
-        return this.users;
-    }
+    e.g. "Removed 20 duplicate ways"
+    */
+  virtual QString getCompletedStatusMessage() = 0;
+};
 
-    public void setUsers(List<Users> users) {
-        this.users = users;
-    }
 }
+
+#endif // OPERATION_STATUS_INFO_H

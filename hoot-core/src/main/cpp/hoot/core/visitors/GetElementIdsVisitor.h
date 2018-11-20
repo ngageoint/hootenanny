@@ -42,8 +42,6 @@ public:
 
   GetElementIdsVisitor(std::set<ElementId>& bag) : _bag(bag) {}
 
-  virtual ~GetElementIdsVisitor() {}
-
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Puts all the visited elementIds into a bag"; }

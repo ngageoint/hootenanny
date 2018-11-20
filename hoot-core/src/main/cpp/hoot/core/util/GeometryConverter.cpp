@@ -57,10 +57,6 @@ namespace hoot
 
 unsigned int GeometryConverter::logWarnCount = 0;
 
-GeometryConverter::GeometryConverter()
-{
-}
-
 GeometryConverter::GeometryConverter(const OsmMapPtr& map) :
 _constMap(map),
 _map(map)
@@ -104,22 +100,25 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const Ge
 boost::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geometry* g, Status s,
   double circularError)
 {
+  LOG_VART(g->getGeometryTypeId());
   switch (g->getGeometryTypeId())
   {
+  case GEOS_POINT:
+    return convertPointToNode(dynamic_cast<const Point*>(g), _map, s, circularError);
   case GEOS_LINESTRING:
   case GEOS_LINEARRING:
     return convertLineStringToWay(dynamic_cast<const LineString*>(g), _map, s, circularError);
   case GEOS_POLYGON:
     return convertPolygonToElement(dynamic_cast<const Polygon*>(g), _map, s, circularError);
   case GEOS_MULTILINESTRING:
-    return convertMultiLineStringToElement(dynamic_cast<const MultiLineString*>(g), _map, s,
-      circularError);
+    return
+      convertMultiLineStringToElement(
+        dynamic_cast<const MultiLineString*>(g), _map, s, circularError);
   case GEOS_MULTIPOLYGON:
-    return convertMultiPolygonToRelation(dynamic_cast<const MultiPolygon*>(g), _map, s,
-      circularError);
+    return
+      convertMultiPolygonToRelation(dynamic_cast<const MultiPolygon*>(g), _map, s, circularError);
   case GEOS_GEOMETRYCOLLECTION:
-    return convertGeometryCollection(dynamic_cast<const GeometryCollection*>(g), s,
-      circularError);
+    return convertGeometryCollection(dynamic_cast<const GeometryCollection*>(g), s, circularError);
   default:
     if (logWarnCount < Log::getWarnMessageLimit())
     {
@@ -132,6 +131,11 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geo
     logWarnCount++;
     return boost::shared_ptr<Element>();
   }
+}
+NodePtr GeometryConverter::convertPointToNode(const geos::geom::Point* point, const OsmMapPtr& map,
+                                              Status s, double circularError)
+{
+  return _createNode(map, Coordinate(point->getX(), point->getY()), s, circularError);
 }
 
 WayPtr GeometryConverter::convertLineStringToWay(const LineString* ls,
@@ -242,7 +246,7 @@ NodePtr GeometryConverter::_createNode(const OsmMapPtr& map, const Coordinate& c
 {
   if (_nf == 0)
   {
-    NodePtr n =NodePtr(new Node(s, map->createNextNodeId(), c, circularError));
+    NodePtr n = NodePtr(new Node(s, map->createNextNodeId(), c, circularError));
     map->addNode(n);
     return n;
   }

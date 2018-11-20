@@ -73,12 +73,6 @@ void PertyWayGeneralizeVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-QString PertyWayGeneralizeVisitor::toString()
-{
-  return "_wayGeneralizeProbability: " + QString::number(_wayGeneralizeProbability) +
-    ", _epsilon: " + QString::number(_epsilon);
-}
-
 void PertyWayGeneralizeVisitor::setOsmMap(OsmMap* map)
 {
   _map = map;

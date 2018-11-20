@@ -22,10 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VALUEAGGREGATOR_H
 #define VALUEAGGREGATOR_H
+
+// Hoot
+#include <hoot/core/info/ApiEntityInfo.h>
 
 // Qt
 #include <QString>
@@ -39,11 +42,14 @@
 namespace hoot
 {
 
-class ValueAggregator
+class ValueAggregator : public ApiEntityInfo
 {
 public:
 
   static std::string className() { return "hoot::ValueAggregator"; }
+
+  ValueAggregator() {}
+  virtual ~ValueAggregator() {}
 
   /**
    * Aggregates the values in the vector d into a single value. The aggregation may be something

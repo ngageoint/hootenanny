@@ -179,7 +179,6 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
 
   PertyOp pertyOp;
   pertyOp.setConfiguration(_settings);
-  LOG_DEBUG("Details: " << pertyOp.toString());
   pertyOp.apply(perturbedMap);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());

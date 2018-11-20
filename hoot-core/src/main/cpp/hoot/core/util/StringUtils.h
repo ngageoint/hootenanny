@@ -71,6 +71,14 @@ public:
   static bool hasAlphabeticCharacter(const QString input);
 
   /**
+   * Determines whether a string contains a number
+   *
+   * @param input string to examine
+   * @return true if the input has at least one number; false otherwise
+   */
+  static bool hasDigit(const QString input);
+
+  /**
    * Converts a JSON string to a Boost property tree
    *
    * @param jsonStr the string to convert

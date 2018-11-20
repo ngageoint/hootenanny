@@ -29,6 +29,7 @@
 
 //  hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // tgs
 #include <tgs/SharedPtr.h>
@@ -37,7 +38,8 @@
 namespace hoot
 {
 
-class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor
+class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor,
+  public OperationStatusInfo
 {
 public:
 
@@ -46,6 +48,13 @@ public:
   RemoveInvalidMultilineStringMembersVisitor();
 
   virtual void visit(const ElementPtr& e);
+
+  virtual QString getInitStatusMessage()
+  { return "Removing invalid multiline string relation members..."; }
+
+  //TODO: finish; wasn't obvious how to count the total affected
+  virtual QString getCompletedStatusMessage()
+  { return ""; }
 
   virtual QString getDescription() const
   { return "Removes invalid multiline string relation members"; }

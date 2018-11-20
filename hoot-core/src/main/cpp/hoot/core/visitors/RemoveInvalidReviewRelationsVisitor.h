@@ -28,6 +28,7 @@
 #define REMOVEINVALIDREVIEWRELATIONSVISITOR_H
 
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -35,7 +36,7 @@ namespace hoot
 /**
  * Remove all empty review relations
  */
-class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor
+class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -44,6 +45,11 @@ public:
   RemoveInvalidReviewRelationsVisitor();
 
   virtual void visit(const ElementPtr& e);
+
+  virtual QString getInitStatusMessage() { return "Removing review relations with no members..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numAffected) + " empty review relations"; }
 
   virtual QString getDescription() const { return "Removes empty review relations"; }
 };

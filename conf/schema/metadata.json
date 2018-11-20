@@ -1,11 +1,6 @@
 [
     {
         "dataType": "text",
-        "geometries": [
-            "node",
-            "way",
-            "relation"
-        ],
         "influence": 0,
         "name": "metadata",
         "objectType": "tag"

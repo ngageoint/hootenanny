@@ -41,6 +41,7 @@ namespace hoot
 class WorstCircularErrorVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
 public:
+
   static std::string className() { return "hoot::WorstCircularErrorVisitor"; }
 
   WorstCircularErrorVisitor(): _worst(-1) {}

@@ -58,8 +58,6 @@ public:
     _pCrit = pCrit;
   }
 
-  virtual ~CriterionCountVisitor() {}
-
   virtual void visit(const ConstElementPtr& e);
 
   virtual void setConfiguration(const Settings& conf);

@@ -39,6 +39,9 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/schema/TagMerger.h>
+#include <hoot/core/algorithms/StringDistance.h>
+#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -61,13 +64,16 @@ public:
 template<typename ApiEntity>
 void printApiEntities(const std::string& apiEntityClassName, const QString apiEntityType,
                       const bool displayType,
-                      //the size of the longest names plus a 3 space buffer
+                      //the size of the longest names plus a 3 space buffer; the value passed in
+                      //here by callers may have to be adjusted over time for some entity types
                       const int maxNameSize)
 {
   const int maxTypeSize = 18;
 
+  LOG_VARD(apiEntityClassName);
   std::vector<std::string> cmds =
     Factory::getInstance().getObjectNamesByBase(apiEntityClassName);
+  LOG_VARD(cmds);
   ApiEntityNameComparator<ApiEntity> apiEntityNameComparator;
   std::sort(cmds.begin(), cmds.end(), apiEntityNameComparator);
   for (size_t i = 0; i < cmds.size(); i++)
@@ -75,7 +81,17 @@ void printApiEntities(const std::string& apiEntityClassName, const QString apiEn
     LOG_VARD(cmds[i]);
     boost::shared_ptr<ApiEntity> c(
       Factory::getInstance().constructObject<ApiEntity>(cmds[i]));
-    if (!c->getDescription().isEmpty())
+
+    boost::shared_ptr<ApiEntityInfo> entityInfo =
+      boost::dynamic_pointer_cast<ApiEntityInfo>(c);
+    if (!entityInfo.get())
+    {
+      throw HootException(
+        "Calls to printApiEntities must be made with classes that implement ApiEntityInfo.");
+    }
+
+    LOG_VARD(entityInfo->getDescription());
+    if (!entityInfo->getDescription().isEmpty())
     {
       bool supportsSingleStat = false;
       boost::shared_ptr<SingleStatistic> singleStat =
@@ -98,7 +114,8 @@ void printApiEntities(const std::string& apiEntityClassName, const QString apiEn
       {
         line += apiEntityType + QString(indentAfterType, ' ');
       }
-      line += c->getDescription();
+      line += entityInfo->getDescription();
+      LOG_VARD(line);
       std::cout << line << std::endl;
     }
   }
@@ -171,7 +188,7 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
     printApiEntities<ElementCriterion>(
       ElementCriterion::className(), "criterion", true, maxNameSize);
     printApiEntities<OsmMapOperation>(OsmMapOperation::className(), "operation", true, maxNameSize);
-    //TODO: would like to combine these into one, as far as the display is concerned, somehow
+    //would like to combine these visitors into one, as far as the display is concerned, somehow
     printApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true, maxNameSize);
     printApiEntities<ConstElementVisitor>(
       ConstElementVisitor::className(), "visitor (const)", true, maxNameSize);
@@ -204,6 +221,22 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
     msg.prepend("Tag Mergers");
     std::cout << msg << std::endl << std::endl;
     printApiEntities<TagMerger>(TagMerger::className(), "tag merger", false, 35);
+  }
+  else if (apiEntityType == "string-comparators")
+  {
+    msg += "):";
+    msg.prepend("String Comparators");
+    std::cout << msg << std::endl << std::endl;
+    printApiEntities<StringDistance>(
+      StringDistance::className(), "string comparator", false, 30);
+  }
+  else if (apiEntityType == "value-aggregators")
+  {
+    msg += "):";
+    msg.prepend("Value Aggregators");
+    std::cout << msg << std::endl << std::endl;
+    printApiEntities<ValueAggregator>(
+      ValueAggregator::className(), "value aggregator", false, 35);
   }
 }
 

@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Std
 #include <set>
@@ -61,7 +62,7 @@ class NodeToWayMap;
  *  - All intersections have been split. (IntersectionSplitter)
  *  - All duplicate ways have been removed. (DuplicateWayRemover)
  */
-class SmallWayMerger : public OsmMapOperation
+class SmallWayMerger : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -76,7 +77,12 @@ public:
    */
   static void mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold);
 
-  virtual QString getDescription() const { return "Merges small ways"; }
+  virtual QString getInitStatusMessage() { return "Merging very small ways..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Merged " + QString::number(_numAffected) + " very small ways"; }
+
+  virtual QString getDescription() const { return "Merges very small ways"; }
 
 protected:
 

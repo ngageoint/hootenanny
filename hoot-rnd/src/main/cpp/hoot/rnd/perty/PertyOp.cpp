@@ -199,16 +199,6 @@ void PertyOp::setConfiguration(const Settings& conf)
   _configure();
 }
 
-QString PertyOp::toString()
-{
-  QString str = "_permuteAlgorithm: " + _permuteAlgorithm;
-  if (_gridCalculator.get())
-  {
-    str += ", " + _gridCalculator->toString();
-  }
-  return str;
-}
-
 void PertyOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   // permute the data first
@@ -246,8 +236,6 @@ boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& m
 {
   MapProjector::projectToPlanar(map);
   boost::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
-
-  LOG_INFO(toString());
 
   geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
   LOG_INFO("env: " << env.toString());
