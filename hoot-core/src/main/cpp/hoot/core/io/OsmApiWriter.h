@@ -54,8 +54,8 @@ class OsmApiWriterTest;
 class OsmApiWriter : public Configurable
 {
   /** OSM API URL paths */
-  const QString API_PATH_CAPABILITIES = "/api/capabilities";
-  const QString API_PATH_PERMISSIONS = "/api/0.6/permissions";
+  const QString API_PATH_CAPABILITIES = "/api/capabilities/";
+  const QString API_PATH_PERMISSIONS = "/api/0.6/permissions/";
   const QString API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create/";
   const QString API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close/";
   const QString API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload/";
