@@ -53,6 +53,8 @@ RUN yum install -q -y \
     hoot-gdal-devel \
     hoot-gdal-python \
     libicu-devel \
+    liboauthcpp \
+    liboauthcpp-devel \
     libpng-devel \
     libtool \
     mlocate \
