@@ -39,6 +39,14 @@
 #include <QUrl>
 #include <QtNetwork/QNetworkRequest>
 
+//  OAuth forward declarations
+namespace OAuth
+{
+class Consumer;
+class Token;
+class Client;
+}
+
 namespace hoot
 {
 
@@ -50,6 +58,15 @@ class HootNetworkRequest
 public:
   /** Constructor */
   HootNetworkRequest();
+  /**
+   * @brief HootNetworkRequest
+   * @param consumer_key - OAuth consumer key
+   * @param consumer_secret - OAuth consumer secret key
+   * @param access_token - OAuth access token from consumer key authentication
+   * @param access_secret - OAuth access secret key from consumer key authentication
+   */
+  HootNetworkRequest(const QString& consumer_key, const QString& consumer_secret,
+                     const QString& access_token, const QString& access_secret);
   /**
    * @brief networkRequest Function to make the actual request
    * @param url URL for the request
@@ -100,24 +117,60 @@ public:
    * @param cookies sets the cookies for the request
    */
   void setCookies(boost::shared_ptr<HootNetworkCookieJar> cookies) { _cookies = cookies; }
+  /**
+   * @brief setOAuthKeys Enable OAuth authentication
+   * @param consumer_key - OAuth consumer key
+   * @param consumer_secret - OAuth consumer secret key
+   * @param access_token - OAuth access token from consumer key authentication
+   * @param access_secret - OAuth access secret key from consumer key authentication
+   */
+  void setOAuthKeys(const QString& consumer_key, const QString& consumer_secret,
+                    const QString& access_token, const QString& access_secret);
 
 private:
+  /**
+   * @brief _networkRequest Function to make the actual request
+   * @param url URL for the request
+   * @param headers collection of known headers to set on the request
+   * @param http_op HTTP operation (GET, POST, or PUT), GET is default
+   * @param data POST data as a QByteArray
+   * @return success
+   */
   bool _networkRequest(QUrl url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                        QNetworkAccessManager::Operation http_op, const QByteArray& data);
+  /**
+   * @brief _blockOnReply Function to turn Qt asynchronous networking calls to synchronous
+   * @param reply Pointer to the network reply object to wait on
+   */
+  void _blockOnReply(QNetworkReply* reply);
   /**
    * @brief _getHttpResponseCode Get the HTTP response code from the response object
    * @param reply Network reply object
    * @return HTTP response code as a number, 200 instead of "200"
    */
   int _getHttpResponseCode(QNetworkReply* reply);
+  /**
+   * @brief _setOAuthHeader Sets the "Authorize: OAuth" HTTP header for the specific request
+   * @param http_op OAuth signatures are based off of the HTTP operation type (GET/PUT/POST)
+   * @param request Reference to the actual network request object
+   */
+  void _setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request);
   /** HTTP response body, if available */
   QByteArray _content;
   /** HTTP status response code  */
   int _status;
   /** Error string */
   QString _error;
-  // cookies to pass in with the request
+  /** cookies to pass in with the request */
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  /** Flag for using OAuth 1.0, all four of the keys/tokens (two in each object)
+   *  below must be valid for `_useOAuth` to be true.
+   */
+  bool _useOAuth;
+  /** OAuth 1.0 consumer object */
+  boost::shared_ptr<OAuth::Consumer> _consumer;
+  /** OAuth 1.0 request token object */
+  boost::shared_ptr<OAuth::Token> _tokenRequest;
 };
 
 typedef boost::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;

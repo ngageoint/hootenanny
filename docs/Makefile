@@ -3,7 +3,7 @@ SHELL=/bin/bash
 
 # If the silent flag is passed to make then make a2x quiet
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-»···A2X_QUIET=""
+	A2X_QUIET=""
 else
 	A2X_QUIET=-v
 endif

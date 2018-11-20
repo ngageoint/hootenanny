@@ -898,6 +898,36 @@ The highway subline matcher to use when determining matching highway sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
+=== hoot.osm.auth.consumer.key
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth Consumer Key found after registering Hootenanny with OpenstreetMap (or its
+derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+
+=== hoot.osm.auth.consumer.secret
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth Private Consumer Key found after registering Hootenanny with OpenstreetMap (or its
+derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+
+=== hoot.osm.auth.access.token
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth Access Token for gaining access to the OAuth protected OSM API
+
+=== hoot.osm.auth.access.token.secret
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth Private Access Token for gaining access to the OAuth protected OSM API
+
 === hoot.services.auth.access.token
 
 * Data Type: string

@@ -43,10 +43,11 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runParseCapabilitiesTest);
   CPPUNIT_TEST(runCapabilitesTest);
   CPPUNIT_TEST(runParsePermissionsTest);
-  /* These tests are not setup to run every time */
+  /* These tests are for local testing and require additional resources to complete */
 //  CPPUNIT_TEST(runPermissionsTest);
 //  CPPUNIT_TEST(runChangesetTest);
 //  CPPUNIT_TEST(runChangesetConflictTest);
+//  CPPUNIT_TEST(oauthTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -213,6 +214,29 @@ public:
         "</osmChange>\n",
         writer.getFailedChangeset());
     }
+  }
+
+  void oauthTest()
+  {
+    QUrl osm;
+    osm.setUrl(ME_API_URL);
+
+    QList<QString> changesets;
+    changesets.append("test-files/ToyTestA.osm");
+
+    OsmApiWriter writer(osm, changesets);
+
+    Settings s;
+    s.set("changeset.apidb.max.writers",        2);
+    s.set("changeset.apidb.max.size",           10);
+    s.set("hoot.osm.auth.consumer.key",         "<consumer_key_here>");
+    s.set("hoot.osm.auth.consumer.secret",      "<consumer_secret_here>");
+    s.set("hoot.osm.auth.access.token",         "<access_token_here>");
+    s.set("hoot.osm.auth.access.token.secret",  "<access_secret_here>");
+
+    writer.setConfiguration(s);
+
+    writer.apply();
   }
 };
 

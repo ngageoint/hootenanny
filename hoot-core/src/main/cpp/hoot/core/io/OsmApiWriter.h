@@ -54,8 +54,8 @@ class OsmApiWriterTest;
 class OsmApiWriter : public Configurable
 {
   /** OSM API URL paths */
-  const QString API_PATH_CAPABILITIES = "/api/capabilities/";
-  const QString API_PATH_PERMISSIONS = "/api/0.6/permissions/";
+  const QString API_PATH_CAPABILITIES = "/api/capabilities";
+  const QString API_PATH_PERMISSIONS = "/api/0.6/permissions";
   const QString API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create/";
   const QString API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close/";
   const QString API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload/";
@@ -195,6 +195,13 @@ private:
    *  if necessary
    */
   void _changesetThreadFunc();
+  /**
+   * @brief createNetworkRequest Create a network request object
+   * @param requiresAuthentication Authentication flag set to true will cause OAuth credentials,
+   *    if present, to be passed to the network request object
+   * @return smart pointer to network request object
+   */
+  HootNetworkRequestPtr createNetworkRequest(bool requiresAuthentication = false);
   /** Changeset processing thread pool */
   std::vector<std::thread> _threadPool;
   /** Queue for producer/consumer work model */
@@ -223,6 +230,14 @@ private:
   QList<SingleStat> _stats;
   /** Progress flag */
   bool _showProgress;
+  /** OAuth 1.0 consumer key registered with OpenstreetMap */
+  QString _consumerKey;
+  /** OAuth 1.0 consumer secred registered with OpenstreetMap */
+  QString _consumerSecret;
+  /** OAuth 1.0 access token granted through OAuth authorization */
+  QString _accessToken;
+  /** OAuth 1.0 secret token granted through OAuth authorization */
+  QString _secretToken;
   /** Default constructor for testing purposes only */
   OsmApiWriter() {}
   /** For white box testing */
