@@ -401,6 +401,12 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
     # Calculate a set of irregular shaped tiles that will fit at most 1000 nodes each for a map
     hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000
+
+    # Normalize all the element address tags in a map
+    hoot convert -D convert.ops="hoot::NormalizeAddressesVisitor" input.osm output.osm
+
+    # Normalize all the element phone number tags in a map
+    hoot convert -D convert.ops="hoot::NormalizePhoneNumbersVisitor" input.osm output.osm
     
 ### Statistics
 
@@ -409,7 +415,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       --all-elements
 
     # Count all features which have a tag whose key contains the text "phone"
-    hoot count -D tag.key.contains.criterion.text="phone" input1.osm hoot::TagKeyContainsCriterion
+    hoot count -D tag.key.contains.criterion.text="phone" input.osm hoot::TagKeyContainsCriterion
     
     # Calculate the area of all features in a map
     hoot stat input.osm hoot::CalculateAreaVisitor
@@ -473,6 +479,18 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     ave : 80 (1.703%)
     sw : 45 (0.9579%)
     h : 18 (0.3831%)
+
+    # Count the number of elements with valid address tags in a map
+    hoot count input.osm hoot::HasAddressCriterion
+
+    # Count the total number of valid address tags in a map
+    hoot stat input.osm hoot::AddressCountVisitor
+
+    # Count the number of elements with valid phone number tags in a map
+    hoot count input.osm hoot::HasPhoneNumberCriterion
+
+    # Count the total number of valid phone number tags in a map
+    hoot stat input.osm hoot::PhoneNumberCountVisitor
     
 ### Add Missing Type Tags
     

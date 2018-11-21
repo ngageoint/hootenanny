@@ -50,8 +50,8 @@ struct ElementPhoneNumber
  *
  * Looks at tag keys containing "phone" by default and can be expanded with additional tag keys.
  *
- * @todo This class is being tested from PoiPolygonPhoneNumberScoreExtractorTest.  Move related
- * tests to a new PhoneNumberParserTest class.
+ * @todo This class is being entirely tested from PoiPolygonPhoneNumberScoreExtractorTest.  Move
+ * related tests to a new PhoneNumberParserTest class.
  */
 class PhoneNumberParser : public Configurable
 {
@@ -68,6 +68,31 @@ public:
    * @return a collection of phone numbers
    */
   QList<ElementPhoneNumber> parsePhoneNumbers(const ConstElementPtr& element) const;
+
+  /**
+   * Returns the number of valid phone number tags contained by the element
+   *
+   * @param element the element to examine for phone numbers
+   * @return a phone number count
+   */
+  int numPhoneNumbers(const ConstElementPtr& element) const;
+
+  /**
+   * Determines if an element contains a phone number
+   *
+   * @param element the element to examine for a phone number
+   * @return true if the element contains at least one phone number; false otherwise
+   * @note This could be made more efficient, if necessary, by only counting the first phone number.
+   */
+  bool hasPhoneNumber(const ConstElementPtr& element) const;
+
+  /**
+   *
+   *
+   * @param element
+   * @return
+   */
+  void normalizePhoneNumbers(const ElementPtr& element);
 
   void setRegionCode(QString code);
   void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }

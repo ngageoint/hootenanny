@@ -2704,7 +2704,7 @@ option may speed up conflation runtime performance.
 === poi.polygon.phone.number.region.code
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `US`
 
 Optional geographical region code used when comparing phone numbers.   See:
 http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region

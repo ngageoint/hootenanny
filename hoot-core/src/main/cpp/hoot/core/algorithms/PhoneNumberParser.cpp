@@ -86,6 +86,7 @@ void PhoneNumberParser::_addPhoneNumber(const QString name, const QString tagKey
                                         const QString tagValue,
                                         QList<ElementPhoneNumber>& phoneNumbers) const
 {
+  // Not normalizing by default here, since it will happen during phone number matching.
   LOG_TRACE("Possibly a phone number: " << tagKey << "=" << tagValue);
   ElementPhoneNumber elementPhoneNumber;
   elementPhoneNumber.name = name;
@@ -93,6 +94,71 @@ void PhoneNumberParser::_addPhoneNumber(const QString name, const QString tagKey
   elementPhoneNumber.tagValue = tagValue;
   phoneNumbers.append(elementPhoneNumber);
   _phoneNumbersProcessed++;
+}
+
+void PhoneNumberParser::normalizePhoneNumbers(const ElementPtr& element)
+{
+  if (_regionCode.isEmpty())
+  {
+    throw HootException("Phone number normalization requires a region code.");
+  }
+
+  // This method has a lot of similarity with parsePhoneNumber, so look there for explanations.
+
+  for (Tags::const_iterator it = element->getTags().constBegin();
+       it != element->getTags().constEnd(); ++it)
+  {
+    const QString tagKey = it.key();
+    LOG_VART(tagKey);
+    if (_additionalTagKeys.contains(tagKey, Qt::CaseInsensitive) ||
+        tagKey.contains("phone", Qt::CaseInsensitive))
+    {
+      const QString tagValue = it.value().toUtf8().trimmed().simplified();
+      LOG_VART(tagValue);
+
+      if (!_searchInText)
+      {
+        if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(
+              tagValue.toStdString(), _regionCode.toStdString()))
+        {
+          std::string phoneNumber = tagValue.toStdString();
+          //TODO: fix
+          //PhoneNumberUtil::GetInstance()->Normalize(&phoneNumber);
+          element->getTags().set(tagKey, QString::fromStdString(phoneNumber));
+        }
+      }
+      else
+      {
+        PhoneNumberMatcher numberFinder(
+          *PhoneNumberUtil::GetInstance(), tagValue.toStdString(), _regionCode.toStdString(),
+          PhoneNumberMatcher::Leniency::POSSIBLE, 1);
+        QString phoneNumbers;
+        while (numberFinder.HasNext())
+        {
+          PhoneNumberMatch match;
+          numberFinder.Next(&match);
+          // TODO: Is normalization here necessary?  Did PhoneNumberMatcher already do it?
+          std::string phoneNumber = match.raw_string();
+          //TODO: fix
+          //PhoneNumberUtil::GetInstance()->Normalize(&phoneNumber);
+          // appending all found phone numbers into a single tag value
+          phoneNumbers += QString::fromStdString(phoneNumber) + ";";
+        }
+        phoneNumbers.chop(1);
+        element->getTags().set(tagKey, phoneNumbers);
+      }
+    }
+  }
+}
+
+int PhoneNumberParser::numPhoneNumbers(const ConstElementPtr& element) const
+{
+  return parsePhoneNumbers(element).size();
+}
+
+bool PhoneNumberParser::hasPhoneNumber(const ConstElementPtr& element) const
+{
+  return numPhoneNumbers(element) > 0;
 }
 
 QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const ConstElementPtr& element) const

@@ -97,20 +97,25 @@ void AddressParser::_readAddressTagKeys(const QString configFile)
   LOG_VART(_addressTypeToTagKeys.size());
 }
 
-bool AddressParser::hasAddress(const Node& node)
+bool AddressParser::hasAddress(const Element& element)
+{
+  return numAddresses(element) > 0;
+}
+
+int AddressParser::numAddresses(const Element& element)
 {
   AddressParser addressParser;
   // We're just getting a count here, so translation isn't needed (can be expensive).
   addressParser._preTranslateTagValuesToEnglish = false;
-  return addressParser.parseAddresses(node).size() > 0;
+  return addressParser.parseAddresses(element).size();
 }
 
-bool AddressParser::hasAddress(const ConstElementPtr& element, const OsmMap& map)
+bool AddressParser::hasAddressRecursive(const ConstElementPtr& element, const OsmMap& map)
 {
-  return numAddresses(element, map) > 0;
+  return numAddressesRecursive(element, map) > 0;
 }
 
-int AddressParser::numAddresses(const ConstElementPtr& element, const OsmMap& map)
+int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const OsmMap& map)
 {
   AddressParser addressParser;
   // We're just getting a count here, so translation isn't needed (can be expensive).
@@ -131,6 +136,11 @@ int AddressParser::numAddresses(const ConstElementPtr& element, const OsmMap& ma
       *boost::dynamic_pointer_cast<const Relation>(element), map);
   }
   return addresses.size();
+}
+
+void AddressParser::normalizeAddresses(const Element& /*element*/)
+{
+  //TODO: finish
 }
 
 QList<Address> AddressParser::parseAddresses(const Element& element) const
@@ -198,7 +208,7 @@ QList<Address> AddressParser::parseAddressesFromWayNodes(const Way& way, const O
   for (size_t i = 0; i < wayNodeIds.size(); i++)
   {
     ConstElementPtr wayNode = map.getElement(ElementType::Node, wayNodeIds.at(i));
-    // see explanation for this check in _collectAddressesFromRelationMembers
+    // see explanation for this check in parseAddressesFromRelationMembers
     if (skipElementId.isNull() || wayNode->getElementId() != skipElementId)
     {
       addresses = parseAddresses(*wayNode);

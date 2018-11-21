@@ -54,7 +54,7 @@ class Relation;
  * Address normalization and translation is handled by libpostal, which uses ML trained on OSM
  * data.  There is also an option to do language pre-translation with a custom translator.
  
- @todo This class is being tested from PoiPolygonAddressScoreExtractorTest.  Move related
+ * @todo This class is being entirely tested from PoiPolygonAddressScoreExtractorTest.  Move related
  * tests to a new AddressParserTest class.
  */
 class AddressParser : public Configurable
@@ -96,30 +96,47 @@ public:
                                                 const ElementId& skipElementId = ElementId()) const;
 
   /**
-   * Determines if a node has an address
-   *
-   * @param node the node to examine for an address
-   * @return true if the node has an address; false otherwise
+   * @brief normalizeAddresses
+   * @param element
    */
-  static bool hasAddress(const Node& node);
+  void normalizeAddresses(const Element& element);
 
   /**
    * Determines if an element has an address
    *
    * @param element the element to examine for an address
-   * @param map map the element being examined belongs to
    * @return true if the element has an address; false otherwise
+   * @note This could be made more efficient, if necessary, by only counting the first address.
    */
-  static bool hasAddress(const ConstElementPtr& element, const OsmMap& map);
+  static bool hasAddress(const Element& element);
 
   /**
    * Counts the number of address an element contains
    *
-   * @param element the element to examine for addresses
-   * @param map map the element being examined belongs to
+   * @param element the element to examine for an address
    * @return the number of addresses the element contains
    */
-  static int numAddresses(const ConstElementPtr& element, const OsmMap& map);
+  static int numAddresses(const Element& element);
+
+  /**
+   * Determines if an element and any elements it contains has an address
+   *
+   * @param element the element to examine for an address
+   * @param map map the element being examined belongs to
+   * @return true if the element or its children have an address; false otherwise
+   * @note This could be made more efficient, if necessary, by only counting the first address.
+   */
+  static bool hasAddressRecursive(const ConstElementPtr& element, const OsmMap& map);
+
+  /**
+   * Counts the number of address an element contains, as well as the addresses of any contained
+   * elements
+   *
+   * @param element the element to examine for addresses
+   * @param map map the element being examined belongs to
+   * @return the number of addresses the element and its children contain
+   */
+  static int numAddressesRecursive(const ConstElementPtr& element, const OsmMap& map);
 
   /**
    * Returns an address tag value for an address type

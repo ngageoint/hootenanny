@@ -57,6 +57,11 @@ namespace hoot
 
 boost::shared_ptr<TestUtils> TestUtils::_theInstance;
 
+const QString TestUtils::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
+const QString TestUtils::STREET_TAG_NAME = "addr:street";
+const QString TestUtils::FULL_ADDRESS_TAG_NAME = "address";
+const QString TestUtils::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
+
 TestUtils::TestUtils()
 {
 }
