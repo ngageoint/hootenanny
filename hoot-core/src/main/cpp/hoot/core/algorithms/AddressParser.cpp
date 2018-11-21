@@ -154,11 +154,6 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   return addresses.size();
 }
 
-void AddressParser::normalizeAddresses(const Element& /*element*/)
-{
-  //TODO: finish
-}
-
 QList<Address> AddressParser::parseAddresses(const Element& element) const
 {
   LibPostalInit::getInstance();
@@ -195,7 +190,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element) const
     LOG_VART(parsedAddress);
 
     //normalize and translate the address strings, so we end up comparing apples to apples
-    const QSet<QString> normalizedAddresses = _normalizeAddress(parsedAddress);
+    const QSet<QString> normalizedAddresses = _addressNormalizer.normalizeAddress(parsedAddress);
     LOG_VART(normalizedAddresses);
 
     for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
@@ -331,29 +326,6 @@ bool AddressParser::_isParseableAddressFromComponents(const Tags& tags, QString&
 bool AddressParser::_isRangeAddress(const QString houseNum) const
 {
   return houseNum.contains("-");
-}
-
-QSet<QString> AddressParser::_normalizeAddress(const QString address) const
-{
-  QSet<QString> normalizedAddresses;
-
-  size_t num_expansions;
-  //TODO: specifying a language in the options is optional, but could we get better performance if
-  //we did specify one when we know what it is (would have to check to see if it was supported
-  //first, of course)?
-  char** expansions =
-    libpostal_expand_address(address.toUtf8().data(), libpostal_get_default_options(),
-    &num_expansions);
-  // add all the normalizations libpostal finds as possible addresses
-  for (size_t i = 0; i < num_expansions; i++)
-  {
-    const QString normalizedAddress = QString::fromUtf8(expansions[i]);
-    normalizedAddresses.insert(normalizedAddress);
-    LOG_TRACE("Normalized address from: " << address << " to: " << normalizedAddress);
-  }
-  libpostal_expansion_array_destroy(expansions, num_expansions);
-
-  return normalizedAddresses;
 }
 
 bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street) const

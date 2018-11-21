@@ -4,8 +4,7 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/algorithms/AddressParser.h>
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/algorithms/AddressNormalizer.h>
 
 namespace hoot
 {
@@ -13,7 +12,7 @@ namespace hoot
 /**
  * Normalizes element addresses
  */
-class NormalizeAddressesVisitor : public ElementVisitor, public Configurable
+class NormalizeAddressesVisitor : public ElementVisitor
 {
 public:
 
@@ -21,15 +20,13 @@ public:
 
   NormalizeAddressesVisitor();
 
-  virtual void setConfiguration(const Settings& conf);
-
   virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const { return "Normalizes element addresses"; }
 
 private:
 
-  AddressParser _addressParser;
+  AddressNormalizer _addressNormalizer;
 };
 
 }

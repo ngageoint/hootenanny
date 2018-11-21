@@ -31,6 +31,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/AddressTranslator.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/algorithms/AddressNormalizer.h>
 
 // Qt
 #include <QMultiMap>
@@ -94,12 +95,6 @@ public:
    */
   QList<Address> parseAddressesFromRelationMembers(const Relation& relation, const OsmMap& map,
                                                 const ElementId& skipElementId = ElementId()) const;
-
-  /**
-   * @brief normalizeAddresses
-   * @param element
-   */
-  void normalizeAddresses(const Element& element);
 
   /**
    * Determines if an element has an address
@@ -174,6 +169,7 @@ private:
   mutable bool _preTranslateTagValuesToEnglish;
 
   AddressTranslator _addressTranslator;
+  AddressNormalizer _addressNormalizer;
 
   /*
    * Reads tag keys used to identify tags as addresses
@@ -181,8 +177,6 @@ private:
   static void _readAddressTagKeys(const QString configFile);
 
   QSet<QString> _parseAddresses(const Element& element, QString& houseNum, QString& street) const;
-  // normalize also translates
-  QSet<QString> _normalizeAddress(const QString address) const;
 
   QSet<QString> _parseAddressAsRange(const QString houseNum, const QString street) const;
   bool _isRangeAddress(const QString houseNum) const;
