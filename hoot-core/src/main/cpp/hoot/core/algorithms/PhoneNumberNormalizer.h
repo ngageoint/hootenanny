@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef PHONE_NUMBER_PARSER_H
+#ifndef PHONE_NUMBER_NORMALIZER_H
 #define PHONE_NUMBER_PARSER_H
 
 // Hoot
@@ -38,58 +38,30 @@
 namespace hoot
 {
 
-struct ElementPhoneNumber
-{
-  QString name;
-  QString tagKey;
-  QString tagValue;
-};
-
 /**
- * Parses phone numbers from features and validates them.
+ * Parses phone numbers from features and normalizes them.
  *
- * Looks at tag keys containing "phone" by default and can be expanded with additional tag keys.
- *
- * @todo This class is being entirely tested from PoiPolygonPhoneNumberScoreExtractorTest.  Move
- * related tests to a new PhoneNumberParserTest class.
+ * See PhoneNumberParser for related notes.
  */
-class PhoneNumberParser : public Configurable
+class PhoneNumberNormalizer : public Configurable
 {
 public:
 
-  PhoneNumberParser();
+  PhoneNumberNormalizer();
 
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * Parses phone numbers from an element's tags
    *
-   * @param element the element to parse phone numbers from
-   * @return a collection of phone numbers
-   */
-  QList<ElementPhoneNumber> parsePhoneNumbers(const ConstElementPtr& element) const;
-
-  /**
-   * Returns the number of valid phone number tags contained by the element
    *
-   * @param element the element to examine for phone numbers
-   * @return a phone number count
+   * @param element
+   * @return
    */
-  int numPhoneNumbers(const ConstElementPtr& element) const;
-
-  /**
-   * Determines if an element contains a phone number
-   *
-   * @param element the element to examine for a phone number
-   * @return true if the element contains at least one phone number; false otherwise
-   * @note This could be made more efficient, if necessary, by only counting the first phone number.
-   */
-  bool hasPhoneNumber(const ConstElementPtr& element) const;
+  void normalizePhoneNumbers(const ElementPtr& element);
 
   void setRegionCode(QString code);
   void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }
   void setSearchInText(bool search);
-  long getPhoneNumbersProcessed() const { return _phoneNumbersProcessed; }
 
 private:
 
@@ -100,10 +72,6 @@ private:
   //allows the parser to search through text tokens; otherwise, it tries to match entire strings
   //as phone numbers
   bool _searchInText;
-  mutable long _phoneNumbersProcessed;
-
-  void _addPhoneNumber(const QString name, const QString tagKey, const QString tagValue,
-                       QList<ElementPhoneNumber>& phoneNumbers) const;
 };
 
 }

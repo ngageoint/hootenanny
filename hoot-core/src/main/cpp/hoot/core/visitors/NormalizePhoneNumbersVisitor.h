@@ -4,7 +4,8 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/algorithms/PhoneNumberParser.h>
+#include <hoot/core/algorithms/PhoneNumberNormalizer.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -12,7 +13,7 @@ namespace hoot
 /**
  * Normalizes element phone numbers
  */
-class NormalizePhoneNumbersVisitor : public ElementVisitor
+class NormalizePhoneNumbersVisitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -20,13 +21,15 @@ public:
 
   NormalizePhoneNumbersVisitor();
 
+  virtual void setConfiguration(const Settings& conf);
+
   virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const { return "Normalizes element phone numbers"; }
 
 private:
 
-  PhoneNumberParser _phoneNumberParser;
+  PhoneNumberNormalizer _phoneNumberNormalizer;
 };
 
 }

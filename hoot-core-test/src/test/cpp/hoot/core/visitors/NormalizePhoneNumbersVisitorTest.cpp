@@ -20,6 +20,7 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
+    //TODO: make sure this data has elements with more than one phone number
     OsmMapReaderFactory::read(
       map,
       "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm",

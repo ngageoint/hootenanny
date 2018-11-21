@@ -13,6 +13,11 @@ NormalizeAddressesVisitor::NormalizeAddressesVisitor()
 {
 }
 
+void NormalizeAddressesVisitor::setConfiguration(const Settings& conf)
+{
+  _addressParser.setConfiguration(conf);
+}
+
 void NormalizeAddressesVisitor::visit(const ElementPtr& e)
 {
   _addressParser.normalizeAddresses(*e);

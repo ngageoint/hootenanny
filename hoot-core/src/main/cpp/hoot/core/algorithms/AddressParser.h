@@ -108,7 +108,7 @@ public:
    * @return true if the element has an address; false otherwise
    * @note This could be made more efficient, if necessary, by only counting the first address.
    */
-  static bool hasAddress(const Element& element);
+  bool hasAddress(const ConstElementPtr& element) const;
 
   /**
    * Counts the number of address an element contains
@@ -116,7 +116,7 @@ public:
    * @param element the element to examine for an address
    * @return the number of addresses the element contains
    */
-  static int numAddresses(const Element& element);
+  int numAddresses(const ConstElementPtr& element) const;
 
   /**
    * Determines if an element and any elements it contains has an address
@@ -126,7 +126,7 @@ public:
    * @return true if the element or its children have an address; false otherwise
    * @note This could be made more efficient, if necessary, by only counting the first address.
    */
-  static bool hasAddressRecursive(const ConstElementPtr& element, const OsmMap& map);
+  bool hasAddressRecursive(const ConstElementPtr& element, const OsmMap& map) const;
 
   /**
    * Counts the number of address an element contains, as well as the addresses of any contained
@@ -136,7 +136,7 @@ public:
    * @param map map the element being examined belongs to
    * @return the number of addresses the element and its children contain
    */
-  static int numAddressesRecursive(const ConstElementPtr& element, const OsmMap& map);
+  int numAddressesRecursive(const ConstElementPtr& element, const OsmMap& map) const;
 
   /**
    * Returns an address tag value for an address type
@@ -171,7 +171,7 @@ private:
   bool _allowLenientHouseNumberMatching;
   //when enabled, will attempt to translate address tags to English with a translator other than
   //the one built into libpostal before address normalization
-  bool _preTranslateTagValuesToEnglish;
+  mutable bool _preTranslateTagValuesToEnglish;
 
   AddressTranslator _addressTranslator;
 

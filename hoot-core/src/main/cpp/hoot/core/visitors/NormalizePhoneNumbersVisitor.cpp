@@ -13,9 +13,14 @@ NormalizePhoneNumbersVisitor::NormalizePhoneNumbersVisitor()
 {
 }
 
+void NormalizePhoneNumbersVisitor::setConfiguration(const Settings& conf)
+{
+  _phoneNumberNormalizer.setConfiguration(conf);
+}
+
 void NormalizePhoneNumbersVisitor::visit(const ElementPtr& e)
 {
-  _phoneNumberParser.normalizePhoneNumbers(e);
+  _phoneNumberNormalizer.normalizePhoneNumbers(e);
 }
 
 }

@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/algorithms/AddressParser.h>
 
 namespace hoot
 {
@@ -96,6 +97,7 @@ private:
   bool _keepClosestMatchesOnly;
 
   bool _addressParsingEnabled;
+  AddressParser _addressParser;
 
   bool _nonDistanceSimilaritiesPresent() const;
 

@@ -6,6 +6,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 #include <hoot/core/algorithms/PhoneNumberParser.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -13,13 +14,16 @@ namespace hoot
 /**
  * Counts the number of valid element phone numbers
  */
-class PhoneNumberCountVisitor : public ConstElementVisitor, public SingleStatistic
+class PhoneNumberCountVisitor : public ConstElementVisitor, public SingleStatistic,
+  public Configurable
 {
 public:
 
   static std::string className() { return "hoot::PhoneNumberCountVisitor"; }
 
   PhoneNumberCountVisitor();
+
+  virtual void setConfiguration(const Settings& conf);
 
   double getStat() const { return _count; }
 

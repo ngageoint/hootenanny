@@ -96,61 +96,6 @@ void PhoneNumberParser::_addPhoneNumber(const QString name, const QString tagKey
   _phoneNumbersProcessed++;
 }
 
-void PhoneNumberParser::normalizePhoneNumbers(const ElementPtr& element)
-{
-  if (_regionCode.isEmpty())
-  {
-    throw HootException("Phone number normalization requires a region code.");
-  }
-
-  // This method has a lot of similarity with parsePhoneNumber, so look there for explanations.
-
-  for (Tags::const_iterator it = element->getTags().constBegin();
-       it != element->getTags().constEnd(); ++it)
-  {
-    const QString tagKey = it.key();
-    LOG_VART(tagKey);
-    if (_additionalTagKeys.contains(tagKey, Qt::CaseInsensitive) ||
-        tagKey.contains("phone", Qt::CaseInsensitive))
-    {
-      const QString tagValue = it.value().toUtf8().trimmed().simplified();
-      LOG_VART(tagValue);
-
-      if (!_searchInText)
-      {
-        if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(
-              tagValue.toStdString(), _regionCode.toStdString()))
-        {
-          std::string phoneNumber = tagValue.toStdString();
-          //TODO: fix
-          //PhoneNumberUtil::GetInstance()->Normalize(&phoneNumber);
-          element->getTags().set(tagKey, QString::fromStdString(phoneNumber));
-        }
-      }
-      else
-      {
-        PhoneNumberMatcher numberFinder(
-          *PhoneNumberUtil::GetInstance(), tagValue.toStdString(), _regionCode.toStdString(),
-          PhoneNumberMatcher::Leniency::POSSIBLE, 1);
-        QString phoneNumbers;
-        while (numberFinder.HasNext())
-        {
-          PhoneNumberMatch match;
-          numberFinder.Next(&match);
-          // TODO: Is normalization here necessary?  Did PhoneNumberMatcher already do it?
-          std::string phoneNumber = match.raw_string();
-          //TODO: fix
-          //PhoneNumberUtil::GetInstance()->Normalize(&phoneNumber);
-          // appending all found phone numbers into a single tag value
-          phoneNumbers += QString::fromStdString(phoneNumber) + ";";
-        }
-        phoneNumbers.chop(1);
-        element->getTags().set(tagKey, phoneNumbers);
-      }
-    }
-  }
-}
-
 int PhoneNumberParser::numPhoneNumbers(const ConstElementPtr& element) const
 {
   return parsePhoneNumbers(element).size();
@@ -181,6 +126,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const ConstElemen
       {
         // If we're not using a region code to see if the number is valid, then just check for at
         // least one digit (vanity numbers can have letters).
+        // TODO: consider getting rid of this, as its too weak of a check
         if (StringUtils::hasDigit(tagValue))
         {
           _addPhoneNumber(element->getTags().getName(), tagKey, tagValue, parsedPhoneNums);

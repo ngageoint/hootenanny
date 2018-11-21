@@ -97,43 +97,59 @@ void AddressParser::_readAddressTagKeys(const QString configFile)
   LOG_VART(_addressTypeToTagKeys.size());
 }
 
-bool AddressParser::hasAddress(const Element& element)
+bool AddressParser::hasAddress(const ConstElementPtr& element) const
 {
   return numAddresses(element) > 0;
 }
 
-int AddressParser::numAddresses(const Element& element)
+int AddressParser::numAddresses(const ConstElementPtr& element) const
 {
-  AddressParser addressParser;
   // We're just getting a count here, so translation isn't needed (can be expensive).
-  addressParser._preTranslateTagValuesToEnglish = false;
-  return addressParser.parseAddresses(element).size();
+  bool translateModified = false;
+  if (_preTranslateTagValuesToEnglish)
+  {
+    translateModified = true;
+    _preTranslateTagValuesToEnglish = false;
+  }
+  const int numAddresses = parseAddresses(*element).size();
+  if (translateModified)
+  {
+    _preTranslateTagValuesToEnglish = true;
+  }
+  return numAddresses;
 }
 
-bool AddressParser::hasAddressRecursive(const ConstElementPtr& element, const OsmMap& map)
+bool AddressParser::hasAddressRecursive(const ConstElementPtr& element, const OsmMap& map) const
 {
   return numAddressesRecursive(element, map) > 0;
 }
 
-int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const OsmMap& map)
+int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const OsmMap& map) const
 {
-  AddressParser addressParser;
   // We're just getting a count here, so translation isn't needed (can be expensive).
-  addressParser._preTranslateTagValuesToEnglish = false;
+  bool translateModified = false;
+  if (_preTranslateTagValuesToEnglish)
+  {
+    translateModified = true;
+    _preTranslateTagValuesToEnglish = false;
+  }
   QList<Address> addresses;
   if (element->getElementType() == ElementType::Node)
   {
-    return hasAddress(*boost::dynamic_pointer_cast<const Node>(element));
+    return hasAddress(boost::dynamic_pointer_cast<const Node>(element));
   }
   else if (element->getElementType() == ElementType::Way)
   {
-    addresses = addressParser.parseAddressesFromWayNodes(
-      *boost::dynamic_pointer_cast<const Way>(element), map);
+    addresses = parseAddressesFromWayNodes(*boost::dynamic_pointer_cast<const Way>(element), map);
   }
   else if (element->getElementType() == ElementType::Relation)
   {
-    addresses = addressParser.parseAddressesFromRelationMembers(
-      *boost::dynamic_pointer_cast<const Relation>(element), map);
+    addresses =
+      parseAddressesFromRelationMembers(*boost::dynamic_pointer_cast<const Relation>(element), map);
+  }
+  if (translateModified)
+  {
+    _preTranslateTagValuesToEnglish = true;
   }
   return addresses.size();
 }

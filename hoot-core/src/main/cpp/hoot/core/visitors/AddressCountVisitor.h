@@ -5,6 +5,8 @@
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/algorithms/AddressParser.h>
 
 namespace hoot
 {
@@ -12,13 +14,15 @@ namespace hoot
 /**
  * Counts the number of valid element addresses
  */
-class AddressCountVisitor : public ElementOsmMapVisitor, public SingleStatistic
+class AddressCountVisitor : public ElementOsmMapVisitor, public SingleStatistic, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::AddressCountVisitor"; }
 
   AddressCountVisitor();
+
+  virtual void setConfiguration(const Settings& conf);
 
   double getStat() const { return _count; }
 
@@ -29,6 +33,7 @@ public:
 private:
 
   int _count;
+  AddressParser _addressParser;
 };
 
 }

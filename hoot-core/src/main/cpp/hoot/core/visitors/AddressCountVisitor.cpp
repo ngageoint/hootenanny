@@ -3,7 +3,6 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/AddressParser.h>
 
 namespace hoot
 {
@@ -15,9 +14,14 @@ _count(0)
 {
 }
 
+void AddressCountVisitor::setConfiguration(const Settings& conf)
+{
+  _addressParser.setConfiguration(conf);
+}
+
 void AddressCountVisitor::visit(const boost::shared_ptr<Element>& e)
 {
-  _count += AddressParser::numAddresses(*e);
+  _count += _addressParser.numAddresses(e);
 }
 
 }
