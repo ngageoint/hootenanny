@@ -32,9 +32,9 @@
 #include <hoot/core/language/AddressTranslator.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/AddressNormalizer.h>
+#include <hoot/core/algorithms/AddressTagKeys.h>
 
 // Qt
-#include <QMultiMap>
 #include <QSet>
 #include <QList>
 
@@ -134,15 +134,6 @@ public:
   int numAddressesRecursive(const ConstElementPtr& element, const OsmMap& map) const;
 
   /**
-   * Returns an address tag value for an address type
-   *
-   * @param tags tags to search for address value
-   * @param addressTagType address tag type as defined in the address tag keys config file
-   * @return an address value
-   */
-  static QString getAddressTagValue(const Tags& tags, const QString addressTagType);
-
-  /**
    * Determines whether two addresses match despite house number subletter differences
    *
    * So, allow "34 elm street" to match "34a elm street".
@@ -153,15 +144,11 @@ public:
    */
   static bool addressesMatchDespiteSubletterDiffs(const QString address1, const QString address2);
 
-  void setAdditionalTagKeys(QSet<QString> keys) { _additionalTagKeys = keys; }
   void setPreTranslateTagValuesToEnglish(bool translate, const Settings& conf);
   void setAllowLenientHouseNumberMatching(bool allow) { _allowLenientHouseNumberMatching = allow; }
 
 private:
 
-  //extra tags to search for addresses in
-  QSet<QString> _additionalTagKeys;
-  static QMultiMap<QString, QString> _addressTypeToTagKeys;
   // see addressesMatchDespiteSubletterDiffs
   bool _allowLenientHouseNumberMatching;
   //when enabled, will attempt to translate address tags to English with a translator other than
@@ -170,11 +157,6 @@ private:
 
   AddressTranslator _addressTranslator;
   AddressNormalizer _addressNormalizer;
-
-  /*
-   * Reads tag keys used to identify tags as addresses
-   */
-  static void _readAddressTagKeys(const QString configFile);
 
   QSet<QString> _parseAddresses(const Element& element, QString& houseNum, QString& street) const;
 
@@ -193,7 +175,7 @@ private:
   QSet<QString> _parseAddressFromComponents(const Tags& tags, QString& houseNum,
                                             QString& street) const;
   /*
-   * Parses address from tags specified in _additionalTagKeys
+   * Parses address from tags specified in the additional tag keys
    */
   QString _parseAddressFromAltTags(const Tags& tags, QString& houseNum, QString& street) const;
 

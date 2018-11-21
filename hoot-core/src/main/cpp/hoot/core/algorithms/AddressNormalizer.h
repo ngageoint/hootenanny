@@ -2,6 +2,9 @@
 #ifndef ADDRESS_NORMALIZER_H
 #define ADDRESS_NORMALIZER_H
 
+// Hoot
+#include <hoot/core/elements/Element.h>
+
 // Qt
 #include <QSet>
 
@@ -16,6 +19,12 @@ class AddressNormalizer
 public:
 
   AddressNormalizer();
+
+  /**
+   * @brief normalizeAddresses
+   * @param e
+   */
+  void normalizeAddresses(const ElementPtr& e);
 
   /**
    * normalize also translates

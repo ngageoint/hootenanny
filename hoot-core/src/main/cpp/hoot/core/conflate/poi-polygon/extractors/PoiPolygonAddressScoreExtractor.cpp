@@ -52,11 +52,11 @@ void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
 
-  _addressParser.setConfiguration(conf);
   _addressParser.setAllowLenientHouseNumberMatching(
     config.getPoiPolygonAddressAllowLenientHouseNumberMatching());
-  _addressParser.setAdditionalTagKeys(
-    QSet<QString>::fromList(config.getPoiPolygonAddressAdditionalTagKeys()));
+  // Set additional tag keys before setting configuration, since AddressTagKeys will have the
+  // additional keys passed to it in the setConfiguration call.
+  _addressParser.setConfiguration(conf);
 
   bool preTranslateTagValuesToEnglish = config.getPoiPolygonAddressTranslateToEnglish();
   // The default translation is what libpostal does during normalization and is always done.  We're

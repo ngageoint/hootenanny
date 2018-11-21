@@ -92,6 +92,11 @@ _addressParsingEnabled(addressParsingEnabled)
   LOG_VART(_addressParsingEnabled);
 }
 
+void PoiPolygonReviewReducer::setConfiguration(const Settings& conf)
+{
+  _addressParser.setConfiguration(conf);
+}
+
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 {
   return _typeScore > 0.03 || _nameScore > 0.35 || _addressMatch;

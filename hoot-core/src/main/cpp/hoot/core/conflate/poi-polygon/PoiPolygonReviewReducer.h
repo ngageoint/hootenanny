@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/AddressParser.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -60,6 +61,8 @@ public:
                           bool exactNameMatch, double typeScoreThreshold, double typeScore,
                           bool typeMatch, double matchDistanceThreshold, bool addressMatch,
                           bool addressParsingEnabled);
+
+  virtual void setConfiguration(const Settings& conf);
 
   /**
    * Determines whether the input features trigger a rule which precludes them from being matched or

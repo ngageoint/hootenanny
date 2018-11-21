@@ -13,10 +13,9 @@ NormalizeAddressesVisitor::NormalizeAddressesVisitor()
 {
 }
 
-void NormalizeAddressesVisitor::visit(const ElementPtr& /*e*/)
+void NormalizeAddressesVisitor::visit(const ElementPtr& e)
 {
-  //_addressNormalizer.normalizeAddresses(*e);
-  //TODO: finish
+  _addressNormalizer.normalizeAddresses(e);
 }
 
 }

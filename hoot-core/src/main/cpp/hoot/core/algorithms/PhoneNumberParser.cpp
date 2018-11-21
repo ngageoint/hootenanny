@@ -77,9 +77,9 @@ void PhoneNumberParser::setRegionCode(QString code)
 void PhoneNumberParser::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  setRegionCode(config.getPoiPolygonPhoneNumberRegionCode());
-  setAdditionalTagKeys(config.getPoiPolygonPhoneNumberAdditionalTagKeys());
-  setSearchInText(config.getPoiPolygonPhoneNumberSearchInText());
+  setRegionCode(config.getPhoneNumberRegionCode());
+  setAdditionalTagKeys(config.getPhoneNumberAdditionalTagKeys());
+  setSearchInText(config.getPhoneNumberSearchInText());
 }
 
 void PhoneNumberParser::_addPhoneNumber(const QString name, const QString tagKey,

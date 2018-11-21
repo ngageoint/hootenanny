@@ -85,6 +85,16 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== address.additional.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+By default,conflation examines standard OSM tags for address comparisons (see the addressTagKeys
+file).  You can expand the tag keys searched by populating this list. From the command line,
+separate list items with a semicolon and surround the entire list in double quotes.
+
 === address.tag.keys.file
 
 * Data Type: string
@@ -2469,6 +2479,37 @@ The minimum spacing, in meters, that may occur between nodes created by PERTY wa
 
 The probability between 0.0 and 1.0 that a way will be split into multiple features by PERTY.
 
+=== phone.number.additional.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+By default, conflation examines all tags with keys containing the text "phone" for phone number
+comparisons.  You can expand the tag keys searched by populating this list. From the command line,
+separate list items with a semicolon and surround the entire list in double quotes.
+
+=== phone.number.region.code
+
+* Data Type: string
+* Default Value: `US`
+
+Optional geographical region code used when comparing phone numbers.   See:
+http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region
+code, if known for the input data, may increase phone number matching accuracy but may also have
+runtime performance implications.
+
+=== phone.number.search.in.text
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text
+that may contain things other than phone numbers.  If false, the conflation will assume the tag
+value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must
+be set to a valid region code when enabling this option.  Enabling this option may have runtime
+performance implications.
+
 === plugin.context.includes
 
 * Data Type: list
@@ -2507,16 +2548,6 @@ The threshold at which a miss is called a miss for POIs.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.polygon.address.additional.tag.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-By default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the
-addressTagKeys file).  You can expand the tag keys searched by populating this list. From the
-command line, separate list items with a semicolon and surround the entire list in double quotes.
 
 === poi.polygon.address.allow.lenient.house.number.matching
 
@@ -2682,16 +2713,6 @@ significant impact on the runtime performance of conflation when enabled and sho
 if the source data is known to have non-English names.  The configuration option,
 'language.translation.translator', controls which translator is used.
 
-=== poi.polygon.phone.number.additional.tag.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-By default, POI/Polygon conflation examines all tags with keys containing the text "phone" for
-phone number comparisons.  You can expand the tag keys searched by populating this list. From the
-command line, separate list items with a semicolon and surround the entire list in double quotes.
-
 === poi.polygon.phone.number.match.enabled
 
 * Data Type: bool
@@ -2700,27 +2721,6 @@ command line, separate list items with a semicolon and surround the entire list 
 If true, POI/Polygon conflation will compare phone number as one of the criteria for matching
 features.  If the data being conflated is known to have poor telephone number data, disabling this
 option may speed up conflation runtime performance.
-
-=== poi.polygon.phone.number.region.code
-
-* Data Type: string
-* Default Value: `US`
-
-Optional geographical region code used when comparing phone numbers.   See:
-http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region
-code, if known for the input data, may increase phone number matching accuracy but may also have
-runtime performance implications.
-
-=== poi.polygon.phone.number.search.in.text
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text
-that may contain things other than phone numbers.  If false, the conflation will assume the tag
-value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must
-be set to a valid region code when enabling this option.  Enabling this option may have runtime
-performance implications.
 
 === poi.polygon.poi.ignore.tags.file
 

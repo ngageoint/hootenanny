@@ -4,6 +4,7 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/LibPostalInit.h>
+#include <hoot/core/algorithms/AddressTagKeys.h>
 
 // libpostal
 #include <libpostal/libpostal.h>
@@ -15,8 +16,45 @@ AddressNormalizer::AddressNormalizer()
 {
 }
 
+void AddressNormalizer::normalizeAddresses(const ElementPtr& e)
+{
+  const QSet<QString> addressTagKeys = AddressTagKeys::getInstance()->getAddressTagKeys(*e);
+  for (QSet<QString>::const_iterator addressTagKeyItr = addressTagKeys.begin();
+       addressTagKeyItr != addressTagKeys.end(); ++addressTagKeyItr)
+  {
+    const QString addressTagKey = *addressTagKeyItr;
+    // normalization may find multiple addresses; we'll arbitrarily take the first one and put the
+    // rest in an alt field
+    const QSet<QString> normalizedAddresses = normalizeAddress(e->getTags().get(addressTagKey));
+    bool firstAddressParsed = false;
+    QString altAddresses;
+    for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
+         normalizedAddressItr != normalizedAddresses.end(); ++normalizedAddressItr)
+    {
+      const QString parsedAddress = *normalizedAddressItr;
+      if (!firstAddressParsed)
+      {
+        e->getTags().set(addressTagKey, parsedAddress);
+        firstAddressParsed = true;
+      }
+      else
+      {
+        altAddresses += parsedAddress + ";";
+      }
+    }
+    if (!altAddresses.isEmpty())
+    {
+      altAddresses.chop(1);
+      e->getTags().set("alt_address", altAddresses);
+    }
+  }
+}
+
 QSet<QString> AddressNormalizer::normalizeAddress(const QString address) const
 {
+  // See note about init of this in AddressParser::parseAddresses.
+  LibPostalInit::getInstance();
+
   QSet<QString> normalizedAddresses;
 
   size_t num_expansions;

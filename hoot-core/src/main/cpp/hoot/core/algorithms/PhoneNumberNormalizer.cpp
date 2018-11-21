@@ -76,9 +76,9 @@ void PhoneNumberNormalizer::setRegionCode(QString code)
 void PhoneNumberNormalizer::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  setRegionCode(config.getPoiPolygonPhoneNumberRegionCode());
-  setAdditionalTagKeys(config.getPoiPolygonPhoneNumberAdditionalTagKeys());
-  setSearchInText(config.getPoiPolygonPhoneNumberSearchInText());
+  setRegionCode(config.getPhoneNumberRegionCode());
+  setAdditionalTagKeys(config.getPhoneNumberAdditionalTagKeys());
+  setSearchInText(config.getPhoneNumberSearchInText());
 }
 
 void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)

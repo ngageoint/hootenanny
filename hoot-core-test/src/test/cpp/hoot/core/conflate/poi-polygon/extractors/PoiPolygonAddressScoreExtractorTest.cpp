@@ -31,6 +31,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/algorithms/AddressTagKeys.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -332,10 +333,11 @@ public:
   {
     PoiPolygonAddressScoreExtractor uut;
     uut.setConfiguration(conf());
-    QSet<QString> additionalTags;
-    additionalTags.insert("note");
-    additionalTags.insert("description");
-    uut._addressParser.setAdditionalTagKeys(additionalTags);
+    QSet<QString> additionalTagKeys;
+    additionalTagKeys.insert("note");
+    additionalTagKeys.insert("description");
+    AddressTagKeysPtr addressTagKeys = AddressTagKeys::getInstance();
+    addressTagKeys->_additionalTagKeys = additionalTagKeys;
 
     OsmMapPtr map(new OsmMap());
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));

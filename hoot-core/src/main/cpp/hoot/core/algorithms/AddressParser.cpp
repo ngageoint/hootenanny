@@ -31,7 +31,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/LibPostalInit.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/Address.h>
 
@@ -41,8 +40,6 @@
 namespace hoot
 {
 
-QMultiMap<QString, QString> AddressParser::_addressTypeToTagKeys;
-
 AddressParser::AddressParser() :
 _allowLenientHouseNumberMatching(true),
 _preTranslateTagValuesToEnglish(false)
@@ -51,12 +48,6 @@ _preTranslateTagValuesToEnglish(false)
 
 void AddressParser::setConfiguration(const Settings& conf)
 {
-  ConfigOptions config = ConfigOptions(conf);
-
-  if (_addressTypeToTagKeys.isEmpty())
-  {
-    _readAddressTagKeys(config.getAddressTagKeysFile());
-  }
   setPreTranslateTagValuesToEnglish(_preTranslateTagValuesToEnglish, conf);
 }
 
@@ -67,34 +58,6 @@ void AddressParser::setPreTranslateTagValuesToEnglish(bool translate, const Sett
   {
     _addressTranslator.setConfiguration(conf);
   }
-}
-
-void AddressParser::_readAddressTagKeys(const QString configFile)
-{
-  const QStringList addressTagKeyEntries = FileUtils::readFileToList(configFile);
-  for (int i = 0; i < addressTagKeyEntries.size(); i++)
-  {
-    const QString addressTagKeyEntry = addressTagKeyEntries.at(i);
-    const QStringList addressTagKeyEntryParts = addressTagKeyEntry.split("=");
-    if (addressTagKeyEntryParts.size() != 2)
-    {
-      throw HootException("Invalid address tag key entry: " + addressTagKeyEntry);
-    }
-    const QString addressType = addressTagKeyEntryParts[0].trimmed().toLower();
-    if (!addressType.isEmpty())
-    {
-      const QStringList addressTags = addressTagKeyEntryParts[1].split(",");
-      for (int j = 0; j < addressTags.size(); j++)
-      {
-        const QString addressTag = addressTags.at(j).trimmed().toLower();
-        if (!addressTag.isEmpty())
-        {
-          _addressTypeToTagKeys.insert(addressType, addressTag);
-        }
-      }
-    }
-  }
-  LOG_VART(_addressTypeToTagKeys.size());
 }
 
 bool AddressParser::hasAddress(const ConstElementPtr& element) const
@@ -156,6 +119,8 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
 
 QList<Address> AddressParser::parseAddresses(const Element& element) const
 {
+  // Make this call here, so that we don't cause it to be done unnecessarily as part of this
+  // class's init when its a mem var on another class, since this init is expensive.
   LibPostalInit::getInstance();
 
   QList<Address> addresses;
@@ -257,20 +222,6 @@ QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& 
   return addresses;
 }
 
-QString AddressParser::getAddressTagValue(const Tags& tags, const QString addressTagType)
-{
-  const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
-  for (int i = 0; i < tagKeys.size(); i++)
-  {
-    const QString tagKey = tagKeys.at(i);
-    if (tags.contains(tagKey))
-    {
-      return tags.get(tagKey);
-    }
-  }
-  return "";
-}
-
 QSet<QString> AddressParser::_parseAddressAsRange(const QString houseNum,
                                                   const QString street) const
 {
@@ -313,8 +264,8 @@ bool AddressParser::_isParseableAddressFromComponents(const Tags& tags, QString&
                                                       QString& street) const
 {
   // we only require a valid street address...no other higher order parts, like city, state, etc.
-  houseNum = getAddressTagValue(tags, "house_number");
-  street = getAddressTagValue(tags, "street").toLower();
+  houseNum = AddressTagKeys::getInstance()->getAddressTagValue(tags, "house_number");
+  street = AddressTagKeys::getInstance()->getAddressTagValue(tags, "street").toLower();
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
     LOG_TRACE("Found address from components: " << houseNum << ", " << street << ".");
@@ -409,13 +360,15 @@ QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QStri
     else
     {
       QString parsedAddress = houseNum + " ";
-      const QString streetPrefix = getAddressTagValue(tags, "street_prefix");
+      const QString streetPrefix =
+        AddressTagKeys::getInstance()->getAddressTagValue(tags, "street_prefix");
       if (!streetPrefix.isEmpty())
       {
         parsedAddress += streetPrefix + " ";
       }
       parsedAddress += street;
-      const QString streetSuffix = getAddressTagValue(tags, "street_suffix");
+      const QString streetSuffix =
+        AddressTagKeys::getInstance()->getAddressTagValue(tags, "street_suffix");
       if (!streetSuffix.isEmpty())
       {
         parsedAddress += " " + streetPrefix;
@@ -436,7 +389,7 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
 
   //let's always look in the name field; arguably, we could look in all of them instead of just
   //one...
-  QSet<QString> additionalTagKeys = _additionalTagKeys;
+  QSet<QString> additionalTagKeys = AddressTagKeys::getInstance()->getAdditionalTagKeys();
   additionalTagKeys = additionalTagKeys.unite(QSet<QString>::fromList(tags.getNameKeys()));
   LOG_VART(additionalTagKeys);
 
@@ -459,10 +412,12 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
 QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& houseNum,
                                              QString& street) const
 {
+  // We're going to take the most likely correct address and ignore any others.
   QSet<QString> parsedAddresses;
 
   // look for a full address tag first
-  QString fullAddress = getAddressTagValue(element.getTags(), "full_address");
+  QString fullAddress =
+    AddressTagKeys::getInstance()->getAddressTagValue(element.getTags(), "full_address");
   LOG_VART(fullAddress);
   if (fullAddress.isEmpty())
   {
