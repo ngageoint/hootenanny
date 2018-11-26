@@ -33,7 +33,7 @@ using namespace boost;
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ElementConverter.h>

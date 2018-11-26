@@ -37,7 +37,7 @@ using namespace geos::operation::distance;
 // Hoot
 #include <hoot/core/util/GeometryPainter.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/OpenCv.h>

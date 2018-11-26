@@ -32,12 +32,12 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/algorithms/RdpWayGeneralizer.h>
+#include <hoot/rnd/perty/RdpWayGeneralizer.h>
 
 // Qt
 #include <QSet>

@@ -33,7 +33,7 @@
 // Hoot
 #include <hoot/core/util/GeometryPainter.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/criterion/HighwayCriterion.h>

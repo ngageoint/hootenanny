@@ -29,10 +29,10 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
-#include <hoot/core/conflate/extractors/NameExtractor.h>
+#include <hoot/core/algorithms/extractors/NameExtractor.h>
 
 namespace hoot
 {

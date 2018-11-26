@@ -28,7 +28,7 @@
 #include "NonConflatableElementRemover.h"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>

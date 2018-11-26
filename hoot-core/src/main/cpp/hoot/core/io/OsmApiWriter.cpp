@@ -28,7 +28,7 @@
 #include "OsmApiWriter.h"
 
 //  Hootenanny
-#include <hoot/core/VersionDefines.h>
+#include <hoot/core/info/VersionDefines.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/ConfigOptions.h>

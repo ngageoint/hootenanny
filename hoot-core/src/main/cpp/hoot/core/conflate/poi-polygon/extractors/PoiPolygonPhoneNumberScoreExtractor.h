@@ -29,9 +29,9 @@
 #define POIPOLYGONPHONENUMBERSCOREEXTRACTOR_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/PhoneNumberParser.h>
+#include <hoot/core/conflate/phone/PhoneNumberParser.h>
 
 // Qt
 #include <QList>

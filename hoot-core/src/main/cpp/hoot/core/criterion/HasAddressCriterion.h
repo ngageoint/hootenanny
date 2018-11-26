@@ -3,7 +3,7 @@
 #define HAS_ADDRESS_CRITERION_H
 
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/algorithms/AddressParser.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -16,7 +16,7 @@ class HasAddressCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::LinearCriterion"; }
+  static std::string className() { return "hoot::HasAddressCriterion"; }
 
   HasAddressCriterion();
 

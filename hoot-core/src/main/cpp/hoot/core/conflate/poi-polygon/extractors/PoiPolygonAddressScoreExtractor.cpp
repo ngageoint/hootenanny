@@ -32,7 +32,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/Address.h>
+#include <hoot/core/conflate/address/Address.h>
 #include <hoot/core/util/StringUtils.h>
 
 using namespace std;

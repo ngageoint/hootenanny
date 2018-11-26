@@ -38,7 +38,7 @@ namespace geos
 }
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // TGS
 #include <tgs/SharedPtr.h>

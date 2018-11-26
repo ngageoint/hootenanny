@@ -32,7 +32,7 @@
 
 #ifndef SWIG
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #endif
 
 // Standard

@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/conflate/AlphaShapeGenerator.h>
+#include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 
 // geos
 #include <geos/util/TopologyException.h>

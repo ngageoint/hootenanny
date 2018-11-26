@@ -28,7 +28,7 @@
 #include "SuperfluousNodeRemover.h"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>

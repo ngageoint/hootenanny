@@ -35,7 +35,7 @@
 // Hoot
 #include <hoot/core/util/Assert.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Standard
 #include <limits>

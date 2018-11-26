@@ -26,12 +26,12 @@
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/language/DictionaryTranslator.h>
-#include <hoot/core/algorithms/AddressTagKeys.h>
+#include <hoot/core/conflate/address/AddressTagKeys.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>

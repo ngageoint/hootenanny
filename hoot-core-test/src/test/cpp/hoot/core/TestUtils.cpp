@@ -28,7 +28,7 @@
 #include "TestUtils.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/criterion/TagCriterion.h>

@@ -58,7 +58,7 @@ namespace geos
 
 // Hoot
 #include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QString>

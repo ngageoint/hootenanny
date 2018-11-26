@@ -33,13 +33,13 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/algorithms/MaximalNearestSubline.h>
+#include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/algorithms/WayAverager.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/ops/RemoveWayOp.h>

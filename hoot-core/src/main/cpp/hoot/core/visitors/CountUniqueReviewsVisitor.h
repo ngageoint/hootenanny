@@ -28,8 +28,8 @@
 #define COUNTUNIQUEREVIEWSVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 

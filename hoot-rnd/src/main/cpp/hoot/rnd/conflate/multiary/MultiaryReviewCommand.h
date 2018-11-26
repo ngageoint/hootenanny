@@ -28,7 +28,7 @@
 #define __MULTIARY_REVIEW_COMMAND_H__
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 
 //QT

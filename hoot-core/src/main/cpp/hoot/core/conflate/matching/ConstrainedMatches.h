@@ -28,7 +28,7 @@
 #define CONSTRAINEDMATCHES_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchConflicts.h>
 #include <hoot/core/util/Configurable.h>
 

@@ -31,7 +31,7 @@
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/IoUtils.h>
 
 // Qt

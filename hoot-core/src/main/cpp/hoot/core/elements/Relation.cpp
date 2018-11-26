@@ -36,7 +36,7 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>

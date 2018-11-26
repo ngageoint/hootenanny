@@ -28,8 +28,8 @@
 #include "FourPassManager.h"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapListener.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmMapListener.h>
 #include <hoot/core/conflate/NodeReplacements.h>
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>

@@ -28,7 +28,7 @@
 #define TRANSLATIONVISITOR_H
 
 // Hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/util/Configurable.h>

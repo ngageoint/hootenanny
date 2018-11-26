@@ -30,12 +30,12 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/algorithms/MaximalNearestSubline.h>
-#include <hoot/core/algorithms/MaximalSubline.h>
+#include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
+#include <hoot/core/algorithms/subline-matching/MaximalSubline.h>
 #include <hoot/core/algorithms/WayAverager.h>
-#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/RemoveWayOp.h>

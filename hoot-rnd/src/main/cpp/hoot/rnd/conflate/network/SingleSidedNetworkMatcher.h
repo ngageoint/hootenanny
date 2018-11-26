@@ -28,7 +28,7 @@
 #define __SINGLE_SIDED_NETWORK_MATCHER_H__
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
 #include <hoot/core/conflate/network/NetworkMatcher.h>

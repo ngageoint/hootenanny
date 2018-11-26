@@ -27,7 +27,7 @@
 #include "WayMatchStringSplitter.h"
 
 // hoot
-#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>

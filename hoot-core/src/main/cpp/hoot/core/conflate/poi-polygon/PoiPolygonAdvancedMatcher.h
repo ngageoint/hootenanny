@@ -28,8 +28,8 @@
 #define POIPOLYGONADVANCEDMATCHER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/algorithms/AddressParser.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

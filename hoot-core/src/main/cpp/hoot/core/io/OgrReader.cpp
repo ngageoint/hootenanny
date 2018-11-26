@@ -39,7 +39,7 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OgrUtilities.h>

@@ -38,7 +38,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 using namespace std;
 

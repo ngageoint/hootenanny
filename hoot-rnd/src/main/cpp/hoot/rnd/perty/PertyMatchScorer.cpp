@@ -27,10 +27,10 @@
 #include "PertyMatchScorer.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/RubberSheet.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>

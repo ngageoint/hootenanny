@@ -54,7 +54,7 @@ using namespace boost;
 #include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/algorithms/AddressParser.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 
 // Qt
 #include <QDomDocument>

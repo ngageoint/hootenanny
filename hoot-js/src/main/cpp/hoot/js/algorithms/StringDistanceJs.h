@@ -29,7 +29,7 @@
 #define STRINGDISTANCEJS_H
 
 // hoot
-#include <hoot/core/algorithms/StringDistance.h>
+#include <hoot/core/algorithms/string/StringDistance.h>
 #include <hoot/js/util/DataConvertJs.h>
 
 // node.js
