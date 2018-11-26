@@ -3702,3 +3702,7 @@ Listing a tag merger...
 
   AverageTagMerger                   Keeps tags from both features; overlapping tags are averaged together
 
+Listing cleaning operations...
+
+  DuplicateWayRemover                          operation         Removes duplicate ways from a map
+

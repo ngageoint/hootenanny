@@ -8,18 +8,36 @@ For further information on how to use this information see both the Hootenanny U
 
 Only one of the following options can be passed to the command:
 
-* +--config-options+     - Displays available configuration options
-* +--feature-extractors+ - Displays available feature extractors used in conflation model building
-* +--formats+            - Displays supported data input/output formats
-* +--languages+          - Displays information about translatable/detectable spoken languages
-* +--matchers+           - Displays available feature matchers used during conflation
-* +--mergers+            - Displays available feature mergers used during conflation
-* +--operators+          - Displays available inline operators that can be applied to map datasets
-* +--string-comparators+ - Displays available string comparators
-* +--tag-mergers+        - Displays available feature tag mergers used during conflation
-* +--value-aggregators+  - Displays available feature tag value aggregators used in conflation model building
+* +--cleaning-operations+ - Displays operations configured for cleaning map data
+* +--config-options+      - Displays available configuration options
+* +--feature-extractors+  - Displays available feature extractors used in conflation model building
+* +--formats+             - Displays supported data input/output formats
+* +--languages+           - Displays information about translatable/detectable spoken languages
+* +--matchers+            - Displays available feature matchers used during conflation
+* +--mergers+             - Displays available feature mergers used during conflation
+* +--operators+           - Displays available inline operators that can be applied to map datasets
+* +--string-comparators+  - Displays available string comparators
+* +--tag-mergers+         - Displays available feature tag mergers used during conflation
+* +--value-aggregators+   - Displays available feature tag value aggregators used in conflation model building
 
 Each of the following sections describes an option that may be used with this command and its input parameters.
+
+=== Cleaning Operations
+
+The +--cleaning-operations+ option prints out the currently configured map cleaning operations that are applied during conflation or with the
+'clean' command.  The configuration option 'map.cleaner.transforms' controls which operators are applied
+
+==== Usage
+
+--------------------------------------
+info --cleaning-operations
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --cleaning-operations
+--------------------------------------
 
 === Configuration Options
 
