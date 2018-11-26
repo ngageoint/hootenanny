@@ -47,13 +47,13 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm",
+      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
       false,
       Status::Unknown1);
 
     PhoneNumberCountVisitor uut;
     map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL(1, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(12, (int)uut.getStat());
   }
 
 };

@@ -49,7 +49,7 @@ public:
     //TODO: make sure this data has elements with more than one phone number
     OsmMapReaderFactory::read(
       map,
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm",
+      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
       false,
       Status::Unknown1);
 

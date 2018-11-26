@@ -346,8 +346,10 @@ QString AddressParser::_parseFullAddress(const QString fullAddress, QString& hou
 
   QString msg = "Found";
   // validate the full address
+  bool validAddress = false;
   if (_isValidAddressStr(parsedAddress, houseNum, street))
   {
+    validAddress = true;
     msg += " valid";
   }
   else
@@ -357,7 +359,11 @@ QString AddressParser::_parseFullAddress(const QString fullAddress, QString& hou
   msg += " address: " + parsedAddress + " from full address: " + fullAddress;
   LOG_TRACE(msg);
 
-  return parsedAddress;
+  if (validAddress)
+  {
+    return parsedAddress;
+  }
+  return "";
 }
 
 QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QString& houseNum,
