@@ -72,7 +72,7 @@ public:
    * @param element the element to parse addresses from
    * @return a collection of addresses
    */
-  QList<Address> parseAddresses(const Element& element) const;
+  QList<Address> parseAddresses(const Element& element, const bool normalizeAddresses = true) const;
 
   /**
    * Parse all addresses from a way's nodes

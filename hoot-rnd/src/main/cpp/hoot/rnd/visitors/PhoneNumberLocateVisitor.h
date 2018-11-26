@@ -5,6 +5,7 @@
 // Hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/rnd/conflate/phone/PhoneNumberLocator.h>
+#include <hoot/core/conflate/phone/PhoneNumberParser.h>
 
 namespace hoot
 {
@@ -27,6 +28,7 @@ public:
 
 private:
 
+  PhoneNumberParser _phoneNumberParser;
   PhoneNumberLocator _phoneNumberLocator;
 };
 

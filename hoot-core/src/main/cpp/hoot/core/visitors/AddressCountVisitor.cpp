@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -36,7 +37,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ConstElementVisitor, AddressCountVisitor)
 
 AddressCountVisitor::AddressCountVisitor() :
-_count(0)
+_totalCount(0)
 {
 }
 
@@ -45,9 +46,13 @@ void AddressCountVisitor::setConfiguration(const Settings& conf)
   _addressParser.setConfiguration(conf);
 }
 
-void AddressCountVisitor::visit(const boost::shared_ptr<Element>& e)
+void AddressCountVisitor::visit(const ConstElementPtr& e)
 {
-  _count += _addressParser.numAddresses(e);
+  LOG_VART(e);
+  const int count = _addressParser.numAddresses(e);
+  LOG_VART(count);
+  _totalCount += count;
+  LOG_VART(_totalCount);
 }
 
 }

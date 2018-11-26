@@ -74,7 +74,10 @@ int AddressParser::numAddresses(const ConstElementPtr& element) const
     translateModified = true;
     _preTranslateTagValuesToEnglish = false;
   }
-  const int numAddresses = parseAddresses(*element).size();
+  // Normalization will sometimes result in some false positive additional addresses, which doesn't
+  // matter that much when doing address comparison, but does matter when trying to get an accurate
+  // count for address tags.
+  const int numAddresses = parseAddresses(*element, false).size();
   if (translateModified)
   {
     _preTranslateTagValuesToEnglish = true;
@@ -117,7 +120,8 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   return addresses.size();
 }
 
-QList<Address> AddressParser::parseAddresses(const Element& element) const
+QList<Address> AddressParser::parseAddresses(const Element& element,
+                                             const bool normalizeAddresses) const
 {
   // Make this call here, so that we don't cause it to be done unnecessarily as part of this
   // class's init when its a mem var on another class, since this init is expensive.
@@ -154,16 +158,28 @@ QList<Address> AddressParser::parseAddresses(const Element& element) const
     }
     LOG_VART(parsedAddress);
 
-    //normalize and translate the address strings, so we end up comparing apples to apples
-    const QSet<QString> normalizedAddresses = _addressNormalizer.normalizeAddress(parsedAddress);
-    LOG_VART(normalizedAddresses);
-
-    for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
-         normalizedAddressItr != normalizedAddresses.end(); ++normalizedAddressItr)
+    if (normalizeAddresses)
     {
-      const QString normalizedAddress = *normalizedAddressItr;
-      LOG_VART(normalizedAddress);
-      Address address(normalizedAddress, _allowLenientHouseNumberMatching);
+      //normalize and translate the address strings, so we end up comparing apples to apples
+      const QSet<QString> normalizedAddresses = _addressNormalizer.normalizeAddress(parsedAddress);
+      LOG_VART(normalizedAddresses);
+
+      for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
+           normalizedAddressItr != normalizedAddresses.end(); ++normalizedAddressItr)
+      {
+        const QString normalizedAddress = *normalizedAddressItr;
+        LOG_VART(normalizedAddress);
+        Address address(normalizedAddress, _allowLenientHouseNumberMatching);
+        if (!addresses.contains(address))
+        {
+          LOG_TRACE("Adding address: " << address);
+          addresses.append(address);
+        }
+      }
+    }
+    else
+    {
+      Address address(parsedAddress, _allowLenientHouseNumberMatching);
       if (!addresses.contains(address))
       {
         LOG_TRACE("Adding address: " << address);
@@ -374,7 +390,8 @@ QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QStri
         parsedAddress += " " + streetPrefix;
       }
       parsedAddresses.insert(parsedAddress);
-      LOG_TRACE("Parsed address parts from component tags: " << parsedAddress << ".");
+      LOG_TRACE(
+        "Found address by parsing address parts from component tags: " << parsedAddress << ".");
     }
   }
 

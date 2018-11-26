@@ -12,6 +12,7 @@ namespace hoot
 class PhoneNumberLocateVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PhoneNumberLocateVisitorTest);
+  //TODO: add test for non-US region code
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 

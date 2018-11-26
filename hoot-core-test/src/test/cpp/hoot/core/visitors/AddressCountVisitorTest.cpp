@@ -34,9 +34,9 @@
 namespace hoot
 {
 
-class AddressCountVisitorVisitorTest : public HootTestFixture
+class AddressCountVisitorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(AddressCountVisitorVisitorTest);
+  CPPUNIT_TEST_SUITE(AddressCountVisitorTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -47,18 +47,18 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm",
+      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
       false,
       Status::Unknown1);
 
     AddressCountVisitor uut;
     map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL(1, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(28, (int)uut.getStat());
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressCountVisitorVisitorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressCountVisitorTest, "slow");
 
 }
 

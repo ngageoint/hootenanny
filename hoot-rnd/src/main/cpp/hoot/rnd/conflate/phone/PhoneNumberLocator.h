@@ -23,15 +23,15 @@ class PhoneNumberLocator
 public:
 
   PhoneNumberLocator();
+  PhoneNumberLocator(const QString regionCode);
 
   /**
-   * @brief locate
+   *
+   *
    * @param phoneNumber
    * @return
    */
-  QString locate(const QString phoneNumber) const;
-
-  void setRegionCode(QString code);
+  QString getLocationDescription(const QString phoneNumber) const;
 
 private:
 

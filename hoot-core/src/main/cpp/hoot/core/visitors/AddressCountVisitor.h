@@ -29,7 +29,7 @@
 #define ADDRESS_COUNT_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/address/AddressParser.h>
@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Counts the number of valid element addresses
  */
-class AddressCountVisitor : public ElementOsmMapVisitor, public SingleStatistic, public Configurable
+class AddressCountVisitor : public ConstElementVisitor, public SingleStatistic, public Configurable
 {
 public:
 
@@ -50,15 +50,16 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  double getStat() const { return _count; }
+  double getStat() const { return _totalCount; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Counts the number of valid element addresses"; }
+  virtual QString getDescription() const
+  { return "Counts the total number of valid element addresses"; }
 
 private:
 
-  int _count;
+  int _totalCount;
   AddressParser _addressParser;
 };
 
