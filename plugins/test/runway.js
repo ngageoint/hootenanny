@@ -73,7 +73,7 @@ describe('TranslationServer', function () {
     });
 
 
-    it('should fail because it\'s missing node tags', function() {
+    it('should translate Runway (F_CODE=GB055) from osm -> tdsv61 even while missing nodes from the OSM', function() {
 
         var osm_xml = '<osm version="0.6" upload="true" generator="hootenanny">\
                         <way id="-19" action="modify" visible="true">\
@@ -93,15 +93,13 @@ describe('TranslationServer', function () {
             path: '/translateTo'
         });
 
-        console.log(tds_xml);
+        // console.log(tds_xml);
         
         xml = parser.parseFromString(tds_xml);
-        gj = osmtogeojson(xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
-
-        var tags = gj.features[0].properties;
-        assert.equal(tags["F_CODE"], 'GB055');
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "F_CODE");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "GB055");
 
     });
 
