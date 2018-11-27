@@ -11,6 +11,11 @@ PhoneNumberLocateVisitor::PhoneNumberLocateVisitor()
 
 }
 
+void PhoneNumberLocateVisitor::setConfiguration(const Settings& conf)
+{
+  _phoneNumberLocator.setConfiguration(conf);
+}
+
 void PhoneNumberLocateVisitor::visit(const ElementPtr& e)
 {
   QList<ElementPhoneNumber> phoneNumbers = _phoneNumberParser.parsePhoneNumbers(e);

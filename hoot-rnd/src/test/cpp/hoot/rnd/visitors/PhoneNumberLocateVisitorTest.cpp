@@ -14,7 +14,6 @@ static const QString outputRoot = "test-output/visitors/PhoneNumberLocateVisitor
 class PhoneNumberLocateVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PhoneNumberLocateVisitorTest);
-  //TODO: add test for non-US region code
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -36,11 +35,13 @@ public:
       Status::Unknown1);
 
     PhoneNumberLocateVisitor uut;
+    uut._phoneNumberLocator.setRegionCode("US");
     map->visitRw(uut);
 
     const QString outputFile = outputRoot + "/out.osm";
     OsmMapWriterFactory::getInstance().write(map, outputFile);
 
+    CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberLocator.getNumLocated());
     HOOT_FILE_EQUALS("test-files/visitors/PhoneNumberLocateVisitorTest/gold.osm", outputFile);
   }
 

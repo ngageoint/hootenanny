@@ -4,6 +4,7 @@
 
 // Hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QString>
@@ -18,12 +19,14 @@ namespace hoot
 /**
  *
  */
-class PhoneNumberLocator
+class PhoneNumberLocator : public Configurable
 {
 public:
 
   PhoneNumberLocator();
   PhoneNumberLocator(const QString regionCode);
+
+  virtual void setConfiguration(const Settings& conf);
 
   /**
    *
@@ -33,11 +36,16 @@ public:
    */
   QString getLocationDescription(const QString phoneNumber) const;
 
+  void setRegionCode(QString code);
+
+  int getNumLocated() const { return _numLocated; }
+
 private:
 
   //required to validate phone numbers
   QString _regionCode;
   PhoneNumberOfflineGeocoder _geocoder;
+  mutable int _numLocated;
 };
 
 }
