@@ -4,7 +4,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/rnd/visitors/PhoneNumberLocateVisitor.h>
+#include <hoot/core/visitors/PhoneNumberLocateVisitor.h>
 
 namespace hoot
 {
