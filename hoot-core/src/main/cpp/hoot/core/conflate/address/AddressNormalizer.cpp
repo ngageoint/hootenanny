@@ -12,7 +12,8 @@
 namespace hoot
 {
 
-AddressNormalizer::AddressNormalizer()
+AddressNormalizer::AddressNormalizer() :
+_numNormalized(0)
 {
 }
 
@@ -78,10 +79,12 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString address) const
   {
     const QString normalizedAddress = QString::fromUtf8(expansions[i]);
     LOG_VART(normalizedAddress);
-    if (_isValidNormalizedAddress(addressToNormalize, normalizedAddress))
+    if (_isValidNormalizedAddress(addressToNormalize, normalizedAddress) &&
+        !normalizedAddresses.contains(normalizedAddress))
     {
       normalizedAddresses.insert(normalizedAddress);
       LOG_TRACE("Normalized address from: " << address << " to: " << normalizedAddress);
+      _numNormalized++;
     }
     else
     {
@@ -96,34 +99,18 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString address) const
 bool AddressNormalizer::_isValidNormalizedAddress(const QString inputAddress,
                                                   const QString normalizedAddress)
 {
-  LOG_VART(inputAddress);
-  LOG_VART(normalizedAddress);
-  // This is a bit of hack, but I don't like the way libpostal is turning "St" or "Street" into
-  // "Saint".  Should probably look into configuration of libpostal for a possible fix instead.
-  const int indexOfSaint = normalizedAddress.indexOf("saint",  0, Qt::CaseInsensitive);
   // force normalization of "&" to "and"
   if (normalizedAddress.contains(" & "))
   {
     return false;
   }
-  else if (indexOfSaint != -1)
+  // This is a bit of hack, but I don't like the way libpostal is turning "St" or "Street" into
+  // "Saint".  Should probably look into configuration of libpostal for a possible fix instead.
+  else if (normalizedAddress.endsWith("saint", Qt::CaseInsensitive) &&
+           (inputAddress.endsWith("street", Qt::CaseInsensitive) ||
+            inputAddress.endsWith("st", Qt::CaseInsensitive)))
   {
-    LOG_VART(indexOfSaint);
-    const int indexOfStreet1 = inputAddress.indexOf("street", 0, Qt::CaseInsensitive);
-    const int indexOfStreet2 = inputAddress.indexOf("st",  0, Qt::CaseInsensitive);
-    LOG_VART(indexOfStreet1);
-    LOG_VART(indexOfStreet2);
-    //TODO: this doesn't work
-    if (indexOfSaint == indexOfStreet1 || indexOfSaint == indexOfStreet2)
-    {
-      return false;
-    }
-    else if (normalizedAddress.endsWith("saint", Qt::CaseInsensitive) &&
-             (inputAddress.endsWith("street", Qt::CaseInsensitive) ||
-              inputAddress.endsWith("st", Qt::CaseInsensitive)))
-    {
-      return false;
-    }
+    return false;
   }
   return true;
 }

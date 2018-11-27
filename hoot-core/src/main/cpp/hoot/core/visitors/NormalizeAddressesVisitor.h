@@ -52,6 +52,8 @@ public:
 
 private:
 
+  friend class NormalizeAddressesVisitorTest;
+
   AddressNormalizer _addressNormalizer;
 };
 

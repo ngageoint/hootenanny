@@ -34,7 +34,11 @@ public:
    */
   QSet<QString> normalizeAddress(const QString address) const;
 
+  int getNumNormalized() const { return _numNormalized; }
+
 private:
+
+  mutable int _numNormalized;
 
   static bool _isValidNormalizedAddress(const QString inputAddress,
                                         const QString normalizedAddress);
