@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- *
+ * Writes tags to an element indicating the detected location associated with its phone number tags
+ * using libphonenumber.  City level location is the most granular detection possible.
  */
 class PhoneNumberLocateVisitor : public ElementVisitor, public Configurable
 {
@@ -48,8 +49,14 @@ public:
 
   static std::string className() { return "hoot::PhoneNumberLocateVisitor"; }
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& conf);
 
+  /**
+   * @see ElementVisitor
+   */
   virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const

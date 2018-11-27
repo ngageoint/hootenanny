@@ -43,7 +43,7 @@ namespace hoot
 {
 
 /**
- *
+ * Attempts to determine the location of a phone number down to the city level using libphonenumber
  */
 class PhoneNumberLocator : public Configurable
 {
@@ -55,10 +55,10 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
+   * Returns an admin level address string for a given phone number
    *
-   *
-   * @param phoneNumber
-   * @return
+   * @param phoneNumber the phone number to locate
+   * @return an address string
    */
   QString getLocationDescription(const QString phoneNumber) const;
 
@@ -68,7 +68,7 @@ public:
 
 private:
 
-  //required to validate phone numbers
+  //two digit location code required to validate phone numbers; see ConfigOptions
   QString _regionCode;
   PhoneNumberOfflineGeocoder _geocoder;
   mutable int _numLocated;

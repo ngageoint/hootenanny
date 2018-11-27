@@ -43,7 +43,7 @@ namespace hoot
 {
 
 /**
- * Parses phone numbers from features and normalizes them.
+ * Normalizes phone numbers
  *
  * See PhoneNumberParser for related notes.
  */
@@ -53,13 +53,15 @@ public:
 
   PhoneNumberNormalizer();
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& conf);
 
   /**
+   * Normalizes the values of all address tags on an element
    *
-   *
-   * @param element
-   * @return
+   * @param element the element to normalize the phone numbers of
    */
   void normalizePhoneNumbers(const ElementPtr& element);
 
@@ -72,13 +74,14 @@ public:
 
 private:
 
-  //required to validate phone numbers
+  //two digit location code required to validate phone numbers; see ConfigOptions
   QString _regionCode;
-  //user customizable fields to search
+  //user customizable fields to search in addition to the default fields
   QStringList _additionalTagKeys;
   //allows the parser to search through text tokens; otherwise, it tries to match entire strings
   //as phone numbers
   bool _searchInText;
+  //format to use during normalization; see ConfigOptions
   PhoneNumberUtil::PhoneNumberFormat _format;
   int _numNormalized;
 };

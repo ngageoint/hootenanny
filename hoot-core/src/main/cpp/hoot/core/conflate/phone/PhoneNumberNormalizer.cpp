@@ -76,19 +76,19 @@ void PhoneNumberNormalizer::setRegionCode(QString code)
 
 void PhoneNumberNormalizer::setFormat(QString format)
 {
-  if (format == "E164")
+  if (format.toUpper() == "E164")
   {
     _format = PhoneNumberUtil::PhoneNumberFormat::E164;
   }
-  if (format == "INTERNATIONAL")
+  if (format.toUpper() == "INTERNATIONAL")
   {
     _format = PhoneNumberUtil::PhoneNumberFormat::INTERNATIONAL;
   }
-  if (format == "NATIONAL")
+  if (format.toUpper() == "NATIONAL")
   {
     _format = PhoneNumberUtil::PhoneNumberFormat::NATIONAL;
   }
-  if (format == "RFC3966")
+  if (format.toUpper() == "RFC3966")
   {
     _format = PhoneNumberUtil::PhoneNumberFormat::RFC3966;
   }

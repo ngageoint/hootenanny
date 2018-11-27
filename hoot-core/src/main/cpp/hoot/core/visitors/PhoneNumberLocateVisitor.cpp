@@ -53,7 +53,7 @@ void PhoneNumberLocateVisitor::visit(const ElementPtr& e)
       _phoneNumberLocator.getLocationDescription(phoneNumber.tagValue);
     if (!locationDescription.isEmpty())
     {
-      e->getTags().set(phoneNumber.tagKey + ":description", locationDescription);
+      e->getTags().set(phoneNumber.tagKey + ":location", locationDescription);
     }
   }
 }

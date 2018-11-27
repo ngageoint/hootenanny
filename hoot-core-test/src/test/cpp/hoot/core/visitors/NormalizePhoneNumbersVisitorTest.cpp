@@ -40,8 +40,6 @@ static const QString outputRoot = "test-output/visitors/NormalizePhoneNumbersVis
 class NormalizePhoneNumbersVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NormalizePhoneNumbersVisitorTest);
-  //TODO: add test with non-US region code
-  //TODO: add alt formats test
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -64,6 +62,7 @@ public:
 
     NormalizePhoneNumbersVisitor uut;
     uut._phoneNumberNormalizer.setRegionCode("US");
+    uut._phoneNumberNormalizer.setFormat("NATIONAL");
     map->visitRw(uut);
 
     const QString outputFile = outputRoot + "/out.osm";

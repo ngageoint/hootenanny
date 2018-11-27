@@ -49,10 +49,16 @@ public:
 
   PhoneNumberCountVisitor();
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& conf);
 
   double getStat() const { return _count; }
 
+  /**
+   * @see ConstElementVisitor
+   */
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const

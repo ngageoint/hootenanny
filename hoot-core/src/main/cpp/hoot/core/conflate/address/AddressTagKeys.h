@@ -42,7 +42,7 @@ class AddressTagKeys;
 typedef boost::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
 
 /**
- *
+ * Allows for mapping an address part type to a range of valid OSM tag keys
  */
 class AddressTagKeys
 {
@@ -53,28 +53,31 @@ public:
   static const AddressTagKeysPtr& getInstance();
 
   /**
+   * Returns the tag keys of all address tags on an element
    *
-   *
-   * @param element
-   * @return
+   * @param element the element to parse tag keys from
+   * @return a collection of tag keys
    */
   QSet<QString> getAddressTagKeys(const Element& element) const;
 
   /**
+   * Returns a tag key of the specified address type from a set of tags
    *
-   *
-   * @param tags
-   * @param addressTagType
-   * @return
+   * @param tags a set of element tags
+   * @param addressTagType the type of address tag to retrieve; see the contents of the file pointed
+   * to by the configuration setting, address.tag.keys.file, for more detail
+   * @return an address tag key or an empty string if no address tag of the specified type is found
    */
   QString getAddressTagKey(const Tags& tags, const QString addressTagType) const;
 
   /**
-   * Returns an address tag value for an address type
+   * Returns a tag value of the specified address type from a set of tags
    *
-   * @param tags tags to search for address value
-   * @param addressTagType address tag type as defined in the address tag keys config file
-   * @return an address value
+   * @param tags a set of element tags
+   * @param addressTagType the type of address tag to retrieve; see the contents of the file pointed
+   * to by the configuration setting, address.tag.keys.file, for more detail
+   * @return an address tag value or an empty string if no address tag of the specified type is
+   * found
    */
   QString getAddressTagValue(const Tags& tags, const QString addressTagType) const;
 

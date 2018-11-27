@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Normalizes element addresses
+ * Normalizes element address tag values
  */
 class NormalizeAddressesVisitor : public ElementVisitor
 {
@@ -46,6 +46,9 @@ public:
 
   NormalizeAddressesVisitor();
 
+  /**
+   * @see ElementVisitor
+   */
   virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const { return "Normalizes element addresses"; }

@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- *
+ * Normalizes address tag values to a standard format using libpostal
  */
 class AddressNormalizer
 {
@@ -47,16 +47,19 @@ public:
   AddressNormalizer();
 
   /**
-   * @brief normalizeAddresses
-   * @param e
+   * Normalizes the values of all address tags on an element
+   *
+   * @param e the element to normalize the addresses of
    */
   void normalizeAddresses(const ElementPtr& e);
 
   /**
-   * normalize also translates
+   * Normalizes address strings
    *
-   * @param address
-   * @return
+   * Also translates addresses to English
+   *
+   * @param address the address to normalize
+   * @return a collection of normalized addresses
    */
   QSet<QString> normalizeAddress(const QString address) const;
 
