@@ -19,6 +19,7 @@ AddressNormalizer::AddressNormalizer()
 void AddressNormalizer::normalizeAddresses(const ElementPtr& e)
 {
   const QSet<QString> addressTagKeys = AddressTagKeys::getInstance()->getAddressTagKeys(*e);
+  LOG_VART(addressTagKeys);
   for (QSet<QString>::const_iterator addressTagKeyItr = addressTagKeys.begin();
        addressTagKeyItr != addressTagKeys.end(); ++addressTagKeyItr)
   {
@@ -31,21 +32,25 @@ void AddressNormalizer::normalizeAddresses(const ElementPtr& e)
     for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
          normalizedAddressItr != normalizedAddresses.end(); ++normalizedAddressItr)
     {
-      const QString parsedAddress = *normalizedAddressItr;
+      const QString normalizedAddress = *normalizedAddressItr;
       if (!firstAddressParsed)
       {
-        e->getTags().set(addressTagKey, parsedAddress);
+        e->getTags().set(addressTagKey, normalizedAddress);
+        LOG_TRACE(
+          "Set normalized address: " << normalizedAddress << " for tag key: " << addressTagKey);
         firstAddressParsed = true;
       }
       else
       {
-        altAddresses += parsedAddress + ";";
+        altAddresses += normalizedAddress + ";";
       }
     }
     if (!altAddresses.isEmpty())
     {
       altAddresses.chop(1);
       e->getTags().set("alt_address", altAddresses);
+      LOG_TRACE(
+        "Set alt normalized address(es): " << altAddresses << " for tag key: " << addressTagKey);
     }
   }
 }

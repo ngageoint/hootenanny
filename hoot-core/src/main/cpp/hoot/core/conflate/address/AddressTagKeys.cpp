@@ -42,6 +42,7 @@ AddressTagKeys::AddressTagKeys()
   ConfigOptions config = ConfigOptions(conf());
   _readAddressTagKeys(config.getAddressTagKeysFile());
   _additionalTagKeys = config.getAddressAdditionalTagKeys().toSet();
+  LOG_VART(_additionalTagKeys);
 }
 
 const AddressTagKeysPtr& AddressTagKeys::getInstance()
@@ -83,27 +84,49 @@ void AddressTagKeys::_readAddressTagKeys(const QString configFile)
 
 QSet<QString> AddressTagKeys::getAddressTagKeys(const Element& element) const
 {
-  QSet<QString> foundAddressTagTypeKeys;
+  QSet<QString> foundAddressTagKeys;
   const QList<QString> addressTagTypeKeys = _addressTypeToTagKeys.keys();
   for (int i = 0; i < addressTagTypeKeys.size(); i++)
   {
     const QString addressTypeTagKey = addressTagTypeKeys.at(i);
-    const Tags& tags = element.getTags();
-    Tags::const_iterator itr = tags.find(addressTypeTagKey);
-    if (itr != tags.end())
+    LOG_VART(addressTypeTagKey);
+    const QString addressTagKey = getAddressTagKey(element.getTags(), addressTypeTagKey);
+    if (!addressTagKey.isEmpty())
     {
-      foundAddressTagTypeKeys.insert(addressTypeTagKey);
+      LOG_TRACE("Found: " << addressTagKey);
+      foundAddressTagKeys.insert(addressTagKey);
     }
   }
   for (QSet<QString>::const_iterator additionalTagKeyItr = _additionalTagKeys.begin();
        additionalTagKeyItr != _additionalTagKeys.end(); ++additionalTagKeyItr)
   {
-    foundAddressTagTypeKeys.insert(*additionalTagKeyItr);
+    const QString addressTypeTagKey = *additionalTagKeyItr;
+    LOG_VART(addressTypeTagKey);
+    const QString addressTagKey = getAddressTagKey(element.getTags(), addressTypeTagKey);
+    if (!addressTagKey.isEmpty())
+    {
+      LOG_TRACE("Found: " << addressTagKey);
+      foundAddressTagKeys.insert(addressTagKey);
+    }
   }
-  return foundAddressTagTypeKeys;
+  return foundAddressTagKeys;
 }
 
-QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString addressTagType)
+QString AddressTagKeys::getAddressTagKey(const Tags& tags, const QString addressTagType) const
+{
+  const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
+  for (int i = 0; i < tagKeys.size(); i++)
+  {
+    const QString tagKey = tagKeys.at(i);
+    if (tags.contains(tagKey))
+    {
+      return tagKey;
+    }
+  }
+  return "";
+}
+
+QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString addressTagType) const
 {
   const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
   for (int i = 0; i < tagKeys.size(); i++)

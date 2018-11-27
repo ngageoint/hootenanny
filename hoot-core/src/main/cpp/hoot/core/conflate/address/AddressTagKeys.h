@@ -48,21 +48,26 @@ class AddressTagKeys
 {
 public:
 
-  /**
-   * @brief AddressTagKeys
-   * @param configFile
-   * @param additionalTagKeys
-   */
   AddressTagKeys();
 
   static const AddressTagKeysPtr& getInstance();
 
   /**
-   * @brief getAddressTagKeys
+   *
+   *
    * @param element
    * @return
    */
   QSet<QString> getAddressTagKeys(const Element& element) const;
+
+  /**
+   *
+   *
+   * @param tags
+   * @param addressTagType
+   * @return
+   */
+  QString getAddressTagKey(const Tags& tags, const QString addressTagType) const;
 
   /**
    * Returns an address tag value for an address type
@@ -71,7 +76,7 @@ public:
    * @param addressTagType address tag type as defined in the address tag keys config file
    * @return an address value
    */
-  QString getAddressTagValue(const Tags& tags, const QString addressTagType);
+  QString getAddressTagValue(const Tags& tags, const QString addressTagType) const;
 
   QSet<QString> getAdditionalTagKeys() const { return _additionalTagKeys; }
 
@@ -83,6 +88,7 @@ private:
 
   //extra tags to search for addresses in
   QSet<QString> _additionalTagKeys;
+  //maps address tag types to valid address tag keys
   QMultiMap<QString, QString> _addressTypeToTagKeys;
 
   /*

@@ -35,18 +35,27 @@
 namespace hoot
 {
 
+static const QString outputRoot = "test-output/visitors/NormalizePhoneNumbersVisitorTest";
+
 class NormalizePhoneNumbersVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NormalizePhoneNumbersVisitorTest);
+  //TODO: add test with non-US region code
+  //TODO: add alt formats test
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
+  NormalizePhoneNumbersVisitorTest()
+  {
+    setResetType(ResetBasic);
+    TestUtils::mkpath(outputRoot);
+  }
+
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    //TODO: make sure this data has elements with more than one phone number
     OsmMapReaderFactory::read(
       map,
       "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
@@ -54,12 +63,14 @@ public:
       Status::Unknown1);
 
     NormalizePhoneNumbersVisitor uut;
+    uut._phoneNumberNormalizer.setRegionCode("US");
     map->visitRw(uut);
 
-    const QString outputFile = "test-output/cmd/glacial/NormalizePhoneNumbersVisitorTest/out.osm";
+    const QString outputFile = outputRoot + "/out.osm";
     OsmMapWriterFactory::getInstance().write(map, outputFile);
 
-    HOOT_FILE_EQUALS("test-files/cmd/quick/NormalizePhoneNumbersVisitorTest/gold.osm", outputFile);
+    CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberNormalizer.getNumNormalized());
+    HOOT_FILE_EQUALS("test-files/visitors/NormalizePhoneNumbersVisitorTest/gold.osm", outputFile);
   }
 
 };

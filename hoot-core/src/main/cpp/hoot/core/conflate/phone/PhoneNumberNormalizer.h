@@ -35,6 +35,10 @@
 // Qt
 #include <QString>
 
+// libphonenumber
+#include <phonenumbers/phonenumberutil.h>
+using namespace i18n::phonenumbers;
+
 namespace hoot
 {
 
@@ -62,6 +66,9 @@ public:
   void setRegionCode(QString code);
   void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }
   void setSearchInText(bool search);
+  void setFormat(QString format);
+
+  int getNumNormalized() const { return _numNormalized; }
 
 private:
 
@@ -72,6 +79,8 @@ private:
   //allows the parser to search through text tokens; otherwise, it tries to match entire strings
   //as phone numbers
   bool _searchInText;
+  PhoneNumberUtil::PhoneNumberFormat _format;
+  int _numNormalized;
 };
 
 }

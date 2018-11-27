@@ -2489,6 +2489,14 @@ By default, conflation examines all tags with keys containing the text "phone" f
 comparisons.  You can expand the tag keys searched by populating this list. From the command line,
 separate list items with a semicolon and surround the entire list in double quotes.
 
+=== phone.number.normalization.format
+
+* Data Type: string
+* Default Value: `NATIONAL`
+
+The phone number format used when normalizing phone numbers.  Valid values are: E164, INTERNATIONAL,
+NATIONAL, and RFC3966.
+
 === phone.number.region.code
 
 * Data Type: string

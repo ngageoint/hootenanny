@@ -34,7 +34,6 @@
 #include <hoot/core/elements/Element.h>
 
 // libphonenumber
-#include <phonenumbers/phonenumberutil.h>
 #include <phonenumbers/phonenumbermatcher.h>
 #include <phonenumbers/phonenumbermatch.h>
 using namespace i18n::phonenumbers;
@@ -44,7 +43,9 @@ namespace hoot
 
 PhoneNumberNormalizer::PhoneNumberNormalizer() :
 _regionCode(""),
-_searchInText(false)
+_searchInText(false),
+_format(PhoneNumberUtil::PhoneNumberFormat::NATIONAL),
+_numNormalized(0)
 {
 }
 
@@ -73,12 +74,37 @@ void PhoneNumberNormalizer::setRegionCode(QString code)
   _regionCode = code;
 }
 
+void PhoneNumberNormalizer::setFormat(QString format)
+{
+  if (format == "E164")
+  {
+    _format = PhoneNumberUtil::PhoneNumberFormat::E164;
+  }
+  if (format == "INTERNATIONAL")
+  {
+    _format = PhoneNumberUtil::PhoneNumberFormat::INTERNATIONAL;
+  }
+  if (format == "NATIONAL")
+  {
+    _format = PhoneNumberUtil::PhoneNumberFormat::NATIONAL;
+  }
+  if (format == "RFC3966")
+  {
+    _format = PhoneNumberUtil::PhoneNumberFormat::RFC3966;
+  }
+  else
+  {
+    throw HootException("Invalid phone number format: " + format);
+  }
+}
+
 void PhoneNumberNormalizer::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   setRegionCode(config.getPhoneNumberRegionCode());
   setAdditionalTagKeys(config.getPhoneNumberAdditionalTagKeys());
   setSearchInText(config.getPhoneNumberSearchInText());
+  setFormat(config.getPhoneNumberNormalizationFormat());
 }
 
 void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
@@ -115,11 +141,11 @@ void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
           {
             std::string formattedPhoneNumber;
             PhoneNumberUtil::GetInstance()->Format(
-              parsedPhoneNumber, PhoneNumberUtil::PhoneNumberFormat::INTERNATIONAL,
-              &formattedPhoneNumber);
-            //PhoneNumberUtil::GetInstance()->NormalizeDigitsOnly(&formattedPhoneNumber);
-            //PhoneNumberUtil::GetInstance()->NormalizeDiallableCharsOnly(&formattedPhoneNumber);
+              parsedPhoneNumber, _format, &formattedPhoneNumber);
             element->getTags().set(tagKey, QString::fromStdString(formattedPhoneNumber));
+            LOG_TRACE(
+              "Normalized phone number from: " << tagValue << " to: " << formattedPhoneNumber);
+            _numNormalized++;
           }
         }
       }
@@ -140,11 +166,7 @@ void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
           phoneNumberCount++;
           // TODO: Is normalization here necessary?  Did PhoneNumberMatcher already do it?
           std::string formattedPhoneNumber;
-          PhoneNumberUtil::GetInstance()->Format(
-            match.number(), PhoneNumberUtil::PhoneNumberFormat::INTERNATIONAL,
-            &formattedPhoneNumber);
-          //PhoneNumberUtil::GetInstance()->NormalizeDigitsOnly(&formattedPhoneNumber);
-          //PhoneNumberUtil::GetInstance()->NormalizeDiallableCharsOnly(&formattedPhoneNumber);
+          PhoneNumberUtil::GetInstance()->Format(match.number(), _format, &formattedPhoneNumber);
           // appending all found phone numbers into a single tag value
           if (phoneNumberCount == 1)
           {
@@ -154,15 +176,21 @@ void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
           {
             altPhoneNumbers += QString::fromStdString(formattedPhoneNumber) + ";";
           }
+          _numNormalized++;
         }
 
         if (phoneNumberCount > 0)
         {
           element->getTags().set(tagKey, phoneNumber);
+          LOG_TRACE(
+            "Normalized phone number from: " << tagValue << " to: " << phoneNumber);
           if (!altPhoneNumbers.isEmpty())
           {
             altPhoneNumbers.chop(1);
             element->getTags().set("alt_phone", altPhoneNumbers);
+            LOG_TRACE(
+              "Normalized phone numbers alternates from: " << tagValue << " to: " <<
+              altPhoneNumbers);
           }
         }
       }

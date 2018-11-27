@@ -55,6 +55,8 @@ public:
 
 private:
 
+  friend class NormalizePhoneNumbersVisitorTest;
+
   PhoneNumberNormalizer _phoneNumberNormalizer;
 };
 
