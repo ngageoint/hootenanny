@@ -408,6 +408,9 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     # Normalize all the element phone number tags in a map
     hoot convert -D convert.ops="hoot::NormalizePhoneNumbersVisitor" input.osm output.osm
     
+    # Add admin boundary level location tags associated with element phone numbers
+    hoot convert -D convert.ops="hoot::PhoneNumberLocateVisitor" input.osm output.osm
+    
 ### Statistics
 
     # Count all elements that are not POIs
