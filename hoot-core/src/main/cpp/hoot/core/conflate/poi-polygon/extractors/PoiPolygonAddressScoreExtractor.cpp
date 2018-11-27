@@ -54,8 +54,6 @@ void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
 
   _addressParser.setAllowLenientHouseNumberMatching(
     config.getPoiPolygonAddressAllowLenientHouseNumberMatching());
-  // Set additional tag keys before setting configuration, since AddressTagKeys will have the
-  // additional keys passed to it in the setConfiguration call.
   _addressParser.setConfiguration(conf);
 
   bool preTranslateTagValuesToEnglish = config.getPoiPolygonAddressTranslateToEnglish();

@@ -54,6 +54,11 @@ class Relation;
  *
  * Address normalization and translation is handled by libpostal, which uses ML trained on OSM
  * data.  There is also an option to do language pre-translation with a custom translator.
+ *
+ * TODO: current addresses not being parsed:
+ *
+ * 16th &amp; Bryant Streets
+ * 16TH &amp; HOFF ST. PARKING GARAGE
  */
 class AddressParser : public Configurable
 {

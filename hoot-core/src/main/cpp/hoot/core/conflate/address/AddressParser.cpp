@@ -127,6 +127,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
   // class's init when its a mem var on another class, since this init is expensive.
   LibPostalInit::getInstance();
 
+  LOG_VART(element.getElementId());
   QList<Address> addresses;
 
   QString houseNum;
@@ -172,7 +173,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
         Address address(normalizedAddress, _allowLenientHouseNumberMatching);
         if (!addresses.contains(address))
         {
-          LOG_TRACE("Adding address: " << address);
+          LOG_TRACE("Adding address: " << address << " for element: " << element.getElementId());
           addresses.append(address);
         }
       }
@@ -182,7 +183,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
       Address address(parsedAddress, _allowLenientHouseNumberMatching);
       if (!addresses.contains(address))
       {
-        LOG_TRACE("Adding address: " << address);
+        LOG_TRACE("Adding address: " << address << " for element: " << element.getElementId());
         addresses.append(address);
       }
     }
@@ -314,7 +315,9 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   for (size_t i = 0; i < parsed->num_components; i++)
   {
     const QString label = parsed->labels[i];
+    LOG_VART(label);
     const QString component = QString::fromUtf8((const char*)parsed->components[i]);
+    LOG_VART(component);
     //we only care about the street address
     if (label == "house_number")
     {
@@ -327,7 +330,9 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   }
   libpostal_address_parser_response_destroy(parsed);
 
-  if (!houseNum.isEmpty() && !street.isEmpty())
+  // intersections won't have numbers; TODO: unfortunately this lets through a false positive, like:
+  // "lrv station-church street"
+  if (/*!houseNum.isEmpty() &&*/ !street.isEmpty())
   {
     address = houseNum + " " + street;
     address = address.trimmed();

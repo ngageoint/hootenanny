@@ -80,15 +80,15 @@ void PhoneNumberNormalizer::setFormat(QString format)
   {
     _format = PhoneNumberUtil::PhoneNumberFormat::E164;
   }
-  if (format.toUpper() == "INTERNATIONAL")
+  else if (format.toUpper() == "INTERNATIONAL")
   {
     _format = PhoneNumberUtil::PhoneNumberFormat::INTERNATIONAL;
   }
-  if (format.toUpper() == "NATIONAL")
+  else if (format.toUpper() == "NATIONAL")
   {
     _format = PhoneNumberUtil::PhoneNumberFormat::NATIONAL;
   }
-  if (format.toUpper() == "RFC3966")
+  else if (format.toUpper() == "RFC3966")
   {
     _format = PhoneNumberUtil::PhoneNumberFormat::RFC3966;
   }

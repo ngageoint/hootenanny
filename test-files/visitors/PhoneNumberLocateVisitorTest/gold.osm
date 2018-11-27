@@ -34,9 +34,9 @@
     </node>
     <node visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7680508352198956" lon="-122.4279354508585556">
         <tag k="REF2" v="002c84"/>
+        <tag k="phone:location" v="San Francisco, CA"/>
         <tag k="phone" v="(415) 431-2701"/>
         <tag k="address" v="2075 Market Street"/>
-        <tag k="phone:description" v="San Francisco, CA"/>
         <tag k="name" v="18th Street Station"/>
         <tag k="amenity" v="post_office"/>
         <tag k="error:circular" v="15"/>
@@ -209,9 +209,9 @@
     </node>
     <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7662290967751488" lon="-122.4104189262150157">
         <tag k="REF2" v="0001cf"/>
+        <tag k="phone:location" v="San Francisco, CA"/>
         <tag k="phone" v="(415) 861-8130"/>
         <tag k="address" v="1655 Bryant Street"/>
-        <tag k="phone:description" v="San Francisco, CA"/>
         <tag k="name" v="Potrero Center"/>
         <tag k="amenity" v="post_office"/>
         <tag k="error:circular" v="15"/>
@@ -302,11 +302,11 @@
     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7694999999999936" lon="-122.4326999999999970">
         <tag k="REF2" v="0048cb"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="phone:location" v="California"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="dog_park"/>
         <tag k="phone" v="(415) 717-2872"/>
         <tag k="address" v="Duboce &amp; Scott St"/>
-        <tag k="phone:description" v="California"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Duboce Park Dog Play Area"/>
         <tag k="addr:postcode" v="94117"/>
@@ -315,11 +315,11 @@
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4339999999999975">
         <tag k="REF2" v="007a4b"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="phone:location" v="California"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="park"/>
         <tag k="phone" v="(415) 203-1299"/>
         <tag k="address" v="Duboce &amp; Scott St"/>
-        <tag k="phone:description" v="California"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Duboce Park Children�s Play Area"/>
         <tag k="addr:postcode" v="94117"/>
@@ -328,11 +328,11 @@
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7693999999999974" lon="-122.4342000000000041">
         <tag k="REF2" v="007a4a"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="phone:location" v="California"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="pitch"/>
         <tag k="phone" v="(415) 203-1299"/>
         <tag k="address" v="Duboce &amp; Scott St"/>
-        <tag k="phone:description" v="California"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Duboce Park Basketball Courts"/>
         <tag k="sport" v="basketball"/>
@@ -342,11 +342,11 @@
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7640999999999991" lon="-122.4202999999999975">
         <tag k="REF2" v="000d65"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="phone:location" v="California"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="park"/>
         <tag k="phone" v="(415) 203-1299"/>
         <tag k="address" v="45 Hoff St"/>
-        <tag k="phone:description" v="California"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Kid Power Park Children�s Play Area"/>
         <tag k="addr:postcode" v="94110"/>
@@ -377,11 +377,11 @@
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7639999999999958" lon="-122.4157999999999902">
         <tag k="REF2" v="none"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="phone:location" v="San Francisco, CA"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="park"/>
         <tag k="phone" v="(415) 831-2700"/>
         <tag k="address" v="17th &amp; Folsom St"/>
-        <tag k="phone:description" v="San Francisco, CA"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="17th &amp; Folsom Park"/>
         <tag k="addr:postcode" v="94110"/>
@@ -390,11 +390,11 @@
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7646999999999977" lon="-122.4099999999999824">
         <tag k="REF2" v="001b68"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="phone:location" v="California"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="park"/>
         <tag k="phone" v="(415) 254-8030"/>
         <tag k="address" v="16th &amp; Bryant St"/>
-        <tag k="phone:description" v="California"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Franklin Square Children�s Play Area"/>
         <tag k="addr:postcode" v="94103"/>
@@ -403,11 +403,11 @@
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7610999999999919" lon="-122.4268999999999892">
         <tag k="REF2" v="00a3e6"/>
         <tag k="wheelchair" v="limited"/>
+        <tag k="phone:location" v="California"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="pitch"/>
         <tag k="phone" v="(415) 203-1299"/>
         <tag k="address" v="19th &amp; Dolores St"/>
-        <tag k="phone:description" v="California"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Mission Dolores Park Tennis Courts"/>
         <tag k="sport" v="tennis"/>
@@ -438,10 +438,10 @@
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4344999999999999">
         <tag k="REF2" v="00a471"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="phone:location" v="San Francisco, CA"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="phone" v="(415) 554-9522"/>
         <tag k="address" v="50 Scott St"/>
-        <tag k="phone:description" v="San Francisco, CA"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Harvey Milk Photo Center"/>
         <tag k="amenity" v="arts_centre"/>
@@ -451,11 +451,11 @@
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4333999999999918">
         <tag k="REF2" v="009396"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="phone:location" v="California"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="park"/>
         <tag k="phone" v="(415) 717-2872"/>
         <tag k="address" v="Duboce &amp; Scott St"/>
-        <tag k="phone:description" v="California"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Duboce Park"/>
         <tag k="addr:postcode" v="94117"/>
@@ -464,11 +464,11 @@
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7610000000000028" lon="-122.4274000000000058">
         <tag k="REF2" v="00a3e7"/>
         <tag k="wheelchair" v="limited"/>
+        <tag k="phone:location" v="California"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="pitch"/>
         <tag k="phone" v="(415) 203-1299"/>
         <tag k="address" v="19th &amp; Dolores St"/>
-        <tag k="phone:description" v="California"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Mission Dolores Basketball Courts"/>
         <tag k="sport" v="basketball"/>
