@@ -4,7 +4,7 @@
 
 // Hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/rnd/conflate/phone/PhoneNumberLocator.h>
+#include <hoot/core/conflate/phone/PhoneNumberLocator.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
 #include <hoot/core/util/Configurable.h>
 
