@@ -60,6 +60,9 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString address) const
   // See note about init of this in AddressParser::parseAddresses.
   LibPostalInit::getInstance();
 
+  LOG_VART(address);
+  const QString addressToNormalize = address.trimmed().simplified();
+  LOG_VART(addressToNormalize);
   QSet<QString> normalizedAddresses;
 
   size_t num_expansions;
@@ -67,18 +70,62 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString address) const
   //we did specify one when we know what it is (would have to check to see if it was supported
   //first, of course)?
   char** expansions =
-    libpostal_expand_address(address.toUtf8().data(), libpostal_get_default_options(),
-    &num_expansions);
+    libpostal_expand_address(
+      addressToNormalize.toUtf8().data(), libpostal_get_default_options(),
+      &num_expansions);
   // add all the normalizations libpostal finds as possible addresses
   for (size_t i = 0; i < num_expansions; i++)
   {
     const QString normalizedAddress = QString::fromUtf8(expansions[i]);
-    normalizedAddresses.insert(normalizedAddress);
-    LOG_TRACE("Normalized address from: " << address << " to: " << normalizedAddress);
+    LOG_VART(normalizedAddress);
+    if (_isValidNormalizedAddress(addressToNormalize, normalizedAddress))
+    {
+      normalizedAddresses.insert(normalizedAddress);
+      LOG_TRACE("Normalized address from: " << address << " to: " << normalizedAddress);
+    }
+    else
+    {
+      LOG_TRACE("Skipping normalized address: " << normalizedAddress << "...");
+    }
   }
   libpostal_expansion_array_destroy(expansions, num_expansions);
 
   return normalizedAddresses;
+}
+
+bool AddressNormalizer::_isValidNormalizedAddress(const QString inputAddress,
+                                                  const QString normalizedAddress)
+{
+  LOG_VART(inputAddress);
+  LOG_VART(normalizedAddress);
+  // This is a bit of hack, but I don't like the way libpostal is turning "St" or "Street" into
+  // "Saint".  Should probably look into configuration of libpostal for a possible fix instead.
+  const int indexOfSaint = normalizedAddress.indexOf("saint",  0, Qt::CaseInsensitive);
+  // force normalization of "&" to "and"
+  if (normalizedAddress.contains(" & "))
+  {
+    return false;
+  }
+  else if (indexOfSaint != -1)
+  {
+    LOG_VART(indexOfSaint);
+    const int indexOfStreet1 = inputAddress.indexOf("street", 0, Qt::CaseInsensitive);
+    const int indexOfStreet2 = inputAddress.indexOf("st",  0, Qt::CaseInsensitive);
+    LOG_VART(indexOfStreet1);
+    LOG_VART(indexOfStreet2);
+    //TODO: this doesn't work
+    if (indexOfSaint == indexOfStreet1 || indexOfSaint == indexOfStreet2)
+    {
+      return false;
+    }
+    else if (normalizedAddress.endsWith("saint", Qt::CaseInsensitive) &&
+             (inputAddress.endsWith("street", Qt::CaseInsensitive) ||
+              inputAddress.endsWith("st", Qt::CaseInsensitive)))
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 }

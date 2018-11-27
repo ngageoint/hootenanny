@@ -33,6 +33,11 @@ public:
    * @return
    */
   QSet<QString> normalizeAddress(const QString address) const;
+
+private:
+
+  static bool _isValidNormalizedAddress(const QString inputAddress,
+                                        const QString normalizedAddress);
 };
 
 }
