@@ -28,24 +28,51 @@
 #include "HootNetworkRequest.h"
 
 //  Hootenanny
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/io/HootNetworkCookieJar.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 //  Qt
 #include <QEventLoop>
 #include <QtNetwork/QSslConfiguration>
 #include <QtNetwork/QSslSocket>
 
+//  LibOAuthCpp
+#include <liboauthcpp/liboauthcpp.h>
+
+using namespace std;
+
 namespace hoot
 {
 
 HootNetworkRequest::HootNetworkRequest()
+  : _useOAuth(false)
 {
+}
+
+HootNetworkRequest::HootNetworkRequest(const QString& consumer_key, const QString& consumer_secret,
+                                       const QString& request_token, const QString& request_secret)
+  : _useOAuth(true)
+{
+  setOAuthKeys(consumer_key, consumer_secret, request_token, request_secret);
+}
+
+void HootNetworkRequest::setOAuthKeys(const QString& consumer_key, const QString& consumer_secret,
+                                      const QString& request_token, const QString& request_secret)
+{
+  //  Initialize the consumer key
+  _consumer.reset(new OAuth::Consumer(consumer_key.toStdString(), consumer_secret.toStdString()));
+  //  Initialize the request token
+  _tokenRequest.reset(new OAuth::Token(request_token.toStdString(), request_secret.toStdString()));
+  //  Set the OAuth flag
+  _useOAuth = true;
 }
 
 bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op,
                                         const QByteArray& data)
 {
+  //  Call the actually network request function with empty headers map
   return _networkRequest(url, QMap<QNetworkRequest::KnownHeaders, QVariant>(), http_op, data);
 }
 
@@ -54,6 +81,7 @@ bool HootNetworkRequest::networkRequest(QUrl url,
                                         QNetworkAccessManager::Operation http_op,
                                         const QByteArray& data)
 {
+  //  Simple passthrough function for consistency
   return _networkRequest(url, headers, http_op, data);
 }
 
@@ -72,11 +100,6 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
   QNetworkRequest request(url);
 
-  for (QMap<QNetworkRequest::KnownHeaders, QVariant>::const_iterator it = headers.begin(); it != headers.end(); ++it)
-  {
-    request.setHeader(it.key(), it.value());
-  }
-
   if (url.scheme().toLower() == "https")
   {
     //  Setup the SSL configuration
@@ -86,15 +109,20 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     config.setPeerVerifyMode(QSslSocket::VerifyNone);
     request.setSslConfiguration(config);
   }
-
+  //  Setup username/password authentication
   if (url.userInfo() != "")
   {
-    //  Using basic authentication, replace with OAuth when necessary
+    //  Using basic authentication
     QString base64 = url.userInfo().toUtf8().toBase64();
     request.setRawHeader("Authorization", QString("Basic %1").arg(base64).toUtf8());
     url.setUserInfo("");
   }
-
+  //  Add the known headers
+  for (QMap<QNetworkRequest::KnownHeaders, QVariant>::const_iterator it = headers.begin(); it != headers.end(); ++it)
+  {
+    request.setHeader(it.key(), it.value());
+  }
+  //  Add any cookies if necessary
   if (_cookies)
   {
     pNAM->setCookieJar(_cookies.get());
@@ -102,18 +130,20 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     // different requests made by the same caller
     _cookies->setParent(0);
   }
-
+  //  Setup the OAuth header on the request object
+  if (_useOAuth && _consumer && _tokenRequest)
+    _setOAuthHeader(http_op, request);
   //  Call the correct function on the network access manager
   QNetworkReply* reply = NULL;
   switch (http_op)
   {
-  case QNetworkAccessManager::Operation::GetOperation:
+  case QNetworkAccessManager::GetOperation:
     reply = pNAM->get(request);
     break;
-  case QNetworkAccessManager::Operation::PutOperation:
+  case QNetworkAccessManager::PutOperation:
     reply = pNAM->put(request, data);
     break;
-  case QNetworkAccessManager::Operation::PostOperation:
+  case QNetworkAccessManager::PostOperation:
     reply = pNAM->post(request, data);
     break;
   default:
@@ -121,9 +151,7 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     break;
   }
   //  Wait for finished signal from reply object
-  QEventLoop loop;
-  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-  loop.exec();
+  _blockOnReply(reply);
   //  Enable logging
   disable.reset();
   //  Get the status and content of the reply if available
@@ -146,6 +174,17 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   return true;
 }
 
+void HootNetworkRequest::_blockOnReply(QNetworkReply* reply)
+{
+  if (reply != NULL)
+  {
+    //  Qt code to force the use of QNetworkReply to be synchronous
+    QEventLoop loop;
+    QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+  }
+}
+
 int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
 {
   if (reply != NULL)
@@ -157,6 +196,24 @@ int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
       return status.toInt();
   }
   return -1;
+}
+
+void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request)
+{
+  //  Convert the operation format
+  OAuth::Http::RequestType op;
+  switch (http_op)
+  {
+  case QNetworkAccessManager::GetOperation:   op = OAuth::Http::Get;    break;
+  case QNetworkAccessManager::PutOperation:   op = OAuth::Http::Put;    break;
+  case QNetworkAccessManager::PostOperation:  op = OAuth::Http::Post;   break;
+  default:                                                              return;
+  }
+  //  Create the client object and get the HTTP header
+  OAuth::Client requestClient(_consumer.get(), _tokenRequest.get());
+  string header = requestClient.getHttpHeader(op, request.url().toString().toStdString());
+  //  Set the Authorization header for OAuth
+  request.setRawHeader("Authorization", QString(header.c_str()).toUtf8());
 }
 
 }

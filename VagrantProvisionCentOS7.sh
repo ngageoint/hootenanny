@@ -94,6 +94,8 @@ sudo yum -y install \
     hoot-gdal-python \
     lcov \
     libicu-devel \
+    liboauthcpp \
+    liboauthcpp-devel \
     libpng-devel \
     libtool \
     m4 \
