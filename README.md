@@ -30,13 +30,12 @@ Hootenanny is an open source conflation tool developed with machine learning tec
 Additional feature types can be made conflatable using Hootenanny's pluggable conflation architecture.  See the Hootenanny Developer Guide for details.
 
 # Feature Summary
-In addition to conflating maps, Hootenanny can also:
+In addition to conflating maps together, Hootenanny can also:
 * Add missing type tags to features
 * Align two maps with each other
-* Apply pluggable data transformation operations to a map
+* Apply data transformation operations to a map
 * Calculate the geospatial extent of a map
 * Clean map data
-* Combine maps together
 * Compare maps with each other
 * Compute bounding tiles based on node density
 * Convert maps between different geodata formats (see Supported Data Formats section below)
@@ -46,6 +45,7 @@ In addition to conflating maps, Hootenanny can also:
 * Explore tag data
 * Gather statistics for a map
 * Identify road intersections in a map
+* Locate phone numbers geographically
 * Perturb map data for testing purposes
 * Plot node density
 * Sort map data
