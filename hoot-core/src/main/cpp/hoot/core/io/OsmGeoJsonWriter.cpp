@@ -127,7 +127,7 @@ void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
   bool isPolygon = OsmSchema::getInstance().isArea(w) ||
-                   nodes[0] == nodes[nodes.size() - 1];
+                   (nodes.size() > 0 && nodes[0] == nodes[nodes.size() - 1]);
   _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
 }
 
@@ -180,6 +180,15 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
     if (_map->getNode(*it).get() != NULL)
       temp_nodes.push_back(*it);
   }
+  //  Empty nodes list should output an empty coordinate array
+  if (temp_nodes.size() == 0)
+  {
+    _writeKvp("type", type.c_str());
+    _write(",");
+    _write("\"coordinates\": []");
+    return;
+  }
+  //  Update the geometry type if necessary
   if (temp_nodes.size() < 2 && type.compare("Point") != 0)
     type = "Point";
   if (temp_nodes.size() < 4 && type.compare("Polygon") == 0)

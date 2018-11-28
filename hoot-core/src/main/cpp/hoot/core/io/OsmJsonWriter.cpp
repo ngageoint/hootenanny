@@ -227,7 +227,11 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
   {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      _writeTag(it.key(), it.value(), firstTag);
+      QString key = it.key();
+      QString value = it.value();
+      if (key == "uuid")
+        value = value.replace("{", "").replace("}", "");
+      _writeTag(key, value, firstTag);
     }
   }
 

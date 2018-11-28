@@ -21,6 +21,8 @@ var availableTranslations = [
 var HOOT_HOME = process.env.HOOT_HOME;
 if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
+    hoot.Log.setLogLevel("warn");
+    hoot.Settings.set({"osm.map.reader.xml.add.child.refs.when.missing":"true"});
 }
 
 //Getting schema for fcode, geom type
