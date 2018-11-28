@@ -86,7 +86,7 @@ _logWarningWhenRequirementsNotFound(ConfigOptions().getRubberSheetLogMissingRequ
 void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
 {
   NodePtr from = _map->getNode(nid);
-  // the status type we're searching for.
+  // the status type we're searching for
   Status s;
   if (from->getStatus() == Status::Unknown1)
   {
