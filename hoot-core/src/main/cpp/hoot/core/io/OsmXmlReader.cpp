@@ -70,7 +70,7 @@ _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
 _preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
-_addChildRefsWhenMissing(false)
+_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderXmlAddChildRefsWhenMissing())
 {
 }
 

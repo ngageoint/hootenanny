@@ -2171,6 +2171,15 @@ as master for determining the sequencing of element ID's.
 
 Add a tag with the bounding box for each element
 
+=== osm.map.reader.xml.add.child.refs.when.missing
+
+* Data Type: bool
+* Default Value: `false`
+
+By default, OsmXmlReader will not add child references (node ref, elements members) to parent
+elements if those elements are not present in the data.  For external sorting and translations,
+where partial chunks of elements will be present the setting is changed.
+
 === osm.map.reader.factory.reader
 
 * Data Type: string
