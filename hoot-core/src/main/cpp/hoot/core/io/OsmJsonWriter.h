@@ -115,9 +115,9 @@ protected:
 
   static QString _typeName(ElementType e);
 
-  void _writeNodes();
-  void _writeWays();
-  void _writeRelations();
+  virtual void _writeNodes();
+  virtual void _writeWays();
+  virtual void _writeRelations();
   void _write(const QString& str) { _write(str, _pretty); }
   void _write(const QString& str, bool newLine);
   void _writeLn(const QString& str) { _write(str, true); }
