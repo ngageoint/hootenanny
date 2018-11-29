@@ -24,31 +24,26 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEUNKNOWN1_H
-#define REMOVEUNKNOWN1_H
+#include "RemoveUnknownVisitor.h"
 
-// hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-/**
- * Removes all elements that have a status of Unknown1.
- */
-class RemoveUnknown1Visitor : public ElementOsmMapVisitor
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveUnknownVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveUnknown1Visitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveUnknown2Visitor)
+
+void RemoveUnknownVisitor::visit(const boost::shared_ptr<Element>& e)
 {
-public:
-
-  static std::string className() { return "hoot::RemoveUnknown1Visitor"; }
-
-  RemoveUnknown1Visitor() {}
-
-  virtual void visit(const boost::shared_ptr<Element>& e);
-
-  virtual QString getDescription() const { return "Removes all elements with a status of Unknown1"; }
-};
+  if (e->getStatus() == _status)
+  {
+    RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
+  }
+}
 
 }
 
-#endif // REMOVEUNKNOWN1_H
