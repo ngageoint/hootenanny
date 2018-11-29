@@ -806,10 +806,10 @@
             {
         	"id":"poipolygon_address_additional_tag_keys",
         	"elem_type":"string",
-        	"description":"BBy default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the addressTagKeys file).  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
+        	"description":"By default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the addressTagKeys file).  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
         	"name":"Address Additional Tag Keys",
         	"defaultvalue":"",
-        	"hoot_key":"poi.polygon.address.additional.tag.keys",
+        	"hoot_key":"address.additional.tag.keys",
         	"onchange":"true"
     	    },
             {
@@ -888,7 +888,7 @@
         	"description":"By default, POI/Polygon conflation examines all tags with keys containing the text 'phone' for phone number comparisons.  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
         	"name":"Phone Number Additional Tag Keys",
         	"defaultvalue":"",
-        	"hoot_key":"poi.polygon.phone.number.additional.tag.keys",
+        	"hoot_key":"phone.number.additional.tag.keys",
         	"onchange":"true"
     	    },
             {
@@ -905,16 +905,16 @@
         	"description":"Optional geographical region code used when comparing phone numbers.   See: http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region code, if known for the input data, may increase phone number matching accuracy but may also have runtime performance implications.",
         	"name":"Phone Number Region Code",
         	"defaultvalue":"",
-        	"hoot_key":"poi.polygon.phone.number.region.code",
+        	"hoot_key":"phone.number.region.code",
         	"onchange":"true"
     	    },
             {
         	"id":"poipolygon_phone_number_search_in_text",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text that may contain things other than phone numbers.  If false, the conflation will assume the tag value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must be set to a valid region code when enabling this option.  Enabling this option may have runtime performance implications.",
+        	"description":"If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text that may contain things other than phone numbers.  If false, the conflation will assume the tag value is a phone number and will not search within it.  phone.number.region.code must be set to a valid region code when enabling this option.  Enabling this option may have runtime performance implications.",
         	"name":"Phone Number Search In Text",
-        	"hoot_key":"poi.polygon.phone.number.search.in.text"
+        	"hoot_key":"phone.number.search.in.text"
     	    },
             {
         	"id":"poipolygon_promote_points_with_addresses_to_pois",
