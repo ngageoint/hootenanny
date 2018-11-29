@@ -29,16 +29,15 @@
 // Hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationCriterion)
 
-bool RelationCriterion::isSatisfied(const ConstElementPtr& e) const
+bool RelationCriterion::isSatisfied(const Element& e) const
 {
-  return (e->getElementType() == ElementType::Relation);
+  return e.getElementType() == ElementType::Relation;
 }
 
 }

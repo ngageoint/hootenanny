@@ -34,9 +34,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ElementTypeCriterion)
 
-bool ElementTypeCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool ElementTypeCriterion::isSatisfied(const Element& e) const
 {
-  return e->getElementType() == _elementType;
+  return e.getElementType() == _elementType;
 }
 
 }

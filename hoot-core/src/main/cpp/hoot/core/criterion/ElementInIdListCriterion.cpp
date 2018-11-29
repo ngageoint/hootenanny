@@ -44,9 +44,9 @@ ElementInIdListCriterion::ElementInIdListCriterion(const std::vector<long>& ids)
   }
 }
 
-bool ElementInIdListCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool ElementInIdListCriterion::isSatisfied(const Element& e) const
 {
-  return _ids.find(e->getId()) != _ids.end();
+  return _ids.find(e.getId()) != _ids.end();
 }
 
 }

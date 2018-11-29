@@ -67,7 +67,7 @@ public:
    * @param element the element to parse phone numbers from
    * @return a collection of phone numbers
    */
-  QList<ElementPhoneNumber> parsePhoneNumbers(const ConstElementPtr& element) const;
+  QList<ElementPhoneNumber> parsePhoneNumbers(const Element& e) const;
 
   /**
    * Returns the number of valid phone number tags contained by the element
@@ -75,7 +75,7 @@ public:
    * @param element the element to examine for phone numbers
    * @return a phone number count
    */
-  int numPhoneNumbers(const ConstElementPtr& element) const;
+  int numPhoneNumbers(const Element& e) const;
 
   /**
    * Determines if an element contains a phone number
@@ -84,7 +84,7 @@ public:
    * @return true if the element contains at least one phone number; false otherwise
    * @note This could be made more efficient, if necessary, by only counting the first phone number.
    */
-  bool hasPhoneNumber(const ConstElementPtr& element) const;
+  bool hasPhoneNumber(const Element& e) const;
 
   void setRegionCode(QString code);
   void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }

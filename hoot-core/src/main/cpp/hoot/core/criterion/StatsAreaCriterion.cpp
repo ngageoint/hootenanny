@@ -30,15 +30,54 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, StatsAreaCriterion)
 
-bool StatsAreaCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool StatsAreaCriterion::isSatisfied(const Element& e) const
 {
-  return OsmSchema::getInstance().isAreaForStats(e);
+  bool result = false;
+
+  const Tags& t = e.getTags();
+
+  // don't process if a node
+  if (e.getElementType() == ElementType::Node)
+  {
+    return false;
+  }
+
+  // don't process if a building part
+  if (t.isTrue(MetadataTags::BuildingPart()))
+  {
+    return false;
+  }
+
+  // don't process if a relation
+  if (e.getElementType() == ElementType::Relation)
+  {
+    return false;
+  }
+
+  result |= isBuilding(t, type);
+  result |= t.isTrue("area");
+
+  // if at least one of the tags is marked as an area, but not a linestring tag then we consider
+  // this to be an area feature.
+  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  {
+    const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
+    uint16_t g = tv.geometries;
+    if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
+    {
+      result = true;
+      break;
+    }
+  }
+
+  return result;
 }
 
 }

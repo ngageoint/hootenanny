@@ -38,10 +38,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ImplicitTagEligiblePoiPolyCriterion)
 
-bool ImplicitTagEligiblePoiPolyCriterion::isSatisfied(
-  const boost::shared_ptr<const Element>& element) const
+bool ImplicitTagEligiblePoiPolyCriterion::isSatisfied(const Element& e) const
 {
-  return element->getTags().getNames().size() > 0 && hasEligibleKvp(element->getTags());
+  return e.getTags().getNames().size() > 0 && hasEligibleKvp(e.getTags());
 }
 
 QStringList ImplicitTagEligiblePoiPolyCriterion::getEligibleKvps(const Tags& tags) const

@@ -30,15 +30,45 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, LinearCriterion)
 
-bool LinearCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool LinearCriterion::isSatisfied(const Element& e) const
 {
-  return OsmSchema::getInstance().isLinear(*e);
+  bool result = false;
+
+  if (e.getElementType() == ElementType::Node)
+  {
+    return false;
+  }
+
+  const Tags& t = e.getTags();
+
+  if (e.getElementType() == ElementType::Relation)
+  {
+    const Relation& r = dynamic_cast<const Relation&>(e);
+    result |= r.getType() == MetadataTags::RelationMultilineString();
+    result |= r.getType() == MetadataTags::RelationRoute();
+    result |= r.getType() == MetadataTags::RelationBoundary();
+  }
+
+  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  {
+    const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
+    uint16_t g = tv.geometries;
+    if (g & (OsmGeometries::LineString | OsmGeometries::ClosedWay) && !(g & OsmGeometries::Area))
+    {
+      result = true;
+      break;
+    }
+  }
+
+  return result;
 }
 
 }

@@ -48,7 +48,7 @@ _map(map)
 {
 }
 
-bool BuildingWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool BuildingWayNodeCriterion::isSatisfied(const Element& e) const
 {
   bool result = false;
 
@@ -57,10 +57,10 @@ bool BuildingWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element
     throw HootException("You must set the map before calling BuildingWayNodeCriterion");
   }
 
-  if (e->getElementType() == ElementType::Node)
+  if (e.getElementType() == ElementType::Node)
   {
     const set<long> waysContainingNode =
-      _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getElementId().getId());
+      _map->getIndex().getNodeToWayMap()->getWaysByNode(e.getElementId().getId());
     for (set<long>::const_iterator it = waysContainingNode.begin();
          it != waysContainingNode.end(); ++it)
     {

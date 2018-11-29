@@ -29,6 +29,8 @@
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 namespace hoot
 {
@@ -39,9 +41,9 @@ NonBuildingAreaCriterion::NonBuildingAreaCriterion()
 {
 }
 
-bool NonBuildingAreaCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool NonBuildingAreaCriterion::isSatisfied(const Element& e) const
 {
-  return OsmSchema::getInstance().isNonBuildingArea(e);
+  return AreaCriterion().isArea(e) && !BuildingCriterion().isBuilding(e);
 }
 
 }

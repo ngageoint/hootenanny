@@ -29,6 +29,8 @@
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -39,9 +41,37 @@ AreaCriterion::AreaCriterion()
 {
 }
 
-bool AreaCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool AreaCriterion::isSatisfied(const Element& e) const
 {
-  return OsmSchema::getInstance().isArea(e);
+  bool result = false;
+
+  // don't process if a node
+  if (e.getElementType() == ElementType::Node)
+  {
+    return false;
+  }
+
+  result |= BuildingCriterion().isSatisfied(e);
+  result |= t.isTrue(MetadataTags::BuildingPart());
+  result |= t.isTrue("area");
+
+  // if at least one of the tags is marked as an area, but not a linestring tag then we consider
+  // this to be an area feature.
+  const Tags t = e.getTags();
+  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  {
+    const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
+    uint16_t g = tv.geometries;
+    if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
+    {
+      //LOG_VERBOSE("Area: " << it.key() << "=" << it.value());
+      result = true;
+      break;
+    }
+  }
+  //LOG_VART(result);
+
+  return result;
 }
 
 }

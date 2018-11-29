@@ -37,7 +37,6 @@
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -47,6 +46,7 @@
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
 #include <fstream>
@@ -154,10 +154,10 @@ public:
   {
     HighwayMatch* result = 0;
 
+    HighwayCriterion highwayCrit;
     if (e1 && e2 &&
         e1->getStatus() != e2->getStatus() && e2->isUnknown() &&
-        OsmSchema::getInstance().isLinearHighway(e1->getTags(), e1->getElementType()) &&
-        OsmSchema::getInstance().isLinearHighway(e2->getTags(), e2->getElementType()) &&
+        highwayCrit.isSatisfied(*e1) && highwayCrit.isSatisfied(*e2) &&
         tagAncestorDiff->diff(map, e1, e2) <= ConfigOptions().getHighwayMaxEnumDiff())
     {
       // score each candidate and push it on the result vector
@@ -215,7 +215,7 @@ public:
 
   static bool isMatchCandidate(ConstElementPtr element)
   {
-    return OsmSchema::getInstance().isLinearHighway(element->getTags(), element->getElementType());
+    return HighwayCriterion().isSatisfied(*element);
   }
 
   boost::shared_ptr<HilbertRTree>& getIndex()

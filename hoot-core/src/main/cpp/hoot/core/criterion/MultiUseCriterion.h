@@ -24,21 +24,33 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "WaterwayCriterion.h"
+#ifndef MULTI_USE_CRITERION_H
+#define MULTI_USE_CRITERION_H
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, WaterwayCriterion)
-
-bool WaterwayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+/**
+ *
+ */
+class MultiUseCriterion : public ElementCriterion
 {
-  return OsmSchema::getInstance().isLinearWaterway(*e.get());
-}
+public:
+
+  static std::string className() { return "hoot::MultiUseCriterion"; }
+
+  MultiUseCriterion();
+
+  bool isSatisfied(const Element& e) const;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new MultiUseCriterion()); }
+
+  virtual QString getDescription() const { return ""; }
+};
 
 }
 
+#endif // MULTI_USE_CRITERION_H

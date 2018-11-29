@@ -31,7 +31,6 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/OsmUtils.h>
@@ -39,6 +38,9 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -70,9 +72,9 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
   {
     const ConstWayPtr& w = map->getWay(*it);
 
-    if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) == false &&
-        OsmSchema::getInstance().isLinearWaterway(*w) == false &&
-        OsmSchema::getInstance().isPowerLine(*w) == false)
+    if (HighwayCriterion().isSatisfied(*w) == false &&
+        LinearWaterwayCriterion().isSatisfied(*w) == false &&
+        PowerLineCriterion().isSatisfied(*w) == false)
     {
       // if this isn't a highway, waterway, or power line then don't consider it.
       LOG_TRACE("calculateAngles skipping feature...");

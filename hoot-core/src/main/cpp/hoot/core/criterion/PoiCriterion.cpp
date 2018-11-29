@@ -36,9 +36,20 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiCriterion)
 
-bool PoiCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool PoiCriterion::isSatisfied(const Element& e) const
 {
-  return OsmSchema::getInstance().isPoi(*e);
+  bool result = false;
+
+  // we consider all point features with a name, or part of the explicitly defined point category
+  // to be POIs.
+  if (e.getElementType() == ElementType::Node)
+  {
+    result =
+      OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
+      e.getTags().getNames().size() > 0;
+  }
+
+  return result;
 }
 
 }

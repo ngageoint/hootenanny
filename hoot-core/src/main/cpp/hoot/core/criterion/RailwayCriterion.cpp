@@ -40,9 +40,22 @@ RailwayCriterion::RailwayCriterion()
 {
 }
 
-bool RailwayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool RailwayCriterion::isSatisfied(const Element& e) const
 {
-  return OsmSchema::getInstance().isRailway(*e);
+  if (e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)
+  {
+    const Tags& tags = e.getTags();
+    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+    {
+      //TODO: I think we may want to narrow down to a more specific set of railway values here
+      //at some point.
+      if (it.key() == "railway" || OsmSchema::getInstance().isAncestor(it.key(), "railway"))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 }

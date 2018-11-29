@@ -30,6 +30,8 @@
 // hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
@@ -61,6 +63,9 @@ private:
   const OsmMap* _map;
 
   bool _autoMergeManyPoiToOnePolyMatches;
+
+  boost::shared_ptr<PoiPolygonPoiCriterion> _poiCrit;
+  boost::shared_ptr<PoiPolygonPolyCriterion> _polyCrit;
 
   Match* _createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
 

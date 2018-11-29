@@ -38,6 +38,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingCriterion)
 
+BuildingCriterion::BuildingCriterion()
+{
+}
+
+BuildingCriterion::BuildingCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool BuildingCriterion::isParentABuilding(ElementId eid) const
 {
   bool result = false;
@@ -61,7 +70,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
   return result;
 }
 
-bool BuildingCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool BuildingCriterion::isSatisfied(const Element& e) const
 {
   bool result = false;
 
@@ -71,11 +80,12 @@ bool BuildingCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) c
   }
 
   // if it is a building
-  if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()))
+  if ((e.getElementType() != ElementType::Node) &&
+      (OsmSchema::getInstance().hasCategory(e->getTags(), "building") == true))
   {
     // see ticket #5952. If the building has a parent relation that is also a building then this
     // is really a building part, not a building.
-    if (isParentABuilding(e->getElementId()) == false)
+    if (isParentABuilding(e.getElementId()) == false)
     {
       result = true;
     }

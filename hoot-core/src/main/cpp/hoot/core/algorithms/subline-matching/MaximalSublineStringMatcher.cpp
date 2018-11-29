@@ -37,10 +37,10 @@
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
+#include <hoot/core/criterion/MultiLineStringCriterion.h>
 
 // Standard
 #include <algorithm>
@@ -352,7 +352,7 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   {
     ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
 
-    if (OsmSchema::getInstance().isMultiLineString(*r) == false)
+    if (MultilineStringCriterion().isSatisified(*r) == false)
     {
       throw NeedsReviewException("Internal Error: When matching sublines expected a multilinestring "
         "relation not a " + r->getType() + ".  A non-multilinestring should never be found here.  "

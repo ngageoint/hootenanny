@@ -83,13 +83,13 @@ _distance(distance)
 {
 }
 
-bool DistanceNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool DistanceNodeCriterion::isSatisfied(const Element& e) const
 {
-  if (e->getElementType() != ElementType::Node)
+  if (e.getElementType() != ElementType::Node)
     return false;
 
-  ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
-  return _center.distance(n->toCoordinate()) < _distance;
+  const Node& n = dynamic_cast<const Node&>(e);
+  return _center.distance(n.toCoordinate()) < _distance;
 }
 
 }

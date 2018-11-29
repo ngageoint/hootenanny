@@ -45,7 +45,7 @@ public:
 
   RailwayCriterion();
 
-  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  bool isSatisfied(const Element& e) const;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RailwayCriterion()); }

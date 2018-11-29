@@ -53,7 +53,7 @@ public:
   DistanceNodeCriterion();
   DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const Element& e) const;
 
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }

@@ -32,8 +32,9 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 #include <unordered_set>
 #include <vector>
@@ -208,6 +209,8 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
     }
     else
     {
+      OneWayCriterion oneWayCrit;
+
       //  Check if the road is contiguous with the sorted roads
       if (end->getLastNodeId() == way->getFirstNodeId())
       {
@@ -223,9 +226,8 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
         start = way;
         failure_count = 0;
       }
-      else if (!OsmSchema::getInstance().isOneWay(*end) &&
-               !OsmSchema::getInstance().isOneWay(*start) &&
-               !OsmSchema::getInstance().isOneWay(*way))
+      else if (!oneWayCrit.isSatisfied(*end) && !oneWayCrit.isSatisfied(*start) &&
+               !oneWayCrit.isSatisfied(*way))
       {
         //  Roads that aren't one way can be reversed but still be valid
         if (start->getFirstNodeId() == way->getFirstNodeId())
@@ -273,7 +275,8 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
   if (!parent || !child)
     return;
   //  Don't join area ways
-  if (OsmSchema::getInstance().isArea(parent) || OsmSchema::getInstance().isArea(child))
+  AreaCriterion areaCrit;
+  if (areaCrit.isSatisfied(*parent) || areaCrit.isSatisfied(*child))
     return;
   //  Check if the two ways are able to be joined back up
   vector<long> child_nodes = child->getNodeIds();

@@ -29,16 +29,21 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
 
-bool OneWayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool OneWayCriterion::isSatisfied(const Element& e) const
 {
-  return OsmSchema::getInstance().isOneWay(*e) == _isOneWay;
+  bool result = false;
+  const QString oneway = e.getTags()["oneway"].toLower();
+  if (e.getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
+  {
+    result = true;
+  }
+  return result;
 }
 
 }

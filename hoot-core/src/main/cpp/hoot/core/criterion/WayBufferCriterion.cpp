@@ -79,21 +79,21 @@ WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
   _bufferAccuracy = -1;
 }
 
-bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool WayBufferCriterion::isSatisfied(const Element& e) const
 {
-  if (e->getElementType() != ElementType::Way)
+  if (e.getElementType() != ElementType::Way)
     return false;
 
-  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+  const Way& w = dynamic_cast<const Way&>(e);
   try
   {
     bool result = true;
     boost::shared_ptr<LineString> ls2 = ElementConverter(_map).
-        convertToLineString(_map->getWay(w->getId()));
+        convertToLineString(_map->getWay(w.getId()));
 
-    if (fabs((w->getCircularError() + _buffer) - _bufferAccuracy) > 0.1)
+    if (fabs((w.getCircularError() + _buffer) - _bufferAccuracy) > 0.1)
     {
-      _bufferAccuracy = w->getCircularError() + _buffer;
+      _bufferAccuracy = w.getCircularError() + _buffer;
 
       _baseBuffered.reset(_baseLs->buffer(_bufferAccuracy, 3,
                                           geos::operation::buffer::BufferOp::CAP_ROUND));
@@ -124,7 +124,7 @@ bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) 
   }
   catch (const geos::util::TopologyException&)
   {
-    LOG_VART(ElementConverter(_map).convertToLineString(_map->getWay(w->getId())));
+    LOG_VART(ElementConverter(_map).convertToLineString(_map->getWay(w.getId())));
     throw;
   }
 }

@@ -50,14 +50,14 @@ void TagKeyContainsCriterion::setConfiguration(const Settings& conf)
   LOG_VART(_text);
 }
 
-bool TagKeyContainsCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool TagKeyContainsCriterion::isSatisfied(const Element& e) const
 {
   Qt::CaseSensitivity caseSens = Qt::CaseSensitive;
   if (!_caseSensitive)
   {
     caseSens = Qt::CaseInsensitive;
   }
-  for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
+  for (Tags::const_iterator it = e.getTags().begin(); it != e.getTags().end(); ++it)
   {
     const QString tagKey = it.key();
     LOG_VART(tagKey);

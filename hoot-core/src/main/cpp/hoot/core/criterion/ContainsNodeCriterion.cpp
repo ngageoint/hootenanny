@@ -58,22 +58,22 @@ void ContainsNodeCriterion::setConfiguration(const Settings& s)
   }
 }
 
-bool ContainsNodeCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool ContainsNodeCriterion::isSatisfied(const Element& e) const
 {
-  if (e->getElementType() == ElementType::Way)
+  if (e.getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
-    return w->hasNode(_nodeId);
+    const Way& w = dynamic_cast<const Way&>(e);
+    return w.hasNode(_nodeId);
   }
-  else if (e->getElementType() == ElementType::Relation)
+  else if (e.getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
-    return r->contains(ElementId(ElementType::Node, _nodeId));
+    const Relation& r = dynamic_cast<const Relation&>(e);
+    return r.contains(ElementId(ElementType::Node, _nodeId));
   }
-  else if (e->getElementType() == ElementType::Node)
+  else if (e.getElementType() == ElementType::Node)
   {
-    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
-    return (n->getId() == _nodeId);
+    const Node& n = dynamic_cast<const Node&>(e);
+    return (n.getId() == _nodeId);
   }
   return false;
 }

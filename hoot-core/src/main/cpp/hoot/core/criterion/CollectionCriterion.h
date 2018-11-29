@@ -24,32 +24,33 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef WATERWAYCRITERION_H
-#define WATERWAYCRITERION_H
+#ifndef COLLECTION_CRITERION_H
+#define COLLECTION_CRITERION_H
 
+// hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * A criterion that will either keep or remove waterways.
+ *
  */
-class WaterwayCriterion : public ElementCriterion
+class CollectionCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::WaterwayCriterion"; }
+  static std::string className() { return "hoot::CollectionCriterion"; }
 
-  WaterwayCriterion() {}
+  CollectionCriterion();
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WaterwayCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new CollectionCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies waterways"; }
+  virtual QString getDescription() const { return ""; }
 };
 
 }
 
-#endif // WATERWAYCRITERION_H
+#endif // COLLECTION_CRITERION_H

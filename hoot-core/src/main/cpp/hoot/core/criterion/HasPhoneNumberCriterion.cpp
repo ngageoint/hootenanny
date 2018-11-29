@@ -45,7 +45,7 @@ void HasPhoneNumberCriterion::setConfiguration(const Settings& conf)
   _phoneNumberParser.setConfiguration(conf);
 }
 
-bool HasPhoneNumberCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool HasPhoneNumberCriterion::isSatisfied(const Element& e) const
 {
   return _phoneNumberParser.hasPhoneNumber(e);
 }

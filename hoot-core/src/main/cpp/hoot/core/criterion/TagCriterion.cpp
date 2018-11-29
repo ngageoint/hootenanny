@@ -65,14 +65,14 @@ void TagCriterion::setConfiguration(const Settings &s)
   setKvps(ConfigOptions(s).getTagCriterionKvps());
 }
 
-bool TagCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool TagCriterion::isSatisfied(const Element& e) const
 {
   for (int i = 0; i < _kvps.size(); i++)
   {
     const QStringList kvpParts = _kvps.at(i).split("=");
     const QString key = kvpParts[0];
     const QString val = kvpParts[1];
-    if (e->getTags().get(key) == val)
+    if (e.getTags().get(key) == val)
     {
       return true;
     }

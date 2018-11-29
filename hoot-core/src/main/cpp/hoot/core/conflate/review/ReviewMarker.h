@@ -65,7 +65,7 @@ public:
   /**
    * Returns true if the element is in at least one review.
    */
-  static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1);
+  static bool isNeedsReview(const ConstOsmMapPtr &map, const Element& e1);
 
   /**
    * Determines whether a pair of elements should be returned for review

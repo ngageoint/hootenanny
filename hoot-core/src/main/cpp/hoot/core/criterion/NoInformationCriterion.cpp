@@ -38,9 +38,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
 
-bool NoInformationCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool NoInformationCriterion::isSatisfied(const Element& e) const
 {
-  const Tags tags = e->getTags();
+  const Tags tags = e.getTags();
   const int informationCount = tags.getInformationCount();
   const int reviewTagCount =
     tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();

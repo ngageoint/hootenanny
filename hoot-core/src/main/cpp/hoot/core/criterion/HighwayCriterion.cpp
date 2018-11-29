@@ -28,16 +28,58 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
-bool HighwayCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool HighwayCriterion::isSatisfied(const Element& e) const
 {
-  return OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType());
+  bool result = false;
+  const Tags& tags = element.getTags();
+  const ElementType type = element.getElementType();
+  Tags::const_iterator it = tags.find("highway");
+  QString key;
+
+  // Is it a legit highway?
+  if ((type == ElementType::Way || type == ElementType::Relation) &&
+      it != t.end() && it.value() != "")
+  {
+    result = true;
+    key = it.key();
+  }
+
+  // Maybe it's a way with nothing but a time tag...
+  it = tags.find("source:datetime");
+  if (type == ElementType::Way && tags.keys().size() < 2 && it != t.end())
+  {
+    // We can treat it like a highway
+    result = true;
+    key = it.key();
+  }
+
+  // Make sure this isn't an area highway section!
+  if (result)
+  {
+    result = !AreaCriterion().isArea(e);
+    LOG_VART(result);
+  }
+  LOG_VART(result);
+
+  if (Log::getInstance().getLevel() <= Log::Trace && result)
+  {
+    LOG_TRACE("isLinearHighway; key: " << key);
+    if (tags.contains("name"))
+    {
+      LOG_VART(tags.get("name"));
+    }
+  }
+
+  return result;
 }
 
 }

@@ -46,7 +46,7 @@ public:
 
   explicit ContainsNodeCriterion(long nodeId);
 
-  bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  bool isSatisfied(const Element& e) const;
 
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ContainsNodeCriterion(_nodeId)); }

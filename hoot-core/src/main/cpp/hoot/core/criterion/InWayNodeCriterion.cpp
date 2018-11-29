@@ -48,9 +48,9 @@ InWayNodeCriterion::InWayNodeCriterion(const OsmMap& map, const std::vector<long
   }
 }
 
-bool InWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool InWayNodeCriterion::isSatisfied(const Element& e) const
 {
-  return _nids.find(e->getId()) != _nids.end();
+  return _nids.find(e.getId()) != _nids.end();
 }
 
 }

@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 using namespace std;
 
@@ -44,15 +45,15 @@ HighwayIntersectionCriterion::HighwayIntersectionCriterion(ConstOsmMapPtr map)
   setOsmMap(map.get());
 }
 
-bool HighwayIntersectionCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool HighwayIntersectionCriterion::isSatisfied(const Element& e) const
 {
-  if (e->getElementType() != ElementType::Node)
+  if (e.getElementType() != ElementType::Node)
   {
     return false;
   }
 
   boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
-  long id = e->getId();
+  long id = e.getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);
 
@@ -61,8 +62,7 @@ bool HighwayIntersectionCriterion::isSatisfied(const boost::shared_ptr<const Ele
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
     ConstWayPtr w = _map->getWay(*it);
-
-    if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()))
+    if (HighwayCriterion().isSatisfied(*w))
     {
       hwids.insert(*it);
     }

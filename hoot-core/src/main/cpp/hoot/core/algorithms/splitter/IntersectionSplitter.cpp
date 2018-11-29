@@ -32,11 +32,13 @@
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -77,6 +79,8 @@ void IntersectionSplitter::_mapNodesToWays()
 {
   _nodeToWays.clear();
 
+  HighwayCriterion highwayCrit;
+  LinearWaterwayCriterion waterwayCrit;
   const WayMap& ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
@@ -84,9 +88,8 @@ void IntersectionSplitter::_mapNodesToWays()
 
     bool isNetworkType = false;
 
-    if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) ||
-        OsmSchema::getInstance().isLinearWaterway(*w) ||
-        OsmSchema::getInstance().isPowerLine(*w))
+    if (highwayCrit.isSatisfied(*w) || waterwayCrit.isSatisfied(*w) ||
+        PowerLineCriterion().isSatisfied(*w))
     {
       isNetworkType  = true;
     }
@@ -100,8 +103,8 @@ void IntersectionSplitter::_mapNodesToWays()
       {
         ElementPtr r = _map->getRelation(rid);
         const Tags& tags = r->getTags();
-        if (OsmSchema::getInstance().isLinearHighway(tags, ElementType::Relation) ||
-            OsmSchema::getInstance().isLinearWaterway(*r))
+        if (highwayCrit.isLinearHighway(tags, ElementType::Relation) ||
+            waterwayCrit.isLinearWaterway(*r))
         {
           isNetworkType  = true;
         }

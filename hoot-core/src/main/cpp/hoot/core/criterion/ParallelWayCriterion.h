@@ -57,7 +57,7 @@ public:
 
   void setThreshold(Degrees threshold) { _threshold = threshold; }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const Element& e) const;
 
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ParallelWayCriterion(_map, _baseWay, _isParallel)); }

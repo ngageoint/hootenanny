@@ -42,7 +42,7 @@ namespace hoot
  * A filter that will remove elements that aren't conflatable by hootenanny.
  * These are elements for which we have no matchers defined.
  */
-class NonConflatableCriterion : public ElementCriterion, public Configurable
+class NonConflatableCriterion : public ElementCriterion
 {
 
 public:
@@ -52,8 +52,6 @@ public:
   NonConflatableCriterion() { setConfiguration(conf()); }
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  virtual void setConfiguration(const Settings& conf);
 
   virtual ElementCriterionPtr clone()
   {

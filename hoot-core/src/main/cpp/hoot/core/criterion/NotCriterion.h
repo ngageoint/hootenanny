@@ -50,7 +50,7 @@ public:
   /**
    * Returns true if the element satisfies the criterion.
    */
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const Element& e) const;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NotCriterion(_child->clone())); }

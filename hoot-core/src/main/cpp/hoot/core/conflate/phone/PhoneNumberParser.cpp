@@ -96,23 +96,23 @@ void PhoneNumberParser::_addPhoneNumber(const QString name, const QString tagKey
   _phoneNumbersProcessed++;
 }
 
-int PhoneNumberParser::numPhoneNumbers(const ConstElementPtr& element) const
+int PhoneNumberParser::numPhoneNumbers(const Element& e) const
 {
   return parsePhoneNumbers(element).size();
 }
 
-bool PhoneNumberParser::hasPhoneNumber(const ConstElementPtr& element) const
+bool PhoneNumberParser::hasPhoneNumber(const Element& e) const
 {
   return numPhoneNumbers(element) > 0;
 }
 
-QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const ConstElementPtr& element) const
+QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& e) const
 {
   //phone=* is the standard OSM tag, but have seen many others over time...keeping the allowed tags
   //fairly loose for now
   QList<ElementPhoneNumber> parsedPhoneNums;
-  for (Tags::const_iterator it = element->getTags().constBegin();
-       it != element->getTags().constEnd(); ++it)
+  for (Tags::const_iterator it = element.getTags().constBegin();
+       it != element.getTags().constEnd(); ++it)
   {
     const QString tagKey = it.key();
     LOG_VART(tagKey);
@@ -129,7 +129,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const ConstElemen
         // TODO: consider getting rid of this, as its too weak of a check
         if (StringUtils::hasDigit(tagValue))
         {
-          _addPhoneNumber(element->getTags().getName(), tagKey, tagValue, parsedPhoneNums);
+          _addPhoneNumber(element.getTags().getName(), tagKey, tagValue, parsedPhoneNums);
         }
       }
       else
@@ -141,7 +141,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const ConstElemen
           if (PhoneNumberUtil::GetInstance()->IsPossibleNumberForString(
                 tagValue.toStdString(), _regionCode.toStdString()))
           {
-            _addPhoneNumber(element->getTags().getName(), tagKey, tagValue, parsedPhoneNums);
+            _addPhoneNumber(element.getTags().getName(), tagKey, tagValue, parsedPhoneNums);
           }
         }
         else
@@ -162,7 +162,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const ConstElemen
             PhoneNumberMatch match;
             numberFinder.Next(&match);
             const QString parsedNum = QString::fromStdString(match.raw_string());
-            _addPhoneNumber(element->getTags().getName(), tagKey, parsedNum, parsedPhoneNums);
+            _addPhoneNumber(element.getTags().getName(), tagKey, parsedNum, parsedPhoneNums);
             parserFinds++;
           }
           LOG_TRACE("Number finder found " << parserFinds << " numbers.");

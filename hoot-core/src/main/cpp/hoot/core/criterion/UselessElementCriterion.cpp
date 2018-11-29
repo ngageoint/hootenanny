@@ -40,9 +40,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, UselessElementCriterion)
 
-bool UselessElementCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool UselessElementCriterion::isSatisfied(const Element& e) const
 {
-  ElementId eid = e->getElementId();
+  ElementId eid = e.getElementId();
   LOG_VART(eid);
 
   const boost::shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
@@ -67,10 +67,10 @@ bool UselessElementCriterion::isSatisfied(const boost::shared_ptr<const Element>
   }
   else if (ElementType::Way == eid.getType().getEnum())
   {
-    ConstWayPtr pWay = boost::dynamic_pointer_cast<const Way>(e);
+    const Way& w = dynamic_cast<const Way&>(e);
 
     // Check for kids
-    if (pWay->getNodeCount() > 0)
+    if (w.getNodeCount() > 0)
     {
       LOG_TRACE("UselessElementCriterion not satisified: way has children");
       return false;
@@ -78,8 +78,8 @@ bool UselessElementCriterion::isSatisfied(const boost::shared_ptr<const Element>
   }
   else if (ElementType::Relation == eid.getType().getEnum())
   {
-    ConstRelationPtr pRel = boost::dynamic_pointer_cast<const Relation>(e);
-    if (pRel->getMembers().size() > 0)
+    const Relation& r = dynamic_cast<const Relation&>(e);
+    if (r.getMembers().size() > 0)
     {
       LOG_TRACE("UselessElementCriterion not satisified: relation has children");
       return false;

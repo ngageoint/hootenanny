@@ -44,7 +44,7 @@ void HasAddressCriterion::setConfiguration(const Settings& conf)
   _addressParser.setConfiguration(conf);
 }
 
-bool HasAddressCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool HasAddressCriterion::isSatisfied(const Element& e) const
 {
   return _addressParser.hasAddress(e);
 }
