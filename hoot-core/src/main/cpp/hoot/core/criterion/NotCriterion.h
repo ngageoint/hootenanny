@@ -29,7 +29,6 @@
 
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {

@@ -28,7 +28,6 @@
 #define HIGHWAYCRITERION_H
 
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {

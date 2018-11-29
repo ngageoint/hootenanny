@@ -276,7 +276,7 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
     return;
   //  Don't join area ways
   AreaCriterion areaCrit;
-  if (areaCrit.isSatisfied(*parent) || areaCrit.isSatisfied(*child))
+  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
     return;
   //  Check if the two ways are able to be joined back up
   vector<long> child_nodes = child->getNodeIds();

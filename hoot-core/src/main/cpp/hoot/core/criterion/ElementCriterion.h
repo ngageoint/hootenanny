@@ -29,6 +29,7 @@
 
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {

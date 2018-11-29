@@ -231,7 +231,7 @@ public:
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements that isMatchCandidate(e)
-      boost::function<bool (const Element& e)> f =
+      boost::function<bool (ConstElementPtr e)> f =
         boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
       boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 

@@ -47,7 +47,7 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
     return false;
   }
 
-  const Tags& t = e.getTags();
+  const Tags& t = e->getTags();
 
   if (e->getElementType() == ElementType::Relation)
   {

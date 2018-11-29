@@ -29,8 +29,6 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/elements/ElementType.h>
 
 namespace hoot
 {

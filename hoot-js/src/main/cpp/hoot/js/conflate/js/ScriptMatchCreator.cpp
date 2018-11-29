@@ -331,7 +331,7 @@ public:
       // will likely slow things down, but should give the same results.
       // An option in the future would be to support an "isIndexedFeature" or similar function
       // to speed the operation back up again.
-      boost::function<bool (const Element& e)> f =
+      boost::function<bool (ConstElementPtr e)> f =
         boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
       boost::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
 

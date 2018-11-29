@@ -48,18 +48,18 @@ public:
 
   // Do something like:
   // boost::function<bool (ConstElementPtr e)> f =
-    //boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-//  explicit ArbitraryCriterion(boost::function<bool (Element& e)> f)
-//  {
-//    _f = f;
-//  }
-
-  explicit ArbitraryCriterion(boost::function<bool (const Element& e)> f)
+  //  boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
+  explicit ArbitraryCriterion(boost::function<bool (ConstElementPtr e)> f)
   {
     _f = f;
   }
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const
+  explicit ArbitraryCriterion(boost::function<bool (const boost::shared_ptr<const Element> &e)> f)
+  {
+    _f = f;
+  }
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const
   {
     return _f(e);
   }
@@ -70,7 +70,7 @@ public:
 
 private:
 
-  boost::function<bool (const Element& e)> _f;
+  boost::function<bool (const boost::shared_ptr<const Element> &e)> _f;
 };
 
 }
