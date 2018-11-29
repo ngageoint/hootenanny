@@ -55,7 +55,7 @@ go
 hoot-cmd/Makefile
 hoot-core-test/Makefile
 hoot-core/Makefile
-hoot-core/src/main/cpp/hoot/core/VersionDefines.h
+hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h
 hoot-core/src/main/cpp/hoot/core/proto/*.pb.h
