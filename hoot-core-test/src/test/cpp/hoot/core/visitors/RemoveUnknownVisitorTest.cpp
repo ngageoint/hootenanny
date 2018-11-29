@@ -90,8 +90,8 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveUnknownVisitorTest, "current");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveElementsVisitorTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveUnknownVisitorTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveElementsVisitorTest, "quick");
 
 }
 
