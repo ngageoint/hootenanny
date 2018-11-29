@@ -1834,6 +1834,15 @@ hash calculation.
 The distance moved along a way, in meters, before calculating the outbound heading for a node on
 that way by the NodeMatcher.
 
+=== node.matcher.fail.on.bad.angle.spots
+
+* Data Type: bool
+* Default Value: `false`
+
+If false, the NodeMatcher will allow angle calculation if any situations are found where it is
+passed a node which is not at the beginning or end of a way.  If true, it will fail in the
+aforementioned situation.
+
 === node.matcher.strictness
 
 * Data Type: double
