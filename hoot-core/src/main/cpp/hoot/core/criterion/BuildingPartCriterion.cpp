@@ -41,7 +41,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, BuildingPartCriterion)
 bool BuildingPartCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
-  if (e.getElementType() != ElementType::Node && e.getTags().isTrue(MetadataTags::BuildingPart()))
+  if (e->getElementType() != ElementType::Node && e->getTags().isTrue(MetadataTags::BuildingPart()))
   {
     result = true;
   }

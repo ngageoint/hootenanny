@@ -42,19 +42,19 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
-  if (e.getElementType() == ElementType::Node)
+  if (e->getElementType() == ElementType::Node)
   {
     return false;
   }
 
   const Tags& t = e.getTags();
 
-  if (e.getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation)
   {
-    const Relation& r = dynamic_cast<const Relation&>(e);
-    result |= r.getType() == MetadataTags::RelationMultilineString();
-    result |= r.getType() == MetadataTags::RelationRoute();
-    result |= r.getType() == MetadataTags::RelationBoundary();
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    result |= r->getType() == MetadataTags::RelationMultilineString();
+    result |= r->getType() == MetadataTags::RelationRoute();
+    result |= r->getType() == MetadataTags::RelationBoundary();
   }
 
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)

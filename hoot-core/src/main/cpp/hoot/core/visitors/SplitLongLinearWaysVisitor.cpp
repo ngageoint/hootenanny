@@ -110,7 +110,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   }
 
   // Ensure we're a linear way -- heuristic is reported to be mostly accurate
-  if (LinearCriterion().isSatisfied(*way) == false)
+  if (LinearCriterion().isSatisfied(way) == false)
   {
     if (printInfo == true)
     {

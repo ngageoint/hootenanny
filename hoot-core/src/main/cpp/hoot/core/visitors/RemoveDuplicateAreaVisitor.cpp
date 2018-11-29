@@ -182,7 +182,7 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
       CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||
-      areaCrit.isSatisfied(*e1) == false)
+      areaCrit.isSatisfied(e1) == false)
   {
     LOG_TRACE("Envelope null or incomplete element.");
     return;
@@ -199,7 +199,7 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
 
       // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
       // a parent.
-      if (e2 != 0 && areaCrit.isSatisfied(*e2) && _equals(e1, e2))
+      if (e2 != 0 && areaCrit.isSatisfied(e2) && _equals(e1, e2))
       {
         LOG_TRACE("e2 is area and e1/e2 equal.");
         // remove the crummier one.

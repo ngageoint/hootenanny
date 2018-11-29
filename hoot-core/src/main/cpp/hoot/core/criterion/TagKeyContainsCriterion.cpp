@@ -57,7 +57,7 @@ bool TagKeyContainsCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     caseSens = Qt::CaseInsensitive;
   }
-  for (Tags::const_iterator it = e.getTags().begin(); it != e.getTags().end(); ++it)
+  for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
     const QString tagKey = it.key();
     LOG_VART(tagKey);

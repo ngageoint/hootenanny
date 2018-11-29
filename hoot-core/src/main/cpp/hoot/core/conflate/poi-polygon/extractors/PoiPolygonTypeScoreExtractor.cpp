@@ -409,13 +409,13 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
 
 bool PoiPolygonTypeScoreExtractor::isPark(ConstElementPtr element)
 {
-  return !BuildingCriterion().isSatisfied(*element) &&
+  return !BuildingCriterion().isSatisfied(element) &&
          (element->getTags().get("leisure") == "park");
 }
 
 bool PoiPolygonTypeScoreExtractor::isParkish(ConstElementPtr element)
 {
-  if (BuildingCriterion().isSatisfied(*element))
+  if (BuildingCriterion().isSatisfied(element))
   {
     return false;
   }

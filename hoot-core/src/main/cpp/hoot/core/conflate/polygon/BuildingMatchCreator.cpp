@@ -177,7 +177,7 @@ public:
   {
     BuildingCriterion buildingCrit;
     if (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
-        buildingCrit.isSatisfied(*e1) && buildingCrit.isSatisfied(*e2))
+        buildingCrit.isSatisfied(e1) && buildingCrit.isSatisfied(e2))
     {
       return true;
     }
@@ -216,7 +216,7 @@ public:
     }
   }
 
-  static bool isMatchCandidate(const Element& element)
+  static bool isMatchCandidate(const ConstElementPtr& element)
   {
     return BuildingCriterion().isSatisfied(element);
   }

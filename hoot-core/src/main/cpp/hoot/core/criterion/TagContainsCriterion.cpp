@@ -54,7 +54,7 @@ bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
   bool matches = false;
   for (int i = 0; i < _key.size(); i++)
   {
-    if (e.getTags().contains(_key[i]) && e.getTags()[_key[i]].contains(_valueSubstring[i]))
+    if (e->getTags().contains(_key[i]) && e->getTags()[_key[i]].contains(_valueSubstring[i]))
     {
       matches = true;
       break;  //  Only one match is required

@@ -62,7 +62,7 @@ void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
     _ec.reset(new ElementConverter(_map->shared_from_this()));
   }
 
-  if (AreaCriterion().isSatisfied(*e))
+  if (AreaCriterion().isSatisfied(e))
   {
     boost::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
 

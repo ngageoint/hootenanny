@@ -119,7 +119,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)
 
   LOG_VART(e->getElementId());
 
-  if (_criterion.get() && !_criterion->isSatisfied(*e))
+  if (_criterion.get() && !_criterion->isSatisfied(e))
   {
     return;
   }

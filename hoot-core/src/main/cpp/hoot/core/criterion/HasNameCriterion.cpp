@@ -37,10 +37,10 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HasNameCriterion)
 
 bool HasNameCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const QStringList names = e.getTags().getNames();
+  const QStringList names = e->getTags().getNames();
   for (int i = 0; i < names.size(); i++)
   {
-    if (!e.getTags().get("name").trimmed().isEmpty())
+    if (!e->getTags().get("name").trimmed().isEmpty())
     {
       return true;
     }

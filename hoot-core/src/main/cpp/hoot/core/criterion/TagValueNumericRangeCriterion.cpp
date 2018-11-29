@@ -65,12 +65,12 @@ bool TagValueNumericRangeCriterion::isSatisfied(const ConstElementPtr& e) const
   for (int i = 0; i < _tagKeys.size(); i++)
   {
     const QString tagKey = _tagKeys.at(i);
-    if (!e.getTags().contains(tagKey))
+    if (!e->getTags().contains(tagKey))
     {
       return false;
     }
     bool ok = false;
-    const long val = e.getTags().get(tagKey).toLong(&ok);
+    const long val = e->getTags().get(tagKey).toLong(&ok);
     if (!ok || val < _rangeMin || val > _rangeMax)
     {
       return false;

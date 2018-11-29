@@ -85,7 +85,7 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
     _numFeaturesTotal++;
     LOG_VART(element->getElementId());
 
-    if (!_criterion.get() || _criterion->isSatisfied(*element))
+    if (!_criterion.get() || _criterion->isSatisfied(element))
     {
       _numFeaturesPassingCriterion++;
       //LOG_VART(_numFeaturesPassingCriterion);

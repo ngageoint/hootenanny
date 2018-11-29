@@ -51,7 +51,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<const Element>& e)
   {
-    if (e->getTags().contains(MetadataTags::Ref1()) && _criterion->isSatisfied(*e))
+    if (e->getTags().contains(MetadataTags::Ref1()) && _criterion->isSatisfied(e))
     {
       _refs.insert(e->getTags().get(MetadataTags::Ref1()));
     }
@@ -73,7 +73,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e)
   {
-    if (_criterion->isSatisfied(*e))
+    if (_criterion->isSatisfied(e))
     {
       NotCriterion nc(_criterion);
       RecursiveElementRemover(e->getElementId(), &nc).apply(_map->shared_from_this());

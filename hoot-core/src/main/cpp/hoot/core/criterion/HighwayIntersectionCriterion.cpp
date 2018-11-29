@@ -47,7 +47,7 @@ HighwayIntersectionCriterion::HighwayIntersectionCriterion(ConstOsmMapPtr map)
 
 bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e.getElementType() != ElementType::Node)
+  if (e->getElementType() != ElementType::Node)
   {
     return false;
   }
@@ -62,7 +62,7 @@ bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
     ConstWayPtr w = _map->getWay(*it);
-    if (HighwayCriterion().isSatisfied(*w))
+    if (HighwayCriterion().isSatisfied(w))
     {
       hwids.insert(*it);
     }

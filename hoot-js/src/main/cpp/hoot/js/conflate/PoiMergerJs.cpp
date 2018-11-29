@@ -80,7 +80,7 @@ void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isola
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const ConstNodePtr& node = it->second;
-    if (node->getId() != mergeTargetId.getId() && PoiCriterion().isSatisfied(*node))
+    if (node->getId() != mergeTargetId.getId() && PoiCriterion().isSatisfied(node))
     {
       LOG_VART(node);
 

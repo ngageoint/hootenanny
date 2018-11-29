@@ -411,7 +411,7 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
 bool BuildingPartMergeOp::_isBuildingPart(const WayPtr& w)
 {
   bool result = false;
-  if (BuildingCriterion().isSatisfied(*w))
+  if (BuildingCriterion().isSatisfied(w))
   {
     result = true;
   }
@@ -421,7 +421,7 @@ bool BuildingPartMergeOp::_isBuildingPart(const WayPtr& w)
 bool BuildingPartMergeOp::_isBuildingPart(const RelationPtr& r)
 {
   bool result = false;
-  if (BuildingCriterion().isSatisfied(*r))
+  if (BuildingCriterion().isSatisfied(r))
   {
     result = true;
   }

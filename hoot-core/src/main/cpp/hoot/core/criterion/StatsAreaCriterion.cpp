@@ -42,10 +42,10 @@ bool StatsAreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
-  const Tags& t = e.getTags();
+  const Tags& t = e->getTags();
 
   // don't process if a node
-  if (e.getElementType() == ElementType::Node)
+  if (e->getElementType() == ElementType::Node)
   {
     return false;
   }
@@ -57,7 +57,7 @@ bool StatsAreaCriterion::isSatisfied(const ConstElementPtr& e) const
   }
 
   // don't process if a relation
-  if (e.getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation)
   {
     return false;
   }

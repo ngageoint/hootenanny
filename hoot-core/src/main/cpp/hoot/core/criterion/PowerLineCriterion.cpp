@@ -37,9 +37,9 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PowerLineCriterion)
 
 bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e.getElementType() == ElementType::Way)
+  if (e->getElementType() == ElementType::Way)
   {
-    const Tags& tags = e.getTags();
+    const Tags& tags = e->getTags();
     const QString powerVal = tags.get("power").toLower().trimmed();
     if (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable")
     {

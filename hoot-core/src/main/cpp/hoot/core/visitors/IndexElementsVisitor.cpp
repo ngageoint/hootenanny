@@ -70,7 +70,7 @@ void IndexElementsVisitor::finalizeIndex()
 
 void IndexElementsVisitor::visit(const ConstElementPtr& e)
 {
-  if (!_criterion || _criterion->isSatisfied(*e))
+  if (!_criterion || _criterion->isSatisfied(e))
   {
     _fids.push_back((int)_indexToEid.size());
     _indexToEid.push_back(e->getElementId());

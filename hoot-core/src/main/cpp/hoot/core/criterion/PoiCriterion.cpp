@@ -42,11 +42,11 @@ bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
 
   // we consider all point features with a name, or part of the explicitly defined point category
   // to be POIs.
-  if (e.getElementType() == ElementType::Node)
+  if (e->getElementType() == ElementType::Node)
   {
     result =
-      OsmSchema::getInstance().hasCategory(e.getTags(), "poi") ||
-      e.getTags().getNames().size() > 0;
+      OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
+      e->getTags().getNames().size() > 0;
   }
 
   return result;

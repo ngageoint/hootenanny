@@ -65,7 +65,7 @@ void CriterionCountVisitor::visit(const ConstElementPtr& e)
   long id = e->getId();
   const boost::shared_ptr<const Element>& ee = _map->getElement(type, id);
 
-  if (_pCrit->isSatisfied(*ee))
+  if (_pCrit->isSatisfied(ee))
   {
     ++_count;
   }

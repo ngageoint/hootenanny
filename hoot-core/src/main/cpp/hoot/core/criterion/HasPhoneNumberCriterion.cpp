@@ -47,7 +47,7 @@ void HasPhoneNumberCriterion::setConfiguration(const Settings& conf)
 
 bool HasPhoneNumberCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return _phoneNumberParser.hasPhoneNumber(e);
+  return _phoneNumberParser.hasPhoneNumber(*e);
 }
 
 }

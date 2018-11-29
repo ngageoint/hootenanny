@@ -219,7 +219,7 @@ void RemoveRef2Visitor::visit(const ConstElementPtr& e)
 
 bool RemoveRef2Visitor::ref1CriterionSatisfied(const ConstElementPtr& e) const
 {
-  return _criterion->isSatisfied(*e);
+  return _criterion->isSatisfied(e);
 }
 
 bool RemoveRef2Visitor::ref2CriterionSatisfied(const ConstElementPtr& e) const

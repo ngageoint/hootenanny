@@ -142,7 +142,7 @@ void OsmGbdxJsonWriter::_writeGeometry(ConstNodePtr n)
 void OsmGbdxJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
-  const bool isPolygon = AreaCriterion().isSatisfied(*w) || nodes[0] == nodes[nodes.size() - 1];
+  const bool isPolygon = AreaCriterion().isSatisfied(w) || nodes[0] == nodes[nodes.size() - 1];
   _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
 }
 
@@ -252,7 +252,7 @@ void OsmGbdxJsonWriter::_writeNodes()
 
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (!crit.isSatisfied(*_map->getNode(it->first)))
+    if (!crit.isSatisfied(_map->getNode(it->first)))
       nids.append(it->first);
   }
 
@@ -295,7 +295,7 @@ void OsmGbdxJsonWriter::_writeWays()
     //  Make sure that building ways are "complete"
     const vector<long>& nodes = w->getNodeIds();
     bool valid = true;
-    if (AreaCriterion().isSatisfied(*w))
+    if (AreaCriterion().isSatisfied(w))
     {
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {

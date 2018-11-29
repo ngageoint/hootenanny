@@ -72,7 +72,7 @@ bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
     const QStringList kvpParts = _kvps.at(i).split("=");
     const QString key = kvpParts[0];
     const QString val = kvpParts[1];
-    if (e.getTags().get(key) == val)
+    if (e->getTags().get(key) == val)
     {
       return true;
     }

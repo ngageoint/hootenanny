@@ -37,11 +37,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
-bool HighwayCriterion::isSatisfied(const Element& element) const
+bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   bool result = false;
-  const Tags& tags = element.getTags();
-  const ElementType type = element.getElementType();
+  const Tags& tags = element->getTags();
+  const ElementType type = element->getElementType();
   Tags::const_iterator it = tags.find("highway");
   QString key;
 

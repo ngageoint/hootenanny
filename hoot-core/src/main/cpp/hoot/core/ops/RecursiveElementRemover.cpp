@@ -104,7 +104,7 @@ void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
     for (set<ElementId>::iterator it = toErase.begin(); it != toErase.end();)
     {
       ConstElementPtr child = map->getElement(*it);
-      if (_criterion->isSatisfied(*child))
+      if (_criterion->isSatisfied(child))
       {
         // remove the child
         toErase.erase(it++);

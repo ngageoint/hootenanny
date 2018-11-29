@@ -58,7 +58,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
     ++it)
   {
     ConstElementPtr e = _map->getRelation(*it);
-    if (isSatisfied(*e))
+    if (isSatisfied(e))
     {
       result = true;
     }
@@ -81,12 +81,12 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
   }
 
   // if it is a building
-  if ((e.getElementType() != ElementType::Node) &&
-      (OsmSchema::getInstance().hasCategory(e.getTags(), "building") == true))
+  if ((e->getElementType() != ElementType::Node) &&
+      (OsmSchema::getInstance().hasCategory(e->getTags(), "building") == true))
   {
     // see ticket #5952. If the building has a parent relation that is also a building then this
     // is really a building part, not a building.
-    if (isParentABuilding(e.getElementId()) == false)
+    if (isParentABuilding(e->getElementId()) == false)
     {
       result = true;
     }

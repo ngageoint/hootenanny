@@ -43,10 +43,10 @@ bool HgisPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
   // See ticket #6853 for a definition of a "HGIS POI"
-  if (e.getElementType() == ElementType::Node)
+  if (e->getElementType() == ElementType::Node)
   {
     result =
-      OsmSchema::getInstance().hasCategory(e.getTags(), OsmSchemaCategory::hgisPoi().toString());
+      OsmSchema::getInstance().hasCategory(e->getTags(), OsmSchemaCategory::hgisPoi().toString());
   }
   return result;
 }

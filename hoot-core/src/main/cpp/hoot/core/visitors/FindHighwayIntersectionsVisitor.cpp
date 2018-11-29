@@ -53,7 +53,7 @@ void FindHighwayIntersectionsVisitor::visit(const ConstElementPtr& e)
   {
     WayPtr w = _map->getWay(*it);
 
-    if (HighwayCriterion().isSatisfied(*w))
+    if (HighwayCriterion().isSatisfied(w))
     {
       hwids.insert(*it);
     }

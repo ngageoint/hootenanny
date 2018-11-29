@@ -46,7 +46,7 @@ ElementInIdListCriterion::ElementInIdListCriterion(const std::vector<long>& ids)
 
 bool ElementInIdListCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return _ids.find(e.getId()) != _ids.end();
+  return _ids.find(e->getId()) != _ids.end();
 }
 
 }

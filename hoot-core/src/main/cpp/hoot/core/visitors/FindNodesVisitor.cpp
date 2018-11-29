@@ -45,7 +45,7 @@ void FindNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
   if (e->getElementType() == ElementType::Node)
   {
     ConstNodePtr pNode = boost::dynamic_pointer_cast<const Node>(e);
-    if (_pCrit->isSatisfied(*e))
+    if (_pCrit->isSatisfied(e))
     {
       _nodeIds.push_back(e->getId());
     }
@@ -72,7 +72,7 @@ vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
   for (size_t i = 0; i < close.size(); i++)
   {
     const ConstNodePtr& n = map->getNode(close[i]);
-    if (pCrit->isSatisfied(*n))
+    if (pCrit->isSatisfied(n))
       result.push_back(n->getId());
   }
 

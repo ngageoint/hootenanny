@@ -236,7 +236,7 @@ void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
   {
     WayPtr way = it->second;
 
-    if (AreaCriterion().isSatisfied(*way) == false)
+    if (AreaCriterion().isSatisfied(way) == false)
     {
       OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
       // set all the column values.
@@ -451,7 +451,7 @@ void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
   {
     WayPtr way = it->second;
 
-    if (AreaCriterion().isSatisfied(*way))
+    if (AreaCriterion().isSatisfied(way))
     {
       _writeWayPolygon(map, way, poLayer, columns, shpColumns);
     }

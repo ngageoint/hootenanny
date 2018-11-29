@@ -40,12 +40,12 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ImplicitTagEligiblePoiCriterion)
 
 bool ImplicitTagEligiblePoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  LOG_VART(e.getElementType());
-  LOG_VART(e.getTags().getNames().size());
-  LOG_VART(hasEligibleKvp(e.getTags()));
+  LOG_VART(e->getElementType());
+  LOG_VART(e->getTags().getNames().size());
+  LOG_VART(hasEligibleKvp(e->getTags()));
   return
-    e.getElementType() == ElementType::Node && e.getTags().getNames().size() > 0 &&
-    hasEligibleKvp(e.getTags());
+    e->getElementType() == ElementType::Node && e->getTags().getNames().size() > 0 &&
+    hasEligibleKvp(e->getTags());
 }
 
 QStringList ImplicitTagEligiblePoiCriterion::getEligibleKvps(const Tags& tags) const

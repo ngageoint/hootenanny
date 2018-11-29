@@ -176,7 +176,7 @@ void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, AreaCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, AreaCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
@@ -186,7 +186,7 @@ void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, LinearCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, LinearCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
@@ -196,7 +196,7 @@ void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, BuildingCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, BuildingCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isHgisPoi(const FunctionCallbackInfo<Value>& args)
@@ -206,7 +206,7 @@ void OsmSchemaJs::isHgisPoi(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, HgisPoiCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, HgisPoiCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
@@ -216,7 +216,7 @@ void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, LinearWaterwayCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, LinearWaterwayCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isPowerLine(const FunctionCallbackInfo<Value>& args)
@@ -226,7 +226,7 @@ void OsmSchemaJs::isPowerLine(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, PowerLineCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, PowerLineCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isMetaData(const FunctionCallbackInfo<Value>& args)
@@ -247,7 +247,7 @@ void OsmSchemaJs::isPoi(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, PoiCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, PoiCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
@@ -257,7 +257,7 @@ void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, RailwayCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, RailwayCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
@@ -267,7 +267,7 @@ void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, HasNameCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, HasNameCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinearHighway(const FunctionCallbackInfo<Value>& args)
@@ -277,7 +277,7 @@ void OsmSchemaJs::isLinearHighway(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::score(const FunctionCallbackInfo<Value>& args)

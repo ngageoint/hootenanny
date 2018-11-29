@@ -36,7 +36,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ElementTypeCriterion)
 
 bool ElementTypeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e.getElementType() == _elementType;
+  return e->getElementType() == _elementType;
 }
 
 }

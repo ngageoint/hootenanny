@@ -349,7 +349,7 @@ void OsmGbdxXmlWriter::_writeNodes(ConstOsmMapPtr map)
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (!crit.isSatisfied(*map->getNode(it->first)))
+    if (!crit.isSatisfied(map->getNode(it->first)))
         nids.append(it->first);
   }
 
@@ -382,7 +382,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
     // Make sure that building ways are "complete"
     const vector<long>& nodes = w->getNodeIds();
     bool valid = true;
-    if (AreaCriterion().isSatisfied(*w))
+    if (AreaCriterion().isSatisfied(w))
     {
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
@@ -493,7 +493,7 @@ void OsmGbdxXmlWriter::_writeWayWithPoints(const ConstWayPtr& w, ConstOsmMapPtr 
   QString endBracket;
 
   const vector<long>& nodes = w->getNodeIds();
-  if (AreaCriterion().isSatisfied(*w) || nodes[0] == nodes[nodes.size() - 1])
+  if (AreaCriterion().isSatisfied(w) || nodes[0] == nodes[nodes.size() - 1])
   {
     featureGeometry = "Polygon";
     endBracket = "))";

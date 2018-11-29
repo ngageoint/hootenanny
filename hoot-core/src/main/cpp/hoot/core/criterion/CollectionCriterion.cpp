@@ -45,16 +45,16 @@ bool CollectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
-  if (e.getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation)
   {
-    const Relation& r = dynamic_cast<const Relation&>(e);
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
 
     // This list could get HUGE.
-    if (r.getType() == MetadataTags::RelationWaterway() ||
-        r.getType() == MetadataTags::RelationNetwork() ||
-        r.getType() == MetadataTags::RelationRouteMaster() ||
-        r.getType() == MetadataTags::RelationSuperRoute() ||
-        r.getType() == MetadataTags::RelationRoute())
+    if (r->getType() == MetadataTags::RelationWaterway() ||
+        r->getType() == MetadataTags::RelationNetwork() ||
+        r->getType() == MetadataTags::RelationRouteMaster() ||
+        r->getType() == MetadataTags::RelationSuperRoute() ||
+        r->getType() == MetadataTags::RelationRoute())
     {
       result = true;
     }

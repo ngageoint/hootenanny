@@ -79,7 +79,7 @@ void PertyWaySplitVisitor::setConfiguration(const Settings& conf)
 void PertyWaySplitVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   LOG_TRACE(e->getElementType());
-  if (HighwayCriterion().isSatisfied(*e))
+  if (HighwayCriterion().isSatisfied(e))
   {
     _split(e);
   }

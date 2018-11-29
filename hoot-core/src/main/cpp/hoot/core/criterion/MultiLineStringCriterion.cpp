@@ -38,10 +38,10 @@ HOOT_FACTORY_REGISTER(ElementCriterion, MultiLineStringCriterion)
 
 bool MultiLineStringCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e.getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation)
   {
-    const Relation& r = dynamic_cast<const Relation&>(e);
-    return r.getType() == MetadataTags::RelationMultilineString();
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    return r->getType() == MetadataTags::RelationMultilineString();
   }
   return false;
 }

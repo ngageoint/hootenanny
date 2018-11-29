@@ -38,7 +38,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
 bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
-  const QString oneway = e.getTags()["oneway"].toLower();
+  const QString oneway = e->getTags()["oneway"].toLower();
   if (oneway == "-1" || oneway == "reverse")
   {
     result = true;

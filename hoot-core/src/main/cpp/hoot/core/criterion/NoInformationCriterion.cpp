@@ -40,7 +40,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
 
 bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const Tags tags = e.getTags();
+  const Tags tags = e->getTags();
   const int informationCount = tags.getInformationCount();
   const int reviewTagCount =
     tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
@@ -62,7 +62,6 @@ bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
 void NoInformationCriterion::setConfiguration(const Settings& conf)
 {
   _treatReviewTagsAsMetadata = ConfigOptions(conf).getWriterCleanReviewTags();
-  //LOG_VART(_treatReviewTagsAsMetadata);
 }
 
 }

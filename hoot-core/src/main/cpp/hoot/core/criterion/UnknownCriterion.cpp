@@ -36,7 +36,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, UnknownCriterion)
 
 bool UnknownCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e.isUnknown();
+  return e->isUnknown();
 }
 
 }

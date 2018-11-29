@@ -96,7 +96,7 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     const WayPtr& w = it->second;
     // if the way isn't in the map anymore (deleted as part of this process) or the way is an
     // area type (different treatment).
-    if (_map->containsWay(key) == false || !LinearCriterion().isSatisfied(*w))
+    if (_map->containsWay(key) == false || !LinearCriterion().isSatisfied(w))
       continue;
 
     // create a map of all the ways that share nodes with this way and the number of nodes shared
@@ -153,7 +153,7 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
 bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
 {
   // is this a linear way
-  return (LinearCriterion().isSatisfied(*w) &&
+  return (LinearCriterion().isSatisfied(w) &&
       // if this is not part of a relation
       _map->getIndex().getParents(w->getElementId()).size() == 0);
 }
@@ -222,12 +222,12 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
   else if (!rev1 && !rev2)
   {
     //  Reverse one of the ways and try again
-    if (oneWayCrit.isSatisfied(*w1) == false)
+    if (oneWayCrit.isSatisfied(w1) == false)
     {
       w1->reverseOrder();
       _splitDuplicateWays(w1, w2, true, false);
     }
-    else if (oneWayCrit.isSatisfied(*w2) == false)
+    else if (oneWayCrit.isSatisfied(w2) == false)
     {
       w2->reverseOrder();
       _splitDuplicateWays(w1, w2, false, true);

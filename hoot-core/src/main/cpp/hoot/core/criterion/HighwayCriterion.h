@@ -28,6 +28,7 @@
 #define HIGHWAYCRITERION_H
 
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
@@ -38,6 +39,7 @@ namespace hoot
 class HighwayCriterion : public ElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::HighwayCriterion"; }
 
   HighwayCriterion() {}

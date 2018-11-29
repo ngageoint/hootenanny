@@ -36,7 +36,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, StatusCriterion)
 
 bool StatusCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return _status == e.getStatus();
+  return _status == e->getStatus();
 }
 
 void StatusCriterion::setConfiguration(const Settings& conf)

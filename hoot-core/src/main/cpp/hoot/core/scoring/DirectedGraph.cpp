@@ -123,7 +123,7 @@ void DirectedGraph::deriveEdges(boost::shared_ptr<const OsmMap> map)
 
 bool DirectedGraph::isOneWay(boost::shared_ptr<Way> way)
 {
-  return OneWayCriterion().isSatisfied(*way);
+  return OneWayCriterion().isSatisfied(way);
 }
 
 }

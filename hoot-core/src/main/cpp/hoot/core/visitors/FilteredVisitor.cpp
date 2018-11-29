@@ -105,7 +105,7 @@ void FilteredVisitor::setOsmMap(const OsmMap* map)
 }
 void FilteredVisitor::visit(const ConstElementPtr& e)
 {
-  if (_criterion->isSatisfied(*e))
+  if (_criterion->isSatisfied(e))
   {
     _visitor->visit(e);
   }

@@ -51,7 +51,7 @@ _tagIgnoreList(tagIgnoreList)
 
 bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const Tags& tags = e.getTags();
+  const Tags& tags = e->getTags();
 
   //Using this looser definition b/c isLinearHighway will return false if any tag is in an area
   //category and not a linestring category, which still gives us some features we don't want to

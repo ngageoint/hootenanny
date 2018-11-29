@@ -135,10 +135,9 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
 
 bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e.getElementType() == ElementType::Way)
+  if (e->getElementType() == ElementType::Way)
   {
-    const Way& w = dynamic_cast<const Way&>(e);
-    ConstWayPtr way(new Way(w));
+    ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(e);
     double difference = calculateDifference(way);
 
     // If the mean "normals" are within 10 degrees of perpendicular.

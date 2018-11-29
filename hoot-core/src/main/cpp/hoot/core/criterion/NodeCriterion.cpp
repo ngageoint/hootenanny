@@ -41,7 +41,7 @@ NodeCriterion::NodeCriterion()
 
 bool NodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e.getElementType() == ElementType::Node;
+  return e->getElementType() == ElementType::Node;
 }
 
 }

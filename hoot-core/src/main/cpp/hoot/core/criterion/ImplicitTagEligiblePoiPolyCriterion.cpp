@@ -40,7 +40,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ImplicitTagEligiblePoiPolyCriterion)
 
 bool ImplicitTagEligiblePoiPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e.getTags().getNames().size() > 0 && hasEligibleKvp(e.getTags());
+  return e->getTags().getNames().size() > 0 && hasEligibleKvp(e->getTags());
 }
 
 QStringList ImplicitTagEligiblePoiPolyCriterion::getEligibleKvps(const Tags& tags) const

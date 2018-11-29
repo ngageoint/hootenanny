@@ -50,7 +50,7 @@ ElementPtr ElementCriterionInputStream::readNextElement()
   do
   {
     ElementPtr e = _elementSource->readNextElement();
-    if (_criterion->isSatisfied(*e))
+    if (_criterion->isSatisfied(e))
     {
       return e;
     }

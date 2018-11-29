@@ -43,18 +43,18 @@ MultiUseBuildingCriterion::MultiUseBuildingCriterion()
 bool MultiUseBuildingCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const OsmSchema& osmSchema = OsmSchema::getInstance();
-  const ElementType elementType = e.getElementType();
+  const ElementType elementType = e->getElementType();
   LOG_VART(elementType);
-  const Tags& tags = e.getTags();
+  const Tags& tags = e->getTags();
   LOG_VART(tags);
-  LOG_VART(osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()));
+  LOG_VART(osmSchema.getCategories(e->getTags()).intersects(OsmSchemaCategory::building()));
   LOG_VART(tags.contains("amenity"));
   LOG_VART(osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
 
   //(element is in a building category OR is an amenity) AND
   //(element has a multi-purpose building tag OR is in a multi-use category)
   return
-    (osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
+    (osmSchema.getCategories(e->getTags()).intersects(OsmSchemaCategory::building()) ||
       tags.contains("amenity")) &&
     (tags.get("building:use") == "multipurpose" ||
      osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));

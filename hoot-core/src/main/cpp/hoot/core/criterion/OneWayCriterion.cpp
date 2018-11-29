@@ -38,8 +38,8 @@ HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
 bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
-  const QString oneway = e.getTags()["oneway"].toLower();
-  if (e.getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
+  const QString oneway = e->getTags()["oneway"].toLower();
+  if (e->getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
   {
     result = true;
   }

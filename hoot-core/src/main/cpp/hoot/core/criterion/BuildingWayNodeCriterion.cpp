@@ -57,16 +57,16 @@ bool BuildingWayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
     throw HootException("You must set the map before calling BuildingWayNodeCriterion");
   }
 
-  if (e.getElementType() == ElementType::Node)
+  if (e->getElementType() == ElementType::Node)
   {
     const set<long> waysContainingNode =
-      _map->getIndex().getNodeToWayMap()->getWaysByNode(e.getElementId().getId());
+      _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getElementId().getId());
     for (set<long>::const_iterator it = waysContainingNode.begin();
          it != waysContainingNode.end(); ++it)
     {
       const long wayId = *it;
       if (_map->containsElement(ElementId(ElementType::Way, wayId)) &&
-          BuildingCriterion().isSatisfied(*(_map->getWay(wayId))))
+          BuildingCriterion().isSatisfied(_map->getWay(wayId)))
       {
         result = true;
         break;
@@ -95,7 +95,7 @@ long BuildingWayNodeCriterion::getMatchingWayId(const ConstElementPtr& e)
     {
       const long wayId = *it;
       if (_map->containsElement(ElementId(ElementType::Way, wayId)) &&
-          BuildingCriterion().isSatisfied(*(_map->getWay(wayId))))
+          BuildingCriterion().isSatisfied(_map->getWay(wayId)))
       {
         return wayId;
         break;

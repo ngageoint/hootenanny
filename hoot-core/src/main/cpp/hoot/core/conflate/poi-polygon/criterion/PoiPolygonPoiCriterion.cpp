@@ -51,7 +51,7 @@ _tagIgnoreList(tagIgnoreList)
 
 bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const Tags& tags = e.getTags();
+  const Tags& tags = e->getTags();
 
   //see note in PoiPolygonPolyCriterion::isSatisified
   if (OsmSchema::getInstance().containsTagFromList(tags, _tagIgnoreList))
@@ -61,7 +61,7 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   LOG_TRACE("Does not contain tag from tag ignore list");
 
-  const bool isNode = e.getElementType() == ElementType::Node;
+  const bool isNode = e->getElementType() == ElementType::Node;
   if (!isNode)
   {
     return false;
@@ -79,8 +79,7 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 
   if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois())
   {
-    const Node& node = dynamic_cast<const Node&>(e);
-    if (_addressParser.hasAddress(node))
+    if (_addressParser.hasAddress(*boost::dynamic_pointer_cast<Node>(e)))
     {
       isPoi = true;
     }

@@ -46,7 +46,7 @@ void HasAddressCriterion::setConfiguration(const Settings& conf)
 
 bool HasAddressCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return _addressParser.hasAddress(e);
+  return _addressParser.hasAddress(*e);
 }
 
 }

@@ -43,7 +43,7 @@ AreaCriterion::AreaCriterion()
 
 bool AreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return isSatisfied(e.getTags(), e.getElementType());
+  return isSatisfied(e->getTags(), e->getElementType());
 }
 
 bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType) const

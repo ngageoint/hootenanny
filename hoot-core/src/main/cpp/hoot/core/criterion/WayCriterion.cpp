@@ -41,7 +41,7 @@ WayCriterion::WayCriterion()
 
 bool WayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e.getElementType() == ElementType::Way;
+  return e->getElementType() == ElementType::Way;
 }
 
 }

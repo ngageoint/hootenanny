@@ -67,7 +67,7 @@ bool TagKeyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (int i = 0; i < _keys.size(); i++)
   {
-    if (e.getTags().contains(_keys[i]))
+    if (e->getTags().contains(_keys[i]))
     {
       return true;
     }

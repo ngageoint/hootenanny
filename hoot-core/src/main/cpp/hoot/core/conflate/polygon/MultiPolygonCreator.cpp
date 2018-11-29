@@ -209,7 +209,7 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
         (e.role == MetadataTags::RoleOuter() || e.role == MetadataTags::RolePart()))
     {
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
-      if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(*r)))
+      if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(r)))
       {
         boost::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
         try

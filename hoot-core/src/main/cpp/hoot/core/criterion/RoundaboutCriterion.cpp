@@ -47,9 +47,9 @@ bool RoundaboutCriterion::isSatisfied(const ConstElementPtr& e) const
 
   // Now check some details...
   bool result = false;
-  Tags::const_iterator tagIt = e.getTags().find("junction");
+  Tags::const_iterator tagIt = e->getTags().find("junction");
 
-  if (tagIt != e.getTags().end() && tagIt.value().toLower() == "roundabout")
+  if (tagIt != e->getTags().end() && tagIt.value().toLower() == "roundabout")
   {
     result = true;
   }

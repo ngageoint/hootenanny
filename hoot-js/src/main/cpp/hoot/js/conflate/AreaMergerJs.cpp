@@ -78,8 +78,8 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
   {
     const ConstWayPtr& way = it->second;
     LOG_VART(way->getId());
-    LOG_VART(nonBuildingAreaCrit.isSatisfied(*way));
-    if (way->getElementId() != mergeTargetId && nonBuildingAreaCrit.isSatisfied(*way))
+    LOG_VART(nonBuildingAreaCrit.isSatisfied(way));
+    if (way->getElementId() != mergeTargetId && nonBuildingAreaCrit.isSatisfied(way))
     {
       LOG_TRACE("Merging way area: " << way << " into " << mergeTargetId);
 
@@ -100,8 +100,8 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
   {
     const ConstRelationPtr& relation = it->second;
     LOG_VART(relation->getId());
-    LOG_VART(nonBuildingAreaCrit.isSatisfied(*relation));
-    if (relation->getElementId() != mergeTargetId && nonBuildingAreaCrit.isSatisfied(*relation))
+    LOG_VART(nonBuildingAreaCrit.isSatisfied(relation));
+    if (relation->getElementId() != mergeTargetId && nonBuildingAreaCrit.isSatisfied(relation))
     {
       LOG_TRACE("Merging relation area: " << relation << " into " << mergeTargetId);
 

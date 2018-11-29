@@ -137,7 +137,7 @@ void WayMerger::_findMatches(long baseWayId)
   HighwayCriterion highwayCrit;
 
   // if it isn't a highway we can't merge it.
-  if (highwayCrit.isSatisfied(*baseWay) == false)
+  if (highwayCrit.isSatisfied(baseWay) == false)
   {
     return;
   }
@@ -150,7 +150,7 @@ void WayMerger::_findMatches(long baseWayId)
   {
     ConstWayPtr otherWay = _map->getWay(otherWays[oi]);
 
-    if (otherWay->isUnknown() && baseWay->isUnknown() && highwayCrit.isSatisfied(*otherWay))
+    if (otherWay->isUnknown() && baseWay->isUnknown() && highwayCrit.isSatisfied(otherWay))
     {
       // create a new manipulation and add it onto the result.
       boost::shared_ptr<Manipulation> m(_createManipulation(baseWay->getId(), otherWay->getId(),

@@ -60,20 +60,20 @@ void ContainsNodeCriterion::setConfiguration(const Settings& s)
 
 bool ContainsNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e.getElementType() == ElementType::Way)
+  if (e->getElementType() == ElementType::Way)
   {
-    const Way& w = dynamic_cast<const Way&>(e);
-    return w.hasNode(_nodeId);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+    return w->hasNode(_nodeId);
   }
-  else if (e.getElementType() == ElementType::Relation)
+  else if (e->getElementType() == ElementType::Relation)
   {
-    const Relation& r = dynamic_cast<const Relation&>(e);
-    return r.contains(ElementId(ElementType::Node, _nodeId));
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    return r->contains(ElementId(ElementType::Node, _nodeId));
   }
-  else if (e.getElementType() == ElementType::Node)
+  else if (e->getElementType() == ElementType::Node)
   {
-    const Node& n = dynamic_cast<const Node&>(e);
-    return (n.getId() == _nodeId);
+    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+    return (n->getId() == _nodeId);
   }
   return false;
 }

@@ -121,7 +121,7 @@ void ElementCriterionJs::isSatisfied(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, ec->isSatisfied(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, ec->isSatisfied(e)));
 }
 
 void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)

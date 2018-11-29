@@ -136,7 +136,7 @@ void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
   {
     const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
-    if (BuildingCriterion().isSatisfied(*r))
+    if (BuildingCriterion().isSatisfied(r))
     {
       _createOutline(r);
     }

@@ -107,7 +107,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   LOG_VART(id);
   const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
 
-  if (_criterion->isSatisfied(*ee))
+  if (_criterion->isSatisfied(ee))
   {
     LOG_TRACE("RemoveElementsVisitor criterion satisfied");
     LOG_VART(_recursive);

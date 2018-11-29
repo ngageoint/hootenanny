@@ -60,11 +60,11 @@ public:
   {
     bool result = false;
 
-    if (e.getElementType() == ElementType::Node && e.getTags().getInformationCount() == 0)
+    if (e->getElementType() == ElementType::Node && e->getTags().getInformationCount() == 0)
     {
       result = true;
     }
-    else if (e.getElementType() != ElementType::Node)
+    else if (e->getElementType() != ElementType::Node)
     {
       if (_buildingCrit.isSatisfied(e) || _buildingPartCrit.isSatisfied(e))
       {
@@ -448,7 +448,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const ConstWayPtr& way = wayItr->second;
-    if (way->getElementId() != mergeTargetId && buildingCrit.isSatisfied(*way))
+    if (way->getElementId() != mergeTargetId && buildingCrit.isSatisfied(way))
     {
       LOG_VART(way);
       std::set<std::pair<ElementId, ElementId> > pairs;
@@ -465,7 +465,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
   for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
   {
     const ConstRelationPtr& relation = relItr->second;
-    if (relation->getElementId() != mergeTargetId && buildingCrit.isSatisfied(*relation))
+    if (relation->getElementId() != mergeTargetId && buildingCrit.isSatisfied(relation))
     {
       LOG_VART(relation);
       std::set<std::pair<ElementId, ElementId> > pairs;

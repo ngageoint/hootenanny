@@ -52,7 +52,7 @@ void UnionPolygonsVisitor::visit(const boost::shared_ptr<const Element>& e)
     return;
   }
 
-  if (AreaCriterion().isSatisfied(*e))
+  if (AreaCriterion().isSatisfied(e))
   {
     boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
     _result.reset(g->Union(_result.get()));

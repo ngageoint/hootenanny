@@ -42,7 +42,7 @@ RailwayCriterion::RailwayCriterion()
 
 bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Way || e->getElementType() == ElementType::Relation)
   {
     const Tags& tags = e.getTags();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
