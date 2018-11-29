@@ -29,14 +29,14 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/RubberSheet.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 using namespace std;
 

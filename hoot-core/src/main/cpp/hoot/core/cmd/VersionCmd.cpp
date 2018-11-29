@@ -38,7 +38,7 @@
 
 // Hoot
 #include <hoot/core/HootConfig.h>
-#include <hoot/core/Version.h>
+#include <hoot/core/info/Version.h>
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>

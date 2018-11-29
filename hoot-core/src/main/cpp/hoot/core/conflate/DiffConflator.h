@@ -28,7 +28,7 @@
 #define DIFFCONFLATOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
 #include <hoot/core/io/Serializable.h>

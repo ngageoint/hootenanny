@@ -35,9 +35,9 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>

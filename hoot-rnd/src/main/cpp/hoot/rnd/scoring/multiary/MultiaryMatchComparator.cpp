@@ -27,9 +27,9 @@
 #include "MultiaryMatchComparator.h"
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>

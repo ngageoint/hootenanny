@@ -1008,13 +1008,17 @@ tds.rules = {
 
     // ETS - Extraction Specification
     // ['ETS','-999999',undefined,undefined], // No Information
-    ['ETS','tpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
-    ['ETS','onc','source:extraction_specification','1ab-onc'], // 1AB-ONC
-    ['ETS','jogAirGround','source:extraction_specification','1ae-jog-a/g'], // 1AE-JOG-A/G
-    ['ETS','dted1','source:extraction_specification','1cd-dted-1'], // 1CD-DTED-1
+    ['ETS','atc','source:extraction_specification','4aa-atc'], // 4AA-ATC
+    ['ETS','combat','source:extraction_specification','2ad-combat'], // 2AD-Combat
     ['ETS','dfad1','source:extraction_specification','1ce-dfad-1'], // 1CE-DFAD-1
-    ['ETS','dted2','source:extraction_specification','1cf-dted-2'], // 1CF-DTED-2
     ['ETS','dfad2','source:extraction_specification','1cg-dfad-2'], // 1CG-DFAD-2
+    ['ETS','digitalFeg','source:extraction_specification','dfeg'], // DFEG
+    ['ETS','dnc','source:extraction_specification','dnc'], // DNC
+    ['ETS','dted1','source:extraction_specification','1cd-dted-1'], // 1CD-DTED-1
+    ['ETS','dted2','source:extraction_specification','1cf-dted-2'], // 1CF-DTED-2
+    ['ETS','dtop','source:extraction_specification','3kc/001-dtop'], // 3KC/001-DTOP
+    ['ETS','ffd','source:extraction_specification','5ee-ffd'], // 5EE-FFD
+    ['ETS','globalTdsEg','source:extraction_specification','gtds-eg'], // GTDS-EG
     ['ETS','hac1','source:extraction_specification','2aa/001-hac-1'], // 2AA/001-HAC-1
     ['ETS','hac2','source:extraction_specification','2aa/002-hac-2'], // 2AA/002-HAC-2
     ['ETS','hac3','source:extraction_specification','2aa/003-hac-3'], // 2AA/003-HAC-3
@@ -1024,24 +1028,8 @@ tds.rules = {
     ['ETS','hac7','source:extraction_specification','2aa/007-hac-7'], // 2AA/007-HAC-7
     ['ETS','hac8','source:extraction_specification','2aa/008-hac-8'], // 2AA/008-HAC-8
     ['ETS','hac9','source:extraction_specification','2aa/009-hac-9'], // 2AA/009-HAC-9
-    ['ETS','combat','source:extraction_specification','2ad-combat'], // 2AD-Combat
-    ['ETS','tlm50','source:extraction_specification','3aa-tlm50'], // 3AA-TLM50
-    ['ETS','tlm100','source:extraction_specification','3ag-tlm100'], // 3AG-TLM100
-    ['ETS','vitd','source:extraction_specification','3ka-vitd'], // 3KA-VITD
-    ['ETS','dtop','source:extraction_specification','3kc/001-dtop'], // 3KC/001-DTOP
-    ['ETS','vmap2','source:extraction_specification','3kh-vmap-2'], // 3KH-VMap-2
-    ['ETS','vmap0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
-    ['ETS','vmap1','source:extraction_specification','3km-vmap-1'], // 3KM-VMap-1
-    ['ETS','uvmap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
-    ['ETS','atc','source:extraction_specification','4aa-atc'], // 4AA-ATC
+    ['ETS','jogAirGround','source:extraction_specification','1ae-jog-a/g'], // 1AE-JOG-A/G
     ['ETS','jogRadar','source:extraction_specification','4ac-jog-r'], // 4AC-JOG-R
-    ['ETS','tercomL','source:extraction_specification','4ge-tercom-l'], // 4GE-TERCOM-L
-    ['ETS','tercomE','source:extraction_specification','4gf-tercom-e'], // 4GF-TERCOM-E
-    ['ETS','tercomT','source:extraction_specification','4gg-tercom-t'], // 4GG-TERCOM-T
-    ['ETS','ffd','source:extraction_specification','5ee-ffd'], // 5EE-FFD
-    ['ETS','digitalFeg','source:extraction_specification','dfeg'], // DFEG
-    ['ETS','dnc','source:extraction_specification','dnc'], // DNC
-    ['ETS','globalTdsEg','source:extraction_specification','gtds-eg'], // GTDS-EG
     ['ETS','localTdsEg','source:extraction_specification','ltds-eg'], // LTDS-EG
     ['ETS','mgcpTrd','source:extraction_specification','mgcp-trd'], // MGCP TRD
     ['ETS','msd1','source:extraction_specification','msd1'], // MSD1
@@ -1049,14 +1037,26 @@ tds.rules = {
     ['ETS','msd3','source:extraction_specification','msd3'], // MSD3
     ['ETS','msd4','source:extraction_specification','msd4'], // MSD4
     ['ETS','msd5','source:extraction_specification','msd5'], // MSD5
+    ['ETS','onc','source:extraction_specification','1ab-onc'], // 1AB-ONC
+    ['ETS','other','source:extraction_specification','other'], // Other
     ['ETS','regionalTdsEg','source:extraction_specification','rtds-eg'], // RTDS-EG
     ['ETS','specUrbanTdsEg','source:extraction_specification','s-utds-eg'], // S-UTDS-EG
+    ['ETS','tercomE','source:extraction_specification','4gf-tercom-e'], // 4GF-TERCOM-E
+    ['ETS','tercomL','source:extraction_specification','4ge-tercom-l'], // 4GE-TERCOM-L
+    ['ETS','tercomT','source:extraction_specification','4gg-tercom-t'], // 4GG-TERCOM-T
+    ['ETS','tlm100','source:extraction_specification','3ag-tlm100'], // 3AG-TLM100
+    ['ETS','tlm50','source:extraction_specification','3aa-tlm50'], // 3AA-TLM50
     ['ETS','tod0','source:extraction_specification','tod0'], // TOD0
     ['ETS','tod1','source:extraction_specification','tod1'], // TOD1
     ['ETS','tod2','source:extraction_specification','tod2'], // TOD2
     ['ETS','tod3','source:extraction_specification','tod3'], // TOD3
     ['ETS','tod4','source:extraction_specification','tod4'], // TOD4
-    ['ETS','other','source:extraction_specification','other'], // Other
+    ['ETS','tpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
+    ['ETS','uvmap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
+    ['ETS','vitd','source:extraction_specification','3ka-vitd'], // 3KA-VITD
+    ['ETS','vmap0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
+    ['ETS','vmap1','source:extraction_specification','3km-vmap-1'], // 3KM-VMap-1
+    ['ETS','vmap2','source:extraction_specification','3kh-vmap-2'], // 3KH-VMap-2
 
     // ETY - Engine Test Cell Type -- Wow....
     // ['ETY','-999999',undefined,undefined], // No Information

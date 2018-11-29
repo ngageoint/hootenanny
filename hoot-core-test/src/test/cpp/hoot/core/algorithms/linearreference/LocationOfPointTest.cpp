@@ -35,7 +35,7 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>

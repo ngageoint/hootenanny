@@ -28,7 +28,7 @@
 #define POIPOLYGONMATCHCREATOR_H
 
 // hoot
-#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>

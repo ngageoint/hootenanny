@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {

@@ -28,7 +28,7 @@
 #include "ImpliedDividedMarker.h"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/ChainCriterion.h>

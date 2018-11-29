@@ -20058,7 +20058,7 @@
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (104m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.198771/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
+        <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: no (104m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.198771/1), address: yes (score: 1/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
         <tag k="hoot:review:sort_order" v="67"/>
         <tag k="type" v="review"/>
     </relation>

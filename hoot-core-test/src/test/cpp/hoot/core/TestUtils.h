@@ -35,7 +35,7 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -93,11 +93,18 @@ namespace hoot
 class TestUtils
 {
 public:
+
   class RegisteredReset
   {
   public:
+
     virtual void reset() = 0;
   };
+
+  static const QString HOUSE_NUMBER_TAG_NAME;
+  static const QString STREET_TAG_NAME;
+  static const QString FULL_ADDRESS_TAG_NAME;
+  static const QString FULL_ADDRESS_TAG_NAME_2;
 
   TestUtils();
 
@@ -173,6 +180,7 @@ public:
   static bool mkpath(const QString& path);
 
 private:
+
   QList<RegisteredReset*> _resets;
 
   static boost::shared_ptr<TestUtils> _theInstance;
@@ -185,6 +193,7 @@ template<class T>
 class AutoRegisterResetInstance : public TestUtils::RegisteredReset
 {
 public:
+
   AutoRegisterResetInstance()
   {
     TestUtils::getInstance()->registerReset(this);
@@ -199,10 +208,10 @@ public:
 #define TEST_UTILS_REGISTER_RESET(ClassName)      \
   static hoot::AutoRegisterResetInstance<ClassName> ClassName##AutoRegisterReset;
 
-
 class HootTestFixture : public CppUnit::TestFixture
 {
 protected:
+
   enum HootTestReset
   {
     ResetNone,
@@ -220,6 +229,7 @@ protected:
   void setResetType(HootTestReset reset) { _reset = reset; }
 
 public:
+
   /**
    * @brief setUp Overload of the CppUnit::TextFixture::setUp() to reset Hootenanny environment
    */
@@ -232,6 +242,7 @@ public:
   }
 
 private:
+
   /** Reset flag on setup to reset nothing, basic IDs, or everything */
   HootTestReset _reset;
 };

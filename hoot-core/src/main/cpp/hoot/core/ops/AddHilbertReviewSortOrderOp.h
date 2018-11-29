@@ -28,7 +28,7 @@
 #define __ADD_HILBERT_REVIEW_SORT_ORDER_H__
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 

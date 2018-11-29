@@ -28,8 +28,8 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/util/MetadataTags.h>
 
 namespace hoot

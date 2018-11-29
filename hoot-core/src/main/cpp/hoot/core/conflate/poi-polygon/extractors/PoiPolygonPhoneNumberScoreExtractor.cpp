@@ -31,12 +31,12 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
-#include <phonenumbers/phonenumbermatcher.h>
-#include <phonenumbers/phonenumbermatch.h>
+//#include <phonenumbers/phonenumbermatcher.h>
+//#include <phonenumbers/phonenumbermatch.h>
 using namespace i18n::phonenumbers;
 
 namespace hoot

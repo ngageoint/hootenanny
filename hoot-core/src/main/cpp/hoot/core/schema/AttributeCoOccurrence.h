@@ -29,7 +29,7 @@
 #define ATTRIBUTECOOCCURRENCE_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // tgs
 #include <tgs/HashMap.h>

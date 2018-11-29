@@ -30,7 +30,7 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {

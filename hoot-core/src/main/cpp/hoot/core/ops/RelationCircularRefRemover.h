@@ -29,7 +29,7 @@
 #define RELATION_CIRCULAR_REF_REMOVER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 

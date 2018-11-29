@@ -28,7 +28,7 @@
 #define FEATUREEXTRACTOR_JS_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 
 // node.js
 #include <hoot/js/util/DataConvertJs.h>

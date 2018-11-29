@@ -28,10 +28,10 @@
 #include "AttributeCoOccurrence.h"
 
 // Hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/conflate/extractors/NameExtractor.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/extractors/NameExtractor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/language/TranslateStringDistance.h>

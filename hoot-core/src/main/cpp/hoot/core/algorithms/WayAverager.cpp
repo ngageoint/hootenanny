@@ -36,7 +36,7 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>

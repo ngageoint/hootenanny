@@ -37,7 +37,7 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>

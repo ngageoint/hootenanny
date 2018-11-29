@@ -27,7 +27,7 @@
 #include "BuildingMerger.h"
 
 // hoot
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>

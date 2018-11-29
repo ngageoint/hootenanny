@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/visitors/FilteredVisitor.h>

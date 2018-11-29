@@ -28,7 +28,7 @@
 #ifndef WORSTCIRCULARERRORVISITOR_H
 #define WORSTCIRCULARERRORVISITOR_H
 
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 

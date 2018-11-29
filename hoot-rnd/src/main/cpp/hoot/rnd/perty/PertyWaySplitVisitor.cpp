@@ -32,11 +32,11 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/algorithms/WaySplitter.h>
-#include <hoot/core/algorithms/MultiLineStringSplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 

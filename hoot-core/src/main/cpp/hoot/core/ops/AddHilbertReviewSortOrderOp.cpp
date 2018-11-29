@@ -29,8 +29,8 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
