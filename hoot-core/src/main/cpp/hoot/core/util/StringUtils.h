@@ -29,7 +29,7 @@
 #define STRINGUTILS_H
 
 // Qt
-#include <QString>
+#include <QStringList>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -71,12 +71,29 @@ public:
   static bool hasAlphabeticCharacter(const QString input);
 
   /**
+   * Determines whether a string contains a number
+   *
+   * @param input string to examine
+   * @return true if the input has at least one number; false otherwise
+   */
+  static bool hasDigit(const QString input);
+
+  /**
    * Converts a JSON string to a Boost property tree
    *
    * @param jsonStr the string to convert
    * @return a Boost property tree
    */
   static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
+
+  /**
+   * Creates a JSON array from a strings
+   *
+   * @param stringList a list of strings
+   * @return a Boost JSON property tree containing a string array
+   */
+  static boost::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
+    const QStringList stringList);
 
   /**
    * Determines if text is a number

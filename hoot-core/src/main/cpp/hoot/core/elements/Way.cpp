@@ -29,9 +29,9 @@
 
 // Hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/Node.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include "Node.h"
 
 // Boost
 using namespace boost;
@@ -347,6 +347,11 @@ bool Way::isFirstLastNodeIdentical() const
   }
 
   return ( getFirstNodeId() == getLastNodeId() );
+}
+
+bool Way::isClosedArea() const
+{
+  return getNodeCount() > 3 && getFirstNodeId() == getLastNodeId();
 }
 
 long Way::getPid(const ConstWayPtr& p, const ConstWayPtr& c)

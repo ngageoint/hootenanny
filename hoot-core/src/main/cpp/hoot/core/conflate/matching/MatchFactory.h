@@ -38,7 +38,6 @@ namespace hoot
 {
 
 class Match;
-class MergeCreator;
 class MatchThreshold;
 
 class MatchFactory

@@ -27,8 +27,8 @@
 #ifndef NOTCRITERION_H
 #define NOTCRITERION_H
 
-#include "ElementCriterion.h"
-#include "ElementCriterionConsumer.h"
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {
@@ -43,7 +43,7 @@ public:
   NotCriterion(ElementCriterion* c) : _child(c) {}
   NotCriterion(ElementCriterionPtr c) : _child(c) {}
 
-  virtual ~NotCriterion() {}
+  //virtual ~NotCriterion() {}
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 

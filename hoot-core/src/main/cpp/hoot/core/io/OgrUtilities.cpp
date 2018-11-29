@@ -31,14 +31,13 @@
 #include <gdal_priv.h>
 
 // hoot
+#include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
 #include <QStringList>
-
-#include "OgrOptions.h"
 
 using namespace std;
 
@@ -181,10 +180,18 @@ boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, b
    * loaded which has been known to cause issues.
    */
   OgrDriverInfo driverInfo = getDriverInfo(url, readonly);
+
+  // With GDALOpenEx, we need to specify the GDAL_OF_UPDATE option or the dataset will get opened
+  // Read Only.
+  if (! readonly)
+  {
+    driverInfo._driverType = driverInfo._driverType | GDAL_OF_UPDATE;
+  }
   LOG_VART(driverInfo._driverName);
   LOG_VART(driverInfo._driverType);
-  const char* drivers[2] = { driverInfo._driverName, NULL };
   LOG_VART(url.toUtf8().data());
+
+  const char* drivers[2] = { driverInfo._driverName, NULL };
 
   // Setup read options for various file types
   OgrOptions options;

@@ -60,5 +60,13 @@
         "isA": "power",
         "name": "power=cable",
         "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "area"
+        ],
+        "isA": "power",
+        "name": "power=substation",
+        "objectType": "tag"
     }
 ]

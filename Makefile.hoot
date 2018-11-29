@@ -2,7 +2,7 @@
 # If the silent flag is passed to make then make Maven and npm quiet too.
 ifneq (,$(findstring s,$(MAKEFLAGS)))
 	MVN_QUIET='-q'
-	NPM_QUIET='-s' # > /dev/null'
+	NPM_QUIET=-s > /dev/null 2>&1
 else
 	HOOT_TEST_DIFF='--diff'
 endif
@@ -340,9 +340,9 @@ ifeq ($(BUILD_UI_TESTS),uitests)
 endif
 
 ui2x-build:
-ifeq ($(BUILD_UI_TESTS),uitests)
-	cd hoot-ui-2x \
-	npm i $(NPM_QUIET) \
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-ui-2x && \
+	npm i $(NPM_QUIET) && \
 	npm run production $(NPM_QUIET)
 endif
 

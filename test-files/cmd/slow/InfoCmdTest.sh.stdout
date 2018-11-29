@@ -3610,21 +3610,81 @@ Listing an output format...
 
 .shp
 
+Listing detectable languages...
+
+detectable languages:
+
+Code: de
+Name: German
+Available: yes
+
+Code: es
+Name: Spanish
+Available: yes
+
+2 languages are supported for detection.
+Currently, 2 of those languages are available for detection.
+
+Listing translatable languages...
+
+translatable languages:
+
+Code: de
+Name: German
+Available: yes
+
+Code: es
+Name: Spanish
+Available: yes
+
+2 languages are supported for translation.
+Currently, 2 of those languages are available for translation.
+
+Listing available language detectors...
+
+Available language detectors:
+
+Name: TikaLanguageDetector
+Description: blah
+URL: https://tika.apache.org
+Supports confidence: yes
+
+Name: OpenNlpLanguageDetector
+Description: more blah
+URL: https://opennlp.apache.org
+Supports confidence: no
+
+2 detectors are available.
+
+Listing available to English language translators...
+
+Available language translators:
+
+Name: JoshuaLanguageTranslator
+Description: blah
+URL: https://cwiki.apache.org/confluence/display/JOSHUA
+
+Name: HootLanguageTranslator
+Description: more blah
+URL: N/A
+
+2 translators are available.
+
 Listing a match creator...
 
-  HighwayMatchCreator                             matches roads with the non-greedy algorithm
+  HighwayMatchCreator                             Matches roads with the non-greedy algorithm
 
 Listing a script match creator...
 
-  ScriptMatchCreator,PoiGeneric.js                matches POIs
+  ScriptMatchCreator,PoiGeneric.js                Matches POIs
 
 Listing a merger...
 
-  PoiPolygonMergerCreator                         merges POIs into polygons
+  PoiPolygonMergerCreator                         Merges POIs into polygons
 
 Listing a script merger...
 
-  ScriptMergerCreator                             Script merge creator required by all script match creators.
+  ScriptMergerCreator                             Script merge creator required by all script match creators
 
 Listing an op...
 
@@ -3640,5 +3700,9 @@ Listing a criterion...
 
 Listing a tag merger...
 
-  AverageTagMerger                   Keeps tags from both reference and secondary features.  Overlapping tags are averaged together
+  AverageTagMerger                   Keeps tags from both features; overlapping tags are averaged together
+
+Listing cleaning operations...
+
+  DuplicateWayRemover                          operation         Removes duplicate ways from a map
 

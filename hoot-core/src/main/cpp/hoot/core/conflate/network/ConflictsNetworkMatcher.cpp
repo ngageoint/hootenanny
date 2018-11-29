@@ -27,11 +27,11 @@
 #include "ConflictsNetworkMatcher.h"
 
 // hoot
+#include <hoot/core/algorithms/frechet/FrechetDistance.h>
+#include <hoot/core/conflate/network/EdgeMatch.h>
+#include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/network/EdgeMatch.h>
-#include <hoot/core/algorithms/frechet/FrechetDistance.h>
-#include "EdgeMatchSetFinder.h"
 
 using namespace geos::geom;
 using namespace std;

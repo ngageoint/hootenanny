@@ -27,10 +27,9 @@
 #ifndef STATUSCRITERION_H
 #define STATUSCRITERION_H
 
-#include "ElementCriterion.h"
-
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/Status.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -54,7 +53,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatusCriterion(_status)); }
 
-  virtual QString getDescription() const { return "Filters based on element status"; }
+  virtual QString getDescription() const { return "Identifies elements with a particular status"; }
 
 private:
 

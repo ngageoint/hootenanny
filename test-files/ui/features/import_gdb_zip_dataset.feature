@@ -15,6 +15,7 @@ Feature: Import Zipped GDB Dataset
         Then I type "gdb_zip_Cucumber" in input "importDatasetLayerName"
         When I press "big.loud" span with text "Import"
         Then I wait 45 "seconds" to not see "Import Dataset"
+        And I wait 1 seconds
 
     Scenario: Delete Dataset
         And I click the "gdb_zip_Cucumber" Dataset

@@ -20,7 +20,7 @@ The +conflate+ command conflates two maps into a single map.  If the specified o
 
 --------------------------------------
 conflate (input1) [input2] (output) [--differential] [--stats filename]
----------------------------------
+--------------------------------------
 
 ==== Examples
 

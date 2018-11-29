@@ -27,8 +27,8 @@
 #ifndef CHAINCRITERION_H
 #define CHAINCRITERION_H
 
-#include "ElementCriterion.h"
-#include "ElementCriterionConsumer.h"
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {
@@ -55,7 +55,7 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
 
   virtual QString getDescription() const
-  { return "Allows for chaining together multiple criterion (logical AND)"; }
+  { return "Allows for chaining criteria together (logical AND)"; }
 
 protected:
 

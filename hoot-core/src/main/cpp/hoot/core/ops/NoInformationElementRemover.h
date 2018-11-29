@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -40,9 +41,10 @@ namespace hoot
 
 /**
  * Recursively removes all elements that do not contain any information and are not in use by
-   another element.
+   another element (e.g. only contains UUID and source, but not FCODE equivalent or other
+   informative tags).
  */
-class NoInformationElementRemover : public OsmMapOperation
+class NoInformationElementRemover : public OsmMapOperation, public OperationStatusInfo
 {
   public:
 
@@ -55,8 +57,15 @@ class NoInformationElementRemover : public OsmMapOperation
     */
     void apply(boost::shared_ptr<OsmMap>& map);
 
+    virtual QString getInitStatusMessage()
+    { return "Removing elements with no information tags..."; }
+
+    //TODO: finish; wasn't obvious how to count the total affected
+    virtual QString getCompletedStatusMessage()
+    { return ""; }
+
     virtual QString getDescription() const
-    { return "Removes elements containing no information"; }
+    { return "Removes elements containing no information in tags"; }
 
   protected:
 

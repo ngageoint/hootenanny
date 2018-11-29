@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Std
 #include <set>
@@ -47,8 +48,10 @@ class TagDifferencer;
 class NodeToWayMap;
 
 /**
- * Searches for itty bitty ways that connect end to end. For some reason some files provide little
- * way segments of 2m or less in length. Silliness. If:
+ * Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID`
+ * are ignored. See `small.way.merger.threshold` for setting the threshold value. Searches for itty
+ * bitty ways that connect end to end. For some reason some files provide little  way segments of
+ * 2m or less in length. Silliness. If:
  *   - the attributes are essentially identical
  *   - there are only two ways meeting (not an intersection)
  *   - and one is less than the specified threshold
@@ -59,7 +62,7 @@ class NodeToWayMap;
  *  - All intersections have been split. (IntersectionSplitter)
  *  - All duplicate ways have been removed. (DuplicateWayRemover)
  */
-class SmallWayMerger : public OsmMapOperation
+class SmallWayMerger : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -74,7 +77,12 @@ public:
    */
   static void mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold);
 
-  virtual QString getDescription() const { return "Merges small ways"; }
+  virtual QString getInitStatusMessage() { return "Merging very small ways..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Merged " + QString::number(_numAffected) + " very small ways"; }
+
+  virtual QString getDescription() const { return "Merges very small ways"; }
 
 protected:
 

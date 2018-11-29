@@ -51,8 +51,6 @@ public:
   ReportMissingElementsVisitor(bool removeMissing = false,
                                int maxReport = Log::getWarnMessageLimit());
 
-  virtual ~ReportMissingElementsVisitor() {}
-
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   virtual void setOsmMap(const OsmMap* map) { assert(!_removeMissing); _constMap = map; }
@@ -62,6 +60,8 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   void setMaxReport(int maxReport) { _maxReport = maxReport; }
+
+  int getMissingCount() const { return _missingCount; }
 
   virtual QString getDescription() const
   { return "Reports references to missing elements in a map"; }

@@ -1,3 +1,5 @@
+process.binding('http_parser').HTTPParser = require('http-parser-js').HTTPParser;
+
 const proxy = require('express-http-proxy');
 const app   = require('express')();
 const argv  = require('minimist')(process.argv.slice(2));

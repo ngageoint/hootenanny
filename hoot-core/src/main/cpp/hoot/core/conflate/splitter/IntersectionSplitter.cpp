@@ -52,8 +52,8 @@ IntersectionSplitter::IntersectionSplitter()
 {
 }
 
-IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map)
-  : _map(map)
+IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map) :
+_map(map)
 {
 }
 
@@ -134,6 +134,7 @@ void IntersectionSplitter::splitIntersections(boost::shared_ptr<OsmMap> map)
 
 void IntersectionSplitter::splitIntersections()
 {
+  _numAffected = 0;
   // make a map of nodes to ways.
   _mapNodesToWays();
 
@@ -235,6 +236,8 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       // if a split occurred.
       if (splits.size() > 1)
       {
+        _numAffected++;
+
         LOG_VART(way->getElementId());
         LOG_VART(way->getStatus());
         LOG_VART(splits[0]->getElementId());

@@ -111,11 +111,6 @@ void PertyNameVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-QString PertyNameVisitor::toString()
-{
-  return "_p: " + QString::number(_p) + ", _changeP: " + QString::number(_changeP);
-}
-
 void PertyNameVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);

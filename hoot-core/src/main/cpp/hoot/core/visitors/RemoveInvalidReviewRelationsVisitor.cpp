@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveInvalidReviewRelationsVisitor.h"
@@ -71,6 +71,7 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
       {
         LOG_TRACE("Removing review relation with ID: " << r->getId());
         RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+        _numAffected++;
       }
     }
   }

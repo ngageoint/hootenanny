@@ -29,7 +29,7 @@
 #define TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
 
 // hoot
-#include <hoot/rnd/visitors/ToEnglishTranslationVisitor.h>
+#include <hoot/core/visitors/ToEnglishTranslationVisitor.h>
 #include <hoot/core/algorithms/StringDistance.h>
 
 namespace hoot
@@ -53,13 +53,14 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const
-  { return "Scores selected tag value English translations against known translated tags"; }
+  { return "Translates selected tags to English and scores them against known translations"; }
 
 private:
 
   //scores the similarity of the pre-translated and translated texts
   StringDistancePtr _translationScorer;
 
+  QStringList _tagKeysAsList;
   QStringList _preTranslatedTagKeys;
   QString _preTranslatedVal;
 };

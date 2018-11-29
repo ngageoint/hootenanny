@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/conflate/highway/Roundabout.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QMultiHash>
@@ -50,7 +51,7 @@ class Way;
  * replace them with simple intersections. Post conflation, if the roundabout
  * is in the reference data, it will be put back.
  */
-class ReplaceRoundabouts : public OsmMapOperation
+class ReplaceRoundabouts : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -79,8 +80,15 @@ public:
    */
   void replaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
 
+  virtual QString getInitStatusMessage()
+  { return "Replacing roundabouts with simple intersections..."; }
+
+  //TODO: finish; wasn't obvious how to count the total affected
+  virtual QString getCompletedStatusMessage()
+  { return ""; }
+
   virtual QString getDescription() const
-  { return "Replaces roundabouts in road data with simple intersections"; }
+  { return "Replaces road roundabouts with simple intersections"; }
 
 private:
 

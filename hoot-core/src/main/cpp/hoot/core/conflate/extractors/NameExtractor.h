@@ -29,13 +29,13 @@
 
 // hoot
 #include <hoot/core/algorithms/StringDistanceConsumer.h>
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
-class NameExtractor : public FeatureExtractor, public StringDistanceConsumer
+class NameExtractor : public FeatureExtractorBase, public StringDistanceConsumer
 {
 public:
 
@@ -47,13 +47,6 @@ public:
   virtual std::string getClassName() const { return NameExtractor::className(); }
 
   virtual std::string getName() const;
-
-  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
-
-  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
-  {
-    return Tgs::DataFrame::NullAsMissingValue;
-  }
 
   virtual double extract(const OsmMap& /*map*/, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;

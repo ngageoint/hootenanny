@@ -46,8 +46,6 @@ public:
 
   KeepBuildingsVisitor() {}
 
-  virtual ~KeepBuildingsVisitor() {}
-
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   /**

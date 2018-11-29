@@ -29,13 +29,13 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/JsRegistrar.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/HootJsStable.h>
 
-#include "OsmMapJs.h"
-#include "JsRegistrar.h"
 
 using namespace hoot;
 using namespace std;

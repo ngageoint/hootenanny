@@ -29,25 +29,14 @@
 
 #include <tgs/SharedPtr.h>
 
-#include "Element.h"
-#include "RelationData.h"
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/RelationData.h>
 
 // hoot
 #include <hoot/core/util/MetadataTags.h>
 
-namespace geos
-{
-  namespace geom
-  {
-    class Geometry;
-    class LinearRing;
-  }
-}
-
 namespace hoot
 {
-
-class Way;
 
 /**
  * This is not a complete implementation of a Relation, but it should be enough to do basic multi-
@@ -93,7 +82,16 @@ public:
    */
   bool contains(ElementId eid) const;
 
-  const std::vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
+  /**
+   * Returns the number of member elements with the given relation role
+   *
+   * @param role role by which to examine elements
+   * @return the number of member elements with the specified role
+   */
+  int numElementsByRole(const QString role) const;
+
+  const std::vector<RelationData::Entry>& getMembers() const
+  { return _relationData->getElements(); }
 
   virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
@@ -176,7 +174,6 @@ private:
 
   void _visitRw(ElementProvider &map, ConstElementVisitor& filter,
     QList<long> &visitedRelations);
-
 };
 
 template<typename IT>

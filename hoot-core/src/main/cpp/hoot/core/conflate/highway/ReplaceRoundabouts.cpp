@@ -50,7 +50,6 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, ReplaceRoundabouts)
 
 ReplaceRoundabouts::ReplaceRoundabouts()
 {
-  // blank
 }
 
 void ReplaceRoundabouts::replaceRoundabouts(boost::shared_ptr<OsmMap> pMap)

@@ -22,10 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STRINGDISTANCE_H
 #define STRINGDISTANCE_H
+
+// Hoot
+#include <hoot/core/info/ApiEntityInfo.h>
 
 // Qt
 #include <QString>
@@ -40,14 +43,15 @@ namespace hoot
 {
 
 /**
- * An interface to determining the distance between two strings.
+ * An interface to determining the similarity of two strings.
  */
-class StringDistance
+class StringDistance : public ApiEntityInfo
 {
 public:
 
   static std::string className() { return "hoot::StringDistance"; }
 
+  StringDistance() {}
   virtual ~StringDistance() {}
 
   /**

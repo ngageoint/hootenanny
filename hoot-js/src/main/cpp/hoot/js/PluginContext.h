@@ -37,7 +37,7 @@
 #include <tgs/SharedPtr.h>
 
 // v8
-#include "HootJsStable.h"
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {

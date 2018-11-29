@@ -27,11 +27,11 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
-#include "ElementData.h"
-#include "ElementId.h"
-#include "ElementType.h"
-#include "Status.h"
-#include "Tags.h"
+#include <hoot/core/elements/ElementData.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/ElementType.h>
+#include <hoot/core/elements/Status.h>
+#include <hoot/core/elements/Tags.h>
 
 // Hoot
 #include <hoot/core/util/Units.h>
@@ -47,8 +47,10 @@
 // Qt
 #include <QString>
 
-namespace geos {
-  namespace geom {
+namespace geos
+{
+  namespace geom
+  {
     class Envelope;
   }
 }
@@ -59,7 +61,6 @@ namespace hoot
 class ElementListener;
 class ElementProvider;
 class ConstElementVisitor;
-class OsmMap;
 
 /**
  * Base class for OSM elements -- node, way and relation.
@@ -160,7 +161,6 @@ public:
    *
    * "this" is guaranteed to be visited last.
    */
-
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor) const = 0;
 
   /**
@@ -190,13 +190,10 @@ protected:
   Element(Status s);
 
   virtual ElementData& _getElementData() = 0;
-
   virtual const ElementData& _getElementData() const = 0;
 
   void _postGeometryChange();
-
   void _preGeometryChange();
-
 };
 
 typedef boost::shared_ptr<Element> ElementPtr;

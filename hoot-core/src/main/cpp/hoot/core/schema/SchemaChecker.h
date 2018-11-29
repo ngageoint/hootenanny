@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __SCHEMA_CHECKER_H__
 #define __SCHEMA_CHECKER_H__
@@ -59,11 +59,6 @@ public:
    */
 
   void checkUnknownVertexType();
-
-  /**
-   * Print out error message if schemavertex has empty geometry.
-   */
-  void checkEmptyGeometry();
 
   /**
    * Print out error message if schemavertex has empty geometry or geometries are empty

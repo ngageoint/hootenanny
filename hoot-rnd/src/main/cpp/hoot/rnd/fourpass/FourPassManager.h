@@ -46,13 +46,11 @@
 // TGS
 #include <tgs/HashMap.h>
 
-#include "TileWorker2.h"
+// R&D
+#include <hoot/rnd/fourpass/TileWorker2.h>
 
 namespace hoot
 {
-
-class OsmMap;
-class NodeReplacements;
 
 /**
  * The FourPassManager is a high level class that delegates the real work to TileWorkers. This class

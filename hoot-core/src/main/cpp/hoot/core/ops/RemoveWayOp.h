@@ -89,7 +89,7 @@ public:
    */
   static void removeWayFully(OsmMapPtr map, long wId);
 
-  virtual QString getDescription() const { return "Removes ways from a map"; }
+  virtual QString getDescription() const { return "Removes ways"; }
 
 private:
 
@@ -98,7 +98,6 @@ private:
 
   void _removeWay(OsmMapPtr &map, long wId);
   void _removeWayFully(OsmMapPtr &map, long wId);
-
 };
 
 }

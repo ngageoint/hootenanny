@@ -131,6 +131,13 @@ public:
   QStringList getNames() const;
 
   /**
+   * Returns a name given tags
+   *
+   * @return the first name found, if one is present
+   */
+  QString getName() const;
+
+  /**
    * Returns the speed in standard units (m/s).
    */
   Velocity getVelocity(const QString& k) const;

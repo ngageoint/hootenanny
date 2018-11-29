@@ -27,7 +27,7 @@
 #ifndef TRANSLITERATENAMEVISITOR_H
 #define TRANSLITERATENAMEVISITOR_H
 
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {
@@ -44,7 +44,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getDescription() const { return "Transliterates element name tags"; }
+  virtual QString getDescription() const { return "Transliterates name tags"; }
 };
 
 }

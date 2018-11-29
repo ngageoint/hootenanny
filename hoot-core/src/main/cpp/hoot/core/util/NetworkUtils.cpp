@@ -41,7 +41,6 @@ boost::shared_ptr<HootNetworkCookieJar> NetworkUtils::getUserSessionCookie(
 {
   LOG_VART(userName);
   LOG_VART(accessToken);
-  LOG_VART(accessTokenSecret);
   LOG_VART(url);
 
   HootApiDb db;

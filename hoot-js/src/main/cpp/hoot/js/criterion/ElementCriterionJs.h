@@ -36,13 +36,8 @@
 // Qt
 #include <QString>
 
-// Standard
-#include <memory>
-
 namespace hoot
 {
-
-class OsmMapOperation;
 
 class ElementCriterionJs : public node::ObjectWrap
 {

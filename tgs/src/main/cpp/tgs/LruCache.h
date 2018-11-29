@@ -33,7 +33,7 @@
 // standard
 #include <list>
 
-#include "HashMap.h"
+#include <tgs/HashMap.h>
 
 namespace Tgs
 {

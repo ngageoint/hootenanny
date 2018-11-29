@@ -28,9 +28,9 @@
 #define REVIEWRELATIONCRITERION_H
 
 // Hoot
-#include "ElementCriterion.h"
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -45,7 +45,6 @@ public:
   static std::string className() { return "hoot::ReviewRelationCriterion"; }
 
   ReviewRelationCriterion() {}
-
   explicit ReviewRelationCriterion(ConstOsmMapPtr& map) : _map(map) { }
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;

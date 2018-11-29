@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef KSKIPBIGRAMDISTANCE_H
@@ -40,8 +40,6 @@
 
 namespace hoot
 {
-
-class HootException;
 
 /** Work based on:
  *  A Closer Look at Skip-gram Modelling
@@ -99,6 +97,9 @@ public:
   double score(const QString& s1, const QString& s2) const;
 
   QString toString() const { return QString("%1-skip bi-gram").arg(_k); }
+
+  virtual QString getDescription() const
+  { return "Returns a string comparison score derived using Skip-gram modelling"; }
 
 private:
   /**

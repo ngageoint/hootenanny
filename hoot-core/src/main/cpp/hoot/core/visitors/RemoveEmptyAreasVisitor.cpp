@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveEmptyAreasVisitor.h"
 
@@ -69,6 +69,7 @@ void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
     if (g->getArea() == 0.0)
     {
       RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
+      _numAffected++;
     }
   }
 }

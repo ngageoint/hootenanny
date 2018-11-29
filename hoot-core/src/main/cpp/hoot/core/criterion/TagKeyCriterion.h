@@ -28,7 +28,7 @@
 #define TAGKEYCRITERION_H
 
 // Hoot
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
 #include <QStringList>
@@ -57,7 +57,7 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagKeyCriterion(_keys)); }
 
   virtual QString getDescription() const
-  { return "Filters elements based on whether they contain any specified tag key"; }
+  { return "Identifies elements that contain a specified tag key"; }
 
 protected:
 

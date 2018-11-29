@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -57,7 +57,7 @@ public:
   void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const
-  { return "Identifies numeric tag values falling within a range"; }
+  { return "Identifies elements having numeric tag values falling within a range"; }
 
 private:
 

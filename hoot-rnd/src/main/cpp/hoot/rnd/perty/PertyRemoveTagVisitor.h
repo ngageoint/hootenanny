@@ -30,8 +30,7 @@
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "RngConsumer.h"
+#include <hoot/rnd/perty/RngConsumer.h>
 
 namespace hoot
 {
@@ -66,8 +65,6 @@ public:
   void setReplacementTagKeys(const QStringList& keys) { _replacementTagKeys = keys; }
 
   void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
-
-  QString toString();
 
   virtual QString getDescription() const { return "Randomly removes feature tags"; }
 

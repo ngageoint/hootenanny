@@ -27,7 +27,7 @@
 #ifndef ELEMENTTYPECRITERION_H
 #define ELEMENTTYPECRITERION_H
 
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementType.h>
 
 namespace hoot

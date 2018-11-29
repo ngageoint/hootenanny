@@ -55,7 +55,6 @@ IndexElementsVisitor::IndexElementsVisitor(boost::shared_ptr<HilbertRTree>& inde
   _index(index),
   _indexToEid(indexToEid)
 {
-  // This space intentionally left blank
 }
 
 void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)

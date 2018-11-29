@@ -70,7 +70,7 @@ _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
 _preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
-_addChildRefsWhenMissing(false)
+_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderXmlAddChildRefsWhenMissing())
 {
 }
 
@@ -894,7 +894,15 @@ ElementPtr OsmXmlReader::readNextElement()
   assert(_foundOsmElementXmlEndElement());
 
   //we're parsed the entire node/way/relation, so return it
-  LOG_TRACE("Read " << _element->getElementId());
+  if (_element.get())
+  {
+    LOG_TRACE("Read " << _element->getElementId());
+  }
+  else
+  {
+    //must be a deleted element
+    LOG_TRACE("Read empty element.");
+  }
   return _element;
 }
 

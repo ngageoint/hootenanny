@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOT_H
 #define HOOT_H
@@ -59,7 +59,7 @@ public:
   /**
    * Load the specified library if it exists using QLibrary.
    */
-  void loadLibrary(QString name);
+  void loadLibrary(const QString& name);
 
   /**
    * Reinitialize hootenanny based on configuration changes.

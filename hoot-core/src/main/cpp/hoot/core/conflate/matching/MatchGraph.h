@@ -40,7 +40,6 @@ namespace hoot
 
 class Match;
 class MatchGraphInternal;
-class MatchThreshold;
 
 typedef std::vector< MatchSet > MatchSetVector;
 

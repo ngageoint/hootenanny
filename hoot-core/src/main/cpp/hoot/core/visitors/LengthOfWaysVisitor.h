@@ -28,11 +28,10 @@
 #define LENGTHOFWAYSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/OsmMap.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -52,8 +51,6 @@ public:
 
   LengthOfWaysVisitor() : _total(0) {}
 
-  virtual ~LengthOfWaysVisitor() {}
-
   static Meters getLengthOfWays(const OsmMapPtr& map, ElementPtr e);
 
   Meters getLengthOfWays() const { return _total; }
@@ -64,7 +61,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Sums the length of all the ways"; }
+  virtual QString getDescription() const { return "Calculates the length of all ways"; }
 
 private:
 

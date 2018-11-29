@@ -42,8 +42,6 @@
 namespace hoot
 {
 
-class HootException;
-
 class LevenshteinDistance : public StringDistance, public Configurable
 {
 public:
@@ -117,6 +115,9 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   QString toString() const { return QString("Levenshtein %1").arg(_alpha); }
+
+  virtual QString getDescription() const
+  { return "Returns a string comparison score derived using Levenshtein Distance"; }
 
 private:
 

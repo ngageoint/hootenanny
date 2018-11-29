@@ -35,8 +35,10 @@ namespace hoot
 {
 
 /**
- * ApiEntity refers to aspects of the hoot API  e.g. FeatureExtractor.  Maybe it could be named
- * better.
+ * ApiEntity refers to aspects of the hoot API; e.g. FeatureExtractor.
+ *
+ * This class can probably be simplified (too much if/else logic).  See notes in InfoCmd about how
+ * registration of associated classes could be made simpler for this.
  */
 class ApiEntityDisplayer
 {
@@ -48,6 +50,15 @@ public:
    * @param apiEntityType the type of entity to display
    */
   static void display(const QString apiEntityType);
+
+  /**
+   * Displays information on the currently configured MapCleaner operations
+   */
+  static void displayCleaningOps();
+
+private:
+
+  static QString _apiEntityTypeForBaseClass(const QString baseClassName);
 };
 
 }

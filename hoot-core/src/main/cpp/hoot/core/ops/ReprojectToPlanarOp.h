@@ -30,8 +30,7 @@
 
 // hoot
 #include <hoot/core/io/Serializable.h>
-
-#include "OsmMapOperation.h"
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
@@ -58,8 +57,7 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
-  virtual QString getDescription() const
-  { return "Reprojects a map to a custom planar projection"; }
+  virtual QString getDescription() const { return "Reprojects to a custom planar projection"; }
 };
 
 }

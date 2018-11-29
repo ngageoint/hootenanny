@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXWORDSETDISTANCE_H
 #define MAXWORDSETDISTANCE_H
 
-#include "StringDistanceConsumer.h"
-
 // hoot
+#include <hoot/core/algorithms/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 
 // Tgs
@@ -44,6 +43,7 @@ namespace hoot
 class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::MaxWordSetDistance"; }
 
   MaxWordSetDistance(StringDistancePtr d);
@@ -57,7 +57,11 @@ public:
 
   virtual QString toString() const { return "MaxWordSet " + _d->toString(); }
 
+  virtual QString getDescription() const
+  { return "Returns a score based on the max (best) pairwise word comparison within two sets of words"; }
+
 private:
+
   StringDistancePtr _d;
   StringTokenizer _tokenizer;
 };

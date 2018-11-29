@@ -31,8 +31,7 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 // Qt
 #include <QStringList>
@@ -57,8 +56,6 @@ public:
   AverageNumericTagsVisitor();
   explicit AverageNumericTagsVisitor(const QStringList keys);
 
-  virtual ~AverageNumericTagsVisitor() {}
-
   /**
    * Given a set of tag keys and for all features having those tags, averages the numerical values of
    * the tags.  If the tag value cannot be converted to a number, a warning is logged and the tag
@@ -70,8 +67,7 @@ public:
 
   virtual double getStat() const;
 
-  virtual QString getDescription() const
-  { return "Averages numeric tag values with specified keys"; }
+  virtual QString getDescription() const { return "Calculates the average of numeric tag values"; }
 
   virtual void setConfiguration(const Settings& conf);
 

@@ -41,6 +41,7 @@ namespace hoot
 class WorstCircularErrorVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
 public:
+
   static std::string className() { return "hoot::WorstCircularErrorVisitor"; }
 
   WorstCircularErrorVisitor(): _worst(-1) {}
@@ -60,7 +61,7 @@ public:
   static Meters getWorstCircularError(const ConstOsmMapPtr& map);
 
   virtual QString getDescription() const
-  { return "Determines the highest circular error value in a map"; }
+  { return "Determines the highest circular error value"; }
 
 private:
 

@@ -29,8 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -46,8 +45,6 @@ public:
   static std::string className() { return "hoot::TagCountVisitor"; }
 
   TagCountVisitor();
-
-  virtual ~TagCountVisitor() {}
 
   long getInformationCount() const { return _informationCount; }
 

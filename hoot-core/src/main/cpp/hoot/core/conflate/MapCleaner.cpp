@@ -45,8 +45,6 @@ MapCleaner::MapCleaner()
 
 void MapCleaner::apply(boost::shared_ptr<OsmMap> &map)
 {
-  // Apply any user specified operations.
-  LOG_INFO("Cleaning map...");
   NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
 }
 

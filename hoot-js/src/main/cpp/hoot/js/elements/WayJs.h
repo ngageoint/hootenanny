@@ -37,13 +37,8 @@
 // Qt
 #include <QString>
 
-// Standard
-#include <memory>
-
 namespace hoot
 {
-
-class OsmMapOperation;
 
 class WayJs : public ElementJs
 {

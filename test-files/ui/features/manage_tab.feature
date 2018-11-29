@@ -89,7 +89,6 @@ Feature: Manage Tab
     Scenario: Add dataset into sub folder
         # Add dataset into sub folder
         Then I wait 5 "seconds" to see "tspan" element with text "TestSubFolder"
-        And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset
         And I click the "Add Dataset" context menu item
         And I select the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
@@ -100,7 +99,8 @@ Feature: Manage Tab
         When I press "big.loud" span with text "Import"
         Then I wait 30 "seconds" to not see "Import Type"
         # Rename dataset
-        And I click the "TestSubFolder" Dataset
+        Then I wait 2 seconds
+        And I expand the "TestSubFolder" folder
         And I should see "dcpoi_clip_Cucumber_manage"
         And I click the "dcpoi_clip_Cucumber_manage" Dataset
         And I context click the "dcpoi_clip_Cucumber_manage" Dataset

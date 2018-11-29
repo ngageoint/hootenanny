@@ -27,10 +27,9 @@
 #ifndef EDGEDISTANCEEXTRACTOR_H
 #define EDGEDISTANCEEXTRACTOR_H
 
-#include "AbstractDistanceExtractor.h"
-
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregatorConsumer.h>
+#include <hoot/core/conflate/extractors/AbstractDistanceExtractor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -73,7 +72,7 @@ public:
   void setSpacing(const double spacing);
 
   virtual QString getDescription() const
-  { return "Calculates the distance from one set of lines to the other set of lines"; }
+  { return "Calculates the distance from one set of lines to another"; }
 
 private:
 

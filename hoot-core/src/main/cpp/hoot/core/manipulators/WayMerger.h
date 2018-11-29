@@ -22,30 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYMERGER_H
 #define WAYMERGER_H
 
-#include <hoot/core/conflate/Conflator.h>
-#include "WayManipulator.h"
-
-// GEOS
-namespace geos {
-  namespace geom {
-    class LineString;
-  }
-}
-
 // Hoot
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/manipulators/WayManipulator.h>
 #include <hoot/core/util/Units.h>
 
 namespace hoot
 {
 
 class OsmMap;
-class Node;
 class Way;
 
 /**
@@ -55,10 +46,10 @@ class Way;
 class WayMerger : public WayManipulator
 {
 public:
+
   static std::string className() { return "hoot::WayMerger"; }
 
   WayMerger();
-
   virtual ~WayMerger() {}
 
   virtual const std::vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
@@ -68,6 +59,7 @@ public:
           ConstOsmMapPtr map, const std::vector<long>& wids);
 
 protected:
+
   /**
    * Creates a new manipulation and returns it. This may be delegated to a subclass.
    */
@@ -87,7 +79,6 @@ private:
   std::vector<long> _findOtherWays(ConstWayPtr way);
 
   void _findMatches(long baseWayId);
-
 };
 
 }

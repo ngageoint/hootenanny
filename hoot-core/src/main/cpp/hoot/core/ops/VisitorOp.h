@@ -45,16 +45,13 @@ class ConstElementVisitor;
  *
  * Yes, it is that simple.
  */
-class VisitorOp :
-  public OsmMapOperation,
-  public ElementVisitorConsumer
+class VisitorOp : public OsmMapOperation, public ElementVisitorConsumer
 {
 public:
 
   static std::string className() { return "hoot::VisitorOp"; }
 
   VisitorOp() {}
-
   VisitorOp(const boost::shared_ptr<ConstElementVisitor>& v) { _visitor = v; }
 
   /**
@@ -62,7 +59,7 @@ public:
    */
   VisitorOp(ConstElementVisitor* v) { _visitor.reset(v); }
 
-  virtual ~VisitorOp() {}
+  //virtual ~VisitorOp() {}
 
   virtual void addVisitor(const ConstElementVisitorPtr& e);
 

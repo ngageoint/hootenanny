@@ -28,15 +28,16 @@
 
 // hoot
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/io/ElementCacheLRU.h>
+#include <hoot/core/io/InternalIdReserver.h>
+#include <hoot/core/io/SqlBulkDelete.h>
 #include <hoot/core/io/SqlBulkInsert.h>
+#include <hoot/core/io/TableType.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/io/TableType.h>
-#include <hoot/core/util/DbUtils.h>
-#include <hoot/core/io/SqlBulkDelete.h>
 
 // qt
 #include <QStringList>
@@ -51,8 +52,6 @@
 
 // tgs
 #include <tgs/System/Time.h>
-
-#include "InternalIdReserver.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -304,9 +303,6 @@ void HootApiDb::createPendingMapIndexes()
 void HootApiDb::deleteMap(long mapId)
 {
   LOG_TRACE("Deleting map: " << mapId << "...");
-
-  // Drop related renderDB First
-  dropDatabase(_getRenderDBName(mapId));
 
   // Drop related sequences
   dropSequence(getCurrentRelationMembersSequenceName(mapId));
@@ -1330,7 +1326,6 @@ bool HootApiDb::accessTokensAreValid(const QString userName, const QString acces
 {
   LOG_VART(userName);
   LOG_VART(accessToken);
-  LOG_VART(accessTokenSecret);
 
   if (_accessTokensAreValid == 0)
   {
@@ -1440,7 +1435,6 @@ QString HootApiDb::getAccessTokenSecretByUserId(const long userId)
   }
   _getAccessTokenSecretByUserId->finish();
 
-  LOG_VART(accessTokenSecret);
   return accessTokenSecret;
 }
 
@@ -1872,26 +1866,6 @@ long HootApiDb::reserveElementId(const ElementType::Type type)
   }
 
   return retVal;
-}
-
-QString HootApiDb::_getRenderDBName(long mapId)
-{
-  // Get current database & maps.display_name
-  QString table = ApiDb::getMapsTableName();
-  QString dbName = "";
-  QString mapDisplayName = "";
-  QString mapIdNumber = QString::number(mapId);
-  QString sql = "SELECT current_database(), " + table + ".display_name "
-                "FROM " + table + " WHERE " + table + ".id=" + mapIdNumber;
-  QSqlQuery q = _exec(sql);
-
-  if (q.next())
-  {
-    dbName = q.value(0).toString();
-    mapDisplayName = q.value(1).toString();
-  }
-
-  return (dbName + "_renderdb_" + mapIdNumber);
 }
 
 QUrl HootApiDb::getBaseUrl()

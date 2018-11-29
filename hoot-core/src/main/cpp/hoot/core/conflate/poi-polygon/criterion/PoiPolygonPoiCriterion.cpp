@@ -27,9 +27,9 @@
 #include "PoiPolygonPoiCriterion.h"
 
 // hoot
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
-#include "../PoiPolygonTagIgnoreListReader.h"
 
 namespace hoot
 {

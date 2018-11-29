@@ -27,7 +27,7 @@
 #ifndef SIGMAAGGREGATOR_H
 #define SIGMAAGGREGATOR_H
 
-#include "ValueAggregator.h"
+#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 
 namespace hoot
 {
@@ -43,6 +43,9 @@ public:
   virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return QString("Sigma Aggregator"); }
+
+  virtual QString getDescription() const
+  { return "Aggregates data based on the unbiased Standard Deviation value"; }
 };
 
 }

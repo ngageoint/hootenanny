@@ -37,8 +37,8 @@
 #include <QDir>
 #include <QFile>
 #include <QHash>
+#include <QString>
 #include <QXmlDefaultHandler>
-class QString;
 class QXmlStreamWriter;
 
 // Standard

@@ -30,8 +30,7 @@
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "RngConsumer.h"
+#include <hoot/rnd/perty/RngConsumer.h>
 
 namespace hoot
 {
@@ -67,11 +66,6 @@ public:
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual QString getDescription() const { return "Randomly changes feature names"; }
-
-  /**
-    @see ConstElementVisitor
-    */
-  QString toString();
 
 private:
 

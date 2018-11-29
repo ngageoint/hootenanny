@@ -45,11 +45,10 @@ class ImplicitTagEligibleCriterion : public ElementCriterion
 {
 public:
 
+  virtual ~ImplicitTagEligibleCriterion(){}
+
   virtual QStringList getEligibleKvps(const Tags& tags) const = 0;
   virtual bool hasEligibleKvp(const Tags& tags) const = 0;
-
-  virtual QString getDescription() const
-  { return "Identifies elements eligible for type tag additions"; }
 };
 
 }

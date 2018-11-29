@@ -28,10 +28,9 @@
 #define SETTAGVALUEVISITOR_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {
@@ -59,7 +58,7 @@ public:
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual QString getDescription() const
-  { return "Adds or updates one or more tags using specified key/value pairs"; }
+  { return "Adds or updates one or more tags with a specified key/value combination"; }
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 

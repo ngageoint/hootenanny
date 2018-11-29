@@ -27,20 +27,19 @@
 #include "PoiPolygonMergerCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <typeinfo>
-
-#include "PoiPolygonMatch.h"
-#include "PoiPolygonMerger.h"
 
 using namespace std;
 
@@ -140,7 +139,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
 vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(CreatorDescription(className(), "merges POIs into polygons", false));
+  result.push_back(CreatorDescription(className(), "Merges POIs into polygons", false));
   return result;
 }
 

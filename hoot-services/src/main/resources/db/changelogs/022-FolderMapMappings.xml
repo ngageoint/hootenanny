@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="arni.sumarlidason" id="22" context="default">
+		<comment>Add foreign keys to folder_map_mappings to enable cascade deletes</comment>
+		
+		<sql>
+			delete from folder_map_mappings where
+			    folder_id not in (select id from folders)
+			    OR
+			    map_id not in (select id from maps)
+		</sql>
+		
+		<sql>
+			insert into folders(
+				id,
+				display_name,
+				parent_id,
+				user_id,
+				public,
+				created_at
+			) values (
+				0,
+				'root',
+				-1,
+				0,
+				true,
+				now()
+			)
+		</sql>
+
+		<addForeignKeyConstraint
+			baseColumnNames="map_id"
+			baseTableName="folder_map_mappings"
+			constraintName="fk_foldermapmappings_mapid_id"
+			deferrable="true"
+			initiallyDeferred="true"
+			onDelete="CASCADE"	
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="maps" />
+		
+		
+		<addForeignKeyConstraint
+			baseColumnNames="folder_id"
+			baseTableName="folder_map_mappings"
+			constraintName="fk_foldermapmappings_folderid_id"
+			deferrable="true"
+			initiallyDeferred="true"
+			onDelete="CASCADE"	
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="folders" />
+
+		<rollback>
+			<dropForeignKeyConstraint
+				baseTableName="folder_map_mappings"
+				constraintName="fk_foldermapmappings_mapid_id" />
+
+			<dropForeignKeyConstraint
+				baseTableName="folder_map_mappings"
+				constraintName="fk_foldermapmappings_folderid_id" />
+
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

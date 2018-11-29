@@ -44,7 +44,6 @@ namespace hoot
 
 class Match;
 class Merger;
-class MatchGraph;
 
 /**
  * A factory for creating a merge from a set of matches.

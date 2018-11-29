@@ -27,16 +27,15 @@
 #include "PoiPolygonTypeScoreExtractor.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-
-#include "PoiPolygonNameScoreExtractor.h"
-#include "PoiPolygonAddressScoreExtractor.h"
-#include "../PoiPolygonDistanceTruthRecorder.h"
+#include <hoot/core/util/MetadataTags.h>
 
 // Qt
 #include <QSet>
@@ -62,9 +61,11 @@ _translateTagValuesToEnglish(false)
 void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
   setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
-  _translateTagValuesToEnglish = config.getPoiPolygonTranslateTypesToEnglish();
+
+  _translateTagValuesToEnglish = config.getPoiPolygonTypeTranslateToEnglish();
   if (_translateTagValuesToEnglish && !_translator)
   {
     _translator.reset(
@@ -388,8 +389,7 @@ bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
   {
     return false;
   }
-  return
-    _typeHasName("amenity=school", PoiPolygonNameScoreExtractor::getElementName(element).toLower());
+  return _typeHasName("amenity=school", element->getTags().getName().toLower());
 }
 
 bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
@@ -397,8 +397,8 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
 {
   if (isSpecificSchool(element1) && isSpecificSchool(element2))
   {
-    const QString name1 = PoiPolygonNameScoreExtractor::getElementName(element1).toLower();
-    const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element2).toLower();
+    const QString name1 = element1->getTags().getName().toLower();
+    const QString name2 = element2->getTags().getName().toLower();
     if (_haveMatchingTypeNames("amenity=school", name1, name2))
     {
       return true;

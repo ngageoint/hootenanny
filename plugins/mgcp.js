@@ -1757,28 +1757,21 @@ mgcp = {
 
         if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
-       // Fix SDV
-        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
-        if (tags['source:imagery:datetime'])
-        {
-            attrs.SDV = tags['source:imagery:datetime'];
-            //delete notUsedTags['source:imagery:datetime'];
-        }
-
-        // Now try using tags from Taginfo
+        //Map alternate source date tags to SDV in order of precedence
+        //default in mgcp_rules is 'source:datetime'
         if (! attrs.SDV)
-        {
-            if (tags['source:date']) 
-            {
-                attrs.SDV = tags['source:date'];
-                //delete notUsedTags['source:date'];
-            }
-            else if (tags['source:geometry:date'])
-            {
-                attrs.SDV = tags['source:geometry:date'];
-                //delete notUsedTags['source:geometry:date'];
-            }
-        }
+            attrs.SDV = tags['source:imagery:datetime']
+                || tags['source:date']
+                || tags['source:geometry:date']
+                || '';
+
+        //Map alternate source tags to ZI001_SDP in order of precedence
+        //default in mgcp_rules is 'source'
+        if (! attrs.SDP)
+            attrs.SDP = tags['source:imagery']
+                || tags['source:description']
+                || '';
+
         // Chop the milliseconds off the "source:datetime"
         if (attrs.SDV)
         {

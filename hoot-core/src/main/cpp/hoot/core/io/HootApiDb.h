@@ -31,9 +31,12 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/BulkDelete.h>
+#include <hoot/core/io/BulkInsert.h>
 
 namespace hoot
 {
+
+class InternalIdReserver;
 
 /**
  * Used for interaction with an Hootenanny API database (Hootenanny's internal customized version
@@ -545,15 +548,6 @@ private:
   void _updateChangesetEnvelopeRelationNodes(const std::vector<long>& relationIds);
 
   void _updateChangesetEnvelopeRelationWays(const std::vector<long>& relationIds);
-
-  /**
-   * Builds the expected renderdb name from our current database & map
-   * id.
-   *
-   * @param mapId id of the map for which we want the associated renderdb
-   * @return should be <dbname>_renderdb_<map_id>
-   */
-  QString _getRenderDBName(long mapId);
 
   static QString _escapeTags(const Tags& tags);
 };

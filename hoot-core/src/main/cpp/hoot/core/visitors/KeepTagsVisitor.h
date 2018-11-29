@@ -29,8 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {
@@ -53,7 +52,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getDescription() const { return "Keeps any tags with matching keys"; }
+  virtual QString getDescription() const { return "Keeps only tags with specified keys"; }
 
 private:
 

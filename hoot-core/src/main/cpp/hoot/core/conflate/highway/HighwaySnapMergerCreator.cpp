@@ -27,12 +27,11 @@
 #include "HighwaySnapMerger.h"
 
 // hoot
+#include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/conflate/highway/HighwaySnapMergerCreator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-#include "HighwayMatch.h"
-#include "HighwaySnapMergerCreator.h"
 
 using namespace std;
 
@@ -93,7 +92,7 @@ vector<CreatorDescription> HighwaySnapMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
   result.push_back(
-    CreatorDescription(className(), "merges roads conflated with the non-greedy algorithm", false));
+    CreatorDescription(className(), "Merges roads conflated with the non-greedy algorithm", false));
   return result;
 }
 

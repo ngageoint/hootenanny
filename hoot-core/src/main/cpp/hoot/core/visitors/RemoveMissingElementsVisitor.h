@@ -28,22 +28,23 @@
 #define REMOVEMISSINGELEMENTSVISITOR_H
 
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include "ReportMissingElementsVisitor.h"
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
-class ReportMissingElementsVisitor;
-
-class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+/**
+ * Removes non-existent element references from relations or ways with negative IDs.
+ */
+class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
+  public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
 
   RemoveMissingElementsVisitor();
-
-  virtual ~RemoveMissingElementsVisitor() {}
 
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
 
@@ -52,8 +53,14 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getInitStatusMessage()
+  { return "Removing references to elements that do not exist..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numAffected) + " missing elements"; }
+
   virtual QString getDescription() const
-  { return "Removes references to any elements that do not exist in a map"; }
+  { return "Removes references to any elements that do not exist"; }
 
 private:
 

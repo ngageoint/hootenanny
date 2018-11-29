@@ -27,7 +27,7 @@
 #ifndef ADDGEOMETRYTYPEVISITOR_H
 #define ADDGEOMETRYTYPEVISITOR_H
 
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {

@@ -63,7 +63,9 @@ The approach described above generally provides good results. There is no gettin
 [[PoiToPolygonConflation]]
 === POI to Polygon Conflation
  
-Hootenanny conflates POIs with both building and area polygons.  It uses the distance between the two features, name similarity, type similarity, and address similarity as the criteria for matching the features.  See <<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details.
+Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between 
+the two features, name similarity, type similarity, address similarity, and phone number similarity.  See 
+<<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details.
 
 [[PoiToPolygonConfigurableOptions]]
 ==== Configurable Options

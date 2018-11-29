@@ -33,17 +33,17 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/extractors/OverlapExtractor.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-#include "extractors/PoiPolygonTypeScoreExtractor.h"
-#include "extractors/PoiPolygonNameScoreExtractor.h"
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
+#include <hoot/core/algorithms/AddressParser.h>
+#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Log.h>
 
 #include <float.h>
 
@@ -60,7 +60,8 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                  double nameScore, bool nameMatch,
                                                  bool exactNameMatch, double typeScoreThreshold,
                                                  double typeScore, bool typeMatch,
-                                                 double matchDistanceThreshold, bool addressMatch) :
+                                                 double matchDistanceThreshold, bool addressMatch,
+                                                 bool addressParsingEnabled) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
@@ -75,7 +76,8 @@ _typeMatch(typeMatch),
 _matchDistanceThreshold(matchDistanceThreshold),
 _addressMatch(addressMatch),
 _badGeomCount(0),
-_keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
+_keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly()),
+_addressParsingEnabled(addressParsingEnabled)
 {
   LOG_VART(_polyNeighborIds.size());
   LOG_VART(_poiNeighborIds.size());
@@ -88,11 +90,28 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
   LOG_VART(_typeMatch);
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_addressMatch);
+  LOG_VART(_addressParsingEnabled);
 }
 
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 {
   return _typeScore > 0.03 || _nameScore > 0.35 || _addressMatch;
+}
+
+bool PoiPolygonReviewReducer::_polyContainsPoiAsMember(ConstElementPtr poly,
+                                                       ConstElementPtr poi) const
+{
+  ConstWayPtr polyWay = boost::dynamic_pointer_cast<const Way>(poly);
+  if (polyWay && polyWay->containsNodeId(poi->getId()))
+  {
+    return true;
+  }
+  ConstRelationPtr polyRelation = boost::dynamic_pointer_cast<const Relation>(poly);
+  if (polyRelation && polyRelation->contains(ElementId(ElementType::Node, poi->getId())))
+  {
+    return true;
+  }
+  return false;
 }
 
 bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
@@ -112,13 +131,26 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
 
-  //if both have addresses and they explicitly contradict each other, throw out the review; don't
-  //do it if the poly has more than one address, like in many multi-use buildings
-  if (!_addressMatch && PoiPolygonAddressScoreExtractor::elementHasAddress(poi, *_map) &&
-      PoiPolygonAddressScoreExtractor::elementHasAddress(poly, *_map))
+  if (_addressParsingEnabled)
   {
-    LOG_TRACE("Returning miss per review reduction rule #1...");
-    return true;
+    const int numPolyAddresses = AddressParser::hasAddress(poly, *_map);
+    const bool polyHasAddress = numPolyAddresses > 0;
+
+    //if both have addresses and they explicitly contradict each other, throw out the review; don't
+    //do it if the poly has more than one address, like in many multi-use buildings.
+    if (!_addressMatch && AddressParser::hasAddress(poi, *_map) && polyHasAddress)
+    {
+      //check to make sure the only address the poly has isn't the poi itself as a way node /
+      //relation member
+      if (_polyContainsPoiAsMember(poly, poi) && numPolyAddresses < 2)
+      {
+      }
+      else
+      {
+        LOG_TRACE("Returning miss per review reduction rule #1...");
+        return true;
+      }
+    }
   }
 
   if (OsmSchema::getInstance().isMultiUse(*poly) && poiHasType && _typeScore < 0.4)
@@ -163,11 +195,15 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const QString poiLeisureVal = poiTags.get("leisure").toLower();
   const QString polyLeisureVal = polyTags.get("leisure").toLower();
 
+  const QString poiName = poi->getTags().getName().toLower();
+  const QString polyName = poly->getTags().getName().toLower();
+  const bool poiHasName = !poiName.isEmpty();
+  const bool polyHasName = !polyName.isEmpty();
+
   //similar to above, but for gardens
   if ((poiLeisureVal == "garden" || polyLeisureVal == "garden") &&
        (!_nonDistanceSimilaritiesPresent() ||
-        (polyIsPark &&
-         !PoiPolygonNameScoreExtractor::getElementName(poly).toLower().contains("garden"))))
+        (polyIsPark && !polyName.toLower().contains("garden"))))
   {
     LOG_TRACE("Returning miss per review reduction rule #6...");
     return true;
@@ -183,8 +219,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //these seem to be clustered together tightly a lot in cities, so up the requirement a bit
   //TODO: using custom match/review distances or custom score requirements may be a better way to
   //handle these types
-  const bool poiHasName = !PoiPolygonNameScoreExtractor::getElementName(poi).isEmpty();
-  const bool polyHasName = !PoiPolygonNameScoreExtractor::getElementName(poly).isEmpty();
   if (poiTags.get("tourism") == "hotel" && polyTags.get("tourism") == "hotel" &&
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
   {
@@ -207,8 +241,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //similar to above, but for sport fields
-  const bool poiNameEndsWithField =
-    PoiPolygonNameScoreExtractor::getElementName(poi).toLower().endsWith("field");
+  const bool poiNameEndsWithField = poiName.endsWith("field");
   LOG_VART(poiNameEndsWithField);
   const bool polyIsSport = PoiPolygonTypeScoreExtractor::isSport(poly);
   LOG_VART(polyIsSport);
@@ -226,8 +259,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
   //be more strict with their reviews.
-  if (/*_genericLandUseTagVals.contains(polyTags.get("landuse"))*/
-      polyHasLanduse && !_nonDistanceSimilaritiesPresent())
+  if (polyHasLanduse && !_nonDistanceSimilaritiesPresent())
   {
     LOG_TRACE("Returning miss per review reduction rule #11...");
     return true;

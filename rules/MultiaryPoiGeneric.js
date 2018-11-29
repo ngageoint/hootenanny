@@ -7,7 +7,7 @@ Object.keys(poi).forEach(function(key) {
     exports[key] = poi[key];
 });
 
-exports.description = "matches three or more POIs";
+exports.description = "Matches three or more POIs";
 exports.experimental = true;
 
 // this matcher will never cause a conflict. However, another matcher may conflict with us.

@@ -46,8 +46,6 @@ public:
 
   KeepHighwaysVisitor() {}
 
-  virtual ~KeepHighwaysVisitor() {}
-
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   /**

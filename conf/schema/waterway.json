@@ -68,6 +68,9 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "area"
+        ],
         "isA": "waterway",
         "name": "waterway=riverbank",
         "objectType": "tag"

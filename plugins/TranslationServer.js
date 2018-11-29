@@ -21,6 +21,11 @@ var availableTranslations = [
 var HOOT_HOME = process.env.HOOT_HOME;
 if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
+    hoot.Log.setLogLevel("warn");
+    hoot.Settings.set({"osm.map.reader.xml.add.child.refs.when.missing":"true"});
+    hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
+    hoot.Settings.set({"ogr.note.extra": "attribute"});
+    hoot.Settings.set({"reader.add.source.datetime": "false"});
 }
 
 //Getting schema for fcode, geom type
@@ -259,8 +264,7 @@ var postHandler = function(data) {
         throw new Error('Unsupported translation schema ' + data.translation);
     }
     var translation = data.transMap[data.transDir][data.translation];
-    hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
-    hoot.Settings.set({"ogr.note.extra": "attribute"});
+
     if (data.transDir === "toogr") {
         hoot.Settings.set({"osm.map.writer.schema": data.translation});
     } else {

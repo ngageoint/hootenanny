@@ -29,20 +29,13 @@
 #define ANGLE_HISTOGRAM_EXTRACTOR_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 
-namespace geos
-{
-namespace geom
-{
-class Geometry;
-}
-}
-
 namespace hoot
 {
+
 class Histogram;
 
 /**
@@ -56,7 +49,7 @@ class Histogram;
  *
  * 1 means the histograms have effectively no difference. 0 means they're completely different.
  */
-class AngleHistogramExtractor : public FeatureExtractor, public Configurable
+class AngleHistogramExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
@@ -68,13 +61,6 @@ public:
   virtual std::string getClassName() const { return AngleHistogramExtractor::className(); }
 
   virtual std::string getName() const;
-
-  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
-
-  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
-  {
-    return Tgs::DataFrame::NullAsMissingValue;
-  }
 
   virtual void setConfiguration(const Settings& conf);
 

@@ -27,25 +27,18 @@
 #ifndef _ELEMENTS_NODE_H_
 #define _ELEMENTS_NODE_H_
 
-#include "Element.h"
-#include "NodeData.h"
-
 // GEOS
 #include <geos/geom/Coordinate.h>
-namespace geos {
-  namespace geom {
-    class Envelope;
-    class Point;
-  }
-}
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Point.h>
 
 // hoot
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/NodeData.h>
 #include <hoot/core/util/SharedPtrPool.h>
 
 namespace hoot
 {
-
-class NodeData;
 
 class Node : public Element
 {
@@ -146,7 +139,6 @@ protected:
   virtual ElementData& _getElementData() { return _nodeData; }
 
   virtual const ElementData& _getElementData() const { return _nodeData; }
-
 };
 
 typedef boost::shared_ptr<Node> NodePtr;

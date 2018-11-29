@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddHilbertReviewSortOrderOp.h"
 
@@ -75,6 +75,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
     return;
   }
 
+  _numAffected = 0;
   _mapEnvelope.reset();
   MapProjector::projectToPlanar(map);
 
@@ -115,6 +116,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
     RelationPtr r = map->getRelation(reviewOrder[i].first.getId());
 
     r->getTags().set(MetadataTags::HootReviewSortOrder(), (long)i);
+    _numAffected++;
   }
 }
 

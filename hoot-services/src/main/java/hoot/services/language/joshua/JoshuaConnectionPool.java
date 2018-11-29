@@ -65,6 +65,7 @@ public class JoshuaConnectionPool
 
   public JoshuaConnectionPool(Map<String, JoshuaServiceInfo> services, int maxPoolSize) 
   {
+    logger.trace("Initializing connection pool...");
     this.services = services;
     this.maxPoolSize = maxPoolSize;
   }

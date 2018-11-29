@@ -29,13 +29,25 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/info/ConfigOptionsDisplayer.h>
 #include <hoot/core/info/FormatsDisplayer.h>
 #include <hoot/core/info/ApiEntityDisplayer.h>
+#include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
+
+// Qt
+#include <QUrl>
 
 namespace hoot
 {
 
+/*
+ * Although, the types of things this command display aren't expected to grow in regular fashion
+ * from this point forward, Some time should probably be spent exploring ways to make the classes
+ * containing the information printed out by this command auto-register themselves in a more
+ * extensible way.
+ */
 class InfoCmd : public BaseCommand
 {
 public:
@@ -157,7 +169,81 @@ public:
 
       FormatsDisplayer::display(displayInputs, displayOutputs);
     }
-    //feature-extractors, operators, matchers, mergers, or tag mergers
+    else if (specifiedOpts.contains("--languages"))
+    {
+      args.removeAt(args.indexOf("--languages"));
+      if (args.size() != 1)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(
+          QString("%1 with the --languages option takes one parameter.").arg(getName()));
+      }
+
+      //only allowing one option per command
+      const QStringList supportedOpts = _getSupportedLanguageOptions();
+      QStringList specifiedOpts;
+      for (int i = 0; i < args.size(); i++)
+      {
+        const QString arg = args.at(i);
+        if (specifiedOpts.contains(arg) ||
+            (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
+        {
+          std::cout << getHelp() << std::endl << std::endl;
+          throw HootException(QString("%1 takes a single option.").arg(getName()));
+        }
+        specifiedOpts.append(arg);
+      }
+      if (specifiedOpts.size() == 0)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(
+          QString("%1 with the --languages option takes a single option.").arg(getName()));
+      }
+      LOG_VARD(specifiedOpts.size());
+
+      ConfigOptions opts = ConfigOptions(conf());
+
+      try
+      {
+        boost::shared_ptr<LanguageInfoProvider> client;
+        client.reset(
+          Factory::getInstance().constructObject<LanguageInfoProvider>(
+            opts.getLanguageInfoProvider()));
+        client->setConfiguration(conf());
+
+        const QString type = args[0].replace("--", "").toLower();
+
+        QString displayStr;
+        if (type == "translatable" || type == "detectable")
+        {
+          displayStr =
+            HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
+              type, client->getAvailableLanguages(type));
+        }
+        else
+        {
+          displayStr =
+            HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
+              type, client->getAvailableApps(type));
+        }
+        std::cout << displayStr << std::endl;
+      }
+      catch (const HootException& e)
+      {
+        LOG_VART(e.getWhat());
+        if (e.getWhat().contains("Access tokens for user"))
+        {
+          std::cout <<
+            "You must log in to the Hootenanny Web Services before displaying supported language information." <<
+            std::endl;
+        }
+      }
+    }
+    else if (specifiedOpts.contains("--cleaning-operations"))
+    {
+      ApiEntityDisplayer::displayCleaningOps();
+    }
+    //everything else
     else if (specifiedOpts.size() == 1)
     {
       QString apiEntityType;
@@ -191,16 +277,30 @@ public:
 
 private:
 
+  QStringList _getSupportedLanguageOptions() const
+  {
+    QStringList options;
+    options.append("--detectable");
+    options.append("--detectors");
+    options.append("--translatable");
+    options.append("--translators");
+    return options;
+  }
+
   QStringList _getSupportedOptions() const
   {
     QStringList options;
+    options.append("--cleaning-operations");
     options.append("--config-options");
     options.append("--feature-extractors");
     options.append("--formats");
+    options.append("--languages");
     options.append("--matchers");
     options.append("--mergers");
     options.append("--operators");
+    options.append("--string-comparators");
     options.append("--tag-mergers");
+    options.append("--value-aggregators");
     return options;
   }
 };

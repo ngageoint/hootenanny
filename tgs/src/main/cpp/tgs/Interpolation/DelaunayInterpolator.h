@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DELAUNAYINTERPOLATOR_H
 #define DELAUNAYINTERPOLATOR_H
@@ -33,8 +33,7 @@
 // Tgs
 #include <tgs/TgsException.h>
 #include <tgs/DelaunayTriangulation/DelaunayTriangulation.h>
-
-#include "BaseInterpolator.h"
+#include <tgs/Interpolation/BaseInterpolator.h>
 
 namespace Tgs
 {

@@ -32,8 +32,7 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "RngConsumer.h"
+#include <hoot/rnd/perty/RngConsumer.h>
 
 namespace hoot
 {
@@ -106,11 +105,6 @@ public:
     }
     _minNodeSpacing = spacing;
   }
-
-  /**
-    @see ConstElementVisitor
-    */
-  virtual QString toString();
 
   virtual QString getDescription() const { return "Randomly splits ways"; }
 

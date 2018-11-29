@@ -36,6 +36,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -45,7 +46,7 @@ namespace hoot
  * Searches for ways that contain the same name multiple times in the name and/or alt_name fields.
  * Any duplicates in the alt_name field will be removed.
  */
-class DuplicateNameRemover : public OsmMapOperation
+class DuplicateNameRemover : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -62,7 +63,12 @@ public:
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
-  virtual QString getDescription() const { return "Removes duplicated names from a feature"; }
+  virtual QString getInitStatusMessage() { return "Removing duplicate name tags..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numAffected) + " duplicate name tags"; }
+
+  virtual QString getDescription() const { return "Removes duplicate name tags from a feature"; }
 
 protected:
 

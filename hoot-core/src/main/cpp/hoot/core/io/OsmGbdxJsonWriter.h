@@ -36,8 +36,7 @@
 
 // Qt
 #include <QDir>
-
-class QString;
+#include <QString>
 
 namespace hoot
 {

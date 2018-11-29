@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ATTRIBUTECOMPARATOR_H
 #define ATTRIBUTECOMPARATOR_H
 
-#include "BaseComparator.h"
+#include <hoot/core/scoring/BaseComparator.h>
 
 namespace hoot
 {
@@ -36,6 +36,7 @@ namespace hoot
 class AttributeComparator : public BaseComparator
 {
 public:
+
   AttributeComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
 
   virtual ~AttributeComparator() {}
@@ -53,6 +54,7 @@ public:
   void setIterations(int i) { _iterations = i; }
 
 private:
+
   int _iterations;
   geos::geom::Coordinate _r;
   double _median;
@@ -61,7 +63,6 @@ private:
   double _ci;
   // sampled standard deviation
   double _s;
-
 };
 
 }

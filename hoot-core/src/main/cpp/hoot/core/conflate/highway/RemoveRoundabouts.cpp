@@ -50,7 +50,6 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveRoundabouts)
 
 RemoveRoundabouts::RemoveRoundabouts()
 {
-  // blank
 }
 
 void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)

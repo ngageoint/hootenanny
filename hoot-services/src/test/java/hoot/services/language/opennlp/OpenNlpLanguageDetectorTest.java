@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
+import hoot.services.language.LanguageUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +67,8 @@ public class OpenNlpLanguageDetectorTest
     Assert.assertEquals("German", detector.getLanguageName("de"));
     Assert.assertEquals("https://opennlp.apache.org", detector.getUrl());
     Assert.assertTrue(!detector.getDescription().isEmpty());
+    Assert.assertEquals(
+      "none available", LanguageUtils.confidenceToString(detector.getConfidence()));
     //logger.debug(detector.detect("wie alt bist du"));
     Assert.assertEquals("deu", detector.detect("wie alt bist du"));
   }

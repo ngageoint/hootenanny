@@ -804,12 +804,29 @@
                 "hoot_key":"merger.creators"
             },
             {
+        	"id":"poipolygon_address_additional_tag_keys",
+        	"elem_type":"string",
+        	"description":"BBy default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the addressTagKeys file).  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
+        	"name":"Address Additional Tag Keys",
+        	"defaultvalue":"",
+        	"hoot_key":"poi.polygon.address.additional.tag.keys",
+        	"onchange":"true"
+    	    },
+            {
         	"id":"poipolygon_address_match_enabled",
         	"elem_type":"bool",
         	"defaultvalue":"true",
         	"description":"If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.  If the data being conflated is known to have poor address data, disabling this option may speed up conflation runtime performance.",
         	"name":"Address Match Enabled",
         	"hoot_key":"poi.polygon.address.match.enabled"
+    	    },
+            {
+        	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of those POIs being automatically merged into the polygon.  If false, then each matched POI will generate a review against the polygon instead.",
+		"name":"Merge Many POI to Single Polygon Matches",
+        	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
     	    },
             {
         	"id":"poipolygon_disable_same_source_conflation",
@@ -856,14 +873,6 @@
         	"hoot_key":"poi.polygon.match.evidence.threshold"
     	    },
             {
-        	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of those POIs being automatically merged into the polygon.  If false, then each matched POI will generate a review against the polygon instead.",
-		"name":"Merge Many POI to Single Polygon Matches",
-        	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
-    	    },
-            {
             	"id":"poipolygon_name_score_threshold",
                 "elem_type":"double",
                 "description":"The minimum similarity the name scores of two features can have and be considered a name match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names present (null).",
@@ -873,6 +882,40 @@
                 "maxvalue":"1.0",
                 "hoot_key":"poi.polygon.name.score.threshold"
             },
+            {
+        	"id":"poipolygon_phone_number_additional_tag_keys",
+        	"elem_type":"string",
+        	"description":"By default, POI/Polygon conflation examines all tags with keys containing the text 'phone' for phone number comparisons.  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
+        	"name":"Phone Number Additional Tag Keys",
+        	"defaultvalue":"",
+        	"hoot_key":"poi.polygon.phone.number.additional.tag.keys",
+        	"onchange":"true"
+    	    },
+            {
+        	"id":"poipolygon_phone_number_match_enabled",
+        	"elem_type":"bool",
+        	"defaultvalue":"true",
+        	"description":"If true, POI/Polygon conflation will compare phone number as one of the criteria for matching features.  If the data being conflated is known to have poor telephone number data, disabling this option may speed up conflation runtime performance.",
+        	"name":"Phone Number Match Enabled",
+        	"hoot_key":"poi.polygon.phone.number.match.enabled"
+    	    },
+            {
+        	"id":"poipolygon_phone_number_region_code",
+        	"elem_type":"string",
+        	"description":"Optional geographical region code used when comparing phone numbers.   See: http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region code, if known for the input data, may increase phone number matching accuracy but may also have runtime performance implications.",
+        	"name":"Phone Number Region Code",
+        	"defaultvalue":"",
+        	"hoot_key":"poi.polygon.phone.number.region.code",
+        	"onchange":"true"
+    	    },
+            {
+        	"id":"poipolygon_phone_number_search_in_text",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text that may contain things other than phone numbers.  If false, the conflation will assume the tag value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must be set to a valid region code when enabling this option.  Enabling this option may have runtime performance implications.",
+        	"name":"Phone Number Search In Text",
+        	"hoot_key":"poi.polygon.phone.number.search.in.text"
+    	    },
             {
         	"id":"poipolygon_promote_points_with_addresses_to_pois",
         	"elem_type":"bool",

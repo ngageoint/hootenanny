@@ -27,7 +27,7 @@
 #ifndef WAYMATCHSTRINGSPLITTER_H
 #define WAYMATCHSTRINGSPLITTER_H
 
-#include "WayMatchStringMerger.h"
+#include <hoot/core/algorithms/WayMatchStringMerger.h>
 
 namespace hoot
 {

@@ -22,18 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLATEDTAGDIFFERENCER_H
 #define TRANSLATEDTAGDIFFERENCER_H
-
-#include "TagDifferencer.h"
 
 // boost
 #include <boost/shared_ptr.hpp>
 
 // hoot
 #include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt

@@ -28,11 +28,10 @@
 #define CALCULATEAREAFORSTATSVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -50,8 +49,6 @@ public:
 
   CalculateAreaForStatsVisitor() : _total(0) {}
 
-  virtual ~CalculateAreaForStatsVisitor() {}
-
   /**
    * Returns the area in meters squared.
    */
@@ -65,7 +62,8 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Calculates feature areas for map statistics"; }
+  virtual QString getDescription() const
+  { return "Calculates feature area totals for map statistics"; }
 
 private:
 

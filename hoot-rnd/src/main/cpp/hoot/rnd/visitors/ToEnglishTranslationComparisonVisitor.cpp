@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, ToEnglishTranslationComparisonVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, ToEnglishTranslationComparisonVisitor)
 
 ToEnglishTranslationComparisonVisitor::ToEnglishTranslationComparisonVisitor() :
 ToEnglishTranslationVisitor()
@@ -57,7 +57,7 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
 
   ToEnglishTranslationVisitor::setConfiguration(conf);
 
-  if (_skipPreTranslatedTags ||
+  if (_ignorePreTranslatedTags ||
       opts.getLanguageTranslationDetectedLanguageOverridesSpecifiedSourceLanguages() ||
       opts.getLanguageTranslationPerformExhaustiveSearchWithNoDetection())
   {
@@ -65,18 +65,23 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
       "ToEnglishTranslationComparisonVisitor does not support enabling any of the following options:\n"
       "language.translation.detected.language.overrides.specified.source.languages\n"
       "language.translation.perform.exhaustive.search.with.no.detection\n"
-      "language.translation.skip.pre.translated.tags\nDisabling the options.");
+      "language.ignore.pre.translated.tags\nDisabling the options.");
   }
 
   _translationScorer.reset(
     Factory::getInstance().constructObject<StringDistance>(
       opts.getLanguageTranslationComparisonScorer()));
 
+  //use a different collection of tag keys here as a list and ignore the parse names option, since
+  //we need to retain the key ordering to be in sync with _preTranslatedTagKeys and don't care
+  //about the parse names option for the purposes of translation performance comparison
+  _tagKeysAsList = opts.getLanguageTagKeys();
+
   _preTranslatedTagKeys = opts.getLanguageTranslationComparisonPretranslatedTagKeys();
-  if (_preTranslatedTagKeys.size() != opts.getLanguageTranslationToTranslateTagKeys().size())
+  if (_preTranslatedTagKeys.size() != opts.getLanguageTagKeys().size())
   {
     throw HootException(
-      QString("When preforming language translation comparison, the number of pre-translated ") +
+      QString("When performing language translation comparison, the number of pre-translated ") +
       QString("tag keys must match that of the keys of the tags to be translated."));
   }
 }
@@ -86,8 +91,10 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
   const Tags& tags = e->getTags();
   for (int i = 0; i < _preTranslatedTagKeys.size(); i++)
   {
-    const QString toTranslateTagKey = _toTranslateTagKeys.at(i);
+    const QString toTranslateTagKey = _tagKeysAsList.at(i);
+    LOG_VART(toTranslateTagKey);
     const QString preTranslatedTagKey = _preTranslatedTagKeys.at(i);
+    LOG_VART(preTranslatedTagKey);
     //only care about features that have both the pre-translated tag and the tag we want to compare
     //our translation to it with
     if (tags.contains(toTranslateTagKey) && tags.contains(preTranslatedTagKey))

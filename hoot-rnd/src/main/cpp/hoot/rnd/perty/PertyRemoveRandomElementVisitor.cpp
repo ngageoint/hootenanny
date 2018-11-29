@@ -51,11 +51,6 @@ PertyRemoveRandomElementVisitor::PertyRemoveRandomElementVisitor()
   setConfiguration(conf());
 }
 
-QString PertyRemoveRandomElementVisitor::toString()
-{
-  return "_p: " + QString::number(_p);
-}
-
 void PertyRemoveRandomElementVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);

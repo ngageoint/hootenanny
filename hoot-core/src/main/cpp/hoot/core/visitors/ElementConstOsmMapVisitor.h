@@ -48,7 +48,6 @@ public:
   static std::string className() { return "hoot::ElementConstOsmMapVisitor"; }
 
   ElementConstOsmMapVisitor() {}
-
   virtual ~ElementConstOsmMapVisitor() {}
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }

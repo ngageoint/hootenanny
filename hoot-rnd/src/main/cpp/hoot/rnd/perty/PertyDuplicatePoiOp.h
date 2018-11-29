@@ -35,7 +35,7 @@
 // Qt
 #include <QString>
 
-#include "RngConsumer.h"
+#include <hoot/rnd/perty/RngConsumer.h>
 
 namespace hoot
 {
@@ -82,11 +82,6 @@ public:
   void setProbability(double p) { _p = p; }
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
-
-  /**
-    @see OsmMapOperation
-    */
-  QString toString();
 
   virtual QString getDescription() const
   { return "Duplicates a POI with some random error"; }

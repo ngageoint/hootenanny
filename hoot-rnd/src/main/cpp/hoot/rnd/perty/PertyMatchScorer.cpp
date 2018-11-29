@@ -27,29 +27,28 @@
 #include "PertyMatchScorer.h"
 
 // hoot
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/rnd/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
 #include <hoot/core/visitors/TagRenameKeyVisitor.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/rnd/perty/PertyOp.h>
+#include <hoot/rnd/scoring/MatchScoringMapPreparer.h>
 
 // Qt
 #include <QFileInfo>
 #include <QDir>
-
-#include "PertyOp.h"
 
 namespace hoot
 {
@@ -180,7 +179,6 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
 
   PertyOp pertyOp;
   pertyOp.setConfiguration(_settings);
-  LOG_DEBUG("Details: " << pertyOp.toString());
   pertyOp.apply(perturbedMap);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());

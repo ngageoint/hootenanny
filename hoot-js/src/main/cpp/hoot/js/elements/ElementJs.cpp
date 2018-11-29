@@ -32,6 +32,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/elements/NodeJs.h>
 #include <hoot/js/elements/RelationJs.h>
 #include <hoot/js/elements/TagsJs.h>
@@ -45,8 +46,6 @@
 
 // Tgs
 #include <tgs/SharedPtr.h>
-
-#include "ElementIdJs.h"
 
 using namespace v8;
 

@@ -27,7 +27,7 @@
 #ifndef UNIONPOLYGONSVISITOR_H
 #define UNIONPOLYGONSVISITOR_H
 
-#include "ElementConstOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -53,8 +53,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
 
-  virtual QString getDescription() const
-  { return "Unions all area elements that are visited to create a single geometry"; }
+  virtual QString getDescription() const { return "Unions all areas to create a single geometry"; }
 
 private:
 

@@ -25,7 +25,6 @@
  * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-
 #ifndef __TGS__PAGE_H__
 #define __TGS__PAGE_H__
 
@@ -33,75 +32,77 @@
 
 namespace Tgs
 {
-  class PageStore;
+
+class PageStore;
+
+/**
+* This class is tightly linked with the PageStore and a circular reference should be expected.
+* I believe that in this instance it is acceptable.
+*/
+class TGS_EXPORT Page
+{
+public:
+
+  ~Page();
 
   /**
-  * This class is tightly linked with the PageStore and a circular reference should be expected.
-  * I believe that in this instance it is acceptable.
+  * Returns the identifier for this Page. This ID is guaranteed to be unique to the PageStore
+  * that contains this page.
   */
-  class  TGS_EXPORT Page
-  {
-  public:
+  int getId() const { return _id; }
 
-    ~Page();
+  /**
+  * Returns the data contained by this page store. It is expected that this data will be cast
+  * to the appropriate type before operations are performed. You are almost guaranteed that this
+  * will not actually be a null terminated string.
+  */
+  char* getData();
 
-    /**
-    * Returns the identifier for this Page. This ID is guaranteed to be unique to the PageStore
-    * that contains this page.
-    */
-    int getId() const { return _id; }
+  /**
+  * Returns the data size in bytes.
+  */
+  int getDataSize() const { return _size; }
 
-    /**
-    * Returns the data contained by this page store. It is expected that this data will be cast
-    * to the appropriate type before operations are performed. You are almost guaranteed that this
-    * will not actually be a null terminated string.
-    */
-    char* getData(); 
+  /**
+  * Returns true if this data has changed since it was last loaded.
+  */
+  bool isDirty() const { return _dirty; }
 
-    /**
-    * Returns the data size in bytes.
-    */
-    int getDataSize() const { return _size; }
+  /**
+  * Call this when the data is changed. If this method is not called the data may not be saved
+  * appropriately.
+  */
+  void setDirty() { _dirty = true; }
 
-    /**
-    * Returns true if this data has changed since it was last loaded.
-    */
-    bool isDirty() const { return _dirty; }
+  char * getDataRaw(){return _data;}
 
-    /**
-    * Call this when the data is changed. If this method is not called the data may not be saved
-    * appropriately.
-    */
-    void setDirty() { _dirty = true; }
+  PageStore* getPageStore(){return _parent;}
 
-    char * getDataRaw(){return _data;}
+  static char* allocateAligned(int size);
 
-    PageStore* getPageStore(){return _parent;}
+  static void freeAligned(char* ptr);
 
-    static char* allocateAligned(int size);
+private:
+  friend class PageStore;
 
-    static void freeAligned(char* ptr);
+  /**
+  * Constructs the page and initializes it w/ it's id, data and size. The page will take
+  * ownership of the data.
+  */
+  Page(PageStore* parent, int id, char* data, int size);
 
-  private:
-    friend class PageStore;
+  /**
+  * Called by the PageStore when this page has been saved out as persistent data.
+  */
+  void _setClean() { _dirty = false; }
 
-    /**
-    * Constructs the page and initializes it w/ it's id, data and size. The page will take
-    * ownership of the data.
-    */
-    Page(PageStore* parent, int id, char* data, int size);
+  int _id;
+  int _size;
+  char* _data;
+  bool _dirty;
+  PageStore* _parent;
+};
 
-    /**
-    * Called by the PageStore when this page has been saved out as persistent data.
-    */
-    void _setClean() { _dirty = false; }
-
-    int _id;
-    int _size;
-    char* _data;
-    bool _dirty;
-    PageStore* _parent;
-  };
 }
 
 #endif

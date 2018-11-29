@@ -1119,6 +1119,17 @@ tds61 = {
         if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
+        // AK030 - Amusement Parks
+        // F_CODE translation == tourism but FFN translation could be leisure. 
+        // E.g. water parks
+        if (attrs.F_CODE == 'AK030')
+        {
+            if (tags.leisure && tags.tourism)
+            {
+                delete tags.tourism;
+            }
+        }
+
         // Unpack the ZI006_MEM field
         if (tags.note)
         {
@@ -1151,6 +1162,13 @@ tds61 = {
             // Debug
             // print('Adding area=yes');
             tags.area = 'yes';
+        }
+
+        if (geometryType == 'Area' && tags.waterway == 'river')
+        {
+            // Debug
+            // print('Changing river to riverbank');
+            tags.waterway = 'riverbank';
         }
 
         // Fix the ZI020_GE4X Values
@@ -2085,28 +2103,20 @@ tds61 = {
             }
         } // End for GE4 loop
 
-        // Fix ZI001_SDV
-        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
-        if (tags['source:imagery:datetime'])
-        {
-            attrs.ZI001_SDV = tags['source:imagery:datetime'];
-            // delete notUsedTags['source:imagery:datetime'];
-        }
-        
-        // Now try using tags from Taginfo
+        //Map alternate source date tags to ZI001_SDV in order of precedence
+        //default is 'source:datetime'
         if (! attrs.ZI001_SDV)
-        {
-            if (tags['source:date']) 
-            {
-                attrs.ZI001_SDV = tags['source:date'];
-                // delete notUsedTags['source:date'];
-            }
-            else if (tags['source:geometry:date'])
-            {
-                attrs.ZI001_SDV = tags['source:geometry:date'];
-                // delete notUsedTags['source:geometry:date'];
-            }
-        }
+            attrs.ZI001_SDV = tags['source:imagery:datetime']
+                || tags['source:date']
+                || tags['source:geometry:date']
+                || '';
+
+        //Map alternate source tags to ZI001_SDP in order of precedence
+        //default is 'source'
+        if (! attrs.ZI001_SDP)
+            attrs.ZI001_SDP = tags['source:imagery']
+                || tags['source:description']
+                || '';
 
          // Amusement Parks
         if (attrs.F_CODE == 'AK030' && !(attrs.FFN))
@@ -2137,6 +2147,7 @@ tds61 = {
     // This is the main routine to convert _TO_ OSM
     toOsm : function(attrs, layerName, geometryType)
     {
+
         tags = {};  // The final output Tag list
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
@@ -2287,6 +2298,7 @@ tds61 = {
     // This is the main routine to convert _TO_ TDS
     toTds : function(tags, elementType, geometryType)
     {
+
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
         attrs = {}; // The output attributes
@@ -2443,7 +2455,7 @@ tds61 = {
         if (!(tds61.AttrLookup[gFcode.toUpperCase()]))
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (tds61.configOut.getOgrThrowError == 'true')
+            if (tds61.configOut.OgrThrowError == 'true')
             {
                 if (! attrs.F_CODE)
                 {

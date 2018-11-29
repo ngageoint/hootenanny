@@ -27,7 +27,7 @@
 #ifndef WATERWAYCRITERION_H
 #define WATERWAYCRITERION_H
 
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {

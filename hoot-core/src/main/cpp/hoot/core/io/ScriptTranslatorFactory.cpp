@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptTranslatorFactory.h"
 
@@ -83,6 +83,8 @@ ScriptTranslator* ScriptTranslatorFactory::createTranslator(QString scriptPath)
       if (result == 0 && st[i]->isValidScript())
       {
         result = st[i];
+        LOG_TRACE("Found a valid translator: " + _translators[i]);
+        break;
       }
       else
       {

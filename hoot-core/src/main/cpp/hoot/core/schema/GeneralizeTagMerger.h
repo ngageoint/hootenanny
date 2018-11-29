@@ -27,7 +27,7 @@
 #ifndef GENERALIZETAGMERGER_H
 #define GENERALIZETAGMERGER_H
 
-#include "TagMerger.h"
+#include <hoot/core/schema/TagMerger.h>
 
 namespace hoot
 {
@@ -40,13 +40,10 @@ public:
 
   GeneralizeTagMerger();
 
-  virtual ~GeneralizeTagMerger() {}
-
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 
-  //TODO: verify this is accurate
-  virtual QString getDescription()
-  { return "Keeps tags from both reference and secondary features.  Overlapping tags are generalized to a common parent"; }
+  virtual QString getDescription() const
+  { return "Keeps tags from features; overlapping tags are generalized to a common parent"; }
 };
 
 }

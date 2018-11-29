@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -43,7 +44,8 @@ class Relation;
  * Goes through all building relations and updates the outline of the building by taking the union
  * of all the building parts.
  */
-class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable
+class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable,
+  public OperationStatusInfo
 {
 public:
 
@@ -59,15 +61,18 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  virtual QString getDescription() const
-  { return "Updates the outline of buildings by taking the union of all the parts"; }
+  virtual QString getInitStatusMessage() { return "Removing outlines around buildings..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numAffected) + " building outlines"; }
+
+  virtual QString getDescription() const { return "Removes the outline around buildings"; }
 
 private:
 
   boost::shared_ptr<OsmMap> _map;
 
   void _removeOutline(const boost::shared_ptr<Relation>& building);
-
 };
 
 }

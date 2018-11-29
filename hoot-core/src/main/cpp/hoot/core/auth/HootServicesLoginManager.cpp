@@ -32,6 +32,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootNetworkCookieJar.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Std
 #include <iostream>
@@ -48,6 +49,34 @@ HootServicesLoginManager::HootServicesLoginManager()
 {
 }
 
+QString HootServicesLoginManager::getBaseUrl()
+{
+  ConfigOptions opts = ConfigOptions(conf());
+  //assuming for now we don't need to go over https
+  QString url = "http://" + opts.getHootServicesAuthHost();
+  const int port = opts.getHootServicesAuthPort();
+  if (port != 80)
+  {
+    url += ":" + QString::number(port);
+  }
+  return url + "/hoot-services";
+}
+
+QString HootServicesLoginManager::_getRequestTokenUrl()
+{
+  return getBaseUrl() + "/auth/oauth1/request";
+}
+
+QString HootServicesLoginManager::_getVerifyUrl()
+{
+  return getBaseUrl() + "/auth/oauth1/verify";
+}
+
+QString HootServicesLoginManager::_getLogoutUrl()
+{
+  return getBaseUrl() + "/auth/oauth1/logout";
+}
+
 QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
 {
   HootNetworkRequest requestTokenRequest;
@@ -55,8 +84,8 @@ QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
   requestTokenRequest.setCookies(_cookies);
   try
   {
-    LOG_VART(ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
-    requestTokenRequest.networkRequest(ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
+    LOG_VART(_getRequestTokenUrl());
+    requestTokenRequest.networkRequest(_getRequestTokenUrl());
   }
   catch (const HootException& e)
   {
@@ -133,9 +162,9 @@ HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString requ
   LOG_VART(_cookies->size());
   LOG_VART(_cookies->toString());
   loginRequest.setCookies(_cookies);
-  LOG_VART(ConfigOptions().getHootServicesAuthVerifyEndpoint());
+  LOG_VART(_getVerifyUrl());
 
-  loginUrl.setUrl(ConfigOptions().getHootServicesAuthVerifyEndpoint());
+  loginUrl.setUrl(_getVerifyUrl());
   loginUrl.addQueryItem("oauth_token", QString(QUrl::toPercentEncoding(requestToken)));
   loginUrl.addQueryItem("oauth_verifier", QString(QUrl::toPercentEncoding(verifier)));
   LOG_VART(loginUrl.toString());
@@ -171,7 +200,6 @@ void HootServicesLoginManager::getAccessTokens(const long userId, QString& acces
   accessToken = db.getAccessTokenByUserId(userId);
   LOG_VARD(accessToken);
   accessTokenSecret = db.getAccessTokenSecretByUserId(userId);
-  LOG_VARD(accessTokenSecret);
   db.close();
 }
 
@@ -196,7 +224,7 @@ bool HootServicesLoginManager::logout(const QString userName, const QString acce
   HootNetworkRequest logoutRequest;
   try
   {
-    logoutRequest.networkRequest(ConfigOptions().getHootServicesAuthLogoutEndpoint());
+    logoutRequest.networkRequest(_getLogoutUrl());
   }
   catch (const HootException& e)
   {

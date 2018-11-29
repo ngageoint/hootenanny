@@ -27,7 +27,7 @@
 #ifndef INVERTEDEDGEMATCHSET_H
 #define INVERTEDEDGEMATCHSET_H
 
-#include "EdgeMatchSet.h"
+#include <hoot/core/conflate/network/EdgeMatchSet.h>
 
 namespace hoot
 {

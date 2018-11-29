@@ -93,6 +93,13 @@ public:
    */
   bool logout(const QString userName, const QString accessToken, const QString accessTokenSecret);
 
+  /**
+   * Returns the base URL used to access Hootenanny Web Services
+   *
+   * @return a URL string
+   */
+  static QString getBaseUrl();
+
 private:
 
   friend class ServicesHootServicesLoginManagerTest;
@@ -100,6 +107,10 @@ private:
   // hoot requires the same http session be used throughout the auth process, so the same session
   // cookie must be passed along with all OAuth requests
   boost::shared_ptr<HootNetworkCookieJar> _cookies;
+
+  static QString _getRequestTokenUrl();
+  static QString _getVerifyUrl();
+  static QString _getLogoutUrl();
 
   HootNetworkRequest _getLoginRequest(const QString requestToken, const QString verifier,
                                       QUrl& loginUrl) const;

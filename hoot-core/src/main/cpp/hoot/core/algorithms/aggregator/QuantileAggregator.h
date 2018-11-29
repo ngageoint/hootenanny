@@ -28,9 +28,8 @@
 #define QUANTILEAGGREGATOR_H
 
 // Hoot
+#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "ValueAggregator.h"
 
 namespace hoot
 {
@@ -53,6 +52,8 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString toString() const { return QString("QuantileAggregator %1").arg(_quantile); }
+
+  virtual QString getDescription() const { return "Aggregates data based on the quantile value"; }
 
 private:
 

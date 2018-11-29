@@ -44,6 +44,7 @@ class MinSumWordSetDistance : public StringDistance, public StringDistanceConsum
   public Configurable
 {
 public:
+
   /**
    * @param d Takes ownership of d.
    */
@@ -59,9 +60,14 @@ public:
 
   virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
 
-  virtual QString toString() const { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
+  virtual QString toString() const
+  { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
+
+  virtual QString getDescription() const
+  { return "Returns a string comparison score based on Minimum Sum Wordset Distance"; }
 
 private:
+
   StringDistancePtr _d;
   StringTokenizer _tokenizer;
   double _p;

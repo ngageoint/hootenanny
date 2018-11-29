@@ -45,8 +45,6 @@ public:
 
   KeepNodesVisitor() {}
 
-  virtual ~KeepNodesVisitor() {}
-
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   /**
@@ -57,7 +55,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const
-  { return "Removes all elements that are not Nodes with meaningful tags"; }
+  { return "Removes all elements that are not nodes with meaningful tags"; }
 
 private:
 

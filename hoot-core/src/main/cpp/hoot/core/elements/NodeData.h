@@ -27,7 +27,7 @@
 #ifndef _ELEMENTS_NODE_DATA_H_
 #define _ELEMENTS_NODE_DATA_H_
 
-#include "ElementData.h"
+#include <hoot/core/elements/ElementData.h>
 
 namespace hoot
 {
@@ -62,7 +62,6 @@ public:
 protected:
 
   double _x, _y;
-
 };
 
 inline void NodeData::init(long id, double x, double y, long changeset, long version,

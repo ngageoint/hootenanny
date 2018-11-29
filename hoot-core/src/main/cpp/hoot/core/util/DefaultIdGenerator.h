@@ -28,7 +28,7 @@
 #ifndef DEFAULTIDGENERATOR_H
 #define DEFAULTIDGENERATOR_H
 
-#include "IdGenerator.h"
+#include <hoot/core/util/IdGenerator.h>
 
 namespace hoot
 {

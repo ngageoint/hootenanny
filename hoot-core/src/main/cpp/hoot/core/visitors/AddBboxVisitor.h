@@ -27,7 +27,7 @@
 #ifndef ADDBBOXVISITOR_H
 #define ADDBBOXVISITOR_H
 
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {
@@ -42,8 +42,8 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getDescription() const { return "Adds a bounding box tag to each applicable element"; }
-
+  virtual QString getDescription() const
+  { return "Adds a bounding box tag to applicable elements"; }
 };
 
 }

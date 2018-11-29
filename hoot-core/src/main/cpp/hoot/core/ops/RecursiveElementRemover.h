@@ -28,14 +28,13 @@
 #define RECURSIVEELEMENTREMOVER_H
 
 // hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
 
 // Standard
 #include <set>
-
-#include "ConstOsmMapOperation.h"
 
 namespace hoot
 {
@@ -71,13 +70,10 @@ public:
    * deleted. Even if isSatisfied returns false the children of that element will still be searched.
    */
   RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion = 0);
-
   /**
    * It is expected that the eid will be populated with addElement after construction.
    */
   RecursiveElementRemover() : _criterion() {}
-
-  virtual ~RecursiveElementRemover() {}
 
   virtual void addElement(const ConstElementPtr& e) { _eid = e->getElementId(); }
 
@@ -86,7 +82,7 @@ public:
    */
   virtual void apply(const boost::shared_ptr<OsmMap>& map);
 
-  virtual QString getDescription() const { return "Recursively removes elements from a map"; }
+  virtual QString getDescription() const { return "Recursively removes elements"; }
 
 private:
 

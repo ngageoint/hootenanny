@@ -27,13 +27,13 @@
 #ifndef LENGTHSCOREEXTRACTOR_H
 #define LENGTHSCOREEXTRACTOR_H
 
-#include "WayFeatureExtractor.h"
+#include <hoot/core/conflate/extractors/WayFeatureExtractor.h>
 
 namespace hoot
 {
 
 /**
- * See exporatory funds report for details.
+ * See the exploratory funds report for details.
  */
 class LengthScoreExtractor : public WayFeatureExtractor
 {

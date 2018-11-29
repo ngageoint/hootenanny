@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="arni.sumarlidason" id="21"
+		context="default">
+		<comment>Enhance review_bookmarks foreign key constraints</comment>
+		<dropForeignKeyConstraint baseTableName="review_bookmarks" constraintName="review_bookmarks_map_id_fkey"/>
+		    <addForeignKeyConstraint baseColumnNames="map_id"
+	            baseTableName="review_bookmarks"
+	            constraintName="review_bookmarks_map_id_fkey"
+	            deferrable="true"
+	            initiallyDeferred="true"
+	            onDelete="CASCADE"
+	            onUpdate="RESTRICT"
+	            referencedColumnNames="id"
+	            referencedTableName="maps"/>
+		<rollback>
+			<dropForeignKeyConstraint baseTableName="review_bookmarks" constraintName="review_bookmarks_map_id_fkey"/>
+			
+		    <addForeignKeyConstraint baseColumnNames="map_id"
+	            baseTableName="review_bookmarks"
+	            constraintName="review_bookmarks_map_id_fkey"
+	            referencedColumnNames="id"
+	            referencedTableName="maps"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

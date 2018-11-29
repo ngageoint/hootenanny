@@ -34,11 +34,13 @@
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/visitors/FeatureCountVisitor.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/ConstElementCriterionVisitorInputStream.h>
+#include <hoot/core/io/ConstElementVisitorInputStream.h>
 
 namespace hoot
 {
@@ -49,12 +51,16 @@ public:
 
   static std::string className() { return "hoot::CountCmd"; }
 
-  CountCmd() { }
+  CountCmd() :
+  _total(0),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+  {
+  }
 
   virtual QString getName() const { return "count"; }
 
   virtual QString getDescription() const
-  { return "Counts the number of features matching a specified criterion"; }
+  { return "Counts the number of features in a map that meet a criterion"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -74,16 +80,8 @@ public:
     }
     LOG_VARD(countFeaturesOnly);
 
-    LOG_VARD(args[0]);
-    if (args.size() > 1)
-    {
-      LOG_VARD(args[1]);
-    }
-
     const QStringList inputs = args[0].split(";");
     LOG_VART(inputs.size());
-    OsmMapPtr map(new OsmMap());
-    _readInputs(inputs, map);
 
     QString criterionClassName = "";
     if (args.size() > 1)
@@ -91,90 +89,160 @@ public:
       criterionClassName = args[1];
     }
     LOG_VARD(criterionClassName);
-    _applyOperator(criterionClassName, map, countFeaturesOnly);
+
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      _total += _count(inputs.at(i), countFeaturesOnly, criterionClassName);
+    }
+    LOG_VART(_total);
+
+    //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
+    std::cout << std::endl << "Total: " << _total << std::endl;
 
     return 0;
   }
 
 private:
 
-  void _readInputs(const QStringList inputs, OsmMapPtr map)
+  long _total;
+  int _taskStatusUpdateInterval;
+
+  boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
   {
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      const QString input = inputs.at(i);
-      boost::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::getInstance().createReader(input, true, Status::Unknown1);
-      reader->open(input);
-      reader->read(map);
-    }
+    LOG_TRACE("Getting reader...");
+
+    boost::shared_ptr<PartialOsmMapReader> reader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(input));
+    reader->setUseDataSourceIds(true);
+    reader->open(input);
+    reader->initializePartial();
+    return reader;
   }
 
-  void _applyOperator(const QString criterionClassName, OsmMapPtr map, const bool countFeaturesOnly)
+  ElementCriterionPtr _getCriterion(const QString criterionClassName, const bool negate)
   {
-    int total = 0;
-    boost::shared_ptr<ElementCountVisitor> elementCountVis(new ElementCountVisitor());
-    boost::shared_ptr<FeatureCountVisitor> featureCountVis(new FeatureCountVisitor());
-    if (criterionClassName.trimmed().isEmpty())
-    {
-      //count all the elements/features
+    LOG_TRACE("Getting criterion...");
 
-      if (countFeaturesOnly)
-      {
-        map->visitRo(*featureCountVis);
-        total = (int)featureCountVis->getStat();
-      }
-      else
-      {
-        map->visitRo(*elementCountVis);
-        total = (int)elementCountVis->getStat();
-      }
+    ElementCriterionPtr crit;
+
+    try
+    {
+      crit.reset(
+        Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+    }
+    catch (const boost::bad_any_cast&)
+    {
+      throw IllegalArgumentException("Invalid criterion: " + criterionClassName);
+    }
+
+    if (negate)
+    {
+      crit.reset(new NotCriterion(crit));
+    }
+    LOG_VART(crit.get());
+
+    boost::shared_ptr<Configurable> critConfig;
+    if (crit.get())
+    {
+      critConfig = boost::dynamic_pointer_cast<Configurable>(crit);
+    }
+    LOG_VART(critConfig.get());
+    if (critConfig.get())
+    {
+      critConfig->setConfiguration(conf());
+    }
+
+    return crit;
+  }
+
+  ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
+                                                const QString criterionClassName,
+                                                ConstElementVisitorPtr countVis)
+  {
+    LOG_TRACE("Getting filtered input stream...");
+
+    ElementInputStreamPtr filteredInputStream;
+
+    LOG_TRACE("Creating stream...");
+    if (!criterionClassName.trimmed().isEmpty())
+    {
+      ElementCriterionPtr crit =
+        _getCriterion(criterionClassName, ConfigOptions().getElementCriterionNegate());
+      filteredInputStream.reset(
+        new ConstElementCriterionVisitorInputStream(inputStream, crit, countVis));
     }
     else
     {
-      //filter the elements/features
+      filteredInputStream.reset(new ConstElementVisitorInputStream(inputStream, countVis));
+    }
 
-      boost::shared_ptr<ElementCriterion> crit;
-      try
-      {
-        crit.reset(
-          Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
-      }
-      catch (const boost::bad_any_cast&)
-      {
-        throw IllegalArgumentException("Invalid criterion: " + criterionClassName);
-      }
+    return filteredInputStream;
+  }
 
-      if (ConfigOptions().getElementCriterionNegate())
-      {
-        crit.reset(new NotCriterion(crit));
-      }
-      LOG_VART(crit.get());
+  ConstElementVisitorPtr _getCountVis(const bool countFeaturesOnly)
+  {
+    ConstElementVisitorPtr countVis;
+    if (countFeaturesOnly)
+    {
+      countVis.reset(new FeatureCountVisitor());
+    }
+    else
+    {
+      countVis.reset(new ElementCountVisitor());
+    }
+    return countVis;
+  }
 
-      boost::shared_ptr<Configurable> critConfig;
-      if (crit.get())
-      {
-        critConfig = boost::dynamic_pointer_cast<Configurable>(crit);
-      }
-      LOG_VART(critConfig.get());
-      if (critConfig.get())
-      {
-        critConfig->setConfiguration(conf());
-      }
+  long _count(const QString input, const bool countFeaturesOnly, const QString criterionClassName)
+  {
+    long inputTotal = 0;
 
-      LOG_TRACE("Using criterion...");
-      if (countFeaturesOnly)
+    boost::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
+
+    ConstElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
+
+    ElementInputStreamPtr filteredInputStream =
+      _getFilteredInputStream(
+        boost::dynamic_pointer_cast<ElementInputStream>(reader),
+        criterionClassName,
+        countVis);
+
+    boost::shared_ptr<SingleStatistic> counter =
+      boost::dynamic_pointer_cast<SingleStatistic>(countVis);
+    LOG_VART(counter.get());
+
+    LOG_TRACE("Counting...");
+    while (filteredInputStream->hasMoreElements())
+    {
+      /*ConstElementPtr element = */filteredInputStream->readNextElement();
+      inputTotal = (int)counter->getStat();
+
+      // It would be nice if we could display information on the total elements processed, as well
+      // as the ones counted, but since the element stream is already filtered by this point would
+      // take some extra work.
+      const long runningTotal = _total + inputTotal;
+      if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
       {
-        total = (int)FilteredVisitor::getStat(crit, featureCountVis, map);
-      }
-      else
-      {
-        total = (int)FilteredVisitor::getStat(crit, elementCountVis, map);
+        QString msg = "Counted " + QString::number(runningTotal);
+        if (countFeaturesOnly)
+        {
+          msg += " features.";
+        }
+        else
+        {
+          msg += " elements.";
+        }
+        PROGRESS_INFO(msg);
       }
     }
-    LOG_VART(total);
+    LOG_VART(inputTotal);
 
-    std::cout << "Total: " << total << std::endl;
+    reader->finalizePartial();
+    reader->close();
+    filteredInputStream->close();
+
+    return inputTotal;
   }
 };
 

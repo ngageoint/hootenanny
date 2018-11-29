@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.clipping;
 
@@ -35,7 +35,6 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-import hoot.services.controllers.common.ExportRenderDBCommand;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 import hoot.services.job.Job;
 
@@ -61,6 +60,5 @@ public class ClipDatasetResourceTest extends HootServicesJerseyTestAbstract {
         assertNotNull(job);
         assertEquals(2, job.getCommands().length);
         assertEquals(ClipDatasetCommand.class, job.getCommands()[0].getClass());
-        assertEquals(ExportRenderDBCommand.class, job.getCommands()[1].getClass());
     }
 }

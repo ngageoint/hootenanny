@@ -50,7 +50,7 @@ public:
   virtual QString getName() const { return "extent"; }
 
   virtual QString getDescription() const
-  { return "Calculates the geospatial bounds of map data"; }
+  { return "Calculates the geospatial bounds of a map"; }
 
   int runSimple(QStringList args)
   {

@@ -29,11 +29,10 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 // Qt
 #include <QSet>
-
-#include "SingleStatistic.h"
 
 namespace hoot
 {
@@ -49,15 +48,13 @@ public:
 
   UniqueNamesVisitor() {}
 
-  virtual ~UniqueNamesVisitor() {}
-
   QSet<QString> getUniqueNames() const { return _names; }
 
   double getStat() const { return _names.size(); }
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Counts all the unique names"; }
+  virtual QString getDescription() const { return "Counts unique names"; }
 
 private:
 

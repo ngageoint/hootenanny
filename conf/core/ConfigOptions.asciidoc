@@ -151,8 +151,8 @@ ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is se
 * Data Type: long
 * Default Value: `1`
 
-First record ID to assign to written ways when writing to an OSM/Hootenanny API database or SQL file.  Must
-be a positive number.  Use this when working with an offline database and know the ID range you
+First record ID to assign to written ways when writing to an OSM/Hootenanny API database or SQL file.
+Must be a positive number.  Use this when working with an offline database and know the ID range you
 want to assign to way records.  If writing to an OSM API databse, this option is
 ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
 
@@ -449,31 +449,32 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::ReplaceRoundabouts` - Replaces any roundabouts that were removed, pre-conflation.
-** `hoot::RemoveMissingElementsVisitor` - Removes non-existent element references from relations or ways with negative IDs.
-** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
-** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
-** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
-** `hoot::WayJoinerOp` - Join up any previously split ways that can be rejoined.
-** `hoot::RemoveInvalidRelationVisitor` - Removes invalid multilinestring/review relations and duplicate members.
-** `hoot::RemoveInvalidMultilineStringMembersVisitor` - Removes invalid multilinestring relation members.
-** `hoot::SuperfluousWayRemover` - Remove all ways that contain no nodes or all the nodes are exactly the same.
-** `hoot::RemoveDuplicateWayNodesVisitor` - Remove all nodes that are unnecessarily duplicated in a way.
-** `hoot::RemoveEmptyRelationsOp` - Removes empty relations.
-** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews.  By processing reviews in sorted order the results are a little more logically ordered.
+** `hoot::ReplaceRoundabouts`
+** `hoot::RemoveMissingElementsVisitor`
+** `hoot::RemoveInvalidReviewRelationsVisitor`
+** `hoot::RemoveDuplicateReviewsOp`
+** `hoot::BuildingOutlineUpdateOp`
+** `hoot::WayJoinerOp`
+** `hoot::RemoveInvalidRelationVisitor`
+** `hoot::RemoveInvalidMultilineStringMembersVisitor`
+** `hoot::SuperfluousWayRemover`
+** `hoot::RemoveDuplicateWayNodesVisitor`
+** `hoot::RemoveEmptyRelationsOp`
+** `hoot::AddHilbertReviewSortOrderOp`
 
 List of operations to run in the conflate command after data is conflated, after the ops in
-unify.post.ops (if using Unifying Conflation), but before exporting.
+unify.post.ops (if using Unifying Conflation), but before exporting. 'hoot info --operators'
+displays information about the available operations.
 
 === conflate.pre.ops
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingOutlineRemoveOp` - Updates the outline of the building by taking the union of all the building parts.
-** `hoot::MapCleaner` - Performs a collection of map cleaning operations.
+** `hoot::BuildingOutlineRemoveOp`
+** `hoot::MapCleaner`
 
 Runs in the conflate command after data is loaded, but before the conflation and before the ops in
-unify.pre.ops (if using Unifying Conflation).
+unify.pre.ops (if using Unifying Conflation). 'hoot info --operators' displays information about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
@@ -507,8 +508,8 @@ List of manipulators to enable in the conflator.
 
 Some of the possible options include:
 
-* `hoot::WayMerger` -
-* `hoot::WayTagMerger` -
+* `hoot::WayMerger`
+* `hoot::WayTagMerger`
 
 === conflator.min.valid.score
 
@@ -518,6 +519,13 @@ Some of the possible options include:
 This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
 the value lower will create more (likely overzealous) matches. Setting the value higher will drop
 less confident matches.
+
+=== contains.node.criterion.id
+
+* Data Type: long
+* Default Value: `0`
+
+ID of the node that ContainsNodeCriterion should search for.
 
 === convert.bounding.box
 
@@ -559,8 +567,8 @@ the convert.bounding.box setting for OSM API database data sources only.
 * Default Value:
 ** ``
 
-Specifies one or more semi-colon delimited map operations or visitors to apply before writing
-converted data.  This is only applicable to the convert command.
+Specifies one or more semi-colon delimited map operations or visitors to apply before writing converted data.  This is only applicable to 
+the convert command. 'hoot info --operators' displays information about the available operations.
 
 === cookie.cutter.alpha
 
@@ -612,12 +620,28 @@ Debugging: The filename to use when saving the debug map during conflation.
 
 * Data Type: list
 * Default Value:
-** `uuid` - Ignore UUID changes
-** `source:datetime` - Ignore source:datetime changes
+** `uuid`
+** `source:datetime`
 ** `license`
 ** `source:imagery`
 
 List of tags to ignore when performing differential conflation with tags.
+
+=== distance.node.criterion.center
+
+* Data Type: string
+* Default Value: ``
+
+WGS84 coordinate in the format: "x,y" that the DistanceNodeCriterion should use as a center when
+searching for nodes.
+
+=== distance.node.criterion.distance
+
+* Data Type: double
+* Default Value: `-1.0`
+
+Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
+specified by 'distance.node.criterion.center'.
 
 === dual.way.splitter.driving.side
 
@@ -703,17 +727,6 @@ set.tag.value.visitor.element.criterion, etc.
 
 The maximum number of elements allowed to be in memory during element sorting.  A value of -1
 indicates no limit.
-
-=== element.sorter.external.temp.format
-
-* Data Type: string
-* Default Value: `pbf`
-
-The OSM format to use for writing sorted temp files during element external sorting.  Valid values
-are 'osm' and 'pbf'.  Using 'pbf' will result in better performance for larger datasets and uses
-the OpenStreetMap default resolution of 100 nanodegrees. 'osm' may be less performant and but allows
-for using the higher Hootenanny internal resolution of .01 nanodegrees (same as used by the
-Hootenanny API database).
 
 === english.words.files
 
@@ -885,6 +898,36 @@ The highway subline matcher to use when determining matching highway sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
+=== hoot.osm.auth.consumer.key
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth Consumer Key found after registering Hootenanny with OpenstreetMap (or its
+derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+
+=== hoot.osm.auth.consumer.secret
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth Private Consumer Key found after registering Hootenanny with OpenstreetMap (or its
+derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+
+=== hoot.osm.auth.access.token
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth Access Token for gaining access to the OAuth protected OSM API
+
+=== hoot.osm.auth.access.token.secret
+
+* Data Type: string
+* Default Value: ``
+
+OpenstreetMap OAuth Private Access Token for gaining access to the OAuth protected OSM API
+
 === hoot.services.auth.access.token
 
 * Data Type: string
@@ -901,19 +944,20 @@ Hootenanny 'login' command to retrieve access tokens.
 Hootenanny Web Services private access token required by some Hootenanny commands.  Use the
 Hootenanny 'login' command to retrieve access tokens.
 
-=== hoot.services.auth.logout.endpoint
+=== hoot.services.auth.host
 
 * Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/logout`
+* Default Value: `localhost`
 
-Hootenanny Web Services endpoint for logging out of Hootenanny.
+Host name of the machine the Hootenanny Web Services are located on.
 
-=== hoot.services.auth.request.token.endpoint
+=== hoot.services.auth.port
 
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/request`
+* Data Type: int
+* Default Value: `8080`
 
-Hootenanny Web Services endpoint for retrieving Hootenanny request tokens.
+Port of the machine the Hootenanny Web Services are located on.  If left empty, port 80 will be
+used.
 
 === hoot.services.auth.user.name
 
@@ -921,13 +965,6 @@ Hootenanny Web Services endpoint for retrieving Hootenanny request tokens.
 * Default Value: ``
 
 Hootenanny Web Services user name associated with an authenticated login.
-
-=== hoot.services.auth.verify.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/auth/oauth1/verify`
-
-Hootenanny Web Services endpoint for logging in a user.
 
 === hootapi.db.writer.copy.bulk.insert
 
@@ -1109,15 +1146,7 @@ names.  Use 'key=*' to ignore all tags for a given key.
 === implicit.tagging.database.deriver.translate.names.to.english
 
 * Data Type: bool
-* Default Value: `true`
-
-If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
-rules are derived.
-
-=== implicit.tagging.database.deriver.translate.names.to.english
-
-* Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
 rules are derived.
@@ -1182,7 +1211,7 @@ are -1 or 1 up to the number of available processors.
 === implicit.tagging.translate.names.to.english
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, all implicit taggers will translate element name words to English before querying the
 corresponding implicit tag rules database.
@@ -1320,15 +1349,118 @@ large to query at once (see `json.reader.http.bbox.max.size`).
 A list of tag keys for which the KeepTagsVisitor will retain on elements, while removing all
 other tags from elements.
 
+=== language.detection.detector
+
+* Data Type: string
+* Default Value: `hoot::HootServicesLanguageDetectorClient`
+
+LanguageDetector implementation to use for detecting source languages.  If using
+hoot::HootServicesLanguageDetectorClient, a translation server must be set up and valid OAuth
+credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
+option.
+
+=== language.detection.write.detected.lang.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, source languages detected for tags will be written in new tags to output.  If false, no
+tags are written and only a summary of the source languages found will be printed at completion.
+
+=== language.hoot.services.detection.min.confidence.threshold
+
+* Data Type: string
+* Default Value: `high`
+
+The minimum language detection confidence threshold to use when detecting languages in text using
+hoot::HootServicesLanguageDetectorClient.  Valid values are: 'low', 'medium', 'high', or 'none'.  A
+value of 'none' or an empty string disables the threshold.  Not all server side language detectors
+specified in 'language.hoot.services.detectors' support detection confidence.  When listing server
+side detectors via the API, confidence support information is included.
+
+=== language.hoot.services.detectors
+
+* Data Type: list
+* Default Value:
+** `TikaLanguageDetector`
+** `OpenNlpLanguageDetector`
+
+When using 'HootServicesTranslatorClient' as the to English language translator or HootServicesLanguageDetectorClient as a source 
+language detector, one or more hoot-services Java class names implementing LanguageDetector.  Language detectors are used in order of 
+entry. 'hoot info --languages --detectors' displays information about the available server side detectors. If no detectors are specified, then 
+language translation will attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection. 
+Separate values with a ';' and surround in quotes when passing in from the command line.
+
+=== language.info.provider
+
+* Data Type: string
+* Default Value: `hoot::HootServicesLanguageInfoClient`
+
+LanguageInfoProvider implementation to use for determining language information needed by to
+English translation. If using hoot::HootServicesLanguageInfoClient, a translation server must be
+set up and valid OAuth credentials used.
+
+=== language.max.cache.size
+
+* Data Type: long
+* Default Value: `10000`
+
+Maximum result cache sized used for to English translation and source language detection.  Not
+necessarily honored by all translators/detectors.  A cache size of -1 disables the translation
+cache.
+
+=== language.ignore.pre.translated.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+If true and performing a to English translation with ToEnglishTranslationVisitor, the translator
+will skip attempting to translate any tags whose owning elements have a pre-translated English tag
+(key=<tag name>:en). If true and performing a non-English source language detection with
+NonEnglishLanguageDetectionVisitor, the detector will ignore the fact that an English pre-translated
+tag already exists on the associated element and attempt to detect the source language of the
+pre-translated tag.
+
+=== language.parse.names
+
+* Data Type: bool
+* Default Value: `false`
+
+When performing a to English translation or source language detection, the translator/detector
+by default uses the required 'language.tag.keys' configuration option to determine which tags to
+translate or detect source languages for.  If this option is enabled, 'language.tag.keys' is no
+longer a required option and all name tags will be parsed during translation/detection.  If
+'language.tag.keys' is populated in addition to enabling this option, then any tag keys in
+'language.tag.keys' that are not names will be parsed in addition to the name tags.
+
+=== language.skip.words.in.english.dictionary
+
+* Data Type: bool
+* Default Value: `true`
+
+When performing a to English translation or source language detection, the translator/detector
+will skip the translation of any tags whose value is in an English dictionary.
+
+=== language.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of keys of tags whose values are to either be translated to English by a
+ToEnglishTranslationVisitor or just have their source languages detected by a
+LanguageDetectionVisitor depending on the operation being performed. Separate keys with a ';' and
+surround in quotes when passing in from the command line.
+
 === language.translation.comparison.pretranslated.tag.keys
 
 * Data Type: list
 * Default Value:
 ** ``
 
-A list of tag keys known to have been previously translated to the desired target language.  The
-list ordering should correspond to that of language.translation.comparison.to.translate.tag.keys.
-Separate keys with a ';' and surround in quotes when passing in from the command line.
+A list of tag keys whose values are known to have been previously translated to the desired target
+language.  The list ordering should correspond to that of language.tag.keys.  Separate keys with a
+';' and surround in quotes when passing in from the command line.
 
 === language.translation.comparison.scorer
 
@@ -1346,81 +1478,14 @@ If source languages are specified that do not match the detected language for pi
 translation, setting this to true allows the detected language to override the specified source
 languages.
 
-=== language.translation.hoot.services.detectable.languages.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectable`
-
-Service endpoint for retrieving detectable languages supported by HootServicesTranslatorClient
-
-=== language.translation.hoot.services.detectors
-
-* Data Type: list
-* Default Value:
-** `TikaLanguageDetector`
-** `OpenNlpLanguageDetector`
-
-When using 'HootServicesTranslatorClient' as the to English language translator, one or more
-hoot-services Java class names implementing LanguageDetector.  Language detectors used
-during a to English language translation in order of entry.  Valid values are 'TikaLanguageDetector'
-and 'OpenNlpLanguageDetector'.  If no detectors are specified, then language translation will
-attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection .
-Separate values with a ';' and surround in quotes when passing in from the command line.
-
-=== language.translation.hoot.services.detectors.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/detectors`
-
-Service endpoint for retrieving available detector implementations supported by
-HootServicesTranslatorClient
-
-=== language.translation.hoot.services.translatable.languages.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translatable`
-
-Service endpoint for retrieving translatable languages supported by HootServicesTranslatorClient
-
-=== language.translation.hoot.services.translation.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translate`
-
-Web service translation endpoint used by the HootServicesTranslatorClient
-
 === language.translation.hoot.services.translator
 
 * Data Type: string
 * Default Value: `HootLanguageTranslator`
 
-When using 'HootServicesTranslatorClient' as the to English language translator, a hoot-services
-Java class names implementing ToEnglishTranslator.  Valid values are 'JoshuaLanguageTranslator' and
-'HootLanguageTranslator'.
-
-=== language.translation.hoot.services.translators.endpoint
-
-* Data Type: string
-* Default Value: `http://localhost:8080/hoot-services/language/toEnglishTranslation/translators`
-
-Service endpoint for retrieving available translator implementations supported by
-HootServicesTranslatorClient
-
-=== language.translation.info.provider
-
-* Data Type: string
-* Default Value: `hoot::HootServicesTranslationInfoClient`
-
-TranslationInfoProvider implementation to use for determining language information needed by to
-English translation.  Not all to English translators will make use of this capability.
-
-=== language.translation.max.cache.size
-
-* Data Type: long
-* Default Value: `10000`
-
-Maximum result cache sized used for to English translation and transliteration.  Not honored by all
-translators.  A cache size of -1 disables the translation cache.
+When using 'hoot::HootServicesTranslatorClient' as the to English language translator, a
+hoot-services Java class names implementing ToEnglishTranslator.  Valid values are
+'JoshuaLanguageTranslator' and 'HootLanguageTranslator'.
 
 === language.translation.perform.exhaustive.search.with.no.detection
 
@@ -1431,22 +1496,6 @@ If more than one source language is specified for to English translation and the
 source language cannot be detected, translation attempts will be made against each specified
 languages until a translation is found.  Enabling this option can have a large impact on translation
 performance due to language detection cost.
-
-=== language.translation.skip.pre.translated.tags
-
-* Data Type: bool
-* Default Value: `false`
-
-When performing a to English translation , the translator will skip the translation of any tags
-whose owning elements have a pre-translated English tag (key=<tag name>:en).
-
-=== language.translation.skip.words.in.english.dictionary
-
-* Data Type: bool
-* Default Value: `true`
-
-When performing a to English translation, the translator will skip the translation of any tags whose
-value is in an English dictionary.
 
 === language.translation.source.languages
 
@@ -1461,28 +1510,15 @@ multiple source languages can have a large impact on translation performance due
 detection cost.  Separate list items with a ';' and surround in quotes when passing them in from
 the command line.
 
-=== language.translation.to.translate.tag.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-A list of keys of tags whose values are to be translated to English.  The translations of these
-tags are compared against the list of pre-translated tags in the option
-language.translation.comparison.pretranslated.tag.keys (list sizes should be equal to each other).
-Separate keys with a ';' and surround in quotes when passing in from the command line.
-
 === language.translation.translator
 
 * Data Type: string
-* Default Value: `hoot::DictionaryTranslator`
+* Default Value: `hoot::HootServicesTranslatorClient`
 
-ToEnglishTranslator implementation to use for to English translation.  hoot::DictionaryTranslator,
-the current default, is a simple lookup table primarily used for translation testing and proof of
-concept.  Other implementations, such as hoot::HootServicesTranslatorClient, have better
-translation capability but require custom server installation procedures.  If using
-hoot::HootServicesTranslatorClient, the option 'hoot.services.authenticated.username' must be
-populated with a valid value or translation web requests will fail.
+ToEnglishTranslator implementation to use for to English translation.
+hoot::HootServicesTranslatorClient, requires a translation server be set up and valid OAuth
+credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
+option.
 
 === levenshtein.distance.alpha
 
@@ -1495,6 +1531,14 @@ Raise the Levenshtein score to this power before returning this result. If alpha
 The default alpha value of 1.15 was determined through experimentation with a Jakarta data set
 using MeanWordSetDistance as the container classes. See Redmine ticket #2349 for some experiment
 details.  The "best" value varies depending on the input data as well as how the data is being used.
+
+=== libpostal.data.dir
+
+* Data Type: string
+* Default Value: `/usr/share/libpostal`
+
+Absolute path to the directory where the libpostal library, used for address parsing, stores its
+data.
 
 === log.format
 
@@ -1544,20 +1588,24 @@ Not necessarily utilized by all parts of the application.
 
 * Data Type: list
 * Default Value:
-** `hoot::ReprojectToPlanarOp` - Before any cleaning, reproject to a planar projection (e.g. UTM).
-** `hoot::DuplicateWayRemover` - Remove duplicate ways (lines) that are exact duplicates. If the lines partially overlap with exactly the same geometry then only the partial overlap is removed from the more complex geometry.
-** `hoot::SuperfluousWayRemover` - Remove all ways that contain no nodes or all the nodes are exactly the same.
-** `hoot::IntersectionSplitter` - Split all highway type ways that intersect.
-** `hoot::UnlikelyIntersectionRemover` - Remove implied intersections that are likely incorrect. For example, a motorway overpass intersecting a residential street at a 90° is considered unlikely and "unsnapped". The geometry location is not modified.
-** `hoot::DualWaySplitter` - Split highway types that are marked as divided into two separate geometries marked as oneway roads. A number of assumptions must be made to do this including assumptions about the direction of travel on roads (right or left hand drivers).
-** `hoot::ImpliedDividedMarker` - If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.
-** `hoot::DuplicateNameRemover` - Remove any duplicate names. See `duplicate.name.case.sensitive` for modifying the case sensitivity.
-** `hoot::SmallWayMerger` - Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.way.merger.threshold` for setting the threshold value.
-** `hoot::RemoveEmptyAreasVisitor` - Remove all area elements that have a area of zero.
-** `hoot::RemoveDuplicateAreaVisitor` - Remove any area elements that are essentially the same.
-** `hoot::NoInformationElementRemover` - Remove any elements that don't have any tags with information. (E.g. only contains UUID and source, but not FCODE equivalent or other informative tags).
+** `hoot::ReprojectToPlanarOp`
+** `hoot::DuplicateWayRemover`
+** `hoot::SuperfluousWayRemover`
+** `hoot::IntersectionSplitter`
+** `hoot::UnlikelyIntersectionRemover`
+** `hoot::DualWaySplitter`
+** `hoot::ImpliedDividedMarker`
+** `hoot::DuplicateNameRemover`
+** `hoot::SmallWayMerger`
+** `hoot::RemoveEmptyAreasVisitor`
+** `hoot::RemoveDuplicateRelationMembersVisitor`
+** `hoot::RelationCircularRefRemover`
+** `hoot::RemoveEmptyRelationsOp`
+** `hoot::RemoveDuplicateAreaVisitor`
+** `hoot::NoInformationElementRemover`
 
 A list of map operations to be applied to a map for cleaning purposes, in order.
+'hoot info --operators' displays information about the available transforms.
 
 [[match.creators]]
 === match.creators
@@ -1567,20 +1615,7 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
-
-Some of the possible options include:
-
-* `hoot::BuildingMatchCreator` - matches building polygons
-* `hoot::HighwayMatchCreator` - matches roads using the non-greedy algorithm
-* `hoot::NetworkMatchCreator` - matches roads using the Network algorithm.
-* `hoot::PoiPolygonMatchCreator` - matches POIs with buildings or areas
-* `hoot::ScriptMatchCreator,Area.js` - matches areas (non-building polygons marked as areas=yes).
-* `hoot::ScriptMatchCreator,LinearWaterway.js` - matches linear rivers and streams
-* `hoot::ScriptMatchCreator,PoiGeneric.js` - matches POIs using Generic Conflation
-* `hoot::ScriptMatchCreator,PowerLine.js` - matches power lines using Generic Conflation
-* `hoot::ScriptMatchCreator,Railway.js` - matches railways using Generic Conflation
-* `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The script should be
-  in `$HOOT_HOME/rules/<yourscript.js>`.
+'hoot info --matchers' displays information about the available matchers.
 
 === match.parallel.exponent
 
@@ -1644,20 +1679,7 @@ are identical. Units in meters and defaults to 1.0m.
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
-
-Possible values include:
-
-* `hoot::BuildingMergerCreator` - Required if `hoot::BuildingMatchCreator` is
-  specified in `match.creators`.
-* `hoot::HighwaySnapMergerCreator` - Required if `hoot::HighwayMatchCreator`
-  is specified in `match.creators`.
-* `hoot::NetworkMergerCreator` - Required if `hoot::NetworkMatchCreator`
-is specified in `match.creators`.
-* `hoot::PoiPolygonMergerCreator` - Required if `hoot::PoiPolygonMatchCreator`
-  is specified in `match.creators`.
-* `hoot::ScriptMergerCreator` - Required if one or more instances of
-  `hoot::ScriptMatchCreator` is specified in `match.creators`. Note that the
-  script name is not specified in this parameter.
+'hoot info --mergers' displays information about the available mergers.
 
 === network.conflicts.aggression
 
@@ -1818,8 +1840,8 @@ strict.
 ** ``
 
 List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
-TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in quotes when passing
-in from the command line.
+TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in double quotes when
+passing in from the command line.
 
 === ogr.append.data
 
@@ -1953,7 +1975,9 @@ If YES, the detected X,Y,Z or geometry columns will be stored as regular attribu
 * Default Value: `Lat*,lat*,LAT*`
 
 From the GDAL docs:
-A comma separated list of possible names for Y/latitude coordinate of a point. Each name might be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or *middle*. The values in the column must be floating point values.
+A comma separated list of possible names for Y/latitude coordinate of a point. Each name might be a
+pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or
+*middle*. The values in the column must be floating point values.
 
 === ogr.reader.csv.lonfield
 
@@ -1961,7 +1985,9 @@ A comma separated list of possible names for Y/latitude coordinate of a point. E
 * Default Value: `Lon*,lon*,LON*`
 
 From the GDAL docs:
-A comma separated list of possible names for X/longitude coordinate of a point. Each name might be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or *middle*. The values in the column must be floating point values.
+A comma separated list of possible names for X/longitude coordinate of a point. Each name might be
+a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or
+*middle*. The values in the column must be floating point values.
 
 //=== ogr.reader.csv.zfield
 
@@ -1969,7 +1995,9 @@ A comma separated list of possible names for X/longitude coordinate of a point. 
 //* Default Value: `Z,z`
 
 //From the GDAL docs:
-//A comma separated list of possible names for Z/elevation coordinate of a point. Each name might be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or *middle*. The values in the column must be floating point values.
+//A comma separated list of possible names for Z/elevation coordinate of a point. Each name might
+be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix
+or *middle*. The values in the column must be floating point values.
 
 === ogr.reader.epsg.override
 
@@ -2032,8 +2060,8 @@ NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
 * Data Type: bool
 * Default Value: `true`
 
-Where applicable, export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
-FCODE per file/layer (ROAD_L, BUILDING_P etc).
+Where applicable, export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc)
+instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
 === ogr.throw.error
 
@@ -2132,9 +2160,9 @@ the output is a SQL file.  If false, the ID update statements will not be writte
 * Data Type: string
 * Default Value: ``
 
-This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter
-It forces database reading/writing use the specified OSM API database as master for determining the
-sequencing of element ID's.
+This is required when using either the OsmApiDbAwareHootApiDbReader or the
+OsmApiDbAwareHootApiDbWriter It forces database reading/writing use the specified OSM API database
+as master for determining the sequencing of element ID's.
 
 === osm.add.bbox.tag
 
@@ -2142,6 +2170,15 @@ sequencing of element ID's.
 * Default Value: `false`
 
 Add a tag with the bounding box for each element
+
+=== osm.map.reader.xml.add.child.refs.when.missing
+
+* Data Type: bool
+* Default Value: `false`
+
+By default, OsmXmlReader will not add child references (node ref, elements members) to parent
+elements if those elements are not present in the data.  For external sorting and translations,
+where partial chunks of elements will be present the setting is changed.
 
 === osm.map.reader.factory.reader
 
@@ -2248,14 +2285,15 @@ The probability that a name will be modified.
 
 * Data Type: list
 * Default Value:
-** `hoot::PertyWaySplitVisitor` - Randomly splits ways.
-** `hoot::PertyWayGeneralizeVisitor` - Randomly generalizes ways.
-** `hoot::PertyRemoveRandomElementVisitor` - Randomly removes elements.
-** `hoot::PertyDuplicatePoiOp` - Randomly adds duplicated POIs.
-** `hoot::PertyRemoveTagVisitor` - Randomly removes element tags.
-** `hoot::PertyNameVisitor` - Randomly modifies element name tags.
+** `hoot::PertyWaySplitVisitor`
+** `hoot::PertyWayGeneralizeVisitor`
+** `hoot::PertyRemoveRandomElementVisitor`
+** `hoot::PertyDuplicatePoiOp`
+** `hoot::PertyRemoveTagVisitor`
+** `hoot::PertyNameVisitor`
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
+'hoot info --operators | grep Perty' displays information about the available operations.
 
 === perty.random.error.x
 
@@ -2509,14 +2547,57 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.address.match.enabled
+=== poi.polygon.address.additional.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+By default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the
+addressTagKeys file).  You can expand the tag keys searched by populating this list. From the
+command line, separate list items with a semicolon and surround the entire list in double quotes.
+
+=== poi.polygon.address.allow.lenient.house.number.matching
 
 * Data Type: bool
 * Default Value: `true`
 
+If true, POI/Polygon conflation will allow house number subletter mismatches for the addresses with
+the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
+
+=== poi.polygon.address.match.enabled
+
+* Data Type: bool
+* Default Value: `false`
+
 If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.
 If the data being conflated is known to have poor address data, disabling this option may speed up
-conflation runtime performance.
+conflation runtime performance.  This option is left turned off by default due to the small startup
+time required to use libpostal (~5s), which would be wasteful for small datasets known to have no
+addresses in them.  The startup time is incurred only once per Hootenanny command invocation.
+
+=== poi.polygon.address.translate.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
+address before normalizing it (note that address normalization may involve some form of language
+translation even when this setting is ).  This can have significant impact on the runtime
+performance of conflation when enabled and should only be enabled if the source data is known to
+have non-English addresses.  The configuration option, 'language.translation.translator', controls
+which translator is used.
+
+=== poi.polygon.address.use.default.language.translation.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI/Polygon conflation will use only libpostal for translating languages in addresses,
+which occurs during address normalization.  If false, and poi.polygon.translate.addresses.to.english
+is enabled, POI/Polygon conflation will use additional to English language translation before
+address normalization.  Disable this only if libpostal's language translation is not adequate for
+your language translation needs.
 
 === poi.polygon.auto.merge.many.poi.to.one.poly.matches
 
@@ -2630,6 +2711,56 @@ The minimum similarity the name scores of two features can have and be considere
 match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
 present (null).
 
+=== poi.polygon.name.translate.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any name tag.  This can have
+significant impact on the runtime performance of conflation when enabled and should only be enabled
+if the source data is known to have non-English names.  The configuration option,
+'language.translation.translator', controls which translator is used.
+
+=== poi.polygon.phone.number.additional.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+By default, POI/Polygon conflation examines all tags with keys containing the text "phone" for
+phone number comparisons.  You can expand the tag keys searched by populating this list. From the
+command line, separate list items with a semicolon and surround the entire list in double quotes.
+
+=== poi.polygon.phone.number.match.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI/Polygon conflation will compare phone number as one of the criteria for matching
+features.  If the data being conflated is known to have poor telephone number data, disabling this
+option may speed up conflation runtime performance.
+
+=== poi.polygon.phone.number.region.code
+
+* Data Type: string
+* Default Value: ``
+
+Optional geographical region code used when comparing phone numbers.   See:
+http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region
+code, if known for the input data, may increase phone number matching accuracy but may also have
+runtime performance implications.
+
+=== poi.polygon.phone.number.search.in.text
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text
+that may contain things other than phone numbers.  If false, the conflation will assume the tag
+value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must
+be set to a valid region code when enabling this option.  Enabling this option may have runtime
+performance implications.
+
 === poi.polygon.poi.ignore.tags.file
 
 * Data Type: string
@@ -2720,36 +2851,6 @@ The threshold at which a review is called a review for PoiPolygon. See
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
-=== poi.polygon.translate.addresses.to.english
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
-address.  This can have significant impact on the runtime performance of conflation when enabled
-and should only be enabled if the source data is known to have non-English addresses.  The
-configuration option, 'language.translation.translator', controls which translator is used.
-
-=== poi.polygon.translate.names.to.english
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, Hootenanny will attempt to translate to English the value of any name tag.  This can have
-significant impact on the runtime performance of conflation when enabled and should only be enabled
-if the source data is known to have non-English names.  The configuration option,
-'language.translation.translator', controls which translator is used.
-
-=== poi.polygon.translate.types.to.english
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
-schema.  This can have significant impact on the runtime performance of conflation when enabled
-and should only be enabled if the source data is known to have non-English type values.  The
-configuration option, 'language.translation.translator', controls which translator is used.
-
 === poi.polygon.type.score.threshold
 
 * Data Type: double
@@ -2765,6 +2866,16 @@ match, with 0.0 being the least similar and 1.0 being the most similar.
 
 Flat file containing OSM types and lists of possible texts features having such a type might
 contain.
+
+=== poi.polygon.type.translate.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
+schema.  This can have significant impact on the runtime performance of conflation when enabled
+and should only be enabled if the source data is known to have non-English type values.  The
+configuration option, 'language.translation.translator', controls which translator is used.
 
 === poi.review.threshold
 
@@ -3021,7 +3132,7 @@ nested criterion, use the Hootenanny Javascript interface instead.
 ** ``
 
 A list of tag keys the RemoveTagsVisitor will remove on elements.  From the command line, separate
-list items with a semicolon and surround the entire list in quotes.
+list items with a semicolon and surround the entire list in double quotes.
 
 === replace.tag.visitor.match.tag
 
@@ -3285,7 +3396,7 @@ Text that TagKeyContainsCriterion searches a match for.
 * Default Value: ``
 
 Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
-delimit multiple key/value pairs with ';' and surround the entire list in quotes.
+delimit multiple key/value pairs with ';' and surround the entire list in double quotes.
 E.g. "highway=road;amenity=school"
 
 === tag.merger.default
@@ -3294,19 +3405,8 @@ E.g. "highway=road;amenity=school"
 * Default Value: `hoot::OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
-depending on the specifics of the merger.
-
-Possible options include:
-
-* <<Average-Tags,`hoot::AverageTagMerger`>> - Attempts to take the average of the two tag sets.
-* <<Generalize-Tag-Merger,`hoot::GeneralizeTagMerger`>> - Attempt to take the most general
-  interpretation of the tags.
-* `hoot::OverwriteTagMerger` - Aliased to `hoot::OverwriteTag2Merger`
-* <<Overwrite-Tag-1,`hoot::OverwriteTag1Merger`>> - Overwrite the tags in the first input.
-* <<Overwrite-Tag-2,`hoot::OverwriteTag2Merger`>> - Overwrite the tags in the second input.
-* <<Provenance-Aware-Overwrite-Tag-Merger,`hoot::ProvenanceAwareOverwriteTagMerger`>> - Overwrite
-the tags in the first input except the provenance tag, hoot:source, which will be merged using
-values from both features.
+depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the 
+available mergers.
 
 === tag.printing.format
 
@@ -3347,7 +3447,7 @@ renaming existing tag keys on all elements in a map.
 
 The keys the TagValueNumericRangeCriterion examines the numeric value of.  Tags for all keys must
 meet the numeric range requirement for the criterion to be met.  Separate multiple keys with a
-semicolon from the command line and surround the entire list in quotes.
+semicolon from the command line and surround the entire list in double quotes.
 
 === tag.value.numeric.range.criterion.max
 
@@ -3487,8 +3587,8 @@ The direction that the translation script should translate. `toogr` will transla
 
 Override the value of translated tags and attributes.
 
-VERY IMPORTANT NOTE: The changes apply to ALL elements and are applied to the OSM+ tags either before or
-after the translation. E.g.
+VERY IMPORTANT NOTE: The changes apply to ALL elements and are applied to the OSM+ tags either
+before or after the translation. E.g.
 * After attributes are translated to OSM+ tags during Import
 * Before OSM+ tags are translated to attributes on Export
 
@@ -3536,11 +3636,12 @@ problematic if you're doing testing or expecting repeatable output for other.
 
 * Data Type: list
 * Default Value:
-** `hoot::SuperfluousNodeRemover` - Removes all the nodes from a map that aren't part of a way.
-** `hoot::SmallWayMerger` - Merges small ways using the threshold determined by the small.way.merger.threshold setting along with other criteria.
+** `hoot::SuperfluousNodeRemover`
+** `hoot::SmallWayMerger`
 
-List of operations to apply immediately after conflation when using Unifying Conflation only.  Runs
-before the operations in `conflate.post.ops`.
+List of operations to apply immediately after conflation when using Unifying Conflation only.
+Runs before the operations in `conflate.post.ops`. 'hoot info --operators' displays information
+about the available operations.
 
 === unify.pre.ops
 
@@ -3548,8 +3649,9 @@ before the operations in `conflate.post.ops`.
 * Default Value:
 ** ``
 
-List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
-after the operations in `conflate.pre.ops`.
+List of operations to apply immediately before conflating when using Unifying Conflation only.
+Runs after the operations in `conflate.pre.ops`. 'hoot info --operators' displays information about
+the available operations.
 
 === uuid.helper.repeatable
 

@@ -26,13 +26,11 @@
  */
 #include "ScriptMergerCreator.h"
 
-#include "ScriptMatch.h"
-#include "ScriptMerger.h"
-
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
+#include <hoot/js/conflate/js/ScriptMerger.h>
 
 using namespace std;
 using namespace v8;
@@ -132,7 +130,7 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
   d.className = className();
-  d.description = "Script merge creator required by all script match creators.";
+  d.description = "Script merge creator required by all script match creators";
   d.experimental = false;
   vector<CreatorDescription> result;
   result.push_back(d);

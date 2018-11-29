@@ -30,8 +30,7 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -52,8 +51,6 @@ public:
 
   SumNumericTagsVisitor();
   explicit SumNumericTagsVisitor(const QStringList keys);
-
-  virtual ~SumNumericTagsVisitor() {}
 
   /**
    * Given a set of tag keys and for all features having those tags, sums the numerical values of

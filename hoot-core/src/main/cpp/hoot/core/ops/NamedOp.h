@@ -28,9 +28,8 @@
 #define NAMEDOP_H
 
 // hoot
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "OsmMapOperation.h"
 
 // Qt
 #include <QStringList>
@@ -51,7 +50,7 @@ public:
   NamedOp();
   NamedOp(QStringList namedOps);
 
-  virtual ~NamedOp() {}
+  //virtual ~NamedOp() {}
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 

@@ -146,7 +146,7 @@ bool Tags::hasInformationTag() const
   for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
     QString key = it.key();
-    LOG_VART(key);
+    //LOG_VART(key);
     if (OsmSchema::getInstance().isMetaData(key, it.value()) == false &&
         it.value() != "")
     {
@@ -397,6 +397,29 @@ QStringList Tags::getNames() const
   }
 
   return result;
+}
+
+QString Tags::getName() const
+{
+  QString name = get("name").toLower().trimmed();
+  if (!name.isEmpty())
+  {
+    return name;
+  }
+  else
+  {
+    QStringList names = getNames();
+    for (int i = 0; i < names.size(); i++)
+    {
+      name = names.at(i).toLower().trimmed();
+      //arbitrarily returning the first name here
+      if (!name.isEmpty())
+      {
+        return name;
+      }
+    }
+  }
+  return "";
 }
 
 const QStringList& Tags::getNameKeys()

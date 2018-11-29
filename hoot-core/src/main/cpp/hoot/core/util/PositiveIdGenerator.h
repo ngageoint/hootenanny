@@ -22,15 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POSITIVEIDGENERATOR_H
 #define POSITIVEIDGENERATOR_H
 
-#include "IdGenerator.h"
-
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/IdGenerator.h>
 
 // standard
 #include <algorithm>

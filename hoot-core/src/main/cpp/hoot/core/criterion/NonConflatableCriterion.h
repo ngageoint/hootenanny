@@ -28,13 +28,12 @@
 #define NONCONFLATABLECRITERION_H
 
 // hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
-
-#include "ElementCriterion.h"
 
 namespace hoot
 {
@@ -61,7 +60,7 @@ public:
     return ElementCriterionPtr(new NonConflatableCriterion());
   }
 
-  virtual QString getDescription() const { return "Identifies features that are not conflatable by hootenanny"; }
+  virtual QString getDescription() const { return "Identifies features that are not conflatable"; }
 
 };
 

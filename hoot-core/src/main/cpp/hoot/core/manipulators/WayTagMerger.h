@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYTAGMERGER_H
 #define WAYTAGMERGER_H
 
-#include "WayMerger.h"
+#include <hoot/core/manipulators/WayMerger.h>
 
 namespace hoot
 {
@@ -36,13 +36,14 @@ namespace hoot
 class WayTagMerger : public WayMerger
 {
 public:
+
   static std::string className() { return "hoot::WayTagMerger"; }
 
   WayTagMerger();
-
   virtual ~WayTagMerger() {}
 
 protected:
+
   virtual Manipulation* _createManipulation(long leftId, long rightId, ConstOsmMapPtr map,
     Meters minSplitSize);
 };

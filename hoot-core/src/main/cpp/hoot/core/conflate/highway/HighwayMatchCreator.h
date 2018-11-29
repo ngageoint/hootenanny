@@ -36,7 +36,6 @@ namespace hoot
 class HighwayMatchVisitor;
 class HighwayClassifier;
 class SublineStringMatcher;
-class NotImplementedException;
 class TagAncestorDifferencer;
 
 class HighwayMatchCreator : public MatchCreator
