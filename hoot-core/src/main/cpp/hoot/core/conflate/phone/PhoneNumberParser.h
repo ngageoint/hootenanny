@@ -86,6 +86,23 @@ public:
    */
   bool hasPhoneNumber(const Element& e) const;
 
+  /**
+   * Returns the number of valid phone number tags contained by the element
+   *
+   * @param element the element to examine for phone numbers
+   * @return a phone number count
+   */
+  int numPhoneNumbers(const ConstElementPtr& element) const;
+
+  /**
+   * Determines if an element contains a phone number
+   *
+   * @param element the element to examine for a phone number
+   * @return true if the element contains at least one phone number; false otherwise
+   * @note This could be made more efficient, if necessary, by only counting the first phone number.
+   */
+  bool hasPhoneNumber(const ConstElementPtr& element) const;
+
   void setRegionCode(QString code);
   void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }
   void setSearchInText(bool search);

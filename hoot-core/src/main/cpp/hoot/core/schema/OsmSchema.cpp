@@ -1608,30 +1608,6 @@ bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList)
   return false;
 }
 
-bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/, OsmGeometries::Type geometries)
-{
-  //  Empty tags shouldn't allow for anything
-  if (t.size() == 0)
-    return false;
-  int usableTags = 0;
-  OsmGeometries::Type value = OsmGeometries::All;
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
-  {
-    const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
-    //  Unknown vertex types aren't usable tags
-    if (tv.getType() != SchemaVertex::UnknownVertexType && tv.geometries != OsmGeometries::Empty)
-    {
-      value = static_cast<OsmGeometries::Type>(value & tv.geometries);
-      usableTags++;
-    }
-  }
-  //  Unusable tags shouldn't allow for anything
-  if (usableTags == 0)
-    return false;
-  //  Check geometries against usable tags
-  return (value & geometries) != OsmGeometries::Empty;
-}
-
 bool OsmSchema::allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries)
 {
   return allowsFor(e->getTags(), e->getElementType(), geometries);

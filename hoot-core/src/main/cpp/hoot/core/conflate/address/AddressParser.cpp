@@ -102,7 +102,7 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   QList<Address> addresses;
   if (element->getElementType() == ElementType::Node)
   {
-    return hasAddress(*boost::dynamic_pointer_cast<const Node>(element));
+    return hasAddress(boost::dynamic_pointer_cast<const Node>(element));
   }
   else if (element->getElementType() == ElementType::Way)
   {
