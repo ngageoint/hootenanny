@@ -29,8 +29,8 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
 {
@@ -46,7 +46,7 @@ void KeepBuildingsVisitor::visit(const ConstElementPtr& e)
   {
     boost::shared_ptr<Element> ee = _map->getElement(type, id);
 
-    if (OsmSchema::getInstance().isBuilding(ee->getTags(), type) == false)
+    if (BuildingCriterion().isSatisfied(ee->getTags(), type) == false)
     {
       /// @todo This could do bad things if the element is in use.
       RemoveElementOp::removeElementNoCheck(_map->shared_from_this(), e->getElementId());

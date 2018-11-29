@@ -41,9 +41,9 @@
 // hoot
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -209,8 +209,7 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
         (e.role == MetadataTags::RoleOuter() || e.role == MetadataTags::RolePart()))
     {
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
-      if (r && (r->isMultiPolygon() ||
-        OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation)))
+      if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(*r)))
       {
         boost::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
         try

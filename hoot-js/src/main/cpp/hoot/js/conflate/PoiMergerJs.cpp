@@ -34,7 +34,7 @@
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/conflate/js/ScriptMerger.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/PoiCriterion.h>
 
 // Qt
 #include <QString>
@@ -80,7 +80,7 @@ void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isola
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const ConstNodePtr& node = it->second;
-    if (node->getId() != mergeTargetId.getId() && OsmSchema::getInstance().isPoi(*node))
+    if (node->getId() != mergeTargetId.getId() && PoiCriterion().isSatisfied(*node))
     {
       LOG_VART(node);
 

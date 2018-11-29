@@ -27,7 +27,7 @@
 #include "AddExportTagsVisitor.h"
 
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {

@@ -39,8 +39,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 namespace hoot
 {
@@ -110,7 +110,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   }
 
   // Ensure we're a linear way -- heuristic is reported to be mostly accurate
-  if (OsmSchema::getInstance().isLinear(*way) == false)
+  if (LinearCriterion().isSatisfied(*way) == false)
   {
     if (printInfo == true)
     {

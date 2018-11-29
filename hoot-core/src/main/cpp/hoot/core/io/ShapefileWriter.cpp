@@ -40,15 +40,15 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/io/OgrOptions.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
 #include <QFileInfo>
@@ -236,7 +236,7 @@ void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
   {
     WayPtr way = it->second;
 
-    if (OsmSchema::getInstance().isArea(way) == false)
+    if (AreaCriterion().isSatisfied(*way) == false)
     {
       OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
       // set all the column values.
@@ -451,7 +451,7 @@ void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
   {
     WayPtr way = it->second;
 
-    if (OsmSchema::getInstance().isArea(way))
+    if (AreaCriterion().isSatisfied(*way))
     {
       _writeWayPolygon(map, way, poLayer, columns, shpColumns);
     }

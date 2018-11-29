@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace std;
 
@@ -57,7 +58,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
     ++it)
   {
     ConstElementPtr e = _map->getRelation(*it);
-    if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()))
+    if (isSatisified(*e))
     {
       result = true;
     }
@@ -92,6 +93,13 @@ bool BuildingCriterion::isSatisfied(const Element& e) const
   }
 
   return result;
+}
+
+bool BuildingCriterion::isSatisfied(const Tags& tags, const ElementType& elementType) const
+{
+  return
+    elementType != ElementType::Node &&
+    OsmSchema::getInstance().hasCategory(tags, "building") == true;
 }
 
 }

@@ -43,22 +43,26 @@ AreaCriterion::AreaCriterion()
 
 bool AreaCriterion::isSatisfied(const Element& e) const
 {
+  return isSatisfied(e.getTags(), e.getElementType())
+}
+
+bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType) const
+{
   bool result = false;
 
   // don't process if a node
-  if (e.getElementType() == ElementType::Node)
+  if (elementType == ElementType::Node)
   {
     return false;
   }
 
-  result |= BuildingCriterion().isSatisfied(e);
+  result |= BuildingCriterion().isSatisfied(tags, elementType);
   result |= t.isTrue(MetadataTags::BuildingPart());
   result |= t.isTrue("area");
 
   // if at least one of the tags is marked as an area, but not a linestring tag then we consider
   // this to be an area feature.
-  const Tags t = e.getTags();
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
     uint16_t g = tv.geometries;

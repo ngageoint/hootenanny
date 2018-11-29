@@ -41,10 +41,11 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
 #include <QBuffer>
@@ -381,7 +382,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
     // Make sure that building ways are "complete"
     const vector<long>& nodes = w->getNodeIds();
     bool valid = true;
-    if (OsmSchema::getInstance().isArea(w))
+    if (AreaCriterion().isSatisfied(*w))
     {
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
@@ -492,7 +493,7 @@ void OsmGbdxXmlWriter::_writeWayWithPoints(const ConstWayPtr& w, ConstOsmMapPtr 
   QString endBracket;
 
   const vector<long>& nodes = w->getNodeIds();
-  if (OsmSchema::getInstance().isArea(w) || nodes[0] == nodes[nodes.size() - 1])
+  if (AreaCriterion().isSatisfied(*w) || nodes[0] == nodes[nodes.size() - 1])
   {
     featureGeometry = "Polygon";
     endBracket = "))";

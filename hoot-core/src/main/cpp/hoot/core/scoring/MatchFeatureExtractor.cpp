@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>

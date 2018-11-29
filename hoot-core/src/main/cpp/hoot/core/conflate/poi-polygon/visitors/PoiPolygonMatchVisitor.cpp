@@ -60,7 +60,11 @@ _elementsEvaluated(0),
 _threshold(threshold),
 _rf(rf),
 _numElementsVisited(0),
-_numMatchCandidatesVisited(0)
+_numMatchCandidatesVisited(0),
+_poiCrit(
+  new PoiPolygonPoiCriterion(PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList())),
+_polyCrit(
+  new PoiPolygonPolyCriterion(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
 {
   ConfigOptions opts = ConfigOptions();
   _enableAdvancedMatching = opts.getPoiPolygonEnableAdvancedMatching();
@@ -94,9 +98,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Elemen
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() &&
-          OsmSchema::getInstance().isPoiPolygonPoly(
-            n, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+      if (n->isUnknown() && _polyCrit->isSatisifed(*n))
       {
         // score each candidate and push it on the result vector
         PoiPolygonMatch* m =
@@ -141,9 +143,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() &&
-          OsmSchema::getInstance().isPoiPolygonPoly(
-            n, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+      if (n->isUnknown() && _polyCrit->isSatisifed(*n))
       {
         _surroundingPolyIds.insert(*it);
       }
@@ -170,9 +170,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<c
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() &&
-          OsmSchema::getInstance().isPoiPolygonPoi(
-            n, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()))
+      if (n->isUnknown() && _poiCrit->isSatisied(*n))
       {
         _surroundingPoiIds.insert(*it);
       }
@@ -223,9 +221,7 @@ bool PoiPolygonMatchVisitor::_isMatchCandidate(ConstElementPtr element)
   //POIs and their surrounding polys and polys and their surrounding POIs; note that this is
   //different than PoiPolygonMatchCreator::isMatchCandidate, which is looking at both to appease
   //the stats
-  return element->isUnknown() &&
-         OsmSchema::getInstance().isPoiPolygonPoi(
-         element, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList());
+  return element->isUnknown() && _poiCrit->isSatisified(*element);
 }
 
 boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()

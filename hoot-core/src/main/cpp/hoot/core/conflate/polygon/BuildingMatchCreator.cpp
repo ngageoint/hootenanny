@@ -34,7 +34,6 @@
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
@@ -176,10 +175,8 @@ public:
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
   {
-    if (e1->getStatus() != e2->getStatus() &&
-        e1->isUnknown() && e2->isUnknown() &&
-        OsmSchema::getInstance().isBuilding(e1->getTags(), e1->getElementType()) &&
-        OsmSchema::getInstance().isBuilding(e2->getTags(), e2->getElementType()))
+    if (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
+        _buildingCrit.isSatisfied(*e1) && _buildingCrit.isSatisfied(*e2))
     {
       return true;
     }
@@ -220,7 +217,7 @@ public:
 
   static bool isMatchCandidate(ConstElementPtr element)
   {
-    return OsmSchema::getInstance().isBuilding(element->getTags(), element->getElementType());
+    return _buildingCrit.isSatisified(*element);
   }
 
   boost::shared_ptr<HilbertRTree>& getIndex()
@@ -275,6 +272,8 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
+
+  BuildingCriterion _buildingCrit;
 };
 
 BuildingMatchCreator::BuildingMatchCreator() :

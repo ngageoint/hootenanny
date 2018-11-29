@@ -36,7 +36,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/rnd/perty/PertyRemoveTagVisitor.h>
 
 using namespace std;

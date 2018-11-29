@@ -51,6 +51,10 @@
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/StatsAreaCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/CollectionCriterion.h>
 
 // Qt
 #include <QString>
@@ -81,8 +85,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   // NOTE: Originally I was using isLinear. This was a bit too strict in that it wants evidence of
   // being linear before the length is calculated. Conversely, this wants evidence that is is not
   // linear before it will assume it doesn't have a length.
-  if (e->getElementType() != ElementType::Node &&
-      OsmSchema::getInstance().isArea(e) == false)
+  if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(*e) == false)
   {
     /// @optimize
     // we don't really need to convert first, we can just loop through the nodes and sum up the
@@ -271,9 +274,9 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
       ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
       assert(w);
 
-      if(statsFlag)
+      if (statsFlag)
       {
-        if (w->isValidPolygon() && OsmSchema::getInstance().isAreaForStats(w->getTags(), ElementType::Way))
+        if (w->isValidPolygon() && StatsAreaCriterion().isSatisfied(*w))
           return GEOS_POLYGON;
         else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
           return GEOS_POLYGON;
@@ -282,7 +285,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
       }
       else
       {
-        if (w->isValidPolygon() && OsmSchema::getInstance().isArea(w->getTags(), ElementType::Way))
+        if (w->isValidPolygon() && AreaCriterion().isSatisfied(*w))
           return GEOS_POLYGON;
         else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
           return GEOS_POLYGON;
@@ -298,21 +301,23 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
       ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
       assert(r);
 
-      if(statsFlag)
+      LinearCriterion linearCrit;
+
+      if (statsFlag)
       {
-        if (r->isMultiPolygon() || OsmSchema::getInstance().isAreaForStats(r->getTags(), ElementType::Relation))
+        if (r->isMultiPolygon() || StatsAreaCriterion().isSatisfied(*r))
           return GEOS_MULTIPOLYGON;
-        else if (OsmSchema::getInstance().isLinear(*r))
+        else if (linearCrit.isSatisfied(*r))
           return GEOS_MULTILINESTRING;
       }
       else
       {
-        if (r->isMultiPolygon() || OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
+        if (r->isMultiPolygon() || AreaCriterion().isSatisfied(*r))
           return GEOS_MULTIPOLYGON;
-        else if (OsmSchema::getInstance().isLinear(*r))
+        else if (linearCrit.isSatisfied(*r))
           return GEOS_MULTILINESTRING;
         // an empty geometry, pass back a collection
-        else if (r->getMembers().size() == 0 || OsmSchema::getInstance().isCollection(*r))
+        else if (r->getMembers().size() == 0 || CollectionCriterion.isSatisfied(*r))
           return GEOS_GEOMETRYCOLLECTION;
         // Restriction relations are empty geometry
         else if (r->isRestriction())

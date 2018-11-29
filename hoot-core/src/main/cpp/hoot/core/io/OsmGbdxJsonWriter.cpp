@@ -39,14 +39,14 @@ using namespace boost;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
 #include <QBuffer>
@@ -142,8 +142,7 @@ void OsmGbdxJsonWriter::_writeGeometry(ConstNodePtr n)
 void OsmGbdxJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
-  bool isPolygon = OsmSchema::getInstance().isArea(w) ||
-                   nodes[0] == nodes[nodes.size() - 1];
+  const bool isPolygon = AreaCriterion().isSatisified(*w) || nodes[0] == nodes[nodes.size() - 1];
   _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
 }
 
@@ -296,7 +295,7 @@ void OsmGbdxJsonWriter::_writeWays()
     //  Make sure that building ways are "complete"
     const vector<long>& nodes = w->getNodeIds();
     bool valid = true;
-    if (OsmSchema::getInstance().isArea(w))
+    if (AreaCriterion().isSatisfied(*w))
     {
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {

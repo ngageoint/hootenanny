@@ -30,10 +30,9 @@
 #include <geos/geom/GeometryFactory.h>
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
-
+#include <hoot/core/criterion/AreaCriterion.h>
 using namespace geos::geom;
 
 namespace hoot
@@ -53,7 +52,7 @@ void UnionPolygonsVisitor::visit(const boost::shared_ptr<const Element>& e)
     return;
   }
 
-  if (OsmSchema::getInstance().isArea(e->getTags(), e->getElementType()))
+  if (AreaCriterion().isSatisfied(*e))
   {
     boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
     _result.reset(g->Union(_result.get()));

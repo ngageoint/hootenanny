@@ -34,7 +34,7 @@
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/conflate/js/ScriptMerger.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 
 // Qt
 #include <QString>
@@ -71,13 +71,15 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
 
   int areasMerged = 0;
 
+  NonBuildingAreaCriterion nonBuildingAreaCrit;
+
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& way = it->second;
     LOG_VART(way->getId());
-    LOG_VART(OsmSchema::getInstance().isNonBuildingArea(way));
-    if (way->getElementId() != mergeTargetId && OsmSchema::getInstance().isNonBuildingArea(way))
+    LOG_VART(nonBuildingAreaCrit.isSatisfied(*way));
+    if (way->getElementId() != mergeTargetId && nonBuildingAreaCrit.isSatisfied(*way))
     {
       LOG_TRACE("Merging way area: " << way << " into " << mergeTargetId);
 
@@ -98,9 +100,8 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
   {
     const ConstRelationPtr& relation = it->second;
     LOG_VART(relation->getId());
-    LOG_VART(OsmSchema::getInstance().isNonBuildingArea(relation));
-    if (relation->getElementId() != mergeTargetId &&
-        OsmSchema::getInstance().isNonBuildingArea(relation))
+    LOG_VART(nonBuildingAreaCrit.isSatisfied(*relation));
+    if (relation->getElementId() != mergeTargetId && nonBuildingAreaCrit.isSatisfied(*relation))
     {
       LOG_TRACE("Merging relation area: " << relation << " into " << mergeTargetId);
 

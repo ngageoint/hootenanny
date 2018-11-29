@@ -61,10 +61,6 @@ bool ImplicitPoiPolygonTypeTagger::_visitElement(const ElementPtr& e)
 
 bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& e)
 {
-//  if (OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType()))
-//  {
-//    return false;
-//  }
   //see comment in OsmSchema::isPoiPolygonPoly
   if (e->getTags().contains("highway"))
   {

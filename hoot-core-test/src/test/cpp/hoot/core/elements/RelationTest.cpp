@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 
 namespace hoot

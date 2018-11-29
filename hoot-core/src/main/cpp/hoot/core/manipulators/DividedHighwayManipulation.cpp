@@ -43,7 +43,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
 // Qt

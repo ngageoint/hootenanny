@@ -28,7 +28,7 @@
 
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>

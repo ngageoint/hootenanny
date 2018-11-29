@@ -49,7 +49,9 @@ public:
 
   bool isParentABuilding(ElementId eid) const;
 
-  bool isSatisfied(const Element& e) const;
+  virtual bool isSatisfied(const Element& e) const;
+
+  bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

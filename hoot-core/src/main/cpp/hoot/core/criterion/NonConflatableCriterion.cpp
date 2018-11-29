@@ -28,10 +28,16 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 namespace hoot
 {
@@ -42,19 +48,20 @@ HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 bool NonConflatableCriterion::isSatisfied(const Element& e) const
 {
   //See if our type is known conflatable - return false
-  if (OsmSchema::getInstance().isLinearHighway(e.getTags(), e.getElementType()))
+  //TODO: This could probably be made cleaner by adding a "conflatable" attribute to criterion.
+  if (HighwayCriterion().isSatisfied(*e))
       return false;
-  else if (OsmSchema::getInstance().isLinearWaterway(e))
+  else if (LinearWaterwayCriterion().isSatisfied(*e))
     return false;
-  else if (OsmSchema::getInstance().isPoi(e))
+  else if (PoiCriterion().isSatisfied(*e))
     return false;
-  else if (OsmSchema::getInstance().isBuilding(e))
+  else if (BuildingCriterion().isSatisfied(*e))
     return false;
-  else if (OsmSchema::getInstance().isRailway(e))
+  else if (RailwayCriterion().isSatisfied(*e))
     return false;
-  else if (OsmSchema::getInstance().isPowerLine(e))
+  else if (PowerLineCriterion().isSatisfied(*e))
     return false;
-  else if (OsmSchema::getInstance().isArea(e))
+  else if (AreaCriterion().isSatisfied(*e))
     return false;
 
   // It is not something we can conflate

@@ -40,7 +40,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/schema/TagComparator.h>

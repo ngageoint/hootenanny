@@ -35,12 +35,13 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 
 // Standard
 #include <iostream>
@@ -88,7 +89,6 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
       w->setNodes(newNodes);
   }
 
-  OsmSchema& schema = OsmSchema::getInstance();
   // go through each way
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
@@ -96,7 +96,7 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     const WayPtr& w = it->second;
     // if the way isn't in the map anymore (deleted as part of this process) or the way is an
     // area type (different treatment).
-    if (_map->containsWay(key) == false || !schema.isLinear(*w))
+    if (_map->containsWay(key) == false || !LinearCriterion().isSatisfied(*w))
       continue;
 
     // create a map of all the ways that share nodes with this way and the number of nodes shared
@@ -153,7 +153,7 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
 bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
 {
   // is this a linear way
-  return (OsmSchema::getInstance().isLinear(*w) &&
+  return (LinearCriterion().isSatisfied(*w) &&
       // if this is not part of a relation
       _map->getIndex().getParents(w->getElementId()).size() == 0);
 }
@@ -163,6 +163,7 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
   // If the ways have any common geometry, then merge their tags.
   LongestCommonNodeString lcs(w1, w2);
   int length = lcs.apply();
+  OneWayCriterion oneWayCrit;
   if (length > 1)
   {
     const Tags mergedTags =
@@ -221,12 +222,12 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
   else if (!rev1 && !rev2)
   {
     //  Reverse one of the ways and try again
-    if (OsmSchema::getInstance().isOneWay(*w1) == false)
+    if (oneWayCrit.isSatisfied(*w1) == false)
     {
       w1->reverseOrder();
       _splitDuplicateWays(w1, w2, true, false);
     }
-    else if (OsmSchema::getInstance().isOneWay(*w2) == false)
+    else if (oneWayCrit.isSatisfied(*w2) == false)
     {
       w2->reverseOrder();
       _splitDuplicateWays(w1, w2, false, true);
