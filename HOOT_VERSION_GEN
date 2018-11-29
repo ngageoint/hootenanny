@@ -55,10 +55,10 @@ fi
 test "$VN" = "$VC" || {
     echo "HOOT_VERSION = $VN" >$HVF
 
-    cat hoot-core/src/main/cpp/hoot/core/VersionDefines.h.in |  \
+    cat hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h.in |  \
     sed -e "s/@HOOT_VERSION@/$VN/g" |  \
     sed -e "s/@HOOT_REVISION@/$HOOT_REVISION/g" |  \
     sed -e "s/@HOOT_BUILT_BY@/$(whoami)/g" > \
-    hoot-core/src/main/cpp/hoot/core/VersionDefines.h
+    hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h
 }
 
