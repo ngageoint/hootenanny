@@ -28,7 +28,7 @@
 #define MINSUMWORDSETDISTANCE_H
 
 // Hoot
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 
 // Tgs

@@ -29,7 +29,7 @@
 #define WAYDIRECTIONCRITERION_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot

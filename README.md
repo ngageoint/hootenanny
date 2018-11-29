@@ -30,13 +30,12 @@ Hootenanny is an open source conflation tool developed with machine learning tec
 Additional feature types can be made conflatable using Hootenanny's pluggable conflation architecture.  See the Hootenanny Developer Guide for details.
 
 # Feature Summary
-In addition to conflating maps, Hootenanny can also:
+In addition to conflating maps together, Hootenanny can also:
 * Add missing type tags to features
 * Align two maps with each other
-* Apply pluggable data transformation operations to a map
+* Apply data transformation operations to a map
 * Calculate the geospatial extent of a map
 * Clean map data
-* Combine maps together
 * Compare maps with each other
 * Compute bounding tiles based on node density
 * Convert maps between different geodata formats (see Supported Data Formats section below)
@@ -46,6 +45,7 @@ In addition to conflating maps, Hootenanny can also:
 * Explore tag data
 * Gather statistics for a map
 * Identify road intersections in a map
+* Locate phone numbers geographically
 * Perturb map data for testing purposes
 * Plot node density
 * Sort map data
@@ -401,6 +401,15 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     
     # Calculate a set of irregular shaped tiles that will fit at most 1000 nodes each for a map
     hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000
+
+    # Normalize all the element address tags in a map
+    hoot convert -D convert.ops="hoot::NormalizeAddressesVisitor" input.osm output.osm
+
+    # Normalize all the element phone number tags in a map
+    hoot convert -D convert.ops="hoot::NormalizePhoneNumbersVisitor" input.osm output.osm
+    
+    # Add admin boundary level location tags associated with element phone numbers
+    hoot convert -D convert.ops="hoot::PhoneNumberLocateVisitor" input.osm output.osm
     
 ### Statistics
 
@@ -409,7 +418,7 @@ See the Hootenanny User Guide for more usage examples and details on command inp
       --all-elements
 
     # Count all features which have a tag whose key contains the text "phone"
-    hoot count -D tag.key.contains.criterion.text="phone" input1.osm hoot::TagKeyContainsCriterion
+    hoot count -D tag.key.contains.criterion.text="phone" input.osm hoot::TagKeyContainsCriterion
     
     # Calculate the area of all features in a map
     hoot stat input.osm hoot::CalculateAreaVisitor
@@ -473,6 +482,18 @@ See the Hootenanny User Guide for more usage examples and details on command inp
     ave : 80 (1.703%)
     sw : 45 (0.9579%)
     h : 18 (0.3831%)
+
+    # Count the number of elements with valid address tags in a map
+    hoot count input.osm hoot::HasAddressCriterion
+
+    # Count the total number of valid address tags in a map
+    hoot stat input.osm hoot::AddressCountVisitor
+
+    # Count the number of elements with valid phone number tags in a map
+    hoot count input.osm hoot::HasPhoneNumberCriterion
+
+    # Count the total number of valid phone number tags in a map
+    hoot stat input.osm hoot::PhoneNumberCountVisitor
     
 ### Add Missing Type Tags
     

@@ -28,8 +28,8 @@
 #define WEIGHTEDWORDDISTANCE_H
 
 // hoot
-#include <hoot/core/algorithms/StringDistance.h>
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/algorithms/string/StringDistance.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/algorithms/string/WordWeightDictionary.h>
 

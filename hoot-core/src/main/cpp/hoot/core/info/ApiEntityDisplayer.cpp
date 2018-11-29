@@ -35,11 +35,11 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/schema/TagMerger.h>
-#include <hoot/core/algorithms/StringDistance.h>
+#include <hoot/core/algorithms/string/StringDistance.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/util/ConfigOptions.h>

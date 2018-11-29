@@ -32,7 +32,7 @@
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/PluginContext.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 using namespace v8;
 

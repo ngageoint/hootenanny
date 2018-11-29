@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 
 #include <hoot/core/criterion/PoiCriterion.h>

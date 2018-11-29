@@ -27,7 +27,7 @@
 #include "BuildingOnlyOp.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/schema/OsmSchema.h>

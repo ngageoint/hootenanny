@@ -28,7 +28,9 @@
 #define POIPOLYGONADVANCEDMATCHER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/address/AddressParser.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -43,13 +45,15 @@ namespace hoot
  * customization of this class may improve matching to the point that the logic should be
  * re-enabled.
  */
-class PoiPolygonAdvancedMatcher
+class PoiPolygonAdvancedMatcher : public Configurable
 {
 
 public:
 
   PoiPolygonAdvancedMatcher(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
                             const std::set<ElementId>& poiNeighborIds, double distance);
+
+  virtual void setConfiguration(const Settings& conf);
 
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -65,6 +69,8 @@ private:
   QStringList _genericLandUseTagVals;
 
   unsigned int _badGeomCount;
+
+  AddressParser _addressParser;
 };
 
 }

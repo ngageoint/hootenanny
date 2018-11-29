@@ -28,9 +28,9 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
-#include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/subline-matching/MaximalNearestSublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
@@ -44,7 +44,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
 

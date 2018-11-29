@@ -32,7 +32,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>

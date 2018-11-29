@@ -33,15 +33,14 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/extractors/OverlapExtractor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/algorithms/AddressParser.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
@@ -93,6 +92,11 @@ _addressParsingEnabled(addressParsingEnabled)
   LOG_VART(_addressParsingEnabled);
 }
 
+void PoiPolygonReviewReducer::setConfiguration(const Settings& conf)
+{
+  _addressParser.setConfiguration(conf);
+}
+
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 {
   return _typeScore > 0.03 || _nameScore > 0.35 || _addressMatch;
@@ -133,12 +137,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   if (_addressParsingEnabled)
   {
-    const int numPolyAddresses = AddressParser::hasAddress(poly, *_map);
+    const int numPolyAddresses = _addressParser.hasAddressRecursive(poly, *_map);
     const bool polyHasAddress = numPolyAddresses > 0;
 
     //if both have addresses and they explicitly contradict each other, throw out the review; don't
     //do it if the poly has more than one address, like in many multi-use buildings.
-    if (!_addressMatch && AddressParser::hasAddress(poi, *_map) && polyHasAddress)
+    if (!_addressMatch && _addressParser.hasAddressRecursive(poi, *_map) && polyHasAddress)
     {
       //check to make sure the only address the poly has isn't the poi itself as a way node /
       //relation member

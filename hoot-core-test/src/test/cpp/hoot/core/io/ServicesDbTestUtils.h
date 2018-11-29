@@ -34,7 +34,7 @@
 
 // Hoot
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/HootNetworkCookieJar.h>
 
 namespace hoot

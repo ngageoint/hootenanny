@@ -29,10 +29,10 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
 using namespace std;

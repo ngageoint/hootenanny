@@ -26,11 +26,12 @@
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/conflate/address/AddressTagKeys.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -62,11 +63,6 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
 
 public:
 
-  const QString HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
-  const QString STREET_TAG_NAME = "addr:street";
-  const QString FULL_ADDRESS_TAG_NAME = "address";
-  const QString FULL_ADDRESS_TAG_NAME_2 = "addr:full";
-
   PoiPolygonAddressScoreExtractorTest()
   {
   }
@@ -78,18 +74,18 @@ public:
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-    way1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 main street");
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 main street");
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    node2->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
-    way2->getTags().set(FULL_ADDRESS_TAG_NAME, "567 first street");
+    way2->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "567 first street");
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
   }
@@ -101,22 +97,22 @@ public:
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    node1->getTags().set(STREET_TAG_NAME, "Main Street");
+    node1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node1->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    way1->getTags().set(STREET_TAG_NAME, "main street");
+    way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way1->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    node2->getTags().set(STREET_TAG_NAME, "Main Street");
+    node2->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node2->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
-    way2->getTags().set(HOUSE_NUMBER_TAG_NAME, "567");
-    way2->getTags().set(STREET_TAG_NAME, "first street");
+    way2->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "567");
+    way2->getTags().set(TestUtils::STREET_TAG_NAME, "first street");
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
   }
@@ -128,32 +124,32 @@ public:
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123-125");
-    node1->getTags().set(STREET_TAG_NAME, "Main Street");
+    node1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123-125");
+    node1->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "124");
-    way1->getTags().set(STREET_TAG_NAME, "main street");
+    way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "124");
+    way1->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set(HOUSE_NUMBER_TAG_NAME, "123-125");
-    node2->getTags().set(STREET_TAG_NAME, "Main Street");
+    node2->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123-125");
+    node2->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
-    way2->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    way2->getTags().set(STREET_TAG_NAME, "main street");
+    way2->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way2->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
     NodePtr node3(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
-    node3->getTags().set(HOUSE_NUMBER_TAG_NAME, "123-125");
-    node3->getTags().set(STREET_TAG_NAME, "Main Street");
+    node3->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123-125");
+    node3->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node3);
     WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
-    way3->getTags().set(HOUSE_NUMBER_TAG_NAME, "567");
-    way3->getTags().set(STREET_TAG_NAME, "first street");
+    way3->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "567");
+    way3->getTags().set(TestUtils::STREET_TAG_NAME, "first street");
     map->addWay(way3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way3), 0.01);
   }
@@ -166,29 +162,29 @@ public:
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(
-      FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
+      TestUtils::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-    way1->getTags().set(FULL_ADDRESS_TAG_NAME_2, "main street 123");
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME_2, "main street 123");
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set(
-      FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
+      TestUtils::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
     map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
     way2->getTags().set(
-      FULL_ADDRESS_TAG_NAME_2, "first street 567");
+      TestUtils::FULL_ADDRESS_TAG_NAME_2, "first street 567");
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
 
     NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node3->getTags().set(
-      FULL_ADDRESS_TAG_NAME_2, "ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN");
+      TestUtils::FULL_ADDRESS_TAG_NAME_2, "ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN");
     map->addNode(node3);
     WayPtr way3(new Way(Status::Unknown2, -1, 15.0));
-    way3->getTags().set(FULL_ADDRESS_TAG_NAME_2, "40 ZENTRALLÄNDSTRASSE");
+    way3->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME_2, "40 ZENTRALLÄNDSTRASSE");
     map->addWay(way3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node3, way3), 0.0);
   }
@@ -200,12 +196,12 @@ public:
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    node1->getTags().set(STREET_TAG_NAME, "Main Street");
+    node1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node1->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123a");
-    way1->getTags().set(STREET_TAG_NAME, "main street");
+    way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123a");
+    way1->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
     map->addWay(way1);
 
     uut.setAllowLenientHouseNumberMatching(true);
@@ -222,26 +218,26 @@ public:
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    node1->getTags().set(STREET_TAG_NAME, "Main Street");
+    node1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node1->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    node2->getTags().set(STREET_TAG_NAME, "main street");
+    node2->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node2->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
     map->addNode(node2);
     way1->addNode(node2->getId());
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node3(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
-    node3->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    node3->getTags().set(STREET_TAG_NAME, "Main Street");
+    node3->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node3->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node3);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
     NodePtr node4(new Node(Status::Unknown2, -4, Coordinate(0.0, 0.0), 15.0));
-    node4->getTags().set(HOUSE_NUMBER_TAG_NAME, "567");
-    node4->getTags().set(STREET_TAG_NAME, "first street");
+    node4->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "567");
+    node4->getTags().set(TestUtils::STREET_TAG_NAME, "first street");
     map->addNode(node4);
     way2->addNode(node4->getId());
     map->addWay(way2);
@@ -255,39 +251,39 @@ public:
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    node1->getTags().set(STREET_TAG_NAME, "Main Street");
+    node1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node1->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
     RelationPtr relation1(new Relation(Status::Unknown2, -1, 15.0));
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    node2->getTags().set(STREET_TAG_NAME, "main street");
+    node2->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node2->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
     map->addNode(node2);
     relation1->addElement("test", node2->getElementId());
     map->addRelation(relation1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, relation1), 0.0);
 
     NodePtr node4(new Node(Status::Unknown1, -4, Coordinate(0.0, 0.0), 15.0));
-    node4->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    node4->getTags().set(STREET_TAG_NAME, "Main Street");
+    node4->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node4->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
     map->addNode(node4);
     RelationPtr relation3(new Relation(Status::Unknown2, -3, 15.0));
     NodePtr node5(new Node(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0));
-    node5->getTags().set(HOUSE_NUMBER_TAG_NAME, "567");
-    node5->getTags().set(STREET_TAG_NAME, "first street");
+    node5->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "567");
+    node5->getTags().set(TestUtils::STREET_TAG_NAME, "first street");
     map->addNode(node5);
     relation3->addElement("test", node5->getElementId());
     map->addRelation(relation3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node4, relation3), 0.01);
 
     NodePtr node6(new Node(Status::Unknown1, -6, Coordinate(0.0, 0.0), 15.0));
-    node6->getTags().set(HOUSE_NUMBER_TAG_NAME, "567");
-    node6->getTags().set(STREET_TAG_NAME, "first street");
+    node6->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "567");
+    node6->getTags().set(TestUtils::STREET_TAG_NAME, "first street");
     map->addNode(node6);
     RelationPtr relation4(new Relation(Status::Unknown2, -4, 15.0));
     WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
-    way3->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    way3->getTags().set(STREET_TAG_NAME, "main street");
+    way3->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way3->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
     map->addWay(way3);
     relation4->addElement("test", way3->getElementId());
     map->addRelation(relation4);
@@ -309,21 +305,21 @@ public:
     dictTranslator->setTokenizeInput(false);
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     way1->getTags().set(
-      FULL_ADDRESS_TAG_NAME, QString::fromUtf8("123 Hauptstraße"));
+      TestUtils::FULL_ADDRESS_TAG_NAME, QString::fromUtf8("123 Hauptstraße"));
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set(
-      FULL_ADDRESS_TAG_NAME_2, "Central Border Street 40 81379");
+      TestUtils::FULL_ADDRESS_TAG_NAME_2, "Central Border Street 40 81379");
     map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
     way2->getTags().set(
-      FULL_ADDRESS_TAG_NAME_2,
+      TestUtils::FULL_ADDRESS_TAG_NAME_2,
       QString::fromUtf8("ZENTRALLÄNDE STRASSE 40 81379 MÜNCHEN"));
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
@@ -337,10 +333,11 @@ public:
   {
     PoiPolygonAddressScoreExtractor uut;
     uut.setConfiguration(conf());
-    QSet<QString> additionalTags;
-    additionalTags.insert("note");
-    additionalTags.insert("description");
-    uut._addressParser.setAdditionalTagKeys(additionalTags);
+    QSet<QString> additionalTagKeys;
+    additionalTagKeys.insert("note");
+    additionalTagKeys.insert("description");
+    AddressTagKeysPtr addressTagKeys = AddressTagKeys::getInstance();
+    addressTagKeys->_additionalTagKeys = additionalTagKeys;
 
     OsmMapPtr map(new OsmMap());
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -383,26 +380,26 @@ public:
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     map->addWay(way1);
 
-    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
-    way1->getTags().set(FULL_ADDRESS_TAG_NAME, "this isn't an address");
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "this isn't an address");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
 
     node1->getTags().clear();
-    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "this isn't an address");
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "this isn't an address");
     way1->getTags().clear();
-    way1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
 
     node1->getTags().clear();
-    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 this isn't an address");
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 this isn't an address");
     way1->getTags().clear();
-    way1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
 
     node1->getTags().clear();
-    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "this isn't an address street");
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "this isn't an address street");
     way1->getTags().clear();
-    way1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
@@ -417,30 +414,30 @@ public:
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     map->addWay(way1);
 
-    node1->getTags().set(FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 Main Street");
 
-    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    way1->getTags().set(STREET_TAG_NAME, "this isn't an address");
+    way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way1->getTags().set(TestUtils::STREET_TAG_NAME, "this isn't an address");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
 
     way1->getTags().clear();
-    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "blah");
-    way1->getTags().set(STREET_TAG_NAME, "main street");
+    way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "blah");
+    way1->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
 
     way1->getTags().clear();
-    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "blah");
-    way1->getTags().set(STREET_TAG_NAME, "street");
+    way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "blah");
+    way1->getTags().set(TestUtils::STREET_TAG_NAME, "street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
 
     way1->getTags().clear();
-    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "");
-    way1->getTags().set(STREET_TAG_NAME, "main street");
+    way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "");
+    way1->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
 
     way1->getTags().clear();
-    way1->getTags().set(HOUSE_NUMBER_TAG_NAME, "123");
-    way1->getTags().set(STREET_TAG_NAME, "");
+    way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way1->getTags().set(TestUtils::STREET_TAG_NAME, "");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
@@ -456,15 +453,19 @@ public:
     map->addWay(way1);
 
     node1->getTags().set(
-      FULL_ADDRESS_TAG_NAME, QString::fromUtf8("Quatre-vingt-douze Ave des Champs-Élysées"));
-    way1->getTags().set(FULL_ADDRESS_TAG_NAME, QString::fromUtf8("92 avenue des champs-elysees"));
+      TestUtils::FULL_ADDRESS_TAG_NAME,
+      QString::fromUtf8("Quatre-vingt-douze Ave des Champs-Élysées"));
+    way1->getTags().set(
+      TestUtils::FULL_ADDRESS_TAG_NAME, QString::fromUtf8("92 avenue des champs-elysees"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     node1->getTags().clear();
     node1->getTags().set(
-      FULL_ADDRESS_TAG_NAME, QString::fromUtf8("Quatre-vingt-douze Ave des Champs-Élysées"));
+      TestUtils::FULL_ADDRESS_TAG_NAME,
+      QString::fromUtf8("Quatre-vingt-douze Ave des Champs-Élysées"));
     way1->getTags().clear();
-    way1->getTags().set(FULL_ADDRESS_TAG_NAME, QString::fromUtf8("92 avenue des champs elysees"));
+    way1->getTags().set(
+      TestUtils::FULL_ADDRESS_TAG_NAME, QString::fromUtf8("92 avenue des champs elysees"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
   }
 };

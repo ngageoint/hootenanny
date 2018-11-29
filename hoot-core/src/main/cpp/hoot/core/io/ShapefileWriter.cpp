@@ -45,7 +45,7 @@ using namespace geos::geom;
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Log.h>

@@ -34,7 +34,7 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/criterion/ParallelWayCriterion.h>

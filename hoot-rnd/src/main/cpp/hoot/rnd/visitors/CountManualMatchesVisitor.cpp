@@ -28,7 +28,7 @@
 
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {

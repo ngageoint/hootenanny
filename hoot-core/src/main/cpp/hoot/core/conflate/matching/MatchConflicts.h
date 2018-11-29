@@ -28,7 +28,7 @@
 #define MATCHCONFLICTS_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QMultiHash>
