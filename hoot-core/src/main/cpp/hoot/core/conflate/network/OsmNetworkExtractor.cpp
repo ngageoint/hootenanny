@@ -99,7 +99,7 @@ OsmNetworkPtr OsmNetworkExtractor::extractNetwork(ConstOsmMapPtr map)
 
 bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtr& r)
 {
-  assert(LinearCriterion.isSatisfied(*r));
+  assert(LinearCriterion.isSatisfied(r));
 
   const vector<RelationData::Entry>& members = r->getMembers();
   bool result = members.size() > 0;
@@ -132,7 +132,7 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
   else if (e->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
-    if (LinearCriterion.isSatisfied(*e) == false)
+    if (LinearCriterion().isSatisfied(e) == false)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
@@ -216,10 +216,10 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
     }
 
     bool directed = false;
-    if (OneWayCriterion().isSatisfied(*e))
+    if (OneWayCriterion().isSatisfied(e))
     {
       directed = true;
-      if (ReversedRoadCriterion().isSatisfied(*e))
+      if (ReversedRoadCriterion().isSatisfied(e))
       {
         swap(from, to);
       }

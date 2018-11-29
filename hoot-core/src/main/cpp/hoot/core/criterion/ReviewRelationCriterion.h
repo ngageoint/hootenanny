@@ -47,7 +47,7 @@ public:
   ReviewRelationCriterion() {}
   explicit ReviewRelationCriterion(ConstOsmMapPtr& map) : _map(map) { }
 
-  virtual bool isSatisfied(const Element& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ReviewRelationCriterion(_map)); }

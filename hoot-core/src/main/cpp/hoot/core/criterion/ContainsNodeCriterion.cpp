@@ -58,7 +58,7 @@ void ContainsNodeCriterion::setConfiguration(const Settings& s)
   }
 }
 
-bool ContainsNodeCriterion::isSatisfied(const Element& e) const
+bool ContainsNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e.getElementType() == ElementType::Way)
   {

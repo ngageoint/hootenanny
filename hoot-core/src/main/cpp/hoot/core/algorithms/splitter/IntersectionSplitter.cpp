@@ -88,8 +88,8 @@ void IntersectionSplitter::_mapNodesToWays()
 
     bool isNetworkType = false;
 
-    if (highwayCrit.isSatisfied(*w) || waterwayCrit.isSatisfied(*w) ||
-        PowerLineCriterion().isSatisfied(*w))
+    if (highwayCrit.isSatisfied(w) || waterwayCrit.isSatisfied(w) ||
+        PowerLineCriterion().isSatisfied(w))
     {
       isNetworkType  = true;
     }
@@ -102,9 +102,7 @@ void IntersectionSplitter::_mapNodesToWays()
       foreach (long rid, relations)
       {
         ElementPtr r = _map->getRelation(rid);
-        const Tags& tags = r->getTags();
-        if (highwayCrit.isLinearHighway(tags, ElementType::Relation) ||
-            waterwayCrit.isLinearWaterway(*r))
+        if (highwayCrit.isSatisfied(r) || waterwayCrit.isSatisfied(r))
         {
           isNetworkType  = true;
         }

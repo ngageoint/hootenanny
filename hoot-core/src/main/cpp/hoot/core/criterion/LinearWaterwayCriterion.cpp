@@ -36,11 +36,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, LinearWaterwayCriterion)
 
-bool LinearWaterwayCriterion::isSatisfied(const Element& e) const
+bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)
   {
-    const Tags& tags = e->getTags();
+    const Tags& tags = e.getTags();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||

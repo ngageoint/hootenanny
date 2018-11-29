@@ -38,7 +38,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
 
-bool NoInformationCriterion::isSatisfied(const Element& e) const
+bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const Tags tags = e.getTags();
   const int informationCount = tags.getInformationCount();

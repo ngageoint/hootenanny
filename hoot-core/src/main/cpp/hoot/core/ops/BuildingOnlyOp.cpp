@@ -68,7 +68,8 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
   ReplaceTagVisitor replaceTagVtor("BUILDING", "yes", "building", "yes");
 
   // Setup a visitor to remove unwanted relations
-  boost::function<bool (ConstElementPtr e)> f = boost::bind(&BuildingOnlyOp::_isBuildingRelation, this, _1);
+  boost::function<bool (const Element& e)> f =
+    boost::bind(&BuildingOnlyOp::_isBuildingRelation, this, _1);
   boost::shared_ptr<ArbitraryCriterion> pBuildingCrit(new ArbitraryCriterion(f));
   RemoveElementsVisitor removeEVisitor(pBuildingCrit);
 
@@ -80,13 +81,13 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
   map->visitRw(multiVtor);
 }
 
-bool BuildingOnlyOp::_isBuildingRelation(ConstElementPtr e)
+bool BuildingOnlyOp::_isBuildingRelation(const Element& e)
 {
   // Is it a building relation?
-  if (e->getElementType() == ElementType::Relation)
+  if (e.getElementType() == ElementType::Relation)
   {
-    const Relation *r = dynamic_cast<const Relation*>(e.get());
-    if (r->getType() == MetadataTags::RelationBuilding())
+    const Relation& r = dynamic_cast<const Relation&>(e);
+    if (r.getType() == MetadataTags::RelationBuilding())
       return true;
   }
 

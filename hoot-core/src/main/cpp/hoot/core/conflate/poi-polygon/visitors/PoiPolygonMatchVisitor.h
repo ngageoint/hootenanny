@@ -33,6 +33,8 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>

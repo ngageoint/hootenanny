@@ -47,7 +47,7 @@ public:
   BuildingWayNodeCriterion();
   BuildingWayNodeCriterion(ConstOsmMapPtr map);
 
-  bool isSatisfied(const Element& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual void setOsmMap(const OsmMap* map);
 

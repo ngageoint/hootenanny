@@ -175,8 +175,9 @@ public:
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
   {
+    BuildingCriterion buildingCrit;
     if (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
-        _buildingCrit.isSatisfied(*e1) && _buildingCrit.isSatisfied(*e2))
+        buildingCrit.isSatisfied(*e1) && buildingCrit.isSatisfied(*e2))
     {
       return true;
     }
@@ -194,7 +195,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (e->getStatus() == _matchStatus && isMatchCandidate(e))
+    if (e->getStatus() == _matchStatus && isMatchCandidate(*e))
     {
       checkForMatch(e);
 
@@ -215,9 +216,9 @@ public:
     }
   }
 
-  static bool isMatchCandidate(ConstElementPtr element)
+  static bool isMatchCandidate(const Element& element)
   {
-    return _buildingCrit.isSatisified(*element);
+    return BuildingCriterion().isSatisfied(element);
   }
 
   boost::shared_ptr<HilbertRTree>& getIndex()
@@ -230,7 +231,8 @@ public:
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements that isMatchCandidate(e)
-      boost::function<bool (ConstElementPtr e)> f = boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
+      boost::function<bool (const Element& e)> f =
+        boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
       boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
@@ -272,8 +274,6 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
-
-  BuildingCriterion _buildingCrit;
 };
 
 BuildingMatchCreator::BuildingMatchCreator() :
@@ -353,7 +353,7 @@ boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 
 bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
-  return BuildingMatchVisitor::isMatchCandidate(element);
+  return BuildingMatchVisitor::isMatchCandidate(*element);
 }
 
 boost::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()

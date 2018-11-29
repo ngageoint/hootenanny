@@ -37,7 +37,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
-bool HighwayCriterion::isSatisfied(const Element& e) const
+bool HighwayCriterion::isSatisfied(const Element& element) const
 {
   bool result = false;
   const Tags& tags = element.getTags();
@@ -47,7 +47,7 @@ bool HighwayCriterion::isSatisfied(const Element& e) const
 
   // Is it a legit highway?
   if ((type == ElementType::Way || type == ElementType::Relation) &&
-      it != t.end() && it.value() != "")
+      it != tags.end() && it.value() != "")
   {
     result = true;
     key = it.key();
@@ -55,7 +55,7 @@ bool HighwayCriterion::isSatisfied(const Element& e) const
 
   // Maybe it's a way with nothing but a time tag...
   it = tags.find("source:datetime");
-  if (type == ElementType::Way && tags.keys().size() < 2 && it != t.end())
+  if (type == ElementType::Way && tags.keys().size() < 2 && it != tags.end())
   {
     // We can treat it like a highway
     result = true;
@@ -65,7 +65,7 @@ bool HighwayCriterion::isSatisfied(const Element& e) const
   // Make sure this isn't an area highway section!
   if (result)
   {
-    result = !AreaCriterion().isArea(e);
+    result = !AreaCriterion().isSatisfied(element);
     LOG_VART(result);
   }
   LOG_VART(result);

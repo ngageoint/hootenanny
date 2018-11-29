@@ -41,9 +41,9 @@ AreaCriterion::AreaCriterion()
 {
 }
 
-bool AreaCriterion::isSatisfied(const Element& e) const
+bool AreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return isSatisfied(e.getTags(), e.getElementType())
+  return isSatisfied(e.getTags(), e.getElementType());
 }
 
 bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType) const
@@ -57,8 +57,8 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   }
 
   result |= BuildingCriterion().isSatisfied(tags, elementType);
-  result |= t.isTrue(MetadataTags::BuildingPart());
-  result |= t.isTrue("area");
+  result |= tags.isTrue(MetadataTags::BuildingPart());
+  result |= tags.isTrue("area");
 
   // if at least one of the tags is marked as an area, but not a linestring tag then we consider
   // this to be an area feature.

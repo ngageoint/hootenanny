@@ -349,7 +349,7 @@ void OsmGbdxXmlWriter::_writeNodes(ConstOsmMapPtr map)
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (!crit.isSatisfied(map->getNode(it->first)))
+    if (!crit.isSatisfied(*map->getNode(it->first)))
         nids.append(it->first);
   }
 

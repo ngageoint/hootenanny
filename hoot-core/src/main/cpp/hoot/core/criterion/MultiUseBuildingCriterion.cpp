@@ -40,7 +40,7 @@ MultiUseBuildingCriterion::MultiUseBuildingCriterion()
 {
 }
 
-bool MultiUseBuildingCriterion::isSatisfied(const Element& e) const
+bool MultiUseBuildingCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const OsmSchema& osmSchema = OsmSchema::getInstance();
   const ElementType elementType = e.getElementType();

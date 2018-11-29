@@ -50,7 +50,7 @@ void TagKeyContainsCriterion::setConfiguration(const Settings& conf)
   LOG_VART(_text);
 }
 
-bool TagKeyContainsCriterion::isSatisfied(const Element& e) const
+bool TagKeyContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   Qt::CaseSensitivity caseSens = Qt::CaseSensitive;
   if (!_caseSensitive)

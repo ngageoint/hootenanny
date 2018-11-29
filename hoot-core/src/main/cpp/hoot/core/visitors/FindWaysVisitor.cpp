@@ -46,7 +46,7 @@ void FindWaysVisitor::visit(const boost::shared_ptr<const Element>& e)
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
-    if (_pCrit->isSatisfied(e))
+    if (_pCrit->isSatisfied(*e))
     {
       _wayIds.push_back(e->getId());
     }
@@ -74,7 +74,7 @@ vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map,
   for (size_t i = 0; i < close.size(); i++)
   {
     const ConstWayPtr& w = map->getWay(close[i]);
-    if (pCrit->isSatisfied(w))
+    if (pCrit->isSatisfied(*w))
       result.push_back(w->getId());
   }
 

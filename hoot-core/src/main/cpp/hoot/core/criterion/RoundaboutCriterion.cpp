@@ -29,13 +29,15 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RoundaboutCriterion)
 
-bool RoundaboutCriterion::isSatisfied(const Element& e) const
+bool RoundaboutCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   // If it's not a highway, it's not a roundabout
   if (!HighwayCriterion().isSatisfied(e))
@@ -47,7 +49,7 @@ bool RoundaboutCriterion::isSatisfied(const Element& e) const
   bool result = false;
   Tags::const_iterator tagIt = e.getTags().find("junction");
 
-  if (tagIt != tags.end() && tagIt.value().toLower() == "roundabout")
+  if (tagIt != e.getTags().end() && tagIt.value().toLower() == "roundabout")
   {
     result = true;
   }

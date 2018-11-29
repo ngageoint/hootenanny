@@ -41,9 +41,9 @@ NonBuildingAreaCriterion::NonBuildingAreaCriterion()
 {
 }
 
-bool NonBuildingAreaCriterion::isSatisfied(const Element& e) const
+bool NonBuildingAreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return AreaCriterion().isArea(e) && !BuildingCriterion().isBuilding(e);
+  return AreaCriterion().isSatisfied(e) && !BuildingCriterion().isSatisfied(e);
 }
 
 }

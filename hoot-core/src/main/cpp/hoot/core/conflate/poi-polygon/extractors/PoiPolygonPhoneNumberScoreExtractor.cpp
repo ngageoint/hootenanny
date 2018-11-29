@@ -59,12 +59,12 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
                                                     const ConstElementPtr& poi,
                                                     const ConstElementPtr& poly) const
 {
-  const QList<ElementPhoneNumber> poiPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(poi);
+  const QList<ElementPhoneNumber> poiPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(*poi);
   if (poiPhoneNumbers.size() > 0)
   {
     LOG_VART(poiPhoneNumbers.size());
   }
-  const QList<ElementPhoneNumber> polyPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(poly);
+  const QList<ElementPhoneNumber> polyPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(*poly);
   if (polyPhoneNumbers.size() > 0)
   {
     LOG_VART(polyPhoneNumbers.size());

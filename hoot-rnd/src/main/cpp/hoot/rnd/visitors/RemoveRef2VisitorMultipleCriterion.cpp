@@ -74,12 +74,12 @@ void RemoveRef2VisitorMultipleCriterion::visit(const ConstElementPtr& e)
 
 bool RemoveRef2VisitorMultipleCriterion::ref1CriterionSatisfied(const ConstElementPtr& e) const
 {
-  return _ref1Criterion->isSatisfied(e);
+  return _ref1Criterion->isSatisfied(*e);
 }
 
 bool RemoveRef2VisitorMultipleCriterion::ref2CriterionSatisfied(const ConstElementPtr& e) const
 {
-  return _ref2Criterion->isSatisfied(e);
+  return _ref2Criterion->isSatisfied(*e);
 }
 
 

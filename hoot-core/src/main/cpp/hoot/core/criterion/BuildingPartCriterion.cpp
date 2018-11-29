@@ -38,7 +38,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingPartCriterion)
 
-bool BuildingPartCriterion::isSatisfied(const Element& e) const
+bool BuildingPartCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
   if (e.getElementType() != ElementType::Node && e.getTags().isTrue(MetadataTags::BuildingPart()))

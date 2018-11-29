@@ -48,7 +48,7 @@ InWayNodeCriterion::InWayNodeCriterion(const OsmMap& map, const std::vector<long
   }
 }
 
-bool InWayNodeCriterion::isSatisfied(const Element& e) const
+bool InWayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return _nids.find(e.getId()) != _nids.end();
 }

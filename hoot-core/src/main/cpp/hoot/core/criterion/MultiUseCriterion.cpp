@@ -40,7 +40,7 @@ MultiUseCriterion::MultiUseCriterion()
 {
 }
 
-bool MultiUseCriterion::isSatisfied(const Element& e) const
+bool MultiUseCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return
     OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::multiUse());

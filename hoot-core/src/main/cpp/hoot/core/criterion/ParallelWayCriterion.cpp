@@ -133,7 +133,7 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
   }
 }
 
-bool ParallelWayCriterion::isSatisfied(const Element& e) const
+bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e.getElementType() == ElementType::Way)
   {

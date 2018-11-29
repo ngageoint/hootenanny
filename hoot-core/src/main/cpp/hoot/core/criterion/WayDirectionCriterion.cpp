@@ -40,7 +40,7 @@ WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
 {
 }
 
-bool WayDirectionCriterion::isSatisfied(const Element& e) const
+bool WayDirectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e.getElementType() != ElementType::Way)
     return false;

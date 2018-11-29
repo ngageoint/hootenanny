@@ -157,7 +157,7 @@ public:
     HighwayCriterion highwayCrit;
     if (e1 && e2 &&
         e1->getStatus() != e2->getStatus() && e2->isUnknown() &&
-        highwayCrit.isSatisfied(*e1) && highwayCrit.isSatisfied(*e2) &&
+        highwayCrit.isSatisfied(e1) && highwayCrit.isSatisfied(e2) &&
         tagAncestorDiff->diff(map, e1, e2) <= ConfigOptions().getHighwayMaxEnumDiff())
     {
       // score each candidate and push it on the result vector
@@ -192,7 +192,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (e->getStatus() == _matchStatus && isMatchCandidate(e))
+    if (e->getStatus() == _matchStatus && isMatchCandidate(*e))
     {
       checkForMatch(e);
 
@@ -213,9 +213,9 @@ public:
     }
   }
 
-  static bool isMatchCandidate(ConstElementPtr element)
+  static bool isMatchCandidate(const ConstElementPtr& element)
   {
-    return HighwayCriterion().isSatisfied(*element);
+    return HighwayCriterion().isSatisfied(element);
   }
 
   boost::shared_ptr<HilbertRTree>& getIndex()
@@ -228,7 +228,8 @@ public:
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements satisfy isMatchCandidate(e)
-      boost::function<bool (ConstElementPtr e)> f = boost::bind(&HighwayMatchVisitor::isMatchCandidate, _1);
+      boost::function<bool (const Element& e)> f =
+        boost::bind(&HighwayMatchVisitor::isMatchCandidate, _1);
       boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
@@ -319,7 +320,7 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
 
 bool HighwayMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
-  return HighwayMatchVisitor::isMatchCandidate(element);
+  return HighwayMatchVisitor::isMatchCandidate(*element);
 }
 
 boost::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()

@@ -49,7 +49,7 @@ void AddressCountVisitor::setConfiguration(const Settings& conf)
 void AddressCountVisitor::visit(const ConstElementPtr& e)
 {
   LOG_VART(e);
-  const int count = _addressParser.numAddresses(e);
+  const int count = _addressParser.numAddresses(*e);
   LOG_VART(count);
   _totalCount += count;
   LOG_VART(_totalCount);

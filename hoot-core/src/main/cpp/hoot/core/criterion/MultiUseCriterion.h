@@ -44,7 +44,7 @@ public:
 
   MultiUseCriterion();
 
-  bool isSatisfied(const Element& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new MultiUseCriterion()); }
 

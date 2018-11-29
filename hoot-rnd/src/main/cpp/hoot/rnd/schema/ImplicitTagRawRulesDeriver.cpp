@@ -148,7 +148,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
       totalFeatureCount++;
 
       assert(_elementCriterion.get());
-      if (_skipFiltering || _elementCriterion->isSatisfied(element))
+      if (_skipFiltering || _elementCriterion->isSatisfied(*element))
       {
         QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());

@@ -35,7 +35,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationCriterion)
 
-bool RelationCriterion::isSatisfied(const Element& e) const
+bool RelationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return e.getElementType() == ElementType::Relation;
 }

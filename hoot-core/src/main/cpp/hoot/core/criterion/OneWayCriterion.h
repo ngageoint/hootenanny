@@ -45,7 +45,7 @@ public:
 
   OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
 
-  virtual bool isSatisfied(const Element& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
 

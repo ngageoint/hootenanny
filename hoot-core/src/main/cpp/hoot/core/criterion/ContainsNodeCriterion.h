@@ -46,7 +46,7 @@ public:
 
   explicit ContainsNodeCriterion(long nodeId);
 
-  bool isSatisfied(const Element& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ContainsNodeCriterion(_nodeId)); }

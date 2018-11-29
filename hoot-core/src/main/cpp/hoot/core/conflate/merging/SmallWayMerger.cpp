@@ -92,7 +92,7 @@ void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
       boost::shared_ptr<Way> w = it->second;
 
       // if the way is smaller than the threshold
-      if (highwayCrit.isSatisfied(*w) &&
+      if (highwayCrit.isSatisfied(w) &&
           ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
       {
         _mergeNeighbors(w);
@@ -131,7 +131,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
 
   HighwayCriterion highwayCrit;
   // if either way is not a highway
-  if (highwayCrit.isSatisfied(*w1) == false || highwayCrit.isSatisfied(*w2) == false)
+  if (highwayCrit.isSatisfied(w1) == false || highwayCrit.isSatisfied(w2) == false)
   {
     return;
   }
@@ -150,7 +150,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     // if both ways are one-way & the beginning of one isn't equal to the end
     // of the other
     OneWayCriterion oneWayCrit;
-    if ((oneWayCrit.isSatisfied(*w1) && oneWayCrit.isSatisfied(*w2)) &&
+    if ((oneWayCrit.isSatisfied(w1) && oneWayCrit.isSatisfied(w2)) &&
         (w1->getNodeId(0) != w2->getLastNodeId() &&
          w2->getNodeId(0) != w1->getLastNodeId()))
     {

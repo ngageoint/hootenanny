@@ -38,7 +38,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ImplicitTagEligiblePoiPolyCriterion)
 
-bool ImplicitTagEligiblePoiPolyCriterion::isSatisfied(const Element& e) const
+bool ImplicitTagEligiblePoiPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return e.getTags().getNames().size() > 0 && hasEligibleKvp(e.getTags());
 }

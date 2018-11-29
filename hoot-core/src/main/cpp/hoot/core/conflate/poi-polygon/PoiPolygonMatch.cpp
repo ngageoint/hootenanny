@@ -247,13 +247,13 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
     PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList());
 
   _e1IsPoi = false;
-  if (poiCrit.isSatisfied(*e1) && polyCrit.isSatisfied(*e2))
+  if (poiCrit.isSatisfied(e1) && polyCrit.isSatisfied(e2))
   {
     _poi = e1;
     _poly = e2;
     _e1IsPoi = true;
   }
-  else if (poiCrit.isSatisfied(*e2) && polyCrit.isSatisfied(*e1))
+  else if (poiCrit.isSatisfied(e2) && polyCrit.isSatisfied(e1))
   {
     _poi = e2;
     _poly = e1;
@@ -412,9 +412,9 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (!foundReviewIfMatchedType)
     {
       LOG_VART(_reviewMultiUseBuildings);
-      LOG_VART(MultiUseBuildingCriterion().isSatisfied(*_poly));
+      LOG_VART(MultiUseBuildingCriterion().isSatisfied(_poly));
       //only do the multi-use check on the poly
-      if (_reviewMultiUseBuildings && MultiUseBuildingCriterion().isSatisfied(*_poly))
+      if (_reviewMultiUseBuildings && MultiUseBuildingCriterion().isSatisfied(_poly))
       {
         _class.setReview();
         _explainText = "Match involves a multi-use building.";
@@ -683,7 +683,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //removing it scores dropped for other datasets.  So, more investigation needs to be done to
   //clean the school restriction up (see #1173).
   if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
-      BuildingCriterion().isSatisfied(*poly))
+      BuildingCriterion().isSatisfied(poly))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
     if (evidence >= _matchEvidenceThreshold)

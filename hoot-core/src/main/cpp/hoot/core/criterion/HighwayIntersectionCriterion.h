@@ -55,7 +55,7 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new HighwayIntersectionCriterion(_map)); }
 
-  virtual bool isSatisfied(const Element& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual void setOsmMap(const OsmMap* map);
 

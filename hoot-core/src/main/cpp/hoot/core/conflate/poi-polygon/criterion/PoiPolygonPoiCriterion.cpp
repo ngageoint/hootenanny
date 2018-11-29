@@ -33,7 +33,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/elements/Node.h>
 
 namespace hoot
@@ -50,19 +49,19 @@ _tagIgnoreList(tagIgnoreList)
 {
 }
 
-bool PoiPolygonPoiCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const Tags& tags = e->getTags();
+  const Tags& tags = e.getTags();
 
   //see note in PoiPolygonPolyCriterion::isSatisified
-  if (OsmSchema::getInstance().containsTagFromList(tags, tagIgnoreList))
+  if (OsmSchema::getInstance().containsTagFromList(tags, _tagIgnoreList))
   {
     LOG_TRACE("Contains tag from tag ignore list");
     return false;
   }
   LOG_TRACE("Does not contain tag from tag ignore list");
 
-  const bool isNode = e->getElementType() == ElementType::Node;
+  const bool isNode = e.getElementType() == ElementType::Node;
   if (!isNode)
   {
     return false;
@@ -80,8 +79,8 @@ bool PoiPolygonPoiCriterion::isSatisfied(const boost::shared_ptr<const Element>&
 
   if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois())
   {
-    ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(e);
-    if (AddressParser::hasAddress(*node))
+    const Node& node = dynamic_cast<const Node&>(e);
+    if (_addressParser.hasAddress(node))
     {
       isPoi = true;
     }

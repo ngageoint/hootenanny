@@ -77,7 +77,7 @@ WayPtr WayAverager::average()
 
   if (DirectionFinder::isSimilarDirection(_map.shared_from_this(), _w1, _w2) == false)
   {
-    if (OneWayCriterion().isSatisified(*_w1) == true)
+    if (OneWayCriterion().isSatisfied(_w1) == true)
     {
       _w2->reverseOrder();
     }

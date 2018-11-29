@@ -352,7 +352,7 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   {
     ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
 
-    if (MultilineStringCriterion().isSatisified(*r) == false)
+    if (MultiLineStringCriterion().isSatisfied(r) == false)
     {
       throw NeedsReviewException("Internal Error: When matching sublines expected a multilinestring "
         "relation not a " + r->getType() + ".  A non-multilinestring should never be found here.  "

@@ -72,9 +72,9 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
   {
     const ConstWayPtr& w = map->getWay(*it);
 
-    if (HighwayCriterion().isSatisfied(*w) == false &&
-        LinearWaterwayCriterion().isSatisfied(*w) == false &&
-        PowerLineCriterion().isSatisfied(*w) == false)
+    if (HighwayCriterion().isSatisfied(w) == false &&
+        LinearWaterwayCriterion().isSatisfied(w) == false &&
+        PowerLineCriterion().isSatisfied*w) == false)
     {
       // if this isn't a highway, waterway, or power line then don't consider it.
       LOG_TRACE("calculateAngles skipping feature...");

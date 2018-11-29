@@ -226,8 +226,8 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
         start = way;
         failure_count = 0;
       }
-      else if (!oneWayCrit.isSatisfied(*end) && !oneWayCrit.isSatisfied(*start) &&
-               !oneWayCrit.isSatisfied(*way))
+      else if (!oneWayCrit.isSatisfied(end) && !oneWayCrit.isSatisfied(start) &&
+               !oneWayCrit.isSatisfied(way))
       {
         //  Roads that aren't one way can be reversed but still be valid
         if (start->getFirstNodeId() == way->getFirstNodeId())

@@ -159,7 +159,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     }
   }
 
-  if (MultiUseCriterion().isSatisfied(*poly) && poiHasType && _typeScore < 0.4)
+  if (MultiUseCriterion().isSatisfied(poly) && poiHasType && _typeScore < 0.4)
   {
     LOG_TRACE("Returning miss per review reduction rule #2...");
     return true;
@@ -327,7 +327,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   BuildingCriterion buildingCrit;
-  const bool polyIsBuilding = buildingCrit.isSatisfied(*poly);
+  const bool polyIsBuilding = buildingCrit.isSatisfied(poly);
   LOG_VART(polyIsBuilding);
 
   //Similar to previous, except more focused for restrooms.
@@ -452,7 +452,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
   LOG_VART(poiContainedInParkPoly);
 
-  const bool poiIsBuilding = buildingCrit.isSatisfied(*poi);
+  const bool poiIsBuilding = buildingCrit.isSatisfied(poi);
   LOG_VART(poiIsBuilding);
 
   PoiPolygonNameScoreExtractor nameScorer;
@@ -578,7 +578,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
               sportPoiOnOtherSportPolyWithTypeMatch = true;
             }
           }
-          else if (buildingCrit.isSatisfied(*polyNeighbor))
+          else if (buildingCrit.isSatisfied(polyNeighbor))
           {
             if (polyNeighborGeom->contains(poiGeom.get()))
             {

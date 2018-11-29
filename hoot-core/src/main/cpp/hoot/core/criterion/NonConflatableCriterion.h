@@ -49,9 +49,9 @@ public:
 
   static std::string className() { return "hoot::NonConflatableCriterion"; }
 
-  NonConflatableCriterion() { setConfiguration(conf()); }
+  NonConflatableCriterion() { }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone()
   {
@@ -59,7 +59,6 @@ public:
   }
 
   virtual QString getDescription() const { return "Identifies features that are not conflatable"; }
-
 };
 
 }

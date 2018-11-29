@@ -39,7 +39,7 @@ NodeCriterion::NodeCriterion()
 {
 }
 
-bool NodeCriterion::isSatisfied(const Element& e) const
+bool NodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return e.getElementType() == ElementType::Node;
 }

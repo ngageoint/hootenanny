@@ -317,7 +317,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
         else if (linearCrit.isSatisfied(*r))
           return GEOS_MULTILINESTRING;
         // an empty geometry, pass back a collection
-        else if (r->getMembers().size() == 0 || CollectionCriterion.isSatisfied(*r))
+        else if (r->getMembers().size() == 0 || CollectionCriterion().isSatisfied(*r))
           return GEOS_GEOMETRYCOLLECTION;
         // Restriction relations are empty geometry
         else if (r->isRestriction())

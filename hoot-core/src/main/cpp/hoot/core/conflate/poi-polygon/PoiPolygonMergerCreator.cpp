@@ -37,6 +37,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
 
 // Standard
 #include <typeinfo>
@@ -224,9 +225,9 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     //not passing the tag ignore list here, since it would have already be used when calling
     //these methods from PoiPolygonMatch
     if (_autoMergeManyPoiToOnePolyMatches &&
-        _poiCrit->isSatisifed(*map->getElement(o1)) &&
-        _poiCrit->isSatisifed(*map->getElement(o2)) &&
-        _polyCrit->isSatisifedy(*map->getElement(sharedEid)))
+        _poiCrit->isSatisfied(map->getElement(o1)) &&
+        _poiCrit->isSatisfied(map->getElement(o2)) &&
+        _polyCrit->isSatisfied(map->getElement(sharedEid)))
     {
       LOG_TRACE("Automatically merging pois: " << o1 << ", " << o2 << " into poly: " << sharedEid);
       return false;

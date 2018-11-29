@@ -41,7 +41,7 @@ void KeepReviewsVisitor::visit(const ConstElementPtr& e)
 {
   ConstOsmMapPtr map(_map->shared_from_this());
   NeedsReviewCriterion crit(map);
-  if (!crit.isSatisfied(e))
+  if (!crit.isSatisfied(*e))
   {
     /// This could do bad things if the element is in use.
     RemoveElementOp::removeElementNoCheck(_map->shared_from_this(), e->getElementId());

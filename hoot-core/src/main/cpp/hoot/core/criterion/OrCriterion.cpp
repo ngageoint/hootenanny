@@ -35,7 +35,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OrCriterion)
 
-bool OrCriterion::isSatisfied(const Element& e) const
+bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (size_t i = 0; i < _criteria.size(); i++)
   {

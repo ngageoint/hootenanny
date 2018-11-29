@@ -45,7 +45,7 @@ HighwayIntersectionCriterion::HighwayIntersectionCriterion(ConstOsmMapPtr map)
   setOsmMap(map.get());
 }
 
-bool HighwayIntersectionCriterion::isSatisfied(const Element& e) const
+bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e.getElementType() != ElementType::Node)
   {

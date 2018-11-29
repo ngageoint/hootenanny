@@ -49,9 +49,9 @@ _tagIgnoreList(tagIgnoreList)
 {
 }
 
-bool PoiPolygonPolyCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const Tags& tags = e->getTags();
+  const Tags& tags = e.getTags();
 
   //Using this looser definition b/c isLinearHighway will return false if any tag is in an area
   //category and not a linestring category, which still gives us some features we don't want to
@@ -76,7 +76,7 @@ bool PoiPolygonPolyCriterion::isSatisfied(const boost::shared_ptr<const Element>
       .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   //isArea includes building too
   const bool isPoly =
-    AreaCriterion().isSatisified(e) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+    AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 
   //LOG_VART(e);
   //LOG_VART(isPoly);

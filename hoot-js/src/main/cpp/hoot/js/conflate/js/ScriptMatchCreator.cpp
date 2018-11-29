@@ -150,7 +150,7 @@ public:
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       ConstElementPtr e2 = map->getElement(*it);
-      if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
+      if (isCorrectOrder(e, e2) && isMatchCandidate(*e2))
       {
         // score each candidate and push it on the result vector
         ScriptMatch* m = new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt);
@@ -331,7 +331,7 @@ public:
       // will likely slow things down, but should give the same results.
       // An option in the future would be to support an "isIndexedFeature" or similar function
       // to speed the operation back up again.
-      boost::function<bool (ConstElementPtr e)> f =
+      boost::function<bool (const Element& e)> f =
         boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
       boost::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
 
@@ -380,11 +380,11 @@ public:
     }
   }
 
-  bool isMatchCandidate(ConstElementPtr e)
+  bool isMatchCandidate(const Element& e)
   {
-    if (_matchCandidateCache.contains(e->getElementId()))
+    if (_matchCandidateCache.contains(e.getElementId()))
     {
-      return _matchCandidateCache[e->getElementId()];
+      return _matchCandidateCache[e.getElementId()];
     }
 
     Isolate* current = v8::Isolate::GetCurrent();
@@ -411,13 +411,13 @@ public:
     Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
 
     bool result = f->BooleanValue();
-    _matchCandidateCache[e->getElementId()] = result;
+    _matchCandidateCache[e.getElementId()] = result;
     return result;
   }
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (isMatchCandidate(e))
+    if (isMatchCandidate(*e))
     {
       checkForMatch(e);
 
@@ -667,7 +667,7 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
-  return _getCachedVisitor(map)->isMatchCandidate(element);
+  return _getCachedVisitor(map)->isMatchCandidate(*element);
 }
 
 boost::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()

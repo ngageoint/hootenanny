@@ -58,7 +58,7 @@ void TagValueNumericRangeCriterion::setConfiguration(const Settings& conf)
   _rangeMax = configOptions.getTagValueNumericRangeCriterionMax();
 }
 
-bool TagValueNumericRangeCriterion::isSatisfied(const Element& e) const
+bool TagValueNumericRangeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   //The element must have tags for all keys passed in, and all the values for those keys must be
   //within the specified range.

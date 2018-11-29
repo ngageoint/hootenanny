@@ -41,7 +41,7 @@ CollectionCriterion::CollectionCriterion()
 {
 }
 
-bool CollectionCriterion::isSatisfied(const Element& e) const
+bool CollectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 

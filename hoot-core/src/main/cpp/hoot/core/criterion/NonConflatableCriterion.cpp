@@ -45,23 +45,23 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
 // Return true if not conflatable
-bool NonConflatableCriterion::isSatisfied(const Element& e) const
+bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   //See if our type is known conflatable - return false
   //TODO: This could probably be made cleaner by adding a "conflatable" attribute to criterion.
-  if (HighwayCriterion().isSatisfied(*e))
+  if (HighwayCriterion().isSatisfied(e))
       return false;
-  else if (LinearWaterwayCriterion().isSatisfied(*e))
+  else if (LinearWaterwayCriterion().isSatisfied(e))
     return false;
-  else if (PoiCriterion().isSatisfied(*e))
+  else if (PoiCriterion().isSatisfied(e))
     return false;
-  else if (BuildingCriterion().isSatisfied(*e))
+  else if (BuildingCriterion().isSatisfied(e))
     return false;
-  else if (RailwayCriterion().isSatisfied(*e))
+  else if (RailwayCriterion().isSatisfied(e))
     return false;
-  else if (PowerLineCriterion().isSatisfied(*e))
+  else if (PowerLineCriterion().isSatisfied(e))
     return false;
-  else if (AreaCriterion().isSatisfied(*e))
+  else if (AreaCriterion().isSatisfied(e))
     return false;
 
   // It is not something we can conflate

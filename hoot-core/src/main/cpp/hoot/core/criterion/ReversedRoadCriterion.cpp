@@ -28,13 +28,14 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
 
-bool ReversedRoadCriterion::isSatisfied(const Element& e) const
+bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
   const QString oneway = e.getTags()["oneway"].toLower();

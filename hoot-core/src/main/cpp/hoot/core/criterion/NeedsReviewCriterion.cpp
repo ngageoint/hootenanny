@@ -35,7 +35,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NeedsReviewCriterion)
 
-bool NeedsReviewCriterion::isSatisfied(const Element& e) const
+bool NeedsReviewCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return _reviewMarker.isNeedsReview(_map, e);
 }

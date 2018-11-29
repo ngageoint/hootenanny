@@ -71,7 +71,7 @@ bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& 
   LOG_VART(elementIsAWay);
   const bool elementIsARelation = e->getElementType() == ElementType::Relation;
   LOG_VART(elementIsARelation);
-  const bool elementIsAPoly = _polyCrit.isSatisfied(e);
+  const bool elementIsAPoly = _polyCrit.isSatisfied(*e);
   LOG_VART(elementIsAPoly);
   const bool elementIsASpecificPoly =
     _inABuildingOrPoiCategory && e->getTags().get("building") != QLatin1String("yes") &&

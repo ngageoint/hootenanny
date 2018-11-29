@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 
 // Qt
 #include <QStringList>
@@ -48,7 +49,7 @@ public:
   PoiPolygonPoiCriterion();
   PoiPolygonPoiCriterion(const QStringList tagIgnoreList);
 
-  bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
 
@@ -57,6 +58,7 @@ public:
 private:
 
   QStringList _tagIgnoreList;
+  AddressParser _addressParser;
 };
 
 }

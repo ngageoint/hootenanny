@@ -75,7 +75,7 @@ void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
   _criteria.push_back(e);
 }
 
-bool ChainCriterion::isSatisfied(const Element& e) const
+bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (size_t i = 0; i < _criteria.size(); i++)
   {

@@ -96,17 +96,17 @@ void PhoneNumberParser::_addPhoneNumber(const QString name, const QString tagKey
   _phoneNumbersProcessed++;
 }
 
-int PhoneNumberParser::numPhoneNumbers(const Element& e) const
+int PhoneNumberParser::numPhoneNumbers(const Element& element) const
 {
   return parsePhoneNumbers(element).size();
 }
 
-bool PhoneNumberParser::hasPhoneNumber(const Element& e) const
+bool PhoneNumberParser::hasPhoneNumber(const Element& element) const
 {
   return numPhoneNumbers(element) > 0;
 }
 
-QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& e) const
+QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& element) const
 {
   //phone=* is the standard OSM tag, but have seen many others over time...keeping the allowed tags
   //fairly loose for now

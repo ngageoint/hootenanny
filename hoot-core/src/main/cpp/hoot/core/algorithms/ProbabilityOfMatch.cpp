@@ -72,7 +72,7 @@ double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
 
   score = TagComparator::getInstance().compareTags(w1->getTags(), w2->getTags());
   OneWayCriterion oneWayCrit;
-  if (oneWayCrit.isSatisfied(*w1) && oneWayCrit.isSatisfied(*w2))
+  if (oneWayCrit.isSatisfied(w1) && oneWayCrit.isSatisfied(w2))
   {
     if (DirectionFinder::isSimilarDirection(map, w1, w2) == false)
     {

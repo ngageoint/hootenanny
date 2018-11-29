@@ -36,7 +36,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, MultiLineStringCriterion)
 
-bool MultiLineStringCriterion::isSatisfied(const Element& e) const
+bool MultiLineStringCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e.getElementType() == ElementType::Relation)
   {

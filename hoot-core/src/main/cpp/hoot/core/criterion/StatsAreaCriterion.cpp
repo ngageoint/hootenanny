@@ -31,13 +31,14 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, StatsAreaCriterion)
 
-bool StatsAreaCriterion::isSatisfied(const Element& e) const
+bool StatsAreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
@@ -61,7 +62,7 @@ bool StatsAreaCriterion::isSatisfied(const Element& e) const
     return false;
   }
 
-  result |= isBuilding(t, type);
+  result |= BuildingCriterion().isSatisfied(e);
   result |= t.isTrue("area");
 
   // if at least one of the tags is marked as an area, but not a linestring tag then we consider

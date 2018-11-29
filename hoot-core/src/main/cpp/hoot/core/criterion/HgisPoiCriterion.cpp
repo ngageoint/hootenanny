@@ -39,7 +39,7 @@ HgisPoiCriterion::HgisPoiCriterion()
 {
 }
 
-bool HgisPoiCriterion::isSatisfied(const Element& e) const
+bool HgisPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
   // See ticket #6853 for a definition of a "HGIS POI"

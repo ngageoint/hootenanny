@@ -48,7 +48,7 @@ _map(map)
 {
 }
 
-bool BuildingWayNodeCriterion::isSatisfied(const Element& e) const
+bool BuildingWayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 

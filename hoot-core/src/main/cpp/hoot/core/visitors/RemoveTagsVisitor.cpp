@@ -100,7 +100,7 @@ void RemoveTagsVisitor::addKey(QString key)
 
 void RemoveTagsVisitor::visit(const boost::shared_ptr<Element>& e)
 {
-  if (_criterion.get() && !_criterion->isSatisfied(e))
+  if (_criterion.get() && !_criterion->isSatisfied(*e))
   {
     return;
   }

@@ -56,17 +56,17 @@ public:
 
   DeletableBuildingCriterion() {}
 
-  bool isSatisfied(const boost::shared_ptr<const Element>& e) const
+  virtual bool isSatisfied(const ConstElementPtr& e) const
   {
     bool result = false;
 
-    if (e->getElementType() == ElementType::Node && e->getTags().getInformationCount() == 0)
+    if (e.getElementType() == ElementType::Node && e.getTags().getInformationCount() == 0)
     {
       result = true;
     }
-    else if (e->getElementType() != ElementType::Node)
+    else if (e.getElementType() != ElementType::Node)
     {
-      if (_buildingCrit.isSatisfied(*e) || _buildingPartCrit.isSatisfied(*e))
+      if (_buildingCrit.isSatisfied(e) || _buildingPartCrit.isSatisfied(e))
       {
         result = true;
       }

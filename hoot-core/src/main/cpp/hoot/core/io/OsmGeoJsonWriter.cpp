@@ -126,7 +126,7 @@ void OsmGeoJsonWriter::_writeGeometry(ConstNodePtr n)
 void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
-  bool isPolygon = AreaCriterion().isSatisfied(w) ||
+  bool isPolygon = AreaCriterion().isSatisfied(*w) ||
                    (nodes.size() > 0 && nodes[0] == nodes[nodes.size() - 1]);
   _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
 }
@@ -249,7 +249,7 @@ void OsmGeoJsonWriter::_writeNodes()
   const NodeMap& nodes = _map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (!crit.isSatisfied(_map->getNode(it->first)))
+    if (!crit.isSatisfied(*_map->getNode(it->first)))
       nids.append(it->first);
   }
   // sort the values to give consistent results.

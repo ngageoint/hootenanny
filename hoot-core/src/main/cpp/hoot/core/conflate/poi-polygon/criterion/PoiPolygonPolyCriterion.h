@@ -48,7 +48,7 @@ public:
   PoiPolygonPolyCriterion();
   PoiPolygonPolyCriterion(const QStringList tagIgnoreList);
 
-  bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
 

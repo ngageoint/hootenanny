@@ -40,7 +40,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, UselessElementCriterion)
 
-bool UselessElementCriterion::isSatisfied(const Element& e) const
+bool UselessElementCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   ElementId eid = e.getElementId();
   LOG_VART(eid);

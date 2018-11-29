@@ -36,7 +36,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiCriterion)
 
-bool PoiCriterion::isSatisfied(const Element& e) const
+bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
@@ -45,7 +45,7 @@ bool PoiCriterion::isSatisfied(const Element& e) const
   if (e.getElementType() == ElementType::Node)
   {
     result =
-      OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
+      OsmSchema::getInstance().hasCategory(e.getTags(), "poi") ||
       e.getTags().getNames().size() > 0;
   }
 

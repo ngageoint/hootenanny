@@ -38,11 +38,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ImplicitTagEligiblePoiCriterion)
 
-bool ImplicitTagEligiblePoiCriterion::isSatisfied(const Element& e) const
+bool ImplicitTagEligiblePoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e.getElementType());
   LOG_VART(e.getTags().getNames().size());
-  LOG_VART(hasEligibleKvp(element.getTags()));
+  LOG_VART(hasEligibleKvp(e.getTags()));
   return
     e.getElementType() == ElementType::Node && e.getTags().getNames().size() > 0 &&
     hasEligibleKvp(e.getTags());

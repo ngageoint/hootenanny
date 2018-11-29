@@ -29,6 +29,8 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/elements/ElementType.h>
 
 namespace hoot
 {
@@ -44,7 +46,7 @@ public:
 
   AreaCriterion();
 
-  virtual bool isSatisfied(const Element& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 

@@ -35,7 +35,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PowerLineCriterion)
 
-bool PowerLineCriterion::isSatisfied(const Element& e) const
+bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e.getElementType() == ElementType::Way)
   {

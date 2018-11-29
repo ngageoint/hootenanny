@@ -40,7 +40,7 @@ RailwayCriterion::RailwayCriterion()
 {
 }
 
-bool RailwayCriterion::isSatisfied(const Element& e) const
+bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)
   {
