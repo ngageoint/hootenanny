@@ -192,7 +192,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (e->getStatus() == _matchStatus && isMatchCandidate(*e))
+    if (e->getStatus() == _matchStatus && isMatchCandidate(e))
     {
       checkForMatch(e);
 
@@ -213,7 +213,7 @@ public:
     }
   }
 
-  static bool isMatchCandidate(const ConstElementPtr& element)
+  static bool isMatchCandidate(ConstElementPtr element)
   {
     return HighwayCriterion().isSatisfied(element);
   }
@@ -320,7 +320,7 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
 
 bool HighwayMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
-  return HighwayMatchVisitor::isMatchCandidate(*element);
+  return HighwayMatchVisitor::isMatchCandidate(element);
 }
 
 boost::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()

@@ -81,13 +81,13 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
   map->visitRw(multiVtor);
 }
 
-bool BuildingOnlyOp::_isBuildingRelation(const Element& e)
+bool BuildingOnlyOp::_isBuildingRelation(ConstElementPtr e)
 {
   // Is it a building relation?
-  if (e.getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation)
   {
-    const Relation& r = dynamic_cast<const Relation&>(e);
-    if (r.getType() == MetadataTags::RelationBuilding())
+    const Relation *r = dynamic_cast<const Relation*>(e.get());
+    if (r->getType() == MetadataTags::RelationBuilding())
       return true;
   }
 

@@ -195,7 +195,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (e->getStatus() == _matchStatus && isMatchCandidate(*e))
+    if (e->getStatus() == _matchStatus && isMatchCandidate(e))
     {
       checkForMatch(e);
 
@@ -216,7 +216,7 @@ public:
     }
   }
 
-  static bool isMatchCandidate(const ConstElementPtr& element)
+  static bool isMatchCandidate(ConstElementPtr element)
   {
     return BuildingCriterion().isSatisfied(element);
   }
@@ -353,7 +353,7 @@ boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 
 bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
-  return BuildingMatchVisitor::isMatchCandidate(*element);
+  return BuildingMatchVisitor::isMatchCandidate(element);
 }
 
 boost::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()

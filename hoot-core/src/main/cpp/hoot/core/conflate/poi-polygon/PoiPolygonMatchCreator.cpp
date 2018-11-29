@@ -128,7 +128,7 @@ bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
                                               const ConstOsmMapPtr& /*map*/)
 {
   return
-    element->isUnknown() && (_poiCrit->isSatisfied(*element) || _polyCrit->isSatisfied(*element));
+    element->isUnknown() && (_poiCrit->isSatisfied(element) || _polyCrit->isSatisfied(element));
 }
 
 boost::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()

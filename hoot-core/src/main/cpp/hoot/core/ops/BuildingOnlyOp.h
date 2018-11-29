@@ -86,7 +86,7 @@ private:
 
   boost::shared_ptr<OsmMap> _map;
 
-  bool _isBuildingRelation(const Element& e);
+  bool _isBuildingRelation(ConstElementPtr e);
 
 };
 
