@@ -241,10 +241,8 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   LOG_VART(e2->getTags().get("uuid"));
   LOG_VART(e2->getTags());
 
-  PoiPolygonPoiCriterion poiCrit(
-    PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList());
-  PoiPolygonPolyCriterion polyCrit(
-    PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList());
+  PoiPolygonPoiCriterion poiCrit;
+  PoiPolygonPolyCriterion polyCrit;
 
   _e1IsPoi = false;
   if (poiCrit.isSatisfied(e1) && polyCrit.isSatisfied(e2))

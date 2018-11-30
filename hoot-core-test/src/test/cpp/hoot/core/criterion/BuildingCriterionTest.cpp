@@ -50,7 +50,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/criterion/ComplexBuildings.osm");
 
-    BuildingCriterion uut;
+    BuildingCriterion uut(false);
     uut.setOsmMap(map.get());
     HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "targetandbestbuy")));
     HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "target")));

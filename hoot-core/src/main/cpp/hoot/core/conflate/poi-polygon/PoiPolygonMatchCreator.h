@@ -75,8 +75,8 @@ private:
 
   boost::shared_ptr<PoiPolygonRfClassifier> _rf;
 
-  boost::shared_ptr<PoiPolygonPoiCriterion> _poiCrit;
-  boost::shared_ptr<PoiPolygonPolyCriterion> _polyCrit;
+  PoiPolygonPoiCriterion _poiCrit;
+  PoiPolygonPolyCriterion _polyCrit;
 };
 
 }

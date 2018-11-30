@@ -29,8 +29,6 @@
 // Hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>

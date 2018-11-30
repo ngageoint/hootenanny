@@ -62,6 +62,7 @@ public:
 private:
 
   ConstOsmMapPtr _map;
+  mutable bool _checkParent;
 };
 
 }

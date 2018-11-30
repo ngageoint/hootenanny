@@ -97,8 +97,8 @@ private:
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
 
-  boost::shared_ptr<PoiPolygonPoiCriterion> _poiCrit;
-  boost::shared_ptr<PoiPolygonPolyCriterion> _polyCrit;
+  PoiPolygonPoiCriterion _poiCrit;
+  PoiPolygonPolyCriterion _polyCrit;
 
   void _checkForMatch(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e);

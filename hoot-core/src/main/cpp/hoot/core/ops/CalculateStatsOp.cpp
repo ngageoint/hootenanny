@@ -347,7 +347,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
               constMap,
               //see comment in _generateFeatureStats as to why ElementCountVisitor is used here
               //instead of FeatureCountVisitor
-              FilteredVisitor(PoiPolygonPoiCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
+              FilteredVisitor(
+                PoiPolygonPoiCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
         }
         _stats.append(
           SingleStat(

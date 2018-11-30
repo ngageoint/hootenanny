@@ -41,11 +41,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MatchCreator, PoiPolygonMatchCreator)
 
-PoiPolygonMatchCreator::PoiPolygonMatchCreator() :
-_poiCrit(
-  new PoiPolygonPoiCriterion(PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList())),
-_polyCrit(
-  new PoiPolygonPolyCriterion(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 {
 }
 
@@ -59,8 +55,8 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
 
-    const bool foundPoi = _poiCrit->isSatisfied(e1) || _poiCrit->isSatisfied(e2);
-    const bool foundPoly = _polyCrit->isSatisfied(e1) || _polyCrit->isSatisfied(e2);
+    const bool foundPoi = _poiCrit.isSatisfied(e1) || _poiCrit.isSatisfied(e2);
+    const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
       result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf());
@@ -128,7 +124,7 @@ bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
                                               const ConstOsmMapPtr& /*map*/)
 {
   return
-    element->isUnknown() && (_poiCrit->isSatisfied(element) || _polyCrit->isSatisfied(element));
+    element->isUnknown() && (_poiCrit.isSatisfied(element) || _polyCrit.isSatisfied(element));
 }
 
 boost::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()

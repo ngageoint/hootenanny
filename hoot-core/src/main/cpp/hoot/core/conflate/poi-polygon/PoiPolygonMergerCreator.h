@@ -64,8 +64,8 @@ private:
 
   bool _autoMergeManyPoiToOnePolyMatches;
 
-  boost::shared_ptr<PoiPolygonPoiCriterion> _poiCrit;
-  boost::shared_ptr<PoiPolygonPolyCriterion> _polyCrit;
+  PoiPolygonPoiCriterion _poiCrit;
+  PoiPolygonPolyCriterion _polyCrit;
 
   Match* _createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
 

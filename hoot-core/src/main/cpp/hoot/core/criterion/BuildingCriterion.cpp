@@ -75,19 +75,18 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
-  if (!_map)
-  {
-    throw HootException("You must set the map before calling BuildingCriterion");
-  }
-
   // if it is a building
   if ((e->getElementType() != ElementType::Node) &&
       (OsmSchema::getInstance().hasCategory(e->getTags(), "building") == true))
   {
-    // see ticket #5952. If the building has a parent relation that is also a building then this
-    // is really a building part, not a building.
-    if (isParentABuilding(e->getElementId()) == false)
+    // If a map was set, then we assume the parent is to be checked as well.  This is a little
+    // messy but reflects how the logic worked before moving OsmSchema feature type method logic
+    // out to criterion.  Another option could be to make two separate criteria, one that checks
+    // the parent and one that doesn't.
+    if (!_map || isParentABuilding(e->getElementId()) == false)
     {
+      // see ticket #5952. If the building has a parent relation that is also a building then this
+      // is really a building part, not a building.
       result = true;
     }
   }
@@ -97,6 +96,8 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
 
 bool BuildingCriterion::isSatisfied(const Tags& tags, const ElementType& elementType) const
 {
+  // There's no option to check the parent in this method, since doing so would require an element
+  // ID and callers call this method, because they don't have it in certain circumstances.
   return
     elementType != ElementType::Node &&
     OsmSchema::getInstance().hasCategory(tags, "building") == true;

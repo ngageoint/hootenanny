@@ -58,11 +58,7 @@ _elementsEvaluated(0),
 _threshold(threshold),
 _rf(rf),
 _numElementsVisited(0),
-_numMatchCandidatesVisited(0),
-_poiCrit(
-  new PoiPolygonPoiCriterion(PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList())),
-_polyCrit(
-  new PoiPolygonPolyCriterion(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+_numMatchCandidatesVisited(0)
 {
   ConfigOptions opts = ConfigOptions();
   _enableAdvancedMatching = opts.getPoiPolygonEnableAdvancedMatching();
@@ -96,7 +92,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Elemen
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() && _polyCrit->isSatisfied(n))
+      if (n->isUnknown() && _polyCrit.isSatisfied(n))
       {
         // score each candidate and push it on the result vector
         PoiPolygonMatch* m =
@@ -141,7 +137,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() && _polyCrit->isSatisfied(n))
+      if (n->isUnknown() && _polyCrit.isSatisfied(n))
       {
         _surroundingPolyIds.insert(*it);
       }
@@ -168,7 +164,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<c
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() && _poiCrit->isSatisfied(n))
+      if (n->isUnknown() && _poiCrit.isSatisfied(n))
       {
         _surroundingPoiIds.insert(*it);
       }
@@ -221,8 +217,7 @@ bool PoiPolygonMatchVisitor::_isMatchCandidate(ConstElementPtr element)
   //the stats
   return
     element->isUnknown() &&
-    PoiPolygonPoiCriterion(
-      PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()).isSatisfied(element);
+    PoiPolygonPoiCriterion().isSatisfied(element);
 }
 
 boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()

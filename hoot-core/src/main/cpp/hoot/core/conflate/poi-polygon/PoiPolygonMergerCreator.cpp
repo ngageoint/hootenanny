@@ -51,11 +51,7 @@ HOOT_FACTORY_REGISTER(MergerCreator, PoiPolygonMergerCreator)
 
 PoiPolygonMergerCreator::PoiPolygonMergerCreator() :
 _map(0),
-_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
-_poiCrit(
-  new PoiPolygonPoiCriterion(PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList())),
-_polyCrit(
-  new PoiPolygonPolyCriterion(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches())
 {
 }
 
@@ -225,9 +221,9 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     //not passing the tag ignore list here, since it would have already be used when calling
     //these methods from PoiPolygonMatch
     if (_autoMergeManyPoiToOnePolyMatches &&
-        _poiCrit->isSatisfied(map->getElement(o1)) &&
-        _poiCrit->isSatisfied(map->getElement(o2)) &&
-        _polyCrit->isSatisfied(map->getElement(sharedEid)))
+        _poiCrit.isSatisfied(map->getElement(o1)) &&
+        _poiCrit.isSatisfied(map->getElement(o2)) &&
+        _polyCrit.isSatisfied(map->getElement(sharedEid)))
     {
       LOG_TRACE("Automatically merging pois: " << o1 << ", " << o2 << " into poly: " << sharedEid);
       return false;
