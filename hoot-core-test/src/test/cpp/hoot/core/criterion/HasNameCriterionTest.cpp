@@ -22,45 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POI_POLYGON_POI_CRITERION_H
-#define POI_POLYGON_POI_CRITERION_H
 
-// hoot
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/conflate/address/AddressParser.h>
-
-// Qt
-#include <QStringList>
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/HasNameCriterion.h>
 
 namespace hoot
 {
 
-/**
- * Identifies POIs for use with POI/Polygon conflation
- */
-class PoiPolygonPoiCriterion : public ElementCriterion
+class HasNameCriterionTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(HasNameCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static std::string className() { return "hoot::PoiPolygonPoiCriterion"; }
+  void runBasicTest()
+  {
+    HasNameCriterion uut;
 
-  PoiPolygonPoiCriterion();
-  PoiPolygonPoiCriterion(const QStringList tagIgnoreList);
+    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set("name", "blah");
+    CPPUNIT_ASSERT(uut.isSatisfied(node1));
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
-
-  virtual QString getDescription() const { return ""; }
-
-private:
-
-  QStringList _tagIgnoreList;
-  AddressParser _addressParser;
+    NodePtr node2(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    node2->getTags().set("blah", "blah");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node2));
+  }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HasNameCriterionTest, "quick");
 
-#endif // POI_POLYGON_POI_CRITERION_H
+}

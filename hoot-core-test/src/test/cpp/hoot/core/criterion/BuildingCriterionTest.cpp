@@ -25,10 +25,6 @@
  * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Boost
-#include <boost/iostreams/filter/zlib.hpp>
-#include <boost/iostreams/filter/bzip2.hpp>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
@@ -50,7 +46,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/criterion/ComplexBuildings.osm");
 
-    BuildingCriterion uut(false);
+    BuildingCriterion uut;
     uut.setOsmMap(map.get());
     HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "targetandbestbuy")));
     HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "target")));

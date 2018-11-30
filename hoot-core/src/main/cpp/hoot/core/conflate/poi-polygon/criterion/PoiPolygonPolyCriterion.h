@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- *
+ * Identifies polygons for use with POI/Polygon conflation
  */
 class PoiPolygonPolyCriterion : public ElementCriterion
 {

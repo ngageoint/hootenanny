@@ -99,7 +99,7 @@ OsmNetworkPtr OsmNetworkExtractor::extractNetwork(ConstOsmMapPtr map)
 
 bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtr& r)
 {
-  assert(LinearCriterion.isSatisfied(r));
+  assert(LinearCriterion().isSatisfied(r));
 
   const vector<RelationData::Entry>& members = r->getMembers();
   bool result = members.size() > 0;

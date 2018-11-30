@@ -144,8 +144,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
   }
 
   // if they're from the same input sets & have effectively the same tags
-  if (w1->getStatus() == w2->getStatus() &&
-      _diff->diff(_map, w1, w2) == 0.0)
+  if (w1->getStatus() == w2->getStatus() && _diff->diff(_map, w1, w2) == 0.0)
   {
     // if both ways are one-way & the beginning of one isn't equal to the end
     // of the other

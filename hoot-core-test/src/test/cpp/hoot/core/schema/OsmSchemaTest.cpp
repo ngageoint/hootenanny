@@ -435,20 +435,6 @@ public:
     d = uut.score("building=abbey", "amenity=church");
     CPPUNIT_ASSERT(d >= 0.8);
   }
-
-  //TODO: move to HasNameCriterionTest
-//  void elementHasNameTest()
-//  {
-//    OsmSchema& uut = OsmSchema::getInstance();
-
-//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    node1->getTags().set("name", "blah");
-//    CPPUNIT_ASSERT(uut.hasName(*node1));
-
-//    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    node2->getTags().set("blah", "blah");
-//    CPPUNIT_ASSERT(!uut.hasName(*node2));
-//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmSchemaTest, "slow");

@@ -66,9 +66,10 @@ void CornerSplitter::splitCorners(boost::shared_ptr<OsmMap> map)
 void CornerSplitter::splitCorners()
 {
   // Get a list of ways (that look like roads) in the map
+  HighwayCriterion highwayCrit;
   for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
   {
-    if (HighwayCriterion().isSatisfied(it->second))
+    if (highwayCrit.isSatisfied(it->second))
     {
       _todoWays.push_back(it->first);
     }
