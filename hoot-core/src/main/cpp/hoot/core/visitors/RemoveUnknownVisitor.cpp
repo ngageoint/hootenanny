@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveUnknown1Visitor.h"
+#include "RemoveUnknownVisitor.h"
 
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
