@@ -34,13 +34,12 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveUnknown1Visitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveUnknown2Visitor)
 
-void RemoveUnknown1Visitor::visit(const boost::shared_ptr<Element>& e)
+void RemoveUnknownVisitor::visit(const boost::shared_ptr<Element>& e)
 {
-  if (e->getStatus() == Status::Unknown1)
-  {
+  if (e->getStatus() == _status)
     RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
-  }
 }
 
 }
