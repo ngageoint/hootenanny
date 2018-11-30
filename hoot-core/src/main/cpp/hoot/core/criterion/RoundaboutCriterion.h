@@ -35,7 +35,7 @@ namespace hoot
 class Element;
 
 /**
- *
+ * Identifies road roundabout junctions
  */
 class RoundaboutCriterion : public ElementCriterion
 {
@@ -49,7 +49,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new RoundaboutCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Identifies road roundabout junctions"; }
 };
 
 }

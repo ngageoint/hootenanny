@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Keeps all the one-way elements
+ * Keeps all the one-way streets
  */
 class OneWayCriterion : public ElementCriterion
 {

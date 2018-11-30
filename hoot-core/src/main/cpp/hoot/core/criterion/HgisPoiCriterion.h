@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * Identifies HGIS POIs
  */
 class HgisPoiCriterion : public ElementCriterion
 {
@@ -48,7 +48,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HgisPoiCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Identifies HGIS POIs"; }
 };
 
 }

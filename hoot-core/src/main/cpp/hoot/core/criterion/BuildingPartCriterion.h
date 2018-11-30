@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * Identifies parts of buildings
  */
 class BuildingPartCriterion : public ElementCriterion
 {

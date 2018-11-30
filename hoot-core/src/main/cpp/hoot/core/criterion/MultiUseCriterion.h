@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * Identifies features with multiple purposes
  */
 class MultiUseCriterion : public ElementCriterion
 {
@@ -48,7 +48,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new MultiUseCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Identifies features with multiple purposes"; }
 };
 
 }

@@ -35,7 +35,7 @@ namespace hoot
 class Element;
 
 /**
- *
+ * Identifies reversed roads
  */
 class ReversedRoadCriterion : public ElementCriterion
 {
@@ -49,7 +49,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ReversedRoadCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Identifies reversed roads"; }
 };
 
 }

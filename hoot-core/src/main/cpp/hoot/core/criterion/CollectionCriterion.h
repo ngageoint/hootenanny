@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * Identifies relation collections
  */
 class CollectionCriterion : public ElementCriterion
 {
@@ -48,7 +48,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new CollectionCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Identifies relation collections"; }
 };
 
 }

@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * A criterion that will either keep or remove matches.
+ * A criterion that will either keep or remove road matches.
  */
 class HighwayCriterion : public ElementCriterion
 {
@@ -47,7 +47,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HighwayCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies highways"; }
+  virtual QString getDescription() const { return "Identifies roads"; }
 };
 
 }

@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * Identifies linear bodies of water
  */
 class LinearWaterwayCriterion : public ElementCriterion
 {
@@ -47,7 +47,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearWaterwayCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Identifies linear bodies of water"; }
 };
 
 }

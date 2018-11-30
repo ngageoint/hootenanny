@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- *
+ * Identifies multi-line string features
  */
 class MultiLineStringCriterion : public ElementCriterion
 {
@@ -48,7 +48,7 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new MultiLineStringCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Identifies multi-line string features"; }
 };
 
 }
