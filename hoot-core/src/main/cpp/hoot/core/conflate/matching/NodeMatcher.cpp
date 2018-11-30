@@ -41,6 +41,7 @@
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -52,11 +53,43 @@ namespace hoot
 {
 
 unsigned int NodeMatcher::logWarnCount = 0;
+QList<boost::shared_ptr<ElementCriterion>> NodeMatcher::_validFeatureTypeCriterion;
 
 NodeMatcher::NodeMatcher() :
 _strictness(ConfigOptions().getNodeMatcherStrictness()),
 _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 {
+}
+
+bool NodeMatcher::_isValidFeatureType(boost::shared_ptr<Way> way)
+{
+  // This list of criterion is very similar to the logic in
+  // IntersectionSplitter::_isNetworkFeatureType, however, don't want to tie the two together
+  // just yet.
+  if (_validFeatureTypeCriterion.isEmpty())
+  {
+    QStringList critClasses;
+    critClasses.append("hoot::HighwayCriterion");
+    critClasses.append("hoot::LinearWaterwayCriterion");
+    critClasses.append("hoot::PowerLineCriterion");
+    critClasses.append("hoot::RailwayCriterion");
+
+    for (int i = 0; i < critClasses.size(); i++)
+    {
+      boost::shared_ptr<ElementCriterion> crit(
+        Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i)));
+      _validFeatureTypeCriterion.append(crit);
+    }
+  }
+
+  for (int i = 0; i < nodes.size(); i++)
+  {
+    if (_validFeatureTypeCriterion.at(i)->isSatisifed(way))
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
@@ -65,18 +98,18 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
   vector<Radians> result;
   result.reserve(wids.size());
 
-  int badSpots = 0;
-
   LOG_VART(nid);
+  QSet<long> badWayIds;
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
     const ConstWayPtr& w = map->getWay(*it);
+    LOG_VART(w->getId());
+    LOG_VART(w->getLastNodeId());
+    LOG_VART(w->getNodeId(0));
 
-    if (HighwayCriterion().isSatisfied(w) == false &&
-        LinearWaterwayCriterion().isSatisfied(w) == false &&
-        PowerLineCriterion().isSatisfied(w) == false)
+    if (!_isValidFeatureType(w))
     {
-      // If this isn't a feature type we're interested in, then don't consider it.
+      // if this isn't a feature from a specific list, then don't consider it.
       LOG_TRACE("calculateAngles skipping feature...");
     }
     else if (w->getNodeId(0) == nid)
@@ -106,28 +139,37 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
     }
     else
     {
-      LOG_TRACE("Bad spot");
-      LOG_VART(w->getNodeId(0));
-      LOG_VART(w->getLastNodeId());
       // count this as a bad spot. If we find some valid spots and some bad spots then that is an
       // error condition
-      badSpots++;
+      badWayIds.insert(w->getId());
     }
   }
 
-  if (result.size() > 0 && badSpots > 0)
+  LOG_VART(badWayIds.size());
+  LOG_VART(result.size());
+  if (result.size() > 0 && badWayIds.size() > 0)
   {
-    LOG_TRACE("Found bad spots in NodeMatcher when calculating angles:")
-    LOG_TRACE("nid: " << nid);
-    LOG_VART(map->getNode(nid)->toString());
-    LOG_TRACE("wids: " << wids);
-    for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
+    LOG_TRACE(
+      "Found " << badWayIds.size() << " bad spot(s) in NodeMatcher when calculating angles " <<
+      "with node: " << nid);
+    LOG_TRACE("wids: " << badWayIds);
+    for (QSet<long>::const_iterator it = badWayIds.begin(); it != badWayIds.end(); ++it)
     {
-      LOG_VART(map->getWay(*it)->toString());
+      const ConstWayPtr& w = map->getWay(*it);
+      LOG_VART(w->getId());
+      LOG_VART(w->getTags().get("REF1"));
+      LOG_VART(w->getTags().get("REF2"));
+      LOG_VART(w->getNodeIndex(nid));
+      LOG_VART(w->getNodeId(0));
+      LOG_VART(w->getLastNodeId());
     }
 
-    throw HootException(
-      "NodeMatcher::calculateAngles was called with a node that was not a start or end node on the specified way.");
+    if (ConfigOptions().getNodeMatcherFailOnBadAngleSpots())
+    {
+      throw HootException(
+        QString("NodeMatcher::calculateAngles was called with a node that was not a start or ") +
+        QString("end node on the specified way."));
+    }
   }
 
   return result;

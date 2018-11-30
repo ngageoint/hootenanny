@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/util/Units.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -37,6 +38,9 @@
 // Std
 #include <vector>
 #include <set>
+
+// Qt
+#include <QList>
 
 namespace hoot
 {
@@ -85,10 +89,9 @@ public:
 private:
 
   boost::shared_ptr<const OsmMap> _map;
-
   double _strictness;
-
   double _delta;
+  static QList<boost::shared_ptr<ElementCriterion>> _validFeatureTypeCriterion;
 
   double _calculateAngleScore(const std::vector<Radians>& theta1, const std::vector<Radians>& theta2,
     std::vector<bool>& exclude, size_t depth, bool debug = false);

@@ -36,9 +36,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
-#include <hoot/core/criterion/PowerLineCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -49,6 +46,8 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IntersectionSplitter)
+
+QList<boost::shared_ptr<ElementCriterion>> IntersectionSplitter::_networkFeatureTypeCriterion;
 
 IntersectionSplitter::IntersectionSplitter()
 {
@@ -75,12 +74,39 @@ void IntersectionSplitter::_mapNodesToWay(boost::shared_ptr<Way> way)
   }
 }
 
+bool IntersectionSplitter::_isNetworkFeatureType(boost::shared_ptr<Way> way)
+{
+  // See related note in NodeMatcher::_isValidFeatureType.
+  if (_networkFeatureTypeCriterion.isEmpty())
+  {
+    QStringList networkCritClasses;
+    networkCritClasses.append("hoot::HighwayCriterion");
+    networkCritClasses.append("hoot::LinearWaterwayCriterion");
+    networkCritClasses.append("hoot::PowerLineCriterion");
+    networkCritClasses.append("hoot::RailwayCriterion");
+
+    for (int i = 0; i < networkCritClasses.size(); i++)
+    {
+      boost::shared_ptr<ElementCriterion> crit(
+        Factory::getInstance().constructObject<ElementCriterion>(networkCritClasses.at(i)));
+      _networkFeatureTypeCriterion.append(crit);
+    }
+  }
+
+  for (int i = 0; i < nodes.size(); i++)
+  {
+    if (_networkFeatureTypeCriterion.at(i)->isSatisifed(way))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 void IntersectionSplitter::_mapNodesToWays()
 {
   _nodeToWays.clear();
 
-  HighwayCriterion highwayCrit;
-  LinearWaterwayCriterion waterwayCrit;
   const WayMap& ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
@@ -88,16 +114,15 @@ void IntersectionSplitter::_mapNodesToWays()
 
     bool isNetworkType = false;
 
-    if (highwayCrit.isSatisfied(w) || waterwayCrit.isSatisfied(w) ||
-        PowerLineCriterion().isSatisfied(w))
+    if (_isNetworkFeatureType(w))
     {
       isNetworkType  = true;
     }
     // if the way isn't a network type, maybe it is part of a relation that is a network type.
     else
     {
-      const set<long>& relations = _map->getIndex().getElementToRelationMap()->getRelationByElement(
-        w->getElementId());
+      const set<long>& relations =
+        _map->getIndex().getElementToRelationMap()->getRelationByElement(w->getElementId());
 
       foreach (long rid, relations)
       {
