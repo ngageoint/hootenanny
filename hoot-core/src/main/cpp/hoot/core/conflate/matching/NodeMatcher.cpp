@@ -38,13 +38,13 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
-#include <hoot/core/criterion/PowerLineCriterion.h>
-#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
+
+// Qt
+#include <QSet>
 
 using namespace std;
 using namespace Tgs;
@@ -53,7 +53,7 @@ namespace hoot
 {
 
 unsigned int NodeMatcher::logWarnCount = 0;
-QList<boost::shared_ptr<ElementCriterion>> NodeMatcher::_validFeatureTypeCriterion;
+QList<boost::shared_ptr<ElementCriterion>> NodeMatcher::_networkFeatureTypeCriterion;
 
 NodeMatcher::NodeMatcher() :
 _strictness(ConfigOptions().getNodeMatcherStrictness()),
@@ -61,12 +61,9 @@ _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 {
 }
 
-bool NodeMatcher::_isValidFeatureType(boost::shared_ptr<Way> way)
+bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
 {
-  // This list of criterion is very similar to the logic in
-  // IntersectionSplitter::_isNetworkFeatureType, however, don't want to tie the two together
-  // just yet.
-  if (_validFeatureTypeCriterion.isEmpty())
+  if (_networkFeatureTypeCriterion.isEmpty())
   {
     QStringList critClasses;
     critClasses.append("hoot::HighwayCriterion");
@@ -76,15 +73,15 @@ bool NodeMatcher::_isValidFeatureType(boost::shared_ptr<Way> way)
 
     for (int i = 0; i < critClasses.size(); i++)
     {
-      boost::shared_ptr<ElementCriterion> crit(
-        Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i)));
-      _validFeatureTypeCriterion.append(crit);
+      _networkFeatureTypeCriterion.append(
+        boost::shared_ptr<ElementCriterion>(
+          Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i))));
     }
   }
 
-  for (int i = 0; i < nodes.size(); i++)
+  for (int i = 0; i < _networkFeatureTypeCriterion.size(); i++)
   {
-    if (_validFeatureTypeCriterion.at(i)->isSatisifed(way))
+    if (_networkFeatureTypeCriterion.at(i)->isSatisfied(element))
     {
       return true;
     }
@@ -107,7 +104,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
     LOG_VART(w->getLastNodeId());
     LOG_VART(w->getNodeId(0));
 
-    if (!_isValidFeatureType(w))
+    if (!isNetworkFeatureType(w))
     {
       // if this isn't a feature from a specific list, then don't consider it.
       LOG_TRACE("calculateAngles skipping feature...");

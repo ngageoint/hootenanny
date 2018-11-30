@@ -36,6 +36,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
 
 // Qt
 #include <QDebug>
@@ -46,8 +47,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IntersectionSplitter)
-
-QList<boost::shared_ptr<ElementCriterion>> IntersectionSplitter::_networkFeatureTypeCriterion;
 
 IntersectionSplitter::IntersectionSplitter()
 {
@@ -74,35 +73,6 @@ void IntersectionSplitter::_mapNodesToWay(boost::shared_ptr<Way> way)
   }
 }
 
-bool IntersectionSplitter::_isNetworkFeatureType(boost::shared_ptr<Way> way)
-{
-  // See related note in NodeMatcher::_isValidFeatureType.
-  if (_networkFeatureTypeCriterion.isEmpty())
-  {
-    QStringList networkCritClasses;
-    networkCritClasses.append("hoot::HighwayCriterion");
-    networkCritClasses.append("hoot::LinearWaterwayCriterion");
-    networkCritClasses.append("hoot::PowerLineCriterion");
-    networkCritClasses.append("hoot::RailwayCriterion");
-
-    for (int i = 0; i < networkCritClasses.size(); i++)
-    {
-      boost::shared_ptr<ElementCriterion> crit(
-        Factory::getInstance().constructObject<ElementCriterion>(networkCritClasses.at(i)));
-      _networkFeatureTypeCriterion.append(crit);
-    }
-  }
-
-  for (int i = 0; i < nodes.size(); i++)
-  {
-    if (_networkFeatureTypeCriterion.at(i)->isSatisifed(way))
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
 void IntersectionSplitter::_mapNodesToWays()
 {
   _nodeToWays.clear();
@@ -114,7 +84,9 @@ void IntersectionSplitter::_mapNodesToWays()
 
     bool isNetworkType = false;
 
-    if (_isNetworkFeatureType(w))
+    // Tying this check to NodeMatcher::isNetworkFeatureType, since both have similar requirements.
+    // Its possible in the future, the list of criterion checked may diverge between the two.
+    if (NodeMatcher::isNetworkFeatureType(w))
     {
       isNetworkType  = true;
     }
@@ -127,7 +99,7 @@ void IntersectionSplitter::_mapNodesToWays()
       foreach (long rid, relations)
       {
         ElementPtr r = _map->getRelation(rid);
-        if (highwayCrit.isSatisfied(r) || waterwayCrit.isSatisfied(r))
+        if (NodeMatcher::isNetworkFeatureType(r))
         {
           isNetworkType  = true;
         }
@@ -172,7 +144,8 @@ void IntersectionSplitter::splitIntersections()
     //  Remove the node first in case it needs to be reprocessed later
     _todoNodes.remove(nodeId);
 
-    if (Log::getInstance().isInfoEnabled() && _todoNodes.size() % 1000 == 0 && _todoNodes.size() > 0)
+    if (Log::getInstance().isInfoEnabled() && _todoNodes.size() % 1000 == 0 &&
+        _todoNodes.size() > 0)
     {
       cout << "  Intersection splitter todo: " << _todoNodes.size() << "       \r";
       cout.flush();
