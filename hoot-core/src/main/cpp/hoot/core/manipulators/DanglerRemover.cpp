@@ -67,8 +67,6 @@ using namespace Tgs;
 namespace hoot
 {
 
-#define SQR(x) ((x) * (x))
-
 DanglerRemover::DanglerRemover(Meters errorPlus)
 {
   _errorPlus = errorPlus;

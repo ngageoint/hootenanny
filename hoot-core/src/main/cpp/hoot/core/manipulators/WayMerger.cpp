@@ -73,8 +73,6 @@ using namespace Tgs;
 namespace hoot
 {
 
-#define SQR(x) ((x) * (x))
-
 HOOT_FACTORY_REGISTER(Manipulator, WayMerger)
 
 WayMerger::WayMerger()
