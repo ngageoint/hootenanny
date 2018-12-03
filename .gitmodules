@@ -4,4 +4,4 @@
 [submodule "hoot-ui-2x"]
 	path = hoot-ui-2x
 	url = https://github.com/ngageoint/hootenanny-ui.git
-	branch = hoot2x
+	branch = hoot2x-test-fix
