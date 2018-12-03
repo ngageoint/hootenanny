@@ -28,7 +28,7 @@
 #define POIRFCLASSIFIER_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>

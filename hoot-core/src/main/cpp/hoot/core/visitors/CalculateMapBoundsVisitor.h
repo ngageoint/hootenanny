@@ -28,7 +28,7 @@
 #ifndef CALCULATEMAPBOUNDSVISITOR_H
 #define CALCULATEMAPBOUNDSVISITOR_H
 
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 /**

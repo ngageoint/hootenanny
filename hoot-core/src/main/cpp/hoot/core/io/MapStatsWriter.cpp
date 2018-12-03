@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/stats/SingleStat.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/util/MapProjector.h>

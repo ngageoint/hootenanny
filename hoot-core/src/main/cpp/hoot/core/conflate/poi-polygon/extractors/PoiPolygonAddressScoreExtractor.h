@@ -28,11 +28,11 @@
 #define POIPOLYGONADDRESSSCOREEXTRACTOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
-#include <hoot/core/algorithms/AddressParser.h>
+#include <hoot/core/algorithms/string/ExactStringDistance.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 
 namespace hoot
 {

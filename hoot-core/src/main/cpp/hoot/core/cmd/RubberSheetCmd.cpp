@@ -28,9 +28,9 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/RubberSheeter.h>
-#include <hoot/core/conflate/RubberSheetDeriver.h>
-#include <hoot/core/conflate/RubberSheetApplier.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheeter.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheetDeriver.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheetApplier.h>
 
 namespace hoot
 {

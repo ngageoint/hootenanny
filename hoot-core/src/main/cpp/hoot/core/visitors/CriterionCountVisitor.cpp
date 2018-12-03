@@ -27,7 +27,7 @@
 #include "CriterionCountVisitor.h"
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {

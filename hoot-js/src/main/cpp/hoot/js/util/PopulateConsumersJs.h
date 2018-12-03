@@ -28,8 +28,8 @@
 #define POPULATECONSUMERSJS_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregatorConsumer.h>
 #include <hoot/core/elements/ElementConsumer.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>

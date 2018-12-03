@@ -29,8 +29,8 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/conflate/splitter/CornerSplitter.h>
-#include <hoot/core/conflate/splitter/IntersectionSplitter.h>
+#include <hoot/core/algorithms/splitter/CornerSplitter.h>
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/NamedOp.h>

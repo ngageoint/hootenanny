@@ -28,9 +28,9 @@
 #define NEEDSREVIEWCRITERION_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot

@@ -31,7 +31,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
-#include <hoot/core/util/FindNodesInWayFactory.h>
+#include <hoot/core/algorithms/FindNodesInWayFactory.h>
 
 using namespace geos::geom;
 using namespace std;

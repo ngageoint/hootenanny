@@ -28,7 +28,7 @@
 #define POIPOLYGONMERGERCREATOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 
 namespace hoot

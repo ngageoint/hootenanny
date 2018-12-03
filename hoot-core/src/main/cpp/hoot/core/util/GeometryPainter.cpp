@@ -28,7 +28,7 @@
 #include "GeometryPainter.h"
 
 // Local Includes
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Exception.h>
 using namespace hoot::elements;

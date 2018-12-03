@@ -33,7 +33,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ShapefileWriter.h>
-#include <hoot/core/conflate/AlphaShapeGenerator.h>
+#include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
 

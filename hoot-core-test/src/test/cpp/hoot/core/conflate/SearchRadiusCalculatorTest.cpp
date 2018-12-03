@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
 #include <hoot/core/conflate/SearchRadiusCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>

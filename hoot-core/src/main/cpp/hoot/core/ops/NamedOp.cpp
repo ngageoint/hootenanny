@@ -31,7 +31,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ops/VisitorOp.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/info/OperationStatusInfo.h>

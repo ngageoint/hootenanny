@@ -31,7 +31,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>

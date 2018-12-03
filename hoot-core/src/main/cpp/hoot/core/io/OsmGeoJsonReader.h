@@ -42,7 +42,7 @@
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonReader.h>
 
 namespace hoot

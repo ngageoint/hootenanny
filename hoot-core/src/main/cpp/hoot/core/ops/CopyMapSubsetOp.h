@@ -28,7 +28,7 @@
 #define COPYMAPSUBSETOP_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot

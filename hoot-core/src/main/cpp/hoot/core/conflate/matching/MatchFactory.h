@@ -28,7 +28,7 @@
 #define MATCHFACTORY_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 
 // Standard

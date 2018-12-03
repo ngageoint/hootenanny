@@ -29,7 +29,7 @@
 #define OSMMAPINDEX_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementListener.h>
 #include <hoot/core/index/ElementToRelationMap.h>
 

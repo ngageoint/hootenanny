@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -60,7 +60,7 @@ public:
   virtual QString getName() const { return "count"; }
 
   virtual QString getDescription() const
-  { return "Counts the number of features in a map that meet a criterion"; }
+  { return "Counts the number of features in a map that meet specified criteria"; }
 
   virtual int runSimple(QStringList args)
   {

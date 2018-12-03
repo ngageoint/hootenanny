@@ -28,7 +28,7 @@
 #define ADDREF2VISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 

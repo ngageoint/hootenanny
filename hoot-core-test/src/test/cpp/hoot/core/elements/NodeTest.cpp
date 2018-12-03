@@ -35,7 +35,7 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>

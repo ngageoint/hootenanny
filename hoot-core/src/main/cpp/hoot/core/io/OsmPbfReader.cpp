@@ -30,7 +30,7 @@
 #include <arpa/inet.h>
 
 // Hoot Includes
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PbfConstants.h>

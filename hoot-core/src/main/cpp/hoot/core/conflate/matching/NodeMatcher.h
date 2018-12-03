@@ -85,9 +85,7 @@ public:
 private:
 
   boost::shared_ptr<const OsmMap> _map;
-
   double _strictness;
-
   double _delta;
 
   double _calculateAngleScore(const std::vector<Radians>& theta1, const std::vector<Radians>& theta2,

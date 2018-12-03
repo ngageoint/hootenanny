@@ -26,7 +26,7 @@
  */
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>

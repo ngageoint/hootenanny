@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/visitors/ToEnglishTranslationVisitor.h>
-#include <hoot/core/algorithms/StringDistance.h>
+#include <hoot/core/algorithms/string/StringDistance.h>
 
 namespace hoot
 {

@@ -34,7 +34,7 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/LineStringAverager.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/algorithms/WayHeading.h>

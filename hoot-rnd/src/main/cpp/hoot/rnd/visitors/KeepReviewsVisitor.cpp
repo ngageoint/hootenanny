@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/criterion/NeedsReviewCriterion.h>
 

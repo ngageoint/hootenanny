@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/visitors/ToEnglishTranslationVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>

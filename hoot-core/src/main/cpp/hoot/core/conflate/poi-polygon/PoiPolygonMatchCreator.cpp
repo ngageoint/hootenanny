@@ -27,7 +27,7 @@
 #include "PoiPolygonMatchCreator.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h>

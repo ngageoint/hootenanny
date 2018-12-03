@@ -28,7 +28,7 @@
 #include "RemoveMissingElementsVisitor.h"
 
 //hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
