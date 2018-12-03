@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEUNKNOWN1_H
-#define REMOVEUNKNOWN1_H
+#ifndef REMOVE_UNKNOWN_VISITOR_H
+#define REMOVE_UNKNOWN_VISITOR_H
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
@@ -34,21 +34,58 @@ namespace hoot
 {
 
 /**
+ * Removes all elements of a given status.
+ */
+class RemoveUnknownVisitor : public ElementOsmMapVisitor
+{
+public:
+
+  static std::string className() { return "hoot::RemoveUnknownVisitor"; }
+
+  void set(Status status) { _status = status; }
+
+  virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual QString getDescription() const { return "Removes all elements of a given status"; }
+
+protected:
+
+  RemoveUnknownVisitor(Status status) : _status(status) {}
+
+private:
+  RemoveUnknownVisitor() {}
+
+  Status _status;
+};
+
+/**
  * Removes all elements that have a status of Unknown1.
  */
-class RemoveUnknown1Visitor : public ElementOsmMapVisitor
+class RemoveUnknown1Visitor : public RemoveUnknownVisitor
 {
 public:
 
   static std::string className() { return "hoot::RemoveUnknown1Visitor"; }
 
-  RemoveUnknown1Visitor() {}
-
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
 
   virtual QString getDescription() const { return "Removes all elements with a status of Unknown1"; }
 };
 
+/**
+ * Removes all elements that have a status of Unknown2.
+ */
+class RemoveUnknown2Visitor : public RemoveUnknownVisitor
+{
+public:
+
+  static std::string className() { return "hoot::RemoveUnknown2Visitor"; }
+
+  RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
+
+  virtual QString getDescription() const { return "Removes all elements with a status of Unknown2"; }
+};
+
 }
 
-#endif // REMOVEUNKNOWN1_H
+#endif // REMOVE_UNKNOWN_VISITOR_H
