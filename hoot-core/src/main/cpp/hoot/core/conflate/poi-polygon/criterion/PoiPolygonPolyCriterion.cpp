@@ -46,11 +46,6 @@ _tagIgnoreList(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList
 {
 }
 
-PoiPolygonPolyCriterion::PoiPolygonPolyCriterion(const QStringList tagIgnoreList) :
-_tagIgnoreList(tagIgnoreList)
-{
-}
-
 bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const Tags& tags = e->getTags();

@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>

@@ -215,9 +215,7 @@ bool PoiPolygonMatchVisitor::_isMatchCandidate(ConstElementPtr element)
   //POIs and their surrounding polys and polys and their surrounding POIs; note that this is
   //different than PoiPolygonMatchCreator::isMatchCandidate, which is looking at both to appease
   //the stats
-  return
-    element->isUnknown() &&
-    PoiPolygonPoiCriterion().isSatisfied(element);
+  return element->isUnknown() && PoiPolygonPoiCriterion().isSatisfied(element);
 }
 
 boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()

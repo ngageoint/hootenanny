@@ -331,7 +331,8 @@ int ConflateCmd::runSimple(QStringList args)
     }
   }
   else
-  { // Write a map
+  {
+    // Write a map
 
     if (conflateTags)
     {
@@ -345,7 +346,7 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate && conflateTags)
   {
     LOG_INFO("Generating tag changeset...");
-    MemChangesetProviderPtr pTagChanges = diffConflator.getTagDiff();
+    //MemChangesetProviderPtr pTagChanges = diffConflator.getTagDiff();
 
     // Write the file!
     QString outFileName = output;

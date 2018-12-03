@@ -34,7 +34,6 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistance.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h>
 #include <hoot/core/util/ElementConverter.h>

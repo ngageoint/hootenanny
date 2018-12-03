@@ -46,7 +46,6 @@ public:
   static std::string className() { return "hoot::PoiPolygonPolyCriterion"; }
 
   PoiPolygonPolyCriterion();
-  PoiPolygonPolyCriterion(const QStringList tagIgnoreList);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
