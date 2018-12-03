@@ -82,8 +82,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DualWaySplitter)
 
 DualWaySplitter::DualWaySplitter()
 { 
-  ConfigOptions opts = ConfigOptions();
-  if (opts.getDualWaySplitterDrivingSideDefaultValue().toLower() == "left")
+  if (ConfigOptions::getDualWaySplitterDrivingSideDefaultValue().toLower() == "left")
   {
     _drivingSide = DualWaySplitter::Left;
     LOG_DEBUG("Assuming drives on left.");
@@ -93,7 +92,7 @@ DualWaySplitter::DualWaySplitter()
     _drivingSide = DualWaySplitter::Right;
     LOG_DEBUG("Assuming drives on right.");
   }
-  _defaultSplitSize = opts.getDualWaySplitterSplitSizeDefaultValue();
+  _defaultSplitSize = ConfigOptions::getDualWaySplitterSplitSizeDefaultValue();
 }
 
 DualWaySplitter::DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,

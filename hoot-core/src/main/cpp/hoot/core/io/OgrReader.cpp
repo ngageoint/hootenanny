@@ -879,7 +879,7 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
     }
 
     result.reset(new Envelope());
-    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::getInstance().createWgs84Projection();
+    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
     boost::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;

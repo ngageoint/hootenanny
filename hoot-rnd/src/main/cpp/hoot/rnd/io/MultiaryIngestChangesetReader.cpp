@@ -62,7 +62,7 @@ boost::shared_ptr<OGRSpatialReference> MultiaryIngestChangesetReader::getProject
 {
   if (!_wgs84)
   {
-    _wgs84 = MapProjector::getInstance().createWgs84Projection();
+    _wgs84 = MapProjector::createWgs84Projection();
   }
   return _wgs84;
 }
