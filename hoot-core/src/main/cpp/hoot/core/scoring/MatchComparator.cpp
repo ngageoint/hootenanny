@@ -723,8 +723,6 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 QString MatchComparator::toString() const
 {
   QString result;
-  int total = 0;
-  int correct = 0;
 
   QString left[3];
   // weird markup makes a pretty table in redmine.
@@ -745,11 +743,6 @@ QString MatchComparator::toString() const
       else
       {
         result += QString(" |%1").arg(_confusion[i][j], 6, 10);
-      }
-      total += _confusion[i][j];
-      if (i == j)
-      {
-        correct += _confusion[i][j];
       }
     }
     result += "  |\n";

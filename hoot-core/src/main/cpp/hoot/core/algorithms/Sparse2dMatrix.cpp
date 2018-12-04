@@ -37,9 +37,6 @@ Sparse2dMatrix::Sparse2dMatrix()
 
 QString Sparse2dMatrix::toString() const
 {
-  QString result;
-  result += "{";
-
   QStringList sl;
 
   for (HashMap<CellId, double>::const_iterator it = begin(); it != end(); ++it)

@@ -488,19 +488,16 @@ void OsmGbdxXmlWriter::_writeWayWithPoints(const ConstWayPtr& w, ConstOsmMapPtr 
   // POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))
   // POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))
 
-  QString featureGeometry;
   QString endBracket;
 
   const vector<long>& nodes = w->getNodeIds();
   if (OsmSchema::getInstance().isArea(w) || nodes[0] == nodes[nodes.size() - 1])
   {
-    featureGeometry = "Polygon";
     endBracket = "))";
     _writer->writeCharacters(QString("POLYGON (("));
   }
   else
   {
-    featureGeometry = "Linestring";
     endBracket = ")";
     _writer->writeCharacters(QString("LINESTRING ("));
   }
@@ -521,20 +518,12 @@ void OsmGbdxXmlWriter::_writeWayWithPoints(const ConstWayPtr& w, ConstOsmMapPtr 
 
   _writer->writeEndElement(); // WKT
 
-//  _writer->writeStartElement("type");
-//  _writer->writeCharacters(featureGeometry);
-//  _writer->writeEndElement();
-
   _writer->writeEndElement(); // geometry
 
   // Add the Det_id from the Tag
   _writer->writeStartElement("id");
   _writer->writeCharacters(w->getTags()["Det_id"]);
   _writer->writeEndElement();
-
-//  _writer->writeStartElement("type");
-//  _writer->writeCharacters("Feature");
-//  _writer->writeEndElement();
 
   _writer->writeEndElement(); // features
 
