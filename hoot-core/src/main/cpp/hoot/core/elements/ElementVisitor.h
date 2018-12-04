@@ -36,10 +36,6 @@ namespace hoot
 
 /**
  * Visits elements in a collection in a way that they can be modified.
- *
- * @note This interface hasn't been propagated throughout the code base so it will not likely be
- * honored in the same was as a ConstElementVisitor. Developers are encouraged to add ElementVisitor
- * support wherever it is relevant.
  */
 class ElementVisitor : public ApiEntityInfo
 {
