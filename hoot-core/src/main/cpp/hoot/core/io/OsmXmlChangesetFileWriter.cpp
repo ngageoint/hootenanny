@@ -43,12 +43,12 @@ using namespace std;
 namespace hoot
 {
 
-OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter()
-  : _precision(ConfigOptions().getWriterPrecision()),
-    _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
-    _multipleChangesetsWritten(false),
-    _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
-    _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
+OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
+_precision(ConfigOptions().getWriterPrecision()),
+_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
+_multipleChangesetsWritten(false),
+_addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
   _stats.resize(Change::Unknown, ElementType::Unknown);
   vector<QString> rows( {"Create", "Modify", "Delete"} );

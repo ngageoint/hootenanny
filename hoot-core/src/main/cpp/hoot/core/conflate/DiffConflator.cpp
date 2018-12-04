@@ -322,7 +322,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement,
   // We want the old element as it was... with new tags.
 
   // Copy the old one to get the geometry
-  ElementPtr pChangeElement (pOldElement->clone());
+  ElementPtr pChangeElement(pOldElement->clone());
 
   assert(pChangeElement->getId() == pOldElement->getId());
 
