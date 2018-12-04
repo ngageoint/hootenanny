@@ -59,7 +59,9 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
   {
     ElementPtr nonConst = _map->getElement(e->getElementId());
     elementObj = ElementJs::New(nonConst);
-  } else {
+  }
+  else
+  {
     elementObj = ElementJs::New(e);
   }
 
@@ -67,7 +69,8 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
   jsArgs[argc++] = elementObj;
 
   TryCatch trycatch;
-  Handle<Value> funcResult = ToLocal(&_func)->Call(current->GetCallingContext()->Global(), argc, jsArgs);
+  Handle<Value> funcResult =
+    ToLocal(&_func)->Call(current->GetCallingContext()->Global(), argc, jsArgs);
 
   if (funcResult.IsEmpty())
   {
@@ -79,7 +82,6 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
     }
     else
     {
-      // Matt, if this conflicts with the newer more robust handling, use that.
       throw HootException(toJson(trycatch.Message()->Get()));
     }
   }

@@ -65,7 +65,6 @@ private:
   const OsmMap* _map;
   std::set<ReviewMarker::ReviewUid> _reviews;
   ReviewMarker _reviewMarker;
-
 };
 
 }

@@ -45,7 +45,7 @@ QMutex RemoveRef2Visitor::_mutex;
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class Ref1ToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class Ref1ToEidVisitor : public ConstElementVisitor
 {
 public:
 
@@ -54,8 +54,6 @@ public:
   virtual ~Ref1ToEidVisitor() {}
 
   const RemoveRef2Visitor::Ref1ToEid& getRef1ToEid() const { return _ref1ToEid; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -69,7 +67,7 @@ public:
   virtual QString getDescription() const { return ""; }
 
 private:
-  const OsmMap* _map;
+
   RemoveRef2Visitor::Ref1ToEid _ref1ToEid;
 };
 
