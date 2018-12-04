@@ -327,7 +327,6 @@
             <tag k="name" v="cow house"/>
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-2" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-275"/>
@@ -360,7 +359,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-3" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-276"/>
@@ -390,7 +388,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-4" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-281"/>
@@ -420,7 +417,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-5" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-282"/>
@@ -450,7 +446,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-6" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-283"/>
@@ -475,7 +470,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-7" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-272"/>
@@ -493,7 +487,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-8" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-273"/>
@@ -511,7 +504,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-9" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-274"/>
@@ -529,7 +521,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-10" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-269"/>
@@ -548,7 +539,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-11" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-270"/>
@@ -568,7 +558,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-12" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-271"/>
@@ -588,7 +577,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-13" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-284"/>
@@ -616,7 +604,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-14" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-285"/>
@@ -647,7 +634,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-15" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-280"/>
@@ -673,7 +659,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-16" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-277"/>
@@ -692,7 +677,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-17" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-278"/>
@@ -717,7 +701,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-18" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-286"/>
@@ -744,7 +727,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-19" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-279"/>
@@ -770,7 +752,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-20" version="0" timestamp="">
             <nd ref="-295"/>
@@ -785,7 +766,6 @@
             <tag k="security:classification" v="UNCLASSIFIED"/>
             <tag k="source:imagery" v="Unknown"/>
             <tag k="power" v="line"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-21" version="0" timestamp="">
             <nd ref="-301"/>
@@ -798,7 +778,6 @@
             <tag k="security:classification" v="UNCLASSIFIED"/>
             <tag k="source:imagery" v="Unknown"/>
             <tag k="railway" v="rail"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-22" version="0" timestamp="">
             <nd ref="-305"/>
@@ -810,7 +789,6 @@
             <tag k="source:imagery" v="Unknown"/>
             <tag k="name" v="Fred's Parking"/>
             <tag k="amenity" v="parking"/>
-            <tag k="error:circular" v="15"/>
         </way>
     </create>
 </osmChange>
