@@ -31,11 +31,13 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
 #include <QMultiHash>
 #include <QSet>
 #include <QMap>
+#include <QList>
 
 namespace hoot
 {
@@ -79,9 +81,7 @@ private:
   QSet<long> _todoNodes;
 
   void _mapNodesToWays();
-
   void _mapNodesToWay(boost::shared_ptr<Way> w);
-
   void _removeWayFromMap(boost::shared_ptr<Way> way);
 
   /**

@@ -43,6 +43,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/MultiUseCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 #include <float.h>
 
@@ -157,7 +159,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     }
   }
 
-  if (OsmSchema::getInstance().isMultiUse(*poly) && poiHasType && _typeScore < 0.4)
+  if (MultiUseCriterion().isSatisfied(poly) && poiHasType && _typeScore < 0.4)
   {
     LOG_TRACE("Returning miss per review reduction rule #2...");
     return true;
@@ -324,7 +326,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
+  BuildingCriterion buildingCrit;
+  const bool polyIsBuilding = buildingCrit.isSatisfied(poly);
   LOG_VART(polyIsBuilding);
 
   //Similar to previous, except more focused for restrooms.
@@ -449,7 +452,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
   LOG_VART(poiContainedInParkPoly);
 
-  const bool poiIsBuilding = OsmSchema::getInstance().isBuilding(poi);
+  const bool poiIsBuilding = buildingCrit.isSatisfied(poi);
   LOG_VART(poiIsBuilding);
 
   PoiPolygonNameScoreExtractor nameScorer;
@@ -575,7 +578,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
               sportPoiOnOtherSportPolyWithTypeMatch = true;
             }
           }
-          else if (OsmSchema::getInstance().isBuilding(polyNeighbor))
+          else if (buildingCrit.isSatisfied(polyNeighbor))
           {
             if (polyNeighborGeom->contains(poiGeom.get()))
             {

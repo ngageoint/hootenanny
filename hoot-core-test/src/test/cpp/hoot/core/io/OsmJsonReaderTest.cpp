@@ -30,7 +30,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
 
 // CPP Unit

@@ -37,8 +37,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/RandomNumberUtils.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Tgs
 #include <tgs/System/Time.h>
@@ -79,7 +79,7 @@ void PertyWaySplitVisitor::setConfiguration(const Settings& conf)
 void PertyWaySplitVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   LOG_TRACE(e->getElementType());
-  if (OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType()))
+  if (HighwayCriterion().isSatisfied(e))
   {
     _split(e);
   }

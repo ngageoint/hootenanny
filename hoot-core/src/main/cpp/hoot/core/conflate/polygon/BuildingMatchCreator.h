@@ -28,6 +28,7 @@
 #define BUILDINGMATCHCREATOR_H
 
 #include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace Tgs
 {
@@ -73,6 +74,8 @@ private:
   boost::shared_ptr<MatchThreshold> _matchThreshold;
 
   QString _conflateMatchBuildingModel;
+
+  BuildingCriterion _buildingCrit;
 
   /**
    * The building model can be slow to load, this provides a lazy load.

@@ -33,9 +33,9 @@
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -66,10 +66,10 @@ void CornerSplitter::splitCorners(boost::shared_ptr<OsmMap> map)
 void CornerSplitter::splitCorners()
 {
   // Get a list of ways (that look like roads) in the map
+  HighwayCriterion highwayCrit;
   for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
   {
-    if (OsmSchema::getInstance().isLinearHighway(it->second->getTags(),
-                                                 it->second->getElementType()))
+    if (highwayCrit.isSatisfied(it->second))
     {
       _todoWays.push_back(it->first);
     }

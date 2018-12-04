@@ -25,10 +25,6 @@
  * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Boost
-#include <boost/iostreams/filter/zlib.hpp>
-#include <boost/iostreams/filter/bzip2.hpp>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>

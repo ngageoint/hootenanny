@@ -22,19 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONPOLYCRITERION_H
-#define POIPOLYGONPOLYCRITERION_H
+#ifndef POI_POLYGON_POLY_CRITERION_H
+#define POI_POLYGON_POLY_CRITERION_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * A criterion that will keep poly-like features, as defined by PoiPolygonMatch.
+ * Identifies polygons for use with POI/Polygon conflation
  */
 class PoiPolygonPolyCriterion : public ElementCriterion
 {
@@ -44,14 +47,17 @@ public:
 
   PoiPolygonPolyCriterion();
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
 
-  virtual QString getDescription() const
-  { return "Identifies polygons as defined by POI/Polygon conflation"; }
+  virtual QString getDescription() const { return ""; }
+
+private:
+
+  QStringList _tagIgnoreList;
 };
 
 }
 
-#endif // POIPOLYGONPOLYCRITERION_H
+#endif // POI_POLYGON_POLY_CRITERION_H

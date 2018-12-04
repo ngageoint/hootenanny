@@ -43,6 +43,7 @@ namespace hoot
 class NodeJs : public ElementJs
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   virtual ConstElementPtr getConstElement() const { return getConstNode(); }
@@ -54,6 +55,7 @@ public:
   static v8::Handle<v8::Object> New(NodePtr n);
 
 private:
+
   NodeJs(ConstNodePtr n);
   NodeJs();
   ~NodeJs();

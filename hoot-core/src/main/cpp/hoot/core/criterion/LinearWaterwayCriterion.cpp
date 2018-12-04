@@ -22,17 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "MetadataTags.h"
+#include "LinearWaterwayCriterion.h"
+
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-const QString MetadataTags::HOOT_STATUS = "hoot:status";
-const QString MetadataTags::ACCURACY = "accuracy";
-const QString MetadataTags::ERROR_CIRCULAR = "error:circular";
-const QString MetadataTags::HOOT_ID = "hoot:id";
+HOOT_FACTORY_REGISTER(ElementCriterion, LinearWaterwayCriterion)
+
+bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  if (e->getElementType() == ElementType::Way || e->getElementType() == ElementType::Relation)
+  {
+    const Tags& tags = e->getTags();
+    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+    {
+      if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||
+          //TODO: Likely this condition needs to be removed and instead the affected data should
+          //be properly translated into OSM before conflation.
+          (it.key() == "type" &&
+           OsmSchema::getInstance().isAncestor("waterway=" + it.value(), "waterway")))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
 
 }
+

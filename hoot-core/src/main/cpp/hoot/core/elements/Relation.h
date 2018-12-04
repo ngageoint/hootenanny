@@ -33,7 +33,7 @@
 #include <hoot/core/elements/RelationData.h>
 
 // hoot
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {

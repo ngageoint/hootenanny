@@ -53,11 +53,11 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new UselessElementCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies useless elements"; }
+  virtual QString getDescription() const { return "Identifies elements that have no use"; }
 
 private:
 
