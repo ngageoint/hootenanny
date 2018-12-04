@@ -83,7 +83,7 @@ _distance(distance)
 {
 }
 
-bool DistanceNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool DistanceNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() != ElementType::Node)
     return false;

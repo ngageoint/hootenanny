@@ -31,7 +31,6 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/OsmUtils.h>
@@ -39,9 +38,13 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/util/Factory.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
+
+// Qt
+#include <QSet>
 
 using namespace std;
 using namespace Tgs;
@@ -50,11 +53,40 @@ namespace hoot
 {
 
 unsigned int NodeMatcher::logWarnCount = 0;
+QList<boost::shared_ptr<ElementCriterion>> NodeMatcher::_networkFeatureTypeCriterion;
 
 NodeMatcher::NodeMatcher() :
 _strictness(ConfigOptions().getNodeMatcherStrictness()),
 _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 {
+}
+
+bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
+{
+  if (_networkFeatureTypeCriterion.isEmpty())
+  {
+    QStringList critClasses;
+    critClasses.append("hoot::HighwayCriterion");
+    critClasses.append("hoot::LinearWaterwayCriterion");
+    critClasses.append("hoot::PowerLineCriterion");
+    critClasses.append("hoot::RailwayCriterion");
+
+    for (int i = 0; i < critClasses.size(); i++)
+    {
+      _networkFeatureTypeCriterion.append(
+        boost::shared_ptr<ElementCriterion>(
+          Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i))));
+    }
+  }
+
+  for (int i = 0; i < _networkFeatureTypeCriterion.size(); i++)
+  {
+    if (_networkFeatureTypeCriterion.at(i)->isSatisfied(element))
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
@@ -72,10 +104,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
     LOG_VART(w->getLastNodeId());
     LOG_VART(w->getNodeId(0));
 
-    if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) == false &&
-        OsmSchema::getInstance().isLinearWaterway(*w) == false &&
-        OsmSchema::getInstance().isPowerLine(*w) == false &&
-        OsmSchema::getInstance().isRailway(*w) == false)
+    if (!isNetworkFeatureType(w))
     {
       // if this isn't a feature from a specific list, then don't consider it.
       LOG_TRACE("calculateAngles skipping feature...");

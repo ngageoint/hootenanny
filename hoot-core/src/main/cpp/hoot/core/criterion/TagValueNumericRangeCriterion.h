@@ -49,7 +49,7 @@ public:
   TagValueNumericRangeCriterion(const QStringList tagKeys, const long rangeMin,
                                 const long rangeMax);
 
-  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new TagValueNumericRangeCriterion()); }

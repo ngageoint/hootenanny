@@ -64,7 +64,6 @@ private:
   boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
 
   ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr pMap);
-
 };
 
 }

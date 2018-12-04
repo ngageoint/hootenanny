@@ -41,6 +41,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // tgs
 #include <tgs/StreamUtils.h>
@@ -410,7 +411,7 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
 bool BuildingPartMergeOp::_isBuildingPart(const WayPtr& w)
 {
   bool result = false;
-  if (OsmSchema::getInstance().isBuilding(w->getTags(), w->getElementType()))
+  if (BuildingCriterion().isSatisfied(w))
   {
     result = true;
   }
@@ -420,7 +421,7 @@ bool BuildingPartMergeOp::_isBuildingPart(const WayPtr& w)
 bool BuildingPartMergeOp::_isBuildingPart(const RelationPtr& r)
 {
   bool result = false;
-  if (OsmSchema::getInstance().isBuilding(r->getTags(), r->getElementType()))
+  if (BuildingCriterion().isSatisfied(r))
   {
     result = true;
   }

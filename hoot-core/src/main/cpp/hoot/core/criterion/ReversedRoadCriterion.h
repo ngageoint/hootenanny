@@ -24,21 +24,34 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "WaterwayCriterion.h"
+#ifndef REVERSED_ROAD_CRITERION_H
+#define REVERSED_ROAD_CRITERION_H
 
-// hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, WaterwayCriterion)
+class Element;
 
-bool WaterwayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+/**
+ * Identifies reversed roads
+ */
+class ReversedRoadCriterion : public ElementCriterion
 {
-  return OsmSchema::getInstance().isLinearWaterway(*e.get());
-}
+public:
+
+  static std::string className() { return "hoot::ReversedRoadCriterion"; }
+
+  ReversedRoadCriterion() {}
+
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ReversedRoadCriterion()); }
+
+  virtual QString getDescription() const { return "Identifies reversed roads"; }
+};
 
 }
 
+#endif // REVERSED_ROAD_CRITERION_H

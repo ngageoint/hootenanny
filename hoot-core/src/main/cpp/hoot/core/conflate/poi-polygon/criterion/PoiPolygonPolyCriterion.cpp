@@ -22,29 +22,62 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonPolyCriterion.h"
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
+
+using namespace std;
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPolyCriterion)
 
-PoiPolygonPolyCriterion::PoiPolygonPolyCriterion()
+PoiPolygonPolyCriterion::PoiPolygonPolyCriterion() :
+_tagIgnoreList(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList())
 {
 }
 
-bool PoiPolygonPolyCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return
-    OsmSchema::getInstance().isPoiPolygonPoly(
-      e, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList());
+  const Tags& tags = e->getTags();
+
+  //Using this looser definition b/c isLinearHighway will return false if any tag is in an area
+  //category and not a linestring category, which still gives us some features we don't want to
+  //conflate with poi/poly.
+  if (tags.contains("highway"))
+  {
+    return false;
+  }
+
+  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
+  //files
+  if (OsmSchema::getInstance().containsTagFromList(tags, _tagIgnoreList))
+  {
+    LOG_TRACE("Contains tag from tag ignore list");
+    return false;
+  }
+  LOG_TRACE("Does not contain tag from tag ignore list");
+
+  //TODO: should use be added as a category here?
+  const bool inABuildingOrPoiCategory =
+    OsmSchema::getInstance().getCategories(tags)
+      .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  //isArea includes building too
+  const bool isPoly =
+    AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+
+  //LOG_VART(e);
+  //LOG_VART(isPoly);
+  return isPoly;
 }
 
 }

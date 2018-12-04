@@ -13,7 +13,7 @@ hoot conflate --warn -C Diff.conf test-files/conflate/diff/input1.osm test-files
 # Run changeset w/tags to produce a unified map (osm) output
 hoot conflate --warn -C Diff.conf test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output_unified.osm --differential --include-tags
 
-# Run changeset w/tags to produce seperate outputs for geometry and tags
+# Run changeset w/tags to produce separate outputs for geometry and tags
 hoot conflate --warn -C Diff.conf test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output.osc --differential --include-tags --separate-output
 
 # Check differential output

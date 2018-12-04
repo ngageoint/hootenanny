@@ -50,7 +50,7 @@ public:
   TagContainsCriterion(QString key, QString valueSubstring);
   TagContainsCriterion(QStringList keys, QStringList valueSubstrings);
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
  /**
    * Adds an additional pair to the search list. If any one of the pairs matches then it is

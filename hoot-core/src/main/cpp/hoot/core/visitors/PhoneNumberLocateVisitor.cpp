@@ -44,7 +44,7 @@ void PhoneNumberLocateVisitor::setConfiguration(const Settings& conf)
 
 void PhoneNumberLocateVisitor::visit(const ElementPtr& e)
 {
-  QList<ElementPhoneNumber> phoneNumbers = _phoneNumberParser.parsePhoneNumbers(e);
+  QList<ElementPhoneNumber> phoneNumbers = _phoneNumberParser.parsePhoneNumbers(*e);
   for (QList<ElementPhoneNumber>::const_iterator phoneNumberItr = phoneNumbers.constBegin();
        phoneNumberItr != phoneNumbers.constEnd(); ++phoneNumberItr)
   {

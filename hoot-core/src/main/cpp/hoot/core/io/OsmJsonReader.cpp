@@ -34,7 +34,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>

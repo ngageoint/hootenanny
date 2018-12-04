@@ -22,34 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef WATERWAYCRITERION_H
-#define WATERWAYCRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/HasNameCriterion.h>
 
 namespace hoot
 {
 
-/**
- * A criterion that will either keep or remove waterways.
- */
-class WaterwayCriterion : public ElementCriterion
+class HasNameCriterionTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(HasNameCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static std::string className() { return "hoot::WaterwayCriterion"; }
+  void runBasicTest()
+  {
+    HasNameCriterion uut;
 
-  WaterwayCriterion() {}
+    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set("name", "blah");
+    CPPUNIT_ASSERT(uut.isSatisfied(node1));
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WaterwayCriterion()); }
-
-  virtual QString getDescription() const { return "Identifies waterways"; }
+    NodePtr node2(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    node2->getTags().set("blah", "blah");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node2));
+  }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HasNameCriterionTest, "quick");
 
-#endif // WATERWAYCRITERION_H
+}

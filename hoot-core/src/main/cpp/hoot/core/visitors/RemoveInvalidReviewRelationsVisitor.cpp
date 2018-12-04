@@ -32,7 +32,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
