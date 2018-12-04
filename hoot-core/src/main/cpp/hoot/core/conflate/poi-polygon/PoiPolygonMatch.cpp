@@ -39,8 +39,6 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/MultiUseBuildingCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 
@@ -240,17 +238,14 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   LOG_VART(e2->getTags().get("uuid"));
   LOG_VART(e2->getTags());
 
-  PoiPolygonPoiCriterion poiCrit;
-  PoiPolygonPolyCriterion polyCrit;
-
   _e1IsPoi = false;
-  if (poiCrit.isSatisfied(e1) && polyCrit.isSatisfied(e2))
+  if (_poiCrit.isSatisfied(e1) && _polyCrit.isSatisfied(e2))
   {
     _poi = e1;
     _poly = e2;
     _e1IsPoi = true;
   }
-  else if (poiCrit.isSatisfied(e2) && polyCrit.isSatisfied(e1))
+  else if (_poiCrit.isSatisfied(e2) && _polyCrit.isSatisfied(e1))
   {
     _poi = e2;
     _poly = e1;

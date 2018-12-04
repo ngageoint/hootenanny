@@ -222,6 +222,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   if (poiTagList.size() == 0 || polyTagList.size() == 0)
   {
     _noTypeFound = true;
+    LOG_VART("No valid type found when comparing: " << poi << " to: " << poly);
     return 0.0;
   }
 

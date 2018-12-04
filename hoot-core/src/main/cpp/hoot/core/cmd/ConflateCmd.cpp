@@ -190,7 +190,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
-  QList< QList<SingleStat> > allStats;
+  QList<QList<SingleStat>> allStats;
 
   // read input 1
   OsmMapPtr map(new OsmMap());
