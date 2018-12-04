@@ -37,8 +37,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateMapBoundsVisitor)
 
-CalculateMapBoundsVisitor::CalculateMapBoundsVisitor():
-  _envelope()
+CalculateMapBoundsVisitor::CalculateMapBoundsVisitor() :
+_envelope()
 {
 }
 

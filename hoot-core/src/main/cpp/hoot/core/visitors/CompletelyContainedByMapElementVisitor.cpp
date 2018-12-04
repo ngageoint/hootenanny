@@ -45,7 +45,6 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, CompletelyContainedByMapElementVisito
 
 CompletelyContainedByMapElementVisitor::CompletelyContainedByMapElementVisitor()
 {
-  _map = 0;
   _complete = true;
 }
 
