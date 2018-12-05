@@ -79,6 +79,7 @@ help:
 	@echo "test-quick              - Run quick tests.  Should take less than five minutes."
 	@echo "ui-build                - Build the web UI js/css dist.  Must enable --with-services configuration options."
 	@echo "ui-test                 - Run user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
+	@echo "ui2x-test               - Run user interface tests on ui2x.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 	@echo "ui-coverage             - Generate coverage reports for mocha and cucumber user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 	@echo "ui-clean-coverage       - Removes the coverage reports for mocha and cucumber user interface tests."
 	@echo "ui2x-build              - Build the web UI 2.0 js/css dist.  Must enable --with-services configuration options."
@@ -109,6 +110,9 @@ ui-build:
 
 ui-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-test
+
+ui2x-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui2x-test
 
 ui-coverage:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-coverage
