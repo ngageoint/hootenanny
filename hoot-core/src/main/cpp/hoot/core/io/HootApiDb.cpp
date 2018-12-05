@@ -1113,6 +1113,7 @@ void HootApiDb::_resetQueries()
   _selectReserveNodeIds.reset();
   _selectNodeIdsForWay.reset();
   _selectMapIds.reset();
+  _selectPublicMapIds.reset();
   _selectMembersForRelation.reset();
   _updateNode.reset();
   _updateRelation.reset();
@@ -1130,6 +1131,8 @@ void HootApiDb::_resetQueries()
   _getAccessTokenSecretByUserId.reset();
   _insertUserSession.reset();
   _updateUserAccessTokens.reset();
+  _mapExistsForUserId.reset();
+  _mapIsPublic.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1141,34 +1144,63 @@ void HootApiDb::_resetQueries()
   _wayIdReserver.reset();
 }
 
+bool HootApiDb::userCanAccessMap(const long mapId)
+{
+  if (_currUserId != -1)
+  {
+    return mapExistsForUser(mapId, _currUserId);
+  }
+  else
+  {
+    return mapIsPublic(mapId);
+  }
+}
+
 set<long> HootApiDb::selectMapIds(QString name)
 {
-  const long userId = _currUserId;
-  LOG_DEBUG("selectMapIds name = "+name);
-  LOG_DEBUG("userId = "+QString::number(userId));
-  if (_selectMapIds == 0)
-  {
-    _selectMapIds.reset(new QSqlQuery(_db));
-    _selectMapIds->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
-                           " WHERE display_name LIKE :name AND user_id=:userId");
-  }
-  _selectMapIds->bindValue(":name", name);
-  _selectMapIds->bindValue(":user_id", (qlonglong)userId);
-  LOG_VARD(_selectMapIds->lastQuery());
-
-  if (_selectMapIds->exec() == false)
-  {
-    throw HootException(_selectMapIds->lastError().text());
-  }
-
   set<long> result;
-  while (_selectMapIds->next())
+  boost::shared_ptr<QSqlQuery> query;
+
+  LOG_VARD(name);
+  LOG_VARD(_currUserId);
+  if (_currUserId != -1)
+  {
+    if (_selectMapIds == 0)
+    {
+      _selectMapIds.reset(new QSqlQuery(_db));
+      _selectMapIds->prepare(
+        "SELECT id FROM " + ApiDb::getMapsTableName() +
+        " WHERE display_name LIKE :name AND user_id = :user_id");
+    }
+    _selectMapIds->bindValue(":user_id", (qlonglong)_currUserId);
+    query = _selectMapIds;
+  }
+  else
+  {
+    if (_selectPublicMapIds == 0)
+    {
+      _selectPublicMapIds.reset(new QSqlQuery(_db));
+      _selectPublicMapIds->prepare(
+        "SELECT id FROM " + ApiDb::getMapsTableName() +
+        " WHERE display_name LIKE :name AND public = true");
+    }
+    query = _selectPublicMapIds;
+  }
+  query->bindValue(":name", name);
+  LOG_VARD(query->lastQuery());
+
+  if (query->exec() == false)
+  {
+    throw HootException(query->lastError().text());
+  }
+
+  while (query->next())
   {
     bool ok;
-    long id = _selectMapIds->value(0).toLongLong(&ok);
+    long id = query->value(0).toLongLong(&ok);
     if (!ok)
     {
-      throw HootException("Error parsing map ID.");
+      throw HootException("Error selecting map IDs.");
     }
     result.insert(id);
   }
@@ -1204,13 +1236,36 @@ QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
   }
 }
 
+bool HootApiDb::mapIsPublic(const long id)
+{
+  if (_mapIsPublic == 0)
+  {
+    _mapIsPublic.reset(new QSqlQuery(_db));
+    _mapIsPublic->prepare(
+      "SELECT public FROM " + ApiDb::getMapsTableName() + " WHERE id = :mapId");
+  }
+  _mapIsPublic->bindValue(":mapId", (qlonglong)id);
+  if (_mapIsPublic->exec() == false)
+  {
+    throw HootException(_mapIsPublic->lastError().text());
+  }
+
+  bool isPublic = false;
+  if (_mapIsPublic->next())
+  {
+    isPublic = _mapIsPublic->value(0).toBool();
+  }
+  _mapIsPublic->finish();
+  return isPublic;
+}
+
 bool HootApiDb::mapExists(const long id)
 {
   if (_mapExistsById == 0)
   {
     _mapExistsById.reset(new QSqlQuery(_db));
     _mapExistsById->prepare("SELECT display_name FROM " + ApiDb::getMapsTableName() +
-                        " WHERE id = :mapId");
+                            " WHERE id = :mapId");
   }
   _mapExistsById->bindValue(":mapId", (qlonglong)id);
   if (_mapExistsById->exec() == false)
@@ -1219,6 +1274,24 @@ bool HootApiDb::mapExists(const long id)
   }
 
   return _mapExistsById->next();
+}
+
+bool HootApiDb::mapExistsForUser(const long mapId, const long userId)
+{
+  if (_mapExistsForUserId == 0)
+  {
+    _mapExistsForUserId.reset(new QSqlQuery(_db));
+    _mapExistsForUserId->prepare(
+      "SELECT id FROM " + ApiDb::getMapsTableName() + " WHERE id = :mapId AND user_id = :userId");
+  }
+  _mapExistsForUserId->bindValue(":mapId", (qlonglong)mapId);
+  _mapExistsForUserId->bindValue(":userId", (qlonglong)userId);
+  if (_mapExistsForUserId->exec() == false)
+  {
+    throw HootException(_mapExistsForUserId->lastError().text());
+  }
+
+  return _mapExistsForUserId->next();
 }
 
 bool HootApiDb::mapExists(const QString name)

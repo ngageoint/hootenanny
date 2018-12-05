@@ -79,19 +79,46 @@ void HootApiDbReader::open(QString urlStr)
   bool ok;
   _database->open(url);
 
-  long requestedMapId = pList[pList.size() - 1].toLong(&ok);
-
-  if (!ok)
+  LOG_VARD(_email);
+  // If no email was specified, then we'll just get any try to get public maps with the same name.
+  if (!_email.isEmpty())
   {
-    if (_email == "")
-    {
-      throw HootException("If a map name is specified then the user email must also be specified "
-                          "via: " + ConfigOptions::getApiDbEmailKey());
-    }
-
-    QString mapName = pList[pList.size() - 1];
     _database->setUserId(_database->getUserId(_email, false));
-    set<long> mapIds = _database->selectMapIds(mapName);
+  }
+
+  long requestedMapId = pList[pList.size() - 1].toLong(&ok);
+  LOG_VARD(ok);
+  LOG_VARD(requestedMapId);
+
+  if (ok)
+  {
+    // Check that the user either created this data, or the data is public.
+    if (_database->mapExists(requestedMapId) && !_database->userCanAccessMap(requestedMapId))
+    {
+      QString errorMsg;
+      if (!_email.isEmpty())
+      {
+        errorMsg =
+          "User with ID: " + QString::number(_database->getCurrentUserId()) +
+          " does not have access to map with ID: " + QString::number(requestedMapId);
+      }
+      else
+      {
+        errorMsg =
+          "Requested map with ID: " + QString::number(requestedMapId) +
+          " not available for public access.";
+      }
+      throw HootException(errorMsg);
+    }
+  }
+  else
+  {
+    QString mapName = pList[pList.size() - 1];
+    // Its a little disjointed to call a "can access" type method when we have a map ID but not
+    // also when we have map name here.  However, since selectMapIds takes care of the access
+    // checking part for us, there's no point in calling an additional access check method.
+    const set<long> mapIds = _database->selectMapIds(mapName);
+    LOG_VARD(mapIds);
     if (mapIds.size() != 1)
     {
       QString str =
@@ -99,6 +126,21 @@ void HootApiDbReader::open(QString urlStr)
           .arg(mapName)
           .arg(mapIds.size());
       throw HootException(str);
+    }
+    else if (mapIds.size() == 0)
+    {
+      QString errorMsg;
+      if (!_email.isEmpty())
+      {
+        errorMsg =
+          "User with ID: " + QString::number(_database->getCurrentUserId()) +
+          " does not have access to map with name: " + mapName;
+      }
+      else
+      {
+        errorMsg = "Requested map with name: " + mapName + " not available for public access.";
+      }
+      throw HootException(errorMsg);
     }
     requestedMapId = *mapIds.begin();
   }

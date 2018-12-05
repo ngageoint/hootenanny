@@ -56,6 +56,7 @@ HootApiDbWriter::HootApiDbWriter()
   _waysWritten = 0;
   _relationsWritten = 0;
   _includeIds = false;
+  _writePublicMap = false;
 
   setConfiguration(conf());
 }
@@ -201,7 +202,7 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
         LOG_DEBUG("Finished removing map with ID: " << *it);
       }
 
-      _hootdb.setMapId(_hootdb.insertMap(mapName, true));
+      _hootdb.setMapId(_hootdb.insertMap(mapName, _writePublicMap));
     }
     else if (mapIds.size() > 1)
     {
@@ -218,7 +219,7 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
   else if (mapIds.size() == 0)
   {
     LOG_DEBUG("Map " << mapName << " was not found, must insert.");
-    _hootdb.setMapId(_hootdb.insertMap(mapName, true));
+    _hootdb.setMapId(_hootdb.insertMap(mapName, _writePublicMap));
   }
 }
 

@@ -65,11 +65,14 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runFactoryReadTest);
   CPPUNIT_TEST(runReadWithElemTest);
   CPPUNIT_TEST(runReadByBoundsTest);
+  CPPUNIT_TEST(runAccessPublicMapWithoutEmailTest);
+  CPPUNIT_TEST(runAccessPrivateMapWithoutEmailTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  QString userEmail() { return QString("%1.ServiceHootApiDbReaderTest@hoottestcpp.org").arg(testName); }
+  QString userEmail()
+  { return QString("%1.ServiceHootApiDbReaderTest@hoottestcpp.org").arg(testName); }
 
   long mapId;
   QString testName;
@@ -105,14 +108,17 @@ public:
     }
   }
 
-  long populateMap()
+  long populateMap(const bool isPublic = false)
   {
+    LOG_DEBUG("Populating test map...");
+
     OsmMapPtr map = ServicesDbTestUtils::createServiceTestMap();
 
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setRemap(false);
     writer.setIncludeDebug(true);
+    writer.setWritePublicMap(isPublic);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     writer.write(map);
     writer.close();
@@ -152,6 +158,7 @@ public:
     mapId = populateMap();
 
     HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
     QString url = ServicesDbTestUtils::getDbReadUrl(mapId).toString();
     reader.open(url);
     HOOT_STR_EQUALS("Env[0:0.4,0:0]", reader.calculateEnvelope().toString());
@@ -163,6 +170,7 @@ public:
     mapId = populateMap();
 
     HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
     // make sure all the element ids start with -1
     OsmMapPtr map(new OsmMap());
     reader.setUseDataSourceIds(false);
@@ -190,6 +198,7 @@ public:
     DisableLog dl;
 
     HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
     QString exceptionMsg("");
     try
     {
@@ -210,6 +219,7 @@ public:
   {
     setUpTest("runUrlInvalidMapIdTest");
     HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
     QString exceptionMsg("");
     const long invalidMapId = mapId + 1;
     try
@@ -223,7 +233,8 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
-      QString("No map exists with ID: " + QString::number(invalidMapId)).toStdString(), exceptionMsg.toStdString());
+      QString("No map exists with ID: " +
+      QString::number(invalidMapId)).toStdString(), exceptionMsg.toStdString());
   }
 
   void verifyFullReadOutput(OsmMapPtr map)
@@ -392,6 +403,7 @@ public:
     mapId = populateMap();
 
     HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.read(map);
@@ -405,6 +417,7 @@ public:
     mapId = populateMap();
 
     HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId,3,"node").toString());
     reader.read(map);
@@ -418,8 +431,11 @@ public:
     mapId = populateMap();
 
     OsmMapPtr map(new OsmMap());
+    conf().set("api.db.email", userEmail());
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     verifyFullReadOutput(map);
+
+    TestUtils::resetEnvironment();
   }
 
   void runPartialReadTest()
@@ -428,6 +444,7 @@ public:
     mapId = populateMap();
 
     HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
     const int chunkSize = 3;
     reader.setMaxElementsPerMap(chunkSize);
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
@@ -599,6 +616,7 @@ public:
     mapId = insertDataForBoundTest();
 
     HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
 
@@ -645,6 +663,41 @@ public:
     reader.close();
   }
 
+  void runAccessPublicMapWithoutEmailTest()
+  {
+    setUpTest("runAccessPublicMapWithoutEmailTest");
+    mapId = populateMap(true);
+
+    HootApiDbReader reader;
+    reader.setUserEmail("");
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
+    reader.read(map);
+    verifyFullReadOutput(map);
+    reader.close();
+  }
+
+  void runAccessPrivateMapWithoutEmailTest()
+  {
+    setUpTest("runAccessPrivateMapWithoutEmailTest");
+    mapId = populateMap(false);
+
+    HootApiDbReader reader;
+    reader.setUserEmail("");
+
+    QString exceptionMsg("");
+    try
+    {
+      reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+      reader.close();
+    }
+    LOG_VARD(exceptionMsg);
+    CPPUNIT_ASSERT(exceptionMsg.contains("not available for public access"));
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbReaderTest, "slow");

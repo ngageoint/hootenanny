@@ -192,7 +192,7 @@ public:
    * @param publicVisibility Is the map publicly visible?
    * @return
    */
-  long insertMap(QString mapName, bool publicVisibility = true);
+  long insertMap(QString mapName, bool publicVisibility = false);
 
   bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId);
 
@@ -212,6 +212,7 @@ public:
 
   /**
    * Insert a new member into an existing relation
+   *
    * @param relationId Which relation we're adding a member to
    * @param type The type of element being added
    * @param elementId The ID for the element being added
@@ -420,6 +421,36 @@ public:
   void updateUserAccessTokens(const long userId, const QString accessToken,
                               const QString accessTokenSecret);
 
+  /**
+   * Determines whether a user has permission to access a map
+   *
+   * The map must either have been created by the current user assigned to this database or
+   * be a public map.
+   *
+   * @param mapId ID of the map to determine access privileges
+   * @return true if the user may access the map; false otherwise
+   */
+  bool userCanAccessMap(const long mapId);
+
+  long getCurrentUserId() const { return _currUserId; }
+
+  /**
+   * Determines whether a map is associated with a user
+   *
+   * @param mapId ID of the map
+   * @param userId ID of the user
+   * @return true if the map is associated with the user; false otherwise
+   */
+  bool mapExistsForUser(const long mapId, const long userId);
+
+  /**
+   * Determines whether a map has public access
+   *
+   * @param id ID of the map
+   * @return true if the map has public access; false otherwise
+   */
+  bool mapIsPublic(const long id);
+
 protected:
 
   virtual void _resetQueries();
@@ -437,6 +468,7 @@ private:
   boost::shared_ptr<QSqlQuery> _changesetExists;
   boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
   boost::shared_ptr<QSqlQuery> _selectMapIds;
+  boost::shared_ptr<QSqlQuery> _selectPublicMapIds;
   boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
   boost::shared_ptr<QSqlQuery> _updateNode;
   boost::shared_ptr<QSqlQuery> _updateRelation;
@@ -454,6 +486,8 @@ private:
   boost::shared_ptr<QSqlQuery> _getAccessTokenSecretByUserId;
   boost::shared_ptr<QSqlQuery> _insertUserSession;
   boost::shared_ptr<QSqlQuery> _updateUserAccessTokens;
+  boost::shared_ptr<QSqlQuery> _mapExistsForUserId;
+  boost::shared_ptr<QSqlQuery> _mapIsPublic;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
