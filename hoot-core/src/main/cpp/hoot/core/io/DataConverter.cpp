@@ -486,16 +486,13 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
     // read each layer's data
     for (int i = 0; i < layers.size(); i++)
     {
-      if (Log::getInstance().getLevel() == Log::Info)
-      {
-        std::cout << ".";
-        std::cout.flush();
-      }
+      PROGRESS_INFO("Read layer " << i + 1 << " of " << layers.size());
       LOG_VART(input);
       LOG_VART(layers[i]);
       progress.setTaskWeight(progressWeights[i]);
       reader.read(input, layers[i], map, progress);
     }
+    LOG_INFO("Read layer " << layers.size() << " of " << layers.size());
   }
 
   if (map->getNodes().size() == 0)

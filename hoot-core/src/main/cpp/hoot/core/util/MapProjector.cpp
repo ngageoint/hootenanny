@@ -595,10 +595,7 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRS
     }
     count++;
   }
-  if (Log::getInstance().isInfoEnabled())
-  {
-    cout << endl;
-  }
+  LOG_DEBUG("Reprojecting " << nodes.size() << " / " << nodes.size());
 
   map->setProjection(ref);
 

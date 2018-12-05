@@ -49,12 +49,12 @@ public:
    *
    * @param apiEntityType the type of entity to display
    */
-  static void display(const QString apiEntityType);
+  static QString display(const QString apiEntityType);
 
   /**
    * Displays information on the currently configured MapCleaner operations
    */
-  static void displayCleaningOps();
+  static QString displayCleaningOps();
 
 private:
 

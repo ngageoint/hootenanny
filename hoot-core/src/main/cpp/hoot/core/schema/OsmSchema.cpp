@@ -933,13 +933,11 @@ private:
 
     if (_isAncestor(vid1, vid2))
     {
-      //cout << _graph[vid1].name.toStdString() << " descendant of " << _graph[vid2].name.toStdString() << endl;
       score = 1;
       return vid1;
     }
     else if (_isAncestor(vid2, vid1))
     {
-      //cout << _graph[vid2].name.toStdString() << " descendant of " << _graph[vid1].name.toStdString() << endl;
       score = 1;
       return vid2;
     }

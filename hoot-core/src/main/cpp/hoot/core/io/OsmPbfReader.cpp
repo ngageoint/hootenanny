@@ -632,23 +632,23 @@ vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(istream&
     if (Log::getInstance().getLevel() <= Log::Info && t - start > 5 && t - last >= 2)
     {
       long pos = _in->tellg();
-      printf("%.1f / %.1f - %.2f MB/s                  \r",
-        pos / 1.0e6, length / 1.0e6,
-        ((_in->tellg() - lastPos) / (t - last)) / 1.0e6);
-      cout.flush();
+      PROGRESS_INFO(QString("%1 / %2 - %3 MB/s                  ")
+                    .arg(pos / 1.0e6, 0, 'g', 1)
+                    .arg(length / 1.0e6, 0, 'g', 1)
+                    .arg(((_in->tellg() - lastPos) / (t - last)) / 1.0e6, 0, 'g', 2));
       last = t;
       lastPos = _in->tellg();
     }
   }
 
   t = Tgs::Time::getTime();
-  if (Log::getInstance().getLevel() <= Log::Info && t - start > 5)
+  if (t - start > 5)
   {
     // print the final summary
-    printf("%.1f / %.1f - %.2f MB/s                  \n",
-      length / 1.0e6, length / 1.0e6,
-      ((length) / (t - start)) / 1.0e6);
-    cout.flush();
+    LOG_INFO(QString("%1 / %2 - %3 MB/s                  ")
+             .arg(length / 1.0e6, 0, 'g', 1)
+             .arg(length / 1.0e6, 0, 'g', 1)
+             .arg((length / (t - start)) / 1.0e6, 0, 'g', 2));
   }
 
   return result;
@@ -1335,10 +1335,10 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
     if (t - _startReadTime > 5 && diff > 2)
     {
       long pos = _in->tellg();
-      printf("Reading .osm.pbf %.1f / %.1f - %.2f MB/s                  \r",
-        pos / 1.0e6, _fileLength / 1.0e6,
-        ((pos - _lastPosition) / (t - _lastReadTime)) / 1.0e6);
-      cout.flush();
+      PROGRESS_DEBUG(QString("Reading .osm.pbf %1 / %2 - %3 MB/s                  ")
+                     .arg(pos / 1.0e6, 0, 'g', 1)
+                     .arg(_fileLength / 1.0e6, 0, 'g', 1)
+                     .arg(((pos - _lastPosition) / (t - _lastReadTime)) / 1.0e6, 0, 'g', 2));
       _lastReadTime = t;
       _lastPosition = pos;
     }
