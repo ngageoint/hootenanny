@@ -35,19 +35,17 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ConstElementVisitor, CriterionCountVisitor)
 
 CriterionCountVisitor::CriterionCountVisitor():
-  _map(NULL),
-  _count(0),
-  _visited(0),
-  _pCrit()
+_count(0),
+_visited(0),
+_pCrit()
 {
   setConfiguration(conf());
 }
 
 CriterionCountVisitor::CriterionCountVisitor(const boost::shared_ptr<ElementCriterion>& pCrit):
-  _map(NULL),
-  _count(0),
-  _visited(0),
-  _pCrit(pCrit)
+_count(0),
+_visited(0),
+_pCrit(pCrit)
 {
   setConfiguration(conf());
 }
