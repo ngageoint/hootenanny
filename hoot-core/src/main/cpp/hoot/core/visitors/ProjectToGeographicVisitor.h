@@ -31,14 +31,14 @@
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
 
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
 
 class ReprojectCoordinateFilter;
 
-class ProjectToGeographicVisitor : public ElementOsmMapVisitor
+class ProjectToGeographicVisitor : public ElementVisitor
 {
 public:
 
