@@ -38,7 +38,7 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 
 echo "Building Hoot..."
-make -s clean && make -sj$(nproc)
+make -s clean && make -j$(nproc)
 echo "Generating Eclipse project files..."
 make -s eclipse
 
