@@ -576,12 +576,12 @@ public class FolderResource {
                 "        union " +
                 "        select f.id,f.parent_id,f.display_name,f.user_id,f.public,f.created_at from folders f " +
                 "        inner join related_folders rf on ( " +
-                "                f.parent_id = rf.id " +
-                "                OR " +
-                "                f.id = rf.parent_id " +
+                "          f.id != 0 AND (f.parent_id = rf.id" +
+                "          OR" +
+                "          f.id = rf.parent_id)" +
                 "        ) " +
                 ") " +
-                "select * from related_folders where id != 0;"
+                "select * from related_folders;"
 
                 + "", folderId);
         try(Connection conn = getConnection() ) {
