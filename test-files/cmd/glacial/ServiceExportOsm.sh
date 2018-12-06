@@ -31,7 +31,7 @@ MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript > /dev/null
 echo "Test shp with MPCP translation"
 export translation="translations/MGCP_TRD4.js"
 export outputtype=shp
-MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript # > /dev/null
+MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript > /dev/null
 
 echo "Test gdb with TDSv6.1 translation"
 export translation="translations/TDSv61.js"
