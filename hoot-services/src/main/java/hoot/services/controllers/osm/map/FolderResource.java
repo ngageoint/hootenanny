@@ -416,9 +416,9 @@ public class FolderResource {
                 "     union" +
                 "     select f.id,f.parent_id,f.display_name,f.user_id,f.public,f.created_at from folders f" +
                 "     inner join related_folders rf on (" +
-                "          f.parent_id = rf.id" +
+                "          f.id != 0 AND (f.parent_id = rf.id" +
                 "          OR" +
-                "          f.id = rf.parent_id" +
+                "          f.id = rf.parent_id)" +
                 "     )" +
                 ")" +
                 "update folders x set public = %s " +
@@ -460,9 +460,9 @@ public class FolderResource {
                     "    union" +
                     "    select f.id,f.parent_id,f.display_name,f.user_id,f.public,f.created_at from folders f" +
                     "    inner join related_folders rf on (" +
-                    "     f.parent_id = rf.id" +
+                    "     f.id != 0 AND (f.parent_id = rf.id" +
                     "     OR" +
-                    "     f.id = rf.parent_id" +
+                    "     f.id = rf.parent_id)" +
                     "    )" +
                     ")" +
                     "select * from related_folders order by id asc;", folderId.longValue());
