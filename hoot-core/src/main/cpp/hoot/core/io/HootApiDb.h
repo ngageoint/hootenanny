@@ -225,18 +225,18 @@ public:
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
   /**
+   * Returns the IDs of all maps with the given name created by the currently configured user
    *
-   *
-   * @param name
-   * @return
+   * @param name map name
+   * @return a collection of map IDs
    */
   std::set<long> selectMapIdsForCurrentUser(QString name);
 
   /**
+   * Returns the IDs of all maps with the given name
    *
-   *
-   * @param name
-   * @return
+   * @param name map name
+   * @return a collection of map IDs
    */
   std::set<long> selectMapIds(QString name);
 
@@ -449,59 +449,64 @@ public:
   long getCurrentUserId() const { return _currUserId; }
 
   /**
+   * Creates a data folder record
    *
-   *
-   * @param displayName
-   * @param parentId
-   * @param userId
-   * @param isPublic
-   * @returns
+   * @param displayName folder name
+   * @param parentId ID of the folder's parent
+   * @param userId ID of the user creating the folder
+   * @param isPublic folder visibility
+   * @returns ID of the created folder
    */
   long insertFolder(const QString displayName, const long parentId, const long userId,
                     const bool isPublic);
 
   /**
+   * Creates a mapping between a map and a data folder
    *
-   *
-   * @param mapId
-   * @param folderId
+   * @param mapId ID of the map
+   * @param folderId ID of the folder
    */
   void insertFolderMapMapping(const long mapId, const long folderId);
 
   /**
+   * Returns the IDs of all folders mapped to a particular map
    *
-   *
-   * @param mapId
-   * @return
+   * @param mapId a map ID
+   * @return collection of folder IDs
    */
   std::set<long> getFolderIdsAssociatedWithMap(const long mapId);
 
   /**
+   * Deletes all folder/map association records for the given map ID
    *
-   *
-   * @param mapId
+   * @param mapId a map ID
    */
   void deleteFolderMapMappingsByMapId(const long mapId);
 
   /**
+   * Deletes all data folder records for the given set of folder IDs
    *
-   *
-   * @param folderIds
+   * @param folderIds a collection of folder IDs
    */
   void deleteFolders(const std::set<long>& folderIds);
 
   /**
+   * Parses a map ID from a Hootenanny API database URL
    *
+   * First attempts to parse the numerical map ID from the URL string, then tries to parse a map
+   * name from the URL and obtain an ID from it.  Throws if no map or multiple maps are found.
    *
-   * @param url
-   * @return
+   * @param url URL to parse
+   * @return a map ID
    */
   long getMapIdFromUrl(const QUrl& url);
 
   /**
+   * Verifies that a map may be accessed by the currently configured user
    *
-   *
-   * @param mapId
+   * @param mapId ID of the map for which to verify access
+   * @param write if true, verifies map write access for the user; if false, verifies map read
+   * access for the user
    */
   void verifyCurrentUserMapUse(const long mapId, const bool write = false);
 

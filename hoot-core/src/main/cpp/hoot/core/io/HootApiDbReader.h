@@ -73,9 +73,6 @@ private:
   friend class ServiceHootApiDbBulkInserterTest;
 
   boost::shared_ptr<HootApiDb> _database;
-
-  long _getMapIdFromUrl(const QUrl& url);
-  void _checkMapAccess(const long mapId);
 };
 
 }
