@@ -141,9 +141,13 @@ void HootApiDbWriter::deleteMap(QString urlStr)
 
   for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
   {
-    LOG_INFO("Removing map with ID: " << *it);
-    _hootdb.deleteMap(*it);
-    LOG_DEBUG("Finished removing map with ID: " << *it);
+    const long mapId = *it;
+
+    _hootdb.verifyCurrentUserMapUse(mapId, true);
+
+    LOG_INFO("Removing map with ID: " << mapId);
+    _hootdb.deleteMap(mapId);
+    LOG_DEBUG("Finished removing map with ID: " << mapId);
   }
 
   _hootdb.commit();
@@ -196,9 +200,13 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
     {
       for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
-        LOG_DEBUG("Removing map with ID: " << *it << "...");
-        _hootdb.deleteMap(*it);
-        LOG_DEBUG("Finished removing map with ID: " << *it);
+        const long mapId = *it;
+
+        _hootdb.verifyCurrentUserMapUse(mapId, true);
+
+        LOG_DEBUG("Removing map with ID: " << mapId << "...");
+        _hootdb.deleteMap(mapId);
+        LOG_DEBUG("Finished removing map with ID: " << mapId);
       }
 
       _hootdb.setMapId(_hootdb.insertMap(mapName));

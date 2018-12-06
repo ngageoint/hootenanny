@@ -1149,7 +1149,84 @@ void HootApiDb::_resetQueries()
   _wayIdReserver.reset();
 }
 
-bool HootApiDb::userCanAccessMap(const long mapId)
+long HootApiDb::getMapIdFromUrl(const QUrl& url)
+{
+  QStringList urlParts = url.path().split("/");
+  bool ok;
+  long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
+  LOG_VARD(ok);
+  LOG_VARD(mapId);
+
+  // if parsed map string is a name (not an id)
+  if (!ok)
+  {
+    // get all map ids with like name
+    const QString mapName = urlParts[urlParts.size() - 1];
+    LOG_VARD(mapName);
+
+    std::set<long> mapIds = selectMapIdsForCurrentUser(mapName);
+    LOG_VARD(mapIds);
+
+    if (mapIds.size() > 1)
+    {
+      QString str =
+        QString("Expected 1 map with the name '%1' but found %2 maps.")
+          .arg(mapName)
+          .arg(mapIds.size());
+      throw HootException(str);
+    }
+    else if (mapIds.size() == 0)
+    {
+      mapIds = selectMapIds(mapName);
+      LOG_VARD(mapIds);
+      if (mapIds.size() > 1)
+      {
+        QString str =
+          QString("Expected 1 map with the name '%1' but found %2 maps.")
+            .arg(mapName)
+            .arg(mapIds.size());
+        throw HootException(str);
+      }
+    }
+
+    mapId = *mapIds.begin();
+    LOG_VARD(mapId);
+  }
+
+  return mapId;
+}
+
+void HootApiDb::verifyCurrentUserMapUse(const long mapId, const bool write)
+{
+  if (!mapExists(mapId))
+  {
+    throw HootException("No map exists with requested ID: " + QString::number(mapId));
+  }
+  else if (!currentUserCanAccessMap(mapId, write))
+  {
+    QString errorMsg;
+    QString accessType = "read";
+    if (write)
+    {
+      accessType = "write";
+    }
+    if (_currUserId != -1)
+    {
+      errorMsg =
+        "User with ID: " + QString::number(_currUserId) +
+        " does not have " + accessType + " access to map with ID: " + QString::number(mapId);
+    }
+    else
+    {
+      errorMsg =
+        "Requested map with ID: " + QString::number(mapId) + " not available for public " +
+        accessType + " access.";
+    }
+    throw HootException(errorMsg);
+  }
+}
+
+bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
 {
   LOG_VARD(mapId);
   LOG_VARD(_currUserId);
@@ -1187,7 +1264,14 @@ bool HootApiDb::userCanAccessMap(const long mapId)
   }
   _getMapPermissionsById->finish();
 
-  return isPublic || _currUserId == userId;
+  if (write)
+  {
+    return _currUserId == userId;
+  }
+  else
+  {
+    return isPublic || _currUserId == userId;
+  }
 }
 
 set<long> HootApiDb::selectMapIds(QString name)

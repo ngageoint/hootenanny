@@ -701,8 +701,14 @@ public:
     setUpTest("runAccessPrivateMapWithoutEmailTest");
     mapId = populateMap(true, false);
 
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    const QString email = "blah@blah.com";
+    db.insertUser(email, email);
+    db.close();
+
     HootApiDbReader reader;
-    reader.setUserEmail("blah@blah.com");
+    reader.setUserEmail(email);
 
     QString exceptionMsg("");
     try
@@ -715,7 +721,7 @@ public:
       reader.close();
     }
     LOG_VARD(exceptionMsg);
-    CPPUNIT_ASSERT(exceptionMsg.contains("does not have access to map"));
+    CPPUNIT_ASSERT(exceptionMsg.contains("access to map with ID"));
   }
 
   void runAccessPrivateMapWithoutEmailTest()
@@ -737,7 +743,7 @@ public:
       reader.close();
     }
     LOG_VARD(exceptionMsg);
-    CPPUNIT_ASSERT(exceptionMsg.contains("not available for public access"));
+    CPPUNIT_ASSERT(exceptionMsg.contains("not available for public"));
   }
 };
 

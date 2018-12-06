@@ -441,9 +441,10 @@ public:
    * be a public map.
    *
    * @param mapId ID of the map to determine access privileges
+   * @param write
    * @return true if the user may access the map; false otherwise
    */
-  bool userCanAccessMap(const long mapId);
+  bool currentUserCanAccessMap(const long mapId, const bool write = false);
 
   long getCurrentUserId() const { return _currUserId; }
 
@@ -488,6 +489,21 @@ public:
    * @param folderIds
    */
   void deleteFolders(const std::set<long>& folderIds);
+
+  /**
+   *
+   *
+   * @param url
+   * @return
+   */
+  long getMapIdFromUrl(const QUrl& url);
+
+  /**
+   *
+   *
+   * @param mapId
+   */
+  void verifyCurrentUserMapUse(const long mapId, const bool write = false);
 
 protected:
 

@@ -64,78 +64,6 @@ Envelope HootApiDbReader::calculateEnvelope() const
   return result;
 }
 
-long HootApiDbReader::_getMapIdFromUrl(const QUrl& url)
-{
-  QStringList urlParts = url.path().split("/");
-  bool ok;
-  long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
-  LOG_VARD(ok);
-  LOG_VARD(mapId);
-
-  // if parsed map string is a name (not an id)
-  if (!ok)
-  {
-    // get all map ids with like name
-    const QString mapName = urlParts[urlParts.size() - 1];
-    LOG_VARD(mapName);
-
-    std::set<long> mapIds = _database->selectMapIdsForCurrentUser(mapName);
-    LOG_VARD(mapIds);
-
-    if (mapIds.size() > 1)
-    {
-      QString str =
-        QString("Expected 1 map with the name '%1' but found %2 maps.")
-          .arg(mapName)
-          .arg(mapIds.size());
-      throw HootException(str);
-    }
-    else if (mapIds.size() == 0)
-    {
-      mapIds = _database->selectMapIds(mapName);
-      LOG_VARD(mapIds);
-      if (mapIds.size() > 1)
-      {
-        QString str =
-          QString("Expected 1 map with the name '%1' but found %2 maps.")
-            .arg(mapName)
-            .arg(mapIds.size());
-        throw HootException(str);
-      }
-    }
-
-    mapId = *mapIds.begin();
-    LOG_VARD(mapId);
-  }
-
-  return mapId;
-}
-
-void HootApiDbReader::_checkMapAccess(const long mapId)
-{
-  if (!_database->mapExists(mapId))
-  {
-    throw HootException("No map exists with requested ID: " + QString::number(mapId));
-  }
-  else if (!_database->userCanAccessMap(mapId))
-  {
-    QString errorMsg;
-    if (!_email.isEmpty())
-    {
-      errorMsg =
-        "User with ID: " + QString::number(_database->getCurrentUserId()) +
-        " does not have access to map with ID: " + QString::number(mapId);
-    }
-    else
-    {
-      errorMsg =
-        "Requested map with ID: " + QString::number(mapId) +
-        " not available for public access.";
-    }
-    throw HootException(errorMsg);
-  }
-}
-
 void HootApiDbReader::open(QString urlStr)
 {
   _url = urlStr;
@@ -155,8 +83,8 @@ void HootApiDbReader::open(QString urlStr)
     _database->setUserId(_database->getUserId(_email, false));
   }
 
-  const long requestedMapId = _getMapIdFromUrl(url);
-  _checkMapAccess(requestedMapId);
+  const long requestedMapId = _database->getMapIdFromUrl(url);
+  _database->verifyCurrentUserMapUse(requestedMapId);
   _database->setMapId(requestedMapId);
 
   //using a transaction seems to make sense here, b/c we don't want to read a map being modified

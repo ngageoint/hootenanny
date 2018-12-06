@@ -106,6 +106,9 @@ void HootApiDbBulkInserter::open(QString url)
 
 void HootApiDbBulkInserter::_getOrCreateMap()
 {
+  // TODO: There's a lot of overlap between this and similar code in HootApiDbWriter that needs
+  // merging.
+
   if (_userEmail.isEmpty())
   {
     throw HootException("Please set the user's email address via the '" +
@@ -132,9 +135,13 @@ void HootApiDbBulkInserter::_getOrCreateMap()
     {
       for (std::set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
-        LOG_DEBUG("Removing map with ID: " << *it << "...");
-        _database.deleteMap(*it);
-        LOG_DEBUG("Finished removing map with ID: " << *it);
+        const long mapId = *it;
+
+        _database.verifyCurrentUserMapUse(mapId, true);
+
+        LOG_DEBUG("Removing map with ID: " << mapId << "...");
+        _database.deleteMap(mapId);
+        LOG_DEBUG("Finished removing map with ID: " << mapId);
       }
 
       _database.setMapId(_database.insertMap(mapName));
