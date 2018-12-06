@@ -67,6 +67,9 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST(runAccessPublicMapWithoutEmailTest);
   CPPUNIT_TEST(runAccessPrivateMapWithoutEmailTest);
+  CPPUNIT_TEST(runInvalidUserTest);
+  //CPPUNIT_TEST(runMultipleMapsWithSameNameWithEmailTest);
+  //CPPUNIT_TEST(runMultipleMapsWithSameNameWithoutEmailTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -103,12 +106,17 @@ public:
     {
       HootApiDb database;
       database.open(ServicesDbTestUtils::getDbModifyUrl());
+
+      database.deleteFolderMapMappingsByMapId(mapId);
+      database.deleteFolders(database.getFolderIdsAssociatedWithMap(mapId));
+
       database.deleteMap(mapId);
+
       database.close();
     }
   }
 
-  long populateMap(const bool isPublic = false)
+  long populateMap(const bool putInFolder = false, const bool folderIsPublic = false)
   {
     LOG_DEBUG("Populating test map...");
 
@@ -118,10 +126,21 @@ public:
     writer.setUserEmail(userEmail());
     writer.setRemap(false);
     writer.setIncludeDebug(true);
-    writer.setWritePublicMap(isPublic);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     writer.write(map);
     writer.close();
+
+    if (putInFolder)
+    {
+      LOG_DEBUG("Adding test data folder...");
+      HootApiDb db;
+      db.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+      db.insertFolderMapMapping(
+        writer.getMapId(),
+        db.insertFolder(testName, -1, db.getUserId(userEmail(), true), folderIsPublic));
+      db.close();
+    }
+
     return writer.getMapId();
   }
 
@@ -233,7 +252,7 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
-      QString("No map exists with ID: " +
+      QString("No map exists with requested ID: " +
       QString::number(invalidMapId)).toStdString(), exceptionMsg.toStdString());
   }
 
@@ -666,7 +685,7 @@ public:
   void runAccessPublicMapWithoutEmailTest()
   {
     setUpTest("runAccessPublicMapWithoutEmailTest");
-    mapId = populateMap(true);
+    mapId = populateMap(true, true);
 
     HootApiDbReader reader;
     reader.setUserEmail("");
@@ -677,10 +696,32 @@ public:
     reader.close();
   }
 
+  void runInvalidUserTest()
+  {
+    setUpTest("runAccessPrivateMapWithoutEmailTest");
+    mapId = populateMap(true, false);
+
+    HootApiDbReader reader;
+    reader.setUserEmail("blah@blah.com");
+
+    QString exceptionMsg("");
+    try
+    {
+      reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+      reader.close();
+    }
+    LOG_VARD(exceptionMsg);
+    CPPUNIT_ASSERT(exceptionMsg.contains("does not have access to map"));
+  }
+
   void runAccessPrivateMapWithoutEmailTest()
   {
     setUpTest("runAccessPrivateMapWithoutEmailTest");
-    mapId = populateMap(false);
+    mapId = populateMap(true, false);
 
     HootApiDbReader reader;
     reader.setUserEmail("");

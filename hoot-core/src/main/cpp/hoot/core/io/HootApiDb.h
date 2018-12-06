@@ -189,10 +189,9 @@ public:
    *
    * @param mapName Name of the map to create.
    * @param userId User id of the map owner.
-   * @param publicVisibility Is the map publicly visible?
    * @return
    */
-  long insertMap(QString mapName, bool publicVisibility = false);
+  long insertMap(QString mapName);
 
   bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId);
 
@@ -225,6 +224,20 @@ public:
 
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
+  /**
+   *
+   *
+   * @param name
+   * @return
+   */
+  std::set<long> selectMapIdsForCurrentUser(QString name);
+
+  /**
+   *
+   *
+   * @param name
+   * @return
+   */
   std::set<long> selectMapIds(QString name);
 
   void updateNode(const long id, const double lat, const double lon, const long version,
@@ -435,21 +448,46 @@ public:
   long getCurrentUserId() const { return _currUserId; }
 
   /**
-   * Determines whether a map is associated with a user
    *
-   * @param mapId ID of the map
-   * @param userId ID of the user
-   * @return true if the map is associated with the user; false otherwise
+   *
+   * @param displayName
+   * @param parentId
+   * @param userId
+   * @param isPublic
+   * @returns
    */
-  bool mapExistsForUser(const long mapId, const long userId);
+  long insertFolder(const QString displayName, const long parentId, const long userId,
+                    const bool isPublic);
 
   /**
-   * Determines whether a map has public access
    *
-   * @param id ID of the map
-   * @return true if the map has public access; false otherwise
+   *
+   * @param mapId
+   * @param folderId
    */
-  bool mapIsPublic(const long id);
+  void insertFolderMapMapping(const long mapId, const long folderId);
+
+  /**
+   *
+   *
+   * @param mapId
+   * @return
+   */
+  std::set<long> getFolderIdsAssociatedWithMap(const long mapId);
+
+  /**
+   *
+   *
+   * @param mapId
+   */
+  void deleteFolderMapMappingsByMapId(const long mapId);
+
+  /**
+   *
+   *
+   * @param folderIds
+   */
+  void deleteFolders(const std::set<long>& folderIds);
 
 protected:
 
@@ -467,7 +505,7 @@ private:
   boost::shared_ptr<QSqlQuery> _mapExistsById;
   boost::shared_ptr<QSqlQuery> _changesetExists;
   boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
-  boost::shared_ptr<QSqlQuery> _selectMapIds;
+  boost::shared_ptr<QSqlQuery> _selectMapIdsForCurrentUser;
   boost::shared_ptr<QSqlQuery> _selectPublicMapIds;
   boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
   boost::shared_ptr<QSqlQuery> _updateNode;
@@ -486,8 +524,13 @@ private:
   boost::shared_ptr<QSqlQuery> _getAccessTokenSecretByUserId;
   boost::shared_ptr<QSqlQuery> _insertUserSession;
   boost::shared_ptr<QSqlQuery> _updateUserAccessTokens;
-  boost::shared_ptr<QSqlQuery> _mapExistsForUserId;
-  boost::shared_ptr<QSqlQuery> _mapIsPublic;
+  boost::shared_ptr<QSqlQuery> _insertFolder;
+  boost::shared_ptr<QSqlQuery> _insertFolderMapMapping;
+  boost::shared_ptr<QSqlQuery> _folderIdsAssociatedWithMap;
+  boost::shared_ptr<QSqlQuery> _deleteFolders;
+  boost::shared_ptr<QSqlQuery> _selectMapIds;
+  boost::shared_ptr<QSqlQuery> _getMapPermissionsById;
+  boost::shared_ptr<QSqlQuery> _getMapPermissionsByName;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

@@ -64,6 +64,78 @@ Envelope HootApiDbReader::calculateEnvelope() const
   return result;
 }
 
+long HootApiDbReader::_getMapIdFromUrl(const QUrl& url)
+{
+  QStringList urlParts = url.path().split("/");
+  bool ok;
+  long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
+  LOG_VARD(ok);
+  LOG_VARD(mapId);
+
+  // if parsed map string is a name (not an id)
+  if (!ok)
+  {
+    // get all map ids with like name
+    const QString mapName = urlParts[urlParts.size() - 1];
+    LOG_VARD(mapName);
+
+    std::set<long> mapIds = _database->selectMapIdsForCurrentUser(mapName);
+    LOG_VARD(mapIds);
+
+    if (mapIds.size() > 1)
+    {
+      QString str =
+        QString("Expected 1 map with the name '%1' but found %2 maps.")
+          .arg(mapName)
+          .arg(mapIds.size());
+      throw HootException(str);
+    }
+    else if (mapIds.size() == 0)
+    {
+      mapIds = _database->selectMapIds(mapName);
+      LOG_VARD(mapIds);
+      if (mapIds.size() > 1)
+      {
+        QString str =
+          QString("Expected 1 map with the name '%1' but found %2 maps.")
+            .arg(mapName)
+            .arg(mapIds.size());
+        throw HootException(str);
+      }
+    }
+
+    mapId = *mapIds.begin();
+    LOG_VARD(mapId);
+  }
+
+  return mapId;
+}
+
+void HootApiDbReader::_checkMapAccess(const long mapId)
+{
+  if (!_database->mapExists(mapId))
+  {
+    throw HootException("No map exists with requested ID: " + QString::number(mapId));
+  }
+  else if (!_database->userCanAccessMap(mapId))
+  {
+    QString errorMsg;
+    if (!_email.isEmpty())
+    {
+      errorMsg =
+        "User with ID: " + QString::number(_database->getCurrentUserId()) +
+        " does not have access to map with ID: " + QString::number(mapId);
+    }
+    else
+    {
+      errorMsg =
+        "Requested map with ID: " + QString::number(mapId) +
+        " not available for public access.";
+    }
+    throw HootException(errorMsg);
+  }
+}
+
 void HootApiDbReader::open(QString urlStr)
 {
   _url = urlStr;
@@ -74,82 +146,17 @@ void HootApiDbReader::open(QString urlStr)
   initializePartial();
 
   QUrl url(_url);
-  QStringList pList = url.path().split("/");
   LOG_DEBUG("Opening database for reader at: " << url.path() << "...");
-  bool ok;
   _database->open(url);
 
   LOG_VARD(_email);
-  // If no email was specified, then we'll just get any try to get public maps with the same name.
   if (!_email.isEmpty())
   {
     _database->setUserId(_database->getUserId(_email, false));
   }
 
-  long requestedMapId = pList[pList.size() - 1].toLong(&ok);
-  LOG_VARD(ok);
-  LOG_VARD(requestedMapId);
-
-  if (ok)
-  {
-    // Check that the user either created this data, or the data is public.
-    if (_database->mapExists(requestedMapId) && !_database->userCanAccessMap(requestedMapId))
-    {
-      QString errorMsg;
-      if (!_email.isEmpty())
-      {
-        errorMsg =
-          "User with ID: " + QString::number(_database->getCurrentUserId()) +
-          " does not have access to map with ID: " + QString::number(requestedMapId);
-      }
-      else
-      {
-        errorMsg =
-          "Requested map with ID: " + QString::number(requestedMapId) +
-          " not available for public access.";
-      }
-      throw HootException(errorMsg);
-    }
-  }
-  else
-  {
-    QString mapName = pList[pList.size() - 1];
-    // Its a little disjointed to call a "can access" type method when we have a map ID but not
-    // also when we have map name here.  However, since selectMapIds takes care of the access
-    // checking part for us, there's no point in calling an additional access check method.
-    const set<long> mapIds = _database->selectMapIds(mapName);
-    LOG_VARD(mapIds);
-    if (mapIds.size() != 1)
-    {
-      QString str =
-        QString("Expected 1 map with the name '%1' but found %2 maps.")
-          .arg(mapName)
-          .arg(mapIds.size());
-      throw HootException(str);
-    }
-    else if (mapIds.size() == 0)
-    {
-      QString errorMsg;
-      if (!_email.isEmpty())
-      {
-        errorMsg =
-          "User with ID: " + QString::number(_database->getCurrentUserId()) +
-          " does not have access to map with name: " + mapName;
-      }
-      else
-      {
-        errorMsg = "Requested map with name: " + mapName + " not available for public access.";
-      }
-      throw HootException(errorMsg);
-    }
-    requestedMapId = *mapIds.begin();
-  }
-
-  if (!_database->mapExists(requestedMapId))
-  {
-    _database->close();
-    throw HootException("No map exists with ID: " + QString::number(requestedMapId));
-  }
+  const long requestedMapId = _getMapIdFromUrl(url);
+  _checkMapAccess(requestedMapId);
   _database->setMapId(requestedMapId);
 
   //using a transaction seems to make sense here, b/c we don't want to read a map being modified

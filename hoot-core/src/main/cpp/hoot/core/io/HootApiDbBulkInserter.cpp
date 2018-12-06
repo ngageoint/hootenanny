@@ -125,7 +125,7 @@ void HootApiDbBulkInserter::_getOrCreateMap()
 
   QStringList pList = QUrl(_outputUrl).path().split("/");
   QString mapName = pList[2];
-  std::set<long> mapIds = _database.selectMapIds(mapName);
+  std::set<long> mapIds = _database.selectMapIdsForCurrentUser(mapName);
   if (mapIds.size() > 0)
   {
     if (_overwriteMap) // delete map and overwrite it
@@ -137,7 +137,7 @@ void HootApiDbBulkInserter::_getOrCreateMap()
         LOG_DEBUG("Finished removing map with ID: " << *it);
       }
 
-      _database.setMapId(_database.insertMap(mapName, true));
+      _database.setMapId(_database.insertMap(mapName));
     }
     else if (mapIds.size() > 1)
     {
@@ -154,7 +154,7 @@ void HootApiDbBulkInserter::_getOrCreateMap()
   else if (mapIds.size() == 0)
   {
     LOG_DEBUG("Map " << mapName << " was not found, must insert.");
-    _database.setMapId(_database.insertMap(mapName, true));
+    _database.setMapId(_database.insertMap(mapName));
   }
 }
 

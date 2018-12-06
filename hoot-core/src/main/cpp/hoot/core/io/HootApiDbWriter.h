@@ -73,9 +73,6 @@ public:
   void setIncludeCircularError(bool includeCircularError)
   { _includeCircularError = includeCircularError; }
 
-  void setWritePublicMap(bool writePublic)
-  { _writePublicMap = writePublic; }
-
   /**
    * If set to true (the default) then all IDs are remapped into new IDs. This is appropriate if
    * any of the input IDs are non-positive.
@@ -154,7 +151,6 @@ private:
   bool _includeIds;
   bool _textStatus;
   bool _includeCircularError;
-  bool _writePublicMap;
 
   bool _open;
 
