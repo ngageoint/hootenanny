@@ -1167,13 +1167,13 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
     std::set<long> mapIds = selectMapIdsForCurrentUser(mapName);
     LOG_VARD(mapIds);
 
+    const QString countMismatchErrorMsg = "Expected 1 map with the name: '%1' but found %2 maps.";
     if (mapIds.size() > 1)
     {
-      QString str =
-        QString("Expected 1 map with the name '%1' but found %2 maps.")
+      throw HootException(
+        QString(countMismatchErrorMsg)
           .arg(mapName)
-          .arg(mapIds.size());
-      throw HootException(str);
+          .arg(mapIds.size()));
     }
     else if (mapIds.size() == 0)
     {
@@ -1181,11 +1181,10 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
       LOG_VARD(mapIds);
       if (mapIds.size() > 1)
       {
-        QString str =
-          QString("Expected 1 map with the name '%1' but found %2 maps.")
+        throw HootException(
+          QString(countMismatchErrorMsg)
             .arg(mapName)
-            .arg(mapIds.size());
-        throw HootException(str);
+            .arg(mapIds.size()));
       }
     }
 

@@ -52,6 +52,7 @@ class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbBulkInserterTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
+  //TODO: permissions tests
   CPPUNIT_TEST_SUITE_END();
 
 public:

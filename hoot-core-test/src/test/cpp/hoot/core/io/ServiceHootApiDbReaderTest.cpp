@@ -67,9 +67,12 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST(runAccessPublicMapWithoutEmailTest);
   CPPUNIT_TEST(runAccessPrivateMapWithoutEmailTest);
-  CPPUNIT_TEST(runInvalidUserTest);
-  //CPPUNIT_TEST(runMultipleMapsWithSameNameWithEmailTest);
-  //CPPUNIT_TEST(runMultipleMapsWithSameNameWithoutEmailTest);
+  //TODO: fix
+  //CPPUNIT_TEST(runInvalidUserTest);
+  //CPPUNIT_TEST(runMultipleMapsSameNameSameUserTest);
+  CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersTest);
+  //TODO: fix
+  //CPPUNIT_TEST(runMultipleMapsSameNameNoUserTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -687,6 +690,8 @@ public:
     setUpTest("runAccessPublicMapWithoutEmailTest");
     mapId = populateMap(true, true);
 
+    // Even though we have no configured user, the map is public, so we should be able to read it.
+
     HootApiDbReader reader;
     reader.setUserEmail("");
     OsmMapPtr map(new OsmMap());
@@ -698,18 +703,21 @@ public:
 
   void runInvalidUserTest()
   {
-    setUpTest("runAccessPrivateMapWithoutEmailTest");
+    setUpTest("runInvalidUserTest");
+    // Write a private map.
     mapId = populateMap(true, false);
 
+    // Create a user different than the one who wrote the map.
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
-    const QString email = "blah@blah.com";
-    db.insertUser(email, email);
-    db.close();
+    const QString differentUserEmail = "blah@blah.com";
+    const long differentUserId = db.insertUser(differentUserEmail, differentUserEmail);
 
+    // Set the reader up with the different user.
     HootApiDbReader reader;
-    reader.setUserEmail(email);
+    reader.setUserEmail(differentUserEmail);
 
+    // The different user should not be able to access the other user's private map.
     QString exceptionMsg("");
     try
     {
@@ -722,16 +730,22 @@ public:
     }
     LOG_VARD(exceptionMsg);
     CPPUNIT_ASSERT(exceptionMsg.contains("access to map with ID"));
+
+    db.deleteUser(differentUserId);
+    db.close();
   }
 
   void runAccessPrivateMapWithoutEmailTest()
   {
     setUpTest("runAccessPrivateMapWithoutEmailTest");
+    // Write a private map.
     mapId = populateMap(true, false);
 
+    // Configure no user with the reader.
     HootApiDbReader reader;
     reader.setUserEmail("");
 
+    // The reader should not be able to read the private map without a configured user.
     QString exceptionMsg("");
     try
     {
@@ -744,6 +758,125 @@ public:
     }
     LOG_VARD(exceptionMsg);
     CPPUNIT_ASSERT(exceptionMsg.contains("not available for public"));
+  }
+
+  void runMultipleMapsSameNameSameUserTest()
+  {
+    setUpTest("runMultipleMapsSameNameSameUserTest");
+    // Create a map.
+    mapId = populateMap();
+
+    // Create another map with the same name.
+    const long differentMapId = populateMap();
+
+    // Try to access the map by name (not ID).
+    HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
+    QString url = ServicesDbTestUtils::getDbReadUrl(mapId).toString();
+    url = url.replace(QString::number(mapId), testName);
+
+    // Access should fail, since there are multiple maps created by this user with the same name.
+
+    // This restriction may be found to be too strict at some point in the future, but this
+    // particular logic has been in here a long and this test simply verifies the behavior.
+
+    QString exceptionMsg("");
+    try
+    {
+      reader.open(url);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+      reader.close();
+    }
+    LOG_VARD(exceptionMsg);
+    HOOT_STR_EQUALS(
+      "Expected 1 map with the name: " + testName + " but found %2 maps.", exceptionMsg);
+
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    db.deleteMap(differentMapId);
+    db.close();
+  }
+
+  void runMultipleMapsSameNameDifferentUsersTest()
+  {
+    setUpTest("runMultipleMapsSameNameDifferentUsersTest");
+    // Create a map.
+    mapId = populateMap();
+
+    // Create a user different than the one who wrote the map.
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    const QString differentUserEmail = "blah@blah.com";
+    const long differentUserId = db.insertUser(differentUserEmail, differentUserEmail);
+
+    // Write a map for the different user with the same name as the original map.
+    // TODO: delete
+    HootApiDbWriter writer;
+    writer.setUserEmail(differentUserEmail);
+    writer.setRemap(false);
+    writer.setIncludeDebug(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    writer.write(ServicesDbTestUtils::createServiceTestMap());
+    writer.close();
+
+    // Configure the reader for the original user, and we should be able to read out the map.
+    // There are two maps with the same name, but they are owned by different users.
+    HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
+    QString url = ServicesDbTestUtils::getDbReadUrl(mapId).toString();
+    url = url.replace(QString::number(mapId), testName);
+    reader.open(url);
+    OsmMapPtr map(new OsmMap());
+    reader.read(map);
+    verifyFullReadOutput(map);
+    reader.close();
+
+    // One of the maps is still left.
+    db.deleteMap(db.getMapIdByName(testName));
+
+    db.deleteUser(differentUserId);
+    db.close();
+  }
+
+  void runMultipleMapsSameNameNoUserTest()
+  {
+    setUpTest("runMultipleMapsSameNameNoUserTest");
+    // Create a map.
+    mapId = populateMap();
+
+    // Create another map with the same name and original user.
+    // TODO: delete
+    const long differentMapId = populateMap();
+
+    // Configure the reader with no user.
+    HootApiDbReader reader;
+    reader.setUserEmail("");
+    QString url = ServicesDbTestUtils::getDbReadUrl(mapId).toString();
+    url = url.replace(QString::number(mapId), testName);
+
+    // Reading should fail, since there are multiple maps with the same name.  See related note in
+    // runMultipleMapsSameNameSameUserTest.
+    QString exceptionMsg("");
+    try
+    {
+      reader.open(url);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+      reader.close();
+    }
+    LOG_VARD(exceptionMsg);
+    HOOT_STR_EQUALS(
+      "Expected 1 map with the name: " + testName + " but found %2 maps.", exceptionMsg);
+
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    db.deleteMap(differentMapId);
+    db.close();
   }
 };
 

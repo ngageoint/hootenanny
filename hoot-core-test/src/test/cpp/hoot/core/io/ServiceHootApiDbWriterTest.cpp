@@ -59,6 +59,7 @@ class ServiceHootApiDbWriterTest : public HootTestFixture
   CPPUNIT_TEST(runEscapeTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runRemapInsertTest);
+  //TODO: permissions tests
   CPPUNIT_TEST_SUITE_END();
 
 public:
