@@ -234,7 +234,6 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 {
   LOG_TRACE("Getting remapped ID for element ID: " << eid << "...");
 
-  //LOG_VART(_remapIds);
   if (_remapIds == false)
   {
     return eid.getId();
@@ -242,7 +241,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 
   long retVal = -1;
 
-  switch(eid.getType().getEnum())
+  switch (eid.getType().getEnum())
   {
   case ElementType::Node:
     if (_nodeRemap.count(eid.getId()) == 1)

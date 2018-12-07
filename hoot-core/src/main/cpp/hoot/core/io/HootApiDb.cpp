@@ -589,7 +589,7 @@ void HootApiDb::beginChangeset()
 
 void HootApiDb::beginChangeset(const Tags& tags)
 {
-  LOG_DEBUG("Starting changeset...");
+  LOG_TRACE("Starting changeset...");
 
   _changesetEnvelope.init();
   _changesetChangeCount = 0;
@@ -613,19 +613,19 @@ void HootApiDb::beginChangeset(const Tags& tags)
   _insertChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
   _insertChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
   _insertChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
-  LOG_VARD(_insertChangeSet->lastQuery());
+  LOG_VART(_insertChangeSet->lastQuery());
 
   _currChangesetId = _insertRecord(*_insertChangeSet);
-  LOG_VARD(_currChangesetId);
+  LOG_VART(_currChangesetId);
 
   _changesetChangeCount = 0;
-  LOG_DEBUG("Started new changeset " << QString::number(_currChangesetId));
+  LOG_TRACE("Started new changeset " << QString::number(_currChangesetId));
 }
 
 long HootApiDb::insertChangeset(const geos::geom::Envelope& bounds, const Tags& tags,
                                 const long numChanges)
 {
-  LOG_DEBUG("Inserting and closing changeset...");
+  LOG_TRACE("Inserting and closing changeset...");
 
   const long mapId = _currMapId;
   const long userId = _currUserId;
@@ -648,20 +648,20 @@ long HootApiDb::insertChangeset(const geos::geom::Envelope& bounds, const Tags& 
   _insertChangeSet2->bindValue(":min_lon", bounds.getMinX());
   _insertChangeSet2->bindValue(":max_lon", bounds.getMaxX());
   _insertChangeSet2->bindValue(":num_changes", (int)numChanges);
-  LOG_VARD(_insertChangeSet2->lastQuery());
+  LOG_VART(_insertChangeSet2->lastQuery());
 
   _currChangesetId = _insertRecord(*_insertChangeSet2);
-  LOG_VARD(_currChangesetId);
+  LOG_VART(_currChangesetId);
 
   _changesetChangeCount = 0;
-  LOG_DEBUG("Inserted and closed changeset " << QString::number(_currChangesetId));
+  LOG_TRACE("Inserted and closed changeset " << QString::number(_currChangesetId));
 
   return _currChangesetId;
 }
 
 void HootApiDb::endChangeset()
 {
-  LOG_DEBUG("Ending changeset...");
+  LOG_TRACE("Ending changeset...");
 
   // If we're already closed, nothing to do
   if (_currChangesetId == -1)
@@ -691,7 +691,7 @@ void HootApiDb::endChangeset()
   _closeChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
   _closeChangeSet->bindValue(":num_changes", (int)_changesetChangeCount);
   _closeChangeSet->bindValue(":id", (qlonglong)_currChangesetId);
-  LOG_VARD(_closeChangeSet->lastQuery());
+  LOG_VART(_closeChangeSet->lastQuery());
 
   if (_closeChangeSet->exec() == false)
   {
@@ -1151,11 +1151,14 @@ void HootApiDb::_resetQueries()
 
 long HootApiDb::getMapIdFromUrl(const QUrl& url)
 {
+  LOG_TRACE("Retrieving map ID from url: " << url);
+  LOG_VART(_currUserId);
+
   QStringList urlParts = url.path().split("/");
   bool ok;
   long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
-  LOG_VARD(ok);
-  LOG_VARD(mapId);
+  LOG_VART(ok);
+  LOG_VART(mapId);
 
   // if parsed map string is a name (not an id)
   if (!ok)
@@ -1163,13 +1166,15 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
     mapId = -1;
     // get all map ids with name
     const QString mapName = urlParts[urlParts.size() - 1];
-    LOG_VARD(mapName);
+    LOG_VART(mapName);
 
     std::set<long> mapIds = selectMapIdsForCurrentUser(mapName);
-    LOG_VARD(mapIds);
+    LOG_VART(mapIds);
 
     // Here, we don't handle the situation where multiple maps with with the same name are owned
     // by the same user.
+    // TODO: I don't believe HootApiDbWriter actually allows multiple maps owned by the same user
+    // with the same name.  After verifying that, this mapIds.size() > 1 check can be removed.
     const QString countMismatchErrorMsg = "Expected 1 map with the name: '%1' but found %2 maps.";
     if (mapIds.size() > 1)
     {
@@ -1182,7 +1187,8 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
     {
       // try for public maps
       mapIds = selectMapIds(mapName);
-      LOG_VARD(mapIds);
+      //mapIds = selectPublicMapIds(mapName);
+      LOG_VART(mapIds);
       // Don't handle multiple maps with the same name here either
       if (mapIds.size() > 1)
       {
@@ -1196,7 +1202,7 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
     if (mapIds.size() == 1)
     {
       mapId = *mapIds.begin();
-      LOG_VARD(mapId);
+      LOG_VART(mapId);
     }
   }
 
@@ -1205,11 +1211,14 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
 
 set<long> HootApiDb::getMapIdsFromUrl(const QUrl& url)
 {
+  LOG_TRACE("Retrieving map IDs from url: " << url);
+  LOG_VART(_currUserId);
+
   QStringList urlParts = url.path().split("/");
   bool ok;
   long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
-  LOG_VARD(ok);
-  LOG_VARD(mapId);
+  LOG_VART(ok);
+  LOG_VART(mapId);
 
   std::set<long> mapIds;
   // if parsed map string is a name (not an id)
@@ -1217,16 +1226,17 @@ set<long> HootApiDb::getMapIdsFromUrl(const QUrl& url)
   {
     // get all map ids with name
     const QString mapName = urlParts[urlParts.size() - 1];
-    LOG_VARD(mapName);
+    LOG_VART(mapName);
 
     mapIds = selectMapIdsForCurrentUser(mapName);
-    LOG_VARD(mapIds);
+    LOG_VART(mapIds);
 
     if (mapIds.size() == 0)
     {
       // try for public maps
       mapIds = selectMapIds(mapName);
-      LOG_VARD(mapIds);
+      //mapIds = selectPublicMapIds(mapName);
+      LOG_VART(mapIds);
     }
   }
   else
@@ -1269,18 +1279,19 @@ void HootApiDb::verifyCurrentUserMapUse(const long mapId, const bool write)
 
 bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
 {
-  LOG_VARD(mapId);
-  LOG_VARD(_currUserId);
+  LOG_VART(mapId);
+  LOG_VART(_currUserId);
+  LOG_VART(write);
 
   if (_getMapPermissionsById == 0)
   {
     _getMapPermissionsById.reset(new QSqlQuery(_db));
     const QString sql =
-      QString("SELECT m.user_id, f.public from maps m ") +
-      QString("LEFT JOIN folder_map_mappings fmm ON (fmm.map_id = m.id) ") +
-      QString("LEFT JOIN folders f ON (f.id = fmm.folder_id) ") +
+      QString("SELECT m.user_id, f.public from " + ApiDb::getMapsTableName() + " m ") +
+      QString("LEFT JOIN " + ApiDb::getFolderMapMappingsTableName() + " fmm ON (fmm.map_id = m.id) ") +
+      QString("LEFT JOIN " + ApiDb::getFoldersTableName() + " f ON (f.id = fmm.folder_id) ") +
       QString("WHERE m.id = :mapId");
-    LOG_VARD(sql);
+    LOG_VART(sql);
     _getMapPermissionsById->prepare(sql);
   }
   _getMapPermissionsById->bindValue(":mapId", (qlonglong)mapId);
@@ -1295,13 +1306,13 @@ bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
   {
     bool ok;
     userId = _getMapPermissionsById->value(0).toLongLong(&ok);
-    LOG_VARD(userId);
+    LOG_VART(userId);
     if (!ok)
     {
       throw HootException(_getMapPermissionsById->lastError().text());
     }
     isPublic = _getMapPermissionsById->value(1).toBool();
-    LOG_VARD(isPublic);
+    LOG_VART(isPublic);
   }
   _getMapPermissionsById->finish();
 
@@ -1318,7 +1329,7 @@ bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
 set<long> HootApiDb::selectMapIds(QString name)
 {
   set<long> result;
-  LOG_VARD(name);
+  LOG_VART(name);
 
   if (_selectMapIds == 0)
   {
@@ -1328,7 +1339,7 @@ set<long> HootApiDb::selectMapIds(QString name)
       " WHERE display_name = :name");
   }
   _selectMapIds->bindValue(":name", name);
-  LOG_VARD(_selectMapIds->lastQuery());
+  LOG_VART(_selectMapIds->lastQuery());
 
   if (_selectMapIds->exec() == false)
   {
@@ -1349,12 +1360,50 @@ set<long> HootApiDb::selectMapIds(QString name)
   return result;
 }
 
+set<long> HootApiDb::selectPublicMapIds(QString name)
+{
+  set<long> result;
+  LOG_VART(name);
+
+  if (_selectPublicMapIds == 0)
+  {
+    _selectPublicMapIds.reset(new QSqlQuery(_db));
+    const QString sql =
+      QString("SELECT m.id, f.public from " + ApiDb::getMapsTableName() + " m ") +
+        QString("LEFT JOIN " + ApiDb::getFolderMapMappingsTableName() + " fmm ON (fmm.map_id = m.id) ") +
+        QString("LEFT JOIN " + ApiDb::getFoldersTableName() + " f ON (f.id = fmm.folder_id) ") +
+        QString("WHERE m.display_name = :mapName AND f.public = TRUE");
+    LOG_VART(sql);
+    _selectPublicMapIds->prepare(sql);
+  }
+  _selectPublicMapIds->bindValue(":mapName", name);
+  LOG_VART(_selectPublicMapIds->lastQuery());
+
+  if (_selectPublicMapIds->exec() == false)
+  {
+    throw HootException(_selectPublicMapIds->lastError().text());
+  }
+
+  while (_selectPublicMapIds->next())
+  {
+    bool ok;
+    long id = _selectPublicMapIds->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Error selecting map public IDs.");
+    }
+    result.insert(id);
+  }
+
+  return result;
+}
+
 set<long> HootApiDb::selectMapIdsForCurrentUser(QString name)
 {
   set<long> result;
 
-  LOG_VARD(name);
-  LOG_VARD(_currUserId);
+  LOG_VART(name);
+  LOG_VART(_currUserId);
   if (_currUserId == -1)
   {
     throw HootException("Database not configured with user.");
@@ -1370,7 +1419,7 @@ set<long> HootApiDb::selectMapIdsForCurrentUser(QString name)
   _selectMapIdsForCurrentUser->bindValue(":user_id", (qlonglong)_currUserId);
 
   _selectMapIdsForCurrentUser->bindValue(":name", name);
-  LOG_VARD(_selectMapIdsForCurrentUser->lastQuery());
+  LOG_VART(_selectMapIdsForCurrentUser->lastQuery());
 
   if (_selectMapIdsForCurrentUser->exec() == false)
   {
@@ -1449,7 +1498,7 @@ void HootApiDb::deleteFolders(const set<long>& folderIds)
   }
   sql.chop(1);
   sql += ")";
-  LOG_VARD(sql);
+  LOG_VART(sql);
 
   if (!_deleteFolders->exec(sql))
   {
@@ -1603,7 +1652,7 @@ long HootApiDb::numChangesets()
     _numChangesets.reset(new QSqlQuery(_db));
     _numChangesets->prepare("SELECT COUNT(*) FROM " + getChangesetsTableName(_currMapId));
   }
-  LOG_VARD(_numChangesets->lastQuery());
+  LOG_VART(_numChangesets->lastQuery());
 
   if (!_numChangesets->exec())
   {
@@ -1629,7 +1678,7 @@ long HootApiDb::numChangesets()
 
 bool HootApiDb::changesetExists(const long id)
 {
-  LOG_DEBUG("Checking changeset exists...");
+  LOG_TRACE("Checking changeset with ID: " << id << " exists...");
 
   const long mapId = _currMapId;
 
@@ -1641,9 +1690,11 @@ bool HootApiDb::changesetExists(const long id)
       .arg(getChangesetsTableName(mapId)));
   }
   _changesetExists->bindValue(":changesetId", (qlonglong)id);
-  LOG_VARD(_changesetExists->lastQuery());
+  LOG_VART(_changesetExists->lastQuery());
   if (_changesetExists->exec() == false)
   {
+    LOG_ERROR(_changesetExists->executedQuery());
+    LOG_ERROR(_changesetExists->lastError().text());
     throw HootException(_changesetExists->lastError().text());
   }
 

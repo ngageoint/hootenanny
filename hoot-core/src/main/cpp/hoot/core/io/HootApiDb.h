@@ -233,6 +233,14 @@ public:
   std::set<long> selectMapIdsForCurrentUser(QString name);
 
   /**
+   *
+   *
+   * @param name
+   * @return
+   */
+  std::set<long> selectPublicMapIds(QString name);
+
+  /**
    * Returns the IDs of all maps with the given name
    *
    * @param name map name

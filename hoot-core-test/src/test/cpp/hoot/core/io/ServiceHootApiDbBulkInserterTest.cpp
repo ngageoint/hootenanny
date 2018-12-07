@@ -94,7 +94,6 @@ public:
 
   void runPsqlDbOfflineTest()
   {
-    QString testName = "runPsqlDbOfflineTest";
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     HootApiDbBulkInserter writer;
@@ -110,7 +109,7 @@ public:
     writer.setUserEmail(userEmail());
     writer.setCopyBulkInsertActivated(true);
 
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
     mapId = writer.getMapId();
@@ -119,7 +118,7 @@ public:
     HootApiDbReader reader;
     OsmMapPtr actualMap(new OsmMap());
     reader.setUserEmail(userEmail());
-    reader.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    reader.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     reader.read(actualMap);
     reader.close();
     const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
@@ -130,11 +129,12 @@ public:
 
     //Should be 4 changesets, but its 8.
     HootApiDb database;
-    database.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    database.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     database.setMapId(mapId);
     database.setCreateIndexesOnClose(false);
     database.setFlushOnClose(false);
     const long numChangesets = database.numChangesets();
+    database.close();
     LOG_VARD(numChangesets);
     CPPUNIT_ASSERT_EQUAL(8L, numChangesets);
 
@@ -149,12 +149,11 @@ public:
 
   void overwriteDataWithDifferentUserTest()
   {
-    QString testName = "overwriteDataWithDifferentUserTest";
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     // write a map
     HootApiDbBulkInserter writer;
-    const QString outFile = outputDir + "/psql-offline-out.sql";
+    const QString outFile = outputDir + "/overwriteDataWithDifferentUserTest-out.sql";
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
@@ -165,34 +164,49 @@ public:
     writer.setOverwriteMap(true);
     writer.setUserEmail(userEmail());
     writer.setCopyBulkInsertActivated(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
-    // Don't close here as we want to retain certain field settings in the writer for the next
-    // write operation.
+    writer.close();
+    mapId = writer.getMapId();
 
     // Insert another user
     HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl("testName").toString());
+    db.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     const QString differentUserEmail = "overwriteDataWithDifferentUserTest2";
     db.insertUser(differentUserEmail, differentUserEmail);
+    db.close();
 
-    // Configure the writer with the other user
-    writer.setUserEmail(differentUserEmail);
+    // Configure another writer with the other user (had difficulties using the same writer for
+    // both map inserts, but it should be possible)
+    HootApiDbBulkInserter writer2;
+    writer2.setOutputFilesCopyLocation(outputDir + "/overwriteDataWithDifferentUserTest2-out.sql");
+    writer2.setStatusUpdateInterval(1);
+    writer2.setChangesetUserId(1);
+    writer2.setMaxChangesetSize(5);
+    writer2.setFileOutputElementBufferSize(3);
+    writer2.setValidateData(false);
+    writer2.setCreateUser(true);
+    writer2.setOverwriteMap(true);
+    writer2.setUserEmail(differentUserEmail);
+    writer2.setCopyBulkInsertActivated(true);
 
-    // We shouldn't be able to overwrite the original user's data.
+    // We shouldn't be able to overwrite the original user's data. (open overwrites if it finds
+    // exisint maps with the same name
     QString exceptionMsg("");
     try
     {
-      writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+      writer2.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
+      writer2.close();
     }
     LOG_VARD(exceptionMsg);
     CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
 
     // Clean up the second user.
+    db.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     db.deleteUser(db.getUserId(differentUserEmail, true));
     db.close();
   }
