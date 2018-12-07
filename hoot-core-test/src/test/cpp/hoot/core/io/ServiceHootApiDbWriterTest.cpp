@@ -59,12 +59,14 @@ class ServiceHootApiDbWriterTest : public HootTestFixture
   CPPUNIT_TEST(runEscapeTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runRemapInsertTest);
-  //TODO: permissions tests
+  CPPUNIT_TEST(overwriteDataWithDifferentUserTest);
+  CPPUNIT_TEST(deleteDataWithDifferentUserTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  QString userEmail() { return QString("%1.ServiceHootApiDbWriterTest@hoottestcpp.org").arg(testName); }
+  QString userEmail()
+  { return QString("%1.ServiceHootApiDbWriterTest@hoottestcpp.org").arg(testName); }
   QString userName()  { return QString("%1.ServiceHootApiDbWriterTest").arg(testName); }
 
   long mapId;
@@ -368,6 +370,99 @@ public:
     }
   }
 
+  void overwriteDataWithDifferentUserTest()
+  {
+    setUpTest("overwriteDataWithDifferentUserTest");
+
+    // write a map
+
+    HootApiDbWriter writer;
+    writer.setRemap(false);
+    writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    n1->setTag("note", "n1");
+    map->addNode(n1);
+
+    writer.write(map);
+    writer.close();
+
+    // Create a different user
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    const QString differentUserEmail = "overwriteDataWithDifferentUserTest2";
+    db.insertUser(differentUserEmail, differentUserEmail);
+
+    // Configure the writer with the second user
+    writer.setUserEmail(differentUserEmail);
+
+    // The second user shouldn't be able to overwrite the first user's data.
+    QString exceptionMsg("");
+    try
+    {
+      writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    LOG_VARD(exceptionMsg);
+    CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
+
+    // Clean up the second user
+    db.deleteUser(db.getUserId(differentUserEmail, true));
+    db.close();
+  }
+
+  void deleteDataWithDifferentUserTest()
+  {
+    setUpTest("deleteDataWithDifferentUserTest");
+
+    // write a map
+
+    HootApiDbWriter writer;
+    writer.setRemap(false);
+    writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    n1->setTag("note", "n1");
+    map->addNode(n1);
+
+    writer.write(map);
+    writer.close();
+
+    // Create a different user
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    const QString differentUserEmail = "deleteDataWithDifferentUserTest2";
+    db.insertUser(differentUserEmail, differentUserEmail);
+
+    // Configure the writer with the second user
+    writer.setUserEmail(differentUserEmail);
+
+    // The second user shouldn't be able to delete the first user's data.
+    QString exceptionMsg("");
+    try
+    {
+      writer.deleteMap(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    LOG_VARD(exceptionMsg);
+    CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
+
+    // Clean up the second user
+    db.deleteUser(db.getUserId(differentUserEmail, true));
+    db.close();
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbWriterTest, "slow");

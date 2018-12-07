@@ -52,7 +52,7 @@ class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbBulkInserterTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
-  //TODO: permissions tests
+  CPPUNIT_TEST(overwriteDataWithDifferentUserTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -145,6 +145,56 @@ public:
 //      outFile);
     HOOT_FILE_EQUALS(
       "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
+  }
+
+  void overwriteDataWithDifferentUserTest()
+  {
+    QString testName = "overwriteDataWithDifferentUserTest";
+    const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
+
+    // write a map
+    HootApiDbBulkInserter writer;
+    const QString outFile = outputDir + "/psql-offline-out.sql";
+    writer.setOutputFilesCopyLocation(outFile);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputElementBufferSize(3);
+    writer.setValidateData(false);
+    writer.setCreateUser(true);
+    writer.setOverwriteMap(true);
+    writer.setUserEmail(userEmail());
+    writer.setCopyBulkInsertActivated(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    writer.write(ServicesDbTestUtils::createTestMap1());
+    // Don't close here as we want to retain certain field settings in the writer for the next
+    // write operation.
+
+    // Insert another user
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl("testName").toString());
+    const QString differentUserEmail = "overwriteDataWithDifferentUserTest2";
+    db.insertUser(differentUserEmail, differentUserEmail);
+
+    // Configure the writer with the other user
+    writer.setUserEmail(differentUserEmail);
+
+    // We shouldn't be able to overwrite the original user's data.
+    QString exceptionMsg("");
+    try
+    {
+      writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    LOG_VARD(exceptionMsg);
+    CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
+
+    // Clean up the second user.
+    db.deleteUser(db.getUserId(differentUserEmail, true));
+    db.close();
   }
 };
 

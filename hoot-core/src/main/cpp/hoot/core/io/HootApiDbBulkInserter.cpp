@@ -128,7 +128,9 @@ void HootApiDbBulkInserter::_getOrCreateMap()
 
   QStringList pList = QUrl(_outputUrl).path().split("/");
   QString mapName = pList[2];
-  std::set<long> mapIds = _database.selectMapIdsForCurrentUser(mapName);
+//  std::set<long> mapIds = _database.selectMapIdsForCurrentUser(mapName);
+  std::set<long> mapIds = _database.getMapIdsFromUrl(_outputUrl);
+
   if (mapIds.size() > 0)
   {
     if (_overwriteMap) // delete map and overwrite it

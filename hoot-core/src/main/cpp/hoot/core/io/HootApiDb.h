@@ -491,15 +491,26 @@ public:
   void deleteFolders(const std::set<long>& folderIds);
 
   /**
-   * Parses a map ID from a Hootenanny API database URL
+   * Determines a single map ID associated with a Hootenanny API database URL
    *
    * First attempts to parse the numerical map ID from the URL string, then tries to parse a map
-   * name from the URL and obtain an ID from it.  Throws if no map or multiple maps are found.
+   * name from the URL and obtain an ID from it.  Throws if multiple maps are found.
    *
    * @param url URL to parse
-   * @return a map ID
+   * @return a map ID or -1 of no map is found
    */
   long getMapIdFromUrl(const QUrl& url);
+
+  /**
+   * Determines one or more map IDs associated with a Hootenanny API database URL
+   *
+   * First attempts to parse the numerical map ID from the URL string, then tries to parse a map
+   * name from the URL and obtain an ID from it.
+   *
+   * @param url URL to parse
+   * @return a collection of map IDs
+   */
+  std::set<long> getMapIdsFromUrl(const QUrl& url);
 
   /**
    * Verifies that a map may be accessed by the currently configured user

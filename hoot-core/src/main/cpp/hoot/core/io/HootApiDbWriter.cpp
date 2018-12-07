@@ -155,7 +155,7 @@ void HootApiDbWriter::deleteMap(QString urlStr)
   _open = false;
 }
 
-set<long> HootApiDbWriter::_openDb(QString& urlStr)
+std::set<long> HootApiDbWriter::_openDb(QString& urlStr)
 {
   if (!isSupported(urlStr))
   {
@@ -185,15 +185,14 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   // start the transaction. We'll close it when finalizePartial is called.
   _hootdb.transaction();
 
-  QStringList pList = url.path().split("/");
-  QString mapName = pList[2];
-  set<long> mapIds = _hootdb.selectMapIdsForCurrentUser(mapName);
-
-  return mapIds;
+  return _hootdb.getMapIdsFromUrl(url);
 }
 
 void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& mapIds)
 {
+  LOG_TRACE("Checking for map overwrites...");
+  LOG_VART(mapIds.size());
+
   if (mapIds.size() > 0)
   {
     if (_overwriteMap) // delete map and overwrite it
@@ -218,8 +217,9 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
     }
     else
     {
-      set<long>::const_iterator idItr = mapIds.begin();
-      _hootdb.setMapId(*idItr);
+      const long mapId = *mapIds.begin();
+      _hootdb.verifyCurrentUserMapUse(mapId, true);
+      _hootdb.setMapId(mapId);
       LOG_DEBUG("Updating map with ID: " << _hootdb.getMapId() << "...");
     }
   }

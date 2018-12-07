@@ -1160,13 +1160,16 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
   // if parsed map string is a name (not an id)
   if (!ok)
   {
-    // get all map ids with like name
+    mapId = -1;
+    // get all map ids with name
     const QString mapName = urlParts[urlParts.size() - 1];
     LOG_VARD(mapName);
 
     std::set<long> mapIds = selectMapIdsForCurrentUser(mapName);
     LOG_VARD(mapIds);
 
+    // Here, we don't handle the situation where multiple maps with with the same name are owned
+    // by the same user.
     const QString countMismatchErrorMsg = "Expected 1 map with the name: '%1' but found %2 maps.";
     if (mapIds.size() > 1)
     {
@@ -1177,8 +1180,10 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
     }
     else if (mapIds.size() == 0)
     {
+      // try for public maps
       mapIds = selectMapIds(mapName);
       LOG_VARD(mapIds);
+      // Don't handle multiple maps with the same name here either
       if (mapIds.size() > 1)
       {
         throw HootException(
@@ -1188,11 +1193,48 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
       }
     }
 
-    mapId = *mapIds.begin();
-    LOG_VARD(mapId);
+    if (mapIds.size() == 1)
+    {
+      mapId = *mapIds.begin();
+      LOG_VARD(mapId);
+    }
   }
 
   return mapId;
+}
+
+set<long> HootApiDb::getMapIdsFromUrl(const QUrl& url)
+{
+  QStringList urlParts = url.path().split("/");
+  bool ok;
+  long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
+  LOG_VARD(ok);
+  LOG_VARD(mapId);
+
+  std::set<long> mapIds;
+  // if parsed map string is a name (not an id)
+  if (!ok)
+  {
+    // get all map ids with name
+    const QString mapName = urlParts[urlParts.size() - 1];
+    LOG_VARD(mapName);
+
+    mapIds = selectMapIdsForCurrentUser(mapName);
+    LOG_VARD(mapIds);
+
+    if (mapIds.size() == 0)
+    {
+      // try for public maps
+      mapIds = selectMapIds(mapName);
+      LOG_VARD(mapIds);
+    }
+  }
+  else
+  {
+    mapIds.insert(mapId);
+  }
+
+  return mapIds;
 }
 
 void HootApiDb::verifyCurrentUserMapUse(const long mapId, const bool write)

@@ -70,8 +70,7 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   //TODO: fix
   //CPPUNIT_TEST(runInvalidUserTest);
   //CPPUNIT_TEST(runMultipleMapsSameNameSameUserTest);
-  CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersTest);
-  //TODO: fix
+  //CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersTest);
   //CPPUNIT_TEST(runMultipleMapsSameNameNoUserTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -809,7 +808,7 @@ public:
     // Create a user different than the one who wrote the map.
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
-    const QString differentUserEmail = "blah@blah.com";
+    const QString differentUserEmail = "runMultipleMapsSameNameDifferentUsersTest2";
     const long differentUserId = db.insertUser(differentUserEmail, differentUserEmail);
 
     // Write a map for the different user with the same name as the original map.
