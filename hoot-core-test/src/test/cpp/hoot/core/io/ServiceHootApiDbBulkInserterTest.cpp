@@ -57,9 +57,9 @@ class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 
 public:
 
-  static QString userEmail() { return "ServiceHootApiDbBulkInserterTest@hoottestcpp.org"; }
-
-  long mapId;
+  QString userEmail()
+  { return QString("%1.ServiceHootApiDbBulkInserterTest@hoottestcpp.org").arg(_testName); }
+  QString userName()  { return QString("%1.ServiceHootApiDbBulkInserterTest").arg(_testName); }
 
   ServiceHootApiDbBulkInserterTest()
   {
@@ -67,15 +67,15 @@ public:
     TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
-  virtual void setUp()
+  void setUpTest(const QString testName)
   {
-    HootTestFixture::setUp();
-    mapId = -1;
+    _mapId = -1;
+    _testName = testName;
     ServicesDbTestUtils::deleteUser(userEmail());
-
     HootApiDb database;
+
     database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
+    database.getOrCreateUser(userEmail(), userName());
     database.close();
   }
 
@@ -83,17 +83,18 @@ public:
   {
     ServicesDbTestUtils::deleteUser(userEmail());
 
-    if (mapId != -1)
+    if (_mapId != -1)
     {
       HootApiDb database;
-      database.open(ServicesDbTestUtils::getDbModifyUrl());
-      database.deleteMap(mapId);
+      database.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+      database.deleteMap(_mapId);
       database.close();
     }
   }
 
   void runPsqlDbOfflineTest()
   {
+    setUpTest("runPsqlDbOfflineTest");
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     HootApiDbBulkInserter writer;
@@ -109,16 +110,16 @@ public:
     writer.setUserEmail(userEmail());
     writer.setCopyBulkInsertActivated(true);
 
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
-    mapId = writer.getMapId();
-    LOG_VARD(mapId);
+    _mapId = writer.getMapId();
+    LOG_VARD(_mapId);
 
     HootApiDbReader reader;
     OsmMapPtr actualMap(new OsmMap());
     reader.setUserEmail(userEmail());
-    reader.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    reader.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     reader.read(actualMap);
     reader.close();
     const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
@@ -129,8 +130,8 @@ public:
 
     //Should be 4 changesets, but its 8.
     HootApiDb database;
-    database.open(ServicesDbTestUtils::getDbModifyUrl().toString());
-    database.setMapId(mapId);
+    database.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    database.setMapId(_mapId);
     database.setCreateIndexesOnClose(false);
     database.setFlushOnClose(false);
     const long numChangesets = database.numChangesets();
@@ -149,6 +150,7 @@ public:
 
   void overwriteDataWithDifferentUserTest()
   {
+    setUpTest("overwriteDataWithDifferentUserTest");
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     // write a map
@@ -164,14 +166,14 @@ public:
     writer.setOverwriteMap(true);
     writer.setUserEmail(userEmail());
     writer.setCopyBulkInsertActivated(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
-    mapId = writer.getMapId();
+    _mapId = writer.getMapId();
 
     // Insert another user
     HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     const QString differentUserEmail = "overwriteDataWithDifferentUserTest2";
     db.insertUser(differentUserEmail, differentUserEmail);
     db.close();
@@ -195,7 +197,7 @@ public:
     QString exceptionMsg("");
     try
     {
-      writer2.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+      writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     }
     catch (const HootException& e)
     {
@@ -206,10 +208,15 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
 
     // Clean up the second user.
-    db.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     db.deleteUser(db.getUserId(differentUserEmail, true));
     db.close();
   }
+
+private:
+
+  long _mapId;
+  QString _testName;
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "slow");
