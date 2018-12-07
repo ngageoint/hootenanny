@@ -375,7 +375,7 @@ public:
 
   void overwriteDataWithDifferentUserTest()
   {
-    setUpTest("overwriteDataWithDifferentUserTest");
+    setUpTest("ServiceHootApiDbWriterTest-overwriteDataWithDifferentUserTest");
 
     // write a map
     HootApiDbWriter writer;
@@ -412,15 +412,16 @@ public:
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
+
       writer2.close();
+
+      // Clean up the second user
+      db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+      db.deleteUser(db.getUserId(differentUserEmail, true));
+      db.close();
     }
     LOG_VARD(exceptionMsg);
     CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
-
-    // Clean up the second user
-    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    db.deleteUser(db.getUserId(differentUserEmail, true));
-    db.close();
   }
 
   void deleteDataWithDifferentUserTest()
@@ -448,26 +449,33 @@ public:
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     const QString differentUserEmail = "deleteDataWithDifferentUserTest2";
     db.insertUser(differentUserEmail, differentUserEmail);
+    db.close();
 
     // Configure the writer with the second user
-    writer.setUserEmail(differentUserEmail);
+    HootApiDbWriter writer2;
+    writer2.setRemap(false);
+    writer2.setIncludeDebug(true);
+    writer2.setUserEmail(differentUserEmail);
 
     // The second user shouldn't be able to delete the first user's data.
     QString exceptionMsg("");
     try
     {
-      writer.deleteMap(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+      writer2.deleteMap(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
+
+      writer2.close();
+
+      // Clean up the second user
+      db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+      db.deleteUser(db.getUserId(differentUserEmail, true));
+      db.close();
     }
     LOG_VARD(exceptionMsg);
     CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
-
-    // Clean up the second user
-    db.deleteUser(db.getUserId(differentUserEmail, true));
-    db.close();
   }
 
 private:

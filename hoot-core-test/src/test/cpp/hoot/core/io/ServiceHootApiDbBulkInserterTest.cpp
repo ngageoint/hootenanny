@@ -150,7 +150,7 @@ public:
 
   void overwriteDataWithDifferentUserTest()
   {
-    setUpTest("overwriteDataWithDifferentUserTest");
+    setUpTest("ServiceHootApiDbBulkInserterTest-overwriteDataWithDifferentUserTest");
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     // write a map
@@ -193,7 +193,7 @@ public:
     writer2.setCopyBulkInsertActivated(true);
 
     // We shouldn't be able to overwrite the original user's data. (open overwrites if it finds
-    // exisint maps with the same name
+    // existing maps with the same name
     QString exceptionMsg("");
     try
     {
@@ -202,15 +202,16 @@ public:
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
+
       writer2.close();
+
+      // Clean up the second user.
+      db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+      db.deleteUser(db.getUserId(differentUserEmail, true));
+      db.close();
     }
     LOG_VARD(exceptionMsg);
     CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
-
-    // Clean up the second user.
-    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    db.deleteUser(db.getUserId(differentUserEmail, true));
-    db.close();
   }
 
 private:

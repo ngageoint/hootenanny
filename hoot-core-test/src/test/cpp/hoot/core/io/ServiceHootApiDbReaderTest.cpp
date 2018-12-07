@@ -70,6 +70,7 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runInvalidUserTest);
   CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersPrivateTest);
   CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersPublicTest);
+  CPPUNIT_TEST(runMultipleMapsSameNameNoUserPublicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -732,6 +733,7 @@ public:
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     const QString differentUserEmail = "blah@blah.com";
     const long differentUserId = db.insertUser(differentUserEmail, differentUserEmail);
+    db.close();
 
     // set the reader up with the different user
     HootApiDbReader reader;
@@ -746,26 +748,26 @@ public:
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
+
       reader.close();
+
+      // delete the second user
+      db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+      db.deleteUser(differentUserId);
+      db.close();
     }
     LOG_VARD(exceptionMsg);
-    CPPUNIT_ASSERT(exceptionMsg.contains("access to map with ID"));
-
-    // delete the second user
-    db.deleteUser(differentUserId);
-    db.close();
+    CPPUNIT_ASSERT(exceptionMsg.contains("access to map with ID"));  
   }
 
   void runMultipleMapsSameNameDifferentUsersPrivateTest()
   {
-    setUpTest("runMultipleMapsSameNameDifferentUsersTest");
+    setUpTest("runMultipleMapsSameNameDifferentUsersPrivateTest");
     // create a map
-    LOG_DEBUG("Writing original map...");
     _mapId = populateMap();
     LOG_VARD(_mapId);
 
-    // create a user different than the one who wrote the map
-    LOG_DEBUG("Writing second user...");
+    // create a user different than the one who wrote the original map
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     const QString differentUserEmail = "runMultipleMapsSameNameDifferentUsersTest2";
@@ -773,7 +775,6 @@ public:
     LOG_VARD(differentUserId);
 
     // write a map for the different user with the same name as the original map
-    LOG_DEBUG("Writing second map...");
     HootApiDbWriter writer;
     writer.setUserEmail(differentUserEmail);
     writer.setRemap(false);
@@ -791,7 +792,6 @@ public:
 
     // Configure the reader for the original user, and we should be able to read out the map.
     // There are two maps with the same name, but they are owned by different users.
-    LOG_DEBUG("Reading original users's map...");
     reader.setUserEmail(userEmail());
     reader.open(url);
     reader.read(map);
@@ -799,7 +799,6 @@ public:
     reader.close();
 
     // Configure the reader for the second user, and we should be able to read out the map as well.
-    LOG_DEBUG("Reading second users's map...");
     map.reset(new OsmMap());
     reader.setUserEmail(differentUserEmail);
     reader.open(url);
@@ -816,14 +815,12 @@ public:
 
   void runMultipleMapsSameNameDifferentUsersPublicTest()
   {
-    setUpTest("runMultipleMapsSameNameDifferentUsersTest");
+    setUpTest("runMultipleMapsSameNameDifferentUsersPublicTest");
     // create a map
-    LOG_DEBUG("Writing original map...");
     _mapId = populateMap(true, true);
     LOG_VARD(_mapId);
 
-    // create a user different than the one who wrote the map
-    LOG_DEBUG("Writing second user...");
+    // create a user different than the one who wrote the original map
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     const QString differentUserEmail = "runMultipleMapsSameNameDifferentUsersTest2";
@@ -831,7 +828,6 @@ public:
     LOG_VARD(differentUserId);
 
     // write a map for the different user with the same name as the original map
-    LOG_DEBUG("Writing second map...");
     HootApiDbWriter writer;
     writer.setUserEmail(differentUserEmail);
     writer.setRemap(false);
@@ -849,7 +845,6 @@ public:
 
     // Configure the reader for the original user, and we should be able to read out the map.
     // There are two maps with the same name, but they are owned by different users.
-    LOG_DEBUG("Reading original users's map...");
     reader.setUserEmail(userEmail());
     reader.open(url);
     reader.read(map);
@@ -857,7 +852,6 @@ public:
     reader.close();
 
     // Configure the reader for the second user, and we should be able to read out the map as well.
-    LOG_DEBUG("Reading second users's map...");
     map.reset(new OsmMap());
     reader.setUserEmail(differentUserEmail);
     reader.open(url);
@@ -870,6 +864,62 @@ public:
 
     db.deleteUser(differentUserId);
     db.close();
+  }
+
+  void runMultipleMapsSameNameNoUserPublicTest()
+  {
+    setUpTest("runMultipleMapsSameNameNoUserPublicTest");
+    // create a map
+    _mapId = populateMap(true, true);
+    LOG_VARD(_mapId);
+
+    // create a user different than the one who wrote the original map
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    const QString differentUserEmail = "runMultipleMapsSameNameDifferentUsersTest2";
+    const long differentUserId = db.insertUser(differentUserEmail, differentUserEmail);
+    LOG_VARD(differentUserId);
+    db.close();
+
+    // write a map for the different user with the same name as the original map
+    HootApiDbWriter writer;
+    writer.setUserEmail(differentUserEmail);
+    writer.setRemap(false);
+    writer.setIncludeDebug(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    writer.write(ServicesDbTestUtils::createServiceTestMap());
+    writer.close();
+    const long secondMapId = writer.getMapId();
+    LOG_VARD(secondMapId);
+
+    // Configure the reader for no user
+    HootApiDbReader reader;
+    QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
+    url = url.replace(QString::number(_mapId), _testName);
+    reader.setUserEmail("");
+
+    // Try to read the map out anonymously from its public folder.  This will cause an error, as
+    // its ambiguous to hoot which map to return.  A map ID would need to be used in this
+    // situation instead.
+    QString exceptionMsg("");
+    try
+    {
+      reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+
+      reader.close();
+
+      // clean up the second map and user
+      db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+      db.deleteMap(db.getMapIdByName(_testName));
+      db.deleteUser(differentUserId);
+      db.close();
+    }
+    LOG_VARD(exceptionMsg);
+    CPPUNIT_ASSERT(exceptionMsg.contains("Expected 1 map"));
   }
 
 private:

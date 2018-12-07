@@ -212,8 +212,9 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
     }
     else if (mapIds.size() > 1)
     {
-      LOG_ERROR("There are multiple maps with this name. Consider using "
-                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
+      LOG_ERROR(
+        "There are multiple maps with this name: " << mapName <<
+        ". Consider using 'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
     }
     else
     {

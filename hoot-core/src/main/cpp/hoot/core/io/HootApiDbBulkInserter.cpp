@@ -150,7 +150,7 @@ void HootApiDbBulkInserter::_getOrCreateMap()
     }
     else if (mapIds.size() > 1)
     {
-      LOG_ERROR("There are multiple maps with this name. Consider using "
+      LOG_ERROR("There are multiple maps with this name: " << mapName << ". Consider using "
                 "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
     }
     else
