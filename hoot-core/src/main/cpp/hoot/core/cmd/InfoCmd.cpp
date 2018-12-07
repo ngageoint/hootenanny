@@ -27,14 +27,14 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/info/ApiEntityDisplayInfo.h>
+#include <hoot/core/info/ConfigOptionsDisplayer.h>
+#include <hoot/core/info/FormatsDisplayer.h>
+#include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/info/ConfigOptionsDisplayer.h>
-#include <hoot/core/info/FormatsDisplayer.h>
-#include <hoot/core/info/ApiEntityDisplayer.h>
-#include <hoot/core/language/LanguageInfoProvider.h>
-#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 
 // Qt
 #include <QUrl>
@@ -241,7 +241,7 @@ public:
     }
     else if (specifiedOpts.contains("--cleaning-operations"))
     {
-      std::cout << ApiEntityDisplayer::displayCleaningOps().toStdString();
+      std::cout << ApiEntityDisplayInfo::getDisplayInfoCleaningOps().toStdString();
     }
     //everything else
     else if (specifiedOpts.size() == 1)
@@ -265,7 +265,7 @@ public:
           QString("%1 with the --operators option takes zero parameters.").arg(getName()));
       }
 
-      std::cout << ApiEntityDisplayer::display(apiEntityType).toStdString();
+      std::cout << ApiEntityDisplayInfo::getDisplayInfo(apiEntityType).toStdString();
     }
     else
     {

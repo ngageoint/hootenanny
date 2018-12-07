@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "ApiEntityDisplayer.h"
+#include "ApiEntityDisplayInfo.h"
 
 // Hoot
 #include <hoot/core/util/Log.h>
@@ -186,7 +186,7 @@ QString getApiEntities2(const std::string& apiEntityClassName)
   return ts.readAll();
 }
 
-QString ApiEntityDisplayer::_apiEntityTypeForBaseClass(const QString className)
+QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString className)
 {
   LOG_VARD(className);
   if (className.toStdString() == OsmMapOperation::className() ||
@@ -207,7 +207,7 @@ QString ApiEntityDisplayer::_apiEntityTypeForBaseClass(const QString className)
   return "";
 }
 
-QString ApiEntityDisplayer::displayCleaningOps()
+QString ApiEntityDisplayInfo::getDisplayInfoCleaningOps()
 {
   ConfigOptions opts = ConfigOptions(conf());
   const QStringList cleaningOps = opts.getMapCleanerTransforms();
@@ -270,7 +270,7 @@ QString ApiEntityDisplayer::displayCleaningOps()
   return ts.readAll();
 }
 
-QString ApiEntityDisplayer::display(const QString apiEntityType)
+QString ApiEntityDisplayInfo::getDisplayInfo(const QString apiEntityType)
 {
   DisableLog dl;
   QString msg = " (prepend 'hoot::' before using";
