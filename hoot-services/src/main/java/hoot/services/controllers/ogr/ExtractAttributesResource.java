@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ogr;
 
@@ -128,7 +128,7 @@ public class ExtractAttributesResource {
 
     /**
      * This REST end point is for getting the result of get attribute upload operation
-     * 
+     *
      * @param jobId
      *            : The jobid from upload
      *
@@ -136,7 +136,7 @@ public class ExtractAttributesResource {
      *            : [true | false] if true then it deletes the output resource after getting the result
      *
      * Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-0644-47fd-a23c-6249e6 e7f7fb output: JSON of attributes
-     * 
+     *
      * @return JSON object of requested attribute
      */
     @GET
@@ -191,7 +191,10 @@ public class ExtractAttributesResource {
                         files.addAll(processFolder(folderWithUnzippedContents));
                     }
                     else {
-                        files.add(uploadedFile);
+                        //if we have shapefiles, only include shp refs
+                        if (extension.equalsIgnoreCase("shp")) {
+                            files.add(uploadedFile);
+                        }
                     }
                 }
             }

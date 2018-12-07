@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
@@ -253,7 +253,6 @@ void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &ma
   bounds.setToNull();
   boost::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
   _matchFactory->createMatches(map, matches, bounds, mt);
-  // go through all the manipulators
   size_t matchCount = 0;
   for (size_t i = 0; i < matches.size(); i++)
   {

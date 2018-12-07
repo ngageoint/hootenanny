@@ -60,12 +60,12 @@ void AddressParser::setPreTranslateTagValuesToEnglish(bool translate, const Sett
   }
 }
 
-bool AddressParser::hasAddress(const ConstElementPtr& element) const
+bool AddressParser::hasAddress(const Element& element) const
 {
   return numAddresses(element) > 0;
 }
 
-int AddressParser::numAddresses(const ConstElementPtr& element) const
+int AddressParser::numAddresses(const Element& element) const
 {
   // We're just getting a count here, so translation isn't needed (can be expensive).
   bool translateModified = false;
@@ -77,7 +77,7 @@ int AddressParser::numAddresses(const ConstElementPtr& element) const
   // Normalization will sometimes result in some false positive additional addresses, which doesn't
   // matter that much when doing address comparison, but does matter when trying to get an accurate
   // count for address tags.
-  const int numAddresses = parseAddresses(*element, false).size();
+  const int numAddresses = parseAddresses(element, false).size();
   if (translateModified)
   {
     _preTranslateTagValuesToEnglish = true;
@@ -102,7 +102,7 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   QList<Address> addresses;
   if (element->getElementType() == ElementType::Node)
   {
-    return hasAddress(boost::dynamic_pointer_cast<const Node>(element));
+    return hasAddress(*boost::dynamic_pointer_cast<const Node>(element));
   }
   else if (element->getElementType() == ElementType::Way)
   {

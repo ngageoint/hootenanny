@@ -37,7 +37,7 @@ using namespace boost;
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>

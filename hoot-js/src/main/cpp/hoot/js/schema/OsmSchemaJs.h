@@ -39,9 +39,11 @@ namespace hoot
 class OsmSchemaJs : public node::ObjectWrap
 {
 public:
+
  static void Init(v8::Handle<v8::Object> target);
 
 private:
+
   OsmSchemaJs();
   ~OsmSchemaJs();
 
@@ -52,6 +54,9 @@ private:
   static void getTagByCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+  // Even though all of the logic for these methods have been moved from OsmSchema to criterion,
+  // decided to leave this interface intact, as it will be simpler to access from js.
   static void isArea(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isBuilding(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isHgisPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -62,9 +67,10 @@ private:
   static void isMetaData(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
+
   static void score(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void scoreOneWay(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)

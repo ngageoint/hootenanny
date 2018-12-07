@@ -64,34 +64,35 @@ function ElementMergeserver(request, response) {
     try {
         var header = {'Accept': 'text/xml', 'Content-Type': 'text/xml', 'Access-Control-Allow-Origin': '*'};
         if (request.method === 'POST') {
+            var urlbits = url.parse(request.url, true);
+            switch(urlbits.path) {
+                case '/elementmerge':
+                    //Lookin' good!
+                    break;
+                default:
+                    throw new Error('Not found');
+            }
             var payload = '';
             request.on('data', function(chunk){
                 payload += chunk;
             });
 
-            request.on('end', function() {
-                var urlbits = url.parse(request.url, true);
-                var params = {};
-                params.osm = payload;
-                params.method = request.method;
-                params.path = urlbits.pathname;
 
-                var result = handleInputs(params);
+            request.on('end', function() {
+
+                var result = postHandler(payload);
 
                 response.writeHead(200, header);
                 response.end(result);
             });
 
-        } else if (request.method === 'GET') {
-            var urlbits = url.parse(request.url, true);
-            var params = urlbits.query;
-            params.method = request.method;
-            params.path = urlbits.pathname;
-
-            var result = handleInputs(params);
-
+        } else if (request.method === 'OPTIONS') {
+            header["Access-Control-Allow-Methods"] = "POST, OPTIONS";
+            header["Access-Control-Allow-Credentials"] = false;
+            header["Access-Control-Max-Age"] = '86400'; // 24 hours
+            header["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
             response.writeHead(200, header);
-            response.end(JSON.Stringify(result));
+            response.end();
         } else {
             throw new Error('Unsupported method');
         }
@@ -107,29 +108,12 @@ function ElementMergeserver(request, response) {
     }
 }
 
-function handleInputs(params) {
-    switch(params.path) {
-        case '/elementmerge':
-            return mergeElement(params);
-        default:
-            throw new Error('Not found');
-    }
-};
-
-var mergeElement = function(payload)
-{
-    if (payload.method === 'POST') {
-        return postHandler(payload.osm);
-    } else if (payload.method === 'GET') {
-        throw new Error('Unsupported method');
-    }
-}
 
 var postHandler = function(data)
 {
   //can't seem to get this to work
   //hoot.Log.setLogLevel('trace');
- 
+
   var map = new hoot.OsmMap();
   hoot.loadMapFromStringPreserveIdAndStatus(map, data);
   var mergedMap = hoot.mergeElements(map);
@@ -138,6 +122,5 @@ var postHandler = function(data)
 }
 
 if (typeof exports !== 'undefined') {
-    exports.handleInputs = handleInputs;
     exports.ElementMergeserver = ElementMergeserver;
 }

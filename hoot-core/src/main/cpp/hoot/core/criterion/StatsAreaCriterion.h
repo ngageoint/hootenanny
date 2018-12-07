@@ -39,11 +39,12 @@ namespace hoot
 class StatsAreaCriterion : public ElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::StatsAreaCriterion"; }
 
   StatsAreaCriterion() {}
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaCriterion()); }
 

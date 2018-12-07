@@ -29,6 +29,7 @@
 
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
@@ -60,7 +61,7 @@ public:
   /**
    * Returns true if the element satisfies the criterion.
    */
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const = 0;
+  virtual bool isSatisfied(const ConstElementPtr& e) const = 0;
 
   /**
    * Use the clone pattern for all classes based on the ElementCriterion class

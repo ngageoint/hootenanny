@@ -30,7 +30,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/TagKeyCountVisitor.h>
 #include <hoot/rnd/perty/PertyMatchScorer.h>
 #include <hoot/rnd/scoring/MapMatchScoringUtils.h>

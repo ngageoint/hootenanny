@@ -46,15 +46,14 @@ using namespace geos::geom;
 #include <hoot/core/io/PythonTranslator.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
 #include <QDir>
@@ -734,10 +733,11 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
 {
   Meters circularError = _parseCircularError(t);
 
+  AreaCriterion areaCrit;
   if (p->getNumInteriorRings() == 0)
   {
     WayPtr outer = _createWay(p->getExteriorRing(), circularError);
-    if (OsmSchema::getInstance().isArea(t, ElementType::Way) == false)
+    if (areaCrit.isSatisfied(t, ElementType::Way) == false)
     {
       t.setArea(true);
     }
@@ -748,7 +748,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   {
     RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
       MetadataTags::RelationMultiPolygon()));
-    if (OsmSchema::getInstance().isArea(t, ElementType::Relation) == false)
+    if (areaCrit.isSatisfied(t, ElementType::Relation) == false)
     {
       t.setArea(true);
     }

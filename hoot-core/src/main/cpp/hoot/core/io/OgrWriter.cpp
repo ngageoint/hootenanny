@@ -64,7 +64,7 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
 
 using namespace geos::geom;

@@ -32,11 +32,11 @@
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
 
 // Qt
 #include <QDebug>
@@ -84,24 +84,22 @@ void IntersectionSplitter::_mapNodesToWays()
 
     bool isNetworkType = false;
 
-    if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) ||
-        OsmSchema::getInstance().isLinearWaterway(*w) ||
-        OsmSchema::getInstance().isPowerLine(*w))
+    // Tying this check to NodeMatcher::isNetworkFeatureType, since both have similar requirements.
+    // Its possible in the future, the list of criterion checked may diverge between the two.
+    if (NodeMatcher::isNetworkFeatureType(w))
     {
       isNetworkType  = true;
     }
     // if the way isn't a network type, maybe it is part of a relation that is a network type.
     else
     {
-      const set<long>& relations = _map->getIndex().getElementToRelationMap()->getRelationByElement(
-        w->getElementId());
+      const set<long>& relations =
+        _map->getIndex().getElementToRelationMap()->getRelationByElement(w->getElementId());
 
       foreach (long rid, relations)
       {
         ElementPtr r = _map->getRelation(rid);
-        const Tags& tags = r->getTags();
-        if (OsmSchema::getInstance().isLinearHighway(tags, ElementType::Relation) ||
-            OsmSchema::getInstance().isLinearWaterway(*r))
+        if (NodeMatcher::isNetworkFeatureType(r))
         {
           isNetworkType  = true;
         }
@@ -146,7 +144,8 @@ void IntersectionSplitter::splitIntersections()
     //  Remove the node first in case it needs to be reprocessed later
     _todoNodes.remove(nodeId);
 
-    if (Log::getInstance().isInfoEnabled() && _todoNodes.size() % 1000 == 0 && _todoNodes.size() > 0)
+    if (Log::getInstance().isInfoEnabled() && _todoNodes.size() % 1000 == 0 &&
+        _todoNodes.size() > 0)
     {
       PROGRESS_INFO("  Intersection splitter todo: " << _todoNodes.size() << "       ");
       todoLogged = true;
