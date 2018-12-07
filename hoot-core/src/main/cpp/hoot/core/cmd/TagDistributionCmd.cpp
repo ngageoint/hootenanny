@@ -128,7 +128,7 @@ public:
     tagDist.setTagKeys(tagKeys);
     tagDist.setTokenize(tokenize);
 
-    tagDist.printTagCounts(tagDist.getTagCounts(inputs));
+    std::cout << tagDist.getTagCountsString(tagDist.getTagCounts(inputs));
 
     return 0;
   }

@@ -27,14 +27,14 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/info/ApiEntityDisplayInfo.h>
+#include <hoot/core/info/ConfigOptionsDisplayer.h>
+#include <hoot/core/info/FormatsDisplayer.h>
+#include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/info/ConfigOptionsDisplayer.h>
-#include <hoot/core/info/FormatsDisplayer.h>
-#include <hoot/core/info/ApiEntityDisplayer.h>
-#include <hoot/core/language/LanguageInfoProvider.h>
-#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 
 // Qt
 #include <QUrl>
@@ -119,11 +119,11 @@ public:
 
       if (args.size() == 0)
       {
-        ConfigOptionsDisplayer::displayAllOptionNames(getDetails);
+        std::cout << ConfigOptionsDisplayer::getAllOptionNames(getDetails).toStdString();
       }
       else
       {
-        ConfigOptionsDisplayer::displayOptionName(args[0], getDetails);
+        std::cout << ConfigOptionsDisplayer::getOptionName(args[0], getDetails).toStdString();
       }
     }
     else if (specifiedOpts.contains("--formats"))
@@ -167,7 +167,7 @@ public:
         displayOutputs = true;
       }
 
-      FormatsDisplayer::display(displayInputs, displayOutputs);
+      std::cout << FormatsDisplayer::display(displayInputs, displayOutputs).toStdString();
     }
     else if (specifiedOpts.contains("--languages"))
     {
@@ -241,7 +241,7 @@ public:
     }
     else if (specifiedOpts.contains("--cleaning-operations"))
     {
-      ApiEntityDisplayer::displayCleaningOps();
+      std::cout << ApiEntityDisplayInfo::getDisplayInfoCleaningOps().toStdString();
     }
     //everything else
     else if (specifiedOpts.size() == 1)
@@ -265,7 +265,7 @@ public:
           QString("%1 with the --operators option takes zero parameters.").arg(getName()));
       }
 
-      ApiEntityDisplayer::display(apiEntityType);
+      std::cout << ApiEntityDisplayInfo::getDisplayInfo(apiEntityType).toStdString();
     }
     else
     {

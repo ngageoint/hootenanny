@@ -83,9 +83,9 @@ public:
                        bool& wordsInvolvedInMultipleRules);
 
   /**
-   * Print out relevant info about the rule database
+   * Return a string containing relevant info about the rule database
    */
-  void printStats();
+  QString getStats();
 
   /**
    * Retrieves the total number implicit tag rules (word/tag associations) in the database

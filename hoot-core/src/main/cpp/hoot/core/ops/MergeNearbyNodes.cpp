@@ -156,18 +156,14 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
       }
     }
 
-    if (Log::getInstance().isInfoEnabled() && count % 1000 == 0)
+    if (count % 1000 == 0)
     {
-      cout << "MergeNearbyNodes " << count << " " << mergeCount << "    \r";
-      cout.flush();
+      PROGRESS_INFO("MergeNearbyNodes " << count << " " << mergeCount << "    ");
     }
     count++;
   }
 
-  if (Log::getInstance().isInfoEnabled())
-  {
-    cout << "MergeNearbyNodes " << nodes.size() << " elapsed: " << time.elapsed() << "ms        \n";
-  }
+  LOG_INFO("MergeNearbyNodes " << nodes.size() << " elapsed: " << time.elapsed() << "ms        ");
 }
 
 void MergeNearbyNodes::mergeNodes(boost::shared_ptr<OsmMap> map, Meters distance)

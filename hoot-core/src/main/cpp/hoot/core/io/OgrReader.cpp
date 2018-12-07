@@ -932,11 +932,6 @@ void OgrReaderInternal::open(const QString path, QString layer)
     _pendingLayers = getLayersWithGeometry(path);
   }
   LOG_VART(_pendingLayers);
-  if (Log::getInstance().getLevel() == Log::Info)
-  {
-    std::cout << ".";
-    std::cout.flush();
-  }
 }
 
 void OgrReaderInternal::_openLayer(QString path, QString layer)

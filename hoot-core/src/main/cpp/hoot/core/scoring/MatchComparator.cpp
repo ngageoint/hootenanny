@@ -242,8 +242,8 @@ bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapP
     LOG_INFO("Miss:");
     for (set<ElementId>::const_iterator it = s.begin(); it != s.end(); ++it)
     {
-      cout << "#############" << endl;
-      cout << in->getElement(*it)->getTags().toString() << endl;
+      LOG_INFO("#############");
+      LOG_INFO(in->getElement(*it)->getTags().toString());
     }
   }
 

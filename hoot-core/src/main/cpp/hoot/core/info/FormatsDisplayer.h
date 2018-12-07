@@ -47,7 +47,7 @@ public:
    * @param displayInputs if true, displays input formats
    * @param displayOutputs if true, displays output formats
    */
-  static void display(const bool displayInputs, const bool displayOutputs);
+  static QString display(const bool displayInputs, const bool displayOutputs);
 };
 
 }

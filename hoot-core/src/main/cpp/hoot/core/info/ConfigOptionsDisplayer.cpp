@@ -34,11 +34,25 @@
 
 // Qt
 #include <QFile>
+#include <QProcess>
+#include <QTextCodec>
+#include <QTextStream>
 
 namespace hoot
 {
 
-void ConfigOptionsDisplayer::displayAllOptionNames(const bool withDetails)
+QString runProcess(const QString& cmd)
+{
+  QProcess proc;
+  proc.start("bash", QStringList() << "-c" << cmd);
+  if (!proc.waitForStarted())
+    throw HootException("Unable to list configuration options.");
+  if (!proc.waitForFinished())
+    throw HootException("Unable to list configuration options.");
+  return QString(proc.readAll());
+}
+
+QString ConfigOptionsDisplayer::getAllOptionNames(const bool withDetails)
 {
   const QString configOptionsFile = ConfigOptions().getConfigOptionsFile();
   QString cmd;
@@ -52,13 +66,10 @@ void ConfigOptionsDisplayer::displayAllOptionNames(const bool withDetails)
     cmd = "cat " + configOptionsFile + " | grep -v '//'";
   }
 
-  if (!cmd.isEmpty() && std::system(cmd.toStdString().c_str()) != 0)
-  {
-    throw HootException("Unable to list configuration options.");
-  }
+  return runProcess(cmd);
 }
 
-void ConfigOptionsDisplayer::displayOptionName(const QString optionName, const bool withDetails)
+QString ConfigOptionsDisplayer::getOptionName(const QString optionName, const bool withDetails)
 {
   const QString configOptionsFile = ConfigOptions().getConfigOptionsFile();
   QString cmd;
@@ -69,20 +80,16 @@ void ConfigOptionsDisplayer::displayOptionName(const QString optionName, const b
     cmd =
       "cat " + configOptionsFile + " | grep '^=== " + optionName.toLower().trimmed() +
       "' | sed 's/=== //g'";
+    return runProcess(cmd);
   }
   else
   {
-    _printAllConfigOptionsDetails(optionName, configOptionsFile);
-  }
-
-  if (!cmd.isEmpty() && std::system(cmd.toStdString().c_str()) != 0)
-  {
-    throw HootException("Unable to list configuration options.");
+    return _getAllConfigOptionsDetails(optionName, configOptionsFile);
   }
 }
 
-void ConfigOptionsDisplayer::_printAllConfigOptionsDetails(const QString optionName,
-                                                           const QString configOptionsFile)
+QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(const QString optionName,
+                                                         const QString configOptionsFile)
 {
   QFile file(configOptionsFile);
   if (!file.open(QFile::ReadOnly))
@@ -92,7 +99,8 @@ void ConfigOptionsDisplayer::_printAllConfigOptionsDetails(const QString optionN
 
   //TODO: replace this w/ some fancy lookahead regex called by grep...doing it by brute force for
   //now
-  QString output;
+  QString buffer;
+  QTextStream ts(&buffer);
   try
   {
     bool foundOption = false;
@@ -111,7 +119,7 @@ void ConfigOptionsDisplayer::_printAllConfigOptionsDetails(const QString optionN
 
       if (foundOption)
       {
-        output += line ;
+        ts << line;
       }
     }
   }
@@ -121,7 +129,7 @@ void ConfigOptionsDisplayer::_printAllConfigOptionsDetails(const QString optionN
   }
   file.close();
 
-  std::cout << output.trimmed() << std::endl;
+  return ts.readAll();
 }
 
 }

@@ -119,9 +119,8 @@ void Conflator::_applyManipulations()
     if (Log::getInstance().isInfoEnabled() && Time::getTime() - lastPrint >= 1.0)
     {
       lastPrint = Time::getTime();
-      cout << "Current Score: " << map->getScore() << " it: " << iteration << " remaining: " <<
-              _manipulationHeap.size() << " elapsed: " << t.elapsed() << "ms             \r";
-      cout.flush();
+      PROGRESS_INFO("Current Score: " << map->getScore() << " it: " << iteration << " remaining: " <<
+              _manipulationHeap.size() << " elapsed: " << t.elapsed() << "ms             ");
     }
 
     noImprovement++;
@@ -172,10 +171,8 @@ void Conflator::_applyManipulations()
     iteration++;
   }
 
-  if (Log::getInstance().isInfoEnabled())
-  {
-    cout << endl;
-  }
+  LOG_INFO("Current Score: " << map->getScore() << " it: " << iteration << " remaining: " <<
+          _manipulationHeap.size() << " elapsed: " << t.elapsed() << "ms             ");
 
   LOG_INFO("Conflating map. Node count: " << _bestMap->getMap()->getNodes().size() <<
            " way count: " <<  _bestMap->getMap()->getWays().size());
