@@ -17,6 +17,7 @@ pipeline {
     // Configurable parameters for users to skip steps and control pipeline behavior
     parameters {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
+        booleanParam(name: 'Verbose', defaultValue: true)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
@@ -101,6 +102,11 @@ pipeline {
         stage("Build") {
             when { expression { return params.Build } }
             steps {
+                script {
+                    if (params.Verbose) {
+                        sh "vagrant ssh ${params.Box} -c 'export BUILD_VERBOSE=yes'"
+                    }
+                }
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
             }       
@@ -136,12 +142,12 @@ pipeline {
                 }
             }
             steps{
-                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar \
-                        -Dsonar.host.url=https://sonarcloud.io \
-                        -Dsonar.organization=hootenanny \
-                        -Dsonar.login=${env.SONAR_CLOUD_KEY} \
-                        -Dsonar.projectKey=hoot-services \
-                        -Dsonar.branch.name=${env.BRANCH_NAME}'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar \
+                    -Dsonar.host.url=https://sonarcloud.io \
+                    -Dsonar.organization=hootenanny \
+                    -Dsonar.login=${env.SONAR_CLOUD_KEY} \
+                    -Dsonar.projectKey=hoot-services \
+                    -Dsonar.branch.name=${env.BRANCH_NAME}'"
 
                 script {
                     if (env.BRANCH_NAME.startsWith("PR-")) {
