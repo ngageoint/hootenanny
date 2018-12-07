@@ -104,7 +104,7 @@ pipeline {
             steps {
                 script {
                     if (params.Verbose) {
-                        sh "vagrant ssh ${params.Box} -c 'echo 'export BUILD_VERBOSE=yes' >> .bashrc; source .bashrc'"
+                        sh "vagrant ssh ${params.Box} -c 'echo \'export BUILD_VERBOSE=yes\' >> .bashrc; source .bashrc'"
                     }
                 }
                 // Perform remainder of provisioning
