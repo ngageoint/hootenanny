@@ -38,7 +38,7 @@
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/TagCountVisitor.h>

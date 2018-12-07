@@ -56,6 +56,34 @@ public:
 
     WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
     CPPUNIT_ASSERT(!uut.isSatisfied(way2));
+
+    Tags t;
+    t["area"] = "yes";
+    CPPUNIT_ASSERT_EQUAL(true, uut.isSatisfied(t, ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL(true, uut.isSatisfied(t, ElementType::Relation));
+    CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Node));
+
+    t.clear();
+    t["highway"] = "primary";
+    CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Way));
+
+    t.clear();
+    t[MetadataTags::BuildingPart()] = "yes";
+    CPPUNIT_ASSERT_EQUAL(true, uut.isSatisfied(t, ElementType::Way));
+    t[MetadataTags::BuildingPart()] = "no";
+    CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Way));
+    t[MetadataTags::BuildingPart()] = "invalid";
+    CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Way));
+
+    t.clear();
+    t["leisure"] = "foo";
+    CPPUNIT_ASSERT_EQUAL(true, uut.isSatisfied(t, ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL(true, uut.isSatisfied(t, ElementType::Relation));
+
+    t.clear();
+    t["leisure"] = "track";
+    CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Relation));
   }
 };
 

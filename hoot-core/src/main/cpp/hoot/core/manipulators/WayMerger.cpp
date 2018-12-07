@@ -50,12 +50,12 @@ using namespace geos::operation::distance;
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/manipulators/WayMergeManipulation.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 using namespace hoot::elements;
 
 // Qt
@@ -132,8 +132,10 @@ void WayMerger::_findMatches(long baseWayId)
 {
   ConstWayPtr baseWay = _map->getWay(baseWayId);
 
+  HighwayCriterion highwayCrit;
+
   // if it isn't a highway we can't merge it.
-  if (OsmSchema::getInstance().isLinearHighway(baseWay->getTags(), ElementType::Way) == false)
+  if (highwayCrit.isSatisfied(baseWay) == false)
   {
     return;
   }
@@ -146,8 +148,7 @@ void WayMerger::_findMatches(long baseWayId)
   {
     ConstWayPtr otherWay = _map->getWay(otherWays[oi]);
 
-    if (otherWay->isUnknown() && baseWay->isUnknown() &&
-        OsmSchema::getInstance().isLinearHighway(otherWay->getTags(), ElementType::Way))
+    if (otherWay->isUnknown() && baseWay->isUnknown() && highwayCrit.isSatisfied(otherWay))
     {
       // create a new manipulation and add it onto the result.
       boost::shared_ptr<Manipulation> m(_createManipulation(baseWay->getId(), otherWay->getId(),

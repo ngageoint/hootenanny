@@ -38,7 +38,7 @@
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>

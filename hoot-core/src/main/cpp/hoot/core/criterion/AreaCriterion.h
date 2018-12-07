@@ -44,7 +44,9 @@ public:
 
   AreaCriterion();
 
-  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
+
+  bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion()); }
 

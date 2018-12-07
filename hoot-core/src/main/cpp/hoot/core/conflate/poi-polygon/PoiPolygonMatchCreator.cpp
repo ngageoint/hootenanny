@@ -31,8 +31,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -56,17 +54,8 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
 
-    const bool foundPoi =
-      OsmSchema::getInstance().isPoiPolygonPoi(
-        e1, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) ||
-      OsmSchema::getInstance().isPoiPolygonPoi(
-        e2, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList());
-    const bool foundPoly =
-      OsmSchema::getInstance().isPoiPolygonPoly(
-        e1, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()) ||
-      OsmSchema::getInstance().isPoiPolygonPoly(
-        e2, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList());
-
+    const bool foundPoi = _poiCrit.isSatisfied(e1) || _poiCrit.isSatisfied(e2);
+    const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
       result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf());
@@ -133,11 +122,8 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
 bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
                                               const ConstOsmMapPtr& /*map*/)
 {
-  return element->isUnknown() &&
-    (OsmSchema::getInstance().isPoiPolygonPoi(
-       element, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) ||
-     OsmSchema::getInstance().isPoiPolygonPoly(
-       element, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()));
+  return
+    element->isUnknown() && (_poiCrit.isSatisfied(element) || _polyCrit.isSatisfied(element));
 }
 
 boost::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()

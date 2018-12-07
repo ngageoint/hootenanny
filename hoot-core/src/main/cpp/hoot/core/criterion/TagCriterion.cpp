@@ -65,7 +65,7 @@ void TagCriterion::setConfiguration(const Settings &s)
   setKvps(ConfigOptions(s).getTagCriterionKvps());
 }
 
-bool TagCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (int i = 0; i < _kvps.size(); i++)
   {

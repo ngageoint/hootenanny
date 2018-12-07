@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Keeps all the one-way elements
+ * Keeps all the one-way streets
  */
 class OneWayCriterion : public ElementCriterion
 {
@@ -45,7 +45,7 @@ public:
 
   OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
 

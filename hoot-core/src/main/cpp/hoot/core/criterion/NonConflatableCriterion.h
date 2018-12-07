@@ -29,11 +29,9 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -42,18 +40,16 @@ namespace hoot
  * A filter that will remove elements that aren't conflatable by hootenanny.
  * These are elements for which we have no matchers defined.
  */
-class NonConflatableCriterion : public ElementCriterion, public Configurable
+class NonConflatableCriterion : public ElementCriterion
 {
 
 public:
 
   static std::string className() { return "hoot::NonConflatableCriterion"; }
 
-  NonConflatableCriterion() { setConfiguration(conf()); }
+  NonConflatableCriterion() { }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  virtual void setConfiguration(const Settings& conf);
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone()
   {
@@ -61,7 +57,6 @@ public:
   }
 
   virtual QString getDescription() const { return "Identifies features that are not conflatable"; }
-
 };
 
 }

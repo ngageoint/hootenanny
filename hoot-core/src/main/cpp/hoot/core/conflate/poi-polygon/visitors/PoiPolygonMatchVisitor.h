@@ -33,6 +33,8 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -94,6 +96,9 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
+
+  PoiPolygonPoiCriterion _poiCrit;
+  PoiPolygonPolyCriterion _polyCrit;
 
   void _checkForMatch(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e);

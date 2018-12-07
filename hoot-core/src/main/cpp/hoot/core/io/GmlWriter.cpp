@@ -37,7 +37,7 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/OsmMap.h>

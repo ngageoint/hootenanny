@@ -61,7 +61,9 @@ NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map,
       // if there are multiple corresponding nodes, throw an exception.
       if (result != std::numeric_limits<long>::max() && result != nid)
       {
-        LOG_ERROR("" << "Internal Error: Two nodes were found with the same coordinate.");
+        // Logging this as a warning, since it happens every once in awhile and life seems to go
+        // on...
+        LOG_WARN("" << "Internal Error: Two nodes were found with the same coordinate.");
         LOG_VART(n);
       }
       result = nid;

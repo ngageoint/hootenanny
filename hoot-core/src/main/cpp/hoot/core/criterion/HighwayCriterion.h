@@ -33,20 +33,21 @@ namespace hoot
 {
 
 /**
- * A criterion that will either keep or remove matches.
+ * A criterion that will either keep or remove road matches.
  */
 class HighwayCriterion : public ElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::HighwayCriterion"; }
 
   HighwayCriterion() {}
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HighwayCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies highways"; }
+  virtual QString getDescription() const { return "Identifies roads"; }
 };
 
 }

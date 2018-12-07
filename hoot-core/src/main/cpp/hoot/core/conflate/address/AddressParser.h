@@ -105,7 +105,7 @@ public:
    * @return true if the element has an address; false otherwise
    * @note This could be made more efficient, if necessary, by only counting the first address.
    */
-  bool hasAddress(const ConstElementPtr& element) const;
+  bool hasAddress(const Element& element) const;
 
   /**
    * Counts the number of address an element contains
@@ -113,7 +113,7 @@ public:
    * @param element the element to examine for an address
    * @return the number of addresses the element contains
    */
-  int numAddresses(const ConstElementPtr& element) const;
+  int numAddresses(const Element& element) const;
 
   /**
    * Determines if an element and any elements it contains has an address

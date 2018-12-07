@@ -40,7 +40,7 @@
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/criterion/WaterwayCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/visitors/CalculateAreaVisitor.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
@@ -347,7 +347,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
               constMap,
               //see comment in _generateFeatureStats as to why ElementCountVisitor is used here
               //instead of FeatureCountVisitor
-              FilteredVisitor(PoiPolygonPoiCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
+              FilteredVisitor(
+                PoiPolygonPoiCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
         }
         _stats.append(
           SingleStat(
@@ -427,7 +428,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _applyVisitor(constMap, FilteredVisitor(PoiCriterion(),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
       _stats.append(SingleStat("Waterway Translated Populated Tag Percent",
-        _applyVisitor(constMap, FilteredVisitor(WaterwayCriterion(),
+        _applyVisitor(constMap, FilteredVisitor(LinearWaterwayCriterion(),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
       _stats.append(SingleStat("Polygon Conflatable POI Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(PoiPolygonPoiCriterion(),

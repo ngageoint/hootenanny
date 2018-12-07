@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/WaterwayCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
@@ -154,7 +154,7 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
     case Building:
       return ElementCriterionPtr(new BuildingCriterion(map));
     case Waterway:
-      return ElementCriterionPtr(new WaterwayCriterion());
+      return ElementCriterionPtr(new LinearWaterwayCriterion());
     case PoiPolygonPOI:
       return ElementCriterionPtr(new PoiPolygonPoiCriterion());
     case Polygon:

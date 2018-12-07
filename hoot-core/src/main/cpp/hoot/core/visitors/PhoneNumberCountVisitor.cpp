@@ -47,7 +47,7 @@ void PhoneNumberCountVisitor::setConfiguration(const Settings& conf)
 
 void PhoneNumberCountVisitor::visit(const ConstElementPtr& e)
 {
-  _count += _phoneNumberParser.numPhoneNumbers(e);
+  _count += _phoneNumberParser.numPhoneNumbers(*e);
 }
 
 }

@@ -36,7 +36,7 @@
 #include <hoot/core/criterion/TagContainsCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
