@@ -102,11 +102,7 @@ pipeline {
         stage("Build") {
             when { expression { return params.Build } }
             steps {
-                script {
-                    if (params.Verbose) {
-                        sh "vagrant ssh ${params.Box} -c 'echo \'export BUILD_VERBOSE=yes\' >> .bashrc; source .bashrc'"
-                    }
-                }
+                sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=yes\" >> .bashrc; source .bashrc'"
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
             }       
