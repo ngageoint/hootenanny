@@ -302,7 +302,7 @@ void HootApiDb::createPendingMapIndexes()
 
 void HootApiDb::deleteMap(long mapId)
 {
-  LOG_TRACE("Deleting map: " << mapId << "...");
+  LOG_DEBUG("Deleting map: " << mapId << "...");
 
   // Drop related sequences
   dropSequence(getCurrentRelationMembersSequenceName(mapId));
@@ -322,6 +322,8 @@ void HootApiDb::deleteMap(long mapId)
 
   // Delete map last
   _exec("DELETE FROM " + ApiDb::getMapsTableName() + " WHERE id=:id", (qlonglong)mapId);
+
+  LOG_DEBUG("Finished deleting map: " << mapId << ".");
 }
 
 bool HootApiDb::hasTable(const QString& tableName)
@@ -1138,6 +1140,8 @@ void HootApiDb::_resetQueries()
   _selectMapIds.reset();
   _getMapPermissionsById.reset();
   _getMapPermissionsByName.reset();
+  _currentUserHasMapWithName.reset();
+  _getMapIdByNameForCurrentUser.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1166,30 +1170,21 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
     mapId = -1;
     // get all map ids with name
     const QString mapName = urlParts[urlParts.size() - 1];
-    LOG_VART(mapName);
+    LOG_VARD(mapName);
 
-    std::set<long> mapIds = selectMapIdsForCurrentUser(mapName);
-    LOG_VART(mapIds);
+    mapId = selectMapIdForCurrentUser(mapName);
+    LOG_VARD(mapId);
 
     // Here, we don't handle the situation where multiple maps with with the same name are owned
     // by the same user.
-    // TODO: I don't believe HootApiDbWriter actually allows multiple maps owned by the same user
-    // with the same name.  After verifying that, this mapIds.size() > 1 check can be removed.
     const QString countMismatchErrorMsg = "Expected 1 map with the name: '%1' but found %2 maps.";
-    if (mapIds.size() > 1)
-    {
-      throw HootException(
-        QString(countMismatchErrorMsg)
-          .arg(mapName)
-          .arg(mapIds.size()));
-    }
-    else if (mapIds.size() == 0)
+    if (mapId == -1)
     {
       // try for public maps
-      mapIds = selectMapIds(mapName);
-      //mapIds = selectPublicMapIds(mapName);
-      LOG_VART(mapIds);
-      // Don't handle multiple maps with the same name here either
+      const std::set<long> mapIds = selectPublicMapIds(mapName);
+      LOG_VARD(mapIds);
+      // Here, we don't handle the situation where multiple maps across different users have the
+      // same name.
       if (mapIds.size() > 1)
       {
         throw HootException(
@@ -1197,58 +1192,22 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
             .arg(mapName)
             .arg(mapIds.size()));
       }
-    }
-
-    if (mapIds.size() == 1)
-    {
-      mapId = *mapIds.begin();
-      LOG_VART(mapId);
+      else
+      {
+        mapId = *mapIds.begin();
+        LOG_VARD(mapId);
+      }
     }
   }
 
   return mapId;
 }
 
-set<long> HootApiDb::getMapIdsFromUrl(const QUrl& url)
-{
-  LOG_TRACE("Retrieving map IDs from url: " << url);
-  LOG_VART(_currUserId);
-
-  QStringList urlParts = url.path().split("/");
-  bool ok;
-  long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
-  LOG_VART(ok);
-  LOG_VART(mapId);
-
-  std::set<long> mapIds;
-  // if parsed map string is a name (not an id)
-  if (!ok)
-  {
-    // get all map ids with name
-    const QString mapName = urlParts[urlParts.size() - 1];
-    LOG_VART(mapName);
-
-    mapIds = selectMapIdsForCurrentUser(mapName);
-    LOG_VART(mapIds);
-
-    if (mapIds.size() == 0)
-    {
-      // try for public maps
-      mapIds = selectMapIds(mapName);
-      //mapIds = selectPublicMapIds(mapName);
-      LOG_VART(mapIds);
-    }
-  }
-  else
-  {
-    mapIds.insert(mapId);
-  }
-
-  return mapIds;
-}
-
 void HootApiDb::verifyCurrentUserMapUse(const long mapId, const bool write)
 {
+  LOG_VART(mapId);
+  LOG_VART(write);
+
   if (!mapExists(mapId))
   {
     throw HootException("No map exists with requested ID: " + QString::number(mapId));
@@ -1278,7 +1237,7 @@ void HootApiDb::verifyCurrentUserMapUse(const long mapId, const bool write)
 }
 
 bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
-{
+{    
   LOG_VART(mapId);
   LOG_VART(_currUserId);
   LOG_VART(write);
@@ -1398,16 +1357,16 @@ set<long> HootApiDb::selectPublicMapIds(QString name)
   return result;
 }
 
-set<long> HootApiDb::selectMapIdsForCurrentUser(QString name)
+long HootApiDb::selectMapIdForCurrentUser(QString name)
 {
-  set<long> result;
+  long result;
 
   LOG_VART(name);
   LOG_VART(_currUserId);
-  if (_currUserId == -1)
-  {
-    throw HootException("Database not configured with user.");
-  }
+//  if (_currUserId == -1)
+//  {
+//    throw HootException("Database not configured with user.");
+//  }
 
   if (_selectMapIdsForCurrentUser == 0)
   {
@@ -1426,7 +1385,9 @@ set<long> HootApiDb::selectMapIdsForCurrentUser(QString name)
     throw HootException(_selectMapIdsForCurrentUser->lastError().text());
   }
 
-  while (_selectMapIdsForCurrentUser->next())
+  // There should only be one map owned by a user with a given name, since that's all
+  // HootApiDbWriter allows.
+  if (_selectMapIdsForCurrentUser->next())
   {
     bool ok;
     long id = _selectMapIdsForCurrentUser->value(0).toLongLong(&ok);
@@ -1434,7 +1395,11 @@ set<long> HootApiDb::selectMapIdsForCurrentUser(QString name)
     {
       throw HootException("Error selecting map IDs.");
     }
-    result.insert(id);
+    result = id;
+  }
+  else
+  {
+    result = -1;
   }
 
   return result;
@@ -1582,6 +1547,31 @@ QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
   }
 }
 
+bool HootApiDb::currentUserHasMapWithName(const QString mapName)
+{
+  LOG_VART(_currUserId);
+//  if (_currUserId == -1)
+//  {
+//    throw HootException("No configured user.");
+//  }
+
+  if (_currentUserHasMapWithName == 0)
+  {
+    _currentUserHasMapWithName.reset(new QSqlQuery(_db));
+    _currentUserHasMapWithName->prepare(
+      "SELECT id FROM " + ApiDb::getMapsTableName() +
+      " WHERE display_name = :mapName AND user_id = :userId");
+  }
+  _currentUserHasMapWithName->bindValue(":mapName", mapName);
+  _currentUserHasMapWithName->bindValue(":userId", (qlonglong)_currUserId);
+  if (_currentUserHasMapWithName->exec() == false)
+  {
+    throw HootException(_currentUserHasMapWithName->lastError().text());
+  }
+
+  return _currentUserHasMapWithName->next();
+}
+
 bool HootApiDb::mapExists(const long id)
 {
   if (_mapExistsById == 0)
@@ -1642,6 +1632,44 @@ long HootApiDb::getMapIdByName(const QString name)
     }
   }
   _getMapIdByName->finish();
+  return result;
+}
+
+long HootApiDb::getMapIdByNameForCurrentUser(const QString name)
+{
+  LOG_VARD(_currUserId);
+//  if (_currUserId == -1)
+//  {
+//    throw HootException("No configured user.");
+//  }
+
+  //assuming unique name here
+  if (_getMapIdByNameForCurrentUser == 0)
+  {
+    _getMapIdByNameForCurrentUser.reset(new QSqlQuery(_db));
+    _getMapIdByNameForCurrentUser->prepare(
+      "SELECT id FROM " + ApiDb::getMapsTableName() +
+      " WHERE display_name = :mapName AND user_id = :userId");
+  }
+  _getMapIdByNameForCurrentUser->bindValue(":mapName", name);
+  _getMapIdByNameForCurrentUser->bindValue(":userId", (qlonglong)_currUserId);
+  if (_getMapIdByNameForCurrentUser->exec() == false)
+  {
+    throw HootException(_getMapIdByNameForCurrentUser->lastError().text());
+  }
+
+  long result = -1;
+  if (_getMapIdByNameForCurrentUser->next())
+  {
+    bool ok;
+    result = _getMapIdByNameForCurrentUser->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException(_getMapIdByNameForCurrentUser->lastError().text());
+    }
+  }
+  _getMapIdByNameForCurrentUser->finish();
+  LOG_VARD(result);
   return result;
 }
 

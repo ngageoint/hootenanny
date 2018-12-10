@@ -123,39 +123,43 @@ void HootApiDbWriter::open(QString urlStr)
 {
   LOG_DEBUG("Opening database writer for: " << urlStr << "...");
 
-  set<long> mapIds = _openDb(urlStr);
+  const long mapId = _openDb(urlStr);
+  LOG_VARD(mapId);
+  const QString mapName = _getMapNameFromUrl(urlStr);
+  LOG_VARD(mapName);
 
-  QUrl url(urlStr);
-  QStringList pList = url.path().split("/");
-  QString mapName = pList[2];
-  _overwriteMaps(mapName, mapIds);
+  if (mapId != -1)
+  {
+    if (_overwriteMap) // delete map and overwrite it
+    {
+      _hootdb.verifyCurrentUserMapUse(mapId, true);
+      _hootdb.deleteMap(mapId);
+      _hootdb.setMapId(_hootdb.insertMap(mapName));
+    }
+    else
+    {
+      _hootdb.verifyCurrentUserMapUse(mapId, true);
+      _hootdb.setMapId(mapId);
+      LOG_DEBUG("Updating map with ID: " << _hootdb.getMapId() << "...");
+    }
+  }
+  else// if (mapIds.size() == 0)
+  {
+    LOG_DEBUG("Map " << mapName << " was not found, must insert.");
+    _hootdb.setMapId(_hootdb.insertMap(mapName));
+  }
 
   _startNewChangeSet();
 }
 
-void HootApiDbWriter::deleteMap(QString urlStr)
+QString HootApiDbWriter::_getMapNameFromUrl(const QString urlStr) const
 {
-  LOG_TRACE("Deleting map at " + urlStr << "...");
-
-  set<long> mapIds = _openDb(urlStr);
-
-  for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
-  {
-    const long mapId = *it;
-
-    _hootdb.verifyCurrentUserMapUse(mapId, true);
-
-    LOG_INFO("Removing map with ID: " << mapId);
-    _hootdb.deleteMap(mapId);
-    LOG_DEBUG("Finished removing map with ID: " << mapId);
-  }
-
-  _hootdb.commit();
-  _hootdb.close();
-  _open = false;
+  QUrl url(urlStr);
+  const QStringList pList = url.path().split("/");
+  return pList[2];
 }
 
-std::set<long> HootApiDbWriter::_openDb(QString& urlStr)
+long HootApiDbWriter::_openDb(const QString urlStr, const bool forDelete)
 {
   if (!isSupported(urlStr))
   {
@@ -167,12 +171,15 @@ std::set<long> HootApiDbWriter::_openDb(QString& urlStr)
                         ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
   }
 
+  // URL must have name in it
   QUrl url(urlStr);
+  const QString mapName = _getMapNameFromUrl(urlStr);
+  LOG_VARD(mapName);
 
   _hootdb.open(url);
   _open = true;
 
-  // create the user before we have a transaction so we can make sure the user gets added.
+  // create the user before we have a transaction so we can make sure the user gets added
   if (_createUserIfNotFound)
   {
     _hootdb.setUserId(_hootdb.getOrCreateUser(_userEmail, _userEmail));
@@ -181,54 +188,39 @@ std::set<long> HootApiDbWriter::_openDb(QString& urlStr)
   {
     _hootdb.setUserId(_hootdb.getUserId(_userEmail, true));
   }
+  LOG_VARD(_hootdb.getCurrentUserId());
+
+  if (!_overwriteMap && !forDelete && _hootdb.currentUserHasMapWithName(mapName))
+  {
+    throw HootException(
+      "User with ID: " + QString::number(_hootdb.getCurrentUserId()) +
+      " already has map with name: " + mapName);
+  }
 
   // start the transaction. We'll close it when finalizePartial is called.
   _hootdb.transaction();
 
-  return _hootdb.getMapIdsFromUrl(url);
+  return _hootdb.getMapIdByNameForCurrentUser(mapName);
 }
 
-void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& mapIds)
+void HootApiDbWriter::deleteMap(QString urlStr)
 {
-  LOG_TRACE("Checking for map overwrites...");
-  LOG_VART(mapIds.size());
+  LOG_DEBUG("Deleting map at " + urlStr << "...");
 
-  if (mapIds.size() > 0)
+  const long mapId = _openDb(urlStr, true);
+  LOG_VARD(mapId);
+  if (mapId != -1)
   {
-    if (_overwriteMap) // delete map and overwrite it
-    {
-      for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
-      {
-        const long mapId = *it;
-
-        _hootdb.verifyCurrentUserMapUse(mapId, true);
-
-        LOG_DEBUG("Removing map with ID: " << mapId << "...");
-        _hootdb.deleteMap(mapId);
-        LOG_DEBUG("Finished removing map with ID: " << mapId);
-      }
-
-      _hootdb.setMapId(_hootdb.insertMap(mapName));
-    }
-    else if (mapIds.size() > 1)
-    {
-      LOG_ERROR(
-        "There are multiple maps with this name: " << mapName <<
-        ". Consider using 'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
-    }
-    else
-    {
-      const long mapId = *mapIds.begin();
-      _hootdb.verifyCurrentUserMapUse(mapId, true);
-      _hootdb.setMapId(mapId);
-      LOG_DEBUG("Updating map with ID: " << _hootdb.getMapId() << "...");
-    }
+    _hootdb.verifyCurrentUserMapUse(mapId, true);
+    _hootdb.deleteMap(mapId);
   }
-  else if (mapIds.size() == 0)
-  {
-    LOG_DEBUG("Map " << mapName << " was not found, must insert.");
-    _hootdb.setMapId(_hootdb.insertMap(mapName));
-  }
+  // Considered adding a throw here when the map is not found, but there are existing callers to
+  // this that expect silence when a map requested for delete doesn't exist...so not making that
+  // change.
+
+  _hootdb.commit();
+  _hootdb.close();
+  _open = false;
 }
 
 long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)

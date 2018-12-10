@@ -59,8 +59,9 @@ class ServiceHootApiDbWriterTest : public HootTestFixture
   CPPUNIT_TEST(runEscapeTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runRemapInsertTest);
-  CPPUNIT_TEST(overwriteDataWithDifferentUserTest);
-  CPPUNIT_TEST(deleteDataWithDifferentUserTest);
+  CPPUNIT_TEST(writeTwoMapsSameNameDifferentUsers);
+  CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteDisabledTest);
+  CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteEnabledTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -373,11 +374,12 @@ public:
     }
   }
 
-  void overwriteDataWithDifferentUserTest()
+  void writeTwoMapsSameNameDifferentUsers()
   {
-    setUpTest("ServiceHootApiDbWriterTest-overwriteDataWithDifferentUserTest");
+    setUpTest("ServiceHootApiDbWriterTest-writeTwoMapsSameNameDifferentUsers");
 
     // write a map
+    LOG_DEBUG("Writing map...");
     HootApiDbWriter writer;
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
@@ -388,13 +390,18 @@ public:
     n1->setTag("note", "n1");
     map->addNode(n1);
     writer.write(map);
+    const long firstMapId = writer.getMapId();
+    LOG_VARD(firstMapId);
     writer.close();
 
     // Create a different user
+    LOG_DEBUG("Creating second user...");
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    const QString differentUserEmail = "overwriteDataWithDifferentUserTest2";
-    db.insertUser(differentUserEmail, differentUserEmail);
+    const QString differentUserEmail =
+      "ServiceHootApiDbWriterTest-writeTwoMapsSameNameDifferentUsers2";
+    const long differentUserId = db.insertUser(differentUserEmail, differentUserEmail);
+    LOG_VARD(differentUserId);
     db.close();
 
     // Configure the writer with the second user
@@ -402,31 +409,23 @@ public:
     writer2.setRemap(false);
     writer2.setIncludeDebug(true);
     writer2.setUserEmail(differentUserEmail);
+    LOG_DEBUG("Attempting to open db for writing second map...");
+    writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    // This should not fail, since we allow different users to write maps with the same name (just
+    // checking that open succeeds here...not the actual write).
 
-    // The second user shouldn't be able to overwrite the first user's data.
-    QString exceptionMsg("");
-    try
-    {
-      writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-
-      writer2.close();
-
-      // Clean up the second user
-      db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-      db.deleteUser(db.getUserId(differentUserEmail, true));
-      db.close();
-    }
-    LOG_VARD(exceptionMsg);
-    CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    db.deleteUser(differentUserId);
   }
 
-  void deleteDataWithDifferentUserTest()
+  void twoMapsSameNameSameUserOverwriteDisabledTest()
   {
-    setUpTest("deleteDataWithDifferentUserTest");
+    setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteDisabledTest");
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    n1->setTag("note", "n1");
+    map->addNode(n1);
 
     // write a map
 
@@ -435,47 +434,58 @@ public:
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    writer.write(map);
+    writer.close();
+
+    // try to write another map with the same name for the same user with overwrite disabled
+    HootApiDbWriter writer2;
+    writer2.setRemap(false);
+    writer2.setIncludeDebug(true);
+    writer2.setUserEmail(userEmail());
+    writer2.setOverwriteMap(false);
+
+    // It should fail b/c we don't allow multiple map with the same name to be owned by the same
+    // user.
+    QString exceptionMsg("");
+    try
+    {
+      writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+      writer2.close();
+    }
+    LOG_VARD(exceptionMsg);
+    CPPUNIT_ASSERT(exceptionMsg.contains("already has map with name"));
+  }
+
+  void twoMapsSameNameSameUserOverwriteEnabledTest()
+  {
+    setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteEnbledTest");
 
     OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
     map->addNode(n1);
 
+    // write a map
+    HootApiDbWriter writer;
+    writer.setRemap(false);
+    writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(map);
     writer.close();
 
-    // Create a different user
-    HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    const QString differentUserEmail = "deleteDataWithDifferentUserTest2";
-    db.insertUser(differentUserEmail, differentUserEmail);
-    db.close();
-
-    // Configure the writer with the second user
+    // try to write another map with the same name for the same user with overwrite enabled
     HootApiDbWriter writer2;
+    writer2.setOverwriteMap(true);
     writer2.setRemap(false);
     writer2.setIncludeDebug(true);
-    writer2.setUserEmail(differentUserEmail);
-
-    // The second user shouldn't be able to delete the first user's data.
-    QString exceptionMsg("");
-    try
-    {
-      writer2.deleteMap(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-
-      writer2.close();
-
-      // Clean up the second user
-      db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-      db.deleteUser(db.getUserId(differentUserEmail, true));
-      db.close();
-    }
-    LOG_VARD(exceptionMsg);
-    CPPUNIT_ASSERT(exceptionMsg.contains("does not have write access to map"));
+    writer2.setUserEmail(userEmail());
+    // It should succeed (just checking open here...not the actual write).
+    writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
   }
 
 private:

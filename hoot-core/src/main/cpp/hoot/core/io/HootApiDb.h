@@ -225,18 +225,18 @@ public:
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
   /**
-   * Returns the IDs of all maps with the given name created by the currently configured user
+   * Returns the ID of the map with the given name created by the currently configured user
+   *
+   * @param name map name
+   * @return a map ID; -1 if no map is found
+   */
+  long selectMapIdForCurrentUser(QString name);
+
+  /**
+   * Returns all public map IDs for a map with the give name
    *
    * @param name map name
    * @return a collection of map IDs
-   */
-  std::set<long> selectMapIdsForCurrentUser(QString name);
-
-  /**
-   *
-   *
-   * @param name
-   * @return
    */
   std::set<long> selectPublicMapIds(QString name);
 
@@ -510,17 +510,6 @@ public:
   long getMapIdFromUrl(const QUrl& url);
 
   /**
-   * Determines one or more map IDs associated with a Hootenanny API database URL
-   *
-   * First attempts to parse the numerical map ID from the URL string, then tries to parse a map
-   * name from the URL and obtain an ID from it.
-   *
-   * @param url URL to parse
-   * @return a collection of map IDs
-   */
-  std::set<long> getMapIdsFromUrl(const QUrl& url);
-
-  /**
    * Verifies that a map may be accessed by the currently configured user
    *
    * @param mapId ID of the map for which to verify access
@@ -528,6 +517,22 @@ public:
    * access for the user
    */
   void verifyCurrentUserMapUse(const long mapId, const bool write = false);
+
+  /**
+   * Determines if the currently configured user owns a map with the given name
+   *
+   * @param mapName map name
+   * @return true if the current user owns a map with the input name; false othersie
+   */
+  bool currentUserHasMapWithName(const QString mapName);
+
+  /**
+   * Returns the ID of a map with given name if owned by the currently configured user
+   *
+   * @param name map name
+   * @return ID of the map; -1 if the map is not found
+   */
+  long getMapIdByNameForCurrentUser(const QString name);
 
 protected:
 
@@ -571,6 +576,8 @@ private:
   boost::shared_ptr<QSqlQuery> _selectMapIds;
   boost::shared_ptr<QSqlQuery> _getMapPermissionsById;
   boost::shared_ptr<QSqlQuery> _getMapPermissionsByName;
+  boost::shared_ptr<QSqlQuery> _currentUserHasMapWithName;
+  boost::shared_ptr<QSqlQuery> _getMapIdByNameForCurrentUser;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

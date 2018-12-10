@@ -84,6 +84,7 @@ void HootApiDbReader::open(QString urlStr)
   }
 
   const long requestedMapId = _database->getMapIdFromUrl(url);
+  LOG_VART(requestedMapId);
   _database->verifyCurrentUserMapUse(requestedMapId);
   _database->setMapId(requestedMapId);
 
