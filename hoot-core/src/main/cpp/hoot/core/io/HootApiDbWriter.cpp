@@ -159,7 +159,7 @@ QString HootApiDbWriter::_getMapNameFromUrl(const QString urlStr) const
   return pList[2];
 }
 
-long HootApiDbWriter::_openDb(const QString urlStr, const bool forDelete)
+long HootApiDbWriter::_openDb(const QString urlStr/*, const bool forDelete*/)
 {
   if (!isSupported(urlStr))
   {
@@ -190,12 +190,14 @@ long HootApiDbWriter::_openDb(const QString urlStr, const bool forDelete)
   }
   LOG_VARD(_hootdb.getCurrentUserId());
 
-  if (!_overwriteMap && !forDelete && _hootdb.currentUserHasMapWithName(mapName))
-  {
-    throw HootException(
-      "User with ID: " + QString::number(_hootdb.getCurrentUserId()) +
-      " already has map with name: " + mapName);
-  }
+//  LOG_VARD(_overwriteMap);
+//  LOG_VARD(forDelete);
+//  if (!_overwriteMap && !forDelete && _hootdb.currentUserHasMapWithName(mapName))
+//  {
+//    throw HootException(
+//      "User with ID: " + QString::number(_hootdb.getCurrentUserId()) +
+//      " already has map with name: " + mapName);
+//  }
 
   // start the transaction. We'll close it when finalizePartial is called.
   _hootdb.transaction();
@@ -207,7 +209,7 @@ void HootApiDbWriter::deleteMap(QString urlStr)
 {
   LOG_DEBUG("Deleting map at " + urlStr << "...");
 
-  const long mapId = _openDb(urlStr, true);
+  const long mapId = _openDb(urlStr/*, true*/);
   LOG_VARD(mapId);
   if (mapId != -1)
   {

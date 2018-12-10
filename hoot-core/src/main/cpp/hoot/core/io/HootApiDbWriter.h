@@ -161,7 +161,7 @@ private:
    */
   void _startNewChangeSet();
 
-  long _openDb(const QString urlStr, const bool forDelete = false);
+  long _openDb(const QString urlStr/*, const bool forDelete = false*/);
   QString _getMapNameFromUrl(const QString urlStr) const;
 };
 

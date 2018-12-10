@@ -1170,10 +1170,10 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
     mapId = -1;
     // get all map ids with name
     const QString mapName = urlParts[urlParts.size() - 1];
-    LOG_VARD(mapName);
+    LOG_VART(mapName);
 
     mapId = selectMapIdForCurrentUser(mapName);
-    LOG_VARD(mapId);
+    LOG_VART(mapId);
 
     // Here, we don't handle the situation where multiple maps with with the same name are owned
     // by the same user.
@@ -1182,7 +1182,7 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
     {
       // try for public maps
       const std::set<long> mapIds = selectPublicMapIds(mapName);
-      LOG_VARD(mapIds);
+      LOG_VART(mapIds);
       // Here, we don't handle the situation where multiple maps across different users have the
       // same name.
       if (mapIds.size() > 1)
@@ -1195,7 +1195,7 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
       else
       {
         mapId = *mapIds.begin();
-        LOG_VARD(mapId);
+        LOG_VART(mapId);
       }
     }
   }

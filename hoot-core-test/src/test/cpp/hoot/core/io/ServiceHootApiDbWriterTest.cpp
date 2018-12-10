@@ -333,16 +333,7 @@ public:
                    (qlonglong)_mapId);
   }
 
-  struct CompareLess
-  {
-    bool operator() (const long& a, const long& b) const
-    {
-      return a < b;
-    }
-
-    static long max_value() { return std::numeric_limits<long>::max(); }
-  };
-
+  // TODO: merge this into ServicesDbTestUtils::compareRecords
   void compareRecords(QString sql, QString expected, QVariant v1 = QVariant())
   {
     HootApiDb db;
@@ -413,7 +404,9 @@ public:
     writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     // This should not fail, since we allow different users to write maps with the same name (just
     // checking that open succeeds here...not the actual write).
+    writer2.close();
 
+    LOG_DEBUG("Deleting second user...");
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     db.deleteUser(differentUserId);
   }
@@ -422,48 +415,52 @@ public:
   {
     setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteDisabledTest");
 
-    OsmMapPtr map(new OsmMap());
+    // create a map
+    OsmMapPtr map1(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
-    map->addNode(n1);
+    map1->addNode(n1);
 
-    // write a map
-
+    // write the first map
     HootApiDbWriter writer;
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    writer.write(map);
+    writer.write(map1);
+    const long mapId = writer.getMapId();
     writer.close();
 
-    // try to write another map with the same name for the same user with overwrite disabled
+    //create a second map
+    OsmMapPtr map2(new OsmMap());
+    NodePtr n2(new Node(Status::Unknown1, 2, 0.0, 0.0, 10.0));
+    n2->setTag("note", "n2");
+    map2->addNode(n2);
+
+    // try to write the second map to the first map with with overwrite disabled
     HootApiDbWriter writer2;
     writer2.setRemap(false);
     writer2.setIncludeDebug(true);
     writer2.setUserEmail(userEmail());
     writer2.setOverwriteMap(false);
+    writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    writer2.write(map2);
+    writer2.close();
 
-    // It should fail b/c we don't allow multiple map with the same name to be owned by the same
-    // user.
-    QString exceptionMsg("");
-    try
-    {
-      writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-      writer2.close();
-    }
-    LOG_VARD(exceptionMsg);
-    CPPUNIT_ASSERT(exceptionMsg.contains("already has map with name"));
+    //the second map should get appended to the first
+    compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                   HootApiDb::getCurrentNodesTableName(mapId) +
+                   " ORDER BY longitude",
+                   "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                   "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
+                   (qlonglong)mapId);
   }
 
   void twoMapsSameNameSameUserOverwriteEnabledTest()
   {
-    setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteEnbledTest");
+    setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteEnabledTest");
 
+    // create a map
     OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
@@ -476,7 +473,14 @@ public:
     writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(map);
+    const long firstMapId = writer.getMapId();
     writer.close();
+
+    //create a second map
+    OsmMapPtr map2(new OsmMap());
+    NodePtr n2(new Node(Status::Unknown1, 2, 0.0, 0.0, 10.0));
+    n2->setTag("note", "n2");
+    map2->addNode(n2);
 
     // try to write another map with the same name for the same user with overwrite enabled
     HootApiDbWriter writer2;
@@ -484,8 +488,23 @@ public:
     writer2.setRemap(false);
     writer2.setIncludeDebug(true);
     writer2.setUserEmail(userEmail());
-    // It should succeed (just checking open here...not the actual write).
     writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    writer2.write(map2);
+    const long secondMapId = writer2.getMapId();
+    writer2.close();
+
+    // the second map should replace the first
+    compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                   HootApiDb::getCurrentNodesTableName(secondMapId) +
+                   " ORDER BY longitude",
+                   "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
+                   (qlonglong)secondMapId);
+
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    const bool firstMapExists = db.mapExists(firstMapId);
+    db.close();
+    CPPUNIT_ASSERT(!firstMapExists);
   }
 
 private:

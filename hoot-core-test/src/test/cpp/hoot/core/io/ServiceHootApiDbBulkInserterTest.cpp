@@ -47,14 +47,13 @@ namespace hoot
  * OsmApiDbBulkWriter.  Rather than add tests for the unneeded features, its a better idea to
  * rework the inheritance of the two classes as described in HootApiDbBulkWriter to get rid of the
  * unneeded functionality in HootApiDbBulkWriter.
+ *
+ * @todo probably need some more user related tests similar to what's in ServiceHootApiDbWriterTest
  */
 class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbBulkInserterTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
-  CPPUNIT_TEST(writeTwoMapsSameNameDifferentUsers);
-  CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteDisabledTest);
-  CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteEnabledTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -148,159 +147,6 @@ public:
 //      outFile);
     HOOT_FILE_EQUALS(
       "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
-  }
-
-  void writeTwoMapsSameNameDifferentUsers()
-  {
-    setUpTest("ServiceHootApiDbBulkInserterTest-writeTwoMapsSameNameDifferentUsers");
-    const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
-
-    // write a map
-    HootApiDbBulkInserter writer;
-    const QString outFile = outputDir + "/overwriteDataWithDifferentUserTest-out.sql";
-    writer.setOutputFilesCopyLocation(outFile);
-    writer.setStatusUpdateInterval(1);
-    writer.setChangesetUserId(1);
-    writer.setMaxChangesetSize(5);
-    writer.setFileOutputElementBufferSize(3);
-    writer.setValidateData(false);
-    writer.setCreateUser(true);
-    writer.setOverwriteMap(true);
-    writer.setUserEmail(userEmail());
-    writer.setCopyBulkInsertActivated(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    writer.write(ServicesDbTestUtils::createTestMap1());
-    writer.close();
-    _mapId = writer.getMapId();
-
-    // Insert another user
-    HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    const QString differentUserEmail =
-      "ServiceHootApiDbBulkInserterTest-writeTwoMapsSameNameDifferentUsers2";
-    const long differentUserId = db.insertUser(differentUserEmail, differentUserEmail);
-    db.close();
-
-    // Configure another writer with the other user
-    HootApiDbBulkInserter writer2;
-    writer2.setOutputFilesCopyLocation(outputDir + "/overwriteDataWithDifferentUserTest2-out.sql");
-    writer2.setStatusUpdateInterval(1);
-    writer2.setChangesetUserId(1);
-    writer2.setMaxChangesetSize(5);
-    writer2.setFileOutputElementBufferSize(3);
-    writer2.setValidateData(false);
-    writer2.setCreateUser(true);
-    writer2.setOverwriteMap(true);
-    writer2.setUserEmail(differentUserEmail);
-    writer2.setCopyBulkInsertActivated(true);
-    writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    // This should not fail, since we allow different users to write maps with the same name (just
-    // checking that open succeeds here...not the actual write).
-
-    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    db.deleteUser(differentUserId);
-  }
-
-  void twoMapsSameNameSameUserOverwriteDisabledTest()
-  {
-    setUpTest("ServiceHootApiDbBulkInserterTest-twoMapsSameNameSameUserOverwriteDisabledTest");
-    const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
-
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
-    n1->setTag("note", "n1");
-    map->addNode(n1);
-
-    // write a map
-    HootApiDbBulkInserter writer;
-    const QString outFile = outputDir + "/twoMapsSameNameSameUserOverwriteDisabledTest-out.sql";
-    writer.setOutputFilesCopyLocation(outFile);
-    writer.setStatusUpdateInterval(1);
-    writer.setChangesetUserId(1);
-    writer.setMaxChangesetSize(5);
-    writer.setFileOutputElementBufferSize(3);
-    writer.setValidateData(false);
-    writer.setCreateUser(true);
-    writer.setOverwriteMap(true);
-    writer.setUserEmail(userEmail());
-    writer.setCopyBulkInsertActivated(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    writer.write(ServicesDbTestUtils::createTestMap1());
-    writer.close();
-
-    // try to write another map with the same name for the same user with overwrite disabled
-    HootApiDbBulkInserter writer2;
-    writer2.setOutputFilesCopyLocation(
-      outputDir + "/twoMapsSameNameSameUserOverwriteDisabledTest2-out.sql");
-    writer2.setStatusUpdateInterval(1);
-    writer2.setChangesetUserId(1);
-    writer2.setMaxChangesetSize(5);
-    writer2.setFileOutputElementBufferSize(3);
-    writer2.setValidateData(false);
-    writer2.setCreateUser(true);
-    writer2.setOverwriteMap(false);
-    writer2.setUserEmail(userEmail());
-    writer2.setCopyBulkInsertActivated(true);
-
-    // It should fail b/c we don't allow multiple map with the same name to be owned by the same
-    // user.
-    QString exceptionMsg("");
-    try
-    {
-      writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-      writer2.close();
-    }
-    LOG_VARD(exceptionMsg);
-    CPPUNIT_ASSERT(exceptionMsg.contains("already has map with name"));
-  }
-
-  void twoMapsSameNameSameUserOverwriteEnabledTest()
-  {
-    setUpTest("ServiceHootApiDbBulkInserterTest-twoMapsSameNameSameUserOverwriteEnabledTest");
-    const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
-
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
-    n1->setTag("note", "n1");
-    map->addNode(n1);
-
-    // write a map
-    HootApiDbBulkInserter writer;
-    const QString outFile = outputDir + "/twoMapsSameNameSameUserOverwriteEnabledTest-out.sql";
-    writer.setOutputFilesCopyLocation(outFile);
-    writer.setStatusUpdateInterval(1);
-    writer.setChangesetUserId(1);
-    writer.setMaxChangesetSize(5);
-    writer.setFileOutputElementBufferSize(3);
-    writer.setValidateData(false);
-    writer.setCreateUser(true);
-    writer.setOverwriteMap(true);
-    writer.setUserEmail(userEmail());
-    writer.setCopyBulkInsertActivated(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    writer.write(ServicesDbTestUtils::createTestMap1());
-    writer.close();
-
-    // try to write another map with the same name for the same user with overwrite enabled
-    HootApiDbBulkInserter writer2;
-    writer2.setOutputFilesCopyLocation(
-      outputDir + "/twoMapsSameNameSameUserOverwriteEnabledTest2-out.sql");
-    writer2.setStatusUpdateInterval(1);
-    writer2.setChangesetUserId(1);
-    writer2.setMaxChangesetSize(5);
-    writer2.setFileOutputElementBufferSize(3);
-    writer2.setValidateData(false);
-    writer2.setCreateUser(true);
-    writer2.setOverwriteMap(true);
-    writer2.setUserEmail(userEmail());
-    writer2.setCopyBulkInsertActivated(true);
-
-    //open should succeed here (just checking open, not the actual write)
-    writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
   }
 
 private:
