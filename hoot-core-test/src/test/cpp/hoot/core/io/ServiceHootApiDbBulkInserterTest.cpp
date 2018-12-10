@@ -48,7 +48,9 @@ namespace hoot
  * rework the inheritance of the two classes as described in HootApiDbBulkWriter to get rid of the
  * unneeded functionality in HootApiDbBulkWriter.
  *
- * @todo probably need some more user related tests similar to what's in ServiceHootApiDbWriterTest
+ * @todo probably need some more user permission related tests similar to what's in
+ * ServiceHootApiDbWriterTest after consolidating some of the logic between HootApiDbBulkInserter
+ * and HootApiDbWriter open methods
  */
 class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 {
