@@ -485,20 +485,6 @@ public:
   std::set<long> getFolderIdsAssociatedWithMap(const long mapId);
 
   /**
-   * Deletes all folder/map association records for the given map ID
-   *
-   * @param mapId a map ID
-   */
-  void deleteFolderMapMappingsByMapId(const long mapId);
-
-  /**
-   * Deletes all data folder records for the given set of folder IDs
-   *
-   * @param folderIds a collection of folder IDs
-   */
-  void deleteFolders(const std::set<long>& folderIds);
-
-  /**
    * Determines a single map ID associated with a Hootenanny API database URL
    *
    * First attempts to parse the numerical map ID from the URL string, then tries to parse a map
@@ -539,6 +525,8 @@ protected:
   virtual void _resetQueries();
 
 private:
+
+  friend class ServiceHootApiDbReaderTest;
 
   boost::shared_ptr<QSqlQuery> _closeChangeSet;
   boost::shared_ptr<QSqlQuery> _insertChangeSet;
@@ -660,20 +648,19 @@ private:
    * Executes the insert, performs error checking and returns the new ID.
    */
   long _insertRecord(QSqlQuery& query);
-
   void _updateChangesetEnvelope( const ConstNodePtr node );
-
   void _updateChangesetEnvelope(const ConstWayPtr way);
-
   void _updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds);
-
   void _updateChangesetEnvelopeRelationIds(const std::vector<long>& relationIds);
-
   void _updateChangesetEnvelopeRelationNodes(const std::vector<long>& relationIds);
-
   void _updateChangesetEnvelopeRelationWays(const std::vector<long>& relationIds);
 
   static QString _escapeTags(const Tags& tags);
+
+  // These delete methods are for testing purposes only, as they don't do any checks for orphaned
+  // map/folder relationships.  Feel free to harden them and promote to public members, if needed.
+  void _deleteFolderMapMappingsByMapId(const long mapId);
+  void _deleteAllFolders(const std::set<long>& folderIds);
 };
 
 }

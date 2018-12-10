@@ -1363,10 +1363,6 @@ long HootApiDb::selectMapIdForCurrentUser(QString name)
 
   LOG_VART(name);
   LOG_VART(_currUserId);
-//  if (_currUserId == -1)
-//  {
-//    throw HootException("Database not configured with user.");
-//  }
 
   if (_selectMapIdsForCurrentUser == 0)
   {
@@ -1437,14 +1433,14 @@ set<long> HootApiDb::getFolderIdsAssociatedWithMap(const long mapId)
   return result;
 }
 
-void HootApiDb::deleteFolderMapMappingsByMapId(const long mapId)
+void HootApiDb::_deleteFolderMapMappingsByMapId(const long mapId)
 {
   _exec(
     "DELETE FROM " + ApiDb::getFolderMapMappingsTableName() +
     " WHERE map_id = :id", (qlonglong)mapId);
 }
 
-void HootApiDb::deleteFolders(const set<long>& folderIds)
+void HootApiDb::_deleteAllFolders(const set<long>& folderIds)
 {
   if (folderIds.size() == 0)
   {
@@ -1550,10 +1546,6 @@ QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
 bool HootApiDb::currentUserHasMapWithName(const QString mapName)
 {
   LOG_VART(_currUserId);
-//  if (_currUserId == -1)
-//  {
-//    throw HootException("No configured user.");
-//  }
 
   if (_currentUserHasMapWithName == 0)
   {
@@ -1638,10 +1630,6 @@ long HootApiDb::getMapIdByName(const QString name)
 long HootApiDb::getMapIdByNameForCurrentUser(const QString name)
 {
   LOG_VARD(_currUserId);
-//  if (_currUserId == -1)
-//  {
-//    throw HootException("No configured user.");
-//  }
 
   //assuming unique name here
   if (_getMapIdByNameForCurrentUser == 0)

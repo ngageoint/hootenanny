@@ -106,8 +106,8 @@ public:
       HootApiDb database;
       database.open(ServicesDbTestUtils::getDbModifyUrl());
 
-      database.deleteFolderMapMappingsByMapId(_mapId);
-      database.deleteFolders(database.getFolderIdsAssociatedWithMap(_mapId));
+      database._deleteFolderMapMappingsByMapId(_mapId);
+      database._deleteAllFolders(database.getFolderIdsAssociatedWithMap(_mapId));
 
       database.deleteMap(_mapId);
 
