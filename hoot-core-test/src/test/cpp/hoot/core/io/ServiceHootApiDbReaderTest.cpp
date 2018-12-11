@@ -793,7 +793,7 @@ public:
     HootApiDbReader reader;
     OsmMapPtr map(new OsmMap());
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
-    url = url.replace(QString::number(_mapId), _testName);
+    url = url.replace("/" + QString::number(_mapId), "/" + _testName);
     LOG_VARD(url);
 
     // Configure the reader for the original user, and we should be able to read out the map.
@@ -857,7 +857,7 @@ public:
     HootApiDbReader reader;
     OsmMapPtr map(new OsmMap());
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
-    url = url.replace(QString::number(_mapId), _testName);
+    url = url.replace("/" + QString::number(_mapId), "/" + _testName);
     // Configure the reader for the original user, and we should be able to read out the second map.
     // There are two maps with the same name, but they are owned by different users.
     reader.setUserEmail(userEmail());
@@ -922,7 +922,7 @@ public:
     // Configure the reader for no user
     HootApiDbReader reader;
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
-    url = url.replace(QString::number(_mapId), _testName);
+    url = url.replace("/" + QString::number(_mapId), "/" + _testName);
     reader.setUserEmail("");
 
     // Try to read the map out anonymously from its public folder.  This will cause an error, as
