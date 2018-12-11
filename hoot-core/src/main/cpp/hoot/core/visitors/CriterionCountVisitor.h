@@ -28,9 +28,8 @@
 #define CRITERIONCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -38,8 +37,7 @@ namespace hoot
 /**
  * Counts the number of elements matching the criterion
  */
-class CriterionCountVisitor : public ElementConstOsmMapVisitor, public ElementCriterionConsumer,
-    public Configurable
+class CriterionCountVisitor : public ConstElementVisitor, public ElementCriterionConsumer
 {
 public:
 
@@ -55,8 +53,6 @@ public:
   }
 
   virtual void visit(const ConstElementPtr& e);
-
-  virtual void setConfiguration(const Settings& conf);
 
   uint64_t getCount() const { return _count; }
   uint64_t getTotal() const { return _visited; }

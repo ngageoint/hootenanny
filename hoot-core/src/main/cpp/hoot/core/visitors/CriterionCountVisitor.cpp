@@ -26,8 +26,6 @@
  */
 #include "CriterionCountVisitor.h"
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -39,7 +37,6 @@ _count(0),
 _visited(0),
 _pCrit()
 {
-  setConfiguration(conf());
 }
 
 CriterionCountVisitor::CriterionCountVisitor(const boost::shared_ptr<ElementCriterion>& pCrit):
@@ -47,23 +44,12 @@ _count(0),
 _visited(0),
 _pCrit(pCrit)
 {
-  setConfiguration(conf());
-}
-
-void CriterionCountVisitor::setConfiguration(const Settings& conf)
-{
-  ConfigOptions configOptions(conf);
-  (void) configOptions; // Do nothing
 }
 
 void CriterionCountVisitor::visit(const ConstElementPtr& e)
 {
   assert(_pCrit);
-  ElementType type = e->getElementType();
-  long id = e->getId();
-  const boost::shared_ptr<const Element>& ee = _map->getElement(type, id);
-
-  if (_pCrit->isSatisfied(ee))
+  if (_pCrit->isSatisfied(e))
   {
     ++_count;
   }
