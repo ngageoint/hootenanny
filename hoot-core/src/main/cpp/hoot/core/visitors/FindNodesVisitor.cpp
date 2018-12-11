@@ -44,7 +44,6 @@ void FindNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr pNode = boost::dynamic_pointer_cast<const Node>(e);
     if (_pCrit->isSatisfied(e))
     {
       _nodeIds.push_back(e->getId());
