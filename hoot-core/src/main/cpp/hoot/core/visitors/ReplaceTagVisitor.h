@@ -28,7 +28,7 @@
 #define REPLACETAGVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -44,7 +44,7 @@ namespace hoot
  * Feel free to extend this class. Maybe add a flag for case-insensitive
  * matching. Or support for wildcards.
  */
-class ReplaceTagVisitor : public ElementOsmMapVisitor, public Configurable
+class ReplaceTagVisitor : public ElementVisitor, public Configurable
 {
 public:
 

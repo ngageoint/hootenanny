@@ -150,7 +150,8 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     if (element->getElementType() == ElementType::Way)
     {
       vector<WayPtr> newWaysAfterSplit =
-        WaySplitter::split(_map->shared_from_this(), boost::dynamic_pointer_cast<Way>(element), waySplitPoint);
+        WaySplitter::split(_map->shared_from_this(),
+        boost::dynamic_pointer_cast<Way>(element), waySplitPoint);
       for (size_t i = 0; i < newWaysAfterSplit.size(); i++)
       {
         newElementsAfterSplit.push_back(newWaysAfterSplit.at(i));
