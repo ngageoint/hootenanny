@@ -41,13 +41,11 @@ AddRef2Visitor::AddRef2Visitor()
   setConfiguration(conf());
 }
 
-void AddRef2Visitor::visit(const ConstElementPtr& e)
+void AddRef2Visitor::visit(const ElementPtr& e)
 {
-  boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
-
-  if (_informationOnly == false || ee->getTags().getNonDebugCount() > 0)
+  if (_informationOnly == false || e->getTags().getNonDebugCount() > 0)
   {
-    ee->getTags()[MetadataTags::Ref2()] = "todo";
+    e->getTags()[MetadataTags::Ref2()] = "todo";
   }
 }
 

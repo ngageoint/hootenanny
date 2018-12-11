@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 
@@ -43,13 +42,11 @@ AddRef1Visitor::AddRef1Visitor()
   setConfiguration(conf());
 }
 
-void AddRef1Visitor::visit(const ConstElementPtr& e)
+void AddRef1Visitor::visit(const ElementPtr& e)
 {
-  boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
-
-  if (_informationOnly == false || ee->getTags().getNonDebugCount() > 0)
+  if (_informationOnly == false || e->getTags().getNonDebugCount() > 0)
   {
-    ee->getTags()[MetadataTags::Ref1()] = _prefix + QString("%1").arg(_count++, 6, 16, QChar('0'));
+    e->getTags()[MetadataTags::Ref1()] = _prefix + QString("%1").arg(_count++, 6, 16, QChar('0'));
   }
 }
 
