@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "ApiEntityDisplayer.h"
+#include "ApiEntityDisplayInfo.h"
 
 // Hoot
 #include <hoot/core/util/Log.h>
@@ -43,6 +43,9 @@
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/util/ConfigOptions.h>
+
+//  Qt
+#include <QTextStream>
 
 namespace hoot
 {
@@ -66,7 +69,7 @@ static const int MAX_NAME_SIZE = 45;
 static const int MAX_TYPE_SIZE = 18;
 
 template<typename ApiEntity>
-void printApiEntities(const std::string& apiEntityBaseClassName, const QString apiEntityType,
+QString getApiEntities(const std::string& apiEntityBaseClassName, const QString apiEntityType,
                       const bool displayType,
                       //the size of the longest names plus a 3 space buffer; the value passed in
                       //here by callers may have to be adjusted over time for some entity types
@@ -78,6 +81,8 @@ void printApiEntities(const std::string& apiEntityBaseClassName, const QString a
   LOG_VARD(classNames);
   ApiEntityNameComparator<ApiEntity> apiEntityNameComparator;
   std::sort(classNames.begin(), classNames.end(), apiEntityNameComparator);
+  QString buffer;
+  QTextStream ts(&buffer);
 
   for (size_t i = 0; i < classNames.size(); i++)
   {
@@ -114,44 +119,25 @@ void printApiEntities(const std::string& apiEntityBaseClassName, const QString a
       }
       const int indentAfterName = maxNameSize - name.size();
       const int indentAfterType = MAX_TYPE_SIZE - apiEntityType.size();
-      QString line = "  " + name + QString(indentAfterName, ' ');
+      QString line_buffer;
+      QTextStream line(&line_buffer);
+      line << "  " << name << QString(indentAfterName, ' ');
       if (displayType)
       {
-        line += apiEntityType + QString(indentAfterType, ' ');
+        line << apiEntityType << QString(indentAfterType, ' ');
       }
-      line += apiEntityInfo->getDescription();
-      LOG_VARD(line);
-      std::cout << line << std::endl;
+      line << apiEntityInfo->getDescription();
+      LOG_VARD(line.readAll());
+      ts << line.readAll() << endl;
     }
   }
-  std::cout << std::endl;
-}
-
-QString ApiEntityDisplayer::_apiEntityTypeForBaseClass(const QString className)
-{
-  LOG_VARD(className);
-  if (className.toStdString() == OsmMapOperation::className() ||
-      Factory::getInstance().hasBase<OsmMapOperation>(className.toStdString()))
-  {
-    return "operation";
-  }
-  else if (className.toStdString() == ElementVisitor::className() ||
-           Factory::getInstance().hasBase<ElementVisitor>(className.toStdString()))
-  {
-    return "visitor";
-  }
-  else if (className.toStdString() == ConstElementVisitor::className() ||
-           Factory::getInstance().hasBase<ConstElementVisitor>(className.toStdString()))
-  {
-    return "visitor (const)";
-  }
-  return "";
+  return ts.readAll();
 }
 
 //matchers/mergers have a more roundabout way to get at the description, so we'll create a new
 //display method for them
 template<typename ApiEntity>
-void printApiEntities2(const std::string& apiEntityClassName)
+QString getApiEntities2(const std::string& apiEntityClassName)
 {
   //the size of the longest names plus a 3 space buffer
   const int maxNameSize = 48;
@@ -184,26 +170,49 @@ void printApiEntities2(const std::string& apiEntityClassName)
         QString line = "  " + name + QString(indentAfterName, ' ');
         line += description.description;
         if (description.experimental)
-        {
           line += " (experimental)";
-        }
         LOG_VARD(line);
         output.append(line);
       }
     }
   }
-
   output.sort();
+
+  QString buffer;
+  QTextStream ts(&buffer);
   for (int i = 0; i < output.size(); i++)
-  {
-    std::cout << output.at(i) << std::endl;
-  }
+    ts << output.at(i) << endl;
+
+  return ts.readAll();
 }
 
-void ApiEntityDisplayer::displayCleaningOps()
+QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString className)
+{
+  LOG_VARD(className);
+  if (className.toStdString() == OsmMapOperation::className() ||
+      Factory::getInstance().hasBase<OsmMapOperation>(className.toStdString()))
+  {
+    return "operation";
+  }
+  else if (className.toStdString() == ElementVisitor::className() ||
+           Factory::getInstance().hasBase<ElementVisitor>(className.toStdString()))
+  {
+    return "visitor";
+  }
+  else if (className.toStdString() == ConstElementVisitor::className() ||
+           Factory::getInstance().hasBase<ConstElementVisitor>(className.toStdString()))
+  {
+    return "visitor (const)";
+  }
+  return "";
+}
+
+QString ApiEntityDisplayInfo::getDisplayInfoCleaningOps()
 {
   ConfigOptions opts = ConfigOptions(conf());
   const QStringList cleaningOps = opts.getMapCleanerTransforms();
+  QString buffer;
+  QTextStream ts(&buffer);
   for (int i = 0; i < cleaningOps.size(); i++)
   {   
     QString className = cleaningOps[i];
@@ -256,29 +265,29 @@ void ApiEntityDisplayer::displayCleaningOps()
     QString line = "  " + name + QString(indentAfterName, ' ');
     line += apiEntityType + QString(indentAfterType, ' ');
     line += apiEntityInfo->getDescription();
-    LOG_VARD(line);
-    std::cout << line << std::endl;
+    ts << line << endl;
   }
-  std::cout << std::endl;
+  return ts.readAll();
 }
 
-void ApiEntityDisplayer::display(const QString apiEntityType)
+QString ApiEntityDisplayInfo::getDisplayInfo(const QString apiEntityType)
 {
   DisableLog dl;
   QString msg = " (prepend 'hoot::' before using";
+  QString buffer;
+  QTextStream ts(&buffer);
   if (apiEntityType == "operators")
   {
     msg += "; * = implements SingleStatistic):";
     msg.prepend("Operators");
-    std::cout << msg << std::endl << std::endl;
-
-    printApiEntities<ElementCriterion>(
+    ts << msg << endl;
+    ts << getApiEntities<ElementCriterion>(
       ElementCriterion::className(), "criterion", true, MAX_NAME_SIZE);
-    printApiEntities<OsmMapOperation>(
+    ts << getApiEntities<OsmMapOperation>(
       OsmMapOperation::className(), "operation", true, MAX_NAME_SIZE);
     //would like to combine these visitors into one method call somehow
-    printApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
-    printApiEntities<ConstElementVisitor>(
+    ts << getApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
+    ts << getApiEntities<ConstElementVisitor>(
       ConstElementVisitor::className(), "visitor (const)", true, MAX_NAME_SIZE);
   }
   // this is pretty repetitive :-(
@@ -286,47 +295,48 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
   {
     msg += "):";
     msg.prepend("Feature Extractors");
-    std::cout << msg << std::endl << std::endl;
-    printApiEntities<FeatureExtractor>(
+    ts << msg << endl;
+    ts << getApiEntities<FeatureExtractor>(
       FeatureExtractor::className(), "feature extractor", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "matchers")
   {
     msg += "):";
     msg.prepend("Conflate Matchers");
-    std::cout << msg << std::endl << std::endl;
-    printApiEntities2<MatchCreator>(MatchCreator::className());
+    ts << msg << endl;
+    ts << getApiEntities2<MatchCreator>(MatchCreator::className());
   }
   else if (apiEntityType == "mergers")
   {
     msg += "):";
     msg.prepend("Conflate Mergers");
-    std::cout << msg << std::endl << std::endl;
-    printApiEntities2<MergerCreator>(MergerCreator::className());
+    ts << msg << endl;
+    ts << getApiEntities2<MergerCreator>(MergerCreator::className());
   }
   else if (apiEntityType == "tag-mergers")
   {
     msg += "):";
     msg.prepend("Tag Mergers");
-    std::cout << msg << std::endl << std::endl;
-    printApiEntities<TagMerger>(TagMerger::className(), "tag merger", false, MAX_NAME_SIZE - 10);
+    ts << msg << endl;
+    ts << getApiEntities<TagMerger>(TagMerger::className(), "tag merger", false, MAX_NAME_SIZE - 10);
   }
   else if (apiEntityType == "string-comparators")
   {
     msg += "):";
     msg.prepend("String Comparators");
-    std::cout << msg << std::endl << std::endl;
-    printApiEntities<StringDistance>(
+    ts << msg << endl;
+    ts << getApiEntities<StringDistance>(
       StringDistance::className(), "string comparator", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "value-aggregators")
   {
     msg += "):";
     msg.prepend("Value Aggregators");
-    std::cout << msg << std::endl << std::endl;
-    printApiEntities<ValueAggregator>(
+    ts << msg << endl;
+    ts << getApiEntities<ValueAggregator>(
       ValueAggregator::className(), "value aggregator", false, MAX_NAME_SIZE - 10);
   }
+  return ts.readAll();
 }
 
 }

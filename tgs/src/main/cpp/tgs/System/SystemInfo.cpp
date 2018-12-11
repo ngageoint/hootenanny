@@ -149,9 +149,4 @@ namespace Tgs
 
     return ss.str();
   }
-
-  void SystemInfo::printMemoryUsage()
-  {
-    std::cout << getMemoryUsageString() << std::endl;
-  }
 }

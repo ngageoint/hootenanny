@@ -90,7 +90,7 @@ public:
 
     QString sep = "\t";
     // read the conflation status from the file.
-    conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
+    conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
 
     QList< QList<SingleStat> > allStats;
 

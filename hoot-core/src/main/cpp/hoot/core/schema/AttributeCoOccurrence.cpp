@@ -175,9 +175,9 @@ public:
             QString name1 = e->getTags()["name"];
             QString name2 = _map->getElement(*eid)->getTags()["name"];
 
-            QString kvpNull = OsmSchema::getInstance().toKvp("name","<NULL>");
-            QString kvpNonNull = OsmSchema::getInstance().toKvp("name","<NON NULL>");
-            QString kvpSame = OsmSchema::getInstance().toKvp("name","<SIMILAR>");
+            QString kvpNull = OsmSchema::toKvp("name","<NULL>");
+            QString kvpNonNull = OsmSchema::toKvp("name","<NON NULL>");
+            QString kvpSame = OsmSchema::toKvp("name","<SIMILAR>");
 
             if (name1 == "")
             {

@@ -36,6 +36,8 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Factory.h>
 
+#include <QTextStream>
+
 namespace hoot
 {
 
@@ -59,17 +61,17 @@ std::map<QString, int> TagDistribution::getTagCounts(const QStringList inputs)
   return tagCounts;
 }
 
-void TagDistribution::printTagCounts(const std::map<QString, int>& tagCounts)
+QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCounts)
 {
-  //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
-  std::cout << std::endl;
+  QString buffer;
+  QTextStream ts(&buffer);
   if (tagCounts.size() == 0)
   {
-    std::cout << "No tags with keys: " << _tagKeys.join(",") << " were found." << std::endl;
+    ts << "No tags with keys: " << _tagKeys.join(",") << " were found." << endl;
   }
   else
   {
-    std::cout << "Total tag value count: " << _total << std::endl;
+    ts << "Total tag value count: " << _total << endl;
 
     int ctr = 0;
     if (!_sortByFrequency)
@@ -80,8 +82,8 @@ void TagDistribution::printTagCounts(const std::map<QString, int>& tagCounts)
         const QString tagValue = itr->first;
         const int count = itr->second;
         const double percentageOfTotal = (double)count / (double)_total;
-        std::cout << tagValue << " : " << QString::number(count) << " (" <<
-          QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << std::endl;
+        ts << tagValue << " : " << QString::number(count) << " ("
+           << QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << endl;
 
         ctr++;
         if (ctr == _limit)
@@ -99,8 +101,8 @@ void TagDistribution::printTagCounts(const std::map<QString, int>& tagCounts)
         const QString tagValue = itr->second;
         const int count = itr->first;
         const double percentageOfTotal = (double)count / (double)_total;
-        std::cout << tagValue << " : " << QString::number(count) << " (" <<
-          QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << std::endl;
+        ts << tagValue << " : " << QString::number(count) << " ("
+           << QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << endl;
 
         ctr++;
         if (ctr == _limit)
@@ -110,6 +112,7 @@ void TagDistribution::printTagCounts(const std::map<QString, int>& tagCounts)
       }
     }
   }
+  return ts.readAll();
 }
 
 void TagDistribution::_countTags(const QString input, std::map<QString, int>& tagCounts)
@@ -187,11 +190,16 @@ void TagDistribution::_countTags(const QString input, std::map<QString, int>& ta
       const long runningTotal = _total + elementCtr;
       if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
       {
-        QString msg = "Processed " + QString::number(runningTotal) + " elements.";
-        PROGRESS_INFO(msg);
+        PROGRESS_INFO("Processed " << QString::number(runningTotal) << " elements.");
       }
     }
   }
+
+  if (_total > 0)
+  {
+    LOG_INFO("Processed " << QString::number(_total) << " elements.");
+  }
+
   LOG_VART(inputTotal);
 
   reader->finalizePartial();

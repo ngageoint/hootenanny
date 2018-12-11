@@ -710,23 +710,8 @@ void MultiaryMatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 QString MultiaryMatchComparator::toString() const
 {
   QString result = _nodeBasedStatsResult;
-  int total = 0;
-  int correct = 0;
 
   result += "\n=== Edge-based Scoring\n\n";
-
-  for (int i = 0; i < 3; i++)
-  {
-    for (int j = 0; j < 3; j++)
-    {
-      total += _confusion[i][j];
-      if (i == j)
-      {
-        correct += _confusion[i][j];
-      }
-    }
-  }
-
   result += _printConfusionTable(_confusion, true);
 
   result += "\n";

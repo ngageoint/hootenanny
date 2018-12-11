@@ -242,8 +242,8 @@ bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapP
     LOG_INFO("Miss:");
     for (set<ElementId>::const_iterator it = s.begin(); it != s.end(); ++it)
     {
-      cout << "#############" << endl;
-      cout << in->getElement(*it)->getTags().toString() << endl;
+      LOG_INFO("#############");
+      LOG_INFO(in->getElement(*it)->getTags().toString());
     }
   }
 
@@ -723,8 +723,6 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 QString MatchComparator::toString() const
 {
   QString result;
-  int total = 0;
-  int correct = 0;
 
   QString left[3];
   // weird markup makes a pretty table in redmine.
@@ -745,11 +743,6 @@ QString MatchComparator::toString() const
       else
       {
         result += QString(" |%1").arg(_confusion[i][j], 6, 10);
-      }
-      total += _confusion[i][j];
-      if (i == j)
-      {
-        correct += _confusion[i][j];
       }
     }
     result += "  |\n";

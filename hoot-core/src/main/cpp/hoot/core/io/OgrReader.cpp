@@ -879,7 +879,7 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
     }
 
     result.reset(new Envelope());
-    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::getInstance().createWgs84Projection();
+    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
     boost::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
@@ -932,11 +932,6 @@ void OgrReaderInternal::open(const QString path, QString layer)
     _pendingLayers = getLayersWithGeometry(path);
   }
   LOG_VART(_pendingLayers);
-  if (Log::getInstance().getLevel() == Log::Info)
-  {
-    std::cout << ".";
-    std::cout.flush();
-  }
 }
 
 void OgrReaderInternal::_openLayer(QString path, QString layer)
