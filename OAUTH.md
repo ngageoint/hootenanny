@@ -33,6 +33,6 @@ All services are now wrapped by authentication and many of the service endpoints
 * Public datasets can be clipped, conflated, and exported by non-owning users, but the destination output folder must be owned by the user.
 * The data within a public dataset, accessed through the Hoot Map API, is editable by any authenticated user.  This allows multiple users to work through conflation reviews.
 * There is a python [script](https://github.com/ngageoint/hootenanny/blob/develop/scripts/database/UpdateFolderOwnerVisibility.py) for migrating existing folders and maps from the dummy user to a real user (once that user has logged in).  
-
+* Public folders and their contents are shaded blue.  Folders and sub-folders cannot mix visibility.  A change to one affects the entire tree.
 
 :tada: Thanks to great work by @sumarlidason and @jbronn
