@@ -102,7 +102,7 @@ pipeline {
             when { expression { return params.Build } }
             steps {
                 // Perform remainder of provisioning
-                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
+                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
             }       
         }
         stage("Core Tests") {

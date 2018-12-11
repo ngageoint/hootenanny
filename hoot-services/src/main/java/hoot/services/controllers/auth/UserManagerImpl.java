@@ -130,6 +130,10 @@ public class UserManagerImpl implements UserManager {
         user.setId(Long.parseLong(userElement.getAttribute("id")));
         user.setProviderCreatedAt(parseTimestamp(userElement.getAttribute("account_created")));
         user.setHootservicesLastAuthorize(new Timestamp(System.currentTimeMillis()));
+        if(user.getId() <= 0L) {
+            logger.warn("empty -or- invalid user profiles can result from misconfigured oauth, check hoot-services.conf::oauthProviderURL");
+            throw new InvalidUserProfileException(xml);
+        }
         return user;
     }
     private void attributeSessionWithUser(String sessionId, Users u) {
