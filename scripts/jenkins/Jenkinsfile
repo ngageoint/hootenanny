@@ -65,9 +65,7 @@ pipeline {
             when { 
                 anyOf {
                     expression { return params.Configure_Tests }
-                    // Work around to run certain tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
-                    // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
-                    expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 } 
+                    triggeredBy 'cron'
                 }
             }
             steps {
@@ -81,7 +79,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..22 }
+                        triggeredBy 'cron'
                         branch 'develop'
                     }
                 }
@@ -130,7 +128,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 }
+                        triggeredBy 'cron'
                         branch 'develop'
                     }
                 }
