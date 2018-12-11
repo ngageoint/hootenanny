@@ -44,7 +44,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveInvalidRelationVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidRelationVisitor)
 
 RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor() :
 _numMembersRemoved(0)

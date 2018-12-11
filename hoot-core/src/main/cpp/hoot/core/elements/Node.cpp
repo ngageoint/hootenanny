@@ -124,7 +124,7 @@ void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) cons
 
 void Node::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
-  filter.visit(map.getNode(getId()));
+  filter.visit(boost::dynamic_pointer_cast<const Node>(map.getNode(getId())));
 }
 
 }

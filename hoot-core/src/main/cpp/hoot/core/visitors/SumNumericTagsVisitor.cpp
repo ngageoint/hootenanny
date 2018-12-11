@@ -34,7 +34,7 @@ namespace hoot
 
 unsigned int SumNumericTagsVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, SumNumericTagsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, SumNumericTagsVisitor)
 
 SumNumericTagsVisitor::SumNumericTagsVisitor() :
 _sum(0.0)

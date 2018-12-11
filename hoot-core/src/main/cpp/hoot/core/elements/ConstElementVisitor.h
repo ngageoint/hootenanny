@@ -29,8 +29,7 @@
 #define CONSTELEMENTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
@@ -41,21 +40,21 @@ namespace hoot
  *
  * This is also used by hoot::VisitorOp and hoot::NamedOp.
  */
-class ConstElementVisitor : public ApiEntityInfo
+class ConstElementVisitor : public ElementVisitor
 {
 public:
 
-  ConstElementVisitor() : _numAffected(0) {}
+  ConstElementVisitor() {}
   virtual ~ConstElementVisitor() {}
 
   static std::string className() { return "hoot::ConstElementVisitor"; }
 
   virtual void visit(const ConstElementPtr& e) = 0;
 
-protected:
-
-  // This will only be used by those implementing OperationStatusInfo.
-  long _numAffected;
+  virtual void visit(const ElementPtr& e)
+  {
+    visit(boost::dynamic_pointer_cast<const Element>(e));
+  }
 };
 
 typedef boost::shared_ptr<ConstElementVisitor> ConstElementVisitorPtr;

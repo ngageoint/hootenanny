@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, CriterionCountVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, CriterionCountVisitor)
 
 CriterionCountVisitor::CriterionCountVisitor():
 _count(0),

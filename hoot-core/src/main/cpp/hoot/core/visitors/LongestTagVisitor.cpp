@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, LongestTagVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, LongestTagVisitor)
 
 void LongestTagVisitor::visit(const ConstElementPtr& e)
 {

@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, AddressCountVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, AddressCountVisitor)
 
 AddressCountVisitor::AddressCountVisitor() :
 _totalCount(0)

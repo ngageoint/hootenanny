@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, FilteredVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, FilteredVisitor)
 
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitor& visitor) :
   _criterion(&criterion),

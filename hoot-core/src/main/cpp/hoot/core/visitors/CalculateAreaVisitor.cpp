@@ -38,7 +38,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateAreaVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, CalculateAreaVisitor)
 
 Meters CalculateAreaVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
 {

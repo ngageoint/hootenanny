@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, AddGeometryTypeVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, AddGeometryTypeVisitor)
 
 AddGeometryTypeVisitor::AddGeometryTypeVisitor()
 {

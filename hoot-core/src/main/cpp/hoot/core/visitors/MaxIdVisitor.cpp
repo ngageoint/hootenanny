@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, MaxIdVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, MaxIdVisitor)
 
 void MaxIdVisitor::visit(const ConstElementPtr& e)
 {

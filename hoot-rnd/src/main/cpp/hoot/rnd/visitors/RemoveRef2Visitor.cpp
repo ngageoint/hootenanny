@@ -37,7 +37,7 @@ namespace hoot
 
 unsigned int RemoveRef2Visitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveRef2Visitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveRef2Visitor)
 
 QStringList RemoveRef2Visitor::_ref2Keys;
 QMutex RemoveRef2Visitor::_mutex;

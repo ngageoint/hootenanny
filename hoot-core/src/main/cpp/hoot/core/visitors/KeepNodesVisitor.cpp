@@ -39,7 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepNodesVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, KeepNodesVisitor)
 
 class FindAllNodesVisitor : public ConstElementVisitor
 {

@@ -34,7 +34,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, WorstCircularErrorVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, WorstCircularErrorVisitor)
 
 void WorstCircularErrorVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
