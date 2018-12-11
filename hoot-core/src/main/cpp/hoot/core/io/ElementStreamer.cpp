@@ -194,25 +194,6 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
 
         filteredInputStream.reset(new ElementVisitorInputStream(filteredInputStream, visitor));
       }
-//      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString()))
-//      {
-//        LOG_INFO("Visiting input with: " << opName << "...");
-//        ConstElementVisitorPtr visitor(
-//          Factory::getInstance().constructObject<ConstElementVisitor>(opName));
-
-//        boost::shared_ptr<Configurable> visConfig;
-//        if (visitor.get())
-//        {
-//          visConfig = boost::dynamic_pointer_cast<Configurable>(visitor);
-//        }
-//        LOG_VART(visConfig.get());
-//        if (visConfig.get())
-//        {
-//          visConfig->setConfiguration(conf());
-//        }
-
-//        filteredInputStream.reset(new ConstElementVisitorInputStream(filteredInputStream, visitor));
-//      }
       else
       {
         throw HootException("An unsupported operation was passed to a streaming conversion.");

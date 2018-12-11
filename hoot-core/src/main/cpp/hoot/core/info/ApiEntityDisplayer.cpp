@@ -33,7 +33,6 @@
 #include <hoot/core/visitors/SingleStatistic.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-//#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
@@ -140,11 +139,6 @@ QString ApiEntityDisplayer::_apiEntityTypeForBaseClass(const QString className)
   {
     return "visitor";
   }
-//  else if (className.toStdString() == ConstElementVisitor::className() ||
-//           Factory::getInstance().hasBase<ConstElementVisitor>(className.toStdString()))
-//  {
-//    return "visitor (const)";
-//  }
   return "";
 }
 
@@ -230,13 +224,6 @@ void ApiEntityDisplayer::displayCleaningOps()
       apiEntityInfo = boost::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
       singleStat = boost::dynamic_pointer_cast<SingleStatistic>(apiEntity);
     }
-//    else if (Factory::getInstance().hasBase<ConstElementVisitor>(className.toStdString()))
-//    {
-//      boost::shared_ptr<ConstElementVisitor> apiEntity(
-//        Factory::getInstance().constructObject<ConstElementVisitor>(className.toStdString()));
-//      apiEntityInfo = boost::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
-//      singleStat = boost::dynamic_pointer_cast<SingleStatistic>(apiEntity);
-//    }
 
     if (!apiEntityInfo.get())
     {
@@ -278,8 +265,6 @@ void ApiEntityDisplayer::display(const QString apiEntityType)
       OsmMapOperation::className(), "operation", true, MAX_NAME_SIZE);
     //would like to combine these visitors into one method call somehow
     printApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
-//    printApiEntities<ConstElementVisitor>(
-//      ConstElementVisitor::className(), "visitor (const)", true, MAX_NAME_SIZE);
   }
   // this is pretty repetitive :-(
   else if (apiEntityType == "feature-extractors")
