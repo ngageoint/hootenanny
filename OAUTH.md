@@ -24,8 +24,15 @@ This will require registering a new client application with the rails app and th
 oauthProviderURL=https://api.openstreetmap.org
 ```
 
-While all services are now wrapped by authentication, none of the service endpoints have yet been migrated to be user aware.
-The plan is for new datasets to be private to the user by default.  Existing datasets owned by the dummy test user will be public.
-We will add a method for making private datasets and their review bookmarks public.
+## Public vs Private Visibility
+All services are now wrapped by authentication and many of the service endpoints have been migrated to be user aware.
+
+>The plan is for new datasets to be private to the user by default.  Existing datasets owned by the dummy test user will be public.  We will add a method for making private datasets and their review bookmarks public.
+
+* During implementation, it was decided that datasets would not have an inherent visibility.  Instead, folders have visibility and datasets inherit visibility from their containing folder.  The root folder is always public.  Data and folders that are public are read-only by non-owners with respect to modification (removing, moving, renaming, writing output to etc.)
+* Public datasets can be clipped, conflated, and exported by non-owning users, but the destination output folder must be owned by the user.
+* The data within a public dataset, accessed through the Hoot Map API, is editable by any authenticated user.  This allows multiple users to work through conflation reviews.
+* There is a python [script](https://github.com/ngageoint/hootenanny/blob/develop/scripts/database/UpdateFolderOwnerVisibility.py) for migrating existing folders and maps from the dummy user to a real user (once that user has logged in).  
+
 
 :tada: Thanks to great work by @sumarlidason and @jbronn
