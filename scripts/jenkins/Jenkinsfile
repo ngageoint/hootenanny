@@ -102,6 +102,7 @@ pipeline {
         stage("Build") {
             when { expression { return params.Build } }
             steps {
+                sh 'echo "export BUILD_VERBOSE=$BUILD_VERBOSE" >> /etc/environment'
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
             }       
