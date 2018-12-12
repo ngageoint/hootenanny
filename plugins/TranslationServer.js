@@ -792,7 +792,6 @@ var getFuzzyStrings = function(searchStr) {
 
 var schemaError = function(params) {
     var msg = params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found';
-    //console.error(msg);
     throw new Error(msg);
 }
 
