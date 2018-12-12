@@ -1120,7 +1120,7 @@ tds61 = {
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
         // AK030 - Amusement Parks
-        // F_CODE translation == tourism but FFN translation could be leisure. 
+        // F_CODE translation == tourism but FFN translation could be leisure.
         // E.g. water parks
         if (attrs.F_CODE == 'AK030')
         {
@@ -1235,7 +1235,7 @@ tds61 = {
         // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
-            ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.communication == 'line'","t['cable:type'] = 'communication'"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
@@ -1276,7 +1276,7 @@ tds61 = {
             ["t.railway == 'crossing'","t['transport:type'] = 'railway'; a.F_CODE = 'AQ062'; delete t.railway"],
             ["t.resource","t.raw_material = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
-            ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
+            // ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
             ["t['tower:type'] == 'minaret' && t.man_made == 'tower'","delete t.man_made"],
             ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
@@ -1315,7 +1315,7 @@ tds61 = {
             'artwork', 'atm', 'bbq', 'bench', 'bicycle_parking', 'bicycle_rental', 'biergarten', 'boat_sharing',
             'car_sharing', 'charging_station', 'clock', 'compressed_air', 'dog_bin', 'dog_waste_bin', 'drinking_water',
             'drinking_water', 'emergency_phone', 'fire_hydrant', 'fountain', 'game_feeding', 'grass_strip', 'grit_bin',
-            'hunting_stand', 'hydrant', 'life_ring', 'loading_dock', 'marketplace', 'nameplate', 'park', 'parking',
+            'hunting_stand', 'hydrant', 'life_ring', 'loading_dock', 'nameplate', 'park', 'parking',
             'parking_entrance', 'parking_space', 'picnic_table', 'post_box', 'recycling', 'street_light', 'swimming_pool',
             'taxi', 'trailer_park', 'tricycle_station', 'vending_machine', 'waste_basket', 'waste_disposal', 'water',
             'water_point', 'watering_place', 'yes', 'ferry_terminal',
@@ -1360,7 +1360,7 @@ tds61 = {
         }
 
         // Adding a custom rule for malls to override the rules above.
-        // All of the other "shops" are buildings 
+        // All of the other "shops" are buildings
         if (tags.shop == 'mall') attrs.F_CODE = 'AG030';
 
         // Churches etc
@@ -1525,7 +1525,7 @@ tds61 = {
                     if (geometryType == 'Point')
                     {
                         attrs.F_CODE = 'AL020'; // Built Up Area
-                        delete tags.place;                        
+                        delete tags.place;
                     }
                     break;
 
