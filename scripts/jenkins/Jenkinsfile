@@ -103,7 +103,7 @@ pipeline {
             when { expression { return params.Build } }
             steps {
                 sh """
-                    vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment
+                    vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'
                 """
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
