@@ -275,12 +275,10 @@ void HilbertRTree::_greedyShuffle(int parentId)
   // swap children two levels down
   if (parent->getChildCount() >= 2)
   {
-    double netImprovement = 0.0;
     // randomly choose child based on overlap weight
     for (int i = 0; i < _shuffleSize; i++)
     {
-      double improvement = _swapGrandChildNodes(parentId, overlaps);
-      netImprovement += improvement;
+      _swapGrandChildNodes(parentId, overlaps);
     }
   }
 }

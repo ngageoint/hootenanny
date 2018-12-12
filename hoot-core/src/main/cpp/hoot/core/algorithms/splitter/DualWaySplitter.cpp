@@ -82,8 +82,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DualWaySplitter)
 
 DualWaySplitter::DualWaySplitter()
 { 
-  ConfigOptions opts = ConfigOptions();
-  if (opts.getDualWaySplitterDrivingSideDefaultValue().toLower() == "left")
+  if (ConfigOptions::getDualWaySplitterDrivingSideDefaultValue().toLower() == "left")
   {
     _drivingSide = DualWaySplitter::Left;
     LOG_DEBUG("Assuming drives on left.");
@@ -93,7 +92,7 @@ DualWaySplitter::DualWaySplitter()
     _drivingSide = DualWaySplitter::Right;
     LOG_DEBUG("Assuming drives on right.");
   }
-  _defaultSplitSize = opts.getDualWaySplitterSplitSizeDefaultValue();
+  _defaultSplitSize = ConfigOptions::getDualWaySplitterSplitSizeDefaultValue();
 }
 
 DualWaySplitter::DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
@@ -277,19 +276,18 @@ boost::shared_ptr<OsmMap> DualWaySplitter::splitAll()
   bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
   {
-    if (Log::getInstance().isInfoEnabled() && wayIds.size() % 1000 == 0 && wayIds.size() > 0)
+    if (wayIds.size() % 1000 == 0 && wayIds.size() > 0)
     {
-      cout << "  splitting " << i << " / " << wayIds.size() << "\r";
-      cout.flush();
+      PROGRESS_DEBUG("  splitting " << i << " / " << wayIds.size());
       todoLogged = true;
     }
     _splitWay(wayIds[i]);
   }
   _numAffected = wayIds.size();
 
-  if (Log::getInstance().isInfoEnabled() && todoLogged)
+  if (todoLogged)
   {
-    cout << endl;
+    LOG_DEBUG("  splitting " << wayIds.size() << " / " << wayIds.size());
   }
 
   //  Remove the un-needed nodes from the original way that aren't part of any other way now

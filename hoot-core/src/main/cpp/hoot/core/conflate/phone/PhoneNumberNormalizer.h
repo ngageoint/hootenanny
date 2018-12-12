@@ -37,7 +37,6 @@
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
-using namespace i18n::phonenumbers;
 
 namespace hoot
 {
@@ -82,7 +81,7 @@ private:
   //as phone numbers
   bool _searchInText;
   //format to use during normalization; see ConfigOptions
-  PhoneNumberUtil::PhoneNumberFormat _format;
+  i18n::phonenumbers::PhoneNumberUtil::PhoneNumberFormat _format;
   int _numNormalized;
 };
 

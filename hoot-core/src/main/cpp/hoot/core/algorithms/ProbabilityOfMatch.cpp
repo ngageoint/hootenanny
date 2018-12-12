@@ -110,7 +110,7 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
     Point* point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
     if (debug)
     {
-      cout << "distance " << ls2->distance(point) << endl;
+      LOG_INFO("distance " << ls2->distance(point));
     }
     double d = ls2->distance(point);
     distanceSum += d;
@@ -135,8 +135,8 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
   if (debug)
   {
-    LOG_INFO("" << "distanceMean: " << distanceMean);
-    LOG_INFO("" << "  s1: " << s1 << " s2: " << s2 << " sigma: " << sigma << " p: " << p);
+    LOG_INFO("distanceMean: " << distanceMean);
+    LOG_INFO("  s1: " << s1 << " s2: " << s2 << " sigma: " << sigma << " p: " << p);
   }
 
   return p;

@@ -70,8 +70,6 @@ using namespace std;
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
 
-#define SQR(x) ((x) * (x))
-
 namespace hoot
 {
 

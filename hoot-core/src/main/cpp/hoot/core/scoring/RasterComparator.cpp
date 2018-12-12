@@ -164,14 +164,12 @@ void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& imag
   cv::Mat in(cvSize(_width, _height), CV_32FC1);
   image = cv::Mat(cvSize(_width, _height), CV_32FC1);
 
-  double rawSum = 0.0;
   for (int y = 0; y < _height; y++)
   {
     float* row = in.ptr<float>(y);
     for (int x = 0; x < _width; x++)
     {
       row[x] = qRed(qImage.pixel(x, y)) * _pixelSize;
-      rawSum += row[x] * _pixelSize;
     }
   }
 

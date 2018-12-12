@@ -91,7 +91,7 @@ public:
 
       ImplicitTagRulesSqliteReader dbReader;
       dbReader.open(args[0].trimmed());
-      dbReader.printStats();
+      std::cout << dbReader.getStats();
       dbReader.close();
     }
     else

@@ -1,87 +1,114 @@
-20:54:48.010 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 153) Hoot instance reinit...
-20:54:48.012 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp(  99) Reading layers...
-20:54:48.012 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/translation_assistant/cali-translation-tdsv61.js
-20:54:48.012 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: test-files/translation_assistant/cali-translation-tdsv61.js
-20:54:48.118 DEBUG ...hoot/core/schema/OsmSchema.cpp(2009) Loading translation files...
-20:54:48.233 DEBUG ...ot/js/JavaScriptTranslator.cpp( 298) Translation script loaded.
-20:54:48.240 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 925) Opening data source for layer: cali-test
-20:54:48.240 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 925) Opening data source for layer: cali-test
-20:54:48.279 DEBUG ...cpp/hoot/core/io/OgrReader.cpp(1085) Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357
-20:54:48.450 DEBUG ...oot/core/util/MapProjector.cpp( 356) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
-20:54:48.450 DEBUG ...oot/core/util/MapProjector.cpp( 374) Planar projection has max distance error 1.12m (0.11%) and max angular error: 0.00° test distance: 1000.00m
-20:54:48.450 DEBUG ...oot/core/util/MapProjector.cpp( 375) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
-20:54:48.450 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 2339        20:54:48.451 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 2339        20:54:48.451 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 2000 / 2339        
-20:54:48.451 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  65) Applying operation: hoot::MergeNearbyNodes
-20:54:48.451 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 14ms        
-20:54:48.466 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  81) map->getElementCount(): 1770
-20:54:48.466 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  65) Applying operation: hoot::BuildingPartMergeOp
-Ways: 0 / 357        Ways: 357 / 357        
-Relations: 0 / 0        
-Combining Parts: 0 / 0        
-20:54:48.471 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  81) map->getElementCount(): 1770
-20:54:48.471 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 1413        20:54:48.471 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 1413        
-20:54:48.472 INFO  ...ore/io/OsmMapWriterFactory.cpp( 136) Writing map to test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61.osm...
-20:54:48.473 DEBUG ...e/io/HootApiDbBulkInserter.cpp(  72) urlStr: test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61.osm
-20:54:48.473 DEBUG ...re/io/OsmApiDbBulkInserter.cpp(  75) urlStr: test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61.osm
-20:54:48.474 DEBUG ...ore/io/OsmMapWriterFactory.cpp(  78) Using output writer: hoot::OsmXmlWriter
-20:54:48.774 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61.osm...
-20:54:48.815 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/translation_assistant/cali-test-tdsv61.osm...
-20:54:49.137 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 153) Hoot instance reinit...
-20:54:49.139 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp(  99) Reading layers...
-20:54:49.139 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/translation_assistant/cali-translation-tdsv40.js
-20:54:49.139 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: test-files/translation_assistant/cali-translation-tdsv40.js
-20:54:49.249 DEBUG ...hoot/core/schema/OsmSchema.cpp(2009) Loading translation files...
-20:54:49.368 DEBUG ...ot/js/JavaScriptTranslator.cpp( 298) Translation script loaded.
-20:54:49.375 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 925) Opening data source for layer: cali-test
-20:54:49.375 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 925) Opening data source for layer: cali-test
-20:54:49.413 DEBUG ...cpp/hoot/core/io/OgrReader.cpp(1085) Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357
-20:54:49.573 DEBUG ...oot/core/util/MapProjector.cpp( 356) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
-20:54:49.573 DEBUG ...oot/core/util/MapProjector.cpp( 374) Planar projection has max distance error 1.12m (0.11%) and max angular error: 0.00° test distance: 1000.00m
-20:54:49.573 DEBUG ...oot/core/util/MapProjector.cpp( 375) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
-20:54:49.574 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 2339        20:54:49.574 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 2339        20:54:49.574 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 2000 / 2339        
-20:54:49.574 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  65) Applying operation: hoot::MergeNearbyNodes
-20:54:49.574 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 13ms        
-20:54:49.588 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  81) map->getElementCount(): 1770
-20:54:49.588 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  65) Applying operation: hoot::BuildingPartMergeOp
-Ways: 0 / 357        Ways: 357 / 357        
-Relations: 0 / 0        
-Combining Parts: 0 / 0        
-20:54:49.593 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  81) map->getElementCount(): 1770
-20:54:49.593 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 1413        20:54:49.594 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 1413        
-20:54:49.594 INFO  ...ore/io/OsmMapWriterFactory.cpp( 136) Writing map to test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv40.osm...
-20:54:49.595 DEBUG ...e/io/HootApiDbBulkInserter.cpp(  72) urlStr: test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv40.osm
-20:54:49.595 DEBUG ...re/io/OsmApiDbBulkInserter.cpp(  75) urlStr: test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv40.osm
-20:54:49.596 DEBUG ...ore/io/OsmMapWriterFactory.cpp(  78) Using output writer: hoot::OsmXmlWriter
-20:54:49.916 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv40.osm...
-20:54:49.962 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/translation_assistant/cali-test-tdsv40.osm...
-20:54:50.298 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 153) Hoot instance reinit...
-20:54:50.300 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp(  99) Reading layers...
-20:54:50.300 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/translation_assistant/cali-translation-tdsv61-fcode.js
-20:54:50.301 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: test-files/translation_assistant/cali-translation-tdsv61-fcode.js
-20:54:50.404 DEBUG ...hoot/core/schema/OsmSchema.cpp(2009) Loading translation files...
-20:54:50.519 DEBUG ...ot/js/JavaScriptTranslator.cpp( 298) Translation script loaded.
-20:54:50.525 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 925) Opening data source for layer: cali-test
-20:54:50.526 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 925) Opening data source for layer: cali-test
-20:54:50.565 DEBUG ...cpp/hoot/core/io/OgrReader.cpp(1085) Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357
-20:54:50.737 DEBUG ...oot/core/util/MapProjector.cpp( 356) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
-20:54:50.737 DEBUG ...oot/core/util/MapProjector.cpp( 374) Planar projection has max distance error 1.12m (0.11%) and max angular error: 0.00° test distance: 1000.00m
-20:54:50.737 DEBUG ...oot/core/util/MapProjector.cpp( 375) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
-20:54:50.737 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 2339        20:54:50.738 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 2339        20:54:50.738 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 2000 / 2339        
-20:54:50.738 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  65) Applying operation: hoot::MergeNearbyNodes
-20:54:50.738 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 15ms        
-20:54:50.753 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  81) map->getElementCount(): 1770
-20:54:50.753 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  65) Applying operation: hoot::BuildingPartMergeOp
-Ways: 0 / 357        Ways: 357 / 357        
-Relations: 0 / 0        
-Combining Parts: 0 / 0        
-20:54:50.758 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  81) map->getElementCount(): 1770
-20:54:50.758 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 1413        20:54:50.759 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 1413        
-20:54:50.759 INFO  ...ore/io/OsmMapWriterFactory.cpp( 136) Writing map to test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61-fcode.osm...
-20:54:50.760 DEBUG ...e/io/HootApiDbBulkInserter.cpp(  72) urlStr: test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61-fcode.osm
-20:54:50.761 DEBUG ...re/io/OsmApiDbBulkInserter.cpp(  75) urlStr: test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61-fcode.osm
-20:54:50.761 DEBUG ...ore/io/OsmMapWriterFactory.cpp(  78) Using output writer: hoot::OsmXmlWriter
-20:54:51.070 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61-fcode.osm...
-20:54:51.116 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/translation_assistant/cali-test-tdsv61.osm...
+14:16:15.422 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
+14:16:15.423 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/translation_assistant/cali-test.shp, test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61.osm, --trans, test-files/translation_assistant/cali-translation-tdsv61.js}
+14:16:15.423 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/translation_assistant/cali-test.shp to test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61.osm...
+14:16:15.430 INFO  ...hoot/core/io/DataConverter.cpp( 408) Reading layers...
+14:16:15.430 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/translation_assistant/cali-translation-tdsv61.js
+14:16:15.430 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/translation_assistant/cali-translation-tdsv61.js
+14:16:15.597 DEBUG ...hoot/core/schema/OsmSchema.cpp(2143) Loading translation files...
+14:16:15.803 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
+14:16:15.804 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 524) Opening layers with geometry: test-files/translation_assistant/cali-test.shp
+14:16:15.804 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 389) allLayers: [1]{cali-test}
+14:16:15.804 DEBUG ...hoot/core/io/DataConverter.cpp( 432) layers: [1]{cali-test}
+14:16:15.804 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 924) Opening data source for layer: cali-test
+14:16:15.805 INFO  ...hoot/core/io/DataConverter.cpp( 489) Read layer 1 of 1        14:16:15.805 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 924) Opening data source for layer: cali-test
+14:16:15.856 DEBUG ...cpp/hoot/core/io/OgrReader.cpp(1079) Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357
+14:16:15.983 INFO  ...hoot/core/io/DataConverter.cpp( 495) Read layer 1 of 1
+14:16:16.059 DEBUG ...oot/core/util/MapProjector.cpp( 356) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
+14:16:16.059 DEBUG ...oot/core/util/MapProjector.cpp( 374) Planar projection has max distance error 1.12m (0.11%) and max angular error: 0.00° test distance: 1000.00m
+14:16:16.059 DEBUG ...oot/core/util/MapProjector.cpp( 375) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
+14:16:16.059 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 2339        14:16:16.060 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 2339        14:16:16.061 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 2000 / 2339        
+14:16:16.061 INFO  ...hoot/core/io/DataConverter.cpp( 514) Applying conversion operations...
+14:16:16.061 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  71) Element count before operation: 2696
+14:16:16.061 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  85) Applying operation: hoot::MergeNearbyNodes
+14:16:16.061 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
+14:16:16.064 INFO  .../core/ops/MergeNearbyNodes.cpp( 161) MergeNearbyNodes 0 2            14:16:16.078 INFO  .../core/ops/MergeNearbyNodes.cpp( 161) MergeNearbyNodes 1000 741            14:16:16.082 INFO  .../core/ops/MergeNearbyNodes.cpp( 166) MergeNearbyNodes 1413 elapsed: 21ms        
+14:16:16.083 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp( 171) Element count after operation: 1770
+14:16:16.083 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  71) Element count before operation: 1770
+14:16:16.084 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  85) Applying operation: hoot::BuildingPartMergeOp
+14:16:16.084 INFO  ...re/ops/BuildingPartMergeOp.cpp( 171) Ways: 0 / 357                14:16:16.092 INFO  ...re/ops/BuildingPartMergeOp.cpp( 184) Ways: 357 / 357        
+14:16:16.092 INFO  ...re/ops/BuildingPartMergeOp.cpp( 203) Relations: 0 / 0        
+14:16:16.092 INFO  ...re/ops/BuildingPartMergeOp.cpp( 227) Combining Parts: 0 / 0        
+14:16:16.092 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp( 171) Element count after operation: 1770
+14:16:16.092 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 1413        14:16:16.093 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 1413        
+14:16:16.093 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61.osm...
+14:16:16.095 DEBUG ...ore/io/OsmMapWriterFactory.cpp(  78) Using output writer: hoot::OsmXmlWriter
+14:16:16.153 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
+14:16:16.153 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 0 seconds
+14:16:16.472 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ion_assistant_convert-ogr2osm/cali-test-tdsv61.osm...
+14:16:16.547 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from t-files/translation_assistant/cali-test-tdsv61.osm...
+14:16:16.930 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
+14:16:16.930 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/translation_assistant/cali-test.shp, test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv40.osm, --trans, test-files/translation_assistant/cali-translation-tdsv40.js}
+14:16:16.930 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/translation_assistant/cali-test.shp to test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv40.osm...
+14:16:16.937 INFO  ...hoot/core/io/DataConverter.cpp( 408) Reading layers...
+14:16:16.937 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/translation_assistant/cali-translation-tdsv40.js
+14:16:16.938 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/translation_assistant/cali-translation-tdsv40.js
+14:16:17.103 DEBUG ...hoot/core/schema/OsmSchema.cpp(2143) Loading translation files...
+14:16:17.301 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
+14:16:17.301 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 524) Opening layers with geometry: test-files/translation_assistant/cali-test.shp
+14:16:17.302 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 389) allLayers: [1]{cali-test}
+14:16:17.302 DEBUG ...hoot/core/io/DataConverter.cpp( 432) layers: [1]{cali-test}
+14:16:17.302 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 924) Opening data source for layer: cali-test
+14:16:17.302 INFO  ...hoot/core/io/DataConverter.cpp( 489) Read layer 1 of 1        14:16:17.302 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 924) Opening data source for layer: cali-test
+14:16:17.349 DEBUG ...cpp/hoot/core/io/OgrReader.cpp(1079) Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357
+14:16:17.495 INFO  ...hoot/core/io/DataConverter.cpp( 495) Read layer 1 of 1
+14:16:17.584 DEBUG ...oot/core/util/MapProjector.cpp( 356) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
+14:16:17.584 DEBUG ...oot/core/util/MapProjector.cpp( 374) Planar projection has max distance error 1.12m (0.11%) and max angular error: 0.00° test distance: 1000.00m
+14:16:17.584 DEBUG ...oot/core/util/MapProjector.cpp( 375) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
+14:16:17.585 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 2339        14:16:17.585 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 2339        14:16:17.586 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 2000 / 2339        
+14:16:17.586 INFO  ...hoot/core/io/DataConverter.cpp( 514) Applying conversion operations...
+14:16:17.586 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  71) Element count before operation: 2696
+14:16:17.587 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  85) Applying operation: hoot::MergeNearbyNodes
+14:16:17.587 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
+14:16:17.590 INFO  .../core/ops/MergeNearbyNodes.cpp( 161) MergeNearbyNodes 0 2            14:16:17.604 INFO  .../core/ops/MergeNearbyNodes.cpp( 161) MergeNearbyNodes 1000 741            14:16:17.608 INFO  .../core/ops/MergeNearbyNodes.cpp( 166) MergeNearbyNodes 1413 elapsed: 21ms        
+14:16:17.609 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp( 171) Element count after operation: 1770
+14:16:17.609 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  71) Element count before operation: 1770
+14:16:17.609 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  85) Applying operation: hoot::BuildingPartMergeOp
+14:16:17.610 INFO  ...re/ops/BuildingPartMergeOp.cpp( 171) Ways: 0 / 357                14:16:17.618 INFO  ...re/ops/BuildingPartMergeOp.cpp( 184) Ways: 357 / 357        
+14:16:17.620 INFO  ...re/ops/BuildingPartMergeOp.cpp( 203) Relations: 0 / 0        
+14:16:17.620 INFO  ...re/ops/BuildingPartMergeOp.cpp( 227) Combining Parts: 0 / 0        
+14:16:17.620 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp( 171) Element count after operation: 1770
+14:16:17.621 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 1413        14:16:17.621 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 1413        
+14:16:17.622 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv40.osm...
+14:16:17.624 DEBUG ...ore/io/OsmMapWriterFactory.cpp(  78) Using output writer: hoot::OsmXmlWriter
+14:16:17.683 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
+14:16:17.684 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 0 seconds
+14:16:18.202 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ion_assistant_convert-ogr2osm/cali-test-tdsv40.osm...
+14:16:18.279 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from t-files/translation_assistant/cali-test-tdsv40.osm...
+14:16:18.755 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
+14:16:18.755 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/translation_assistant/cali-test.shp, test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61-fcode.osm, --trans, test-files/translation_assistant/cali-translation-tdsv61-fcode.js}
+14:16:18.755 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/translation_assistant/cali-test.shp to test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61-fcode.osm...
+14:16:18.762 INFO  ...hoot/core/io/DataConverter.cpp( 408) Reading layers...
+14:16:18.762 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/translation_assistant/cali-translation-tdsv61-fcode.js
+14:16:18.763 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/translation_assistant/cali-translation-tdsv61-fcode.js
+14:16:18.948 DEBUG ...hoot/core/schema/OsmSchema.cpp(2143) Loading translation files...
+14:16:19.193 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
+14:16:19.193 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 524) Opening layers with geometry: test-files/translation_assistant/cali-test.shp
+14:16:19.194 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 389) allLayers: [1]{cali-test}
+14:16:19.194 DEBUG ...hoot/core/io/DataConverter.cpp( 432) layers: [1]{cali-test}
+14:16:19.194 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 924) Opening data source for layer: cali-test
+14:16:19.195 INFO  ...hoot/core/io/DataConverter.cpp( 489) Read layer 1 of 1        14:16:19.195 DEBUG ...cpp/hoot/core/io/OgrReader.cpp( 924) Opening data source for layer: cali-test
+14:16:19.261 DEBUG ...cpp/hoot/core/io/OgrReader.cpp(1079) Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357
+14:16:19.423 INFO  ...hoot/core/io/DataConverter.cpp( 495) Read layer 1 of 1
+14:16:19.513 DEBUG ...oot/core/util/MapProjector.cpp( 356) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
+14:16:19.513 DEBUG ...oot/core/util/MapProjector.cpp( 374) Planar projection has max distance error 1.12m (0.11%) and max angular error: 0.00° test distance: 1000.00m
+14:16:19.513 DEBUG ...oot/core/util/MapProjector.cpp( 375) Projection: PROJCS["unnamed",PROJECTION["Orthographic"],PARAMETER["latitude_of_origin",3.371580336103492],PARAMETER["central_meridian",-76.54432004481359],PARAMETER["false_easting",0],PARAMETER["false_northing",0]]
+14:16:19.513 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 2339        14:16:19.514 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 2339        14:16:19.515 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 2000 / 2339        
+14:16:19.515 INFO  ...hoot/core/io/DataConverter.cpp( 514) Applying conversion operations...
+14:16:19.515 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  71) Element count before operation: 2696
+14:16:19.515 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  85) Applying operation: hoot::MergeNearbyNodes
+14:16:19.515 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
+14:16:19.519 INFO  .../core/ops/MergeNearbyNodes.cpp( 161) MergeNearbyNodes 0 2            14:16:19.532 INFO  .../core/ops/MergeNearbyNodes.cpp( 161) MergeNearbyNodes 1000 741            14:16:19.537 INFO  .../core/ops/MergeNearbyNodes.cpp( 166) MergeNearbyNodes 1413 elapsed: 21ms        
+14:16:19.537 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp( 171) Element count after operation: 1770
+14:16:19.537 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp(  71) Element count before operation: 1770
+14:16:19.538 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  85) Applying operation: hoot::BuildingPartMergeOp
+14:16:19.538 INFO  ...re/ops/BuildingPartMergeOp.cpp( 171) Ways: 0 / 357                14:16:19.547 INFO  ...re/ops/BuildingPartMergeOp.cpp( 184) Ways: 357 / 357        
+14:16:19.547 INFO  ...re/ops/BuildingPartMergeOp.cpp( 203) Relations: 0 / 0        
+14:16:19.547 INFO  ...re/ops/BuildingPartMergeOp.cpp( 227) Combining Parts: 0 / 0        
+14:16:19.547 DEBUG .../cpp/hoot/core/ops/NamedOp.cpp( 171) Element count after operation: 1770
+14:16:19.547 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 0 / 1413        14:16:19.548 DEBUG ...oot/core/util/MapProjector.cpp( 594) Reprojecting 1000 / 1413        
+14:16:19.549 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/translation_assistant_convert-ogr2osm/cali-test-tdsv61-fcode.osm...
+14:16:19.551 DEBUG ...ore/io/OsmMapWriterFactory.cpp(  78) Using output writer: hoot::OsmXmlWriter
+14:16:19.615 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
+14:16:19.615 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 0 seconds
+14:16:19.979 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from sistant_convert-ogr2osm/cali-test-tdsv61-fcode.osm...
+14:16:20.061 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from t-files/translation_assistant/cali-test-tdsv61.osm...

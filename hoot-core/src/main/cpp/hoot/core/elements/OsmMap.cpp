@@ -65,7 +65,7 @@ OsmMap::OsmMap()
 {
   if (!_wgs84)
   {
-    _wgs84 = MapProjector::getInstance().createWgs84Projection();
+    _wgs84 = MapProjector::createWgs84Projection();
   }
 
   setIdGenerator(IdGenerator::getInstance());

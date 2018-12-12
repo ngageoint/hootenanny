@@ -336,7 +336,7 @@ double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeL
 
   // if el1 is not part of this string, but shares a vertex with the first edge then we can
   // still calculate and return the distance.
-  if (el->isExtreme() && el->getVertex() == edgeStartVertex)
+  if (el->isExtreme() && el->getVertex() == edgeEndVertex)
   {
     return beginningD;
   }
