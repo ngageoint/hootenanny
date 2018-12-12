@@ -93,12 +93,9 @@ void VagabondNetworkMatcher::iteratePageRank()
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
-  double sum = 0.0;
-
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
-    sum += it.value();
     it.value() = 0;
   }
 
@@ -156,12 +153,9 @@ void VagabondNetworkMatcher::iteratePageRankBleeding()
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
-  double sum = 0.0;
-
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
-    sum += it.value();
     it.value() = 0;
   }
 
@@ -214,12 +208,9 @@ void VagabondNetworkMatcher::iterateVoting()
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
-  double sum = 0.0;
-
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
-    sum += it.value();
     it.value() = 0;
   }
 

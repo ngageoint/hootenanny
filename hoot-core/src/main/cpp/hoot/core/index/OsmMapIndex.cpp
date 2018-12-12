@@ -108,8 +108,7 @@ void OsmMapIndex::_buildNodeTree() const
 
   Box b(2);
   int count = 0;
-  for (NodeMap::const_iterator it = nodes.begin();
-    it != nodes.end(); ++it)
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it, ++count)
   {
     ConstNodePtr n = it->second;
 
@@ -119,18 +118,13 @@ void OsmMapIndex::_buildNodeTree() const
     boxes.push_back(b);
     ids.push_back(_createTreeNid(n->getId()));
 
-    if (Log::getInstance().isDebugEnabled() && count % 1000 == 0)
+    if (count % 1000 == 0)
     {
-      cout << "  building node R-Tree count: " << count << " / " << nodes.size() << "       \r";
-      cout.flush();
+      PROGRESS_DEBUG("  building node R-Tree count: " << count << " / " << nodes.size() << "       ");
     }
-    count += 1;
   }
 
-  if (Log::getInstance().isDebugEnabled())
-  {
-    cout << endl;
-  }
+  LOG_DEBUG("  building node R-Tree count: " << count << " / " << nodes.size() << "       ");
 
   _pendingNodeInsert.clear();
   _pendingNodeRemoval.clear();
@@ -163,8 +157,7 @@ void OsmMapIndex::_buildWayTree() const
 
   Box b(2);
   int count = 0;
-  for (WayMap::const_iterator it = ways.begin();
-    it != ways.end(); ++it)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it, ++count)
   {
     ConstWayPtr w = it->second;
 
@@ -180,16 +173,11 @@ void OsmMapIndex::_buildWayTree() const
 
     if (Log::getInstance().isDebugEnabled() && count % 1000 == 0)
     {
-      cout << "  building way R-Tree count: " << count << " / " << ways.size() << "       \r";
-      cout.flush();
+      PROGRESS_DEBUG("  building way R-Tree count: " << count << " / " << ways.size() << "       ");
     }
-    count += 1;
   }
 
-  if (Log::getInstance().isDebugEnabled())
-  {
-    cout << endl;
-  }
+  LOG_DEBUG("  building way R-Tree count: " << count << " / " << ways.size() << "       ");
 
   _pendingWayInsert.clear();
   _pendingWayRemoval.clear();

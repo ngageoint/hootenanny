@@ -35,9 +35,6 @@
 // Standard
 #include <iomanip>
 
-namespace hoot
-{
-
 #define CHECK(con) \
   if (!(con)) \
   { \
@@ -73,6 +70,9 @@ namespace hoot
       LOG_WARN("More than 10 errors, suppressing errors."); \
     return; \
   }
+
+namespace hoot
+{
 
 class CompareVisitor : public ElementConstOsmMapVisitor
 {

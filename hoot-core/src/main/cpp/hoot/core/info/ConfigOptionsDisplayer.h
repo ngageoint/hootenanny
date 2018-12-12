@@ -47,7 +47,7 @@ public:
    * @param withDetails if true, displays details along with the option names; if false only
    * displays option names
    */
-  static void displayAllOptionNames(const bool withDetails = false);
+  static QString getAllOptionNames(const bool withDetails = false);
 
   /**
    * Display a single configuration option
@@ -56,12 +56,12 @@ public:
    * @param withDetails if true, displays details along with the option name; if false only
    * displays the option name
    */
-  static void displayOptionName(const QString optionName, const bool withDetails = false);
+  static QString getOptionName(const QString optionName, const bool withDetails = false);
   
 private:
 
-  static void _printAllConfigOptionsDetails(const QString optionName,
-                                            const QString configOptionsFile);
+  static QString _getAllConfigOptionsDetails(const QString optionName,
+                                             const QString configOptionsFile);
 };
 
 }

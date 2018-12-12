@@ -35,9 +35,10 @@
 #include <tgs/System/Time.h>
 
 // Qt
-#include <QSqlError>
-#include <QVariant>
 #include <QSet>
+#include <QSqlError>
+#include <QTextStream>
+#include <QVariant>
 
 namespace hoot
 {
@@ -205,7 +206,7 @@ long ImplicitTagRulesSqliteReader::getRuleCount()
   return _ruleCountQuery.value(0).toLongLong();
 }
 
-void ImplicitTagRulesSqliteReader::printStats()
+QString ImplicitTagRulesSqliteReader::getStats()
 {
   LOG_DEBUG("Printing stats...");
 
@@ -233,10 +234,14 @@ void ImplicitTagRulesSqliteReader::printStats()
   _wordCountQuery.next();
   const long wordCount = _wordCountQuery.value(0).toLongLong();
 
-  std::cout << "Implicit tag rules database summary:" << std::endl;
-  std::cout << "\tWord count: " << wordCount << std::endl;
-  std::cout << "\tTag count: " << tagCount << std::endl;
-  std::cout << "\tRule count: " << ruleCount << std::endl;
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
+  ts << "Implicit tag rules database summary:" << endl;
+  ts << "\tWord count: " << wordCount << endl;
+  ts << "\tTag count: " << tagCount << endl;
+  ts << "\tRule count: " << ruleCount << endl;
+  return ts.readAll();
 }
 
 void ImplicitTagRulesSqliteReader::_prepareQueries()

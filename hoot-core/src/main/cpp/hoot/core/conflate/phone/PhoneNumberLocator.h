@@ -37,7 +37,6 @@
 
 // libphonenumber
 #include <phonenumbers/geocoding/phonenumber_offline_geocoder.h>
-using namespace i18n::phonenumbers;
 
 namespace hoot
 {
@@ -70,7 +69,7 @@ private:
 
   //two digit location code required to validate phone numbers; see ConfigOptions
   QString _regionCode;
-  PhoneNumberOfflineGeocoder _geocoder;
+  i18n::phonenumbers::PhoneNumberOfflineGeocoder _geocoder;
   mutable int _numLocated;
 };
 

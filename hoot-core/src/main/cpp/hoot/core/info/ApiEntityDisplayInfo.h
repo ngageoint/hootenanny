@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef APIENTITYDISPLAYER_H
-#define APIENTITYDISPLAYER_H
+#ifndef APIENTITYDISPLAYINFO_H
+#define APIENTITYDISPLAYINFO_H
 
 // Qt
 #include <QString>
@@ -40,21 +40,21 @@ namespace hoot
  * This class can probably be simplified (too much if/else logic).  See notes in InfoCmd about how
  * registration of associated classes could be made simpler for this.
  */
-class ApiEntityDisplayer
+class ApiEntityDisplayInfo
 {
 public:
 
   /**
-   * Displays information about an ApiEntity
+   * Gets display information about an ApiEntity as a string
    *
    * @param apiEntityType the type of entity to display
    */
-  static void display(const QString apiEntityType);
+  static QString getDisplayInfo(const QString apiEntityType);
 
   /**
-   * Displays information on the currently configured MapCleaner operations
+   * Gets display information on the currently configured MapCleaner operations as a string
    */
-  static void displayCleaningOps();
+  static QString getDisplayInfoCleaningOps();
 
 private:
 
@@ -63,4 +63,4 @@ private:
 
 }
 
-#endif // APIENTITYDISPLAYER_H
+#endif // APIENTITYDISPLAYINFO_H

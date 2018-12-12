@@ -167,10 +167,9 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    if (Log::getInstance().getLevel() <= Log::Info && i % 1000 == 0)
+    if (i % 1000 == 0)
     {
-      cout << "Ways: " << i << " / " << ways.size() << "        \r";
-      cout << flush;
+      PROGRESS_INFO("Ways: " << i << " / " << ways.size() << "        ");
     }
     const WayPtr& w = it->second;
     // add the way to a building group if appropriate
@@ -183,11 +182,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
     i++;
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
-  {
-    cout << "Ways: " << ways.size() << " / " << ways.size() << "        \r";
-    cout << endl << flush;
-  }
+  LOG_INFO("Ways: " << ways.size() << " / " << ways.size() << "        ");
 
   i = 0;
   // go through all the relations
@@ -196,8 +191,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   {
     if (Log::getInstance().getLevel() <= Log::Info /* && i % 100 == 0 */)
     {
-      cout << "Relations: " << i << " / " << relations.size() << "        \r";
-      cout << flush;
+      PROGRESS_INFO("Relations: " << i << " / " << relations.size() << "        ");
     }
     const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
@@ -207,11 +201,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
     i++;
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
-  {
-    cout << "Relations: " << relations.size() << " / " << relations.size() << "        \r";
-    cout << endl << flush;
-  }
+  LOG_INFO("Relations: " << relations.size() << " / " << relations.size() << "        ");
 
   ////
   /// Time to start making changes to the map.
@@ -225,8 +215,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   {
     if (Log::getInstance().getLevel() <= Log::Info && i % 1000 == 0)
     {
-      cout << "Combining Parts: " << i << " / " << groups.size() << "        \r";
-      cout << flush;
+      PROGRESS_INFO("Combining Parts: " << i << " / " << groups.size() << "        ");
     }
     // combine the group of building parts into a relation.
     const vector< boost::shared_ptr<Element> >& parts = it->second;
@@ -236,11 +225,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
     i++;
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
-  {
-    cout << "Combining Parts: " << groups.size() << " / " << groups.size() << "        \r";
-    cout << endl << flush;
-  }
+  LOG_INFO("Combining Parts: " << groups.size() << " / " << groups.size() << "        ");
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.

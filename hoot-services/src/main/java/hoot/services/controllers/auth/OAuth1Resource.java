@@ -88,9 +88,10 @@ public class OAuth1Resource {
         try {
             accessToken = s.getAccessToken(r /* <== Specifying this was important [!] */, requestToken, oauth_verifier);
         } catch (Exception e) {
-            // Pass.
+            logger.warn("Failed to get access token for user w/ exception:", e);
         }
         if (accessToken == null) {
+            logger.warn("Failed to get access token for user; no details");
             return Response.status(401).build();
         }
         // Save this access token to our HTTP Session based token services:

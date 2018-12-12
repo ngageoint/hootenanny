@@ -324,20 +324,15 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
     int i2 = Tgs::Random::instance()->generateInt(points.size()) + 3;
     swap(randomized[i1], randomized[i2]);
   }
-
   for (size_t i = 0; i < randomized.size(); i++)
   {
-    if (i % 10000 == 0 && Log::getInstance().getLevel() <= Log::Trace)
+    if (i % 10000 == 0)
     {
-      cout << "Progress: " << i << " of " << randomized.size() - 1 << "          \r";
-      cout << flush;
+      PROGRESS_TRACE("Progress: " << i << " of " << randomized.size() - 1 << "          ");
     }
     _dt->insert(randomized[i].first, randomized[i].second);
   }
-  if (Log::getInstance().getLevel() <= Log::Trace)
-  {
-    cout << endl;
-  }
+  LOG_TRACE("Progress: " << randomized.size() - 1 << " of " << randomized.size() - 1 << "          ");
 }
 
 boost::shared_ptr<OsmMap> AlphaShape::toOsmMap()

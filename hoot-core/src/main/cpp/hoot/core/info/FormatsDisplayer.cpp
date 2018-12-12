@@ -34,11 +34,14 @@
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapWriter.h>
 
+// Qt
+#include <QTextStream>
+
 namespace hoot
 {
 
 template<typename IoClass>
-void printFormats(const std::string& className, const QStringList extraFormats = QStringList())
+QString getFormats(const std::string& className, const QStringList extraFormats = QStringList())
 {
   std::vector<std::string> readerNames =
     Factory::getInstance().getObjectNamesByBase(className);
@@ -62,34 +65,41 @@ void printFormats(const std::string& className, const QStringList extraFormats =
   formatsList.append(extraFormats);
   formatsList.sort();
 
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   for (int i = 0; i < formatsList.size(); i++)
-  {
-    std::cout << formatsList.at(i) << std::endl;
-  }
-  std::cout << std::endl;
+    ts << formatsList.at(i) << endl;
+  ts << endl;
+
+  return ts.readAll();
 }
 
-void FormatsDisplayer::display(const bool displayInputs, const bool displayOutputs)
+QString FormatsDisplayer::display(const bool displayInputs, const bool displayOutputs)
 {
   DisableLog dl;
 
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   if (displayInputs)
   {
-    std::cout << "Input formats:" << std::endl << std::endl;
-    printFormats<OsmMapReader>(OsmMapReader::className());
+    ts << "Input formats:" << endl << endl;
+    ts << getFormats<OsmMapReader>(OsmMapReader::className()) << endl;
   }
 
   if (displayOutputs)
   {
-    std::cout << "Output formats:" << std::endl << std::endl;
+    ts << "Output formats:" << endl << endl;
     QStringList formatsList;
     //These are supported by the changeset writers, who aren't map readers/writers.  Possibly,
     //a lightweight interface could be used on all the readers writers instead of modifying
     //OsmMapReader/OsmMapwriter with the supportedFormats method to make this better.
     formatsList.append(".osc");
     formatsList.append(".osc.sql");
-    printFormats<OsmMapWriter>(OsmMapWriter::className(), formatsList);
+    ts << getFormats<OsmMapWriter>(OsmMapWriter::className(), formatsList) << endl;
   }
+  return ts.readAll();
 }
 
 }

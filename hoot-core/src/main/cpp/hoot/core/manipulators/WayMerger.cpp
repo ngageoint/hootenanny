@@ -73,8 +73,6 @@ using namespace Tgs;
 namespace hoot
 {
 
-#define SQR(x) ((x) * (x))
-
 HOOT_FACTORY_REGISTER(Manipulator, WayMerger)
 
 WayMerger::WayMerger()
@@ -110,10 +108,9 @@ const vector< boost::shared_ptr<Manipulation> >& WayMerger::findWayManipulations
   size_t i;
   for (i = 0; i < wids.size(); i++)
   {
-    if (Log::getInstance().isInfoEnabled() && i >= 100 && i % 100 == 0)
+    if (i >= 100 && i % 100 == 0)
     {
-      cout << "  finding manipulations: " << i << " / " << wids.size() << "        \r";
-      cout.flush();
+      PROGRESS_INFO("  finding manipulations: " << i << " / " << wids.size() << "        ");
     }
     if (_map->containsWay(wids[i]))
     {
@@ -122,9 +119,9 @@ const vector< boost::shared_ptr<Manipulation> >& WayMerger::findWayManipulations
     }
   }
 
-  if (Log::getInstance().isInfoEnabled() && i >= 100)
+  if (i >= 100)
   {
-    cout << endl;
+    LOG_INFO("  finding manipulations: " << wids.size() << " / " << wids.size() << "        ");
   }
 
   return _result;
