@@ -1352,7 +1352,7 @@ tds61 = {
             // If we don't have a Feature Function then assign one.
             if (!(attrs.FFN))
             {
-                attrs.FFN = facilityList[tags.amenity];
+                // attrs.FFN = facilityList[tags.amenity];
                 // Debug
                 // print('PreDropped: amenity = ' + tags.amenity);
                 delete tags.amenity;
