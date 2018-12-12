@@ -90,7 +90,7 @@ pipeline {
             steps{
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
-                sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
+                sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
                 script {
                     if (env.BRANCH_NAME == "develop") {
                         // Compile instrumented code for develop branch which allows for calculating coverage
