@@ -1232,7 +1232,7 @@ tds61 = {
 
         if (tds61.tdsPreRules == undefined)
         {
-        // See ToOsmPostProcessing for more details about rulesList.
+        // See ToOsmPostProcessing for more details about rulesList
             var rulesList = [
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
@@ -1291,7 +1291,7 @@ tds61 = {
             tds61.tdsPreRules = translate.buildComplexRules(rulesList);
         }
 
-        // Apply the rulesList.
+        // Apply the rulesList
         // translate.applyComplexRules(tags,attrs,tds61.tdsPreRules);
         // Pulling this out of translate
         for (var i = 0, rLen = tds61.tdsPreRules.length; i < rLen; i++)
@@ -1306,10 +1306,10 @@ tds61 = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // Some tags imply that they are buildings but don't actually say so.
+        // Some tags imply that they are buildings but don't actually say so
         // Most of these are taken from raw OSM and the OSM Wiki
         // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
-        // are not buildings.
+        // are not buildings
         // Taking "place_of_worship" out of this and making it a building
         var notBuildingList = [
             'artwork', 'atm', 'bbq', 'bench', 'bicycle_parking', 'bicycle_rental', 'biergarten', 'boat_sharing',
@@ -1349,7 +1349,7 @@ tds61 = {
                 }
             }
 
-            // If we don't have a Feature Function then assign one.
+            // If we don't have a Feature Function then assign one
             if (!(attrs.FFN))
             {
                 // attrs.FFN = facilityList[tags.amenity];
@@ -1359,7 +1359,7 @@ tds61 = {
             }
         }
 
-        // Adding a custom rule for malls to override the rules above.
+        // Adding a custom rule for malls to override the rules above
         // All of the other "shops" are buildings
         if (tags.shop == 'mall') attrs.F_CODE = 'AG030';
 
@@ -1459,7 +1459,7 @@ tds61 = {
                 tags.landuse = 'farmland';
                 break;
 
-            case 'farmyard': // NOTE: This is different to farm.
+            case 'farmyard': // NOTE: This is different to farm
                 tags.facility = 'yes';
                 tags.use = 'agriculture';
                 delete tags.landuse;
@@ -1577,8 +1577,8 @@ tds61 = {
             } // End switch
         }
 
-        // Bridges & Roads.  If we have an area or a line everything is fine.
-        // If we have a point, we need to make sure that it becomes a bridge, not a road.
+        // Bridges & Roads.  If we have an area or a line everything is fine
+        // If we have a point, we need to make sure that it becomes a bridge, not a road
         if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
 
@@ -1608,7 +1608,7 @@ tds61 = {
           tags.note = translate.appendValue(tags.note,'Viaduct',';');
         }
 
-        // Fix road junctions.
+        // Fix road junctions
         // TDS has junctions as points. If we can make the feature into a road, railway or bridge then we will
         // If not, it should go to the o2s layer
         if (tags.junction && geometryType !== 'Point')
@@ -1917,7 +1917,7 @@ tds61 = {
                     break;
             }
 
-            // Use the road surface to possibly override the classification.
+            // Use the road surface to possibly override the classification
             // We are assumeing that unpaved roads are Fair Weather only
             switch (attrs.ZI016_ROC)
             {
@@ -1952,7 +1952,7 @@ tds61 = {
         if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
         {
             // If we havent fixed up the road type/class, have a go with the
-            // highway tag.
+            // highway tag
             if (!attrs.RTY && !attrs.RIN_ROI)
             {
                 switch (tags.highway)
@@ -2025,8 +2025,8 @@ tds61 = {
 
         }
 
-        // RLE vs LOC: Need to deconflict this for various features.
-        // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead.
+        // RLE vs LOC: Need to deconflict this for various features
+        // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead
         if (attrs.LOC == '45' && (['AT005','AQ113','BH065','BH110'].indexOf(attrs.TRS) == -1))
         {
             attrs.RLE = '2'; // Raised above surface
@@ -2052,33 +2052,33 @@ tds61 = {
         if (attrs.HGT > 46 && !(attrs.LMC)) attrs.LMC = '1001';
 
         // Alt_Name:  AL020 Built Up Area & ZD070 Water Measurement Location are the _ONLY_ features in TDS
-        // that have a secondary name.
+        // that have a secondary name
         if (attrs.ZI005_FNA2 && (attrs.F_CODE !== 'AL020' && attrs.F_CODE !== 'ZD070'))
         {
             // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
-            // but this causes problems so until the customer gives us more direction, we are going to drop it.
+            // but this causes problems so until the customer gives us more direction, we are going to drop it
             // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
             delete attrs.ZI005_FNA2;
         }
 
         // Alt_Name2:  ZD070 Water Measurement Location is the _ONLY_ feature in TDS that has a
-        // third name.
+        // third name
         if (attrs.ZI005_FNA3 && attrs.F_CODE !== 'ZD070')
         {
             // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
-            // but this causes problems so until the customer gives us more direction, we are going to drop it.
+            // but this causes problems so until the customer gives us more direction, we are going to drop it
             // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
             delete attrs.ZI005_FNA3;
         }
 
         // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
-        // we concatenate the tag values for this field.
+        // we concatenate the tag values for this field
         // We are getting guidance from the customer on what value they would like in this field:
         // * The earliest date/time,
         // * The first on in the list
         // * etc
         //
-        // Until we get an answer, we are going to take the first value in the list.
+        // Until we get an answer, we are going to take the first value in the list
         if (attrs.ZI001_SDV)
         {
             attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
@@ -2170,7 +2170,7 @@ tds61 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
-        // See if we have an o2s_X layer and try to unpack it.
+        // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
         {
             tags = translate.parseO2S(attrs);
@@ -2205,7 +2205,7 @@ tds61 = {
         if (tds61.lookup == undefined)
         {
             // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
-            // other tables are not set either.
+            // other tables are not set either
 
             // Support Import Only attributes
             tds61.rules.one2one.push.apply(tds61.rules.one2one,tds61.rules.one2oneIn);
@@ -2213,7 +2213,7 @@ tds61 = {
             tds61.lookup = translate.createLookup(tds61.rules.one2one);
         }
 
-        // Untangle TDS attributes & OSM tags.
+        // Untangle TDS attributes & OSM tags
         // NOTE: This could get wrapped with an ENV variable so it only gets called during import
         tds61.untangleAttributes(attrs, tags);
 
@@ -2230,7 +2230,7 @@ tds61 = {
         // pre processing
         tds61.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
-        // Use the FCODE to add some tags.
+        // Use the FCODE to add some tags
         if (attrs.F_CODE)
         {
             var ftag = tds61.fcodeLookup['F_CODE'][attrs.F_CODE];
@@ -2247,14 +2247,14 @@ tds61 = {
         }
 
         // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
-        // isn't used in the translation - this should end up empty.
+        // isn't used in the translation - this should end up empty
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
         delete notUsedAttrs.F_CODE;
         delete notUsedAttrs.FCSUBTYPE;
 
         // apply the simple number and text biased rules
-        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
         translate.applySimpleNumBiased(notUsedAttrs, tags, tds61.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(notUsedAttrs, tags, tds61.rules.txtBiased, 'forward');
 
@@ -2340,8 +2340,8 @@ tds61 = {
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
 
-        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
-        // There is no way we can translate these to a single TDS feature.
+        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line
+        // There is no way we can translate these to a single TDS feature
         if (geometryType == 'Collection') return null;
 
         // Flip the ge4List table so we can use it for export
@@ -2395,7 +2395,7 @@ tds61 = {
         tds61.applyToTdsPreProcessing(tags, attrs, geometryType);
 
         // Make a copy of the input tags so we can remove them as they get translated. What is left is
-        // the not used tags.
+        // the not used tags
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
@@ -2428,8 +2428,8 @@ tds61 = {
 
         translate.applyTdsOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
 
-        // Post Processing.
-        // We send the original list of tags and the list of tags we haven't used yet.
+        // Post Processing
+        // We send the original list of tags and the list of tags we haven't used yet
         // tds61.applyToTdsPostProcessing(tags, attrs, geometryType);
         tds61.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
@@ -2440,7 +2440,7 @@ tds61 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
         }
 
-        // If we have unused tags, add them to the memo field.
+        // If we have unused tags, add them to the memo field
         if (Object.keys(notUsedTags).length > 0 && tds61.configOut.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
@@ -2493,8 +2493,8 @@ tds61 = {
             // var str = JSON.stringify(tags);
             var str = JSON.stringify(tags,Object.keys(tags).sort());
 
-            // Shapefiles can't handle fields > 254 chars.
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+            // Shapefiles can't handle fields > 254 chars
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
             // A nicer thing would be to arrange the tags until they fit neatly
             if (str.length < 255 || tds61.configOut.OgrSplitO2s == 'false')
             {
@@ -2521,14 +2521,14 @@ tds61 = {
         }
         else // We have a feature
         {
-            // Check if we need to make more features.
+            // Check if we need to make more features
             // NOTE: This returns the structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
             returnData = tds61.manyFeatures(geometryType,tags,attrs);
 
             // Debug: Add the first feature
             //returnData.push({attrs: attrs, tableName: ''});
 
-            // Now go through the features and clean them up.
+            // Now go through the features and clean them up
             var gType = geometryType.toString().charAt(0);
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
@@ -2539,7 +2539,7 @@ tds61 = {
                     // Validate attrs: remove all that are not supposed to be part of a feature
                     tds61.validateAttrs(geometryType,returnData[i]['attrs']);
 
-                    // Now set the FCSubtype.
+                    // Now set the FCSubtype
                     // NOTE: If we export to shapefile, GAIT _will_ complain about this
                     if (tds61.configOut.OgrEsriFcsubtype == 'true')
                     {
