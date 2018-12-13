@@ -342,12 +342,14 @@ public:
   inline static QString getRelationMembersTableName()           { return "relation_members"; }
   inline static QString getRelationTagsTableName()              { return "relation_tags"; }
   inline static QString getRelationsTableName()                 { return "relations"; }
-  inline static QString getWayNodesTableName()                 { return "way_nodes"; }
+  inline static QString getWayNodesTableName()                  { return "way_nodes"; }
   inline static QString getWayTagsTableName()                   { return "way_tags"; }
   inline static QString getWaysTableName()                      { return "ways"; }
 
   inline static QString getMapsTableName()                      { return "maps"; }
   inline static QString getUsersTableName()                     { return "users"; }
+  inline static QString getFoldersTableName()                   { return "folders"; }
+  inline static QString getFolderMapMappingsTableName()         { return "folder_map_mappings"; }
 
   inline static QString getSequenceId()                         { return "_id_seq"; }
 

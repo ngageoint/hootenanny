@@ -47,6 +47,10 @@ namespace hoot
  * OsmApiDbBulkWriter.  Rather than add tests for the unneeded features, its a better idea to
  * rework the inheritance of the two classes as described in HootApiDbBulkWriter to get rid of the
  * unneeded functionality in HootApiDbBulkWriter.
+ *
+ * @todo probably need some more user permission related tests similar to what's in
+ * ServiceHootApiDbWriterTest after consolidating some of the logic between HootApiDbBulkInserter
+ * and HootApiDbWriter open methods
  */
 class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 {
@@ -56,9 +60,9 @@ class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 
 public:
 
-  static QString userEmail() { return "ServiceHootApiDbBulkInserterTest@hoottestcpp.org"; }
-
-  long mapId;
+  QString userEmail()
+  { return QString("%1.ServiceHootApiDbBulkInserterTest@hoottestcpp.org").arg(_testName); }
+  QString userName()  { return QString("%1.ServiceHootApiDbBulkInserterTest").arg(_testName); }
 
   ServiceHootApiDbBulkInserterTest()
   {
@@ -66,15 +70,15 @@ public:
     TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
-  virtual void setUp()
+  void setUpTest(const QString testName)
   {
-    HootTestFixture::setUp();
-    mapId = -1;
+    _mapId = -1;
+    _testName = testName;
     ServicesDbTestUtils::deleteUser(userEmail());
-
     HootApiDb database;
+
     database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
+    database.getOrCreateUser(userEmail(), userName());
     database.close();
   }
 
@@ -82,18 +86,18 @@ public:
   {
     ServicesDbTestUtils::deleteUser(userEmail());
 
-    if (mapId != -1)
+    if (_mapId != -1)
     {
       HootApiDb database;
-      database.open(ServicesDbTestUtils::getDbModifyUrl());
-      database.deleteMap(mapId);
+      database.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+      database.deleteMap(_mapId);
       database.close();
     }
   }
 
   void runPsqlDbOfflineTest()
   {
-    QString testName = "runPsqlDbOfflineTest";
+    setUpTest("runPsqlDbOfflineTest");
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     HootApiDbBulkInserter writer;
@@ -109,16 +113,16 @@ public:
     writer.setUserEmail(userEmail());
     writer.setCopyBulkInsertActivated(true);
 
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
-    mapId = writer.getMapId();
-    LOG_VARD(mapId);
+    _mapId = writer.getMapId();
+    LOG_VARD(_mapId);
 
     HootApiDbReader reader;
     OsmMapPtr actualMap(new OsmMap());
     reader.setUserEmail(userEmail());
-    reader.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    reader.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     reader.read(actualMap);
     reader.close();
     const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
@@ -129,11 +133,12 @@ public:
 
     //Should be 4 changesets, but its 8.
     HootApiDb database;
-    database.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
-    database.setMapId(mapId);
+    database.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    database.setMapId(_mapId);
     database.setCreateIndexesOnClose(false);
     database.setFlushOnClose(false);
     const long numChangesets = database.numChangesets();
+    database.close();
     LOG_VARD(numChangesets);
     CPPUNIT_ASSERT_EQUAL(8L, numChangesets);
 
@@ -145,6 +150,11 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
   }
+
+private:
+
+  long _mapId;
+  QString _testName;
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "slow");
