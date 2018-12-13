@@ -337,6 +337,7 @@ ui2x-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
 	cd $$HOOT_HOME/hoot-ui-2x && \
+	npm i && \
 	npm run test:hoot
 else
 	echo "UI tests must specify both --with-services and --with-uitests."
