@@ -198,11 +198,6 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString className
   {
     return "visitor";
   }
-  else if (className.toStdString() == ConstElementVisitor::className() ||
-           Factory::getInstance().hasBase<ConstElementVisitor>(className.toStdString()))
-  {
-    return "visitor (const)";
-  }
   return "";
 }
 
