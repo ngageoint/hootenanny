@@ -1344,7 +1344,7 @@ tds61 = {
                 if (!(tags.facility = 'yes'))
                 {
                     // Debug
-                    print('Making a building: ' + tags.facility);
+                    // print('Making a building: ' + tags.facility);
                     attrs.F_CODE = 'AL013'; // Building
                 }
             }

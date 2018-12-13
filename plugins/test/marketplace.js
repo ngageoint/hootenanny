@@ -17,15 +17,18 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
 
     var schemas = [
         'TDSv61',
-        // 'TDSv40',
-        // 'GGDMv30'
+        'TDSv40',
+        // 'MGCP',
+        'GGDMv30'
     ]
 
     schemas.forEach(schema => {
+        var fcode_key = (schema === 'MGCP') ? 'FCODE' : 'F_CODE';
         fcodes.forEach(fcode => {
+            if (schema === 'MGCP' && fcode === 'AL013') fcode = 'AL015';
             ffns.forEach(ffn => {
 
-            it('should translate F_CODE=' + fcode + ' and FFN=' + ffn + ' from ' + schema + ' -> osm -> ' + schema, function() {
+            it('should translate ' + fcode_key + '=' + fcode + ' and FFN=' + ffn + ' from ' + schema + ' -> osm -> ' + schema, function() {
 
                 var tds_xml = '<osm version="0.6">\
                                 <way id="-19">\
@@ -34,7 +37,7 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
                                     <nd ref="-12" />\
                                     <nd ref="-13" />\
                                     <nd ref="-10" />\
-                                    <tag k="F_CODE" v="' + fcode + '"/>\
+                                    <tag k="' + fcode_key + '" v="' + fcode + '"/>\
                                     <tag k="FFN" v="' + ffn + '"/>\
                                 </way>\
                             </osm>';
@@ -42,7 +45,7 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
                 var osm_xml = server.handleInputs({
                     osm: tds_xml,
                     method: 'POST',
-                    translation: 'TDSv61',
+                    translation: schema,
                     path: '/translateFrom'
                 });
 
@@ -58,7 +61,7 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
                 var tds_xml = server.handleInputs({
                     osm: osm_xml,
                     method: 'POST',
-                    translation: 'TDSv61',
+                    translation: schema,
                     path: '/translateTo'
                 });
 
@@ -66,8 +69,8 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
 
                 xml = parser.parseFromString(tds_xml);
 
-                assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
-                assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "F_CODE");
+                assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), schema);
+                assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), fcode_key);
                 assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), fcode);
                 assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("k"), "FFN");
                 assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("v"), ffn);

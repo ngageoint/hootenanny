@@ -58,7 +58,7 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
 
@@ -115,7 +115,7 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
 
@@ -138,6 +138,7 @@ describe('TranslationServer', function () {
     var schemas = [
         'TDSv61',
         'TDSv40',
+        // 'MGCP', //No AG030 in MGCP
         'GGDMv30'
     ]
 
@@ -147,6 +148,7 @@ describe('TranslationServer', function () {
             var fcode = k;
             var tag = cases[k];
             var tagKey = Object.keys(tag)[0];
+            var fcode_key = (schema === 'MGCP') ? 'FCODE' : 'F_CODE';
 
             it('should translate ' + fcode + ' from ' + schema + ' -> osm -> ' + schema, function() {
 
@@ -161,7 +163,7 @@ describe('TranslationServer', function () {
                                     <nd ref="-12" />\
                                     <nd ref="-13" />\
                                     <nd ref="-10" />\
-                                    <tag k="F_CODE" v="' + fcode + '"/>\
+                                    <tag k="' + fcode_key + '" v="' + fcode + '"/>\
                                 </way>\
                             </osm>';
 
@@ -190,14 +192,14 @@ describe('TranslationServer', function () {
                 });
 
                 // console.log(tds_xml);
-                
+
                 xml = parser.parseFromString(tds_xml);
                 gj = osmtogeojson(xml);
 
                 assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), schema);
 
                 var tags = gj.features[0].properties;
-                assert.equal(tags["F_CODE"], fcode);
+                assert.equal(tags[fcode_key], fcode);
 
             });
 
