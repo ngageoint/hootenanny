@@ -59,7 +59,7 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
 
@@ -94,12 +94,59 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
         assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "F_CODE");
         assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "GB055");
+
+    });
+
+
+    it('should translate Stopway (F_CODE=GB045) from tdsv61 -> osm -> tdsv61 even while missing nodes from the OSM', function() {
+
+        var tds_xml = '<osm version="0.6">\
+                        <way id="-19">\
+                            <nd ref="-10" />\
+                            <nd ref="-11" />\
+                            <nd ref="-12" />\
+                            <nd ref="-13" />\
+                            <nd ref="-10" />\
+                            <tag k="F_CODE" v="GB045"/>\
+                        </way>\
+                    </osm>';
+
+        var osm_xml = server.handleInputs({
+            osm: tds_xml,
+            method: 'POST',
+            translation: 'TDSv61',
+            path: '/translateFrom'
+        });
+
+        // console.log(osm_xml);
+
+        var xml = parser.parseFromString(osm_xml);
+
+        assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "aeroway");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "stopway");
+
+
+        var tds_xml = server.handleInputs({
+            osm: osm_xml,
+            method: 'POST',
+            translation: 'TDSv61',
+            path: '/translateTo'
+        });
+
+        // console.log(tds_xml);
+
+        xml = parser.parseFromString(tds_xml);
+
+        assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "F_CODE");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "GB045");
 
     });
 
