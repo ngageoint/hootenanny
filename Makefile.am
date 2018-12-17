@@ -110,6 +110,9 @@ ui-build:
 
 ui-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-test
+	
+ui2x-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui2x-test
 
 ui-coverage:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-coverage
