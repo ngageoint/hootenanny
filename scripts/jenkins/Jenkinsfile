@@ -17,7 +17,6 @@ pipeline {
     // Configurable parameters for users to skip steps and control pipeline behavior
     parameters {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
-        booleanParam(name: 'Verbose', defaultValue: true)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
@@ -102,7 +101,6 @@ pipeline {
         stage("Build") {
             when { expression { return params.Build } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=yes\" >> .bashrc; source .bashrc'"
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
             }       
