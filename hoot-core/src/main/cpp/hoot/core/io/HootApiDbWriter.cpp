@@ -48,15 +48,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, HootApiDbWriter)
 
-HootApiDbWriter::HootApiDbWriter()
+HootApiDbWriter::HootApiDbWriter() :
+_nodesWritten(0),
+_waysWritten(0),
+_relationsWritten(0),
+_remapIds(true),
+_includeIds(false),
+_jobId(-1),
+_open(false)
 {
-  _open = false;
-  _remapIds = true;
-  _nodesWritten = 0;
-  _waysWritten = 0;
-  _relationsWritten = 0;
-  _includeIds = false;
-
   setConfiguration(conf());
 }
 
@@ -143,10 +143,18 @@ void HootApiDbWriter::open(QString urlStr)
       LOG_DEBUG("Updating map with ID: " << _hootdb.getMapId() << "...");
     }
   }
-  else// if (mapIds.size() == 0)
+  else
   {
     LOG_DEBUG("Map " << mapName << " was not found, must insert.");
     _hootdb.setMapId(_hootdb.insertMap(mapName));
+  }
+
+  LOG_VARD(_jobId);
+  if (!_jobId.trimmed().isEmpty())
+  {
+    // a job id was passed in by the services; write the id of the map being written to the job
+    // status table
+    _hootdb.updateJobStatusResourceId(_jobId, _hootdb.getMapId());
   }
 
   _startNewChangeSet();
@@ -189,15 +197,6 @@ long HootApiDbWriter::_openDb(const QString urlStr/*, const bool forDelete*/)
     _hootdb.setUserId(_hootdb.getUserId(_userEmail, true));
   }
   LOG_VARD(_hootdb.getCurrentUserId());
-
-//  LOG_VARD(_overwriteMap);
-//  LOG_VARD(forDelete);
-//  if (!_overwriteMap && !forDelete && _hootdb.currentUserHasMapWithName(mapName))
-//  {
-//    throw HootException(
-//      "User with ID: " + QString::number(_hootdb.getCurrentUserId()) +
-//      " already has map with name: " + mapName);
-//  }
 
   // start the transaction. We'll close it when finalizePartial is called.
   _hootdb.transaction();
@@ -342,6 +341,7 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
   setRemap(configOptions.getHootapiDbWriterRemapIds());
   setCopyBulkInsertActivated(configOptions.getHootapiDbWriterCopyBulkInsert());
+  setJobId(configOptions.getHootapiDbWriterJobId());
 }
 
 void HootApiDbWriter::_startNewChangeSet()

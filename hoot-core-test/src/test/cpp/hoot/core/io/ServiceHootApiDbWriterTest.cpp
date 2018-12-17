@@ -62,6 +62,7 @@ class ServiceHootApiDbWriterTest : public HootTestFixture
   CPPUNIT_TEST(writeTwoMapsSameNameDifferentUsers);
   CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteDisabledTest);
   CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteEnabledTest);
+  CPPUNIT_TEST(jobIdTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -505,6 +506,63 @@ public:
     const bool firstMapExists = db.mapExists(firstMapId);
     db.close();
     CPPUNIT_ASSERT(!firstMapExists);
+  }
+
+  void jobIdTest()
+  {
+    setUpTest("ServiceHootApiDbWriterTest-jobIdTest");
+
+    // create a services job
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    const QString jobId = db.insertJob(_testName);
+    LOG_VARD(jobId);
+    db.close();
+
+    // create a map
+    OsmMapPtr map(new OsmMap());
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    n1->setTag("note", "n1");
+    map->addNode(n1);
+
+    // write the map and pass the job id into the writer
+    HootApiDbWriter writer;
+    writer.setJobId(jobId);
+    writer.setRemap(false);
+    writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    writer.write(map);
+    const long firstMapId = writer.getMapId();
+    LOG_VARD(firstMapId);
+    writer.close();
+
+    // write another copy of the map w/o setting the job id on the writer
+    HootApiDbWriter writer2;
+    writer2.setJobId("");
+    writer2.setRemap(false);
+    writer2.setUserEmail(userEmail());
+    writer2.setIncludeDebug(true);
+    writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName + "2").toString());
+    writer2.write(map);
+    const long secondMapId = writer2.getMapId();
+    LOG_VARD(secondMapId);
+    writer2.close();
+
+    // the first map's id should be written to the job status table resource_id col for the input
+    // job id and the resource id shouldn't have changed when the second map was written
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    long resourceId = db.getJobStatusResourceId(jobId);
+    LOG_VARD(resourceId);
+    CPPUNIT_ASSERT(firstMapId != secondMapId);
+    CPPUNIT_ASSERT_EQUAL(firstMapId, resourceId);
+    db.close();
+
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    db.deleteMap(firstMapId);
+    db.deleteMap(secondMapId);
+    db._deleteJob(jobId);
+    db.close();
   }
 
 private:
