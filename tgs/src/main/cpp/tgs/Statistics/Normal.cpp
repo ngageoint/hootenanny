@@ -39,7 +39,7 @@ namespace Tgs
     ////
     // http://en.wikipedia.org/wiki/Normal_distribution
     ////
-    double c = 1 / (sqrt(sigma) * sqrt(2 * M_PI));
+    double c = 1 / (sigma * sqrt(2 * M_PI));
     double ep = pow(M_E, -1.0 * pow(x - mu, 2.0) / (2.0 * sigma * sigma));
     return c * ep;
   }
