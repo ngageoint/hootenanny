@@ -122,8 +122,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
         c->setConfiguration(*_conf);
       }
 
-      boost::shared_ptr<OsmMapOperation> op(new VisitorOp(t));
-      op->apply(map);
+      map->visitRw(*t);
 
       if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {

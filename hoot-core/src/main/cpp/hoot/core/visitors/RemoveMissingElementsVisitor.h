@@ -27,7 +27,7 @@
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
 
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Removes non-existent element references from relations or ways with negative IDs.
  */
-class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
+class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
   public OperationStatusInfo
 {
 public:

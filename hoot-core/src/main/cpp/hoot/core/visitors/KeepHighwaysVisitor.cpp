@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepHighwaysVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, KeepHighwaysVisitor)
 
 void KeepHighwaysVisitor::visit(const ConstElementPtr& e)
 {

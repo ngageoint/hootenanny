@@ -464,7 +464,7 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
         {
           ExtractWaysVisitor v(result);
           v.setOsmMap(map.get());
-          e->visitRw(*map, v);
+          e->visitRo(*map, v);
         }
       }
       return result;

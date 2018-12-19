@@ -38,7 +38,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, FindHighwayIntersectionsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, FindHighwayIntersectionsVisitor)
 
 void FindHighwayIntersectionsVisitor::visit(const ConstElementPtr& e)
 {

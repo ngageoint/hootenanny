@@ -41,11 +41,10 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, CompletelyContainedByMapElementVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, CompletelyContainedByMapElementVisitor)
 
 CompletelyContainedByMapElementVisitor::CompletelyContainedByMapElementVisitor()
 {
-  _map = 0;
   _complete = true;
 }
 

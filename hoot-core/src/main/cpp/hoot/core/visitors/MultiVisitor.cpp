@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, MultiVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, MultiVisitor)
 
 MultiVisitor::MultiVisitor()
 {

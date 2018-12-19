@@ -45,7 +45,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyWayGeneralizeVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, PertyWayGeneralizeVisitor)
 
 PertyWayGeneralizeVisitor::PertyWayGeneralizeVisitor() :
 _epsilon(-1.0)

@@ -28,17 +28,13 @@
 #define ADDREF1VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class AddRef1Visitor :
-    public ConstElementVisitor,
-    public ConstOsmMapConsumer,
-    public Configurable
+class AddRef1Visitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -48,25 +44,17 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  /**
-   * AddRef1Visitor requires a read/write map.
-   */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
-
   /**
    * Adds a REF1 tag with a unique string to all valid elements. If the Tags::getNonDebugCount() is
    * greater than zero then the element is tagged with a REF1. The unique string is simply a counter
    * so it isn't going to be unique across multiple runs.
    */
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const { return "Adds REF1 tags"; }
 
 private:
 
-  OsmMap* _map;
   int _count;
   QString _prefix;
   bool _informationOnly;

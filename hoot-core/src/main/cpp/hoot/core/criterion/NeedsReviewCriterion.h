@@ -61,7 +61,6 @@ private:
 
   ConstOsmMapPtr _map;
   ReviewMarker _reviewMarker;
-
 };
 
 }
