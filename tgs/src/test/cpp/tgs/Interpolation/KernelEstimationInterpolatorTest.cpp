@@ -107,7 +107,7 @@ public:
     uut.setStopDelta(0.0001);
     uut.setSigma(-1);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.155, uut.getSigma(), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.181, uut.getSigma(), 0.001);
 
 //    // write out as a .pgm image
 //    ofstream fs;
@@ -208,9 +208,9 @@ public:
     uut.setDependentColumns(dep);
 
     uut.setSigma(0.002);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3247, uut.estimateError(), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5369, uut.estimateError(), 0.0001);
     uut.setSigma(0.008);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0721615, uut.estimateError(), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.483795, uut.estimateError(), 0.00001);
   }
 
 };

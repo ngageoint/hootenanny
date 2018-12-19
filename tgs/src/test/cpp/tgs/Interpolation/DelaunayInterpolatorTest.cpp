@@ -218,7 +218,7 @@ public:
     dep.push_back("h");
     uut.setDependentColumns(dep);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0029, uut.estimateError(), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0039, uut.estimateError(), 0.0001);
   }
 
 };
