@@ -70,7 +70,7 @@ void ArffToRfConverter::convert(const QString input, const QString output)
   double error;
   double sigma;
   rf.findAverageError(df, error, sigma);
-  LOG_INFO("Error: " << error << " sigma: " << sigma);
+  LOG_DEBUG("Error: " << error << " sigma: " << sigma);
 
   std::ofstream fileStream;
   fileStream.open((output).toStdString().data());
