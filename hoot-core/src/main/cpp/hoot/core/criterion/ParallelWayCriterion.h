@@ -32,7 +32,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
@@ -57,7 +57,7 @@ public:
 
   void setThreshold(Degrees threshold) { _threshold = threshold; }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ParallelWayCriterion(_map, _baseWay, _isParallel)); }

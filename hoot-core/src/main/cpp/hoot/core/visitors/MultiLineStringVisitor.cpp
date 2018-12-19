@@ -31,7 +31,7 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
@@ -43,7 +43,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, MultiLineStringVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, MultiLineStringVisitor)
 
 MultiLineStringVisitor::MultiLineStringVisitor() :
   _provider(),

@@ -31,7 +31,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard

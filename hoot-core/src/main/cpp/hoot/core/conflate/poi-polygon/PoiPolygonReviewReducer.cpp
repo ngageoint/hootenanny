@@ -33,17 +33,18 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/extractors/OverlapExtractor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/algorithms/AddressParser.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/MultiUseCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 #include <float.h>
 
@@ -93,6 +94,11 @@ _addressParsingEnabled(addressParsingEnabled)
   LOG_VART(_addressParsingEnabled);
 }
 
+void PoiPolygonReviewReducer::setConfiguration(const Settings& conf)
+{
+  _addressParser.setConfiguration(conf);
+}
+
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 {
   return _typeScore > 0.03 || _nameScore > 0.35 || _addressMatch;
@@ -133,12 +139,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   if (_addressParsingEnabled)
   {
-    const int numPolyAddresses = AddressParser::hasAddress(poly, *_map);
+    const int numPolyAddresses = _addressParser.hasAddressRecursive(poly, *_map);
     const bool polyHasAddress = numPolyAddresses > 0;
 
     //if both have addresses and they explicitly contradict each other, throw out the review; don't
     //do it if the poly has more than one address, like in many multi-use buildings.
-    if (!_addressMatch && AddressParser::hasAddress(poi, *_map) && polyHasAddress)
+    if (!_addressMatch && _addressParser.hasAddressRecursive(poi, *_map) && polyHasAddress)
     {
       //check to make sure the only address the poly has isn't the poi itself as a way node /
       //relation member
@@ -153,7 +159,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     }
   }
 
-  if (OsmSchema::getInstance().isMultiUse(*poly) && poiHasType && _typeScore < 0.4)
+  if (MultiUseCriterion().isSatisfied(poly) && poiHasType && _typeScore < 0.4)
   {
     LOG_TRACE("Returning miss per review reduction rule #2...");
     return true;
@@ -320,7 +326,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
+  BuildingCriterion buildingCrit;
+  const bool polyIsBuilding = buildingCrit.isSatisfied(poly);
   LOG_VART(polyIsBuilding);
 
   //Similar to previous, except more focused for restrooms.
@@ -445,7 +452,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
   LOG_VART(poiContainedInParkPoly);
 
-  const bool poiIsBuilding = OsmSchema::getInstance().isBuilding(poi);
+  const bool poiIsBuilding = buildingCrit.isSatisfied(poi);
   LOG_VART(poiIsBuilding);
 
   PoiPolygonNameScoreExtractor nameScorer;
@@ -571,7 +578,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
               sportPoiOnOtherSportPolyWithTypeMatch = true;
             }
           }
-          else if (OsmSchema::getInstance().isBuilding(polyNeighbor))
+          else if (buildingCrit.isSatisfied(polyNeighbor))
           {
             if (polyNeighborGeom->contains(poiGeom.get()))
             {

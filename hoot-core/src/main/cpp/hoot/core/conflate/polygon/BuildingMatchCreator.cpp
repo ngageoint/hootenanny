@@ -27,14 +27,13 @@
 #include "BuildingMatchCreator.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
@@ -176,10 +175,9 @@ public:
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
   {
-    if (e1->getStatus() != e2->getStatus() &&
-        e1->isUnknown() && e2->isUnknown() &&
-        OsmSchema::getInstance().isBuilding(e1->getTags(), e1->getElementType()) &&
-        OsmSchema::getInstance().isBuilding(e2->getTags(), e2->getElementType()))
+    BuildingCriterion buildingCrit(false);
+    if (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
+        buildingCrit.isSatisfied(e1) && buildingCrit.isSatisfied(e2))
     {
       return true;
     }
@@ -220,7 +218,7 @@ public:
 
   static bool isMatchCandidate(ConstElementPtr element)
   {
-    return OsmSchema::getInstance().isBuilding(element->getTags(), element->getElementType());
+    return BuildingCriterion().isSatisfied(element);
   }
 
   boost::shared_ptr<HilbertRTree>& getIndex()
@@ -233,7 +231,8 @@ public:
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements that isMatchCandidate(e)
-      boost::function<bool (ConstElementPtr e)> f = boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
+      boost::function<bool (ConstElementPtr e)> f =
+        boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
       boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor

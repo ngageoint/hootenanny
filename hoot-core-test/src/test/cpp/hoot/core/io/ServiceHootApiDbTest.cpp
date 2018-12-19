@@ -37,7 +37,7 @@
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 //  Qt
 #include <QTextCodec>
@@ -443,7 +443,7 @@ public:
     QList<long> ids;
     database.setUserId(database.getOrCreateUser(userEmail(), userName()));
 
-    mapId = database.insertMap(testName, true);
+    mapId = database.insertMap(testName);
     ids.append(mapId);
 
     database.setMapId(mapId);
@@ -485,7 +485,7 @@ public:
 
     QList<long> ids;
     database.setUserId(database.getOrCreateUser(userEmail(), userName()));
-    mapId = database.insertMap(testName, true);
+    mapId = database.insertMap(testName);
     ids.append(mapId);
     database.setMapId(mapId);
     database.beginChangeset();
@@ -540,7 +540,7 @@ public:
     QList<long> ids;
     database.transaction();
     database.setUserId(database.getOrCreateUser(userEmail(), userName()));
-    mapId = database.insertMap(testName, true);
+    mapId = database.insertMap(testName);
     ids.append(mapId);
     database.setMapId(mapId);
     database.beginChangeset();

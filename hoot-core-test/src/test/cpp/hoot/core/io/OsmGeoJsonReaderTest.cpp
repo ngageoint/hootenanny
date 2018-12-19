@@ -30,7 +30,7 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>

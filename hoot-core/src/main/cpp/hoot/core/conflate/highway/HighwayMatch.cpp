@@ -30,15 +30,15 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/algorithms/MultiLineStringSplitter.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
-#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/SigmaAggregator.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>

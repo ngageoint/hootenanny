@@ -50,7 +50,7 @@ namespace geos
 #include <ogr_geometry.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QString>

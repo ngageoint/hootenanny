@@ -37,10 +37,10 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 
 // Qt
@@ -70,7 +70,7 @@ _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
 _preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
-_addChildRefsWhenMissing(false)
+_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderXmlAddChildRefsWhenMissing())
 {
 }
 
@@ -708,7 +708,7 @@ boost::shared_ptr<OGRSpatialReference> OsmXmlReader::getProjection() const
 {
   if (!_wgs84)
   {
-    _wgs84 = MapProjector::getInstance().createWgs84Projection();
+    _wgs84 = MapProjector::createWgs84Projection();
   }
   return _wgs84;
 }

@@ -35,7 +35,7 @@
 #include <geos/geom/MultiPolygon.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
@@ -64,7 +64,7 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
 
 using namespace geos::geom;

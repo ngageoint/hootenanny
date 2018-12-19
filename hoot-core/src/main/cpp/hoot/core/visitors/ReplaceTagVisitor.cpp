@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, ReplaceTagVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, ReplaceTagVisitor)
 
 ReplaceTagVisitor::ReplaceTagVisitor():
   _matchKey(""),

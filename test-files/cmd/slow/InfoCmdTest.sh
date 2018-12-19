@@ -103,3 +103,9 @@ echo "Listing a tag merger..."
 echo ""
 hoot info --tag-mergers | grep "AverageTagMerger"
 echo ""
+
+# CLEANING OPS
+echo "Listing cleaning operations..."
+echo ""
+hoot info --cleaning-operations | grep "DuplicateWayRemover"
+echo ""

@@ -37,7 +37,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
 // Qt

@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 using namespace hoot::pb;
 
 // CPP Unit

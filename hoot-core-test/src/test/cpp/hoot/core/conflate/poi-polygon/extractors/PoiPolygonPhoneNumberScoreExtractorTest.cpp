@@ -27,7 +27,7 @@
 
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonPhoneNumberScoreExtractor.h>
@@ -109,7 +109,7 @@ public:
     PoiPolygonPhoneNumberScoreExtractor uut;
     OsmMapPtr map(new OsmMap());
 
-    NodePtr node1(new Node(Status::Unknown1, -1,geos::geom:: Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
 
     node1->getTags().set("source:phone", "(123) 456 7890");

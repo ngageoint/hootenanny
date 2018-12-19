@@ -37,7 +37,7 @@ using namespace boost;
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -124,7 +124,7 @@ void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) cons
 
 void Node::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
-  filter.visit(map.getNode(getId()));
+  filter.visit(boost::dynamic_pointer_cast<const Node>(map.getNode(getId())));
 }
 
 }

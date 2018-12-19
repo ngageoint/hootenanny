@@ -27,14 +27,14 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
 #include <hoot/core/conflate/SearchRadiusCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
 // CPP Unit

@@ -58,11 +58,11 @@ public:
   std::map<QString, int> getTagCounts(const QStringList inputs);
 
   /**
-   * Displays a summary for tag count data
+   * Returns a summary for tag count data
    *
    * @param tagCounts the data to display
    */
-  void printTagCounts(const std::map<QString, int>& tagCounts);
+  QString getTagCountsString(const std::map<QString, int>& tagCounts);
 
   void setTagKeys(const QStringList keys) { _tagKeys = keys; }
   void setCriterionClassName(const QString name) { _criterionClassName = name; }

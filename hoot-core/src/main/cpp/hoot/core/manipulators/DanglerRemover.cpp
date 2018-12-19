@@ -39,9 +39,9 @@ using namespace geos::geom;
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/algorithms/MaximalNearestSubline.h>
+#include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/WorkingMap.h>
 #include <hoot/core/criterion/UnknownCriterion.h>
@@ -66,8 +66,6 @@ using namespace Tgs;
 
 namespace hoot
 {
-
-#define SQR(x) ((x) * (x))
 
 DanglerRemover::DanglerRemover(Meters errorPlus)
 {
@@ -96,10 +94,9 @@ const vector< boost::shared_ptr<Manipulation> >& DanglerRemover::findWayManipula
   size_t i;
   for (i = 0; i < wids.size(); i++)
   {
-    if (Log::getInstance().isInfoEnabled() && i >= 100 && i % 100 == 0)
+    if (i >= 100 && i % 100 == 0)
     {
-      cout << "  finding manipulations: " << i << " / " << wids.size() << "        \r";
-      cout.flush();
+      PROGRESS_INFO("  finding manipulations: " << i << " / " << wids.size() << "        ");
     }
     if (_map->containsWay(wids[i]))
     {
@@ -108,9 +105,9 @@ const vector< boost::shared_ptr<Manipulation> >& DanglerRemover::findWayManipula
     }
   }
 
-  if (Log::getInstance().isInfoEnabled() && i >= 100)
+  if (i >= 100)
   {
-    cout << endl;
+    LOG_INFO("  finding manipulations: " << wids.size() << " / " << wids.size() << "        ");
   }
 
   return _result;

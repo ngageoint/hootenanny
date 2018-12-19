@@ -34,7 +34,7 @@
 */
 
 tds = {
-    // getDbSchema - Load the standard schema or modify it into the TDS structure.
+    // getDbSchema - Load the standard schema or modify it into the TDS structure
     getDbSchema: function() {
         tds.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
         tds.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
@@ -221,7 +221,7 @@ tds = {
         // Now add the o2s feature to the tds.rawSchema
         // We can drop features but this is a nice way to see what we would drop
         // NOTE: We add these feature AFTER adding the ESRI Feature Dataset so that they
-        // DON'T get put under the Feature Dataset in the output.
+        // DON'T get put under the Feature Dataset in the output
         newSchema = translate.addEmptyFeature(newSchema);
 
         // Add the empty Review layers
@@ -235,10 +235,10 @@ tds = {
     }, // End getDbSchema
 
     // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
-    //                feature, checking enumerated values and populating the OTH field.
+    //                feature, checking enumerated values and populating the OTH field
     validateAttrs: function(geometryType,attrs) {
 
-        // First, use the lookup table to quickly drop all attributes that are not part of the feature.
+        // First, use the lookup table to quickly drop all attributes that are not part of the feature
         // This is quicker than going through the Schema due to the way the Schema is arranged
         var attrList = tds.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
@@ -272,7 +272,7 @@ tds = {
                         // Since we deleted the attribute, Skip the text check
                         continue;
                     }
-                    
+
                     // Now check the length of the text fields
                     // We need more info from the customer about this: What to do if it is too long
                     if (val in tds.rules.txtLength)
@@ -287,7 +287,7 @@ tds = {
                             }
                             else
                             {
-                                // Still too long. Chop to the maximum length.
+                                // Still too long. Chop to the maximum length
                                 attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncating to ' + tds.rules.txtLength[val] + ' characters.');
                             }
@@ -329,7 +329,7 @@ tds = {
                             }
                             else
                             {
-                                // Still too long. Chop to the maximum length.
+                                // Still too long. Chop to the maximum length
                                 attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncating to ' + tds.rules.txtLength[val] + ' characters.');
                             }
@@ -428,8 +428,8 @@ tds = {
     }, // End validateTDSAttrs
 
 
-    // Sort out if we need to return more than one feature.
-    // This is generally for Roads, Railways, bridges, tunnels etc.
+    // Sort out if we need to return more than one feature
+    // This is generally for Roads, Railways, bridges, tunnels etc
     manyFeatures: function(geometryType, tags, attrs)
     {
 
@@ -556,7 +556,7 @@ tds = {
             delete nTags.embankment;
         }
 
-        // Loop through the new features and process them.
+        // Loop through the new features and process them
         for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
         {
             // pre processing
@@ -597,12 +597,12 @@ tds = {
         }
     },
 
-    // Untangle TDS attributes & OSM tags.
+    // Untangle TDS attributes & OSM tags
     // Some people have been editing OSM files and inserting TDS attributes
     untangleAttributes: function (attrs, tags)
     {
-        // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
-        // We need to unpack this before we can do anything.
+        // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag
+        // We need to unpack this before we can do anything
         if (attrs.other_tags)
         {
             var tList = attrs.other_tags.split('","');
@@ -683,7 +683,7 @@ tds = {
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
         // 2) Convert all of the Attrs to uppercase - if needed
-        // 3) Swap some of the funky named attrs around.
+        // 3) Swap some of the funky named attrs around
         for (var col in attrs)
         {
             // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
@@ -741,9 +741,9 @@ tds = {
         } // End in attrs loop
 
         // Drop all of the XXX Closure default values IFF the associated attributes are
-        // not set.
+        // not set
         // Doing this after the main cleaning loop so all of the -999999 values are
-        // already gone and we can just check for existance.
+        // already gone and we can just check for existance
         for (var i in tds.rules.closureList)
         {
             if (attrs[i])
@@ -1056,7 +1056,7 @@ tds = {
 
 
         // Lifecycle tags
-        // NOTE: This needs to be expanded.
+        // NOTE: This needs to be expanded
         if (tags.condition)
         {
             if (tags.condition == 'construction')
@@ -1114,7 +1114,7 @@ tds = {
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
         // AK030 - Amusement Parks
-        // F_CODE translation == tourism but FFN translation could be leisure.
+        // F_CODE translation == tourism but FFN translation could be leisure
         // E.g. water parks
         if (attrs.F_CODE == 'AK030')
         {
@@ -1152,7 +1152,7 @@ tds = {
         } // End unpack tags.note
 
         // Fix up areas
-        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area
         if (geometryType == 'Area' && ! translate.isOsmArea(tags))
         {
             // Debug
@@ -1219,10 +1219,10 @@ tds = {
 
         if (tds.PreRules == undefined)
         {
-        // See ToOsmPostProcessing for more details about rulesList.
+        // See ToOsmPostProcessing for more details about rulesList
             var rulesList = [
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
-            ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.communication == 'line'","t['cable:type'] = 'communication'"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
@@ -1263,7 +1263,7 @@ tds = {
             ["t.railway == 'crossing'","t['transport:type'] = 'railway'; a.F_CODE = 'AQ062'; delete t.railway"],
             ["t.resource","t.raw_material = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
-            ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
+            // ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
             ["t['tower:type'] == 'minaret' && t.man_made == 'tower'","delete t.man_made"],
             ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
@@ -1277,7 +1277,7 @@ tds = {
             tds.PreRules = translate.buildComplexRules(rulesList);
         }
 
-        // Apply the rulesList.
+        // Apply the rulesList
         // translate.applyComplexRules(tags,attrs,tds.PreRules);
         // Pulling this out of translate
         for (var i = 0, rLen = tds.PreRules.length; i < rLen; i++)
@@ -1292,15 +1292,15 @@ tds = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // Some tags imply that they are buildings but don't actually say so.
+        // Some tags imply that they are buildings but don't actually say so
         // Most of these are taken from raw OSM and the OSM Wiki
         // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
-        // are not buildings.
+        // are not buildings
         // Taking "place_of_worship" out of this and making it a building
         var notBuildingList = [
             'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
             'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','marketplace','post_box',
+            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
             'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
             'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
             'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
@@ -1308,7 +1308,7 @@ tds = {
             'trailer_park','game_feeding', 'ferry_terminal'
             ]; // End notBuildingList
 
-        if (tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
+        if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
         // going out on a limb and processing OSM specific tags:
         // - Building == a thing,
@@ -1326,21 +1326,27 @@ tds = {
             }
             else
             {
-                attrs.F_CODE = 'AL013'; // Building
+                // Make sure we don't turn point facilities into buildings
+                if (!(tags.facility = 'yes'))
+                {
+                    // Debug
+                    // print('Making a building: ' + tags.facility);
+                    attrs.F_CODE = 'AL013'; // Building
+                }
             }
 
-            // If we don't have a Feature Function then assign one.
+            // If we don't have a Feature Function then assign one
             if (!(attrs.FFN))
             {
-                attrs.FFN = facilityList[tags.amenity];
+                // attrs.FFN = facilityList[tags.amenity];
                 // Debug
                 // print('PreDropped: amenity = ' + tags.amenity);
                 delete tags.amenity;
             }
         }
 
-        // Adding a custom rule for malls to override the rules above.
-        // All of the other "shops" are buildings 
+        // Adding a custom rule for malls to override the rules above
+        // All of the other "shops" are buildings
         if (tags.shop == 'mall') attrs.F_CODE = 'AG030';
 
         // Churches etc
@@ -1439,7 +1445,7 @@ tds = {
                 tags.landuse = 'farmland';
                 break;
 
-            case 'farmyard': // NOTE: This is different to farm.
+            case 'farmyard': // NOTE: This is different to farm
                 tags.facility = 'yes';
                 tags.use = 'agriculture';
                 delete tags.landuse;
@@ -1559,7 +1565,7 @@ tds = {
                     {
                         attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
                         delete tags.place;
-                        break;                        
+                        break;
                     }
                     else
                     {
@@ -1572,8 +1578,8 @@ tds = {
         }
 
 
-        // Bridges & Roads.  If we have an area or a line everything is fine.
-        // If we have a point, we need to make sure that it becomes a bridge, not a road.
+        // Bridges & Roads.  If we have an area or a line everything is fine
+        // If we have a point, we need to make sure that it becomes a bridge, not a road
         if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
         // Movable Bridges
@@ -1594,7 +1600,7 @@ tds = {
           tags.note = translate.appendValue(tags.note,'Viaduct',';');
         }
 
-        // Fix road junctions.
+        // Fix road junctions
         // TDS has junctions as points. If we can make the feature into a road, railway or bridge then we will
         // If not, it should go to the o2s layer
         if (tags.junction && geometryType !== 'Point')
@@ -1767,7 +1773,7 @@ tds = {
         {
             attrs.FFN = '921'; // Recreation
         }
-    
+
     }, // End applyToTdsPreProcessing
 
     applyToTdsPostProcessing : function (tags, attrs, geometryType, notUsedTags)
@@ -1867,7 +1873,7 @@ tds = {
                     break;
             }
 
-            // Use the road surface to possibly override the classification.
+            // Use the road surface to possibly override the classification
             // We are assumeing that unpaved roads are Fair Weather only
             switch (attrs.ZI016_ROC)
             {
@@ -1957,8 +1963,8 @@ tds = {
             delete attrs.ZI005_FNA;
         }
 
-        // RLE vs LOC: Need to deconflict this for various features.
-        // locList: list of features that can be "Above Surface". Other features use RLE (Relitive Level) instead.
+        // RLE vs LOC: Need to deconflict this for various features
+        // locList: list of features that can be "Above Surface". Other features use RLE (Relitive Level) instead
         // var locList = ['AT005', 'AQ113', 'BH065', 'BH110'];
 
 //         if (attrs.LOC == '45' && (locList.indexOf(attrs.TRS) == -1))
@@ -1985,11 +1991,11 @@ tds = {
         // If things have a height greater than 46m, tags them as being a "Navigation Landmark"
         if (attrs.HGT > 46 && !(attrs.LMC)) attrs.LMC = '1001';
 
-        // Alt_Name:  AL020 Built Up Area is the _ONLY_ feature in TDS that has a secondary name.
+        // Alt_Name:  AL020 Built Up Area is the _ONLY_ feature in TDS that has a secondary name
         if (attrs.ZI005_FNA2 && attrs.F_CODE !== 'AL020')
         {
             // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
-            // but this causes problems so until the customer gives us more direction, we are going to drop it.
+            // but this causes problems so until the customer gives us more direction, we are going to drop it
             // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
 
             delete attrs.ZI005_FNA2;
@@ -2078,7 +2084,7 @@ tds = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
-        // See if we have an o2s_X layer and try to unpack it.
+        // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
         {
             tags = translate.parseO2S(attrs);
@@ -2113,7 +2119,7 @@ tds = {
         if (tds.lookup == undefined)
         {
             // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
-            // other tables are not set either.
+            // other tables are not set either
 
             // Support TDS v30 and other Import Only attributes
             tds.rules.one2one.push.apply(tds.rules.one2one,tds.rules.one2oneIn);
@@ -2121,7 +2127,7 @@ tds = {
             tds.lookup = translate.createLookup(tds.rules.one2one);
         }
 
-        // Untangle TDS attributes & OSM tags.
+        // Untangle TDS attributes & OSM tags
         // NOTE: This could get wrapped with an ENV variable so it only gets called during import
         tds.untangleAttributes(attrs, tags);
 
@@ -2139,7 +2145,7 @@ tds = {
         tds.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
 
-        // Use the FCODE to add some tags.
+        // Use the FCODE to add some tags
         if (attrs.F_CODE)
         {
             var ftag = tds.fcodeLookup['F_CODE'][attrs.F_CODE];
@@ -2156,14 +2162,14 @@ tds = {
         }
 
         // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
-        // isn't used in the translation - this should end up empty.
+        // isn't used in the translation - this should end up empty
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
         delete notUsedAttrs.F_CODE;
         delete notUsedAttrs.FCSUBTYPE;
 
         // apply the simple number and text biased rules
-        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
         translate.applySimpleNumBiased(notUsedAttrs, tags, tds.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(notUsedAttrs, tags, tds.rules.txtBiased, 'forward');
 
@@ -2248,8 +2254,8 @@ tds = {
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
 
-        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
-        // There is no way we can translate these to a single TDS feature.
+        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line
+        // There is no way we can translate these to a single TDS feature
         if (geometryType == 'Collection') return null;
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
@@ -2281,7 +2287,7 @@ tds = {
         tds.applyToTdsPreProcessing(tags, attrs, geometryType);
 
         // Make a copy of the input tags so we can remove them as they get translated. What is left is
-        // the not used tags.
+        // the not used tags
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
@@ -2314,7 +2320,7 @@ tds = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
         }
 
-        // If we have unused tags, add them to the memo field.
+        // If we have unused tags, add them to the memo field
         if (Object.keys(notUsedTags).length > 0 && tds.configOut.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
@@ -2367,8 +2373,8 @@ tds = {
             // var str = JSON.stringify(tags);
             var str = JSON.stringify(tags,Object.keys(tags).sort());
 
-            // Shapefiles can't handle fields > 254 chars.
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+            // Shapefiles can't handle fields > 254 chars
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
             // A nicer thing would be to arrange the tags until they fit neatly
             if (str.length < 255 || tds.configOut.OgrSplitO2s == 'false')
             {
@@ -2395,14 +2401,14 @@ tds = {
         }
         else // We have a feature
         {
-            // Check if we need to make more features.
+            // Check if we need to make more features
             // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
             returnData = tds.manyFeatures(geometryType,tags,attrs);
 
             // Debug: Add the first feature
             //returnData.push({attrs: attrs, tableName: ''});
 
-            // Now go through the features and clean them up.
+            // Now go through the features and clean them up
             var gType = geometryType.toString().charAt(0);
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
@@ -2413,7 +2419,7 @@ tds = {
                     // Validate attrs: remove all that are not supposed to be part of a feature
                     tds.validateAttrs(geometryType,returnData[i]['attrs']);
 
-                    // Now set the FCSubtype.
+                    // Now set the FCSubtype
                     // NOTE: If we export to shapefile, GAIT _will_ complain about this
                     if (tds.configOut.OgrEsriFcsubtype == 'true')
                     {

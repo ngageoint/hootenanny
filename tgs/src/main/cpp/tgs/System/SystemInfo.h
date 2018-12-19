@@ -44,7 +44,6 @@ namespace Tgs
     static long getPhysicalMemoryUsage() { long v; long rss; getMemoryUsage(v, rss); return rss; }
     static long getVirtualMemoryUsage() { long v; long rss; getMemoryUsage(v, rss); return v; }
 
-    static void printMemoryUsage();
     static std::string getMemoryUsageString();
     static std::string humanReadable(long bytes);
   };

@@ -27,9 +27,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/splitter/LargeWaySplitter.h>
+#include <hoot/core/algorithms/splitter/LargeWaySplitter.h>
 #include <hoot/core/conflate/tile/LocalTileWorker.h>
-#include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
 #include <hoot/core/conflate/tile/TileConflator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>

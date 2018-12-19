@@ -29,7 +29,7 @@
 
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 
 // Std

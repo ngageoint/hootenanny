@@ -31,12 +31,12 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
-#include <phonenumbers/phonenumbermatcher.h>
-#include <phonenumbers/phonenumbermatch.h>
+//#include <phonenumbers/phonenumbermatcher.h>
+//#include <phonenumbers/phonenumbermatch.h>
 using namespace i18n::phonenumbers;
 
 namespace hoot
@@ -59,12 +59,12 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
                                                     const ConstElementPtr& poi,
                                                     const ConstElementPtr& poly) const
 {
-  const QList<ElementPhoneNumber> poiPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(poi);
+  const QList<ElementPhoneNumber> poiPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(*poi);
   if (poiPhoneNumbers.size() > 0)
   {
     LOG_VART(poiPhoneNumbers.size());
   }
-  const QList<ElementPhoneNumber> polyPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(poly);
+  const QList<ElementPhoneNumber> polyPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(*poly);
   if (polyPhoneNumbers.size() > 0)
   {
     LOG_VART(polyPhoneNumbers.size());

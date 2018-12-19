@@ -36,9 +36,9 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/conflate/splitter/IntersectionSplitter.h>
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -242,18 +242,10 @@ double GraphComparator::compareMaps()
       _ci = zalpha * _s / sqrt(scores.size());
     }
 
-    if (Log::getInstance().isInfoEnabled())
-    {
-      cout << i << " / " << _iterations << " mean: " << _mean << "   \r";
-      cout.flush();
-    }
-    //qDebug() << _median << 1 - error << _mean << "+/-" << _ci << "sd: " << _s;
+    PROGRESS_INFO(i << " / " << _iterations << " mean: " << _mean << "   ");
   }
 
-  if (Log::getInstance().isInfoEnabled())
-  {
-    cout << "                                   \r";
-  }
+  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
 
   return _mean;
 }

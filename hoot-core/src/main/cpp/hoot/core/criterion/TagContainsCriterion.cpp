@@ -49,7 +49,7 @@ _valueSubstring(valueSubstrings)
 {
 }
 
-bool TagContainsCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool matches = false;
   for (int i = 0; i < _key.size(); i++)

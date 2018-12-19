@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/MultiLineStringSplitter.h>
+#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Log.h>

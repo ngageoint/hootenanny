@@ -28,7 +28,7 @@
 #include "OsmApiChangeset.h"
 
 //  Hoot
-#include <hoot/core/VersionDefines.h>
+#include <hoot/core/info/VersionDefines.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>

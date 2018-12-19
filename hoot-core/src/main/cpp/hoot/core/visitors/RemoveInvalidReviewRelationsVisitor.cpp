@@ -28,16 +28,16 @@
 #include "RemoveInvalidReviewRelationsVisitor.h"
 
 //hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
-#include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveInvalidReviewRelationsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidReviewRelationsVisitor)
 
 RemoveInvalidReviewRelationsVisitor::RemoveInvalidReviewRelationsVisitor()
 {

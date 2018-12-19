@@ -150,7 +150,7 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
         throw HootException(toJson(exception));
       }
     }
-    // if this is a generic error (e.g. throw Errro("blah");) then just report the string.
+    // if this is a generic error (e.g. throw Error("blah");) then just report the string.
     else if (exception->IsNativeError() &&
       str(exception->ToObject()->GetConstructorName()) == "Error")
     {

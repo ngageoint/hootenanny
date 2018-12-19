@@ -133,12 +133,12 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
   }
 }
 
-bool ParallelWayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if(e->getElementType() == ElementType::Way)
+  if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
-    double difference = calculateDifference(w);
+    ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(e);
+    double difference = calculateDifference(way);
 
     // If the mean "normals" are within 10 degrees of perpendicular.
     bool parallel = difference < toRadians(_threshold);

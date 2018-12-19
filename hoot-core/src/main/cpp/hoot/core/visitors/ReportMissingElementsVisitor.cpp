@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
 
 using namespace std;
@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, ReportMissingElementsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, ReportMissingElementsVisitor)
 
 ReportMissingElementsVisitor::ReportMissingElementsVisitor(bool removeMissing, int maxReport) :
 _maxReport(maxReport),

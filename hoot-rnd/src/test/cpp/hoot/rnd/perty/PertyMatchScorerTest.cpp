@@ -30,7 +30,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/TagKeyCountVisitor.h>
 #include <hoot/rnd/perty/PertyMatchScorer.h>
 #include <hoot/rnd/scoring/MapMatchScoringUtils.h>
@@ -111,10 +111,10 @@ public:
     //different with each run
     CPPUNIT_ASSERT_EQUAL(100, (int)combinedMap->getElementCount());
     boost::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef1(new TagKeyCountVisitor(MetadataTags::Ref1()));
-    combinedMap->visitRw(*tagKeyCountVisitorRef1);
+    combinedMap->visitRo(*tagKeyCountVisitorRef1);
     CPPUNIT_ASSERT_EQUAL(8, (int)tagKeyCountVisitorRef1->getStat());
     boost::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef2(new TagKeyCountVisitor(MetadataTags::Ref2()));
-    combinedMap->visitRw(*tagKeyCountVisitorRef2);
+    combinedMap->visitRo(*tagKeyCountVisitorRef2);
     CPPUNIT_ASSERT_EQUAL(10, (int)tagKeyCountVisitorRef2->getStat());
   }
 

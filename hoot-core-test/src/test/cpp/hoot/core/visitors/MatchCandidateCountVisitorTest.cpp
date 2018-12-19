@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/elements/Way.h>

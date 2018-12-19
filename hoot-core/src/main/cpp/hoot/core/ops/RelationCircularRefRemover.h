@@ -29,7 +29,7 @@
 #define RELATION_CIRCULAR_REF_REMOVER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
@@ -61,7 +61,7 @@ public:
            " relation members involved in circular references"; }
 
   virtual QString getDescription() const
-  { return "Removes one half of a relation pair, both of which reference each other, from a map"; }
+  { return "Removes half of a relation pair, that reference each other, from a map"; }
 
 private:
 

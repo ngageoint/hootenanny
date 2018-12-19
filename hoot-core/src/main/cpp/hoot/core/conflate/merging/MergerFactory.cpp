@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
 #include <hoot/core/util/ConfigOptions.h>

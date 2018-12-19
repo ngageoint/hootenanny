@@ -28,7 +28,7 @@
 #include "CumulativeConflator.h"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -36,7 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/rnd/visitors/KeepReviewsVisitor.h>
 

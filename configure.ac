@@ -122,6 +122,10 @@ LIBPOSTAL_INIT()
 m4_include([m4/libphonenumber.m4])
 LIBPHONENUMBER_INIT()
 
+# liboauthcpp
+m4_include([m4/liboauthcpp.m4])
+LIBOAUTHCPP_INIT()
+
 ##
 # Optional
 ##

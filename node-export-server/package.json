@@ -3,16 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "archiver": "0.14.4",
+    "archiver": "^3.0.0",
     "configure": "0.0.1",
-    "express": "4.13.1",
-    "lodash": "3.10.0",
-    "node-uuid": "1.4.3",
-    "rimraf": "2.4.2"
+    "express": "^4.16.4",
+    "lodash": "^4.17.11",
+    "uuid": "^3.3.2",
+    "rimraf": "^2.6.2"
   },
   "devDependencies": {
-    "mocha": "2.2.5",
-    "chai": "3.2.0"
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   },
   "scripts": {
     "start": "node server.js --config config.json",

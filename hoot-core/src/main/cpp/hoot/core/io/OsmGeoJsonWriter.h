@@ -81,7 +81,7 @@ protected:
    * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  void _writeNodes();
+  virtual void _writeNodes();
 
   /**
    * @brief _writeNode Writes a single node; metadata, tags, and geometry
@@ -93,7 +93,7 @@ protected:
    * @brief _writeWays Iterates all ways that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  void _writeWays();
+  virtual void _writeWays();
 
   /**
    * @brief _writeWay Writes a single way; metadata, tags, and geometry
@@ -105,7 +105,7 @@ protected:
    * @brief _writeRelations Iterates all relations that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  void _writeRelations();
+  virtual void _writeRelations();
 
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles

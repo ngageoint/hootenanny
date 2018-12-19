@@ -106,6 +106,9 @@ void HootApiDbBulkInserter::open(QString url)
 
 void HootApiDbBulkInserter::_getOrCreateMap()
 {
+  // TODO: There's a lot of overlap between this and similar code in HootApiDbWriter that needs
+  // merging.
+
   if (_userEmail.isEmpty())
   {
     throw HootException("Please set the user's email address via the '" +
@@ -123,38 +126,41 @@ void HootApiDbBulkInserter::_getOrCreateMap()
   }
   _changesetData.changesetUserId = _database.getUserId(_userEmail, true);
 
-  QStringList pList = QUrl(_outputUrl).path().split("/");
-  QString mapName = pList[2];
-  std::set<long> mapIds = _database.selectMapIds(mapName);
-  if (mapIds.size() > 0)
+  // URL must have name in it
+  const QStringList pList = QUrl(_outputUrl).path().split("/");
+  const QString mapName = pList[2];
+  LOG_VARD(mapName);
+
+//  LOG_VARD(_overwriteMap);
+//  if (!_overwriteMap && _database.currentUserHasMapWithName(mapName))
+//  {
+//    throw HootException(
+//      "User with ID: " + QString::number(_database.getCurrentUserId()) +
+//      " already has map with name: " + mapName);
+//  }
+
+  const long mapId = _database.getMapIdByNameForCurrentUser(mapName);
+  LOG_VART(mapId);
+
+  if (mapId != -1)
   {
     if (_overwriteMap) // delete map and overwrite it
     {
-      for (std::set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
-      {
-        LOG_DEBUG("Removing map with ID: " << *it << "...");
-        _database.deleteMap(*it);
-        LOG_DEBUG("Finished removing map with ID: " << *it);
-      }
-
-      _database.setMapId(_database.insertMap(mapName, true));
-    }
-    else if (mapIds.size() > 1)
-    {
-      LOG_ERROR("There are multiple maps with this name. Consider using "
-                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
+      _database.verifyCurrentUserMapUse(mapId, true);
+      _database.deleteMap(mapId);
+      _database.setMapId(_database.insertMap(mapName));
     }
     else
     {
-      std::set<long>::const_iterator idItr = mapIds.begin();
-      _database.setMapId(*idItr);
+      _database.verifyCurrentUserMapUse(mapId, true);
+      _database.setMapId(mapId);
       LOG_DEBUG("Updating map with ID: " << _database.getMapId() << "...");
     }
   }
-  else if (mapIds.size() == 0)
+  else// if (mapIds.size() == 0)
   {
     LOG_DEBUG("Map " << mapName << " was not found, must insert.");
-    _database.setMapId(_database.insertMap(mapName, true));
+    _database.setMapId(_database.insertMap(mapName));
   }
 }
 

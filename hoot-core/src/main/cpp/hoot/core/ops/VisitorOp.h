@@ -42,8 +42,6 @@ class ConstElementVisitor;
 
 /**
  * Given a visitor this operation applies the visitor to the map as a read/write operation.
- *
- * Yes, it is that simple.
  */
 class VisitorOp : public OsmMapOperation, public ElementVisitorConsumer
 {
@@ -58,8 +56,6 @@ public:
    * Takes ownership of the visitor.
    */
   VisitorOp(ConstElementVisitor* v) { _visitor.reset(v); }
-
-  //virtual ~VisitorOp() {}
 
   virtual void addVisitor(const ConstElementVisitorPtr& e);
 

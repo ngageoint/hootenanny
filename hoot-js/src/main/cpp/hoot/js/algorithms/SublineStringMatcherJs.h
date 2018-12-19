@@ -28,7 +28,7 @@
 #define __SUBLINE_STRING_MATCHER_JS_H__
 
 // hoot
-#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/js/util/DataConvertJs.h>
 
 // node.js

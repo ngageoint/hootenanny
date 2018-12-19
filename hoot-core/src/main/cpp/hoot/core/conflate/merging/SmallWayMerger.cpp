@@ -32,7 +32,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
@@ -44,6 +44,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -81,6 +83,7 @@ void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
   // make a copy so we can make changes.
   WayMap wm = _map->getWays();
   // go through each way
+  HighwayCriterion highwayCrit;
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     // if we haven't already merged the way
@@ -89,7 +92,7 @@ void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
       boost::shared_ptr<Way> w = it->second;
 
       // if the way is smaller than the threshold
-      if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) &&
+      if (highwayCrit.isSatisfied(w) &&
           ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
       {
         _mergeNeighbors(w);
@@ -126,9 +129,9 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
   boost::shared_ptr<Way> w1 = _map->getWay(*it);
   boost::shared_ptr<Way> w2 = _map->getWay(*(++it));
 
+  HighwayCriterion highwayCrit;
   // if either way is not a highway
-  if (OsmSchema::getInstance().isLinearHighway(w1->getTags(), w1->getElementType()) == false ||
-      OsmSchema::getInstance().isLinearHighway(w2->getTags(), w2->getElementType()) == false)
+  if (highwayCrit.isSatisfied(w1) == false || highwayCrit.isSatisfied(w2) == false)
   {
     return;
   }
@@ -141,13 +144,12 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
   }
 
   // if they're from the same input sets & have effectively the same tags
-  if (w1->getStatus() == w2->getStatus() &&
-      _diff->diff(_map, w1, w2) == 0.0)
+  if (w1->getStatus() == w2->getStatus() && _diff->diff(_map, w1, w2) == 0.0)
   {
     // if both ways are one-way & the beginning of one isn't equal to the end
     // of the other
-    if ((OsmSchema::getInstance().isOneWay(*w1) &&
-         OsmSchema::getInstance().isOneWay(*w2)) &&
+    OneWayCriterion oneWayCrit;
+    if ((oneWayCrit.isSatisfied(w1) && oneWayCrit.isSatisfied(w2)) &&
         (w1->getNodeId(0) != w2->getLastNodeId() &&
          w2->getNodeId(0) != w1->getLastNodeId()))
     {

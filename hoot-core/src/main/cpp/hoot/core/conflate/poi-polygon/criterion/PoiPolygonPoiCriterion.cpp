@@ -22,29 +22,69 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonPoiCriterion.h"
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPoiCriterion)
 
-PoiPolygonPoiCriterion::PoiPolygonPoiCriterion()
+PoiPolygonPoiCriterion::PoiPolygonPoiCriterion() :
+_tagIgnoreList(PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList())
 {
 }
 
-bool PoiPolygonPoiCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return
-    OsmSchema::getInstance().isPoiPolygonPoi(
-      e, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList());
+  const Tags& tags = e->getTags();
+
+  //see note in PoiPolygonPolyCriterion::isSatisified
+  if (OsmSchema::getInstance().containsTagFromList(tags, _tagIgnoreList))
+  {
+    LOG_TRACE("Contains tag from tag ignore list");
+    return false;
+  }
+  LOG_TRACE("Does not contain tag from tag ignore list");
+
+  const bool isNode = e->getElementType() == ElementType::Node;
+  if (!isNode)
+  {
+    return false;
+  }
+
+  //TODO: should use be added as a category here?
+  const bool inABuildingOrPoiCategory =
+    OsmSchema::getInstance().getCategories(tags)
+      .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  bool isPoi = isNode && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  LOG_VART(inABuildingOrPoiCategory);
+  LOG_VART(tags.get("uuid"));
+  LOG_VART(tags.getNames());
+  LOG_VART(isPoi);
+
+  if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois())
+  {
+    if (_addressParser.hasAddress(*boost::dynamic_pointer_cast<const Node>(e)))
+    {
+      isPoi = true;
+    }
+  }
+
+  //LOG_VART(e);
+  //LOG_VART(isPoi);
+  return isPoi;
 }
 
 }

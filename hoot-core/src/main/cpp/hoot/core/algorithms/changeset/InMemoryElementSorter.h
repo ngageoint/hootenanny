@@ -28,7 +28,7 @@
 #define IN_MEMORY_ELEMENT_SORTER_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ElementInputStream.h>
 
 // Qt

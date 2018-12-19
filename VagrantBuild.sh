@@ -2,6 +2,13 @@
 
 set -e
 
+SILENT_MAKE=-s
+SILENT_CONFIGURE=--quiet
+if [ "$BUILD_VERBOSE" == "yes" ]; then
+  SILENT_MAKE=''
+  SILENT_CONFIGURE=''
+fi
+
 # Set this for use later
 export OS_NAME="$(lsb_release -i -s)"
 
@@ -28,7 +35,7 @@ if [ -f missing ]; then
 fi
 
 # Taking out ui-tests until we get Tomcat8 etc installed
-aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --quiet --with-rnd --with-services --with-uitests
+aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure $SILENT_CONFIGURE --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
@@ -38,9 +45,10 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 
 echo "Building Hoot..."
-make -s clean && make -sj$(nproc)
+make $SILENT_MAKE clean
+make $SILENT_MAKE -j$(nproc)
 echo "Generating Eclipse project files..."
-make -s eclipse
+make $SILENT_MAKE eclipse
 
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 # Copy the web apps, no need to use sudo
@@ -49,8 +57,8 @@ make -s eclipse
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now
 echo "Building Hoot docs..."
-make -sj$(nproc) docs &> /dev/null || true
-make -sj$(nproc) docs
+make $SILENT_MAKE -j$(nproc) docs &> /dev/null || true
+make $SILENT_MAKE -j$(nproc) docs
 
 hoot version
 

@@ -66,7 +66,7 @@ mgcp = {
 
 
     // validateAttrs - Clean up the supplied attr list by dropping anything that should not be part of the
-    //                 feature.
+    //                 feature
     validateAttrs: function(geometryType,attrs) {
 
         var attrList = mgcpAttrLookup[geometryType.toString().charAt(0) + attrs.FCODE];
@@ -102,7 +102,7 @@ mgcp = {
                             else
                             {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length.
+                                // Still too long. Chop to the maximum length
                                 attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
@@ -136,7 +136,7 @@ mgcp = {
                             else
                             {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length.
+                                // Still too long. Chop to the maximum length
                                 attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
@@ -207,8 +207,8 @@ mgcp = {
     }, // End validateAttrs
 
 
-    // Sort out if we need to return more than one feature.
-    // This is generally for Roads, Railways, bridges, tunnels etc.
+    // Sort out if we need to return more than one feature
+    // This is generally for Roads, Railways, bridges, tunnels etc
     manyFeatures: function(geometryType, tags, attrs)
     {
         // Add the first feature to the structure that we return
@@ -331,7 +331,7 @@ mgcp = {
             delete nTags.embankment;
         }
 
-        // Loop through the new features and process them.
+        // Loop through the new features and process them
         for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
         {
             // pre processing
@@ -359,12 +359,12 @@ mgcp = {
 
     // ##### Start of the xxToOsmxx Block #####
 
-    // Untangle MGCP attributes & OSM tags.
+    // Untangle MGCP attributes & OSM tags
     // Some people have been editing OSM files and inserting MGCP attributes
     untangleAttributes: function (attrs, tags)
     {
-        // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
-        // We need to unpack this before we can do anything.
+        // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag
+        // We need to unpack this before we can do anything
         if (attrs.other_tags)
         {
             var tList = attrs.other_tags.split('","');
@@ -434,7 +434,7 @@ mgcp = {
         if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
         // The swap list. These are the same attr, just named differently
-        // These may get converted back on output.
+        // These may get converted back on output
         var swapList = {
                 'CPYRT_NOTE':'CCN',
                 'SRC_INFO':'SDP',
@@ -699,7 +699,7 @@ mgcp = {
                         religion = 'buddhist';
                         break;
 
-                    // In the spec, these don't specify a religion.
+                    // In the spec, these don't specify a religion
                     // case 'religious_community':
                     // case 'pagoda':
                     // case 'shrine':
@@ -895,7 +895,7 @@ mgcp = {
                 break;
 
             case 'BH070': // Ford
-                // Fords are also supposed to be roads.
+                // Fords are also supposed to be roads
                 if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
                 break;
 
@@ -968,22 +968,22 @@ mgcp = {
 
         // AC000 (Processing Facility) vs AL010 (Facility)
         // In TDS, this is just AL010. Therefore, make it AL010 and use a custom rule if we are exporting
-        // We are assumeing that it should produce something.
+        // We are assumeing that it should produce something
         if (tags.facility == 'processing')
         {
             if (! tags.product) tags.product = 'unknown';
             tags.facility = 'yes';
         }
 
-        // Sort out the WID, WD1 etc attributes.
+        // Sort out the WID, WD1 etc attributes
         // Roads etc have a WD1 attribute but this doesn't get translated to "width"
         if (attrs.WD1)
         {
             if (! tags.width) tags.width = attrs.WD1;
         }
 
-        // Fix up areas.
-        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+        // Fix up areas
+        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area
         if (geometryType == 'Area' && ! translate.isOsmArea(tags))
         {
             // Debug
@@ -1026,9 +1026,9 @@ mgcp = {
 
         if (mgcp.mgcpPreRules == undefined)
         {
-            // See ToOsmPostProcessing for more details about rulesList.
+            // See ToOsmPostProcessing for more details about rulesList
             var rulesList = [
-            ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.amenity == 'ferry_terminal'","t['transport:type'] = 'maritime'"],
             ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
@@ -1050,7 +1050,7 @@ mgcp = {
             ["t.rapids == 'yes'","t.waterway = 'rapids'"],
             ["t.resource","t.product = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
-            ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
+            // ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
             ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
             ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.water == 'pond'","a.F_CODE = 'BH170'; t.natural = 'other_pool_type'"],
@@ -1062,7 +1062,7 @@ mgcp = {
             mgcp.mgcpPreRules = translate.buildComplexRules(rulesList);
         }
 
-        // Apply the rulesList.
+        // Apply the rulesList
         //translate.applyComplexRules(tags,attrs,mgcp.mgcpPreRules);
         for (var i = 0, rLen = mgcp.mgcpPreRules.length; i < rLen; i++)
         {
@@ -1096,7 +1096,7 @@ mgcp = {
                 tags.landuse = 'farmland';
                 break;
 
-            case 'farmyard': // NOTE: This is different to farm.
+            case 'farmyard': // NOTE: This is different to farm
                 tags.facility = 'yes';
                 tags.use = 'agriculture';
                 delete tags.landuse;
@@ -1156,13 +1156,13 @@ mgcp = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // An "amenitiy" can be a building or a thing.
-        // If appropriate, make the "amenity" into a building.
+        // An "amenitiy" can be a building or a thing
+        // If appropriate, make the "amenity" into a building
         // This list is taken from the OSM Wiki and Taginfo
         var notBuildingList = [
             'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
             'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','marketplace','post_box',
+            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
             'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
             'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
             'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
@@ -1176,7 +1176,7 @@ mgcp = {
         // - Building == a thing,
         // - Amenity == The area around a thing. Except for the ones that are not.....
         // If it is a Point feature, it becomes a building. Polygon features become Facilities
-        // Line features become buildings and then get ignored.
+        // Line features become buildings and then get ignored
         var facilityList = {'school':'850','hospital':'860','university':'850'};
         if (tags.amenity in facilityList)
         {
@@ -1189,7 +1189,7 @@ mgcp = {
                 attrs.F_CODE = 'AL015'; // Building
             }
 
-            // If we don't have a Feature Function then assign one.
+            // If we don't have a Feature Function then assign one
             if (!attrs.FFN) attrs.FFN = facilityList[tags.amenity];
         }
 
@@ -1201,7 +1201,7 @@ mgcp = {
             if (tags.product == 'unknown') delete tags.product;
         }
 
-        // Cutlines and Highways.
+        // Cutlines and Highways
         // In OSM, a cutline is a cleared way, if it is a polygon then drop the highway info
         if (tags.man_made == 'cutline' && geometryType == 'Area' && tags.highway) delete tags.highway;
 
@@ -1449,7 +1449,7 @@ mgcp = {
     applyToMgcpPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
         // Gross generalisation. If we don't have an FCODE but we do have an FFN then we either have a
-        // Building or a Facility.
+        // Building or a Facility
         // In the absence of any other info, we are making it a Building
         if (!attrs.F_CODE)
         {
@@ -1494,7 +1494,7 @@ mgcp = {
         // Default railway
         // if (attrs.F_CODE == 'AN010' && tags.railway == 'yes') attrs.RRC = '0';
 
-        // Not a great fit.
+        // Not a great fit
         if (tags.public_transportation == 'station' && tags.bus == 'yes') attrs.FFN = '481';
 
         // Mapping Senior Citizens home to Accomodation. Not great
@@ -1502,7 +1502,7 @@ mgcp = {
 
         // These FCODES have "No prescribed attributes" in TRDv40
         // Therefore:
-        // - clean up the the attrs.
+        // - clean up the the attrs
         // - JSON the tags and stick them in a text field
         var noAttrList = [ 'AJ010', 'AJ030', 'AK170', 'AL019', 'AL070', 'AL099', 'AN076',
                            'BD100', 'BD180', 'BH165', 'BI010', 'BJ020', 'BJ031', 'BJ110',
@@ -1558,7 +1558,7 @@ mgcp = {
                     break;
             }
 
-            // Use the road surface to possibly override the classification.
+            // Use the road surface to possibly override the classification
             // We are assumeing that unpaved roads are Fair Weather only
             if (attrs.RST == '1') attrs.WTC = '1'; // Hard Paved surface
             if (attrs.RST == '2') attrs.WTC = '2'; // Unpaved surface
@@ -1615,8 +1615,8 @@ mgcp = {
                 if (tags.tunnel) attrs.LOC = '40'; // Below Surface
                 if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
 
-                // Single lane roads dont have a median and are not separated.
-                // NOTE: This could cause problems.
+                // Single lane roads dont have a median and are not separated
+                // NOTE: This could cause problems
                 if (attrs.LTN == '1')
                 {
                     attrs.SEP = '1000';
@@ -1807,7 +1807,7 @@ mgcp = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
-        // See if we have an o2s_X layer and try to unpack it.
+        // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
         {
             tags = translate.parseO2S(attrs);
@@ -1832,7 +1832,7 @@ mgcp = {
         {
             // Order is important:
             // First the MGCPv3 & 4 FCODES, then the common ones. This ensures that the common ones don't
-            // stomp on the other ones.
+            // stomp on the other ones
             mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneInV3);
             mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
 
@@ -1844,7 +1844,7 @@ mgcp = {
 
         if (mgcp.lookup == undefined)
         {
-            // Setup lookup tables to make translation easier.
+            // Setup lookup tables to make translation easier
 
             // Add the MGCPv3.0 specific attributes to the v4.0/common attribute table
             mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.one2oneIn);
@@ -1852,7 +1852,7 @@ mgcp = {
             mgcp.lookup = translate.createLookup(mgcp.rules.one2one);
         }
 
-        // Untangle MGCP attributes & OSM tags.
+        // Untangle MGCP attributes & OSM tags
         // NOTE: This could get wrapped with an ENV variable so it only gets called during import
         mgcp.untangleAttributes(attrs, tags);
 
@@ -1869,7 +1869,7 @@ mgcp = {
         // pre processing
         mgcp.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
-        // Use the FCODE to add some tags.
+        // Use the FCODE to add some tags
         if (attrs.F_CODE)
         {
             var ftag = mgcp.fcodeLookup['F_CODE'][attrs.F_CODE];
@@ -1886,13 +1886,13 @@ mgcp = {
         }
 
         // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
-        // isn't used in the translation - this should end up empty.
+        // isn't used in the translation - this should end up empty
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
         delete notUsedAttrs.F_CODE;
 
         // apply the simple number and text biased rules
-        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
         translate.applySimpleNumBiased(notUsedAttrs, tags, mgcp.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(notUsedAttrs, tags,  mgcp.rules.txtBiased,'forward');
 
@@ -1955,8 +1955,8 @@ mgcp = {
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
 
-        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
-        // There is no way we can translate these to a single TDS feature.
+        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line
+        // There is no way we can translate these to a single TDS feature
         if (geometryType == 'Collection') return null;
 
         // Debug:
@@ -1972,7 +1972,7 @@ mgcp = {
         {
             // Order is important:
             // First the MGCPv4 FCODES, then the common ones. This ensures that the common ones don't
-            // stomp on the V4 ones.
+            // stomp on the V4 ones
             mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
             mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneOut);
 
@@ -1997,7 +1997,7 @@ mgcp = {
         mgcp.applyToMgcpPreProcessing(tags, attrs, geometryType);
 
         // Make a copy of the input tags so we can remove them as they get translated. What is left is
-        // the not used tags.
+        // the not used tags
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
@@ -2019,7 +2019,7 @@ mgcp = {
         // Debug
         // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
-        // If we have unused tags, add them to the TXT field.
+        // If we have unused tags, add them to the TXT field
         // NOTE: We are not checking if this is longer than 255 characters
         if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'attribute')
         {
@@ -2078,8 +2078,8 @@ mgcp = {
             // var str = JSON.stringify(tags);
             var str = JSON.stringify(tags,Object.keys(tags).sort());
 
-            // Shapefiles can't handle fields > 254 chars.
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+            // Shapefiles can't handle fields > 254 chars
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
             // A nicer thing would be to arrange the tags until they fit neatly
             if (str.length < 255 || mgcp.configOut.OgrSplitO2s == 'false')
             {
@@ -2110,7 +2110,7 @@ mgcp = {
             // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
             returnData = mgcp.manyFeatures(geometryType,tags,attrs);
 
-            // Now go through the features and clean them up.
+            // Now go through the features and clean them up
             var gType = geometryType.toString().charAt(0);
 
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
@@ -2119,7 +2119,7 @@ mgcp = {
                 delete returnData[i]['attrs']['F_CODE'];
 
                 // Now make sure that we have a valid feature _before_ trying to validate and jam it into the list of
-                // features to return.
+                // features to return
                 var gFcode = gType + returnData[i]['attrs']['FCODE'];
                 if (mgcp.layerNameLookup[gFcode.toUpperCase()])
                 {

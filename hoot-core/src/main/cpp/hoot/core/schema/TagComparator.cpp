@@ -28,7 +28,7 @@
 #include "TagComparator.h"
 
 // Hoot
-#include <hoot/core/algorithms/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>

@@ -189,10 +189,9 @@ public:
    *
    * @param mapName Name of the map to create.
    * @param userId User id of the map owner.
-   * @param publicVisibility Is the map publicly visible?
    * @return
    */
-  long insertMap(QString mapName, bool publicVisibility = true);
+  long insertMap(QString mapName);
 
   bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId);
 
@@ -212,6 +211,7 @@ public:
 
   /**
    * Insert a new member into an existing relation
+   *
    * @param relationId Which relation we're adding a member to
    * @param type The type of element being added
    * @param elementId The ID for the element being added
@@ -224,6 +224,28 @@ public:
 
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
+  /**
+   * Returns the ID of the map with the given name created by the currently configured user
+   *
+   * @param name map name
+   * @return a map ID; -1 if no map is found
+   */
+  long selectMapIdForCurrentUser(QString name);
+
+  /**
+   * Returns all public map IDs for a map with the give name
+   *
+   * @param name map name
+   * @return a collection of map IDs
+   */
+  std::set<long> selectPublicMapIds(QString name);
+
+  /**
+   * Returns the IDs of all maps with the given name
+   *
+   * @param name map name
+   * @return a collection of map IDs
+   */
   std::set<long> selectMapIds(QString name);
 
   void updateNode(const long id, const double lat, const double lon, const long version,
@@ -420,11 +442,91 @@ public:
   void updateUserAccessTokens(const long userId, const QString accessToken,
                               const QString accessTokenSecret);
 
+  /**
+   * Determines whether a user has permission to access a map
+   *
+   * The map must either have been created by the current user assigned to this database or
+   * be a public map.
+   *
+   * @param mapId ID of the map to determine access privileges
+   * @param write
+   * @return true if the user may access the map; false otherwise
+   */
+  bool currentUserCanAccessMap(const long mapId, const bool write = false);
+
+  long getCurrentUserId() const { return _currUserId; }
+
+  /**
+   * Creates a data folder record
+   *
+   * @param displayName folder name
+   * @param parentId ID of the folder's parent
+   * @param userId ID of the user creating the folder
+   * @param isPublic folder visibility
+   * @returns ID of the created folder
+   */
+  long insertFolder(const QString displayName, const long parentId, const long userId,
+                    const bool isPublic);
+
+  /**
+   * Creates a mapping between a map and a data folder
+   *
+   * @param mapId ID of the map
+   * @param folderId ID of the folder
+   */
+  void insertFolderMapMapping(const long mapId, const long folderId);
+
+  /**
+   * Returns the IDs of all folders mapped to a particular map
+   *
+   * @param mapId a map ID
+   * @return collection of folder IDs
+   */
+  std::set<long> getFolderIdsAssociatedWithMap(const long mapId);
+
+  /**
+   * Determines a single map ID associated with a Hootenanny API database URL
+   *
+   * First attempts to parse the numerical map ID from the URL string, then tries to parse a map
+   * name from the URL and obtain an ID from it.  Throws if multiple maps are found.
+   *
+   * @param url URL to parse
+   * @return a map ID or -1 of no map is found
+   */
+  long getMapIdFromUrl(const QUrl& url);
+
+  /**
+   * Verifies that a map may be accessed by the currently configured user
+   *
+   * @param mapId ID of the map for which to verify access
+   * @param write if true, verifies map write access for the user; if false, verifies map read
+   * access for the user
+   */
+  void verifyCurrentUserMapUse(const long mapId, const bool write = false);
+
+  /**
+   * Determines if the currently configured user owns a map with the given name
+   *
+   * @param mapName map name
+   * @return true if the current user owns a map with the input name; false othersie
+   */
+  bool currentUserHasMapWithName(const QString mapName);
+
+  /**
+   * Returns the ID of a map with given name if owned by the currently configured user
+   *
+   * @param name map name
+   * @return ID of the map; -1 if the map is not found
+   */
+  long getMapIdByNameForCurrentUser(const QString name);
+
 protected:
 
   virtual void _resetQueries();
 
 private:
+
+  friend class ServiceHootApiDbReaderTest;
 
   boost::shared_ptr<QSqlQuery> _closeChangeSet;
   boost::shared_ptr<QSqlQuery> _insertChangeSet;
@@ -436,7 +538,8 @@ private:
   boost::shared_ptr<QSqlQuery> _mapExistsById;
   boost::shared_ptr<QSqlQuery> _changesetExists;
   boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
-  boost::shared_ptr<QSqlQuery> _selectMapIds;
+  boost::shared_ptr<QSqlQuery> _selectMapIdsForCurrentUser;
+  boost::shared_ptr<QSqlQuery> _selectPublicMapIds;
   boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
   boost::shared_ptr<QSqlQuery> _updateNode;
   boost::shared_ptr<QSqlQuery> _updateRelation;
@@ -454,6 +557,15 @@ private:
   boost::shared_ptr<QSqlQuery> _getAccessTokenSecretByUserId;
   boost::shared_ptr<QSqlQuery> _insertUserSession;
   boost::shared_ptr<QSqlQuery> _updateUserAccessTokens;
+  boost::shared_ptr<QSqlQuery> _insertFolder;
+  boost::shared_ptr<QSqlQuery> _insertFolderMapMapping;
+  boost::shared_ptr<QSqlQuery> _folderIdsAssociatedWithMap;
+  boost::shared_ptr<QSqlQuery> _deleteFolders;
+  boost::shared_ptr<QSqlQuery> _selectMapIds;
+  boost::shared_ptr<QSqlQuery> _getMapPermissionsById;
+  boost::shared_ptr<QSqlQuery> _getMapPermissionsByName;
+  boost::shared_ptr<QSqlQuery> _currentUserHasMapWithName;
+  boost::shared_ptr<QSqlQuery> _getMapIdByNameForCurrentUser;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
@@ -536,20 +648,19 @@ private:
    * Executes the insert, performs error checking and returns the new ID.
    */
   long _insertRecord(QSqlQuery& query);
-
   void _updateChangesetEnvelope( const ConstNodePtr node );
-
   void _updateChangesetEnvelope(const ConstWayPtr way);
-
   void _updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds);
-
   void _updateChangesetEnvelopeRelationIds(const std::vector<long>& relationIds);
-
   void _updateChangesetEnvelopeRelationNodes(const std::vector<long>& relationIds);
-
   void _updateChangesetEnvelopeRelationWays(const std::vector<long>& relationIds);
 
   static QString _escapeTags(const Tags& tags);
+
+  // These delete methods are for testing purposes only, as they don't do any checks for orphaned
+  // map/folder relationships.  Feel free to harden them and promote to public members, if needed.
+  void _deleteFolderMapMappingsByMapId(const long mapId);
+  void _deleteAllFolders(const std::set<long>& folderIds);
 };
 
 }

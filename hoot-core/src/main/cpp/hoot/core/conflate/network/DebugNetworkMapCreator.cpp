@@ -27,7 +27,7 @@
 #include "DebugNetworkMapCreator.h"
 
 // hoot
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/MedianNodeVisitor.h>
 
 namespace hoot

@@ -28,15 +28,15 @@
 #include "LocalTileWorker.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapListener.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmMapListener.h>
 #include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
 #include <hoot/core/conflate/NodeReplacements.h>
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
 #include <hoot/core/conflate/highway/ImpliedDividedMarker.h>
-#include <hoot/core/conflate/splitter/DualWaySplitter.h>
-#include <hoot/core/conflate/splitter/LargeWaySplitter.h>
+#include <hoot/core/algorithms/splitter/DualWaySplitter.h>
+#include <hoot/core/algorithms/splitter/LargeWaySplitter.h>
 #include <hoot/core/conflate/tile/LocalTileWorker.h>
 #include <hoot/core/conflate/tile/TileBoundsCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>

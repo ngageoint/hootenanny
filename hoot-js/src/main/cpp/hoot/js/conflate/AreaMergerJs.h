@@ -32,9 +32,7 @@
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/PluginContext.h>
-#include <hoot/core/OsmMap.h>
-
-using namespace v8;
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -56,7 +54,7 @@ public:
    * @param mergeTargetId the ID of the area which all other areas should be merged into
    * @param current the context this method should run under
    */
-  static void mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
+  static void mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
 };
 
 }

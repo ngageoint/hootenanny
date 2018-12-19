@@ -28,7 +28,7 @@
 #define POIPOLYGONMATCH_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
@@ -41,6 +41,8 @@
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
@@ -200,6 +202,9 @@ private:
   QString _explainText;
 
   static boost::shared_ptr<ToEnglishTranslator> _translator;
+
+  PoiPolygonPoiCriterion _poiCrit;
+  PoiPolygonPolyCriterion _polyCrit;
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 

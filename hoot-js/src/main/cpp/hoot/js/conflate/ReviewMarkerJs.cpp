@@ -28,7 +28,7 @@
 #include "ReviewMarkerJs.h"
 
 // hoot
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>

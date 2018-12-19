@@ -39,15 +39,15 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 namespace hoot
 {
 
 unsigned int SplitLongLinearWaysVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, SplitLongLinearWaysVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
 
 SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
 _maxNodesPerWay(0)
@@ -110,7 +110,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   }
 
   // Ensure we're a linear way -- heuristic is reported to be mostly accurate
-  if (OsmSchema::getInstance().isLinear(*way) == false)
+  if (LinearCriterion().isSatisfied(way) == false)
   {
     if (printInfo == true)
     {

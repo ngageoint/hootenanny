@@ -37,7 +37,7 @@
 #include <hoot/rnd/scoring/MatchScoringMapPreparer.h>
 #include <hoot/rnd/scoring/MapScoringStatusAndRefTagValidator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/IoUtils.h>

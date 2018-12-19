@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 
 // Standard

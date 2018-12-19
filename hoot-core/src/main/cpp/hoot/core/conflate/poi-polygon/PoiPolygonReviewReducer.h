@@ -28,7 +28,9 @@
 #define POIPOLYGONREVIEWREDUCER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/address/AddressParser.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -59,6 +61,8 @@ public:
                           bool exactNameMatch, double typeScoreThreshold, double typeScore,
                           bool typeMatch, double matchDistanceThreshold, bool addressMatch,
                           bool addressParsingEnabled);
+
+  virtual void setConfiguration(const Settings& conf);
 
   /**
    * Determines whether the input features trigger a rule which precludes them from being matched or
@@ -96,6 +100,7 @@ private:
   bool _keepClosestMatchesOnly;
 
   bool _addressParsingEnabled;
+  AddressParser _addressParser;
 
   bool _nonDistanceSimilaritiesPresent() const;
 

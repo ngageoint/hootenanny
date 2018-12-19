@@ -141,10 +141,10 @@ dnc.rules = {
         'D91':'water:current:direction:11', // Direction of Current
         'DEP':'depth', // Depth
         'DF1':'seamark:calling-in_point:traffic_flow:direction:1', // Direction of Traffic - 1
-        'DF2':'seamark:calling-in_point:traffic_flow:direction:2', // Direction of Traffic - 1
-        'DF3':'seamark:calling-in_point:traffic_flow:direction:3', // Direction of Traffic - 1
-        'DF4':'seamark:calling-in_point:traffic_flow:direction:4', // Direction of Traffic - 1
-        'DOF':'flow_direction', // Direction of FLow
+        'DF2':'seamark:calling-in_point:traffic_flow:direction:2', // Direction of Traffic - 2
+        'DF3':'seamark:calling-in_point:traffic_flow:direction:3', // Direction of Traffic - 3
+        'DF4':'seamark:calling-in_point:traffic_flow:direction:4', // Direction of Traffic - 4
+        'DOF':'flow_direction', // Direction of Flow
         'EOL':'seamark:light:height', // Elevation of Light
         'HDH':'hydrographic_drying_height', // Hydrographic Drying Height
         'HDP':'depth:hydrographic', // Hydrographic Depth

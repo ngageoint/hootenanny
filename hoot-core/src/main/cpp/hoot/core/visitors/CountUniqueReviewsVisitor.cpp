@@ -27,14 +27,14 @@
 #include "CountUniqueReviewsVisitor.h"
 
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, CountUniqueReviewsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, CountUniqueReviewsVisitor)
 
 void CountUniqueReviewsVisitor::visit(const ConstElementPtr& e)
 {

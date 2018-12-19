@@ -27,8 +27,8 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/string/TextFileWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/WeightedWordDistance.h>

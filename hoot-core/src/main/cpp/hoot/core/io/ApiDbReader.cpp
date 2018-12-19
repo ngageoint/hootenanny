@@ -28,7 +28,7 @@
 
 // Hoot
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/Log.h>

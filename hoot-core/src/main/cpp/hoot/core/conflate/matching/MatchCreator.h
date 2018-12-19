@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/CreatorDescription.h>
+#include <hoot/core/info/CreatorDescription.h>
 
 // Standard
 #include <string>

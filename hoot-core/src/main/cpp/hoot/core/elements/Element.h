@@ -92,7 +92,8 @@ public:
    * empty or any of the child elements are missing. The caller gets ownership of the returned
    * envelope.
    */
-  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const = 0;
+  virtual geos::geom::Envelope* getEnvelope(
+    const boost::shared_ptr<const ElementProvider>& ep) const = 0;
 
   long getId() const { return _getElementData().getId(); }
   void setId(long id) { _getElementData().setId(id); }
@@ -137,7 +138,8 @@ public:
   /**
    * At this point only one listener is supported, but we could support more later if needed.
    */
-  void registerListener(ElementListener* l) { assert(_listener == 0 || _listener == l); _listener = l; }
+  void registerListener(ElementListener* l)
+  { assert(_listener == 0 || _listener == l); _listener = l; }
 
   /**
    * Set the enumerated status code.

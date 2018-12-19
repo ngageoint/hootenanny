@@ -22,30 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "KeepHighwaysVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepHighwaysVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, KeepHighwaysVisitor)
 
 void KeepHighwaysVisitor::visit(const ConstElementPtr& e)
 {
   ElementType type = e->getElementType();
   long id = e->getId();
 
-  if (OsmSchema::getInstance().isLinearHighway(e->getTags(), type) == false ||
-      OsmSchema::getInstance().isArea(e->getTags(), type))
+  if (HighwayCriterion().isSatisfied(e) == false || AreaCriterion().isSatisfied(e))
   {
     // we don't want to accidentally delete a highway by deleting a relation that contains
     // highways.

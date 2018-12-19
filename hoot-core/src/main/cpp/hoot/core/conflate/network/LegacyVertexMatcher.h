@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QList>

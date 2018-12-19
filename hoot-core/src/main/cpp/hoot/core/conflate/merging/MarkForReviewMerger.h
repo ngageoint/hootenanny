@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/conflate/merging/Merger.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 
 namespace hoot
 {

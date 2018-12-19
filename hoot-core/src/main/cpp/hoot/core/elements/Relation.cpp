@@ -36,7 +36,7 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -353,7 +353,7 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
 
   AddToVisitedRelationsList addTo(visitedRelations, getId());
 
-  filter.visit(map.getRelation(getId()));
+  filter.visit(boost::dynamic_pointer_cast<const Relation>(map.getRelation(getId())));
 
   const vector<RelationData::Entry>& members = getMembers();
 

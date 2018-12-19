@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 // tgs
 #include <tgs/SharedPtr.h>

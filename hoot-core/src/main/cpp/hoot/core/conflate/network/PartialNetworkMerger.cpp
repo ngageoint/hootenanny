@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
