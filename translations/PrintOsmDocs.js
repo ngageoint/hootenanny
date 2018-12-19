@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -39,11 +39,11 @@
 tds = {}
 tds61 = {}
 mgcp = {}
-ufd = {}
-dnc = {}
-utp = {}
+ggdm30 = {}
 geonames = {}
-navteq = {}
+// ufd = {}
+// dnc = {}
+// utp = {}
 
 
 // Grab all of the init and rules files so we have somthing to work with
@@ -51,11 +51,9 @@ hoot.require('tds40_rules')
 hoot.require('SchemaTools');
 hoot.require('tds61_rules')
 hoot.require('mgcp_rules')
-hoot.require('ufd_rules')
-hoot.require('utp_rules')
+hoot.require('ggdm30_rules')
+// hoot.require('ufd_rules')
 hoot.require('geonames_rules')
-hoot.require('navteq_rules')
-hoot.require('dnc_rules')
 hoot.require('fcode_common')
 hoot.require('config')
 
@@ -75,7 +73,6 @@ function initialize()
      ufd.rules.one2one
      utp.rules.one2one
      dnc.rules.one2one
-
      navteq.rules.one2one
      geonames.rules.one2one <- Non standard format
 
@@ -109,41 +106,48 @@ function initialize()
     var tagList = {} // Final list of tags
 
     // Standard one2one rules
+    createLookup(tagList, ggdm30.rules.one2one, 'GGDM30');
+    createLookup(tagList, ggdm30.rules.one2oneIn, 'GGDM30');
     createLookup(tagList, tds.rules.one2one, 'TDS40');
     createLookup(tagList, tds.rules.one2oneIn, 'TDS40');
     createLookup(tagList, tds61.rules.one2one, 'TDS61');
     createLookup(tagList, tds61.rules.one2oneIn, 'TDS61');
     createLookup(tagList, mgcp.rules.one2one, 'MGCP');
     createLookup(tagList, mgcp.rules.one2oneIn, 'MGCP');
-    createLookup(tagList, ufd.rules.one2one, 'UFD');
-    createLookup(tagList, utp.rules.one2one, 'UTP');
-    createLookup(tagList, dnc.rules.one2one, 'DNC');
+    createLookup(tagList, geonames.rules.one2one, 'GeoNames');
+
+
+    // createLookup(tagList, ufd.rules.one2one, 'UFD');
+    // createLookup(tagList, utp.rules.one2one, 'UTP');
+    // createLookup(tagList, dnc.rules.one2one, 'DNC');
     // createLookup(tagList, navteq.rules.one2one, 'NAVTEQ');
-    // createLookup(tagList, geonames.rules.one2one, 'GeoNames');
 
     // Add in the Biased rules
+    createBiasedLookup(tagList, ggdm30.rules.txtBiased, 'GGDM30');
+    createBiasedLookup(tagList, ggdm30.rules.numBiased, 'GGDM30');
     createBiasedLookup(tagList, tds.rules.txtBiased, 'TDS40');
     createBiasedLookup(tagList, tds.rules.numBiased, 'TDS40');
     createBiasedLookup(tagList, tds61.rules.txtBiased, 'TDS61');
     createBiasedLookup(tagList, tds61.rules.numBiased, 'TDS61');
     createBiasedLookup(tagList, mgcp.rules.txtBiased, 'MGCP');
     createBiasedLookup(tagList, mgcp.rules.numBiased, 'MGCP');
-    createBiasedLookup(tagList, ufd.rules.numBiased, 'UFD');
-    createBiasedLookup(tagList, ufd.rules.txtBiased, 'UFD');
-    createBiasedLookup(tagList, utp.rules.numBiased, 'UTP');
-    createBiasedLookup(tagList, utp.rules.txtBiased, 'UTP');
-    createBiasedLookup(tagList, dnc.rules.numBiased, 'DNC');
-    createBiasedLookup(tagList, dnc.rules.txtBiased, 'DNC');
+    // createBiasedLookup(tagList, ufd.rules.numBiased, 'UFD');
+    // createBiasedLookup(tagList, ufd.rules.txtBiased, 'UFD');
+    // createBiasedLookup(tagList, utp.rules.numBiased, 'UTP');
+    // createBiasedLookup(tagList, utp.rules.txtBiased, 'UTP');
+    // createBiasedLookup(tagList, dnc.rules.numBiased, 'DNC');
+    // createBiasedLookup(tagList, dnc.rules.txtBiased, 'DNC');
     // createBiasedLookup(tagList, NAVTEQ.rules.txtBiased, 'NAVTEQ');
 
     // F_CODE one2one rules
     createLookup(tagList, fcodeCommon.one2one, 'NFDD');
+    createLookup(tagList, ggdm30.rules.fcodeOne2oneIn, 'GGDM30');
     createLookup(tagList, tds.rules.fcodeOne2oneIn, 'TDS40');
     createLookup(tagList, tds61.rules.fcodeOne2oneIn, 'TDS61');
     createLookup(tagList, mgcp.rules.fcodeOne2oneIn, 'MGCP');
-    createLookup(tagList, ufd.rules.fcodeOne2oneIn, 'UFD');
-    createLookup(tagList, utp.rules.fcodeOne2oneIn, 'UTP');
-    createLookup(tagList, dnc.rules.fcodeOne2oneIn, 'DNC');
+    // createLookup(tagList, ufd.rules.fcodeOne2oneIn, 'UFD');
+    // createLookup(tagList, utp.rules.fcodeOne2oneIn, 'UTP');
+    // createLookup(tagList, dnc.rules.fcodeOne2oneIn, 'DNC');
 
     // Print the tagList
     switch (config.getTagPrintingFormat())
@@ -217,7 +221,7 @@ function createLookup(tagList, one2one, source)
 
             desc = attrList[row[0]];
             if (row[0] == 'F_CODE') desc = 'Feature Code ' + row[1];
-            if (!desc) desc = 'Text or number value';
+            if (!desc) desc = '##### Text or number value';
 
             // New tag value
             if (!(tagShort in tagList))
@@ -497,7 +501,7 @@ function dumpCsvTags(tagList)
     var shortKeys = Object.keys(tagList);
     shortKeys.sort();
 
-    print('"Tag","Value","Tag_Description"');
+    print('"Tag","Value","Tag_Description","Tag_Source"');
 
     for (var i = 0, tlen = shortKeys.length; i < tlen; i++)
     {
@@ -514,8 +518,9 @@ function dumpCsvTags(tagList)
             tag = tagList[shortTag][val]['tag'];
             value = tagList[shortTag][val]['value'];
             desc = tagList[shortTag][val]['desc'];
+            source = tagList[shortTag][val]['src'].replace(/,/g,";");
             
-            print('"' + tag + '","' + value + '","' + desc + '"');
+            print('"' + tag + '","' + value + '","' + desc + '","' + source + '"');
         }
     }
 } // End dumpCsvTags
