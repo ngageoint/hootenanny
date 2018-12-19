@@ -52,7 +52,7 @@ namespace hoot
 /**
  * Traverses the OsmMap and creates a map from REF tags to ElementIds.
  */
-class RefToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class RefToEidVisitor : public ConstElementVisitor
 {
 public:
 
@@ -63,8 +63,6 @@ public:
   virtual ~RefToEidVisitor() {}
 
   const RefToEid& getRefToEid() const { return _ref2Eid; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -89,7 +87,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   QString _ref;
   RefToEid _ref2Eid;
 };

@@ -31,8 +31,7 @@
 #include <geos/geom/MultiLineString.h>
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // standard
 #include <string>
@@ -52,7 +51,7 @@ class Way;
  * relevant during tile based operations because not all elements may be completely represented
  * within a tile.
  */
-class CompletelyContainedByMapElementVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class CompletelyContainedByMapElementVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
@@ -67,8 +66,6 @@ public:
 
   bool isComplete() const { return _complete; }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const
@@ -76,7 +73,6 @@ public:
 
 protected:
 
-  const OsmMap* _map;
   bool _complete;
 
   bool _isComplete(const boost::shared_ptr<const Element>& e);

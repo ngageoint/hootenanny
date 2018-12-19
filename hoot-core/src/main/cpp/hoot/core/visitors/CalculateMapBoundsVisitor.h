@@ -29,7 +29,7 @@
 #define CALCULATEMAPBOUNDSVISITOR_H
 
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 /**
  * A visitor for finding the bounds of a map, based on the old OsmMap::calculateBounds
@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-class CalculateMapBoundsVisitor : public ElementConstOsmMapVisitor
+class CalculateMapBoundsVisitor : public ConstElementVisitor
 {
 public:
 
@@ -48,8 +48,6 @@ public:
   CalculateMapBoundsVisitor();
 
   OGREnvelope getBounds() { return _envelope; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   // Note: should only visit nodes when calculating bounds
   virtual void visit(const boost::shared_ptr<const Element>& e);

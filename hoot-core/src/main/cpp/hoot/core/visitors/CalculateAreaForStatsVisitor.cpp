@@ -39,7 +39,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateAreaForStatsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, CalculateAreaForStatsVisitor)
 
 Meters CalculateAreaForStatsVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
 {
@@ -51,7 +51,8 @@ Meters CalculateAreaForStatsVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
 
 void CalculateAreaForStatsVisitor::visit(const ConstElementPtr& e)
 {
-  boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e, true, true);
+  boost::shared_ptr<Geometry> g =
+    ElementConverter(_map->shared_from_this()).convertToGeometry(e, true, true);
   _total += g->getArea();
 }
 

@@ -53,6 +53,7 @@ protected:
   RemoveUnknownVisitor(Status status) : _status(status) {}
 
 private:
+
   RemoveUnknownVisitor() {}
 
   Status _status;

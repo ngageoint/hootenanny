@@ -39,7 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepNodesVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, KeepNodesVisitor)
 
 class FindAllNodesVisitor : public ConstElementVisitor
 {
@@ -73,8 +73,6 @@ private:
 
 void KeepNodesVisitor::visit(const ConstElementPtr& e)
 {
-  //shared_ptr<Element> ee = _map->getElement(e->getElementId());
-
   if (e->getElementType() != ElementType::Node || e->getTags().getNonDebugCount() == 0)
   {
     // check to see if any of this element's children are Nodes.

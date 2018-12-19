@@ -33,8 +33,8 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveUnknown1Visitor)
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveUnknown2Visitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveUnknown1Visitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveUnknown2Visitor)
 
 void RemoveUnknownVisitor::visit(const boost::shared_ptr<Element>& e)
 {

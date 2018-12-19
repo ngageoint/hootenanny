@@ -353,7 +353,7 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
 
   AddToVisitedRelationsList addTo(visitedRelations, getId());
 
-  filter.visit(map.getRelation(getId()));
+  filter.visit(boost::dynamic_pointer_cast<const Relation>(map.getRelation(getId())));
 
   const vector<RelationData::Entry>& members = getMembers();
 

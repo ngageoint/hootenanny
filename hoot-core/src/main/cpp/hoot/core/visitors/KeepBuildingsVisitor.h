@@ -29,16 +29,17 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 
 namespace hoot
 {
 
 /**
  * Removes all ways and relations that are not part of a building.
- * @todo This could do bad things if the element is in use.
+ *
+ * This could do bad things if the element is in use.
  */
-class KeepBuildingsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class KeepBuildingsVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
 public:
 

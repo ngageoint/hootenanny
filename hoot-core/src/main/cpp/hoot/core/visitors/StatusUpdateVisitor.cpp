@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, StatusUpdateVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, StatusUpdateVisitor)
 
 StatusUpdateVisitor::StatusUpdateVisitor()
 {

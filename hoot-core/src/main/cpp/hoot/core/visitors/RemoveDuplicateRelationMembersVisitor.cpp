@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveDuplicateRelationMembersVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateRelationMembersVisitor)
 
 RemoveDuplicateRelationMembersVisitor::RemoveDuplicateRelationMembersVisitor()
 {
