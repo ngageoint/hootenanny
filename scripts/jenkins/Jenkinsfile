@@ -12,7 +12,7 @@ pipeline {
 
     triggers {
         // Set nightly trigger
-        cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(20-21) * * 1-5" : "")
+        cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(1-2) * * 1-5" : "")
     }
 
     // Configurable parameters for users to skip steps and control pipeline behavior
@@ -66,7 +66,7 @@ pipeline {
             when { 
                 anyOf {
                     expression { return params.Configure_Tests }
-                    triggeredBy 'cron'
+                    triggeredBy 'Cron'
                 }
             }
             steps {
@@ -80,7 +80,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        triggeredBy 'cron'
+                        triggeredBy 'Cron'
                         branch 'develop'
                     }
                 }
@@ -132,7 +132,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        triggeredBy 'cron'
+                        triggeredBy 'Cron'
                         branch 'develop'
                     }
                 }
