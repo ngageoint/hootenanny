@@ -66,7 +66,7 @@ pipeline {
             when { 
                 anyOf {
                     expression { return params.Configure_Tests }
-                    triggeredBy 'Cron'
+                    triggeredBy 'TimerTrigger'
                 }
             }
             steps {
@@ -80,7 +80,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        triggeredBy 'Cron'
+                        triggeredBy 'TimerTrigger'
                         branch 'develop'
                     }
                 }
@@ -132,7 +132,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        triggeredBy 'Cron'
+                        triggeredBy 'TimerTrigger'
                         branch 'develop'
                     }
                 }
@@ -154,7 +154,6 @@ pipeline {
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
                     }
-
                 }
             }
         }
