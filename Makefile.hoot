@@ -318,8 +318,8 @@ endif
 ui2x-build:
 ifeq ($(BUILD_SERVICES),services)
 	cd $$HOOT_HOME/hoot-ui-2x && \
-	npm i $(NPM_QUIET) && \
-	npm run production $(NPM_QUIET)
+	(npm i $(NPM_QUIET) || npm i $(NPM_QUIET)) && \
+	(npm run production $(NPM_QUIET) || npm run production $(NPM_QUIET))
 endif
 
 ui-test: services-build build
