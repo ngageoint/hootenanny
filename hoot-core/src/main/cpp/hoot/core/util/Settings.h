@@ -58,8 +58,6 @@ public:
 
   typedef QHash<QString, QVariant> SettingsMap;
 
-  Settings();
-
   void append(const QString& key, const QStringList& values);
 
   /**
@@ -159,6 +157,8 @@ public:
   QString toString() const;
 
 private:
+
+  Settings();
 
   static boost::shared_ptr<Settings> _theInstance;
   SettingsMap _settings;
