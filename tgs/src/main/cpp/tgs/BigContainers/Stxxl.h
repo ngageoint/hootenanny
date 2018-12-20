@@ -61,6 +61,7 @@ public:
   void setConfig(QString configFile);
 
 private:
+
   static boost::shared_ptr<Stxxl> _theInstance;
   QTemporaryFile _configFileTmp;
 

@@ -41,11 +41,12 @@ class TagMerger;
 class Tags;
 class ElementType;
 
+/**
+ * (Singleton)
+ */
 class TagMergerFactory
 {
 public:
-
-  TagMergerFactory();
 
   ~TagMergerFactory();
 
@@ -74,6 +75,9 @@ public:
   void reset();
 
 private:
+
+  TagMergerFactory();
+
   QHash<QString, boost::shared_ptr<const TagMerger> > _mergers;
   boost::shared_ptr<const TagMerger> _default;
 

@@ -42,13 +42,11 @@ class AddressTagKeys;
 typedef boost::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
 
 /**
- * Allows for mapping an address part type to a range of valid OSM tag keys
+ * Allows for mapping an address part type to a range of valid OSM tag keys (Singleton)
  */
 class AddressTagKeys
 {
 public:
-
-  AddressTagKeys();
 
   static const AddressTagKeysPtr& getInstance();
 
@@ -84,6 +82,8 @@ public:
   QSet<QString> getAdditionalTagKeys() const { return _additionalTagKeys; }
 
 private:
+
+  AddressTagKeys();
 
   friend class PoiPolygonAddressScoreExtractorTest;
 

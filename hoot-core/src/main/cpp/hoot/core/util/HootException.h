@@ -70,6 +70,7 @@ public:
   virtual const char* what() const throw() { _tmp = _what.toAscii(); return _tmp.constData(); }
 
 private:
+
   QString _what;
   mutable QByteArray _tmp;
 };
@@ -100,6 +101,9 @@ private:
 class HootExceptionThrower
 {
 public:
+
+  HootExceptionThrower() {}
+
   typedef void (*ThrowMethod)(HootException* e);
 
   static HootExceptionThrower& getInstance();
@@ -117,6 +121,7 @@ public:
   void rethrowPointer(HootException* e);
 
 private:
+
   QVector<ThrowMethod> _throwMethods;
   static HootExceptionThrower* _theInstance;
 };
@@ -129,6 +134,7 @@ template<class T>
 class AutoRegisterException
 {
 public:
+
   AutoRegisterException()
   {
     HootExceptionThrower::getInstance().registerException(tryThrow);

@@ -45,12 +45,12 @@ namespace hoot
 {
 
 /**
+ * (Singleton)
  */
 class TranslateDictionary
 {
 public:
 
-  TranslateDictionary();
   ~TranslateDictionary();
 
   static TranslateDictionary& getInstance();
@@ -68,6 +68,8 @@ public:
   bool transliterationCachingEnabled() const { return _transliterationCachingEnabled; }
 
 private:
+
+  TranslateDictionary();
 
   static boost::shared_ptr<TranslateDictionary> _theInstance;
 

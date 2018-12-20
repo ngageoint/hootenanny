@@ -42,14 +42,13 @@ namespace hoot
 
 /**
  * A super simple wrapper around boost's object pool and shared pointers. This should provide
- * more efficient allocation/deleting when dealing with large numbers of elements. E.g. nodes.
+ * more efficient allocation/deleting when dealing with large numbers of elements (Singleton).
+ * E.g. nodes.
  */
 template <class T>
 class SharedPtrPool
 {
 public:
-
-  SharedPtrPool() {}
 
   boost::shared_ptr<T> allocate()
   {
@@ -62,6 +61,8 @@ public:
   static SharedPtrPool<T>& getInstance() { return _theInstance; }
 
 private:
+
+  SharedPtrPool() {}
 
   static SharedPtrPool<T> _theInstance;
   boost::fast_pool_allocator<T> _pool;

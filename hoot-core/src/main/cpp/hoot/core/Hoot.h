@@ -67,6 +67,7 @@ public:
   void reinit();
 
 private:
+
   static boost::shared_ptr<Hoot> _theInstance;
 
   Hoot();

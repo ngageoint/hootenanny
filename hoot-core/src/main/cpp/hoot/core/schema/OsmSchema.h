@@ -55,7 +55,8 @@ enum EdgeType
   CompoundComponent,
 };
 
-struct OsmSchemaCategory {
+struct OsmSchemaCategory
+{
   enum Type
   {
     Empty =           0x00,

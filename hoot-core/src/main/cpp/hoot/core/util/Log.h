@@ -135,6 +135,7 @@ public:
   static std::string ellipsisStr(const std::string& str, uint count = 33);
 
 private:
+
   WarningLevel _level;
   static boost::shared_ptr<Log> _theInstance;
   static unsigned int _warnMessageLimit;
@@ -149,6 +150,7 @@ private:
 class DisableLog
 {
 public:
+
   DisableLog(Log::WarningLevel tmpLevel = Log::Error)
   {
     _oldLevel = Log::getInstance().getLevel();
@@ -168,6 +170,7 @@ public:
   }
 
 private:
+
   Log::WarningLevel _oldLevel;
 };
 

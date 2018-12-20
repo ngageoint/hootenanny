@@ -56,6 +56,9 @@ namespace hoot
 
 class OsmMap;
 
+/**
+ * (Singleton)
+ */
 class MapProjector
 {
 public:

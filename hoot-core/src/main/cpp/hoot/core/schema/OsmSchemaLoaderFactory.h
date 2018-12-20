@@ -40,16 +40,21 @@ namespace hoot
 
 class OsmSchemaLoader;
 
+/**
+ * (Singleton)
+ */
 class OsmSchemaLoaderFactory
 {
 public:
-  OsmSchemaLoaderFactory() {}
 
   static OsmSchemaLoaderFactory& getInstance();
 
   boost::shared_ptr<OsmSchemaLoader> createLoader(QString url);
 
 private:
+
+  OsmSchemaLoaderFactory() {}
+
   static boost::shared_ptr<OsmSchemaLoaderFactory> _theInstance;
 };
 
