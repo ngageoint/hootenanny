@@ -38,7 +38,7 @@ namespace Tgs
 {
 
 /**
- * A convenience class for initializing STXXL in a multiple processes safe way.
+ * A convenience class for initializing STXXL in a multiple processes safe way (Singleton).
  */
 class Stxxl
 {

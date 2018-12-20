@@ -71,6 +71,9 @@ public:
   }
 };
 
+/**
+ * (Singleton)
+ */
 class JsRegistrar
 {
 public:

@@ -42,6 +42,9 @@ namespace hoot
 
 class ScriptTranslator;
 
+/**
+ * (Singleton)
+ */
 class ScriptTranslatorFactory
 {
 public:

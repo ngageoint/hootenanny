@@ -102,7 +102,7 @@ private:
 };
 
 /**
- * Centralize some operations that occur over and over when using Multiary Conflation.
+ * Centralize some operations that occur over and over when using Multiary Conflation (Singleton).
  */
 class MultiaryUtilities
 {

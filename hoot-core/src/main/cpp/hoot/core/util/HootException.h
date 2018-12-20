@@ -76,6 +76,8 @@ private:
 };
 
 /**
+ * (Singleton)
+ *
  * Cliff Notes for adding an exception:
  * 1. Add a HOOT_DEFINE_EXCEPTION[_STR] in your .h (possibly here).
  * 2. Add a HOOT_REGISTER_EXCEPTION in your .cpp (possibly HootException.cpp).

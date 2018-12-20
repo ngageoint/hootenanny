@@ -249,7 +249,7 @@ class Relation;
 class Way;
 
 /**
- * This class is reentrant, but not thread safe.
+ * This class is reentrant, but not thread safe (Singleton).
  */
 class OsmSchema
 {

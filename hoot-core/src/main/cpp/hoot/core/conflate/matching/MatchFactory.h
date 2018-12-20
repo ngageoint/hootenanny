@@ -40,6 +40,9 @@ namespace hoot
 class Match;
 class MatchThreshold;
 
+/**
+ * (Singleton)
+ */
 class MatchFactory
 {
 public:

@@ -54,7 +54,7 @@ namespace hoot
 
 /**
  * This class is here to abstract out the logging interface. I only have mild confidence in log4cxx
- * and I don't really need all the complicated goodies.
+ * and I don't really need all the complicated goodies (Singleton).
  */
 class Log
 {

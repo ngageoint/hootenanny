@@ -49,8 +49,8 @@ class Tags;
 typedef boost::shared_ptr<MostEnglishName> MostEnglishNamePtr;
 
 /**
- * Return a best guess at the "most english" name in the list. There are no guarantees. This is
- * an ad-hoc routine that should be better than taking the first choice in most cases.
+ * Return a best guess at the "most english" name in the list (Singleton). There are no guarantees.
+ * This is an ad-hoc routine that should be better than taking the first choice in most cases.
  *
  * If there are no names then an empty string is returned.
  *
