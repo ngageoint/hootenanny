@@ -38,8 +38,12 @@ import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConflateCommandTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(ConflateCommandTest.class);
 
     @Test
     @Category(UnitTest.class)
@@ -85,21 +89,19 @@ public class ConflateCommandTest {
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("HOOT_OPTIONS"));
         String command = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
-        assertTrue(command.startsWith("-D, convert.ops=hoot::DecomposeBuildingRelationsVisitor, "));
-        assertTrue(command.contains("["));
+        assertTrue(command.startsWith("[-D, convert.ops=hoot::DecomposeBuildingRelationsVisitor, "));
         assertTrue(command.contains("-D, writer.include.conflate.score.tags=false, "));
         assertTrue(command.contains("-D, hootapi.db.writer.overwrite.map=true, "));
         assertTrue(command.contains("-D, writer.text.status=true, "));
         assertTrue(command.contains("-D, api.db.email=test@test.com, "));
-        assertTrue(command.contains("-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
+        assertTrue(command.endsWith("-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                                     "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
                                     "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
                                     "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
                                     "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
                                     "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
-                                    "hoot::NoInformationElementRemover\""));
+                                    "hoot::NoInformationElementRemover\"]"));
         assertTrue(command.contains("-D, hootapi.db.writer.job.id="));
-        assertTrue(command.endsWith("]"));
 
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads", conflateCommand.getSubstitutionMap().get("INPUT1"));
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads", conflateCommand.getSubstitutionMap().get("INPUT2"));
