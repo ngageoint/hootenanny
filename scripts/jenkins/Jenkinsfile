@@ -123,7 +123,7 @@ pipeline {
         stage("UI Tests") {
             when { expression { return params.UI_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test; make -s ui2x-test'"
             }
         }
         stage("Sonar") {
