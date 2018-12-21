@@ -1885,7 +1885,7 @@ tds61 = {
         }
         else
         {
-            attrs.UFI = createUuid().replace('{','').replace('}','');
+            if (tds61.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
         }
 
         // Add Weather Restrictions to transportation features
@@ -2321,6 +2321,7 @@ tds61 = {
             tds61.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             tds61.configOut.OgrThematicStructure = config.getOgrThematicStructure();
             tds61.configOut.OgrThrowError = config.getOgrThrowError();
+            tds61.configOut.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon

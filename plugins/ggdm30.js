@@ -1684,7 +1684,7 @@ ggdm30 = {
         }
         else
         {
-            attrs.UFI = createUuid().replace('{','').replace('}','');
+            if (ggdm30.config.OgrAddUuid == 'true') attrs.UFI = toosm().replace('{','').replace('}','');
         }
 
         // Add Weather Restrictions to transportation features
@@ -2075,6 +2075,7 @@ ggdm30 = {
             ggdm30.config.OgrSplitO2s = config.getOgrSplitO2s();
             ggdm30.config.OgrThematicStructure = config.getOgrThematicStructure();
             ggdm30.config.OgrThrowError = config.getOgrThrowError();
+            ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon

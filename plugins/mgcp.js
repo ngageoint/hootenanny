@@ -810,7 +810,7 @@ mgcp = {
             // print('Added building to military');
             if (tags.military !== 'range') tags.building = 'yes';
         }
-        
+
         // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
         // if ('ford' in tags && !tags.highway) tags.highway = 'road';
 
@@ -1239,7 +1239,7 @@ mgcp = {
                     if (geometryType == 'Point')
                     {
                         attrs.F_CODE = 'AL020'; // Built Up Area
-                        delete tags.place;                        
+                        delete tags.place;
                     }                break;
 
             case 'isolated_dwelling':
@@ -1296,7 +1296,7 @@ mgcp = {
             tags.building = tags['settlement:type'];
             delete tags['settlement:type'];
         }
-        
+
         // Movable Bridges
         if (tags.bridge == 'movable')
         {
@@ -1488,7 +1488,7 @@ mgcp = {
         }
         else
         {
-            attrs.UID = createUuid().replace('{','').replace('}','');
+            if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','');
         }
 
         // Default railway
@@ -1814,7 +1814,7 @@ mgcp = {
             tags = translate.parseO2S(attrs);
 
             // Add some metadata
-            if (! tags.uuid) 
+            if (! tags.uuid)
             {
                 if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
             }
@@ -1945,6 +1945,7 @@ mgcp = {
             mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
             mgcp.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             mgcp.configOut.OgrThrowError = config.getOgrThrowError();
+            mgcp.configOut.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
