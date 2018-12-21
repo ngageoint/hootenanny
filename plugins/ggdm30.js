@@ -767,7 +767,7 @@ ggdm30 = {
         }
         else
         {
-            tags.uuid = createUuid();
+            if (ggdm30.config.OgrAddUuid == 'true') tags.uuid = createUuid();
         }
 
 
@@ -1926,6 +1926,8 @@ ggdm30 = {
             ggdm30.config = {};
             ggdm30.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+            ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
+
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
             ggdm30.toChange = hoot.Settings.get("translation.override");
@@ -1945,7 +1947,11 @@ ggdm30 = {
             tags = translate.parseO2S(attrs);
 
             // Add some metadata
-            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.uuid)
+            {
+                if (ggdm30.config.OgrAddUuid == 'true') tags.uuid = createUuid();
+            }
+
             if (! tags.source) tags.source = 'ggdmv30:' + layerName.toLowerCase();
 
             // Debug:
@@ -2030,6 +2036,9 @@ ggdm30 = {
         // Debug: Add the FCODE to the tags
         if (ggdm30.config.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,ggdm30.toChange);
+
         // Debug:
         if (ggdm30.config.OgrDebugDumptags == 'true')
         {
@@ -2039,9 +2048,6 @@ ggdm30 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
-
-        // Override tag values if appropriate
-        translate.overrideValues(tags,ggdm30.toChange);
 
         return tags;
     }, // End of toOsm

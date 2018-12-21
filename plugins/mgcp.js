@@ -724,7 +724,7 @@ mgcp = {
         }
         else
         {
-            tags.uuid = createUuid();
+            if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
         }
 
         // Railway Yard
@@ -1794,6 +1794,7 @@ mgcp = {
             mgcp.configIn = {};
             mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+            mgcp.configIn.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes
             mgcp.toChange = hoot.Settings.get("translation.override");
@@ -1813,7 +1814,11 @@ mgcp = {
             tags = translate.parseO2S(attrs);
 
             // Add some metadata
-            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.uuid) 
+            {
+                if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+            }
+
             if (! tags.source) tags.source = 'mgcp:' + layerName.toLowerCase();
 
             // Debug:
@@ -1905,6 +1910,9 @@ mgcp = {
         // Debug: Add the FCODE to the tags
         if (mgcp.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,mgcp.toChange);
+
         // Debug:
         if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
@@ -1914,9 +1922,6 @@ mgcp = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
-
-        // Override tag values if appropriate
-        translate.overrideValues(tags,mgcp.toChange);
 
         return tags;
     }, // End of ToOsm
