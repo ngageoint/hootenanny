@@ -12,7 +12,7 @@ pipeline {
 
     triggers {
         // Set nightly trigger
-        cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(20-21) * * 1-5" : "")
+        cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(1-2) * * 1-5" : "")
     }
 
     // Configurable parameters for users to skip steps and control pipeline behavior
@@ -66,7 +66,7 @@ pipeline {
             when { 
                 anyOf {
                     expression { return params.Configure_Tests }
-                    triggeredBy 'cron'
+                    triggeredBy 'TimerTrigger'
                 }
             }
             steps {
@@ -80,7 +80,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        triggeredBy 'cron'
+                        triggeredBy 'TimerTrigger'
                         branch 'develop'
                     }
                 }
@@ -123,7 +123,7 @@ pipeline {
         stage("UI Tests") {
             when { expression { return params.UI_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test; make -s ui2x-test'"
             }
         }
         stage("Sonar") {
@@ -132,7 +132,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        triggeredBy 'cron'
+                        triggeredBy 'TimerTrigger'
                         branch 'develop'
                     }
                 }
@@ -154,7 +154,6 @@ pipeline {
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
                     }
-
                 }
             }
         }
