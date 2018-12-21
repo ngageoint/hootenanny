@@ -67,6 +67,9 @@ public:
   unsigned int _driverType;
 };
 
+/**
+ * (Singleton)
+ */
 class OgrUtilities
 {
 public:

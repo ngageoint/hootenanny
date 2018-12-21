@@ -44,11 +44,12 @@ namespace hoot
 
 class Tags;
 
+/**
+ * (Singleton)
+ */
 class TagComparator
 {
 public:
-
-  TagComparator();
 
   /**
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be
@@ -132,6 +133,8 @@ public:
   void mergeText(Tags& t1, Tags& t2, Tags& result);
 
 private:
+
+  TagComparator();
 
   static boost::shared_ptr<TagComparator> _theInstance;
 

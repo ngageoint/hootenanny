@@ -38,18 +38,19 @@ class LibPostalInit;
 typedef boost::shared_ptr<LibPostalInit> LibPostalInitPtr;
 
 /**
- * Singleton access for initializing/destroying libpostal
+ * Singleton access for initializing/destroying libpostal (Singleton)
  */
 class LibPostalInit
 {
 public:
 
-  LibPostalInit();
   ~LibPostalInit();
 
   static const LibPostalInitPtr& getInstance();
 
 private:
+
+  LibPostalInit();
 
   static LibPostalInitPtr _theInstance;
 

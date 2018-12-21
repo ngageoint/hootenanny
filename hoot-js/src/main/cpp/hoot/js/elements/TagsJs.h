@@ -48,6 +48,7 @@ namespace hoot
 class TagsJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   Tags& getTags() { return _tags; }
@@ -55,6 +56,7 @@ public:
   static v8::Handle<v8::Object> New(const Tags& t);
 
 private:
+
   TagsJs(ConstNodePtr n);
   TagsJs();
   ~TagsJs();

@@ -58,6 +58,7 @@ template<class T>
 class ClassInitializerTemplate : public ClassInitializer
 {
 public:
+
   ClassInitializerTemplate()
   {
   }
@@ -68,14 +69,14 @@ public:
   {
     T::Init(exports);
   }
-
-private:
 };
 
+/**
+ * (Singleton)
+ */
 class JsRegistrar
 {
 public:
-  JsRegistrar();
 
   static JsRegistrar& getInstance();
 
@@ -89,6 +90,8 @@ private:
 
   std::vector<boost::shared_ptr<ClassInitializer> > _initializers;
   static boost::shared_ptr<JsRegistrar> _theInstance;
+
+  JsRegistrar();
 };
 
 template<class T>

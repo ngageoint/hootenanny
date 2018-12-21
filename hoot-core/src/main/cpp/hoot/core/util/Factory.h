@@ -95,6 +95,9 @@ private:
   std::string _name, _baseName;
 };
 
+/**
+ * (Singleton)
+ */
 class Factory
 {
 public:
