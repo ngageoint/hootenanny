@@ -54,6 +54,7 @@ class NetworkDetailsTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
   NetworkEdgePtr _e1ab, _e1bc, _e1cd, _e1df;
   NetworkEdgePtr _e2ab, _e2bc;
 
@@ -178,11 +179,11 @@ public:
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.0))));
     HOOT_STR_EQUALS(toRadians(45),
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.1))));
-    HOOT_STR_EQUALS(toRadians(90),
+    HOOT_STR_EQUALS(toRadians(0),
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.5))));
-    HOOT_STR_EQUALS(toRadians(135),
+    HOOT_STR_EQUALS(toRadians(-45),
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.75))));
-    HOOT_STR_EQUALS(toRadians(135),
+    HOOT_STR_EQUALS(toRadians(-45),
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 1.0))));
   }
 

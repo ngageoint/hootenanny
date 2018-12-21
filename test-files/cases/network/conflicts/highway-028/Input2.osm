@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-89017" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920908767220794" lon="-77.0544828999999964"/>
+    <node visible="true" id="-89016" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8913895000000025" lon="-77.0545554268292392"/>
+    <node visible="true" id="-89015" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8923145194804789" lon="-77.0550999999999959"/>
+    <node visible="true" id="-88999" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8923001140350522" lon="-77.0550999999999959"/>
+    <node visible="true" id="-76362" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8917399999999773" lon="-77.0547380000000004"/>
+    <node visible="true" id="-76361" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8917799999999687" lon="-77.0547459999999660"/>
+    <node visible="true" id="-76360" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8918200000000027" lon="-77.0547499999999843"/>
+    <node visible="true" id="-76359" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8918600000000367" lon="-77.0547509999999818"/>
+    <node visible="true" id="-76358" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8918999999999997" lon="-77.0547469999999919"/>
+    <node visible="true" id="-76357" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8919859999999673" lon="-77.0547249999999906"/>
+    <node visible="true" id="-57339" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921240000000026" lon="-77.0546849999999921"/>
+    <node visible="true" id="-1422" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8922219999999683" lon="-77.0550479999999993"/>
+    <node visible="true" id="-1421" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915689999999827" lon="-77.0546859999999896"/>
+    <node visible="true" id="-1420" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8914629999999590" lon="-77.0546109999999800"/>
+    <way visible="true" id="-5047" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1422"/>
+        <nd ref="-57339"/>
+        <nd ref="-89017"/>
+        <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5046" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-89016"/>
+        <nd ref="-1420"/>
+        <nd ref="-1421"/>
+        <nd ref="-1422"/>
+        <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5045" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1422"/>
+        <nd ref="-89015"/>
+        <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5029" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1422"/>
+        <nd ref="-88999"/>
+        <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-304" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-57339"/>
+        <nd ref="-76357"/>
+        <nd ref="-76358"/>
+        <nd ref="-76359"/>
+        <nd ref="-76360"/>
+        <nd ref="-76361"/>
+        <nd ref="-76362"/>
+        <nd ref="-1421"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+</osm>

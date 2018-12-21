@@ -3908,7 +3908,7 @@
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7590000000000003" lon="-122.1139588225587005"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0459999999999994" lon="-122.2059777980965833"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0459999999999923" lon="-122.2338033135485205"/>
-    <way visible="true" id="-15538" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15496" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1335"/>
         <nd ref="-1338"/>
         <nd ref="-1339"/>
@@ -3939,7 +3939,7 @@
         <tag k="Length_Fee" v="13988.29157662"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15532" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15490" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-891"/>
         <nd ref="-892"/>
@@ -4004,7 +4004,7 @@
         <tag k="Length_Fee" v="58259.75743441"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15527" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15485" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-932"/>
         <nd ref="-933"/>
         <nd ref="-934"/>
@@ -4035,7 +4035,7 @@
         <tag k="Length_Fee" v="58259.75743441"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15516" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15474" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-844"/>
         <nd ref="-845"/>
@@ -4100,7 +4100,7 @@
         <tag k="Length_Fee" v="58236.82114167"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15511" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15469" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-932"/>
         <nd ref="-885"/>
         <nd ref="-886"/>
@@ -4130,7 +4130,7 @@
         <tag k="Length_Fee" v="58236.82114167"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15501" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15459" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-658"/>
         <nd ref="-660"/>
         <tag k="REF2" v="todo"/>
@@ -4142,7 +4142,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15499" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15457" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-658"/>
         <nd ref="-1111"/>
         <tag k="REF1" v="000073"/>
@@ -4163,7 +4163,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15498" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15456" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-619"/>
         <nd ref="-620"/>
@@ -4228,7 +4228,7 @@
         <tag k="Length_Fee" v="37796.49735604"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15465" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15423" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-662"/>
         <nd ref="-3164"/>
         <tag k="REF2" v="todo"/>
@@ -4240,7 +4240,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15461" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15419" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1111"/>
         <nd ref="-659"/>
         <nd ref="-660"/>
@@ -4275,7 +4275,7 @@
         <tag k="Length_Fee" v="37796.49735604"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15456" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15414" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8"/>
         <nd ref="-603"/>
         <nd ref="-604"/>
@@ -4315,7 +4315,7 @@
         <tag k="Length_Fee" v="15272.33366977"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15451" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15409" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
         <nd ref="-2273"/>
         <tag k="REF2" v="00008c"/>
@@ -4327,7 +4327,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15449" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15407" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
         <nd ref="-551"/>
         <nd ref="-552"/>
@@ -4401,7 +4401,7 @@
         <tag k="Length_Fee" v="123835.36447739"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15445" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15403" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-526"/>
         <nd ref="-527"/>
         <tag k="REF1" v="00008f"/>
@@ -4422,7 +4422,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15444" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15402" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-527"/>
         <nd ref="-528"/>
         <nd ref="-529"/>
@@ -4472,14 +4472,14 @@
         <tag k="Length_Fee" v="97282.77912039"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15433" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15391" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-207"/>
         <nd ref="-3883"/>
         <tag k="REF2" v="todo"/>
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15431" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15389" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-205"/>
         <nd ref="-206"/>
         <nd ref="-207"/>
@@ -4501,7 +4501,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15430" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15388" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-207"/>
         <nd ref="-17"/>
         <tag k="REF1" v="000279"/>
@@ -4523,7 +4523,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15426" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15384" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27"/>
         <nd ref="-1486"/>
         <nd ref="-1487"/>
@@ -4582,7 +4582,7 @@
         <tag k="Length_Fee" v="73305.37694486"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15421" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15379" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1521"/>
         <nd ref="-1522"/>
         <tag k="status" v="operational"/>
@@ -4606,7 +4606,7 @@
         <tag k="Length_Fee" v="73305.37694486"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15418" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15376" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1424"/>
         <nd ref="-3775"/>
         <nd ref="-1426"/>
@@ -4620,7 +4620,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15416" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15374" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1424"/>
         <nd ref="-1425"/>
         <tag k="status" v="operational"/>
@@ -4641,7 +4641,7 @@
         <tag k="Length_Fee" v="43195.8258019"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15415" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15373" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1437"/>
         <nd ref="-1413"/>
         <nd ref="-1414"/>
@@ -4678,7 +4678,7 @@
         <tag k="Length_Fee" v="43195.8258019"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15408" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15366" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1425"/>
         <nd ref="-1426"/>
         <nd ref="-1427"/>
@@ -4707,7 +4707,7 @@
         <tag k="Length_Fee" v="43195.8258019"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15403" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15361" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-273"/>
         <nd ref="-208"/>
         <nd ref="-209"/>
@@ -4734,7 +4734,7 @@
         <tag k="Length_Fee" v="2660.78913489"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15399" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15357" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-666"/>
         <nd ref="-667"/>
         <nd ref="-668"/>
@@ -4758,7 +4758,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15395" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15353" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-669"/>
         <nd ref="-670"/>
         <nd ref="-671"/>
@@ -4797,7 +4797,7 @@
         <tag k="Length_Fee" v="55124.05488235"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15392" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15350" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3316"/>
         <nd ref="-3393"/>
         <nd ref="-733"/>
@@ -4806,7 +4806,7 @@
         <tag k="wires" v="single"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15390" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15348" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-732"/>
         <nd ref="-733"/>
         <tag k="status" v="operational"/>
@@ -4830,7 +4830,7 @@
         <tag k="Length_Fee" v="266.18490287"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15386" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15344" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1664"/>
         <nd ref="-737"/>
         <nd ref="-738"/>
@@ -4855,7 +4855,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15374" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15332" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-743"/>
         <nd ref="-744"/>
         <nd ref="-745"/>
@@ -4878,7 +4878,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15369" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15327" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-745"/>
         <nd ref="-746"/>
         <nd ref="-747"/>
@@ -4902,7 +4902,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15365" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15323" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-749"/>
         <nd ref="-750"/>
         <nd ref="-751"/>
@@ -4965,7 +4965,7 @@
         <tag k="Length_Fee" v="28164.38775402"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15360" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15318" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-790"/>
         <nd ref="-791"/>
         <tag k="status" v="operational"/>
@@ -4988,7 +4988,7 @@
         <tag k="Length_Fee" v="28164.38775402"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15357" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15315" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-829"/>
         <nd ref="-830"/>
         <tag k="REF2" v="todo"/>
@@ -4998,7 +4998,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15355" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15313" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-829"/>
         <nd ref="-1795"/>
         <tag k="status" v="operational"/>
@@ -5019,7 +5019,7 @@
         <tag k="Length_Fee" v="29681.0744457"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15354" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15312" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-793"/>
         <nd ref="-794"/>
         <nd ref="-795"/>
@@ -5077,7 +5077,7 @@
         <tag k="Length_Fee" v="29681.0744457"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15342" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15300" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1795"/>
         <nd ref="-830"/>
         <nd ref="-831"/>
@@ -5102,7 +5102,7 @@
         <tag k="Length_Fee" v="29681.0744457"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15336" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15294" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-792"/>
         <nd ref="-793"/>
         <tag k="status" v="operational"/>
@@ -5125,7 +5125,7 @@
         <tag k="Length_Fee" v="29681.0744457"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15332" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15290" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3548"/>
         <nd ref="-3567"/>
         <nd ref="-971"/>
@@ -5136,7 +5136,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15330" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15288" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-971"/>
         <nd ref="-1005"/>
         <tag k="REF1" v="000039"/>
@@ -5157,7 +5157,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15329" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15287" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-941"/>
         <nd ref="-942"/>
         <nd ref="-943"/>
@@ -5210,7 +5210,7 @@
         <tag k="Length_Fee" v="26789.93374941"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15310" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15268" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-940"/>
         <nd ref="-941"/>
         <tag k="status" v="operational"/>
@@ -5234,7 +5234,7 @@
         <tag k="Length_Fee" v="26789.93374941"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15307" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15265" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1003"/>
         <nd ref="-3090"/>
         <nd ref="-3089"/>
@@ -5246,7 +5246,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15305" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15263" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1003"/>
         <nd ref="-1004"/>
         <nd ref="-1005"/>
@@ -5268,7 +5268,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15304" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15262" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-973"/>
         <nd ref="-974"/>
         <nd ref="-975"/>
@@ -5321,7 +5321,7 @@
         <tag k="Length_Fee" v="26793.19004001"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15289" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15247" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-972"/>
         <nd ref="-973"/>
         <tag k="status" v="operational"/>
@@ -5345,7 +5345,7 @@
         <tag k="Length_Fee" v="26793.19004001"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15286" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15244" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3642"/>
         <nd ref="-3666"/>
         <nd ref="-3667"/>
@@ -5357,7 +5357,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15284" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15242" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1010"/>
         <nd ref="-1011"/>
         <nd ref="-1061"/>
@@ -5379,7 +5379,7 @@
         <tag k="Length_Fee" v="25386.01066699"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15283" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15241" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1007"/>
         <nd ref="-1008"/>
         <nd ref="-1009"/>
@@ -5405,7 +5405,7 @@
         <tag k="Length_Fee" v="25386.01066699"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15278" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15236" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1006"/>
         <nd ref="-1007"/>
         <tag k="status" v="operational"/>
@@ -5429,7 +5429,7 @@
         <tag k="Length_Fee" v="25386.01066699"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15274" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15232" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1054"/>
         <nd ref="-1055"/>
         <nd ref="-1097"/>
@@ -5455,7 +5455,7 @@
         <tag k="Length_Fee" v="32315.51980185"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15268" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15226" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1145"/>
         <nd ref="-1146"/>
         <tag k="ref" v="Sobrante - East Portal/East Portal - Claremont"/>
@@ -5478,7 +5478,7 @@
         <tag k="Length_Fee" v="850.09915195"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15264" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15222" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1155"/>
         <nd ref="-1156"/>
         <nd ref="-1157"/>
@@ -5501,7 +5501,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15263" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15221" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1147"/>
         <nd ref="-1148"/>
         <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
@@ -5522,7 +5522,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15262" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15220" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1148"/>
         <nd ref="-1149"/>
         <nd ref="-1150"/>
@@ -5552,7 +5552,7 @@
         <tag k="Length_Fee" v="22493.87282968"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15258" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15216" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1238"/>
         <nd ref="-1229"/>
         <tag k="status" v="operational"/>
@@ -5575,7 +5575,7 @@
         <tag k="Length_Fee" v="289.53575539"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15254" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15212" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1244"/>
         <nd ref="-1231"/>
         <nd ref="-1232"/>
@@ -5599,7 +5599,7 @@
         <tag k="Length_Fee" v="135.99512327"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15248" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15206" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1244"/>
         <nd ref="-1238"/>
         <tag k="status" v="operational"/>
@@ -5622,7 +5622,7 @@
         <tag k="Length_Fee" v="61.87193626"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15245" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15203" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3647"/>
         <nd ref="-1250"/>
         <tag k="REF2" v="todo"/>
@@ -5634,7 +5634,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15243" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15201" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1250"/>
         <nd ref="-1251"/>
         <tag k="REF1" v="000027"/>
@@ -5655,7 +5655,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15237" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15195" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1246"/>
         <nd ref="-1247"/>
         <nd ref="-1248"/>
@@ -5683,7 +5683,7 @@
         <tag k="Length_Fee" v="24947.68210708"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15232" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15190" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1245"/>
         <nd ref="-1246"/>
         <tag k="status" v="operational"/>
@@ -5707,7 +5707,7 @@
         <tag k="Length_Fee" v="24947.68210708"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15229" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15187" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1298"/>
         <nd ref="-1297"/>
         <tag k="REF2" v="000026"/>
@@ -5716,7 +5716,7 @@
         <tag k="ref" v="Christie - Sobrante"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15181" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15139" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1282"/>
         <nd ref="-1283"/>
         <nd ref="-1284"/>
@@ -5785,7 +5785,7 @@
         <tag k="Length_Fee" v="48230.41800181"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15176" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15134" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1439"/>
         <nd ref="-2738"/>
         <tag k="REF2" v="000026"/>
@@ -5794,7 +5794,7 @@
         <tag k="ref" v="Christie - Sobrante"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15173" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15131" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1439"/>
         <nd ref="-1282"/>
         <tag k="ref" v="Christie - Sobrante"/>
@@ -5818,7 +5818,7 @@
         <tag k="Length_Fee" v="48230.41800181"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15169" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15127" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1408"/>
         <nd ref="-1409"/>
         <nd ref="-1412"/>
@@ -5845,7 +5845,7 @@
         <tag k="Length_Fee" v="445.27235981"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15165" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15123" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1410"/>
         <nd ref="-1411"/>
         <nd ref="-1412"/>
@@ -5872,7 +5872,7 @@
         <tag k="Length_Fee" v="505.8986465"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15161" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15119" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1525"/>
         <nd ref="-1526"/>
         <tag k="REF1" v="0002d5"/>
@@ -5893,7 +5893,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15160" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15118" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1524"/>
         <nd ref="-1525"/>
         <tag k="status" v="operational"/>
@@ -5917,7 +5917,7 @@
         <tag k="Length_Fee" v="40312.98545586"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15157" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15115" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1688"/>
         <nd ref="-1695"/>
         <tag k="REF2" v="todo"/>
@@ -5925,7 +5925,7 @@
         <tag k="wires" v="single"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15156" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15114" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3595"/>
         <nd ref="-3599"/>
         <nd ref="-3597"/>
@@ -5936,7 +5936,7 @@
         <tag k="wires" v="single"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15145" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15103" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1693"/>
         <nd ref="-1694"/>
         <nd ref="-1695"/>
@@ -5958,7 +5958,7 @@
         <tag k="Length_Fee" v="1401.65918347"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15144" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15102" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1695"/>
         <nd ref="-1696"/>
         <tag k="status" v="operational"/>
@@ -5982,7 +5982,7 @@
         <tag k="Length_Fee" v="1401.65918347"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15141" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15099" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1067"/>
         <nd ref="-3289"/>
         <nd ref="-1065"/>
@@ -5994,7 +5994,7 @@
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15140" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15098" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2319"/>
         <nd ref="-2466"/>
         <nd ref="-2467"/>
@@ -6027,7 +6027,7 @@
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15137" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15095" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1158"/>
         <nd ref="-1067"/>
         <nd ref="-1068"/>
@@ -6081,7 +6081,7 @@
         <tag k="Length_Fee" v="32315.51980185"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15127" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15085" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1062"/>
         <nd ref="-3368"/>
         <nd ref="-1060"/>
@@ -6093,7 +6093,7 @@
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15117" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15075" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1057"/>
         <nd ref="-3408"/>
         <nd ref="-1097"/>
@@ -6105,7 +6105,7 @@
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15110" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15068" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1061"/>
         <nd ref="-3644"/>
         <tag k="REF2" v="todo"/>
@@ -6115,7 +6115,7 @@
         <tag k="ref" v="East Portal-Claremont"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15107" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15065" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1061"/>
         <nd ref="-1012"/>
         <nd ref="-1013"/>
@@ -6147,7 +6147,7 @@
         <tag k="Length_Fee" v="25386.01066699"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15101" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15059" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1578"/>
         <nd ref="-1579"/>
         <nd ref="-1580"/>
@@ -6173,7 +6173,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15094" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15052" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1577"/>
         <nd ref="-1578"/>
         <tag k="status" v="operational"/>
@@ -6194,7 +6194,7 @@
         <tag k="Length_Fee" v="5333.34877055"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15093" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15051" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1583"/>
         <nd ref="-1577"/>
         <tag k="ref" v="Oleum - El Cerrito"/>
@@ -6217,7 +6217,7 @@
         <tag k="Length_Fee" v="5333.34877055"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15089" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15047" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1567"/>
         <nd ref="-1568"/>
         <nd ref="-1569"/>
@@ -6248,7 +6248,7 @@
         <tag k="Length_Fee" v="7990.28513193"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15084" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15042" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1576"/>
         <nd ref="-1583"/>
         <tag k="REF1" v="0002d4"/>
@@ -6270,7 +6270,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15077" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15035" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1566"/>
         <nd ref="-1567"/>
         <tag k="REF1" v="0002d4"/>
@@ -6292,7 +6292,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15073" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15031" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1578"/>
         <nd ref="-722"/>
         <nd ref="-723"/>
@@ -6324,7 +6324,7 @@
         <tag k="Length_Fee" v="55124.05488235"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15065" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15023" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1023"/>
         <nd ref="-2379"/>
         <nd ref="-2380"/>
@@ -6340,7 +6340,7 @@
         <tag k="ref" v="Moraga - Claremont"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15063" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15021" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1066"/>
         <nd ref="-1019"/>
         <nd ref="-1020"/>
@@ -6384,7 +6384,7 @@
         <tag k="Length_Fee" v="25386.01066699"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15048" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15006" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1326"/>
         <nd ref="-1324"/>
         <tag k="REF2" v="000026"/>
@@ -6392,7 +6392,7 @@
         <tag k="name" v="Oleum - North Tower - Christie 115kV transmission line"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15047" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15005" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1329"/>
         <nd ref="-2873"/>
         <nd ref="-2874"/>
@@ -6403,7 +6403,7 @@
         <tag k="name" v="Oleum - North Tower - Christie 115kV transmission line"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-15044" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15002" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1327"/>
         <nd ref="-1328"/>
         <nd ref="-1329"/>
@@ -6431,7 +6431,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15034" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14992" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1325"/>
         <nd ref="-280"/>
         <nd ref="-281"/>
@@ -6462,7 +6462,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15029" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14987" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-273"/>
         <nd ref="-274"/>
         <tag k="REF1" v="000275"/>
@@ -6483,7 +6483,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15028" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14986" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-274"/>
         <nd ref="-275"/>
         <nd ref="-276"/>
@@ -6510,7 +6510,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15008" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14966" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1108"/>
         <nd ref="-1109"/>
         <nd ref="-1110"/>
@@ -6535,7 +6535,7 @@
         <tag k="Length_Fee" v="29979.79913248"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15004" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14962" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1336"/>
         <nd ref="-1335"/>
         <tag k="status" v="operational"/>
@@ -6558,13 +6558,13 @@
         <tag k="Length_Fee" v="48230.41800181"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-15001" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14959" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1112"/>
         <nd ref="-1110"/>
         <tag k="REF2" v="todo"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14999" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14957" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1111"/>
         <nd ref="-1112"/>
         <nd ref="-1113"/>
@@ -6614,7 +6614,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14987" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14945" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-700"/>
         <nd ref="-3120"/>
         <nd ref="-703"/>
@@ -6625,7 +6625,7 @@
         <tag k="name" v="Oleum - Martinez 115kV transmission line"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14986" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14944" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3449"/>
         <nd ref="-684"/>
         <tag k="REF2" v="000071"/>
@@ -6635,7 +6635,7 @@
         <tag k="name" v="Oleum - Martinez 115kV transmission line"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14983" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14941" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-732"/>
         <nd ref="-684"/>
         <nd ref="-685"/>
@@ -6687,7 +6687,7 @@
         <tag k="Length_Fee" v="55124.05488235"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14971" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14929" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-734"/>
         <nd ref="-1337"/>
         <tag k="status" v="operational"/>
@@ -6712,7 +6712,7 @@
         <tag k="Length_Fee" v="1456.45731085"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14966" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14924" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1337"/>
         <nd ref="-1335"/>
         <nd ref="-735"/>
@@ -6738,7 +6738,7 @@
         <tag k="Length_Fee" v="1456.45731085"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14962" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14920" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-95"/>
         <nd ref="-518"/>
         <nd ref="-96"/>
@@ -6760,7 +6760,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14956" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14914" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1244"/>
         <nd ref="-3360"/>
         <nd ref="-1143"/>
@@ -6769,7 +6769,7 @@
         <tag k="voltage" v="115000"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14953" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14911" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1140"/>
         <nd ref="-1141"/>
         <nd ref="-1142"/>
@@ -6795,7 +6795,7 @@
         <tag k="Length_Fee" v="29979.79913248"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14948" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14906" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1241"/>
         <nd ref="-1039"/>
         <tag k="REF2" v="todo"/>
@@ -6803,7 +6803,7 @@
         <tag k="voltage" v="115000"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14942" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14900" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1262"/>
         <nd ref="-1263"/>
         <nd ref="-1264"/>
@@ -6845,7 +6845,7 @@
         <tag k="Length_Fee" v="24947.68210708"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14933" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14891" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1181"/>
         <nd ref="-1263"/>
         <tag k="REF2" v="todo"/>
@@ -6854,7 +6854,7 @@
         <tag k="ref" v="Sobrante - Claremont"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14920" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14878" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1268"/>
         <nd ref="-1271"/>
         <tag k="REF2" v="todo"/>
@@ -6863,7 +6863,7 @@
         <tag k="ref" v="Sobrante - Claremont"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14905" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14863" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1234"/>
         <nd ref="-1235"/>
         <nd ref="-1236"/>
@@ -6889,7 +6889,7 @@
         <tag k="Length_Fee" v="1342.66646523"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14889" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14847" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1281"/>
         <nd ref="-1233"/>
         <tag k="ref" v="Sobrante - Claremont"/>
@@ -6913,7 +6913,7 @@
         <tag k="Length_Fee" v="1342.66646523"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14883" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14841" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1233"/>
         <nd ref="-1234"/>
         <tag k="status" v="operational"/>
@@ -6936,7 +6936,7 @@
         <tag k="Length_Fee" v="1342.66646523"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14880" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14838" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1270"/>
         <nd ref="-2956"/>
         <nd ref="-2957"/>
@@ -6946,7 +6946,7 @@
         <tag k="ref" v="Sobrante - East Portal"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14877" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14835" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1040"/>
         <nd ref="-1041"/>
         <nd ref="-1042"/>
@@ -6985,7 +6985,7 @@
         <tag k="Length_Fee" v="12893.72789489"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14847" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14805" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1604"/>
         <nd ref="-1643"/>
         <tag k="REF2" v="todo"/>
@@ -6999,7 +6999,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14846" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14804" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1635"/>
         <nd ref="-3055"/>
         <nd ref="-3053"/>
@@ -7015,7 +7015,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14842" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14800" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1603"/>
         <nd ref="-1604"/>
         <nd ref="-1605"/>
@@ -7080,7 +7080,7 @@
         <tag k="Length_Fee" v="58645.62823076"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14765" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14723" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1642"/>
         <nd ref="-2851"/>
         <tag k="REF2" v="todo"/>
@@ -7094,7 +7094,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14762" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14720" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1643"/>
         <nd ref="-1644"/>
         <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.230Z"/>
@@ -7115,7 +7115,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14761" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14719" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1642"/>
         <nd ref="-1643"/>
         <tag k="ref" v="Standard Oil - Sobrante"/>
@@ -7142,7 +7142,7 @@
         <tag k="Length_Fee" v="38790.08417009"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14749" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14707" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1663"/>
         <nd ref="-1664"/>
         <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.230Z"/>
@@ -7163,7 +7163,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14740" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14698" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1599"/>
         <nd ref="-1600"/>
         <tag k="status" v="operational"/>
@@ -7184,7 +7184,7 @@
         <tag k="Length_Fee" v="58645.62823076"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14739" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14697" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1583"/>
         <nd ref="-1584"/>
         <nd ref="-1585"/>
@@ -7223,13 +7223,13 @@
         <tag k="Length_Fee" v="58645.62823076"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14712" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14670" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3373"/>
         <nd ref="-101"/>
         <tag k="REF2" v="todo"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14709" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14667" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1431"/>
         <nd ref="-101"/>
         <nd ref="-102"/>
@@ -7262,7 +7262,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14702" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14660" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-97"/>
         <nd ref="-99"/>
         <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
@@ -7284,7 +7284,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14679" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14645" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-99"/>
         <nd ref="-1600"/>
         <nd ref="-1389"/>
@@ -7307,7 +7307,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14675" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14641" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-273"/>
         <nd ref="-112"/>
         <nd ref="-113"/>
@@ -7339,7 +7339,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14674" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14640" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-123"/>
         <nd ref="-124"/>
         <nd ref="-1430"/>
@@ -7367,7 +7367,7 @@
         <tag k="Length_Fee" v="18258.84326879"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14631" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14597" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1603"/>
         <nd ref="-1644"/>
         <nd ref="-1645"/>
@@ -7433,7 +7433,7 @@
         <tag k="Length_Fee" v="38790.08417009"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14628" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14594" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3145"/>
         <nd ref="-3153"/>
         <nd ref="-3144"/>
@@ -7444,7 +7444,7 @@
         <tag k="wires" v="single"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14622" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14588" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1436"/>
         <nd ref="-1485"/>
         <tag k="REF2" v="todo"/>
@@ -7455,7 +7455,7 @@
         <tag k="ref" v="Parkway - Moraga"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14616" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14582" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1432"/>
         <nd ref="-1429"/>
         <tag k="REF2" v="todo"/>
@@ -7466,7 +7466,7 @@
         <tag k="ref" v="Bahia - Moraga"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14604" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14570" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1387"/>
         <nd ref="-1390"/>
         <tag k="REF2" v="000017"/>
@@ -7479,7 +7479,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14603" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14569" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1359"/>
         <nd ref="-1361"/>
         <tag k="REF2" v="000017"/>
@@ -7492,7 +7492,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14600" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14566" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1360"/>
         <nd ref="-1361"/>
         <nd ref="-1362"/>
@@ -7546,7 +7546,7 @@
         <tag k="Length_Fee" v="110683.54659046"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14589" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14555" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1412"/>
         <nd ref="-1346"/>
         <tag k="REF2" v="000017"/>
@@ -7559,7 +7559,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14580" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14546" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1403"/>
         <nd ref="-1405"/>
         <tag k="REF2" v="000017"/>
@@ -7572,12 +7572,12 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14577" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14543" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1403"/>
         <nd ref="-1404"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14570" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14536" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1404"/>
         <nd ref="-1405"/>
         <nd ref="-1406"/>
@@ -7607,7 +7607,7 @@
         <tag k="Length_Fee" v="110683.54659046"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14566" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14532" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1163"/>
         <nd ref="-2347"/>
         <nd ref="-2348"/>
@@ -7622,7 +7622,7 @@
         <tag k="ref" v="Sobrante - Claremont"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14564" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14530" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1158"/>
         <nd ref="-1159"/>
         <nd ref="-1160"/>
@@ -7666,7 +7666,10 @@
         <tag k="Length_Fee" v="22493.87282968"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14545" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14506" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1099"/>
+        <nd ref="-1100"/>
+        <nd ref="-1101"/>
         <nd ref="-1102"/>
         <nd ref="-1103"/>
         <nd ref="-1104"/>
@@ -7695,39 +7698,13 @@
         <tag k="Length_Fee" v="29979.79913248"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14531" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1099"/>
-        <nd ref="-1100"/>
-        <nd ref="-1101"/>
-        <nd ref="-1102"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="power" v="line"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Length_Mil" v="6"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="circuits" v="2"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
-        <tag k="REF1" v="000033"/>
-        <tag k="OBJECTID" v="1297"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="frequency" v="60"/>
-        <tag k="cables" v="3"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="Shape__Len" v="0.092586216840936"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="29979.79913248"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-14522" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14488" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1098"/>
         <nd ref="-1096"/>
         <tag k="REF2" v="todo"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14520" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14486" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1097"/>
         <nd ref="-1098"/>
         <nd ref="-1108"/>
@@ -7750,7 +7727,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14513" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14479" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1093"/>
         <nd ref="-1094"/>
         <nd ref="-1095"/>
@@ -7775,7 +7752,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14506" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14472" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1090"/>
         <nd ref="-1091"/>
         <nd ref="-1092"/>
@@ -7799,7 +7776,7 @@
         <tag k="power" v="line"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14499" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14465" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3652"/>
         <nd ref="-3646"/>
         <nd ref="-3649"/>
@@ -7815,7 +7792,7 @@
         <tag k="ref" v="Sobrante - Claremont"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14497" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14463" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1189"/>
         <nd ref="-1190"/>
         <nd ref="-1191"/>
@@ -7859,7 +7836,7 @@
         <tag k="Length_Fee" v="21951.011012"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14483" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14449" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-841"/>
         <nd ref="-842"/>
         <nd ref="-843"/>
@@ -7885,7 +7862,7 @@
         <tag k="Length_Fee" v="1129.2620839"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14478" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14444" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-838"/>
         <nd ref="-841"/>
@@ -7911,7 +7888,7 @@
         <tag k="Length_Fee" v="35457.44775563"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14475" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14441" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2384"/>
         <nd ref="-1257"/>
         <tag k="REF2" v="todo"/>
@@ -7919,7 +7896,7 @@
         <tag k="voltage" v="115000"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14455" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14421" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1252"/>
         <nd ref="-3652"/>
         <tag k="REF2" v="todo"/>
@@ -7928,7 +7905,7 @@
         <tag k="voltage" v="115000"/>
         <tag k="power" v="line"/>
     </way>
-    <way visible="true" id="-14452" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14418" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1251"/>
         <nd ref="-1252"/>
         <nd ref="-1253"/>
@@ -7963,7 +7940,7 @@
         <tag k="Length_Fee" v="24947.68210708"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-14442" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14408" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6"/>
         <nd ref="-833"/>
         <nd ref="-834"/>
@@ -9428,6 +9405,7 @@
         <nd ref="-1567"/>
         <tag k="REF2" v="todo"/>
         <tag k="power" v="line"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3356"/>
@@ -12242,8 +12220,8 @@
         <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-963" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-15181" role=""/>
-        <member type="way" ref="-15044" role=""/>
+        <member type="way" ref="-15139" role=""/>
+        <member type="way" ref="-15002" role=""/>
         <tag k="status" v="operational"/>
         <tag k="name" v="PG&amp;E 115kV"/>
         <tag k="kV_Sort" v="115"/>
@@ -12264,8 +12242,8 @@
         <tag k="error:circular" v="15"/>
     </relation>
     <relation visible="true" id="-962" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-15044" role=""/>
-        <member type="way" ref="-15181" role=""/>
+        <member type="way" ref="-15002" role=""/>
+        <member type="way" ref="-15139" role=""/>
         <tag k="status" v="operational"/>
         <tag k="name" v="PG&amp;E 115kV"/>
         <tag k="kV_Sort" v="115"/>
@@ -12288,7 +12266,7 @@
         <tag k="error:circular" v="15"/>
     </relation>
     <relation visible="true" id="-954" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-14877" role=""/>
+        <member type="way" ref="-14835" role=""/>
         <member type="way" ref="-63" role=""/>
         <tag k="status" v="operational"/>
         <tag k="name" v="PG&amp;E 115kV"/>
@@ -12311,7 +12289,7 @@
     </relation>
     <relation visible="true" id="-950" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-336" role=""/>
-        <member type="way" ref="-14842" role=""/>
+        <member type="way" ref="-14800" role=""/>
         <tag k="status" v="operational"/>
         <tag k="name" v="PG&amp;E 115kV"/>
         <tag k="kV_Sort" v="115"/>
@@ -12332,8 +12310,8 @@
         <tag k="error:circular" v="15"/>
     </relation>
     <relation visible="true" id="-948" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-14739" role=""/>
-        <member type="way" ref="-14631" role=""/>
+        <member type="way" ref="-14697" role=""/>
+        <member type="way" ref="-14597" role=""/>
         <tag k="REF2" v="todo"/>
         <tag k="voltage" v="115000"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
@@ -12344,7 +12322,7 @@
     </relation>
     <relation visible="true" id="-928" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-397" role=""/>
-        <member type="way" ref="-14577" role=""/>
+        <member type="way" ref="-14543" role=""/>
         <tag k="status" v="operational"/>
         <tag k="comments" v="Triple circuit for 5 miles; 115 line shares 230 poles."/>
         <tag k="name" v="PG&amp;E 230kV"/>

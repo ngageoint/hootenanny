@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-54038' action='modify' visible='true' lat='0.64304076565' lon='4.99872565'>
+    <tag k='created_by' v='Merkaartor 0.13' />
+  </node>
+  <node id='-54040' action='modify' visible='true' lat='0.64346984854' lon='4.99865055'>
+    <tag k='created_by' v='Merkaartor 0.13' />
+  </node>
+  <node id='-54042' action='modify' visible='true' lat='0.64386151458' lon='4.99853495'>
+    <tag k='created_by' v='Merkaartor 0.13' />
+  </node>
+  <node id='-54044' action='modify' visible='true' lat='0.64414575892' lon='4.99841445'>
+    <tag k='created_by' v='Merkaartor 0.13' />
+  </node>
+  <node id='-54046' action='modify' visible='true' lat='0.64442577866' lon='4.99978685'>
+    <tag k='created_by' v='Merkaartor 0.13' />
+  </node>
+  <node id='-54048' action='modify' visible='true' lat='0.64421013129' lon='4.99973415'>
+    <tag k='created_by' v='Merkaartor 0.13' />
+  </node>
+  <node id='-54050' action='modify' visible='true' lat='0.64408138654' lon='4.99956245'>
+    <tag k='created_by' v='Merkaartor 0.13' />
+  </node>
+  <node id='-54052' action='modify' visible='true' lat='0.64405996261' lon='4.99916555'>
+    <tag k='created_by' v='Merkaartor 0.13' />
+  </node>
+  <way id='-54054' action='modify' visible='true'>
+    <nd ref='-54038' />
+    <nd ref='-54040' />
+    <nd ref='-54042' />
+    <tag k='created_by' v='Merkaartor 0.13' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='note' v='2c' />
+  </way>
+  <way id='-54056' action='modify' visible='true'>
+    <nd ref='-54042' />
+    <nd ref='-54044' />
+    <tag k='created_by' v='Merkaartor 0.13' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='note' v='2b' />
+  </way>
+  <way id='-54058' action='modify' visible='true'>
+    <nd ref='-54046' />
+    <nd ref='-54048' />
+    <nd ref='-54050' />
+    <nd ref='-54052' />
+    <nd ref='-54042' />
+    <tag k='created_by' v='Merkaartor 0.13' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='note' v='2a' />
+  </way>
+</osm>
