@@ -40,8 +40,8 @@ describe('TranslationServer', function () {
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
         assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("k"), "bridge");
         assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("v"), "yes");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("k"), "area");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("v"), "yes");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "area");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "yes");
 
         var tds_xml = server.handleInputs({
             osm: osm_xml,
@@ -55,8 +55,8 @@ describe('TranslationServer', function () {
         xml = parser.parseFromString(tds_xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
-        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "F_CODE");
-        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "AQ040");
+        assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("k"), "F_CODE");
+        assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("v"), "AQ040");
 
     });
 
@@ -89,8 +89,8 @@ describe('TranslationServer', function () {
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
         assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("k"), "bridge");
         assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("v"), "aqueduct");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("k"), "area");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("v"), "yes");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "area");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "yes");
 
         var tds_xml = server.handleInputs({
             osm: osm_xml,
@@ -104,8 +104,8 @@ describe('TranslationServer', function () {
         xml = parser.parseFromString(tds_xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
-        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "F_CODE");
-        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "BH010");
+        assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("k"), "F_CODE");
+        assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("v"), "BH010");
 
     });
 
