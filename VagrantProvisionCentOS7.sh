@@ -101,6 +101,10 @@ sudo yum versionlock add \
      hoot-gdal-$GDAL_VERSION \
      hoot-gdal-devel-$GDAL_VERSION \
      hoot-gdal-python-$GDAL_VERSION \
+     libphonenumber-$LIBPHONENUMBER_VERSION \
+     libphonenumber-devel-$LIBPHONENUMBER_VERSION \
+     liboauthcpp-$LIBOAUTHCPP_VERSION \
+     liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
      stxxl-$STXXL_VERSION \
