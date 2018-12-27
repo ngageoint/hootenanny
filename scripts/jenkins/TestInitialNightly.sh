@@ -14,7 +14,7 @@ make -sj`nproc` plugins-test
 export HOOT_TEST_DIFF=--diff
 # Running glacial tests here because we're not sure core-coverage runs them
 echo "Running glacial tests..."
-bin/HootTest $HOOT_TEST_DIFF --glacial --parallel $(nproc)
+bin/HootTest $HOOT_TEST_DIFF --glacial --parallel
 
 # This is done in VagrantBuild.sh
 # cd $HOOT_HOME/docs
