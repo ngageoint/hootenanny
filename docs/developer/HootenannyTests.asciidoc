@@ -261,7 +261,9 @@ test routines. At this time the micro tests run as part of _quick_ and up.
 ==== Running Core Unit Tests in Parallel
 
 Hootenanny can run certain unit tests in parallel.  This is accomplished by `--parallel [n]` flag
-where `[n]` specifies the number of worker processes to spawn.
+where the optional `[n]` specifies the number of worker processes to spawn.  Leaving off the `[n]`
+parameter makes an implicit call to the operating system to get the total number of online processing units.
+(The same as +$(nproc)+ )
 
 --------------
 # Runs quick tests serially
@@ -272,10 +274,12 @@ HootTest --quick --parallel 2
 
 # Runs quick tests in parallel with one process per processing unit
 HootTest --quick --parallel $(nproc)
+# Or implicit call to nproc
+HootTest --quick --parallel
 --------------
 
-Initial testing shows using `$(nproc)` is the optimal setting for speed as any more than that causes
-processes to wait for significantly longer for CPU time and give no real benefit.
+Initial testing shows using `$(nproc)` or leaving the parameter empty is the optimal setting for speed
+as any more than that causes processes to wait for significantly longer for CPU time and give no real benefit.
 
 These worker processes are QProcess objects that spawn `HootTest --listen`.  This "listening" process
 accepts single unit test names (similar to `--single`) from standard in, runs the test and then sends
