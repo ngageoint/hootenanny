@@ -98,4 +98,37 @@ describe('TranslationServer', function () {
     });
 
 
+    it('should translate length to LZN from osm -> tdsv61 even while missing nodes from the OSM', function() {
+
+        var osm_xml = '<osm version="0.6" upload="true" generator="hootenanny">\
+                        <way id="-19" action="modify" visible="true">\
+                            <nd ref="-10" />\
+                            <nd ref="-11" />\
+                            <nd ref="-12" />\
+                            <nd ref="-13" />\
+                            <nd ref="-10" />\
+                            <tag k="highway" v="primary"/>\
+                            <tag k="length" v="332.2"/>\
+                        </way>\
+                    </osm>';
+
+        var tds_xml = server.handleInputs({
+            osm: osm_xml,
+            method: 'POST',
+            translation: 'TDSv61',
+            path: '/translateTo'
+        });
+
+        // console.log(tds_xml);
+
+        xml = parser.parseFromString(tds_xml);
+
+        assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
+        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("k"), "F_CODE");
+        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("v"), "AP030");
+        assert.equal(xml.getElementsByTagName("tag")[3].getAttribute("k"), "LZN");
+        assert.equal(xml.getElementsByTagName("tag")[3].getAttribute("v"), "332.2");
+
+    });
+
 });

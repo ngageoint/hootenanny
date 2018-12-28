@@ -46,6 +46,7 @@ class OsmMapOperation;
 class MostEnglishNameJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   MostEnglishNamePtr getPtr() { return _sd; }
@@ -53,6 +54,7 @@ public:
   static v8::Handle<v8::Object> New(const MostEnglishNamePtr& sd);
 
 private:
+
   MostEnglishNameJs();
   MostEnglishNameJs(MostEnglishNamePtr sd) { _sd = sd; }
   ~MostEnglishNameJs();

@@ -27,7 +27,6 @@
 #include "PoiPolygonAddressScoreExtractor.h"
 
 // hoot
-#include <hoot/core/algorithms/string/MostEnglishName.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>

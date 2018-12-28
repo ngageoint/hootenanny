@@ -40,11 +40,12 @@ namespace hoot
 class Match;
 class MatchThreshold;
 
+/**
+ * (Singleton)
+ */
 class MatchFactory
 {
 public:
-
-  MatchFactory();
 
   ~MatchFactory();
 
@@ -100,6 +101,8 @@ public:
   long getMatchCandidateCount(const ConstOsmMapPtr& map, const geos::geom::Envelope& bounds);
 
 private:
+
+  MatchFactory();
 
   void _checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> matchCreator,
                                    const geos::geom::Envelope& bounds) const;

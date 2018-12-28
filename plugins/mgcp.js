@@ -724,7 +724,7 @@ mgcp = {
         }
         else
         {
-            tags.uuid = createUuid();
+            if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
         }
 
         // Railway Yard
@@ -810,7 +810,7 @@ mgcp = {
             // print('Added building to military');
             if (tags.military !== 'range') tags.building = 'yes';
         }
-        
+
         // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
         // if ('ford' in tags && !tags.highway) tags.highway = 'road';
 
@@ -1239,7 +1239,7 @@ mgcp = {
                     if (geometryType == 'Point')
                     {
                         attrs.F_CODE = 'AL020'; // Built Up Area
-                        delete tags.place;                        
+                        delete tags.place;
                     }                break;
 
             case 'isolated_dwelling':
@@ -1296,7 +1296,7 @@ mgcp = {
             tags.building = tags['settlement:type'];
             delete tags['settlement:type'];
         }
-        
+
         // Movable Bridges
         if (tags.bridge == 'movable')
         {
@@ -1488,7 +1488,7 @@ mgcp = {
         }
         else
         {
-            attrs.UID = createUuid().replace('{','').replace('}','');
+            if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','');
         }
 
         // Default railway
@@ -1794,6 +1794,7 @@ mgcp = {
             mgcp.configIn = {};
             mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+            mgcp.configIn.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes
             mgcp.toChange = hoot.Settings.get("translation.override");
@@ -1813,7 +1814,11 @@ mgcp = {
             tags = translate.parseO2S(attrs);
 
             // Add some metadata
-            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.uuid)
+            {
+                if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+            }
+
             if (! tags.source) tags.source = 'mgcp:' + layerName.toLowerCase();
 
             // Debug:
@@ -1905,6 +1910,9 @@ mgcp = {
         // Debug: Add the FCODE to the tags
         if (mgcp.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,mgcp.toChange);
+
         // Debug:
         if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
@@ -1914,9 +1922,6 @@ mgcp = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
-
-        // Override tag values if appropriate
-        translate.overrideValues(tags,mgcp.toChange);
 
         return tags;
     }, // End of ToOsm
@@ -1940,6 +1945,7 @@ mgcp = {
             mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
             mgcp.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             mgcp.configOut.OgrThrowError = config.getOgrThrowError();
+            mgcp.configOut.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon

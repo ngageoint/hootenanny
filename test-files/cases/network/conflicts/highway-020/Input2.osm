@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-863666' action='modify' visible='true' lat='-0.23831883692' lon='5.01279115'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-863667' action='modify' visible='true' lat='-0.24111911324' lon='5.01252285'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <way id='-863665' action='modify' visible='true'>
+    <nd ref='-863666' />
+    <nd ref='-863667' />
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Kemanggisan Pulo' />
+  </way>
+</osm>

@@ -43,7 +43,7 @@ namespace hoot
 {
 
 /**
- * Stores Hootenanny configuration options
+ * Stores Hootenanny configuration options (Singleton)
  *
  * This class favors convenience over performance so use it appropriately outside performance
  * critical code sections.
@@ -56,9 +56,13 @@ class Settings
 {
 public:
 
-  typedef QHash<QString, QVariant> SettingsMap;
-
+  // Technically, this is a Singleton and this constructor should not be publicly accessible.  There
+  // does seem to be a use case for passing around temporary settings, though, which then makes
+  // sense for it to remain public.  Possibly, we need a separate class for HootSettings that would
+  // then be a true Singleton?
   Settings();
+
+  typedef QHash<QString, QVariant> SettingsMap;
 
   void append(const QString& key, const QStringList& values);
 

@@ -224,7 +224,7 @@ gifd = {
         }
         else
         {
-            tags.uuid = createUuid();
+            if (gifd.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
         }
 
 
@@ -448,8 +448,21 @@ gifd = {
     {
         tags = {};  // The final output Tag list
 
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (gifd.configIn == undefined)
+        {
+            gifd.configIn = {};
+            gifd.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+            gifd.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+            gifd.configIn.OgrAddUuid = config.getOgrAddUuid();
+
+            // Get any changes
+            gifd.toChange = hoot.Settings.get("translation.override");
+        }
+
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (gifd.configIn.OgrDebugDumptags == 'true')
         {
             print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
@@ -521,10 +534,13 @@ gifd = {
         for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
         // Debug: Add the FCODE to the tags
-        if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (gifd.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+
+        // Override tag values if appropriate
+        translate.overrideValues(tags,gifd.toChange);
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (gifd.configIn.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');

@@ -113,7 +113,7 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/translateTo'
             });
-    
+
             var areaSchema = server.handleInputs({
                 idval: 'AL013',
                 geom: 'Area',
@@ -130,11 +130,11 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/translateTo'
             });
-    
+
             var pointSchemaColumns = pointSchema.columns.map(function(col) { return col.name; });
             var areaSchemaColumns = areaSchema.columns.map(function(col) { return col.name; } );
             var allSchemaColumns = allSchema.columns.map(function(col) { return col.name; });
-    
+
             var intersection = pointSchemaColumns.filter(function(col) { return areaSchemaColumns.indexOf(col) !== -1 }).length > 0;
             assert.equal(allSchemaColumns.length > 0, true);
             assert.equal(intersection, true);
@@ -235,13 +235,13 @@ describe('TranslationServer', function () {
                 translation: 'TDSv61',
                 path: '/translateTo'
             })
-            
+
             xml2js.parseString(ferryWay, function(err, result) {
                 if (err) console.error(err);
-                assert(result.osm.way[0].tag[1].$.k, 'F_CODE')
-                assert(result.osm.way[0].tag[1].$.v, 'AQ080')
+                assert(result.osm.way[0].tag[0].$.k, 'F_CODE')
+                assert(result.osm.way[0].tag[0].$.v, 'AQ080')
             })
-            
+
             var ferryNode = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><node id="-1" lon="33.731597320098885" lat="-24.919578904988793" version="0"><tag k="amenity" v="ferry_terminal"/></node></osm>',
                 method: 'POST',
@@ -251,8 +251,8 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(ferryNode, function(err, result) {
                 if (err) console.error(err);
-                assert(result.osm.node[0].tag[1].$.k, 'F_CODE')
-                assert(result.osm.node[0].tag[1].$.v, 'AQ080')
+                assert(result.osm.node[0].tag[0].$.k, 'F_CODE')
+                assert(result.osm.node[0].tag[0].$.v, 'AQ080')
             })
         })
         it('should handle OSM to MGCP POST of building area feature', function() {
@@ -274,7 +274,7 @@ describe('TranslationServer', function () {
 
 
         it('should translate Coastline (BA010) from ogr -> osm -> ogr', function() {
-            
+
             var data = '<osm version="0.6" generator="JOSM"><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /> <tag k="F_CODE" v="BA010" /></way></osm>'
 
             var osm_xml = server.handleInputs({
@@ -300,8 +300,8 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(tds61_xml, function(err, result) {
                 if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE")
-                assert.equal(result.osm.way[0].tag[1].$.v, "BA010")
+                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE")
+                assert.equal(result.osm.way[0].tag[0].$.v, "BA010")
             });
 
             var tds40_xml = server.handleInputs({
@@ -313,10 +313,10 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(tds40_xml, function(err, result) {
                 if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE")
-                assert.equal(result.osm.way[0].tag[1].$.v, "BA010")
+                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE")
+                assert.equal(result.osm.way[0].tag[0].$.v, "BA010")
             });
-            
+
             var mgcp_xml = server.handleInputs({
                 osm: osm_xml,
                 method: 'POST',
@@ -326,10 +326,10 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(mgcp_xml, function(err, result) {
                 if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[1].$.k, "FCODE")
-                assert.equal(result.osm.way[0].tag[1].$.v, "BA010")
+                assert.equal(result.osm.way[0].tag[0].$.k, "FCODE")
+                assert.equal(result.osm.way[0].tag[0].$.v, "BA010")
             });
-            
+
             var ggdmv30_xml = server.handleInputs({
                 osm: osm_xml,
                 method: 'POST',
@@ -339,50 +339,50 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(ggdmv30_xml, function(err, result) {
                 if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE")
-                assert.equal(result.osm.way[0].tag[1].$.v, "BA010")
+                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE")
+                assert.equal(result.osm.way[0].tag[0].$.v, "BA010")
             });
 
         }).timeout(8000);
 
         it('should persist Land Water Boundary (BA010) FCODE and SLT=6 (mangrove) from TDSv61-> osm -> TDSv61', function() {
-            
+
             var data = '<osm version="0.6" generator="JOSM"><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /> <tag k="F_CODE" v="BA010" /><tag k="SLT" v="6" /></way></osm>'
-            
+
                 var osm_xml = server.handleInputs({
                     osm: data,
                     method: 'POST',
                     translation: 'TDSv61',
                     path: '/translateFrom'
                 });
-    
-    
+
+
                 xml2js.parseString(osm_xml, function(err, result) {
                     if (err) console.error(err);
-    
+
                     assert.equal(result.osm.way[0].tag[0].$.k, 'natural')
                     assert.equal(result.osm.way[0].tag[0].$.v, 'coastline')
                     assert.equal(result.osm.way[0].tag[1].$.k, 'shoreline:type')
                     assert.equal(result.osm.way[0].tag[1].$.v, 'mangrove')
-    
+
                 })
-    
+
                 var tds_xml = server.handleInputs({
                     osm: osm_xml,
                     method: 'POST',
                     translation: 'TDSv61',
                     path: '/translateTo'
                 })
-    
+
                 xml2js.parseString(tds_xml, function(err, result) {
                     if (err) console.error(err);
-                    assert.equal(result.osm.way[0].tag[1].$.k, 'F_CODE')
-                    assert.equal(result.osm.way[0].tag[1].$.v, 'BA010')
-                    assert.equal(result.osm.way[0].tag[2].$.k, 'SLT')
-                    assert.equal(result.osm.way[0].tag[2].$.v, '6')
+                    assert.equal(result.osm.way[0].tag[0].$.k, 'F_CODE')
+                    assert.equal(result.osm.way[0].tag[0].$.v, 'BA010')
+                    assert.equal(result.osm.way[0].tag[1].$.k, 'SLT')
+                    assert.equal(result.osm.way[0].tag[1].$.v, '6')
                 })
         })
-        
+
         it('should handle OSM to MGCP POST of power line feature', function() {
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
@@ -622,21 +622,21 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.log(err)
                 // road
-                assert.equal(result.osm.way[0].tag[3].$.k, 'F_CODE')
-                assert.equal(result.osm.way[0].tag[3].$.v, 'AP030')
+                assert.equal(result.osm.way[0].tag[2].$.k, 'F_CODE')
+                assert.equal(result.osm.way[0].tag[2].$.v, 'AP030')
                 assert.equal(result.osm.way[0].tag[1].$.k, 'RTY')
                 assert.equal(result.osm.way[0].tag[1].$.v, '3')
                 assert.equal(result.osm.way[0].tag[0].$.k, 'ZI016_WTC')
                 assert.equal(result.osm.way[0].tag[0].$.v, '1')
-                assert.equal(result.osm.way[0].tag[4].$.k, 'RIN_ROI')
-                assert.equal(result.osm.way[0].tag[4].$.v, '5')
+                assert.equal(result.osm.way[0].tag[3].$.k, 'RIN_ROI')
+                assert.equal(result.osm.way[0].tag[3].$.v, '5')
                 // buildings
-                assert.equal(result.osm.way[1].tag[1].$.k, 'F_CODE')
-                assert.equal(result.osm.way[1].tag[1].$.v, 'AL013')
-                assert.equal(result.osm.way[2].tag[1].$.k, 'F_CODE')
-                assert.equal(result.osm.way[2].tag[1].$.v, 'AL013')
-                assert.equal(result.osm.way[3].tag[1].$.k, 'F_CODE')
-                assert.equal(result.osm.way[3].tag[1].$.v, 'AL013')
+                assert.equal(result.osm.way[1].tag[0].$.k, 'F_CODE')
+                assert.equal(result.osm.way[1].tag[0].$.v, 'AL013')
+                assert.equal(result.osm.way[2].tag[0].$.k, 'F_CODE')
+                assert.equal(result.osm.way[2].tag[0].$.v, 'AL013')
+                assert.equal(result.osm.way[3].tag[0].$.k, 'F_CODE')
+                assert.equal(result.osm.way[3].tag[0].$.v, 'AL013')
             });
         });
 
@@ -1117,13 +1117,13 @@ describe('TranslationServer', function () {
                 path: '/supportedGeometries',
             }
             var tds61Building = Object.assign(baseParams, { translation: 'TDSv61', fcode: 'AL013' });
-            assert.deepEqual(server.handleInputs(tds61Building), ['Point', 'Area']);            
+            assert.deepEqual(server.handleInputs(tds61Building), ['Point', 'Area']);
             var tds40Wall = Object.assign(baseParams, { translation: 'TDSv40', fcode: 'AL260' })
             assert.deepEqual(server.handleInputs(tds40Wall), [ 'Line' ]);
             var mgcpFord = Object.assign(baseParams, { translation: 'MGCP', fcode: 'BH070' });
             assert.deepEqual(server.handleInputs(mgcpFord), [ 'Line', 'Point' ]);
             var ggdm30Tower = Object.assign(baseParams, { translation: 'GGDMv30' , fcode: 'AL241'})
-            assert.deepEqual(server.handleInputs(ggdm30Tower), [ 'Point', 'Area' ]); 
+            assert.deepEqual(server.handleInputs(ggdm30Tower), [ 'Point', 'Area' ]);
         })
     });
 
@@ -1145,12 +1145,12 @@ describe('TranslationServer', function () {
     });
 
     describe('getLein', function() {
-        it('should return I251 for installation, I213 for intall, M313 for military', 
+        it('should return I251 for installation, I213 for intall, M313 for military',
             function() {
                 var leinIntall = server.getLein('intall'),
                     leinInstallation = server.getLein('installation'),
                     leinMilitary = server.getLein('military');
-                
+
                 assert.equal(leinIntall.toLowerCase(), 'i213');
                 assert.equal(leinInstallation.toLowerCase(), 'i251');
                 assert.equal(leinMilitary.toLowerCase(), 'm313');
@@ -1161,7 +1161,7 @@ describe('TranslationServer', function () {
     describe('getIntendedKeys', function() {
         it('should return ["a", "x", "s"] when provided "z"', function() {
             var intendedKeys = server.getIntendedKeys('z');
-    
+
             assert.equal(intendedKeys[0], 'a')
             assert.equal(intendedKeys[1], 'x')
             assert.equal(intendedKeys[2], 's')
@@ -1169,16 +1169,16 @@ describe('TranslationServer', function () {
         it('should return same result when passed "{" or "["', function() {
             var leftSqiglyKeys = server.getIntendedKeys('{'),
                 leftStraigthKeys = server.getIntendedKeys('[');
-    
+
             assert.equal(leftSqiglyKeys[0], leftStraigthKeys[0]);
         });
     });
-    
+
     describe('getFuzzyString', function() {
-        it('should return ["cuilding", "fuilding", "guilding", building"] when passed "vuilding', 
+        it('should return ["cuilding", "fuilding", "guilding", building"] when passed "vuilding',
             function() {
                 var fuzzyStrings = server.getFuzzyStrings('vuilding');
-    
+
                 assert.equal(fuzzyStrings[0], 'cuilding')
                 assert.equal(fuzzyStrings[1], 'fuilding')
                 assert.equal(fuzzyStrings[2], 'guilding')
@@ -1187,7 +1187,7 @@ describe('TranslationServer', function () {
         )
         it('should return surf and furf when passed durf', function() {
             var fuzzyStrings = server.getFuzzyStrings('durf');
-    
+
             assert.equal(fuzzyStrings[0], 'surf')
             assert.equal(fuzzyStrings[1], 'furf');
         })
@@ -1234,10 +1234,10 @@ describe('TranslationServer', function () {
                             leinIntall = server.getLein('intall'),
                             leinMilitary = server.getLein('military'),
                             minDist = Math.abs(
-                                Number(leinIntall.substr(1, leinIntall.length)) - 
+                                Number(leinIntall.substr(1, leinIntall.length)) -
                                 Number(leinInstallation.substr(1, leinInstallation.length))
                             );
-                    
+
                         minDescDistance = Math.min.apply(
                             null, 'Military Installation'
                                     .split(/\s+/)
@@ -1249,13 +1249,13 @@ describe('TranslationServer', function () {
                                         )
                                     })
                             )
-                        
+
                         assert.equal(minDescDistance, minDist)
                     }
                 );
             });
 
-            it('includes items with installation in description when searchStr is intall, isnall, or insralkl at reasonable index', 
+            it('includes items with installation in description when searchStr is intall, isnall, or insralkl at reasonable index',
                 function() {
                     var options = {
                         geomType: 'Area',
@@ -1271,7 +1271,7 @@ describe('TranslationServer', function () {
                             includesInstallation = misTypeResults.filter(function(d, index) {
                                 return /installation/.test(d.desc.toLowerCase()) && index < 99;
                             }).length > 0;
-                            
+
                         assert.equal(includesInstallation, true);
                     })
                 }

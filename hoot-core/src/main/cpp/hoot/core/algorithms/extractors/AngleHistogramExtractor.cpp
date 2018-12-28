@@ -69,7 +69,7 @@ public:
       {
         Coordinate c = _map.getNode(nodes[i])->toCoordinate();
         double distance = c.distance(last);
-        double theta = atan2(c.x - last.x, c.y - last.y);
+        double theta = atan2(c.y - last.y, c.x - last.x);
         _h.addAngle(theta, distance);
         last = c;
       }

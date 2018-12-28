@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-863715' action='modify' visible='true' lat='-0.23882586989' lon='5.01234765033' />
+  <node id='-863716' action='modify' visible='true' lat='-0.23889755827' lon='5.01234261933' />
+  <node id='-863717' action='modify' visible='true' lat='-0.23938307299' lon='5.01228789033' />
+  <node id='-863718' action='modify' visible='true' lat='-0.23941866386' lon='5.01264097933' />
+  <node id='-863719' action='modify' visible='true' lat='-0.23956646521' lon='5.01261970733' />
+  <node id='-863720' action='modify' visible='true' lat='-0.23991989366' lon='5.01258925733' />
+  <node id='-863721' action='modify' visible='true' lat='-0.24030613723' lon='5.01256561733' />
+  <node id='-863722' action='modify' visible='true' lat='-0.24033912261' lon='5.01256242133' />
+  <node id='-863723' action='modify' visible='true' lat='-0.24062546566' lon='5.01253465533' />
+  <node id='-863724' action='modify' visible='true' lat='-0.24109948057' lon='5.01248868933' />
+  <way id='-863711' action='modify' visible='true'>
+    <nd ref='-863715' />
+    <nd ref='-863716' />
+    <nd ref='-863717' />
+    <nd ref='-863718' />
+    <nd ref='-863719' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='name' v='KEMANGGISAN PULO 1' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='5' />
+  </way>
+  <way id='-863712' action='modify' visible='true'>
+    <nd ref='-863719' />
+    <nd ref='-863720' />
+    <nd ref='-863721' />
+    <nd ref='-863722' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='name' v='KEMANGGISAN PULO 2' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='5' />
+  </way>
+  <way id='-863713' action='modify' visible='true'>
+    <nd ref='-863722' />
+    <nd ref='-863723' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='name' v='KEMANGGISAN PULO 2' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='5' />
+  </way>
+  <way id='-863714' action='modify' visible='true'>
+    <nd ref='-863723' />
+    <nd ref='-863724' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='name' v='KEMANGGISAN PULO 2' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='5' />
+  </way>
+</osm>

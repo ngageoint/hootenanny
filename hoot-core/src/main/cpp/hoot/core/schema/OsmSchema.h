@@ -55,7 +55,8 @@ enum EdgeType
   CompoundComponent,
 };
 
-struct OsmSchemaCategory {
+struct OsmSchemaCategory
+{
   enum Type
   {
     Empty =           0x00,
@@ -248,13 +249,11 @@ class Relation;
 class Way;
 
 /**
- * This class is reentrant, but not thread safe.
+ * This class is reentrant, but not thread safe (Singleton).
  */
 class OsmSchema
 {
 public:
-
-  OsmSchema();
 
   virtual ~OsmSchema();
 
@@ -411,6 +410,11 @@ public:
   bool containsTagFromList(const Tags& tags, const QStringList tagList) const;
 
 private:
+
+  friend class OsmSchemaTest;
+  friend class SchemaCheckerTest;
+
+  OsmSchema();
 
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.

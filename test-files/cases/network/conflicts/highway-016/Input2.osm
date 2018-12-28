@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-144844' visible='true' lat='-6.19696344552' lon='106.787712171' />
+  <node id='-144845' visible='true' lat='-6.19700775286' lon='106.786667594' />
+  <node id='-144846' visible='true' lat='-6.19699087698' lon='106.786566917' />
+  <node id='-144847' visible='true' lat='-6.19696226231' lon='106.786527348' />
+  <node id='-144848' visible='true' lat='-6.19665855559' lon='106.786519023' />
+  <way id='-144843' action='modify' visible='true'>
+    <nd ref='-144844' />
+    <nd ref='-144845' />
+    <nd ref='-144846' />
+    <nd ref='-144847' />
+    <nd ref='-144848' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='name' v='KEMANGGISAN 3G' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='2.5' />
+  </way>
+</osm>

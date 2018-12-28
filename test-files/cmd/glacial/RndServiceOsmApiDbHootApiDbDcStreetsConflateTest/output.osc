@@ -243,222 +243,243 @@
             <tag k="hoot:id" v="4517"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-61" version="0" lat="38.8920949999999976" lon="-77.0501589999999936">
+        <node id="-61" version="0" lat="38.8954039999999992" lon="-77.0418899999999951">
+            <tag k="hoot:id" v="4532"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-62" version="0" lat="38.8954019999999971" lon="-77.0420160000000038">
+            <tag k="hoot:id" v="4533"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-63" version="0" lat="38.8953980000000001" lon="-77.0427030000000030">
+            <tag k="hoot:id" v="4534"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-64" version="0" lat="38.8953950000000006" lon="-77.0430410000000023">
+            <tag k="hoot:id" v="4535"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-65" version="0" lat="38.8953950000000006" lon="-77.0433570000000003">
+            <tag k="hoot:id" v="4536"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-66" version="0" lat="38.8953980000000001" lon="-77.0434719999999942">
+            <tag k="hoot:id" v="4537"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-67" version="0" lat="38.8954039999999992" lon="-77.0436679999999967">
+            <tag k="hoot:id" v="4538"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-68" version="0" lat="38.8954000000000022" lon="-77.0440669999999983">
+            <tag k="hoot:id" v="4539"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-69" version="0" lat="38.8954049999999967" lon="-77.0447960000000052">
+            <tag k="hoot:id" v="4540"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-70" version="0" lat="38.8954299999998980" lon="-77.0449179999999956">
+            <tag k="hoot:id" v="4541"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-71" version="0" lat="38.8920949999999976" lon="-77.0501589999999936">
             <tag k="hoot:id" v="4542"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-62" version="0" lat="38.8921020000000013" lon="-77.0493910000000000">
+        <node id="-72" version="0" lat="38.8921020000000013" lon="-77.0493910000000000">
             <tag k="hoot:id" v="4543"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-63" version="0" lat="38.8921019999999018" lon="-77.0488490000000041">
+        <node id="-73" version="0" lat="38.8921019999999018" lon="-77.0488490000000041">
             <tag k="hoot:id" v="4544"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-64" version="0" lat="38.8921029999999988" lon="-77.0486960000000067">
+        <node id="-74" version="0" lat="38.8921029999999988" lon="-77.0486960000000067">
             <tag k="hoot:id" v="4545"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-65" version="0" lat="38.8921009999999967" lon="-77.0479720000000015">
+        <node id="-75" version="0" lat="38.8921009999999967" lon="-77.0479720000000015">
             <tag k="hoot:id" v="4546"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-66" version="0" lat="38.8921009999999967" lon="-77.0466760000000050">
+        <node id="-76" version="0" lat="38.8921009999999967" lon="-77.0466760000000050">
             <tag k="hoot:id" v="4547"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-67" version="0" lat="38.8921009999999967" lon="-77.0449380000000019">
+        <node id="-77" version="0" lat="38.8921009999999967" lon="-77.0449380000000019">
             <tag k="hoot:id" v="4548"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-68" version="0" lat="38.8921009999999967" lon="-77.0434769999999958">
+        <node id="-78" version="0" lat="38.8921009999999967" lon="-77.0434769999999958">
             <tag k="hoot:id" v="4549"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-69" version="0" lat="38.8920999999999992" lon="-77.0417309999999986">
+        <node id="-79" version="0" lat="38.8920999999999992" lon="-77.0417309999999986">
             <tag k="hoot:id" v="4550"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-70" version="0" lat="38.8920999999999992" lon="-77.0406760000000048">
+        <node id="-80" version="0" lat="38.8920999999999992" lon="-77.0406760000000048">
             <tag k="hoot:id" v="4551"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-71" version="0" lat="38.8985709999999969" lon="-77.0350660000000005">
+        <node id="-81" version="0" lat="38.8985709999999969" lon="-77.0350660000000005">
             <tag k="hoot:id" v="4567"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-72" version="0" lat="38.8986469999999969" lon="-77.0350669999999980">
+        <node id="-82" version="0" lat="38.8986469999999969" lon="-77.0350669999999980">
             <tag k="hoot:id" v="4568"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-73" version="0" lat="38.8987610000000004" lon="-77.0351169999999996">
+        <node id="-83" version="0" lat="38.8987610000000004" lon="-77.0351169999999996">
             <tag k="hoot:id" v="4569"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-74" version="0" lat="38.8964020000000019" lon="-77.0394620000000003">
+        <node id="-84" version="0" lat="38.8964020000000019" lon="-77.0394620000000003">
             <tag k="hoot:id" v="4574"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-75" version="0" lat="38.8966089999999980" lon="-77.0394610000000029">
+        <node id="-85" version="0" lat="38.8966089999999980" lon="-77.0394610000000029">
             <tag k="hoot:id" v="4575"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-76" version="0" lat="38.8969280000000026" lon="-77.0394600000000054">
+        <node id="-86" version="0" lat="38.8969280000000026" lon="-77.0394600000000054">
             <tag k="hoot:id" v="4576"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-77" version="0" lat="38.8972630000000024" lon="-77.0394679999999994">
+        <node id="-87" version="0" lat="38.8972630000000024" lon="-77.0394679999999994">
             <tag k="hoot:id" v="4577"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-78" version="0" lat="38.8973560000000020" lon="-77.0394730000000010">
+        <node id="-88" version="0" lat="38.8973560000000020" lon="-77.0394730000000010">
             <tag k="hoot:id" v="4578"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-79" version="0" lat="38.8974690000000010" lon="-77.0394780000000026">
+        <node id="-89" version="0" lat="38.8974690000000010" lon="-77.0394780000000026">
             <tag k="hoot:id" v="4579"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-80" version="0" lat="38.8978290000000015" lon="-77.0394730000000010">
+        <node id="-90" version="0" lat="38.8978290000000015" lon="-77.0394730000000010">
             <tag k="hoot:id" v="4580"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-81" version="0" lat="38.8981599999999972" lon="-77.0394710000000060">
+        <node id="-91" version="0" lat="38.8981599999999972" lon="-77.0394710000000060">
             <tag k="hoot:id" v="4581"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-82" version="0" lat="38.8982260000000011" lon="-77.0394720000000035">
+        <node id="-92" version="0" lat="38.8982260000000011" lon="-77.0394720000000035">
             <tag k="hoot:id" v="4582"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-83" version="0" lat="38.8983220000000003" lon="-77.0394720000000035">
+        <node id="-93" version="0" lat="38.8983220000000003" lon="-77.0394720000000035">
             <tag k="hoot:id" v="4583"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-84" version="0" lat="38.8986400000000003" lon="-77.0394720000000035">
+        <node id="-94" version="0" lat="38.8986400000000003" lon="-77.0394720000000035">
             <tag k="hoot:id" v="4584"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-85" version="0" lat="38.8988129999999970" lon="-77.0394600000000054">
+        <node id="-95" version="0" lat="38.8988129999999970" lon="-77.0394600000000054">
             <tag k="hoot:id" v="4585"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-86" version="0" lat="38.8988689999999977" lon="-77.0394569999999987">
+        <node id="-96" version="0" lat="38.8988689999999977" lon="-77.0394569999999987">
             <tag k="hoot:id" v="4586"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-87" version="0" lat="38.8990129999999965" lon="-77.0394540000000063">
+        <node id="-97" version="0" lat="38.8990129999999965" lon="-77.0394540000000063">
             <tag k="hoot:id" v="4587"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-88" version="0" lat="38.8996759999999995" lon="-77.0394490000000047">
+        <node id="-98" version="0" lat="38.8996759999999995" lon="-77.0394490000000047">
             <tag k="hoot:id" v="4588"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-89" version="0" lat="38.9002079999999992" lon="-77.0394479999999930">
+        <node id="-99" version="0" lat="38.9002079999999992" lon="-77.0394479999999930">
             <tag k="hoot:id" v="4589"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-90" version="0" lat="38.9003310000000013" lon="-77.0394490000000047">
+        <node id="-100" version="0" lat="38.9003310000000013" lon="-77.0394490000000047">
             <tag k="hoot:id" v="4590"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-91" version="0" lat="38.9004789999999971" lon="-77.0394490000000047">
+        <node id="-101" version="0" lat="38.9004789999999971" lon="-77.0394490000000047">
             <tag k="hoot:id" v="4591"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-92" version="0" lat="38.9008460000000014" lon="-77.0394469999999956">
+        <node id="-102" version="0" lat="38.9008460000000014" lon="-77.0394469999999956">
             <tag k="hoot:id" v="4592"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-93" version="0" lat="38.9013399999999976" lon="-77.0394469999999956">
+        <node id="-103" version="0" lat="38.9013399999999976" lon="-77.0394469999999956">
             <tag k="hoot:id" v="4593"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-94" version="0" lat="38.9016829999999985" lon="-77.0394500000000022">
+        <node id="-104" version="0" lat="38.9016829999999985" lon="-77.0394500000000022">
             <tag k="hoot:id" v="4594"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-95" version="0" lat="38.9020110000000017" lon="-77.0394500000000022">
+        <node id="-105" version="0" lat="38.9020110000000017" lon="-77.0394500000000022">
             <tag k="hoot:id" v="4595"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-96" version="0" lat="38.9023690000000002" lon="-77.0394479999999930">
+        <node id="-106" version="0" lat="38.9023690000000002" lon="-77.0394479999999930">
             <tag k="hoot:id" v="4596"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-97" version="0" lat="38.9023990000000026" lon="-77.0394469999999956">
+        <node id="-107" version="0" lat="38.9023990000000026" lon="-77.0394469999999956">
             <tag k="hoot:id" v="4597"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-98" version="0" lat="38.9025230000000022" lon="-77.0394459999999981">
+        <node id="-108" version="0" lat="38.9025230000000022" lon="-77.0394459999999981">
             <tag k="hoot:id" v="4598"/>
             <tag k="hoot:status" v="2"/>
         </node>
-        <node id="-99" version="0" lat="38.8957692869231977" lon="-77.0353235013258058">
+        <node id="-109" version="0" lat="38.8957692869231977" lon="-77.0353235013258058">
+            <tag k="hoot:id" v="4854"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-110" version="0" lat="38.8957227555924021" lon="-77.0377183697773944">
+            <tag k="hoot:id" v="4856"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-111" version="0" lat="38.8920987000038991" lon="-77.0391230013839987">
+            <tag k="hoot:id" v="4859"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-112" version="0" lat="38.8949632150009990" lon="-77.0377191692457046">
+            <tag k="hoot:id" v="4861"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-113" version="0" lat="38.8932771429213986" lon="-77.0382197097487023">
+            <tag k="hoot:id" v="4863"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-114" version="0" lat="38.8920930993793021" lon="-77.0339249994921005">
+            <tag k="hoot:id" v="4866"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-115" version="0" lat="38.8932649522310996" lon="-77.0348668333405016">
             <tag k="hoot:id" v="4870"/>
             <tag k="hoot:status" v="1"/>
         </node>
-        <node id="-100" version="0" lat="38.8957227555924021" lon="-77.0377183697773944">
-            <tag k="hoot:id" v="4872"/>
+        <node id="-116" version="0" lat="38.8943750266817005" lon="-77.0347338960770003">
+            <tag k="hoot:id" v="4871"/>
             <tag k="hoot:status" v="1"/>
         </node>
-        <node id="-101" version="0" lat="38.8949632150009990" lon="-77.0377191692457046">
-            <tag k="hoot:id" v="4875"/>
+        <node id="-117" version="0" lat="38.8954752942370021" lon="-77.0338680068800983">
+            <tag k="hoot:id" v="4876"/>
             <tag k="hoot:status" v="1"/>
         </node>
-        <node id="-102" version="0" lat="38.8932771429213986" lon="-77.0382197097487023">
-            <tag k="hoot:id" v="4877"/>
+        <node id="-118" version="0" lat="38.8953914542250985" lon="-77.0377119854018986">
+            <tag k="hoot:id" v="4879"/>
             <tag k="hoot:status" v="1"/>
         </node>
-        <node id="-103" version="0" lat="38.8932649522310996" lon="-77.0348668333405016">
+        <node id="-119" version="0" lat="38.8953918002898007" lon="-77.0384010009463935">
             <tag k="hoot:id" v="4880"/>
             <tag k="hoot:status" v="1"/>
         </node>
-        <node id="-104" version="0" lat="38.8943750266817005" lon="-77.0347338960770003">
-            <tag k="hoot:id" v="4881"/>
-            <tag k="hoot:status" v="1"/>
-        </node>
-        <node id="-105" version="0" lat="38.8954752942370021" lon="-77.0338680068800983">
-            <tag k="hoot:id" v="4883"/>
-            <tag k="hoot:status" v="1"/>
-        </node>
-        <node id="-106" version="0" lat="38.8953914542250985" lon="-77.0377119854018986">
-            <tag k="hoot:id" v="4886"/>
-            <tag k="hoot:status" v="1"/>
-        </node>
-        <node id="-107" version="0" lat="38.8953918002898007" lon="-77.0384010009463935">
-            <tag k="hoot:id" v="4887"/>
-            <tag k="hoot:status" v="1"/>
-        </node>
-        <node id="-108" version="0" lat="38.8920930993793021" lon="-77.0339249994921005">
-            <tag k="hoot:id" v="4893"/>
-            <tag k="hoot:status" v="1"/>
-        </node>
-        <node id="-109" version="0" lat="38.8920987000038991" lon="-77.0391230013839987">
-            <tag k="hoot:id" v="4896"/>
-            <tag k="hoot:status" v="1"/>
-        </node>
     </create>
-    <modify>
-        <way id="4" version="1">
-            <nd ref="2532"/>
-            <nd ref="1208"/>
-            <nd ref="1210"/>
-            <nd ref="1212"/>
-            <nd ref="1214"/>
-            <nd ref="1216"/>
-            <nd ref="1218"/>
-            <nd ref="1053"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="4"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-            <tag k="name" v="CONSTITUTION AVE NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-    </modify>
     <modify>
         <way id="27" version="1">
             <nd ref="3469"/>
@@ -468,6 +489,31 @@
             <nd ref="3473"/>
             <nd ref="3474"/>
             <nd ref="3475"/>
+            <nd ref="-84"/>
+            <nd ref="-85"/>
+            <nd ref="-86"/>
+            <nd ref="-87"/>
+            <nd ref="-88"/>
+            <nd ref="-89"/>
+            <nd ref="-90"/>
+            <nd ref="-91"/>
+            <nd ref="-92"/>
+            <nd ref="-93"/>
+            <nd ref="-94"/>
+            <nd ref="-95"/>
+            <nd ref="-96"/>
+            <nd ref="-97"/>
+            <nd ref="-98"/>
+            <nd ref="-99"/>
+            <nd ref="-100"/>
+            <nd ref="-101"/>
+            <nd ref="-102"/>
+            <nd ref="-103"/>
+            <nd ref="-104"/>
+            <nd ref="-105"/>
+            <nd ref="-106"/>
+            <nd ref="-107"/>
+            <nd ref="-108"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="27"/>
             <tag k="hoot:status" v="3"/>
@@ -478,32 +524,22 @@
         </way>
     </modify>
     <modify>
-        <way id="43" version="1">
-            <nd ref="-105"/>
-            <nd ref="870"/>
-            <nd ref="871"/>
-            <nd ref="872"/>
-            <nd ref="873"/>
-            <nd ref="874"/>
-            <nd ref="875"/>
-            <nd ref="876"/>
-            <nd ref="877"/>
-            <nd ref="112"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="43"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="E St NW"/>
-            <tag k="name" v="E ST NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
         <way id="44" version="1">
-            <nd ref="-106"/>
+            <nd ref="549"/>
+            <nd ref="878"/>
+            <nd ref="879"/>
+            <nd ref="880"/>
+            <nd ref="881"/>
+            <nd ref="882"/>
+            <nd ref="883"/>
+            <nd ref="-118"/>
             <nd ref="884"/>
             <nd ref="885"/>
             <nd ref="886"/>
             <nd ref="887"/>
-            <nd ref="-107"/>
+            <nd ref="-119"/>
+            <nd ref="888"/>
+            <nd ref="3469"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="44"/>
             <tag k="hoot:status" v="3"/>
@@ -529,22 +565,14 @@
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
-        <way id="63" version="1">
+    </modify>
+    <modify>
+        <way id="65" version="1">
             <nd ref="3713"/>
             <nd ref="3715"/>
             <nd ref="3717"/>
             <nd ref="3719"/>
             <nd ref="3721"/>
-            <nd ref="3723"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="63"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="17th St NW"/>
-            <tag k="name" v="17TH ST NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="65" version="1">
             <nd ref="3723"/>
             <nd ref="3724"/>
             <nd ref="3725"/>
@@ -552,6 +580,11 @@
             <nd ref="3727"/>
             <nd ref="3728"/>
             <nd ref="3729"/>
+            <nd ref="3730"/>
+            <nd ref="3731"/>
+            <nd ref="3732"/>
+            <nd ref="3733"/>
+            <nd ref="3469"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="65"/>
             <tag k="hoot:status" v="3"/>
@@ -560,21 +593,8 @@
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
-        <way id="67" version="1">
-            <nd ref="3729"/>
-            <nd ref="3730"/>
-            <nd ref="3731"/>
-            <nd ref="3732"/>
-            <nd ref="3733"/>
-            <nd ref="3469"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="67"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="17th St NW"/>
-            <tag k="name" v="17TH ST NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
+    </modify>
+    <modify>
         <way id="70" version="1">
             <nd ref="1052"/>
             <nd ref="2199"/>
@@ -622,6 +642,23 @@
             <nd ref="2247"/>
             <nd ref="2249"/>
             <nd ref="2250"/>
+            <nd ref="-44"/>
+            <nd ref="-45"/>
+            <nd ref="-46"/>
+            <nd ref="-47"/>
+            <nd ref="-48"/>
+            <nd ref="-49"/>
+            <nd ref="-50"/>
+            <nd ref="-51"/>
+            <nd ref="-52"/>
+            <nd ref="-53"/>
+            <nd ref="-54"/>
+            <nd ref="-55"/>
+            <nd ref="-56"/>
+            <nd ref="-57"/>
+            <nd ref="-58"/>
+            <nd ref="-59"/>
+            <nd ref="-60"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="74"/>
             <tag k="hoot:status" v="3"/>
@@ -665,43 +702,8 @@
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
-        <way id="112" version="1">
-            <nd ref="112"/>
-            <nd ref="3065"/>
-            <nd ref="3066"/>
-            <nd ref="3067"/>
-            <nd ref="3068"/>
-            <nd ref="3069"/>
-            <nd ref="3070"/>
-            <nd ref="3071"/>
-            <nd ref="3072"/>
-            <nd ref="3073"/>
-            <nd ref="3074"/>
-            <nd ref="3075"/>
-            <nd ref="4276"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="112"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="E St NW"/>
-            <tag k="name" v="E ST NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="114" version="1">
-            <nd ref="4276"/>
-            <nd ref="3076"/>
-            <nd ref="3077"/>
-            <nd ref="3078"/>
-            <nd ref="3079"/>
-            <nd ref="549"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="114"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="E St NW;Ellipse Rd NW"/>
-            <tag k="name" v="E ST NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
+    </modify>
+    <modify>
         <way id="116" version="1">
             <nd ref="3469"/>
             <nd ref="3080"/>
@@ -714,6 +716,16 @@
             <nd ref="3087"/>
             <nd ref="3088"/>
             <nd ref="3750"/>
+            <nd ref="-61"/>
+            <nd ref="-62"/>
+            <nd ref="-63"/>
+            <nd ref="-64"/>
+            <nd ref="-65"/>
+            <nd ref="-66"/>
+            <nd ref="-67"/>
+            <nd ref="-68"/>
+            <nd ref="-69"/>
+            <nd ref="-70"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="116"/>
             <tag k="hoot:status" v="3"/>
@@ -739,57 +751,6 @@
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
-        <way id="140" version="1">
-            <nd ref="-108"/>
-            <nd ref="30"/>
-            <nd ref="31"/>
-            <nd ref="32"/>
-            <nd ref="33"/>
-            <nd ref="34"/>
-            <nd ref="35"/>
-            <nd ref="36"/>
-            <nd ref="3833"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="140"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-            <tag k="name" v="CONSTITUTION AVE NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="142" version="1">
-            <nd ref="3833"/>
-            <nd ref="37"/>
-            <nd ref="38"/>
-            <nd ref="39"/>
-            <nd ref="41"/>
-            <nd ref="43"/>
-            <nd ref="45"/>
-            <nd ref="47"/>
-            <nd ref="49"/>
-            <nd ref="-109"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="142"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-            <tag k="name" v="CONSTITUTION AVE NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="143" version="1">
-            <nd ref="3713"/>
-            <nd ref="51"/>
-            <nd ref="52"/>
-            <nd ref="53"/>
-            <nd ref="54"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="143"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-            <tag k="name" v="CONSTITUTION AVE NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
     </modify>
     <modify>
         <way id="155" version="1">
@@ -808,7 +769,7 @@
     </modify>
     <modify>
         <way id="207" version="1">
-            <nd ref="-99"/>
+            <nd ref="-109"/>
             <nd ref="2565"/>
             <nd ref="2566"/>
             <nd ref="2567"/>
@@ -832,7 +793,7 @@
             <nd ref="2585"/>
             <nd ref="2586"/>
             <nd ref="2587"/>
-            <nd ref="-100"/>
+            <nd ref="-110"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="207"/>
             <tag k="hoot:status" v="3"/>
@@ -864,7 +825,7 @@
             <tag k="error:circular" v="5"/>
         </way>
         <way id="223" version="1">
-            <nd ref="-101"/>
+            <nd ref="-112"/>
             <nd ref="570"/>
             <nd ref="572"/>
             <nd ref="574"/>
@@ -885,7 +846,7 @@
             <nd ref="590"/>
             <nd ref="591"/>
             <nd ref="592"/>
-            <nd ref="-102"/>
+            <nd ref="-113"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="223"/>
             <tag k="hoot:status" v="3"/>
@@ -897,7 +858,7 @@
     </modify>
     <modify>
         <way id="330" version="1">
-            <nd ref="-103"/>
+            <nd ref="-115"/>
             <nd ref="4240"/>
             <nd ref="4241"/>
             <nd ref="4242"/>
@@ -910,7 +871,7 @@
             <nd ref="4249"/>
             <nd ref="4250"/>
             <nd ref="4252"/>
-            <nd ref="-104"/>
+            <nd ref="-116"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="330"/>
             <tag k="hoot:status" v="3"/>
@@ -937,7 +898,7 @@
     </modify>
     <create>
         <way id="-1" version="0">
-            <nd ref="-104"/>
+            <nd ref="-116"/>
             <nd ref="-29"/>
             <nd ref="-28"/>
             <nd ref="-27"/>
@@ -950,7 +911,7 @@
             <nd ref="-20"/>
             <nd ref="-19"/>
             <nd ref="-18"/>
-            <nd ref="-105"/>
+            <nd ref="-117"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="336"/>
             <tag k="hoot:status" v="2"/>
@@ -961,7 +922,7 @@
     </create>
     <create>
         <way id="-2" version="0">
-            <nd ref="-103"/>
+            <nd ref="-115"/>
             <nd ref="-43"/>
             <nd ref="-42"/>
             <nd ref="-41"/>
@@ -971,7 +932,7 @@
             <nd ref="-37"/>
             <nd ref="-36"/>
             <nd ref="-35"/>
-            <nd ref="-108"/>
+            <nd ref="-114"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="344"/>
             <tag k="hoot:status" v="2"/>
@@ -980,7 +941,7 @@
             <tag k="error:circular" v="5"/>
         </way>
         <way id="-3" version="0">
-            <nd ref="-102"/>
+            <nd ref="-113"/>
             <nd ref="-17"/>
             <nd ref="-16"/>
             <nd ref="-15"/>
@@ -998,7 +959,7 @@
             <nd ref="-3"/>
             <nd ref="-2"/>
             <nd ref="-1"/>
-            <nd ref="-109"/>
+            <nd ref="-111"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="347"/>
             <tag k="hoot:status" v="2"/>
@@ -1007,8 +968,8 @@
             <tag k="error:circular" v="5"/>
         </way>
         <way id="-4" version="0">
-            <nd ref="-101"/>
-            <nd ref="-107"/>
+            <nd ref="-112"/>
+            <nd ref="-119"/>
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="350"/>
             <tag k="hoot:status" v="2"/>
@@ -1017,31 +978,37 @@
             <tag k="error:circular" v="5"/>
         </way>
         <way id="-5" version="0">
-            <nd ref="2559"/>
-            <nd ref="-71"/>
-            <nd ref="-72"/>
-            <nd ref="-73"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="363"/>
-            <tag k="hoot:status" v="2"/>
-            <tag k="name" v="E Executive Ave NW"/>
-            <tag k="highway" v="unclassified"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="-6" version="0">
-            <nd ref="-106"/>
+            <nd ref="-118"/>
             <nd ref="-34"/>
             <nd ref="-33"/>
             <nd ref="-32"/>
             <nd ref="-31"/>
             <nd ref="-30"/>
-            <nd ref="-100"/>
+            <nd ref="-110"/>
+            <nd ref="2588"/>
+            <nd ref="2589"/>
+            <nd ref="2590"/>
+            <nd ref="2591"/>
+            <nd ref="2592"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="388"/>
-            <tag k="hoot:status" v="2"/>
+            <tag k="hoot:id" v="354"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="alt_name" v="SOUTH EXECUTIVE AVE NW"/>
             <tag k="name" v="South Pl NW"/>
             <tag k="foot" v="designated"/>
             <tag k="highway" v="path"/>
+            <tag k="error:circular" v="5"/>
+        </way>
+        <way id="-6" version="0">
+            <nd ref="2559"/>
+            <nd ref="-81"/>
+            <nd ref="-82"/>
+            <nd ref="-83"/>
+            <tag k="accuracy" v="5"/>
+            <tag k="hoot:id" v="361"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="name" v="E Executive Ave NW"/>
+            <tag k="highway" v="unclassified"/>
             <tag k="error:circular" v="5"/>
         </way>
         <way id="-7" version="0">
@@ -1051,9 +1018,9 @@
             <nd ref="2562"/>
             <nd ref="2563"/>
             <nd ref="2564"/>
-            <nd ref="-99"/>
+            <nd ref="-109"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="908"/>
+            <tag k="hoot:id" v="868"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Executive Ave NW;South Pl NW"/>
             <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
@@ -1061,56 +1028,44 @@
             <tag k="error:circular" v="5"/>
         </way>
         <way id="-8" version="0">
-            <nd ref="-100"/>
-            <nd ref="2588"/>
-            <nd ref="2589"/>
-            <nd ref="2590"/>
-            <nd ref="2591"/>
-            <nd ref="2592"/>
+            <nd ref="2532"/>
+            <nd ref="1208"/>
+            <nd ref="1210"/>
+            <nd ref="1212"/>
+            <nd ref="1214"/>
+            <nd ref="1216"/>
+            <nd ref="1218"/>
+            <nd ref="1053"/>
+            <nd ref="27"/>
+            <nd ref="29"/>
+            <nd ref="-114"/>
+            <nd ref="30"/>
+            <nd ref="31"/>
+            <nd ref="32"/>
+            <nd ref="33"/>
+            <nd ref="34"/>
+            <nd ref="35"/>
+            <nd ref="36"/>
+            <nd ref="3833"/>
+            <nd ref="37"/>
+            <nd ref="38"/>
+            <nd ref="39"/>
+            <nd ref="41"/>
+            <nd ref="43"/>
+            <nd ref="45"/>
+            <nd ref="47"/>
+            <nd ref="49"/>
+            <nd ref="-111"/>
+            <nd ref="3713"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="912"/>
+            <tag k="hoot:id" v="883"/>
             <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="South Pl NW"/>
-            <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
-            <tag k="foot" v="designated"/>
+            <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
+            <tag k="name" v="CONSTITUTION AVE NW"/>
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
         <way id="-9" version="0">
-            <nd ref="3475"/>
-            <nd ref="-74"/>
-            <nd ref="-75"/>
-            <nd ref="-76"/>
-            <nd ref="-77"/>
-            <nd ref="-78"/>
-            <nd ref="-79"/>
-            <nd ref="-80"/>
-            <nd ref="-81"/>
-            <nd ref="-82"/>
-            <nd ref="-83"/>
-            <nd ref="-84"/>
-            <nd ref="-85"/>
-            <nd ref="-86"/>
-            <nd ref="-87"/>
-            <nd ref="-88"/>
-            <nd ref="-89"/>
-            <nd ref="-90"/>
-            <nd ref="-91"/>
-            <nd ref="-92"/>
-            <nd ref="-93"/>
-            <nd ref="-94"/>
-            <nd ref="-95"/>
-            <nd ref="-96"/>
-            <nd ref="-97"/>
-            <nd ref="-98"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="927"/>
-            <tag k="hoot:status" v="2"/>
-            <tag k="name" v="17th St NW"/>
-            <tag k="highway" v="unclassified"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="-10" version="0">
             <nd ref="549"/>
             <nd ref="552"/>
             <nd ref="554"/>
@@ -1121,17 +1076,17 @@
             <nd ref="564"/>
             <nd ref="566"/>
             <nd ref="568"/>
-            <nd ref="-101"/>
+            <nd ref="-112"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="929"/>
+            <tag k="hoot:id" v="890"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Ellipse Rd NW"/>
             <tag k="name" v="ELLIPSE RD NW"/>
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
-        <way id="-11" version="0">
-            <nd ref="-102"/>
+        <way id="-10" version="0">
+            <nd ref="-113"/>
             <nd ref="593"/>
             <nd ref="594"/>
             <nd ref="595"/>
@@ -1150,15 +1105,15 @@
             <nd ref="608"/>
             <nd ref="3843"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="933"/>
+            <tag k="hoot:id" v="894"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Ellipse Rd NW"/>
             <tag k="name" v="ELLIPSE RD NW"/>
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
-        <way id="-12" version="0">
-            <nd ref="-104"/>
+        <way id="-11" version="0">
+            <nd ref="-116"/>
             <nd ref="4254"/>
             <nd ref="4256"/>
             <nd ref="4258"/>
@@ -1172,14 +1127,14 @@
             <nd ref="4274"/>
             <nd ref="4276"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="948"/>
+            <tag k="hoot:id" v="930"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Ellipse Rd NW"/>
             <tag k="name" v="ELLIPSE RD NW"/>
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
-        <way id="-13" version="0">
+        <way id="-12" version="0">
             <nd ref="3843"/>
             <nd ref="4208"/>
             <nd ref="4209"/>
@@ -1203,122 +1158,73 @@
             <nd ref="4237"/>
             <nd ref="4238"/>
             <nd ref="4239"/>
-            <nd ref="-103"/>
+            <nd ref="-115"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="951"/>
+            <tag k="hoot:id" v="933"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Ellipse Rd NW"/>
             <tag k="name" v="ELLIPSE RD NW"/>
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
-        <way id="-14" version="0">
+        <way id="-13" version="0">
             <nd ref="1073"/>
             <nd ref="869"/>
-            <nd ref="-105"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="954"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="E St NW"/>
-            <tag k="name" v="E ST NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="-15" version="0">
+            <nd ref="-117"/>
+            <nd ref="870"/>
+            <nd ref="871"/>
+            <nd ref="872"/>
+            <nd ref="873"/>
+            <nd ref="874"/>
+            <nd ref="875"/>
+            <nd ref="876"/>
+            <nd ref="877"/>
+            <nd ref="112"/>
+            <nd ref="3065"/>
+            <nd ref="3066"/>
+            <nd ref="3067"/>
+            <nd ref="3068"/>
+            <nd ref="3069"/>
+            <nd ref="3070"/>
+            <nd ref="3071"/>
+            <nd ref="3072"/>
+            <nd ref="3073"/>
+            <nd ref="3074"/>
+            <nd ref="3075"/>
+            <nd ref="4276"/>
+            <nd ref="3076"/>
+            <nd ref="3077"/>
+            <nd ref="3078"/>
+            <nd ref="3079"/>
             <nd ref="549"/>
-            <nd ref="878"/>
-            <nd ref="879"/>
-            <nd ref="880"/>
-            <nd ref="881"/>
-            <nd ref="882"/>
-            <nd ref="883"/>
-            <nd ref="-106"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="969"/>
+            <tag k="hoot:id" v="960"/>
             <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="E St NW"/>
+            <tag k="alt_name" v="E St NW;Ellipse Rd NW"/>
             <tag k="name" v="E ST NW"/>
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
         </way>
-        <way id="-16" version="0">
-            <nd ref="-107"/>
-            <nd ref="888"/>
-            <nd ref="3469"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="972"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="E St NW"/>
-            <tag k="name" v="E ST NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="-17" version="0">
-            <nd ref="2250"/>
-            <nd ref="-44"/>
-            <nd ref="-45"/>
-            <nd ref="-46"/>
-            <nd ref="-47"/>
-            <nd ref="-48"/>
-            <nd ref="-49"/>
-            <nd ref="-50"/>
-            <nd ref="-51"/>
-            <nd ref="-52"/>
-            <nd ref="-53"/>
-            <nd ref="-54"/>
-            <nd ref="-55"/>
-            <nd ref="-56"/>
-            <nd ref="-57"/>
-            <nd ref="-58"/>
-            <nd ref="-59"/>
-            <nd ref="-60"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="993"/>
-            <tag k="hoot:status" v="2"/>
-            <tag k="name" v="15th St NW"/>
-            <tag k="highway" v="unclassified"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="-18" version="0">
-            <nd ref="1053"/>
-            <nd ref="27"/>
-            <nd ref="29"/>
-            <nd ref="-108"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="1015"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-            <tag k="name" v="CONSTITUTION AVE NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="-19" version="0">
-            <nd ref="-109"/>
+        <way id="-14" version="0">
+            <nd ref="-71"/>
+            <nd ref="-72"/>
+            <nd ref="-73"/>
+            <nd ref="-74"/>
+            <nd ref="-75"/>
+            <nd ref="-76"/>
+            <nd ref="-77"/>
+            <nd ref="-78"/>
+            <nd ref="-79"/>
+            <nd ref="-80"/>
+            <nd ref="54"/>
+            <nd ref="53"/>
+            <nd ref="52"/>
+            <nd ref="51"/>
             <nd ref="3713"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="1026"/>
+            <tag k="hoot:id" v="983"/>
             <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-            <tag k="name" v="CONSTITUTION AVE NW"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="5"/>
-        </way>
-        <way id="-20" version="0">
-            <nd ref="-61"/>
-            <nd ref="-62"/>
-            <nd ref="-63"/>
-            <nd ref="-64"/>
-            <nd ref="-65"/>
-            <nd ref="-66"/>
-            <nd ref="-67"/>
-            <nd ref="-68"/>
-            <nd ref="-69"/>
-            <nd ref="-70"/>
-            <nd ref="54"/>
-            <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="1035"/>
-            <tag k="hoot:status" v="2"/>
-            <tag k="alt_name" v="Constitution Ave NW"/>
+            <tag k="alt_name" v="CONSTITUTION AVE NW;Constitution Ave NW"/>
             <tag k="name" v="US Hwy 50"/>
             <tag k="highway" v="secondary"/>
             <tag k="error:circular" v="5"/>

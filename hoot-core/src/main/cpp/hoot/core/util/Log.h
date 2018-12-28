@@ -54,7 +54,7 @@ namespace hoot
 
 /**
  * This class is here to abstract out the logging interface. I only have mild confidence in log4cxx
- * and I don't really need all the complicated goodies.
+ * and I don't really need all the complicated goodies (Singleton).
  */
 class Log
 {
@@ -135,6 +135,7 @@ public:
   static std::string ellipsisStr(const std::string& str, uint count = 33);
 
 private:
+
   WarningLevel _level;
   static boost::shared_ptr<Log> _theInstance;
   static unsigned int _warnMessageLimit;
@@ -149,6 +150,7 @@ private:
 class DisableLog
 {
 public:
+
   DisableLog(Log::WarningLevel tmpLevel = Log::Error)
   {
     _oldLevel = Log::getInstance().getLevel();
@@ -168,6 +170,7 @@ public:
   }
 
 private:
+
   Log::WarningLevel _oldLevel;
 };
 

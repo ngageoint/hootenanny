@@ -43,14 +43,12 @@ class OsmMap;
 class OsmMapReader;
 
 /**
- * A factory for constructing readers based on the URL.
+ * A factory for constructing readers based on the URL (Singleton).
  */
 class OsmMapReaderFactory
 {
 
 public:
-
-  OsmMapReaderFactory();
 
   boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
                                                Status defaultStatus = Status::Invalid);
@@ -78,6 +76,8 @@ public:
   static bool isSupportedFormat(const QString url);
 
 private:
+
+  OsmMapReaderFactory();
 
   static boost::shared_ptr<OsmMapReaderFactory> _theInstance;
 

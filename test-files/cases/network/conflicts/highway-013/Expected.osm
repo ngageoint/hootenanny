@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="4.820276872559999" minlon="7.02391697157" maxlat="4.82650963291" maxlon="7.0251186012"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8225903864668611" lon="7.0243332909303637">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-13"/>
+    </node>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8202768725599991" lon="7.0239169715700003">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-6"/>
+    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8265096329099997" lon="7.0251186012000000">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-5"/>
+    </node>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8257505862499990" lon="7.0251078723699987">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-4"/>
+    </node>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8247777223900004" lon="7.0248503803000002">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-3"/>
+    </node>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8231634067600000" lon="7.0244641422000003">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-2"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8213780333499994" lon="7.0240564464299995">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-1"/>
+    </node>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6"/>
+        <nd ref="-1"/>
+        <nd ref="-13"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <tag k="alt_name" v="input2"/>
+        <tag k="name" v="input1"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-9"/>
+    </way>
+</osm>

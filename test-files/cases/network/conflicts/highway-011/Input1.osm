@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-79623' action='modify' visible='true' lat='-10.90480134091' lon='86.50439140253'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-79625' action='modify' visible='true' lat='-10.90482830593' lon='86.50361690253'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-79627' action='modify' visible='true' lat='-10.90491255925' lon='86.50253330253'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-79629' action='modify' visible='true' lat='-10.90496530399' lon='86.50207200253'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-79631' action='modify' visible='true' lat='-10.90345071826' lon='86.50199730253' />
+  <node id='-79633' action='modify' visible='true' lat='-10.90423833486' lon='86.50194320253'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-79635' action='modify' visible='true' lat='-10.90433315696' lon='86.50211490253'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-79637' action='modify' visible='true' lat='-10.90578699549' lon='86.50210420253'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-79639' action='modify' visible='true' lat='-10.90610306842' lon='86.50203980253'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-79641' action='modify' visible='true' lat='-10.90495473529' lon='86.50178230253'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-79643' action='modify' visible='true' lat='-10.90504885026' lon='86.50034470253' />
+  <node id='-79645' action='modify' visible='true' lat='-10.90490667908' lon='86.50259789378' />
+  <node id='-79647' action='modify' visible='true' lat='-10.90491611015' lon='86.5024879755' />
+  <node id='-80033' action='modify' visible='true' lat='-10.90479960195' lon='86.50507272505' />
+  <way id='-79649' action='modify' visible='true'>
+    <nd ref='-79623' />
+    <nd ref='-79625' />
+    <nd ref='-79645' />
+    <nd ref='-79627' />
+    <nd ref='-79647' />
+    <nd ref='-79629' />
+    <tag k='created_by' v='Merkaartor 0.13' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Salam' />
+  </way>
+  <way id='-79651' action='modify' visible='true'>
+    <nd ref='-79631' />
+    <nd ref='-79633' />
+    <nd ref='-79635' />
+    <nd ref='-79629' />
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+  </way>
+  <way id='-79653' action='modify' visible='true'>
+    <nd ref='-79629' />
+    <nd ref='-79637' />
+    <nd ref='-79639' />
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+  </way>
+  <way id='-79655' action='modify' visible='true'>
+    <nd ref='-79629' />
+    <nd ref='-79641' />
+    <nd ref='-79643' />
+    <tag k='created_by' v='Merkaartor 0.13' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Salam' />
+  </way>
+  <way id='-80034' action='modify' visible='true'>
+    <nd ref='-80033' />
+    <nd ref='-79623' />
+    <tag k='highway' v='road' />
+  </way>
+</osm>
