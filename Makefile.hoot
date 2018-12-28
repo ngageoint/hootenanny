@@ -86,27 +86,27 @@ endif
 
 check: test
 test: build services-test plugins-test
-	bin/HootTest $(HOOT_TEST_DIFF) --slow --parallel $$(nproc)
+	bin/HootTest $(HOOT_TEST_DIFF) --slow --parallel
 
 docs: always HOOT_VERSION_FILE services-docs
 	echo Building documentation...
 	cd docs; $(MAKE)
 
 test-quick: build
-	bin/HootTest $(HOOT_TEST_DIFF) --quick --parallel $$(nproc)
+	bin/HootTest $(HOOT_TEST_DIFF) --quick --parallel
 
 test-all-core: services-test-all plugins-test
 	# Don't run services tests at the same time as glacial -- that may stomp
 	# on each other's DB changes.
-	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel $$(nproc)
+	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel
 
 test-all-no-core: services-test-all plugins-test
-	$(MAKE) ui-test
+	$(MAKE) ui-test ui2x-test
 
 test-all: test-all-no-core
 	# Don't run services tests at the same time as glacial -- that may stomp
 	# on each other's DB changes.
-	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel $$(nproc)
+	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel
 
 licenses:
 	scripts/copyright/UpdateAllCopyrightHeaders.sh
@@ -341,7 +341,7 @@ endif
 
 ui2x-build:
 ifeq ($(BUILD_SERVICES),services)
-	cd hoot-ui-2x && \
+	cd $$HOOT_HOME/hoot-ui-2x && \
 	npm i $(NPM_QUIET) && \
 	npm run production $(NPM_QUIET)
 endif
@@ -350,6 +350,19 @@ ui-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
 	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test CUKE_OPTS=--fail-fast
+else
+	echo "UI tests must specify both --with-services and --with-uitests."
+endif
+else
+	echo "UI tests must specify both --with-services and --with-uitests."
+endif
+
+ui2x-test: services-build build
+ifeq ($(BUILD_UI_TESTS),uitests)
+ifeq ($(BUILD_SERVICES),services)
+	cd $$HOOT_HOME/hoot-ui-2x && \
+	npm i && \
+	npm run test:hoot
 else
 	echo "UI tests must specify both --with-services and --with-uitests."
 endif

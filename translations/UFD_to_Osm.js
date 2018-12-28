@@ -2976,38 +2976,37 @@ ufd = {
 
         // This is the current lost of shortened and screwed up attribute names and what they should be.
         var swapList = {
-'ACE_EVAL_M':'ACE_EVAL_METHOD_CD',
-'ALE_EVAL_M':'ALE_EVAL_METHOD_CD',
-'COMM_CPYRT':'COMM_CPYRT_NOTICE',
-'COMM_LIC_T':'COMM_LIC_TIER_NOTICE',
-'COMPLETENE':'COMPLETENESS_CODE',
-'CREATION_D':'CREATION_DATE',
-'ORIGINATIN':'ORIGINATING_SOURCE',
-'ORIG_SOURC':'ORIG_SOURCE_DATE',
-'ORIG_SOU_1':'ORIG_SOURCE_INFO',
-'RSTRN_DCLS':'RSTRN_DCLS_XMPT_CD',
-'RSTRN_DECL':'RSTRN_DECLASS',
-'RSTRN_DS_1':'RSTRN_DSEM_CTRL_NIC',
-'RSTRN_DSEM':'RSTRN_DSEM_CTRL_IC',
-'RSTRN_FORE':'RSTRN_FOREIGN_GOV',
-'RSTRN_RELE':'RSTRN_RELEASIBILITY',
-'SEC_CD_CNT':'SEC_CD_CNTRL',
-'SEC_CLASS_':'SEC_CLASS_SYS_ID',
-'SEC_CLS_AU':'SEC_CLS_AUTH_DESC',
-'SEC_CLS__1':'SEC_CLS_AUTH_MULT',
-'SEC_CLS__2':'SEC_CLS_AUTHORITY',
-'UPDATE_S_1':'UPDATE_SOURCE_DATE',
-'UPDATE_S_2':'UPDATE_SOURCE_INFO',
-'UPDATE_SOU':'UPDATE_SOURCE',
-'Z_VALUE_TY':'Z_VALUE_TYPE'
+            'ACE_EVAL_M':'ACE_EVAL_METHOD_CD',
+            'ALE_EVAL_M':'ALE_EVAL_METHOD_CD',
+            'COMM_CPYRT':'COMM_CPYRT_NOTICE',
+            'COMM_LIC_T':'COMM_LIC_TIER_NOTICE',
+            'COMPLETENE':'COMPLETENESS_CODE',
+            'CREATION_D':'CREATION_DATE',
+            'ORIGINATIN':'ORIGINATING_SOURCE',
+            'ORIG_SOURC':'ORIG_SOURCE_DATE',
+            'ORIG_SOU_1':'ORIG_SOURCE_INFO',
+            'RSTRN_DCLS':'RSTRN_DCLS_XMPT_CD',
+            'RSTRN_DECL':'RSTRN_DECLASS',
+            'RSTRN_DS_1':'RSTRN_DSEM_CTRL_NIC',
+            'RSTRN_DSEM':'RSTRN_DSEM_CTRL_IC',
+            'RSTRN_FORE':'RSTRN_FOREIGN_GOV',
+            'RSTRN_RELE':'RSTRN_RELEASIBILITY',
+            'SEC_CD_CNT':'SEC_CD_CNTRL',
+            'SEC_CLASS_':'SEC_CLASS_SYS_ID',
+            'SEC_CLS_AU':'SEC_CLS_AUTH_DESC',
+            'SEC_CLS__1':'SEC_CLS_AUTH_MULT',
+            'SEC_CLS__2':'SEC_CLS_AUTHORITY',
+            'UPDATE_S_1':'UPDATE_SOURCE_DATE',
+            'UPDATE_S_2':'UPDATE_SOURCE_INFO',
+            'UPDATE_SOU':'UPDATE_SOURCE',
+            'Z_VALUE_TY':'Z_VALUE_TYPE'
         };
 
         // List of data values to drop/ignore. Love the spelling of some of these
         // 997 = Unpopulated
         // 998 = Not Applicable
         // 0 = Unknown BUT this can also be a valid value for some fields so we don't have it here
-        var ignoreList = { 'unknown':1, 'unk':1, 'n/a':1, 'n_a':1, '-32768':1,
-   'not applicable':1, '997':1, '998':1 };
+        var ignoreList = { 'unknown':1, 'unk':1, 'n/a':1, 'n_a':1, '-32768':1,'not applicable':1, '997':1, '998':1 };
 
         // Unit conversion. Some attributes are in centimetres, others in decimetres
         var unitList = { 'WD1':10 };
@@ -3015,124 +3014,124 @@ ufd = {
         // make sure all columns are upper case. This simplifies translation.
         for (var col in attrs)
         {
-// slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
-// First, push to lowercase
-var attrValue = attrs[col].toString().toLowerCase();
+            // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
+            // First, push to lowercase
+            var attrValue = attrs[col].toString().toLowerCase();
 
-// Get rid of the spaces in the text
-attrValue = attrValue.replace(/\s/g, '');
+            // Get rid of the spaces in the text
+            attrValue = attrValue.replace(/\s/g, '');
 
-// Wipe out the useless values
-if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
-{
-    delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
-    continue;
-}
+            // Wipe out the useless values
+            if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
+            {
+                delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
+                continue;
+            }
 
-var c = col.toUpperCase();
-if (c !== col)
-{
-    attrs[c] = attrs[col];
-    delete attrs[col];
-    col = c; // For the rest of the loop
-}
+            var c = col.toUpperCase();
+            if (c !== col)
+            {
+                attrs[c] = attrs[col];
+                delete attrs[col];
+                col = c; // For the rest of the loop
+            }
 
-// Sort out units - if needed
-if (col in unitList) attrs[col] = attrs[col] / unitList[col];
+            // Sort out units - if needed
+            if (col in unitList) attrs[col] = attrs[col] / unitList[col];
 
-// Now see if we need to swap attr names
-if (col in swapList)
-{
-    // print('Swapped: ' + swapList[col]); // debug
-    attrs[swapList[col]] = attrs[col];
-    delete attrs[col];
-    continue;
-}
+            // Now see if we need to swap attr names
+            if (col in swapList)
+            {
+                // print('Swapped: ' + swapList[col]); // debug
+                attrs[swapList[col]] = attrs[col];
+                delete attrs[col];
+                continue;
+            }
 
         }
 
         // Time to find an FCODE
         if (attrs.F_CODE)
         {
-// Do Nothing :-)
+            // Do Nothing :-)
         }
         else if (attrs.FCODE)
         {
-attrs.F_CODE = attrs.FCODE;
-delete attrs.FCODE;
+            attrs.F_CODE = attrs.FCODE;
+            delete attrs.FCODE;
         }
         else
         {
-var fCodeMap = [
-    ['AA050', ['aa050','well_p']], // Well
-    ['AL015', ['al015','building_a','building_p']], // Building
-    ['AL020', ['al020','builtup_area_a']], // Built up area
-    ['AL030', ['al030','cemetery_a']], // Cemetary
-    ['AL100', ['al100']], // Hut
-    ['AL105', ['al105']], // Settlement
-    ['AL130', ['al130','monument_a','monument_p']], // Memorial Monument
-    ['AL200', ['al200','ruins_a']], // Ruins
-    ['AN010', ['an010','railway_l']], // Railway
-    ['AN050', ['an050','rr_siding_spur_l']], // Railway Sidetrack
-    ['AN060', ['an060','rr_marshal_yard_a']], // Railway Yard
-    ['AP010', ['ap010','trackl','track_l','cart_track','carttrack','cart_track_l']], // Cart Track
-    ['AP020', ['ap020','interchange_l', 'interchangel']], // Interchange
-    ['AP030', ['ap030','roadnet','road_l','roadl']], // Road
-    ['AP050', ['ap050','traill','trail_l']], // Trail
-    ['AQ040', ['aq040','bridgel','bridge_l','bridge_tunnel_l','bridge_overpass_l']], // Bridge
-    ['AQ045', ['aq045','bridge_span_l', 'bridge_span_p']], // Bridge Span
-    ['AQ050', ['aq050','bridge_superstructure_p']], // Bridge Superstructure
-    ['AQ055', ['aq055','bridge_pylon_p']], // Bridge Pylon
-    ['AQ065', ['aq065','culvert_l']], // Culvert
-    ['AQ113', ['aq113','pipeline_pipe_l']], // Pipeline
-    ['AQ130', ['aq130','tunnell','tunnel_l']], // Tunnel
-    ['AT050', ['at050','comm_building_a']], // Communication Building
-    ['BH010', ['bh010','aqueduct_l']], // Aqueduct
-    ['BH020', ['bh020','canal_a','canal_l']], // Canal
-    ['BH030', ['bh030','ditch_l','ditch_a']], // Ditch
-    ['BH070', ['bh070','ford_l','ford_p']], // Ford
-    ['BH140', ['bh140', 'river_stream_a','river_stream_l']], // River
-    ['DB070', ['db070']], // Cut
-    ['DB150', ['db150']], // Mountain Pass
-    ['ZD040', ['zd040','named_location_p']], // Annotated Location
-    ]
+            var fCodeMap = [
+                        ['AA050', ['aa050','well_p']], // Well
+                        ['AL015', ['al015','building_a','building_p']], // Building
+                        ['AL020', ['al020','builtup_area_a']], // Built up area
+                        ['AL030', ['al030','cemetery_a']], // Cemetary
+                        ['AL100', ['al100']], // Hut
+                        ['AL105', ['al105']], // Settlement
+                        ['AL130', ['al130','monument_a','monument_p']], // Memorial Monument
+                        ['AL200', ['al200','ruins_a']], // Ruins
+                        ['AN010', ['an010','railway_l']], // Railway
+                        ['AN050', ['an050','rr_siding_spur_l']], // Railway Sidetrack
+                        ['AN060', ['an060','rr_marshal_yard_a']], // Railway Yard
+                        ['AP010', ['ap010','trackl','track_l','cart_track','carttrack','cart_track_l']], // Cart Track
+                        ['AP020', ['ap020','interchange_l', 'interchangel']], // Interchange
+                        ['AP030', ['ap030','roadnet','road_l','roadl']], // Road
+                        ['AP050', ['ap050','traill','trail_l']], // Trail
+                        ['AQ040', ['aq040','bridgel','bridge_l','bridge_tunnel_l','bridge_overpass_l']], // Bridge
+                        ['AQ045', ['aq045','bridge_span_l', 'bridge_span_p']], // Bridge Span
+                        ['AQ050', ['aq050','bridge_superstructure_p']], // Bridge Superstructure
+                        ['AQ055', ['aq055','bridge_pylon_p']], // Bridge Pylon
+                        ['AQ065', ['aq065','culvert_l']], // Culvert
+                        ['AQ113', ['aq113','pipeline_pipe_l']], // Pipeline
+                        ['AQ130', ['aq130','tunnell','tunnel_l']], // Tunnel
+                        ['AT050', ['at050','comm_building_a']], // Communication Building
+                        ['BH010', ['bh010','aqueduct_l']], // Aqueduct
+                        ['BH020', ['bh020','canal_a','canal_l']], // Canal
+                        ['BH030', ['bh030','ditch_l','ditch_a']], // Ditch
+                        ['BH070', ['bh070','ford_l','ford_p']], // Ford
+                        ['BH140', ['bh140', 'river_stream_a','river_stream_l']], // River
+                        ['DB070', ['db070']], // Cut
+                        ['DB150', ['db150']], // Mountain Pass
+                        ['ZD040', ['zd040','named_location_p']], // Annotated Location
+                    ]
 
-    // Funky but it makes life easier
-var llayerName = layerName.toString().toLowerCase();
+            // Funky but it makes life easier
+            var llayerName = layerName.toString().toLowerCase();
 
-for (var row in fCodeMap)
-{
-    for (var val in fCodeMap[row][1])
-    {
-        if (llayerName.match(fCodeMap[row][1][val])) attrs.F_CODE = fCodeMap[row][0];
-    }
-}
+            for (var row in fCodeMap)
+            {
+                for (var val in fCodeMap[row][1])
+                {
+                    if (llayerName.match(fCodeMap[row][1][val])) attrs.F_CODE = fCodeMap[row][0];
+                }
+            }
         } // End of Find an FCode
 
         // Names are a bit of a mess
         // Standards. We have them for a reason.
         if (!attrs.NAM)
         {
-if (attrs.NAM_1)
-{
-    attrs.NAM = attrs.NAM_1;
-    delete attrs.NAM_1;   
-}
-else if (attrs.NAM_2)
-{
-    attrs.NAM = attrs.NAM_2;
-    delete attrs.NAM_2;   
-}
-else if (attrs.NAM_3)
-{
-    attrs.NAM = attrs.NAM_3;
-    delete attrs.NAM_3;   
-}
-else if (attrs.NAM_4)
-{
-    attrs.NAM = attrs.NAM_4;
-    delete attrs.NAM_4;   
-}
+            if (attrs.NAM_1)
+            {
+                attrs.NAM = attrs.NAM_1;
+                delete attrs.NAM_1;
+            }
+            else if (attrs.NAM_2)
+            {
+                attrs.NAM = attrs.NAM_2;
+                delete attrs.NAM_2;
+            }
+            else if (attrs.NAM_3)
+            {
+                attrs.NAM = attrs.NAM_3;
+                delete attrs.NAM_3;
+            }
+            else if (attrs.NAM_4)
+            {
+                attrs.NAM = attrs.NAM_4;
+                delete attrs.NAM_4;
+            }
         }
 
     }, // End of applyToOsmPreProcessing
@@ -3147,61 +3146,61 @@ else if (attrs.NAM_4)
         // if ('ACE_EVAL' in attrs && attrs['ACE_EVAL'] != '')
         if (translate.isOK(attrs['ACE_EVAL']))
         {
-// Convert to 95% circular error (AKA ~2 standard deviations)
-accuracy = attrs['ACE_EVAL'] * 1.91;
+            // Convert to 95% circular error (AKA ~2 standard deviations)
+            accuracy = attrs['ACE_EVAL'] * 1.91;
         }
         // else if ('ACE' in attrs && attrs['ACE'] != '')
         else if (translate.isOK(attrs['ACE']))
         {
-// Convert to 95% circular error (AKA ~2 standard deviations)
-accuracy = attrs['ACE_EVAL'] * 1.91;
+            // Convert to 95% circular error (AKA ~2 standard deviations)
+            accuracy = attrs['ACE_EVAL'] * 1.91;
         }
         // else if ('SCALE' in attrs && attrs['SCALE'] != '')
         else if (translate.isOK(attrs['SCALE']))
         {
-var scale = attrs['SCALE'];
-// Convert to accuracy as 90% circular error
-accuracy = scale * 1.0 / 30.0 / 12 * 0.3048;
-// Convert to 95% circular error (AKA ~2 standard deviations)
-accuracy = accuracy * 1.91;
+            var scale = attrs['SCALE'];
+            // Convert to accuracy as 90% circular error
+            accuracy = scale * 1.0 / 30.0 / 12 * 0.3048;
+            // Convert to 95% circular error (AKA ~2 standard deviations)
+            accuracy = accuracy * 1.91;
         }
 
         // if ('ACC' in attrs)
         if (translate.isOK(attrs['ACC']))
         {
-if (attrs['ACC'] == '2')
-{
-    accuracy = accuracy * 2;
-    // Add note: Accuracy: Approximate
-}
-else if (attrs['ACC'] == '3')
-{
-    accuracy = accuracy * 4;
-    // Add note: Accuracy: Doubtful
-}
-else if (attrs['ACC'] == '5')
-{
-    accuracy = -1;
-    // Add note: Accuracy: Disputed
-}
-else if (attrs['ACC'] == '6')
-{
-    // Add note: Accuracy: Undisputed
-}
-else if (attrs['ACC'] == '7')
-{
-    // Add note: Accuracy: Precise
-}
-else if (attrs['ACC'] == '8')
-{
-    accuracy = -1;
-    // Add note: Accuracy: Abrogated
-}
+            if (attrs['ACC'] == '2')
+            {
+                accuracy = accuracy * 2;
+                // Add note: Accuracy: Approximate
+            }
+            else if (attrs['ACC'] == '3')
+            {
+                accuracy = accuracy * 4;
+                // Add note: Accuracy: Doubtful
+            }
+            else if (attrs['ACC'] == '5')
+            {
+                accuracy = -1;
+                // Add note: Accuracy: Disputed
+            }
+            else if (attrs['ACC'] == '6')
+            {
+                // Add note: Accuracy: Undisputed
+            }
+            else if (attrs['ACC'] == '7')
+            {
+                // Add note: Accuracy: Precise
+            }
+            else if (attrs['ACC'] == '8')
+            {
+                accuracy = -1;
+                // Add note: Accuracy: Abrogated
+            }
         }
 
         if (accuracy > -1)
         {
-tags['error:circular'] = accuracy;
+            tags['error:circular'] = accuracy;
         }
 
         // #####
@@ -3216,11 +3215,11 @@ tags['error:circular'] = accuracy;
 
         if (attrs.GFID)
         {
-tags.uuid = '{' + attrs.GFID + '}';
+            tags.uuid = '{' + attrs.GFID + '}';
         }
         else
         {
-tags.uuid = createUuid();
+            if (ufd.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
         }
 
         // If we have a House of Worship type then tag it
@@ -3237,15 +3236,15 @@ tags.uuid = createUuid();
         // If we have a BUA, change the building tags to settlement:type
         if ((attrs.F_CODE == 'AL020' || attrs.F_CODE == 'AL105') && tags.building)
         {
-tags['settlement:type'] = tags.building;
-delete tags.building;
+            tags['settlement:type'] = tags.building;
+            delete tags.building;
         }
 
         // AQ060 Airport Control Tower needs some extra tags
         if (tags.aeroway == 'tower')
         {
-tags.use = 'air_traffic_control';
-tags['tower:type'] = 'observation';
+            tags.use = 'air_traffic_control';
+            tags['tower:type'] = 'observation';
         }
 
         // AT030 Powerline -> AT005 in TDS.
@@ -3254,8 +3253,8 @@ tags['tower:type'] = 'observation';
         // Orchards have a "product" not a "crop" in UFD
         if (tags.landuse == 'orchard' && tags.product)
         {
-tags.crop = tags.product;
-delete tags.product;
+            tags.crop = tags.product;
+            delete tags.product;
         }
 
         // EW Radar Site
@@ -3273,16 +3272,16 @@ delete tags.product;
         // Add 'building = yes' to amenities if we don't already have one
         if (tags.amenity && !(tags.building))
         {
-// print('Added building'); // debug
-// Don't add building=yes to built up areas!
-if (!(tags.place)) tags.building = 'yes';
+            // print('Added building'); // debug
+            // Don't add building=yes to built up areas!
+            if (!(tags.place)) tags.building = 'yes';
         }
 
         // Add 'building = yes' to military if it isn't a range
         if (tags.military && !(tags.building))
         {
-// print('Added building to military'); // debug
-if (tags.military !== 'range') tags.building = 'yes';
+            // print('Added building to military'); // debug
+            if (tags.military !== 'range') tags.building = 'yes';
         }
 
         // Add tags if we have Null attributes
@@ -3298,123 +3297,123 @@ if (tags.military !== 'range') tags.building = 'yes';
         // I'm pretty sure we are not going to see 99% of these but they are in the spec
         if (attrs.SEC_CLASS)
         {
-switch (attrs.SEC_CLASS)
-{
-    case '01': // COSMIC Top Secret-Bohemia
-        tags['security:classification'] = 'TOP_SECRET'; // Top Secret
-        tags['security:classification:sci'] = 'COSMIC';
-        tags['security:classification:sci:non_us'] = 'BOHEMIA';
-        break;
+            switch (attrs.SEC_CLASS)
+            {
+            case '01': // COSMIC Top Secret-Bohemia
+                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
+                tags['security:classification:sci'] = 'COSMIC';
+                tags['security:classification:sci:non_us'] = 'BOHEMIA';
+                break;
 
-    case '02': // COSMIC Top Secret-Balk
-        tags['security:classification'] = 'TOP_SECRET'; // Top Secret
-        tags['security:classification:sci'] = 'COSMIC';
-        tags['security:classification:sci:non_us'] = 'BALK';
-        break;
+            case '02': // COSMIC Top Secret-Balk
+                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
+                tags['security:classification:sci'] = 'COSMIC';
+                tags['security:classification:sci:non_us'] = 'BALK';
+                break;
 
-    case '03': // NATO Secret
-        tags['security:classification'] = 'SECRET'; // Secret
-        tags['security:classification:nato'] = 'yes';
-        break;
+            case '03': // NATO Secret
+                tags['security:classification'] = 'SECRET'; // Secret
+                tags['security:classification:nato'] = 'yes';
+                break;
 
-    case '04': // NATO Secret-Savate
-        tags['security:classification'] = 'SECRET'; // Secret
-        tags['security:classification:nato'] = 'yes';
-        tags['security:classification:sci','SAVATE'];
-        break;
+            case '04': // NATO Secret-Savate
+                tags['security:classification'] = 'SECRET'; // Secret
+                tags['security:classification:nato'] = 'yes';
+                tags['security:classification:sci','SAVATE'];
+                break;
 
-    case '05': // NATO Secret-Avicula
-        tags['security:classification'] = 'SECRET'; // Secret
-        tags['security:classification:nato'] = 'yes';
-        tags['security:classification:sci','AVICULA'];
-        break;
+            case '05': // NATO Secret-Avicula
+                tags['security:classification'] = 'SECRET'; // Secret
+                tags['security:classification:nato'] = 'yes';
+                tags['security:classification:sci','AVICULA'];
+                break;
 
-    case '06': // NATO Confidential
-        tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
-        tags['security:classification:nato'] = 'yes';
-        break;
+            case '06': // NATO Confidential
+                tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
+                tags['security:classification:nato'] = 'yes';
+                break;
 
-    case '07': // NATO Restricted
-        tags['security:classification'] = 'RRESTRICTED'; // Restricted
-        tags['security:classification:nato'] = 'yes';
-        break;
+            case '07': // NATO Restricted
+                tags['security:classification'] = 'RRESTRICTED'; // Restricted
+                tags['security:classification:nato'] = 'yes';
+                break;
 
-    case '08': // NATO Unclassified
-        tags['security:classification'] = 'UNCLASSIFIED'; // Unclassified
-        tags['security:classification:nato'] = 'yes';
-        break;
+            case '08': // NATO Unclassified
+                tags['security:classification'] = 'UNCLASSIFIED'; // Unclassified
+                tags['security:classification:nato'] = 'yes';
+                break;
 
-    case '09': // COSMIC Top Secret Atom
-        tags['security:classification'] = 'TOP_SECRET'; // Top Secret
-        tags['security:classification:sci'] = 'COSMIC;ATOM';
-        break;
+            case '09': // COSMIC Top Secret Atom
+                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
+                tags['security:classification:sci'] = 'COSMIC;ATOM';
+                break;
 
-    case '10': // Secret Atomal
-        tags['security:classification'] = 'SECRET'; // Secret
-        tags['security:classification:sci:non_us'] = 'ATOMAL';
-        break;
+            case '10': // Secret Atomal
+                tags['security:classification'] = 'SECRET'; // Secret
+                tags['security:classification:sci:non_us'] = 'ATOMAL';
+                break;
 
-    case '11': // Confidential Atomal
-        tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
-        tags['security:classification:sci:non_us'] = 'ATOMAL';
-        break;
+            case '11': // Confidential Atomal
+                tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
+                tags['security:classification:sci:non_us'] = 'ATOMAL';
+                break;
 
-    case 'TS':
-        tags['security:classification'] = 'TOP_SECRET'; // Top Secret
-        break;
+            case 'TS':
+                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
+                break;
 
-    case 'S':
-        tags['security:classification'] = 'SECRET'; // Secret
-        break;
+            case 'S':
+                tags['security:classification'] = 'SECRET'; // Secret
+                break;
 
-    case 'C':
-        tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
-        break;
+            case 'C':
+                tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
+                break;
 
-    case 'U':
-    case 'Unclassified':
-        tags['security:classification'] = 'UNCLASSIFIED'; // Unclassified
-        break;
-}
+            case 'U':
+            case 'Unclassified':
+                tags['security:classification'] = 'UNCLASSIFIED'; // Unclassified
+                break;
+            }
         } // End SEC_CLASS
 
         // Misc F_CODE fixes
         switch (attrs.F_CODE)
         {
-case undefined: // Break early if no value
-    break;
-
-case 'FA020': // Armistice Line
-    tags.historic='armistice_line';
-    break;
-
-case 'FA001': // Administrative Area
-case 'FA000': // Administrative Boundary
-    switch (attrs.USG)
-    {
         case undefined: // Break early if no value
-break;
+            break;
 
-        case '26': // 1st order
-tags.admin_level = '4';
-break;
+        case 'FA020': // Armistice Line
+            tags.historic='armistice_line';
+            break;
 
-        case '30': // 2nd order
-tags.admin_level = '6';
-break;
+        case 'FA001': // Administrative Area
+        case 'FA000': // Administrative Boundary
+            switch (attrs.USG)
+            {
+            case undefined: // Break early if no value
+                break;
 
-        case '31': // 3rd order
-tags.admin_level = '8';
-break;
-    }
+            case '26': // 1st order
+                tags.admin_level = '4';
+                break;
 
-    break;         
+            case '30': // 2nd order
+                tags.admin_level = '6';
+                break;
+
+            case '31': // 3rd order
+                tags.admin_level = '8';
+                break;
+            }
+
+            break;
         } // End case F_CODE
 
         // Handle update sources that are not in the spec list
         if (attrs.UPDATE_SOURCE && !(tags['source:review_source:type']))
         {
-tags['source:review_source:type'] = attrs.UPDATE_SOURCE;
+            tags['source:review_source:type'] = attrs.UPDATE_SOURCE;
         }
 
     }, // End of applyToOsmPostProcessing
@@ -3432,6 +3431,7 @@ function initialize()
         ufd.configIn = {};
         ufd.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
         ufd.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+        ufd.configIn.OgrAddUuid = config.getOgrAddUuid();
 
         // Get any changes
         ufd.toChange = hoot.Settings.get("translation.override");
@@ -3480,13 +3480,13 @@ function translateToOsm(attrs, layerName, geometryType)
         var ftag = ufd.fcodeLookup['F_CODE'][attrs.F_CODE];
         if (ftag)
         {
-tags[ftag[0]] = ftag[1];
-// Debug: Dump out the tags from the FCODE
-// print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+            tags[ftag[0]] = ftag[1];
+            // Debug: Dump out the tags from the FCODE
+            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
         }
         else
         {
-hoot.logError('Translation for FCODE ' + attrs.F_CODE + ' not found');
+            hoot.logError('Translation for FCODE ' + attrs.F_CODE + ' not found');
         }
     }
 

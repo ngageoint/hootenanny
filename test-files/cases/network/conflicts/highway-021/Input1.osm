@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1017062' action='modify' visible='true' lat='4.1597321216' lon='4.478165725'>
+    <tag k='error:circular' v='10.08' />
+  </node>
+  <node id='-1017063' action='modify' visible='true' lat='4.15949421592' lon='4.478109559' />
+  <node id='-1017064' action='modify' visible='true' lat='4.15925177719' lon='4.478062059' />
+  <node id='-1017065' action='modify' visible='true' lat='4.15886724908' lon='4.478056938' />
+  <way id='-1017051' action='modify' visible='true'>
+    <nd ref='-1017062' />
+    <nd ref='-1017063' />
+    <nd ref='-1017064' />
+    <nd ref='-1017065' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='2.5' />
+  </way>
+</osm>

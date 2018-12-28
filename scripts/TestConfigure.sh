@@ -14,7 +14,7 @@ function build_notest {
 function build {
     make -s clean
     make -sj`nproc`
-    HootTest --quick --parallel $(nproc)
+    HootTest --quick --parallel
     make -s clean
 }
 

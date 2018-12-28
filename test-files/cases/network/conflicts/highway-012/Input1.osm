@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-886289' action='modify' visible='true' lat='-1.77930447508' lon='-3.58401339345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886291' action='modify' visible='true' lat='-1.7792187137' lon='-3.58412059345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886293' action='modify' visible='true' lat='-1.77926164466' lon='-3.58485019345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886295' action='modify' visible='true' lat='-1.77927230199' lon='-3.58511839345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886297' action='modify' visible='true' lat='-1.77897208695' lon='-3.58548319345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886299' action='modify' visible='true' lat='-1.77874687548' lon='-3.58613769345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886301' action='modify' visible='true' lat='-1.77797472237' lon='-3.58631999345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886303' action='modify' visible='true' lat='-1.77755657364' lon='-3.58630929345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886305' action='modify' visible='true' lat='-1.77687018287' lon='-3.58599819345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886307' action='modify' visible='true' lat='-1.77609813225' lon='-3.58562269345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886309' action='modify' visible='true' lat='-1.77587292164' lon='-3.58553679345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886311' action='modify' visible='true' lat='-1.77489707684' lon='-3.58583719345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886313' action='modify' visible='true' lat='-1.77468262442' lon='-3.58599819345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886315' action='modify' visible='true' lat='-1.77448948658' lon='-3.58634149345'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <node id='-886317' action='modify' visible='true' lat='-1.77431257443' lon='-3.586737148' />
+  <node id='-928511' action='modify' visible='true' lat='-1.77804187318' lon='-3.58401504385' />
+  <node id='-930128' action='modify' visible='true' lat='-1.7732429146' lon='-3.58631137603' />
+  <node id='-930129' action='modify' visible='true' lat='-1.77395064978' lon='-3.58632341725'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+  </node>
+  <way id='-886319' action='modify' visible='true'>
+    <nd ref='-886289' />
+    <nd ref='-886291' />
+    <nd ref='-886293' />
+    <nd ref='-886295' />
+    <nd ref='-886297' />
+    <nd ref='-886299' />
+    <nd ref='-886301' />
+    <nd ref='-886303' />
+    <nd ref='-886305' />
+    <nd ref='-886307' />
+    <nd ref='-886309' />
+    <nd ref='-886311' />
+    <nd ref='-886313' />
+    <nd ref='-886315' />
+    <tag k='accuracy' v='15' />
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Rawa Belong 2' />
+  </way>
+  <way id='-886321' action='modify' visible='true'>
+    <nd ref='-886317' />
+    <nd ref='-886315' />
+    <tag k='highway' v='road' />
+  </way>
+  <way id='-928512' action='modify' visible='true'>
+    <nd ref='-928511' />
+    <nd ref='-886289' />
+    <tag k='highway' v='road' />
+  </way>
+  <way id='-930127' action='modify' visible='true'>
+    <nd ref='-930128' />
+    <nd ref='-930129' />
+    <nd ref='-886315' />
+    <tag k='highway' v='road' />
+  </way>
+</osm>

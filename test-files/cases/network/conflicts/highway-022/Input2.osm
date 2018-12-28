@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-35' action='modify' visible='true' lat='4.15987629741' lon='4.47810514127'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1719' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-39' action='modify' visible='true' lat='4.15954222368' lon='4.47813077679'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1720' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-41' action='modify' visible='true' lat='4.1592796271' lon='4.47807594563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1721' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-43' action='modify' visible='true' lat='4.15886298678' lon='4.47809064563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1722' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-72' action='modify' visible='true' lat='4.16017008216' lon='4.47801418751' />
+  <node id='-74' action='modify' visible='true' lat='4.1602985703' lon='4.47788139809' />
+  <node id='-76' action='modify' visible='true' lat='4.16037245321' lon='4.47758992298' />
+  <node id='-78' action='modify' visible='true' lat='4.16018228457' lon='4.47818638121' />
+  <node id='-80' action='modify' visible='true' lat='4.16057840308' lon='4.47873312731' />
+  <node id='-824' action='modify' visible='true' lat='4.1586236467' lon='4.4780674939' />
+  <node id='-826' action='modify' visible='true' lat='4.15832453549' lon='4.47823207359' />
+  <node id='-828' action='modify' visible='true' lat='4.15808743505' lon='4.47890136433' />
+  <node id='-830' action='modify' visible='true' lat='4.16055692378' lon='4.47742746177' />
+  <node id='-832' action='modify' visible='true' lat='4.16109313375' lon='4.47734700059' />
+  <node id='-1070' action='modify' visible='true' lat='4.16038689494' lon='4.4782974281' />
+  <way id='-45' action='modify' visible='true'>
+    <nd ref='-832' />
+    <nd ref='-830' />
+    <nd ref='-76' />
+    <nd ref='-74' />
+    <nd ref='-72' />
+    <nd ref='-35' />
+    <nd ref='-39' />
+    <nd ref='-41' />
+    <nd ref='-43' />
+    <nd ref='-824' />
+    <nd ref='-826' />
+    <nd ref='-828' />
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+  </way>
+  <way id='-79' action='modify' visible='true'>
+    <nd ref='-35' />
+    <nd ref='-78' />
+    <nd ref='-1070' />
+    <nd ref='-80' />
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+  </way>
+</osm>

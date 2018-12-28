@@ -35,13 +35,11 @@ namespace hoot
 class OsmChangeWriter;
 
 /**
- * A factory for constructing changeset writers based on the URL.
+ * A factory for constructing changeset writers based on the URL (Singleton).
  */
 class OsmChangeWriterFactory
 {
 public:
-
-  OsmChangeWriterFactory();
 
   boost::shared_ptr<OsmChangeWriter> createWriter(
     QString url, QString elementPayloadFormat = "json");
@@ -51,6 +49,8 @@ public:
   static OsmChangeWriterFactory& getInstance();
 
 private:
+
+  OsmChangeWriterFactory();
 
   static boost::shared_ptr<OsmChangeWriterFactory> _theInstance;
 };

@@ -46,8 +46,8 @@ describe('TranslationServer', function () {
         var xml = parser.parseFromString(osm_xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("k"), "F_CODE");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("v"), "AL013");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "F_CODE");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "AL013");
         assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("k"), "error");
         assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("v"), "No Valid Feature Code");
 
@@ -86,10 +86,10 @@ describe('TranslationServer', function () {
         var xml = parser.parseFromString(osm_xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
-        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "F_CODE");
-        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "AL013");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("k"), "error");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("v"), "No Valid Feature Code");
+        assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("k"), "F_CODE");
+        assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("v"), "AL013");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "error");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "No Valid Feature Code");
 
     });
 
@@ -126,8 +126,8 @@ describe('TranslationServer', function () {
         var xml = parser.parseFromString(osm_xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("k"), "error");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("v"), "No Valid Feature Code");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "error");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "No Valid Feature Code");
         assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("k"), "tag1");
         assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("v"), "{\'use\':\'residential\'}");
 
