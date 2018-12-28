@@ -34,8 +34,8 @@
 
 // hoot
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
-#include <hoot/core/algorithms/MultiLineStringSplitter.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -464,7 +464,7 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
         {
           ExtractWaysVisitor v(result);
           v.setOsmMap(map.get());
-          e->visitRw(*map, v);
+          e->visitRo(*map, v);
         }
       }
       return result;

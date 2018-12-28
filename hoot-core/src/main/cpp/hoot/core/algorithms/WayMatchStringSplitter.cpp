@@ -27,7 +27,7 @@
 #include "WayMatchStringSplitter.h"
 
 // hoot
-#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
@@ -50,7 +50,7 @@ WayMatchStringSplitter::WayMatchStringSplitter()
 
 void WayMatchStringSplitter::applySplits(OsmMapPtr map,
   vector<pair<ElementId, ElementId> > &replaced,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings) throw (NeedsReviewException)
+  QList<WayMatchStringMerger::SublineMappingPtr> mappings)
 {
   LOG_TRACE("Applying way splits...");
   _splitWay(WayNumber::Way1, map, replaced, mappings);

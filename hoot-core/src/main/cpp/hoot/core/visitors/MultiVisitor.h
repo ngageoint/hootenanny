@@ -30,11 +30,12 @@
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
 
-class MultiVisitor : public ElementOsmMapVisitor
+class MultiVisitor : public ElementVisitor
 {
 public:
 

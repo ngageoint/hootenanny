@@ -28,19 +28,19 @@
 #include "OsmPbfWriter.h"
 
 // Hoot Includes
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 //  Version must be included last
-#include <hoot/core/Version.h>
-#include <hoot/core/VersionDefines.h>
+#include <hoot/core/info/Version.h>
+#include <hoot/core/info/VersionDefines.h>
 
 using namespace hoot::pb;
 

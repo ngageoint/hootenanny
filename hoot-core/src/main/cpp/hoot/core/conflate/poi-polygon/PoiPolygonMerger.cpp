@@ -31,7 +31,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>

@@ -37,7 +37,7 @@
 #include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/Settings.h>
 
@@ -59,20 +59,27 @@ class ServiceHootApiDbWriterTest : public HootTestFixture
   CPPUNIT_TEST(runEscapeTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runRemapInsertTest);
+  CPPUNIT_TEST(writeTwoMapsSameNameDifferentUsers);
+  CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteDisabledTest);
+  CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteEnabledTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  QString userEmail() { return QString("%1.ServiceHootApiDbWriterTest@hoottestcpp.org").arg(testName); }
-  QString userName()  { return QString("%1.ServiceHootApiDbWriterTest").arg(testName); }
+  QString userEmail()
+  { return QString("%1.ServiceHootApiDbWriterTest@hoottestcpp.org").arg(_testName); }
+  QString userName()  { return QString("%1.ServiceHootApiDbWriterTest").arg(_testName); }
 
-  long mapId;
-  QString testName;
-
-  void setUpTest(const QString& test_name)
+  ServiceHootApiDbWriterTest()
   {
-    mapId = -1;
-    testName = test_name;
+    setResetType(ResetBasic);
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbWriterTest");
+  }
+
+  void setUpTest(const QString testName)
+  {
+    _mapId = -1;
+    _testName = testName;
     ServicesDbTestUtils::deleteUser(userEmail());
     HootApiDb database;
 
@@ -85,11 +92,11 @@ public:
   {
     ServicesDbTestUtils::deleteUser(userEmail());
 
-    if (mapId != -1)
+    if (_mapId != -1)
     {
       HootApiDb database;
       database.open(ServicesDbTestUtils::getDbModifyUrl());
-      database.deleteMap(mapId);
+      database.deleteMap(_mapId);
       database.close();
     }
   }
@@ -101,7 +108,7 @@ public:
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
     OsmMapPtr map(new OsmMap());
 
@@ -117,14 +124,14 @@ public:
 
     writer.write(map);
 
-    mapId = writer.getMapId();
+    _mapId = writer.getMapId();
 
-    compareRecords("SELECT tags FROM " + HootApiDb::getCurrentNodesTableName(mapId) +
+    compareRecords("SELECT tags FROM " + HootApiDb::getCurrentNodesTableName(_mapId) +
                    " ORDER BY longitude",
                    "\"note\"=>\"n1',\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
                    "\"note\"=>\"n2\\\\\\\"\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
                    "\"note\"=>\"n3\\\\\\\\\", \"" + MetadataTags::HootId() + "\"=>\"-3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
   }
 
   void runInsertTest()
@@ -135,7 +142,7 @@ public:
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
     OsmMapPtr map(new OsmMap());
 
@@ -168,7 +175,7 @@ public:
 
     writer.write(map);
 
-    mapId = writer.getMapId();
+    _mapId = writer.getMapId();
 
     compareRecords("SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
                    " WHERE email LIKE :email",
@@ -176,55 +183,55 @@ public:
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   HootApiDb::getCurrentNodesTableName(mapId) +
+                   HootApiDb::getCurrentNodesTableName(_mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
                    "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
                    "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootId() + "\"=>\"3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
 
     compareRecords("SELECT id, visible, version, tags FROM " +
-                   HootApiDb::getCurrentWaysTableName(mapId) +
+                   HootApiDb::getCurrentWaysTableName(_mapId) +
                    " ORDER BY id",
                    "1;true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"\n"
                    "2;true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
 
     compareRecords("SELECT way_id, node_id, sequence_id FROM " +
-                   HootApiDb::getCurrentWayNodesTableName(mapId) +
+                   HootApiDb::getCurrentWayNodesTableName(_mapId) +
                    " ORDER BY way_id, node_id, sequence_id",
                    "1;1;0\n"
                    "1;2;1\n"
                    "2;2;0\n"
                    "2;3;1",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
 
     compareRecords("SELECT id, visible, version, tags FROM " +
-                   HootApiDb::getCurrentRelationsTableName(mapId),
+                   HootApiDb::getCurrentRelationsTableName(_mapId),
                    "1;true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
 
     compareRecords("SELECT relation_id, member_type, member_id, member_role, sequence_id "
                    "FROM " +
-                   HootApiDb::getCurrentRelationMembersTableName(mapId) +
+                   HootApiDb::getCurrentRelationMembersTableName(_mapId) +
                    " ORDER BY relation_id, member_type",
                    "1;node;1;n1;0\n"
                    "1;way;1;w1;1",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
 
     HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl(testName));
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName));
 
     QStringList tableNames;
-    tableNames.append(HootApiDb::getCurrentNodesTableName(mapId));
-    tableNames.append(HootApiDb::getCurrentWaysTableName(mapId));
-    tableNames.append(HootApiDb::getCurrentRelationsTableName(mapId));
+    tableNames.append(HootApiDb::getCurrentNodesTableName(_mapId));
+    tableNames.append(HootApiDb::getCurrentWaysTableName(_mapId));
+    tableNames.append(HootApiDb::getCurrentRelationsTableName(_mapId));
 
     for (int i = 0; i < tableNames.length(); i++)
     {
       QStringList results =
         db.execToString("SELECT timestamp FROM " + tableNames[i],
-                         (qlonglong)mapId).split("\n");
+                         (qlonglong)_mapId).split("\n");
       for (int j = 0; j < results.length(); j++)
       {
         CPPUNIT_ASSERT(OsmUtils::fromTimeString(results[j]) != ElementData::TIMESTAMP_EMPTY);
@@ -241,7 +248,7 @@ public:
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
     OsmMapPtr map(new OsmMap());
 
@@ -278,7 +285,7 @@ public:
     map->addRelation(r2);
 
     writer.write(map);
-    mapId = writer.getMapId();
+    _mapId = writer.getMapId();
 
     compareRecords("SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
                    " WHERE email LIKE :email",
@@ -286,60 +293,51 @@ public:
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   HootApiDb::getCurrentNodesTableName(mapId) +
+                   HootApiDb::getCurrentNodesTableName(_mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
                    "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
                    "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootId() + "\"=>\"-3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +
-                   HootApiDb::getCurrentWaysTableName(mapId) +
+                   HootApiDb::getCurrentWaysTableName(_mapId) +
                    " ORDER BY id",
                    "true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"\n"
                    "true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
 
     compareRecords("SELECT sequence_id FROM " +
-                   HootApiDb::getCurrentWayNodesTableName(mapId) +
+                   HootApiDb::getCurrentWayNodesTableName(_mapId) +
                    " ORDER BY way_id, node_id, sequence_id",
                    "1\n"
                    "0\n"
                    "1\n"
                    "0",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +
-                   HootApiDb::getCurrentRelationsTableName(mapId) +
+                   HootApiDb::getCurrentRelationsTableName(_mapId) +
                    " ORDER BY id",
                    "true;1;\"note\"=>\"r2\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"\n"
                    "true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
 
     compareRecords("SELECT member_type, member_role, sequence_id "
                    "FROM " +
-                   HootApiDb::getCurrentRelationMembersTableName(mapId) +
+                   HootApiDb::getCurrentRelationMembersTableName(_mapId) +
                    " ORDER BY relation_id, member_type",
                    "relation;r1;0\n"
                    "node;n1;0\n"
                    "way;w1;1",
-                   (qlonglong)mapId);
+                   (qlonglong)_mapId);
   }
 
-  struct CompareLess
-  {
-    bool operator() (const long& a, const long& b) const
-    {
-      return a < b;
-    }
-
-    static long max_value() { return std::numeric_limits<long>::max(); }
-  };
-
+  // TODO: merge this into ServicesDbTestUtils::compareRecords
   void compareRecords(QString sql, QString expected, QVariant v1 = QVariant())
   {
     HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl(testName));
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName));
     QString result = db.execToString(sql, v1);
     if (expected == "")
     {
@@ -367,6 +365,152 @@ public:
     }
   }
 
+  void writeTwoMapsSameNameDifferentUsers()
+  {
+    setUpTest("ServiceHootApiDbWriterTest-writeTwoMapsSameNameDifferentUsers");
+
+    // write a map
+    LOG_DEBUG("Writing map...");
+    HootApiDbWriter writer;
+    writer.setRemap(false);
+    writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    OsmMapPtr map(new OsmMap());
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    n1->setTag("note", "n1");
+    map->addNode(n1);
+    writer.write(map);
+    const long firstMapId = writer.getMapId();
+    LOG_VARD(firstMapId);
+    writer.close();
+
+    // Create a different user
+    LOG_DEBUG("Creating second user...");
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    const QString differentUserEmail =
+      "ServiceHootApiDbWriterTest-writeTwoMapsSameNameDifferentUsers2";
+    const long differentUserId = db.insertUser(differentUserEmail, differentUserEmail);
+    LOG_VARD(differentUserId);
+    db.close();
+
+    // Configure the writer with the second user
+    HootApiDbWriter writer2;
+    writer2.setRemap(false);
+    writer2.setIncludeDebug(true);
+    writer2.setUserEmail(differentUserEmail);
+    LOG_DEBUG("Attempting to open db for writing second map...");
+    writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    // This should not fail, since we allow different users to write maps with the same name (just
+    // checking that open succeeds here...not the actual write).
+    writer2.close();
+
+    LOG_DEBUG("Deleting second user...");
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    db.deleteUser(differentUserId);
+  }
+
+  void twoMapsSameNameSameUserOverwriteDisabledTest()
+  {
+    setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteDisabledTest");
+
+    // create a map
+    OsmMapPtr map1(new OsmMap());
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    n1->setTag("note", "n1");
+    map1->addNode(n1);
+
+    // write the first map
+    HootApiDbWriter writer;
+    writer.setRemap(false);
+    writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    writer.write(map1);
+    const long mapId = writer.getMapId();
+    writer.close();
+
+    //create a second map
+    OsmMapPtr map2(new OsmMap());
+    NodePtr n2(new Node(Status::Unknown1, 2, 0.0, 0.0, 10.0));
+    n2->setTag("note", "n2");
+    map2->addNode(n2);
+
+    // try to write the second map to the first map with with overwrite disabled
+    HootApiDbWriter writer2;
+    writer2.setRemap(false);
+    writer2.setIncludeDebug(true);
+    writer2.setUserEmail(userEmail());
+    writer2.setOverwriteMap(false);
+    writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    writer2.write(map2);
+    writer2.close();
+
+    //the second map should get appended to the first
+    compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                   HootApiDb::getCurrentNodesTableName(mapId) +
+                   " ORDER BY longitude",
+                   "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                   "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
+                   (qlonglong)mapId);
+  }
+
+  void twoMapsSameNameSameUserOverwriteEnabledTest()
+  {
+    setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteEnabledTest");
+
+    // create a map
+    OsmMapPtr map(new OsmMap());
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    n1->setTag("note", "n1");
+    map->addNode(n1);
+
+    // write a map
+    HootApiDbWriter writer;
+    writer.setRemap(false);
+    writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    writer.write(map);
+    const long firstMapId = writer.getMapId();
+    writer.close();
+
+    //create a second map
+    OsmMapPtr map2(new OsmMap());
+    NodePtr n2(new Node(Status::Unknown1, 2, 0.0, 0.0, 10.0));
+    n2->setTag("note", "n2");
+    map2->addNode(n2);
+
+    // try to write another map with the same name for the same user with overwrite enabled
+    HootApiDbWriter writer2;
+    writer2.setOverwriteMap(true);
+    writer2.setRemap(false);
+    writer2.setIncludeDebug(true);
+    writer2.setUserEmail(userEmail());
+    writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    writer2.write(map2);
+    const long secondMapId = writer2.getMapId();
+    writer2.close();
+
+    // the second map should replace the first
+    compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                   HootApiDb::getCurrentNodesTableName(secondMapId) +
+                   " ORDER BY longitude",
+                   "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
+                   (qlonglong)secondMapId);
+
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    const bool firstMapExists = db.mapExists(firstMapId);
+    db.close();
+    CPPUNIT_ASSERT(!firstMapExists);
+  }
+
+private:
+
+  long _mapId;
+  QString _testName;
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbWriterTest, "slow");

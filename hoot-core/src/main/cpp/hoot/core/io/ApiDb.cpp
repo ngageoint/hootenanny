@@ -382,6 +382,8 @@ long ApiDb::getUserId(const QString email, bool throwWhenMissing)
 
 long ApiDb::insertUser(const QString email, const QString displayName)
 {
+  LOG_TRACE("Inserting user with email: " << email << " and displayName: " << displayName);
+
   long id = -1;
 
   if (_insertUser == 0)

@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 
 namespace hoot
@@ -48,7 +48,7 @@ InWayNodeCriterion::InWayNodeCriterion(const OsmMap& map, const std::vector<long
   }
 }
 
-bool InWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
+bool InWayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return _nids.find(e->getId()) != _nids.end();
 }

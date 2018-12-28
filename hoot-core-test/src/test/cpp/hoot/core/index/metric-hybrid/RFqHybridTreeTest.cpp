@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>
 #include <hoot/core/io/OsmPbfReader.h>
@@ -309,7 +309,8 @@ public:
     {
       if (e->getElementType() == ElementType::Node)
       {
-        const boost::shared_ptr<const hoot::Node>& n = boost::dynamic_pointer_cast<const hoot::Node>(e);
+        const boost::shared_ptr<const hoot::Node>& n =
+          boost::dynamic_pointer_cast<const hoot::Node>(e);
         QStringList names = n->getTags().getNames();
         set<QString> nameSet;
         for (int i = 0; i < names.size(); i++)

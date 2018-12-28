@@ -28,9 +28,8 @@
 #define COUNTUNIQUEREVIEWSVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
@@ -42,8 +41,7 @@ class OsmMap;
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CountUniqueReviewsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public SingleStatistic
+class CountUniqueReviewsVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
 
 public:
@@ -54,18 +52,14 @@ public:
 
   double getStat() const { return _reviews.size(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Counts the number of unique feature reviews"; }
 
 private:
 
-  const OsmMap* _map;
   std::set<ReviewMarker::ReviewUid> _reviews;
   ReviewMarker _reviewMarker;
-
 };
 
 }

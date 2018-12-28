@@ -1165,7 +1165,19 @@ tds61.rules = {
     ['ETS','msd5','source:extraction_specification','msd5'], // MSD5
     ['ETS','onc','source:extraction_specification','1ab-onc'], // 1AB-ONC
     ['ETS','other','source:extraction_specification','other'], // Other
-    ['ETS','regionalTdsEg','Fpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
+    ['ETS','regionalTdsEg','source:extraction_specification','rtds-eg'], // RTDS-EG
+    ['ETS','specUrbanTdsEg','source:extraction_specification','s-utds-eg'], // S-UTDS-EG
+    ['ETS','tercomE','source:extraction_specification','4gf-tercom-e'], // 4GF-TERCOM-E
+    ['ETS','tercomL','source:extraction_specification','4ge-tercom-l'], // 4GE-TERCOM-L
+    ['ETS','tercomT','source:extraction_specification','4gg-tercom-t'], // 4GG-TERCOM-T
+    ['ETS','tlm100','source:extraction_specification','3ag-tlm100'], // 3AG-TLM100
+    ['ETS','tlm50','source:extraction_specification','3aa-tlm50'], // 3AA-TLM50
+    ['ETS','tod0','source:extraction_specification','tod0'], // TOD0
+    ['ETS','tod1','source:extraction_specification','tod1'], // TOD1
+    ['ETS','tod2','source:extraction_specification','tod2'], // TOD2
+    ['ETS','tod3','source:extraction_specification','tod3'], // TOD3
+    ['ETS','tod4','source:extraction_specification','tod4'], // TOD4
+    ['ETS','tpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
     ['ETS','uvmap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
     ['ETS','vitd','source:extraction_specification','3ka-vitd'], // 3KA-VITD
     ['ETS','vmap0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0

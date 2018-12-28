@@ -27,9 +27,9 @@
 
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/splitter/IntersectionSplitter.h>
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>

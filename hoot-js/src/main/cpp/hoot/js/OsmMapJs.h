@@ -30,7 +30,7 @@
 #include <hoot/js/SystemNodeJs.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/IdGeneratorJs.h>
 

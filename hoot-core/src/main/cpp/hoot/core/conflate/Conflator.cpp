@@ -32,8 +32,8 @@ using namespace boost;
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -119,9 +119,8 @@ void Conflator::_applyManipulations()
     if (Log::getInstance().isInfoEnabled() && Time::getTime() - lastPrint >= 1.0)
     {
       lastPrint = Time::getTime();
-      cout << "Current Score: " << map->getScore() << " it: " << iteration << " remaining: " <<
-              _manipulationHeap.size() << " elapsed: " << t.elapsed() << "ms             \r";
-      cout.flush();
+      PROGRESS_INFO("Current Score: " << map->getScore() << " it: " << iteration << " remaining: " <<
+              _manipulationHeap.size() << " elapsed: " << t.elapsed() << "ms             ");
     }
 
     noImprovement++;
@@ -172,10 +171,8 @@ void Conflator::_applyManipulations()
     iteration++;
   }
 
-  if (Log::getInstance().isInfoEnabled())
-  {
-    cout << endl;
-  }
+  LOG_INFO("Current Score: " << map->getScore() << " it: " << iteration << " remaining: " <<
+          _manipulationHeap.size() << " elapsed: " << t.elapsed() << "ms             ");
 
   LOG_INFO("Conflating map. Node count: " << _bestMap->getMap()->getNodes().size() <<
            " way count: " <<  _bestMap->getMap()->getWays().size());

@@ -28,18 +28,18 @@
 
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/algorithms/MaximalSublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/MaximalSublineMatcher.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/extractors/EuclideanDistanceExtractor.h>
-#include <hoot/core/conflate/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
@@ -336,7 +336,7 @@ double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeL
 
   // if el1 is not part of this string, but shares a vertex with the first edge then we can
   // still calculate and return the distance.
-  if (el->isExtreme() && el->getVertex() == edgeStartVertex)
+  if (el->isExtreme() && el->getVertex() == edgeEndVertex)
   {
     return beginningD;
   }

@@ -156,14 +156,13 @@ private:
 
   bool _copyBulkInsertActivated;
 
-  std::set<long> _openDb(QString& urlStr);
-
-  void _overwriteMaps(const QString& mapName, const std::set<long>& mapIds);
-
   /**
    * Close the current changeset and start a new one.
    */
   void _startNewChangeSet();
+
+  long _openDb(const QString urlStr/*, const bool forDelete = false*/);
+  QString _getMapNameFromUrl(const QString urlStr) const;
 };
 
 }

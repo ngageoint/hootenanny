@@ -79,7 +79,7 @@ WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
   _bufferAccuracy = -1;
 }
 
-bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() != ElementType::Way)
     return false;

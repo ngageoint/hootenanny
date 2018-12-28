@@ -36,7 +36,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 
 namespace hoot

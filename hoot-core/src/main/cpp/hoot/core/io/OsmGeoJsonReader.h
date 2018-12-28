@@ -42,7 +42,7 @@
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonReader.h>
 
 namespace hoot
@@ -89,7 +89,7 @@ public:
    * @param jsonStr - input string
    * @return Smart pointer to the OSM map
    */
-  OsmMapPtr loadFromString(QString jsonStr);
+  virtual OsmMapPtr loadFromString(QString jsonStr);
 
   /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
@@ -97,7 +97,7 @@ public:
    * @param path - Path to file
    * @return Smart pointer to the OSM map
    */
-  OsmMapPtr loadFromFile(QString path);
+  virtual OsmMapPtr loadFromFile(QString path);
 
   virtual QString supportedFormats() { return ".geojson"; }
 

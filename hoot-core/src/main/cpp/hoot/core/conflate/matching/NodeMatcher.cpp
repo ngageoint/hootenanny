@@ -31,17 +31,20 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/util/Factory.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
+
+// Qt
+#include <QSet>
 
 using namespace std;
 using namespace Tgs;
@@ -50,11 +53,40 @@ namespace hoot
 {
 
 unsigned int NodeMatcher::logWarnCount = 0;
+QList<boost::shared_ptr<ElementCriterion>> NodeMatcher::_networkFeatureTypeCriterion;
 
 NodeMatcher::NodeMatcher() :
 _strictness(ConfigOptions().getNodeMatcherStrictness()),
 _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 {
+}
+
+bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
+{
+  if (_networkFeatureTypeCriterion.isEmpty())
+  {
+    QStringList critClasses;
+    critClasses.append("hoot::HighwayCriterion");
+    critClasses.append("hoot::LinearWaterwayCriterion");
+    critClasses.append("hoot::PowerLineCriterion");
+    critClasses.append("hoot::RailwayCriterion");
+
+    for (int i = 0; i < critClasses.size(); i++)
+    {
+      _networkFeatureTypeCriterion.append(
+        boost::shared_ptr<ElementCriterion>(
+          Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i))));
+    }
+  }
+
+  for (int i = 0; i < _networkFeatureTypeCriterion.size(); i++)
+  {
+    if (_networkFeatureTypeCriterion.at(i)->isSatisfied(element))
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
@@ -63,18 +95,18 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
   vector<Radians> result;
   result.reserve(wids.size());
 
-  int badSpots = 0;
-
   LOG_VART(nid);
+  QSet<long> badWayIds;
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
     const ConstWayPtr& w = map->getWay(*it);
+    LOG_VART(w->getId());
+    LOG_VART(w->getLastNodeId());
+    LOG_VART(w->getNodeId(0));
 
-    if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) == false &&
-        OsmSchema::getInstance().isLinearWaterway(*w) == false &&
-        OsmSchema::getInstance().isPowerLine(*w) == false)
+    if (!isNetworkFeatureType(w))
     {
-      // if this isn't a highway, waterway, or power line then don't consider it.
+      // if this isn't a feature from a specific list, then don't consider it.
       LOG_TRACE("calculateAngles skipping feature...");
     }
     else if (w->getNodeId(0) == nid)
@@ -104,28 +136,37 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
     }
     else
     {
-      LOG_TRACE("Bad spot");
-      LOG_VART(w->getNodeId(0));
-      LOG_VART(w->getLastNodeId());
       // count this as a bad spot. If we find some valid spots and some bad spots then that is an
       // error condition
-      badSpots++;
+      badWayIds.insert(w->getId());
     }
   }
 
-  if (result.size() > 0 && badSpots > 0)
+  LOG_VART(badWayIds.size());
+  LOG_VART(result.size());
+  if (result.size() > 0 && badWayIds.size() > 0)
   {
-    LOG_TRACE("Found bad spots in NodeMatcher when calculating angles:")
-    LOG_TRACE("nid: " << nid);
-    LOG_VART(map->getNode(nid)->toString());
-    LOG_TRACE("wids: " << wids);
-    for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
+    LOG_TRACE(
+      "Found " << badWayIds.size() << " bad spot(s) in NodeMatcher when calculating angles " <<
+      "with node: " << nid);
+    LOG_TRACE("wids: " << badWayIds);
+    for (QSet<long>::const_iterator it = badWayIds.begin(); it != badWayIds.end(); ++it)
     {
-      LOG_VART(map->getWay(*it)->toString());
+      const ConstWayPtr& w = map->getWay(*it);
+      LOG_VART(w->getId());
+      LOG_VART(w->getTags().get("REF1"));
+      LOG_VART(w->getTags().get("REF2"));
+      LOG_VART(w->getNodeIndex(nid));
+      LOG_VART(w->getNodeId(0));
+      LOG_VART(w->getLastNodeId());
     }
 
-    throw HootException(
-      "NodeMatcher::calculateAngles was called with a node that was not a start or end node on the specified way.");
+    if (ConfigOptions().getNodeMatcherFailOnBadAngleSpots())
+    {
+      throw HootException(
+        QString("NodeMatcher::calculateAngles was called with a node that was not a start or ") +
+        QString("end node on the specified way."));
+    }
   }
 
   return result;

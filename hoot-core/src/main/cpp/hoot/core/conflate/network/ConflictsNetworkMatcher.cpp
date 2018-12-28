@@ -27,7 +27,7 @@
 #include "ConflictsNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/algorithms/frechet/FrechetDistance.h>
+#include <hoot/core/algorithms/FrechetDistance.h>
 #include <hoot/core/conflate/network/EdgeMatch.h>
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 #include <hoot/core/util/Factory.h>
@@ -729,6 +729,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
 
 void ConflictsNetworkMatcher::_printEdgeMatches()
 {
+  stringstream ss;
   foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
   {
     foreach (EdgeString::EdgeEntry edge, em->getString1()->getAllEdges())
@@ -737,28 +738,29 @@ void ConflictsNetworkMatcher::_printEdgeMatches()
       {
         if (elmnt->getElementType() == ElementType::Way)
         {
-          cout << "(way:" << elmnt->getId() << ")";
+          ss << "(way:" << elmnt->getId() << ")";
         }
       }
     }
 
-    cout << " <<matches>> ";
+    ss << " <<matches>> ";
     foreach (EdgeString::EdgeEntry edge, em->getString2()->getAllEdges())
     {
       foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
       {
         if (elmnt->getElementType() == ElementType::Way)
         {
-          cout << "(way:" << elmnt->getId() << ")";
+          ss << "(way:" << elmnt->getId() << ")";
         }
       }
     }
 
-    cout << std::endl;
+    ss << std::endl;
 
     int i = 0;
     i++;
   }
+  LOG_INFO(ss.str());
 }
 
 }

@@ -31,15 +31,15 @@
 
 // hoot
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveEmptyAreasVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveEmptyAreasVisitor)
 
 RemoveEmptyAreasVisitor::RemoveEmptyAreasVisitor()
 {
@@ -62,7 +62,7 @@ void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
     _ec.reset(new ElementConverter(_map->shared_from_this()));
   }
 
-  if (OsmSchema::getInstance().isArea(e->getTags(), e->getElementType()))
+  if (AreaCriterion().isSatisfied(e))
   {
     boost::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
 

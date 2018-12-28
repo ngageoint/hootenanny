@@ -31,7 +31,7 @@
 
 // hoot
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/util/FindNodesInWayFactory.h>
+#include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 
 using namespace geos::geom;

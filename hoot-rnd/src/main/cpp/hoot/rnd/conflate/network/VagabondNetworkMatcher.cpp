@@ -27,8 +27,8 @@
 #include "VagabondNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
@@ -93,12 +93,9 @@ void VagabondNetworkMatcher::iteratePageRank()
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
-  double sum = 0.0;
-
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
-    sum += it.value();
     it.value() = 0;
   }
 
@@ -156,12 +153,9 @@ void VagabondNetworkMatcher::iteratePageRankBleeding()
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
-  double sum = 0.0;
-
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
-    sum += it.value();
     it.value() = 0;
   }
 
@@ -214,12 +208,9 @@ void VagabondNetworkMatcher::iterateVoting()
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
-  double sum = 0.0;
-
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
-    sum += it.value();
     it.value() = 0;
   }
 

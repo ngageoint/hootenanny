@@ -28,7 +28,7 @@
 #define HIGHWAYREVIEWCLEANEROP_H
 
 // hoot
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot

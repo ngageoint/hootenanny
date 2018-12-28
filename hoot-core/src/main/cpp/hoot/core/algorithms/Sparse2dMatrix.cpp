@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Sparse2dMatrix.h"
 
@@ -37,9 +37,6 @@ Sparse2dMatrix::Sparse2dMatrix()
 
 QString Sparse2dMatrix::toString() const
 {
-  QString result;
-  result += "{";
-
   QStringList sl;
 
   for (HashMap<CellId, double>::const_iterator it = begin(); it != end(); ++it)

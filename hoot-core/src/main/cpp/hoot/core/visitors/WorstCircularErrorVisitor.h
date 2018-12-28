@@ -28,8 +28,8 @@
 #ifndef WORSTCIRCULARERRORVISITOR_H
 #define WORSTCIRCULARERRORVISITOR_H
 
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
 /**
@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-class WorstCircularErrorVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
+class WorstCircularErrorVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
@@ -49,8 +49,6 @@ public:
   Meters getWorstCircularError() { return _worst; }
 
   virtual double getStat() const { return _worst; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
 

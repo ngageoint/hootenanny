@@ -30,13 +30,10 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Standard
 #include <iomanip>
-
-namespace hoot
-{
 
 #define CHECK(con) \
   if (!(con)) \
@@ -73,6 +70,9 @@ namespace hoot
       LOG_WARN("More than 10 errors, suppressing errors."); \
     return; \
   }
+
+namespace hoot
+{
 
 class CompareVisitor : public ElementConstOsmMapVisitor
 {

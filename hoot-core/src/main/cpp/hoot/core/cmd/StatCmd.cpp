@@ -29,15 +29,15 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/SingleStatistic.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/ConstElementVisitorInputStream.h>
+#include <hoot/core/io/ElementVisitorInputStream.h>
 
 namespace hoot
 {
@@ -99,14 +99,14 @@ private:
     return reader;
   }
 
-  ConstElementVisitorPtr _getStatCollector(const QString visClassName)
+  ElementVisitorPtr _getStatCollector(const QString visClassName)
   {
-    boost::shared_ptr<ConstElementVisitor> statsCollector;
+    boost::shared_ptr<ElementVisitor> statsCollector;
 
     try
     {
       statsCollector.reset(
-        Factory::getInstance().constructObject<ConstElementVisitor>(visClassName));
+        Factory::getInstance().constructObject<ElementVisitor>(visClassName));
     }
     catch (const boost::bad_any_cast&)
     {
@@ -130,10 +130,10 @@ private:
 
     boost::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
 
-    ConstElementVisitorPtr statCollector = _getStatCollector(visClassName);
+    ElementVisitorPtr statCollector = _getStatCollector(visClassName);
 
     ElementInputStreamPtr filteredInputStream(
-      new ConstElementVisitorInputStream(
+      new ElementVisitorInputStream(
         boost::dynamic_pointer_cast<ElementInputStream>(reader), statCollector));
 
     boost::shared_ptr<SingleStatistic> counter =

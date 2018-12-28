@@ -130,7 +130,6 @@ private:
   const QSet<QString>& _getWords();
 
   long _loadEnglishWords(QString path);
-
 };
 
 }

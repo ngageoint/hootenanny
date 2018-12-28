@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, AddBboxVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, AddBboxVisitor)
 
 AddBboxVisitor::AddBboxVisitor()
 {

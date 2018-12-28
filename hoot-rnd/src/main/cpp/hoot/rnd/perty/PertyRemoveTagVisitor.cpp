@@ -44,7 +44,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyRemoveTagVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, PertyRemoveTagVisitor)
 
 PertyRemoveTagVisitor::PertyRemoveTagVisitor()
 {

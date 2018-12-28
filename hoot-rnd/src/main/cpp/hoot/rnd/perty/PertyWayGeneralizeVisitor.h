@@ -28,7 +28,7 @@
 #define PERTY_WAY_GENERALIZE_VISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/rnd/perty/RngConsumer.h>

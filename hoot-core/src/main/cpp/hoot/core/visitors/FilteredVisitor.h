@@ -28,8 +28,8 @@
 #define FILTEREDVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/visitors/ElementVisitorConsumer.h>
 
@@ -70,7 +70,7 @@ public:
    * visitor. In this case FilteredVisitor will take ownership of the criterion and visitor and
    * delete it when destructed.
    */
-  FilteredVisitor(ElementCriterion *criterion, ConstElementVisitor* visitor);
+  FilteredVisitor(ElementCriterion* criterion, ConstElementVisitor* visitor);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 

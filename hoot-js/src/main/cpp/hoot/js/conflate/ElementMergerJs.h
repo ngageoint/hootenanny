@@ -32,9 +32,7 @@
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/PluginContext.h>
-#include <hoot/core/OsmMap.h>
-
-using namespace v8;
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -89,7 +87,7 @@ private:
   ~ElementMergerJs();
 
   static void mergeElements(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void _mergeElements(OsmMapPtr map, Isolate* current);
+  static void _mergeElements(OsmMapPtr map, v8::Isolate* current);
 
   static MergeType _determineMergeType(ConstOsmMapPtr map);
   //feature being merged into must have a custom hoot tag for all merge types except poi/poly

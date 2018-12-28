@@ -41,7 +41,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -166,14 +166,14 @@ public:
    * @param jsonStr - input string
    * @return Smart pointer to the OSM map
    */
-  OsmMapPtr loadFromString(QString jsonStr);
+  virtual OsmMapPtr loadFromString(QString jsonStr);
 
   /**
    * @brief loadFromPtree - Builds a map from the supplied boost property tree
    * @param ptree - input boost property tree
    * @return Smart pointer to the OSM map
    */
-  OsmMapPtr loadFromPtree(const boost::property_tree::ptree &tree);
+  virtual OsmMapPtr loadFromPtree(const boost::property_tree::ptree &tree);
 
   /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
@@ -181,7 +181,7 @@ public:
    * @param path - Path to file
    * @return Smart pointer to the OSM map
    */
-  OsmMapPtr loadFromFile(QString path);
+  virtual OsmMapPtr loadFromFile(QString path);
 
   /**
    * @brief getVersion Overpass API version, if that's where JSON comes from

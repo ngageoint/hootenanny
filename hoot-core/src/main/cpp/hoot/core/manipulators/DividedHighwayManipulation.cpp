@@ -34,7 +34,7 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/LineStringAverager.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/algorithms/WayHeading.h>
@@ -43,7 +43,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
 // Qt

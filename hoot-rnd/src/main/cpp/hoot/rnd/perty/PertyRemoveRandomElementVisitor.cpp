@@ -35,13 +35,13 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/RandomNumberUtils.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyRemoveRandomElementVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, PertyRemoveRandomElementVisitor)
 
 PertyRemoveRandomElementVisitor::PertyRemoveRandomElementVisitor()
 {
@@ -72,7 +72,8 @@ void PertyRemoveRandomElementVisitor::visit(const ConstElementPtr& e)
   boost::uniform_real<> uni(0.0, 1.0);
   if (uni(*_rng) <= _p)
   {
-    RecursiveElementRemover(ElementId(e->getElementType(), e->getId())).apply(_map->shared_from_this());
+    RecursiveElementRemover(
+      ElementId(e->getElementType(), e->getId())).apply(_map->shared_from_this());
   }
 }
 

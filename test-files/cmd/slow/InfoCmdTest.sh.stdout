@@ -3593,6 +3593,7 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 
 The minimum similarity the type scores a POI and polygon can have and be considered a type
 match, with 0.0 being the least similar and 1.0 being the most similar.
+
 Listing all option names...
 
   SampledAngleHistogramExtractor               Calculates the angle of each line segment in a sampled fashion and adds it to a histogram
@@ -3692,7 +3693,7 @@ Listing an op...
 
 Listing a visitor...
 
-  RemoveEmptyAreasVisitor                      visitor (const)   Removes empty areas
+  RemoveEmptyAreasVisitor                      visitor           Removes empty areas
 
 Listing a criterion...
 

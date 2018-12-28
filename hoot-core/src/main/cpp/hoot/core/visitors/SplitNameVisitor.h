@@ -27,7 +27,7 @@
 #ifndef SPLITNAMEVISITOR_H
 #define SPLITNAMEVISITOR_H
 
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
@@ -36,7 +36,7 @@ namespace hoot
  * Sometimes name fields have more than 255 characters. This method takes all names beyond the 255
  * character point and puts them into fields named 'name:0', 'name:1', etc.
  */
-class SplitNameVisitor : public ElementOsmMapVisitor
+class SplitNameVisitor : public ElementVisitor
 {
 public:
 

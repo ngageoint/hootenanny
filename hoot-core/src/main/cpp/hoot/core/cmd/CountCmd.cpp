@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -39,8 +39,8 @@
 #include <hoot/core/visitors/FeatureCountVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/ConstElementCriterionVisitorInputStream.h>
-#include <hoot/core/io/ConstElementVisitorInputStream.h>
+#include <hoot/core/io/ElementCriterionVisitorInputStream.h>
+#include <hoot/core/io/ElementVisitorInputStream.h>
 
 namespace hoot
 {
@@ -60,7 +60,7 @@ public:
   virtual QString getName() const { return "count"; }
 
   virtual QString getDescription() const
-  { return "Counts the number of features in a map that meet a criterion"; }
+  { return "Counts the number of features in a map that meet specified criteria"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -158,7 +158,7 @@ private:
 
   ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
                                                 const QString criterionClassName,
-                                                ConstElementVisitorPtr countVis)
+                                                ElementVisitorPtr countVis)
   {
     LOG_TRACE("Getting filtered input stream...");
 
@@ -170,19 +170,19 @@ private:
       ElementCriterionPtr crit =
         _getCriterion(criterionClassName, ConfigOptions().getElementCriterionNegate());
       filteredInputStream.reset(
-        new ConstElementCriterionVisitorInputStream(inputStream, crit, countVis));
+        new ElementCriterionVisitorInputStream(inputStream, crit, countVis));
     }
     else
     {
-      filteredInputStream.reset(new ConstElementVisitorInputStream(inputStream, countVis));
+      filteredInputStream.reset(new ElementVisitorInputStream(inputStream, countVis));
     }
 
     return filteredInputStream;
   }
 
-  ConstElementVisitorPtr _getCountVis(const bool countFeaturesOnly)
+  ElementVisitorPtr _getCountVis(const bool countFeaturesOnly)
   {
-    ConstElementVisitorPtr countVis;
+    ElementVisitorPtr countVis;
     if (countFeaturesOnly)
     {
       countVis.reset(new FeatureCountVisitor());
@@ -200,7 +200,7 @@ private:
 
     boost::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
 
-    ConstElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
+    ElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
 
     ElementInputStreamPtr filteredInputStream =
       _getFilteredInputStream(

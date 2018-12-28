@@ -1,0 +1,7 @@
+Ingest the data
+Test osm with no translation
+Test shp with MPCP translation
+Test gdb with TDSv6.1 translation
+Test wfs with TDSv4.0 translation
+Remove ingested data
+Remove WFS data store tables

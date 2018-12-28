@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, IsSortedVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, IsSortedVisitor)
 
 IsSortedVisitor::IsSortedVisitor() :
 _isSorted(true)

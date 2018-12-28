@@ -31,7 +31,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ops/VisitorOp.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/info/OperationStatusInfo.h>
@@ -122,8 +122,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
         c->setConfiguration(*_conf);
       }
 
-      boost::shared_ptr<OsmMapOperation> op(new VisitorOp(t));
-      op->apply(map);
+      map->visitRw(*t);
 
       if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {

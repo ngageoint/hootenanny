@@ -95,7 +95,6 @@ import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
-import hoot.services.models.db.Folders;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
@@ -642,16 +641,10 @@ public class MapResource {
 
         // These functions ensure the map + folder are
         // either owned by the user -or- public.
-        Map m = getMapForUser(user, mapId, true, true);
-        Folders f = FolderResource.getFolderForUser(user, folderId);
-        if(!f.getId().equals(0L) && user != null && !f.getUserId().equals(user.getId())) {
-            // this is a little frustrating, but the NotAuthorizedException
-            // is behaving a little different that other WebApplicationExceptions:
-            // the status message was being overwritten w/ a generic message,
-            // so i had to build a response object to get the custom message
-            // passed back to the front end.
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the destination folder").build());
-        }
+        // getMapForUser(Users user, String mapId, boolean allowOSM, boolean userDesiresModify)
+        Map m = getMapForUser(user, mapId, false, true);
+        // Handle some CRUD
+        FolderResource.getFolderForUser(user, folderId);
 
         // Delete any existing to avoid duplicate entries
         createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(m.getId())).execute();

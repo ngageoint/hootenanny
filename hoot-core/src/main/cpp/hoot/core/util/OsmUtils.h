@@ -29,7 +29,7 @@
 #define OSM_UTILS_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Boost Includes
 #include <boost/shared_ptr.hpp>

@@ -28,7 +28,7 @@
 #define TRANSLATESTRINGDISTANCE_H
 
 // hoot
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
 

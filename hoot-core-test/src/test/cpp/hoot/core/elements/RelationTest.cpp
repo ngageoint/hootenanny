@@ -26,12 +26,12 @@
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 
 namespace hoot
@@ -102,7 +102,7 @@ public:
     r2->addElement("", r1->getElementId());
 
     ElementCountVisitor v;
-    r1->visitRw(*map, v);
+    r1->visitRo(*map, v);
 
     LOG_VAR(v.getCount());
   }
@@ -120,8 +120,8 @@ public:
     r1->addElement("", r1->getElementId());
 
     ElementCountVisitor v;
-    r1->visitRw(*map, v);
-    r2->visitRw(*map, v);
+    r1->visitRo(*map, v);
+    r2->visitRo(*map, v);
 
     LOG_VAR(v.getCount());
   }

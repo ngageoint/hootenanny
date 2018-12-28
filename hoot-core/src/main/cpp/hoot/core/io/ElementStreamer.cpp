@@ -33,11 +33,10 @@
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
-#include <hoot/core/io/ConstElementVisitorInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
@@ -194,25 +193,6 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
         }
 
         filteredInputStream.reset(new ElementVisitorInputStream(filteredInputStream, visitor));
-      }
-      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString()))
-      {
-        LOG_INFO("Visiting input with: " << opName << "...");
-        ConstElementVisitorPtr visitor(
-          Factory::getInstance().constructObject<ConstElementVisitor>(opName));
-
-        boost::shared_ptr<Configurable> visConfig;
-        if (visitor.get())
-        {
-          visConfig = boost::dynamic_pointer_cast<Configurable>(visitor);
-        }
-        LOG_VART(visConfig.get());
-        if (visConfig.get())
-        {
-          visConfig->setConfiguration(conf());
-        }
-
-        filteredInputStream.reset(new ConstElementVisitorInputStream(filteredInputStream, visitor));
       }
       else
       {

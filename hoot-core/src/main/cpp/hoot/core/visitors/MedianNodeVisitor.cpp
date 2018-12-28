@@ -38,7 +38,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, MedianNodeVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, MedianNodeVisitor)
 
 MedianNodeVisitor::MedianNodeVisitor()
 {

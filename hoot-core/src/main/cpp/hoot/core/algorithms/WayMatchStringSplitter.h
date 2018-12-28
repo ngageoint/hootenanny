@@ -41,9 +41,10 @@ public:
   /**
    * Traverses all mappings, splits ways where appropriate and updates the subline mappings in
    * place.
+   * Throws NeedsReviewException
    */
   void applySplits(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings) throw (NeedsReviewException);
+    QList<WayMatchStringMerger::SublineMappingPtr> mappings);
 
   std::set< std::pair<ElementId, ElementId> > getUnknown1Replacements()
   { return _unknown1Replacements; }

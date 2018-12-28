@@ -40,13 +40,14 @@ WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
 {
 }
 
-bool WayDirectionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool WayDirectionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() != ElementType::Way)
     return false;
 
-  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
-  return DirectionFinder::isSimilarDirection(_map, _baseWay, w) == _similarDirection;
+  return
+    DirectionFinder::isSimilarDirection(
+      _map, _baseWay, boost::dynamic_pointer_cast<const Way>(e)) == _similarDirection;
 }
 
 }

@@ -29,8 +29,8 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace std;
 
@@ -48,7 +48,7 @@ _map(map)
 {
 }
 
-bool BuildingWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool BuildingWayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
@@ -66,7 +66,7 @@ bool BuildingWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element
     {
       const long wayId = *it;
       if (_map->containsElement(ElementId(ElementType::Way, wayId)) &&
-          OsmSchema::getInstance().isBuilding(_map->getWay(wayId)))
+          BuildingCriterion().isSatisfied(_map->getWay(wayId)))
       {
         result = true;
         break;
@@ -95,7 +95,7 @@ long BuildingWayNodeCriterion::getMatchingWayId(const ConstElementPtr& e)
     {
       const long wayId = *it;
       if (_map->containsElement(ElementId(ElementType::Way, wayId)) &&
-          OsmSchema::getInstance().isBuilding(_map->getWay(wayId)))
+          BuildingCriterion().isSatisfied(_map->getWay(wayId)))
       {
         return wayId;
         break;

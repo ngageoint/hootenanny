@@ -68,11 +68,6 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
     dSumReverse += Distance::euclidean(cs1[i], cs2[pointCount - i - 1]);
   }
 
-//  cout << "direction finder " << dSumSame << " " << dSumReverse << endl;
-//  cout << " Point count " << pointCount <<endl;
-  //cout << cs1 << endl;
-  //cout << cs2 << endl;
-
   return dSumSame < dSumReverse;
 }
 

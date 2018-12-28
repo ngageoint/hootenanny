@@ -39,7 +39,7 @@ using namespace geos::geom;
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/LineStringAverager.h>
 #include <hoot/core/conflate/WorkingMap.h>
@@ -69,8 +69,6 @@ using namespace std;
 // Tgs
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
-
-#define SQR(x) ((x) * (x))
 
 namespace hoot
 {

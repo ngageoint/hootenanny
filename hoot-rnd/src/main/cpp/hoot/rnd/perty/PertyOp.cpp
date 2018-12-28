@@ -27,7 +27,7 @@
 #include "PertyOp.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -247,8 +247,6 @@ boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& m
   ShiftMapVisitor v(EX, cols, env, _gridSpacing);
   map->visitRw(v);
 
-  double dSum = 0.0;
-
   for (int i = 0; i < rows; ++i)
   {
     for (int j =0; j < cols; ++j)
@@ -258,7 +256,6 @@ boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& m
 
       double dx = EX.at<double>((i * cols + j) * 2, 0);
       double dy = EX.at<double>((i * cols + j) * 2 + 1, 0);
-      dSum += sqrt(dx * dx + dy * dy);
 
       NodePtr n1(new Node(Status::Unknown1, result->createNextNodeId(), x, y, 5));
       NodePtr n2(new Node(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5));

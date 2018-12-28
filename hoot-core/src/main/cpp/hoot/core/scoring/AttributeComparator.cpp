@@ -31,7 +31,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -147,20 +147,10 @@ double AttributeComparator::compareMaps()
       _ci = zalpha * _s / sqrt(scores.size());
     }
 
-
-    if (Log::getInstance().isInfoEnabled())
-    {
-      cout << i << " / " << _iterations << " mean: " << _mean << "   \r";
-      cout.flush();
-    }
+    PROGRESS_INFO(i << " / " << _iterations << " mean: " << _mean << "   ");
   }
 
-  //cout << "Score count: " << scores.size() << endl;
-
-  if (Log::getInstance().isInfoEnabled())
-  {
-    cout << "                                   \r";
-  }
+  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
 
   OsmSchema::getInstance().setIsACost(oldIsACost);
 

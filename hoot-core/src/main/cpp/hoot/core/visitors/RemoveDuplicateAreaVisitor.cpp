@@ -32,10 +32,9 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -44,6 +43,7 @@
 #include <hoot/core/visitors/CompletelyContainedByMapElementVisitor.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/schema/TagDifferencer.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -51,7 +51,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveDuplicateAreaVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateAreaVisitor)
 
 RemoveDuplicateAreaVisitor::RemoveDuplicateAreaVisitor()
 {
@@ -176,13 +176,13 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
   }
   LOG_VART(e1->getElementId());
 
-  OsmSchema& schema = OsmSchema::getInstance();
+  AreaCriterion areaCrit;
   boost::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
   LOG_VART(env.get());
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
       CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||
-      schema.isArea(e1) == false)
+      areaCrit.isSatisfied(e1) == false)
   {
     LOG_TRACE("Envelope null or incomplete element.");
     return;
@@ -199,7 +199,7 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
 
       // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
       // a parent.
-      if (e2 != 0 && schema.isArea(e2) && _equals(e1, e2))
+      if (e2 != 0 && areaCrit.isSatisfied(e2) && _equals(e1, e2))
       {
         LOG_TRACE("e2 is area and e1/e2 equal.");
         // remove the crummier one.

@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DecomposeBuildingRelationsVisitor.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
@@ -39,7 +39,7 @@ namespace hoot
 
 unsigned int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, DecomposeBuildingRelationsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
 
 DecomposeBuildingRelationsVisitor::DecomposeBuildingRelationsVisitor()
 {
