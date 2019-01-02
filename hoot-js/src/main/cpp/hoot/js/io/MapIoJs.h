@@ -45,7 +45,6 @@ public:
   static void loadMapFromString(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void loadMapFromStringPreserveIdAndStatus(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void saveMap(const v8::FunctionCallbackInfo<v8::Value>& args);
-
 };
 
 }

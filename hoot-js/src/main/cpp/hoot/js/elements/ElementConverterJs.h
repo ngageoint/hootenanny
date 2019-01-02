@@ -37,9 +37,11 @@ namespace hoot
 class ElementConverterJs : public node::ObjectWrap
 {
 public:
+
  static void Init(v8::Handle<v8::Object> target);
 
 private:
+
   ElementConverterJs();
   ~ElementConverterJs();
 
