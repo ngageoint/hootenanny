@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/js/util/StreamUtilsJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 
 // Qt
 #include <QHash>

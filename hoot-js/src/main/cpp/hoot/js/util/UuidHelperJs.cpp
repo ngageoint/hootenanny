@@ -30,7 +30,7 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/StringUtilsJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 // QT
 #include <QStringList>

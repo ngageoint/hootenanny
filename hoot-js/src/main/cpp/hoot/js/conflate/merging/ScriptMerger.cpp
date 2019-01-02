@@ -32,9 +32,9 @@
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/util/StreamUtilsJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>

@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>

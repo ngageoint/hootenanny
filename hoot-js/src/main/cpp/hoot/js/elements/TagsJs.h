@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 // Qt
 #include <QString>

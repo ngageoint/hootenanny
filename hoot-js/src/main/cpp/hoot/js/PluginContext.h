@@ -28,7 +28,7 @@
 #define PLUGINCONTEXT_H
 
 // hoot
-#include <hoot/js/util/StreamUtilsJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 
 // Qt
 #include <QString>

@@ -30,8 +30,8 @@
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
-#include <hoot/js/util/DataConvertJs.h>
-#include <hoot/js/util/StreamUtilsJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 
 // Qt
 #include <QVariant>

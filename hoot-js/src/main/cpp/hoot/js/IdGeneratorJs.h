@@ -30,7 +30,7 @@
 // node.js
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/core/util/IdGenerator.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 // Qt
 #include <QString>

@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/js/elements/ElementIdJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 
 // node.js

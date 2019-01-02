@@ -31,7 +31,7 @@
 #include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 
 // node.js
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/SystemNodeJs.h>
 
 // Qt

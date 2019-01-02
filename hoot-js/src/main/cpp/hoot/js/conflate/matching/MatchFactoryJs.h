@@ -31,7 +31,7 @@
 // node.js
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {

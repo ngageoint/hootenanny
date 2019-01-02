@@ -30,7 +30,7 @@
 #include <hoot/js/SystemNodeJs.h>
 
 // hoot
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {

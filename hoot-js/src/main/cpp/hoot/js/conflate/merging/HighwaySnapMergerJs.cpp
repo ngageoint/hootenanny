@@ -32,7 +32,7 @@
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/algorithms/subline-matching//SublineStringMatcherJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 

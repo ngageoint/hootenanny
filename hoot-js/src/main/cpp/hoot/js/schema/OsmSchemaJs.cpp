@@ -30,7 +30,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>

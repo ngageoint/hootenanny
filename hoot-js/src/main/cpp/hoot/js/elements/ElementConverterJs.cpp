@@ -32,8 +32,8 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/DataConvertJs.h>
-#include <hoot/js/util/StreamUtilsJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/util/HootExceptionJs.h> 
 

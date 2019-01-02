@@ -30,8 +30,8 @@
 #include <hoot/core/schema/SchemaChecker.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/js/util/DataConvertJs.h>
-#include <hoot/js/util/StreamUtilsJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 
 // Qt
 #include <QByteArray>

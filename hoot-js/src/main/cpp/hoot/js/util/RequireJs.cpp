@@ -31,7 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
 // Qt

@@ -28,7 +28,7 @@
 
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
