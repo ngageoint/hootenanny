@@ -43,7 +43,7 @@
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/conflate/js/ScriptMatch.h>
+#include <hoot/js/conflate/matching/ScriptMatch.h>
 
 // Qt
 #include <QFileInfo>

@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/js/OsmMapJs.h>
-#include <hoot/js/conflate/js/ScriptMergerCreator.h>
+#include <hoot/js/conflate/merging/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>

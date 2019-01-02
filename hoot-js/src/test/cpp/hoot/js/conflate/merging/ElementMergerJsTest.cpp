@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/js/HootJsStable.h>
-#include <hoot/js/conflate/ElementMergerJs.h>
+#include <hoot/js/conflate/merging/ElementMergerJs.h>
 
 // Std
 #include <string>

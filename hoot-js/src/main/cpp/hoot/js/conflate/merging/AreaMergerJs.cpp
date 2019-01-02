@@ -22,9 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiMergerJs.h"
+#include "AreaMergerJs.h"
 
 // Hoot
 #include <hoot/core/util/ConfPath.h>
@@ -33,8 +33,8 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/conflate/js/ScriptMerger.h>
-#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/js/conflate/merging/ScriptMerger.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 
 // Qt
 #include <QString>
@@ -48,15 +48,15 @@ using namespace v8;
 namespace hoot
 {
 
-void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
+void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
 {
-  LOG_INFO("Merging POIs...");
+  LOG_INFO("Merging areas...");
 
-  // instantiate script merger
+  // instantiate the script merger
   boost::shared_ptr<PluginContext> script(new PluginContext());
   v8::HandleScope handleScope(current);
   v8::Context::Scope context_scope(script->getContext(current));
-  script->loadScript(ConfPath::search("PoiGeneric.js", "rules"), "plugin");
+  script->loadScript(ConfPath::search("Area.js", "rules"), "plugin");
   v8::Handle<v8::Object> global = script->getContext(current)->Global();
   if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
   {
@@ -69,33 +69,56 @@ void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isola
     throw IllegalArgumentException("Expected plugin to be a valid object.");
   }
 
-  // Got in Map with POIs A, B, C, D, E
-  //
-  // Make a set of pairs to indicate all are same object:
-  //   A->B, A->C, A->D, A->E
-  //
-  // ...then pass those pairs one at a time through the merger, since it only merges pairs
-  int poisMerged = 0;
-  const NodeMap nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  int areasMerged = 0;
+
+  NonBuildingAreaCriterion nonBuildingAreaCrit;
+
+  const WayMap ways = map->getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const ConstNodePtr& node = it->second;
-    if (node->getId() != mergeTargetId.getId() && PoiCriterion().isSatisfied(node))
+    const ConstWayPtr& way = it->second;
+    LOG_VART(way->getId());
+    LOG_VART(nonBuildingAreaCrit.isSatisfied(way));
+    if (way->getElementId() != mergeTargetId && nonBuildingAreaCrit.isSatisfied(way))
     {
-      LOG_VART(node);
+      LOG_TRACE("Merging way area: " << way << " into " << mergeTargetId);
 
       std::set< std::pair< ElementId, ElementId> > matches;
-      matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, node->getElementId()));
+      matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::way(way->getId())));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
-      std::vector< std::pair< ElementId, ElementId > > replacedNodes;
-      merger.apply(map, replacedNodes);
-      LOG_VART(replacedNodes.size());
+      std::vector< std::pair< ElementId, ElementId > > replacedWays;
+      merger.apply(map, replacedWays);
+      LOG_VART(replacedWays.size());
 
-      poisMerged++;
+      areasMerged++;
     }
   }
-  LOG_INFO("Merged " << poisMerged << " POIs.");
+
+  const RelationMap relations = map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    const ConstRelationPtr& relation = it->second;
+    LOG_VART(relation->getId());
+    LOG_VART(nonBuildingAreaCrit.isSatisfied(relation));
+    if (relation->getElementId() != mergeTargetId && nonBuildingAreaCrit.isSatisfied(relation))
+    {
+      LOG_TRACE("Merging relation area: " << relation << " into " << mergeTargetId);
+
+      std::set< std::pair< ElementId, ElementId> > matches;
+      matches.insert(
+        std::pair<ElementId,ElementId>(mergeTargetId, ElementId::relation(relation->getId())));
+      // apply script merging
+      ScriptMerger merger(script, plugin, matches);
+      std::vector< std::pair< ElementId, ElementId > > replacedRelations;
+      merger.apply(map, replacedRelations);
+      LOG_VART(replacedRelations.size());
+
+      areasMerged++;
+    }
+  }
+
+  LOG_INFO("Merged " << areasMerged << " areas.");
 }
 
 }
