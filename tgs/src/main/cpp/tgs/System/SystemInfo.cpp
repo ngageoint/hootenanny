@@ -145,7 +145,7 @@ namespace Tgs
     long rss;
     getMemoryUsage(vm, rss);
 
-    ss << "Memory usage, vm: " << humanReadable(vm) << " rss: " << humanReadable(rss);
+    ss << "Memory usage, vm:\t" << humanReadable(vm) << "\trss:\t" << humanReadable(rss);
 
     return ss.str();
   }
