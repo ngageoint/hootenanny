@@ -36,7 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>

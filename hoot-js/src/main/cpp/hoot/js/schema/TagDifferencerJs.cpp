@@ -32,7 +32,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>

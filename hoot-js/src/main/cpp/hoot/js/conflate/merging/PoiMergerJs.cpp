@@ -31,7 +31,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/conflate/merging/ScriptMerger.h>
 #include <hoot/core/criterion/PoiCriterion.h>

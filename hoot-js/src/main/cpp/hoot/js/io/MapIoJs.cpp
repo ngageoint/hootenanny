@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
 // node.js

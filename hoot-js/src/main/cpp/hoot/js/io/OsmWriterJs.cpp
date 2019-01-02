@@ -30,7 +30,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 
 using namespace v8;
 

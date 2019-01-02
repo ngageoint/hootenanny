@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/TagComparator.h>
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/io/DataConvertJs.h>

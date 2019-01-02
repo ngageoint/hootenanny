@@ -37,7 +37,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/algorithms/string/StringDistanceJs.h>
 #include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>
 #include <hoot/js/criterion/ElementCriterionJs.h>

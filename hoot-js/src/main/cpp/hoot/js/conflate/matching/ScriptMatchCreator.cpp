@@ -41,7 +41,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 
