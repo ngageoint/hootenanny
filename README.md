@@ -43,7 +43,7 @@ In addition to conflating maps together, Hootenanny can also:
 * Derive changesets between maps and apply the changesets to external OSM data stores
 * Detect spoken languages in a map's tag data
 * Explore tag data
-* Gather statistics for a map
+* Gather statistics from a map
 * Identify road intersections in a map
 * Locate phone numbers geographically
 * Perturb map data for testing purposes
@@ -61,14 +61,6 @@ free tagging system allows the map to include an unlimited number of attributes 
 Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence 
 Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny). 
 
-# Installation
-Hootenanny is supported on Red Hat/CentOS:
-
-[Instructions](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md) to launch a Hootenanny CentOS virtual machine
-
-[Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation 
-to CentOS 7.x.
-
 # Documentation
 User and technical documentation may be found locally after installation in 'hoot/docs' or 
 [included with each release](https://github.com/ngageoint/hootenanny/releases). 
@@ -77,6 +69,14 @@ User and technical documentation may be found locally after installation in 'hoo
 
 If you have any support questions please create an issue in the [Hootenanny GitHub repository](https://github.com/ngageoint/hootenanny).
 
+# Installation
+Hootenanny is supported on Red Hat/CentOS:
+
+[Instructions](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md) to launch a Hootenanny CentOS virtual machine
+
+[Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation 
+to CentOS 7.x.
+
 # Web User Interface
 [Hootenanny's web user interface](https://github.com/ngageoint/hootenanny-ui) is built upon the open source 
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience. 
@@ -84,10 +84,10 @@ If you have any support questions please create an issue in the [Hootenanny GitH
 # Web Services API
 Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  See the User Documentation for more details.
 
-# Command Line
+# Command Line Interface
 Command line access is available and exposes additional functionalities not available from the web user interface.  See the "Usage" section below for examples, as well as the User Documentation.
 
-# Bindings
+# Programming Language Bindings
 Hootenanny has nodejs bindings available which expose core conflation capabilities.
 
 # Supported Data Formats
@@ -138,16 +138,11 @@ supports automated schema conversion between:
 
 Users are also able to define their own custom translations.  For custom translations, a specific mapping can be defined based on an 
 uploaded dataset using a semi-automated Translation Assistant.  More details on the translation capabilities of Hootenanny can be 
-found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
-
-# Data Exploration
-
-Hootenanny has a pluggable architecture that allows you to create your information gathering features for gleaning information from map 
-data, as illustrated in examples in the Usage section.  See the Hootenanny Developer Guide for more details on data exploration customization. 
+found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide. 
 
 # Usage
 
-See the Hootenanny User Guide for more usage examples and details on command input parameters.
+See the Hootenanny User Guide for additional usage examples and details on command input parameters.
 
 ## Basic
 
