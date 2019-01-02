@@ -30,7 +30,7 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 

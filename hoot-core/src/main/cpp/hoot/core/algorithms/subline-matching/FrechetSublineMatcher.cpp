@@ -33,7 +33,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/algorithms/FrechetDistance.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 using namespace geos::geom;
 using namespace std;

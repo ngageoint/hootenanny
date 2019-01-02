@@ -37,7 +37,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/RemoveWayOp.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 
 using namespace geos::geom;

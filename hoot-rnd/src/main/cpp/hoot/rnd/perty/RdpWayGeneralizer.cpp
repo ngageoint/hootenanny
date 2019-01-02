@@ -36,7 +36,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 using namespace std;
 

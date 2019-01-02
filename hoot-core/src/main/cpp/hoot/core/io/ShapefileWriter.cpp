@@ -40,7 +40,7 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/io/OgrOptions.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>

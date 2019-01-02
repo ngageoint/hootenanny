@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "NetworkUtils.h"
+#include "NetworkIoUtils.h"
 
 // Hoot
 #include <hoot/core/util/HootException.h>
@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-boost::shared_ptr<HootNetworkCookieJar> NetworkUtils::getUserSessionCookie(
+boost::shared_ptr<HootNetworkCookieJar> NetworkIoUtils::getUserSessionCookie(
   const QString userName, const QString accessToken, const QString accessTokenSecret,
   const QString url)
 {

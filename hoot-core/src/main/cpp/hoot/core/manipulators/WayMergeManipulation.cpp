@@ -43,7 +43,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/ops/RemoveWayOp.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
 // Qt

@@ -44,7 +44,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/DirectedGraph.h>
 #include <hoot/core/scoring/ShortestPath.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/GeometryPainter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>

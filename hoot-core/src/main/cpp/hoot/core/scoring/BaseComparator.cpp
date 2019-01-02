@@ -39,7 +39,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 

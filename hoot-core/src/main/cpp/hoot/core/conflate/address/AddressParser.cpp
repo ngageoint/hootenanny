@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/LibPostalInit.h>
+#include <hoot/core/conflate/address/LibPostalInit.h>
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/address/Address.h>

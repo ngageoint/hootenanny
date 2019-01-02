@@ -60,7 +60,7 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/DataProducer.h>
+#include <hoot/core/conflate/stats/DataProducer.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>

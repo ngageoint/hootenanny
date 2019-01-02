@@ -35,7 +35,7 @@
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/HootException.h>
 
 using namespace geos::geom;

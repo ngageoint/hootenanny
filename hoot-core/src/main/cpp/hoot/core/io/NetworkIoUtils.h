@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef NETWORK_UTILS_H
-#define NETWORK_UTILS_H
+#ifndef NETWORK_IO_UTILS_H
+#define NETWORK_IO_UTILS_H
 
 // Hoot
 #include <hoot/core/io/HootNetworkCookieJar.h>
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Various utilities for use in network programming
  */
-class NetworkUtils
+class NetworkIoUtils
 {
 
 public:
@@ -58,4 +58,4 @@ public:
 
 }
 
-#endif // NETWORK_UTILS_H
+#endif // NETWORK_IO_UTILS_H

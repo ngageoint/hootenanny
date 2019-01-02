@@ -41,7 +41,7 @@
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/MultiUseCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>

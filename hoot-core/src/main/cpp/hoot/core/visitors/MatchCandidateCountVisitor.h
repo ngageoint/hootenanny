@@ -28,7 +28,7 @@
 #define MATCH_CANDIDATE_COUNT_VISITOR_H
 
 // hoot
-#include <hoot/core/util/DataProducer.h>
+#include <hoot/core/conflate/stats/DataProducer.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 

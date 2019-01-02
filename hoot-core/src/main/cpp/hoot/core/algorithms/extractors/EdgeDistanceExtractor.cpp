@@ -38,7 +38,7 @@
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>

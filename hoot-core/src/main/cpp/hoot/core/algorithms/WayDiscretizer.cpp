@@ -36,7 +36,7 @@ using namespace geos::geom;
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 // Standard
 #include <iostream>

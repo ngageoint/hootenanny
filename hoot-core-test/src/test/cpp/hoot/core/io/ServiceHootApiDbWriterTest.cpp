@@ -38,7 +38,7 @@
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Settings.h>
 
 // Standard
