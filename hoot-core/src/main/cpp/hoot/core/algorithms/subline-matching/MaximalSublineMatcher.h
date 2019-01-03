@@ -61,6 +61,9 @@ public:
   /// @todo not used?  need some refactoring here
   virtual void setHeadingDelta(Meters /*headingDelta*/) { }
 
+  virtual QString getDescription() const
+  { return "Matches lines based on the maximal subline found"; }
+
 private:
 
   Radians _maxAngle;

@@ -33,6 +33,7 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -40,7 +41,7 @@ namespace hoot
 /**
  * Finds matching sublines in linear elements.
  */
-class SublineStringMatcher : public Configurable
+class SublineStringMatcher : public Configurable, public ApiEntityInfo
 {
 public:
 

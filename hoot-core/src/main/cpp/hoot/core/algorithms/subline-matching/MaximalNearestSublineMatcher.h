@@ -49,6 +49,9 @@ public:
 
   virtual void setHeadingDelta(Meters headingDelta) { _headingDelta = headingDelta; }
 
+  virtual QString getDescription() const
+  { return "Matches lines based on the maximal nearest subline found"; }
+
 private:
 
   Meters _minSplitSize;

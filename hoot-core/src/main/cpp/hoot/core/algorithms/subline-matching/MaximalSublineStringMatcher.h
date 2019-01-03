@@ -71,6 +71,9 @@ public:
 
   virtual void setSublineMatcher(boost::shared_ptr<SublineMatcher> sm);
 
+  virtual QString getDescription() const
+  { return "Matches lines based on the maximal subline string found"; }
+
 private:
 
   // for white box testing.

@@ -42,6 +42,8 @@
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 //  Qt
 #include <QTextStream>
@@ -311,6 +313,22 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString apiEntityType)
     ts << msg << endl;
     ts << getApiEntities<StringDistance>(
       StringDistance::className(), "string comparator", false, MAX_NAME_SIZE - 15);
+  }
+  else if (apiEntityType == "subline-matchers")
+  {
+    msg += "):";
+    msg.prepend("Subline Matchers");
+    ts << msg << endl;
+    ts << getApiEntities<SublineMatcher>(
+      SublineMatcher::className(), "subline matcher", false, MAX_NAME_SIZE - 15);
+  }
+  else if (apiEntityType == "subline-string-matchers")
+  {
+    msg += "):";
+    msg.prepend("Subline Matchers");
+    ts << msg << endl;
+    ts << getApiEntities<SublineStringMatcher>(
+      SublineStringMatcher::className(), "subline string matcher", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "value-aggregators")
   {

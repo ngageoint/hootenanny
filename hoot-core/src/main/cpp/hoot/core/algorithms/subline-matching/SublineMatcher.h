@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -37,9 +38,10 @@ namespace hoot
  * Given two ways, calculate zero or more likely matching sublines. The definition of a matching
  * subline is implementation dependent.
  */
-class SublineMatcher
+class SublineMatcher : public ApiEntityInfo
 {
 public:
+
   static std::string className() { return "hoot::SublineMatcher"; }
 
   SublineMatcher() {}

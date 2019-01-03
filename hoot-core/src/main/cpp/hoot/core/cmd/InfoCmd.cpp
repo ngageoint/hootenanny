@@ -299,6 +299,8 @@ private:
     options.append("--mergers");
     options.append("--operators");
     options.append("--string-comparators");
+    options.append("--subline-matchers");
+    options.append("--subline-string-matchers");
     options.append("--tag-mergers");
     options.append("--value-aggregators");
     return options;

@@ -61,6 +61,9 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
+  virtual QString getDescription() const
+  { return "Matches lines based on the Frechet Distance algorithm"; }
+
 private:
 
   Radians _maxAngle;
