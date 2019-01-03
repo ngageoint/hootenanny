@@ -122,9 +122,6 @@ public:
     HOOT_STR_EQUALS("leisure=badvalue1", avg.toStdString());
   }
 
-  /**
-   * Test calculating the average between two tags with weights.
-   */
   void categoryTest()
   {
     OsmSchema uut;
