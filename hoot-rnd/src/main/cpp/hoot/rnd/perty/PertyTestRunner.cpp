@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyTestRunner.h"
 
 // hoot
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/perty/PertyTestRunResult.h>
 #include <hoot/rnd/perty/PertyMatchScorer.h>
