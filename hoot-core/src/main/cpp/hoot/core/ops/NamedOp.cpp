@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NamedOp.h"
 
@@ -92,37 +92,6 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
       }
 
       t->apply(map);
-
-      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
-      {
-        LOG_INFO(
-          statusInfo->getCompletedStatusMessage() + " in " +
-          StringUtils::secondsToDhms(timer.elapsed()));
-      }
-    }
-    else if (f.hasBase<ConstElementVisitor>(s.toStdString()))
-    {
-      boost::shared_ptr<ConstElementVisitor> t(
-        Factory::getInstance().constructObject<ConstElementVisitor>(s));
-
-      boost::shared_ptr<OperationStatusInfo> statusInfo =
-        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
-      if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
-      {
-        LOG_INFO(statusInfo->getInitStatusMessage());
-      }
-      else
-      {
-        LOG_INFO("Applying visitor: " << s);
-      }
-
-      Configurable* c = dynamic_cast<Configurable*>(t.get());
-      if (_conf != 0 && c != 0)
-      {
-        c->setConfiguration(*_conf);
-      }
-
-      map->visitRw(*t);
 
       if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {

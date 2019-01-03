@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootServicesLanguageInfoClient.h"
@@ -34,7 +34,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/HootNetworkRequest.h>
-#include <hoot/core/util/NetworkUtils.h>
+#include <hoot/core/io/NetworkIoUtils.h>
 #include <hoot/core/auth/HootServicesLoginManager.h>
 
 // Qt
@@ -92,7 +92,7 @@ void HootServicesLanguageInfoClient::setConfiguration(const Settings& conf)
     // get a session cookie associated with the user information passed into the command calling
     // this class
     _cookies =
-      NetworkUtils::getUserSessionCookie(
+      NetworkIoUtils::getUserSessionCookie(
         opts.getHootServicesAuthUserName(), opts.getHootServicesAuthAccessToken(),
         opts.getHootServicesAuthAccessTokenSecret(), _getDetectableUrl());
   }
