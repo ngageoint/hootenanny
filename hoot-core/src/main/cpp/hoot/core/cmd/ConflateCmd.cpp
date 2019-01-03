@@ -250,13 +250,15 @@ int ConflateCmd::runSimple(QStringList args)
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
 
-  //TODO: this won't work...need a visitor or op
-  if (conf().hasKey("tag.filter"))
-  {
-    QStringList preConflateOps = conf().get("conflate.pre.ops").toStringList();
-    preConflateOps.prepend("hoot::TagCriterion2");
-    conf().set("conflate.pre.ops", preConflateOps);
-  }
+  //FilteredVisitor filteredVis1(poiCrit, statusVisitor);
+  //map->visitRw(filteredVis1);
+//  if (conf().hasKey("tag.filter"))
+//  {
+//    QStringList preConflateOps = conf().get("conflate.pre.ops").toStringList();
+//    preConflateOps.prepend("hoot::TagCriterion2");
+//    conf().set("conflate.pre.ops", preConflateOps);
+//  }
+
 
   LOG_INFO("Applying pre-conflation operations...");
   NamedOp(ConfigOptions().getConflatePreOps()).apply(map);

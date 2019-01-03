@@ -121,13 +121,6 @@ public:
       converter.setFeatureReadLimit(featureReadLimit);
     }
 
-    //TODO: this won't work...need a visitor or op
-    if (conf().hasKey("tag.filter"))
-    {
-      QStringList preConflateOps = conf().get("conflate.pre.ops").toStringList();
-      preConflateOps.prepend("hoot::TagCriterion2");
-      conf().set("conflate.pre.ops", preConflateOps);
-    }
     converter.setConfiguration(conf());
 
     converter.convert(inputs, output);
