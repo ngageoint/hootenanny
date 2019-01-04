@@ -75,6 +75,11 @@ class HighwayMatchVisitor : public ConstElementVisitor
 {
 public:
 
+  HighwayMatchVisitor(ElementCriterionPtr filter) :
+  _filter(filter)
+  {
+  }
+
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    *
@@ -228,7 +233,7 @@ public:
     }
   }
 
-  static bool isMatchCandidate(ConstElementPtr element)
+  bool isMatchCandidate(ConstElementPtr element)
   {
     LOG_VART(element->getElementId());
 
@@ -344,7 +349,7 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
 
 bool HighwayMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
-  return HighwayMatchVisitor::isMatchCandidate(element);
+  return HighwayMatchVisitor(_filter).isMatchCandidate(element);
 }
 
 boost::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()

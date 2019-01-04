@@ -76,12 +76,13 @@ public:
    */
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
     std::vector<const Match*>& result, boost::shared_ptr<BuildingRfClassifier> rf,
-    ConstMatchThresholdPtr threshold, Status matchStatus = Status::Invalid,
-    bool reviewMatchesOtherThanOneToOne = false) :
+    ConstMatchThresholdPtr threshold, ElementCriterionPtr filter = ElementCriterionPtr(),
+    Status matchStatus = Status::Invalid, bool reviewMatchesOtherThanOneToOne = false) :
     _map(map),
     _result(result),
     _rf(rf),
     _mt(threshold),
+    _filter(filter),
     _matchStatus(matchStatus),
     _reviewMatchesOtherThanOneToOne(reviewMatchesOtherThanOneToOne)
   {
@@ -216,8 +217,12 @@ public:
     }
   }
 
-  static bool isMatchCandidate(ConstElementPtr element)
+  bool isMatchCandidate(ConstElementPtr element)
   {
+    if (_filter && !_filter->isSatisfied(element))
+    {
+      return false;
+    }
     return BuildingCriterion().isSatisfied(element);
   }
 
@@ -258,6 +263,7 @@ private:
   std::set<ElementId> _empty;
   boost::shared_ptr<BuildingRfClassifier> _rf;
   ConstMatchThresholdPtr _mt;
+  ElementCriterionPtr _filter;
   Status _matchStatus;
   bool _reviewMatchesOtherThanOneToOne;
   int _neighborCountMax;
@@ -309,7 +315,7 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<
   LOG_INFO("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(
-    map, matches, _getRf(), threshold, Status::Unknown1,
+    map, matches, _getRf(), threshold, _filter, Status::Unknown1,
     ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne());
   map->visitRo(v);
 }
