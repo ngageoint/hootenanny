@@ -71,6 +71,15 @@ using namespace Tgs;
 class BuildingMatchVisitor : public ConstElementVisitor
 {
 public:
+
+  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+                       ElementCriterionPtr filter = ElementCriterionPtr()) :
+  _map(map),
+  _result(result),
+  _filter(filter)
+  {
+  }
+
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
@@ -237,7 +246,7 @@ public:
 
       // Only index elements that isMatchCandidate(e)
       boost::function<bool (ConstElementPtr e)> f =
-        boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
+        boost::bind(&BuildingMatchVisitor::isMatchCandidate, this, _1);
       boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
@@ -357,9 +366,10 @@ boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
   return _rf;
 }
 
-bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
+bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map)
 {
-  return BuildingMatchVisitor::isMatchCandidate(element);
+  std::vector<const Match*> matches;
+  return BuildingMatchVisitor(map, matches, _filter).isMatchCandidate(element);
 }
 
 boost::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()

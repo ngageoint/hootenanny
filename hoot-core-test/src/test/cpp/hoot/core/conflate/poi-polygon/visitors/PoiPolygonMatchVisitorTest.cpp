@@ -85,12 +85,14 @@ public:
 
   void runIsCandidateTest()
   {
+    std::vector<const Match*> result;
+
     OsmMapPtr map = getTestMap1();
     CPPUNIT_ASSERT(
-      PoiPolygonMatchVisitor::_isMatchCandidate(
+      PoiPolygonMatchVisitor(map, result).isMatchCandidate(
         map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0])));
     CPPUNIT_ASSERT(
-      !PoiPolygonMatchVisitor::_isMatchCandidate(
+      !PoiPolygonMatchVisitor(map, result).isMatchCandidate(
         map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0])));
 
     OsmXmlReader reader;
@@ -99,7 +101,7 @@ public:
     reader.read("test-files/ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
     CPPUNIT_ASSERT(
-      !PoiPolygonMatchVisitor::_isMatchCandidate(
+      !PoiPolygonMatchVisitor(map, result).isMatchCandidate(
         map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0])));
   }
 };

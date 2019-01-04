@@ -51,8 +51,11 @@ class PoiPolygonMatchVisitor : public ConstElementVisitor
 public:
 
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+                         ElementCriterionPtr filter = ElementCriterionPtr());
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
                          ConstMatchThresholdPtr threshold,
-                         boost::shared_ptr<PoiPolygonRfClassifier> rf);
+                         boost::shared_ptr<PoiPolygonRfClassifier> rf,
+                         ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor();
 
   /**
@@ -62,6 +65,8 @@ public:
    * @param e element to examine
    */
   virtual void visit(const ConstElementPtr& e);
+
+  bool isMatchCandidate(ConstElementPtr element);
 
   virtual QString getDescription() const { return ""; }
 
@@ -99,13 +104,12 @@ private:
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
+  ElementCriterionPtr _filter;
 
   void _checkForMatch(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPoiIds(const boost::shared_ptr<const Element>& e);
   Meters _getSearchRadius(const boost::shared_ptr<const Element>& e) const;
-
-  static bool _isMatchCandidate(ConstElementPtr element);
 
   boost::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
   boost::shared_ptr<Tgs::HilbertRTree>& _getPoiIndex();

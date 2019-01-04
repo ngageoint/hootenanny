@@ -45,10 +45,20 @@
 namespace hoot
 {
 
- PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
-                                                std::vector<const Match*>& result,
-                                                ConstMatchThresholdPtr threshold,
-                                                boost::shared_ptr<PoiPolygonRfClassifier> rf) :
+PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
+                                               std::vector<const Match*>& result,
+                                               ElementCriterionPtr filter) :
+_map(map),
+_result(result),
+_filter(filter)
+{
+}
+
+PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
+                                               std::vector<const Match*>& result,
+                                               ConstMatchThresholdPtr threshold,
+                                               boost::shared_ptr<PoiPolygonRfClassifier> rf,
+                                               ElementCriterionPtr filter) :
 _map(map),
 _result(result),
 _neighborCountMax(-1),
@@ -57,7 +67,8 @@ _elementsEvaluated(0),
 _threshold(threshold),
 _rf(rf),
 _numElementsVisited(0),
-_numMatchCandidatesVisited(0)
+_numMatchCandidatesVisited(0),
+_filter(filter)
 {
   ConfigOptions opts = ConfigOptions();
   _enableAdvancedMatching = opts.getPoiPolygonEnableAdvancedMatching();
@@ -180,7 +191,7 @@ Meters PoiPolygonMatchVisitor::_getSearchRadius(const boost::shared_ptr<const El
 
 void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
 {
-  if (_isMatchCandidate(e))
+  if (isMatchCandidate(e))
   {
     //Technically, the density based density matches depends on this data too, but since that
     //code has been disabled, this check is good enough.
@@ -208,8 +219,13 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-bool PoiPolygonMatchVisitor::_isMatchCandidate(ConstElementPtr element)
+bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element)
 {
+  if (_filter && !_filter->isSatisfied(element))
+  {
+    return false;
+  }
+
   //simpler logic to just examine each POI and check for surrounding polys, rather than check both
   //POIs and their surrounding polys and polys and their surrounding POIs; note that this is
   //different than PoiPolygonMatchCreator::isMatchCandidate, which is looking at both to appease

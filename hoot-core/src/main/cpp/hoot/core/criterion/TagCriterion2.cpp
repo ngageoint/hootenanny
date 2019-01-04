@@ -48,7 +48,7 @@ TagCriterion2::TagCriterion2(const QString filter)
 
 void TagCriterion2::setConfiguration(const Settings& s)
 {
-  _parseFilterString(ConfigOptions(s).getTagFilter());
+  _parseFilterString(ConfigOptions(s).getConflateTagFilter());
 }
 
 void TagCriterion2::_parseFilterString(const QString /*filterStr*/)

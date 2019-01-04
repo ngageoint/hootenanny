@@ -76,7 +76,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 
-  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf());
+  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _filter);
   map->visitRo(v);
 
   if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))

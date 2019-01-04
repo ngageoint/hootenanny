@@ -139,7 +139,8 @@ void MatchFactory::registerCreator(QString c)
 
     if (conf().hasKey("conflate.tag.filter"))
     {
-      boost::shared_ptr<TagCriterion2> filter(new TagCriterion2(conf().get("conflate.tag.filter")));
+      boost::shared_ptr<TagCriterion2> filter(
+        new TagCriterion2(conf().get("conflate.tag.filter").toString()));
       mc->setCriterion(filter);
     }
 

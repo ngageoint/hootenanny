@@ -75,7 +75,10 @@ class HighwayMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  HighwayMatchVisitor(ElementCriterionPtr filter) :
+  HighwayMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
+                      ElementCriterionPtr filter = ElementCriterionPtr()) :
+  _map(map),
+  _result(result),
   _filter(filter)
   {
   }
@@ -256,7 +259,7 @@ public:
 
       // Only index elements satisfy isMatchCandidate(e)
       boost::function<bool (ConstElementPtr e)> f =
-        boost::bind(&HighwayMatchVisitor::isMatchCandidate, _1);
+        boost::bind(&HighwayMatchVisitor::isMatchCandidate, this, _1);
       boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
@@ -326,7 +329,7 @@ Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid
     _tagAncestorDiff, map->getElement(eid1), map->getElement(eid2));
 }
 
-void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
+void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
   LOG_INFO("Creating matches with: " << className() << "...");
@@ -347,9 +350,10 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
   return result;
 }
 
-bool HighwayMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
+bool HighwayMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map)
 {
-  return HighwayMatchVisitor(_filter).isMatchCandidate(element);
+  vector<const Match*> matches;
+  return HighwayMatchVisitor(map, matches, _filter).isMatchCandidate(element);
 }
 
 boost::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
