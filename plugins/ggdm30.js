@@ -1684,7 +1684,7 @@ ggdm30 = {
         }
         else
         {
-            if (ggdm30.config.OgrAddUuid == 'true') attrs.UFI = toosm().replace('{','').replace('}','');
+            if (ggdm30.config.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
         }
 
         // Add Weather Restrictions to transportation features
