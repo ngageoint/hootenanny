@@ -80,6 +80,8 @@ public:
 
   virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() = 0;
 
+  virtual void setCriterion(const ElementCriterionPtr& filter) { _filter = filter; }
+
   /**
    * Arguments are passed in by the MatchFactory.
    */
@@ -98,6 +100,7 @@ public:
 protected:
 
   QString _description;
+  ElementCriterionPtr _filter;
 };
 
 typedef boost::shared_ptr<MatchCreator> MatchCreatorPtr;

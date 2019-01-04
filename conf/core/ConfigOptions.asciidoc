@@ -508,6 +508,14 @@ See also:
 The string that lists the types of conflation used in the user interface.  The possible values
 are: reference, cookieCutter, average, and advancedConflation.
 
+=== conflate.tag.filter
+
+* Data Type: string
+* Default Value: ``
+
+A JSON tag filter that is applied to filter feature before conflation.  See the Hootenanny
+User Guide for filter usage examples.
+
 === conflator.manipulators
 
 * Data Type: list
@@ -3406,14 +3414,6 @@ Primarily, this is useful within the node.js interface.
 
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
-
-=== tag.filter
-
-* Data Type: string
-* Default Value: ``
-
-A JSON tag filter that is applied before conflation or during ingest/export.  See the Hootenanny
-User Guide for filter usage examples.
 
 === tag.key.contains.criterion.text
 

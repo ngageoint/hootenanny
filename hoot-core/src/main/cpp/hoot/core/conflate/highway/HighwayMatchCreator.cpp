@@ -77,19 +77,23 @@ public:
 
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
+   *
+   * @todo This constructor has gotten a little out of hand.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
     vector<const Match*>& result, boost::shared_ptr<HighwayClassifier> c,
     boost::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
     ConstMatchThresholdPtr threshold,
-    boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff):
+    boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
+    ElementCriterionPtr filter = ElementCriterionPtr()):
     _map(map),
     _result(result),
     _c(c),
     _sublineMatcher(sublineMatcher),
     _matchStatus(matchStatus),
     _threshold(threshold),
-    _tagAncestorDiff(tagAncestorDiff)
+    _tagAncestorDiff(tagAncestorDiff),
+    _filter(filter)
   {
     ConfigOptions opts = ConfigOptions();
     _neighborCountMax = -1;
@@ -111,6 +115,8 @@ public:
 
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
+    LOG_VART(e->getElementId());
+
     boost::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(getSearchRadius(e));
 
@@ -152,6 +158,15 @@ public:
     boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ConstElementPtr e1, ConstElementPtr e2)
   {
+    if (e1)
+    {
+      LOG_VART(e1->getElementId());
+    }
+    if (e2)
+    {
+      LOG_VART(e2->getElementId());
+    }
+
     HighwayMatch* result = 0;
 
     HighwayCriterion highwayCrit;
@@ -215,6 +230,13 @@ public:
 
   static bool isMatchCandidate(ConstElementPtr element)
   {
+    LOG_VART(element->getElementId());
+
+    if (_filter && !_filter->isSatisfied(element))
+    {
+      return false;
+    }
+
     return HighwayCriterion().isSatisfied(element);
   }
 
@@ -264,6 +286,7 @@ private:
   ConstMatchThresholdPtr _threshold;
   boost::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
   double _highwayMaxEnumDiff;
+  ElementCriterionPtr _filter;
 
   // Used for finding neighbors
   boost::shared_ptr<HilbertRTree> _index;
@@ -304,7 +327,8 @@ void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   LOG_INFO("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   HighwayMatchVisitor v(
-    map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff);
+    map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
+    _filter);
   map->visitRo(v);
 }
 

@@ -32,6 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/TagCriterion2.h>
 
 //Qt
 #include <QString>
@@ -54,6 +55,9 @@ MatchFactory::MatchFactory()
 
 Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const
 {
+  LOG_VART(eid1);
+  LOG_VART(eid2);
+
   for (size_t i = 0; i < _creators.size(); ++i)
   {
     Match* m = _creators[i]->createMatch(map, eid1, eid2);
@@ -132,6 +136,13 @@ void MatchFactory::registerCreator(QString c)
     args.removeFirst();
     boost::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(className));
+
+    if (conf().hasKey("conflate.tag.filter"))
+    {
+      boost::shared_ptr<TagCriterion2> filter(new TagCriterion2(conf().get("conflate.tag.filter")));
+      mc->setCriterion(filter);
+    }
+
     _theInstance->registerCreator(mc);
 
     if (args.size() > 0)
