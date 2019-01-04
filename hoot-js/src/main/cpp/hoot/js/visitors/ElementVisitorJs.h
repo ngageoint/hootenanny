@@ -44,11 +44,13 @@ class ConstElementVisitor;
 class ElementVisitorJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   boost::shared_ptr<ConstElementVisitor> getVisitor() { return _v; }
 
 private:
+
   ElementVisitorJs(ConstElementVisitor* v) : _v(v) {}
   ElementVisitorJs() {}
   ~ElementVisitorJs() {}
