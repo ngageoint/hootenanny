@@ -4932,26 +4932,26 @@ tds61.rules = {
     'PBA030':'PhysiographyPnt', // Physiography
     'ABA030':'PhysiographySrf', // Physiography
     'ABA040':'HydrographySrf', // Hydrography
-    'ABB005':'PortorHarbourSrf', // Port or Harbour
-    'PBB009':'PortorHarbourPnt', // Port or Harbour
-    'ABB009':'PortorHarbourSrf', // Port or Harbour
-    'LBB081':'PortorHarbourCrv', // Port or Harbour
-    'ABB081':'PortorHarbourSrf', // Port or Harbour
-    'LBB082':'PortorHarbourCrv', // Port or Harbour
-    'ABB082':'PortorHarbourSrf', // Port or Harbour
-    'ABB090':'PortorHarbourSrf', // Port or Harbour
+    'ABB005':'PortHarbourSrf', // Port or Harbour
+    'PBB009':'PortHarbourPnt', // Port or Harbour
+    'ABB009':'PortHarbourSrf', // Port or Harbour
+    'LBB081':'PortHarbourCrv', // Port or Harbour
+    'ABB081':'PortHarbourSrf', // Port or Harbour
+    'LBB082':'PortHarbourCrv', // Port or Harbour
+    'ABB082':'PortHarbourSrf', // Port or Harbour
+    'ABB090':'PortHarbourSrf', // Port or Harbour
     'PBB110':'HydrographyPnt', // Hydrography
     'ABB110':'HydrographySrf', // Hydrography
-    'ABB199':'PortorHarbourSrf', // Port or Harbour
-    'PBB201':'PortorHarbourPnt', // Port or Harbour
-    'ABB201':'PortorHarbourSrf', // Port or Harbour
-    'PBB241':'PortorHarbourPnt', // Port or Harbour
-    'ABB241':'PortorHarbourSrf', // Port or Harbour
+    'ABB199':'PortHarbourSrf', // Port or Harbour
+    'PBB201':'PortHarbourPnt', // Port or Harbour
+    'ABB201':'PortHarbourSrf', // Port or Harbour
+    'PBB241':'PortHarbourPnt', // Port or Harbour
+    'ABB241':'PortHarbourSrf', // Port or Harbour
     'PBC050':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
     'ABC050':'HydrographicAidtoNavigationSrf', // Hydrographic Aid to Navigation
     'PBC070':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
-    'PBD100':'PortorHarbourPnt', // Port or Harbour
-    'ABD100':'PortorHarbourSrf', // Port or Harbour
+    'PBD100':'PortHarbourPnt', // Port or Harbour
+    'ABD100':'PortHarbourSrf', // Port or Harbour
     'PBD115':'HydrographyPnt', // Hydrography
     'ABD115':'HydrographySrf', // Hydrography
     'PBD140':'HydrographyPnt', // Hydrography
@@ -5003,7 +5003,7 @@ tds61.rules = {
     'ABH220':'UtilityInfrastructureSrf', // Utility Infrastructure
     'PBH230':'HydrographyPnt', // Hydrography
     'ABH230':'HydrographySrf', // Hydrography
-    'ABI005':'PortorHarbourSrf', // Port or Harbour
+    'ABI005':'PortHarbourSrf', // Port or Harbour
     'PBI006':'TransportationWaterPnt', // Transportation - Water
     'LBI006':'TransportationWaterCrv', // Transportation - Water
     'ABI006':'TransportationWaterSrf', // Transportation - Water
