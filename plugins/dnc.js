@@ -39,11 +39,6 @@ dnc = {
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         dnc.rawSchema = dnc.schema.getDbSchema();
 
-        // Debug:
-        // print("dncAttrLookup: Start");
-        // translate.dumpLookup(dncAttrLookup);
-        // print("dncAttrLookup: End");
-
         // Now add some fields to hold OSM specific information on export
         for (var i = 0, schemaLen = dnc.rawSchema.length; i < schemaLen; i++)
         {
@@ -902,21 +897,21 @@ dnc = {
         //     delete tags.barrier; // Take away the walls...
         // }
 
-        // An "amenitiy" can be a building or a thing
-        // If appropriate, make the "amenity" into a building
-        // This list is taken from the OSM Wiki and Taginfo
-        var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding','ferry_terminal'
-            ]; // End bldArray
+        // // An "amenitiy" can be a building or a thing
+        // // If appropriate, make the "amenity" into a building
+        // // This list is taken from the OSM Wiki and Taginfo
+        // var notBuildingList = [
+        //     'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+        //     'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+        //     'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+        //     'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+        //     'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+        //     'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+        //     'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+        //     'trailer_park','game_feeding','ferry_terminal'
+        //     ]; // End bldArray
 
-        if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
+        // if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
 
         // Places, localities and regions
         switch (tags.place)
@@ -1094,6 +1089,22 @@ dnc = {
                 }
             }
         }
+
+        // An "amenitiy" can be a building or a thing
+        // If appropriate, make the "amenity" into a building
+        // This list is taken from the OSM Wiki and Taginfo
+        var notBuildingList = [
+            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+            'trailer_park','game_feeding','ferry_terminal'
+            ]; // End bldArray
+
+        if (!attrs.F_CODE && tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
 
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
@@ -1445,7 +1456,6 @@ dnc = {
         {
             dnc.configOut = {};
             dnc.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-            dnc.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
             dnc.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             dnc.configOut.OgrThrowError = config.getOgrThrowError();
             dnc.configOut.OgrAddUuid = config.getOgrAddUuid();

@@ -363,7 +363,7 @@ translate = {
                         continue;
                     }
 
-                    hoot.logTrace('Lookup value not found for column:: (' + col + '=' + value + ')');
+                    hoot.logDebug('Lookup value not found for column:: (' + col + '=' + value + ')');
 
                     // The following is used for export. If we have an attribute value that can't
                     // find a rule for, we add it to the OTH Field.
@@ -375,7 +375,7 @@ translate = {
                         othVal = '(' + otherVal[0] + ':' + value + ')';
                         outList.OTH = translate.appendValue(outList.OTH,othVal,' ');
 
-                        hoot.logTrace('Adding to OTH field:: ' + othVal);
+                        hoot.logDebug('Adding to OTH field:: ' + othVal);
 
                         // Set the output attribute to "other"
                         outList[otherVal[0]] = otherVal[1];
@@ -387,7 +387,7 @@ translate = {
                     } // End if otherVal
                     else
                     {
-                        hoot.logTrace('Could not add ::' + col + '=' + value + ':: to the OTH field');
+                        hoot.logDebug('Could not add ::' + col + '=' + value + ':: to the OTH field');
                     }
                 } // End value != ''
             } // End col in lookup
