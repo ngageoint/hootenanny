@@ -897,7 +897,7 @@ dnc = {
         //     delete tags.barrier; // Take away the walls...
         // }
 
-        // // An "amenitiy" can be a building or a thing
+        // // An "amenity" can be a building or a thing
         // // If appropriate, make the "amenity" into a building
         // // This list is taken from the OSM Wiki and Taginfo
         // var notBuildingList = [
