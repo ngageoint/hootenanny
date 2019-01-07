@@ -34,6 +34,7 @@
 
 // Qt
 #include <QString>
+#include <QMap>
 
 namespace hoot
 {
@@ -63,11 +64,11 @@ private:
 
   friend class TagCriterion2Test;
 
-  QList<TagFilter> _mustHave;
-  QList<TagFilter> _shouldHave;
-  QList<TagFilter> _mustNotHave;
+  QMap<QString, QList<TagFilter>> _tagFilters;
 
   void _parseFilterString(const QString filterStr);
+  void _loadTagFilters(const QString tagFilterType, boost::shared_ptr<pt::ptree> propTree);
+
   bool _elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const;
 };
 

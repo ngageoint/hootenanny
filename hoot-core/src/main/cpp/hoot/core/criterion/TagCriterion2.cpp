@@ -113,26 +113,22 @@ void TagCriterion2::_parseFilterString(const QString filterStr)
      }
    */
 
-  LOG_TRACE("must filters:");
-  for (pt::ptree::value_type& tagFilterPart : propTree->get_child("must"))
-  {
-    _mustHave.append(TagFilter::fromJson(tagFilterPart));
-  }
-  LOG_VART(_mustHave.size());
+  _tagFilters.clear();
+  _loadTagFilters("must", propTree);
+  _loadTagFilters("should", propTree);
+  _loadTagFilters("must_not", propTree);
+}
 
-  LOG_TRACE("should filters:");
-  for (pt::ptree::value_type& tagFilterPart : propTree->get_child("should"))
+void TagCriterion2::_loadTagFilters(const QString tagFilterType,
+                                    boost::shared_ptr<pt::ptree> propTree)
+{
+  LOG_TRACE("Loading " << tagFilterType << " filters...");
+  _tagFilters[tagFilterType].clear();
+  for (pt::ptree::value_type& tagFilterPart : propTree->get_child(tagFilterType.toStdString()))
   {
-    _shouldHave.append(TagFilter::fromJson(tagFilterPart));
+    _tagFilters[tagFilterType].append(TagFilter::fromJson(tagFilterPart));
   }
-  LOG_VART(_shouldHave.size());
-
-  LOG_TRACE("must not filters:");
-  for (pt::ptree::value_type& tagFilterPart : propTree->get_child("must_not"))
-  {
-    _mustNotHave.append(TagFilter::fromJson(tagFilterPart));
-  }
-  LOG_VART(_mustNotHave.size());
+  LOG_VART(_tagFilters[tagFilterType].size());
 }
 
 bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const
@@ -156,6 +152,7 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
     keyMatcher.setPatternSyntax(QRegExp::Wildcard);
     QRegExp valueMatcher(filter.getValue());
     valueMatcher.setPatternSyntax(QRegExp::Wildcard);
+
     for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
     {
       if (!keyMatched && keyMatcher.exactMatch(tagItr.key()))
@@ -186,25 +183,25 @@ bool TagCriterion2::isSatisfied(const ConstElementPtr& e) const
 {
   //TODO: add similarity and aliases
 
-  for (int i = 0; i < _mustHave.size(); i++)
+  for (int i = 0; i < _tagFilters["must"].size(); i++)
   {
-    if (!_elementPassesTagFilter(e, _mustHave.at(i)))
+    if (!_elementPassesTagFilter(e, _tagFilters["must"].at(i)))
     {
       return false;
     }
   }
 
-  for (int i = 0; i < _mustNotHave.size(); i++)
+  for (int i = 0; i < _tagFilters["must_not"].size(); i++)
   {
-    if (_elementPassesTagFilter(e, _mustNotHave.at(i)))
+    if (_elementPassesTagFilter(e, _tagFilters["must_not"].at(i)))
     {
       return false;
     }
   }
 
-  for (int i = 0; i < _shouldHave.size(); i++)
+  for (int i = 0; i < _tagFilters["should"].size(); i++)
   {
-    if (_elementPassesTagFilter(e, _shouldHave.at(i)))
+    if (_elementPassesTagFilter(e, _tagFilters["should"].at(i)))
     {
       return true;
     }

@@ -36,61 +36,16 @@ class TagCriterion2Test : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagCriterion2Test);
   CPPUNIT_TEST(runMustTest);
-  CPPUNIT_TEST(runShouldTest);
-  CPPUNIT_TEST(runMustNotTest);
-  CPPUNIT_TEST(runValueWildcardTest);
-  CPPUNIT_TEST(runKeyWildcardTest);
-  CPPUNIT_TEST(runAliasTest);
-  CPPUNIT_TEST(runSimilarityTest);
+//  CPPUNIT_TEST(runShouldTest);
+//  CPPUNIT_TEST(runMustNotTest);
+//  CPPUNIT_TEST(runValueWildcardTest);
+//  CPPUNIT_TEST(runKeyWildcardTest);
+//  CPPUNIT_TEST(runAliasTest);
+//  CPPUNIT_TEST(runSimilarityTest);
+//  CPPUNIT_TEST(runMultiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  /*
-   * {
-       "must":
-       [
-         {
-           "filter": "tourism=hotel",
-           "allowAliases": "true"
-         }
-       ]
-       "should":
-       [
-         {
-           "filter": "amenity=restaurant",
-           "similarityThreshold": "0.8"
-         },
-         {
-           "filter": "amenity=place_of_worship"
-         },
-         {
-           "filter": "*address*=*"
-         },
-         {
-           "filter": "poi*=*"
-         },
-         {
-           "filter": "*building=*"
-         },
-         {
-           "filter": "*=*address*"
-         },
-         {
-           "filter": "*=poi*"
-         },
-         {
-           "filter": "*=*building"
-         }
-       ],
-       "must_not":
-       [
-         {
-           "filter": "amenity=chapel"
-         }
-       ]
-     }
-   */
 
   void runMustTest()
   {
@@ -141,6 +96,11 @@ public:
   }
 
   void runSimilarityTest()
+  {
+
+  }
+
+  void runMultiTest()
   {
 
   }
