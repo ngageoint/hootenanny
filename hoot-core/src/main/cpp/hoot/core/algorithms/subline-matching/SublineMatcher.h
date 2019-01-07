@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SUBLINEMATCHER_H
 #define SUBLINEMATCHER_H
 
 // hoot
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -37,9 +38,10 @@ namespace hoot
  * Given two ways, calculate zero or more likely matching sublines. The definition of a matching
  * subline is implementation dependent.
  */
-class SublineMatcher
+class SublineMatcher : public ApiEntityInfo
 {
 public:
+
   static std::string className() { return "hoot::SublineMatcher"; }
 
   SublineMatcher() {}

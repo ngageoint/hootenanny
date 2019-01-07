@@ -85,7 +85,7 @@ public:
         {
           populateCriterionConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(ConstElementVisitor::className()))
+        else if (str(obj->Get(baseClass())) == QString::fromStdString(ElementVisitor::className()))
         {
           populateVisitorConsumer<T>(consumer, v);
         }

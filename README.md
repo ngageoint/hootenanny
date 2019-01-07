@@ -576,6 +576,12 @@ Requires language translation server installation.  See the Hootenanny Install G
 
     # List all available tag value aggregators
     hoot info --value-aggregators
+    
+    # List all available subline matchers
+    hoot info --subline-matchers
+    
+    # List all available subline string matchers
+    hoot info --subline-string-matchers
 
 # Redistribution
 Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe.  The government has 

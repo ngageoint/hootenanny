@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SUBLINESTRINGMATCHER_H
 #define SUBLINESTRINGMATCHER_H
@@ -33,6 +33,7 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -40,7 +41,7 @@ namespace hoot
 /**
  * Finds matching sublines in linear elements.
  */
-class SublineStringMatcher : public Configurable
+class SublineStringMatcher : public Configurable, public ApiEntityInfo
 {
 public:
 
