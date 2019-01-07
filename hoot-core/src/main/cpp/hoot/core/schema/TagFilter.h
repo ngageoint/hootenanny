@@ -56,6 +56,8 @@ public:
 
   static TagFilter fromJson(const pt::ptree::value_type& tagFilterPart);
 
+  QString toString() const;
+
 private:
 
   QString _key;

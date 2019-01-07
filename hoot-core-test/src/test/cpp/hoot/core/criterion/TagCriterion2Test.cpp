@@ -38,56 +38,321 @@ class TagCriterion2Test : public HootTestFixture
   CPPUNIT_TEST(runMustTest);
 //  CPPUNIT_TEST(runShouldTest);
 //  CPPUNIT_TEST(runMustNotTest);
-//  CPPUNIT_TEST(runValueWildcardTest);
-//  CPPUNIT_TEST(runKeyWildcardTest);
+//  CPPUNIT_TEST(runKeyWildcard1Test);
+//  CPPUNIT_TEST(runKeyWildcard2Test);
+//  CPPUNIT_TEST(runKeyWildcard3Test);
+//  CPPUNIT_TEST(runKeyWildcard4Test);
+//  CPPUNIT_TEST(runValueWildcard1Test);
+//  CPPUNIT_TEST(runValueWildcard2Test);
+//  CPPUNIT_TEST(runValueWildcard3Test);
 //  CPPUNIT_TEST(runAliasTest);
 //  CPPUNIT_TEST(runSimilarityTest);
 //  CPPUNIT_TEST(runMultiTest);
+  //TODO: error tests
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void runMustTest()
   {
-//    QStringList kvps;
-//    kvps.append("amenity=school");
-//    kvps.append("poi=yes");
+    const QString filter =
+      "{ \"must\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }";
+    TagCriterion2 uut(filter);
 
-//    TagCriterion uut;
-//    uut.setKvps(kvps);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
-//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    node1->getTags().set("amenity", "school");
-//    node1->getTags().set("poi", "yes");
-//    CPPUNIT_ASSERT(uut.isSatisfied(node1));
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
-//    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    node2->getTags().set("amenity", "school");
-//    CPPUNIT_ASSERT(uut.isSatisfied(node2));
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
-//    NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    node3->getTags().set("highway", "road");
-//    CPPUNIT_ASSERT(!uut.isSatisfied(node3));
+    node->getTags().clear();
+    node->getTags().set("amenity", "hospital");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
   }
 
   void runShouldTest()
   {
+    const QString filter =
+      "{ \"should\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }";
+    TagCriterion2 uut(filter);
 
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "hospital");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
   }
 
   void runMustNotTest()
   {
+    const QString filter =
+      "{ \"must_not\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }";
+    TagCriterion2 uut(filter);
 
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "hospital");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 
-  void runValueWildcardTest()
+  void runKeyWildcard1Test()
   {
+    const QString filter = "{ \"should\": [ { \"filter\": \"*=restaurant\" } ] }";
+    TagCriterion2 uut(filter);
 
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "hospital");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
   }
 
-  void runKeyWildcardTest()
+  void runKeyWildcard2Test()
   {
+    const QString filter = "{ \"should\": [ { \"filter\": \"amenity*=restaurant\" } ] }";
+    TagCriterion2 uut(filter);
 
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity_2", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("my_amenity", "restaurant");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity_2", "restaurant");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+  }
+
+  void runKeyWildcard3Test()
+  {
+    const QString filter = "{ \"should\": [ { \"filter\": \"*amenity=restaurant\" } ] }";
+    TagCriterion2 uut(filter);
+
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity_2", "restaurant");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("my_amenity", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("my_amenity", "restaurant");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+  }
+
+  void runKeyWildcard4Test()
+  {
+    const QString filter = "{ \"should\": [ { \"filter\": \"*amenity*=restaurant\" } ] }";
+    TagCriterion2 uut(filter);
+
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity_2", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("my_amenity", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("my_amenity", "restaurant");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+  }
+
+  void runValueWildcard1Test()
+  {
+    const QString filter = "{ \"should\": [ { \"filter\": \"amenity=*\" } ] }";
+    TagCriterion2 uut(filter);
+
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "hospital");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+  }
+
+  void runValueWildcard2Test()
+  {
+    const QString filter = "{ \"should\": [ { \"filter\": \"amenity=water*\" } ] }";
+    TagCriterion2 uut(filter);
+
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "water");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "water_park");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "new_water_park");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "water_park");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+  }
+
+  void runValueWildcard3Test()
+  {
+    const QString filter = "{ \"should\": [ { \"filter\": \"amenity=*water\" } ] }";
+    TagCriterion2 uut(filter);
+
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "water");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "water_park");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "new_water");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "new_water");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+  }
+
+  void runValueWildcard4Test()
+  {
+    const QString filter = "{ \"should\": [ { \"filter\": \"amenity=*water*\" } ] }";
+    TagCriterion2 uut(filter);
+
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "water");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "water_park");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "new_water");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "new_water");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
   }
 
   void runAliasTest()

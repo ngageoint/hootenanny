@@ -126,7 +126,9 @@ void TagCriterion2::_loadTagFilters(const QString tagFilterType,
   _tagFilters[tagFilterType].clear();
   for (pt::ptree::value_type& tagFilterPart : propTree->get_child(tagFilterType.toStdString()))
   {
-    _tagFilters[tagFilterType].append(TagFilter::fromJson(tagFilterPart));
+    TagFilter tagFilter = TagFilter::fromJson(tagFilterPart);
+    LOG_VART(tagFilter);
+    _tagFilters[tagFilterType].append(tagFilter);
   }
   LOG_VART(_tagFilters[tagFilterType].size());
 }
@@ -136,16 +138,36 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
   bool keyMatched = false;
   bool valueMatched = false;
   const Tags& tags = e->getTags();
+  LOG_VART(tags);
 
-  if (filter.getKey() == "*" || tags.contains(filter.getKey()))
+  LOG_VART(filter.getKey());
+  if (filter.getKey() == "*")
   {
+    LOG_TRACE("Key is generic wildcard.  Key matched.")
     keyMatched = true;
   }
-  if (filter.getValue() == "*" || tags.get(filter.getKey()) == filter.getValue())
+  else if (tags.contains(filter.getKey()))
   {
+    LOG_TRACE("Tags contain key exact match of: " << filter.getKey());
+    keyMatched = true;
+  }
+
+  LOG_VART(filter.getValue());
+  if (filter.getValue() == "*")
+  {
+    LOG_TRACE("Value is generic wildcard.  Value matched.");
+    valueMatched = true;
+  }
+  else if (tags.get(filter.getKey()) == filter.getValue())
+  {
+    LOG_TRACE(
+      "Tags contain exact value match of: " << filter.getValue() << " for key: " <<
+      filter.getKey());
     valueMatched = true;
   }
 
+  LOG_VART(keyMatched);
+  LOG_VART(valueMatched);
   if (!keyMatched || !valueMatched)
   {
     QRegExp keyMatcher(filter.getKey());
@@ -157,16 +179,16 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
     {
       if (!keyMatched && keyMatcher.exactMatch(tagItr.key()))
       {
+        LOG_TRACE("Tags match key on wildcard for key: " << filter.getKey());
         keyMatched = true;
 
         if (!valueMatched && valueMatcher.exactMatch(tagItr.value()))
         {
+          LOG_TRACE(
+            "Tags match value on wildcard for key: " << filter.getKey() << " and value: " <<
+            filter.getValue());
           valueMatched = true;
         }
-      }
-      if (!valueMatched && filter.getValue() == "*" && valueMatcher.exactMatch(tagItr.value()))
-      {
-        valueMatched = true;
       }
 
       if (keyMatched && valueMatched)
@@ -187,6 +209,7 @@ bool TagCriterion2::isSatisfied(const ConstElementPtr& e) const
   {
     if (!_elementPassesTagFilter(e, _tagFilters["must"].at(i)))
     {
+      LOG_TRACE("Tag filtering failed a \"must\" criterion.");
       return false;
     }
   }
@@ -195,6 +218,7 @@ bool TagCriterion2::isSatisfied(const ConstElementPtr& e) const
   {
     if (_elementPassesTagFilter(e, _tagFilters["must_not"].at(i)))
     {
+      LOG_TRACE("Tag filtering failed a \"must not\" criterion.");
       return false;
     }
   }
@@ -203,10 +227,12 @@ bool TagCriterion2::isSatisfied(const ConstElementPtr& e) const
   {
     if (_elementPassesTagFilter(e, _tagFilters["should"].at(i)))
     {
+      LOG_TRACE("Tag filtering passed on a \"should\" criterion.");
       return true;
     }
   }
 
+  LOG_TRACE("Tag filtering failed to pass any criterion.");
   return false;
 }
 

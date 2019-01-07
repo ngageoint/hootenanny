@@ -68,5 +68,22 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
   return TagFilter(key, value, allowAliases, similarityThreshold);
 }
 
+QString TagFilter::toString() const
+{
+  QString str = "filter: " + _key + "=" + _value + ", allowAliases: ";
+  if (_allowAliases)
+  {
+    str += "true";
+  }
+  else
+  {
+    str += "false";
+  }
+  if (_similarityThreshold != -1.0)
+  {
+    str += ", similarity threshold: " + QString::number(_similarityThreshold);
+  }
+  return str;
+}
 
 }
