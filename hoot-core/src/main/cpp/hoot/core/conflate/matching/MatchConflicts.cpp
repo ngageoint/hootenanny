@@ -84,7 +84,7 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
   // the set of indexes to all the matches that use a common ElementId
   vector<int> matchSet;
   long eidToMatchCount = 0;
-  LOG_DEBUG("Calculating subset conflicts...");
+  LOG_INFO("Calculating match subset conflicts...");
   for (EidIndexMap::iterator it = eidToMatches.begin(); it != eidToMatches.end(); ++it)
   {
     // if we got a new Eid.
@@ -117,7 +117,9 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &match
   LOG_VART(matches.size());
   LOG_VART(conflicts.size());
   LOG_VART(matchSet.size());
+
   // search for all possible match pair conflicts within a set.
+  int ctr = 0;
   for (size_t i = 0; i < matchSet.size(); i++)
   {
     size_t m1 = matchSet[i];
@@ -136,6 +138,13 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &match
         }
         conflicts.insert(m1, m2);
       }
+    }
+
+    ctr++;
+    if (ctr % 10 == 0)
+    {
+      PROGRESS_INFO(
+        "Processed conflicts for " << ctr << " / " << matchSet.size() << " matches...");
     }
   }
 }

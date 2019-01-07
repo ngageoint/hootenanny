@@ -64,6 +64,7 @@ void NetworkMatcher::_createEdge2Index()
   std::vector<int> fids;
 
   const OsmNetwork::EdgeMap& em = _n2->getEdgeMap();
+  int ctr = 0;
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
     fids.push_back((int)_index2Edge.size());
@@ -78,6 +79,12 @@ void NetworkMatcher::_createEdge2Index()
     b.setBounds(1, env.getMinY(), env.getMaxY());
 
     boxes.push_back(b);
+
+    ctr++;
+    if (ctr % 10 == 0)
+    {
+      PROGRESS_INFO("Created " << ctr << " / " << em.size() << " edge mappings.");
+    }
   }
 
   _edge2Index->bulkInsert(boxes, fids);
