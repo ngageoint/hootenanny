@@ -151,6 +151,9 @@ QList<boost::shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(con
         scoreSum += score;
         testScoreCtr++;
       }
+      LOG_INFO(
+        "Received score of: " << score << " for test run #" << QString::number(i + 1) <<
+        ", simulation #" << QString::number(j + 1));
       LOG_VARD(scoreSum);
     }
 
