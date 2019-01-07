@@ -710,7 +710,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
-    PROGRESS_INFO(count++ << " / " << em.size());
+    PROGRESS_INFO(count++ << " / " << em.size() << " edge scores seeded.");
 
     ConstNetworkEdgePtr e1 = it.value();
 
