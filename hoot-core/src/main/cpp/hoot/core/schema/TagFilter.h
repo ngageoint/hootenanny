@@ -30,6 +30,11 @@
 // Qt
 #include <QString>
 
+// Boost
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+namespace pt = boost::property_tree;
+
 namespace hoot
 {
 
@@ -48,6 +53,8 @@ public:
   QString getValue() const { return _value; }
   bool getAllowAliases() const { return _allowAliases; }
   double getSimilarityThreshold() const { return _similarityThreshold; }
+
+  static TagFilter fromJson(const pt::ptree::value_type& tagFilterPart);
 
 private:
 

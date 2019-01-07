@@ -61,11 +61,14 @@ public:
 
 private:
 
+  friend class TagCriterion2Test;
+
   QList<TagFilter> _mustHave;
   QList<TagFilter> _shouldHave;
   QList<TagFilter> _mustNotHave;
 
   void _parseFilterString(const QString filterStr);
+  bool _elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const;
 };
 
 }

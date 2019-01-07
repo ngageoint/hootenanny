@@ -35,12 +35,64 @@ namespace hoot
 class TagCriterion2Test : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagCriterion2Test);
-  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runMustTest);
+  CPPUNIT_TEST(runShouldTest);
+  CPPUNIT_TEST(runMustNotTest);
+  CPPUNIT_TEST(runValueWildcardTest);
+  CPPUNIT_TEST(runKeyWildcardTest);
+  CPPUNIT_TEST(runAliasTest);
+  CPPUNIT_TEST(runSimilarityTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runBasicTest()
+  /*
+   * {
+       "must":
+       [
+         {
+           "filter": "tourism=hotel",
+           "allowAliases": "true"
+         }
+       ]
+       "should":
+       [
+         {
+           "filter": "amenity=restaurant",
+           "similarityThreshold": "0.8"
+         },
+         {
+           "filter": "amenity=place_of_worship"
+         },
+         {
+           "filter": "*address*=*"
+         },
+         {
+           "filter": "poi*=*"
+         },
+         {
+           "filter": "*building=*"
+         },
+         {
+           "filter": "*=*address*"
+         },
+         {
+           "filter": "*=poi*"
+         },
+         {
+           "filter": "*=*building"
+         }
+       ],
+       "must_not":
+       [
+         {
+           "filter": "amenity=chapel"
+         }
+       ]
+     }
+   */
+
+  void runMustTest()
   {
 //    QStringList kvps;
 //    kvps.append("amenity=school");
@@ -61,6 +113,36 @@ public:
 //    NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
 //    node3->getTags().set("highway", "road");
 //    CPPUNIT_ASSERT(!uut.isSatisfied(node3));
+  }
+
+  void runShouldTest()
+  {
+
+  }
+
+  void runMustNotTest()
+  {
+
+  }
+
+  void runValueWildcardTest()
+  {
+
+  }
+
+  void runKeyWildcardTest()
+  {
+
+  }
+
+  void runAliasTest()
+  {
+
+  }
+
+  void runSimilarityTest()
+  {
+
   }
 };
 

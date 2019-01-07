@@ -26,6 +26,9 @@
  */
 #include "TagFilter.h"
 
+// Hoot
+#include <hoot/core/util/Log.h>
+
 namespace hoot
 {
 
@@ -37,5 +40,33 @@ _allowAliases(allowAliases),
 _similarityThreshold(similarityThreshold)
 {
 }
+
+TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
+{
+  const QString filter = QString::fromStdString(tagFilterPart.second.get<std::string>("filter"));
+  if (filter.trimmed().isEmpty() || !filter.contains("="))
+  {
+    //throw
+  }
+  const QStringList filterParts = filter.split("=");
+  const QString key = filterParts[0];
+  LOG_VART(key);
+  const QString value = filterParts[1];
+  LOG_VART(value);
+
+  bool allowAliases = false;
+  if (tagFilterPart.second.get<bool>("allowAliases"))
+  {
+    allowAliases = true;
+  }
+  LOG_VART(allowAliases);
+
+  double similarityThreshold = -1.0;
+  similarityThreshold = tagFilterPart.second.get<double>("similarityThreshold");
+  LOG_VART(similarityThreshold);
+
+  return TagFilter(key, value, allowAliases, similarityThreshold);
+}
+
 
 }

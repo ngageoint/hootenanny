@@ -30,6 +30,16 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Boost
+//#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+namespace pt = boost::property_tree;
+
+// Qt
+#include <QRegExp>
 
 namespace hoot
 {
@@ -51,64 +61,154 @@ void TagCriterion2::setConfiguration(const Settings& s)
   _parseFilterString(ConfigOptions(s).getConflateTagFilter());
 }
 
-void TagCriterion2::_parseFilterString(const QString /*filterStr*/)
+void TagCriterion2::_parseFilterString(const QString filterStr)
 {
+  const boost::shared_ptr<pt::ptree> propTree = StringUtils::jsonStringToPropTree(filterStr);
+
   /*
    * non-sensical example, but illustrates all the possible filter inputs
    *
    * {
-       "feature_filter":
-       {
-         "must":
-         [
-           {
-             "tourism=hotel",
-             "allowAliases": "true"
-           }
-         ]
-         "should":
-         [
-           {
-             "amenity=restaurant",
-             "similarityThreshold": "0.8"
-           },
-           {
-             "amenity=place_of_worship"
-           },
-           {
-             "*address*=*"
-           },
-           {
-             "poi*=*"
-           },
-           {
-             "*building=*"
-           },
-           {
-             "*=*address*"
-           },
-           {
-             "*=poi*"
-           },
-           {
-             "*=*building"
-           }
-         ],
-         "must_not":
-         [
-           {
-             "amenity=chapel"
-           }
-         ]
-       }
+       "must":
+       [
+         {
+           "filter": "tourism=hotel",
+           "allowAliases": "true"
+         }
+       ]
+       "should":
+       [
+         {
+           "filter": "amenity=restaurant",
+           "similarityThreshold": "0.8"
+         },
+         {
+           "filter": "amenity=place_of_worship"
+         },
+         {
+           "filter": "*address*=*"
+         },
+         {
+           "filter": "poi*=*"
+         },
+         {
+           "filter": "*building=*"
+         },
+         {
+           "filter": "*=*address*"
+         },
+         {
+           "filter": "*=poi*"
+         },
+         {
+           "filter": "*=*building"
+         }
+       ],
+       "must_not":
+       [
+         {
+           "filter": "amenity=chapel"
+         }
+       ]
      }
    */
 
+  LOG_TRACE("must filters:");
+  for (pt::ptree::value_type& tagFilterPart : propTree->get_child("must"))
+  {
+    _mustHave.append(TagFilter::fromJson(tagFilterPart));
+  }
+  LOG_VART(_mustHave.size());
 
+  LOG_TRACE("should filters:");
+  for (pt::ptree::value_type& tagFilterPart : propTree->get_child("should"))
+  {
+    _shouldHave.append(TagFilter::fromJson(tagFilterPart));
+  }
+  LOG_VART(_shouldHave.size());
+
+  LOG_TRACE("must not filters:");
+  for (pt::ptree::value_type& tagFilterPart : propTree->get_child("must_not"))
+  {
+    _mustNotHave.append(TagFilter::fromJson(tagFilterPart));
+  }
+  LOG_VART(_mustNotHave.size());
 }
 
-bool TagCriterion2::isSatisfied(const ConstElementPtr& /*e*/) const
+bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const
 {
+  bool keyMatched = false;
+  bool valueMatched = false;
+  const Tags& tags = e->getTags();
+
+  if (filter.getKey() == "*" || tags.contains(filter.getKey()))
+  {
+    keyMatched = true;
+  }
+  if (filter.getValue() == "*" || tags.get(filter.getKey()) == filter.getValue())
+  {
+    valueMatched = true;
+  }
+
+  if (!keyMatched || !valueMatched)
+  {
+    QRegExp keyMatcher(filter.getKey());
+    keyMatcher.setPatternSyntax(QRegExp::Wildcard);
+    QRegExp valueMatcher(filter.getValue());
+    valueMatcher.setPatternSyntax(QRegExp::Wildcard);
+    for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+    {
+      if (!keyMatched && keyMatcher.exactMatch(tagItr.key()))
+      {
+        keyMatched = true;
+
+        if (!valueMatched && valueMatcher.exactMatch(tagItr.value()))
+        {
+          valueMatched = true;
+        }
+      }
+      if (!valueMatched && filter.getValue() == "*" && valueMatcher.exactMatch(tagItr.value()))
+      {
+        valueMatched = true;
+      }
+
+      if (keyMatched && valueMatched)
+      {
+        break;
+      }
+    }
+  }
+
+  return keyMatched && valueMatched;
+}
+
+bool TagCriterion2::isSatisfied(const ConstElementPtr& e) const
+{
+  //TODO: add similarity and aliases
+
+  for (int i = 0; i < _mustHave.size(); i++)
+  {
+    if (!_elementPassesTagFilter(e, _mustHave.at(i)))
+    {
+      return false;
+    }
+  }
+
+  for (int i = 0; i < _mustNotHave.size(); i++)
+  {
+    if (_elementPassesTagFilter(e, _mustNotHave.at(i)))
+    {
+      return false;
+    }
+  }
+
+  for (int i = 0; i < _shouldHave.size(); i++)
+  {
+    if (_elementPassesTagFilter(e, _shouldHave.at(i)))
+    {
+      return true;
+    }
+  }
 
   return false;
 }

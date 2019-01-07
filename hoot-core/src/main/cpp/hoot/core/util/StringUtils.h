@@ -87,7 +87,7 @@ public:
   static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
 
   /**
-   * Creates a JSON array from a strings
+   * Creates a JSON array from a list of strings
    *
    * @param stringList a list of strings
    * @return a Boost JSON property tree containing a string array
