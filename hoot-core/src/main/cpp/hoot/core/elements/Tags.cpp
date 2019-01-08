@@ -732,4 +732,24 @@ bool Tags::hasAnyKvp(const QStringList kvps) const
   return false;
 }
 
+Tags Tags::stringListToTags(const QStringList tags)
+{
+  Tags tagsToReturn;
+  for (int i = 0; i < tags.size(); i++)
+  {
+    const QString tagStr = tags.at(i);
+    if (!tagStr.contains("="))
+    {
+      //throw
+    }
+    const QStringList tagStrParts = tagStr.split("=");
+    if (!tagStrParts.size() == 2)
+    {
+      //throw
+    }
+    tagsToReturn.appendValue(tagStrParts[0], tagStrParts[1]);
+  }
+  return tagsToReturn;
+}
+
 }

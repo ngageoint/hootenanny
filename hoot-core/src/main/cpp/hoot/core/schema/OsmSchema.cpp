@@ -1527,6 +1527,19 @@ double OsmSchema::getIsACost() const
   return d->getIsACost();
 }
 
+Tags OsmSchema::getAliasTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  const std::vector<SchemaVertex> schemaVertices = d->getSchemaVertices(tags);
+  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
+       itr != schemaVertices.end(); ++itr)
+  {
+    SchemaVertex vertex = *itr;
+    tagsToReturn.addTags(Tags::stringListToTags(vertex.aliases));
+  }
+  return tagsToReturn;
+}
+
 vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
 {
   return d->getSchemaVertices(tags);

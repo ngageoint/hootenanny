@@ -46,8 +46,8 @@ class TagFilter
 
 public:
 
-  TagFilter(const QString key, const QString value, const bool allowAliases,
-            const double similarityThreshold);
+  TagFilter(const QString key, const QString value, const bool allowAliases = false,
+            const double similarityThreshold = -1.0);
 
   QString getKey() const { return _key; }
   QString getValue() const { return _value; }

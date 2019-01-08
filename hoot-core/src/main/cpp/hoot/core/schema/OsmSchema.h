@@ -409,6 +409,14 @@ public:
    */
   bool containsTagFromList(const Tags& tags, const QStringList tagList) const;
 
+  /**
+   *
+   *
+   * @param tags
+   * @return
+   */
+  Tags getAliasTags(const Tags& tags);
+
 private:
 
   friend class OsmSchemaTest;

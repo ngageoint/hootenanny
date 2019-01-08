@@ -73,6 +73,7 @@ enum TagValueType
 class SchemaVertex
 {
 public:
+
   typedef enum VertexType
   {
     UnknownVertexType,
@@ -155,6 +156,7 @@ public:
   uint16_t geometries;
 
 private:
+
   VertexType _type;
   CompoundRuleList _compoundRules;
 };

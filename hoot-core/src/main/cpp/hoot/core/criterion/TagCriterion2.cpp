@@ -32,6 +32,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -91,11 +92,45 @@ void TagCriterion2::_loadTagFilters(const QString tagFilterType,
 
 bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const
 {
-  bool keyMatched = false;
-  bool valueMatched = false;
-  const Tags& tags = e->getTags();
+  LOG_VART(e->getTags());
+  LOG_VART(filter);
+
+  LOG_TRACE("Checking for tag match...");
+  bool foundFilterMatch = _filterMatchesAnyTag(filter, e->getTags());
+  LOG_VART(foundFilterMatch);
+
+  LOG_VART(filter.getAllowAliases());
+  if (!foundFilterMatch && filter.getAllowAliases())
+  {
+    LOG_TRACE("Checking for tag alias match...");
+    Tags filterTags;
+    if (filter.getKey() != "*" && filter.getValue() != "*")
+    {
+      filterTags.appendValue(filter.getKey().remove("*"), filter.getValue().remove("*"));
+    }
+    Tags aliasTags = OsmSchema::getInstance().getAliasTags(filterTags);
+    for (Tags::const_iterator tagItr = aliasTags.begin(); tagItr != aliasTags.end(); ++tagItr)
+    {
+      const QString aliasTagKey = tagItr.key();
+      const QString aliasTagValue = tagItr.value();
+      foundFilterMatch = _filterMatchesAnyTag(TagFilter(aliasTagKey, aliasTagValue), e->getTags());
+      if (foundFilterMatch)
+      {
+        break;
+      }
+    }
+
+    LOG_VART(foundFilterMatch);
+  }
+
+  return foundFilterMatch;
+}
+
+bool TagCriterion2::_filterMatchesAnyTag(const TagFilter& filter, const Tags& tags) const
+{
   LOG_VART(tags);
 
+  bool keyMatched = false;
   LOG_VART(filter.getKey());
   if (filter.getKey() == "*")
   {
@@ -108,6 +143,7 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
     keyMatched = true;
   }
 
+  bool valueMatched = false;
   LOG_VART(filter.getValue());
   if (filter.getValue() == "*")
   {
@@ -149,7 +185,7 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
 
       if (keyMatched && valueMatched)
       {
-        break;
+        return true;
       }
     }
   }
@@ -164,7 +200,7 @@ bool TagCriterion2::_elementPassesMustTagFilters(const ConstElementPtr& e) const
   {
     LOG_TRACE("Checking " << filterSize << " 'must' filters...");
 
-    //must pass all of these
+    // must pass all of these
     for (int i = 0; i < filterSize; i++)
     {
       if (!_elementPassesTagFilter(e, _tagFilters["must"].at(i)))
@@ -185,7 +221,7 @@ bool TagCriterion2::_elementPassesMustNotTagFilters(const ConstElementPtr& e) co
   {
     LOG_TRACE("Checking " << filterSize << " 'must not' filters...");
 
-    //must pass none of these
+    // must pass none of these
     for (int i = 0; i < filterSize; i++)
     {
       if (_elementPassesTagFilter(e, _tagFilters["must_not"].at(i)))
@@ -206,7 +242,7 @@ bool TagCriterion2::_elementPassesShouldTagFilters(const ConstElementPtr& e) con
   {
     LOG_TRACE("Checking " << filterSize << " 'should' filters...");
 
-    //just needs to pass any one of these
+    // just needs to pass any one of these
     for (int i = 0; i < filterSize; i++)
     {
       if (_elementPassesTagFilter(e, _tagFilters["should"].at(i)))
@@ -223,8 +259,6 @@ bool TagCriterion2::_elementPassesShouldTagFilters(const ConstElementPtr& e) con
 
 bool TagCriterion2::isSatisfied(const ConstElementPtr& e) const
 {
-  //TODO: add similarity and aliases
-
   if (!_elementPassesMustTagFilters(e))
   {
     return false;

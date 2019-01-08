@@ -62,8 +62,6 @@ public:
 
 private:
 
-  //friend class TagCriterion2Test;
-
   QMap<QString, QList<TagFilter>> _tagFilters;
 
   void _parseFilterString(const QString filterStr);
@@ -73,6 +71,7 @@ private:
   bool _elementPassesMustTagFilters(const ConstElementPtr& e) const;
   bool _elementPassesMustNotTagFilters(const ConstElementPtr& e) const;
   bool _elementPassesShouldTagFilters(const ConstElementPtr& e) const;
+  bool _filterMatchesAnyTag(const TagFilter& filter, const Tags& tags) const;
 };
 
 }

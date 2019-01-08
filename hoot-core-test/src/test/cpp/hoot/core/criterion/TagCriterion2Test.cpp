@@ -45,8 +45,8 @@ class TagCriterion2Test : public HootTestFixture
   CPPUNIT_TEST(runValueWildcard1Test);
   CPPUNIT_TEST(runValueWildcard2Test);
   CPPUNIT_TEST(runValueWildcard3Test);
-//  CPPUNIT_TEST(runAliasTest);
-//  CPPUNIT_TEST(runSimilarityTest);
+  CPPUNIT_TEST(runAliasTest);
+  //CPPUNIT_TEST(runSimilarityTest);
 //  CPPUNIT_TEST(runMultiTest);
   //TODO: error tests
   CPPUNIT_TEST_SUITE_END();
@@ -357,7 +357,44 @@ public:
 
   void runAliasTest()
   {
+    boost::shared_ptr<TagCriterion2> uut;
+    QString filter;
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
+    node->getTags().clear();
+    // This is an alias for amenity=charging_station as defined in the hoot schema.
+    node->getTags().set("amenity", "ev_charging");
+
+    // allowAliases is false by default
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=charging_station\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=charging_station\", \"allowAliases\": \"true\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
+
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=charging_station\", \"allowAliases\": \"false\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=charging_station*\", \"allowAliases\": \"true\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
+
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=charging*\", \"allowAliases\": \"true\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=*\", \"allowAliases\": \"true\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
   }
 
   void runSimilarityTest()

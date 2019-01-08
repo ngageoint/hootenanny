@@ -263,6 +263,14 @@ public:
    */
   bool hasAnyKvp(const QStringList kvps) const;
 
+  /**
+   *
+   *
+   * @param tags
+   * @return
+   */
+  static Tags stringListToTags(const QStringList tags);
+
 private:
 
   void _valueRegexParser(const QString& str, QString& num, QString& units) const;
