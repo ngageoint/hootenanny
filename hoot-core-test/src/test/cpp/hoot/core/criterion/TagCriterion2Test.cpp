@@ -48,6 +48,9 @@ class TagCriterion2Test : public HootTestFixture
   CPPUNIT_TEST(runAliasTest);
   CPPUNIT_TEST(runSimilarityTest);
   //TODO
+  //not sure if we get support for inheritance with similarity thresholds or not yet
+  //CPPUNIT_TEST(runChildTest);
+  //CPPUNIT_TEST(runAncestorTest);
 //  CPPUNIT_TEST(runContradictoryFilterTest);
 //  CPPUNIT_TEST(runMultiTest);
 //  CPPUNIT_TEST(runInvalidFilterTagJsonTest);
@@ -501,6 +504,9 @@ public:
 
   void runInvalidFilterFormatJsonTest()
   {
+    boost::shared_ptr<TagCriterion2> uut;
+    QString exceptionMsg;
+
     try
     {
       uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"\" } ] }"));
