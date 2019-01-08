@@ -39,6 +39,10 @@ _value(value),
 _allowAliases(allowAliases),
 _similarityThreshold(similarityThreshold)
 {
+  if (_similarityThreshold != -1.0 && (_similarityThreshold < 0.001 || _similarityThreshold > 1.0))
+  {
+    //throw
+  }
 }
 
 TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
@@ -98,10 +102,18 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
     //throw
   }
   const QStringList filterParts = filter.split("=");
-  const QString key = filterParts[0];
+  const QString key = filterParts[0].trimmed().toLower();
   LOG_VART(key);
-  const QString value = filterParts[1];
+  if (key.isEmpty())
+  {
+    //throw
+  }
+  const QString value = filterParts[1].trimmed().toLower();
   LOG_VART(value);
+  if (value.isEmpty())
+  {
+    //throw
+  }
 
   // allowAliases and similarityThreshold are optional
 

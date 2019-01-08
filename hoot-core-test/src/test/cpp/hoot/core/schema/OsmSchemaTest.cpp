@@ -229,11 +229,11 @@ public:
     uut.createTestingGraph();
 
     HOOT_STR_EQUALS("[3]{highway=road, highway=primary, highway=secondary}",
-      tagsToNames(uut.getSimilarTags("highway=primary", 0.8)));
+      tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.8)));
     HOOT_STR_EQUALS("[4]{highway=road, highway=primary, highway=secondary, highway=residential}",
-      tagsToNames(uut.getSimilarTags("highway=primary", 0.5)));
+      tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.5)));
     HOOT_STR_EQUALS("[1]{highway=road}",
-      tagsToNames(uut.getSimilarTags("highway=road", 0.1)));
+      tagsToNames(uut.getSimilarTagsAsVertices("highway=road", 0.1)));
   }
 
   /**

@@ -46,7 +46,7 @@ class TagCriterion2Test : public HootTestFixture
   CPPUNIT_TEST(runValueWildcard2Test);
   CPPUNIT_TEST(runValueWildcard3Test);
   CPPUNIT_TEST(runAliasTest);
-  //CPPUNIT_TEST(runSimilarityTest);
+  CPPUNIT_TEST(runSimilarityTest);
 //  CPPUNIT_TEST(runMultiTest);
   //TODO: error tests
   CPPUNIT_TEST_SUITE_END();
@@ -399,7 +399,41 @@ public:
 
   void runSimilarityTest()
   {
+    boost::shared_ptr<TagCriterion2> uut;
+    QString filter;
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
+    node->getTags().clear();
+    // amenity=community_centre has a similarity score of 0.7 with amenity=arts_centre as defined
+    // in the hoot schema.
+    node->getTags().set("amenity", "community_centre");
+
+    // similarityThreshold is disabled by default
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    // a similarity score of -1.0 is the same as not using similarity scoring at all
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"-1.0\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.7\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
+
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.6\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
+
+    filter =
+      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.8\" } ] }";
+    uut.reset(new TagCriterion2(filter));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
   }
 
   void runMultiTest()

@@ -301,7 +301,16 @@ public:
    *
    * minimumScore must be > 0.
    */
-  std::vector<SchemaVertex> getSimilarTags(QString name, double minimumScore);
+  std::vector<SchemaVertex> getSimilarTagsAsVertices(QString name, double minimumScore);
+
+  /**
+   *
+   *
+   * @param name
+   * @param minimumScore
+   * @return
+   */
+  Tags getSimilarTags(QString name, double minimumScore);
 
   std::vector<SchemaVertex> getTagByCategory(OsmSchemaCategory c) const;
 

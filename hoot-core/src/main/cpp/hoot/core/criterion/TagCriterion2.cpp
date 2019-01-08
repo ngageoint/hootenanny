@@ -90,6 +90,50 @@ void TagCriterion2::_loadTagFilters(const QString tagFilterType,
   LOG_TRACE(tagFilterType << "filters: " << _tagFilters[tagFilterType].size());
 }
 
+bool TagCriterion2::_hasAuxMatch(const ConstElementPtr& e, const TagFilter& filter,
+                                 const QString matchType) const
+{
+  LOG_TRACE("Checking for tag " << matchType << " match...");
+
+  Tags filterTags;
+  if (filter.getKey() != "*" && filter.getValue() != "*")
+  {
+    filterTags.appendValue(filter.getKey().remove("*"), filter.getValue().remove("*"));
+
+    Tags tags;
+    if (matchType.toLower() == "alias")
+    {
+      tags = OsmSchema::getInstance().getAliasTags(filterTags);
+    }
+    else if (matchType.toLower() == "similar")
+    {
+      tags =
+        OsmSchema::getInstance().getSimilarTags(
+          filter.getKey() + "=" + filter.getValue(), filter.getSimilarityThreshold());
+    }
+    else
+    {
+      //throw
+    }
+
+    for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+    {
+      const QString tagKey = tagItr.key();
+      const QString tagValue = tagItr.value();
+      const QStringList tagValues = tagValue.split(";");
+      for (int i = 0; i < tagValues.length(); i++)
+      {
+        if (_filterMatchesAnyTag(TagFilter(tagKey, tagValues.at(i)), e->getTags()))
+        {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
 bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const
 {
   LOG_VART(e->getTags());
@@ -102,24 +146,14 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
   LOG_VART(filter.getAllowAliases());
   if (!foundFilterMatch && filter.getAllowAliases())
   {
-    LOG_TRACE("Checking for tag alias match...");
-    Tags filterTags;
-    if (filter.getKey() != "*" && filter.getValue() != "*")
-    {
-      filterTags.appendValue(filter.getKey().remove("*"), filter.getValue().remove("*"));
-    }
-    Tags aliasTags = OsmSchema::getInstance().getAliasTags(filterTags);
-    for (Tags::const_iterator tagItr = aliasTags.begin(); tagItr != aliasTags.end(); ++tagItr)
-    {
-      const QString aliasTagKey = tagItr.key();
-      const QString aliasTagValue = tagItr.value();
-      foundFilterMatch = _filterMatchesAnyTag(TagFilter(aliasTagKey, aliasTagValue), e->getTags());
-      if (foundFilterMatch)
-      {
-        break;
-      }
-    }
+    foundFilterMatch = _hasAuxMatch(e, filter, "alias");
+    LOG_VART(foundFilterMatch);
+  }
 
+  LOG_VART(filter.getSimilarityThreshold());
+  if (!foundFilterMatch && filter.getSimilarityThreshold() != -1.0)
+  {
+    foundFilterMatch = _hasAuxMatch(e, filter, "similar");
     LOG_VART(foundFilterMatch);
   }
 

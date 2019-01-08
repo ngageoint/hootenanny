@@ -1545,13 +1545,26 @@ vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
   return d->getSchemaVertices(tags);
 }
 
-vector<SchemaVertex> OsmSchema::getSimilarTags(QString name, double minimumScore)
+vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(QString name, double minimumScore)
 {
   if (minimumScore <= 0)
   {
     throw IllegalArgumentException("minimumScore must be > 0");
   }
   return d->getSimilarTags(name, minimumScore);
+}
+
+Tags OsmSchema::getSimilarTags(QString name, double minimumScore)
+{
+  Tags tags;
+  const vector<SchemaVertex> vertices = d->getSimilarTags(name, minimumScore);
+  for (std::vector<SchemaVertex>::const_iterator itr = vertices.begin();
+       itr != vertices.end(); ++itr)
+  {
+    SchemaVertex vertex = *itr;
+    tags.appendValue(vertex.key, vertex.value);
+  }
+  return tags;
 }
 
 vector<SchemaVertex> OsmSchema::getTagByCategory(OsmSchemaCategory c) const

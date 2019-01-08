@@ -72,6 +72,7 @@ private:
   bool _elementPassesMustNotTagFilters(const ConstElementPtr& e) const;
   bool _elementPassesShouldTagFilters(const ConstElementPtr& e) const;
   bool _filterMatchesAnyTag(const TagFilter& filter, const Tags& tags) const;
+  bool _hasAuxMatch(const ConstElementPtr& e, const TagFilter& filter, const QString type) const;
 };
 
 }
