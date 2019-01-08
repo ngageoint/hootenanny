@@ -43,6 +43,54 @@ _similarityThreshold(similarityThreshold)
 
 TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
 {
+  /*
+   * non-sensical example, but illustrates all the possible filter inputs
+   *
+   * {
+       "must":
+       [
+         {
+           "filter": "tourism=hotel",
+           "allowAliases": "true"
+         }
+       ]
+       "should":
+       [
+         {
+           "filter": "amenity=restaurant",
+           "similarityThreshold": "0.8"
+         },
+         {
+           "filter": "amenity=place_of_worship"
+         },
+         {
+           "filter": "*address*=*"
+         },
+         {
+           "filter": "poi*=*"
+         },
+         {
+           "filter": "*building=*"
+         },
+         {
+           "filter": "*=*address*"
+         },
+         {
+           "filter": "*=poi*"
+         },
+         {
+           "filter": "*=*building"
+         }
+       ],
+       "must_not":
+       [
+         {
+           "filter": "amenity=chapel"
+         }
+       ]
+     }
+   */
+
   const QString filter = QString::fromStdString(tagFilterPart.second.get<std::string>("filter"));
   LOG_VART(filter);
   if (filter.trimmed().isEmpty() || !filter.contains("="))

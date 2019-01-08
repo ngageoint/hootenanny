@@ -36,15 +36,15 @@ class TagCriterion2Test : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagCriterion2Test);
   CPPUNIT_TEST(runMustTest);
-//  CPPUNIT_TEST(runShouldTest);
-//  CPPUNIT_TEST(runMustNotTest);
-//  CPPUNIT_TEST(runKeyWildcard1Test);
-//  CPPUNIT_TEST(runKeyWildcard2Test);
-//  CPPUNIT_TEST(runKeyWildcard3Test);
-//  CPPUNIT_TEST(runKeyWildcard4Test);
-//  CPPUNIT_TEST(runValueWildcard1Test);
-//  CPPUNIT_TEST(runValueWildcard2Test);
-//  CPPUNIT_TEST(runValueWildcard3Test);
+  CPPUNIT_TEST(runShouldTest);
+  CPPUNIT_TEST(runMustNotTest);
+  CPPUNIT_TEST(runKeyWildcard1Test);
+  CPPUNIT_TEST(runKeyWildcard2Test);
+  CPPUNIT_TEST(runKeyWildcard3Test);
+  CPPUNIT_TEST(runKeyWildcard4Test);
+  CPPUNIT_TEST(runValueWildcard1Test);
+  CPPUNIT_TEST(runValueWildcard2Test);
+  CPPUNIT_TEST(runValueWildcard3Test);
 //  CPPUNIT_TEST(runAliasTest);
 //  CPPUNIT_TEST(runSimilarityTest);
 //  CPPUNIT_TEST(runMultiTest);

@@ -34,7 +34,6 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Boost
-//#include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 namespace pt = boost::property_tree;
 
@@ -64,55 +63,6 @@ void TagCriterion2::setConfiguration(const Settings& s)
 void TagCriterion2::_parseFilterString(const QString filterStr)
 {
   const boost::shared_ptr<pt::ptree> propTree = StringUtils::jsonStringToPropTree(filterStr);
-
-  /*
-   * non-sensical example, but illustrates all the possible filter inputs
-   *
-   * {
-       "must":
-       [
-         {
-           "filter": "tourism=hotel",
-           "allowAliases": "true"
-         }
-       ]
-       "should":
-       [
-         {
-           "filter": "amenity=restaurant",
-           "similarityThreshold": "0.8"
-         },
-         {
-           "filter": "amenity=place_of_worship"
-         },
-         {
-           "filter": "*address*=*"
-         },
-         {
-           "filter": "poi*=*"
-         },
-         {
-           "filter": "*building=*"
-         },
-         {
-           "filter": "*=*address*"
-         },
-         {
-           "filter": "*=poi*"
-         },
-         {
-           "filter": "*=*building"
-         }
-       ],
-       "must_not":
-       [
-         {
-           "filter": "amenity=chapel"
-         }
-       ]
-     }
-   */
-
   _tagFilters.clear();
   _loadTagFilters("must", propTree);
   _loadTagFilters("should", propTree);
@@ -136,7 +86,7 @@ void TagCriterion2::_loadTagFilters(const QString tagFilterType,
       _tagFilters[tagFilterType].append(tagFilter);
     }
   }
-  LOG_VART(_tagFilters[tagFilterType].size());
+  LOG_TRACE(tagFilterType << "filters: " << _tagFilters[tagFilterType].size());
 }
 
 bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const
@@ -183,7 +133,7 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
 
     for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
     {
-      if (!keyMatched && keyMatcher.exactMatch(tagItr.key()))
+      if (keyMatched || (!keyMatched && keyMatcher.exactMatch(tagItr.key())))
       {
         LOG_TRACE("Tags match key on wildcard for key: " << filter.getKey());
         keyMatched = true;
@@ -207,39 +157,89 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
   return keyMatched && valueMatched;
 }
 
+bool TagCriterion2::_elementPassesMustTagFilters(const ConstElementPtr& e) const
+{
+  const int filterSize = _tagFilters["must"].size();
+  if (filterSize > 0)
+  {
+    LOG_TRACE("Checking " << filterSize << " 'must' filters...");
+
+    //must pass all of these
+    for (int i = 0; i < filterSize; i++)
+    {
+      if (!_elementPassesTagFilter(e, _tagFilters["must"].at(i)))
+      {
+        LOG_TRACE("Tag filtering failed a \"must\" criterion.");
+        return false;
+      }
+    }
+    LOG_TRACE("Tag filtering passed all \"must\" criteria.");
+  }
+  return true;
+}
+
+bool TagCriterion2::_elementPassesMustNotTagFilters(const ConstElementPtr& e) const
+{
+  const int filterSize = _tagFilters["must_not"].size();
+  if (filterSize > 0)
+  {
+    LOG_TRACE("Checking " << filterSize << " 'must not' filters...");
+
+    //must pass none of these
+    for (int i = 0; i < filterSize; i++)
+    {
+      if (_elementPassesTagFilter(e, _tagFilters["must_not"].at(i)))
+      {
+        LOG_TRACE("Tag filtering failed a \"must not\" criterion.");
+        return false;
+      }
+    }
+    LOG_TRACE("Tag filtering passed all \"must not\" criteria.");
+  }
+  return true;
+}
+
+bool TagCriterion2::_elementPassesShouldTagFilters(const ConstElementPtr& e) const
+{
+  const int filterSize = _tagFilters["should"].size();
+  if (filterSize > 0)
+  {
+    LOG_TRACE("Checking " << filterSize << " 'should' filters...");
+
+    //just needs to pass any one of these
+    for (int i = 0; i < filterSize; i++)
+    {
+      if (_elementPassesTagFilter(e, _tagFilters["should"].at(i)))
+      {
+        LOG_TRACE("Tag filtering passed on a \"should\" criterion.");
+        return true;
+      }
+    }
+    LOG_TRACE("Tag filtering failed to pass on any 'should' criterion.");
+    return false;
+  }
+  return true;
+}
+
 bool TagCriterion2::isSatisfied(const ConstElementPtr& e) const
 {
   //TODO: add similarity and aliases
 
-  for (int i = 0; i < _tagFilters["must"].size(); i++)
+  if (!_elementPassesMustTagFilters(e))
   {
-    if (!_elementPassesTagFilter(e, _tagFilters["must"].at(i)))
-    {
-      LOG_TRACE("Tag filtering failed a \"must\" criterion.");
-      return false;
-    }
+    return false;
+  }
+  if (!_elementPassesMustNotTagFilters(e))
+  {
+    return false;
+  }
+  if (!_elementPassesShouldTagFilters(e))
+  {
+    return false;
   }
 
-  for (int i = 0; i < _tagFilters["must_not"].size(); i++)
-  {
-    if (_elementPassesTagFilter(e, _tagFilters["must_not"].at(i)))
-    {
-      LOG_TRACE("Tag filtering failed a \"must not\" criterion.");
-      return false;
-    }
-  }
-
-  for (int i = 0; i < _tagFilters["should"].size(); i++)
-  {
-    if (_elementPassesTagFilter(e, _tagFilters["should"].at(i)))
-    {
-      LOG_TRACE("Tag filtering passed on a \"should\" criterion.");
-      return true;
-    }
-  }
-
-  LOG_TRACE("Tag filtering failed to pass any criterion.");
-  return false;
+  LOG_TRACE("Tag filtering passed all criteria.");
+  return true;
 }
 
 }

@@ -62,7 +62,7 @@ public:
 
 private:
 
-  friend class TagCriterion2Test;
+  //friend class TagCriterion2Test;
 
   QMap<QString, QList<TagFilter>> _tagFilters;
 
@@ -70,6 +70,9 @@ private:
   void _loadTagFilters(const QString tagFilterType, boost::shared_ptr<pt::ptree> propTree);
 
   bool _elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const;
+  bool _elementPassesMustTagFilters(const ConstElementPtr& e) const;
+  bool _elementPassesMustNotTagFilters(const ConstElementPtr& e) const;
+  bool _elementPassesShouldTagFilters(const ConstElementPtr& e) const;
 };
 
 }
