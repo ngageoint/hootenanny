@@ -123,12 +123,18 @@ void TagCriterion2::_loadTagFilters(const QString tagFilterType,
                                     boost::shared_ptr<pt::ptree> propTree)
 {
   LOG_TRACE("Loading " << tagFilterType << " filters...");
+
   _tagFilters[tagFilterType].clear();
-  for (pt::ptree::value_type& tagFilterPart : propTree->get_child(tagFilterType.toStdString()))
+  boost::optional<pt::ptree&> tagFilterChild =
+    propTree->get_child_optional(tagFilterType.toStdString());
+  if (tagFilterChild)
   {
-    TagFilter tagFilter = TagFilter::fromJson(tagFilterPart);
-    LOG_VART(tagFilter);
-    _tagFilters[tagFilterType].append(tagFilter);
+    for (pt::ptree::value_type& tagFilterPart : propTree->get_child(tagFilterType.toStdString()))
+    {
+      TagFilter tagFilter = TagFilter::fromJson(tagFilterPart);
+      LOG_VART(tagFilter);
+      _tagFilters[tagFilterType].append(tagFilter);
+    }
   }
   LOG_VART(_tagFilters[tagFilterType].size());
 }

@@ -44,6 +44,7 @@ _similarityThreshold(similarityThreshold)
 TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
 {
   const QString filter = QString::fromStdString(tagFilterPart.second.get<std::string>("filter"));
+  LOG_VART(filter);
   if (filter.trimmed().isEmpty() || !filter.contains("="))
   {
     //throw
@@ -54,15 +55,23 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
   const QString value = filterParts[1];
   LOG_VART(value);
 
+  // allowAliases and similarityThreshold are optional
+
   bool allowAliases = false;
-  if (tagFilterPart.second.get<bool>("allowAliases"))
+  boost::optional<bool> allowAliasesProp = tagFilterPart.second.get_optional<bool>("allowAliases");
+  if (allowAliasesProp)
   {
-    allowAliases = true;
+    allowAliases = allowAliasesProp.get();
   }
   LOG_VART(allowAliases);
 
   double similarityThreshold = -1.0;
-  similarityThreshold = tagFilterPart.second.get<double>("similarityThreshold");
+  boost::optional<double> similarityThresholdProp =
+    tagFilterPart.second.get_optional<double>("similarityThreshold");
+  if (similarityThresholdProp)
+  {
+    similarityThreshold = similarityThresholdProp.get();
+  }
   LOG_VART(similarityThreshold);
 
   return TagFilter(key, value, allowAliases, similarityThreshold);
