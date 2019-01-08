@@ -28,13 +28,18 @@
 #define ADDREF1VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class AddRef1Visitor : public ElementVisitor, public Configurable
+/*
+ * This is an ElementOsmMapVisitor instead of a ElementVisitor to appease the
+ * PrepExactHighwayData.js script in the train-highways regression test. Finishing #2831 would
+ * make it possible to change this back to an ElementVisitor.
+ */
+class AddRef1Visitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 
