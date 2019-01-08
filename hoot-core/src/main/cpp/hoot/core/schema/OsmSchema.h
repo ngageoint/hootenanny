@@ -47,12 +47,12 @@ class Tags;
 
 enum EdgeType
 {
-  CanHave,
+  CanHave,  //not used
   IsA,
   SimilarTo,
-  ParentOf,
-  AssociatedWith,
-  CompoundComponent,
+  ParentOf, //not used
+  AssociatedWith,   //used once
+  CompoundComponent //not used
 };
 
 struct OsmSchemaCategory

@@ -47,10 +47,11 @@ class TagCriterion2Test : public HootTestFixture
   CPPUNIT_TEST(runValueWildcard3Test);
   CPPUNIT_TEST(runAliasTest);
   CPPUNIT_TEST(runSimilarityTest);
-  //TODO
-  //not sure if we get support for inheritance with similarity thresholds or not yet
-  //CPPUNIT_TEST(runChildTest);
-  //CPPUNIT_TEST(runAncestorTest);
+  //todo
+  CPPUNIT_TEST(runChildTest);
+//  CPPUNIT_TEST(runAncestorTest);
+//  CPPUNIT_TEST(runAssociatedWithTest);
+//  CPPUNIT_TEST(runCategoryTest);
   CPPUNIT_TEST(runContradictoryFilterTest);
   CPPUNIT_TEST(runMultiTest);
   CPPUNIT_TEST(runInvalidFilterTagJsonTest);
@@ -63,7 +64,7 @@ public:
   void runMustTest()
   {
     TagCriterion2 uut(
-      "{ \"must\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }");
+      "{ \"must\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -88,7 +89,7 @@ public:
   void runShouldTest()
   {
     TagCriterion2 uut(
-      "{ \"should\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }");
+      "{ \"should\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -113,7 +114,7 @@ public:
   void runMustNotTest()
   {
     TagCriterion2 uut(
-      "{ \"must_not\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }");
+      "{ \"must_not\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -137,7 +138,7 @@ public:
 
   void runKeyWildcard1Test()
   {
-    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"*=restaurant\" } ] }");
+    TagCriterion2 uut("{ \"should\": [ { \"tag\": \"*=restaurant\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -161,7 +162,7 @@ public:
 
   void runKeyWildcard2Test()
   {
-    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity*=restaurant\" } ] }");
+    TagCriterion2 uut("{ \"should\": [ { \"tag\": \"amenity*=restaurant\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -189,7 +190,7 @@ public:
 
   void runKeyWildcard3Test()
   {
-    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"*amenity=restaurant\" } ] }");
+    TagCriterion2 uut("{ \"should\": [ { \"tag\": \"*amenity=restaurant\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -217,7 +218,7 @@ public:
 
   void runKeyWildcard4Test()
   {
-    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"*amenity*=restaurant\" } ] }");
+    TagCriterion2 uut("{ \"should\": [ { \"tag\": \"*amenity*=restaurant\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -245,7 +246,7 @@ public:
 
   void runValueWildcard1Test()
   {
-    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity=*\" } ] }");
+    TagCriterion2 uut("{ \"should\": [ { \"tag\": \"amenity=*\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -269,7 +270,7 @@ public:
 
   void runValueWildcard2Test()
   {
-    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity=water*\" } ] }");
+    TagCriterion2 uut("{ \"should\": [ { \"tag\": \"amenity=water*\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -297,7 +298,7 @@ public:
 
   void runValueWildcard3Test()
   {
-    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity=*water\" } ] }");
+    TagCriterion2 uut("{ \"should\": [ { \"tag\": \"amenity=*water\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -325,7 +326,7 @@ public:
 
   void runValueWildcard4Test()
   {
-    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity=*water*\" } ] }");
+    TagCriterion2 uut("{ \"should\": [ { \"tag\": \"amenity=*water*\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -361,32 +362,32 @@ public:
     node->getTags().set("amenity", "ev_charging");
 
     // allowAliases is false by default
-    uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"amenity=charging_station\" } ] }"));
+    uut.reset(new TagCriterion2("{ \"must\": [ { \"tag\": \"amenity=charging_station\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     uut.reset(
       new TagCriterion2(
-        "{ \"must\": [ { \"filter\": \"amenity=charging_station\", \"allowAliases\": \"true\" } ] }"));
+        "{ \"must\": [ { \"tag\": \"amenity=charging_station\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
     uut.reset(
       new TagCriterion2(
-        "{ \"must\": [ { \"filter\": \"amenity=charging_station\", \"allowAliases\": \"false\" } ] }"));
+        "{ \"must\": [ { \"tag\": \"amenity=charging_station\", \"allowAliases\": \"false\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     uut.reset(
       new TagCriterion2(
-        "{ \"must\": [ { \"filter\": \"amenity=charging_station*\", \"allowAliases\": \"true\" } ] }"));
+        "{ \"must\": [ { \"tag\": \"amenity=charging_station*\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
     uut.reset(
       new TagCriterion2(
-        "{ \"must\": [ { \"filter\": \"amenity=charging*\", \"allowAliases\": \"true\" } ] }"));
+        "{ \"must\": [ { \"tag\": \"amenity=charging*\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     uut.reset(
       new TagCriterion2(
-        "{ \"must\": [ { \"filter\": \"amenity=*\", \"allowAliases\": \"true\" } ] }"));
+        "{ \"must\": [ { \"tag\": \"amenity=*\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
   }
 
@@ -401,29 +402,49 @@ public:
     node->getTags().set("amenity", "community_centre");
 
     // similarityThreshold is disabled by default
-    uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"amenity=arts_centre\" } ] }"));
+    uut.reset(new TagCriterion2("{ \"must\": [ { \"tag\": \"amenity=arts_centre\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     // a similarity score of -1.0 is the same as not using similarity scoring at all
     uut.reset(
       new TagCriterion2(
-        "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"-1.0\" } ] }"));
+        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"-1.0\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     uut.reset(
       new TagCriterion2(
-        "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.7\" } ] }"));
+        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.7\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
     uut.reset(
       new TagCriterion2(
-        "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.6\" } ] }"));
+        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.6\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
     uut.reset(
       new TagCriterion2(
-        "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.8\" } ] }"));
+        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.8\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
+  }
+
+  void runChildTest()
+  {
+
+  }
+
+  void runAncestorTest()
+  {
+
+  }
+
+  void runAssociatedWithTest()
+  {
+
+  }
+
+  void runCategoryTest()
+  {
+    //TODO: allow missing or "*" tag filters here
   }
 
   void runContradictoryFilterTest()
@@ -436,23 +457,23 @@ public:
 
     uut.reset(
       new TagCriterion2(
-        QString("{ \"must\": [ { \"filter\": \"amenity=restaurant\" } ], ") +
-        QString("\"must_not\": [ { \"filter\": \"amenity=restaurant\" } ] }")));
+        QString("{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ], ") +
+        QString("\"must_not\": [ { \"tag\": \"amenity=restaurant\" } ] }")));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     uut.reset(
       new TagCriterion2(
-        QString("{ \"must_not\": [ { \"filter\": \"amenity=restaurant\" } ], ") +
-        QString("\"should\": [ { \"filter\": \"amenity=restaurant\" } ] }")));
+        QString("{ \"must_not\": [ { \"tag\": \"amenity=restaurant\" } ], ") +
+        QString("\"should\": [ { \"tag\": \"amenity=restaurant\" } ] }")));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
   }
 
   void runMultiTest()
   {
     TagCriterion2 uut(
-      QString("{ \"must\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ], ") +
-      QString("\"must_not\": [ { \"filter\": \"tourism=hotel\" }, { \"filter\": \"building=yes\" } ], ") +
-      QString("\"should\": [ { \"filter\": \"cuisine=italian\" } ] }"));
+      QString("{ \"must\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ], ") +
+      QString("\"must_not\": [ { \"tag\": \"tourism=hotel\" }, { \"tag\": \"building=yes\" } ], ") +
+      QString("\"should\": [ { \"tag\": \"cuisine=italian\" } ] }"));
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -499,7 +520,7 @@ public:
 
     try
     {
-      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \" =arts_centre\" } ] }"));
+      uut.reset(new TagCriterion2("{ \"must\": [ { \"tag\": \" =arts_centre\" } ] }"));
     }
     catch (const HootException& e)
     {
@@ -509,7 +530,7 @@ public:
 
     try
     {
-      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"amenity = \" } ] }"));
+      uut.reset(new TagCriterion2("{ \"must\": [ { \"tag\": \"amenity = \" } ] }"));
     }
     catch (const HootException& e)
     {
@@ -519,7 +540,7 @@ public:
 
     try
     {
-      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \" =\" } ] }"));
+      uut.reset(new TagCriterion2("{ \"must\": [ { \"tag\": \" =\" } ] }"));
     }
     catch (const HootException& e)
     {
@@ -529,7 +550,7 @@ public:
 
     try
     {
-      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"amenity \" } ] }"));
+      uut.reset(new TagCriterion2("{ \"must\": [ { \"tag\": \"amenity \" } ] }"));
     }
     catch (const HootException& e)
     {
@@ -547,7 +568,7 @@ public:
     {
       uut.reset(
         new TagCriterion2(
-          "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.0\" } ] }"));
+          "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.0\" } ] }"));
     }
     catch (const HootException& e)
     {
@@ -559,7 +580,7 @@ public:
     {
       uut.reset(
         new TagCriterion2(
-          "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"1.1\" } ] }"));
+          "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"1.1\" } ] }"));
     }
     catch (const HootException& e)
     {
@@ -611,7 +632,7 @@ public:
 
     try
     {
-      uut.reset(new TagCriterion2("{ \"blah\": [ { \"filter\": \"amenity=arts_centre\" } ] }"));
+      uut.reset(new TagCriterion2("{ \"blah\": [ { \"tag\": \"amenity=arts_centre\" } ] }"));
     }
     catch (const HootException& e)
     {

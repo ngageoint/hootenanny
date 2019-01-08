@@ -63,55 +63,71 @@ _similarityThreshold(similarityThreshold)
 TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
 {
   /*
-   * non-sensical example, but illustrates all the possible filter inputs
+   * a non-sensical and contradictory example, but it illustrates all the possible filter inputs
    *
    * {
        "must":
        [
          {
-           "filter": "tourism=hotel",
+           "tag": "tourism=hotel",
            "allowAliases": "true"
+         },
+         {
+           "tag": "surface=gravel",
+           "allowChildren": "true"
+         },
+         {
+           "tag": "*",
+           "category": "transportation"
+         },
+         {
+           "tag": "building:part=yes",
+           "allowAssociations": "true"
          }
        ]
        "should":
        [
          {
-           "filter": "amenity=restaurant",
+           "tag": "amenity=restaurant",
            "similarityThreshold": "0.8"
          },
          {
-           "filter": "amenity=place_of_worship"
+           "tag": "amenity=place_of_worship"
          },
          {
-           "filter": "*address*=*"
+           "tag": "*address*=*"
          },
          {
-           "filter": "poi*=*"
+           "tag": "poi*=*"
          },
          {
-           "filter": "*building=*"
+           "tag": "*building=*"
          },
          {
-           "filter": "*=*address*"
+           "tag": "*=*address*"
          },
          {
-           "filter": "*=poi*"
+           "tag": "*=poi*"
          },
          {
-           "filter": "*=*building"
+           "tag": "*=*building"
          }
        ],
        "must_not":
        [
          {
-           "filter": "amenity=chapel"
+           "tag": "amenity=chapel"
+         },
+         {
+           "tag": "highway=secondary",
+           "allowAncestors": "true"
          }
        ]
      }
    */
 
   boost::optional<std::string> filterProp =
-    tagFilterPart.second.get_optional<std::string>("filter");
+    tagFilterPart.second.get_optional<std::string>("tag");
   if (!filterProp)
   {
     throw IllegalArgumentException("Invalid tag filter.");
@@ -119,6 +135,11 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
   const QString filter = QString::fromStdString(filterProp.get());
   LOG_VART(filter);
   if (filter.trimmed().isEmpty() || !filter.contains("="))
+  {
+    throw IllegalArgumentException("Invalid tag filter: " + filter);
+  }
+  //TODO: add test for this
+  if (filter != "*" && !filter.contains("="))
   {
     throw IllegalArgumentException("Invalid tag filter: " + filter);
   }
