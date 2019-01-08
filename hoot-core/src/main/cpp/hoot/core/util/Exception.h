@@ -42,6 +42,7 @@ namespace hoot {
 class Exception : public std::exception
 {
 public:
+
   Exception() { }
   Exception(const QString& error)
   {
@@ -56,6 +57,7 @@ public:
   }
 
 protected:
+
   QString _error;
 };
 

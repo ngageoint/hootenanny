@@ -51,11 +51,11 @@ class TagCriterion2Test : public HootTestFixture
   //not sure if we get support for inheritance with similarity thresholds or not yet
   //CPPUNIT_TEST(runChildTest);
   //CPPUNIT_TEST(runAncestorTest);
-//  CPPUNIT_TEST(runContradictoryFilterTest);
-//  CPPUNIT_TEST(runMultiTest);
-//  CPPUNIT_TEST(runInvalidFilterTagJsonTest);
-//  CPPUNIT_TEST(runInvalidFilterSimilarityThresholdJsonTest);
-//  CPPUNIT_TEST(runInvalidFilterFormatJsonTest);
+  CPPUNIT_TEST(runContradictoryFilterTest);
+  CPPUNIT_TEST(runMultiTest);
+  CPPUNIT_TEST(runInvalidFilterTagJsonTest);
+  CPPUNIT_TEST(runInvalidFilterSimilarityThresholdJsonTest);
+  CPPUNIT_TEST(runInvalidFilterFormatJsonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -428,12 +428,68 @@ public:
 
   void runContradictoryFilterTest()
   {
+    boost::shared_ptr<TagCriterion2> uut;
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+
+    uut.reset(
+      new TagCriterion2(
+        QString("{ \"must\": [ { \"filter\": \"amenity=restaurant\" } ], ") +
+        QString("\"must_not\": [ { \"filter\": \"amenity=restaurant\" } ] }")));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    uut.reset(
+      new TagCriterion2(
+        QString("{ \"must_not\": [ { \"filter\": \"amenity=restaurant\" } ], ") +
+        QString("\"should\": [ { \"filter\": \"amenity=restaurant\" } ] }")));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
   }
 
   void runMultiTest()
   {
+    TagCriterion2 uut(
+      QString("{ \"must\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ], ") +
+      QString("\"must_not\": [ { \"filter\": \"tourism=hotel\" }, { \"filter\": \"building=yes\" } ], ") +
+      QString("\"should\": [ { \"filter\": \"cuisine=italian\" } ] }"));
 
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    node->getTags().set("cuisine", "italian");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("cuisine", "italian");
+    node->getTags().set("poi", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("cuisine", "italian");
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    node->getTags().set("cuisine", "italian");
+    node->getTags().set("poi", "yes");
+    node->getTags().set("tourism", "hotel");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    node->getTags().set("cuisine", "italian");
+    node->getTags().set("poi", "yes");
+    node->getTags().set("building", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 
   void runInvalidFilterTagJsonTest()
@@ -449,7 +505,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter tag key"));
 
     try
     {
@@ -459,7 +515,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter tag value"));
 
     try
     {
@@ -469,7 +525,17 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter"));
+
+    try
+    {
+      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"amenity \" } ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter"));
   }
 
   void runInvalidFilterSimilarityThresholdJsonTest()
@@ -481,25 +547,25 @@ public:
     {
       uut.reset(
         new TagCriterion2(
-          "{ \"must\": [ { \"filter\": \" =arts_centre\", \"similarityThreshold\": \"0.0\" } ] }"));
+          "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.0\" } ] }"));
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter similarity threshold"));
 
     try
     {
       uut.reset(
         new TagCriterion2(
-          "{ \"must\": [ { \"filter\": \" =arts_centre\", \"similarityThreshold\": \"1.1\" } ] }"));
+          "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"1.1\" } ] }"));
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter similarity threshold"));
   }
 
   void runInvalidFilterFormatJsonTest()
@@ -509,13 +575,51 @@ public:
 
     try
     {
-      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"\" } ] }"));
+      uut.reset(new TagCriterion2("{}"));
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+    LOG_VART(exceptionMsg);
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Empty tag filter specified.").toStdString(), exceptionMsg.toStdString());
+
+    try
+    {
+      uut.reset(new TagCriterion2("{ \"must\": [ ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    LOG_VART(exceptionMsg);
+    //CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter"));
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Empty tag filter specified.").toStdString(), exceptionMsg.toStdString());
+
+    try
+    {
+      uut.reset(new TagCriterion2("{ \"must\": [ {} ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    LOG_VART(exceptionMsg);
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter"));
+
+    try
+    {
+      uut.reset(new TagCriterion2("{ \"blah\": [ { \"filter\": \"amenity=arts_centre\" } ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    LOG_VART(exceptionMsg);
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Empty tag filter specified.").toStdString(), exceptionMsg.toStdString());
   }
 };
 

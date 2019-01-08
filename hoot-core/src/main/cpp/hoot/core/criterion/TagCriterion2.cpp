@@ -68,6 +68,12 @@ void TagCriterion2::_parseFilterString(const QString filterStr)
   _loadTagFilters("must", propTree);
   _loadTagFilters("should", propTree);
   _loadTagFilters("must_not", propTree);
+
+  if (_tagFilters["must"].size() == 0 && _tagFilters["must_not"].size() == 0 &&
+      _tagFilters["should"].size() == 0)
+  {
+    throw IllegalArgumentException("Empty tag filter specified.");
+  }
 }
 
 void TagCriterion2::_loadTagFilters(const QString tagFilterType,
@@ -119,7 +125,8 @@ bool TagCriterion2::_hasAuxMatch(const ConstElementPtr& e, const TagFilter& filt
       const QStringList tagValues = tagValue.split(";");
       for (int i = 0; i < tagValues.length(); i++)
       {
-        if (_filterMatchesAnyTag(TagFilter(tagKey, tagValues.at(i)), e->getTags()))
+        const QString tagValue = tagValues.at(i).trimmed().toLower();
+        if (!tagValue.isEmpty() && _filterMatchesAnyTag(TagFilter(tagKey, tagValue), e->getTags()))
         {
           return true;
         }
@@ -137,20 +144,29 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
 
   LOG_TRACE("Checking for tag match...");
   bool foundFilterMatch = _filterMatchesAnyTag(filter, e->getTags());
-  LOG_VART(foundFilterMatch);
+  if (foundFilterMatch)
+  {
+    LOG_TRACE("Found tag match.");
+  }
 
   LOG_VART(filter.getAllowAliases());
   if (!foundFilterMatch && filter.getAllowAliases())
   {
     foundFilterMatch = _hasAuxMatch(e, filter, "alias");
-    LOG_VART(foundFilterMatch);
+    if (foundFilterMatch)
+    {
+      LOG_TRACE("Found alias match.");
+    }
   }
 
   LOG_VART(filter.getSimilarityThreshold());
   if (!foundFilterMatch && filter.getSimilarityThreshold() != -1.0)
   {
     foundFilterMatch = _hasAuxMatch(e, filter, "similar");
-    LOG_VART(foundFilterMatch);
+    if (foundFilterMatch)
+    {
+      LOG_TRACE("Found similarity match.");
+    }
   }
 
   return foundFilterMatch;
@@ -199,11 +215,13 @@ bool TagCriterion2::_filterMatchesAnyTag(const TagFilter& filter, const Tags& ta
 
     for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
     {
+      LOG_VART(tagItr.key());
       if (keyMatched || (!keyMatched && keyMatcher.exactMatch(tagItr.key())))
       {
         LOG_TRACE("Tags match key on wildcard for key: " << filter.getKey());
         keyMatched = true;
 
+        LOG_VART(tagItr.value());
         if (!valueMatched && valueMatcher.exactMatch(tagItr.value()))
         {
           LOG_TRACE(
@@ -215,6 +233,7 @@ bool TagCriterion2::_filterMatchesAnyTag(const TagFilter& filter, const Tags& ta
 
       if (keyMatched && valueMatched)
       {
+        LOG_TRACE("Matched both key and value.");
         return true;
       }
     }

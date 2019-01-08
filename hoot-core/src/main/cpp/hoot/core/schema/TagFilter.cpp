@@ -28,6 +28,7 @@
 
 // Hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {
@@ -39,9 +40,23 @@ _value(value),
 _allowAliases(allowAliases),
 _similarityThreshold(similarityThreshold)
 {
+  LOG_VART(_key);
+  LOG_VART(_value);
+  LOG_VART(_allowAliases);
+  LOG_VART(_similarityThreshold);
+
+  if (_key.isEmpty())
+  {
+    throw IllegalArgumentException("Invalid tag filter tag key: " + _key);
+  }
+  if (_value.isEmpty())
+  {
+    throw IllegalArgumentException("Invalid tag filter tag value: " + _value);
+  }
   if (_similarityThreshold != -1.0 && (_similarityThreshold < 0.001 || _similarityThreshold > 1.0))
   {
-    //throw
+    throw IllegalArgumentException(
+      "Invalid tag filter similarity threshold: " + QString::number(_similarityThreshold));
   }
 }
 
@@ -95,25 +110,23 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
      }
    */
 
-  const QString filter = QString::fromStdString(tagFilterPart.second.get<std::string>("filter"));
+  boost::optional<std::string> filterProp =
+    tagFilterPart.second.get_optional<std::string>("filter");
+  if (!filterProp)
+  {
+    throw IllegalArgumentException("Invalid tag filter.");
+  }
+  const QString filter = QString::fromStdString(filterProp.get());
   LOG_VART(filter);
   if (filter.trimmed().isEmpty() || !filter.contains("="))
   {
-    //throw
+    throw IllegalArgumentException("Invalid tag filter: " + filter);
   }
   const QStringList filterParts = filter.split("=");
   const QString key = filterParts[0].trimmed().toLower();
   LOG_VART(key);
-  if (key.isEmpty())
-  {
-    //throw
-  }
   const QString value = filterParts[1].trimmed().toLower();
   LOG_VART(value);
-  if (value.isEmpty())
-  {
-    //throw
-  }
 
   // allowAliases and similarityThreshold are optional
 
