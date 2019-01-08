@@ -111,10 +111,6 @@ bool TagCriterion2::_hasAuxMatch(const ConstElementPtr& e, const TagFilter& filt
         OsmSchema::getInstance().getSimilarTags(
           filter.getKey() + "=" + filter.getValue(), filter.getSimilarityThreshold());
     }
-    else
-    {
-      //throw
-    }
 
     for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
     {

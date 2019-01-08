@@ -1,7 +1,0 @@
-#!/bin/bash
-set -e
-
-HOOT_OPT="--error"
-
-# TODO: finish
-

@@ -47,17 +47,20 @@ class TagCriterion2Test : public HootTestFixture
   CPPUNIT_TEST(runValueWildcard3Test);
   CPPUNIT_TEST(runAliasTest);
   CPPUNIT_TEST(runSimilarityTest);
+  //TODO
+//  CPPUNIT_TEST(runContradictoryFilterTest);
 //  CPPUNIT_TEST(runMultiTest);
-  //TODO: error tests
+//  CPPUNIT_TEST(runInvalidFilterTagJsonTest);
+//  CPPUNIT_TEST(runInvalidFilterSimilarityThresholdJsonTest);
+//  CPPUNIT_TEST(runInvalidFilterFormatJsonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void runMustTest()
   {
-    const QString filter =
-      "{ \"must\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut(
+      "{ \"must\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -81,9 +84,8 @@ public:
 
   void runShouldTest()
   {
-    const QString filter =
-      "{ \"should\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut(
+      "{ \"should\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -107,9 +109,8 @@ public:
 
   void runMustNotTest()
   {
-    const QString filter =
-      "{ \"must_not\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut(
+      "{ \"must_not\": [ { \"filter\": \"amenity=restaurant\" }, { \"filter\": \"poi=yes\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -133,8 +134,7 @@ public:
 
   void runKeyWildcard1Test()
   {
-    const QString filter = "{ \"should\": [ { \"filter\": \"*=restaurant\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"*=restaurant\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -158,8 +158,7 @@ public:
 
   void runKeyWildcard2Test()
   {
-    const QString filter = "{ \"should\": [ { \"filter\": \"amenity*=restaurant\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity*=restaurant\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -187,8 +186,7 @@ public:
 
   void runKeyWildcard3Test()
   {
-    const QString filter = "{ \"should\": [ { \"filter\": \"*amenity=restaurant\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"*amenity=restaurant\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -216,8 +214,7 @@ public:
 
   void runKeyWildcard4Test()
   {
-    const QString filter = "{ \"should\": [ { \"filter\": \"*amenity*=restaurant\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"*amenity*=restaurant\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -245,8 +242,7 @@ public:
 
   void runValueWildcard1Test()
   {
-    const QString filter = "{ \"should\": [ { \"filter\": \"amenity=*\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity=*\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -270,8 +266,7 @@ public:
 
   void runValueWildcard2Test()
   {
-    const QString filter = "{ \"should\": [ { \"filter\": \"amenity=water*\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity=water*\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -299,8 +294,7 @@ public:
 
   void runValueWildcard3Test()
   {
-    const QString filter = "{ \"should\": [ { \"filter\": \"amenity=*water\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity=*water\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -328,8 +322,7 @@ public:
 
   void runValueWildcard4Test()
   {
-    const QString filter = "{ \"should\": [ { \"filter\": \"amenity=*water*\" } ] }";
-    TagCriterion2 uut(filter);
+    TagCriterion2 uut("{ \"should\": [ { \"filter\": \"amenity=*water*\" } ] }");
 
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -358,7 +351,6 @@ public:
   void runAliasTest()
   {
     boost::shared_ptr<TagCriterion2> uut;
-    QString filter;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -366,41 +358,38 @@ public:
     node->getTags().set("amenity", "ev_charging");
 
     // allowAliases is false by default
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=charging_station\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"amenity=charging_station\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=charging_station\", \"allowAliases\": \"true\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(
+      new TagCriterion2(
+        "{ \"must\": [ { \"filter\": \"amenity=charging_station\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=charging_station\", \"allowAliases\": \"false\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(
+      new TagCriterion2(
+        "{ \"must\": [ { \"filter\": \"amenity=charging_station\", \"allowAliases\": \"false\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=charging_station*\", \"allowAliases\": \"true\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(
+      new TagCriterion2(
+        "{ \"must\": [ { \"filter\": \"amenity=charging_station*\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=charging*\", \"allowAliases\": \"true\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(
+      new TagCriterion2(
+        "{ \"must\": [ { \"filter\": \"amenity=charging*\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=*\", \"allowAliases\": \"true\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(
+      new TagCriterion2(
+        "{ \"must\": [ { \"filter\": \"amenity=*\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
   }
 
   void runSimilarityTest()
   {
     boost::shared_ptr<TagCriterion2> uut;
-    QString filter;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -409,36 +398,118 @@ public:
     node->getTags().set("amenity", "community_centre");
 
     // similarityThreshold is disabled by default
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"amenity=arts_centre\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     // a similarity score of -1.0 is the same as not using similarity scoring at all
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"-1.0\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(
+      new TagCriterion2(
+        "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"-1.0\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.7\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(
+      new TagCriterion2(
+        "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.7\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.6\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(
+      new TagCriterion2(
+        "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.6\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
-    filter =
-      "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.8\" } ] }";
-    uut.reset(new TagCriterion2(filter));
+    uut.reset(
+      new TagCriterion2(
+        "{ \"must\": [ { \"filter\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.8\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
+  }
+
+  void runContradictoryFilterTest()
+  {
+
   }
 
   void runMultiTest()
   {
 
+  }
+
+  void runInvalidFilterTagJsonTest()
+  {
+    boost::shared_ptr<TagCriterion2> uut;
+    QString exceptionMsg;
+
+    try
+    {
+      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \" =arts_centre\" } ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+
+    try
+    {
+      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"amenity = \" } ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+
+    try
+    {
+      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \" =\" } ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+  }
+
+  void runInvalidFilterSimilarityThresholdJsonTest()
+  {
+    boost::shared_ptr<TagCriterion2> uut;
+    QString exceptionMsg;
+
+    try
+    {
+      uut.reset(
+        new TagCriterion2(
+          "{ \"must\": [ { \"filter\": \" =arts_centre\", \"similarityThreshold\": \"0.0\" } ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+
+    try
+    {
+      uut.reset(
+        new TagCriterion2(
+          "{ \"must\": [ { \"filter\": \" =arts_centre\", \"similarityThreshold\": \"1.1\" } ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
+  }
+
+  void runInvalidFilterFormatJsonTest()
+  {
+    try
+    {
+      uut.reset(new TagCriterion2("{ \"must\": [ { \"filter\": \"\" } ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(QString("").toStdString(),exceptionMsg.toStdString());
   }
 };
 

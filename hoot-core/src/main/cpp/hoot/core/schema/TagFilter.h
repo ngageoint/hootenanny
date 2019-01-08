@@ -32,7 +32,7 @@
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
+//#include <boost/foreach.hpp>
 namespace pt = boost::property_tree;
 
 namespace hoot
@@ -59,6 +59,8 @@ public:
   QString toString() const;
 
 private:
+
+  friend class TagFilterTest;
 
   QString _key;
   QString _value;
