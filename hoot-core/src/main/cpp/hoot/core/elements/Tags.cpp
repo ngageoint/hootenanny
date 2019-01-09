@@ -694,7 +694,8 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
 {
   QRegExp nRegExp("(\\d+(\\.\\d+)?)");
   int pos = 0;
-  while ((pos = nRegExp.indexIn(str,pos)) != -1){
+  while ((pos = nRegExp.indexIn(str,pos)) != -1)
+  {
     num = nRegExp.cap(1).trimmed();
     pos += nRegExp.matchedLength();
   }
@@ -750,6 +751,18 @@ Tags Tags::stringListToTags(const QStringList tags)
     tagsToReturn.appendValue(tagStrParts[0], tagStrParts[1]);
   }
   return tagsToReturn;
+}
+
+Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
+{
+  Tags tags;
+  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
+       itr != schemaVertices.end(); ++itr)
+  {
+    const SchemaVertex vertex = *itr;
+    tags.appendValue(vertex.key, vertex.value);
+  }
+  return tags;
 }
 
 }

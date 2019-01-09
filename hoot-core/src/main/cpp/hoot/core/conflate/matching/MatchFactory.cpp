@@ -32,7 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/TagCriterion2.h>
+#include <hoot/core/criterion/TagAdvancedCriterion.h>
 
 //Qt
 #include <QString>
@@ -139,8 +139,8 @@ void MatchFactory::registerCreator(QString c)
 
     if (!conf().get("conflate.tag.filter").toString().trimmed().isEmpty())
     {
-      boost::shared_ptr<TagCriterion2> filter(
-        new TagCriterion2(conf().get("conflate.tag.filter").toString()));
+      boost::shared_ptr<TagAdvancedCriterion> filter(
+        new TagAdvancedCriterion(conf().get("conflate.tag.filter").toString()));
       mc->setCriterion(filter);
     }
 

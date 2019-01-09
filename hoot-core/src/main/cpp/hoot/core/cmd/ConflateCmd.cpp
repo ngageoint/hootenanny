@@ -255,7 +255,7 @@ int ConflateCmd::runSimple(QStringList args)
 //  if (conf().hasKey("tag.filter"))
 //  {
 //    QStringList preConflateOps = conf().get("conflate.pre.ops").toStringList();
-//    preConflateOps.prepend("hoot::TagCriterion2");
+//    preConflateOps.prepend("hoot::TagAdvancedCriterion");
 //    conf().set("conflate.pre.ops", preConflateOps);
 //  }
 

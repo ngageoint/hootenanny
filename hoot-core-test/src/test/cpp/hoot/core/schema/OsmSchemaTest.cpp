@@ -165,7 +165,7 @@ public:
 
   void dumpAsCsv(OsmSchema& schema, QString tag)
   {
-    vector<SchemaVertex> surfaces = schema.getChildTags(tag);
+    vector<SchemaVertex> surfaces = schema.getChildTagsAsVertices(tag);
     QString csvDistance;
     QString csvAverage;
 
@@ -207,7 +207,7 @@ public:
   {
     OsmSchema& uut = OsmSchema::getInstance();
 
-    vector<SchemaVertex> gravel = uut.getChildTags("surface=gravel");
+    vector<SchemaVertex> gravel = uut.getChildTagsAsVertices("surface=gravel");
 
     CPPUNIT_ASSERT_EQUAL(2, (int)gravel.size());
   }

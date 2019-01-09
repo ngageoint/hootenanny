@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Units.h>
+#include <hoot/core/schema/SchemaVertex.h>
 
 // Qt
 #include <QHash>
@@ -270,6 +271,14 @@ public:
    * @return
    */
   static Tags stringListToTags(const QStringList tags);
+
+  /**
+   *
+   *
+   * @param vertices
+   * @return
+   */
+  static Tags schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices);
 
 private:
 

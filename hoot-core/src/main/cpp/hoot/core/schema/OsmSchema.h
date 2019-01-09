@@ -51,7 +51,7 @@ enum EdgeType
   IsA,
   SimilarTo,
   ParentOf, //not used
-  AssociatedWith,   //used once
+  AssociatedWith,
   CompoundComponent //not used
 };
 
@@ -68,7 +68,8 @@ struct OsmSchemaCategory
     PseudoName =      0x20,
     HgisPoi =         0x40, // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
     Multiuse =        0x80,
-    All = Poi | Building | Transportation | Use | Name | HgisPoi | Multiuse
+    //TODO: should this have PseudoName?
+    All = Poi | Building | Transportation | Use | Name |  HgisPoi | Multiuse
   };
 
   OsmSchemaCategory() : _type(Empty) {}
@@ -278,7 +279,15 @@ public:
    */
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
 
-  std::vector<SchemaVertex> getAssociatedTags(QString name);
+  std::vector<SchemaVertex> getAssociatedTagsAsVertices(QString name);
+
+  /**
+   *
+   *
+   * @param tags
+   * @return
+   */
+  Tags getAssociatedTags(const Tags& tags);
 
   OsmSchemaCategory getCategories(const Tags& t) const;
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
@@ -290,7 +299,15 @@ public:
 
   bool hasTagKey(const QString key);
 
-  std::vector<SchemaVertex> getChildTags(QString name);
+  std::vector<SchemaVertex> getChildTagsAsVertices(QString name);
+
+  /**
+   *
+   *
+   * @param tags
+   * @return
+   */
+  Tags getChildTags(const Tags& tags);
 
   static OsmSchema& getInstance();
 

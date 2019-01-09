@@ -1439,7 +1439,25 @@ bool OsmSchema::hasTagKey(const QString key)
   return getAllTagKeys().contains(key);
 }
 
-vector<SchemaVertex> OsmSchema::getAssociatedTags(QString name)
+Tags OsmSchema::getAssociatedTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  for (Tags::const_iterator inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd();
+       ++inputTagItr)
+  {
+    const Tags childTags =
+      Tags::schemaVerticesToTags(
+        getAssociatedTagsAsVertices(inputTagItr.key() + "=" + inputTagItr.value()));
+    for (Tags::const_iterator childTagItr = childTags.constBegin();
+         childTagItr != childTags.constEnd(); ++childTagItr)
+    {
+      tagsToReturn.appendValue(childTagItr.key(), childTagItr.value());
+    }
+  }
+  return tagsToReturn;
+}
+
+vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(QString name)
 {
   return d->getAssociatedTags(name);
 }
@@ -1479,9 +1497,40 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
   return result;
 }
 
-vector<SchemaVertex> OsmSchema::getChildTags(QString name)
+vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(QString name)
 {
   return d->getChildTags(name);
+}
+
+Tags OsmSchema::getChildTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  for (Tags::const_iterator inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd();
+       ++inputTagItr)
+  {
+    const Tags childTags =
+      Tags::schemaVerticesToTags(
+        getChildTagsAsVertices(inputTagItr.key() + "=" + inputTagItr.value()));
+    for (Tags::const_iterator childTagItr = childTags.constBegin();
+         childTagItr != childTags.constEnd(); ++childTagItr)
+    {
+      tagsToReturn.appendValue(childTagItr.key(), childTagItr.value());
+    }
+  }
+  return tagsToReturn;
+}
+
+Tags OsmSchema::getAliasTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  const std::vector<SchemaVertex> schemaVertices = d->getSchemaVertices(tags);
+  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
+       itr != schemaVertices.end(); ++itr)
+  {
+    SchemaVertex vertex = *itr;
+    tagsToReturn.addTags(Tags::stringListToTags(vertex.aliases));
+  }
+  return tagsToReturn;
 }
 
 const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
@@ -1525,19 +1574,6 @@ OsmSchema& OsmSchema::getInstance()
 double OsmSchema::getIsACost() const
 {
   return d->getIsACost();
-}
-
-Tags OsmSchema::getAliasTags(const Tags& tags)
-{
-  Tags tagsToReturn;
-  const std::vector<SchemaVertex> schemaVertices = d->getSchemaVertices(tags);
-  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
-       itr != schemaVertices.end(); ++itr)
-  {
-    SchemaVertex vertex = *itr;
-    tagsToReturn.addTags(Tags::stringListToTags(vertex.aliases));
-  }
-  return tagsToReturn;
 }
 
 vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const

@@ -1,30 +1,5 @@
-/*
- * This file is part of Hootenanny.
- *
- * Hootenanny is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * --------------------------------------------------------------------
- *
- * The following copyright notices are generated automatically. If you
- * have a new notice to add, please use the format:
- * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
- * copyrights will be updated automatically.
- *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
- */
-#include "TagCriterion2.h"
+
+#include "TagAdvancedCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -44,26 +19,27 @@ namespace pt = boost::property_tree;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, TagCriterion2)
+HOOT_FACTORY_REGISTER(ElementCriterion, TagAdvancedCriterion)
 
-TagCriterion2::TagCriterion2()
+TagAdvancedCriterion::TagAdvancedCriterion()
 {
   setConfiguration(conf());
 }
 
-TagCriterion2::TagCriterion2(const QString filter)
+TagAdvancedCriterion::TagAdvancedCriterion(const QString filterJson)
 {
-  _parseFilterString(filter);
+  _parseFilterString(filterJson);
 }
 
-void TagCriterion2::setConfiguration(const Settings& s)
+void TagAdvancedCriterion::setConfiguration(const Settings& s)
 {
   _parseFilterString(ConfigOptions(s).getConflateTagFilter());
 }
 
-void TagCriterion2::_parseFilterString(const QString filterStr)
+void TagAdvancedCriterion::_parseFilterString(const QString filterJson)
 {
-  const boost::shared_ptr<pt::ptree> propTree = StringUtils::jsonStringToPropTree(filterStr);
+  const boost::shared_ptr<pt::ptree> propTree = StringUtils::jsonStringToPropTree(filterJson);
+
   _tagFilters.clear();
   _loadTagFilters("must", propTree);
   _loadTagFilters("should", propTree);
@@ -76,8 +52,8 @@ void TagCriterion2::_parseFilterString(const QString filterStr)
   }
 }
 
-void TagCriterion2::_loadTagFilters(const QString tagFilterType,
-                                    boost::shared_ptr<pt::ptree> propTree)
+void TagAdvancedCriterion::_loadTagFilters(const QString tagFilterType,
+                                           boost::shared_ptr<pt::ptree> propTree)
 {
   LOG_TRACE("Loading " << tagFilterType << " filters...");
 
@@ -96,8 +72,8 @@ void TagCriterion2::_loadTagFilters(const QString tagFilterType,
   LOG_TRACE(tagFilterType << "filters: " << _tagFilters[tagFilterType].size());
 }
 
-bool TagCriterion2::_hasAuxMatch(const ConstElementPtr& e, const TagFilter& filter,
-                                 const QString matchType) const
+bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilter& filter,
+                                        const QString matchType) const
 {
   LOG_TRACE("Checking for tag " << matchType << " match...");
 
@@ -117,6 +93,42 @@ bool TagCriterion2::_hasAuxMatch(const ConstElementPtr& e, const TagFilter& filt
         OsmSchema::getInstance().getSimilarTags(
           filter.getKey() + "=" + filter.getValue(), filter.getSimilarityThreshold());
     }
+    else if (matchType.toLower() == "child")
+    {
+      tags = OsmSchema::getInstance().getChildTags(filterTags);
+    }
+    else if (matchType.toLower() == "ancestor")
+    {
+      for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end();
+           ++tagItr)
+      {
+        if (OsmSchema::getInstance().isAncestor(
+              filter.getKey().remove("*") + "=" + filter.getValue().remove("*"),
+              tagItr.key() + "=" + tagItr.value()))
+        {
+          LOG_TRACE("Found " << matchType << " match.");
+          return true;
+        }
+      }
+      return false;
+    }
+    else if (matchType.toLower() == "association")
+    {
+      tags = OsmSchema::getInstance().getAssociatedTags(filterTags);
+    }
+    else if (matchType.toLower() == "category")
+    {
+      if (OsmSchema::getInstance().hasCategory(e->getTags(), filter.getCategory().toString()))
+      {
+        LOG_TRACE("Found " << matchType << " match.");
+        return true;
+      }
+      return false;
+    }
+    else
+    {
+      throw IllegalArgumentException("Invalid aux tag match type: " + matchType);
+    }
 
     for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
     {
@@ -128,6 +140,7 @@ bool TagCriterion2::_hasAuxMatch(const ConstElementPtr& e, const TagFilter& filt
         const QString tagValue = tagValues.at(i).trimmed().toLower();
         if (!tagValue.isEmpty() && _filterMatchesAnyTag(TagFilter(tagKey, tagValue), e->getTags()))
         {
+          LOG_TRACE("Found " << matchType << " match.");
           return true;
         }
       }
@@ -137,7 +150,8 @@ bool TagCriterion2::_hasAuxMatch(const ConstElementPtr& e, const TagFilter& filt
   return false;
 }
 
-bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const
+bool TagAdvancedCriterion::_elementPassesTagFilter(const ConstElementPtr& e,
+                                                   const TagFilter& filter) const
 {
   LOG_VART(e->getTags());
   LOG_VART(filter);
@@ -153,26 +167,42 @@ bool TagCriterion2::_elementPassesTagFilter(const ConstElementPtr& e, const TagF
   if (!foundFilterMatch && filter.getAllowAliases())
   {
     foundFilterMatch = _hasAuxMatch(e, filter, "alias");
-    if (foundFilterMatch)
-    {
-      LOG_TRACE("Found alias match.");
-    }
   }
 
   LOG_VART(filter.getSimilarityThreshold());
   if (!foundFilterMatch && filter.getSimilarityThreshold() != -1.0)
   {
     foundFilterMatch = _hasAuxMatch(e, filter, "similar");
-    if (foundFilterMatch)
-    {
-      LOG_TRACE("Found similarity match.");
-    }
+  }
+
+  LOG_VART(filter.getAllowChildren());
+  if (!foundFilterMatch && filter.getAllowChildren())
+  {
+    foundFilterMatch = _hasAuxMatch(e, filter, "child");
+  }
+
+  LOG_VART(filter.getAllowAncestors());
+  if (!foundFilterMatch && filter.getAllowAncestors())
+  {
+    foundFilterMatch = _hasAuxMatch(e, filter, "ancestor");
+  }
+
+  LOG_VART(filter.getAllowAssociations());
+  if (!foundFilterMatch && filter.getAllowAssociations())
+  {
+    foundFilterMatch = _hasAuxMatch(e, filter, "association");
+  }
+
+  LOG_VART(filter.getCategory());
+  if (!foundFilterMatch && filter.getCategory() != OsmSchemaCategory::Empty)
+  {
+    foundFilterMatch = _hasAuxMatch(e, filter, "category");
   }
 
   return foundFilterMatch;
 }
 
-bool TagCriterion2::_filterMatchesAnyTag(const TagFilter& filter, const Tags& tags) const
+bool TagAdvancedCriterion::_filterMatchesAnyTag(const TagFilter& filter, const Tags& tags) const
 {
   LOG_VART(tags);
 
@@ -242,7 +272,7 @@ bool TagCriterion2::_filterMatchesAnyTag(const TagFilter& filter, const Tags& ta
   return keyMatched && valueMatched;
 }
 
-bool TagCriterion2::_elementPassesMustTagFilters(const ConstElementPtr& e) const
+bool TagAdvancedCriterion::_elementPassesMustTagFilters(const ConstElementPtr& e) const
 {
   const int filterSize = _tagFilters["must"].size();
   if (filterSize > 0)
@@ -263,7 +293,7 @@ bool TagCriterion2::_elementPassesMustTagFilters(const ConstElementPtr& e) const
   return true;
 }
 
-bool TagCriterion2::_elementPassesMustNotTagFilters(const ConstElementPtr& e) const
+bool TagAdvancedCriterion::_elementPassesMustNotTagFilters(const ConstElementPtr& e) const
 {
   const int filterSize = _tagFilters["must_not"].size();
   if (filterSize > 0)
@@ -284,7 +314,7 @@ bool TagCriterion2::_elementPassesMustNotTagFilters(const ConstElementPtr& e) co
   return true;
 }
 
-bool TagCriterion2::_elementPassesShouldTagFilters(const ConstElementPtr& e) const
+bool TagAdvancedCriterion::_elementPassesShouldTagFilters(const ConstElementPtr& e) const
 {
   const int filterSize = _tagFilters["should"].size();
   if (filterSize > 0)
@@ -306,7 +336,7 @@ bool TagCriterion2::_elementPassesShouldTagFilters(const ConstElementPtr& e) con
   return true;
 }
 
-bool TagCriterion2::isSatisfied(const ConstElementPtr& e) const
+bool TagAdvancedCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!_elementPassesMustTagFilters(e))
   {

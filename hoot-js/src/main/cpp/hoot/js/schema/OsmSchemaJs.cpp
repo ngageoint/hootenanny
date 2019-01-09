@@ -125,7 +125,7 @@ void OsmSchemaJs::getChildTags(const FunctionCallbackInfo<Value>& args)
 
   QString kvp = toCpp<QString>(args[0]);
 
-  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getChildTags(kvp)));
+  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getChildTagsAsVertices(kvp)));
 }
 
 void OsmSchemaJs::getSimilarTags(const FunctionCallbackInfo<Value>& args)
