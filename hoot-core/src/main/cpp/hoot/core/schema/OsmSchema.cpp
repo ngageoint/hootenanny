@@ -1451,7 +1451,12 @@ Tags OsmSchema::getAssociatedTags(const Tags& tags)
     for (Tags::const_iterator childTagItr = childTags.constBegin();
          childTagItr != childTags.constEnd(); ++childTagItr)
     {
-      tagsToReturn.appendValue(childTagItr.key(), childTagItr.value());
+      QString val = childTagItr.value().trimmed();
+      if (val.isEmpty())
+      {
+        val = "*";
+      }
+      tagsToReturn.appendValue(childTagItr.key(), val);
     }
   }
   return tagsToReturn;

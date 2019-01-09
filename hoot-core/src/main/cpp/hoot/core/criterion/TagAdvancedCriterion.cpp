@@ -78,71 +78,78 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
   LOG_TRACE("Checking for tag " << matchType << " match...");
 
   Tags filterTags;
-  if (filter.getKey() != "*" && filter.getValue() != "*")
+  QString filterKey = filter.getKey();
+  if (filterKey != "*")
   {
-    filterTags.appendValue(filter.getKey().remove("*"), filter.getValue().remove("*"));
+    filterKey = filterKey.remove("*");
+  }
+  QString filterVal = filter.getValue();
+  if (filterVal != "*")
+  {
+    filterVal = filterVal.remove("*");
+  }
+  filterTags.appendValue(filterKey, filterVal);
 
-    Tags tags;
-    if (matchType.toLower() == "alias")
+  Tags tags;
+  if (matchType.toLower() == "alias")
+  {
+    tags = OsmSchema::getInstance().getAliasTags(filterTags);
+  }
+  else if (matchType.toLower() == "similar")
+  {
+    tags =
+      OsmSchema::getInstance().getSimilarTags(
+        filter.getKey() + "=" + filter.getValue(), filter.getSimilarityThreshold());
+  }
+  else if (matchType.toLower() == "child")
+  {
+    tags = OsmSchema::getInstance().getChildTags(filterTags);
+  }
+  else if (matchType.toLower() == "ancestor")
+  {
+    for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end();
+         ++tagItr)
     {
-      tags = OsmSchema::getInstance().getAliasTags(filterTags);
-    }
-    else if (matchType.toLower() == "similar")
-    {
-      tags =
-        OsmSchema::getInstance().getSimilarTags(
-          filter.getKey() + "=" + filter.getValue(), filter.getSimilarityThreshold());
-    }
-    else if (matchType.toLower() == "child")
-    {
-      tags = OsmSchema::getInstance().getChildTags(filterTags);
-    }
-    else if (matchType.toLower() == "ancestor")
-    {
-      for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end();
-           ++tagItr)
-      {
-        if (OsmSchema::getInstance().isAncestor(
-              filter.getKey().remove("*") + "=" + filter.getValue().remove("*"),
-              tagItr.key() + "=" + tagItr.value()))
-        {
-          LOG_TRACE("Found " << matchType << " match.");
-          return true;
-        }
-      }
-      return false;
-    }
-    else if (matchType.toLower() == "association")
-    {
-      tags = OsmSchema::getInstance().getAssociatedTags(filterTags);
-    }
-    else if (matchType.toLower() == "category")
-    {
-      if (OsmSchema::getInstance().hasCategory(e->getTags(), filter.getCategory().toString()))
+      if (OsmSchema::getInstance().isAncestor(
+            filterKey + "=" + filterVal, tagItr.key() + "=" + tagItr.value()))
       {
         LOG_TRACE("Found " << matchType << " match.");
         return true;
       }
-      return false;
     }
-    else
+    return false;
+  }
+  else if (matchType.toLower() == "association")
+  {
+    tags = OsmSchema::getInstance().getAssociatedTags(filterTags);
+  }
+  else if (matchType.toLower() == "category")
+  {
+    if (OsmSchema::getInstance().hasCategory(e->getTags(), filter.getCategory().toString()))
     {
-      throw IllegalArgumentException("Invalid aux tag match type: " + matchType);
+      LOG_TRACE("Found " << matchType << " match.");
+      return true;
     }
+    return false;
+  }
+  else
+  {
+    throw IllegalArgumentException("Invalid aux tag match type: " + matchType);
+  }
+  LOG_VART(tags);
 
-    for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  {
+    const QString tagKey = tagItr.key();
+    const QString tagValue = tagItr.value();
+    const QStringList tagValues = tagValue.split(";");
+    for (int i = 0; i < tagValues.length(); i++)
     {
-      const QString tagKey = tagItr.key();
-      const QString tagValue = tagItr.value();
-      const QStringList tagValues = tagValue.split(";");
-      for (int i = 0; i < tagValues.length(); i++)
+      const QString tagValue = tagValues.at(i).trimmed().toLower();
+      if (!tagValue.isEmpty() && _filterMatchesAnyTag(TagFilter(tagKey, tagValue), e->getTags()))
       {
-        const QString tagValue = tagValues.at(i).trimmed().toLower();
-        if (!tagValue.isEmpty() && _filterMatchesAnyTag(TagFilter(tagKey, tagValue), e->getTags()))
-        {
-          LOG_TRACE("Found " << matchType << " match.");
-          return true;
-        }
+        LOG_TRACE("Found " << matchType << " match.");
+        return true;
       }
     }
   }
