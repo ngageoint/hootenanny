@@ -55,7 +55,7 @@ class MatchCandidateCountVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
   CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
   CPPUNIT_TEST(runFilteredPoiMatchCreatorTest);
-  //CPPUNIT_TEST(runFilteredBuildingMatchCreatorTest);
+  CPPUNIT_TEST(runFilteredMultipleMatchCreatorTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -146,7 +146,7 @@ public:
   }
 
 // Script match creators are handled a little differently during match candidate count creation
-// than regular match creators.  This test is specifically checking that the match creators
+// than regular match creators.  These tests specifically check that the match creators
 // used by the visitor are the correct ones that were specified in the configuration.
 
   void runScriptMatchCreatorTest()
@@ -248,7 +248,7 @@ public:
     const QString poiTagFilter = "{ \"must\": [ { \"tag\": \"poi=yes\" } ] }";
 
     MatchFactory::getInstance().reset();
-    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
+    MatchFactory::_setTagFilter(poiTagFilter);
     MatchFactory::_setMatchCreators(matchCreators);
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     map->visitRo(*uut);
@@ -273,9 +273,49 @@ public:
     CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
   }
 
-  void runFilteredBuildingMatchCreatorTest()
+  void runFilteredMultipleMatchCreatorTest()
   {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    MapProjector::projectToPlanar(map);
 
+    QStringList matchCreators;
+    matchCreators.append("hoot::BuildingMatchCreator");
+    matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
+    boost::shared_ptr<MatchCandidateCountVisitor> uut;
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter("");
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)39, (int)uut->getStat());
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"building=yes\" } ] }");
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)17, (int)uut->getStat());
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)21, (int)uut->getStat());
+
+    //TODO: fix
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"name=Starbucks\" } ] }");
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)12, (int)uut->getStat());
   }
 };
 
