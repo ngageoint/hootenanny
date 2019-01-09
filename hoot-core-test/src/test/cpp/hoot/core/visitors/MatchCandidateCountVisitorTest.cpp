@@ -54,6 +54,8 @@ class MatchCandidateCountVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runScriptMatchCreatorTest);
   CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
   CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
+//  CPPUNIT_TEST(runFilteredPoiMatchCreatorTest);
+  //CPPUNIT_TEST(runFilteredBuildingMatchCreatorTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -143,9 +145,10 @@ public:
       matchCandidateCountsByMatchCreator["hoot::hoot::ScriptMatchCreator,LineStringGenericTest.js"]);
   }
 
-  //Script match creators are handled a little differently during match candidate count creation than
-  //regular match creators.  This test is specifically checking that the match creators used by the
-  //visitor are the correct ones that were specified in the configuration.
+//Script match creators are handled a little differently during match candidate count creation
+//than regular match creators.  This test is specifically checking that the match creators
+//used by the visitor are the correct ones that were specified in the configuration.
+
   void runScriptMatchCreatorTest()
   {
     OsmXmlReader reader;
@@ -221,6 +224,53 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL(
       (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);
+  }
+
+  void runFilteredPoiMatchCreatorTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2(new Node(Status::Unknown2, 2, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node1->getTags().clear();
+    node1->getTags().set("poi", "yes");
+    map->addNode(node1);
+
+    node2->getTags().clear();
+    node2->getTags().set("poi", "yes");
+    map->addNode(node2);
+
+    MapProjector::projectToPlanar(map);
+
+    QStringList matchCreators;
+    matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
+    boost::shared_ptr<MatchCandidateCountVisitor> uut;
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(uut);
+    CPPUNIT_ASSERT_EQUAL((int)1, (int)uut.getStat());
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::_setTagFilter(tagFilter);
+
+    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }");
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    node1->getTags().set("amenity", "restaurant");
+    map->visitRo(uut);
+    CPPUNIT_ASSERT_EQUAL((int)0, (int)uut.getStat());
+
+    node2->getTags().set("amenity", "restaurant");
+    map->visitRo(uut);
+    CPPUNIT_ASSERT_EQUAL((int)1, (int)uut.getStat());
+  }
+
+  void runFilteredBuildingMatchCreatorTest()
+  {
+
   }
 };
 

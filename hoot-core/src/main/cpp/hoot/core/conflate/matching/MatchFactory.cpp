@@ -51,6 +51,7 @@ MatchFactory::~MatchFactory()
 
 MatchFactory::MatchFactory()
 {
+  setConfiguration(conf());
 }
 
 Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const
@@ -137,10 +138,9 @@ void MatchFactory::registerCreator(QString c)
     boost::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(className));
 
-    if (!conf().get("conflate.tag.filter").toString().trimmed().isEmpty())
+    if (!_tagFilter.trimmed().isEmpty())
     {
-      boost::shared_ptr<TagAdvancedCriterion> filter(
-        new TagAdvancedCriterion(conf().get("conflate.tag.filter").toString()));
+      boost::shared_ptr<TagAdvancedCriterion> filter(new TagAdvancedCriterion(_tagFilter));
       mc->setCriterion(filter);
     }
 
@@ -262,6 +262,11 @@ void MatchFactory::_tempFixDefaults()
     conf().set("map.cleaner.transforms", mapCleanerTransforms.join(";"));
   }
   LOG_VARD(ConfigOptions().getMapCleanerTransforms());
+}
+
+void MatchFactory::setConfiguration(const Settings& s)
+{
+  _tagFilter = ConfigOptions(s).getConflateTagFilter();
 }
 
 MatchFactory& MatchFactory::getInstance()

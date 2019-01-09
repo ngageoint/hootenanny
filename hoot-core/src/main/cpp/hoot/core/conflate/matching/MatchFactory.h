@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/util/Configurable.h>
 
 // Standard
 #include <vector>
@@ -43,7 +44,7 @@ class MatchThreshold;
 /**
  * (Singleton)
  */
-class MatchFactory
+class MatchFactory : public Configurable
 {
 public:
 
@@ -53,6 +54,8 @@ public:
    * Returns the default MatchFactory with the default creators registered.
    */
   static MatchFactory& getInstance();
+
+  void setConfiguration(const Settings& s);
 
   /**
    * Create a match object for the specified element IDs. If the element IDs aren't recognized as
@@ -93,20 +96,16 @@ public:
 
   void reset() { _creators.clear(); }
 
-  /**
-   * Returns the number of candidate matches for all registered match creators.
-   *
-   * @return the match candidate count
-   */
-  long getMatchCandidateCount(const ConstOsmMapPtr& map, const geos::geom::Envelope& bounds);
-
 private:
+
+  QString _tagFilter;
 
   MatchFactory();
 
   void _checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> matchCreator,
                                    const geos::geom::Envelope& bounds) const;
   static void _setMatchCreators(QStringList matchCreatorsList);
+  static void _setTagFilter(QString filter) { _tagFilter = filter; }
 
   static void _tempFixDefaults();
 
