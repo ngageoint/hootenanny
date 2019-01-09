@@ -78,7 +78,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO(statusInfo->getInitStatusMessage());
+        LOG_DEBUG(statusInfo->getInitStatusMessage());
       }
       else
       {
@@ -95,7 +95,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 
       if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO(
+        LOG_DEBUG(
           statusInfo->getCompletedStatusMessage() + " in " +
           StringUtils::secondsToDhms(timer.elapsed()));
       }
@@ -109,7 +109,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO(statusInfo->getInitStatusMessage());
+        LOG_DEBUG(statusInfo->getInitStatusMessage());
       }
       else
       {
@@ -126,7 +126,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 
       if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO(
+        LOG_DEBUG(
           statusInfo->getCompletedStatusMessage() + " in " +
           StringUtils::secondsToDhms(timer.elapsed()));
       }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SystemInfo.h"
@@ -145,7 +145,7 @@ namespace Tgs
     long rss;
     getMemoryUsage(vm, rss);
 
-    ss << "Memory usage, vm: " << humanReadable(vm) << " rss: " << humanReadable(rss);
+    ss << "Memory usage, vm:\t" << humanReadable(vm) << "\trss:\t" << humanReadable(rss);
 
     return ss.str();
   }
