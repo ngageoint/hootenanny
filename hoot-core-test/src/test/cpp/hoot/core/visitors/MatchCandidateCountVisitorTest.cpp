@@ -54,7 +54,7 @@ class MatchCandidateCountVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runScriptMatchCreatorTest);
   CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
   CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
-//  CPPUNIT_TEST(runFilteredPoiMatchCreatorTest);
+  CPPUNIT_TEST(runFilteredPoiMatchCreatorTest);
   //CPPUNIT_TEST(runFilteredBuildingMatchCreatorTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -145,9 +145,9 @@ public:
       matchCandidateCountsByMatchCreator["hoot::hoot::ScriptMatchCreator,LineStringGenericTest.js"]);
   }
 
-//Script match creators are handled a little differently during match candidate count creation
-//than regular match creators.  This test is specifically checking that the match creators
-//used by the visitor are the correct ones that were specified in the configuration.
+// Script match creators are handled a little differently during match candidate count creation
+// than regular match creators.  This test is specifically checking that the match creators
+// used by the visitor are the correct ones that were specified in the configuration.
 
   void runScriptMatchCreatorTest()
   {
@@ -245,27 +245,32 @@ public:
     QStringList matchCreators;
     matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
     boost::shared_ptr<MatchCandidateCountVisitor> uut;
+    const QString poiTagFilter = "{ \"must\": [ { \"tag\": \"poi=yes\" } ] }";
 
     MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
     MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
+    MatchFactory::_setMatchCreators(matchCreators);
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
-    map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL((int)1, (int)uut.getStat());
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
+
+    const QString restaurantTagFilter = "{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }";
 
     MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter(restaurantTagFilter);
     MatchFactory::_setMatchCreators(matchCreators);
-    MatchFactory::_setTagFilter(tagFilter);
-
-    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }");
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     node1->getTags().set("amenity", "restaurant");
-    map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL((int)0, (int)uut.getStat());
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)1, (int)uut->getStat());
 
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter(restaurantTagFilter);
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     node2->getTags().set("amenity", "restaurant");
-    map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL((int)1, (int)uut.getStat());
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
   }
 
   void runFilteredBuildingMatchCreatorTest()

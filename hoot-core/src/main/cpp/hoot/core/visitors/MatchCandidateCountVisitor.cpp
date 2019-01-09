@@ -35,15 +35,16 @@ namespace hoot
 {
 
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
-  const vector<boost::shared_ptr<MatchCreator> >& matchCreators) :
+  const vector<boost::shared_ptr<MatchCreator>>& matchCreators) :
 _totalCandidateCount(0)
 {
   _setupCreators(matchCreators);
 }
 
 void MatchCandidateCountVisitor::_setupCreators(
-  const vector<boost::shared_ptr<MatchCreator> >& matchCreators)
+  const vector<boost::shared_ptr<MatchCreator>>& matchCreators)
 {
+  _matchCreatorsByName.clear();
   LOG_VARD(matchCreators.size());
   for (size_t i = 0; i < matchCreators.size(); i++)
   {
