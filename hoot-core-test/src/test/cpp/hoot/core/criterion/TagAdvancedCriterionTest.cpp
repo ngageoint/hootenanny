@@ -24,7 +24,7 @@ class TagAdvancedCriterionTest : public HootTestFixture
   CPPUNIT_TEST(runChildTest);
   CPPUNIT_TEST(runAncestorTest);
   CPPUNIT_TEST(runAssociatedWithTest);
-  //CPPUNIT_TEST(runCategoryTest);
+  CPPUNIT_TEST(runCategoryTest);
   CPPUNIT_TEST(runContradictoryFilterTest);
   CPPUNIT_TEST(runMultiTest);
   CPPUNIT_TEST(runInvalidFilterTagJsonTest);
@@ -552,24 +552,10 @@ public:
     node->getTags().clear();
     node->getTags().set("highway", "road");
 
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"category\": \"transportation\" } ] }"));
+    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"category\": \"transportation\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"*\", \"category\": \"transportation\" } ] }"));
-    CPPUNIT_ASSERT(uut->isSatisfied(node));
-
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"highway=primary\", \"category\": \"\" } ] }"));
-    CPPUNIT_ASSERT(!uut->isSatisfied(node));
-
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"*\", \"category\": \"poi\" } ] }"));
+    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"category\": \"building\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
   }
 
@@ -686,6 +672,16 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter"));
+
+    try
+    {
+      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"*\" } ] }"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter"));
   }
 
   void runInvalidFilterSimilarityThresholdJsonTest()
@@ -777,16 +773,46 @@ public:
 
   void runInvalidFilterCategoryJsonTest()
   {
+    boost::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
+
     try
     {
-      TagAdvancedCriterion uut("{ \"must\": [ { \"category\": \"blah\" } ] }");
-      LOG_VART(uut.getDescription());
+      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"category\": \"blah\" } ] }"));
+      LOG_VART(uut->getDescription());
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Unknown category"));
+
+    try
+    {
+      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"category\": \"\" } ] }"));
+      LOG_VART(uut->getDescription());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    //CPPUNIT_ASSERT_EQUAL(
+      //QString("Empty tag category.").toStdString(), exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Unknown category"));
+
+    try
+    {
+      uut.reset(
+        new TagAdvancedCriterion(
+          "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"category\": \"\" } ] }"));
+      LOG_VART(uut->getDescription());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    //CPPUNIT_ASSERT_EQUAL(
+      //QString("Empty tag category.").toStdString(), exceptionMsg.toStdString());
     CPPUNIT_ASSERT(exceptionMsg.startsWith("Unknown category"));
   }
 };

@@ -8,27 +8,66 @@
 namespace hoot
 {
 
-TagFilter::TagFilter(const QString key, const QString value) :
-_key(key),
-_value(value),
+TagFilter::TagFilter(const QString key, const QString value, const OsmSchemaCategory& category) :
+_key(key.trimmed().toLower()),
+_value(value.trimmed().toLower()),
 _allowAliases(false),
 _similarityThreshold(false),
 _allowChildren(false),
 _allowAncestors(false),
 _allowAssociations(false),
-_category(OsmSchemaCategory::Empty)
+_category(category)
 {
   LOG_VART(_key);
   LOG_VART(_value);
+  LOG_VART(_category);
 
-  if (_key.isEmpty())
+  if (_category == OsmSchemaCategory::Empty)
+  {
+    if (_key.isEmpty())
+    {
+      throw IllegalArgumentException("Invalid tag filter tag key: " + _key);
+    }
+    if (_value.isEmpty())
+    {
+      throw IllegalArgumentException("Invalid tag filter tag value: " + _value);
+    }
+  }
+}
+
+void TagFilter::setKey(QString key)
+{
+  if (_category != OsmSchemaCategory::Empty && !key.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException("Both a tag filter and a category filter cannot be specified.");
+  }
+  else if (_category == OsmSchemaCategory::Empty && key.trimmed().isEmpty())
   {
     throw IllegalArgumentException("Invalid tag filter tag key: " + _key);
   }
-  if (_value.isEmpty())
+  _key = key.trimmed().toLower();
+}
+
+void TagFilter::setValue(QString val)
+{
+  if (_category != OsmSchemaCategory::Empty && !val.trimmed().isEmpty())
   {
-    throw IllegalArgumentException("Invalid tag filter tag value: " + _value);
+    throw IllegalArgumentException("Both a tag filter and a category filter cannot be specified.");
   }
+  else if (_category == OsmSchemaCategory::Empty && val.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException("Invalid tag filter tag val: " + _value);
+  }
+  _value = val.trimmed().toLower();
+}
+
+void TagFilter::setCategory(OsmSchemaCategory category)
+{
+  if (category != OsmSchemaCategory::Empty && (!_key.isEmpty() || !_value.isEmpty()))
+  {
+    throw IllegalArgumentException("Both a tag filter and a category filter cannot be specified.");
+  }
+  _category = category;
 }
 
 void TagFilter::setSimilarityThreshold(double threshold)
@@ -60,7 +99,6 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
            "allowChildren": "true"
          },
          {
-           "tag": "*",
            "category": "transportation"
          },
          {
@@ -110,12 +148,24 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
    */
 
   bool categorySpecified = false;
-  QString categoryStr = "";
+  QString categoryStr = "invalid";
   boost::optional<std::string> categoryProp =
     tagFilterPart.second.get_optional<std::string>("category");
   if (categoryProp)
   {
-    categoryStr = QString::fromStdString(categoryProp.get());
+    categoryStr = QString::fromStdString(categoryProp.get()).trimmed().toLower();
+    if (categoryStr.isEmpty() || categoryStr == "empty")
+    {
+      throw IllegalArgumentException("Unknown category.");
+    }
+  }
+  if (categoryStr.isEmpty())
+  {
+    throw IllegalArgumentException("Empty tag category.");
+  }
+  else if (categoryStr == "invalid")
+  {
+    categoryStr = "";
   }
   OsmSchemaCategory category(OsmSchemaCategory::fromString(categoryStr));
   if (category != OsmSchemaCategory::Empty)
@@ -126,19 +176,17 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
 
   boost::optional<std::string> filterProp =
     tagFilterPart.second.get_optional<std::string>("tag");
-  // We allow missing wildcard tag filters when a category is specified only.
-  if (!filterProp && category == OsmSchemaCategory::Empty)
+  if ((filterProp && categorySpecified) || (!filterProp && !categorySpecified))
   {
     throw IllegalArgumentException("Invalid tag filter.");
   }
-  QString key = "*";
-  QString value = "*";
+  QString key = "";
+  QString value = "";
   if (filterProp)
   {
     const QString filter = QString::fromStdString(filterProp.get());
     LOG_VART(filter);
-    if (category == OsmSchemaCategory::Empty &&
-        (filter.trimmed().isEmpty() || !filter.contains("=")))
+    if (filter.trimmed().isEmpty() || !filter.contains("="))
     {
       throw IllegalArgumentException("Invalid tag filter: " + filter);
     }
@@ -147,11 +195,6 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
     LOG_VART(key);
     value = filterParts[1].trimmed().toLower();
     LOG_VART(value);
-  }
-  else if (!categorySpecified)
-  {
-    throw IllegalArgumentException(
-      "If no tag filter is specified a category filter must be specified.");
   }
 
   bool allowAliases = false;
@@ -198,13 +241,12 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
   }
   LOG_VART(allowAssociations);
 
-  TagFilter filter(key, value);
+  TagFilter filter(key, value, category);
   filter.setAllowAliases(allowAliases);
   filter.setSimilarityThreshold(similarityThreshold);
   filter.setAllowChildren(allowChildren);
   filter.setAllowAncestors(allowAncestors);
   filter.setAllowAssociations(allowAssociations);
-  filter.setCategory(category);
   return filter;
 }
 

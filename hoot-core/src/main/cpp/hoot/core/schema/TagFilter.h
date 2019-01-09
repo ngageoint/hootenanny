@@ -23,13 +23,14 @@ class TagFilter
 
 public:
 
-  TagFilter(const QString key, const QString value);
+  TagFilter(const QString key, const QString value,
+            const OsmSchemaCategory& category = OsmSchemaCategory::Empty);
 
   QString getKey() const { return _key; }
-  void setKey(QString key) { _key = key; }
+  void setKey(QString key);
 
   QString getValue() const { return _value; }
-  void setValue(QString val) { _value = val; }
+  void setValue(QString val);
 
   bool getAllowAliases() const { return _allowAliases; }
   void setAllowAliases(bool allow) { _allowAliases = allow; }
@@ -47,7 +48,7 @@ public:
   void setAllowAssociations(bool allow) { _allowAssociations = allow; }
 
   OsmSchemaCategory getCategory() const { return _category; }
-  void setCategory(OsmSchemaCategory category) { _category = category; }
+  void setCategory(OsmSchemaCategory category);
 
   static TagFilter fromJson(const pt::ptree::value_type& tagFilterPart);
 

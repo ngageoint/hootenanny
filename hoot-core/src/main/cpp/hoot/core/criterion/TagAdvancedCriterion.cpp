@@ -162,42 +162,46 @@ bool TagAdvancedCriterion::_elementPassesTagFilter(const ConstElementPtr& e,
 {
   LOG_VART(e->getTags());
   LOG_VART(filter);
+  bool foundFilterMatch = false;
 
-  LOG_TRACE("Checking for tag match...");
-  bool foundFilterMatch = _filterMatchesAnyTag(filter, e->getTags());
-  if (foundFilterMatch)
+  if (!(filter.getKey().isEmpty() && filter.getValue().isEmpty()))
   {
-    LOG_TRACE("Found tag match.");
-  }
+    LOG_TRACE("Checking for tag match...");
+    foundFilterMatch = _filterMatchesAnyTag(filter, e->getTags());
+    if (foundFilterMatch)
+    {
+      LOG_TRACE("Found tag match.");
+    }
 
-  LOG_VART(filter.getAllowAliases());
-  if (!foundFilterMatch && filter.getAllowAliases())
-  {
-    foundFilterMatch = _hasAuxMatch(e, filter, "alias");
-  }
+    LOG_VART(filter.getAllowAliases());
+    if (!foundFilterMatch && filter.getAllowAliases())
+    {
+      foundFilterMatch = _hasAuxMatch(e, filter, "alias");
+    }
 
-  LOG_VART(filter.getSimilarityThreshold());
-  if (!foundFilterMatch && filter.getSimilarityThreshold() != -1.0)
-  {
-    foundFilterMatch = _hasAuxMatch(e, filter, "similar");
-  }
+    LOG_VART(filter.getSimilarityThreshold());
+    if (!foundFilterMatch && filter.getSimilarityThreshold() != -1.0)
+    {
+      foundFilterMatch = _hasAuxMatch(e, filter, "similar");
+    }
 
-  LOG_VART(filter.getAllowChildren());
-  if (!foundFilterMatch && filter.getAllowChildren())
-  {
-    foundFilterMatch = _hasAuxMatch(e, filter, "child");
-  }
+    LOG_VART(filter.getAllowChildren());
+    if (!foundFilterMatch && filter.getAllowChildren())
+    {
+      foundFilterMatch = _hasAuxMatch(e, filter, "child");
+    }
 
-  LOG_VART(filter.getAllowAncestors());
-  if (!foundFilterMatch && filter.getAllowAncestors())
-  {
-    foundFilterMatch = _hasAuxMatch(e, filter, "ancestor");
-  }
+    LOG_VART(filter.getAllowAncestors());
+    if (!foundFilterMatch && filter.getAllowAncestors())
+    {
+      foundFilterMatch = _hasAuxMatch(e, filter, "ancestor");
+    }
 
-  LOG_VART(filter.getAllowAssociations());
-  if (!foundFilterMatch && filter.getAllowAssociations())
-  {
-    foundFilterMatch = _hasAuxMatch(e, filter, "association");
+    LOG_VART(filter.getAllowAssociations());
+    if (!foundFilterMatch && filter.getAllowAssociations())
+    {
+      foundFilterMatch = _hasAuxMatch(e, filter, "association");
+    }
   }
 
   LOG_VART(filter.getCategory());
