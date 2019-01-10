@@ -13,20 +13,21 @@
 #include <boost/foreach.hpp>
 namespace pt = boost::property_tree;
 
-// Qt
-#include <QRegExp>
-
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TagAdvancedCriterion)
 
-TagAdvancedCriterion::TagAdvancedCriterion()
+TagAdvancedCriterion::TagAdvancedCriterion() :
+_keyMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
+_valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 {
   setConfiguration(conf());
 }
 
-TagAdvancedCriterion::TagAdvancedCriterion(const QString filterJson)
+TagAdvancedCriterion::TagAdvancedCriterion(const QString filterJson) :
+_keyMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
+_valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 {
   _parseFilterString(filterJson);
 }
@@ -249,23 +250,19 @@ bool TagAdvancedCriterion::_filterMatchesAnyTag(const TagFilter& filter, const T
   LOG_VART(valueMatched);
   if (!keyMatched || !valueMatched)
   {
-    QRegExp keyMatcher(filter.getKey());
-    keyMatcher.setPatternSyntax(QRegExp::Wildcard);
-    keyMatcher.setCaseSensitivity(Qt::CaseInsensitive);
-    QRegExp valueMatcher(filter.getValue());
-    valueMatcher.setPatternSyntax(QRegExp::Wildcard);
-    valueMatcher.setCaseSensitivity(Qt::CaseInsensitive);
+    _keyMatcher->setPattern(filter.getKey());
+    _valueMatcher->setPattern(filter.getValue());
 
     for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
     {
       LOG_VART(tagItr.key());
-      if (keyMatched || (!keyMatched && keyMatcher.exactMatch(tagItr.key())))
+      if (keyMatched || (!keyMatched && _keyMatcher->exactMatch(tagItr.key())))
       {
         LOG_TRACE("Tags match key on wildcard for key: " << filter.getKey());
         keyMatched = true;
 
         LOG_VART(tagItr.value());
-        if (!valueMatched && valueMatcher.exactMatch(tagItr.value()))
+        if (!valueMatched && _valueMatcher->exactMatch(tagItr.value()))
         {
           LOG_TRACE(
             "Tags match value on wildcard for key: " << filter.getKey() << " and value: " <<

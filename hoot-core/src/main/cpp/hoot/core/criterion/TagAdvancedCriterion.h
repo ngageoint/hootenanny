@@ -10,6 +10,7 @@
 // Qt
 #include <QString>
 #include <QMap>
+#include <QRegExp>
 
 namespace hoot
 {
@@ -38,6 +39,8 @@ public:
 private:
 
   QMap<QString, QList<TagFilter>> _tagFilters;
+  boost::shared_ptr<QRegExp> _keyMatcher;
+  boost::shared_ptr<QRegExp> _valueMatcher;
 
   void _parseFilterString(const QString filterJson);
   void _loadTagFilters(const QString tagFilterType, boost::shared_ptr<pt::ptree> propTree);
