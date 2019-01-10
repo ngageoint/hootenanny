@@ -100,7 +100,11 @@ public:
 protected:
 
   QString _description;
-  // allows for matching only a subset of feature in the input data
+  // allows for matching only a subset of features in the input data
+  // Unfortunately, each match creator will need to add explicit logic to use this filterin their
+  // isMatchCandidate method (if they call into a match visitor, then in that class's
+  // isMatchCandidate method).  Couldn't find any clean way to add that to this base class, given
+  // the way that each match creator calls into a visitor to parse potential matches
   ElementCriterionPtr _filter;
 };
 
