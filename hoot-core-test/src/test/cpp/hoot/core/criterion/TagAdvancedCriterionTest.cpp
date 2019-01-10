@@ -26,6 +26,7 @@ class TagAdvancedCriterionTest : public HootTestFixture
   CPPUNIT_TEST(runAssociatedWithTest);
   CPPUNIT_TEST(runCategoryTest);
   CPPUNIT_TEST(runContradictoryFilterTest);
+  CPPUNIT_TEST(runCaseSensitivityTest);
   CPPUNIT_TEST(runMultiTest);
   CPPUNIT_TEST(runInvalidFilterTagJsonTest);
   CPPUNIT_TEST(runInvalidFilterSimilarityThresholdJsonTest);
@@ -578,6 +579,25 @@ public:
         QString("{ \"must_not\": [ { \"tag\": \"amenity=restaurant\" } ], ") +
         QString("\"should\": [ { \"tag\": \"amenity=restaurant\" } ] }")));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
+  }
+
+  void runCaseSensitivityTest()
+  {
+    boost::shared_ptr<TagAdvancedCriterion> uut;
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("name", "Starbucks");
+
+    uut.reset(
+      new TagAdvancedCriterion(
+        QString("{ \"must\": [ { \"tag\": \"name=starbucks\" } ] }")));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
+
+    uut.reset(
+      new TagAdvancedCriterion(
+        QString("{ \"must\": [ { \"tag\": \"name=Starbucks\" } ] }")));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
   }
 
   void runMultiTest()
