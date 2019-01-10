@@ -169,7 +169,6 @@ public final class HootProperties {
         TEMPLATE_PATH = getProperty("advOptTemplate");
         REF_OVERRIDE_PATH = getProperty("advOptRefOverride");
         HORZ_OVERRIDE_PATH = getProperty("advOptHorizontalOverride");
-        AVE_OVERRIDE_PATH = getProperty("advOptAverageOverride");
         ATT_OVERRIDE_PATH = getProperty("advOptAttributeOverride");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");

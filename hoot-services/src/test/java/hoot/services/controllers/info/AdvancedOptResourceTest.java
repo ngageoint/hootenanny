@@ -56,15 +56,15 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
 
     @Test
     @Category(UnitTest.class)
-    public void testGetOptionsWhenConflationTypeAverage() throws Exception {
+    public void testGetOptionsWhenConflationTypeAttribute() throws Exception {
         Response responseData =
                 target("/advancedopts/getoptions")
-                        .queryParam("conftype", "average")
+                        .queryParam("conftype", "attribute")
                         .request(MediaType.APPLICATION_JSON)
                         .get();
 
         String jsonStr = responseData.readEntity(String.class);
-        assertThat(jsonStr, CoreMatchers.containsString("average_conflation_options"));
+        assertThat(jsonStr, CoreMatchers.containsString("attribute_conflation_options"));
     }
 
     @Test
