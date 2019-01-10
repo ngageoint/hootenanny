@@ -370,6 +370,45 @@ public:
     CPPUNIT_ASSERT(uut.isSatisfied(node));
   }
 
+  void runSimilarityTest()
+  {
+    boost::shared_ptr<TagAdvancedCriterion> uut;
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    // amenity=community_centre has a similarity score of 0.7 with amenity=arts_centre as defined
+    // in the hoot schema.
+    node->getTags().set("amenity", "community_centre");
+
+    // similarityThreshold is disabled by default
+    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"amenity=arts_centre\" } ] }"));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    // a similarity score of -1.0 is the same as not using similarity scoring at all
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"-1.0\" } ] }"));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    // input is at the threshold
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.7\" } ] }"));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
+
+    // input exceeds the threshold
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.6\" } ] }"));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
+
+    //input is below the threshold
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.8\" } ] }"));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+  }
+
   void runAliasTest()
   {
     boost::shared_ptr<TagAdvancedCriterion> uut;
@@ -411,45 +450,6 @@ public:
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"amenity=*\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
-  }
-
-  void runSimilarityTest()
-  {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-
-    node->getTags().clear();
-    // amenity=community_centre has a similarity score of 0.7 with amenity=arts_centre as defined
-    // in the hoot schema.
-    node->getTags().set("amenity", "community_centre");
-
-    // similarityThreshold is disabled by default
-    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"amenity=arts_centre\" } ] }"));
-    CPPUNIT_ASSERT(!uut->isSatisfied(node));
-
-    // a similarity score of -1.0 is the same as not using similarity scoring at all
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"-1.0\" } ] }"));
-    CPPUNIT_ASSERT(!uut->isSatisfied(node));
-
-    // input is at the threshold
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.7\" } ] }"));
-    CPPUNIT_ASSERT(uut->isSatisfied(node));
-
-    // input exceeds the threshold
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.6\" } ] }"));
-    CPPUNIT_ASSERT(uut->isSatisfied(node));
-
-    //input is below the threshold
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.8\" } ] }"));
-    CPPUNIT_ASSERT(!uut->isSatisfied(node));
   }
 
   void runChildTest()
@@ -557,6 +557,25 @@ public:
         "{ \"must\": [ { \"tag\": \"building:part=yes\", \"allowAssociations\": \"false\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
+    // see wildcard notes in runAliasTest
+
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"building:part=yes*\", \"allowAssociations\": \"true\" } ] }"));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
+
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"building:part=y*\", \"allowAssociations\": \"true\" } ] }"));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    // associations are slightly different from the other aux match types in that they don't support
+    // full wildcards, so this won't match
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"building:part=*\", \"allowAssociations\": \"true\" } ] }"));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
     node->getTags().clear();
     // More tags that are associated with building:part=yes.
     node->getTags().set("building:material", "wood");
@@ -578,25 +597,6 @@ public:
     uut.reset(
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"building:part=yes\", \"allowAssociations\": \"true\" } ] }"));
-    CPPUNIT_ASSERT(!uut->isSatisfied(node));
-
-    // see wildcard notes in runAliasTest
-
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"building:part=yes*\", \"allowAssociations\": \"true\" } ] }"));
-    CPPUNIT_ASSERT(uut->isSatisfied(node));
-
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"building:part=y*\", \"allowAssociations\": \"true\" } ] }"));
-    CPPUNIT_ASSERT(!uut->isSatisfied(node));
-
-    // associations are slightly different from the other aux match types in that they don't support
-    // full wildcards, so this won't match
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"building:part=*\", \"allowAssociations\": \"true\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
   }
 
