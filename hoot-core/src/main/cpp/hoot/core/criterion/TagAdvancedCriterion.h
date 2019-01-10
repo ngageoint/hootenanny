@@ -51,6 +51,9 @@ namespace hoot
    - children/ancestors
    - categories
    - associations
+
+   See TagAdvancedCriterionTest and the Hootenanny User Documentation "Feature Filtering" section
+   for filter examples.
  */
 class TagAdvancedCriterion : public ElementCriterion, public Configurable
 {
