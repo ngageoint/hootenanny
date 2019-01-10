@@ -309,7 +309,6 @@ public:
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)21, (int)uut->getStat());
 
-    //TODO: fix
     MatchFactory::getInstance().reset();
     MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"name=Starbucks\" } ] }");
     MatchFactory::_setMatchCreators(matchCreators);
@@ -320,6 +319,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchCandidateCountVisitorTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchCandidateCountVisitorTest, "current");
 
 }

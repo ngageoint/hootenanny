@@ -251,8 +251,10 @@ bool TagAdvancedCriterion::_filterMatchesAnyTag(const TagFilter& filter, const T
   {
     QRegExp keyMatcher(filter.getKey());
     keyMatcher.setPatternSyntax(QRegExp::Wildcard);
+    keyMatcher.setCaseSensitivity(Qt::CaseInsensitive);
     QRegExp valueMatcher(filter.getValue());
     valueMatcher.setPatternSyntax(QRegExp::Wildcard);
+    valueMatcher.setCaseSensitivity(Qt::CaseInsensitive);
 
     for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
     {
