@@ -26,7 +26,14 @@ specifying a JSON string containing multiple logical AND/OR/NOT tag filters and 
 * Associations - include features that have associations with other features in ways that do not fall into one of the other matching types (catch all similarity capability)
 * Categories - include features that fall into a user defined category 
 
-==== Examples
+==== Conflation Command Example
+
+An example using tag/schema filtering with conflation to conflate only restaurants:
+-----
+hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" input1.osm input2.osm output.osm
+-----
+
+==== Filter Examples
 
 The tag/schema filtering capability is best explained through specific filter examples:
 
