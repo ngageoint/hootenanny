@@ -162,7 +162,7 @@ See the Hootenanny User Guide for additional usage examples and details on comma
     # the first map
     hoot conflate --differential input1.osm input2.osm output.osm
 
-    # Conflate only restaurants
+    # Conflate only restaurants (see the User Guide for more filter examples)
     hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" input1.osm input2.osm output.osm
     
 ### Applying Changes
