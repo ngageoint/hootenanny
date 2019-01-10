@@ -7,16 +7,17 @@ two ways: 1) at the geometry/base feature type level and 2) more granularly at t
 
 === Geometry and Base Fature Type Conflation Feature Filtering
 
-Conflation at the higher geometry/base feature type level is controlled with matchers.  For an overview of the different types of conflation
-available in Hootenanny see the corresponding conflation related sections in this document, as well as the documentation for the 
-'match.creators' configuration option.  By default, Hootenanny enables all types of geometry/base feature type matching it supports.  This 
-ensures that a conflation job results in as much data conflated as possible.  If you were in a situation where you only wanted to perform 
-certain types of conflation, you could adjust the 'match.creators' and 'merger.creators' configuration option accordingly.
+Conflation at the geometry/base feature type level is controlled with matchers.  An example of this type of conflation would be 
+Road Conflation or POI Conflation.  Hootenanny has a specific geometric and attribute related definition of what makes up a road or POI.  
+For an overview of the different types of conflation available in Hootenanny see the corresponding conflation related sections in this 
+document, as well as the documentation for the 'match.creators' configuration option.  By default, Hootenanny enables all types of 
+conflation that it supports.  This ensures that a conflation job results in as much data conflated as possible.  If you desire to perform 
+certain types of conflation only, you can adjust the 'match.creators' and 'merger.creators' configuration options accordingly.
 
 === Tag and Schema Conflation Feature Filtering
 
-At a more granular level, Hootenanny allows for filtering out features during conflation at the tag/schema level.  Hootenanny supports specifying
-a JSON string containing multiple logical AND/OR/NOT tag filters and allows for multiple filtering concepts:
+At a more granular level, Hootenanny allows for filtering out features during conflation via tag/schema relationships.  Hootenanny supports 
+specifying a JSON string containing multiple logical AND/OR/NOT tag filters and allows for multiple filtering concepts:
 
 * Tag key/value string wildcard - basic tag string matching between features
 * Type tag similarity - score how similar features are to each other only keep those at or above a certain similarity threshold
