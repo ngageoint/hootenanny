@@ -15,6 +15,7 @@ include::user/SchemaFiles.asciidoc[]
 include::user/OsmApiDb.asciidoc[]
 include::user/ImplicitTypeTagging.asciidoc[]
 include::user/LanguageTranslation.asciidoc[]
+include::user/FeatureFiltering.asciidoc[]
 include::HootenannyConfigOptions.asciidoc[]
 :leveloffset: 0
 include::commands/HootCommandLineReference.asciidoc[]

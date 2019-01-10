@@ -11,8 +11,8 @@ namespace hoot
 TagFilter::TagFilter(const QString key, const QString value, const OsmSchemaCategory& category) :
 _key(key.trimmed().toLower()),
 _value(value.trimmed().toLower()),
+_similarityThreshold(-1.0),
 _allowAliases(false),
-_similarityThreshold(false),
 _allowChildren(false),
 _allowAncestors(false),
 _allowAssociations(false),
@@ -85,7 +85,7 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
 {
   /*
    * a non-sensical and contradictory example, but it illustrates all the possible types of
-   * filter inputs
+   * JSON filter inputs
    *
    * {
        "must":
@@ -168,6 +168,7 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
     categoryStr = "";
   }
   OsmSchemaCategory category(OsmSchemaCategory::fromString(categoryStr));
+  // an empty category is ignored
   if (category != OsmSchemaCategory::Empty)
   {
     categorySpecified = true;
@@ -176,6 +177,7 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
 
   boost::optional<std::string> filterProp =
     tagFilterPart.second.get_optional<std::string>("tag");
+  // must have either a tag key/value or a category filter per input
   if ((filterProp && categorySpecified) || (!filterProp && !categorySpecified))
   {
     throw IllegalArgumentException("Invalid tag filter.");
@@ -186,6 +188,7 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
   {
     const QString filter = QString::fromStdString(filterProp.get());
     LOG_VART(filter);
+    // don't allow full wildcard, like "*", so all inputs should be a kvp with or w/o wildcards
     if (filter.trimmed().isEmpty() || !filter.contains("="))
     {
       throw IllegalArgumentException("Invalid tag filter: " + filter);
@@ -205,6 +208,7 @@ TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
   }
   LOG_VART(allowAliases);
 
+  // similarity thresholds = -1 are ignored throughout
   double similarityThreshold = -1.0;
   boost::optional<double> similarityThresholdProp =
     tagFilterPart.second.get_optional<double>("similarityThreshold");

@@ -68,7 +68,7 @@ struct OsmSchemaCategory
     PseudoName =      0x20,
     HgisPoi =         0x40, // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
     Multiuse =        0x80,
-    //TODO: should this have PseudoName?
+    //TODO: should this have PseudoName too?
     All = Poi | Building | Transportation | Use | Name |  HgisPoi | Multiuse
   };
 
@@ -282,10 +282,10 @@ public:
   std::vector<SchemaVertex> getAssociatedTagsAsVertices(QString name);
 
   /**
+   * Retrieves a set of tags that are associated with the input tags, as defined by the hoot schema
    *
-   *
-   * @param tags
-   * @return
+   * @param tags tags to search associations for
+   * @return a set of tags
    */
   Tags getAssociatedTags(const Tags& tags);
 
@@ -302,10 +302,10 @@ public:
   std::vector<SchemaVertex> getChildTagsAsVertices(QString name);
 
   /**
+   * Retrieves all child tags for the given input tags
    *
-   *
-   * @param tags
-   * @return
+   * @param tags tags for which to retrieve child tags
+   * @return a set of tags
    */
   Tags getChildTags(const Tags& tags);
 
@@ -321,11 +321,11 @@ public:
   std::vector<SchemaVertex> getSimilarTagsAsVertices(QString name, double minimumScore);
 
   /**
+   * Retrieves tags similar to the input tag
    *
-   *
-   * @param name
-   * @param minimumScore
-   * @return
+   * @param name a kvp
+   * @param minimumScore tag similarity threshold
+   * @return a set of tags
    */
   Tags getSimilarTags(QString name, double minimumScore);
 
@@ -436,10 +436,10 @@ public:
   bool containsTagFromList(const Tags& tags, const QStringList tagList) const;
 
   /**
+   * Retrieves tags that are aliases of the input tags
    *
-   *
-   * @param tags
-   * @return
+   * @param tags tags to search aliases for
+   * @return a set of tags
    */
   Tags getAliasTags(const Tags& tags);
 

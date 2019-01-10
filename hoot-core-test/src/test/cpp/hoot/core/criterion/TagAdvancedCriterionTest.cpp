@@ -36,8 +36,21 @@ class TagAdvancedCriterionTest : public HootTestFixture
 
 public:
 
+  /**
+   * A note about certain types of "aux matching", including alias, child, ancestor, and associated
+   * with: combining string kvp wildcard filters with these type of options is not possible (but may
+   * work in certain cases).  See the comments in runAliasTest for more detail.  The same comments
+   * apply to tests for the aforementioned aux matching types.
+   */
+  TagAdvancedCriterionTest()
+  {
+
+  }
+
   void runMustTest()
   {
+    // element must satisfy all parts of the filter
+
     TagAdvancedCriterion uut(
       "{ \"must\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ] }");
 
@@ -63,6 +76,8 @@ public:
 
   void runShouldTest()
   {
+    // element needs only to satisfy any one part of the filter
+
     TagAdvancedCriterion uut(
       "{ \"should\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ] }");
 
@@ -88,6 +103,8 @@ public:
 
   void runMustNotTest()
   {
+    // element cannot satisfy any parts of the filter
+
     TagAdvancedCriterion uut(
       "{ \"must_not\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ] }");
 
@@ -333,7 +350,7 @@ public:
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
-    // This is an alias for amenity=charging_station as defined in the hoot schema.
+    // amenity=ev_charging is an alias for amenity=charging_station, as defined in the hoot schema.
     node->getTags().set("amenity", "ev_charging");
 
     // allowAliases is false by default
@@ -350,16 +367,20 @@ public:
         "{ \"must\": [ { \"tag\": \"amenity=charging_station\", \"allowAliases\": \"false\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
+    // we don't allow partial wildcards for this type of aux matching and the wildcard part gets
+    // automatically dropped, so this still matches
     uut.reset(
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"amenity=charging_station*\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
+    // we don't allow partial wildcards for this type of aux matching, so this won't match
     uut.reset(
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"amenity=charging*\", \"allowAliases\": \"true\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
+    // full wildcards will still work for this type of aux matching, so this matches
     uut.reset(
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"amenity=*\", \"allowAliases\": \"true\" } ] }"));
@@ -386,16 +407,19 @@ public:
         "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"-1.0\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
+    // input is at the threshold
     uut.reset(
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.7\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
+    // input exceeds the threshold
     uut.reset(
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.6\" } ] }"));
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
+    //input is below the threshold
     uut.reset(
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"amenity=arts_centre\", \"similarityThreshold\": \"0.8\" } ] }"));
@@ -408,7 +432,7 @@ public:
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
-    // This is a child of surface=gravel.
+    // surface=pebblestone is a child of surface=gravel.
     node->getTags().set("surface", "pebblestone");
 
     // allowChildren is false by default
@@ -424,6 +448,8 @@ public:
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"surface=gravel\", \"allowChildren\": \"false\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    // see wildcard notes in runAliasTest
 
     uut.reset(
       new TagAdvancedCriterion(
@@ -443,14 +469,11 @@ public:
 
   void runAncestorTest()
   {
-    //child, parent
-    //CPPUNIT_ASSERT_EQUAL(true, uut.isAncestor("highway=primary", "highway=road"));
-
     boost::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
-    // This is an ancestor child of highway=primary.
+    // highway=road is an ancestor child of highway=primary.
     node->getTags().set("highway", "road");
 
     // allowAncestors is false by default
@@ -466,6 +489,8 @@ public:
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"highway=primary\", \"allowAncestors\": \"false\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    // see wildcard notes in runAliasTest
 
     uut.reset(
       new TagAdvancedCriterion(
@@ -489,7 +514,7 @@ public:
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
-    // This is associated with building:part=yes.
+    // roof:height is associated with building:part=yes.  The value used is irrelevant.
     node->getTags().set("roof:height", "15");
 
     // allowAssociations is false by default
@@ -504,21 +529,6 @@ public:
     uut.reset(
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"building:part=yes\", \"allowAssociations\": \"false\" } ] }"));
-    CPPUNIT_ASSERT(!uut->isSatisfied(node));
-
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"building:part=yes*\", \"allowAssociations\": \"true\" } ] }"));
-    CPPUNIT_ASSERT(uut->isSatisfied(node));
-
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"building:part=y*\", \"allowAssociations\": \"true\" } ] }"));
-    CPPUNIT_ASSERT(!uut->isSatisfied(node));
-
-    uut.reset(
-      new TagAdvancedCriterion(
-        "{ \"must\": [ { \"tag\": \"building:part=*\", \"allowAssociations\": \"true\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     node->getTags().clear();
@@ -542,6 +552,25 @@ public:
     uut.reset(
       new TagAdvancedCriterion(
         "{ \"must\": [ { \"tag\": \"building:part=yes\", \"allowAssociations\": \"true\" } ] }"));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    // see wildcard notes in runAliasTest
+
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"building:part=yes*\", \"allowAssociations\": \"true\" } ] }"));
+    CPPUNIT_ASSERT(uut->isSatisfied(node));
+
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"building:part=y*\", \"allowAssociations\": \"true\" } ] }"));
+    CPPUNIT_ASSERT(!uut->isSatisfied(node));
+
+    // associations are slightly different from the other aux match types in that they don't support
+    // full wildcards, so this won't match
+    uut.reset(
+      new TagAdvancedCriterion(
+        "{ \"must\": [ { \"tag\": \"building:part=*\", \"allowAssociations\": \"true\" } ] }"));
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
   }
 
@@ -568,6 +597,8 @@ public:
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
 
+    // If a filter contradicts itself, it should always fail to pass the element.
+
     uut.reset(
       new TagAdvancedCriterion(
         QString("{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ], ") +
@@ -589,6 +620,8 @@ public:
     node->getTags().clear();
     node->getTags().set("name", "Starbucks");
 
+    // Case sensitivity is set to false by default.
+
     uut.reset(
       new TagAdvancedCriterion(
         QString("{ \"must\": [ { \"tag\": \"name=starbucks\" } ] }")));
@@ -602,8 +635,8 @@ public:
 
   void runMultiTest()
   {
-    // This doesn't test wildcards and other features, so its possible additional multi tests will
-    // need to be added for those if bugs are found.
+    // Tests combinations of filters.  This doesn't test wildcards and other features, so its
+    // possible additional multi tests will need to be added for those if bugs are found.
 
     TagAdvancedCriterion uut(
       QString("{ \"must\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ], ") +
@@ -693,6 +726,8 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter"));
 
+    // don't allow kvp full wildcards; a tag filter must always be filtering kvps in some way, or
+    // the filter won't actually do any filtering
     try
     {
       uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"*\" } ] }"));
@@ -708,6 +743,8 @@ public:
   {
     boost::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
+
+    // Thresholds must be a positive number <= 1.0.
 
     try
     {
@@ -772,11 +809,8 @@ public:
       exceptionMsg = e.what();
     }
     LOG_VART(exceptionMsg);
+    // arguably this could be "Empty tag filter specified." instead
     CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid tag filter"));
-//    CPPUNIT_ASSERT_EQUAL(
-//      QString("If no tag filter is specified a category filter must be specified.")
-//        .toStdString(),
-//      exceptionMsg.toStdString());
 
     try
     {
@@ -787,6 +821,7 @@ public:
       exceptionMsg = e.what();
     }
     LOG_VART(exceptionMsg);
+    // arguably this could return "invalid" or something more descriptive instead
     CPPUNIT_ASSERT_EQUAL(
       QString("Empty tag filter specified.").toStdString(), exceptionMsg.toStdString());
   }
@@ -807,6 +842,8 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.startsWith("Unknown category"));
 
+    // Empty categories are allowed in hoot, but make no sense in the context of a tag filter.
+
     try
     {
       uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"category\": \"\" } ] }"));
@@ -816,8 +853,6 @@ public:
     {
       exceptionMsg = e.what();
     }
-    //CPPUNIT_ASSERT_EQUAL(
-      //QString("Empty tag category.").toStdString(), exceptionMsg.toStdString());
     CPPUNIT_ASSERT(exceptionMsg.startsWith("Unknown category"));
 
     try
@@ -831,8 +866,6 @@ public:
     {
       exceptionMsg = e.what();
     }
-    //CPPUNIT_ASSERT_EQUAL(
-      //QString("Empty tag category.").toStdString(), exceptionMsg.toStdString());
     CPPUNIT_ASSERT(exceptionMsg.startsWith("Unknown category"));
   }
 };

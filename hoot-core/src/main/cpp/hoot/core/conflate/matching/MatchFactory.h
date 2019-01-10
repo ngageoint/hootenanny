@@ -98,6 +98,7 @@ public:
 
 private:
 
+  // allows for matching a subset of the input data
   QString _tagFilter;
 
   MatchFactory();

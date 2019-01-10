@@ -1452,6 +1452,8 @@ Tags OsmSchema::getAssociatedTags(const Tags& tags)
          childTagItr != childTags.constEnd(); ++childTagItr)
     {
       QString val = childTagItr.value().trimmed();
+      // Associated tags are just returned as keys, so this is being added to the value to alleviate
+      // callers that expect non-empty values.
       if (val.isEmpty())
       {
         val = "*";
@@ -1533,7 +1535,7 @@ Tags OsmSchema::getAliasTags(const Tags& tags)
        itr != schemaVertices.end(); ++itr)
   {
     SchemaVertex vertex = *itr;
-    tagsToReturn.addTags(Tags::stringListToTags(vertex.aliases));
+    tagsToReturn.addTags(Tags::kvpListToTags(vertex.aliases));
   }
   return tagsToReturn;
 }

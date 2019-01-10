@@ -513,8 +513,8 @@ are: reference, cookieCutter, average, and advancedConflation.
 * Data Type: string
 * Default Value: ``
 
-A JSON tag filter that is applied to filter feature before conflation.  See the Hootenanny
-User Guide for filter usage examples.
+A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
+User Guide "Feature Filtering" section for filter usage examples.
 
 === conflator.manipulators
 

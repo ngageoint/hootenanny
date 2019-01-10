@@ -265,18 +265,18 @@ public:
   bool hasAnyKvp(const QStringList kvps) const;
 
   /**
+   * Converts a list of KVPs into tags
    *
-   *
-   * @param tags
-   * @return
+   * @param kvps kvps to convert
+   * @return a set of tags
    */
-  static Tags stringListToTags(const QStringList tags);
+  static Tags kvpListToTags(const QStringList kvps);
 
   /**
+   * Converts a collection of schema vertices to tags
    *
-   *
-   * @param vertices
-   * @return
+   * @param vertices schema vertices to convert
+   * @return a set of tags
    */
   static Tags schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices);
 

@@ -16,7 +16,15 @@ namespace hoot
 {
 
 /**
+ * Criterion allowing for advanced tag filtering concepts, as defined in the Hootenanny schema,
+ * including:
  *
+ * - tag key/value string wildcard
+   - type tag similarity
+   - aliases
+   - children/ancestors
+   - categories
+   - associations
  */
 class TagAdvancedCriterion : public ElementCriterion, public Configurable
 {
@@ -34,10 +42,11 @@ public:
   void setConfiguration(const Settings& s);
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Identifies elements by tag using a set of advanced schema functionality"; }
 
 private:
 
+  // one filter for each type: must, must_not, and should
   QMap<QString, QList<TagFilter>> _tagFilters;
   boost::shared_ptr<QRegExp> _keyMatcher;
   boost::shared_ptr<QRegExp> _valueMatcher;
@@ -49,7 +58,15 @@ private:
   bool _elementPassesMustTagFilters(const ConstElementPtr& e) const;
   bool _elementPassesMustNotTagFilters(const ConstElementPtr& e) const;
   bool _elementPassesShouldTagFilters(const ConstElementPtr& e) const;
+
+  /*
+   * Checks for a match between the kvp portion of the tag filter and the input tags
+   */
   bool _filterMatchesAnyTag(const TagFilter& filter, const Tags& tags) const;
+  /*
+   * Looks for match other than a tag string match...basically all other type of matches;
+   * associations, etc.
+   */
   bool _hasAuxMatch(const ConstElementPtr& e, const TagFilter& filter, const QString type) const;
 };
 

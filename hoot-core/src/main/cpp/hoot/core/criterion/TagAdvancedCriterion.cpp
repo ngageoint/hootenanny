@@ -19,6 +19,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, TagAdvancedCriterion)
 
 TagAdvancedCriterion::TagAdvancedCriterion() :
+// not seeing a need to use anything other than case-insensitive here, but can make it
+// configurable if needed
 _keyMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
 _valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 {
@@ -80,6 +82,8 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
 
   Tags filterTags;
   QString filterKey = filter.getKey();
+  // We don't support kvp wildcards when we're looking for aux style matches.  So if the filter
+  // specifies a wildcard, we'll simply remove it.
   if (filterKey != "*")
   {
     filterKey = filterKey.remove("*");
@@ -90,6 +94,10 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
     filterVal = filterVal.remove("*");
   }
   filterTags.appendValue(filterKey, filterVal);
+
+  // Here we finding a set of tags as defined by the type of match we are looking for, then for
+  // each tag found, create a tag filter with the kvp and call back into _filterMatchesAnyTag with
+  // that filter.
 
   Tags tags;
   if (matchType.toLower() == "alias")
@@ -165,14 +173,20 @@ bool TagAdvancedCriterion::_elementPassesTagFilter(const ConstElementPtr& e,
   LOG_VART(filter);
   bool foundFilterMatch = false;
 
+  // If the kvp filter is empty, then the filter must be a category filter, so we skip to that.
   if (!(filter.getKey().isEmpty() && filter.getValue().isEmpty()))
   {
+    // Trying to match the tag kvp first, then if no match is found, checking each additional aux
+    // match type based on the filter's content.
+
     LOG_TRACE("Checking for tag match...");
     foundFilterMatch = _filterMatchesAnyTag(filter, e->getTags());
     if (foundFilterMatch)
     {
       LOG_TRACE("Found tag match.");
     }
+
+    // there may be a way to make this section cleaner
 
     LOG_VART(filter.getAllowAliases());
     if (!foundFilterMatch && filter.getAllowAliases())

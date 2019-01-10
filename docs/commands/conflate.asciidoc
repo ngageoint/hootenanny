@@ -16,6 +16,11 @@ The +conflate+ command conflates two maps into a single map.  If the specified o
 * +--stats+        - Hootenanny map statistics such as node and way count; must be the last option entered and may be optionally followed
                      by an output file name
 
+=== Feature Filtering
+
+A subset of input features may be conflated by specifying the 'conflate.tag.filter' configuration option.  The option allows for JSON 
+feature tag filtering.  For more information, see the "Feature Filtering" section of the Hootenanny User Guide.
+
 === Usage
 
 --------------------------------------

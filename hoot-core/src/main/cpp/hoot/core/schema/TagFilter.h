@@ -16,7 +16,8 @@ namespace hoot
 {
 
 /**
- *
+ * A tag filter linked to the Hootenanny schema that can be applied to feature data with a criterion.
+ * Multiple tag filters can be specified in the filter JSON.
  */
 class TagFilter
 {
@@ -50,6 +51,12 @@ public:
   OsmSchemaCategory getCategory() const { return _category; }
   void setCategory(OsmSchemaCategory category);
 
+  /**
+   * Creates a tag filter from a JSON node
+   *
+   * @param tagFilterPart a "must", "must_not", "should" boost prop tree node
+   * @return a tag filter
+   */
   static TagFilter fromJson(const pt::ptree::value_type& tagFilterPart);
 
   QString toString() const;
@@ -58,13 +65,24 @@ private:
 
   friend class TagFilterTest;
 
+  // allows for retrieving features by tag content (optional if category is used)
   QString _key;
   QString _value;
-  bool _allowAliases;
+
+  // allows retrieving features similar to those brought back by the tag filter, if their
+  // similarity score is above the threshold, where similarity is defined in the hoot schema; must
+  // be a positive number <= 1.0 for use; -1.0 is the default value and is ignored (optional)
   double _similarityThreshold;
+
+  // allows for retrieving related features with to those brought back by the tag filter;
+  // See OsmSchema or the user documentation on tag filtering for more info (optional)
+  bool _allowAliases;
   bool _allowChildren;
   bool _allowAncestors;
   bool _allowAssociations;
+
+  // allows for retrieving features by a category, where categories are defined in the hoot schema
+  // (optional if a tag filter is used)
   OsmSchemaCategory _category;
 };
 

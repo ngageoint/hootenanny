@@ -100,6 +100,7 @@ public:
 protected:
 
   QString _description;
+  // allows for matching only a subset of feature in the input data
   ElementCriterionPtr _filter;
 };
 

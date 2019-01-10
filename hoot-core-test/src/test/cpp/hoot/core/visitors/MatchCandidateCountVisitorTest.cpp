@@ -145,12 +145,12 @@ public:
       matchCandidateCountsByMatchCreator["hoot::hoot::ScriptMatchCreator,LineStringGenericTest.js"]);
   }
 
-// Script match creators are handled a little differently during match candidate count creation
-// than regular match creators.  These tests specifically check that the match creators
-// used by the visitor are the correct ones that were specified in the configuration.
-
   void runScriptMatchCreatorTest()
   {
+    // Script match creators are handled a little differently during match candidate count creation
+    // than regular match creators.  This test specifically checks that the match creators
+    // used by the visitor are the correct ones that were specified in the configuration.
+
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
