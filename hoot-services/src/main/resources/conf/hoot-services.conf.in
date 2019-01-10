@@ -114,6 +114,9 @@ advOptHorizontalOverride=conf/services/conflationHorizontalOps.json
 # Advanced options horizontal override
 advOptAverageOverride=conf/services/conflationAverageOps.json
 
+# Advanced options horizontal override
+advOptAttributeOverride=conf/services/conflationAttributeOps.json
+
 # Element merge Node Server port
 ElementMergeServerPort=8096
 
