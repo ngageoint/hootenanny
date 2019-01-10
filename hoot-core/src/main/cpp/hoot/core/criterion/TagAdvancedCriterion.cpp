@@ -62,7 +62,11 @@ _valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 
 void TagAdvancedCriterion::setConfiguration(const Settings& s)
 {
-  _parseFilterString(ConfigOptions(s).getConflateTagFilter());
+  const QString tagFilter = ConfigOptions(s).getConflateTagFilter();
+  if (!tagFilter.trimmed().isEmpty())
+  {
+    _parseFilterString(tagFilter);
+  }
 }
 
 void TagAdvancedCriterion::_parseFilterString(const QString filterJson)
