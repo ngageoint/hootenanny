@@ -83,20 +83,12 @@ exports.matchScore = function(map, e1, e2)
     return result;
 };
 
-/**
- * Simpler version of the merge function. Maybe only support this at first.
- * It only supports merging two elements and the replaced list is determined
- * implicitly based on the result.
-
-TODO: This can probably be replaced with the same mergePair function used in PoiGeneric.js and Area.js
- */
 exports.mergePair = function(map, e1, e2)
 {
-    var newTags = mergeTags(e1, e2);
-    e1.setTags(newTags);
+  // replace instances of e2 with e1 and merge tags
+  mergeElements(map, e1, e2);
+  e1.setStatusString("conflated");
 
-    removeElement(map, e2);
-
-    return e1;
+  return e1;
 };
 
