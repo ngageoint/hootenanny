@@ -32,13 +32,20 @@
         ]
       },
       {
-        "id":"attribute_override_unknown_2_remover",
+        "id":"attribute_override_conflate_post_ops",
         "elem_type":"string",
-        "description":"Remove unmatched features in secondary dataset.",
-        "name":"Remove Unmatched Secondary Features",
+        "description":"Remove review relations and unmatched features in secondary dataset.",
+        "name":"Conflate Post Ops",
         "hoot_key":"conflate.post.ops",
-        "defaultvalue":"hoot::RemoveUnknown2Visitor",
-        "required":"true"
+        "defaultvalue":"hoot::RemoveElementsVisitor;hoot::RemoveUnknown2Visitor"
+      },
+      {
+        "id": "attribute_override_visitor_criterion",
+        "elem_type": "string",
+        "description": "The criterion for the RemoveElementsVisitor above",
+        "name": "Remove Elements Visitor Cirterion",
+        "defaultvalue": "hoot::ReviewRelationCriterion",
+        "hoot_key": "remove.elements.visitor.element.criterion"
       },
       {
         "id": "attribute_override_conflate_match_highway_classifier",
