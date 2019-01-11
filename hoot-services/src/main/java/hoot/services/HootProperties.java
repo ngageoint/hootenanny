@@ -48,7 +48,6 @@ public final class HootProperties {
     public static final String TEMPLATE_PATH;
     public static final String REF_OVERRIDE_PATH;
     public static final String HORZ_OVERRIDE_PATH;
-    public static final String AVE_OVERRIDE_PATH;
     public static final String ATT_OVERRIDE_PATH;
     public static final String DOC_NAME;
     public static final String RPT_STORE_PATH;
@@ -169,7 +168,6 @@ public final class HootProperties {
         TEMPLATE_PATH = getProperty("advOptTemplate");
         REF_OVERRIDE_PATH = getProperty("advOptRefOverride");
         HORZ_OVERRIDE_PATH = getProperty("advOptHorizontalOverride");
-        AVE_OVERRIDE_PATH = getProperty("advOptAverageOverride");
         ATT_OVERRIDE_PATH = getProperty("advOptAttributeOverride");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
