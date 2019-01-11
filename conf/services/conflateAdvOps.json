@@ -252,7 +252,7 @@
                 "name":"Minimum Ties Required",
                 "defaultvalue":"4",
                 "hoot_key":"rubber.sheet.minimum.ties"
-            } 
+            }
         ]
     },
     {
@@ -450,6 +450,24 @@
                 "name":"Unifying Optimizer Time Limit",
                 "defaultvalue":"30",
                 "hoot_key":"unify.optimizer.time.limit"
+            }
+        ]
+    },
+    {
+        "id":"hoot_post_conflation_options",
+        "elem_type":"group",
+        "description":"A list of map operations to be applied to a map after conflation has run",
+        "name":"Post Conlation Options",
+        "hoot_key":"conflate.post.ops",
+        "members":[
+
+            {
+                "id":"unknown_2_remover",
+                "elem_type":"checkbox",
+                "description":"Remove unmatched features in secondary dataset.",
+                "name":"Remove Unmatched Secondary Features",
+                "hoot_val":"hoot::RemoveUnknown2Visitor",
+                "defaultvalue":"false"
             }
         ]
     },

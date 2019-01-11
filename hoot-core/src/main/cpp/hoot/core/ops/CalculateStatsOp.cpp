@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateStatsOp.h"
 
@@ -60,7 +60,7 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/DataProducer.h>
+#include <hoot/core/conflate/stats/DataProducer.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>

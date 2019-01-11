@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "JsFunctionCriterion.h"
 
@@ -31,7 +31,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 using namespace v8;
 
