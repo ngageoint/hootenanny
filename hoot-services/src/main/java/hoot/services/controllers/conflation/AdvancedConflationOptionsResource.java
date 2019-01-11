@@ -64,11 +64,9 @@ public class AdvancedConflationOptionsResource {
     private JSONArray template;
     private JSONArray referenceTemplate;
     private JSONArray horizontalTemplate;
-    private JSONArray averageTemplate;
     private JSONArray attributeTemplate;
     private JSONObject referenceOverride;
     private JSONObject horizontalOverride;
-    private JSONObject averageOverride;
     private JSONObject attributeOverride;
 
     public AdvancedConflationOptionsResource() {}
@@ -105,13 +103,6 @@ public class AdvancedConflationOptionsResource {
                 }
                 template = horizontalTemplate;
             }
-            else if (confType.equalsIgnoreCase("average")) {
-                if ((averageTemplate == null) || doForce) {
-                    averageTemplate = new JSONArray();
-                    averageTemplate.add(averageOverride);
-                }
-                template = averageTemplate;
-            }
             else if (confType.equalsIgnoreCase("attribute")) {
                 if ((attributeTemplate == null) || doForce) {
                     attributeTemplate = new JSONArray();
@@ -147,10 +138,6 @@ public class AdvancedConflationOptionsResource {
 
             try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HORZ_OVERRIDE_PATH))){
                 horizontalOverride = (JSONObject) parser.parse(fileReader);
-            }
-
-            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, AVE_OVERRIDE_PATH))) {
-                averageOverride = (JSONObject) parser.parse(fileReader);
             }
 
             try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, ATT_OVERRIDE_PATH))) {
