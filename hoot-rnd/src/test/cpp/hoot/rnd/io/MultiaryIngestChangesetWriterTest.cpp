@@ -264,6 +264,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryIngestChangesetWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryIngestChangesetWriterTest, "glacial");
 
 }

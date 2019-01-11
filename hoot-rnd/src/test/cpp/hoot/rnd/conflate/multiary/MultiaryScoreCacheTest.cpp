@@ -159,6 +159,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryScoreCacheTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryScoreCacheTest, "glacial");
 
 }

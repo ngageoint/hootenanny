@@ -127,6 +127,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(VagabondNetworkMatcherTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(VagabondNetworkMatcherTest, "glacial");
 
 }

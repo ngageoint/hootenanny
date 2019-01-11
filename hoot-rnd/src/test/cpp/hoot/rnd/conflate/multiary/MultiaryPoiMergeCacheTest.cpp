@@ -123,6 +123,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryPoiMergeCacheTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryPoiMergeCacheTest, "glacial");
 
 }

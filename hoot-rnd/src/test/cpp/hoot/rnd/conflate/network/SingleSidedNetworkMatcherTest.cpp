@@ -127,6 +127,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SingleSidedNetworkMatcherTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SingleSidedNetworkMatcherTest, "glacial");
 
 }

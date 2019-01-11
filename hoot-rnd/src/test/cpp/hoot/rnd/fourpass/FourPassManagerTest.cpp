@@ -95,7 +95,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FourPassManagerTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FourPassManagerTest, "glacial");
 
 }

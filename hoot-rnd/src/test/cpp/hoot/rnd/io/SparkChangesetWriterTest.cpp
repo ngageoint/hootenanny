@@ -256,6 +256,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SparkChangesetWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SparkChangesetWriterTest, "glacial");
 
 }

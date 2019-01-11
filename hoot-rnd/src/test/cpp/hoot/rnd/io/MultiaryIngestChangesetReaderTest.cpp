@@ -128,6 +128,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryIngestChangesetReaderTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryIngestChangesetReaderTest, "glacial");
 
 }

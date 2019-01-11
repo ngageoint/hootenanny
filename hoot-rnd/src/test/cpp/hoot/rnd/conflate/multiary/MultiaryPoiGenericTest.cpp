@@ -99,6 +99,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryPoiGenericTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryPoiGenericTest, "glacial");
 
 }

@@ -67,6 +67,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CumulativeConflatorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CumulativeConflatorTest, "glacial");
 
 }
