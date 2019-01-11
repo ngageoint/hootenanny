@@ -109,8 +109,6 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 
   if (_criterion->isSatisfied(ee))
   {
-    LOG_TRACE("RemoveElementsVisitor criterion satisfied");
-    LOG_VART(_recursive);
     _count++;
     if (_recursive)
     {

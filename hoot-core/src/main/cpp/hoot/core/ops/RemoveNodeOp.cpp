@@ -39,18 +39,19 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveNodeOp)
 
-RemoveNodeOp::RemoveNodeOp(bool doCheck, bool removeFully)
-  : _doCheck(doCheck),
-    _removeFully(removeFully),
-    _removeOnlyUnused(false)
+RemoveNodeOp::RemoveNodeOp(bool doCheck, bool removeFully) :
+_nodeIdToRemove(-std::numeric_limits<int>::max()),
+_doCheck(doCheck),
+_removeFully(removeFully),
+_removeOnlyUnused(false)
 {
 }
 
-RemoveNodeOp::RemoveNodeOp(long nId, bool doCheck, bool removeFully, bool removeOnlyUnused)
-  : _nodeIdToRemove(nId),
-    _doCheck(doCheck),
-    _removeFully(removeFully),
-    _removeOnlyUnused(removeOnlyUnused)
+RemoveNodeOp::RemoveNodeOp(long nId, bool doCheck, bool removeFully, bool removeOnlyUnused) :
+_nodeIdToRemove(nId),
+_doCheck(doCheck),
+_removeFully(removeFully),
+_removeOnlyUnused(removeOnlyUnused)
 {
 }
 
@@ -100,6 +101,11 @@ void RemoveNodeOp::_removeNodeFully(OsmMapPtr& map, long nId)
 
 void RemoveNodeOp::apply(OsmMapPtr& map)
 {
+  if (_nodeIdToRemove == -std::numeric_limits<int>::max())
+  {
+    throw IllegalArgumentException("No node ID specified for RemoveNodeOp.");
+  }
+
   if (_removeFully)
     _removeNodeFully(map, _nodeIdToRemove);
   else if (!_doCheck)
