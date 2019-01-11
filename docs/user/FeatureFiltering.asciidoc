@@ -17,7 +17,7 @@ certain types of conflation only, you can adjust the 'match.creators' and 'merge
 === Tag and Schema Conflation Feature Filtering
 
 At a more granular level, Hootenanny allows for filtering out features during conflation via tag/schema relationships.  Hootenanny supports 
-specifying a JSON string containing multiple logical AND/OR/NOT tag filters and allows for multiple filtering concepts:
+specifying a JSON string or path to a file containing multiple logical AND/OR/NOT tag filters and allows for multiple filtering concepts:
 
 * Tag key/value string wildcard - basic tag string matching between features
 * Type tag similarity - score how similar features are to each other only keep those at or above a certain similarity threshold
@@ -31,6 +31,11 @@ specifying a JSON string containing multiple logical AND/OR/NOT tag filters and 
 An example using tag/schema filtering with conflation to conflate only restaurants:
 -----
 hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" input1.osm input2.osm output.osm
+-----
+
+Conflate specifying a JSON feature filter as a file:
+-----
+hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 -----
 
 ==== Filter Examples

@@ -164,6 +164,9 @@ See the Hootenanny User Guide for additional usage examples and details on comma
 
     # Conflate only restaurants (see the User Guide for more filter examples)
     hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" input1.osm input2.osm output.osm
+
+    # Conflate specifying a JSON feature filter as a file (see the User Guide for more filter examples)
+    hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
     
 ### Applying Changes
 

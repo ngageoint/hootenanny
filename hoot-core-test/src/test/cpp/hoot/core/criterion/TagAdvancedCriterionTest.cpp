@@ -54,6 +54,7 @@ class TagAdvancedCriterionTest : public HootTestFixture
   CPPUNIT_TEST(runContradictoryFilterTest);
   CPPUNIT_TEST(runCaseSensitivityTest);
   CPPUNIT_TEST(runMultiTest);
+  CPPUNIT_TEST(runFileTest);
   CPPUNIT_TEST(runInvalidFilterTagJsonTest);
   CPPUNIT_TEST(runInvalidFilterSimilarityThresholdJsonTest);
   CPPUNIT_TEST(runInvalidFilterFormatJsonTest);
@@ -70,7 +71,6 @@ public:
    */
   TagAdvancedCriterionTest()
   {
-
   }
 
   void runMustTest()
@@ -705,6 +705,16 @@ public:
     node->getTags().set("poi", "yes");
     node->getTags().set("building", "yes");
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runFileTest()
+  {
+    TagAdvancedCriterion uut("test-files/criterion/TagAdvancedCriterionTest.json");
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().clear();
+    node->getTags().set("amenity", "restaurant");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
   }
 
   void runInvalidFilterTagJsonTest()

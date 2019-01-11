@@ -52,8 +52,8 @@ namespace hoot
    - categories
    - associations
 
-   See TagAdvancedCriterionTest and the Hootenanny User Documentation "Feature Filtering" section
-   for filter examples.
+   Accepts either a JSON string or file path as input.  See TagAdvancedCriterionTest and the
+   Hootenanny User Documentation "Feature Filtering" section for filter examples.
  */
 class TagAdvancedCriterion : public ElementCriterion, public Configurable
 {
@@ -62,7 +62,7 @@ public:
   static std::string className() { return "hoot::TagAdvancedCriterion"; }
 
   TagAdvancedCriterion();
-  TagAdvancedCriterion(const QString filterJson);
+  TagAdvancedCriterion(const QString filterJsonStrOrPath);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
@@ -80,8 +80,9 @@ private:
   boost::shared_ptr<QRegExp> _keyMatcher;
   boost::shared_ptr<QRegExp> _valueMatcher;
 
-  void _parseFilterString(const QString filterJson);
-  void _loadTagFilters(const QString tagFilterType, boost::shared_ptr<pt::ptree> propTree);
+  void _parseFilterString(const QString filterJsonStringOrPath);
+  void _loadTagFilters(const QString tagFilterType,
+                       boost::shared_ptr<boost::property_tree::ptree> propTree);
 
   bool _elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const;
   bool _elementPassesMustTagFilters(const ConstElementPtr& e) const;

@@ -36,7 +36,6 @@
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
-namespace pt = boost::property_tree;
 
 namespace hoot
 {
@@ -83,7 +82,7 @@ public:
    * @param tagFilterPart a "must", "must_not", "should" boost prop tree node
    * @return a tag filter
    */
-  static TagFilter fromJson(const pt::ptree::value_type& tagFilterPart);
+  static TagFilter fromJson(const boost::property_tree::ptree::value_type& tagFilterPart);
 
   QString toString() const;
 

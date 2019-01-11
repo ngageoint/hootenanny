@@ -37,7 +37,7 @@
 
 // Boost
 #include <boost/foreach.hpp>
-namespace pt = boost::property_tree;
+#include <boost/property_tree/json_parser.hpp>
 
 namespace hoot
 {
@@ -53,11 +53,11 @@ _valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
   setConfiguration(conf());
 }
 
-TagAdvancedCriterion::TagAdvancedCriterion(const QString filterJson) :
+TagAdvancedCriterion::TagAdvancedCriterion(const QString filterJsonStringOrPath) :
 _keyMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
 _valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 {
-  _parseFilterString(filterJson);
+  _parseFilterString(filterJsonStringOrPath);
 }
 
 void TagAdvancedCriterion::setConfiguration(const Settings& s)
@@ -69,9 +69,33 @@ void TagAdvancedCriterion::setConfiguration(const Settings& s)
   }
 }
 
-void TagAdvancedCriterion::_parseFilterString(const QString filterJson)
+void TagAdvancedCriterion::_parseFilterString(const QString filterJsonStringOrPath)
 {
-  const boost::shared_ptr<pt::ptree> propTree = StringUtils::jsonStringToPropTree(filterJson);
+  boost::shared_ptr<boost::property_tree::ptree> propTree;
+  if (!filterJsonStringOrPath.toLower().endsWith(".json"))
+  {
+    propTree = StringUtils::jsonStringToPropTree(filterJsonStringOrPath);
+  }
+  else
+  {
+    propTree.reset(new boost::property_tree::ptree());
+    try
+    {
+      boost::property_tree::read_json(filterJsonStringOrPath.toStdString(), *propTree);
+    }
+    catch (boost::property_tree::json_parser::json_parser_error& e)
+    {
+      throw HootException(
+        QString("Error parsing JSON: %1 (line %2)")
+          .arg(QString::fromStdString(e.message()))
+          .arg(QString::number(e.line())));
+    }
+    catch (const std::exception& e)
+    {
+      const QString reason = e.what();
+      throw HootException("Error parsing JSON " + reason);
+    }
+  }
 
   _tagFilters.clear();
   _loadTagFilters("must", propTree);
@@ -86,16 +110,17 @@ void TagAdvancedCriterion::_parseFilterString(const QString filterJson)
 }
 
 void TagAdvancedCriterion::_loadTagFilters(const QString tagFilterType,
-                                           boost::shared_ptr<pt::ptree> propTree)
+                                           boost::shared_ptr<boost::property_tree::ptree> propTree)
 {
   LOG_TRACE("Loading " << tagFilterType << " filters...");
 
   _tagFilters[tagFilterType].clear();
-  boost::optional<pt::ptree&> tagFilterChild =
+  boost::optional<boost::property_tree::ptree&> tagFilterChild =
     propTree->get_child_optional(tagFilterType.toStdString());
   if (tagFilterChild)
   {
-    for (pt::ptree::value_type& tagFilterPart : propTree->get_child(tagFilterType.toStdString()))
+    for (boost::property_tree::ptree::value_type& tagFilterPart :
+         propTree->get_child(tagFilterType.toStdString()))
     {
       TagFilter tagFilter = TagFilter::fromJson(tagFilterPart);
       LOG_VART(tagFilter);

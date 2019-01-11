@@ -1,0 +1,8 @@
+{ 
+  "must": 
+  [ 
+    { 
+      "tag": "amenity=restaurant" 
+    } 
+  ] 
+}

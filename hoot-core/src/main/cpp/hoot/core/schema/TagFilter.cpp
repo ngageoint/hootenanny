@@ -107,7 +107,7 @@ void TagFilter::setSimilarityThreshold(double threshold)
   _similarityThreshold = threshold;
 }
 
-TagFilter TagFilter::fromJson(const pt::ptree::value_type& tagFilterPart)
+TagFilter TagFilter::fromJson(const boost::property_tree::ptree::value_type& tagFilterPart)
 {
   /*
    * a non-sensical and contradictory example, but it illustrates all the possible types of

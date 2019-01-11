@@ -67,9 +67,8 @@ struct OsmSchemaCategory
     Name =            0x10,
     PseudoName =      0x20,
     HgisPoi =         0x40, // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
-    Multiuse =        0x80,
-    //TODO: should this have PseudoName too?
-    All = Poi | Building | Transportation | Use | Name |  HgisPoi | Multiuse
+    Multiuse =        0x80//,
+    //All = Poi | Building | Transportation | Use | Name | PseudoName | HgisPoi | Multiuse
   };
 
   OsmSchemaCategory() : _type(Empty) {}
