@@ -78,17 +78,17 @@ private:
 };
 
 Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
-                   long version, quint64 timestamp, QString user, long uid, bool visible) :
-Element(s)
+                   long version, quint64 timestamp, QString user, long uid, bool visible)
+  : Element(s)
 {
   _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid, visible));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }
 
-Relation::Relation(const Relation& from) :
-Element(from.getStatus()),
-_relationData(from._relationData)
+Relation::Relation(const Relation& from)
+  : Element(from.getStatus()),
+  _relationData(new RelationData(*from._relationData.get()))
 {
 }
 
