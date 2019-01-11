@@ -459,6 +459,8 @@ See also:
 
 * Data Type: list
 * Default Value:
+** `hoot::SuperfluousNodeRemover`
+** `hoot::SmallWayMerger`
 ** `hoot::ReplaceRoundabouts`
 ** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
@@ -472,9 +474,8 @@ See also:
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
-List of operations to run in the conflate command after data is conflated, after the ops in
-unify.post.ops (if using Unifying Conflation), but before exporting. 'hoot info --operators'
-displays information about the available operations.
+List of operations to run in the conflate command after data is conflated, but before exporting.
+'hoot info --operators' displays information about the available operations.
 
 === conflate.pre.ops
 
@@ -483,8 +484,8 @@ displays information about the available operations.
 ** `hoot::BuildingOutlineRemoveOp`
 ** `hoot::MapCleaner`
 
-Runs in the conflate command after data is loaded, but before the conflation and before the ops in
-unify.pre.ops (if using Unifying Conflation). 'hoot info --operators' displays information about the available operations.
+Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
+about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
@@ -3655,27 +3656,6 @@ runs. Especially if the machine Hoot is running on is under heavy load. If the "
 is changing between runs and GLPK isn't finding an optimal solution then this is likely causing
 different output.  Just because the output is changing doesn't mean it is wrong, but this can be
 problematic if you're doing testing or expecting repeatable output for other.
-
-=== unify.post.ops
-
-* Data Type: list
-* Default Value:
-** `hoot::SuperfluousNodeRemover`
-** `hoot::SmallWayMerger`
-
-List of operations to apply immediately after conflation when using Unifying Conflation only.
-Runs before the operations in `conflate.post.ops`. 'hoot info --operators' displays information
-about the available operations.
-
-=== unify.pre.ops
-
-* Data Type: list
-* Default Value:
-** ``
-
-List of operations to apply immediately before conflating when using Unifying Conflation only.
-Runs after the operations in `conflate.pre.ops`. 'hoot info --operators' displays information about
-the available operations.
 
 === uuid.helper.repeatable
 

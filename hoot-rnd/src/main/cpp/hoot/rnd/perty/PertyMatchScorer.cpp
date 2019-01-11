@@ -58,8 +58,7 @@ _settings(conf())
 {
   ConfigOptions configOptions;
   setSearchDistance(configOptions.getPertySearchDistance());
-  if (ConfigOptions().getConflatePreOps().contains("hoot::RubberSheet") ||
-      ConfigOptions().getUnifyPreOps().contains("hoot::RubberSheet"))
+  if (ConfigOptions().getConflatePreOps().contains("hoot::RubberSheet"))
   {
     setApplyRubberSheet(false);
   }

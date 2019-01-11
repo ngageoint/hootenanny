@@ -25,7 +25,7 @@ hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/A
 hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
 wait
 
-hoot conflate $HOOT_OPTS -D unify.post.ops="hoot::SuperfluousNodeRemover;hoot::SmallWayMerger;hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D remove.tags.visitor.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
+hoot conflate $HOOT_OPTS -D conflate.post.ops="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor;$(conflate.post.ops)" -D remove.tags.visitor.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
 hoot diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output1.osm test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
 
 hoot delete-db-map $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &

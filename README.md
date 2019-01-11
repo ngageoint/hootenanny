@@ -288,7 +288,7 @@ See the Hootenanny User Guide for additional usage examples and details on comma
     # Assuming a first map is superior to a second, cut out the shape of the first map out from 
     # the area being conflated so that only data from the second map is stitched in around the 
     # first map
-    hoot conflate -D unify.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 \
+    hoot conflate -D conflate.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 \
       -D cookie.cutter.alpha.shape.buffer=0 -D cookie.cutter.output.crop=false
     
 ### Applying Changes

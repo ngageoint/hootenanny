@@ -105,10 +105,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   nonConflateRemover.apply(_pMap);
   _stats.append(SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
 
-  LOG_INFO("Applying pre diff-conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPreOps()).apply(_pMap);
-  _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
-
   // Will reproject if necessary.
   LOG_INFO("Projecting to planar...");
   MapProjector::projectToPlanar(_pMap);
@@ -160,11 +156,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
   removeRef1Visitor.setRecursive(true);
   _pMap->visitRw(removeRef1Visitor);
-
-  LOG_INFO("Applying post-diff conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPostOps()).apply(_pMap);
-
-  _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }
 
 void DiffConflator::setConfiguration(const Settings &conf)

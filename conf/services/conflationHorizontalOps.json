@@ -106,12 +106,12 @@
         "hoot_key": "small.way.merger.threshold"
       },
 			{
-				"id":"horizontal_unify_pre_ops",
+				"id":"horizontal_conflate_pre_ops",
 				"elem_type":"string",
-				"description":"Unify pre ops",
-				"name":"Unify Pre Ops",
+				"description":"Conflate pre ops",
+				"name":"Conflate Pre Ops",
 				"defaultvalue":"hoot::CookieCutterOp",
-				"hoot_key":"unify.pre.ops",
+				"hoot_key":"conflate.pre.ops",
 				"required":"true"
 			},
 			{

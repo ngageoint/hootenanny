@@ -125,9 +125,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
 
-  LOG_INFO("Applying pre-unifying conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
-
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
   // will reproject if necessary.
@@ -293,11 +290,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
-
-  LOG_INFO("Applying post-unifying conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPostOps()).apply(map);
-
-  _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,

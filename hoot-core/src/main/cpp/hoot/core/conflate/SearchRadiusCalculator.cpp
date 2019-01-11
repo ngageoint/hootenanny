@@ -54,8 +54,7 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);
   //TODO: I don't believe this actually matters.
-//  if (config.getConflatePreOps().contains("hoot::RubberSheet") ||
-//      config.getUnifyPreOps().contains("hoot::RubberSheet"))
+//  if (config.getConflatePreOps().contains("hoot::RubberSheet"))
 //  {
 //    throw HootException(
 //      "Rubber sheeting cannot be used when automatically calculating search radius.");
