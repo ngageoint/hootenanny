@@ -48,7 +48,6 @@ public final class HootProperties {
     public static final String TEMPLATE_PATH;
     public static final String REF_OVERRIDE_PATH;
     public static final String HORZ_OVERRIDE_PATH;
-    public static final String AVE_OVERRIDE_PATH;
     public static final String ATT_OVERRIDE_PATH;
     public static final String DOC_NAME;
     public static final String RPT_STORE_PATH;
