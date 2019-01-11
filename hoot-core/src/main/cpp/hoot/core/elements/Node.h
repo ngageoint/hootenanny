@@ -48,9 +48,9 @@ public:
 
   Node(const Node& from);
 
-  Node(Status s, long id, const geos::geom::Coordinate& c, Meters circularError);
+  Node(Status s, long id, const geos::geom::Coordinate& c, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
 
-  Node(Status s, long id, double x, double y, Meters circularError,
+  Node(Status s, long id, double x, double y, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
        long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
        unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
        QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
@@ -74,7 +74,7 @@ public:
    * @return A newly allocated and initialized Node shared pointer.
    */
   static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y,
-    Meters circularError);
+    Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
 
   static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
                                        long changeset, long version, quint64 timestamp,

@@ -56,12 +56,14 @@ public:
   static QString USER_EMPTY;
   static long UID_EMPTY;
   static bool VISIBLE_EMPTY;
+  static double CIRCULAR_ERROR_EMPTY;
+  static double CIRCULAR_ERROR_DEFAULT;
 
   virtual ~ElementData() {}
 
   virtual void clear() { _tags.clear(); }
 
-  Meters getCircularError() const { return _circularError >= 0 ? _circularError : 15.0; }
+  Meters getCircularError() const { return _circularError >= 0 ? _circularError : CIRCULAR_ERROR_DEFAULT; }
 
   bool hasCircularError() const { return _circularError >= 0; }
 
@@ -101,7 +103,7 @@ protected:
   // Please don't add any additional constructors. Multiple constructors has lead to a large number
   // of errors in the past. If you need more parameters please just add them to the end with a
   // sensible default value.
-  ElementData(long id = LLONG_MIN, const Tags& tags = Tags(), Meters circularError = -1,
+  ElementData(long id = LLONG_MIN, const Tags& tags = Tags(), Meters circularError = CIRCULAR_ERROR_EMPTY,
               long changeset = ElementData::CHANGESET_EMPTY,
               long version = ElementData::VERSION_EMPTY,
               quint64 timestamp = ElementData::TIMESTAMP_EMPTY,

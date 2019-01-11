@@ -67,15 +67,15 @@ protected:
 inline void NodeData::init(long id, double x, double y, long changeset, long version,
   quint64 timestamp, QString user, long uid, bool visible)
 {
- _id = id;
- _x = x;
- _y = y;
- _changeset = changeset;
- _version = version;
- _timestamp = timestamp;
- _user = user;
- _uid = uid;
- _visible = visible;
+  _id = id;
+  _x = x;
+  _y = y;
+  _changeset = changeset;
+  _version = version;
+  _timestamp = timestamp;
+  _user = user;
+  _uid = uid;
+  _visible = visible;
 }
 
 }

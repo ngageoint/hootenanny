@@ -284,7 +284,7 @@ RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
     new Relation(
       parts[0]->getStatus(),
       map->createNextRelationId(),
-      -1,
+      ElementData::CIRCULAR_ERROR_EMPTY,
       MetadataTags::RelationBuilding()));
 
   OsmSchema& schema = OsmSchema::getInstance();

@@ -87,7 +87,7 @@ bool TestUtils::compareMaps(OsmMapPtr ref, OsmMapPtr test)
 }
 
 NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
-                              double circularError, Tags tags)
+                              Meters circularError, Tags tags)
 {
   NodePtr result(new Node(status, map->createNextNodeId(), x, y, circularError));
   map->addNode(result);
@@ -95,12 +95,12 @@ NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
   return result;
 }
 
-WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce, const QString& note)
+WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError, const QString& note)
 {
-  WayPtr result(new Way(s, map->createNextWayId(), ce));
+  WayPtr result(new Way(s, map->createNextWayId(), circularError));
   for (size_t i = 0; c[i].isNull() == false; i++)
   {
-    NodePtr n(new Node(s, map->createNextNodeId(), c[i], ce));
+    NodePtr n(new Node(s, map->createNextNodeId(), c[i], circularError));
     map->addNode(n);
     result->addNode(n->getId());
   }

@@ -265,8 +265,9 @@ QString Relation::toString() const
   ss << "tags: " << getTags().toString().toUtf8().data();
   ss << "status: " << getStatusString().toStdString() << endl;
   ss << "version: " << getVersion() << endl;
-  ss << "visible: " << getVisible() << endl;
-  ss << "circular error: " << getCircularError();
+  ss << "visible: " << getVisible();
+  if (hasCircularError())
+    ss << endl << "circular error: " << getCircularError();
   return QString::fromUtf8(ss.str().data());
 }
 

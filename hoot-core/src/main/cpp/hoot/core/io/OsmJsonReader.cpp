@@ -64,7 +64,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 OsmJsonReader::OsmJsonReader()
   : _defaultStatus(Status::Invalid),
     _useDataSourceIds(true),
-    _defaultCircErr(15.0),
+    _defaultCircErr(ElementData::CIRCULAR_ERROR_EMPTY),
     _propTree(),
     _version(""),
     _generator(""),

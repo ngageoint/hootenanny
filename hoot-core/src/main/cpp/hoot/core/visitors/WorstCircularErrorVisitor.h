@@ -44,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::WorstCircularErrorVisitor"; }
 
-  WorstCircularErrorVisitor(): _worst(-1) {}
+  WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
 
   Meters getWorstCircularError() { return _worst; }
 

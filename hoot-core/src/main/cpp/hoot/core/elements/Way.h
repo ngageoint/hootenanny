@@ -52,7 +52,8 @@ public:
 
   static std::string className() { return "hoot::Way"; }
 
-  Way(Status s, long id, Meters circularError, long changeset = ElementData::CHANGESET_EMPTY,
+  Way(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
+      long changeset = ElementData::CHANGESET_EMPTY,
       long version = ElementData::VERSION_EMPTY,
       quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
       QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,

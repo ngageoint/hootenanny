@@ -192,7 +192,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
   r->addElement(MetadataTags::RoleReviewee(), e1->getElementId());
   r->addElement(MetadataTags::RoleReviewee(), e2->getElementId());
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
-  r->setCircularError(-1);
+  r->setCircularError(ElementData::CIRCULAR_ERROR_EMPTY);
 
   LOG_VART(r->getId());
   LOG_VART(e1->getElementId());
@@ -242,7 +242,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
     r->addElement(MetadataTags::RoleReviewee(), id);
   }
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
-  r->setCircularError(-1);
+  r->setCircularError(ElementData::CIRCULAR_ERROR_EMPTY);
 
   LOG_VART(r->getId());
   LOG_VART(ids);
@@ -285,7 +285,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
   }
   r->addElement(MetadataTags::RoleReviewee(), e->getElementId());
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
-  r->setCircularError(-1);
+  r->setCircularError(ElementData::CIRCULAR_ERROR_EMPTY);
 
   LOG_VART(r->getId());
   LOG_VART(e->getElementId());

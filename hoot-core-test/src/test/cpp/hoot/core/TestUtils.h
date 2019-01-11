@@ -117,17 +117,17 @@ public:
   static bool compareMaps(const QString& map1, const QString map2);
 
   static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
-    double circularError = 15.0, Tags tags = Tags());
+    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT, Tags tags = Tags());
 
-  static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[], Meters ce = 15,
-                          const QString& note = "");
+  static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[],
+    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT, const QString& note = "");
 
   static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
-    Meters circularError = 15, Tags tags = Tags());
+    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT, Tags tags = Tags());
 
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
-    Meters circularError = 15);
+    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT);
 
   static ElementPtr getElementWithNote(OsmMapPtr map, QString note);
 

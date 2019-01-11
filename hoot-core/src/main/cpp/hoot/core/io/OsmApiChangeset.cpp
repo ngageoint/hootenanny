@@ -28,6 +28,7 @@
 #include "OsmApiChangeset.h"
 
 //  Hoot
+#include <hoot/core/elements/ElementData.h>
 #include <hoot/core/info/VersionDefines.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
@@ -216,7 +217,7 @@ void XmlChangeset::updateChangeset(const QString &changes)
       //  Get the old and new IDs
       long old_id = 0;
       long new_id = 0;
-      long version = -1;
+      long version = ElementData::VERSION_EMPTY;
       if (attributes.hasAttribute("old_id"))
           old_id = attributes.value("old_id").toString().toLong();
       if (attributes.hasAttribute("new_id"))

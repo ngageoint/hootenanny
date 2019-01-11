@@ -57,7 +57,7 @@ void UnionPolygonsOp::apply(boost::shared_ptr<OsmMap>& map)
   LOG_VART(g.get());
 
   OsmMapPtr result(new OsmMap());
-  GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, -1);
+  GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, ElementData::CIRCULAR_ERROR_EMPTY);
 
   map.reset(new OsmMap(result));
   LOG_VART(map.get());

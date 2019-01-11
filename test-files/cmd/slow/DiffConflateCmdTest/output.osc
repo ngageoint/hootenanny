@@ -8,7 +8,6 @@
             <tag k="uuid" v="{dd5f81c2-e249-467e-985a-914a76ef121e}"/>
             <tag k="name" v="Lana's House of Coffee"/>
             <tag k="attribution" v="osm"/>
-            <tag k="error:circular" v="15"/>
         </node>
         <node id="-2" version="0" lat="8.6541474185900018" lon="28.1392570135799929" timestamp="2018-06-11T16:50:55Z"/>
         <node id="-3" version="0" lat="8.6548074607699945" lon="28.1410811127400002" timestamp="2018-06-11T16:50:55Z"/>
