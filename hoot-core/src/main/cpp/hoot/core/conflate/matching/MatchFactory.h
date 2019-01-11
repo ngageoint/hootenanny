@@ -94,7 +94,7 @@ public:
    */
   void registerCreator(QString c);
 
-  void reset() { _creators.clear(); }
+  void reset();
 
 private:
 

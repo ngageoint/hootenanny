@@ -337,4 +337,10 @@ MatchFactory& MatchFactory::getInstance()
   return *_theInstance;
 }
 
+void MatchFactory::reset()
+{
+  _creators.clear();
+  _tagFilter = "";
+}
+
 }
