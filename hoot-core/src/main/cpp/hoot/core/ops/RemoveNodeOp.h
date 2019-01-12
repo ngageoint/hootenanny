@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVENODEOP_H
 #define REMOVENODEOP_H
@@ -108,7 +108,7 @@ public:
    */
   static void removeNodeFully(OsmMapPtr map, long nId);
 
-  virtual QString getDescription() const { return "Removes nodes"; }
+  virtual QString getDescription() const { return "Removes a single node by ID"; }
 
 private:
 
