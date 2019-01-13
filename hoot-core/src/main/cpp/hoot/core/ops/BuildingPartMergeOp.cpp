@@ -61,7 +61,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 BuildingPartMergeOp::BuildingPartMergeOp()
 {
   vector<SchemaVertex> buildingPartTags =
-      OsmSchema::getInstance().getAssociatedTags(MetadataTags::BuildingPart() + "=yes");
+    OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
   for (size_t i = 0; i < buildingPartTags.size(); i++)
   {
     _buildingPartTagNames.insert(buildingPartTags[i].name.split("=")[0]);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -1439,7 +1439,32 @@ bool OsmSchema::hasTagKey(const QString key)
   return getAllTagKeys().contains(key);
 }
 
-vector<SchemaVertex> OsmSchema::getAssociatedTags(QString name)
+Tags OsmSchema::getAssociatedTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  for (Tags::const_iterator inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd();
+       ++inputTagItr)
+  {
+    const Tags childTags =
+      Tags::schemaVerticesToTags(
+        getAssociatedTagsAsVertices(inputTagItr.key() + "=" + inputTagItr.value()));
+    for (Tags::const_iterator childTagItr = childTags.constBegin();
+         childTagItr != childTags.constEnd(); ++childTagItr)
+    {
+      QString val = childTagItr.value().trimmed();
+      // Associated tags are just returned as keys, so this is being added to the value to alleviate
+      // callers that expect non-empty values.
+      if (val.isEmpty())
+      {
+        val = "*";
+      }
+      tagsToReturn.appendValue(childTagItr.key(), val);
+    }
+  }
+  return tagsToReturn;
+}
+
+vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(QString name)
 {
   return d->getAssociatedTags(name);
 }
@@ -1479,9 +1504,40 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
   return result;
 }
 
-vector<SchemaVertex> OsmSchema::getChildTags(QString name)
+vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(QString name)
 {
   return d->getChildTags(name);
+}
+
+Tags OsmSchema::getChildTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  for (Tags::const_iterator inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd();
+       ++inputTagItr)
+  {
+    const Tags childTags =
+      Tags::schemaVerticesToTags(
+        getChildTagsAsVertices(inputTagItr.key() + "=" + inputTagItr.value()));
+    for (Tags::const_iterator childTagItr = childTags.constBegin();
+         childTagItr != childTags.constEnd(); ++childTagItr)
+    {
+      tagsToReturn.appendValue(childTagItr.key(), childTagItr.value());
+    }
+  }
+  return tagsToReturn;
+}
+
+Tags OsmSchema::getAliasTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  const std::vector<SchemaVertex> schemaVertices = d->getSchemaVertices(tags);
+  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
+       itr != schemaVertices.end(); ++itr)
+  {
+    SchemaVertex vertex = *itr;
+    tagsToReturn.addTags(Tags::kvpListToTags(vertex.aliases));
+  }
+  return tagsToReturn;
 }
 
 const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
@@ -1532,13 +1588,26 @@ vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
   return d->getSchemaVertices(tags);
 }
 
-vector<SchemaVertex> OsmSchema::getSimilarTags(QString name, double minimumScore)
+vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(QString name, double minimumScore)
 {
   if (minimumScore <= 0)
   {
     throw IllegalArgumentException("minimumScore must be > 0");
   }
   return d->getSimilarTags(name, minimumScore);
+}
+
+Tags OsmSchema::getSimilarTags(QString name, double minimumScore)
+{
+  Tags tags;
+  const vector<SchemaVertex> vertices = d->getSimilarTags(name, minimumScore);
+  for (std::vector<SchemaVertex>::const_iterator itr = vertices.begin();
+       itr != vertices.end(); ++itr)
+  {
+    SchemaVertex vertex = *itr;
+    tags.appendValue(vertex.key, vertex.value);
+  }
+  return tags;
 }
 
 vector<SchemaVertex> OsmSchema::getTagByCategory(OsmSchemaCategory c) const

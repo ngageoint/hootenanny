@@ -508,6 +508,14 @@ See also:
 The string that lists the types of conflation used in the user interface.  The possible values
 are: reference, cookieCutter, average, and advancedConflation.
 
+=== conflate.tag.filter
+
+* Data Type: string
+* Default Value: ``
+
+A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
+User Guide "Feature Filtering" section for filter usage examples.
+
 === conflator.manipulators
 
 * Data Type: list

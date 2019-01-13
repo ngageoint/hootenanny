@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMSCHEMA_H
@@ -47,12 +47,12 @@ class Tags;
 
 enum EdgeType
 {
-  CanHave,
+  CanHave,  //not used
   IsA,
   SimilarTo,
-  ParentOf,
+  ParentOf, //not used
   AssociatedWith,
-  CompoundComponent,
+  CompoundComponent //not used
 };
 
 struct OsmSchemaCategory
@@ -67,8 +67,8 @@ struct OsmSchemaCategory
     Name =            0x10,
     PseudoName =      0x20,
     HgisPoi =         0x40, // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
-    Multiuse =        0x80,
-    All = Poi | Building | Transportation | Use | Name | HgisPoi | Multiuse
+    Multiuse =        0x80//,
+    //All = Poi | Building | Transportation | Use | Name | PseudoName | HgisPoi | Multiuse
   };
 
   OsmSchemaCategory() : _type(Empty) {}
@@ -278,7 +278,15 @@ public:
    */
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
 
-  std::vector<SchemaVertex> getAssociatedTags(QString name);
+  std::vector<SchemaVertex> getAssociatedTagsAsVertices(QString name);
+
+  /**
+   * Retrieves a set of tags that are associated with the input tags, as defined by the hoot schema
+   *
+   * @param tags tags to search associations for
+   * @return a set of tags
+   */
+  Tags getAssociatedTags(const Tags& tags);
 
   OsmSchemaCategory getCategories(const Tags& t) const;
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
@@ -290,7 +298,15 @@ public:
 
   bool hasTagKey(const QString key);
 
-  std::vector<SchemaVertex> getChildTags(QString name);
+  std::vector<SchemaVertex> getChildTagsAsVertices(QString name);
+
+  /**
+   * Retrieves all child tags for the given input tags
+   *
+   * @param tags tags for which to retrieve child tags
+   * @return a set of tags
+   */
+  Tags getChildTags(const Tags& tags);
 
   static OsmSchema& getInstance();
 
@@ -301,7 +317,16 @@ public:
    *
    * minimumScore must be > 0.
    */
-  std::vector<SchemaVertex> getSimilarTags(QString name, double minimumScore);
+  std::vector<SchemaVertex> getSimilarTagsAsVertices(QString name, double minimumScore);
+
+  /**
+   * Retrieves tags similar to the input tag
+   *
+   * @param name a kvp
+   * @param minimumScore tag similarity threshold
+   * @return a set of tags
+   */
+  Tags getSimilarTags(QString name, double minimumScore);
 
   std::vector<SchemaVertex> getTagByCategory(OsmSchemaCategory c) const;
 
@@ -408,6 +433,14 @@ public:
    * method is being called.
    */
   bool containsTagFromList(const Tags& tags, const QStringList tagList) const;
+
+  /**
+   * Retrieves tags that are aliases of the input tags
+   *
+   * @param tags tags to search aliases for
+   * @return a set of tags
+   */
+  Tags getAliasTags(const Tags& tags);
 
 private:
 

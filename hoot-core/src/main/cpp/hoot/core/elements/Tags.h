@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_H
 #define TAGS_H
 
 // Hoot
 #include <hoot/core/util/Units.h>
+#include <hoot/core/schema/SchemaVertex.h>
 
 // Qt
 #include <QHash>
@@ -262,6 +263,22 @@ public:
    * @return true if tags contain at least one kvp; false otherwise
    */
   bool hasAnyKvp(const QStringList kvps) const;
+
+  /**
+   * Converts a list of KVPs into tags
+   *
+   * @param kvps kvps to convert
+   * @return a set of tags
+   */
+  static Tags kvpListToTags(const QStringList kvps);
+
+  /**
+   * Converts a collection of schema vertices to tags
+   *
+   * @param vertices schema vertices to convert
+   * @return a set of tags
+   */
+  static Tags schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices);
 
 private:
 
