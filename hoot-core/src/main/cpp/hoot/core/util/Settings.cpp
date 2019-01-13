@@ -513,7 +513,7 @@ void Settings::parseCommonArguments(QStringList& args)
     {
       if (args.size() < 2)
       {
-        throw HootException("--define or -D must be followed by key=value.");
+        throw HootException("--define or -D must be followed by key=value (or key+=value or key-=value).");
       }
       QString kv = args[1];
       QStringList kvl = kv.split("+=");
@@ -547,7 +547,7 @@ void Settings::parseCommonArguments(QStringList& args)
       }
       if (kvl.size() != 2)
       {
-        throw HootException("define must takes the form key=value.");
+        throw HootException("define must takes the form key=value (or key+=value or key-=value).");
       }
       if (!conf().hasKey(kvl[0]))
       {

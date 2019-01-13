@@ -42,7 +42,7 @@ namespace hoot
 {
 
 /**
- * A singleton to initialize hootenanny. You should call getInstance() on this before any other
+ * A Singleton to initialize hootenanny. You should call getInstance() on this before any other
  * use of hoot. You can call getInstance multiple times without any ill effects.
  */
 class Hoot
@@ -67,6 +67,7 @@ public:
   void reinit();
 
 private:
+
   static boost::shared_ptr<Hoot> _theInstance;
 
   Hoot();

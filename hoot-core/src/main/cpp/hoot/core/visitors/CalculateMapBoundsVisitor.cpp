@@ -35,10 +35,10 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateMapBoundsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, CalculateMapBoundsVisitor)
 
-CalculateMapBoundsVisitor::CalculateMapBoundsVisitor():
-  _envelope()
+CalculateMapBoundsVisitor::CalculateMapBoundsVisitor() :
+_envelope()
 {
 }
 

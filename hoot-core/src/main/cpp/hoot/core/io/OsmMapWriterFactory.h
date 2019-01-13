@@ -39,13 +39,11 @@ class OsmMap;
 class OsmMapWriter;
 
 /**
- * A factory for constructing writers based on the URL.
+ * A factory for constructing writers based on the URL (Singleton).
  */
 class OsmMapWriterFactory
 {
 public:
-
-  OsmMapWriterFactory();
 
   boost::shared_ptr<OsmMapWriter> createWriter(QString url);
 
@@ -60,6 +58,8 @@ public:
   static bool isSupportedFormat(const QString url);
 
 private:
+
+  OsmMapWriterFactory();
 
   static boost::shared_ptr<OsmMapWriterFactory> _theInstance;
 };

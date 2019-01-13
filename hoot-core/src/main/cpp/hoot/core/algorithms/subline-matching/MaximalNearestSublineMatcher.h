@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALNEARESTSUBLINEMATCHER_H
 #define MAXIMALNEARESTSUBLINEMATCHER_H
@@ -48,6 +48,9 @@ public:
   virtual void setMinSplitSize(Meters minSplitSize) { _minSplitSize = minSplitSize; }
 
   virtual void setHeadingDelta(Meters headingDelta) { _headingDelta = headingDelta; }
+
+  virtual QString getDescription() const
+  { return "Matches lines based on the maximal nearest subline found"; }
 
 private:
 

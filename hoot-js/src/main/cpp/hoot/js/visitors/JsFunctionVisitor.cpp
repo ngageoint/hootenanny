@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "JsFunctionVisitor.h"
 
@@ -32,14 +32,14 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 using namespace v8;
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, JsFunctionVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, JsFunctionVisitor)
 
 void JsFunctionVisitor::visit(const ConstElementPtr& e)
 {
@@ -59,7 +59,9 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
   {
     ElementPtr nonConst = _map->getElement(e->getElementId());
     elementObj = ElementJs::New(nonConst);
-  } else {
+  }
+  else
+  {
     elementObj = ElementJs::New(e);
   }
 
@@ -67,7 +69,8 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
   jsArgs[argc++] = elementObj;
 
   TryCatch trycatch;
-  Handle<Value> funcResult = ToLocal(&_func)->Call(current->GetCallingContext()->Global(), argc, jsArgs);
+  Handle<Value> funcResult =
+    ToLocal(&_func)->Call(current->GetCallingContext()->Global(), argc, jsArgs);
 
   if (funcResult.IsEmpty())
   {
@@ -79,7 +82,6 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
     }
     else
     {
-      // Matt, if this conflicts with the newer more robust handling, use that.
       throw HootException(toJson(trycatch.Message()->Get()));
     }
   }

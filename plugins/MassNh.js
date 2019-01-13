@@ -132,9 +132,8 @@ MassNh = {
             if (roadList.indexOf(tags.highway) !== -1) tags.highway = tags.highway + '_link';
         }
 
-        // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         tags.source = 'MassNh_GIS';
-        tags.uuid = createUuid();
+        if (MassNh.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
 
         // Medians
         if (attrs.MEDIANTYPE && attrs.MEDIANTYPE !== '0') tags.median = 'yes';
@@ -422,9 +421,23 @@ MassNh = {
     toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // The final output Tag list
+        if (MassNh.configIn == undefined)
+                {
+                    MassNh.configIn = {};
+                    MassNh.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+                    MassNh.configIn.OgrAddUuid = config.getOgrAddUuid();
+
+                    // Get any changes
+                    MassNh.toChange = hoot.Settings.get("translation.override");
+                }
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (MassNh.configIn.OgrDebugDumptags == 'true')
+        {
+            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
+            var kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+        }
 
         if (MassNh.lookup == undefined)
         {
@@ -456,11 +469,15 @@ MassNh = {
 
         // post processing
         MassNh.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
-        
+
+        // Override tag values if appropriate
+        translate.overrideValues(tags,MassNh.toChange);
+
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true') 
+        if (MassNh.configIn.OgrDebugDumptags == 'true')
         {
-            for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
 

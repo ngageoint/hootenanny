@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyWayGeneralizeVisitor.h"
 
@@ -36,7 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/RandomNumberUtils.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/rnd/perty/RdpWayGeneralizer.h>
 
 // Qt
@@ -45,7 +45,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyWayGeneralizeVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, PertyWayGeneralizeVisitor)
 
 PertyWayGeneralizeVisitor::PertyWayGeneralizeVisitor() :
 _epsilon(-1.0)

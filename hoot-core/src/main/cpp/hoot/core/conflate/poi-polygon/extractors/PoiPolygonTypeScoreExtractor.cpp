@@ -27,7 +27,6 @@
 #include "PoiPolygonTypeScoreExtractor.h"
 
 // hoot
-#include <hoot/core/algorithms/string/MostEnglishName.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>

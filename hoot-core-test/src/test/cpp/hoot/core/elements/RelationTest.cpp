@@ -102,7 +102,7 @@ public:
     r2->addElement("", r1->getElementId());
 
     ElementCountVisitor v;
-    r1->visitRw(*map, v);
+    r1->visitRo(*map, v);
 
     LOG_VAR(v.getCount());
   }
@@ -120,8 +120,8 @@ public:
     r1->addElement("", r1->getElementId());
 
     ElementCountVisitor v;
-    r1->visitRw(*map, v);
-    r2->visitRw(*map, v);
+    r1->visitRo(*map, v);
+    r2->visitRo(*map, v);
 
     LOG_VAR(v.getCount());
   }

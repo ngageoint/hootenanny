@@ -853,7 +853,7 @@ tds61 = {
         }
         else
         {
-            tags.uuid = createUuid();
+            if (tds61.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
         }
 
 
@@ -1885,7 +1885,7 @@ tds61 = {
         }
         else
         {
-            attrs.UFI = createUuid().replace('{','').replace('}','');
+            if (tds61.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
         }
 
         // Add Weather Restrictions to transportation features
@@ -2157,6 +2157,7 @@ tds61 = {
             tds61.configIn = {};
             tds61.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             tds61.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+            tds61.configIn.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes
             tds61.toChange = hoot.Settings.get("translation.override");
@@ -2176,7 +2177,11 @@ tds61 = {
             tags = translate.parseO2S(attrs);
 
             // Add some metadata
-            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.uuid)
+            {
+                if (tds61.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+            }
+
             if (! tags.source) tags.source = 'tdsv61:' + layerName.toLowerCase();
 
             // Debug:
@@ -2275,6 +2280,9 @@ tds61 = {
         // Debug: Add the FCODE to the tags
         if (tds61.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,tds61.toChange);
+
         // Debug:
         if (tds61.configIn.OgrDebugDumptags == 'true')
         {
@@ -2285,9 +2293,6 @@ tds61 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
-
-        // Override tag values if appropriate
-        translate.overrideValues(tags,tds61.toChange);
 
         return tags;
     }, // End of toOsm
@@ -2316,6 +2321,7 @@ tds61 = {
             tds61.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             tds61.configOut.OgrThematicStructure = config.getOgrThematicStructure();
             tds61.configOut.OgrThrowError = config.getOgrThrowError();
+            tds61.configOut.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon

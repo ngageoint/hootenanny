@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveDuplicateWayNodesVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateWayNodesVisitor)
 
 RemoveDuplicateWayNodesVisitor::RemoveDuplicateWayNodesVisitor()
 {

@@ -76,7 +76,7 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
   // Visit the map once, execute all visitors on each element
   MultiVisitor multiVtor;
   multiVtor.addVisitor(&removeTagVtor);
-  multiVtor.addVisitor(&replaceTagVtor);
+  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor *>(&replaceTagVtor));
   multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor *>(&removeEVisitor));
   map->visitRw(multiVtor);
 }

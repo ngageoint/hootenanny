@@ -34,14 +34,12 @@ namespace hoot
 {
 
 /**
- * Reads tag ignore lists for POI/Polygon conflation
+ * Reads tag ignore lists for POI/Polygon conflation (Singleton)
  */
 class PoiPolygonTagIgnoreListReader
 {
 
 public:
-
-  PoiPolygonTagIgnoreListReader();
 
   static PoiPolygonTagIgnoreListReader& getInstance();
 
@@ -49,6 +47,8 @@ public:
   QStringList getPolyTagIgnoreList() const { return _polyTagIgnoreList; }
 
 private:
+
+  PoiPolygonTagIgnoreListReader();
 
   static boost::shared_ptr<PoiPolygonTagIgnoreListReader> _theInstance;
 

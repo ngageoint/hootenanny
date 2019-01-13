@@ -22,23 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDREF1VISITOR_H
 #define ADDREF1VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class AddRef1Visitor :
-    public ConstElementVisitor,
-    public ConstOsmMapConsumer,
-    public Configurable
+/*
+ * This is an ElementOsmMapVisitor instead of a ElementVisitor to appease the
+ * PrepExactHighwayData.js script in the train-highways regression test. Finishing #2831 would
+ * make it possible to change this back to an ElementVisitor.
+ */
+class AddRef1Visitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 
@@ -48,25 +49,17 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  /**
-   * AddRef1Visitor requires a read/write map.
-   */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
-
   /**
    * Adds a REF1 tag with a unique string to all valid elements. If the Tags::getNonDebugCount() is
    * greater than zero then the element is tagged with a REF1. The unique string is simply a counter
    * so it isn't going to be unique across multiple runs.
    */
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const { return "Adds REF1 tags"; }
 
 private:
 
-  OsmMap* _map;
   int _count;
   QString _prefix;
   bool _informationOnly;

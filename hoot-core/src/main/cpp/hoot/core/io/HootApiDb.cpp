@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDb.h"
 
@@ -1240,7 +1240,7 @@ void HootApiDb::verifyCurrentUserMapUse(const long mapId, const bool write)
 }
 
 bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
-{    
+{
   LOG_VART(mapId);
   LOG_VART(_currUserId);
   LOG_VART(write);

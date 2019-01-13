@@ -23,14 +23,14 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HausdorffDistanceExtractor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/VertexHausdorffDistance.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 using namespace geos::geom;
 using namespace std;

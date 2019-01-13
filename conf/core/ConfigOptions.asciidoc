@@ -1871,6 +1871,13 @@ List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor,
 TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in double quotes when
 passing in from the command line.
 
+=== ogr.add.uuid
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, translation files will add a UUID to features.
+
 === ogr.append.data
 
 * Data Type: bool

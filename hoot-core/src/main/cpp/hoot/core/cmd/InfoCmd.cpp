@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -299,6 +299,8 @@ private:
     options.append("--mergers");
     options.append("--operators");
     options.append("--string-comparators");
+    options.append("--subline-matchers");
+    options.append("--subline-string-matchers");
     options.append("--tag-mergers");
     options.append("--value-aggregators");
     return options;

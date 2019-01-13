@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAMEDOP_H
 #define NAMEDOP_H
@@ -49,8 +49,6 @@ public:
 
   NamedOp();
   NamedOp(QStringList namedOps);
-
-  //virtual ~NamedOp() {}
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 

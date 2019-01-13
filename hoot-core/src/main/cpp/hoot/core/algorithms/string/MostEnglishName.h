@@ -49,8 +49,8 @@ class Tags;
 typedef boost::shared_ptr<MostEnglishName> MostEnglishNamePtr;
 
 /**
- * Return a best guess at the "most english" name in the list. There are no guarantees. This is
- * an ad-hoc routine that should be better than taking the first choice in most cases.
+ * Return a best guess at the "most english" name in the list (Singleton). There are no guarantees.
+ * This is an ad-hoc routine that should be better than taking the first choice in most cases.
  *
  * If there are no names then an empty string is returned.
  *
@@ -70,8 +70,6 @@ public:
   static std::string className() { return "hoot::MostEnglishName"; }
 
   static unsigned int logWarnCount;
-
-  MostEnglishName();
 
   static const MostEnglishNamePtr& getInstance();
 
@@ -119,6 +117,14 @@ public:
   bool isEnglishText(const QString text);
 
 private:
+
+  // This class is unique in that it 1) is a Singleton, 2) is configurable, and 3) and gets called
+  // from hoot-js.  hoot-js isn't set up to treat treat configurable classes as Singletons, so
+  // so this is here to limit that calling behavior just to MostEnglishNameJs.  Possibly,
+  // MostEnglishNameJs could be changed to use it as a Singleton at some point.
+  friend class MostEnglishNameJs;
+
+  MostEnglishName();
 
   static MostEnglishNamePtr _theInstance;
 

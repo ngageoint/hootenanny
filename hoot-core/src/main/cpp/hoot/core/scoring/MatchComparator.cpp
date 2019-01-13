@@ -27,7 +27,6 @@
 #include "MatchComparator.h"
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
@@ -57,7 +56,7 @@ unsigned int MatchComparator::logWarnCount = 0;
 /**
  * Traverses the OsmMap and creates a map from REF tags to all the uuids that have that REF.
  */
-class GetRefUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class GetRefUuidVisitor : public ConstElementVisitor
 {
 public:
 
@@ -68,8 +67,6 @@ public:
   virtual ~GetRefUuidVisitor() {}
 
   const RefToUuid& getRefToUuid() const { return _ref2Uuid; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual QString getDescription() const { return ""; }
 
@@ -108,7 +105,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   QString _ref;
   RefToUuid _ref2Uuid;
 };
@@ -116,7 +112,7 @@ private:
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class UuidToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class UuidToEidVisitor : public ConstElementVisitor
 {
 public:
 
@@ -125,8 +121,6 @@ public:
   virtual ~UuidToEidVisitor() {}
 
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual QString getDescription() const { return ""; }
 
@@ -155,7 +149,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   QString _ref;
   MatchComparator::UuidToEid _uuidToEid;
 };

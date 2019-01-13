@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, PhoneNumberCountVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, PhoneNumberCountVisitor)
 
 PhoneNumberCountVisitor::PhoneNumberCountVisitor() :
 _count(0)

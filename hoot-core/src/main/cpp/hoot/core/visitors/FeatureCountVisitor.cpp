@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, FeatureCountVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, FeatureCountVisitor)
 
 void FeatureCountVisitor::visit(const boost::shared_ptr<const Element>& e)
 {

@@ -109,3 +109,15 @@ echo "Listing cleaning operations..."
 echo ""
 hoot info --cleaning-operations | grep "DuplicateWayRemover"
 echo ""
+
+# SUBLINE MATCHERS
+echo "Listing subline matchers..."
+echo ""
+hoot info --subline-matchers | grep "FrechetSublineMatcher"
+echo ""
+
+# SUBLINE STRING MATCHERS
+echo "Listing subline string matchers..."
+echo ""
+hoot info --subline-string-matchers | grep "MaximalSublineStringMatcher"
+echo ""

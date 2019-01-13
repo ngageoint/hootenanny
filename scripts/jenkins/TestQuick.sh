@@ -9,4 +9,4 @@ hoot version --debug
 
 export HOOT_TEST_DIFF=--diff
 make -s -f Makefile.hoot services-test-all
-HootTest --quick --parallel $(nproc)
+HootTest --quick --parallel

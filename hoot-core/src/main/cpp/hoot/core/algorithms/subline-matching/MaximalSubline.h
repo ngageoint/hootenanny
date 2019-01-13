@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALSUBLINE_H
 #define MAXIMALSUBLINE_H
@@ -88,6 +88,7 @@ public:
     { _map = map; _w1 = w1; _w2 = w2; }
 
   protected:
+
     ConstWayPtr _w1, _w2;
     ConstOsmMapPtr _map;
   };
@@ -103,6 +104,7 @@ public:
   class ThresholdMatchCriteria : public MatchCriteria
   {
   public:
+
     ThresholdMatchCriteria(Meters maxDistance, Radians maxAngleDiff);
 
     virtual ~ThresholdMatchCriteria() {}
@@ -112,6 +114,7 @@ public:
     void matchingSubline(geos::geom::LineSegment& a, geos::geom::LineSegment& b) const;
 
   private:
+
     Meters _maxDistance;
     Radians _maxAngleDiff;
 

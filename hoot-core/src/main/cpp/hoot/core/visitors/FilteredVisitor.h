@@ -70,7 +70,7 @@ public:
    * visitor. In this case FilteredVisitor will take ownership of the criterion and visitor and
    * delete it when destructed.
    */
-  FilteredVisitor(ElementCriterion *criterion, ConstElementVisitor* visitor);
+  FilteredVisitor(ElementCriterion* criterion, ConstElementVisitor* visitor);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 

@@ -625,7 +625,7 @@ void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
   {
     if (containsNode(it->first))
     {
-      visitor.visit(it->second);
+      visitor.visit(boost::dynamic_pointer_cast<const Node>(it->second));
     }
   }
 }
@@ -644,7 +644,7 @@ void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
   {
     if (containsWay(it->first))
     {
-      visitor.visit(it->second);
+      visitor.visit(boost::dynamic_pointer_cast<const Way>(it->second));
     }
   }
 }
@@ -663,7 +663,7 @@ void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(it->second);
+      visitor.visit(boost::dynamic_pointer_cast<const Relation>(it->second));
     }
   }
 }
@@ -682,7 +682,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   {
     if (containsNode(it->first))
     {
-      visitor.visit(it->second);
+      visitor.visit(boost::dynamic_pointer_cast<const Node>(it->second));
     }
   }
 
@@ -692,7 +692,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   {
     if (containsWay(it->first))
     {
-      visitor.visit(it->second);
+      visitor.visit(boost::dynamic_pointer_cast<const Way>(it->second));
     }
   }
 
@@ -702,7 +702,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(it->second);
+      visitor.visit(boost::dynamic_pointer_cast<const Relation>(it->second));
     }
   }
 }
@@ -760,7 +760,7 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
   {
     if (containsWay(it->first))
     {
-      visitor.visit(it->second);
+      visitor.visit(boost::dynamic_pointer_cast<const Way>(it->second));
     }
   }
 }
@@ -779,7 +779,7 @@ void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(it->second);
+      visitor.visit(boost::dynamic_pointer_cast<const Relation>(it->second));
     }
   }
 }

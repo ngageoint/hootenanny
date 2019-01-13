@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -218,7 +218,7 @@ public:
     dep.push_back("h");
     uut.setDependentColumns(dep);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0029, uut.estimateError(), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0039, uut.estimateError(), 0.0001);
   }
 
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __MOST_ENGLISH_NAME_JS_H__
@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/algorithms/string/MostEnglishName.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -46,6 +46,7 @@ class OsmMapOperation;
 class MostEnglishNameJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   MostEnglishNamePtr getPtr() { return _sd; }
@@ -53,6 +54,7 @@ public:
   static v8::Handle<v8::Object> New(const MostEnglishNamePtr& sd);
 
 private:
+
   MostEnglishNameJs();
   MostEnglishNameJs(MostEnglishNamePtr sd) { _sd = sd; }
   ~MostEnglishNameJs();

@@ -46,7 +46,7 @@ class Match;
 class Merger;
 
 /**
- * A factory for creating a merge from a set of matches.
+ * A factory for creating a merge from a set of matches (Singleton).
  */
 class MergerFactory
 {
@@ -57,11 +57,6 @@ public:
   static unsigned int logWarnCount;
 
   static QString mergerCreatorsKey() { return "merger.creators"; }
-
-  /**
-   * A custom merge factory can be created or the global singleton can be used.
-   */
-  MergerFactory();
 
   ~MergerFactory();
 
@@ -101,6 +96,14 @@ public:
   void reset() { _creators.clear(); }
 
 private:
+
+  // Since this is a Singleton, we shouldn't be accessing its constructor, but there are a some
+  // spots where are.  This is here to limit any further constructor access.
+  friend class UnifyingConflator;
+  friend class MultiaryUtilities;
+
+  MergerFactory();
+
   static boost::shared_ptr<MergerFactory> _theInstance;
 
   std::vector<MergerCreator*> _creators;
