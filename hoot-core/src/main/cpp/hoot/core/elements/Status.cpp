@@ -98,8 +98,8 @@ QString Status::toString() const
 {
   if (_type > EnumEnd)
   {
-      int inputNum = _type - EnumEnd + 2;
-      return QString("Input%1").arg(inputNum, 3, 10, QChar('0'));
+    int inputNum = _type - EnumEnd + 2;
+    return QString("Input%1").arg(inputNum, 3, 10, QChar('0'));
   }
   else
   {
