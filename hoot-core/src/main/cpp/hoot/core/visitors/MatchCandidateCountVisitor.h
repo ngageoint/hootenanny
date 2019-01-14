@@ -65,7 +65,7 @@ private:
   long _totalCandidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 
-  void _setupCreators(const std::vector<boost::shared_ptr<MatchCreator> >& matchCreators);
+  void _setupCreators(const std::vector<boost::shared_ptr<MatchCreator>>& matchCreators);
 };
 
 }

@@ -22,45 +22,55 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef EXCEPTION_H
-#define EXCEPTION_H
+#ifndef SERVICES_JOB_STATUS_H
+#define SERVICES_JOB_STATUS_H
 
-// Qt Includes
+// Qt
 #include <QString>
 
-// Standard Includes
-#include <exception>
+namespace hoot
+{
 
-namespace hoot {
-
-/**
- * The Exception class is intended to be the base class for all exceptions
- * thrown by Hootenanny.
- */
-class Exception : public std::exception
+class ServicesJobStatus
 {
 public:
 
-  Exception() { }
-  Exception(const QString& error)
+  // matches the same enum in hoot-services JobStatus.java
+  typedef enum TypeEnum
   {
-    _error = error;
-  }
+    Running = 0,
+    Complete,
+    Failed,
+    Cancelled,
+    Unknown
+  } TypeEnum;
 
-  virtual ~Exception() throw() {}
+  typedef int Type;
 
-  virtual const char* what() const throw()
-  {
-    return _error.toAscii();
-  }
+  ServicesJobStatus() { _type = Unknown; }
+  ServicesJobStatus(Type type) { _type = type; }
 
-protected:
+  bool operator==(ServicesJobStatus t) const { return t._type == _type; }
+  bool operator!=(ServicesJobStatus t) const { return t._type != _type; }
 
-  QString _error;
+  Type getEnum() const { return _type; }
+
+  QString toString() const;
+
+  /**
+   * @brief fromString Parses type from either a human readable string or the numeric string.
+   * @param typeString The string to parse.
+   * @return The type parsed, or throws an exception if it is an invalid string.
+   */
+  static Type fromString(QString typeString);
+
+private:
+
+  ServicesJobStatus::Type _type;
 };
 
 }
 
-#endif // EXCEPTION_H
+#endif // SERVICES_JOB_STATUS_H

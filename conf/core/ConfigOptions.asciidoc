@@ -509,6 +509,14 @@ See also:
 The string that lists the types of conflation used in the user interface.  The possible values
 are: reference, cookieCutter, average, and advancedConflation.
 
+=== conflate.tag.filter
+
+* Data Type: string
+* Default Value: ``
+
+A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
+User Guide "Feature Filtering" section for filter usage examples.
+
 === conflator.manipulators
 
 * Data Type: list
@@ -994,6 +1002,15 @@ or deleted.  It also requires writing out temporary files, so extra disk space i
 
 Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
 This is most useful when debugging and testing.
+
+=== hootapi.db.writer.job.id
+
+* Data Type: string
+* Default Value: ``
+
+This option allows the Hootenanny Web Services to pass in the ID of the currently executing command
+job.  Given that information, any Hootenanny API database writer invoked by the command will write
+the ID of the job's associated map to the job status table.
 
 === hootapi.db.writer.output.id.mappings
 

@@ -43,6 +43,7 @@ In addition to conflating maps together, Hootenanny can also:
 * Derive changesets between maps and apply the changesets to external OSM data stores
 * Detect spoken languages in a map's tag data
 * Explore tag data
+* Filtering features based on tag content and schema relationships
 * Gather statistics from a map
 * Identify road intersections in a map
 * Locate phone numbers geographically
@@ -160,6 +161,12 @@ See the Hootenanny User Guide for additional usage examples and details on comma
     # Conflate, adding data from the second map to output that does not conflict with data in 
     # the first map
     hoot conflate --differential input1.osm input2.osm output.osm
+
+    # Conflate only restaurants (see the User Guide for more filter examples)
+    hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" input1.osm input2.osm output.osm
+
+    # Conflate specifying a JSON feature filter as a file (see the User Guide for more filter examples)
+    hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
     
 ### Applying Changes
 

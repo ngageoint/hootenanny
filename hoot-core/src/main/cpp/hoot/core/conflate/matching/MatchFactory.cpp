@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchFactory.h"
 
@@ -32,6 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/TagAdvancedCriterion.h>
 
 //Qt
 #include <QString>
@@ -50,10 +51,14 @@ MatchFactory::~MatchFactory()
 
 MatchFactory::MatchFactory()
 {
+  setConfiguration(conf());
 }
 
 Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const
 {
+  LOG_VART(eid1);
+  LOG_VART(eid2);
+
   for (size_t i = 0; i < _creators.size(); ++i)
   {
     Match* m = _creators[i]->createMatch(map, eid1, eid2);
@@ -132,6 +137,15 @@ void MatchFactory::registerCreator(QString c)
     args.removeFirst();
     boost::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(className));
+
+    if (!_tagFilter.trimmed().isEmpty())
+    {
+      // We're specifically checking for an option to feed this tag criterion.  Additional combined
+      // criteria can be added to this match creator if needed.
+      boost::shared_ptr<TagAdvancedCriterion> filter(new TagAdvancedCriterion(_tagFilter));
+      mc->setCriterion(filter);
+    }
+
     _theInstance->registerCreator(mc);
 
     if (args.size() > 0)
@@ -252,6 +266,11 @@ void MatchFactory::_tempFixDefaults()
   LOG_VARD(ConfigOptions().getMapCleanerTransforms());
 }
 
+void MatchFactory::setConfiguration(const Settings& s)
+{
+  _tagFilter = ConfigOptions(s).getConflateTagFilter();
+}
+
 MatchFactory& MatchFactory::getInstance()
 {
   /* TODO: remove this hack after the following UI issues are fixed:
@@ -316,6 +335,12 @@ MatchFactory& MatchFactory::getInstance()
     _setMatchCreators(matchCreators);
   }
   return *_theInstance;
+}
+
+void MatchFactory::reset()
+{
+  _creators.clear();
+  _tagFilter = "";
 }
 
 }

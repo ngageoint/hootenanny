@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchCandidateCountVisitor.h"
 
@@ -35,15 +35,16 @@ namespace hoot
 {
 
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
-  const vector<boost::shared_ptr<MatchCreator> >& matchCreators) :
+  const vector<boost::shared_ptr<MatchCreator>>& matchCreators) :
 _totalCandidateCount(0)
 {
   _setupCreators(matchCreators);
 }
 
 void MatchCandidateCountVisitor::_setupCreators(
-  const vector<boost::shared_ptr<MatchCreator> >& matchCreators)
+  const vector<boost::shared_ptr<MatchCreator>>& matchCreators)
 {
+  _matchCreatorsByName.clear();
   LOG_VARD(matchCreators.size());
   for (size_t i = 0; i < matchCreators.size(); i++)
   {
