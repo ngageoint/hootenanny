@@ -79,11 +79,13 @@ class ScriptMatchVisitor : public ConstElementVisitor
 public:
 
   ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
-    ConstMatchThresholdPtr mt, boost::shared_ptr<PluginContext> script) :
+    ConstMatchThresholdPtr mt, boost::shared_ptr<PluginContext> script,
+                     ElementCriterionPtr filter = ElementCriterionPtr()) :
     _map(map),
     _result(result),
     _mt(mt),
     _script(script),
+    _filter(filter),
     _customSearchRadius(-1.0)
   {
     _neighborCountMax = -1;
@@ -387,6 +389,11 @@ public:
       return _matchCandidateCache[e->getElementId()];
     }
 
+    if (_filter && !_filter->isSatisfied(e))
+    {
+      return false;
+    }
+
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
@@ -458,6 +465,7 @@ private:
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _mt;
   boost::shared_ptr<PluginContext> _script;
+  ElementCriterionPtr _filter;
   Persistent<Function> _getSearchRadius;
 
   QHash<ElementId, bool> _matchCandidateCache;
@@ -538,7 +546,7 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
-  ScriptMatchVisitor v(map, matches, threshold, _script);
+  ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
   v.calculateSearchRadius();
   _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
@@ -604,7 +612,7 @@ boost::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
 
     vector<const Match*> emptyMatches;
     _cachedScriptVisitor.reset(
-      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script));
+      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter));
     _cachedScriptVisitor->setScriptPath(scriptPath);
     //If the search radius has already been calculated for this matcher once, we don't want to do
     //it again due to the expense.

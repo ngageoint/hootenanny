@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatchCreator.h"
 
@@ -88,17 +88,25 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
-  ElementCriterionPtr c1(new ChainCriterion(
-                         ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
-                         _userCriterion));
+  boost::shared_ptr<ChainCriterion> c1(new ChainCriterion(
+                                         ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+                                         _userCriterion));
+  if (_filter)
+  {
+    c1->addCriterion(_filter);
+  }
   e1.setCriterion(c1);
   OsmNetworkPtr n1 = e1.extractNetwork(map);
   LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
-  ElementCriterionPtr c2(new ChainCriterion(
-                         ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-                         _userCriterion));
+  boost::shared_ptr<ChainCriterion> c2(new ChainCriterion(
+                                         ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+                                         _userCriterion));
+  if (_filter)
+  {
+    c2->addCriterion(_filter);
+  }
   e2.setCriterion(c2);
   OsmNetworkPtr n2 = e2.extractNetwork(map);
   LOG_TRACE("Extracted Network 2: " << n2->toString());
@@ -187,6 +195,10 @@ vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
 
 bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
+  if (_filter && !_filter->isSatisfied(element))
+  {
+    return false;
+  }
   return _userCriterion->isSatisfied(element);
 }
 

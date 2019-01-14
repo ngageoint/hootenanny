@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatchCreator.h"
 
@@ -71,17 +71,27 @@ using namespace Tgs;
 class BuildingMatchVisitor : public ConstElementVisitor
 {
 public:
+
+  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+                       ElementCriterionPtr filter = ElementCriterionPtr()) :
+  _map(map),
+  _result(result),
+  _filter(filter)
+  {
+  }
+
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
     std::vector<const Match*>& result, boost::shared_ptr<BuildingRfClassifier> rf,
-    ConstMatchThresholdPtr threshold, Status matchStatus = Status::Invalid,
-    bool reviewMatchesOtherThanOneToOne = false) :
+    ConstMatchThresholdPtr threshold, ElementCriterionPtr filter = ElementCriterionPtr(),
+    Status matchStatus = Status::Invalid, bool reviewMatchesOtherThanOneToOne = false) :
     _map(map),
     _result(result),
     _rf(rf),
     _mt(threshold),
+    _filter(filter),
     _matchStatus(matchStatus),
     _reviewMatchesOtherThanOneToOne(reviewMatchesOtherThanOneToOne)
   {
@@ -96,8 +106,8 @@ public:
 
   ~BuildingMatchVisitor()
   {
-    LOG_DEBUG("neighbor counts, max: " << _neighborCountMax << " mean: " <<
-             (double)_neighborCountSum / (double)_elementsEvaluated);
+    LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
+              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
   virtual QString getDescription() const { return ""; }
@@ -216,8 +226,15 @@ public:
     }
   }
 
-  static bool isMatchCandidate(ConstElementPtr element)
+  bool isMatchCandidate(ConstElementPtr element)
   {
+    LOG_VART(element->getElementId());
+    LOG_VART(_filter.get());
+
+    if (_filter && !_filter->isSatisfied(element))
+    {
+      return false;
+    }
     return BuildingCriterion().isSatisfied(element);
   }
 
@@ -232,7 +249,7 @@ public:
 
       // Only index elements that isMatchCandidate(e)
       boost::function<bool (ConstElementPtr e)> f =
-        boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
+        boost::bind(&BuildingMatchVisitor::isMatchCandidate, this, _1);
       boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
@@ -258,6 +275,7 @@ private:
   std::set<ElementId> _empty;
   boost::shared_ptr<BuildingRfClassifier> _rf;
   ConstMatchThresholdPtr _mt;
+  ElementCriterionPtr _filter;
   Status _matchStatus;
   bool _reviewMatchesOtherThanOneToOne;
   int _neighborCountMax;
@@ -309,7 +327,7 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<
   LOG_INFO("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(
-    map, matches, _getRf(), threshold, Status::Unknown1,
+    map, matches, _getRf(), threshold, _filter, Status::Unknown1,
     ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne());
   map->visitRo(v);
 }
@@ -351,9 +369,10 @@ boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
   return _rf;
 }
 
-bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
+bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map)
 {
-  return BuildingMatchVisitor::isMatchCandidate(element);
+  std::vector<const Match*> matches;
+  return BuildingMatchVisitor(map, matches, _filter).isMatchCandidate(element);
 }
 
 boost::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()

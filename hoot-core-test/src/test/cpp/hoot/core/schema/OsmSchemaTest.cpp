@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -122,9 +122,6 @@ public:
     HOOT_STR_EQUALS("leisure=badvalue1", avg.toStdString());
   }
 
-  /**
-   * Test calculating the average between two tags with weights.
-   */
   void categoryTest()
   {
     OsmSchema uut;
@@ -168,7 +165,7 @@ public:
 
   void dumpAsCsv(OsmSchema& schema, QString tag)
   {
-    vector<SchemaVertex> surfaces = schema.getChildTags(tag);
+    vector<SchemaVertex> surfaces = schema.getChildTagsAsVertices(tag);
     QString csvDistance;
     QString csvAverage;
 
@@ -210,7 +207,7 @@ public:
   {
     OsmSchema& uut = OsmSchema::getInstance();
 
-    vector<SchemaVertex> gravel = uut.getChildTags("surface=gravel");
+    vector<SchemaVertex> gravel = uut.getChildTagsAsVertices("surface=gravel");
 
     CPPUNIT_ASSERT_EQUAL(2, (int)gravel.size());
   }
@@ -232,11 +229,11 @@ public:
     uut.createTestingGraph();
 
     HOOT_STR_EQUALS("[3]{highway=road, highway=primary, highway=secondary}",
-      tagsToNames(uut.getSimilarTags("highway=primary", 0.8)));
+      tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.8)));
     HOOT_STR_EQUALS("[4]{highway=road, highway=primary, highway=secondary, highway=residential}",
-      tagsToNames(uut.getSimilarTags("highway=primary", 0.5)));
+      tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.5)));
     HOOT_STR_EQUALS("[1]{highway=road}",
-      tagsToNames(uut.getSimilarTags("highway=road", 0.1)));
+      tagsToNames(uut.getSimilarTagsAsVertices("highway=road", 0.1)));
   }
 
   /**
