@@ -2,7 +2,7 @@
 [[SupportedDataFormats]]
 == Supported Data Formats
 
-Hootenanny can import from:
+**Hootenanny can import from:**
 
 * ESRI File Geodatabase (.gdb)
 * GeoJSON (.geojson) (M1)
@@ -16,7 +16,7 @@ Hootenanny can import from:
 * Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
 * Additional OGR supported formats
 
-Hootenanny can export to:
+**Hootenanny can export to:**
 
 * ESRI File Geodatabase (.gdb)
 * GeoJSON (.geojson) (M1)
@@ -28,13 +28,13 @@ Hootenanny can export to:
 * Shapefile (.shp) (M1)
 * Additional OGR supported formats
 
-Hootenanny can export changesets to:
+**Hootenanny can export changesets to:**
 
 * OpenStreetMap API Web Service
 * OpenStreetMap SQL changeset file (.osc.sql)
 * OpenStreetMap XML changeset file (.osc)
 
-Notes:
+**Notes:**
 
 * (M1) = format requires reading entire dataset into memory during processing
 * (M2) = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
