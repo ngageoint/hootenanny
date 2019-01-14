@@ -60,6 +60,7 @@ void NamedOp::apply(OsmMapPtr& map)
   Factory& f = Factory::getInstance();
 
   QElapsedTimer timer;
+  LOG_VARD(_namedOps);
   foreach (QString s, _namedOps)
   {
     if (s.isEmpty())
@@ -74,15 +75,12 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
 
+      LOG_INFO("Applying operation: " << s);
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
         LOG_DEBUG(statusInfo->getInitStatusMessage());
-      }
-      else
-      {
-        LOG_INFO("Applying operation: " << s);
       }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
@@ -105,15 +103,12 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
+      LOG_INFO("Applying operation: " << s);
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
         LOG_DEBUG(statusInfo->getInitStatusMessage());
-      }
-      else
-      {
-        LOG_INFO("Applying operation: " << s);
       }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());

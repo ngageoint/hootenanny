@@ -66,6 +66,8 @@ public:
 
   void append(const QString& key, const QStringList& values);
 
+  void prepend(const QString& key, const QStringList& values);
+
   /**
    * Removes all user defined settings. This is most useful for unit testing.
    */

@@ -78,6 +78,15 @@ hoot conflate \
 
 This example will not replace roundabouts in the post conflation operations because it is explicitly removed from the default list of post conflate operations.
 
+-----
+hoot conflate \
+  -D conflate.post.ops++="hoot::RemoveUnknown2Visitor" \
+  test-files/ToyTestA.osm test-files/ToyTestB.osm \
+  test-output/ToyTestRemoveUnknown2.osm
+-----
+
+This example prepends the +RemoveUnknown2Visitor+ operation to the post conflate operations list using +++=+ operator.
+
 [[Conflation-Configuration]]
 === Conflation Configuration
 
