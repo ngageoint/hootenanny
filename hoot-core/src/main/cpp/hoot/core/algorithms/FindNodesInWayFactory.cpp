@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FindNodesInWayFactory.h"
@@ -63,7 +63,7 @@ NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map,
       {
         // Logging this as a warning, since it happens every once in awhile and life seems to go
         // on...
-        LOG_WARN("" << "Internal Error: Two nodes were found with the same coordinate.");
+        LOG_WARN("" << "Internal Problem: Two nodes were found with the same coordinate.");
         LOG_VART(n);
       }
       result = nid;

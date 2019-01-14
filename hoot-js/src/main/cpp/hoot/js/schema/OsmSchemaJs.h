@@ -49,8 +49,8 @@ private:
 
   static void getAllTags(const v8::FunctionCallbackInfo<v8::Value>& agrs);
   static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getChildTags(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getSimilarTags(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getChildTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getSimilarTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagByCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APIDB_H
 #define APIDB_H
@@ -99,7 +99,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedHootDbVersion() { return "22:arni.sumarlidason"; }
+  static QString expectedHootDbVersion() { return "23:brandon.witham"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
@@ -346,10 +346,7 @@ public:
   inline static QString getWayTagsTableName()                   { return "way_tags"; }
   inline static QString getWaysTableName()                      { return "ways"; }
 
-  inline static QString getMapsTableName()                      { return "maps"; }
   inline static QString getUsersTableName()                     { return "users"; }
-  inline static QString getFoldersTableName()                   { return "folders"; }
-  inline static QString getFolderMapMappingsTableName()         { return "folder_map_mappings"; }
 
   inline static QString getSequenceId()                         { return "_id_seq"; }
 
@@ -366,8 +363,6 @@ public:
   inline static QString getCurrentWaysSequenceName()
   { return getCurrentWaysTableName() + getSequenceId(); }
 
-  inline static QString getMapsSequenceName()
-  { return getMapsTableName() + getSequenceId(); }
   inline static QString getUsersSequenceName()
   { return getUsersTableName() + getSequenceId(); }
 

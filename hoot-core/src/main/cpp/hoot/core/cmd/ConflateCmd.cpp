@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConflateCmd.h"
@@ -391,9 +391,6 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate)
   {
     // Differential specific stats - get some numbers for our output
-    // Number of new points
-    // Number of new buildings
-    // km of new roads
 
     ElementCriterionPtr pPoiCrit(new PoiCriterion());
     CriterionCountVisitor poiCounter;

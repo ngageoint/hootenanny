@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -113,6 +113,7 @@ class ExportCommand extends ExternalCommand {
         options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("api.db.email=" + params.getUserEmail());
+        options.add("hootapi.db.writer.job.id=" + jobId);
 
         //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
         if (params.getTextStatus()) {
