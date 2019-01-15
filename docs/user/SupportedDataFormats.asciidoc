@@ -1,0 +1,45 @@
+
+[[SupportedDataFormats]]
+== Supported Data Formats
+
+**Hootenanny can import from:**
+
+* ESRI File Geodatabase (.gdb)
+* GeoJSON (.geojson) (M1)
+* geonames.org (.geonames)
+* Hootenanny API Database (hootapidb://)
+* JSON file (.json; similar to Overpass JSON) (M1)
+* OpenStreetMap XML (.osm)
+* OpenStreetMap Protocol Buffers (.osm.pbf)
+* OpenStreetMap API Database (osmapidb://)
+* Shapefile (.shp)
+* Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
+* Additional OGR supported formats
+
+**Hootenanny can export to:**
+
+* ESRI File Geodatabase (.gdb)
+* GeoJSON (.geojson) (M1)
+* Hootenanny API Database (hootapidb://)
+* JSON file (.json; similar to Overpass JSON) (M1)
+* OpenStreetMap XML file (.osm) (M2)
+* OpenStreetMap Protocol Buffers file (.osm.pbf)
+* OpenStreetMap API Database (osmapidb://)
+* Shapefile (.shp) (M1)
+* Additional OGR supported formats
+
+**Hootenanny can export changesets to:**
+
+* OpenStreetMap API Web Service
+* OpenStreetMap SQL changeset file (.osc.sql)
+* OpenStreetMap XML changeset file (.osc)
+
+**Notes:**
+
+* (M1) = format requires reading entire dataset into memory during processing
+* (M2) = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
+* All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
+
+Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer 
+Guide for details.
+

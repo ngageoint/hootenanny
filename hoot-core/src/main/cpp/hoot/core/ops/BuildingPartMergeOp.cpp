@@ -182,7 +182,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
     i++;
   }
-  LOG_INFO("Ways: " << ways.size() << " / " << ways.size() << "        ");
+  LOG_DEBUG("Ways: " << ways.size() << " / " << ways.size() << "        ");
 
   i = 0;
   // go through all the relations
@@ -201,7 +201,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
     i++;
   }
-  LOG_INFO("Relations: " << relations.size() << " / " << relations.size() << "        ");
+  LOG_DEBUG("Relations: " << relations.size() << " / " << relations.size() << "        ");
 
   ////
   /// Time to start making changes to the map.
@@ -225,7 +225,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
     i++;
   }
-  LOG_INFO("Combining Parts: " << groups.size() << " / " << groups.size() << "        ");
+  LOG_DEBUG("Combining Parts: " << groups.size() << " / " << groups.size() << "        ");
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.
