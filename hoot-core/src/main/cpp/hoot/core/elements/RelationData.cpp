@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RelationData.h"
 
@@ -32,16 +32,19 @@ namespace hoot
 {
 
 RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp,
-                           QString user, long uid, bool visible) :
-ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid, visible)
+                           QString user, long uid, bool visible)
+  : ElementData(id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version,
+                timestamp, user, uid, visible)
 {
 }
 
-RelationData::RelationData(const RelationData& rd) :
-ElementData(rd.getId(), rd.getTags(), rd.getCircularError(), rd.getChangeset(), rd.getVersion(),
-            rd.getTimestamp(), rd.getUser(), rd.getUid(), rd.getVisible()),
-_type(rd._type),
-_members(rd._members)
+RelationData::RelationData(const RelationData& rd)
+  : ElementData(rd.getId(), rd.getTags(),
+                (rd.hasCircularError() ? rd.getCircularError() : ElementData::CIRCULAR_ERROR_EMPTY),
+                rd.getChangeset(), rd.getVersion(), rd.getTimestamp(), rd.getUser(),
+                rd.getUid(), rd.getVisible()),
+    _type(rd._type),
+    _members(rd._members)
 {
 }
 

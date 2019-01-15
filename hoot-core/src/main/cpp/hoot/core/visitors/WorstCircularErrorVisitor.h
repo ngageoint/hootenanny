@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WORSTCIRCULARERRORVISITOR_H
@@ -44,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::WorstCircularErrorVisitor"; }
 
-  WorstCircularErrorVisitor(): _worst(-1) {}
+  WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
 
   Meters getWorstCircularError() { return _worst; }
 

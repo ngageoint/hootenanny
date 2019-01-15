@@ -8,7 +8,6 @@
             <tag k="uuid" v="{dd5f81c2-e249-467e-985a-914a76ef121e}"/>
             <tag k="name" v="Lana's House of Coffee"/>
             <tag k="attribution" v="osm"/>
-            <tag k="error:circular" v="15"/>
         </node>
         <node id="-2" version="0" lat="8.6541474185900018" lon="28.1392570135799929" timestamp="2018-06-11T16:50:55Z"/>
         <node id="-3" version="0" lat="8.6548074607699945" lon="28.1410811127400002" timestamp="2018-06-11T16:50:55Z"/>
@@ -803,7 +802,6 @@
             <tag k="building" v="yes"/>
             <tag k="source:imagery" v="Unknown"/>
             <tag k="name" v="New Name"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="3" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="24"/>
@@ -843,7 +841,6 @@
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
             <tag k="highway" v="primary"/>
             <tag k="surface" v="cobblestone"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="2" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="9"/>
@@ -907,7 +904,6 @@
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
             <tag k="highway" v="primary"/>
             <tag k="surface" v="cobblestone"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="1" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="1"/>
@@ -944,7 +940,6 @@
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
             <tag k="highway" v="primary"/>
             <tag k="surface" v="paved"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="5" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="108"/>
@@ -960,7 +955,6 @@
             <tag k="attribution" v="osm"/>
             <tag k="amenity" v="fuel"/>
             <tag k="source:datetime" v="2018-06-11T16:49:01Z"/>
-            <tag k="error:circular" v="15"/>
         </way>
     </modify>
 </osmChange>

@@ -333,7 +333,8 @@ QString Way::toString() const
   ss << "status: " << getStatusString().toStdString() << endl;
   ss << "version: " << getVersion() << endl;
   ss << "visible: " << getVisible() << endl;
-  ss << "circular error: " << getCircularError();
+  if (hasCircularError())
+    ss << "circular error: " << getCircularError();
   if (hasPid())
     ss << "parent id: " << getPid() << endl;
   return QString::fromStdString(ss.str());
