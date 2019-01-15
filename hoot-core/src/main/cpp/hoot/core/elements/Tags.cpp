@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Tags.h"
@@ -694,7 +694,8 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
 {
   QRegExp nRegExp("(\\d+(\\.\\d+)?)");
   int pos = 0;
-  while ((pos = nRegExp.indexIn(str,pos)) != -1){
+  while ((pos = nRegExp.indexIn(str,pos)) != -1)
+  {
     num = nRegExp.cap(1).trimmed();
     pos += nRegExp.matchedLength();
   }
@@ -730,6 +731,38 @@ bool Tags::hasAnyKvp(const QStringList kvps) const
     }
   }
   return false;
+}
+
+Tags Tags::kvpListToTags(const QStringList kvps)
+{
+  Tags tagsToReturn;
+  for (int i = 0; i < kvps.size(); i++)
+  {
+    const QString tagStr = kvps.at(i);
+    if (!tagStr.contains("="))
+    {
+      throw IllegalArgumentException("Invalid tag: " + tagStr);
+    }
+    const QStringList tagStrParts = tagStr.split("=");
+    if (!tagStrParts.size() == 2)
+    {
+      throw IllegalArgumentException("Invalid tag: " + tagStr);
+    }
+    tagsToReturn.appendValue(tagStrParts[0], tagStrParts[1]);
+  }
+  return tagsToReturn;
+}
+
+Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
+{
+  Tags tags;
+  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
+       itr != schemaVertices.end(); ++itr)
+  {
+    const SchemaVertex vertex = *itr;
+    tags.appendValue(vertex.key, vertex.value);
+  }
+  return tags;
 }
 
 }

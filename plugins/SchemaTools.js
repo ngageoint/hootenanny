@@ -102,7 +102,7 @@ schemaTools.generateRuleTags = function(rule) {
     var result = [];
 
     if (rule.ruleType === 'similarTo') {
-        var tags = hoot.OsmSchema.getSimilarTags(rule.name, rule.threshold);
+        var tags = hoot.OsmSchema.getSimilarTagsAsVertices(rule.name, rule.threshold);
 
         tags = schemaTools.expandAliases(tags);
 
@@ -121,7 +121,7 @@ schemaTools.generateRuleTags = function(rule) {
             }
         }
     } else if (rule.ruleType === 'isA') {
-        var tags = hoot.OsmSchema.getChildTags(rule.name);
+        var tags = hoot.OsmSchema.getChildTagsAsVertices(rule.name);
 
         // Add the parents
         tags.push.apply(tags,[hoot.OsmSchema.getTagVertex(rule.name)]);

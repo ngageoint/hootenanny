@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCREATOR_H
 #define MATCHCREATOR_H
@@ -80,6 +80,8 @@ public:
 
   virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() = 0;
 
+  virtual void setCriterion(const ElementCriterionPtr& filter) { _filter = filter; }
+
   /**
    * Arguments are passed in by the MatchFactory.
    */
@@ -98,6 +100,12 @@ public:
 protected:
 
   QString _description;
+  // allows for matching only a subset of features in the input data
+  // Unfortunately, each match creator will need to add explicit logic to use this filter in their
+  // isMatchCandidate method (if they call into a match visitor, then in that class's
+  // isMatchCandidate method).  Couldn't find any clean way to add that to this base class, given
+  // the way that each match creator calls into a visitor to parse potential matches
+  ElementCriterionPtr _filter;
 };
 
 typedef boost::shared_ptr<MatchCreator> MatchCreatorPtr;

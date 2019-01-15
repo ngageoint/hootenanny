@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFIGURATION_H
@@ -65,6 +65,8 @@ public:
   typedef QHash<QString, QVariant> SettingsMap;
 
   void append(const QString& key, const QStringList& values);
+
+  void prepend(const QString& key, const QStringList& values);
 
   /**
    * Removes all user defined settings. This is most useful for unit testing.

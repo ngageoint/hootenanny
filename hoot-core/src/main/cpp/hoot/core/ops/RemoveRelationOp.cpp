@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveRelationOp.h"
 
@@ -39,7 +39,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveRelationOp)
 
-RemoveRelationOp::RemoveRelationOp()
+RemoveRelationOp::RemoveRelationOp() :
+_rIdToRemove(-std::numeric_limits<int>::max())
 {
 }
 
@@ -51,6 +52,11 @@ _rIdToRemove(rId)
 void RemoveRelationOp::apply(OsmMapPtr& map)
 {
   LOG_VART(_rIdToRemove);
+  if (_rIdToRemove == -std::numeric_limits<int>::max())
+  {
+    throw IllegalArgumentException("No relation ID specified for RemoveRelationOp.");
+  }
+
   if (map->_relations.find(_rIdToRemove) != map->_relations.end())
   {
     // determine if this relation is a part of any other relations

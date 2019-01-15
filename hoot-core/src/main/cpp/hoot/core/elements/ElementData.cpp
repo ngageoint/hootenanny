@@ -22,10 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Element.h"
+
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -36,5 +38,7 @@ quint64 ElementData::TIMESTAMP_EMPTY = 0;
 QString ElementData::USER_EMPTY = QString();
 long ElementData::UID_EMPTY = 0;
 bool ElementData::VISIBLE_EMPTY = true;
+double ElementData::CIRCULAR_ERROR_EMPTY = -1;
+double ElementData::CIRCULAR_ERROR_DEFAULT = ConfigOptions().getCircularErrorDefaultValue();
 
 }
