@@ -2,7 +2,7 @@
 
 ![](https://github.com/ngageoint/hootenanny/blob/master/docs/user/images/id/hoot_conflation_new.png)
 
-# Introduction
+# Overview
 _Hootenanny_: 
 
 1. a gathering at which folksingers entertain often with the audience joining in
@@ -12,6 +12,14 @@ _Conflation_:
 1. Fancy word for merge
 
 Hootenanny is an open source conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain.  In short, it merges multiple maps into a single seamless map.
+
+Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, 
+and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) 
+for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s 
+free tagging system allows the map to include an unlimited number of attributes describing each feature.
+
+Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence 
+Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny). 
 
 # Project Goals
 * Automatically combine geospatial features for decision making
@@ -43,7 +51,7 @@ In addition to conflating maps together, Hootenanny can also:
 * Derive changesets between maps and apply the changesets to external OSM data stores
 * Detect spoken languages in a map's tag data
 * Explore tag data
-* Filtering features based on tag content and schema relationships
+* Filter features based on tag content and schema relationships
 * Gather statistics from a map
 * Identify road intersections in a map
 * Locate phone numbers geographically
@@ -52,15 +60,6 @@ In addition to conflating maps together, Hootenanny can also:
 * Sort map data
 * Translate feature tags using user defined schemas
 * Translate feature tags to English
-
-# Overview
-Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, 
-and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) 
-for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s 
-free tagging system allows the map to include an unlimited number of attributes describing each feature.
-
-Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence 
-Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny). 
 
 # Documentation
 User and technical documentation may be found locally after installation in 'hoot/docs' or 
@@ -80,19 +79,18 @@ to CentOS 7.x.
 
 # Web User Interface
 [Hootenanny's web user interface](https://github.com/ngageoint/hootenanny-ui) is built upon the open source 
-[Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience. 
+[Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience.  See the User Interface Guide for more details. 
 
 # Web Services API
-Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  See the User Documentation for more details.
+Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  The API documentation can be found in the release at: docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz.
 
 # Command Line Interface
-Command line access is available and exposes additional functionalities not available from the web user interface.  See the "Usage" section below for examples, as well as the User Documentation.
+Command line access is available and exposes additional functionalities not available from the web user interface.  See the "Usage" section below for examples, as well as the Command Line Documentation section of the User Documentation.
 
 # Programming Language Bindings
-Hootenanny has nodejs bindings available which expose core conflation capabilities.
+Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/user/JavascriptOverview.asciidoc) available which expose core conflation capabilities.
 
 # Supported Data Formats
-
 See the Hootenanny User Guide [Supported Data Formats section](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc).
 
 # Tag Schemas
@@ -109,7 +107,6 @@ uploaded dataset using a semi-automated Translation Assistant.  More details on 
 found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide. 
 
 # Usage
-
 See the Hootenanny User Guide [Command Line Examples section](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc).
 
 # Redistribution
