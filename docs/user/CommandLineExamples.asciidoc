@@ -2,6 +2,8 @@
 [[CommandLineExamples]]
 == Command Line Examples
 
+See the User Guide for more detail.
+
 === Basic
 
 -----
