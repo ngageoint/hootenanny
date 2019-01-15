@@ -32,6 +32,14 @@
         ]
       },
       {
+        "id": "hoot_road_opt_engine",
+        "elem_type": "list",
+        "description": "A list of road engines",
+        "name": "Engines",
+        "defaultvalue": "Unify",
+        "hoot_key": "hoot.road.opt.engine"
+      },
+      {
         "id":"attribute_override_conflate_post_ops",
         "elem_type":"string",
         "description":"Remove review relations and unmatched features in secondary dataset.",
@@ -43,71 +51,17 @@
         "id": "attribute_override_visitor_criterion",
         "elem_type": "string",
         "description": "The criterion for the RemoveElementsVisitor above",
-        "name": "Remove Elements Visitor Cirterion",
+        "name": "Remove Elements Visitor Criterion",
         "defaultvalue": "hoot::ReviewRelationCriterion",
         "hoot_key": "remove.elements.visitor.element.criterion"
       },
       {
-        "id": "attribute_override_conflate_match_highway_classifier",
-        "elem_type": "string",
-        "description": "The highway match classifier to use. This should only be used for testing and debugging.",
-        "name": "Conflate Match Highway Classifier",
-        "defaultvalue": "hoot::HighwayRfClassifier",
-        "hoot_key": "conflate.match.highway.classifier",
-        "required":"true"
-      },
-      {
-        "id": "road_match_creator",
-        "elem_type": "string",
-        "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-        "name": "Match Creator",
-        "defaultvalue": "hoot::HighwayMatchCreator",
-        "hoot_key": "match.creators",
-        "required":"true"
-      },
-      {
-        "id": "road_merger_creator",
-        "elem_type": "string",
-        "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-        "name": "Merger Creator",
-        "defaultvalue": "hoot::HighwaySnapMergerCreator",
-        "hoot_key": "merger.creators",
-        "required":"true"
-      },
-      {
-        "id": "building_match_creator",
-        "elem_type": "string",
-        "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-        "name": "Match Creator",
-        "defaultvalue": "hoot::BuildingMatchCreator",
-        "hoot_key": "match.creators"
-      },
-      {
-        "id": "building_merger_creator",
-        "elem_type": "string",
-        "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-        "name": "Merger Creator",
-        "defaultvalue": "hoot::BuildingMergerCreator",
-        "hoot_key": "merger.creators"
-      },
-      {
-        "id": "attribute_override_small_way_merger_threshold",
-        "minvalue": "0",
-        "elem_type": "double",
-        "description": "If highways are smaller than threshold and the tags matched then they will be merged together into a single way.",
-        "maxvalue": "",
-        "name": "Small Way Merger Threshold",
-        "defaultvalue": "15",
-        "hoot_key": "small.way.merger.threshold"
-      },
-       {
-        "id": "horizontal_override_writer_include_debug",
+        "id": "attribute_override_remove_elements_visitor_recursive",
         "elem_type": "bool",
-        "description": "Writer Include Debug",
-        "name": "Writer Include Debug",
+        "description": "Remove elements recusively",
+        "name": "Remove elements recusively",
         "defaultvalue": "false",
-        "hoot_key": "writer.include.debug.tags",
-        "required":"true"
+        "hoot_key": "remove.elements.visitor.recursive",
       }
     ]
 
