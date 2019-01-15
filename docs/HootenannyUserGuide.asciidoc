@@ -5,7 +5,7 @@ include::user/History.asciidoc[]
 include::user/Introduction.asciidoc[]
 include::user/Limitations.asciidoc[]
 include::user/OldDocs.asciidoc[]
-include::JavascriptOverview.asciidoc[]                                          
+include::user/JavascriptOverview.asciidoc[]                                          
 :leveloffset: 1
 include::tmp/RulesLib.asciidoc[]                                                
 include::tmp/RulesTemplate.asciidoc[]                                           
