@@ -170,7 +170,7 @@ getDbSchema: function()
                            { name:"Hotel", value:"95" },
                            { name:"Diplomatic Building", value:"96" },
                            { name:"Other", value:"999" }
-                        ] // End of Enumerations 
+                        ] 
                      },// End of BFC
                      { name:"COL",
                        desc:"Character of Light" ,
@@ -201,7 +201,7 @@ getDbSchema: function()
                            { name:"Synagogue",value:"20" },
                            { name:"Stupa",value:"21" },
                            { name:"Not Applicable",value:"22" }
-                        ] // End of Enumerations 
+                        ] 
                      },// End of HWT
                     { name:"NAM",
                        desc:"Name" ,
@@ -210,8 +210,8 @@ getDbSchema: function()
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     } // End of NAM
-                    ] // End of Columns
+                     } 
+                    ] 
           },// End of feature BUILDNGA
 
 
@@ -227,19 +227,19 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"PRO",
                        desc:"Product" ,
                        optional:"R" ,
-                       definition:"The principal product(s) resulting from a production,mining,or agricultural activity. ( If multiple products are specified then they are usually listed in descending order of importance. )",
+                       definition:"",
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
@@ -256,7 +256,7 @@ getDbSchema: function()
                            { name:"Stone",value:"108" },
                            { name:"Water",value:"116" },
                            { name:"Other",value:"999" },
-                        ] // End of Enumerations 
+                        ] 
                      },// End of PRO
                      { name:"ZV2",
                        desc:"Highest Z-Value" ,
@@ -266,7 +266,7 @@ getDbSchema: function()
                        type:"Integer",
                        defValue:"99999" 
                      } // End of ZV2
-                    ] // End of Columns
+                    ] 
           },// End of feature INDUSTA
         { name:"LANDMRKA",
           fcode:"",
@@ -280,8 +280,8 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     } // End of F_CODE
-                    ] // End of Columns
+                     } 
+                    ] 
           },// End of feature LANDMRKA
         { name:"PARKA",
           fcode:"",
@@ -295,16 +295,16 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     }// End of NAM
-                    ] // End of Columns
+                     }
+                    ] 
           },// End of feature PARKA
         { name:"TRANSA",
           fcode:"",
@@ -318,7 +318,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"APT",
                        desc:"Airfield Type" ,
                        optional:"R" ,
@@ -330,7 +330,7 @@ getDbSchema: function()
                            { name:"Minor",value:"2" },
                            { name:"Seaplane Base",value:"4" },
                            { name:"Heliport",value:"9" },
-                        ] // End of Enumerations 
+                        ] 
                      },// End of APT
                      { name:"EXS",
                        desc:"Existence Category" ,
@@ -342,17 +342,17 @@ getDbSchema: function()
                            { name:"Under Construction",value:"5" },
                            { name:"Abandoned/Disused",value:"6" },
                            { name:"Operational",value:"28" }
-                        ] // End of Enumerations 
+                        ] 
                      },// End of EXS
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     }// End of NAM
-                    ] // End of Columns
+                     }
+                    ] 
           },// End of feature TRANSA
         { name:"FENCEL",
           fcode:"",
@@ -366,8 +366,8 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     } // End of F_CODE
-                    ] // End of Columns
+                     } 
+                    ] 
           },// End of feature FENCEL
         { name:"PARKL",
           fcode:"",
@@ -381,7 +381,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"SSC",
                        desc:"Structure Shape Category" ,
                        optional:"R" ,
@@ -391,17 +391,17 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Unknown",value:"0" },
                            { name:"Roller Coaster",value:"25" }
-                        ] // End of Enumerations 
+                        ] 
                      },// End of SSC
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     }// End of NAM
-                    ] // End of Columns
+                     }
+                    ] 
           },// End of feature PARKL
         { name:"POWERL",
           fcode:"",
@@ -415,7 +415,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"OHC",
                        desc:"Overhead Clearance Category" ,
                        optional:"R" ,
@@ -431,9 +431,9 @@ getDbSchema: function()
                        defValue:"1",
                        enumerations:[
                            { name:"Feature crosses navigable water",value:"1" },
-                        ] // End of Enumerations 
+                        ] 
                      }// End of OWO
-                    ] // End of Columns
+                    ] 
           },// End of feature POWERL
         { name:"RAILRDL",
           fcode:"",
@@ -447,7 +447,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     }, // End of F_CODE
+                     }, 
                      { name:"EXS",
                        desc:"Existence Category" ,
                        optional:"R" ,
@@ -460,7 +460,7 @@ getDbSchema: function()
                            { name:"Destroyed",value:"7" },
                            { name:"Dismantled",value:"8" },
                            { name:"Operational",value:"28" }
-                        ] // End of Enumerations 
+                        ] 
                      },// End of EXS
                      { name:"LOC",
                        desc:"Location Category" ,
@@ -472,7 +472,7 @@ getDbSchema: function()
                            { name:"Below Surface / Submerged / Underground",value:"4" },
                            { name:"On ground surface",value:"8" },
                            { name:"Suspended / Elevated Above Ground or Water",value:"25" },
-                        ] // End of Enumerations 
+                        ] 
                      }, // End of LOC
                      { name:"RRC",
                        desc:"Railroad Categories" ,
@@ -491,7 +491,7 @@ getDbSchema: function()
                            { name:"Main Line", value:"16" },
                            { name:"Branch Line", value:"17" },
                            { name:"Railway in Road", value:"21" }
-                        ] // End of Enumerations 
+                        ] 
                      }// End of RRC
                      { name:"VRR",
                        desc:"Vertical Reference Category" ,
@@ -504,9 +504,9 @@ getDbSchema: function()
                            { name:"Below Surface / Submerged",value:"4" },
                            { name:"Covers and Uncovers",value:"8" },
                            { name:"Not Applicable",value:"9" }
-                        ] // End of Enumerations 
-                     } // End of VRR
-                    ] // End of Columns
+                        ] 
+                     } 
+                    ] 
           },// End of feature RAILRDL
         { name:"TRANSL",
           fcode:"",
@@ -520,7 +520,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"EXS",
                        desc:"Existence Category" ,
                        optional:"R" ,
@@ -529,10 +529,10 @@ getDbSchema: function()
                        defValue:"28",
                        enumerations:[
                            { name:"Operational",value:"28" }
-                        ] // End of Enumerations 
+                        ] 
                      }
-                    ] // End of Columns
-        },// End of feature TRANSL
+                    ] 
+        },
         { name:"AEROP",
           fcode:"",
           desc:"Aeronautical Point",
@@ -545,7 +545,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -555,7 +555,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },// End of ACC
                      { name:"APT",
                        desc:"Airfield Type" ,
@@ -565,7 +565,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Major Airfield", value:"1" },
                            { name:"Minor Airfield", value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      }, // End of APT
                      { name:"BRF",
                        desc:"Broadcast Frequency",
@@ -590,7 +590,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Operational",value:"28" },
                            { name:"Continuous Operation",value:"42" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"MCA",
                        desc:"XXX Morse Code" ,
@@ -602,11 +602,11 @@ getDbSchema: function()
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     }// End of NAM
+                     }
                      { name:"NST",
                        desc:"Navigation System Type" ,
                        optional:"R" ,
@@ -617,7 +617,7 @@ getDbSchema: function()
                            { name:"Unknown",value:"0" },
                            { name:"NOB (Non-directional Beacon)",value:"17" },
                            { name:"RNG (Radio Range)",value:"19" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"OLQ",
                        desc:"Obstruction Light Quality" ,
@@ -629,7 +629,7 @@ getDbSchema: function()
                            { name:"Unknown",value:"0" },
                            { name:"One light present",value:"1" },
                            { name:"Multiple lights present",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"ORC",
                        desc:"Operating Range Category",
@@ -638,8 +638,8 @@ getDbSchema: function()
                        type:"Integer",
                        defValue:"0" 
                      }, // End of BRF
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"BUILDNGP",
           fcode:"",
           desc:"Building Point",
@@ -652,7 +652,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -662,7 +662,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"BFC",
                        desc:"Building Function Category" ,
@@ -724,7 +724,7 @@ getDbSchema: function()
                            { name:"Hotel", value:"95" },
                            { name:"Diplomatic Building", value:"96" },
                            { name:"Other", value:"999" }
-                        ] // End of Enumerations 
+                        ] 
                      },// End of BFC
                      { name:"COL",
                        desc:"XXX Character of Light" ,
@@ -744,7 +744,7 @@ getDbSchema: function()
                            { name:"Under Construction",value:"5" },
                            { name:"Abandoned / Disused",value:"6" },
                            { name:"Destroyed",value:"7" },
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"HWT",
                        desc:"House of Worship Type" ,
@@ -768,16 +768,16 @@ getDbSchema: function()
                            { name:"Synagogue",value:"20" },
                            { name:"Stupa",value:"21" },
                            { name:"Not Applicable",value:"22" }
-                        ] // End of Enumerations 
+                        ] 
                      },// End of HWT
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"SSR",
                        desc:"Structure Shape of Roof" ,
                        optional:"R" ,
@@ -790,7 +790,7 @@ getDbSchema: function()
                            { name:"With Cupola", value:"77" }, 
                            { name:"With Tower", value:"79" }, 
                            { name:"With Minaret", value:"80" }  
-                        ] // End of Enumerations 
+                        ] 
                      }, // End of SSR
                      { name:"SST",
                        desc:"Sound Signal Type" ,
@@ -808,7 +808,7 @@ getDbSchema: function()
                            { name:"Whistle", value:"14" }, 
                            { name:"Reed", value:"15" }, 
                            { name:"None", value:"16" } 
-                        ] // End of Enumerations 
+                        ] 
                      }, // End of SST
                      { name:"STA",
                        desc:"Station Type" ,
@@ -836,12 +836,12 @@ getDbSchema: function()
                            { name:"Lock Signal", value:"30" }, 
                            { name:"International Port Signals", value:"32" }, 
                            { name:"Firing Practice Signal", value:"33" }, 
-                        ] // End of Enumerations 
+                        ] 
                      }, // End of STA
-                    ] // End of Columns
+                    ] 
           },
         { name:"BUILTUPP",
-          fcode:"Built Up Area Point",
+          fcode:"",
           desc:"Built Up Area Point",
           definition:"Built Up Area Point",
           geom:"Point",
@@ -852,7 +852,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -862,20 +862,20 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     }// End of NAM
-                    ] // End of Columns
+                     }
+                    ] 
           },
         { name:"COMPP",
-          fcode:"Communications Point",
+          fcode:"",
           desc:"Communications Point",
           definition:"Communications Point",
           geom:"Point",
@@ -886,7 +886,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -896,7 +896,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"BRF",
                        desc:"Broadcast Frequency",
@@ -929,9 +929,9 @@ getDbSchema: function()
                            { name:"TV", value:"15" }, 
                            { name:"Microwave", value:"16" }, 
                            { name:"Radio Telegraph", value:"33" }
-                        ] // End of Enumerations 
+                        ] 
                      }
-                    ] // End of Columns
+                    ] 
           },// End of feature COMPP
         { name:"INUDSTP",
           fcode:"",
@@ -945,7 +945,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -955,7 +955,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"COL",
                        desc:"XXX Character of Light" ,
@@ -967,7 +967,7 @@ getDbSchema: function()
                      { name:"HGT",
                        desc:"Height Above Surface Level" ,
                        optional:"R" ,
-                       definition:"The vertical distance measured from the lowest point of the base of the feature at ground or water level (downhill/downstream side) to the tallest point of the feature. ( For non-inland water bodies, the water level is usually understood to be Mean Sea Level (MSL). Note that the feature may be supported above the surface by another feature (for example: a tower supported by a building) and as a consequence the value of the Height Above Surface Level is different (larger) than the base-to-top height of the feature (for example: supported tower) itself. )", 
+                       definition:"", 
                        units:"Metre", 
                        type:"Integer",
                        defValue:"0" 
@@ -981,16 +981,16 @@ getDbSchema: function()
                        enumerations:[
                            { name:"On ground surface",value:"8" },
                            { name:"Off Shore",value:"22" },
-                        ] // End of Enumerations 
+                        ] 
                      }, // End of LOC
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"PRO",
                        desc:"Product" ,
                        optional:"R" ,
@@ -1001,7 +1001,7 @@ getDbSchema: function()
                            { name:"Unknown",value:"0" },
                            { name:"Electric",value:"31" },
                            { name:"Other",value:"999" },
-                        ] // End of Enumerations 
+                        ] 
                      },// End of PRO
                      { name:"SSC",
                        desc:"Structure Shape Category" ,
@@ -1022,7 +1022,7 @@ getDbSchema: function()
                            { name:"Scanner",value:"108" },
                            { name:"Obelisk",value:"109" },
                            { name:"Other",value:"999" }
-                        ] // End of Enumerations 
+                        ] 
                      },// End of SSC
                      { name:"TUC",
                        desc:"Transportation Use Category" ,
@@ -1038,7 +1038,7 @@ getDbSchema: function()
                            { name:"Marine", value:"12" }, 
                            { name:"Air", value:"13" }, 
                            { name:"Pedestrian", value:"17" } 
-                        ] // End of Enumerations 
+                        ] 
                      }, // End of TUC
                      { name:"USE",
                        desc:"Useage" ,
@@ -1049,7 +1049,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Container",value:"132" },
                            { name:"Other",value:"999" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"ZV2",
                        desc:"Highest Z-Value" ,
@@ -1059,8 +1059,8 @@ getDbSchema: function()
                        type:"Integer",
                        defValue:"99999" 
                      } // End of ZV2
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"LANDMRKP",
           fcode:"",
           desc:"Landmark Point",
@@ -1073,7 +1073,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -1083,10 +1083,10 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"POWERP",
           fcode:"",
           desc:"Power Point",
@@ -1099,7 +1099,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -1109,12 +1109,12 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"ECRAREA",
-          fcode:"Earthcover Area",
+          fcode:"",
           desc:"Earthcover Area",
           definition:"",
           geom:"Area",
@@ -1126,8 +1126,8 @@ getDbSchema: function()
                        type:"String",
                        defValue:"" 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"FORESHOA",
           fcode:"",
           desc:"Foreshore Area",
@@ -1140,7 +1140,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"BA020" 
-                     },// End of F_CODE
+                     },
                      { name:"MCC",
                        desc:"Material Composition Category" ,
                        optional:"R" ,
@@ -1157,7 +1157,7 @@ getDbSchema: function()
                            { name:"Sand", value:"88" }, 
                            { name:"Shingle", value:"98" }, 
                            { name:"Stone", value:"108" } 
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"MCS",
                        desc:"Material Compsition Secondary" ,
@@ -1172,13 +1172,13 @@ getDbSchema: function()
                            { name:"Sand", value:"88" }, 
                            { name:"Shingle", value:"98" }, 
                            { name:"Stone", value:"108" } 
-                        ] // End of Enumerations 
+                        ] 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"ADMINL",
-          fcode:"Administrative Line",
-          desc:"",
+          fcode:"",
+          desc:"Administrative Line",
           definition:"",
           geom:"Line",
           columns:[ 
@@ -1188,7 +1188,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -1200,24 +1200,24 @@ getDbSchema: function()
                            { name:"Approximate",value:"2" },
                            { name:"Disputed",value:"5" },
                            { name:"Undisputed",value:"6" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NM3",
                        desc:"Name 3" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"NM4",
                        desc:"Name 4" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"USE",
                        desc:"Useage" ,
                        optional:"R" ,
@@ -1227,13 +1227,13 @@ getDbSchema: function()
                        enumerations:[
                            { name:"International",value:"23" },
                            { name:"Insular",value:"32" }
-                        ] // End of Enumerations 
+                        ] 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"BOUNDRYL",
-          fcode:"Boundary Line",
-          desc:"",
+          fcode:"",
+          desc:"Boundary Line",
           definition:"",
           geom:"Line",
           columns:[ 
@@ -1243,23 +1243,23 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"NM3",
                        desc:"Name 3" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"NM4",
                        desc:"Name 4" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"USE",
                        desc:"Useage" ,
                        optional:"R" ,
@@ -1268,13 +1268,13 @@ getDbSchema: function()
                        defValue:"23",
                        enumerations:[
                            { name:"International",value:"23" }
-                        ] // End of Enumerations 
+                        ] 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"COASTL",
-          fcode:"Coastline Line",
-          desc:"",
+          fcode:"",
+          desc:"Coastline Line",
           definition:"",
           geom:"Line",
           columns:[ 
@@ -1284,7 +1284,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -1294,7 +1294,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"SLT",
                        desc:"Shoreline Type" ,
@@ -1311,13 +1311,13 @@ getDbSchema: function()
                            { name:"Sandy", value:"13" }, 
                            { name:"Stony, Shingly", value:"14" }, 
                            { name:"Other", value:"999" }, 
-                        ] // End of Enumerations 
+                        ] 
                      }, // End of SLT
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"FORESHOL",
-          fcode:"Foreshore Line",
-          desc:"",
+          fcode:"",
+          desc:"Foreshore Line",
           definition:"",
           geom:"Line",
           columns:[ 
@@ -1328,8 +1328,8 @@ getDbSchema: function()
                        type:"String",
                        defValue:"" 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"FORESHOP",
           fcode:"",
           desc:"Foreshore Point",
@@ -1342,7 +1342,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"BA020" 
-                     },// End of F_CODE
+                     },
                      { name:"MCC",
                        desc:"Material Composition Category" ,
                        optional:"R" ,
@@ -1359,7 +1359,7 @@ getDbSchema: function()
                            { name:"Sand", value:"88" }, 
                            { name:"Shingle", value:"98" }, 
                            { name:"Stone", value:"108" } 
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"MCS",
                        desc:"Material Compsition Secondary" ,
@@ -1374,13 +1374,13 @@ getDbSchema: function()
                            { name:"Sand", value:"88" }, 
                            { name:"Shingle", value:"98" }, 
                            { name:"Stone", value:"108" } 
-                        ] // End of Enumerations 
+                        ] 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"ISLANDP",
-          fcode:"Island Point",
-          desc:"",
+          fcode:"",
+          desc:"Island Point",
           definition:"",
           geom:"Point",
           columns:[ 
@@ -1391,8 +1391,8 @@ getDbSchema: function()
                        type:"String",
                        defValue:"BA030" 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"ECRTEXT",
           fcode:"",
           desc:"Earthcover Text",
@@ -1409,13 +1409,13 @@ getDbSchema: function()
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
-                    ] // End of Columns
-          },// End of feature TRANSL
+                     },
+                    ] 
+          },
         { name:"ENVAREA",
           fcode:"",
           desc:"Environment Area",
@@ -1436,12 +1436,12 @@ getDbSchema: function()
                        units:"degrees", 
                        type:"Integer",
                        defValue:"0" 
-                     },// End of NAM
-                    ] // End of Columns
-          },// End of feature TRANSL
+                     },
+                    ] 
+          },
         { name:"CURRDIAP",
-          fcode:"Current Diagram Point",
-          desc:"",
+          fcode:"",
+          desc:"Current Diagram Point",
           definition:"",
           geom:"Point",
           columns:[ 
@@ -1620,11 +1620,11 @@ getDbSchema: function()
                        type:"Real",
                        defValue:"0.0" 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"CURRFLP",
-          fcode:"Current Flow Point",
-          desc:"",
+          fcode:"",
+          desc:"Current Flow Point",
           definition:"",
           geom:"Point",
           columns:[ 
@@ -1634,7 +1634,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"CRN",
                        desc:"Current Rate Minimum",
                        optional:"R",
@@ -1661,7 +1661,7 @@ getDbSchema: function()
                            { name:"Flood",value:"3" },
                            { name:"General",value:"4" },
                            { name:"Ocean",value:"5" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"DOF",
                        desc:"Direction of Flow",
@@ -1690,7 +1690,7 @@ getDbSchema: function()
                            { name:"Oct",value:"10" },
                            { name:"Nov",value:"11" },
                            { name:"Dec",value:"12" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"HS2",
                        desc:"Current Information 1" ,
@@ -1711,20 +1711,20 @@ getDbSchema: function()
                            { name:"Sep",value:"9" },
                            { name:"Oct",value:"10" },
                            { name:"Nov",value:"11" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
-                    ] // End of Columns
-          },// End of feature TRANSL
+                     },
+                    ] 
+          },
         { name:"TIDEP",
-          fcode:"Tide Point",
+          fcode:"",
           desc:"Tide Point",
           definition:"",
           geom:"Point",
@@ -1735,17 +1735,17 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
-                    ] // End of Columns
-          },// End of feature TRANSL
+                     },
+                    ] 
+          },
         { name:"HYDAREA",
           fcode:"",
           desc:"Hydrographic Area",
@@ -1758,7 +1758,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -1768,7 +1768,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"CVH",
                        desc:"Depth Curve or Contour Value High",
@@ -1784,8 +1784,8 @@ getDbSchema: function()
                        type:"Real",
                        defValue:"99999.0" 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"HYDLINE",
           fcode:"",
           desc:"Hydrographic Line",
@@ -1798,7 +1798,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -1808,7 +1808,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"CRV",
                        desc:"Depth Curve or Contour Value",
@@ -1817,8 +1817,8 @@ getDbSchema: function()
                        type:"Real",
                        defValue:"99999.0" 
                      }
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"BOTCHARP",
           fcode:"BF010",
           desc:"Bottom Characteristics Point",
@@ -1831,7 +1831,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"CSM",
                        desc:"Secondary Material Characteristics" ,
                        optional:"R" ,
@@ -1864,7 +1864,7 @@ getDbSchema: function()
                            { name:"Varied",value:"25" },
                            { name:"Volcanic",value:"26" },
                            { name:"Medium",value:"27" },
-                       ] // End of Enumerations 
+                       ] 
                      },
                      { name:"MCC",
                        desc:"Material Composition Category" ,
@@ -1918,7 +1918,7 @@ getDbSchema: function()
                            { name:"Sponge",value:"106" },
                            { name:"Stone",value:"108" },
                            { name:"Tufa",value:"111" },
-                       ] // End of Enumerations 
+                       ] 
                      },
                      { name:"MCS",
                        desc:"Material Composition Secondary" ,
@@ -1972,7 +1972,7 @@ getDbSchema: function()
                            { name:"Sponge",value:"106" },
                            { name:"Stone",value:"108" },
                            { name:"Tufa",value:"111" },
-                       ] // End of Enumerations 
+                       ] 
                      },
                      { name:"MCU",
                        desc:"Material Composition Underlying" ,
@@ -2026,7 +2026,7 @@ getDbSchema: function()
                            { name:"Sponge",value:"106" },
                            { name:"Stone",value:"108" },
                            { name:"Tufa",value:"111" },
-                       ] // End of Enumerations 
+                       ] 
                      },
                      { name:"PSC",
                        desc:"Physical Surface Characteristics" ,
@@ -2062,7 +2062,7 @@ getDbSchema: function()
                            { name:"Medium",value:"27" },
                            { name:"Springs in Seabed",value:"28" },
                            { name:"Mobile Bottom",value:"29" },
-                       ] // End of Enumerations 
+                       ] 
                      },
                      { name:"UMC",
                        desc:"Underlying Material Characteristics" ,
@@ -2096,10 +2096,10 @@ getDbSchema: function()
                            { name:"Varied",value:"25" },
                            { name:"Volcanic",value:"26" },
                            { name:"Medium",value:"27" },
-                       ] // End of Enumerations 
+                       ] 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"SOUNDP",
           fcode:"",
           desc:"Soundings Point",
@@ -2112,7 +2112,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -2123,7 +2123,7 @@ getDbSchema: function()
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" },
                            { name:"Doubtful",value:"3" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"DAT",
                        desc:"XXX Date" ,
@@ -2132,7 +2132,7 @@ getDbSchema: function()
                        length:"30",
                        type:"String",
                        defValue:"26" 
-                     },// End of NAM
+                     },
                      { name:"EXS",
                        desc:"Existence Category" ,
                        optional:"R" ,
@@ -2143,7 +2143,7 @@ getDbSchema: function()
                            { name:"Definite",value:"1" },
                            { name:"Doubtful",value:"2" },
                            { name:"Reported",value:"3" },
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"HDH",
                        desc:"Hydrographic Drying Height",
@@ -2171,7 +2171,7 @@ getDbSchema: function()
                            { name:"Slant",value:"9" },
                            { name:"Ordinary",value:"10" },
                            { name:"Other",value:"999" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"SVC",
                        desc:"Sounding Velocity" ,
@@ -2186,7 +2186,7 @@ getDbSchema: function()
                            { name:"Mathews Tables (NP 139) Corrected",value:"3" },
                            { name:"SVM Corrected",value:"4" },
                            { name:"Other Calibration",value:"5" },
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"VAL",
                        desc:"Value",
@@ -2195,8 +2195,8 @@ getDbSchema: function()
                        type:"Integer",
                        defValue:"0" 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"CANALA",
           fcode:"",
           desc:"Canal Area",
@@ -2209,7 +2209,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"EXS",
                        desc:"Existence Category" ,
                        optional:"R" ,
@@ -2219,7 +2219,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Abandoned/Disused",value:"6" },
                            { name:"Navigable",value:"32" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"HDP",
                        desc:"Hydrographic Depth",
@@ -2237,16 +2237,16 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Dry",value:"3" },
                            { name:"Perennial/Permanent",value:"8" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"RPA",
                        desc:"Required Port Access" ,
                        optional:"R" ,
@@ -2257,7 +2257,7 @@ getDbSchema: function()
                            { name:"Unknown",value:"0" },
                            { name:"Access Required",value:"1" },
                            { name:"Access Not Required",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"WID",
                        desc:"Width",
@@ -2266,8 +2266,8 @@ getDbSchema: function()
                        type:"Integer",
                        defValue:"0" 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"LAKEA",
           fcode:"",
           desc:"Lake Area",
@@ -2280,7 +2280,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"HYC",
                        desc:"Hydrological Category" ,
                        optional:"R" ,
@@ -2289,16 +2289,16 @@ getDbSchema: function()
                        defValue:"8",
                        enumerations:[
                            { name:"Perennial/Permanent",value:"8" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"RPA",
                        desc:"Required Port Access" ,
                        optional:"R" ,
@@ -2309,10 +2309,10 @@ getDbSchema: function()
                            { name:"Unknown",value:"0" },
                            { name:"Access Required",value:"1" },
                            { name:"Access Not Required",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"MISCIWYA",
           fcode:"",
           desc:"Miscellaneous Inland Waterways Area",
@@ -2325,7 +2325,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"EXS",
                        desc:"Existence Category" ,
                        optional:"R" ,
@@ -2336,16 +2336,16 @@ getDbSchema: function()
                            { name:"Unknown",value:"0" },
                            { name:"Natural",value:"45" },
                            { name:"Man-made",value:"46" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"WID",
                        desc:"Width",
                        optional:"R",
@@ -2353,8 +2353,8 @@ getDbSchema: function()
                        type:"Integer",
                        defValue:"0" 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"RIVERA",
           fcode:"",
           desc:"River Area",
@@ -2367,7 +2367,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -2377,7 +2377,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"HYC",
                        desc:"Hydrological Category" ,
@@ -2387,16 +2387,16 @@ getDbSchema: function()
                        defValue:"8",
                        enumerations:[
                            { name:"Perennial/Permanent",value:"8" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"RPA",
                        desc:"Required Port Access" ,
                        optional:"R" ,
@@ -2407,7 +2407,7 @@ getDbSchema: function()
                            { name:"Unknown",value:"0" },
                            { name:"Access Required",value:"1" },
                            { name:"Access Not Required",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"SLT",
                        desc:"Shoreline Type" ,
@@ -2424,10 +2424,10 @@ getDbSchema: function()
                            { name:"Sandy",value:"13" },
                            { name:"Stony,Shingly",value:"14" },
                            { name:"Other",value:"15" }
-                        ] // End of Enumerations 
+                        ] 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"AQUEDCTL",
           fcode:"",
           desc:"Aqueduct Line",
@@ -2440,7 +2440,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"LOC",
                        desc:"Location Category" ,
                        optional:"R" ,
@@ -2452,7 +2452,7 @@ getDbSchema: function()
                            { name:"Below Surface / Submerged / Underground",value:"4" },
                            { name:"On ground surface",value:"8" },
                            { name:"Suspended / Elevated Above Ground or Water",value:"25" },
-                        ] // End of Enumerations 
+                        ] 
                      }, // End of LOC
                      { name:"OHC",
                        desc:"Overhead Clearance Category" ,
@@ -2469,10 +2469,10 @@ getDbSchema: function()
                        defValue:"1",
                        enumerations:[
                            { name:"Feature crosses navigable water",value:"1" },
-                        ] // End of Enumerations 
+                        ] 
                      }// End of OWO
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"BARRIERL",
           fcode:"",
           desc:"Barrier Line",
@@ -2485,7 +2485,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"EXS",
                        desc:"Existence Category" ,
                        optional:"R" ,
@@ -2494,18 +2494,18 @@ getDbSchema: function()
                        defValue:"50",
                        enumerations:[
                            { name:"Non-Tidal",value:"50" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
-                    ] // End of Columns
-          },// End of feature TRANSL
+                     },
+                    ] 
+          },
         { name:"CANALL",
           fcode:"",
           desc:"Canal Line",
@@ -2518,7 +2518,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"EXS",
                        desc:"Existence Category" ,
                        optional:"R" ,
@@ -2527,16 +2527,16 @@ getDbSchema: function()
                        defValue:"32",
                        enumerations:[
                            { name:"Navigable",value:"32" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"WID",
                        desc:"Width",
                        optional:"R",
@@ -2544,8 +2544,8 @@ getDbSchema: function()
                        type:"Integer",
                        defValue:"0" 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"DAML",
           fcode:"",
           desc:"Dam Line",
@@ -2558,15 +2558,15 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"USE",
                        desc:"Usage" ,
                        optional:"R" ,
@@ -2577,10 +2577,10 @@ getDbSchema: function()
                            { name:"Unknown",value:"0" },
                            { name:"Flood Barrage",value:"131" },
                            { name:"Other",value:"999" }
-                        ] // End of Enumerations 
+                        ] 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
         { name:"RIVERL",
           fcode:"",
           desc:"River Line",
@@ -2593,7 +2593,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -2603,7 +2603,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"AHC",
                        desc:"Associated Hydrological Category" ,
@@ -2614,7 +2614,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Perennial",value:"1" },
                            { name:"Intermittent",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"HYC",
                        desc:"Hydrological Category" ,
@@ -2625,16 +2625,16 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Non-Perennial/Intermittent/Fluctuating",value:"6" },
                            { name:"Perennial/Permanent",value:"8" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
+                     },
                      { name:"SLT",
                        desc:"Shoreline Type" ,
                        optional:"R" ,
@@ -2650,10 +2650,696 @@ getDbSchema: function()
                            { name:"Sandy",value:"13" },
                            { name:"Stony,Shingly",value:"14" },
                            { name:"Other",value:"15" }
-                        ] // End of Enumerations 
+                        ] 
                      },
-                    ] // End of Columns
-          },// End of feature TRANSL
+                    ] 
+          },
+        { name:"EMBANKA",
+          fcode:"",
+          desc:"Embankment Area",
+          definition:"",
+          geom:"Area",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"EXS",
+                       desc:"Existence Category" ,
+                       optional:"R" ,
+                       definition:"Existence Category",
+                       type:"enumeration",
+                       defValue:"51",
+                       enumerations:[
+                           { name:"Tidal/Tidal Fluctuation",value:"51" }
+                        ] 
+                     },
+                     { name:"USE",
+                       desc:"Usage" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"as a Causeway",value:"127" }
+                        ] 
+                     },
+                     { name:"VRR",
+                       desc:"Vertical Reference Category" ,
+                       optional:"R" ,
+                       definition:"Vertical Reference Category",
+                       type:"enumeration",
+                       defValue:"1",
+                       enumerations:[
+                           { name:"Above surface / Does Not Cover (At High Water)",value:"1" },
+                           { name:"Covers and Uncovers",value:"8" },
+                           { name:"Not Applicable",value:"9" }
+                        ] 
+                     } 
+                    ] 
+          },
+        { name:"ORCHARDA",
+          fcode:"",
+          desc:"Orchard Area",
+          definition:"",
+          geom:"Area",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     }
+                    ]
+          },
+        { name:"SNOWICEA",
+          fcode:"",
+          desc:"Snow/Ice Area",
+          definition:"",
+          geom:"Area",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"SIC",
+                       desc:"Snow/Ice Category" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Snow",value:"1" },
+                           { name:"Ice",value:"2" }
+                        ] 
+                     } 
+                    ]
+          },
+        { name:"TREEA",
+          fcode:"",
+          desc:"Tree Area",
+          definition:"",
+          geom:"Area",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"EXS",
+                       desc:"Existence Category" ,
+                       optional:"R" ,
+                       definition:"Existence Category",
+                       type:"enumeration",
+                       defValue:"30",
+                       enumerations:[
+                           { name:"Not Isolated",value:"30" },
+                        ] 
+                     },
+                     { name:"TRE",
+                       desc:"Tree Category" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Deciduous",value:"1" },
+                           { name:"Evergreen",value:"2" },
+                           { name:"Mixed",value:"3" }
+                        ] 
+                     },
+                     { name:"VEG",
+                       desc:"Vegetation Category" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Casuarina",value:"11" },
+                           { name:"Coniferous",value:"12" },
+                           { name:"Nipa Palm",value:"16" },
+                           { name:"Palm",value:"17" },
+                           { name:"Filao",value:"18" },
+                           { name:"Mangrove",value:"19" },
+                           { name:"Eucalyptus",value:"29" },
+                           { name:"Cypress",value:"38" },
+                           { name:"Other",value:"999" }
+                        ] 
+                     }
+                    ]
+          },
+        { name:"VOLCANOA",
+          fcode:"",
+          desc:"Volcano Area",
+          definition:"",
+          geom:"Area",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"DAT",
+                       desc:"XXX Date" ,
+                       optional:"R" ,
+                       definition:"",
+                       length:"30",
+                       type:"String",
+                       defValue:"26" 
+                     },
+                     { name:"EXS",
+                       desc:"Existence Category" ,
+                       optional:"R" ,
+                       definition:"Existence Category",
+                       type:"enumeration",
+                       defValue:"1",
+                       enumerations:[
+                           { name:"Definite",value:"1" },
+                           { name:"Doubtful",value:"2" },
+                           { name:"Reported",value:"3" },
+                        ] 
+                     },
+                     { name:"LOC",
+                       desc:"Location Category" ,
+                       optional:"R" ,
+                       definition:"Over Water Category",
+                       type:"enumeration",
+                       defValue:"4",
+                       enumerations:[
+                           { name:"Below Surface / Submerged / Underground",value:"4" }
+                        ] 
+                     }, // End of LOC
+                     { name:"NAM",
+                       desc:"Name" ,
+                       optional:"R" ,
+                       definition:"",
+                       length:"30",
+                       type:"String",
+                       defValue:"UNK" 
+                     },
+                     { name:"VAL",
+                       desc:"Value",
+                       optional:"R",
+                       units:"year", 
+                       type:"Integer",
+                       defValue:"0" 
+                     }
+                    ] 
+          },
+        { name:"LCRLINE",
+          fcode:"",
+          desc:"Land Cover Line",
+          definition:"",
+          geom:"Line",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"USE",
+                       desc:"Usage" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Levee/Dyke",value:"69" },
+                           { name:"as a Causeway",value:"127" }
+                        ] 
+                     },
+                     { name:"VRR",
+                       desc:"Vertical Reference Category" ,
+                       optional:"R" ,
+                       definition:"Vertical Reference Category",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Above surface / Does Not Cover (At High Water)",value:"1" },
+                           { name:"Covers and Uncovers",value:"8" },
+                           { name:"Not Applicable",value:"9" }
+                        ] 
+                     },
+                    ] 
+          },
+        { name:"SNOWICEP",
+          fcode:"",
+          desc:"Snow/Ice Point",
+          definition:"",
+          geom:"Point",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"HGT",
+                       desc:"Height Above Surface Level" ,
+                       optional:"R" ,
+                       definition:"", 
+                       units:"Metre", 
+                       type:"Integer",
+                       defValue:"0" 
+                     }, // End of HGT
+                    ] 
+          },
+        { name:"TREEP",
+          fcode:"",
+          desc:"Tree Point",
+          definition:"",
+          geom:"Point",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"EXS",
+                       desc:"Existence Category" ,
+                       optional:"R" ,
+                       definition:"Existence Category",
+                       type:"enumeration",
+                       defValue:"31",
+                       enumerations:[
+                           { name:"Isolated",value:"31" },
+                        ] 
+                     },
+                     { name:"TRE",
+                       desc:"Tree Category" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Deciduous",value:"1" },
+                           { name:"Evergreen",value:"2" },
+                           { name:"Mixed",value:"3" }
+                        ] 
+                     },
+                     { name:"VEG",
+                       desc:"Vegetation Category" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Casuarina",value:"11" },
+                           { name:"Coniferous",value:"12" },
+                           { name:"Nipa Palm",value:"16" },
+                           { name:"Palm",value:"17" },
+                           { name:"Filao",value:"18" },
+                           { name:"Eucalyptus",value:"29" },
+                        ] 
+                     }
+                    ]
+          },
+        { name:"LIMBNDYA",
+          fcode:"",
+          desc:"Limit Boundaries Area",
+          definition:"",
+          geom:"Area",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"COD",
+                       desc:"Certainty of Delineation" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"1",
+                       enumerations:[
+                           { name:"Null",value:"-32768" },
+                           { name:"Limits and Info Known",value:"1" },
+                           { name:"Limits and Info Unknown",value:"2" }
+                        ] 
+                     },
+                     { name:"EXS",
+                       desc:"Existence Category" ,
+                       optional:"R" ,
+                       definition:"Existence Category",
+                       type:"enumeration",
+                       defValue:"46",
+                       enumerations:[
+                           { name:"Null",value:"-32768" },
+                           { name:"Natural",value:"45" },
+                           { name:"Man-made",value:"46" }
+                        ] 
+                     },
+                     { name:"MAC",
+                       desc:"Maritime Area Category" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Anchorage (general)",value:"11" },
+                           { name:"Anchoring Berths",value:"12" },
+                           { name:"Explosive Anchorage",value:"13" },
+                           { name:"Large Vessel/Deepwater/Deep Draft",value:"14" },
+                           { name:"Anchoring Prohibited",value:"15" },
+                           { name:"Quarantine Anchorage",value:"16" },
+                           { name:"Reserved Anchorage",value:"17" },
+                           { name:"Tanker Anchorage",value:"19" },
+                           { name:"Submarine Cable Area",value:"20" },
+                           { name:"Pipeline Area",value:"21" },
+                           { name:"Fishing Prohibited",value:"22" },
+                           { name:"Cable and Pipeline Area",value:"23" },
+                           { name:"Turning Area/Swinging Circle",value:"24" },
+                           { name:"Spoil Area/Spoil Ground",value:"25" },
+                           { name:"Unsurveyed Area",value:"26" },
+                           { name:"Submarine Exercise Area",value:"27" },
+                           { name:"Mine Laying Practice Area",value:"28" },
+                           { name:"Firing Danger Area",value:"29" },
+                           { name:"Dumping Ground for Hazardous Materials",value:"30" },
+                           { name:"Incineration Area",value:"31" },
+                           { name:"Oil Field",value:"32" },
+                           { name:"Gas Field",value:"33" },
+                           { name:"Explosive Dumping Ground",value:"35" },
+                           { name:"Safety Zone",value:"37" },
+                           { name:"Precautionary Area",value:"42" },
+                           { name:"Areas to be Avoided",value:"43" },
+                           { name:"Degaussing Range",value:"44" },
+                           { name:"Outfall Area",value:"45" },
+                           { name:"Intake Area",value:"46" },
+                           { name:"Pilot Boarding Area",value:"48" },
+                           { name:"Cargo Transshipment Area",value:"49" },
+                           { name:"Seaplane Anchorage",value:"53" },
+                           { name:"Time Limited Anchorage",value:"54" },
+                           { name:"Fairway",value:"55" },
+                           { name:"Fish Trap Area",value:"56" },
+                           { name:"Marine Farm",value:"57" },
+                           { name:"Dredging Area",value:"58" },
+                           { name:"Sewer Area",value:"61" },
+                           { name:"Other",value:"999" },
+                        ] 
+                     },
+                     { name:"NAM",
+                       desc:"Name" ,
+                       optional:"R" ,
+                       definition:"",
+                       length:"70",
+                       type:"String",
+                       defValue:"UNK" 
+                     },
+                     { name:"OPS",
+                       desc:"Operational State" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"1",
+                       enumerations:[
+                           { name:"Null",value:"-32768" },
+                           { name:"Operational",value:"1" },
+                           { name:"non-Operational",value:"2" }
+                        ] 
+                     },
+                     { name:"PBV",
+                       desc:"Pilot Boarding Vehicle" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"-32768",
+                       enumerations:[
+                           { name:"Null",value:"-32768" },
+                           { name:"Unknown",value:"0" },
+                           { name:"By Boat",value:"1" },
+                           { name:"By Helecopter",value:"2" }
+                        ] 
+                     },
+                     { name:"PRO",
+                       desc:"Product" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Ammunition",value:"3" },
+                           { name:"Chemical",value:"13" },
+                           { name:"Explosives",value:"33" },
+                           { name:"Gas",value:"38" },
+                           { name:"Gasoline",value:"39" },
+                           { name:"Oll",value:"67" },
+                           { name:"Radioactive Material",value:"82" },
+                           { name:"Water",value:"116" },
+                           { name:"None",value:"130" }
+                        ] 
+                     },// End of PRO
+                     { name:"TIM",
+                       desc:"Time Attribute" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"Integer",
+                       defValue:"-32l68" 
+                     },
+                     { name:"TXT",
+                       desc:"Text Attribute" ,
+                       optional:"R" ,
+                       definition:"",
+                       length:"255",
+                       type:"String",
+                       defValue:"None" 
+                     },
+                     { name:"USE",
+                       desc:"Usage" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"-32768",
+                       enumerations:[
+                           { name:"Null",value:"-32768" },
+                           { name:"Unknown",value:"0" },
+                           { name:"Telegraph",value:"51" },
+                           { name:"Telephone",value:"52" },
+                           { name:"Power",value:"53" },
+                           { name:"Other",value:"999" }
+                        ] 
+                     }
+                  ]
+          },
+        { name:"MARITIMA",
+          fcode:"",
+          desc:"Maritime Area",
+          definition:"",
+          geom:"Area",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"ATN",
+                       desc:"Aids to Navigation" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"2",
+                       enumerations:[
+                           { name:"Marked",value:"1" },
+                           { name:"Unmarked",value:"2" }
+                        ] 
+                     },
+                     { name:"COD",
+                       desc:"Certainty of Delineation" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"1",
+                       enumerations:[
+                           { name:"Limits and Info Known",value:"1" },
+                           { name:"Limits and Info Unknown",value:"2" }
+                        ] 
+                     },
+                     { name:"DAN",
+                       desc:"Description of Aids to Navigation" ,
+                       optional:"R" ,
+                       definition:"",
+                       length:"255",
+                       type:"String",
+                       defValue:"N/A" 
+                     },
+                     { name:"DAT",
+                       desc:"XXX Date" ,
+                       optional:"R" ,
+                       definition:"",
+                       length:"30",
+                       type:"String",
+                       defValue:"26" 
+                     },
+                     { name:"EXS",
+                       desc:"Existence Category" ,
+                       optional:"R" ,
+                       definition:"Existence Category",
+                       type:"enumeration",
+                       defValue:"1",
+                       enumerations:[
+                           { name:"Definite",value:"1" },
+                           { name:"Reported",value:"3" }
+                        ] 
+                     },
+                     { name:"HDP",
+                       desc:"Hydrographic Depth",
+                       optional:"R",
+                       units:"metre", 
+                       type:"Real",
+                       defValue:"" 
+                     },
+                     { name:"IAS",
+                       desc:"IMO Approval Status" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"1",
+                       enumerations:[
+                           { name:"Approved",value:"1" },
+                           { name:"Not Approved",value:"2" }
+                        ] 
+                     },
+                     { name:"MAC",
+                       desc:"Maritime Area Category" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Dredged Channel/Dregged Area",value:"2" },
+                           { name:"Mine Danger Area",value:"4" },
+                           { name:"Prohibited Shipping Area/Entry",value:"5" },
+                           { name:"Works in Progress Area",value:"9" },
+                           { name:"Roundabout Zone (TSS)",value:"40" },
+                           { name:"Inshore traffic Zone (TSS)",value:"41" }
+                        ] 
+                     },
+                     { name:"MAS",
+                       desc:"Maintenance Status" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"1",
+                       enumerations:[
+                           { name:"Maintained",value:"1" },
+                           { name:"Not Maintained",value:"2" }
+                        ] 
+                     },
+                     { name:"TSP",
+                       desc:"Traffic Scheme Part" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"-32768",
+                       enumerations:[
+                           { name:"Null",value:"-32768" },
+                           { name:"Separation Zone Area",value:"3" }
+                        ] 
+                     },
+                     { name:"VAL",
+                       desc:"Value",
+                       optional:"R",
+                       units:"year", 
+                       type:"Integer",
+                       defValue:"0" 
+                     },
+                     { name:"WID",
+                       desc:"Width",
+                       optional:"R",
+                       units:"metre", 
+                       type:"Integer",
+                       defValue:"-2147483648" 
+                     },
+                     { name:"WPC",
+                       desc:"Work in Progress Category" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Land Reclamation",value:"1" },
+                           { name:"Construction of Structures",value:"2" }
+                        ] 
+                     }
+                  ]
+          },
+        { name:"ROUTEA",
+          fcode:"",
+          desc:"Route Area",
+          definition:"",
+          geom:"Area",
+          columns:[ 
+                     { name:"F_CODE",
+                       desc:"Feature Code" ,
+                       optional:"R" ,
+                       length:"5",
+                       type:"String",
+                       defValue:"" 
+                     },
+                     { name:"HDI",
+                       desc:"Hydrographic Depth/Height Information" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"12",
+                       enumerations:[
+                           { name:"Depth known by Other than Wire",value:"9" },
+                           { name:"Depth Known",value:"12" }
+                        ] 
+                     },
+                     { name:"HDP",
+                       desc:"Hydrographic Depth",
+                       optional:"R",
+                       units:"metre", 
+                       type:"Real",
+                       defValue:"" 
+                     },
+                     { name:"RTT",
+                       desc:"Route Intended Use" ,
+                       optional:"R" ,
+                       definition:"",
+                       type:"enumeration",
+                       defValue:"0",
+                       enumerations:[
+                           { name:"Unknown",value:"0" },
+                           { name:"Deep Water Route",value:"4" },
+                           { name:"Two Way Route",value:"11" }
+                        ] 
+                     }
+                    ] 
+          },
+
 
 
 
@@ -2670,7 +3356,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:"" 
-                     },// End of F_CODE
+                     },
                      { name:"ACC",
                        desc:"Accuracy Category" ,
                        optional:"R" ,
@@ -2680,7 +3366,7 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"",
                        desc:"",
@@ -2698,18 +3384,18 @@ getDbSchema: function()
                        enumerations:[
                            { name:"Operational",value:"28" },
                            { name:"Continuous Operation",value:"42" }
-                        ] // End of Enumerations 
+                        ] 
                      },
                      { name:"NAM",
                        desc:"Name" ,
                        optional:"R" ,
-                       definition:"A textual identifier or code that is used to denote a feature.",
+                       definition:"",
                        length:"30",
                        type:"String",
                        defValue:"UNK" 
-                     },// End of NAM
-                    ] // End of Columns
-          },// End of feature TRANSL
+                     },
+                    ] 
+          },
 
 
     ]; // End of schema
