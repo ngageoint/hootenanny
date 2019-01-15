@@ -31,6 +31,129 @@
           }
         ]
       },
+            {
+                "id":"hoot_road_opt_engine",
+                "elem_type":"list",
+                "description":"A list of road engines",
+                "name":"Engines",
+                "defaultvalue":"Unify",
+                "onchange":"true",
+                "members":[
+                    {
+                        "id":"hoot_road_opt_engine_unify",
+                        "description":"A non-greedy road conflation algorithm which uses a random-forest model for classification",
+                        "name":"Unify",
+                        "members":[
+                            {
+                                "id":"conflate_match_highway_classifier",
+                                "elem_type":"string",
+                                "description":"The highway match classifier to use. This should only be used for testing and debugging.",
+                                "name":"Conflate Match Highway Classifier",
+                                "required":"true",
+                                "defaultvalue":"hoot::HighwayExpertClassifier",
+                                "hoot_key":"conflate.match.highway.classifier"
+                            },
+                            {
+                                "id":"road_match_creator",
+                                "elem_type":"string",
+                                "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+                                "name":"Match Creator",
+                                "required":"true",
+                                "defaultvalue":"hoot::HighwayMatchCreator",
+                                "override":{
+                                    "defaultvalue":"hoot::HighwayMatchCreator"
+                                },
+                                "hoot_key":"match.creators"
+                            },
+                            {
+                                "id":"road_merger_creator",
+                                "elem_type":"string",
+                                "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+                                "name":"Merger Creator",
+                                "required":"true",
+                                "defaultvalue":"hoot::HighwaySnapMergerCreator",
+                                "override":{
+                                    "defaultvalue":"hoot::HighwaySnapMergerCreator"
+                                },
+                                "hoot_key":"merger.creators"
+                            },
+                            {
+                                "id":"highway_matcher_heading_delta",
+                                "minvalue":"0.0",
+                                "elem_type":"double",
+                                "description":"The distance around a point on a way to look when calculating the heading. A larger value will smooth out the heading values on a line. A smaller value will make the heading values correspond directly to the heading on the way at that point. This is primarily used in subline matching. Values are in meters.",
+                                "maxvalue":"360.0",
+                                "name":"Highway Matcher Heading Delta",
+                                "defaultvalue":"5.0",
+                                "hoot_key":"highway.matcher.heading.delta"
+                            },
+                            {
+                                "id":"highway_matcher_max_angle",
+                                "minvalue":"0.0",
+                                "elem_type":"double",
+                                "description":"Sets that maximum angle that is still considered a highway match. Units in degrees.",
+                                "maxvalue":"360.0",
+                                "name":"Highway Matcher Max Angle",
+                                "defaultvalue":"60",
+                                "hoot_key":"highway.matcher.max.angle"
+                            },
+                            {
+                    "id":"highway_max_enum_diff",
+                    "minvalue":"0.01",
+                    "elem_type":"double",
+                    "description":"If two highways have significantly different enumerated types then they will not be considered for match. For example: highway=primary vs highway=secondary has a diff of 0.2.  highway=primary vs highway=footway has a diff of 0.67.",
+                    "maxvalue":"1.0",
+                    "name":"Highway Max Enum Diff",
+                    "defaultvalue":"0.6",
+                    "hoot_key":"highway.max.enum.diff"
+                  }
+                        ]
+                    },
+                    {
+                        "id":"hoot_road_opt_engine_network",
+                        "description":"A road conflation algorithm based on graph operations treating the data as a network",
+                        "name":"Network",
+                        "members":[
+                            {
+                                "id":"network_match_creator",
+                                "elem_type":"string",
+                                "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+                                "name":"Match Creator",
+                                "required":"true",
+                                "defaultvalue":"hoot::NetworkMatchCreator",
+                                "override":{
+                                    "defaultvalue":"hoot::NetworkMatchCreator"
+                                },
+                                "hoot_key":"match.creators"
+                            },
+                            {
+                                "id":"network_merger_creator",
+                                "elem_type":"string",
+                                "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+                                "name":"Merger Creator",
+                                "required":"true",
+                                "defaultvalue":"hoot::NetworkMergerCreator",
+                                "override":{
+                                    "defaultvalue":"hoot::NetworkMergerCreator"
+                                },
+                                "hoot_key":"merger.creators"
+                            },
+                            {
+                                "id":"network_matcher",
+                                "elem_type":"string",
+                                "description":"The network matcher to use during conflation. This option represents different algorithms used for scoring matches.",
+                                "name":"Network Matcher",
+                                "required":"true",
+                                "defaultvalue":"hoot::ConflictsNetworkMatcher",
+                                "override":{
+                                    "defaultvalue":"hoot::ConflictsNetworkMatcher"
+                                },
+                                "hoot_key":"network.matcher"
+                            }
+                        ]
+                    }
+                ]
+            },
       {
         "id":"attribute_override_conflate_post_ops",
         "elem_type":"string",
@@ -43,71 +166,17 @@
         "id": "attribute_override_visitor_criterion",
         "elem_type": "string",
         "description": "The criterion for the RemoveElementsVisitor above",
-        "name": "Remove Elements Visitor Cirterion",
+        "name": "Remove Elements Visitor Criterion",
         "defaultvalue": "hoot::ReviewRelationCriterion",
         "hoot_key": "remove.elements.visitor.element.criterion"
       },
       {
-        "id": "attribute_override_conflate_match_highway_classifier",
-        "elem_type": "string",
-        "description": "The highway match classifier to use. This should only be used for testing and debugging.",
-        "name": "Conflate Match Highway Classifier",
-        "defaultvalue": "hoot::HighwayRfClassifier",
-        "hoot_key": "conflate.match.highway.classifier",
-        "required":"true"
-      },
-      {
-        "id": "road_match_creator",
-        "elem_type": "string",
-        "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-        "name": "Match Creator",
-        "defaultvalue": "hoot::HighwayMatchCreator",
-        "hoot_key": "match.creators",
-        "required":"true"
-      },
-      {
-        "id": "road_merger_creator",
-        "elem_type": "string",
-        "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-        "name": "Merger Creator",
-        "defaultvalue": "hoot::HighwaySnapMergerCreator",
-        "hoot_key": "merger.creators",
-        "required":"true"
-      },
-      {
-        "id": "building_match_creator",
-        "elem_type": "string",
-        "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-        "name": "Match Creator",
-        "defaultvalue": "hoot::BuildingMatchCreator",
-        "hoot_key": "match.creators"
-      },
-      {
-        "id": "building_merger_creator",
-        "elem_type": "string",
-        "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-        "name": "Merger Creator",
-        "defaultvalue": "hoot::BuildingMergerCreator",
-        "hoot_key": "merger.creators"
-      },
-      {
-        "id": "attribute_override_small_way_merger_threshold",
-        "minvalue": "0",
-        "elem_type": "double",
-        "description": "If highways are smaller than threshold and the tags matched then they will be merged together into a single way.",
-        "maxvalue": "",
-        "name": "Small Way Merger Threshold",
-        "defaultvalue": "15",
-        "hoot_key": "small.way.merger.threshold"
-      },
-       {
-        "id": "horizontal_override_writer_include_debug",
+        "id": "attribute_override_remove_elements_visitor_recursive",
         "elem_type": "bool",
-        "description": "Writer Include Debug",
-        "name": "Writer Include Debug",
+        "description": "Remove elements recusively",
+        "name": "Remove elements recusively",
         "defaultvalue": "false",
-        "hoot_key": "writer.include.debug.tags",
-        "required":"true"
+        "hoot_key": "remove.elements.visitor.recursive",
       }
     ]
 
