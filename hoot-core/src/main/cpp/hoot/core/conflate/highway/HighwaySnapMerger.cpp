@@ -299,100 +299,19 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   LOG_VART(e1Match->getElementType());
   LOG_VART(e1->getElementType());
   LOG_VART(e2->getElementType());
-  if (e1Match->getElementType() == ElementType::Way)
+  if (e1Match->getElementType() == ElementType::Way &&
+      e1->getElementType() == ElementType::Way &&
+      e2->getElementType() == ElementType::Way)
   {
-    if (e1->getElementType() == ElementType::Way &&
-        e2->getElementType() == ElementType::Way)
-    {
-      WayPtr w1 = boost::dynamic_pointer_cast<Way>(e1);
-      WayPtr w2 = boost::dynamic_pointer_cast<Way>(e2);
-      WayPtr wMatch = boost::dynamic_pointer_cast<Way>(e1Match);
-
-      const long pid = Way::getPid(w1, w2);
-      wMatch->setPid(pid);
-      LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
-
-      if (scraps1)
-      {
-        if (scraps1->getElementType() == ElementType::Way)
-        {
-          boost::dynamic_pointer_cast<Way>(scraps1)->setPid(w1->getPid());
-          LOG_TRACE(
-            "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
-        }
-        else if (scraps1->getElementType() == ElementType::Relation)
-        {
-          RelationPtr r1 = boost::dynamic_pointer_cast<Relation>(scraps1);
-          const std::vector<RelationData::Entry> relationMembers = r1->getMembers();
-          QSet<long> way1Ids;
-          for (size_t i = 0; i < relationMembers.size(); i++)
-          {
-            ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-            if (member->getElementType() == ElementType::Way)
-            {
-              way1Ids.insert(member->getId());
-            }
-          }
-          LOG_VART(way1Ids);
-
-          //TODO: can't be right
-          boost::dynamic_pointer_cast<Way>(scraps1)->setPid(way1Ids.toList().at(0));
-          LOG_TRACE(
-            "Set PID: " << way1Ids.toList().at(0) << " on: " << scraps1->getElementId() <<
-            " (scraps1).");
-        }
-      }
-
-      if (scraps2 && scraps2->getElementType() == ElementType::Way)
-      {
-        boost::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
-        LOG_TRACE(
-          "Set PID: " << w2->getPid() << " on: " << scraps2->getElementId() << " (scraps2).");
-      }
-    }
-    else if (e1->getElementType() == ElementType::Relation &&
-             e2->getElementType() == ElementType::Way)
-    {
-      RelationPtr r1 = boost::dynamic_pointer_cast<Relation>(e1);
-      const std::vector<RelationData::Entry> relationMembers = r1->getMembers();
-      QSet<long> way1Ids;
-      for (size_t i = 0; i < relationMembers.size(); i++)
-      {
-        ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-        if (member->getElementType() == ElementType::Way)
-        {
-          way1Ids.insert(member->getId());
-        }
-      }
-      LOG_VART(way1Ids);
-
-      if (way1Ids.size() > 0)
-      {
-        WayPtr w2 = boost::dynamic_pointer_cast<Way>(e2);
-
-        WayPtr wMatch = boost::dynamic_pointer_cast<Way>(e1Match);
-        //TODO: can't be right
-        const long pid = Way::getPid(way1Ids.toList().at(0), w2->getId());
-        wMatch->setPid(pid);
-        LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
-
-        if (scraps1 && scraps1->getElementType() == ElementType::Way)
-        {
-          boost::dynamic_pointer_cast<Way>(scraps1)->setPid(way1Ids.toList().at(0));
-          LOG_TRACE(
-            "Set PID: " << way1Ids.toList().at(0) << " on: " << scraps1->getElementId() <<
-            " (scraps1).");
-        }
-
-        if (scraps2 && scraps2->getElementType() == ElementType::Way)
-        {
-          boost::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
-          LOG_TRACE(
-            "Set PID: " << w2->getPid() << " on: " << scraps2->getElementId() << " (scraps2).");
-        }
-      }
-    }
-  } 
+    WayPtr w1 = boost::dynamic_pointer_cast<Way>(e1);
+    WayPtr w2 = boost::dynamic_pointer_cast<Way>(e2);
+    WayPtr wMatch = boost::dynamic_pointer_cast<Way>(e1Match);
+    wMatch->setPid(Way::getPid(w1, w2));
+    if (scraps1 && scraps1->getElementType() == ElementType::Way)
+      boost::dynamic_pointer_cast<Way>(scraps1)->setPid(w1->getPid());
+    if (scraps2 && scraps2->getElementType() == ElementType::Way)
+      boost::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
+  }
 
   // remove the old way that was split and snapped
   if (e1 != e1Match && scraps1)
