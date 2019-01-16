@@ -50,6 +50,7 @@ class WaySublineCollection;
 class WaySublineMatchString
 {
 public:
+
   static std::string className() { return "hoot::WaySublineMatchString"; }
 
   typedef std::vector<WaySublineMatch> MatchCollection;
@@ -124,6 +125,7 @@ public:
   QString toString() const;
 
 private:
+
   MatchCollection _matches;
 };
 

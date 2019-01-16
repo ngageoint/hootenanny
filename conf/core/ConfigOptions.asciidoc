@@ -2930,18 +2930,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== preserve.unknown1.element.id.when.modifying.features
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the element ID of features with status=unknown1 will be preserved when modifying features
-(merging, splitting, etc. during conflation, cleaning, etc.).  If false, the modified feature will
-be given a new, unique element ID.  This is useful when writing conflated data output back to a
-reference data store (associated with the unknown1 status) where modifying existing features is
-preferred over replacing them for provenance purposes.  Not honored by all visitors, map operations,
-or mergers which modify features.
-
 === power.line.auto.calc.search.radius
 
 * Data Type: bool

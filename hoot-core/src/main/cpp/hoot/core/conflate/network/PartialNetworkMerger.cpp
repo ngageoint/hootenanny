@@ -208,10 +208,6 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
     // split the ways in such a way that the mappings are updated appropriately.
     WayMatchStringSplitter splitter;
     splitter.applySplits(map, replaced, _allSublineMappings);
-    std::set< std::pair<ElementId, ElementId> > splitUnknown1Replacements =
-      splitter.getUnknown1Replacements();
-    _unknown1Replacements.insert(splitUnknown1Replacements.begin(), splitUnknown1Replacements.end());
-    LOG_VART(_unknown1Replacements.size());
 
     // apply merge operations on the split ways.
     LOG_TRACE("Merging split ways...");

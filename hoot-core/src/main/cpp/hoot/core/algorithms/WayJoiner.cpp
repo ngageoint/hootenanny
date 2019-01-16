@@ -86,6 +86,8 @@ void WayJoiner::resetParents()
 
 void WayJoiner::joinParentChild()
 {
+  LOG_TRACE("Joining parents to children...");
+
   WayMap ways = _map->getWays();
   vector<long> ids;
   //  Find all ways that have a split parent id
@@ -97,6 +99,7 @@ void WayJoiner::joinParentChild()
   }
   //  Sort the ids so that the smallest is first (i.e. largest negative id is the last one allocated)
   sort(ids.begin(), ids.end());
+  LOG_VART(ids);
   //  Iterate all of the ids
   for (vector<long>::const_iterator it = ids.begin(); it != ids.end(); ++it)
   {
@@ -110,6 +113,8 @@ void WayJoiner::joinParentChild()
 
 void WayJoiner::joinSiblings()
 {
+  LOG_TRACE("Joining siblings...");
+
   WayMap ways = _map->getWays();
   // Get a list of ways that still have a parent
   map<long, deque<long> > w;
@@ -134,6 +139,8 @@ void WayJoiner::joinSiblings()
 
 void WayJoiner::joinAtNode()
 {
+  LOG_TRACE("Joining at node...");
+
   WayMap ways = _map->getWays();
   unordered_set<long> ids;
   //  Find all ways that have a split parent id
@@ -187,6 +194,8 @@ bool WayJoiner::areJoinable(const WayPtr& w1, const WayPtr& w2)
 
 void WayJoiner::rejoinSiblings(deque<long>& way_ids)
 {
+  LOG_TRACE("Rejoining siblings...");
+
   WayMap ways = _map->getWays();
   WayPtr start;
   WayPtr end;
@@ -274,6 +283,10 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
 {
   if (!parent || !child)
     return;
+
+  LOG_VART(parent->getId());
+  LOG_VART(child->getId());
+
   //  Don't join area ways
   AreaCriterion areaCrit;
   if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))

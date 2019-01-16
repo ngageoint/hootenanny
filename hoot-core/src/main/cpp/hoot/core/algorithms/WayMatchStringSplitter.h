@@ -46,15 +46,9 @@ public:
   void applySplits(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
 
-  std::set< std::pair<ElementId, ElementId> > getUnknown1Replacements()
-  { return _unknown1Replacements; }
-
 private:
 
   static QString _overlyAggressiveMergeReviewText;
-
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
-  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(WayNumber wn, OsmMapPtr map,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;

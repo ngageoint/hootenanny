@@ -65,8 +65,6 @@ private:
   std::set< std::pair<ElementId, ElementId> > _pairs;
   boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
-
   ReviewMarker _reviewMarker;
 
   /**
