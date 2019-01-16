@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAYSNAPMERGERCREATOR_H
-#define HIGHWAYSNAPMERGERCREATOR_H
+#ifndef HIGHWAYMERGERCREATOR_H
+#define HIGHWAYMERGERCREATOR_H
 
 // hoot
 #include <hoot/core/conflate/merging/MergerCreator.h>
@@ -34,16 +34,16 @@
 namespace hoot
 {
 
-class HighwaySnapMergerCreator : public MergerCreator, public Configurable
+class HighwayMergerCreator : public MergerCreator, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::HighwaySnapMergerCreator"; }
+  static std::string className() { return "hoot::HighwayMergerCreator"; }
 
-  HighwaySnapMergerCreator();
+  HighwayMergerCreator();
 
   /**
-   * If there is a single HighwayMatch, a single HighwaySnapMerger will be created and returned.
+   * If there is a single HighwayMatch, a single HighwayMergerCreator will be created and returned.
    */
   virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const;
 
@@ -60,4 +60,4 @@ private:
 
 }
 
-#endif // HIGHWAYSNAPMERGERCREATOR_H
+#endif // HIGHWAYMERGERCREATOR_H

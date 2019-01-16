@@ -24,50 +24,38 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef NETWORKMERGER_H
-#define NETWORKMERGER_H
+#ifndef HIGHWAY_TAG_ONLY_MERGER_H
+#define HIGHWAY_TAG_ONLY_MERGER_H
 
-// hoot
-#include <hoot/core/conflate/merging/MergerBase.h>
-#include <hoot/core/conflate/network/EdgeMatch.h>
-#include <hoot/core/conflate/network/NetworkDetails.h>
+// Hoot
+#include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
 
 namespace hoot
 {
 
 /**
- * Merges whole network pairs (no partials).
- *
- * In the case of network matches we're guaranteed there is no overlap between matches so we can
- * use some of the functions in HighwayMerger, but others are too complex/imprecise.
+ * Merges road tags only, keeping ref1 tags
  */
-class NetworkMerger : public MergerBase
+class HighwayTagOnlyMerger : public HighwayMergerAbstract
 {
+
 public:
 
-  /**
-   * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
-   * and Unknown2 as second.
-   */
-  NetworkMerger(const std::set< std::pair<ElementId, ElementId> >& pairs, ConstEdgeMatchPtr edgeMatch,
-    ConstNetworkDetailsPtr details);
+  static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
+  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual QString toString() const;
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
 protected:
 
-  virtual PairsSet& getPairs() { return _pairs; }
-  virtual const PairsSet& getPairs() const { return _pairs; }
-
-private:
-
-  std::set< std::pair<ElementId, ElementId> > _pairs;
-  ConstEdgeMatchPtr _edgeMatch;
-  ConstNetworkDetailsPtr _details;
+  virtual bool _mergePair(
+    const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+    std::vector<std::pair<ElementId, ElementId>>& replaced);
 };
+
+typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;
 
 }
 
-#endif // NETWORKMERGER_H
+#endif // HIGHWAY_TAG_ONLY_MERGER_H
