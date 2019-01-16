@@ -89,7 +89,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       elementToRemove = e1;
     }
 
-    // There actually could be a review in here, but the default tag merging doesn't use the
+    // There actually could be a relation in here, but the default tag merging doesn't use the
     // element type anyway, so not worrying about it for now.
     elementToKeep->setTags(
       TagMergerFactory::mergeTags(
