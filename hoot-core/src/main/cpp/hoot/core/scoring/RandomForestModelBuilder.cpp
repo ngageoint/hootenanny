@@ -60,7 +60,7 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
   }
 
   MatchFeatureExtractor mfe;
-  QStringList creators = ConfigOptions().getMatchCreators().split(";");
+  QStringList creators = ConfigOptions().getMatchCreators();
   for (int i = 0; i < creators.size(); i++)
   {
     QString creator = creators[i];
