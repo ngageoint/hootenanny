@@ -56,11 +56,11 @@
         "elem_type": "string",
         "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
         "name": "Merger Creator",
-        "defaultvalue": "hoot::HighwaySnapMergerCreator",
+        "defaultvalue": "hoot::HighwayMergerCreator",
         "hoot_key": "merger.creators",
 				"required":"true",
 	"override":{
-						"defaultvalue": "hoot::HighwaySnapMergerCreator"
+						"defaultvalue": "hoot::HighwayMergerCreator"
 					}
       },
       {

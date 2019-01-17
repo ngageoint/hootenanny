@@ -61,7 +61,7 @@ Way::Way(Status s, long id, Meters circularError, long changeset, long version,
 
 Way::Way(const Way& from)
   : Element(from.getStatus()),
-    _wayData(from._wayData)
+    _wayData(new WayData(*from._wayData.get()))
 {
 }
 

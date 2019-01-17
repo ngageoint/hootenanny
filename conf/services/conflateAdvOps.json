@@ -454,24 +454,6 @@
         ]
     },
     {
-        "id":"hoot_post_conflation_options",
-        "elem_type":"group",
-        "description":"A list of map operations to be applied to a map after conflation has run",
-        "name":"Post Conlation Options",
-        "hoot_key":"conflate.post.ops",
-        "members":[
-
-            {
-                "id":"unknown_2_remover",
-                "elem_type":"checkbox",
-                "description":"Remove unmatched features in secondary dataset.",
-                "name":"Remove Unmatched Secondary Features",
-                "hoot_val":"hoot::RemoveUnknown2Visitor",
-                "defaultvalue":"false"
-            }
-        ]
-    },
-    {
         "id":"hoot_road_options",
         "elem_type":"group",
         "description":"Hootenanny road options",
@@ -548,11 +530,19 @@
                                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                                 "name":"Merger Creator",
                                 "required":"true",
-                                "defaultvalue":"hoot::HighwaySnapMergerCreator",
+                                "defaultvalue":"hoot::HighwayMergerCreator",
                                 "override":{
-                                    "defaultvalue":"hoot::HighwaySnapMergerCreator"
+                                    "defaultvalue":"hoot::HighwayMergerCreator"
                                 },
                                 "hoot_key":"merger.creators"
+                            },
+                            {
+            	              "id":"highway_merge_tags_only",
+                              "elem_type":"bool",
+                              "defaultvalue":"false",
+                              "description":"If true, road conflation will merge tags only and not geometries.",
+                              "name":"Merge Road Tags Only",
+                              "hoot_key":"highway.merge.tags.only"
                             },
                             {
                                 "id":"highway_matcher_heading_delta",
