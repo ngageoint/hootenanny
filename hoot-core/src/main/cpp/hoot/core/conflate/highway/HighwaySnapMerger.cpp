@@ -68,7 +68,6 @@ HighwaySnapMerger::HighwaySnapMerger(Meters minSplitSize,
   const set<pair<ElementId, ElementId>>& pairs,
   const boost::shared_ptr<SublineStringMatcher> &sublineMatcher) :
 _minSplitSize(minSplitSize), // this isn't used?
-_pairs(pairs),
 _sublineMatcher(sublineMatcher)
 {
   _pairs = pairs;
