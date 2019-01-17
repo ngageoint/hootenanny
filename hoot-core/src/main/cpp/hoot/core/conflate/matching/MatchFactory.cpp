@@ -174,8 +174,9 @@ void MatchFactory::_tempFixDefaults()
 
   if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
   {
-    throw HootException(
-      "Empty match/merger creators only allowed when conflate.enable.old.roads is enabled.");
+    LOG_WARN("Match or merger creators empty.  Setting to defaults.");
+    matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
+    mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
   }
 
   //fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972
