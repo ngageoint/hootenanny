@@ -172,8 +172,7 @@ void MatchFactory::_tempFixDefaults()
   LOG_VARD(matchCreators);
   LOG_VARD(mergerCreators);
 
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0) &&
-      !ConfigOptions().getConflateEnableOldRoads())
+  if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
   {
     throw HootException(
       "Empty match/merger creators only allowed when conflate.enable.old.roads is enabled.");
@@ -289,16 +288,6 @@ MatchFactory& MatchFactory::getInstance()
   const QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
   LOG_VARD(matchCreators);
   LOG_VARD(mergerCreators);
-
-  //ConflateAverageTest is configured with old roads and specifies empty strings for both matchers
-  //and mergers.  I don't completely understand why it explicitly needs to specify an empty config
-  //strings for those, though.  The old roads option will be removed in #2133.
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0) &&
-      !ConfigOptions().getConflateEnableOldRoads())
-  {
-    throw HootException(
-      "Empty match/merger creators only allowed when conflate.enable.old.roads is enabled.");
-  }
 
   if (matchCreators.size() != mergerCreators.size())
   {

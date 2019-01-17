@@ -277,16 +277,6 @@ boost::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   //shared_ptr<MatchThreshold> matchThreshold;
   OsmMapPtr conflationCopy(new OsmMap(combinedDataToConflate));
 
-  ConfigOptions configOptions(_settings);
-  if (configOptions.getConflateEnableOldRoads())
-  {
-    // call the old road conflation routine
-    Conflator conflator;
-    conflator.loadSource(conflationCopy);
-    conflator.conflate();
-    conflationCopy.reset(new OsmMap(conflator.getBestMap()));
-  }
-
   UnifyingConflator conflator/*(matchThreshold)*/;
   conflator.setConfiguration(_settings);
   conflator.apply(conflationCopy);
