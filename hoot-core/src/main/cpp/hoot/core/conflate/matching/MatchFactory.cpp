@@ -175,8 +175,8 @@ void MatchFactory::_tempFixDefaults()
   if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
   {
     LOG_WARN("Match or merger creators empty.  Setting to defaults.");
-    matchCreators = ConfigOptions::getMatchCreatorsDefaultValue().toStringList().split(";");
-    mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue().toStringList().split(";");
+    matchCreators = ConfigOptions::getMatchCreatorsDefaultValue().split(";");
+    mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue().split(";");
   }
 
   //fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972
