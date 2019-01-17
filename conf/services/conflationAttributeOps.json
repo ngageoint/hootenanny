@@ -36,6 +36,22 @@
         "name": "Remove elements recusively",
         "defaultvalue": "false",
         "hoot_key": "remove.elements.visitor.recursive",
+      },
+      {
+        "id": "attribute_override_highway_merge_tags_only",
+        "elem_type": "bool",
+        "description": "Tag only merger creator",
+        "name": "Tag only merger creator",
+        "defaultvalue": "true",
+        "hoot_key": "highway.merge.tags.only",
+      },
+      {
+        "id": "attribute_building_keep_ref_geom",
+        "elem_type": "bool",
+        "description": "Keep building ref geom",
+        "name": "Keep building ref geom",
+        "defaultvalue": "false",
+        "hoot_key": "building.keep.more.complex.geometry.when.auto.merging",
       }
     ]
 
