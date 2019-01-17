@@ -167,8 +167,8 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
 
 void MatchFactory::_tempFixDefaults()
 {
-  QStringList matchCreators = ConfigOptions().getMatchCreators().split(";");
-  QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
+  QStringList matchCreators = ConfigOptions().getMatchCreators();
+  QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VARD(matchCreators);
   LOG_VARD(mergerCreators);
 
@@ -285,8 +285,8 @@ MatchFactory& MatchFactory::getInstance()
     MatchFactory::_tempFixDefaults();
   }
 
-  const QStringList matchCreators = ConfigOptions().getMatchCreators().split(";");
-  const QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
+  const QStringList matchCreators = ConfigOptions().getMatchCreators();
+  const QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VARD(matchCreators);
   LOG_VARD(mergerCreators);
 
