@@ -241,7 +241,16 @@ public:
     }
     else if (specifiedOpts.contains("--cleaning-operations"))
     {
-      std::cout << ApiEntityDisplayInfo::getDisplayInfoCleaningOps().toStdString();
+      LOG_VART("test1");
+      std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("map.cleaner.transforms").toStdString();
+    }
+    else if (specifiedOpts.contains("--conflate-post-operations"))
+    {
+      std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("conflate.post.ops").toStdString();
+    }
+    else if (specifiedOpts.contains("--conflate-pre-operations"))
+    {
+      std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("conflate.pre.ops").toStdString();
     }
     //everything else
     else if (specifiedOpts.size() == 1)
@@ -292,6 +301,8 @@ private:
     QStringList options;
     options.append("--cleaning-operations");
     options.append("--config-options");
+    options.append("--conflate-post-operations");
+    options.append("--conflate-pre-operations");
     options.append("--feature-extractors");
     options.append("--formats");
     options.append("--languages");
