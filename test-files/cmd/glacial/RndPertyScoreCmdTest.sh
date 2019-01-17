@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-mkdir -p $HOOT_HOME/test-output/cmd/slow/RndPertyScoreCmdTest
+mkdir -p $HOOT_HOME/test-output/cmd/glacial/RndPertyScoreCmdTest
 
 inputfile=$HOOT_HOME/test-files/DcGisRoads.osm
-outdir=$HOOT_HOME/test-output/cmd/slow/RndPertyScoreCmdTest/
+outdir=$HOOT_HOME/test-output/cmd/glacial/RndPertyScoreCmdTest/
 
 myCmd="hoot perty -D perty.systematic.error.x=1 \
                         -D perty.systematic.error.y=1 \

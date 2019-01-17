@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-REF_DIR=test-files/cmd/slow/RndImplicitTypeDatabaseDeriverTest
-OUTPUT_DIR=test-output/cmd/slow/RndImplicitTypeDatabaseDeriverTest
+REF_DIR=test-files/cmd/glacial/RndImplicitTypeDatabaseDeriverTest
+OUTPUT_DIR=test-output/cmd/glacial/RndImplicitTypeDatabaseDeriverTest
 INPUT_DIR=test-files/schema/ImplicitTagRawRulesDeriverTest
 
 rm -rf $OUTPUT_DIR
