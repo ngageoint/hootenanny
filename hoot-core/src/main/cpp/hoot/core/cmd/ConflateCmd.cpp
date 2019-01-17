@@ -31,7 +31,6 @@
 #include <geos/geom/GeometryFactory.h>
 
 // Hoot
-#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
