@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-OUTPUT_DIR=test-output/cmd/slow/RndServiceNodeDensityTilesCmdTest
-GOLD_FILES_DIR=test-files/cmd/slow/RndNodeDensityTilesCmdTest
+OUTPUT_DIR=test-output/cmd/glacial/RndServiceNodeDensityTilesCmdTest
+GOLD_FILES_DIR=test-files/cmd/glacial/RndNodeDensityTilesCmdTest
 mkdir -p $OUTPUT_DIR 
 
 # convert.bounding.box only works with db inputs

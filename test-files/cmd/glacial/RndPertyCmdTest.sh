@@ -5,8 +5,8 @@ mkdir -p $HOOT_HOME/test-output/cmd/glacial/RndPertyCmdTest
 
 # Compare to known-good
 inputfile=$HOOT_HOME/test-files/DcGisRoads.osm
-testfile=$HOOT_HOME/test-files/cmd/quick/RndPertyCmdTest/p_out.osm
-outputfile=$HOOT_HOME/test-output/cmd/quick/RndPertyCmdTest/p_out.osm
+testfile=$HOOT_HOME/test-files/cmd/glacial/RndPertyCmdTest/p_out.osm
+outputfile=$HOOT_HOME/test-output/cmd/glacial/RndPertyCmdTest/p_out.osm
 
 # Run the command. Note that we sanitize output to remove 
 # number of nodes reprojected, because this is variable
