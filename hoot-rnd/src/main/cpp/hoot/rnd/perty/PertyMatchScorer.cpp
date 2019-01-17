@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/conflate/cleaning/MapCleaner.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
