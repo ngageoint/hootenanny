@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HighwaySnapMerger.h"
+#include "HighwayMergerCreator.h"
 
 // hoot
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/highway/HighwaySnapMergerCreator.h>
+#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -38,21 +39,21 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(MergerCreator, HighwaySnapMergerCreator)
+HOOT_FACTORY_REGISTER(MergerCreator, HighwayMergerCreator)
 
-HighwaySnapMergerCreator::HighwaySnapMergerCreator()
+HighwayMergerCreator::HighwayMergerCreator()
 {
   setConfiguration(conf());
 }
 
-bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
+bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
   bool result = false;
   assert(matches.size() > 0);
 
-  set< pair<ElementId, ElementId> > eids;
+  set<pair<ElementId, ElementId>> eids;
 
   boost::shared_ptr<SublineStringMatcher> sublineMatcher;
   // go through all the matches
@@ -81,14 +82,21 @@ bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches, vector<Mer
   // only add the highway merge if there are elements to merge.
   if (eids.size() > 0)
   {
-    mergers.push_back(new HighwaySnapMerger(_minSplitSize, eids, sublineMatcher));
+    if (!ConfigOptions().getHighwayMergeTagsOnly())
+    {
+      mergers.push_back(new HighwaySnapMerger(_minSplitSize, eids, sublineMatcher));
+    }
+    else
+    {
+      mergers.push_back(new HighwayTagOnlyMerger(eids));
+    }
     result = true;
   }
 
   return result;
 }
 
-vector<CreatorDescription> HighwaySnapMergerCreator::getAllCreators() const
+vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
   result.push_back(
@@ -96,7 +104,7 @@ vector<CreatorDescription> HighwaySnapMergerCreator::getAllCreators() const
   return result;
 }
 
-bool HighwaySnapMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
+bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
   const Match* m2) const
 {
   const HighwayMatch* hm1 = dynamic_cast<const HighwayMatch*>(m1);
@@ -112,7 +120,7 @@ bool HighwaySnapMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Ma
   }
 }
 
-void HighwaySnapMergerCreator::setConfiguration(const Settings &conf)
+void HighwayMergerCreator::setConfiguration(const Settings &conf)
 {
   _minSplitSize = ConfigOptions(conf).getWayMergerMinSplitSize();
 }

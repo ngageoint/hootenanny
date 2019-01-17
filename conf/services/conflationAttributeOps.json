@@ -6,33 +6,7 @@
     "required":"true",
     "members": [
       {
-        "id": "attribute_override_conflate_enable_old_roads",
-        "elem_type": "bool",
-        "override":{
-                    "elem_type":"bool"
-                },
-        "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command. By default the `--conflate` command will first conflate roads using the circa 2012 conflation algorithm and then conflate using the newer (circa 2014) unifying algorithm. If the unifying algorithm has road conflation enable then the results could get interesting.",
-        "name": "Conflate Enable Old Roads",
-        "defaultvalue": "false",
-        "hoot_key": "conflate.enable.old.roads",
-        "required":"true",
-        "members": [
-          {
-            "isDefault": "false",
-            "description": "Enable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
-            "name": "true",
-            "hoot_val": "true"
-          },
-          {
-            "isDefault": "true",
-            "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
-            "name": "false",
-            "hoot_val": "false"
-          }
-        ]
-      },
-      {
-        "id": "hoot_road_opt_engine",
+        "id": "attribute_override_hoot_road_opt_engine",
         "elem_type": "list",
         "description": "A list of road engines",
         "name": "Engines",
@@ -62,6 +36,22 @@
         "name": "Remove elements recusively",
         "defaultvalue": "false",
         "hoot_key": "remove.elements.visitor.recursive",
+      },
+      {
+        "id": "attribute_override_highway_merge_tags_only",
+        "elem_type": "bool",
+        "description": "Tag only merger creator",
+        "name": "Tag only merger creator",
+        "defaultvalue": "true",
+        "hoot_key": "highway.merge.tags.only",
+      },
+      {
+        "id": "attribute_building_keep_ref_geom",
+        "elem_type": "bool",
+        "description": "Keep building ref geom",
+        "name": "Keep building ref geom",
+        "defaultvalue": "false",
+        "hoot_key": "building.keep.more.complex.geometry.when.auto.merging",
       }
     ]
 

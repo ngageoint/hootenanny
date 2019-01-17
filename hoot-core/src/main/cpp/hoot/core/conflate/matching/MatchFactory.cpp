@@ -197,7 +197,7 @@ void MatchFactory::_tempFixDefaults()
       }
       else if (matchCreator == "hoot::HighwayMatchCreator")
       {
-        fixedMergerCreators.append("hoot::HighwaySnapMergerCreator");
+        fixedMergerCreators.append("hoot::HighwayMergerCreator");
       }
       else if (matchCreator == "hoot::NetworkMatchCreator")
       {
