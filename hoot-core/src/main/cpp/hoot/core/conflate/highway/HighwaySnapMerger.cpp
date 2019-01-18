@@ -273,27 +273,27 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           LOG_TRACE(
             "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
         }
-        else if (scraps1->getElementType() == ElementType::Relation)
-        {
-          RelationPtr r1 = boost::dynamic_pointer_cast<Relation>(scraps1);
-          const std::vector<RelationData::Entry> relationMembers = r1->getMembers();
-          QSet<long> way1Ids;
-          for (size_t i = 0; i < relationMembers.size(); i++)
-          {
-            ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-            if (member->getElementType() == ElementType::Way)
-            {
-              way1Ids.insert(member->getId());
-            }
-          }
-          LOG_VART(way1Ids);
+//        else if (scraps1->getElementType() == ElementType::Relation)
+//        {
+//          RelationPtr r1 = boost::dynamic_pointer_cast<Relation>(scraps1);
+//          const std::vector<RelationData::Entry> relationMembers = r1->getMembers();
+//          QSet<long> way1Ids;
+//          for (size_t i = 0; i < relationMembers.size(); i++)
+//          {
+//            ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+//            if (member->getElementType() == ElementType::Way)
+//            {
+//              way1Ids.insert(member->getId());
+//            }
+//          }
+//          LOG_VART(way1Ids);
 
-          //TODO: can't be right
-          boost::dynamic_pointer_cast<Way>(scraps1)->setPid(way1Ids.toList().at(0));
-          LOG_TRACE(
-            "Set PID: " << way1Ids.toList().at(0) << " on: " << scraps1->getElementId() <<
-            " (scraps1).");
-        }
+//          //TODO: can't be right
+//          boost::dynamic_pointer_cast<Way>(scraps1)->setPid(way1Ids.toList().at(0));
+//          LOG_TRACE(
+//            "Set PID: " << way1Ids.toList().at(0) << " on: " << scraps1->getElementId() <<
+//            " (scraps1).");
+//        }
       }
 
       if (scraps2 && scraps2->getElementType() == ElementType::Way)
