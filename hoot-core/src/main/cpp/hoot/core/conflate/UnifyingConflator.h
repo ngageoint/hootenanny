@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIFYINGCONFLATOR_H
 #define UNIFYINGCONFLATOR_H
@@ -71,7 +71,6 @@ public:
   static std::string className() { return "hoot::UnifyingConflator"; }
 
   UnifyingConflator();
-
   UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold);
 
   ~UnifyingConflator();
@@ -153,12 +152,6 @@ private:
 
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
-
-  /*
-   * This method is required for the preserve.unknown1.element.id.when.modifying.features setting
-   * to work.  It is run after conflation to prevent ID's of unknown1 features from being lost.
-   */
-  void _mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map);
 };
 
 }
