@@ -1,0 +1,1 @@
+The road named Naseemee Hingun in the secondary dataset should have its tags transferred over to the corresponding reference feature without tags and the geometry of the reference feature should be preserved with no splits.
