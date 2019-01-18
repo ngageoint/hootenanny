@@ -270,6 +270,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
       if (scraps1)
       {
+        LOG_VART(scraps1->getElementType());
         if (scraps1->getElementType() == ElementType::Way)
         {
           boost::dynamic_pointer_cast<Way>(scraps1)->setPid(w1->getPid());
@@ -301,11 +302,15 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         }
       }
 
-      if (scraps2 && scraps2->getElementType() == ElementType::Way)
+      if (scraps2)
       {
-        boost::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
-        LOG_TRACE(
-          "Set PID: " << w2->getPid() << " on: " << scraps2->getElementId() << " (scraps2).");
+        LOG_VART(scraps2->getElementType());
+        if (scraps2->getElementType() == ElementType::Way)
+        {
+          boost::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
+          LOG_TRACE(
+            "Set PID: " << w2->getPid() << " on: " << scraps2->getElementId() << " (scraps2).");
+        }
       }
     }
     else if (e1->getElementType() == ElementType::Relation &&
