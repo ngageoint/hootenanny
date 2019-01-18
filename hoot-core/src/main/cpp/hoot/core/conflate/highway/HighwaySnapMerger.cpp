@@ -277,6 +277,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           LOG_TRACE(
             "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
         }
+        // This case made necessary by the "else if (matches.size() > 1)" code block in
+        // MultiLineStringSplitter::createSublines.
         else if (scraps1->getElementType() == ElementType::Relation)
         {
           RelationPtr r1 = boost::dynamic_pointer_cast<Relation>(scraps1);
@@ -291,12 +293,15 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
             }
           }
           LOG_VART(way1Ids);
+          const long firstWayIdInRelation = way1Ids.toList().at(0);
 
           if (pid == 0)
           {
-            wMatch->setPid(way1Ids.toList().at(0));
+            // arbitrary to select the first way; works for the test case highway-2867 but perhaps
+            // it should be done another way (?)...
+            wMatch->setPid(firstWayIdInRelation);
             LOG_TRACE(
-              "Set PID: " << way1Ids.toList().at(0) << " on: " << wMatch->getElementId() <<
+              "Set PID: " << firstWayIdInRelation << " on: " << wMatch->getElementId() <<
               " (e1Match).");
           }
         }
@@ -313,6 +318,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         }
       }
     }
+    // This case made necessary by the "else if (matches.size() > 1)" code block in
+    // MultiLineStringSplitter::createSublines.
+    // not adding case for e1 = way and e2 = relation, since it hasn't been encountered yet
     else if (e1->getElementType() == ElementType::Relation &&
              e2->getElementType() == ElementType::Way)
     {
@@ -334,16 +342,18 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         WayPtr w2 = boost::dynamic_pointer_cast<Way>(e2);
 
         WayPtr wMatch = boost::dynamic_pointer_cast<Way>(e1Match);
-        //TODO: can't be right
-        const long pid = Way::getPid(way1Ids.toList().at(0), w2->getId());
+        // see comment on similar line in above code block
+        const long firstWayIdInRelation = way1Ids.toList().at(0);
+        const long pid = Way::getPid(firstWayIdInRelation, w2->getId());
         wMatch->setPid(pid);
         LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
 
         if (scraps1 && scraps1->getElementType() == ElementType::Way)
         {
-          boost::dynamic_pointer_cast<Way>(scraps1)->setPid(way1Ids.toList().at(0));
+          // see comment on similar line in above code block
+          boost::dynamic_pointer_cast<Way>(scraps1)->setPid(firstWayIdInRelation);
           LOG_TRACE(
-            "Set PID: " << way1Ids.toList().at(0) << " on: " << scraps1->getElementId() <<
+            "Set PID: " << firstWayIdInRelation << " on: " << scraps1->getElementId() <<
             " (scraps1).");
         }
 
