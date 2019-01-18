@@ -260,6 +260,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       WayPtr w1 = boost::dynamic_pointer_cast<Way>(e1);
       WayPtr w2 = boost::dynamic_pointer_cast<Way>(e2);
       WayPtr wMatch = boost::dynamic_pointer_cast<Way>(e1Match);
+      LOG_VART(w1->getId());
+      LOG_VART(w2->getId());
+      LOG_VART(wMatch->getId());
 
       const long pid = Way::getPid(w1, w2);
       wMatch->setPid(pid);
@@ -273,27 +276,29 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           LOG_TRACE(
             "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
         }
-//        else if (scraps1->getElementType() == ElementType::Relation)
-//        {
-//          RelationPtr r1 = boost::dynamic_pointer_cast<Relation>(scraps1);
-//          const std::vector<RelationData::Entry> relationMembers = r1->getMembers();
-//          QSet<long> way1Ids;
-//          for (size_t i = 0; i < relationMembers.size(); i++)
-//          {
-//            ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-//            if (member->getElementType() == ElementType::Way)
-//            {
-//              way1Ids.insert(member->getId());
-//            }
-//          }
-//          LOG_VART(way1Ids);
+        else if (scraps1->getElementType() == ElementType::Relation)
+        {
+          RelationPtr r1 = boost::dynamic_pointer_cast<Relation>(scraps1);
+          const std::vector<RelationData::Entry> relationMembers = r1->getMembers();
+          QSet<long> way1Ids;
+          for (size_t i = 0; i < relationMembers.size(); i++)
+          {
+            ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+            if (member->getElementType() == ElementType::Way)
+            {
+              way1Ids.insert(member->getId());
+            }
+          }
+          LOG_VART(way1Ids);
 
-//          //TODO: can't be right
-//          boost::dynamic_pointer_cast<Way>(scraps1)->setPid(way1Ids.toList().at(0));
-//          LOG_TRACE(
-//            "Set PID: " << way1Ids.toList().at(0) << " on: " << scraps1->getElementId() <<
-//            " (scraps1).");
-//        }
+          if (pid == 0)
+          {
+            wMatch->setPid(way1Ids.toList().at(0));
+            LOG_TRACE(
+              "Set PID: " << way1Ids.toList().at(0) << " on: " << wMatch->getElementId() <<
+              " (e1Match).");
+          }
+        }
       }
 
       if (scraps2 && scraps2->getElementType() == ElementType::Way)
