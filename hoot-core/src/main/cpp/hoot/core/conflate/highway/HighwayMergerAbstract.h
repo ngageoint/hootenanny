@@ -22,37 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef NETWORKMERGER_H
-#define NETWORKMERGER_H
+#ifndef HIGHWAY_MERGER_ABSTRACT_H
+#define HIGHWAY_MERGER_ABSTRACT_H
 
-// hoot
+// Hoot
 #include <hoot/core/conflate/merging/MergerBase.h>
-#include <hoot/core/conflate/network/EdgeMatch.h>
-#include <hoot/core/conflate/network/NetworkDetails.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 
 namespace hoot
 {
 
 /**
- * Merges whole network pairs (no partials).
- *
- * In the case of network matches we're guaranteed there is no overlap between matches so we can
- * use some of the functions in HighwayMerger, but others are too complex/imprecise.
+ * Base class for road merging
  */
-class NetworkMerger : public MergerBase
+class HighwayMergerAbstract : public MergerBase
 {
+
 public:
 
-  /**
-   * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
-   * and Unknown2 as second.
-   */
-  NetworkMerger(const std::set< std::pair<ElementId, ElementId> >& pairs, ConstEdgeMatchPtr edgeMatch,
-    ConstNetworkDetailsPtr details);
+  static std::string className() { return "hoot::HighwayMergerAbstract"; }
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
+  static unsigned int logWarnCount;
+
+  virtual ~HighwayMergerAbstract() {}
+
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector< std::pair<ElementId, ElementId> >& replaced) = 0;
 
   virtual QString toString() const;
 
@@ -61,13 +58,17 @@ protected:
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 
-private:
+  std::set<std::pair<ElementId, ElementId>> _pairs;
 
-  std::set< std::pair<ElementId, ElementId> > _pairs;
-  ConstEdgeMatchPtr _edgeMatch;
-  ConstNetworkDetailsPtr _details;
+  virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+    std::vector<std::pair<ElementId, ElementId>>& replaced);
+
+  virtual void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString note,
+                                QString reviewType);
+
+  ReviewMarker _reviewMarker;
 };
 
 }
 
-#endif // NETWORKMERGER_H
+#endif // HIGHWAY_MERGER_ABSTRACT_H

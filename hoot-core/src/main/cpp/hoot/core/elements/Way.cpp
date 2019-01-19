@@ -61,7 +61,7 @@ Way::Way(Status s, long id, Meters circularError, long changeset, long version,
 
 Way::Way(const Way& from)
   : Element(from.getStatus()),
-    _wayData(from._wayData)
+    _wayData(new WayData(*from._wayData.get()))
 {
 }
 
@@ -333,7 +333,8 @@ QString Way::toString() const
   ss << "status: " << getStatusString().toStdString() << endl;
   ss << "version: " << getVersion() << endl;
   ss << "visible: " << getVisible() << endl;
-  ss << "circular error: " << getCircularError();
+  if (hasCircularError())
+    ss << "circular error: " << getCircularError();
   if (hasPid())
     ss << "parent id: " << getPid() << endl;
   return QString::fromStdString(ss.str());

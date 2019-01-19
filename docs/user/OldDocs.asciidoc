@@ -8,7 +8,7 @@ This document provides background on how to use Hootenanny in a number of common
 [[Installation]]
 == Installation
 
-Hootenanny can be installed on both CentOS/RHEL 6.5 and Ubuntu 12.04/14.04 operating systems.  See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information. 
+See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information. 
 
 [[OldDocsConflation]]
 == Conflation

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SearchRadiusCalculator.h"
@@ -54,8 +54,7 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);
   //TODO: I don't believe this actually matters.
-//  if (config.getConflatePreOps().contains("hoot::RubberSheet") ||
-//      config.getUnifyPreOps().contains("hoot::RubberSheet"))
+//  if (config.getConflatePreOps().contains("hoot::RubberSheet"))
 //  {
 //    throw HootException(
 //      "Rubber sheeting cannot be used when automatically calculating search radius.");

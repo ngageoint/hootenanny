@@ -22,23 +22,40 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef HIGHWAY_TAG_ONLY_MERGER_H
+#define HIGHWAY_TAG_ONLY_MERGER_H
 
-#include "Element.h"
-
-#include <hoot/core/util/ConfigOptions.h>
+// Hoot
+#include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
 
 namespace hoot
 {
 
-long ElementData::CHANGESET_EMPTY = 0;
-long ElementData::VERSION_EMPTY = 0;
-quint64 ElementData::TIMESTAMP_EMPTY = 0;
-QString ElementData::USER_EMPTY = QString();
-long ElementData::UID_EMPTY = 0;
-bool ElementData::VISIBLE_EMPTY = true;
-double ElementData::CIRCULAR_ERROR_EMPTY = -1;
-double ElementData::CIRCULAR_ERROR_DEFAULT = ConfigOptions().getCircularErrorDefaultValue();
+/**
+ * Merges road tags only, keeping ref1 tags
+ */
+class HighwayTagOnlyMerger : public HighwayMergerAbstract
+{
+
+public:
+
+  static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
+
+  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
+
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+
+protected:
+
+  virtual bool _mergePair(
+    const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+    std::vector<std::pair<ElementId, ElementId>>& replaced);
+};
+
+typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;
 
 }
+
+#endif // HIGHWAY_TAG_ONLY_MERGER_H

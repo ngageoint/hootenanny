@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyMatchScorer.h"
 
@@ -58,8 +58,7 @@ _settings(conf())
 {
   ConfigOptions configOptions;
   setSearchDistance(configOptions.getPertySearchDistance());
-  if (ConfigOptions().getConflatePreOps().contains("hoot::RubberSheet") ||
-      ConfigOptions().getUnifyPreOps().contains("hoot::RubberSheet"))
+  if (ConfigOptions().getConflatePreOps().contains("hoot::RubberSheet"))
   {
     setApplyRubberSheet(false);
   }

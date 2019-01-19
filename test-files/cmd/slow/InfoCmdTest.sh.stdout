@@ -3715,3 +3715,11 @@ Listing subline string matchers...
 
   MaximalSublineStringMatcher   Matches lines based on the maximal subline string found
 
+Listing pre-conflation operations...
+
+  MapCleaner                                   operation         Cleans map data
+
+Listing post-conflation operations...
+
+  SuperfluousNodeRemover                       operation         Removes all nodes no part of a way
+

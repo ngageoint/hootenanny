@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
@@ -52,7 +52,8 @@ public:
 
   static std::string className() { return "hoot::Way"; }
 
-  Way(Status s, long id, Meters circularError, long changeset = ElementData::CHANGESET_EMPTY,
+  Way(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
+      long changeset = ElementData::CHANGESET_EMPTY,
       long version = ElementData::VERSION_EMPTY,
       quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
       QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
