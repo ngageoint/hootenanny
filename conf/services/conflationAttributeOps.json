@@ -1,0 +1,58 @@
+{
+    "id": "attribute_conflation_options",
+    "elem_type": "group",
+    "description": "Attribute conflation options.",
+    "name": "Attribute Conflation Options",
+    "required":"true",
+    "members": [
+      {
+        "id": "attribute_override_hoot_road_opt_engine",
+        "elem_type": "list",
+        "description": "A list of road engines",
+        "name": "Engines",
+        "defaultvalue": "Unify",
+        "hoot_key": "hoot.road.opt.engine"
+      },
+      {
+        "id":"attribute_override_conflate_post_ops",
+        "elem_type":"string",
+        "description":"Remove review relations and unmatched features in secondary dataset.",
+        "name":"Conflate Post Ops",
+        "hoot_key":"conflate.post.ops",
+        "defaultvalue":"hoot::RemoveElementsVisitor;hoot::RemoveUnknown2Visitor"
+      },
+      {
+        "id": "attribute_override_visitor_criterion",
+        "elem_type": "string",
+        "description": "The criterion for the RemoveElementsVisitor above",
+        "name": "Remove Elements Visitor Criterion",
+        "defaultvalue": "hoot::ReviewRelationCriterion",
+        "hoot_key": "remove.elements.visitor.element.criterion"
+      },
+      {
+        "id": "attribute_override_remove_elements_visitor_recursive",
+        "elem_type": "bool",
+        "description": "Remove elements recusively",
+        "name": "Remove elements recusively",
+        "defaultvalue": "false",
+        "hoot_key": "remove.elements.visitor.recursive",
+      },
+      {
+        "id": "attribute_override_highway_merge_tags_only",
+        "elem_type": "bool",
+        "description": "Tag only merger creator",
+        "name": "Tag only merger creator",
+        "defaultvalue": "true",
+        "hoot_key": "highway.merge.tags.only",
+      },
+      {
+        "id": "attribute_building_keep_ref_geom",
+        "elem_type": "bool",
+        "description": "Keep building ref geom",
+        "name": "Keep building ref geom",
+        "defaultvalue": "false",
+        "hoot_key": "building.keep.more.complex.geometry.when.auto.merging",
+      }
+    ]
+
+}

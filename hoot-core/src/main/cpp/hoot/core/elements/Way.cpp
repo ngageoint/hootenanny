@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Way.h"
@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 
 // Boost
@@ -61,7 +61,7 @@ Way::Way(Status s, long id, Meters circularError, long changeset, long version,
 
 Way::Way(const Way& from)
   : Element(from.getStatus()),
-    _wayData(from._wayData)
+    _wayData(new WayData(*from._wayData.get()))
 {
 }
 
@@ -333,7 +333,8 @@ QString Way::toString() const
   ss << "status: " << getStatusString().toStdString() << endl;
   ss << "version: " << getVersion() << endl;
   ss << "visible: " << getVisible() << endl;
-  ss << "circular error: " << getCircularError();
+  if (hasCircularError())
+    ss << "circular error: " << getCircularError();
   if (hasPid())
     ss << "parent id: " << getPid() << endl;
   return QString::fromStdString(ss.str());

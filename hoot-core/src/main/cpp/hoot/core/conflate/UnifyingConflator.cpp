@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnifyingConflator.h"
 
@@ -124,9 +124,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 {
   Timer timer;
   _reset();
-
-  LOG_INFO("Applying pre-unifying conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -279,11 +276,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   }
   LOG_INFO("Mergers applied");
 
-  if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
-  {
-    _mapUnknown1IdsBackToModifiedElements(map);
-  }
-
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   size_t mergerCount = _mergers.size();
   // free up any used resources.
@@ -293,66 +285,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
-
-  LOG_INFO("Applying post-unifying conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPostOps()).apply(map);
-
-  _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
                           const pair<ElementId, ElementId>& pair2)
 {
   return pair1.first.getId() > pair2.first.getId();
-}
-
-void UnifyingConflator::_mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map)
-{ 
-  LOG_TRACE("Mapping unknown 1 IDs back to modified elements...");
-
-  for (size_t i = 0; i < _mergers.size(); ++i)
-  {
-    set< pair<ElementId, ElementId> > impactedUnknown1ElementIds =
-      _mergers[i]->getImpactedUnknown1ElementIds();
-    //convert to list for sorting (can't sort a set); not sure why the std::sort with std::list
-    //isn't working here...using qt classes instead
-    list< pair<ElementId, ElementId> > impactedUnknown1ElementIdsAsList(
-      impactedUnknown1ElementIds.begin(), impactedUnknown1ElementIds.end());
-    QList< pair<ElementId, ElementId> > impactedUnknown1ElementIdsAsList2 =
-      QList <pair<ElementId, ElementId> >::fromStdList(impactedUnknown1ElementIdsAsList);
-    LOG_VART(impactedUnknown1ElementIdsAsList2);
-    if (ConfigOptions().getIdGenerator() == "hoot::PositiveIdGenerator")
-    {
-      //sort from highest to lowest element id keys, since when using the positive id generator,
-      //later elements created by the conflation may have been replaced more than once
-      qSort(impactedUnknown1ElementIdsAsList2.begin(), impactedUnknown1ElementIdsAsList2.end(),
-            elementIdPairCompare);
-    }
-    LOG_VART(impactedUnknown1ElementIdsAsList2);
-    for (QList< pair<ElementId, ElementId> >::const_iterator it =
-         impactedUnknown1ElementIdsAsList2.begin();
-         it != impactedUnknown1ElementIdsAsList2.end(); ++it)
-    {
-      ElementId eid1 = it->first;
-      ElementId eid2 = it->second;
-      LOG_VART(eid1);
-      LOG_VART(eid2);
-
-      if (eid1.getType() == eid2.getType())
-      {
-        LOG_TRACE(
-          "Retaining reference ID by setting: " << eid1 << " on " << eid2 <<
-          " and setting status to conflated...");
-        ElementPtr replacementElement = map->getElement(eid2);
-        LOG_VART(replacementElement.get());
-        LOG_VART(replacementElement->getElementId().getType());
-        ElementPtr newUnknown1Element(replacementElement->clone());
-        newUnknown1Element->setId(eid1.getId());
-        newUnknown1Element->setStatus(Status::Conflated);
-        map->replace(replacementElement, newUnknown1Element);
-      }
-    }
-  }
 }
 
 void UnifyingConflator::_mapElementIdsToMergers()

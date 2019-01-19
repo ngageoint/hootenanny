@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -69,25 +69,20 @@ public class ConflateResource {
 
     /**
      * Conflate service operates like a standard ETL service. The conflate
-     * service specifies the input files, conflation type, match threshold, miss
-     * threshold, and output file name. The conflation type can be specified as
-     * the average of the two input datasets or based on a single input file
-     * that is intended to be the reference dataset. It has two fronts, WPS and
-     * standard rest end point.
-     *
-     * that is intended to be the reference dataset.
+     * service specifies the input files, conflation type, options
+     * and output file name.
      *
      * POST hoot-services/conflation/execute
      *
      * @param params
      *            parameters in json format :
      *
-     *     INPUT1_TYPE: Conflation input type [OSM] | [OGR] | [DB] | [OSM_API_DB]
+     *     INPUT1_TYPE: Conflation input type [OSM] | [OGR] | [DB]
      *     INPUT2_TYPE: Conflation input type [OSM] | [OGR] | [DB]
-     *     INPUT1: Conlfation input 1
-     *     INPUT2: Conlfation input 2
+     *     INPUT1: Conflation input 1
+     *     INPUT2: Conflation input 2
      *     OUTPUT_NAME: Conflation operation output name
-     *     CONFLATION_TYPE: [Average] | [Reference]
+     *     CONFLATION_TYPE: [Horizontal] | [Reference]
      *     REFERENCE_LAYER:
      *         The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2
      *         tags will be dominant with layer 1 as geometry snap layer.

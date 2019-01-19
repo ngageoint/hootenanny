@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHFACTORY_H
 #define MATCHFACTORY_H
@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/util/Configurable.h>
 
 // Standard
 #include <vector>
@@ -43,7 +44,7 @@ class MatchThreshold;
 /**
  * (Singleton)
  */
-class MatchFactory
+class MatchFactory : public Configurable
 {
 public:
 
@@ -53,6 +54,8 @@ public:
    * Returns the default MatchFactory with the default creators registered.
    */
   static MatchFactory& getInstance();
+
+  void setConfiguration(const Settings& s);
 
   /**
    * Create a match object for the specified element IDs. If the element IDs aren't recognized as
@@ -91,22 +94,19 @@ public:
    */
   void registerCreator(QString c);
 
-  void reset() { _creators.clear(); }
-
-  /**
-   * Returns the number of candidate matches for all registered match creators.
-   *
-   * @return the match candidate count
-   */
-  long getMatchCandidateCount(const ConstOsmMapPtr& map, const geos::geom::Envelope& bounds);
+  void reset();
 
 private:
+
+  // allows for matching a subset of the input data
+  QString _tagFilter;
 
   MatchFactory();
 
   void _checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> matchCreator,
                                    const geos::geom::Envelope& bounds) const;
   static void _setMatchCreators(QStringList matchCreatorsList);
+  static void _setTagFilter(QString filter) { _theInstance->_tagFilter = filter; }
 
   static void _tempFixDefaults();
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmXmlChangesetFileWriter.h"
 
@@ -30,7 +30,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -206,7 +206,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
     _newElementIdMappings[ElementType::Node].insert(n->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
-  long version = -1;
+  long version = ElementData::VERSION_EMPTY;
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
@@ -275,7 +275,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
     _newElementIdMappings[ElementType::Way].insert(w->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
-  long version = -1;
+  long version = ElementData::VERSION_EMPTY;
   // for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
@@ -354,7 +354,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     _newElementIdMappings[ElementType::Relation].insert(r->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
-  long version = -1;
+  long version = ElementData::VERSION_EMPTY;
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MARKFORREVIEWMERGER_H
 #define MARKFORREVIEWMERGER_H
@@ -58,9 +58,6 @@ public:
   virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   virtual std::set<ElementId> getImpactedElementIds() const;
-
-  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
-  { return std::set< std::pair<ElementId, ElementId> >(); }
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 

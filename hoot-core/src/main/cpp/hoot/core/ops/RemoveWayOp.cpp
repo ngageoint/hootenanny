@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveWayOp.h"
 
@@ -40,18 +40,20 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveWayOp)
 
 RemoveWayOp::RemoveWayOp(bool removeFully):
-  _removeFully(removeFully)
+_wayIdToRemove(-std::numeric_limits<int>::max()),
+_removeFully(removeFully)
 {
 }
 
 RemoveWayOp::RemoveWayOp(long wId, bool removeFully):
-  _wayIdToRemove(wId),
-  _removeFully(removeFully)
+_wayIdToRemove(wId),
+_removeFully(removeFully)
 {
 }
 
-void RemoveWayOp::_removeWay(OsmMapPtr &map, long wId)
+void RemoveWayOp::_removeWay(OsmMapPtr& map, long wId)
 {
+  LOG_VART(wId);
   if (map->_ways.find(wId) != map->_ways.end())
   {
     LOG_TRACE("Removing way: " << ElementId::way(wId) << "...");
@@ -60,12 +62,11 @@ void RemoveWayOp::_removeWay(OsmMapPtr &map, long wId)
   }
 }
 
-void RemoveWayOp::_removeWayFully(OsmMapPtr &map, long wId)
+void RemoveWayOp::_removeWayFully(OsmMapPtr& map, long wId)
 {
   // copy the set because we may modify it later.
-  set<long> rid = map->_index->getElementToRelationMap()->
-      getRelationByElement(ElementId::way(wId));
-
+  set<long> rid =
+    map->_index->getElementToRelationMap()->getRelationByElement(ElementId::way(wId));
   for (set<long>::const_iterator it = rid.begin(); it != rid.end(); ++it)
   {
     const long relationId = *it;
@@ -78,6 +79,11 @@ void RemoveWayOp::_removeWayFully(OsmMapPtr &map, long wId)
 
 void RemoveWayOp::apply(OsmMapPtr& map)
 {
+  if (_wayIdToRemove == -std::numeric_limits<int>::max())
+  {
+    throw IllegalArgumentException("No way ID specified for RemoveWayOp.");
+  }
+
   if (_removeFully)
     _removeWayFully(map, _wayIdToRemove);
   else
@@ -86,12 +92,14 @@ void RemoveWayOp::apply(OsmMapPtr& map)
 
 void RemoveWayOp::removeWay(OsmMapPtr map, long wId)
 {
+  LOG_VART(wId);
   RemoveWayOp wayRemover(wId);
   wayRemover.apply(map);
 }
 
 void RemoveWayOp::removeWayFully(OsmMapPtr map, long wId)
 {
+  LOG_VART(wId);
   RemoveWayOp wayRemover(wId, true);
   wayRemover.apply(map);
 }

@@ -20,5 +20,5 @@ hoot node-density-tiles --warn -D api.db.email=test@test.com -D convert.bounding
 diff $GOLD_FILES_DIR/output-cropped.geojson $OUTPUT_DIR/output-cropped.geojson
 
 # Clean up the map from the database
-hoot delete-db-map -D api.db.email=test@test.com $HOOT_DB_URL"/DcTigerRoads"
-scripts/database/CleanAndInitializeOsmApiDb.sh
+hoot delete-db-map --warn -D api.db.email=test@test.com $HOOT_DB_URL"/DcTigerRoads"
+scripts/database/CleanAndInitializeOsmApiDb.sh > /dev/null

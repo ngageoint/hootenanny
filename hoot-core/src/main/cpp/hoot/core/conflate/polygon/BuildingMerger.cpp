@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMerger.h"
 
@@ -246,8 +246,6 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
 
     LOG_VART(keeper->getElementId());
     LOG_VART(scrap->getElementId());
-    const ElementId scrapId = scrap->getElementId();
-    const Status scrapStatus = scrap->getStatus();
 
     //Check to see if we are removing a multipoly building relation.  If so, its multipolygon
     //relation members, need to be removed as well.
@@ -265,16 +263,6 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
          it != multiPolyMemberIds.end(); ++it)
     {
       RecursiveElementRemover(*it).apply(map);
-    }
-
-    // see comments for similar functionality in HighwaySnapMerger::_mergePair
-    if (scrapStatus == Status::Unknown1 &&
-        ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
-    {
-      LOG_TRACE(
-        "Retaining reference ID by mapping unknown1 ID: " << scrapId << " to ID: " <<
-        keeper->getElementId() << "...");
-      _unknown1Replacements.insert(pair<ElementId, ElementId>(scrapId, keeper->getElementId()));
     }
 
     set< pair<ElementId, ElementId> > replacedSet;

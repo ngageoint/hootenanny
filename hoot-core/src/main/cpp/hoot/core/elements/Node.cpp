@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Node.h"
@@ -40,6 +40,8 @@ using namespace geos::geom;
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -104,17 +106,18 @@ boost::shared_ptr<geos::geom::Point> Node::toPoint() const
 
 QString Node::toString() const
 {
-  return
-    QString(
-      "Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6\n status: %7\n circular error: %8")
-      .arg(getId())
-      .arg(QString::number(getX(), 'f', ConfigOptions().getWriterPrecision()))
-      .arg(QString::number(getY(), 'f', ConfigOptions().getWriterPrecision()))
-      .arg(getTags().toString())
-      .arg(getVersion())
-      .arg(getVisible())
-      .arg(getStatus().toString())
-      .arg(QString::number(getCircularError()));
+  stringstream ss(stringstream::out);
+  ss << "Node(" << getId() << "):"
+     << " x: " << QString::number(getX(), 'f', ConfigOptions().getWriterPrecision())
+     << " y: " << QString::number(getY(), 'f', ConfigOptions().getWriterPrecision())
+     << " tags:" << endl
+     << getTags().toString() << endl
+     << " version: " << getVersion() << endl
+     << " visible: " << getVisible() << endl
+     << " status: " << getStatus().toString();
+  if (hasCircularError())
+    ss << endl << " circular error: " << QString::number(getCircularError());
+  return QString::fromUtf8(ss.str().data());
 }
 
 void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const

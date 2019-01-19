@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementVisitorJs.h"
 
@@ -55,7 +55,7 @@ void ElementVisitorJs::Init(Handle<Object> target)
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
   vector<string> opNames =
-    Factory::getInstance().getObjectNamesByBase(ConstElementVisitor::className());
+    Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
@@ -68,7 +68,7 @@ void ElementVisitorJs::Init(Handle<Object> target)
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::NewFromUtf8(current, ConstElementVisitor::className().data()));
+                                  String::NewFromUtf8(current, ElementVisitor::className().data()));
 
     Persistent<Function> constructor(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
@@ -82,12 +82,20 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
 
   QString className = str(args.This()->GetConstructorName());
 
-  ConstElementVisitor* c = Factory::getInstance().constructObject<ConstElementVisitor>(className);
-  ElementVisitorJs* obj = new ElementVisitorJs(c);
+  ElementVisitor* vis = Factory::getInstance().constructObject<ElementVisitor>(className);
+  ConstElementVisitor* constVis = dynamic_cast<ConstElementVisitor*>(vis);
+  if (!constVis)
+  {
+    // TODO: We need to allow ElementVisitor as well. - #2831
+    throw HootException(
+      QString("Only ConstElementVisitors may be used in Hootenanny Javascript.  Change your ") +
+      QString("ElementVisitor class to inherit from ConstElementVisitor or ElementOsmMapVisitor."));
+  }
+  ElementVisitorJs* obj = new ElementVisitorJs(constVis);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
-  PopulateConsumersJs::populateConsumers<ConstElementVisitor>(c, args);
+  PopulateConsumersJs::populateConsumers<ConstElementVisitor>(constVis, args);
 
   args.GetReturnValue().Set(args.This());
 }

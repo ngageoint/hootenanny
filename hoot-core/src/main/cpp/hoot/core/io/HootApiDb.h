@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
@@ -338,6 +338,12 @@ public:
   { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
   inline static QString getCurrentWaysSequenceName(long mapId)
   { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getMapsSequenceName()
+  { return getMapsTableName() + getSequenceId(); }
+
+  inline static QString getMapsTableName()                      { return "maps"; }
+  inline static QString getFoldersTableName()                   { return "folders"; }
+  inline static QString getFolderMapMappingsTableName()         { return "folder_map_mappings"; }
 
   inline static QString getJobStatusTableName() { return "job_status"; }
 
@@ -520,6 +526,30 @@ public:
    */
   long getMapIdByNameForCurrentUser(const QString name);
 
+  /**
+   * Writes an associated resource ID for a job
+   *
+   * @param jobId the job's ID
+   * @param resourceId the resource ID
+   */
+  void updateJobStatusResourceId(const QString jobId, const long resourceId);
+
+  /**
+   * Inserts a job record
+   *
+   * @param statusDetail optional status detail text
+   * @return the ID of the inserted job
+   */
+  QString insertJob(const QString statusDetail = "");
+
+  /**
+   * Retrieves the resource ID associated with a job
+   *
+   * @param jobId the job's ID
+   * @return a resource ID
+   */
+  long getJobStatusResourceId(const QString jobId);
+
 protected:
 
   virtual void _resetQueries();
@@ -527,6 +557,7 @@ protected:
 private:
 
   friend class ServiceHootApiDbReaderTest;
+  friend class ServiceHootApiDbWriterTest;
 
   boost::shared_ptr<QSqlQuery> _closeChangeSet;
   boost::shared_ptr<QSqlQuery> _insertChangeSet;
@@ -544,9 +575,6 @@ private:
   boost::shared_ptr<QSqlQuery> _updateNode;
   boost::shared_ptr<QSqlQuery> _updateRelation;
   boost::shared_ptr<QSqlQuery> _updateWay;
-  boost::shared_ptr<QSqlQuery> _updateJobStatus;
-  boost::shared_ptr<QSqlQuery> _insertJobStatus;
-  boost::shared_ptr<QSqlQuery> _jobStatusExists;
   boost::shared_ptr<QSqlQuery> _mapExistsByName;
   boost::shared_ptr<QSqlQuery> _getMapIdByName;
   boost::shared_ptr<QSqlQuery> _insertChangeSet2;
@@ -566,6 +594,10 @@ private:
   boost::shared_ptr<QSqlQuery> _getMapPermissionsByName;
   boost::shared_ptr<QSqlQuery> _currentUserHasMapWithName;
   boost::shared_ptr<QSqlQuery> _getMapIdByNameForCurrentUser;
+  boost::shared_ptr<QSqlQuery> _updateJobStatusResourceId;
+  boost::shared_ptr<QSqlQuery> _insertJob;
+  boost::shared_ptr<QSqlQuery> _deleteJobById;
+  boost::shared_ptr<QSqlQuery> _getJobStatusResourceId;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
@@ -658,9 +690,11 @@ private:
   static QString _escapeTags(const Tags& tags);
 
   // These delete methods are for testing purposes only, as they don't do any checks for orphaned
-  // map/folder relationships.  Feel free to harden them and promote to public members, if needed.
+  // relationships.  Feel free to harden them and promote to public members that can be used beyond
+  // test code, if needed.
   void _deleteFolderMapMappingsByMapId(const long mapId);
   void _deleteAllFolders(const std::set<long>& folderIds);
+  void _deleteJob(const QString id);
 };
 
 }

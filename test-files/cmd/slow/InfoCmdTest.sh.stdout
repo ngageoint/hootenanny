@@ -3707,3 +3707,19 @@ Listing cleaning operations...
 
   DuplicateWayRemover                          operation         Removes duplicate ways from a map
 
+Listing subline matchers...
+
+  FrechetSublineMatcher         Matches lines based on the Frechet Distance algorithm
+
+Listing subline string matchers...
+
+  MaximalSublineStringMatcher   Matches lines based on the maximal subline string found
+
+Listing pre-conflation operations...
+
+  MapCleaner                                   operation         Cleans map data
+
+Listing post-conflation operations...
+
+  SuperfluousNodeRemover                       operation         Removes all nodes no part of a way
+

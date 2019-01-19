@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMSCHEMA_JS_H
 #define OSMSCHEMA_JS_H
@@ -31,7 +31,7 @@
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {
@@ -49,8 +49,8 @@ private:
 
   static void getAllTags(const v8::FunctionCallbackInfo<v8::Value>& agrs);
   static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getChildTags(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getSimilarTags(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getChildTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getSimilarTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagByCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);

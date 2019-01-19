@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYSNAPMERGER_H
 #define HIGHWAYSNAPMERGER_H
 
 // Hoot
-#include <hoot/core/conflate/merging/MergerBase.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
 
 namespace hoot
 {
@@ -37,7 +37,10 @@ namespace hoot
 class SublineStringMatcher;
 class WaySublineCollection;
 
-class HighwaySnapMerger : public MergerBase
+/**
+ * Merges road geometries and tags
+ */
+class HighwaySnapMerger : public HighwayMergerAbstract
 {
 
 public:
@@ -47,25 +50,20 @@ public:
   static unsigned int logWarnCount;
 
   HighwaySnapMerger(Meters minSplitSize,
-    const std::set< std::pair<ElementId, ElementId> >& pairs,
+    const std::set<std::pair<ElementId, ElementId>>& pairs,
     const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
-
-  virtual QString toString() const;
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
 protected:
 
-  virtual PairsSet& getPairs() { return _pairs; }
-  virtual const PairsSet& getPairs() const { return _pairs; }
+  virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+                          std::vector< std::pair<ElementId, ElementId> >& replaced);
 
 private:
 
   double _minSplitSize;
-  std::set< std::pair<ElementId, ElementId> > _pairs;
   boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
-
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 
   ReviewMarker _reviewMarker;
 
@@ -74,12 +72,6 @@ private:
    * for "directly". See ticket #951 for details.
    */
   bool _directConnect(const ConstOsmMapPtr &map, WayPtr w) const;
-
-  void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString note,
-                        QString reviewType);
-
-  void _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                  std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   void _removeSpans(OsmMapPtr map, const ElementPtr& w1, const ElementPtr& w2) const;
   void _removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const;

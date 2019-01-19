@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCH_CANDIDATE_COUNT_VISITOR_H
 #define MATCH_CANDIDATE_COUNT_VISITOR_H
 
 // hoot
-#include <hoot/core/util/DataProducer.h>
+#include <hoot/core/conflate/stats/DataProducer.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
@@ -65,7 +65,7 @@ private:
   long _totalCandidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 
-  void _setupCreators(const std::vector<boost::shared_ptr<MatchCreator> >& matchCreators);
+  void _setupCreators(const std::vector<boost::shared_ptr<MatchCreator>>& matchCreators);
 };
 
 }

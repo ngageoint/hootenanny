@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -48,7 +48,7 @@ public final class HootProperties {
     public static final String TEMPLATE_PATH;
     public static final String REF_OVERRIDE_PATH;
     public static final String HORZ_OVERRIDE_PATH;
-    public static final String AVE_OVERRIDE_PATH;
+    public static final String ATT_OVERRIDE_PATH;
     public static final String DOC_NAME;
     public static final String RPT_STORE_PATH;
     public static final String BASEMAPS_TILES_FOLDER;
@@ -77,7 +77,6 @@ public final class HootProperties {
     public static final String INGEST_SIZE_THRESHOLD;
     public static final String EXPORT_SIZE_THRESHOLD;
     public static final String OSMAPI_DB_NAME;
-    public static final Boolean OSM_API_DB_ENABLED;
     public static final String MAP_QUERY_DIMENSIONS;
     public static final String MAP_QUERY_AREA_DEGREES;
     public static final String MAX_QUERY_NODES;
@@ -168,7 +167,7 @@ public final class HootProperties {
         TEMPLATE_PATH = getProperty("advOptTemplate");
         REF_OVERRIDE_PATH = getProperty("advOptRefOverride");
         HORZ_OVERRIDE_PATH = getProperty("advOptHorizontalOverride");
-        AVE_OVERRIDE_PATH = getProperty("advOptAverageOverride");
+        ATT_OVERRIDE_PATH = getProperty("advOptAttributeOverride");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
         DEFAULT_TRANSLATIONS_CONFIG = getProperty("defaultTranslationsConfig");
@@ -186,7 +185,6 @@ public final class HootProperties {
         CONFLATE_SIZE_THRESHOLD = getProperty("conflateSizeThreshold");
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
-        OSM_API_DB_ENABLED = Boolean.parseBoolean(getProperty("osmApiDbEnabled"));
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
         MAX_QUERY_NODES = getProperty("maxQueryNodes");

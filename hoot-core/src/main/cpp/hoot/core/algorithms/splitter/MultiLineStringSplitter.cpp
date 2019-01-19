@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringSplitter.h"
 
@@ -32,7 +32,7 @@
 // hoot
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
@@ -109,12 +109,12 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   // if there were multiple matches then create a relation to contain the matches.
   else if (matches.size() > 1)
   {
-    LOG_TRACE("multilinestring: multiple matches get relation");
     RelationPtr r(new Relation(matches[0]->getStatus(), map->createNextRelationId(),
       matches[0]->getCircularError(), MetadataTags::RelationMultilineString()));
-
     for (size_t i = 0; i < matches.size(); i++)
     {
+      LOG_TRACE(
+        "multilinestring: adding multiple match to relation: " << matches[i]->getElementId());
       r->addElement("", matches[i]);
     }
     result = r;

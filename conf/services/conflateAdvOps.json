@@ -252,7 +252,7 @@
                 "name":"Minimum Ties Required",
                 "defaultvalue":"4",
                 "hoot_key":"rubber.sheet.minimum.ties"
-            } 
+            }
         ]
     },
     {
@@ -530,11 +530,19 @@
                                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                                 "name":"Merger Creator",
                                 "required":"true",
-                                "defaultvalue":"hoot::HighwaySnapMergerCreator",
+                                "defaultvalue":"hoot::HighwayMergerCreator",
                                 "override":{
-                                    "defaultvalue":"hoot::HighwaySnapMergerCreator"
+                                    "defaultvalue":"hoot::HighwayMergerCreator"
                                 },
                                 "hoot_key":"merger.creators"
+                            },
+                            {
+            	              "id":"highway_merge_tags_only",
+                              "elem_type":"bool",
+                              "defaultvalue":"false",
+                              "description":"If true, road conflation will merge tags only and not geometries.",
+                              "name":"Merge Road Tags Only",
+                              "hoot_key":"highway.merge.tags.only"
                             },
                             {
                                 "id":"highway_matcher_heading_delta",

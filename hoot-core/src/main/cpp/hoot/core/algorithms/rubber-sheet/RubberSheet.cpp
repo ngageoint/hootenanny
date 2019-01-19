@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RubberSheet.h"
@@ -175,6 +175,7 @@ void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
     MapProjector::projectToPlanar(_map);
   }
 
+  int ctr = 0;
   const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
@@ -187,6 +188,13 @@ void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
 
       n->setX(newC.x);
       n->setY(newC.y);
+    }
+
+    ctr++;
+    if (ctr % 100 == 0)
+    {
+      PROGRESS_INFO(
+        "Applied rubber sheet transform to " << ctr << " / " << nm.size() << " nodes...");
     }
   }
 }
@@ -305,6 +313,8 @@ void RubberSheet::_findTies()
   // both nodes are the worst circular error.
   _searchRadius = WorstCircularErrorVisitor::getWorstCircularError(_map) * 2;
 
+  int ctr = 0;
+
   boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   // go through all the intersections w/ 2 or more roads intersecting
   for (NodeToWayMap::const_iterator it = n2w->begin(); it != n2w->end(); ++it)
@@ -317,9 +327,17 @@ void RubberSheet::_findTies()
       // calculate the probability of each match and add it to our list
       _addIntersection(nid, wids);
     }
+
+    ctr++;
+    if (ctr % 100 == 0)
+    {
+      PROGRESS_INFO(
+        "Processed intersections for " << ctr << " / " << n2w->size() << " nodes...");
+    }
   }
 
   // go through all the paired intersections
+  ctr = 0;
   for (MatchList::const_iterator it = _matches.begin(); it != _matches.end(); ++it)
   {
     NodePtr n = _map->getNode(it->first);
@@ -336,6 +354,13 @@ void RubberSheet::_findTies()
         _finalPairs.push_back(m1);
       }
     }
+
+    ctr++;
+    if (ctr % 100 == 0)
+    {
+      PROGRESS_INFO(
+        "Processed paired intersections for " << ctr << " / " << _matches.size() << " matches...");
+    }
   }
 
   sort(_finalPairs.begin(), _finalPairs.end(), compareMatches);
@@ -351,6 +376,7 @@ void RubberSheet::_findTies()
   set<long> touched;
   LOG_DEBUG("Found " << _finalPairs.size() << " potential tie points.");
 
+  ctr = 0;
   for (size_t i = 0; i < _finalPairs.size(); ++i)
   {
     NodePtr n1 = _map->getNode(_finalPairs[i].nid1);
@@ -384,6 +410,13 @@ void RubberSheet::_findTies()
         n2->getTags()[MetadataTags::HootMatchP()] = QString("%1").arg(_finalPairs[i].p);
         n2->getTags()[MetadataTags::HootMatchOrder()] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
       }
+    }
+
+    ctr++;
+    if (ctr % 100 == 0)
+    {
+      PROGRESS_INFO(
+        "Potential tie points processed: " << ctr << " / " << _finalPairs.size());
     }
   }
 

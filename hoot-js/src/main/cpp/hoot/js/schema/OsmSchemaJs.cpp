@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmSchemaJs.h"
 
@@ -30,7 +30,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
@@ -65,10 +65,10 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, getAllTags)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "getCategories"),
               FunctionTemplate::New(current, getCategories)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getChildTags"),
-              FunctionTemplate::New(current, getChildTags)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getSimilarTags"),
-              FunctionTemplate::New(current, getSimilarTags)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "getChildTagsAsVertices"),
+              FunctionTemplate::New(current, getChildTagsAsVertices)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "getSimilarTagsAsVertices"),
+              FunctionTemplate::New(current, getSimilarTagsAsVertices)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "getTagByCategory"),
               FunctionTemplate::New(current, getTagByCategory)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "getTagVertex"),
@@ -119,23 +119,24 @@ void OsmSchemaJs::getCategories(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getCategories(kvp).toStringList()));
 }
 
-void OsmSchemaJs::getChildTags(const FunctionCallbackInfo<Value>& args)
+void OsmSchemaJs::getChildTagsAsVertices(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
   QString kvp = toCpp<QString>(args[0]);
 
-  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getChildTags(kvp)));
+  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getChildTagsAsVertices(kvp)));
 }
 
-void OsmSchemaJs::getSimilarTags(const FunctionCallbackInfo<Value>& args)
+void OsmSchemaJs::getSimilarTagsAsVertices(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
   QString kvp = toCpp<QString>(args[0]);
   double minimumScore = toCpp<double>(args[1]);
 
-  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getSimilarTags(kvp, minimumScore)));
+  args.GetReturnValue().Set(
+    toV8(OsmSchema::getInstance().getSimilarTagsAsVertices(kvp, minimumScore)));
 }
 
 void OsmSchemaJs::getTagByCategory(const FunctionCallbackInfo<Value>& args)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FeatureExtractorJs.h"
 
@@ -32,10 +32,10 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
-#include <hoot/js/util/StreamUtilsJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
 // Qt

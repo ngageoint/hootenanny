@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALSUBLINESTRINGMATCHER_H
 #define MAXIMALSUBLINESTRINGMATCHER_H
@@ -70,6 +70,9 @@ public:
   virtual void setHeadingDelta(Meters headingDelta);
 
   virtual void setSublineMatcher(boost::shared_ptr<SublineMatcher> sm);
+
+  virtual QString getDescription() const
+  { return "Matches lines based on the maximal subline string found"; }
 
 private:
 

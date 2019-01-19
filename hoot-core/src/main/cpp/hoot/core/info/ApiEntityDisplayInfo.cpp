@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ApiEntityDisplayInfo.h"
@@ -42,6 +42,8 @@
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 //  Qt
 #include <QTextStream>
@@ -201,15 +203,30 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString className
   return "";
 }
 
-QString ApiEntityDisplayInfo::getDisplayInfoCleaningOps()
+QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString optName)
 {
-  ConfigOptions opts = ConfigOptions(conf());
-  const QStringList cleaningOps = opts.getMapCleanerTransforms();
+  LOG_TRACE("getDisplayInfoOps: " << optName);
+
+  const QString errorMsg = "Invalid config option name: " + optName;
+  if (!conf().hasKey(optName))
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  const QStringList listOpt = conf().get(optName).toStringList();
+  LOG_VART(listOpt.size());
+  if (listOpt.isEmpty())
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  const QStringList operations = listOpt[0].split(";");
+
   QString buffer;
   QTextStream ts(&buffer);
-  for (int i = 0; i < cleaningOps.size(); i++)
+  for (int i = 0; i < operations.size(); i++)
   {   
-    QString className = cleaningOps[i];
+    QString className = operations[i];
     LOG_VARD(className);
 
     // There's a lot of duplicated code in here when compared with printApiEntities.  Haven't
@@ -237,7 +254,7 @@ QString ApiEntityDisplayInfo::getDisplayInfoCleaningOps()
     if (!apiEntityInfo.get())
     {
       throw HootException(
-        "Calls to displayCleaningOps must be made with classes that implement ApiEntityInfo.");
+        "Calls to getDisplayInfoOps must return a list of classes, all that implement ApiEntityInfo.");
     }
     const bool supportsSingleStat = singleStat.get();
 
@@ -311,6 +328,22 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString apiEntityType)
     ts << msg << endl;
     ts << getApiEntities<StringDistance>(
       StringDistance::className(), "string comparator", false, MAX_NAME_SIZE - 15);
+  }
+  else if (apiEntityType == "subline-matchers")
+  {
+    msg += "):";
+    msg.prepend("Subline Matchers");
+    ts << msg << endl;
+    ts << getApiEntities<SublineMatcher>(
+      SublineMatcher::className(), "subline matcher", false, MAX_NAME_SIZE - 15);
+  }
+  else if (apiEntityType == "subline-string-matchers")
+  {
+    msg += "):";
+    msg.prepend("Subline Matchers");
+    ts << msg << endl;
+    ts << getApiEntities<SublineStringMatcher>(
+      SublineStringMatcher::className(), "subline string matcher", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "value-aggregators")
   {
