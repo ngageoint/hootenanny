@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef APIENTITYDISPLAYINFO_H
@@ -52,9 +52,11 @@ public:
   static QString getDisplayInfo(const QString apiEntityType);
 
   /**
-   * Gets display information on the currently configured MapCleaner operations as a string
+   * Gets display information on the currently configured operations by the given name
+   *
+   * @param optName a Hootenanny configuration option name identifying a list of operations
    */
-  static QString getDisplayInfoCleaningOps();
+  static QString getDisplayInfoOps(const QString optName);
 
 private:
 

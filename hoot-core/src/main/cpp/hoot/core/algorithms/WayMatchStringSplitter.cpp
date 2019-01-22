@@ -43,8 +43,6 @@ QString WayMatchStringSplitter::_overlyAggressiveMergeReviewText =
   "using input data/imagery. There may also be one or more zero length ways at intersections.";
 
 WayMatchStringSplitter::WayMatchStringSplitter()
-  : _preserveUnknown1ElementIdWhenModifyingFeatures(
-      ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
 {
 }
 
@@ -154,16 +152,6 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map, vector<pair<
         newWays.append(w);
         replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
       }
-    }
-
-    // see comments for similar functionality in HighwaySnapMerger::_mergePair
-    if (way->getStatus() == Status::Unknown1 && _preserveUnknown1ElementIdWhenModifyingFeatures)
-    {
-      LOG_TRACE(
-        "Retaining reference ID by mapping unknown1 ID: " << way->getElementId() << " to ID: " <<
-        newWays[0]->getElementId() << "...");
-      _unknown1Replacements.insert(
-        pair<ElementId, ElementId>(way->getElementId(), newWays[0]->getElementId()));
     }
 
     LOG_TRACE("Replacing: " << way->getElementId() << " with: " << newWays);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -97,11 +97,8 @@ public class ExportResource {
      *                            //a file path will be specified.
      *   "input":"ToyTestA",      //Input name. for inputtype = db then specify name from hoot db.
      *                            //For inputtype=file, specify full path to a file.
-     *   "outputtype":"gdb",      //[gdb | shp | osm_api_db | osc | tiles]. gdb will produce an ESRI file
-     *                             geodatabase, shp will output shapefile. osm_api_db will derive and apply a
-     *                            //changeset to an OSM API database . osc will derive changeset
-     *                            //xml computing the the difference between the configured
-     *                            //OSM API database and the specified input layer.  tiles outputs a GeoJSON file
+     *   "outputtype":"gdb",      //[gdb | shp | tiles]. gdb will produce an ESRI file
+     *                             geodatabase, shp will output shapefile. tiles outputs a GeoJSON file
      *                            //containing partitioned concentrations of node tiles
      *   "removereview" : "false"
      * }
@@ -150,22 +147,6 @@ public class ExportResource {
                         ExportOSMCommand.class, this.getClass(), user);
 
                 workflow.add(exportOSMCommand);
-            }
-            else if (outputType.equalsIgnoreCase("osc")) {
-                ExternalCommand deriveChangesetCommand = userAwareExportCommandFactory.build(jobId, params,
-                        debugLevel, DeriveChangesetCommand.class, this.getClass(), user);
-
-                workflow.add(deriveChangesetCommand);
-            }
-            else if (outputType.equalsIgnoreCase("osm_api_db")) {
-                ExternalCommand deriveChangesetCommand = userAwareExportCommandFactory.build(jobId, params,
-                        debugLevel, DeriveChangesetCommand.class, this.getClass(), user);
-
-                ExternalCommand applyChangesetCommand = userAwareExportCommandFactory.build(jobId, params,
-                        debugLevel, ApplyChangesetCommand.class, this.getClass(), user);
-
-                workflow.add(deriveChangesetCommand);
-                workflow.add(applyChangesetCommand);
             }
             else if (outputType.startsWith("tiles")) {
                 ExternalCommand calculateTilesCommand = userAwareExportCommandFactory.build(jobId, params,

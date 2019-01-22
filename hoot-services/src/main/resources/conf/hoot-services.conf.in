@@ -57,9 +57,6 @@ dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 # Translation javascript path
 translationScriptPath=$(homeFolder)/translations
 
-# Enable access to a single OSM API database configured by DatabaseConfig.sh.
-osmApiDbEnabled=true
-
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
 

@@ -65,7 +65,7 @@ private:
   double _minSplitSize;
   boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
+  ReviewMarker _reviewMarker;
 
   /**
    * Returns true if the way directly connects the left and right ways. There is some tolerance

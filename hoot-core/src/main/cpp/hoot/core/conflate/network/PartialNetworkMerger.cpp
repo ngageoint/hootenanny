@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PartialNetworkMerger.h"
 
@@ -208,10 +208,6 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
     // split the ways in such a way that the mappings are updated appropriately.
     WayMatchStringSplitter splitter;
     splitter.applySplits(map, replaced, _allSublineMappings);
-    std::set< std::pair<ElementId, ElementId> > splitUnknown1Replacements =
-      splitter.getUnknown1Replacements();
-    _unknown1Replacements.insert(splitUnknown1Replacements.begin(), splitUnknown1Replacements.end());
-    LOG_VART(_unknown1Replacements.size());
 
     // apply merge operations on the split ways.
     LOG_TRACE("Merging split ways...");

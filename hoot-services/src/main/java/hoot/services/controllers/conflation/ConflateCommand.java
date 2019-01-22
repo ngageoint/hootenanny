@@ -27,8 +27,6 @@
 package hoot.services.controllers.conflation;
 
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-import static hoot.services.HootProperties.OSMAPI_DB_URL;
-import static hoot.services.HootProperties.OSM_API_DB_ENABLED;
 import static hoot.services.HootProperties.RPT_STORE_PATH;
 
 import java.io.File;
@@ -56,50 +54,6 @@ class ConflateCommand extends ExternalCommand {
         super(jobId);
         this.conflateParams = params;
 
-        boolean conflatingOsmApiDbData = ConflateUtils.isAtLeastOneLayerOsmApiDb(params);
-
-        //Since we're not returning the osm api db layer to the hoot ui, this exception
-        //shouldn't actually ever occur, but will leave this check here anyway.
-        if (conflatingOsmApiDbData && !OSM_API_DB_ENABLED) {
-            throw new IllegalArgumentException("Attempted to conflate an OSM API database data source but OSM " +
-                    "API database support is disabled.");
-        }
-
-        BoundingBox bounds;
-
-        // osm api db related input params have already been validated by
-        // this point, so just check to see if any osm api db input is present
-        if (conflatingOsmApiDbData && OSM_API_DB_ENABLED) {
-            ConflateUtils.validateOsmApiDbConflateParams(params);
-
-            String secondaryParameterKey = ConflateUtils.isFirstLayerOsmApiDb(params) ? params.getInput2() : params.getInput1();
-
-            //Record the aoi of the conflation job (equal to that of the secondary layer), as
-            //we'll need it to detect conflicts at export time.
-            long secondaryMapId = Long.parseLong(secondaryParameterKey);
-            if (!hoot.services.models.osm.Map.mapExists(secondaryMapId)) {
-                String msg = "No secondary map exists with ID: " + secondaryMapId;
-                throw new IllegalArgumentException(msg);
-            }
-
-            if (params.getBounds() != null) {
-                bounds = new BoundingBox(params.getBounds());
-            }
-            else {
-                hoot.services.models.osm.Map secondaryMap = new hoot.services.models.osm.Map(secondaryMapId);
-                bounds = secondaryMap.getBounds();
-            }
-        }
-        else {
-            bounds = null;
-        }
-
-        String aoi = null;
-
-        if (bounds != null) {
-            aoi = bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
-        }
-
         List<String> options = new LinkedList<>();
         options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("writer.include.conflate.score.tags=false");
@@ -117,29 +71,6 @@ class ConflateCommand extends ExternalCommand {
 
         String input2Type = params.getInputType2();
         String input2 = input2Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput2()) : params.getInput2();
-
-        String referenceLayer = params.getReferenceLayer();
-        if (referenceLayer.equalsIgnoreCase("1")) {
-            if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
-                input1 = OSMAPI_DB_URL; 
-            }
-        }
-        else if (referenceLayer.equalsIgnoreCase("2")) {
-            options.add("tag.merger.default=hoot::OverwriteTag1Merger");
-            if (input2Type.equalsIgnoreCase("OSM_API_DB")) {
-                input2 = OSMAPI_DB_URL;
-            }
-        }
-        //This is set up for the XML changeset workflow.
-        if (input1Type.equalsIgnoreCase("OSM_API_DB") || input2Type.equalsIgnoreCase("OSM_API_DB"))
-        {
-          options.add("convert.bounding.box=" + aoi);
-          options.add("reader.conflate.use.data.source.ids.1=true");
-          options.add("reader.conflate.use.data.source.ids.2=false");
-          options.add("id.generator=hoot::PositiveIdGenerator");
-          options.add("osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter");
-          options.add("preserve.unknown1.element.id.when.modifying.features=true");
-        }
 
         String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
 

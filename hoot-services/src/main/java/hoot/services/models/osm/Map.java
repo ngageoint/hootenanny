@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -30,8 +30,6 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.tuple;
 import static hoot.services.HootProperties.MAP_QUERY_DIMENSIONS;
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
-import static hoot.services.HootProperties.OSMAPI_DB_NAME;
-import static hoot.services.HootProperties.OSM_API_DB_ENABLED;
 import static hoot.services.HootProperties.replaceSensitiveData;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
@@ -631,18 +629,6 @@ public class Map extends Maps {
         MapLayers mapLayers = new MapLayers();
         List<MapLayer> mapLayerList = new ArrayList<>();
 
-        if (OSM_API_DB_ENABLED) {
-            // add a OSM API db dummy record for the UI for conflation involving OSM API db data
-            MapLayer mapLayer = new MapLayer();
-            mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
-            mapLayer.setName("OSM_API_DB_" + replaceSensitiveData(OSMAPI_DB_NAME));
-            Timestamp ts = new Timestamp(System.currentTimeMillis());
-            mapLayer.setDate(ts);
-            mapLayer.setLastAccessed(MapLayer.format.format(ts));
-            mapLayer.setPublicCol(Boolean.valueOf(true));
-            mapLayerList.add(mapLayer);
-        }
-
         for (Maps mapLayerRecord : mapLayerRecords) {
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(mapLayerRecord.getId());
@@ -654,14 +640,6 @@ public class Map extends Maps {
                 mapLayer.setLastAccessed(tags.get("lastAccessed"));
             } else {
                 mapLayer.setLastAccessed(MapLayer.format.format(mapLayerRecord.getCreatedAt()));
-            }
-            if (OSM_API_DB_ENABLED) {
-                //This tag, set during conflation, is what indicates whether a conflated dataset
-                //had any osm api db source data in it.  That is the requirement to export back
-                //into an osm api db.
-                if (tags.containsKey("osm_api_db_export_time")) {
-                    mapLayer.setCanExportToOsmApiDb(true);
-                }
             }
 
             mapLayerList.add(mapLayer);

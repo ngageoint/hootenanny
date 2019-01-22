@@ -203,15 +203,30 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString className
   return "";
 }
 
-QString ApiEntityDisplayInfo::getDisplayInfoCleaningOps()
+QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString optName)
 {
-  ConfigOptions opts = ConfigOptions(conf());
-  const QStringList cleaningOps = opts.getMapCleanerTransforms();
+  LOG_TRACE("getDisplayInfoOps: " << optName);
+
+  const QString errorMsg = "Invalid config option name: " + optName;
+  if (!conf().hasKey(optName))
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  const QStringList listOpt = conf().get(optName).toStringList();
+  LOG_VART(listOpt.size());
+  if (listOpt.isEmpty())
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  const QStringList operations = listOpt[0].split(";");
+
   QString buffer;
   QTextStream ts(&buffer);
-  for (int i = 0; i < cleaningOps.size(); i++)
+  for (int i = 0; i < operations.size(); i++)
   {   
-    QString className = cleaningOps[i];
+    QString className = operations[i];
     LOG_VARD(className);
 
     // There's a lot of duplicated code in here when compared with printApiEntities.  Haven't
@@ -239,7 +254,7 @@ QString ApiEntityDisplayInfo::getDisplayInfoCleaningOps()
     if (!apiEntityInfo.get())
     {
       throw HootException(
-        "Calls to displayCleaningOps must be made with classes that implement ApiEntityInfo.");
+        "Calls to getDisplayInfoOps must return a list of classes, all that implement ApiEntityInfo.");
     }
     const bool supportsSingleStat = singleStat.get();
 
