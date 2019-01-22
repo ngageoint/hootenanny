@@ -44,6 +44,7 @@
 
 //  Hoot
 #include <hoot/core/io/OsmApiChangesetElement.h>
+#include <hoot/core/util/DefaultIdGenerator.h>
 
 namespace hoot
 {
@@ -68,6 +69,11 @@ public:
    */
   void loadChangeset(const QString& changesetPath);
   /**
+   * @brief splitLongWays
+   * @param maxWayNodes
+   */
+  void splitLongWays(long maxWayNodes = 2000);
+  /**
    * @brief updateChangeset Update the changeset with the response from the OSM API after part of the changeset is uploaded
    * @param changes - XML Changeset .OSC formatted text
    */
@@ -89,7 +95,7 @@ public:
    */
   bool isDone() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) == _processedCount + _failedCount; }
   /** Elements in a changeset can be in three sections, create, modify, and delete.  Max is used for iterating */
-  enum ChangesetType
+  enum ChangesetType : int
   {
     TypeCreate = 0,
     TypeModify,
@@ -285,6 +291,14 @@ private:
    * @param element Pointer to the element to mark
    */
   void markBuffered(XmlElement* element);
+  /**
+   * @brief getNextNode/Way/RelationId searches the Create section of the changeset to find the next available ID
+   *  for the desired element type
+   * @return next available negative node/way/relation ID
+   */
+  long getNextNodeId();
+  long getNextWayId();
+  long getNextRelationId();
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   XmlElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
@@ -309,6 +323,8 @@ private:
   long _failedCount;
   /** Buffer of elements that are about to be pushed into a subset */
   std::vector<XmlElement*> _sendBuffer;
+  /** Negative ID generator */
+  DefaultIdGenerator _idGen;
 };
 
 /** Atomic subset of IDs that are sent to the OSM API, header only class */

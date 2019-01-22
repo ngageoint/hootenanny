@@ -189,6 +189,34 @@ void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changese
   }
 }
 
+void XmlChangeset::splitLongWays(long maxWayNodes)
+{
+  //  Negative numbers means there is no max set
+  if (maxWayNodes < 0)
+    return;
+  //  Iterate all of the changeset types except delete
+  for (int type = TypeCreate; type < TypeDelete; ++type)
+  {
+    for (XmlElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
+    {
+      XmlWay* way = dynamic_cast<XmlWay*>(it->second.get());
+      while (way->getNodeCount() > maxWayNodes)
+      {
+        //  Create a copy of the way
+        XmlWayPtr newWay(new XmlWay(*way));
+        newWay->changeId(getNextWayId());
+        //  Remove maxWayNodes from the original and add them to this way
+        way->removeNodes(0, maxWayNodes - 1);
+        newWay->removeNodes(maxWayNodes);
+        //  Save the new way
+        _idMap.addId(ElementType::Way, newWay->id());
+        _ways[TypeCreate][newWay->id()] = newWay;
+        _allWays[newWay->id()] = newWay;
+      }
+    }
+  }
+}
+
 void XmlChangeset::updateChangeset(const QString &changes)
 {
   /* <diffResult generator="OpenStreetMap Server" version="0.6">
@@ -1026,6 +1054,30 @@ bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version)
     }
   }
   return success;
+}
+
+long XmlChangeset::getNextNodeId()
+{
+  long id = _idGen.createNodeId();
+  while (_allNodes.find(id) != _allNodes.end())
+    id = _idGen.createNodeId();
+  return id;
+}
+
+long XmlChangeset::getNextWayId()
+{
+  long id = _idGen.createNodeId();
+  while (_allWays.find(id) != _allWays.end())
+    id = _idGen.createNodeId();
+  return id;
+}
+
+long XmlChangeset::getNextRelationId()
+{
+  long id = _idGen.createNodeId();
+  while (_allRelations.find(id) != _allRelations.end())
+    id = _idGen.createNodeId();
+  return id;
 }
 
 }

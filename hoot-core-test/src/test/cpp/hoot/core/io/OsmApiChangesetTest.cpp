@@ -41,6 +41,7 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetJoinTest);
   CPPUNIT_TEST(runXmlChangesetUpdateTest);
   CPPUNIT_TEST(runXmlChangesetSplitTest);
+  CPPUNIT_TEST(runXmlChangesetSplitWayTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -160,6 +161,20 @@ public:
     CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalDeleteCount());
   }
 
+  void runXmlChangesetSplitWayTest()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
+    //  Split the ways to a max of 8 nodes per way
+    changeset.splitLongWays(8);
+
+    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetSplitWayExpected.osc");
+
+    ChangesetInfoPtr info(new ChangesetInfo());
+    changeset.calculateChangeset(info);
+
+    HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiChangesetTest, "quick");

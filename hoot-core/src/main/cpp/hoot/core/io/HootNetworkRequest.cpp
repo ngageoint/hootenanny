@@ -167,6 +167,9 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   if (QNetworkReply::NoError != reply->error())
   {
     _error = reply->errorString();
+    //  Remove authentication information if present
+    if (request.url() != url)
+      _error.replace(request.url().toString(), url.toString(), Qt::CaseInsensitive);
     return false;
   }
 

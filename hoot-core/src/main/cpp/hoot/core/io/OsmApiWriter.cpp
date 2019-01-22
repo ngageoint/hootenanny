@@ -28,6 +28,7 @@
 #include "OsmApiWriter.h"
 
 //  Hootenanny
+#include <hoot/core/algorithms/splitter/LargeWaySplitter.h>
 #include <hoot/core/info/VersionDefines.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
@@ -104,6 +105,8 @@ bool OsmApiWriter::apply()
     _changeset.loadChangeset(_changesets[i]);
     _stats.append(SingleStat(QString("Changeset (%1) Time (sec)").arg(_changesets[i]), timer.getElapsedAndRestart()));
   }
+  //  Split any ways that need splitting
+  _changeset.splitLongWays(_capabilities.getWayNodes());
   //  Start the writer threads
   LOG_INFO("Starting " << _maxWriters << " processing threads.");
   for (int i = 0; i < _maxWriters; ++i)

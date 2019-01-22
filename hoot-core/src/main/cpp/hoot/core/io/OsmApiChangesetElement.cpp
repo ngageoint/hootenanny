@@ -43,6 +43,17 @@ XmlElement::XmlElement(const XmlObject& object, ElementIdToIdMap* idMap)
 {
 }
 
+XmlElement::XmlElement(const XmlElement& element)
+  : _type(element._type),
+    _id(element._id),
+    _version(element._version),
+    _object(element._object),
+    _tags(element._tags),
+    _idMap(element._idMap),
+    _status(element._status)
+{
+}
+
 void XmlElement::addTag(const XmlObject& tag)
 {
   //  Make sure that the object is in fact a tag before adding it
@@ -60,6 +71,8 @@ QString XmlElement::toString(const QXmlStreamAttributes& attributes, long change
   {
     const QXmlStreamAttribute& attribute = attributes.at(i);
     QStringRef name = attribute.name();
+    if (name == "action")
+      continue;
     ts << name.toString() << "=\"";
     //  Some attributes need to be overridden
     if (name == "changeset")    //  Changeset ID is provided by the OSM API
@@ -106,6 +119,11 @@ XmlNode::XmlNode(const XmlObject& node, ElementIdToIdMap* idMap)
   _type = ElementType::Node;
 }
 
+XmlNode::XmlNode(const XmlNode &node)
+  : XmlElement(node)
+{
+}
+
 QString XmlNode::toString(long changesetId) const
 {
   QString buffer;
@@ -131,6 +149,21 @@ XmlWay::XmlWay(const XmlObject& way, ElementIdToIdMap* idMap)
   _type = ElementType::Way;
 }
 
+XmlWay::XmlWay(const XmlWay &way)
+  : XmlElement(way),
+    _nodes(way._nodes)
+{
+}
+
+void XmlWay::removeNodes(int position, int count)
+{
+  if (position < 0 || count == 0 || _nodes.size() < 1)
+    return;
+  if (count < 0 || count >= _nodes.size())
+    count = _nodes.size() - position;
+  _nodes.remove(position, count);
+}
+
 QString XmlWay::toString(long changesetId) const
 {
   QString buffer;
@@ -153,6 +186,12 @@ XmlRelation::XmlRelation(const XmlObject& relation, ElementIdToIdMap* idMap)
 {
   //  Override the type
   _type = ElementType::Relation;
+}
+
+XmlRelation::XmlRelation(const XmlRelation &relation)
+  : XmlElement(relation),
+    _members(relation._members)
+{
 }
 
 QString XmlRelation::toString(long changesetId) const
