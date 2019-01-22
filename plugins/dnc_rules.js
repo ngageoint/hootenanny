@@ -92,20 +92,32 @@ dnc.rules = {
         'BER':'berth_identifier', // Berth Identifier
         'BRR':'seamark:bearing:category', // Bearing and Reciprocal Category
         'COL':'seamark:light:character', // Character of Light
+        'COMP_DATE':'source:datetime', // DQ First Edition Date
         'DAN':'navigationaid:description', // Description of Aids to Navigation
         'DAT':'report:date', // Date
+        'DATUM':'source:chart:datum', // DQ Chart Datum
         'DRP':'reference_point:description', // Description of Reference Point
+        'EDITION':'source:chart:edition', // DQ Chart Edition Number
+        'LINEAGE':'source:chart:lineage', // DQ Linage
         'LSA':'seamark:light:sector:angle', // Light Sector Angle
         'MCA':'morse_code_attribute', // Morse Code Attribute
         'MLR':'seamark:light:ranges', // Multiple Light Ranges
         'NAM':'name', // Geographic Name Information : Full Name
+        'NAME':'source:chart:name', // DQ Chart Name
         'NM3':'name:three', // Name 3
         'NM4':'name:four', // Name 4
+        'OSM_UUID':'uuid', // NOTE: This is not in the DNC spec but is in our OSM data 
+        'PRINT_DATE':'source:chart:print_date', // DQ Chart Print date
+        'SCALE':'source:scale', // DQ Chart Scale
+        'SOURCE_ID':'source:chart:identifier', // DQ Chart Identifier
+        'SOURCE_INFO':'source:description', // DQ Source Information
         'TXT':'note' // Text
      }, // End txtBiased
 
     // One2one ruled for Number fields
     numBiased : {
+        'ABS_HORIZ_ACC':'source:accuracy:horizontal', // Absolute Horizontal Accuracy
+        'ABS_VERT_ACC':'source:accuracy:vertical', // Absolute Vertical Accuracy
         'BR2':'seamark:radio_station:frequency:2', // Broadcast Frequency 2
         'BRF':'seamark:radio_station:frequency', // Broadcast Frequency
         'BRG':'bearing:to_object', // Bearing of Object
@@ -156,6 +168,7 @@ dnc.rules = {
         'OR2':'seamark:radio_station:range:2', // Operating Range Category (2)
         'ORC':'seamark:radio_station:range', // Operating Range Category
         'PER':'seamark:light:period', // Period of Light
+        'REF_LAT':'source:chart:reference_latitude', // DQ Chart Reference Latitude
         'SHC':'safe_clearance:horizontal', // Safe Horizontal Clearance
         'TIM':'activity_duration', // Time Attribute
         'VAL':'value', // Value - a generic value
@@ -1280,39 +1293,276 @@ dnc.rules = {
 
     ], // ##### End of One2One Rules #####
 
+    // ##### Start of intList #####
+    // intList - The list of fields that have to be integer
+    intList : [
+    'ABS_HORIZ_ACC', 'ABS_VERT_ACC', 'BR2', 'BRF', 'D80', 'D80', 'D81', 'D82', 'D83', 'D84', 'D85', 'D86', 'D87',
+    'D88', 'D89', 'D90', 'D91', 'DAT', 'DF1', 'DF2', 'DF3', 'DF4', 'DOF', 'EOL', 'HGT', 'LOR', 'LVN', 'OR2',
+    'ORC', 'SCALE', 'SOURCE_ID', 'TIM', 'VAL', 'VAV', 'WID', 'WID', 'ZV2'
+    ],
+
+    // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    // NOTE: DAN,TXT and NAM have been made wider which is not exactly to spec
+    txtLength : {
+    'BER':25, 'BRR':11, 'COL':10, 'DATUM':40, 'DRP':30, 'LINAGE':100, 'LSA':11, 'MCA':5, 'MLR':10, 'NAME':40,
+    'NM3':30, 'NM4':30, 'PRINT_DATE':20, 'SOURCE_INFO':100
+    },
+    // ##### End of txtLength #####
+
+// lib_name String (40.0)
+// lib_number String (8.0)
+// lib_type String (1.0)
+
+// ntm_date String (20.0)
+// ntm String (5.0)
+
+// text String (0.0)
+// tile_name String (8.0)
+
+// dan String (255.0)
+// txt String (255.0)
+
+
+
+
+
+
+    // ##### End of intList #####
+
+    // Lookup tables for linking an F_CODE to a Layer Name
     layerList : {
-        'AL015':'BUILDINGA',
-        'AC000':'INDUSTA',
-        'AH050':'INDUSTA',
-        'AK160':'INDUSTA',
-        'AM040':'INDUSTA',
-        'AM070':'INDUSTA',
-        'AA010':'LANDMRKA',
-        'AB000':'LANDMRKA',
-        'AB010':'LANDMRKA',
-        'AC030':'LANDMRKA',
-        'AD010':'LANDMRKA',
-        'AD030':'LANDMRKA',
-        'AH010':'LANDMRKA',
-        'AL005':'LANDMRKA',
-        'AL020':'LANDMRKA',
-        'AL030':'LANDMRKA',
-        'AM010':'LANDMRKA',
-        'AM030':'LANDMRKA',
-        'AQ116':'LANDMRKA',
-        'AT020':'LANDMRKA',
-        'AK040':'PARKA',
-        'AK090':'PARKA',
-        'AK100':'PARKA',
-        'AK120':'PARKA',
-        'AK180':'PARKA',
-        'AL070':'FENCEL',
-        'AL260':'FENCEL',
-        'AK020':'PARKL',
-        'AK130':'PARKL',
-        'AQ010':'POWERL',
-        'AT030':'POWERL',
-        'AT060':'POWERL',
-        'AN010':'RAILRDL',
+        'AA010A':'LANDMRKA',
+        'AA010P':'LANDMRKP', // Mine /Quarry
+        'AB000A':'LANDMRKA',
+        'AB010A':'LANDMRKA',
+        'AC000A':'INDUSTA',
+        'AC030A':'LANDMRKA',
+        'AD010A':'LANDMRKA',
+        'AD030A':'LANDMRKA',
+        'AD030P':'LANDMRKP', // Substation/Transformer Yard
+        'AF010P':'INDUSTP', // Chimney/Smokestack
+        'AF030P':'LANDMRKP', // Cooling Tower
+        'AF040P':'INDUSTP', // Crane
+        'AF070P':'INDUSTP', // Flare Pipe
+        'AH010A':'LANDMRKA',
+        'AH010P':'LANDMRKP', // Bastion /Rampart/Fortification
+        'AH050A':'INDUSTA',
+        'AH050P':'INDUSTP', // Fortification
+        'AJ050P':'INDUSTP', // Windmill
+        'AK020L':'PARKL',
+        'AK020P':'INDUSTP', // Amusement Park Attraction
+        'AK040A':'PARKA',
+        'AK080P':'LANDMRKP', // Drive-In Theater Screen
+        'AK090A':'PARKA',
+        'AK100A':'PARKA',
+        'AK120A':'PARKA',
+        'AK130L':'PARKL',
+        'AK160A':'INDUSTA',
+        'AK160P':'LANDMRKP', // Stadium /Amphitheater
+        'AK180A':'PARKA',
+        'AL005A':'LANDMRKA',
+        'AL015A':'BUILDNGA',
+        'AL015P':'BUILDNGP',
+        'AL018P':'BUILDNGP',
+        'AL020A':'LANDMRKA',
+        'AL020P':'BUILTUPP',
+        'AL020P':'COAPOINT',
+        'AL025P':'LANDMRKP', // Cairn
+        'AL030A':'LANDMRKA',
+        'AL050P':'MARKERP',
+        'AL070L':'FENCEL',
+        'AL073P':'LANDMRKP', // Flagstaff/Flagpole
+        'AL130P':'INDUSTP', // Monument
+        'AL200A':'RUINSA',
+        'AL200P':'RUINSP',
+        'AL240P':'INDUSTP', // Tower (Non-communication)
+        'AL260L':'FENCEL',
+        'AM010A':'LANDMRKA',
+        'AM020P':'LANDMRKP', // Grain Bin /Silo
+        'AM030A':'LANDMRKA',
+        'AM030P':'LANDMRKP', // Grain Elevator
+        'AM040A':'INDUSTA',
+        'AM070A':'INDUSTA',
+        'AM070P':'INDUSTP', // Tank
+        'AM080P':'LANDMRKP', // Water Tower
+        'AN010L':'RAILRDL',
+        'AP020L':'TRANSL',
+        'AP030L':'TRANSL',
+        'AQ010L':'POWERL',
+        'AQ020P':'POWERP',
+        'AQ040A':'BRIDGEA',
+        'AQ040L':'BRIDGEL',
+        'AQ045A':'BRIDGSPA',
+        'AQ045L':'BRIDGSPL',
+        'AQ060P':'INDUSTP', // Control Tower
+        'AQ070L':'FERRYL',
+        'AQ080P':'INDUSTP', // Ferry Site
+        'AQ110P':'LANDMRKP', // Mooring Mast
+        'AQ113L':'PIPELINL',
+        'AQ116A':'LANDMRKA',
+        'AQ116P':'LANDMRKP', // Pumping Station
+        'AQ130L':'TUNNELL',
+        'AT005L':'HAZARDL',
+        'AT010P':'LANDMRKP', // Disk/Dish
+        'AT020A':'LANDMRKA',
+        'AT030L':'POWERL',
+        'AT040P':'POWERP',
+        'AT045P':'INDUSTP', // Radar Transmitter
+        'AT050P':'COMMP',
+        'AT060L':'POWERL',
+        'AT080P':'COMMP',
+        'BA010L':'COALINE',
+        'BA010L':'COASTL',
+        'BA020A':'FORESHOA',
+        'BA020P':'FORESHOP',
+        'BA030A':'ECRAREA',
+        'BA030P':'ISLANDP',
+        'BA040A':'COAAREA',
+        'BA040A':'ECRAREA',
+        'BB010A':'LIMBNDYA',
+        'BB010L':'LIMBNDYL',
+        'BB010P':'LIMBNDYP',
+        'BB020P':'BERTHP',
+        'BB030P':'MOORINGP',
+        'BB040A':'STRUCTRA',
+        'BB040L':'STRUCTRL',
+        'BB050P':'CALLINP',
+        'BB080P':'MOORINGP',
+        'BB090A':'PIERA',
+        'BB100L':'HAZARDL',
+        'BB105P':'OBSTRUCTP',
+        'BB110A':'OBSTRUCTA',
+        'BB115A':'STRUCTRA',
+        'BB140A':'STRUCTRA',
+        'BB140L':'STRUCTRL',
+        'BB150A':'LANDINGA',
+        'BB150P':'LANDINGP',
+        'BB160P':'MOORINGP',
+        'BB170A':'LOADINGA',
+        'BB170L':'TUNNELL',
+        'BB170P':'LOADINGP',
+        'BB180A':'OBSTRUCTA',
+        'BB180P':'OBSTRUCTP',
+        'BB190A':'PIERA',
+        'BB190L':'PIERL',
+        'BB220A':'STRUCTRA',
+        'BB220L':'STRUCTRL',
+        'BB230L':'SEAWALLL',
+        'BB240L':'PIERL',
+        'BC010P':'BOUYBCNP',
+        'BC020P':'BOUYBCNP',
+        'BC040L':'LIGHTSL',
+        'BC040P':'LIGHTSP',
+        'BC055P':'MARKERP',
+        'BC060A':'SECTORA',
+        'BC070P':'BOUYBCNP',
+        'BC080A':'OBSTRUCTA',
+        'BC080P':'OBSTRUCTP',
+        'BC100L':'LEADINGL',
+        'BD000A':'HAZARDA',
+        'BD000P':'HAZARDP',
+        'BD010A':'OBSTRUCTA',
+        'BD010L':'HAZARDL',
+        'BD010P':'DANGERP',
+        'BD020A':'HAZARDA',
+        'BD020P':'HAZARDP',
+        'BD030A':'DANGERA',
+        'BD030P':'DANGERP',
+        'BD040A':'OBSTRUCTA',
+        'BD040P':'OBSTRUCTP',
+        'BD050A':'DANGERA',
+        'BD050P':'DANGERP',
+        'BD060A':'OBSTRUCTA',
+        'BD060P':'OBSTRUCTP',
+        'BD080A':'OBSTRUCTA',
+        'BD080P':'OBSTRUCTP',
+        'BD100A':'DANGERA',
+        'BD100P':'DANGERP',
+        'BD110P':'LOADINGP',
+        'BD120A':'REEFA',
+        'BD130P':'HAZARDP',
+        'BD140A':'DANGERA',
+        'BD140P':'DANGERP',
+        'BD180A':'HAZARDA',
+        'BD180P':'HAZARDP',
+        'BE010A':'HYDAREA',
+        'BE010L':'HYDLINE',
+        'BE020P':'SOUNDP',
+        'BF010P':'BOTCHARP',
+        'BG010P':'CURRFLP',
+        'BG020P':'TIDEP',
+        'BG030P':'TIDEP',
+        'BG040P':'CURRDIAP',
+        'BH010L':'AQUEDCTL',
+        'BH020A':'CANALA',
+        'BH020L':'CANALL',
+        'BH050A':'FISHHATA',
+        'BH080A':'LAKEA',
+        'BH090A':'MISCIWYA',
+        'BH095A':'EMBANKA',
+        'BH120L':'BARRIERL',
+        'BH130A':'LAKEA',
+        'BH140A':'RIVERA',
+        'BH140L':'RIVERL',
+        'BH155A':'MISCIWYA',
+        'BH180L':'BARRIERL',
+        'BH210L':'RIVERL',
+        'BI020L':'DAML',
+        'BI030A':'MISCIWYA',
+        'BI040L':'BARRIERL',
+        'BJ030A':'SNOWICEA',
+        'BJ060P':'SNOWICEP',
+        'BJ065A':'SNOWICEA',
+        'BJ100A':'SNOWICEA',
+        'BJ110A':'SNOWICEA',
+        'CA010L':'RELLINE',
+        'CA030P':'RELPOINT',
+        'DA010A':'ECAREA',
+        'DB090A':'EMBANKA',
+        'DB090L':'LCRLINE',
+        'DB170A':'EMBANKA',
+        'DB180A':'VOLCANOA',
+        'EA030A':'ORCHARDA',
+        'EA040A':'ORCHARDA',
+        'EA050A':'ORCHARDA',
+        'EC030A':'TREEA',
+        'EC030P':'TREEP',
+        'FA000L':'ADMINL',
+        'FA000L':'COALINE',
+        'FA020L':'BOUNDRYL',
+        'FA040L':'BOUNDRYL',
+        'FA060L':'BOUNDRYL',
+        'FA110L':'BOUNDRYL',
+        'FC021A':'LIMBNDYA',
+        'FC021L':'LIMBNDYL',
+        'FC021P':'LIMBNDYP',
+        'FC031A':'MARITIMA',
+        'FC031L':'MARITIML',
+        'FC031P':'MARITIMP',
+        'FC036A':'LIMBNDYA',
+        'FC036L':'LIMBNDYL',
+        'FC036P':'LIMBNDYP',
+        'FC041A':'SEPARTNA',
+        'FC041L':'SEPARTNL',
+        'FC041P':'SEPARTNP',
+        'FC100L':'DISTL',
+        'FC130L':'DISTL',
+        'FC165A':'ROUTEA',
+        'FC165L':'ROUTEL',
+        'FC165P':'ROUTEP',
+        'FC170A':'SEPARTNA',
+        'FC170L':'SEPARTNL',
+        'FC177A':'SWEPTA',
+        'FC177L':'SWEPTL',
+        'GA020P':'AEROP',
+        'GA035P':'AEROP',
+        'GB005P':'AEROP',
+        'GB010P':'AEROP',
+        'GB055L':'TRANSL',
+        'GB070A':'SEPARTNA',
+        'GB070L':'SEPARTNL',
+        'ZC040A':'ENVAREA',
+        'ZD040P':'ECRTEXT', // NOTE: This is a TEXT table
     } // End layerList
 } // End of dnc.rules

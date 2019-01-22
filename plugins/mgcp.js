@@ -1144,8 +1144,6 @@ mgcp = {
                 tags.use = 'residential';
                 tags.landuse = 'built_up_area';
                 break;
-
-
         } // End switch landuse
 
 

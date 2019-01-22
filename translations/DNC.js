@@ -22,26 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018,2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //
-// Convert DNC to OSM+
+// Convert DNC to/from OSM+
 //
 
 hoot.require('dnc');
 hoot.require('dnc_rules');
+hoot.require('dnc_schema');
 hoot.require('config');
 hoot.require('translate');
 hoot.require('fcode_common');
 
+function initialize()
+{
+    // Set the schema type for the export
+    hoot.Settings.set({"osm.map.writer.schema":"DNC"});
+    hoot.Settings.set({"ogr.esri.fdname":""});
+}
 
 // Layer name filter - Filter out all layers that match this regexp
-// function layerNameFilter()
-// {
-//     // Drop all of the "SRC_*" and "o2s_*" layers
-//     return "^(?!SRC_|o2s_)";
-// }
+function layerNameFilter()
+{
+    // Drop all of the tileref and libref layers
+    return "^(?!tileref_|libref_)";
+}
+
+// Create the output Schema
+function getDbSchema()
+{
+    return dnc.getDbSchema();
+}
 
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
@@ -52,3 +65,10 @@ function translateToOsm(attrs, layerName, geometryType)
 
 } // End of Translate Attributes
 
+// EXPORT
+// translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
+function translateToOgr(tags, elementType, geometryType)
+{
+    return dnc.toOgr(tags, elementType, geometryType)
+
+} // End of translateToOgr
