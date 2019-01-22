@@ -1,0 +1,1 @@
+All files in this folder were moved here from hoot-core, as they were only needed for Average Conflation (now disabled) and Hadoop processing.  To use these files as part of hoot-hadoop, namespace refactoring must first be done.

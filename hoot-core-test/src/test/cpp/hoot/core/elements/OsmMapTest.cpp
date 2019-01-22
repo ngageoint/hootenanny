@@ -34,7 +34,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/index/KnnWayIterator.h>
