@@ -1,8 +1,0 @@
-
-
-== Legacy Linear Conflation
-
-NOTE: Complete me.
-
-This refers to the conflation implemented circa 2012 in the initial software design. See
-+conflate.enable.old.roads+ configuration option for usage details.

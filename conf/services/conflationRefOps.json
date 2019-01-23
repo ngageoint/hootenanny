@@ -5,32 +5,6 @@
 	"name": "Reference Conflation Options",
 	"required":"true",
 	"members": [
-      {
-        "id": "reference_override_conflate_enable_old_roads",
-        "elem_type": "bool",
-		"override":{
-					"elem_type":"bool"
-				},
-        "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command. By default the `--conflate` command will first conflate roads using the circa 2012 conflation algorithm and then conflate using the newer (circa 2014) unifying algorithm. If the unifying algorithm has road conflation enable then the results could get interesting.",
-        "name": "Conflate Enable Old Roads",
-        "defaultvalue": "false",
-        "hoot_key": "conflate.enable.old.roads",
-				"required":"true",
-        "members": [
-          {
-            "isDefault": "false",
-            "description": "Enable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
-            "name": "true",
-            "hoot_val": "true"
-          },
-          {
-            "isDefault": "true",
-            "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
-            "name": "false",
-            "hoot_val": "false"
-          }
-        ]
-      },
       
       {
         "id": "reference_override_conflate_match_highway_classifier",

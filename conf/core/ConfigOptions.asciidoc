@@ -389,18 +389,6 @@ populated.
 
 Path to this file.  Only modified during testing the Hootenanny options command.
 
-=== conflate.enable.old.roads
-
-* Data Type: bool
-* Default Value: `false`
-
-Enable the old road conflation. This is only necessary when using the `conflate` command. See the
-_Command Line Reference_ for details on the `conflate` command.
-
-By default the `conflate` command will first conflate roads using the circa 2012 conflation
-algorithm and then conflate using the newer (circa 2014) unifying algorithm. If the unifying
-algorithm has road conflation enable then the results could get interesting.
-
 === conflate.match.building.model
 
 * Data Type: string
