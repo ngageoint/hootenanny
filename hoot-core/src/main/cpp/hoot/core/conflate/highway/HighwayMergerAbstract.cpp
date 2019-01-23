@@ -93,9 +93,6 @@ void HighwayMergerAbstract::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1
 bool HighwayMergerAbstract::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   vector<pair<ElementId, ElementId>>& /*replaced*/)
 {
-  LOG_VART(eid1);
-  LOG_VART(eid2);
-
   OsmMapPtr result = map;
 
   ElementPtr e1 = result->getElement(eid1);

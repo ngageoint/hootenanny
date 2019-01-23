@@ -89,6 +89,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   // extract all the sublines into ways.
   for (size_t i = 0; i < string.getSublines().size(); i++)
   {
+    LOG_VART(string.getSublines()[i]);
     WayPtr w = string.getSublines()[i].toWay(map, nf);
     if (reverse[i])
     {
@@ -97,6 +98,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     if (ElementConverter(map).calculateLength(w) > 0)
     {
       matches.push_back(w);
+      LOG_TRACE("Adding " << w->getElementId() << " to map...");
       map->addElement(w);
     }
   }
@@ -121,6 +123,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     map->addElement(r);
   }
 
+  LOG_VART(result);
   return result;
 }
 

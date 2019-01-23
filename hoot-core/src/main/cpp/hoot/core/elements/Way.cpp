@@ -363,9 +363,9 @@ long Way::getPid(const ConstWayPtr& p, const ConstWayPtr& c)
 
 long Way::getPid(long p, long c)
 {
-  if (p != WayData::PID_EMPTY)      return p;
-  else if(c != WayData::PID_EMPTY)  return c;
-  else                              return WayData::PID_EMPTY;
+  if (p != WayData::PID_EMPTY)       { LOG_TRACE("Returning parent parent id..."); return p; }
+  else if (c != WayData::PID_EMPTY)  { LOG_TRACE("Returning child parent id..."); return c; }
+  else                               { LOG_TRACE("Returning empty parent id..."); return WayData::PID_EMPTY; }
 }
 
 }

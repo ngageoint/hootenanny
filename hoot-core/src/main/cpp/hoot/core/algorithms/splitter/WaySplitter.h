@@ -97,6 +97,7 @@ public:
     WayLocation& splitPoint);
 
 private:
+
   OsmMapPtr _map;
   WayPtr _a;
   boost::shared_ptr<FindNodesInWayFactory> _nf;

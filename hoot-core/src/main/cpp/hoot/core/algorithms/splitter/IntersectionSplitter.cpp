@@ -229,7 +229,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     {
       // split the way and remove it from the map
       WayLocation wl(_map, way, firstIndex, 0.0);
-      vector< boost::shared_ptr<Way> > splits = WaySplitter::split(_map, way, wl);
+      vector<boost::shared_ptr<Way>> splits = WaySplitter::split(_map, way, wl);
 
       // if a split occurred.
       if (splits.size() > 1)

@@ -102,7 +102,9 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   vector<ConstWayPtr> ways1 = ExtractWaysVisitor::extractWays(map, e1);
   vector<ConstWayPtr> ways2 = ExtractWaysVisitor::extractWays(map, e2);
   LOG_VART(ways1.size());
+  LOG_VART(ways1);
   LOG_VART(ways2.size());
+  LOG_VART(ways2);
 
   if ((ways1.size() > 4 && ways2.size() > 4) || (ways1.size() + ways2.size() > 7))
   {

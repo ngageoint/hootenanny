@@ -72,6 +72,8 @@ void WayJoiner::join()
 
 void WayJoiner::resetParents()
 {
+  LOG_TRACE("Resetting parents...");
+
   if (_leavePid)
     return;
   WayMap ways = _map->getWays();
@@ -80,7 +82,10 @@ void WayJoiner::resetParents()
   {
     WayPtr way = it->second;
     if (way->hasPid())
+    {
+      LOG_VART(way->getElementId());
       way->resetPid();
+    }
   }
 }
 
@@ -104,8 +109,21 @@ void WayJoiner::joinParentChild()
   for (vector<long>::const_iterator it = ids.begin(); it != ids.end(); ++it)
   {
     WayPtr way = ways[*it];
+    if (way)
+    {
+      LOG_VART(way->getElementId());
+    }
     long parent_id = way->getPid();
+    LOG_VART(parent_id);
     WayPtr parent = ways[parent_id];
+    if (parent)
+    {
+      LOG_VART(parent->getElementId());
+    }
+    else
+    {
+      LOG_TRACE("Parent with ID: " << parent_id << " does not exist.");
+    }
     //  Join this way to the parent
     joinWays(parent, way);
   }
@@ -154,20 +172,34 @@ void WayJoiner::joinAtNode()
   //  Iterate all of the nodes and check for compatible ways to join them to
   for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
   {
+    LOG_VART(*it);
     WayPtr way = ways[*it];
+    LOG_VART(way->getElementId());
     Tags pTags = way->getTags();
     //  Check each of the endpoints for ways to merge
     vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
+    LOG_VART(endpoints);
     for (vector<long>::const_iterator e = endpoints.begin(); e != endpoints.end(); ++e)
     {
       //  Find all ways connected to this node
       const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
+      LOG_VART(way_ids);
       for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
       {
         WayPtr child = _map->getWay(*ways);
+        if (child)
+        {
+          LOG_VART(child->getElementId());
+        }
+        else
+        {
+          LOG_TRACE("Child for way with ID: " << way->getId() << " not found.");
+        }
         if (child && way->getId() != child->getId() && areJoinable(way, child))
         {
           Tags cTags = child->getTags();
+          LOG_VART(pTags);
+          LOG_VART(cTags);
           //  Check for equivalent tags
           if (pTags == cTags || pTags.dataOnlyEqual(cTags))
           {
@@ -195,6 +227,7 @@ bool WayJoiner::areJoinable(const WayPtr& w1, const WayPtr& w2)
 void WayJoiner::rejoinSiblings(deque<long>& way_ids)
 {
   LOG_TRACE("Rejoining siblings...");
+  LOG_VART(way_ids);
 
   WayMap ways = _map->getWays();
   WayPtr start;
@@ -208,7 +241,15 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
     way_ids.pop_front();
     WayPtr way = ways[id];
     if (!way)
+    {
+      LOG_TRACE("Way with ID: " << id << " does not exist.");
       continue;
+    }
+    else
+    {
+      LOG_VART(way->getElementId());
+    }
+
     if (sorted.empty())
     {
       //  The first time through the loop, just use that way as the base
@@ -218,6 +259,14 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
     }
     else
     {
+      LOG_VART(way->getElementId());
+      LOG_VART(start->getElementId());
+      LOG_VART(end->getElementId());
+      LOG_VART(way->getFirstNodeId());
+      LOG_VART(way->getLastNodeId());
+      LOG_VART(start->getFirstNodeId());
+      LOG_VART(end->getLastNodeId());
+
       OneWayCriterion oneWayCrit;
 
       //  Check if the road is contiguous with the sorted roads
@@ -256,6 +305,7 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
         else
         {
           //  Requeue the way and up the failure count
+          LOG_TRACE("Way with ID: " << id << " cannot be rejoined (1).");
           way_ids.push_back(id);
           failure_count++;
         }
@@ -263,17 +313,34 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
       else
       {
         //  Requeue the way and up the failure count
+        LOG_TRACE("Way with ID: " << id << " cannot be rejoined (2).");
         way_ids.push_back(id);
         failure_count++;
       }
     }
   }
+  LOG_VART(sorted);
   //  Iterate the sorted ways and merge them
   if (sorted.size() > 1)
   {
     WayPtr parent = ways[sorted[0]];
+    if (parent)
+    {
+      LOG_VART(parent->getElementId());
+    }
     for (size_t i = 1; i < sorted.size(); ++i)
+    {
+      if (ways[sorted[i]])
+      {
+        LOG_VART((ways[sorted[i]]->getElementId()));
+      }
+      else
+      {
+        LOG_TRACE("No child exists for ID: " << sorted[i]);
+      }
       joinWays(parent, ways[sorted[i]]);
+    }
+
     //  Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here
     parent->resetPid();
   }
