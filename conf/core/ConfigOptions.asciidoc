@@ -389,18 +389,6 @@ populated.
 
 Path to this file.  Only modified during testing the Hootenanny options command.
 
-=== conflate.enable.old.roads
-
-* Data Type: bool
-* Default Value: `false`
-
-Enable the old road conflation. This is only necessary when using the `conflate` command. See the
-_Command Line Reference_ for details on the `conflate` command.
-
-By default the `conflate` command will first conflate roads using the circa 2012 conflation
-algorithm and then conflate using the newer (circa 2014) unifying algorithm. If the unifying
-algorithm has road conflation enable then the results could get interesting.
-
 === conflate.match.building.model
 
 * Data Type: string
@@ -1645,8 +1633,16 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 [[match.creators]]
 === match.creators
 
-* Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js;hoot::ScriptMatchCreator,Railway.js;hoot::ScriptMatchCreator,PowerLine.js`
+* Data Type: list
+* Default Value:
+** `hoot::BuildingMatchCreator`
+** `hoot::ScriptMatchCreator,PoiGeneric.js`
+** `hoot::HighwayMatchCreator`
+** `hoot::ScriptMatchCreator,LinearWaterway.js`
+** `hoot::PoiPolygonMatchCreator`
+** `hoot::ScriptMatchCreator,Area.js`
+** `hoot::ScriptMatchCreator,Railway.js`
+** `hoot::ScriptMatchCreator,PowerLine.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
@@ -1709,8 +1705,16 @@ are identical. Units in meters and defaults to 1.0m.
 [[merger.creators]]
 === merger.creators
 
-* Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwayMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator;hoot::ScriptMergerCreator;hoot::ScriptMergerCreator`
+* Data Type: list
+* Default Value:
+** `hoot::BuildingMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::HighwayMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::PoiPolygonMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.

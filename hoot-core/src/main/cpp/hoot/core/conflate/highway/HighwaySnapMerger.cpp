@@ -378,6 +378,12 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
 
+  LOG_VART(e2Match->getElementId());
+  if (scraps2)
+  {
+    LOG_VART(scraps2->getElementId());
+  }
+
   // if there is something left to review against
   if (scraps2)
   {

@@ -121,3 +121,15 @@ echo "Listing subline string matchers..."
 echo ""
 hoot info --subline-string-matchers | grep "MaximalSublineStringMatcher"
 echo ""
+
+# CONFLATE PRE OPS
+echo "Listing pre-conflation operations..."
+echo ""
+hoot info --conflate-pre-operations | grep "MapCleaner"
+echo ""
+
+# CONFLATE POST OPS
+echo "Listing post-conflation operations..."
+echo ""
+hoot info --conflate-post-operations | grep "SuperfluousNodeRemover"
+echo ""

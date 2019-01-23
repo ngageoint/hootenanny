@@ -212,7 +212,7 @@ could be matched, but results in a _miss_ or _review_ classification.
 
 === Road Merging Logic
 
-The legacy road conflation routine supported road averaging by default. The
+The legacy road conflation routine (no longer available) supported road averaging by default. The
 newer unifying road conflation routine only supports snapping roads together. In
 this case it means snapping the roads from the second input to the first input.
 Besides breaking roads where necessary, the first input will not be moved.

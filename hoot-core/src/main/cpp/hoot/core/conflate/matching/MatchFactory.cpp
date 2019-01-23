@@ -167,16 +167,16 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
 
 void MatchFactory::_tempFixDefaults()
 {
-  QStringList matchCreators = ConfigOptions().getMatchCreators().split(";");
-  QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
+  QStringList matchCreators = ConfigOptions().getMatchCreators();
+  QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VARD(matchCreators);
   LOG_VARD(mergerCreators);
 
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0) &&
-      !ConfigOptions().getConflateEnableOldRoads())
+  if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
   {
-    throw HootException(
-      "Empty match/merger creators only allowed when conflate.enable.old.roads is enabled.");
+    LOG_WARN("Match or merger creators empty.  Setting to defaults.");
+    matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
+    mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
   }
 
   //fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972
@@ -285,20 +285,10 @@ MatchFactory& MatchFactory::getInstance()
     MatchFactory::_tempFixDefaults();
   }
 
-  const QStringList matchCreators = ConfigOptions().getMatchCreators().split(";");
-  const QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
+  const QStringList matchCreators = ConfigOptions().getMatchCreators();
+  const QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VARD(matchCreators);
   LOG_VARD(mergerCreators);
-
-  //ConflateAverageTest is configured with old roads and specifies empty strings for both matchers
-  //and mergers.  I don't completely understand why it explicitly needs to specify an empty config
-  //strings for those, though.  The old roads option will be removed in #2133.
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0) &&
-      !ConfigOptions().getConflateEnableOldRoads())
-  {
-    throw HootException(
-      "Empty match/merger creators only allowed when conflate.enable.old.roads is enabled.");
-  }
 
   if (matchCreators.size() != mergerCreators.size())
   {

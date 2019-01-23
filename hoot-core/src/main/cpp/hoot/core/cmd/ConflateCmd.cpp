@@ -31,7 +31,6 @@
 #include <geos/geom/GeometryFactory.h>
 
 // Hoot
-#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
@@ -270,23 +269,10 @@ int ConflateCmd::runSimple(QStringList args)
   }
   else
   {
-    if (ConfigOptions().getConflateEnableOldRoads())
-    {
-      // call the old road conflation routine
-      Conflator conflator;
-      conflator.loadSource(map);
-      conflator.conflate();
-      result.reset(new OsmMap(conflator.getBestMap()));
-      stats.append(SingleStat("Old Road Conflation Time (sec)", t.getElapsedAndRestart()));
-    }
-
-    {
-      // call new conflation routine
-      UnifyingConflator conflator;
-      conflator.apply(result);
-      stats.append(conflator.getStats());
-      stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
-    }
+    UnifyingConflator conflator;
+    conflator.apply(result);
+    stats.append(conflator.getStats());
+    stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
   }
 
   // Apply any user specified operations.

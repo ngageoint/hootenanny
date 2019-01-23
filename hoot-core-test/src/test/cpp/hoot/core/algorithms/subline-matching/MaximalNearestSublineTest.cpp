@@ -33,7 +33,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/WayAverager.h>
-#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/elements/ElementConverter.h>
