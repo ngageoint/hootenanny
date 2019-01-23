@@ -22,26 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmXmlReader.h"
 
 // Hoot
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 // Qt
 #include <QBuffer>
@@ -61,16 +61,14 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
-//This should be using the config option, but with the change a couple of the tests have suspect
-//results, so the change needs further investigation.
-_circularError(-1/*ConfigOptions().getCircularErrorDefaultValue()*/),
+_circularError(ElementData::CIRCULAR_ERROR_EMPTY),
 _keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
 _useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
 _preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
-_addChildRefsWhenMissing(false)
+_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderXmlAddChildRefsWhenMissing())
 {
 }
 
@@ -708,7 +706,7 @@ boost::shared_ptr<OGRSpatialReference> OsmXmlReader::getProjection() const
 {
   if (!_wgs84)
   {
-    _wgs84 = MapProjector::getInstance().createWgs84Projection();
+    _wgs84 = MapProjector::createWgs84Projection();
   }
   return _wgs84;
 }

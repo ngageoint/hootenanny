@@ -50,7 +50,7 @@ public:
 
   virtual QString toString() const { return "RmseAggregator"; }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Aggregates data based on the Root Mean Square Deviation value"; }
 };
 

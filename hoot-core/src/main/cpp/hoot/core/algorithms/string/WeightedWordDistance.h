@@ -28,8 +28,8 @@
 #define WEIGHTEDWORDDISTANCE_H
 
 // hoot
-#include <hoot/core/algorithms/StringDistance.h>
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/algorithms/string/StringDistance.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/algorithms/string/WordWeightDictionary.h>
 
@@ -63,7 +63,7 @@ public:
 
   virtual QString toString() const { return "WeightedWordDistance " + _d->toString(); }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Returns a score based on the best pairwise comparison within two sets of words"; }
 
 private:

@@ -103,3 +103,21 @@ echo "Listing a tag merger..."
 echo ""
 hoot info --tag-mergers | grep "AverageTagMerger"
 echo ""
+
+# CLEANING OPS
+echo "Listing cleaning operations..."
+echo ""
+hoot info --cleaning-operations | grep "DuplicateWayRemover"
+echo ""
+
+# SUBLINE MATCHERS
+echo "Listing subline matchers..."
+echo ""
+hoot info --subline-matchers | grep "FrechetSublineMatcher"
+echo ""
+
+# SUBLINE STRING MATCHERS
+echo "Listing subline string matchers..."
+echo ""
+hoot info --subline-string-matchers | grep "MaximalSublineStringMatcher"
+echo ""

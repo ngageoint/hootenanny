@@ -47,7 +47,8 @@ public:
   static std::string className() { return "hoot::ArbitraryCriterion"; }
 
   // Do something like:
-  // boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
+  // boost::function<bool (ConstElementPtr e)> f =
+  //  boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
   explicit ArbitraryCriterion(boost::function<bool (ConstElementPtr e)> f)
   {
     _f = f;

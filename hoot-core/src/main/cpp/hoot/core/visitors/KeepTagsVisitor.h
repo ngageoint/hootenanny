@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
@@ -39,7 +39,7 @@ class Element;
 /**
  * Keeps any tags with keys matching those passed to this visitor; removes all others
  */
-class KeepTagsVisitor : public ElementOsmMapVisitor, public Configurable
+class KeepTagsVisitor : public ElementVisitor, public Configurable
 {
 public:
 

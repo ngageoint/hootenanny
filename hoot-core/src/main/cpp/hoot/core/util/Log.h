@@ -54,7 +54,7 @@ namespace hoot
 
 /**
  * This class is here to abstract out the logging interface. I only have mild confidence in log4cxx
- * and I don't really need all the complicated goodies.
+ * and I don't really need all the complicated goodies (Singleton).
  */
 class Log
 {
@@ -135,6 +135,7 @@ public:
   static std::string ellipsisStr(const std::string& str, uint count = 33);
 
 private:
+
   WarningLevel _level;
   static boost::shared_ptr<Log> _theInstance;
   static unsigned int _warnMessageLimit;
@@ -149,6 +150,7 @@ private:
 class DisableLog
 {
 public:
+
   DisableLog(Log::WarningLevel tmpLevel = Log::Error)
   {
     _oldLevel = Log::getInstance().getLevel();
@@ -168,6 +170,7 @@ public:
   }
 
 private:
+
   Log::WarningLevel _oldLevel;
 };
 
@@ -186,6 +189,7 @@ private:
 
 #define PROGRESS_INFO(str) { PROGRESS_LEVEL(hoot::Log::Info, str) }
 #define PROGRESS_DEBUG(str) { PROGRESS_LEVEL(hoot::Log::Debug, str) }
+#define PROGRESS_TRACE(str) { PROGRESS_LEVEL(hoot::Log::Trace, str) }
 
 /// print out a variable along w/ it's value. E.g. int a = 3; LOG_VAR(a); => logs "a: 3"
 #define LOG_VART(var) LOG_TRACE(#var << ": " << (var))

@@ -65,9 +65,7 @@ public:
   static std::string className() { return "hoot::MapCropper"; }
 
   MapCropper();
-
   MapCropper(const geos::geom::Envelope& envelope);
-
   MapCropper(const boost::shared_ptr<const geos::geom::Geometry>& g, bool invert);
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);

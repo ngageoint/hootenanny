@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
@@ -42,6 +42,7 @@ namespace hoot {
 class Exception : public std::exception
 {
 public:
+
   Exception() { }
   Exception(const QString& error)
   {
@@ -56,6 +57,7 @@ public:
   }
 
 protected:
+
   QString _error;
 };
 

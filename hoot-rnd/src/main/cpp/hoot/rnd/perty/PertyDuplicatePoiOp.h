@@ -28,7 +28,7 @@
 #define PERTYDUPLICATEPOIOP_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -82,11 +82,6 @@ public:
   void setProbability(double p) { _p = p; }
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
-
-  /**
-    @see OsmMapOperation
-    */
-  QString toString();
 
   virtual QString getDescription() const
   { return "Duplicates a POI with some random error"; }

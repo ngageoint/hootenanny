@@ -1167,7 +1167,19 @@ tds61.rules = {
     ['ETS','msd5','source:extraction_specification','msd5'], // MSD5
     ['ETS','onc','source:extraction_specification','1ab-onc'], // 1AB-ONC
     ['ETS','other','source:extraction_specification','other'], // Other
-    ['ETS','regionalTdsEg','Fpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
+    ['ETS','regionalTdsEg','source:extraction_specification','rtds-eg'], // RTDS-EG
+    ['ETS','specUrbanTdsEg','source:extraction_specification','s-utds-eg'], // S-UTDS-EG
+    ['ETS','tercomE','source:extraction_specification','4gf-tercom-e'], // 4GF-TERCOM-E
+    ['ETS','tercomL','source:extraction_specification','4ge-tercom-l'], // 4GE-TERCOM-L
+    ['ETS','tercomT','source:extraction_specification','4gg-tercom-t'], // 4GG-TERCOM-T
+    ['ETS','tlm100','source:extraction_specification','3ag-tlm100'], // 3AG-TLM100
+    ['ETS','tlm50','source:extraction_specification','3aa-tlm50'], // 3AA-TLM50
+    ['ETS','tod0','source:extraction_specification','tod0'], // TOD0
+    ['ETS','tod1','source:extraction_specification','tod1'], // TOD1
+    ['ETS','tod2','source:extraction_specification','tod2'], // TOD2
+    ['ETS','tod3','source:extraction_specification','tod3'], // TOD3
+    ['ETS','tod4','source:extraction_specification','tod4'], // TOD4
+    ['ETS','tpc','source:extraction_specification','1aa-tpc'], // 1AA-TPC
     ['ETS','uvmap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
     ['ETS','vitd','source:extraction_specification','3ka-vitd'], // 3KA-VITD
     ['ETS','vmap0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
@@ -4920,26 +4932,26 @@ tds61.rules = {
     'PBA030':'PhysiographyPnt', // Physiography
     'ABA030':'PhysiographySrf', // Physiography
     'ABA040':'HydrographySrf', // Hydrography
-    'ABB005':'PortorHarbourSrf', // Port or Harbour
-    'PBB009':'PortorHarbourPnt', // Port or Harbour
-    'ABB009':'PortorHarbourSrf', // Port or Harbour
-    'LBB081':'PortorHarbourCrv', // Port or Harbour
-    'ABB081':'PortorHarbourSrf', // Port or Harbour
-    'LBB082':'PortorHarbourCrv', // Port or Harbour
-    'ABB082':'PortorHarbourSrf', // Port or Harbour
-    'ABB090':'PortorHarbourSrf', // Port or Harbour
+    'ABB005':'PortHarbourSrf', // Port or Harbour
+    'PBB009':'PortHarbourPnt', // Port or Harbour
+    'ABB009':'PortHarbourSrf', // Port or Harbour
+    'LBB081':'PortHarbourCrv', // Port or Harbour
+    'ABB081':'PortHarbourSrf', // Port or Harbour
+    'LBB082':'PortHarbourCrv', // Port or Harbour
+    'ABB082':'PortHarbourSrf', // Port or Harbour
+    'ABB090':'PortHarbourSrf', // Port or Harbour
     'PBB110':'HydrographyPnt', // Hydrography
     'ABB110':'HydrographySrf', // Hydrography
-    'ABB199':'PortorHarbourSrf', // Port or Harbour
-    'PBB201':'PortorHarbourPnt', // Port or Harbour
-    'ABB201':'PortorHarbourSrf', // Port or Harbour
-    'PBB241':'PortorHarbourPnt', // Port or Harbour
-    'ABB241':'PortorHarbourSrf', // Port or Harbour
+    'ABB199':'PortHarbourSrf', // Port or Harbour
+    'PBB201':'PortHarbourPnt', // Port or Harbour
+    'ABB201':'PortHarbourSrf', // Port or Harbour
+    'PBB241':'PortHarbourPnt', // Port or Harbour
+    'ABB241':'PortHarbourSrf', // Port or Harbour
     'PBC050':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
     'ABC050':'HydrographicAidtoNavigationSrf', // Hydrographic Aid to Navigation
     'PBC070':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
-    'PBD100':'PortorHarbourPnt', // Port or Harbour
-    'ABD100':'PortorHarbourSrf', // Port or Harbour
+    'PBD100':'PortHarbourPnt', // Port or Harbour
+    'ABD100':'PortHarbourSrf', // Port or Harbour
     'PBD115':'HydrographyPnt', // Hydrography
     'ABD115':'HydrographySrf', // Hydrography
     'PBD140':'HydrographyPnt', // Hydrography
@@ -4991,7 +5003,7 @@ tds61.rules = {
     'ABH220':'UtilityInfrastructureSrf', // Utility Infrastructure
     'PBH230':'HydrographyPnt', // Hydrography
     'ABH230':'HydrographySrf', // Hydrography
-    'ABI005':'PortorHarbourSrf', // Port or Harbour
+    'ABI005':'PortHarbourSrf', // Port or Harbour
     'PBI006':'TransportationWaterPnt', // Transportation - Water
     'LBI006':'TransportationWaterCrv', // Transportation - Water
     'ABI006':'TransportationWaterSrf', // Transportation - Water

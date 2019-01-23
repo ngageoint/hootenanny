@@ -29,7 +29,7 @@
 #define FEATURECOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
@@ -38,15 +38,13 @@ namespace hoot
 /**
  * Counts the number of elements with an information tag count greater than zero.
  */
-class FeatureCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
+class FeatureCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
   static std::string className() { return "hoot::FeatureCountVisitor"; }
 
   FeatureCountVisitor() : _count(0) {}
-
-  virtual ~FeatureCountVisitor() {}
 
   int getCount() const { return _count; }
 

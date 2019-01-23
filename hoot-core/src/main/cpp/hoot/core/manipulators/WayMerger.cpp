@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayMerger.h"
@@ -39,9 +39,9 @@ using namespace geos::geom;
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/algorithms/MaximalNearestSubline.h>
+#include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/conflate/WorkingMap.h>
 #include <hoot/core/criterion/StatusCriterion.h>
@@ -50,12 +50,12 @@ using namespace geos::operation::distance;
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/manipulators/WayMergeManipulation.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 using namespace hoot::elements;
 
 // Qt
@@ -72,8 +72,6 @@ using namespace Tgs;
 
 namespace hoot
 {
-
-#define SQR(x) ((x) * (x))
 
 HOOT_FACTORY_REGISTER(Manipulator, WayMerger)
 
@@ -110,10 +108,9 @@ const vector< boost::shared_ptr<Manipulation> >& WayMerger::findWayManipulations
   size_t i;
   for (i = 0; i < wids.size(); i++)
   {
-    if (Log::getInstance().isInfoEnabled() && i >= 100 && i % 100 == 0)
+    if (i >= 100 && i % 100 == 0)
     {
-      cout << "  finding manipulations: " << i << " / " << wids.size() << "        \r";
-      cout.flush();
+      PROGRESS_INFO("  finding manipulations: " << i << " / " << wids.size() << "        ");
     }
     if (_map->containsWay(wids[i]))
     {
@@ -122,9 +119,9 @@ const vector< boost::shared_ptr<Manipulation> >& WayMerger::findWayManipulations
     }
   }
 
-  if (Log::getInstance().isInfoEnabled() && i >= 100)
+  if (i >= 100)
   {
-    cout << endl;
+    LOG_INFO("  finding manipulations: " << wids.size() << " / " << wids.size() << "        ");
   }
 
   return _result;
@@ -134,8 +131,10 @@ void WayMerger::_findMatches(long baseWayId)
 {
   ConstWayPtr baseWay = _map->getWay(baseWayId);
 
+  HighwayCriterion highwayCrit;
+
   // if it isn't a highway we can't merge it.
-  if (OsmSchema::getInstance().isLinearHighway(baseWay->getTags(), ElementType::Way) == false)
+  if (highwayCrit.isSatisfied(baseWay) == false)
   {
     return;
   }
@@ -148,8 +147,7 @@ void WayMerger::_findMatches(long baseWayId)
   {
     ConstWayPtr otherWay = _map->getWay(otherWays[oi]);
 
-    if (otherWay->isUnknown() && baseWay->isUnknown() &&
-        OsmSchema::getInstance().isLinearHighway(otherWay->getTags(), ElementType::Way))
+    if (otherWay->isUnknown() && baseWay->isUnknown() && highwayCrit.isSatisfied(otherWay))
     {
       // create a new manipulation and add it onto the result.
       boost::shared_ptr<Manipulation> m(_createManipulation(baseWay->getId(), otherWay->getId(),

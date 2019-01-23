@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -38,8 +38,12 @@ import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConflateCommandTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(ConflateCommandTest.class);
 
     @Test
     @Category(UnitTest.class)
@@ -84,19 +88,20 @@ public class ConflateCommandTest {
         assertEquals(debugLevel, conflateCommand.getSubstitutionMap().get("DEBUG_LEVEL"));
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("HOOT_OPTIONS"));
-        assertEquals("[-D, convert.ops=hoot::DecomposeBuildingRelationsVisitor, " +
-                              "-D, writer.include.conflate.score.tags=false, " +
-                              "-D, hootapi.db.writer.overwrite.map=true, " +
-                              "-D, writer.text.status=true, " +
-                              "-D, api.db.email=test@test.com, " +
-                              "-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
+        String command = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
+        assertTrue(command.startsWith("[-D, convert.ops=hoot::DecomposeBuildingRelationsVisitor, "));
+        assertTrue(command.contains("-D, writer.include.conflate.score.tags=false, "));
+        assertTrue(command.contains("-D, hootapi.db.writer.overwrite.map=true, "));
+        assertTrue(command.contains("-D, writer.text.status=true, "));
+        assertTrue(command.contains("-D, api.db.email=test@test.com, "));
+        assertTrue(command.endsWith("-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                                     "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
                                     "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
                                     "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
                                     "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
                                     "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
-                                    "hoot::NoInformationElementRemover\"]",
-                conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString());
+                                    "hoot::NoInformationElementRemover\"]"));
+        assertTrue(command.contains("-D, hootapi.db.writer.job.id="));
 
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads", conflateCommand.getSubstitutionMap().get("INPUT1"));
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads", conflateCommand.getSubstitutionMap().get("INPUT2"));

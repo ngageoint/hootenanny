@@ -48,8 +48,6 @@ public:
   TagKeyCountVisitor(const QString key);
   explicit TagKeyCountVisitor(const QStringList keys);
 
-  virtual ~TagKeyCountVisitor() {}
-
   virtual void visit(const ConstElementPtr& e);
 
   virtual double getStat() const { return _keyCount; }

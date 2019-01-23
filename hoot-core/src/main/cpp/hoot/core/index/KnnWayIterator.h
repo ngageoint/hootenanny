@@ -35,7 +35,7 @@
 #include <tgs/RStarTree/KnnIterator.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {

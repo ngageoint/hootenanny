@@ -52,7 +52,7 @@ public:
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 
   // leave empty to avoid duplicate tag mergers displayed by the info command
-  virtual QString getDescription() { return ""; }
+  virtual QString getDescription() const { return ""; }
 
 protected:
 
@@ -71,9 +71,7 @@ public:
 
   OverwriteTag2Merger() : OverwriteTagMerger(false) {}
 
-  virtual ~OverwriteTag2Merger() {}
-
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Overwrites tags in the secondary feature with tags from the reference feature"; }
 };
 
@@ -88,9 +86,7 @@ public:
 
   OverwriteTag1Merger() : OverwriteTagMerger(true) {}
 
-  virtual ~OverwriteTag1Merger() {}
-
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Overwrites tags in the reference feature with tags from the secondary feature"; }
 };
 

@@ -28,7 +28,7 @@
 #define TRANSLATIONVISITOR_H
 
 // Hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/util/Configurable.h>
@@ -52,8 +52,6 @@ public:
 
   TranslationVisitor();
 
-  virtual ~TranslationVisitor() {}
-
   /**
    * @see Configurable
    */
@@ -65,8 +63,6 @@ public:
   void setPath(QString path);
 
   virtual void visit(const ElementPtr& e);
-
-  virtual QString toString() { return "hoot::TranslationVisitor"; }
 
   virtual QString getDescription() const { return "Translates features to a schema"; }
 

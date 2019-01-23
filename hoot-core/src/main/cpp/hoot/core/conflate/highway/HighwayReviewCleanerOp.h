@@ -28,7 +28,7 @@
 #define HIGHWAYREVIEWCLEANEROP_H
 
 // hoot
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
@@ -50,8 +50,6 @@ public:
   HighwayReviewCleanerOp();
 
   virtual void apply(OsmMapPtr& map);
-
-  virtual QString toString() const { return QString::fromStdString(className()); }
 
   virtual QString getDescription() const
   { return "Identifies highway reviews that are impossible due to a lack of string match"; }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMSCHEMA_H
@@ -47,15 +47,16 @@ class Tags;
 
 enum EdgeType
 {
-  CanHave,
+  CanHave,  //not used
   IsA,
   SimilarTo,
-  ParentOf,
+  ParentOf, //not used
   AssociatedWith,
-  CompoundComponent,
+  CompoundComponent //not used
 };
 
-struct OsmSchemaCategory {
+struct OsmSchemaCategory
+{
   enum Type
   {
     Empty =           0x00,
@@ -66,8 +67,8 @@ struct OsmSchemaCategory {
     Name =            0x10,
     PseudoName =      0x20,
     HgisPoi =         0x40, // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
-    Multiuse =        0x80,
-    All = Poi | Building | Transportation | Use | Name | HgisPoi | Multiuse
+    Multiuse =        0x80//,
+    //All = Poi | Building | Transportation | Use | Name | PseudoName | HgisPoi | Multiuse
   };
 
   OsmSchemaCategory() : _type(Empty) {}
@@ -248,13 +249,11 @@ class Relation;
 class Way;
 
 /**
- * This class is reentrant, but not thread safe.
+ * This class is reentrant, but not thread safe (Singleton).
  */
 class OsmSchema
 {
 public:
-
-  OsmSchema();
 
   virtual ~OsmSchema();
 
@@ -279,7 +278,15 @@ public:
    */
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
 
-  std::vector<SchemaVertex> getAssociatedTags(QString name);
+  std::vector<SchemaVertex> getAssociatedTagsAsVertices(QString name);
+
+  /**
+   * Retrieves a set of tags that are associated with the input tags, as defined by the hoot schema
+   *
+   * @param tags tags to search associations for
+   * @return a set of tags
+   */
+  Tags getAssociatedTags(const Tags& tags);
 
   OsmSchemaCategory getCategories(const Tags& t) const;
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
@@ -291,7 +298,15 @@ public:
 
   bool hasTagKey(const QString key);
 
-  std::vector<SchemaVertex> getChildTags(QString name);
+  std::vector<SchemaVertex> getChildTagsAsVertices(QString name);
+
+  /**
+   * Retrieves all child tags for the given input tags
+   *
+   * @param tags tags for which to retrieve child tags
+   * @return a set of tags
+   */
+  Tags getChildTags(const Tags& tags);
 
   static OsmSchema& getInstance();
 
@@ -302,7 +317,16 @@ public:
    *
    * minimumScore must be > 0.
    */
-  std::vector<SchemaVertex> getSimilarTags(QString name, double minimumScore);
+  std::vector<SchemaVertex> getSimilarTagsAsVertices(QString name, double minimumScore);
+
+  /**
+   * Retrieves tags similar to the input tag
+   *
+   * @param name a kvp
+   * @param minimumScore tag similarity threshold
+   * @return a set of tags
+   */
+  Tags getSimilarTags(QString name, double minimumScore);
 
   std::vector<SchemaVertex> getTagByCategory(OsmSchemaCategory c) const;
 
@@ -340,102 +364,8 @@ public:
 
   bool isAncestor(const QString& childKvp, const QString& parentKvp);
 
-  bool isArea(const Tags& t, const ElementType& type) const;
-  bool isArea(const ConstElementPtr& e) const;
-
-  bool isAreaForStats(const Tags& t, const ElementType& type) const;
-  bool isAreaForStats(const ConstElementPtr& e) const;
-
   bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries);
   bool allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries);
-
-  bool isNonBuildingArea(const ConstElementPtr& e) const;
-
-  bool isBuilding(const Tags& t, const ElementType& type) const;
-  bool isBuilding(const ConstElementPtr& e) const;
-
-  /**
-   * Returns true if this is a building:part. This is mutually exclusive with isBuilding.
-   */
-  bool isBuildingPart(const Tags& t, const ElementType& type) const;
-  bool isBuildingPart(const ConstElementPtr& e) const;
-
-  /**
-   * Determines whether the element passed in is a polygon under the POI to Polygon conflation
-   * definition
-   *
-   * @param e element to determine type of
-   * @param tagIgnoreList if the input feature contains any of the tags in this list this method
-   * will always return false
-   * @return true if the element meets the specified criteria; false otherwise
-   */
-  bool isPoiPolygonPoly(const ConstElementPtr& e,
-                        const QStringList tagIgnoreList = QStringList()) const;
-
-  /**
-   * Determines whether the element passed in is a POI under the POI to Polygon conflation
-   * definition
-   *
-   * @param e element to determine type of
-   * @param tagIgnoreList if the input feature contains any of the tags in this list this method
-   * will always return false
-   * @return true if the element meets the specified criteria; false otherwise
-   */
-  bool isPoiPolygonPoi(const ConstElementPtr& e,
-                       const QStringList tagIgnoreList = QStringList()) const;
-
-  /**
-   * Returns true if this is a geometry collection.
-   */
-  bool isCollection(const Element& e) const;
-
-  /**
-   * Returns true if this is a POI as defined by the Tampa DG group.
-   */
-  bool isHgisPoi(const Element& e) const;
-
-  /**
-   * Returns true if the element is a highway type (e.g. road, primary, path, etc.)
-   *
-   * This is not an exhaustive list, be sure and check the function to make sure it will do what
-   * you expect in your instance.
-   */
-  bool isLinearHighway(const Tags& t, const ElementType& type) const;
-
-  /**
-   * Returns true if the element is a linear object (e.g. road, etc.)
-   *
-   * This is not an exhaustive list, be sure and check the function to make sure it will do what
-   * you expect in your instance.
-   */
-  bool isLinear(const Element& e) const;
-
-  /**
-   * Returns true if the specified element is a linear waterway.
-   */
-  bool isLinearWaterway(const Element& e);
-
-  /**
-   * Returns true if the specified element is a power utility line.
-   */
-  bool isPowerLine(const Element& e) const;
-
-  /**
-   * Returns true if the element is a roundabout
-   *
-   * This is not an exhaustive check, feel free to add more criteria
-   */
-  bool isRoundabout(const Tags& tags, const ElementType& type) const;
-
-  /**
-   * Returns true if the specified element is a multi-use building.
-   */
-  bool isMultiUseBuilding(const Element& e) const;
-
-  /**
-   * Returns true if the specified element is multi-use.
-   */
-  bool isMultiUse(const Element& e) const;
 
   /**
    * Returns true if this is a list of values. Right now this just looks for a semicolon in value,
@@ -452,28 +382,6 @@ public:
    * Tags such as "name", "highway" and "height" are not metadata.
    */
   bool isMetaData(const QString& key, const QString& value);
-
-  bool isMultiLineString(const Relation& r) const;
-
-  /**
-   * Returns true if this is a unidirectional way (e.g. oneway=true)
-   */
-  bool isOneWay(const Element &e) const;
-
-  bool isPoi(const Element& e) const;
-
-  /**
-   * Determines whether an element has a name
-   *
-   * @param element the element to examine
-   * @return true if the element has a name tag; false otherwie
-   */
-  bool hasName(const Element& element) const;
-
-  /**
-   * Returns true if the specified element is a railway.
-   */
-  bool isRailway(const Element& e);
 
   /**
    * Returns true if this is a reversed unidirectional way. (E.g. oneway=reverse)
@@ -526,7 +434,20 @@ public:
    */
   bool containsTagFromList(const Tags& tags, const QStringList tagList) const;
 
+  /**
+   * Retrieves tags that are aliases of the input tags
+   *
+   * @param tags tags to search aliases for
+   * @return a set of tags
+   */
+  Tags getAliasTags(const Tags& tags);
+
 private:
+
+  friend class OsmSchemaTest;
+  friend class SchemaCheckerTest;
+
+  OsmSchema();
 
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.

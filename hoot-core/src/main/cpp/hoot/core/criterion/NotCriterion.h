@@ -43,14 +43,14 @@ public:
   NotCriterion(ElementCriterion* c) : _child(c) {}
   NotCriterion(ElementCriterionPtr c) : _child(c) {}
 
-  virtual ~NotCriterion() {}
+  //virtual ~NotCriterion() {}
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
   /**
    * Returns true if the element satisfies the criterion.
    */
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NotCriterion(_child->clone())); }

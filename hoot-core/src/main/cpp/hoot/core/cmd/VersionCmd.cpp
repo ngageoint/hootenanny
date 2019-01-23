@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Boost
@@ -38,11 +38,12 @@
 
 // Hoot
 #include <hoot/core/HootConfig.h>
-#include <hoot/core/Version.h>
+#include <hoot/core/info/Version.h>
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/OpenCv.h>
 
 // Qt
 #include <Qt>
@@ -65,6 +66,27 @@
 
 // tgs
 #include <tgs/System/SystemInfo.h>
+
+// python
+#include <patchlevel.h>
+
+// Protobuf
+#include <google/protobuf/stubs/common.h>
+
+// PNG
+#include <png.h>
+
+//  LibPostgresql
+#if HOOT_HAVE_POSTGRESQL
+#include <pg_config.h>
+#endif
+
+//  LibICU
+#if HOOT_HAVE_LIBICUI18N
+#include <unicode/uversion.h>
+#endif
+//  Proj4
+#include <projects.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -91,24 +113,42 @@ public:
     }
 
     cout << Version::getFullVersion() << " Built By: " << Version::getBuiltBy() << endl;
-    LOG_DEBUG("GEOS Version: " << geosversion());
-    LOG_DEBUG("GDAL Version: " << GDALVersionInfo("RELEASE_NAME"));
-    LOG_DEBUG("GLPK Version: " << glp_version());
-    LOG_DEBUG("Qt Version: " << qVersion());
-    LOG_DEBUG("Boost Version: " << QString("%1.%2.%3")
+    LOG_DEBUG("GEOS Version:\t" << geosversion());
+    LOG_DEBUG("GDAL Version:\t" << GDALVersionInfo("RELEASE_NAME"));
+    LOG_DEBUG("GLPK Version:\t" << glp_version());
+    LOG_DEBUG("Qt Version:  \t" << qVersion());
+    LOG_DEBUG("Boost Version:\t" << QString("%1.%2.%3")
               .arg(BOOST_VERSION / 100000)
               .arg(BOOST_VERSION / 100 % 1000)
               .arg(BOOST_VERSION % 100));
 #   ifdef HOOT_HAVE_STXXL
-      LOG_DEBUG("STXXL Version: " << stxxl::get_version_string());
+      LOG_DEBUG("STXXL Version:\t" << stxxl::get_version_string());
 #   endif
 #   ifdef HOOT_HAVE_LIBCPPUNIT
-      LOG_DEBUG("CppUnit Version: " << CPPUNIT_VERSION);
+      LOG_DEBUG("CppUnit Version:\t" << CPPUNIT_VERSION);
 #   endif
-    LOG_DEBUG("NodeJs Version: " << NODE_VERSION_STRING);
-    LOG_DEBUG("v8 Version: " << V8_VERSION_STRING);
+    LOG_DEBUG("NodeJs Version:\t" << NODE_VERSION_STRING);
+    LOG_DEBUG("v8 Version:  \t" << V8_VERSION_STRING);
+    LOG_DEBUG("Python Version:\t" << PY_VERSION);
+    LOG_DEBUG("Protobuf Version:\t" << QString("%1.%2.%3")
+              .arg(GOOGLE_PROTOBUF_VERSION / 1000000)
+              .arg(GOOGLE_PROTOBUF_VERSION / 1000 % 1000)
+              .arg(GOOGLE_PROTOBUF_VERSION % 1000));
+    LOG_DEBUG("OpenCv Version:\t" << CV_VERSION);
+#   ifdef HOOT_HAVE_POSTGRESQL
+      LOG_DEBUG("PostgreSQL Version:\t" << PG_VERSION);
+#   endif
+    LOG_DEBUG("LibPNG Version:\t" << PNG_LIBPNG_VER_STRING);
+#   ifdef HOOT_HAVE_LIBICUI18N
+      UVersionInfo info;
+      char version[U_MAX_VERSION_STRING_LENGTH] = { '\0' };
+      u_getVersion(info);
+      u_versionToString(info, version);
+      LOG_DEBUG("LibICU Version:\t" << version);
+#   endif
+    LOG_DEBUG("Proj4 Version:\t" << pj_release);
+    //  Finish with the memory usage
     LOG_DEBUG(Tgs::SystemInfo::getMemoryUsageString());
-
     return 0;
   }
 };

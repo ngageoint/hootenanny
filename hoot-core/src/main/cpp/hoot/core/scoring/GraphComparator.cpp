@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GraphComparator.h"
@@ -36,15 +36,15 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/conflate/splitter/IntersectionSplitter.h>
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/DirectedGraph.h>
 #include <hoot/core/scoring/ShortestPath.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/GeometryPainter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -242,18 +242,10 @@ double GraphComparator::compareMaps()
       _ci = zalpha * _s / sqrt(scores.size());
     }
 
-    if (Log::getInstance().isInfoEnabled())
-    {
-      cout << i << " / " << _iterations << " mean: " << _mean << "   \r";
-      cout.flush();
-    }
-    //qDebug() << _median << 1 - error << _mean << "+/-" << _ci << "sd: " << _s;
+    PROGRESS_INFO(i << " / " << _iterations << " mean: " << _mean << "   ");
   }
 
-  if (Log::getInstance().isInfoEnabled())
-  {
-    cout << "                                   \r";
-  }
+  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
 
   return _mean;
 }

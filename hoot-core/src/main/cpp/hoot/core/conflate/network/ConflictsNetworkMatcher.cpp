@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflictsNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/algorithms/frechet/FrechetDistance.h>
+#include <hoot/core/algorithms/FrechetDistance.h>
 #include <hoot/core/conflate/network/EdgeMatch.h>
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 #include <hoot/core/util/Factory.h>
@@ -137,15 +137,18 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
 
 void ConflictsNetworkMatcher::_removeDupes()
 {
-  LOG_DEBUG("Removing duplicate edges...");
-
   // Bail out if we only have one match
   if (_edgeMatches->getAllMatches().size() < 2)
     return;
 
+  LOG_INFO("Removing duplicate edges...");
+
   QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
   QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
 
+  int ctr = 0;
+  const int total = _edgeMatches->getAllMatches().size();
+  //potential bottleneck for network conflation here...
   while (it1 != _edgeMatches->getAllMatches().end())
   {
     it2 = it1;
@@ -176,6 +179,12 @@ void ConflictsNetworkMatcher::_removeDupes()
       }
     }
     ++it1;
+
+    ctr++;
+    if (ctr % 10 == 0)
+    {
+      PROGRESS_INFO("Processed " << ctr << " / " << total << " matches for duplicate edges.");
+    }
   }
 }
 
@@ -209,9 +218,11 @@ Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
 
 void ConflictsNetworkMatcher::_sanityCheckRelationships()
 {
-  LOG_DEBUG("Performing Relationship Sanity Check");
+  LOG_INFO("Performing relationship sanity check...");
 
   // Check our relationships for sanity...
+  int ctr = 0;
+  const int total = _scores.keys().size();
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
     double myDistance = _getMatchSeparation(em);
@@ -239,6 +250,12 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
           _matchRelationships.remove(r->getEdge());
         }
       }
+    }
+
+    ctr++;
+    if (ctr % 10 == 0)
+    {
+      PROGRESS_INFO("Sanity checked " << ctr << " / " << total << " relationships.");
     }
   }
 }
@@ -693,7 +710,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
-    PROGRESS_INFO(count++ << " / " << em.size());
+    PROGRESS_INFO(count++ << " / " << em.size() << " edge scores seeded.");
 
     ConstNetworkEdgePtr e1 = it.value();
 
@@ -729,6 +746,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
 
 void ConflictsNetworkMatcher::_printEdgeMatches()
 {
+  stringstream ss;
   foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
   {
     foreach (EdgeString::EdgeEntry edge, em->getString1()->getAllEdges())
@@ -737,28 +755,29 @@ void ConflictsNetworkMatcher::_printEdgeMatches()
       {
         if (elmnt->getElementType() == ElementType::Way)
         {
-          cout << "(way:" << elmnt->getId() << ")";
+          ss << "(way:" << elmnt->getId() << ")";
         }
       }
     }
 
-    cout << " <<matches>> ";
+    ss << " <<matches>> ";
     foreach (EdgeString::EdgeEntry edge, em->getString2()->getAllEdges())
     {
       foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
       {
         if (elmnt->getElementType() == ElementType::Way)
         {
-          cout << "(way:" << elmnt->getId() << ")";
+          ss << "(way:" << elmnt->getId() << ")";
         }
       }
     }
 
-    cout << std::endl;
+    ss << std::endl;
 
     int i = 0;
     i++;
   }
+  LOG_INFO(ss.str());
 }
 
 }

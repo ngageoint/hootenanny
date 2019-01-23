@@ -26,19 +26,19 @@
  */
 #include "FindHighwayIntersectionsVisitor.h"
 
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, FindHighwayIntersectionsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, FindHighwayIntersectionsVisitor)
 
 void FindHighwayIntersectionsVisitor::visit(const ConstElementPtr& e)
 {
@@ -53,7 +53,7 @@ void FindHighwayIntersectionsVisitor::visit(const ConstElementPtr& e)
   {
     WayPtr w = _map->getWay(*it);
 
-    if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()))
+    if (HighwayCriterion().isSatisfied(w))
     {
       hwids.insert(*it);
     }

@@ -54,15 +54,61 @@ if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
     # Install the versionlock plugin version first.
     sudo yum install -y yum-plugin-versionlock
 else
-    # Remove any NodeJS version locks to allow upgrading to $NODE_VERSION.
-    sudo yum versionlock delete nodejs nodejs-devel
+    # Remove any version locks to allow upgrading when versions have changed.
+    sudo yum versionlock delete \
+         geos \
+         geos-devel \
+         glpk \
+         glpk-devel \
+         hoot-gdal \
+         hoot-gdal-devel \
+         hoot-gdal-python \
+         liboauthcpp \
+         liboauthcpp-devel \
+         libphonenumber \
+         libphonenumber-devel \
+         nodejs \
+         nodejs-devel \
+         stxxl \
+         stxxl-devel
+
 fi
 
-echo "### Installing NodeJS ${NODE_VERSION}"
-sudo yum install -y nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
+echo "### Installing libraries with locked versions"
+sudo yum install -y \
+     geos-$GEOS_VERSION \
+     geos-devel-$GEOS_VERSION \
+     glpk-$GLPK_VERSION \
+     glpk-devel-$GLPK_VERSION \
+     hoot-gdal-$GDAL_VERSION \
+     hoot-gdal-devel-$GDAL_VERSION \
+     hoot-gdal-python-$GDAL_VERSION \
+     libphonenumber-$LIBPHONENUMBER_VERSION \
+     libphonenumber-devel-$LIBPHONENUMBER_VERSION \
+     liboauthcpp-$LIBOAUTHCPP_VERSION \
+     liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
+     nodejs-$NODE_VERSION \
+     nodejs-devel-$NODE_VERSION \
+     stxxl-$STXXL_VERSION \
+     stxxl-devel-$STXXL_VERSION
 
-echo "### Locking version of NodeJS"
-sudo yum versionlock add nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
+echo "### Locking versions of libraries"
+sudo yum versionlock add \
+     geos-$GEOS_VERSION \
+     geos-devel-$GEOS_VERSION \
+     glpk-$GLPK_VERSION \
+     glpk-devel-$GLPK_VERSION \
+     hoot-gdal-$GDAL_VERSION \
+     hoot-gdal-devel-$GDAL_VERSION \
+     hoot-gdal-python-$GDAL_VERSION \
+     libphonenumber-$LIBPHONENUMBER_VERSION \
+     libphonenumber-devel-$LIBPHONENUMBER_VERSION \
+     liboauthcpp-$LIBOAUTHCPP_VERSION \
+     liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
+     nodejs-$NODE_VERSION \
+     nodejs-devel-$NODE_VERSION \
+     stxxl-$STXXL_VERSION \
+     stxxl-devel-$STXXL_VERSION
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
@@ -82,16 +128,9 @@ sudo yum -y install \
     gcc \
     gcc-c++ \
     gdb \
-    geos \
-    geos-devel \
     git \
     git-core \
-    glpk \
-    glpk-devel \
     gnuplot \
-    hoot-gdal \
-    hoot-gdal-devel \
-    hoot-gdal-python \
     lcov \
     libicu-devel \
     libpng-devel \
@@ -107,7 +146,6 @@ sudo yum -y install \
     java-1.8.0-openjdk \
     perl-XML-LibXML \
     hoot-postgis24_95 \
-    libphonenumber-devel \
     libpostal-data \
     libpostal-devel \
     postgresql95 \
@@ -130,8 +168,6 @@ sudo yum -y install \
     qtwebkit \
     qtwebkit-devel \
     redhat-lsb-core \
-    stxxl \
-    stxxl-devel \
     swig \
     tex-fonts-hebrew \
     texlive \

@@ -28,17 +28,17 @@
 #include "AttributeCoOccurrence.h"
 
 // Hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/conflate/extractors/NameExtractor.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/extractors/NameExtractor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/language/TranslateStringDistance.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/language/DictionaryTranslator.h>
 
 // tgs
@@ -52,7 +52,7 @@ namespace hoot
 /**
  * Traverses the OsmMap and creates a map from REF tags to ElementIds.
  */
-class RefToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class RefToEidVisitor : public ConstElementVisitor
 {
 public:
 
@@ -63,8 +63,6 @@ public:
   virtual ~RefToEidVisitor() {}
 
   const RefToEid& getRefToEid() const { return _ref2Eid; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -89,7 +87,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   QString _ref;
   RefToEid _ref2Eid;
 };
@@ -175,9 +172,9 @@ public:
             QString name1 = e->getTags()["name"];
             QString name2 = _map->getElement(*eid)->getTags()["name"];
 
-            QString kvpNull = OsmSchema::getInstance().toKvp("name","<NULL>");
-            QString kvpNonNull = OsmSchema::getInstance().toKvp("name","<NON NULL>");
-            QString kvpSame = OsmSchema::getInstance().toKvp("name","<SIMILAR>");
+            QString kvpNull = OsmSchema::toKvp("name","<NULL>");
+            QString kvpNonNull = OsmSchema::toKvp("name","<NON NULL>");
+            QString kvpSame = OsmSchema::toKvp("name","<SIMILAR>");
 
             if (name1 == "")
             {

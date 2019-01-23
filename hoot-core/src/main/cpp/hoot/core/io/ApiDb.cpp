@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ApiDb.h"
 
@@ -44,7 +44,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // qt
 #include <QStringList>
@@ -382,6 +382,8 @@ long ApiDb::getUserId(const QString email, bool throwWhenMissing)
 
 long ApiDb::insertUser(const QString email, const QString displayName)
 {
+  LOG_TRACE("Inserting user with email: " << email << " and displayName: " << displayName);
+
   long id = -1;
 
   if (_insertUser == 0)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Building.h"
 
@@ -31,8 +31,8 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 using namespace geos::geom;
 using namespace std;

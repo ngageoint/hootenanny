@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
 
@@ -41,7 +41,7 @@ namespace hoot
  * all missing references are removed. Note: This may not give desired results if your data
  * shouldn't contain missing references.
  */
-class ReportMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
+class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
     public Configurable
 {
 public:
@@ -50,8 +50,6 @@ public:
 
   ReportMissingElementsVisitor(bool removeMissing = false,
                                int maxReport = Log::getWarnMessageLimit());
-
-  virtual ~ReportMissingElementsVisitor() {}
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
@@ -62,6 +60,8 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   void setMaxReport(int maxReport) { _maxReport = maxReport; }
+
+  int getMissingCount() const { return _missingCount; }
 
   virtual QString getDescription() const
   { return "Reports references to missing elements in a map"; }

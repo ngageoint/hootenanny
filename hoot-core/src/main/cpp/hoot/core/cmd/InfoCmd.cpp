@@ -22,19 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/info/ApiEntityDisplayInfo.h>
+#include <hoot/core/info/ConfigOptionsDisplayer.h>
+#include <hoot/core/info/FormatsDisplayer.h>
+#include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/info/ConfigOptionsDisplayer.h>
-#include <hoot/core/info/FormatsDisplayer.h>
-#include <hoot/core/info/ApiEntityDisplayer.h>
-#include <hoot/core/language/LanguageInfoProvider.h>
-#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
 
 // Qt
 #include <QUrl>
@@ -119,11 +119,11 @@ public:
 
       if (args.size() == 0)
       {
-        ConfigOptionsDisplayer::displayAllOptionNames(getDetails);
+        std::cout << ConfigOptionsDisplayer::getAllOptionNames(getDetails).toStdString();
       }
       else
       {
-        ConfigOptionsDisplayer::displayOptionName(args[0], getDetails);
+        std::cout << ConfigOptionsDisplayer::getOptionName(args[0], getDetails).toStdString();
       }
     }
     else if (specifiedOpts.contains("--formats"))
@@ -167,7 +167,7 @@ public:
         displayOutputs = true;
       }
 
-      FormatsDisplayer::display(displayInputs, displayOutputs);
+      std::cout << FormatsDisplayer::display(displayInputs, displayOutputs).toStdString();
     }
     else if (specifiedOpts.contains("--languages"))
     {
@@ -233,10 +233,15 @@ public:
         LOG_VART(e.getWhat());
         if (e.getWhat().contains("Access tokens for user"))
         {
-          LOG_ERROR(
-            "You must log in to the Hootenanny Web Services before displaying supported language information.")
+          std::cout <<
+            "You must log in to the Hootenanny Web Services before displaying supported language information." <<
+            std::endl;
         }
       }
+    }
+    else if (specifiedOpts.contains("--cleaning-operations"))
+    {
+      std::cout << ApiEntityDisplayInfo::getDisplayInfoCleaningOps().toStdString();
     }
     //everything else
     else if (specifiedOpts.size() == 1)
@@ -260,7 +265,7 @@ public:
           QString("%1 with the --operators option takes zero parameters.").arg(getName()));
       }
 
-      ApiEntityDisplayer::display(apiEntityType);
+      std::cout << ApiEntityDisplayInfo::getDisplayInfo(apiEntityType).toStdString();
     }
     else
     {
@@ -285,6 +290,7 @@ private:
   QStringList _getSupportedOptions() const
   {
     QStringList options;
+    options.append("--cleaning-operations");
     options.append("--config-options");
     options.append("--feature-extractors");
     options.append("--formats");
@@ -293,6 +299,8 @@ private:
     options.append("--mergers");
     options.append("--operators");
     options.append("--string-comparators");
+    options.append("--subline-matchers");
+    options.append("--subline-string-matchers");
     options.append("--tag-mergers");
     options.append("--value-aggregators");
     return options;

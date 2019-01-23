@@ -7,11 +7,12 @@ pipeline {
     environment {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
+        BUILD_VERBOSE = 'yes'
     }
 
     triggers {
         // Set nightly trigger
-        cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(20-21) * * 1-5" : "")
+        cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(1-2) * * 1-5" : "")
     }
 
     // Configurable parameters for users to skip steps and control pipeline behavior
@@ -65,9 +66,7 @@ pipeline {
             when { 
                 anyOf {
                     expression { return params.Configure_Tests }
-                    // Work around to run certain tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
-                    // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
-                    expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 } 
+                    triggeredBy 'TimerTrigger'
                 }
             }
             steps {
@@ -81,7 +80,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..22 }
+                        triggeredBy 'TimerTrigger'
                         branch 'develop'
                     }
                 }
@@ -89,7 +88,7 @@ pipeline {
             steps{
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
-                sh "sed -i '/make -s clean && make -sj\$(nproc)/c\\make -s clean && build-wrapper-linux-x86-64 --out-dir bw-output make -sj\$(nproc)' VagrantBuild.sh"
+                sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
                 script {
                     if (env.BRANCH_NAME == "develop") {
                         // Compile instrumented code for develop branch which allows for calculating coverage
@@ -101,14 +100,17 @@ pipeline {
         stage("Build") {
             when { expression { return params.Build } }
             steps {
+                sh """
+                    vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'
+                """
                 // Perform remainder of provisioning
-                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
+                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
             }       
         }
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel'"
             }
         }
         stage("Services Tests") {
@@ -121,7 +123,7 @@ pipeline {
         stage("UI Tests") {
             when { expression { return params.UI_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test; make -s ui2x-test'"
             }
         }
         stage("Sonar") {
@@ -130,7 +132,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 }
+                        triggeredBy 'TimerTrigger'
                         branch 'develop'
                     }
                 }
@@ -152,7 +154,6 @@ pipeline {
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
                     }
-
                 }
             }
         }

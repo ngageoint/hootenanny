@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyTestRunner.h"
 
 // hoot
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/perty/PertyTestRunResult.h>
 #include <hoot/rnd/perty/PertyMatchScorer.h>
@@ -107,8 +107,6 @@ QList<boost::shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(con
   int testScoreCtr = 0;
   for (int i = 0; i < _numTestRuns; i++)
   {
-    QList<double> simulationScores;
-
     for (int j = 0; j < _dynamicVariables.size(); j++)
     {
       //this code does nothing if there are no dynamic variables present
@@ -116,6 +114,8 @@ QList<boost::shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(con
     }
     _matchScorer->setConfiguration(_settings);
 
+    QList<double> simulationScores;
+    double score;
     double scoreSum = 0;
     for (int j = 0; j < _numTestSimulations; j++)
     {
@@ -133,7 +133,7 @@ QList<boost::shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(con
           outputPath + "/test-" + QString::number(i + 1) + "-" + QString::number(j + 1);
         boost::shared_ptr<const MatchComparator> matchComparator =
           _matchScorer->scoreMatches(referenceMapInputPath, testRunOutputPath);
-        const double score = matchComparator->getPertyScore();
+        score = matchComparator->getPertyScore();
         simulationScores.append(score);
         scoreSum += score;
 
@@ -146,11 +146,14 @@ QList<boost::shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(con
       }
       else
       {
-        const double score = _testScores.at(testScoreCtr);
+        score = _testScores.at(testScoreCtr);
         simulationScores.append(score);
         scoreSum += score;
         testScoreCtr++;
       }
+      LOG_INFO(
+        "Received score of: " << score << " for test run #" << QString::number(i + 1) <<
+        ", simulation #" << QString::number(j + 1));
       LOG_VARD(scoreSum);
     }
 

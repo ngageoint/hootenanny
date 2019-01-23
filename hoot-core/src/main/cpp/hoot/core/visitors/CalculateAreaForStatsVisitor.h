@@ -28,9 +28,7 @@
 #define CALCULATEAREAFORSTATSVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
@@ -40,16 +38,13 @@ namespace hoot
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CalculateAreaForStatsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public SingleStatistic
+class CalculateAreaForStatsVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
 public:
 
   static std::string className() { return "hoot::CalculateAreaForStatsVisitor"; }
 
   CalculateAreaForStatsVisitor() : _total(0) {}
-
-  virtual ~CalculateAreaForStatsVisitor() {}
 
   /**
    * Returns the area in meters squared.
@@ -60,8 +55,6 @@ public:
 
   double getStat() const { return getArea(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const
@@ -69,7 +62,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   Meters _total;
 };
 

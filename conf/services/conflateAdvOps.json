@@ -133,6 +133,30 @@
                 "defaultvalue":"true"
             },
             {
+                "id":"remove_duplicate_relation_members_visitor",
+                "elem_type":"checkbox",
+                "description":"Remove all duplicate relation members in a relation.",
+                "name":"Remove Duplicate Relation Members",
+                "hoot_val":"hoot::RemoveDuplicateRelationMembersVisitor",
+                "defaultvalue":"true"
+            },
+            {
+                "id":"relation_circular_ref_remover",
+                "elem_type":"checkbox",
+                "description":"Remove all circular references within relations.",
+                "name":"Remove Relation Circular References",
+                "hoot_val":"hoot::RelationCircularRefRemover",
+                "defaultvalue":"true"
+            },
+            {
+                "id":"remove_empty_relations",
+                "elem_type":"checkbox",
+                "description":"Remove all relations with no members.",
+                "name":"Remove Empty Relations",
+                "hoot_val":"hoot::RemoveEmptyRelationsOp",
+                "defaultvalue":"true"
+            },
+            {
                 "id":"remove_duplicate_area_visitor",
                 "elem_type":"checkbox",
                 "description":"Remove any area elements that are essentially the same.",
@@ -228,7 +252,7 @@
                 "name":"Minimum Ties Required",
                 "defaultvalue":"4",
                 "hoot_key":"rubber.sheet.minimum.ties"
-            } 
+            }
         ]
     },
     {
@@ -506,11 +530,19 @@
                                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                                 "name":"Merger Creator",
                                 "required":"true",
-                                "defaultvalue":"hoot::HighwaySnapMergerCreator",
+                                "defaultvalue":"hoot::HighwayMergerCreator",
                                 "override":{
-                                    "defaultvalue":"hoot::HighwaySnapMergerCreator"
+                                    "defaultvalue":"hoot::HighwayMergerCreator"
                                 },
                                 "hoot_key":"merger.creators"
+                            },
+                            {
+            	              "id":"highway_merge_tags_only",
+                              "elem_type":"bool",
+                              "defaultvalue":"false",
+                              "description":"If true, road conflation will merge tags only and not geometries.",
+                              "name":"Merge Road Tags Only",
+                              "hoot_key":"highway.merge.tags.only"
                             },
                             {
                                 "id":"highway_matcher_heading_delta",
@@ -806,10 +838,10 @@
             {
         	"id":"poipolygon_address_additional_tag_keys",
         	"elem_type":"string",
-        	"description":"BBy default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the addressTagKeys file).  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
+        	"description":"By default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the addressTagKeys file).  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
         	"name":"Address Additional Tag Keys",
         	"defaultvalue":"",
-        	"hoot_key":"poi.polygon.address.additional.tag.keys",
+        	"hoot_key":"address.additional.tag.keys",
         	"onchange":"true"
     	    },
             {
@@ -888,7 +920,7 @@
         	"description":"By default, POI/Polygon conflation examines all tags with keys containing the text 'phone' for phone number comparisons.  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
         	"name":"Phone Number Additional Tag Keys",
         	"defaultvalue":"",
-        	"hoot_key":"poi.polygon.phone.number.additional.tag.keys",
+        	"hoot_key":"phone.number.additional.tag.keys",
         	"onchange":"true"
     	    },
             {
@@ -905,16 +937,16 @@
         	"description":"Optional geographical region code used when comparing phone numbers.   See: http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region code, if known for the input data, may increase phone number matching accuracy but may also have runtime performance implications.",
         	"name":"Phone Number Region Code",
         	"defaultvalue":"",
-        	"hoot_key":"poi.polygon.phone.number.region.code",
+        	"hoot_key":"phone.number.region.code",
         	"onchange":"true"
     	    },
             {
         	"id":"poipolygon_phone_number_search_in_text",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text that may contain things other than phone numbers.  If false, the conflation will assume the tag value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must be set to a valid region code when enabling this option.  Enabling this option may have runtime performance implications.",
+        	"description":"If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text that may contain things other than phone numbers.  If false, the conflation will assume the tag value is a phone number and will not search within it.  phone.number.region.code must be set to a valid region code when enabling this option.  Enabling this option may have runtime performance implications.",
         	"name":"Phone Number Search In Text",
-        	"hoot_key":"poi.polygon.phone.number.search.in.text"
+        	"hoot_key":"phone.number.search.in.text"
     	    },
             {
         	"id":"poipolygon_promote_points_with_addresses_to_pois",

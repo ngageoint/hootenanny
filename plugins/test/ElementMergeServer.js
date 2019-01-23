@@ -4,7 +4,7 @@ var assert = require('assert'),
 var httpMocks = require('node-mocks-http');
 var server = require('../ElementMergeServer.js');
 
-var poiToPoiInput = 
+var poiToPoiInput =
     "<?xml version='1.0' encoding='UTF-8'?>\
      <osm version='0.6' upload='true' generator='hootenanny'>\
        <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>\
@@ -21,7 +21,7 @@ var poiToPoiInput =
        </node>\
      </osm>";
 
-var poiToPolyInput = 
+var poiToPolyInput =
     "<?xml version='1.0' encoding='UTF-8'?>\
      <osm version='0.6' upload='true' generator='hootenanny'>\
      <node visible='true' id='-530' lat='-0.3635327329999427' lon='42.5442892910000410'>\
@@ -45,7 +45,7 @@ var poiToPolyInput =
      </way>\
      </osm>";
 
-var areaToAreaInput = 
+var areaToAreaInput =
     "<?xml version='1.0' encoding='UTF-8'?>\
      <osm version='0.6' generator='JOSM'>\
      <bounds minlat='37.7081' minlon='-122.5118886' maxlat='37.8106' maxlon='-122.376' origin='hootenanny' />\
@@ -70,7 +70,7 @@ var areaToAreaInput =
        </relation>\
        </osm>";
 
-var buildingToBuildingInput = 
+var buildingToBuildingInput =
     "<?xml version='1.0' encoding='UTF-8'?>\
      <osm version='0.6' generator='JOSM'>\
        <way id='-222330' action='modify' visible='true'>\
@@ -98,14 +98,15 @@ var buildingToBuildingInput =
 describe('ElementMergeServer', function () {
     it('responds with HTTP 404 if url not found', function() {
         var request  = httpMocks.createRequest({
-            method: 'GET',
-            url: '/foo'
+            method: 'POST',
+            url: '/foo',
+            body: poiToPoiInput
         });
         var response = httpMocks.createResponse();
         server.ElementMergeserver(request, response);
         assert.equal(response.statusCode, '404');
     });
-    it('repsonds with HTTP 400 if unsupported method', function() {
+    it('responds with HTTP 400 if unsupported method', function() {
         var request  = httpMocks.createRequest({
             method: 'GET',
             url: '/elementmerge'
@@ -115,8 +116,8 @@ describe('ElementMergeServer', function () {
         assert.equal(response.statusCode, '400');
     });
 
-    //Testing good inputs here only.  Bad inputs are thoroughly tested in the core.  Not checking 
-    //nodes in the polys here or overall element count, but its ok since we're testing all of 
+    //Testing good inputs here only.  Bad inputs are thoroughly tested in the core.  Not checking
+    //nodes in the polys here or overall element count, but its ok since we're testing all of
     //that in the core.
 
     it('merges two pois', function() {
@@ -238,27 +239,6 @@ describe('ElementMergeServer', function () {
                 assert.equal(result.osm.way[0].tag[3].$.k, "name");
                 assert.equal(result.osm.way[0].tag[3].$.v, "building 1");
             });
-        });
-    });
-
-    describe('handleInputs', function() {
- 
-        it('throws error if url not found', function() {
-            assert.throws(function error() {
-                server.handleInputs({
-                    method: 'POST',
-                    path: '/foo'
-                })
-            }, Error, 'Not found');
-        });
-
-        it('throws error if unsupported method', function() {
-            assert.throws(function error() {
-                server.handleInputs({
-                    method: 'GET',
-                    path: '/elementmerge'
-                })
-            }, Error, 'Unsupported method');
         });
     });
 

@@ -29,42 +29,29 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
 
 /**
  * Visits elements in a collection in a way that they can be modified.
- *
- * @note This interface hasn't been propagated throughout the code base so it will not likely be
- * honored in the same was as a ConstElementVisitor. Developers are encouraged to add ElementVisitor
- * support wherever it is relevant.
  */
-class ElementVisitor
+class ElementVisitor : public ApiEntityInfo
 {
 public:
 
+  ElementVisitor() : _numAffected(0) {}
   virtual ~ElementVisitor() {}
 
   static std::string className() { return "hoot::ElementVisitor"; }
 
   virtual void visit(const ElementPtr& e) = 0;
 
-  /**
-    Returns a string representation of the visitor
-    */
-  virtual QString toString() { return ""; }
+protected:
 
-  /**
-   * Returns a one sentence description for the visitor.
-   *
-   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
-   * on one line when displayed with the 'info --operators' command.
-   *
-   * To prevent a visitor from being displayed by the 'info --operators' command, this
-   * may be implemented as returning an empty string.
-   */
-  virtual QString getDescription() const = 0;
+  // This will only be used by those implementing OperationStatusInfo.
+  long _numAffected;
 };
 
 typedef boost::shared_ptr<ElementVisitor> ElementVisitorPtr;

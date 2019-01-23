@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddGeometryTypeVisitor.h"
 
@@ -31,12 +31,12 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, AddGeometryTypeVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, AddGeometryTypeVisitor)
 
 AddGeometryTypeVisitor::AddGeometryTypeVisitor()
 {

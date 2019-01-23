@@ -41,6 +41,7 @@ function initialize()
 {
     // Set the schema type for the export
     hoot.Settings.set({"osm.map.writer.schema":"GGDMv30"});
+    hoot.Settings.set({"ogr.esri.fdname":"GGDM_Composite"});
 }
 
 

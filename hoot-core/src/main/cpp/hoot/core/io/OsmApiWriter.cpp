@@ -28,7 +28,7 @@
 #include "OsmApiWriter.h"
 
 //  Hootenanny
-#include <hoot/core/VersionDefines.h>
+#include <hoot/core/info/VersionDefines.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -64,7 +64,11 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbMaxWriters()),
     _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize()),
-    _showProgress(false)
+    _showProgress(false),
+    _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
+    _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
+    _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
+    _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret())
 {
   if (isSupported(url))
     _url = url;
@@ -73,7 +77,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
 bool OsmApiWriter::apply()
 {
   Timer timer;
-  HootNetworkRequestPtr request(new HootNetworkRequest());
+  //  Setup the network request object without OAuth for the capabilities call
+  HootNetworkRequestPtr request = createNetworkRequest();
   //  Validate API capabilites
   if (!queryCapabilities(request))
   {
@@ -81,6 +86,8 @@ bool OsmApiWriter::apply()
     return false;
   }
   _stats.append(SingleStat("API Capabilites Query Time (sec)", timer.getElapsedAndRestart()));
+  //  Setup the network request object with OAuth or with username/password authentication
+  request = createNetworkRequest(true);
   //  Validate API permissions
   if (!validatePermissions(request))
   {
@@ -177,8 +184,8 @@ bool OsmApiWriter::apply()
 
 void OsmApiWriter::_changesetThreadFunc()
 {
-  HootNetworkRequestPtr request(new HootNetworkRequest());
-  //
+  //  Setup the network request object with OAuth or with username/password authentication
+  HootNetworkRequestPtr request = createNetworkRequest(true);
   long id = -1;
   //  Iterate until all elements are sent and updated
   while (!_changeset.isDone())
@@ -205,7 +212,7 @@ void OsmApiWriter::_changesetThreadFunc()
         _workQueue.push(workInfo);
         _workQueueMutex.unlock();
         //  Reset the network request object and sleep it off
-        request.reset(new HootNetworkRequest());
+        request = createNetworkRequest(true);
         LOG_WARN("Bad changeset ID. Resetting network request object.");
         this_thread::sleep_for(chrono::milliseconds(100));
         //  Try a new create changeset request
@@ -296,9 +303,14 @@ void OsmApiWriter::_changesetThreadFunc()
 
 void OsmApiWriter::setConfiguration(const Settings& conf)
 {
-  _description = ConfigOptions(conf).getChangesetDescription();
-  _maxChangesetSize = ConfigOptions(conf).getChangesetApidbMaxSize();
-  _maxWriters = ConfigOptions(conf).getChangesetApidbMaxWriters();
+  ConfigOptions options(conf);
+  _description = options.getChangesetDescription();
+  _maxChangesetSize = options.getChangesetApidbMaxSize();
+  _maxWriters = options.getChangesetApidbMaxWriters();
+  _consumerKey = options.getHootOsmAuthConsumerKey();
+  _consumerSecret = options.getHootOsmAuthConsumerSecret();
+  _accessToken = options.getHootOsmAuthAccessToken();
+  _secretToken = options.getHootOsmAuthAccessTokenSecret();
 }
 
 bool OsmApiWriter::isSupported(const QUrl &url)
@@ -635,6 +647,30 @@ QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& 
     LOG_WARN(ex.what());
   }
   return "";
+}
+
+HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentication)
+{
+  HootNetworkRequestPtr request;
+  if (!requiresAuthentication)
+  {
+    //  When the call doesn't require authentication, don't pass in OAuth credentials
+    request.reset(new HootNetworkRequest());
+  }
+  else if (!_consumerKey.isEmpty() &&
+      !_consumerSecret.isEmpty() &&
+      !_accessToken.isEmpty() &&
+      !_secretToken.isEmpty())
+  {
+    //  When OAuth credentials are present and authentication is requested, pass OAuth crendentials
+    request.reset(new HootNetworkRequest(_consumerKey, _consumerSecret, _accessToken, _secretToken));
+  }
+  else
+  {
+    //  No OAuth credentials are present, so authentication must be by username/password
+    request.reset(new HootNetworkRequest());
+  }
+  return request;
 }
 
 }

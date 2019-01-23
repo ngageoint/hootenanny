@@ -5,7 +5,7 @@ jobs:
   archive-create:
     working_directory: '/rpmbuild/hootenanny'
     docker:
-      - image: hootenanny/rpmbuild-hoot-release@sha256:31eebbffaf447159224318992582dc42785c62565fb00f79c6ca8bd2f1d1ea7e
+      - image: hootenanny/rpmbuild-hoot-release@sha256:23b0d5f707ec041306a8e217a8ea388dfdaac7e49f7ec32bd50ea9b020720068
     steps:
       - checkout
       - run:
@@ -17,7 +17,7 @@ jobs:
           name: 'Make Hootenanny Archive'
           command: |
             su-exec postgres pg_ctl -D $PGDATA -s start
-            su-exec rpmbuild bash -c "mkdir -p /rpmbuild/.m2 && curl -sSL https://s3.amazonaws.com/hoot-maven/m2-cache-2018-10-02.tar.gz | tar -C /rpmbuild/.m2 -xzf -"
+            su-exec rpmbuild bash -c "mkdir -p /rpmbuild/.m2 && curl -sSL https://s3.amazonaws.com/hoot-maven/m2-cache-2018-12-06.tar.gz | tar -C /rpmbuild/.m2 -xzf -"
             su-exec rpmbuild ./scripts/ci/archive.sh
             su-exec rpmbuild bash -c "mkdir -p archives && mv -v hootenanny-[0-9]*.tar.gz archives"
       - persist_to_workspace:
@@ -27,7 +27,7 @@ jobs:
   archive-upload:
     working_directory: '/rpmbuild/hootenanny'
     docker:
-      - image: hootenanny/rpmbuild-repo@sha256:562b0eae74337a591280178bc064d61bf508193e102bd9cae6dfc932ab7cbb26
+      - image: hootenanny/rpmbuild-repo@sha256:199d872d842961003769f1f589c72097ce9ed21572c5664071b599c838224f88
         user: rpmbuild
     steps:
       - attach_workspace:
@@ -39,7 +39,7 @@ jobs:
   copyright:
     working_directory: '/rpmbuild/hootenanny'
     docker:
-      - image: hootenanny/rpmbuild-generic@sha256:4743f645ce4b7d6f29013c158881a035088b3eb4cab36d674c1b501e8690418a
+      - image: hootenanny/rpmbuild-generic@sha256:b46f6b3a2386f2643cf3fa7d29aa13670743aedb7b6309220b9b16a2dfd6334d
         user: rpmbuild
         environment:
           HOOT_HOME: '/rpmbuild/hootenanny'

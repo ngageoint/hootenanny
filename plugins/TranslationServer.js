@@ -21,6 +21,12 @@ var availableTranslations = [
 var HOOT_HOME = process.env.HOOT_HOME;
 if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
+    hoot.Log.setLogLevel("warn");
+    hoot.Settings.set({"osm.map.reader.xml.add.child.refs.when.missing":"true"});
+    hoot.Settings.set({"ogr.add.uuid": "false"});
+    hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
+    hoot.Settings.set({"ogr.note.extra": "attribute"});
+    hoot.Settings.set({"reader.add.source.datetime": "false"});
 }
 
 //Getting schema for fcode, geom type
@@ -259,9 +265,6 @@ var postHandler = function(data) {
         throw new Error('Unsupported translation schema ' + data.translation);
     }
     var translation = data.transMap[data.transDir][data.translation];
-    hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
-    hoot.Settings.set({"ogr.note.extra": "attribute"});
-    hoot.Settings.set({"reader.add.source.datetime": "false"});
 
     if (data.transDir === "toogr") {
         hoot.Settings.set({"osm.map.writer.schema": data.translation});
@@ -288,7 +291,7 @@ var osm2ogr = function(params) {
 
         //geom type may be Vertex for tagged nodes that are members of ways
         var geom = params.geom.split(',').map(function(geom) {
-            return geom === 'Vertex' ? 'Point' : geom;         
+            return geom === 'Vertex' ? 'Point' : geom;
         });
         var k = params.key || params.idelem;
         var v = params.value || params.idval;
@@ -311,7 +314,7 @@ var osm2ogr = function(params) {
                 // first check to see if the current column name is found
                 // in other schema columns
                 var matches = [];
-                match.forEach(function(schema) { 
+                match.forEach(function(schema) {
                     schema.columns.forEach(function(col) { if (col.name === column.name) matches.push(col) })
                 })
                 // if it is...
@@ -320,15 +323,15 @@ var osm2ogr = function(params) {
                     if (!matches[0].hasOwnProperty('enumerations')) {
                         finColumns.push(column)
                     } else {
-                        // otherwise build the intersection of 
+                        // otherwise build the intersection of
                         // all matches' enumerations...
                         matches.push(column)
                         var enumerations = [].concat
                             .apply([], matches.map(function(column) { return column.enumerations }))
-                            .filter(function(enumeration, index, self) { 
-                                return self.findIndex(function(e) { 
-                                    return e.name === enumeration.name 
-                                }) === index; 
+                            .filter(function(enumeration, index, self) {
+                                return self.findIndex(function(e) {
+                                    return e.name === enumeration.name
+                                }) === index;
                             })
 
                         // and then only if that intersection
@@ -341,7 +344,7 @@ var osm2ogr = function(params) {
                 }
             })
 
-            // final check to see if no 
+            // final check to see if no
             // intersection was found amongst columns
             if (!finColumns.length) {
                 schemaError(params);
@@ -790,7 +793,6 @@ var getFuzzyStrings = function(searchStr) {
 
 var schemaError = function(params) {
     var msg = params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found';
-    console.error(msg);
     throw new Error(msg);
 }
 

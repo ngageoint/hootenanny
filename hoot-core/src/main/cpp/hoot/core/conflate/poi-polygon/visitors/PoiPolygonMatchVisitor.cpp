@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PoiPolygonMatchVisitor.h"
@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -48,10 +45,20 @@
 namespace hoot
 {
 
- PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
-                                                std::vector<const Match*>& result,
-                                                ConstMatchThresholdPtr threshold,
-                                                boost::shared_ptr<PoiPolygonRfClassifier> rf) :
+PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
+                                               std::vector<const Match*>& result,
+                                               ElementCriterionPtr filter) :
+_map(map),
+_result(result),
+_filter(filter)
+{
+}
+
+PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
+                                               std::vector<const Match*>& result,
+                                               ConstMatchThresholdPtr threshold,
+                                               boost::shared_ptr<PoiPolygonRfClassifier> rf,
+                                               ElementCriterionPtr filter) :
 _map(map),
 _result(result),
 _neighborCountMax(-1),
@@ -60,7 +67,8 @@ _elementsEvaluated(0),
 _threshold(threshold),
 _rf(rf),
 _numElementsVisited(0),
-_numMatchCandidatesVisited(0)
+_numMatchCandidatesVisited(0),
+_filter(filter)
 {
   ConfigOptions opts = ConfigOptions();
   _enableAdvancedMatching = opts.getPoiPolygonEnableAdvancedMatching();
@@ -94,9 +102,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Elemen
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() &&
-          OsmSchema::getInstance().isPoiPolygonPoly(
-            n, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+      if (n->isUnknown() && _polyCrit.isSatisfied(n))
       {
         // score each candidate and push it on the result vector
         PoiPolygonMatch* m =
@@ -141,9 +147,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() &&
-          OsmSchema::getInstance().isPoiPolygonPoly(
-            n, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+      if (n->isUnknown() && _polyCrit.isSatisfied(n))
       {
         _surroundingPolyIds.insert(*it);
       }
@@ -170,9 +174,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<c
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() &&
-          OsmSchema::getInstance().isPoiPolygonPoi(
-            n, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()))
+      if (n->isUnknown() && _poiCrit.isSatisfied(n))
       {
         _surroundingPoiIds.insert(*it);
       }
@@ -189,7 +191,7 @@ Meters PoiPolygonMatchVisitor::_getSearchRadius(const boost::shared_ptr<const El
 
 void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
 {
-  if (_isMatchCandidate(e))
+  if (isMatchCandidate(e))
   {
     //Technically, the density based density matches depends on this data too, but since that
     //code has been disabled, this check is good enough.
@@ -217,15 +219,18 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-bool PoiPolygonMatchVisitor::_isMatchCandidate(ConstElementPtr element)
+bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element)
 {
+  if (_filter && !_filter->isSatisfied(element))
+  {
+    return false;
+  }
+
   //simpler logic to just examine each POI and check for surrounding polys, rather than check both
   //POIs and their surrounding polys and polys and their surrounding POIs; note that this is
   //different than PoiPolygonMatchCreator::isMatchCandidate, which is looking at both to appease
   //the stats
-  return element->isUnknown() &&
-         OsmSchema::getInstance().isPoiPolygonPoi(
-         element, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList());
+  return element->isUnknown() && PoiPolygonPoiCriterion().isSatisfied(element);
 }
 
 boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()

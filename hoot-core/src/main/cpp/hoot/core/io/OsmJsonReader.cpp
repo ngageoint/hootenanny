@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmJsonReader.h"
@@ -34,7 +34,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -64,7 +64,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 OsmJsonReader::OsmJsonReader()
   : _defaultStatus(Status::Invalid),
     _useDataSourceIds(true),
-    _defaultCircErr(15.0),
+    _defaultCircErr(ElementData::CIRCULAR_ERROR_EMPTY),
     _propTree(),
     _version(""),
     _generator(""),

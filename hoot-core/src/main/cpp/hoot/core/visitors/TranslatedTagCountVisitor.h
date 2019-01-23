@@ -28,7 +28,7 @@
 #define TRANSLATEDTAGCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
@@ -49,8 +49,6 @@ public:
 
   TranslatedTagCountVisitor() {}
   TranslatedTagCountVisitor(boost::shared_ptr<ScriptTranslator> t);
-
-  virtual ~TranslatedTagCountVisitor() {}
 
   long getPopulatedCount() const { return _populatedCount; }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OUTSIDEBOUNDSREMOVER_H
@@ -48,12 +48,15 @@ class OsmMap;
 class OutsideBoundsRemover
 {
 public:
-  OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e, bool inverse = false);
+
+  OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e,
+                       bool inverse = false);
 
   /**
    * Removes ways completely outside the given envelope.
    */
-  static void removeWays(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e, bool inverse = false);
+  static void removeWays(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e,
+                         bool inverse = false);
 
   void removeWays();
 

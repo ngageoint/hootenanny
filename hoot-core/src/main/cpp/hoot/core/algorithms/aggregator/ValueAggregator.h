@@ -27,6 +27,9 @@
 #ifndef VALUEAGGREGATOR_H
 #define VALUEAGGREGATOR_H
 
+// Hoot
+#include <hoot/core/info/ApiEntityInfo.h>
+
 // Qt
 #include <QString>
 
@@ -39,11 +42,14 @@
 namespace hoot
 {
 
-class ValueAggregator
+class ValueAggregator : public ApiEntityInfo
 {
 public:
 
   static std::string className() { return "hoot::ValueAggregator"; }
+
+  ValueAggregator() {}
+  virtual ~ValueAggregator() {}
 
   /**
    * Aggregates the values in the vector d into a single value. The aggregation may be something
@@ -54,8 +60,6 @@ public:
   virtual double aggregate(std::vector<double>& d) const = 0;
 
   virtual QString toString() const = 0;
-
-  virtual QString getDescription() = 0;
 };
 
 typedef boost::shared_ptr<ValueAggregator> ValueAggregatorPtr;

@@ -28,8 +28,8 @@
 #define MATCHCOMPARATOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>

@@ -32,13 +32,13 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/algorithms/WaySplitter.h>
-#include <hoot/core/algorithms/MultiLineStringSplitter.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/util/RandomNumberUtils.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Tgs
 #include <tgs/System/Time.h>
@@ -48,7 +48,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyWaySplitVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, PertyWaySplitVisitor)
 
 PertyWaySplitVisitor::PertyWaySplitVisitor() :
 _splitRecursionLevel(0)
@@ -76,16 +76,10 @@ void PertyWaySplitVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-QString PertyWaySplitVisitor::toString()
-{
-  return "_waySplitProbability: " + QString::number(_waySplitProbability) +
-    ", _minNodeSpacing: " + QString::number(_minNodeSpacing);
-}
-
 void PertyWaySplitVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   LOG_TRACE(e->getElementType());
-  if (OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType()))
+  if (HighwayCriterion().isSatisfied(e))
   {
     _split(e);
   }
@@ -156,7 +150,8 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     if (element->getElementType() == ElementType::Way)
     {
       vector<WayPtr> newWaysAfterSplit =
-        WaySplitter::split(_map->shared_from_this(), boost::dynamic_pointer_cast<Way>(element), waySplitPoint);
+        WaySplitter::split(_map->shared_from_this(),
+        boost::dynamic_pointer_cast<Way>(element), waySplitPoint);
       for (size_t i = 0; i < newWaysAfterSplit.size(); i++)
       {
         newElementsAfterSplit.push_back(newWaysAfterSplit.at(i));

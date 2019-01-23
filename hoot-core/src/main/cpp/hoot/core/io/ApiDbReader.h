@@ -28,7 +28,7 @@
 #define APIDBREADER_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/Configurable.h>

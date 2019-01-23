@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmSchemaJs.h"
 
@@ -30,7 +30,17 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/HgisPoiCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/HasNameCriterion.h>
 
 using namespace v8;
 
@@ -55,10 +65,10 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, getAllTags)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "getCategories"),
               FunctionTemplate::New(current, getCategories)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getChildTags"),
-              FunctionTemplate::New(current, getChildTags)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getSimilarTags"),
-              FunctionTemplate::New(current, getSimilarTags)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "getChildTagsAsVertices"),
+              FunctionTemplate::New(current, getChildTagsAsVertices)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "getSimilarTagsAsVertices"),
+              FunctionTemplate::New(current, getSimilarTagsAsVertices)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "getTagByCategory"),
               FunctionTemplate::New(current, getTagByCategory)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "getTagVertex"),
@@ -109,23 +119,24 @@ void OsmSchemaJs::getCategories(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getCategories(kvp).toStringList()));
 }
 
-void OsmSchemaJs::getChildTags(const FunctionCallbackInfo<Value>& args)
+void OsmSchemaJs::getChildTagsAsVertices(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
   QString kvp = toCpp<QString>(args[0]);
 
-  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getChildTags(kvp)));
+  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getChildTagsAsVertices(kvp)));
 }
 
-void OsmSchemaJs::getSimilarTags(const FunctionCallbackInfo<Value>& args)
+void OsmSchemaJs::getSimilarTagsAsVertices(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
   QString kvp = toCpp<QString>(args[0]);
   double minimumScore = toCpp<double>(args[1]);
 
-  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getSimilarTags(kvp, minimumScore)));
+  args.GetReturnValue().Set(
+    toV8(OsmSchema::getInstance().getSimilarTagsAsVertices(kvp, minimumScore)));
 }
 
 void OsmSchemaJs::getTagByCategory(const FunctionCallbackInfo<Value>& args)
@@ -155,7 +166,8 @@ void OsmSchemaJs::isAncestor(const FunctionCallbackInfo<Value>& args)
   QString childKvp = toCpp<QString>(args[0]);
   QString parentKvp = toCpp<QString>(args[1]);
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isAncestor(childKvp, parentKvp)));
+  args.GetReturnValue().Set(
+    Boolean::New(current, OsmSchema::getInstance().isAncestor(childKvp, parentKvp)));
 }
 
 void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
@@ -165,7 +177,7 @@ void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isArea(e)));
+  args.GetReturnValue().Set(Boolean::New(current, AreaCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
@@ -175,7 +187,7 @@ void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isLinear(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, LinearCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
@@ -185,7 +197,7 @@ void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isBuilding(e)));
+  args.GetReturnValue().Set(Boolean::New(current, BuildingCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isHgisPoi(const FunctionCallbackInfo<Value>& args)
@@ -195,7 +207,7 @@ void OsmSchemaJs::isHgisPoi(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isHgisPoi(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, HgisPoiCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
@@ -205,7 +217,7 @@ void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isLinearWaterway(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, LinearWaterwayCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isPowerLine(const FunctionCallbackInfo<Value>& args)
@@ -215,7 +227,7 @@ void OsmSchemaJs::isPowerLine(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isPowerLine(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, PowerLineCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isMetaData(const FunctionCallbackInfo<Value>& args)
@@ -236,7 +248,7 @@ void OsmSchemaJs::isPoi(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isPoi(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, PoiCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
@@ -246,7 +258,7 @@ void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isRailway(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, RailwayCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
@@ -256,7 +268,7 @@ void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().hasName(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, HasNameCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinearHighway(const FunctionCallbackInfo<Value>& args)
@@ -266,7 +278,7 @@ void OsmSchemaJs::isLinearHighway(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType())));
+  args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::score(const FunctionCallbackInfo<Value>& args)

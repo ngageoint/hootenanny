@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryIngestChangesetReader.h"
 
@@ -62,7 +62,7 @@ boost::shared_ptr<OGRSpatialReference> MultiaryIngestChangesetReader::getProject
 {
   if (!_wgs84)
   {
-    _wgs84 = MapProjector::getInstance().createWgs84Projection();
+    _wgs84 = MapProjector::createWgs84Projection();
   }
   return _wgs84;
 }

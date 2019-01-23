@@ -22,21 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SearchRadiusCalculator.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/RubberSheet.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 using namespace std;
 
@@ -54,8 +54,7 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);
   //TODO: I don't believe this actually matters.
-//  if (config.getConflatePreOps().contains("hoot::RubberSheet") ||
-//      config.getUnifyPreOps().contains("hoot::RubberSheet"))
+//  if (config.getConflatePreOps().contains("hoot::RubberSheet"))
 //  {
 //    throw HootException(
 //      "Rubber sheeting cannot be used when automatically calculating search radius.");

@@ -28,8 +28,8 @@
 #define HIGHWAYINTERSECTIONCRITERION_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
@@ -55,7 +55,7 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new HighwayIntersectionCriterion(_map)); }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual void setOsmMap(const OsmMap* map);
 

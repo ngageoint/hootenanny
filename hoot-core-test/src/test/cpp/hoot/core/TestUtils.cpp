@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TestUtils.h"
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/criterion/TagCriterion.h>
@@ -57,6 +57,11 @@ namespace hoot
 
 boost::shared_ptr<TestUtils> TestUtils::_theInstance;
 
+const QString TestUtils::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
+const QString TestUtils::STREET_TAG_NAME = "addr:street";
+const QString TestUtils::FULL_ADDRESS_TAG_NAME = "address";
+const QString TestUtils::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
+
 TestUtils::TestUtils()
 {
 }
@@ -82,7 +87,7 @@ bool TestUtils::compareMaps(OsmMapPtr ref, OsmMapPtr test)
 }
 
 NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
-                              double circularError, Tags tags)
+                              Meters circularError, Tags tags)
 {
   NodePtr result(new Node(status, map->createNextNodeId(), x, y, circularError));
   map->addNode(result);
@@ -90,12 +95,12 @@ NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
   return result;
 }
 
-WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce, const QString& note)
+WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError, const QString& note)
 {
-  WayPtr result(new Way(s, map->createNextWayId(), ce));
+  WayPtr result(new Way(s, map->createNextWayId(), circularError));
   for (size_t i = 0; c[i].isNull() == false; i++)
   {
-    NodePtr n(new Node(s, map->createNextNodeId(), c[i], ce));
+    NodePtr n(new Node(s, map->createNextNodeId(), c[i], circularError));
     map->addNode(n);
     result->addNode(n->getId());
   }

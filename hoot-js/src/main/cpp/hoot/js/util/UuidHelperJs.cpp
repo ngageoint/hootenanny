@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UuidHelperJs.h"
 
@@ -30,7 +30,7 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/StringUtilsJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 // QT
 #include <QStringList>

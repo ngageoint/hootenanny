@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -58,12 +58,6 @@ PertyDuplicatePoiOp::PertyDuplicatePoiOp()
   _rng = _localRng.get();
 
   setConfiguration(conf());
-}
-
-QString PertyDuplicatePoiOp::toString()
-{
-  return "_p: " + QString::number(_p) + ", _duplicateSigma: " + QString::number(_duplicateSigma) +
-    ", _moveMultiplier: "  + QString::number(_moveMultiplier);
 }
 
 void PertyDuplicatePoiOp::apply(OsmMapPtr& map)

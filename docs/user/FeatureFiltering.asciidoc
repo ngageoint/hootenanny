@@ -1,0 +1,256 @@
+
+[[FeatureFiltering]]
+== Feature Filtering
+
+Feature filtering is supported during conflation in order to conflate a subset of the input features.  Feature filtering happens in 
+two ways: 1) at the geometry/base feature type level and 2) more granularly at the tag/schema level.
+
+=== Geometry and Base Fature Type Conflation Feature Filtering
+
+Conflation at the geometry/base feature type level is controlled with matchers.  An example of this type of conflation would be 
+Road Conflation or POI Conflation.  Hootenanny has a specific geometric and attribute related definition of what makes up a road or POI.  
+For an overview of the different types of conflation available in Hootenanny see the corresponding conflation related sections in this 
+document, as well as the documentation for the 'match.creators' configuration option.  By default, Hootenanny enables all types of 
+conflation that it supports.  This ensures that a conflation job results in as much data conflated as possible.  If you desire to perform 
+certain types of conflation only, you can adjust the 'match.creators' and 'merger.creators' configuration options accordingly.
+
+=== Tag and Schema Conflation Feature Filtering
+
+At a more granular level, Hootenanny allows for filtering out features during conflation via tag/schema relationships.  Hootenanny supports 
+specifying a JSON string or path to a file containing multiple logical AND/OR/NOT tag filters and allows for multiple filtering concepts:
+
+* Tag key/value string wildcard - basic tag string matching between features
+* Type tag similarity - score how similar features are to each other only keep those at or above a certain similarity threshold
+* Aliases - include features that have tags that are aliases for other tags
+* Children/ancestors - include features that are either children or ancestors of the features they are being compared to
+* Associations - include features that have associations with other features in ways that do not fall into one of the other matching types (catch all similarity capability)
+* Categories - include features that fall into a user defined category 
+
+==== Conflation Command Example
+
+An example using tag/schema filtering with conflation to conflate only restaurants:
+-----
+hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" input1.osm input2.osm output.osm
+-----
+
+Conflate specifying a JSON feature filter as a file:
+-----
+hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
+-----
+
+==== Filter Examples
+
+The tag/schema filtering capability is best explained through specific filter examples:
+
+1) Filter down to just restaurants:
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "amenity=restaurant"
+    }
+  ]
+}
+-----
+
+2) Filter down to just tourism related features:
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "tourism=*"
+    }
+  ]
+}
+-----
+
+3) Filter down to just restaurants OR places of worship; exclude chapels:
+-----
+{
+  "should": 
+  [
+    {
+      "tag": "amenity=restaurant"
+    },
+    {
+      "tag": "amenity=place_of_worship"
+    }
+  ],
+  "must_not":
+  [
+    {
+      "tag": "amenity=chapel"
+    }
+  ]
+}
+-----
+
+4) Filter down to just hospitals and allow alias matching (alias matching off by default).  Alias matching is controlled from the hoot schema.  For example, this would also pick up _amenity=medical_centre_ as an alias:
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "amenity=hospital",
+      "allowAliases": "true"
+    }
+  ]
+}
+-----
+
+5) Filter down to restaurants and anything with a schema similarity to restaurants >= 0.8 (similarity comparison off by default).  Feature type similarity scores are controlled from the hoot schema.  For example, this also picks up _amenity=pub_:
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "amenity=restaurant",
+      "similarityThreshold": "0.8"
+    }
+  ]
+}
+-----
+
+6) Filter down to only non-building malls (POI's):
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "shop=mall"
+    }
+  ],
+  "must_not":
+  [
+    {
+      "tag": "building=*"
+    }
+  ]
+}
+-----
+
+7) Filter down to features with a tag key containing "address":
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "*address*=*"
+    }
+  ]
+}
+-----
+
+8) Filter down to features with a tag key starting with "address":
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "address*=*"
+    }
+  ]
+}
+-----
+
+9) Filter down to features with a tag key ending with "address":
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "*address=*"
+    }
+  ]
+}
+-----
+
+10) Filter down to features with a tag value containing "address":
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "*=*address*"
+    }
+  ]
+}
+-----
+
+11) Filter down to features with a tag value starting with "address":
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "*=address*"
+    }
+  ]
+}
+-----
+
+12) Filter down to features with a tag value ending with "address":
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "*=*address"
+    }
+  ]
+}
+-----
+
+13) Filter down to all gravel roads, as well as their descendants (off by default; this also returns surface=fine_gravel and surface=pebblestone):
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "surface=gravel",
+      "allowChildren": "true"
+    }
+  ]
+}
+-----
+
+14) Filter down to all roads even though highway=secondary was specified (off by default; this also returns highway=road):
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "highway=secondary",
+      "allowAncestors": "true"
+    }
+  ]
+}
+-----
+
+15) Query for all transportation related features (no tag filter may be specified with a category; current available categories include: poi, building, transportation, use, multiuse, name, and pseudoname):
+-----
+{
+  "must": 
+  [
+    {
+      "category": "transportation"
+    }
+  ]
+}
+-----
+
+16) Query for all features associated with building:part=yes (this is kind of catch all where other relationships are too strong of a link; associations aren't widely used in the hoot schema but can be added quite easily):
+-----
+{
+  "must": 
+  [
+    {
+      "tag": "building:part=yes",
+      "allowAssociations": "true"
+    }
+  ]
+}
+-----
+

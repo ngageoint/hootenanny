@@ -32,7 +32,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // TGS
 #include <tgs/SharedPtr.h>
@@ -40,10 +40,12 @@
 namespace hoot
 {
 
+/**
+ * (Singleton)
+ */
 class ProbabilityOfMatch
 {
 public:
-  ProbabilityOfMatch();
 
   static ProbabilityOfMatch& getInstance();
 
@@ -70,6 +72,9 @@ public:
   static bool debug;
 
 private:
+
+  ProbabilityOfMatch();
+
   static boost::shared_ptr<ProbabilityOfMatch> _theInstance;
   double _parallelExp;
   double _dMax;

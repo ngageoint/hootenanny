@@ -1,8 +1,7 @@
 ****Quick Stats****
-12:31:13.082 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
-
-12:31:13.321 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-12:31:13.322 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
+14:53:02.519 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+14:53:02.577 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+14:53:02.578 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -13,28 +12,26 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-12:31:15.396 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
-
-12:31:15.585 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-12:31:16.581 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-12:31:16.589 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+14:53:02.902 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+14:53:02.961 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+14:53:03.211 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
+14:53:03.212 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-12:31:16.591 INFO  ...grant/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-12:31:16.594 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+14:53:03.213 INFO  ...ase-1/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
+14:53:03.214 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-12:31:16.596 INFO  ...vagrant/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-12:31:17.940 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/TDSv61.js
-12:31:21.905 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
-
-12:31:22.033 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-12:31:22.037 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-12:31:22.040 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+14:53:03.215 INFO  ...lease-1/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+14:53:03.844 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /fouo/hoot-release-1/hoot/translations/TDSv61.js
+14:53:06.254 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+14:53:06.302 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+14:53:06.304 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
+14:53:06.305 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-12:31:22.041 INFO  ...grant/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-12:31:22.043 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+14:53:06.306 INFO  ...ase-1/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
+14:53:06.307 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-12:31:22.044 INFO  ...vagrant/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-12:31:22.886 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/TDSv61.js
+14:53:06.307 INFO  ...lease-1/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+14:53:06.750 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /fouo/hoot-release-1/hoot/translations/TDSv61.js
 {
     "Node Count":
     [

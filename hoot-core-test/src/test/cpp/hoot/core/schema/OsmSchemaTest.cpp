@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -62,10 +62,8 @@ class OsmSchemaTest : public HootTestFixture
   CPPUNIT_TEST(getSimilarTagsTest);
   CPPUNIT_TEST(getTagTest);
   CPPUNIT_TEST(isAncestorTest);
-  CPPUNIT_TEST(isAreaTest);
   CPPUNIT_TEST(isMetaDataTest);
   CPPUNIT_TEST(religionTest);
-  CPPUNIT_TEST(elementHasNameTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -124,9 +122,6 @@ public:
     HOOT_STR_EQUALS("leisure=badvalue1", avg.toStdString());
   }
 
-  /**
-   * Test calculating the average between two tags with weights.
-   */
   void categoryTest()
   {
     OsmSchema uut;
@@ -170,7 +165,7 @@ public:
 
   void dumpAsCsv(OsmSchema& schema, QString tag)
   {
-    vector<SchemaVertex> surfaces = schema.getChildTags(tag);
+    vector<SchemaVertex> surfaces = schema.getChildTagsAsVertices(tag);
     QString csvDistance;
     QString csvAverage;
 
@@ -212,7 +207,7 @@ public:
   {
     OsmSchema& uut = OsmSchema::getInstance();
 
-    vector<SchemaVertex> gravel = uut.getChildTags("surface=gravel");
+    vector<SchemaVertex> gravel = uut.getChildTagsAsVertices("surface=gravel");
 
     CPPUNIT_ASSERT_EQUAL(2, (int)gravel.size());
   }
@@ -234,11 +229,11 @@ public:
     uut.createTestingGraph();
 
     HOOT_STR_EQUALS("[3]{highway=road, highway=primary, highway=secondary}",
-      tagsToNames(uut.getSimilarTags("highway=primary", 0.8)));
+      tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.8)));
     HOOT_STR_EQUALS("[4]{highway=road, highway=primary, highway=secondary, highway=residential}",
-      tagsToNames(uut.getSimilarTags("highway=primary", 0.5)));
+      tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.5)));
     HOOT_STR_EQUALS("[1]{highway=road}",
-      tagsToNames(uut.getSimilarTags("highway=road", 0.1)));
+      tagsToNames(uut.getSimilarTagsAsVertices("highway=road", 0.1)));
   }
 
   /**
@@ -405,40 +400,6 @@ public:
       "highway=road"));
   }
 
-  void isAreaTest()
-  {
-    OsmSchema uut;
-    uut.createTestingGraph();
-
-    Tags t;
-    t["area"] = "yes";
-    CPPUNIT_ASSERT_EQUAL(true, uut.isArea(t, ElementType::Way));
-    CPPUNIT_ASSERT_EQUAL(true, uut.isArea(t, ElementType::Relation));
-    CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Node));
-
-    t.clear();
-    t["highway"] = "primary";
-    CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
-
-    t.clear();
-    t[MetadataTags::BuildingPart()] = "yes";
-    CPPUNIT_ASSERT_EQUAL(true, uut.isArea(t, ElementType::Way));
-    t[MetadataTags::BuildingPart()] = "no";
-    CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
-    t[MetadataTags::BuildingPart()] = "invalid";
-    CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
-
-    t.clear();
-    t["leisure"] = "foo";
-    CPPUNIT_ASSERT_EQUAL(true, uut.isArea(t, ElementType::Way));
-    CPPUNIT_ASSERT_EQUAL(true, uut.isArea(t, ElementType::Relation));
-
-    t.clear();
-    t["leisure"] = "track";
-    CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
-    CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Relation));
-  }
-
   void isMetaDataTest()
   {
     OsmSchema& uut = OsmSchema::getInstance();
@@ -470,19 +431,6 @@ public:
     // These should have a high score. The exact value isn't important.
     d = uut.score("building=abbey", "amenity=church");
     CPPUNIT_ASSERT(d >= 0.8);
-  }
-
-  void elementHasNameTest()
-  {
-    OsmSchema& uut = OsmSchema::getInstance();
-
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set("name", "blah");
-    CPPUNIT_ASSERT(uut.hasName(*node1));
-
-    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set("blah", "blah");
-    CPPUNIT_ASSERT(!uut.hasName(*node2));
   }
 };
 

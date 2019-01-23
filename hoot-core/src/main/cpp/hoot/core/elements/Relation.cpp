@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Relation.h"
 
@@ -36,7 +36,7 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -78,19 +78,18 @@ private:
 };
 
 Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
-                   long version, quint64 timestamp, QString user, long uid, bool visible) :
-Element(s)
+                   long version, quint64 timestamp, QString user, long uid, bool visible)
+  : Element(s)
 {
   _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid, visible));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }
 
-Relation::Relation(const Relation& from) :
-Element(from.getStatus()),
-_relationData(from._relationData)
+Relation::Relation(const Relation& from)
+  : Element(from.getStatus()),
+  _relationData(new RelationData(*from._relationData.get()))
 {
-
 }
 
 void Relation::addElement(const QString& role, const boost::shared_ptr<const Element>& e)
@@ -133,26 +132,44 @@ bool Relation::contains(ElementId eid) const
   return false;
 }
 
-Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider> &ep) const
+int Relation::numElementsByRole(const QString role) const
+{
+  const vector<RelationData::Entry>& members = getMembers();
+  int roleCtr = 0;
+  for (size_t i = 0; i < members.size(); i++)
+  {
+    if (members[i].getRole() == role)
+    {
+      roleCtr++;
+    }
+  }
+  return roleCtr;
+}
+
+Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const
 {
   return new Envelope(getEnvelopeInternal(ep));
 }
 
-Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProvider> &ep) const
+Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProvider>& ep) const
 {
   Envelope result;
   result.init();
+
   const vector<RelationData::Entry>& members = getMembers();
 
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry& m = members[i];
+    LOG_VART(m.getElementId());
+
     // if any of the elements don't exist then return an empty envelope.
     if (ep->containsElement(m.getElementId()) == false)
     {
       result.setToNull();
       return result;
     }
+
     const boost::shared_ptr<const Element> e = ep->getElement(m.getElementId());
     boost::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
 
@@ -171,7 +188,7 @@ Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProv
 void Relation::_makeWritable()
 {
   // make sure we're the only one with a reference to the data before we modify it.
-  if(_relationData.use_count() > 1)
+  if (_relationData.use_count() > 1)
   {
     _relationData.reset(new RelationData(*_relationData));
   }
@@ -248,8 +265,9 @@ QString Relation::toString() const
   ss << "tags: " << getTags().toString().toUtf8().data();
   ss << "status: " << getStatusString().toStdString() << endl;
   ss << "version: " << getVersion() << endl;
-  ss << "visible: " << getVisible() << endl;
-  ss << "circular error: " << getCircularError();
+  ss << "visible: " << getVisible();
+  if (hasCircularError())
+    ss << endl << "circular error: " << getCircularError();
   return QString::fromUtf8(ss.str().data());
 }
 
@@ -265,13 +283,15 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
+    //logging these as debug now that we have a cleaner in the pipeline to remove these types
+    //of circular refs
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+      LOG_DEBUG("Invalid data. This relation contains a circular reference. " + toString());
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      LOG_DEBUG(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
     logWarnCount++;
     return;
@@ -308,7 +328,6 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
   }
 }
 
-
 void Relation::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
   QList<long> visitedRelations;
@@ -335,7 +354,7 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
 
   AddToVisitedRelationsList addTo(visitedRelations, getId());
 
-  filter.visit(map.getRelation(getId()));
+  filter.visit(boost::dynamic_pointer_cast<const Relation>(map.getRelation(getId())));
 
   const vector<RelationData::Entry>& members = getMembers();
 

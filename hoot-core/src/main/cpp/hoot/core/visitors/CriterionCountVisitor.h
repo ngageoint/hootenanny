@@ -28,10 +28,8 @@
 #define CRITERIONCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -39,11 +37,7 @@ namespace hoot
 /**
  * Counts the number of elements matching the criterion
  */
-class CriterionCountVisitor :
-    public ConstElementVisitor,
-    public ConstOsmMapConsumer,
-    public ElementCriterionConsumer,
-    public Configurable
+class CriterionCountVisitor : public ConstElementVisitor, public ElementCriterionConsumer
 {
 public:
 
@@ -58,15 +52,7 @@ public:
     _pCrit = pCrit;
   }
 
-  virtual ~CriterionCountVisitor() {}
-
   virtual void visit(const ConstElementPtr& e);
-
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual void setOsmMap(OsmMap* /*map*/) {  assert(false); }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   uint64_t getCount() const { return _count; }
   uint64_t getTotal() const { return _visited; }
@@ -76,7 +62,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   uint64_t _count;
   uint64_t _visited;
   boost::shared_ptr<ElementCriterion> _pCrit;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef STRINGUTILS_H
@@ -87,7 +87,7 @@ public:
   static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
 
   /**
-   * Creates a JSON array from a strings
+   * Creates a JSON array from a list of strings
    *
    * @param stringList a list of strings
    * @return a Boost JSON property tree containing a string array

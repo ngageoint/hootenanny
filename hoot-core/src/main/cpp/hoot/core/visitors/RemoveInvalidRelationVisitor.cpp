@@ -28,12 +28,12 @@
 #include "RemoveInvalidRelationVisitor.h"
 
 //  hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 //  Standard library
 #include <unordered_map>
@@ -44,9 +44,10 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveInvalidRelationVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidRelationVisitor)
 
-RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor()
+RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor() :
+_numMembersRemoved(0)
 {
 }
 
@@ -79,6 +80,7 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
         }
         //  Delete the relation
         RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+        _numAffected++;
       }
     }
   }
@@ -107,6 +109,7 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
       r->removeElement(eid);
       if (membersMap.find(id) == membersMap.end())
         membersMap[id] = *it;
+      _numMembersRemoved++;
     }
   }
   //  Reinsert the members that were duplicates but all instances were deleted

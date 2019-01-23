@@ -36,7 +36,7 @@ namespace hoot
 
 unsigned int AverageNumericTagsVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, AverageNumericTagsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, AverageNumericTagsVisitor)
 
 AverageNumericTagsVisitor::AverageNumericTagsVisitor() :
 _sum(0.0),

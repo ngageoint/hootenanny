@@ -27,8 +27,9 @@
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
 
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -36,7 +37,8 @@ namespace hoot
 /**
  * Removes non-existent element references from relations or ways with negative IDs.
  */
-class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
+  public OperationStatusInfo
 {
 public:
 
@@ -44,14 +46,18 @@ public:
 
   RemoveMissingElementsVisitor();
 
-  virtual ~RemoveMissingElementsVisitor() {}
-
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
 
   virtual void setOsmMap(const OsmMap* /*map*/)
   { throw NotImplementedException("Set Map with const is not supported"); }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getInitStatusMessage()
+  { return "Removing references to elements that do not exist..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Removed " + QString::number(_numAffected) + " missing elements"; }
 
   virtual QString getDescription() const
   { return "Removes references to any elements that do not exist"; }

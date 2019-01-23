@@ -28,17 +28,13 @@
 #define ADDREF2VISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class AddRef2Visitor :
-    public ConstElementVisitor,
-    public ConstOsmMapConsumer,
-    public Configurable
+class AddRef2Visitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -46,28 +42,18 @@ public:
 
   AddRef2Visitor();
 
-  virtual ~AddRef2Visitor() {}
-
   virtual void setConfiguration(const Settings& conf);
-
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  /**
-   * AddRef2Visitor requires a read/write map.
-   */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   /**
    * Adds a REF2 tag with a "todo" to all valid elements. If the Tags::getNonDebugCount() is greater
    * than zero then the element is tagged with a REF2.
    */
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const { return "Adds REF2 tags"; }
 
 private:
 
-  OsmMap* _map;
   bool _informationOnly;
 };
 

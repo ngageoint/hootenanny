@@ -28,7 +28,7 @@
 #include "DuplicateNameRemover.h"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -56,18 +56,19 @@ _caseSensitive(true)
 
 void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
 {
+  _numAffected = 0;
   _map = map;
 
   WayMap wm = _map->getWays();
-  // go through each way
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     const WayPtr& w = it->second;
 
     QStringList list = w->getTags().getNames();
-    // put all the alt_name values in a set, this will remove duplicates.
+    // add in alt names
     list.append(w->getTags().getList("alt_name"));
 
+    // remove empty names
     QStringList list2 = list;
     list.clear();
     for (int i = 0; i < list2.size(); i++)
@@ -78,6 +79,7 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
       }
     }
 
+    // filter on case sensitivity and "best name"
     QStringList filtered;
     for (int i = 0; i < list.size(); i++)
     {
@@ -98,6 +100,8 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
         filtered.append(list[i]);
       }
     }
+
+    _numAffected = list.size() - filtered.size();
 
     if (filtered.size() > 0)
     {

@@ -36,7 +36,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/Soundex.h>
+#include <hoot/core/algorithms/string/Soundex.h>
 #include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 

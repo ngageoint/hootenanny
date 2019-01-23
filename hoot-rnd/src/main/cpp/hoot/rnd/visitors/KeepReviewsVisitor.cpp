@@ -28,14 +28,14 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/criterion/NeedsReviewCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepReviewsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, KeepReviewsVisitor)
 
 void KeepReviewsVisitor::visit(const ConstElementPtr& e)
 {

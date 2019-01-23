@@ -28,8 +28,6 @@
 #define RELATIONCRITERION_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
@@ -38,7 +36,7 @@ namespace hoot
 /**
  * Matches any old relation
  */
-class RelationCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class RelationCriterion : public ElementCriterion
 {
 public:
 
@@ -46,26 +44,17 @@ public:
 
   RelationCriterion() {}
 
-  explicit RelationCriterion(ConstOsmMapPtr& map) : _map(map) { }
-
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone()
   {
-    return ElementCriterionPtr(new RelationCriterion(_map));
+    return ElementCriterionPtr(new RelationCriterion());
   }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
   virtual QString getDescription() const
   {
     return "Identifies relations";
   }
-
-private:
-
-  ConstOsmMapPtr _map;
-
 };
 
 }

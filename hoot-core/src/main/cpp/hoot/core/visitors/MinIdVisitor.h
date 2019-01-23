@@ -49,8 +49,6 @@ public:
 
   MinIdVisitor() : _minId(std::numeric_limits<long>::max()) {}
 
-  virtual ~MinIdVisitor() {}
-
   long getMinId() const { return _minId; }
 
   double getStat() const { return _minId; }

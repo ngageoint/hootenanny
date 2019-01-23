@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 
 #include <hoot/core/criterion/PoiCriterion.h>
@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveRef2VisitorMultipleCriterion)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveRef2VisitorMultipleCriterion)
 
 RemoveRef2VisitorMultipleCriterion::RemoveRef2VisitorMultipleCriterion() :
 RemoveRef2Visitor()

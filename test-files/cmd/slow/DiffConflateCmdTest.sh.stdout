@@ -1,274 +1,12 @@
-17:37:52.212 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 189) Differentially Conflating test-files/conflate/diff/input1.osm with test-files/conflate/diff/input2.osm and writing the output to test-output/cmd/DiffConflateCmdTest/output.osm
-17:37:52.219 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/diff/input1.osm...
-17:37:52.301 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/diff/input2.osm...
-17:37:52.309 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 253) Applying pre-conflation operations...
-17:37:52.309 INFO  ...t/core/conflate/MapCleaner.cpp(  49) Cleaning map...
-
-17:37:52.460 INFO  ...ore/conflate/DiffConflator.cpp(  97) Discarding relations...
-17:37:52.460 INFO  ...ore/conflate/DiffConflator.cpp( 103) Discarding non-conflatable elements...
-17:37:52.463 INFO  ...ore/conflate/DiffConflator.cpp( 108) Applying pre diff-conflation operations...
-17:37:52.464 INFO  .../core/conflate/RubberSheet.cpp( 140) Rubbersheeting the map...
-17:37:52.467 WARN  .../core/conflate/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:37:52.467 WARN  .../core/conflate/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
-17:37:52.467 INFO  ...ore/conflate/DiffConflator.cpp( 113) Projecting to planar...
-17:37:52.467 INFO  ...ore/conflate/DiffConflator.cpp( 118) Finding matches...
-17:37:52.467 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 1 / 8...
-17:37:52.468 INFO  ...lygon/BuildingMatchCreator.cpp( 310) Creating matches with: hoot::BuildingMatchCreator...
-17:37:52.945 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 2 / 8...
-17:37:52.945 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: PoiGeneric.js...
-17:37:52.955 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 3 / 8...
-17:37:52.955 INFO  ...etwork/NetworkMatchCreator.cpp(  86) Extracting networks...
-17:37:52.957 INFO  ...etwork/NetworkMatchCreator.cpp( 106) Matching networks...
-17:37:52.958 INFO  ...rk/ConflictsNetworkMatcher.cpp( 682) Seeding edge scores...
-17:37:52.958 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 0 / 4        17:37:53.254 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 1 / 4        17:37:53.717 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 2 / 4        17:37:53.894 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 3 / 4        17:37:54.085 INFO  ...rk/ConflictsNetworkMatcher.cpp( 248) Creating match relationships...
-17:37:54.085 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 0 / 6        17:37:54.085 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 1 / 6        17:37:54.086 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 2 / 6        17:37:54.086 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 3 / 6        17:37:54.087 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 4 / 6        17:37:54.087 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 5 / 6        17:37:54.091 INFO  ...etwork/NetworkMatchCreator.cpp( 121) Optimizing network over 10 iterations...
-17:37:54.091 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.091 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.091 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.091 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.092 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.092 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.092 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 1/10 complete.
-17:37:54.092 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.092 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.093 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.093 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.093 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.094 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.094 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 2/10 complete.
-17:37:54.094 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.094 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.094 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.094 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.095 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.095 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.096 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 3/10 complete.
-17:37:54.096 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.096 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.096 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.096 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.097 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.097 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.098 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 4/10 complete.
-17:37:54.098 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.098 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.098 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.098 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.098 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.099 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.099 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 5/10 complete.
-17:37:54.099 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.099 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.100 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.100 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.100 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.100 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.101 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 6/10 complete.
-17:37:54.101 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.101 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.101 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.101 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.102 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.102 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.102 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 7/10 complete.
-17:37:54.102 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.103 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.103 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.103 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.103 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.104 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.104 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 8/10 complete.
-17:37:54.104 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.104 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.105 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.105 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.105 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.105 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.106 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 9/10 complete.
-17:37:54.106 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:37:54.106 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:37:54.106 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:37:54.106 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:37:54.107 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:37:54.107 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:37:54.107 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 10/10 complete.
-17:37:54.113 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 4 / 8...
-17:37:54.114 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-17:37:54.117 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 5 and 1 tie points were found.
-17:37:54.117 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
-17:37:54.118 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: LinearWaterway.js...
-17:37:54.123 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 5 / 8...
-17:37:54.123 INFO  ...gon/PoiPolygonMatchCreator.cpp(  86) Creating matches with: hoot::PoiPolygonMatchCreator...
-17:38:00.793 INFO  ...gon/PoiPolygonMatchCreator.cpp(  99) POI/Polygon total match pair candidates processed: 4
-17:38:00.793 INFO  ...gon/PoiPolygonMatchCreator.cpp( 100) POI/Polygon distance matches: 1
-17:38:00.793 INFO  ...gon/PoiPolygonMatchCreator.cpp( 101) POI/Polygon type matches: 1
-17:38:00.793 INFO  ...gon/PoiPolygonMatchCreator.cpp( 102) POI/Polygon match pairs with no relevant type: 1
-17:38:00.793 INFO  ...gon/PoiPolygonMatchCreator.cpp( 106) POI/Polygon name matches: 1 / 1 match candidates.  2 total names processed.
-17:38:00.793 INFO  ...gon/PoiPolygonMatchCreator.cpp( 110) POI/Polygon address matches: 0 / 0 candidate matches.  0 total addresses processed.
-17:38:00.793 INFO  ...gon/PoiPolygonMatchCreator.cpp( 112) POI/Polygon convex polygon distance matches: 0
-17:38:00.793 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 6 / 8...
-17:38:00.793 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: Area.js...
-17:38:00.805 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 7 / 8...
-17:38:00.805 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-17:38:00.805 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: Railway.js...
-17:38:00.825 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 8 / 8...
-17:38:00.826 INFO  ...mdisk/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-17:38:00.828 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:38:00.828 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
-17:38:00.829 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: PowerLine.js...
-
-17:38:00.841 INFO  ...ore/conflate/DiffConflator.cpp( 164) Applying post-diff conflation operations...
-17:38:00.842 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 293) Applying post-conflation operations...
-
-
-17:38:00.902 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/DiffConflateCmdTest/output.osm...
-17:38:00.910 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 432) Conflation job completed.
-17:38:01.380 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 189) Differentially Conflating test-files/conflate/diff/input1.osm with test-files/conflate/diff/input2.osm and writing the output to -output/cmd/DiffConflateCmdTest/output_unified.osc
-17:38:01.394 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/diff/input1.osm...
-17:38:01.517 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/diff/input2.osm...
-17:38:01.525 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 253) Applying pre-conflation operations...
-17:38:01.526 INFO  ...t/core/conflate/MapCleaner.cpp(  49) Cleaning map...
-
-17:38:01.676 INFO  ...ore/conflate/DiffConflator.cpp(  97) Discarding relations...
-17:38:01.676 INFO  ...ore/conflate/DiffConflator.cpp( 103) Discarding non-conflatable elements...
-17:38:01.679 INFO  ...ore/conflate/DiffConflator.cpp( 108) Applying pre diff-conflation operations...
-17:38:01.680 INFO  .../core/conflate/RubberSheet.cpp( 140) Rubbersheeting the map...
-17:38:01.683 WARN  .../core/conflate/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:38:01.683 WARN  .../core/conflate/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
-17:38:01.683 INFO  ...ore/conflate/DiffConflator.cpp( 113) Projecting to planar...
-17:38:01.683 INFO  ...ore/conflate/DiffConflator.cpp( 118) Finding matches...
-17:38:01.683 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 1 / 8...
-17:38:01.683 INFO  ...lygon/BuildingMatchCreator.cpp( 310) Creating matches with: hoot::BuildingMatchCreator...
-17:38:02.173 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 2 / 8...
-17:38:02.174 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: PoiGeneric.js...
-17:38:02.184 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 3 / 8...
-17:38:02.184 INFO  ...etwork/NetworkMatchCreator.cpp(  86) Extracting networks...
-17:38:02.186 INFO  ...etwork/NetworkMatchCreator.cpp( 106) Matching networks...
-17:38:02.187 INFO  ...rk/ConflictsNetworkMatcher.cpp( 682) Seeding edge scores...
-17:38:02.187 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 0 / 4        17:38:02.523 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 1 / 4        17:38:03.017 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 2 / 4        17:38:03.177 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 3 / 4        17:38:03.348 INFO  ...rk/ConflictsNetworkMatcher.cpp( 248) Creating match relationships...
-17:38:03.348 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 0 / 6        17:38:03.349 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 1 / 6        17:38:03.349 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 2 / 6        17:38:03.349 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 3 / 6        17:38:03.350 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 4 / 6        17:38:03.350 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 5 / 6        17:38:03.354 INFO  ...etwork/NetworkMatchCreator.cpp( 121) Optimizing network over 10 iterations...
-17:38:03.354 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.354 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.354 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.354 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.355 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.355 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.355 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 1/10 complete.
-17:38:03.355 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.355 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.356 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.356 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.356 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.357 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.357 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 2/10 complete.
-17:38:03.357 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.357 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.358 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.358 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.358 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.358 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.359 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 3/10 complete.
-17:38:03.359 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.359 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.359 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.359 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.360 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.360 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.360 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 4/10 complete.
-17:38:03.360 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.360 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.361 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.361 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.361 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.362 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.362 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 5/10 complete.
-17:38:03.362 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.362 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.362 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.363 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.363 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.363 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.364 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 6/10 complete.
-17:38:03.364 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.364 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.364 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.364 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.365 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.365 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.365 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 7/10 complete.
-17:38:03.365 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.365 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.366 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.366 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.366 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.367 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.367 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 8/10 complete.
-17:38:03.367 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.367 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.368 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.368 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.368 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.368 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.369 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 9/10 complete.
-17:38:03.369 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:03.369 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:03.369 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:03.369 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:03.370 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:03.370 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:03.370 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 10/10 complete.
-17:38:03.376 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 4 / 8...
-17:38:03.377 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-17:38:03.381 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 5 and 1 tie points were found.
-17:38:03.381 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
-17:38:03.381 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: LinearWaterway.js...
-17:38:03.386 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 5 / 8...
-17:38:03.386 INFO  ...gon/PoiPolygonMatchCreator.cpp(  86) Creating matches with: hoot::PoiPolygonMatchCreator...
-17:38:09.938 INFO  ...gon/PoiPolygonMatchCreator.cpp(  99) POI/Polygon total match pair candidates processed: 4
-17:38:09.938 INFO  ...gon/PoiPolygonMatchCreator.cpp( 100) POI/Polygon distance matches: 1
-17:38:09.938 INFO  ...gon/PoiPolygonMatchCreator.cpp( 101) POI/Polygon type matches: 1
-17:38:09.938 INFO  ...gon/PoiPolygonMatchCreator.cpp( 102) POI/Polygon match pairs with no relevant type: 1
-17:38:09.938 INFO  ...gon/PoiPolygonMatchCreator.cpp( 106) POI/Polygon name matches: 1 / 1 match candidates.  2 total names processed.
-17:38:09.938 INFO  ...gon/PoiPolygonMatchCreator.cpp( 110) POI/Polygon address matches: 0 / 0 candidate matches.  0 total addresses processed.
-17:38:09.938 INFO  ...gon/PoiPolygonMatchCreator.cpp( 112) POI/Polygon convex polygon distance matches: 0
-17:38:09.938 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 6 / 8...
-17:38:09.938 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: Area.js...
-17:38:09.950 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 7 / 8...
-17:38:09.951 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-17:38:09.951 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: Railway.js...
-17:38:09.970 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 8 / 8...
-17:38:09.970 INFO  ...mdisk/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-17:38:09.973 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:38:09.973 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
-17:38:09.973 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: PowerLine.js...
-
-17:38:09.984 INFO  ...ore/conflate/DiffConflator.cpp( 164) Applying post-diff conflation operations...
-17:38:09.985 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 293) Applying post-conflation operations...
-
-
-17:38:10.047 INFO  ...eset/InMemoryElementSorter.cpp(  47) Sorting elements by element type for map with element count: 0
-17:38:10.047 INFO  ...eset/InMemoryElementSorter.cpp(  47) Sorting elements by element type for map with element count: 327
-17:38:10.047 INFO  .../OsmXmlChangesetFileWriter.cpp(  99) Writing changeset to test-output/cmd/DiffConflateCmdTest/output_unified.osc
-17:38:10.053 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 347) Generating tag changeset...
-17:38:10.054 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 432) Conflation job completed.
-17:38:10.437 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 189) Differentially Conflating test-files/conflate/diff/input1.osm with test-files/conflate/diff/input2.osm and writing the output to -output/cmd/DiffConflateCmdTest/output_unified.osm
-17:38:10.444 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/diff/input1.osm...
-17:38:10.536 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/diff/input2.osm...
-17:38:10.544 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 253) Applying pre-conflation operations...
-17:38:10.544 INFO  ...t/core/conflate/MapCleaner.cpp(  49) Cleaning map...
-
-17:38:10.703 INFO  ...ore/conflate/DiffConflator.cpp(  97) Discarding relations...
-17:38:10.703 INFO  ...ore/conflate/DiffConflator.cpp( 103) Discarding non-conflatable elements...
-17:38:10.706 INFO  ...ore/conflate/DiffConflator.cpp( 108) Applying pre diff-conflation operations...
-17:38:10.707 INFO  .../core/conflate/RubberSheet.cpp( 140) Rubbersheeting the map...
-17:38:10.710 WARN  .../core/conflate/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:38:10.710 WARN  .../core/conflate/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
-17:38:10.710 INFO  ...ore/conflate/DiffConflator.cpp( 113) Projecting to planar...
-17:38:10.710 INFO  ...ore/conflate/DiffConflator.cpp( 118) Finding matches...
-17:38:10.710 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 1 / 8...
-17:38:10.710 INFO  ...lygon/BuildingMatchCreator.cpp( 310) Creating matches with: hoot::BuildingMatchCreator...
-17:38:11.200 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 2 / 8...
-17:38:11.200 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: PoiGeneric.js...
-17:38:11.210 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 3 / 8...
-17:38:11.210 INFO  ...etwork/NetworkMatchCreator.cpp(  86) Extracting networks...
-17:38:11.211 INFO  ...etwork/NetworkMatchCreator.cpp( 106) Matching networks...
-17:38:11.212 INFO  ...rk/ConflictsNetworkMatcher.cpp( 682) Seeding edge scores...
-17:38:11.212 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 0 / 4        17:38:11.509 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 1 / 4        17:38:12.010 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 2 / 4        17:38:12.173 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 3 / 4        17:38:12.356 INFO  ...rk/ConflictsNetworkMatcher.cpp( 248) Creating match relationships...
-17:38:12.356 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 0 / 6        17:38:12.356 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 1 / 6        17:38:12.357 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 2 / 6        17:38:12.357 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 3 / 6        17:38:12.357 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 4 / 6        17:38:12.357 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 5 / 6        17:38:12.361 INFO  ...etwork/NetworkMatchCreator.cpp( 121) Optimizing network over 10 iterations...
-17:38:12.361 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.361 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.362 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.362 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.362 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.362 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.363 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 1/10 complete.
-17:38:12.363 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.363 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.363 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.363 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.364 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.364 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.364 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 2/10 complete.
-17:38:12.364 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.365 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.365 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.365 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.365 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.366 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.366 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 3/10 complete.
-17:38:12.366 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.366 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.367 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.367 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.367 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.367 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.368 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 4/10 complete.
-17:38:12.368 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.368 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.368 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.368 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.369 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.369 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.369 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 5/10 complete.
-17:38:12.370 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.370 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.370 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.370 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.370 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.371 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.371 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 6/10 complete.
-17:38:12.371 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.371 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.372 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.372 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.372 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.372 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.373 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 7/10 complete.
-17:38:12.373 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.373 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.374 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.374 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.374 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.374 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.375 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 8/10 complete.
-17:38:12.375 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.375 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.375 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.375 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.376 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.376 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.376 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 9/10 complete.
-17:38:12.376 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:12.376 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:12.377 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:12.377 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:12.377 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:12.378 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:12.378 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 10/10 complete.
-17:38:12.384 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 4 / 8...
-17:38:12.385 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-17:38:12.388 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 5 and 1 tie points were found.
-17:38:12.388 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
-17:38:12.388 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: LinearWaterway.js...
-17:38:12.393 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 5 / 8...
-17:38:12.394 INFO  ...gon/PoiPolygonMatchCreator.cpp(  86) Creating matches with: hoot::PoiPolygonMatchCreator...
-17:38:19.100 INFO  ...gon/PoiPolygonMatchCreator.cpp(  99) POI/Polygon total match pair candidates processed: 4
-17:38:19.100 INFO  ...gon/PoiPolygonMatchCreator.cpp( 100) POI/Polygon distance matches: 1
-17:38:19.100 INFO  ...gon/PoiPolygonMatchCreator.cpp( 101) POI/Polygon type matches: 1
-17:38:19.100 INFO  ...gon/PoiPolygonMatchCreator.cpp( 102) POI/Polygon match pairs with no relevant type: 1
-17:38:19.100 INFO  ...gon/PoiPolygonMatchCreator.cpp( 106) POI/Polygon name matches: 1 / 1 match candidates.  2 total names processed.
-17:38:19.100 INFO  ...gon/PoiPolygonMatchCreator.cpp( 110) POI/Polygon address matches: 0 / 0 candidate matches.  0 total addresses processed.
-17:38:19.100 INFO  ...gon/PoiPolygonMatchCreator.cpp( 112) POI/Polygon convex polygon distance matches: 0
-17:38:19.100 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 6 / 8...
-17:38:19.100 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: Area.js...
-17:38:19.112 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 7 / 8...
-17:38:19.112 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-17:38:19.113 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: Railway.js...
-17:38:19.132 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 8 / 8...
-17:38:19.133 INFO  ...mdisk/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-17:38:19.135 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:38:19.135 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
-17:38:19.136 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: PowerLine.js...
-
-17:38:19.148 INFO  ...ore/conflate/DiffConflator.cpp( 164) Applying post-diff conflation operations...
-17:38:19.149 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 293) Applying post-conflation operations...
-
-
-17:38:19.212 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/DiffConflateCmdTest/output_unified.osm...
-17:38:19.221 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 347) Generating tag changeset...
-17:38:19.222 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 432) Conflation job completed.
-17:38:19.599 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 189) Differentially Conflating test-files/conflate/diff/input1.osm with test-files/conflate/diff/input2.osm and writing the output to test-output/cmd/DiffConflateCmdTest/output.osc
-17:38:19.607 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/diff/input1.osm...
-17:38:19.695 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/diff/input2.osm...
-17:38:19.703 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 253) Applying pre-conflation operations...
-17:38:19.703 INFO  ...t/core/conflate/MapCleaner.cpp(  49) Cleaning map...
-
-17:38:19.862 INFO  ...ore/conflate/DiffConflator.cpp(  97) Discarding relations...
-17:38:19.862 INFO  ...ore/conflate/DiffConflator.cpp( 103) Discarding non-conflatable elements...
-17:38:19.865 INFO  ...ore/conflate/DiffConflator.cpp( 108) Applying pre diff-conflation operations...
-17:38:19.866 INFO  .../core/conflate/RubberSheet.cpp( 140) Rubbersheeting the map...
-17:38:19.869 WARN  .../core/conflate/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:38:19.869 WARN  .../core/conflate/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
-17:38:19.869 INFO  ...ore/conflate/DiffConflator.cpp( 113) Projecting to planar...
-17:38:19.869 INFO  ...ore/conflate/DiffConflator.cpp( 118) Finding matches...
-17:38:19.869 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 1 / 8...
-17:38:19.869 INFO  ...lygon/BuildingMatchCreator.cpp( 310) Creating matches with: hoot::BuildingMatchCreator...
-17:38:20.381 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 2 / 8...
-17:38:20.382 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: PoiGeneric.js...
-17:38:20.392 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 3 / 8...
-17:38:20.392 INFO  ...etwork/NetworkMatchCreator.cpp(  86) Extracting networks...
-17:38:20.394 INFO  ...etwork/NetworkMatchCreator.cpp( 106) Matching networks...
-17:38:20.395 INFO  ...rk/ConflictsNetworkMatcher.cpp( 682) Seeding edge scores...
-17:38:20.395 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 0 / 4        17:38:20.730 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 1 / 4        17:38:21.207 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 2 / 4        17:38:21.369 INFO  ...rk/ConflictsNetworkMatcher.cpp( 696) 3 / 4        17:38:21.551 INFO  ...rk/ConflictsNetworkMatcher.cpp( 248) Creating match relationships...
-17:38:21.551 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 0 / 6        17:38:21.551 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 1 / 6        17:38:21.552 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 2 / 6        17:38:21.552 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 3 / 6        17:38:21.552 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 4 / 6        17:38:21.552 INFO  ...rk/ConflictsNetworkMatcher.cpp( 253) 5 / 6        17:38:21.557 INFO  ...etwork/NetworkMatchCreator.cpp( 121) Optimizing network over 10 iterations...
-17:38:21.557 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.557 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.558 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.558 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.558 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.559 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.559 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 1/10 complete.
-17:38:21.559 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.559 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.560 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.560 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.560 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.561 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.561 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 2/10 complete.
-17:38:21.561 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.561 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.562 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.562 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.562 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.563 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.563 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 3/10 complete.
-17:38:21.563 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.563 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.564 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.564 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.564 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.564 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.565 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 4/10 complete.
-17:38:21.565 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.565 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.565 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.565 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.566 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.566 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.567 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 5/10 complete.
-17:38:21.567 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.567 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.567 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.567 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.568 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.568 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.569 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 6/10 complete.
-17:38:21.569 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.569 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.569 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.569 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.570 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.570 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.570 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 7/10 complete.
-17:38:21.571 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.571 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.571 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.571 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.572 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.572 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.572 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 8/10 complete.
-17:38:21.572 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.572 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.573 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.573 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.573 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.574 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.574 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 9/10 complete.
-17:38:21.574 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 1/6        17:38:21.574 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 2/6        17:38:21.575 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 3/8        17:38:21.575 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 4/8        17:38:21.575 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 5/8        17:38:21.576 INFO  ...rk/ConflictsNetworkMatcher.cpp( 498) 6/8        17:38:21.576 INFO  ...etwork/NetworkMatchCreator.cpp( 125) Optimization iteration: 10/10 complete.
-17:38:21.583 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 4 / 8...
-17:38:21.584 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-17:38:21.587 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 5 and 1 tie points were found.
-17:38:21.587 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
-17:38:21.587 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: LinearWaterway.js...
-17:38:21.594 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 5 / 8...
-17:38:21.594 INFO  ...gon/PoiPolygonMatchCreator.cpp(  86) Creating matches with: hoot::PoiPolygonMatchCreator...
-17:38:28.204 INFO  ...gon/PoiPolygonMatchCreator.cpp(  99) POI/Polygon total match pair candidates processed: 4
-17:38:28.204 INFO  ...gon/PoiPolygonMatchCreator.cpp( 100) POI/Polygon distance matches: 1
-17:38:28.204 INFO  ...gon/PoiPolygonMatchCreator.cpp( 101) POI/Polygon type matches: 1
-17:38:28.204 INFO  ...gon/PoiPolygonMatchCreator.cpp( 102) POI/Polygon match pairs with no relevant type: 1
-17:38:28.204 INFO  ...gon/PoiPolygonMatchCreator.cpp( 106) POI/Polygon name matches: 1 / 1 match candidates.  2 total names processed.
-17:38:28.204 INFO  ...gon/PoiPolygonMatchCreator.cpp( 110) POI/Polygon address matches: 0 / 0 candidate matches.  0 total addresses processed.
-17:38:28.204 INFO  ...gon/PoiPolygonMatchCreator.cpp( 112) POI/Polygon convex polygon distance matches: 0
-17:38:28.204 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 6 / 8...
-17:38:28.204 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: Area.js...
-17:38:28.216 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 7 / 8...
-17:38:28.216 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-17:38:28.216 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: Railway.js...
-17:38:28.236 INFO  ...late/matching/MatchFactory.cpp(  75) Launching match creator 8 / 8...
-17:38:28.236 INFO  ...mdisk/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-17:38:28.239 INFO  .../core/conflate/RubberSheet.cpp( 434) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:38:28.240 INFO  ...ate/SearchRadiusCalculator.cpp( 156) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
-17:38:28.240 INFO  ...late/js/ScriptMatchCreator.cpp( 552) Creating matches with: hoot::ScriptMatchCreator; rules: PowerLine.js...
-
-17:38:28.253 INFO  ...ore/conflate/DiffConflator.cpp( 164) Applying post-diff conflation operations...
-17:38:28.254 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 293) Applying post-conflation operations...
-
-
-17:38:28.335 INFO  ...eset/InMemoryElementSorter.cpp(  47) Sorting elements by element type for map with element count: 0
-17:38:28.335 INFO  ...eset/InMemoryElementSorter.cpp(  47) Sorting elements by element type for map with element count: 327
-17:38:28.335 INFO  .../OsmXmlChangesetFileWriter.cpp(  99) Writing changeset to test-output/cmd/DiffConflateCmdTest/output.osc
-17:38:28.341 INFO  .../OsmXmlChangesetFileWriter.cpp(  99) Writing changeset to test-output/cmd/DiffConflateCmdTest/output.tags.osc
-17:38:28.342 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 347) Generating tag changeset...
-17:38:28.342 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 432) Conflation job completed.
+15:08:31.501 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
+15:08:31.501 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
+15:08:34.007 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
+15:08:34.008 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
+15:08:36.524 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
+15:08:36.524 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
+15:08:39.090 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
+15:08:39.090 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
 Checking differential output
-17:38:28.729 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-output/cmd/DiffConflateCmdTest/output.osm...
-17:38:28.739 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/cmd/slow/DiffConflateCmdTest/output.osm...
 Checking Changeset
 Changeset Files Match
 Checking tag diff
@@ -276,9 +14,7 @@ Tag Changeset Files Match
 Checking unified geometry+tag diff changeset
 Unified Changeset Files Match
 Checking unified geometry+tag diff osm
-17:38:29.063 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from -output/cmd/DiffConflateCmdTest/output_unified.osm...
-17:38:29.075 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from es/cmd/slow/DiffConflateCmdTest/output_unified.osm...
-17:38:29.577 WARN  .../core/conflate/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 0 tie points were found.
-17:38:29.577 WARN  .../core/conflate/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
-17:38:37.164 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/Empty.osm...
-17:38:37.165 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from tmp/dum.osm...
+15:08:42.303 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 0 tie points were found.
+15:08:42.303 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
+15:08:43.193 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/Empty.osm...
+15:08:43.195 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from tmp/dum.osm...

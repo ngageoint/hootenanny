@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
@@ -43,7 +43,7 @@ class ElementAttributeType;
  * timestamp) an additional setting may have to be set to break OSM compatibility
  * (e.g. see OsmXmlWriter::_includeCompatibilityTags).
  */
-class RemoveAttributesVisitor : public ElementOsmMapVisitor, public Configurable
+class RemoveAttributesVisitor : public ElementVisitor, public Configurable
 {
 
 public:

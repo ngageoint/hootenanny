@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGMERGERFACTORY_H
 #define TAGMERGERFACTORY_H
@@ -41,11 +41,12 @@ class TagMerger;
 class Tags;
 class ElementType;
 
+/**
+ * (Singleton)
+ */
 class TagMergerFactory
 {
 public:
-
-  TagMergerFactory();
 
   ~TagMergerFactory();
 
@@ -74,6 +75,9 @@ public:
   void reset();
 
 private:
+
+  TagMergerFactory();
+
   QHash<QString, boost::shared_ptr<const TagMerger> > _mergers;
   boost::shared_ptr<const TagMerger> _default;
 

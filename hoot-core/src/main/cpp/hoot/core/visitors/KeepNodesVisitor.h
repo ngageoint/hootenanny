@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 
 namespace hoot
 {
@@ -37,15 +37,13 @@ namespace hoot
 /**
  * Removes all elements that are not Nodes w/ meaningful tags.
  */
-class KeepNodesVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class KeepNodesVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
 public:
 
   static std::string className() { return "hoot::KeepNodesVisitor"; }
 
   KeepNodesVisitor() {}
-
-  virtual ~KeepNodesVisitor() {}
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 

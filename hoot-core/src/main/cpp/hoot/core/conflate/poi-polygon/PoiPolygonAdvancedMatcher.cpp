@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonAdvancedMatcher.h"
 
@@ -36,9 +36,8 @@
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/algorithms/AddressParser.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -58,6 +57,11 @@ _badGeomCount(0)
 {
 }
 
+void PoiPolygonAdvancedMatcher::setConfiguration(const Settings& conf)
+{
+  _addressParser.setConfiguration(conf);
+}
+
 bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
 {
   //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
@@ -70,7 +74,8 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
     throw geos::util::TopologyException();
   }
 
-  const QString poiAddress = AddressParser::getAddressTagValue(poi->getTags(), "full_address");
+  const QString poiAddress =
+    AddressTagKeys::getInstance()->getAddressTagValue(poi->getTags(), "full_address");
   if (poiAddress.isEmpty())
   {
     return false;

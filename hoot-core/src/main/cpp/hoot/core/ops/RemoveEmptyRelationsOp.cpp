@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 
 // Qt
@@ -39,8 +39,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveEmptyRelationsOp)
 
-RemoveEmptyRelationsOp::RemoveEmptyRelationsOp() :
-_numRemoved(0)
+RemoveEmptyRelationsOp::RemoveEmptyRelationsOp()
 {
 }
 
@@ -94,7 +93,7 @@ void RemoveEmptyRelationsOp::_deleteEmptyRelations(OsmMapPtr& map, const bool re
   for (QList<long>::const_iterator it = relationIds.begin(); it != relationIds.end(); ++it)
   {
     RemoveRelationOp::removeRelation(map, *it);
-    _numRemoved++;
+    _numAffected++;
   }
 }
 

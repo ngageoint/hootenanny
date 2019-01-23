@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ParallelWayCriterion.h"
@@ -38,7 +38,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
 
@@ -133,12 +133,12 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
   }
 }
 
-bool ParallelWayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if(e->getElementType() == ElementType::Way)
+  if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
-    double difference = calculateDifference(w);
+    ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(e);
+    double difference = calculateDifference(way);
 
     // If the mean "normals" are within 10 degrees of perpendicular.
     bool parallel = difference < toRadians(_threshold);

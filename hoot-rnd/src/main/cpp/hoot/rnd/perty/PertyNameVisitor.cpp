@@ -46,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyNameVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, PertyNameVisitor)
 
 PertyNameVisitor::PertyNameVisitor()
 {
@@ -109,11 +109,6 @@ void PertyNameVisitor::setConfiguration(const Settings& conf)
   {
     _rng->seed(seed);
   }
-}
-
-QString PertyNameVisitor::toString()
-{
-  return "_p: " + QString::number(_p) + ", _changeP: " + QString::number(_changeP);
 }
 
 void PertyNameVisitor::visit(const boost::shared_ptr<Element>& e)

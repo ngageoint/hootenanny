@@ -50,8 +50,6 @@ public:
 
   IsSortedVisitor();
 
-  virtual ~IsSortedVisitor() {}
-
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYUTILITIES_H
 #define MULTIARYUTILITIES_H
@@ -32,7 +32,7 @@
 
 #ifndef SWIG
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #endif
 
 // Standard
@@ -45,11 +45,13 @@ namespace hoot
 class SearchBoundsCalculator;
 
 /**
- * A simple class to represent relationships between nodes.
+ * A simple class to represent relationships between nodes (Singleton).
  */
 class MultiarySimpleMatch
 {
+
 public:
+
   MultiarySimpleMatch() {}
 
   MultiarySimpleMatch(int nIndex, double s) : neighborIndex(nIndex), score(s) {}
@@ -67,7 +69,9 @@ public:
  */
 class MultiaryElement
 {
+
 public:
+
   MultiaryElement() {}
 
 #ifndef SWIG
@@ -98,11 +102,13 @@ private:
 };
 
 /**
- * Centralize some operations that occur over and over when using Multiary Conflation.
+ * Centralize some operations that occur over and over when using Multiary Conflation (Singleton).
  */
 class MultiaryUtilities
 {
+
 public:
+
 // OsmMap hasn't been wrapped, yet.
 #ifndef SWIG
   /**
@@ -140,6 +146,9 @@ public:
   static MultiaryUtilities& getInstance();
 
 private:
+
+  MultiaryUtilities() {}
+
   static boost::shared_ptr<MultiaryUtilities> _theInstance;
 
   boost::shared_ptr<SearchBoundsCalculator> _searchBoundsCalculator;

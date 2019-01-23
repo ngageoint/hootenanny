@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbReader.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/DbUtils.h>
@@ -74,40 +74,18 @@ void HootApiDbReader::open(QString urlStr)
   initializePartial();
 
   QUrl url(_url);
-  QStringList pList = url.path().split("/");
   LOG_DEBUG("Opening database for reader at: " << url.path() << "...");
-  bool ok;
   _database->open(url);
 
-  long requestedMapId = pList[pList.size() - 1].toLong(&ok);
-
-  if (!ok)
+  LOG_VARD(_email);
+  if (!_email.isEmpty())
   {
-    if (_email == "")
-    {
-      throw HootException("If a map name is specified then the user email must also be specified "
-                          "via: " + ConfigOptions::getApiDbEmailKey());
-    }
-
-    QString mapName = pList[pList.size() - 1];
     _database->setUserId(_database->getUserId(_email, false));
-    set<long> mapIds = _database->selectMapIds(mapName);
-    if (mapIds.size() != 1)
-    {
-      QString str =
-        QString("Expected 1 map with the name '%1' but found %2 maps.")
-          .arg(mapName)
-          .arg(mapIds.size());
-      throw HootException(str);
-    }
-    requestedMapId = *mapIds.begin();
   }
 
-  if (!_database->mapExists(requestedMapId))
-  {
-    _database->close();
-    throw HootException("No map exists with ID: " + QString::number(requestedMapId));
-  }
+  const long requestedMapId = _database->getMapIdFromUrl(url);
+  LOG_VART(requestedMapId);
+  _database->verifyCurrentUserMapUse(requestedMapId);
   _database->setMapId(requestedMapId);
 
   //using a transaction seems to make sense here, b/c we don't want to read a map being modified
@@ -132,7 +110,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
       nodeId,
       resultIterator.value(ApiDb::NODES_LONGITUDE).toDouble(),
       resultIterator.value(ApiDb::NODES_LATITUDE).toDouble(),
-      -1,
+      ElementData::CIRCULAR_ERROR_EMPTY,
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000));
@@ -167,7 +145,7 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
     new Way(
       _status,
       newWayId,
-      -1,
+      ElementData::CIRCULAR_ERROR_EMPTY,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000));
@@ -206,7 +184,7 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
     new Relation(
       _status,
       newRelationId,
-      -1,
+      ElementData::CIRCULAR_ERROR_EMPTY,
       "",/*MetadataTags::RelationCollection()*/ //services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),

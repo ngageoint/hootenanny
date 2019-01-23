@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/TextFileWordWeightDictionary.h>
 #include <hoot/core/schema/ScoreMatrix.h>

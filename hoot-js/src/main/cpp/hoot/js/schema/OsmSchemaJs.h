@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMSCHEMA_JS_H
 #define OSMSCHEMA_JS_H
@@ -31,7 +31,7 @@
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {
@@ -39,19 +39,24 @@ namespace hoot
 class OsmSchemaJs : public node::ObjectWrap
 {
 public:
+
  static void Init(v8::Handle<v8::Object> target);
 
 private:
+
   OsmSchemaJs();
   ~OsmSchemaJs();
 
   static void getAllTags(const v8::FunctionCallbackInfo<v8::Value>& agrs);
   static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getChildTags(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getSimilarTags(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getChildTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getSimilarTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagByCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+  // Even though all of the logic for these methods have been moved from OsmSchema to criterion,
+  // decided to leave this interface intact, as it will be simpler to access from js.
   static void isArea(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isBuilding(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isHgisPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -62,9 +67,10 @@ private:
   static void isMetaData(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
+
   static void score(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void scoreOneWay(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)

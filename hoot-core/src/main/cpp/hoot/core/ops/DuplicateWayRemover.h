@@ -29,9 +29,10 @@
 #define DUPLICATEWAYREMOVER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -45,7 +46,7 @@ namespace hoot
  *
  * Area ways will be ignored.
  */
-class DuplicateWayRemover : public OsmMapOperation
+class DuplicateWayRemover : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -72,6 +73,12 @@ public:
   {
     _strictTagMatching = strictTagMatching;
   }
+
+  virtual QString getInitStatusMessage() { return "Removing duplicate ways..."; }
+
+  //TODO: finish; wasn't obvious how to count the total affected
+  virtual QString getCompletedStatusMessage()
+  { return ""; }
 
   virtual QString getDescription() const { return "Removes duplicate ways from a map"; }
 

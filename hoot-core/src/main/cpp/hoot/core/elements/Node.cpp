@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Node.h"
@@ -37,9 +37,11 @@ using namespace boost;
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -76,13 +78,11 @@ void Node::clear()
 boost::shared_ptr<Node> Node::cloneSp() const
 {
   NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
-
   result->_nodeData = _nodeData;
-
   return result;
 }
 
-Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider> &/*ep*/) const
+Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider>& /*ep*/) const
 {
   return new Envelope(getX(), getX(), getY(), getY());
 }
@@ -100,25 +100,24 @@ void Node::setY(double y)
 boost::shared_ptr<geos::geom::Point> Node::toPoint() const
 {
   Coordinate c(getX(), getY());
-
   boost::shared_ptr<Point> result(GeometryFactory::getDefaultInstance()->createPoint(c));
-
   return result;
 }
 
 QString Node::toString() const
 {
-  return
-    QString(
-      "Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6\n status: %7\n circular error: %8")
-      .arg(getId())
-      .arg(QString::number(getX(), 'f', ConfigOptions().getWriterPrecision()))
-      .arg(QString::number(getY(), 'f', ConfigOptions().getWriterPrecision()))
-      .arg(getTags().toString())
-      .arg(getVersion())
-      .arg(getVisible())
-      .arg(getStatus().toString())
-      .arg(QString::number(getCircularError()));
+  stringstream ss(stringstream::out);
+  ss << "Node(" << getId() << "):"
+     << " x: " << QString::number(getX(), 'f', ConfigOptions().getWriterPrecision())
+     << " y: " << QString::number(getY(), 'f', ConfigOptions().getWriterPrecision())
+     << " tags:" << endl
+     << getTags().toString() << endl
+     << " version: " << getVersion() << endl
+     << " visible: " << getVisible() << endl
+     << " status: " << getStatus().toString();
+  if (hasCircularError())
+    ss << endl << " circular error: " << QString::number(getCircularError());
+  return QString::fromUtf8(ss.str().data());
 }
 
 void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
@@ -128,7 +127,7 @@ void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) cons
 
 void Node::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
-  filter.visit(map.getNode(getId()));
+  filter.visit(boost::dynamic_pointer_cast<const Node>(map.getNode(getId())));
 }
 
 }

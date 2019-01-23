@@ -67,11 +67,6 @@ public:
 
   virtual QString getDescription() const { return "Randomly changes feature names"; }
 
-  /**
-    @see ConstElementVisitor
-    */
-  QString toString();
-
 private:
 
   double _changeP;

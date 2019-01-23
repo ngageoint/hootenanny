@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKMERGER_H
 #define NETWORKMERGER_H
@@ -39,7 +39,7 @@ namespace hoot
  * Merges whole network pairs (no partials).
  *
  * In the case of network matches we're guaranteed there is no overlap between matches so we can
- * use some of the functions in HighwaySnapMerger, but others are too complex/imprecise.
+ * use some of the functions in HighwayMerger, but others are too complex/imprecise.
  */
 class NetworkMerger : public MergerBase
 {

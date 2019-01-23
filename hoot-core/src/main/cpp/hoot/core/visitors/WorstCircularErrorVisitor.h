@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WORSTCIRCULARERRORVISITOR_H
 #define WORSTCIRCULARERRORVISITOR_H
 
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
 /**
@@ -38,18 +38,17 @@
 namespace hoot
 {
 
-class WorstCircularErrorVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
+class WorstCircularErrorVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
+
   static std::string className() { return "hoot::WorstCircularErrorVisitor"; }
 
-  WorstCircularErrorVisitor(): _worst(-1) {}
+  WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
 
   Meters getWorstCircularError() { return _worst; }
 
   virtual double getStat() const { return _worst; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
 

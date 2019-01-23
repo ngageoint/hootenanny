@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
@@ -90,7 +90,7 @@ public:
 
     QString sep = "\t";
     // read the conflation status from the file.
-    conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
+    conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
 
     QList< QList<SingleStat> > allStats;
 

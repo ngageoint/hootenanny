@@ -28,7 +28,7 @@
 #define MINSUMWORDSETDISTANCE_H
 
 // Hoot
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 
 // Tgs
@@ -63,7 +63,7 @@ public:
   virtual QString toString() const
   { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Returns a string comparison score based on Minimum Sum Wordset Distance"; }
 
 private:

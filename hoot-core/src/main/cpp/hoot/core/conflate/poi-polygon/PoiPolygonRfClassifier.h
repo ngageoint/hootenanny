@@ -28,8 +28,8 @@
 #define POIPOLYGONRFCLASSIFIER_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {

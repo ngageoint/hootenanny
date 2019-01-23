@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DiffConflator.h"
 
@@ -40,7 +40,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/schema/TagComparator.h>
@@ -105,10 +105,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   nonConflateRemover.apply(_pMap);
   _stats.append(SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
 
-  LOG_INFO("Applying pre diff-conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPreOps()).apply(_pMap);
-  _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
-
   // Will reproject if necessary.
   LOG_INFO("Projecting to planar...");
   MapProjector::projectToPlanar(_pMap);
@@ -160,11 +156,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
   removeRef1Visitor.setRecursive(true);
   _pMap->visitRw(removeRef1Visitor);
-
-  LOG_INFO("Applying post-diff conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPostOps()).apply(_pMap);
-
-  _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }
 
 void DiffConflator::setConfiguration(const Settings &conf)
@@ -322,7 +313,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement,
   // We want the old element as it was... with new tags.
 
   // Copy the old one to get the geometry
-  ElementPtr pChangeElement (pOldElement->clone());
+  ElementPtr pChangeElement(pOldElement->clone());
 
   assert(pChangeElement->getId() == pOldElement->getId());
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatch.h"
 
@@ -34,13 +34,13 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistance.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/MultiUseBuildingCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace std;
 
@@ -239,19 +239,13 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   LOG_VART(e2->getTags());
 
   _e1IsPoi = false;
-  if (OsmSchema::getInstance().isPoiPolygonPoi(
-        e1, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) &&
-      OsmSchema::getInstance().isPoiPolygonPoly(
-        e2, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+  if (_poiCrit.isSatisfied(e1) && _polyCrit.isSatisfied(e2))
   {
     _poi = e1;
     _poly = e2;
     _e1IsPoi = true;
   }
-  else if (OsmSchema::getInstance().isPoiPolygonPoi(
-             e2, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) &&
-           OsmSchema::getInstance().isPoiPolygonPoly(
-             e1, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+  else if (_poiCrit.isSatisfied(e2) && _polyCrit.isSatisfied(e1))
   {
     _poi = e2;
     _poly = e1;
@@ -395,6 +389,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
       _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
       _addressMatchEnabled);
+    reviewReducer.setConfiguration(conf());
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
@@ -409,9 +404,9 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (!foundReviewIfMatchedType)
     {
       LOG_VART(_reviewMultiUseBuildings);
-      LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
+      LOG_VART(MultiUseBuildingCriterion().isSatisfied(_poly));
       //only do the multi-use check on the poly
-      if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
+      if (_reviewMultiUseBuildings && MultiUseBuildingCriterion().isSatisfied(_poly))
       {
         _class.setReview();
         _explainText = "Match involves a multi-use building.";
@@ -680,7 +675,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //removing it scores dropped for other datasets.  So, more investigation needs to be done to
   //clean the school restriction up (see #1173).
   if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
-      OsmSchema::getInstance().isBuilding(poly))
+      BuildingCriterion().isSatisfied(poly))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
     if (evidence >= _matchEvidenceThreshold)
@@ -694,6 +689,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   {
     PoiPolygonAdvancedMatcher advancedMatcher(
       _map, _polyNeighborIds, _poiNeighborIds, _distance);
+    advancedMatcher.setConfiguration(conf());
     if (advancedMatcher.triggersRule(_poi, _poly))
     {
       evidence++;

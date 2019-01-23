@@ -28,7 +28,7 @@
 #define TRANSLATESTRINGDISTANCE_H
 
 // hoot
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
 
@@ -71,7 +71,7 @@ public:
   void setTokenize(bool tokenize) { _tokenize = tokenize; }
   void setTranslateAll(bool translateAll) { _translateAll = translateAll; }
 
-  virtual QString getDescription()
+  virtual QString getDescription() const
   { return "Returns a string comparison score based on the associated string comparator after first translating to English"; }
 
 private:

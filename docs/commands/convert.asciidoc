@@ -4,8 +4,8 @@
 === Description
 
 The +convert+ command converts map data from one input format to another.  Optionally, a translation may be performed during the 
-conversion.  The process may be memory bound depending upon the formats selected.  See the README for information on 
-supported formats.
+conversion.  The process may be memory bound depending upon the formats selected.  See the Hootenanny User Guide Supported Data Formats 
+section for information on supported formats.
 
 * +input(s)+ - Input path(s) to convert from; Wildcard paths can be used for multiple inputs within the same directory.  
                Multiple inputs are supported unless converting to an OGR format.  Each input is made up of a file 

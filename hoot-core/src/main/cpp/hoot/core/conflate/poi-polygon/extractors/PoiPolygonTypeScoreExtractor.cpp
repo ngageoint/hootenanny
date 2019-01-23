@@ -27,7 +27,6 @@
 #include "PoiPolygonTypeScoreExtractor.h"
 
 // hoot
-#include <hoot/core/algorithms/string/MostEnglishName.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
@@ -35,8 +34,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/MetadataTags.h>
-
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 // Qt
 #include <QSet>
 
@@ -222,6 +221,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   if (poiTagList.size() == 0 || polyTagList.size() == 0)
   {
     _noTypeFound = true;
+    LOG_TRACE("No valid type found when comparing: " << poi << " to: " << poly);
     return 0.0;
   }
 
@@ -409,13 +409,13 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
 
 bool PoiPolygonTypeScoreExtractor::isPark(ConstElementPtr element)
 {
-  return !OsmSchema::getInstance().isBuilding(element) &&
+  return !BuildingCriterion().isSatisfied(element) &&
          (element->getTags().get("leisure") == "park");
 }
 
 bool PoiPolygonTypeScoreExtractor::isParkish(ConstElementPtr element)
 {
-  if (OsmSchema::getInstance().isBuilding(element))
+  if (BuildingCriterion().isSatisfied(element))
   {
     return false;
   }

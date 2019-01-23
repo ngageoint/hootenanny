@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATION_H
 #define RELATION_H
@@ -33,7 +33,7 @@
 #include <hoot/core/elements/RelationData.h>
 
 // hoot
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -56,8 +56,8 @@ public:
 
   explicit Relation(const Relation& from);
 
-  Relation(Status s, long id, Meters circularError, QString type = "",
-           long changeset = ElementData::CHANGESET_EMPTY,
+  Relation(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
+           QString type = "", long changeset = ElementData::CHANGESET_EMPTY,
            long version = ElementData::VERSION_EMPTY,
            quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
@@ -82,7 +82,16 @@ public:
    */
   bool contains(ElementId eid) const;
 
-  const std::vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
+  /**
+   * Returns the number of member elements with the given relation role
+   *
+   * @param role role by which to examine elements
+   * @return the number of member elements with the specified role
+   */
+  int numElementsByRole(const QString role) const;
+
+  const std::vector<RelationData::Entry>& getMembers() const
+  { return _relationData->getElements(); }
 
   virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
@@ -165,7 +174,6 @@ private:
 
   void _visitRw(ElementProvider &map, ConstElementVisitor& filter,
     QList<long> &visitedRelations);
-
 };
 
 template<typename IT>
