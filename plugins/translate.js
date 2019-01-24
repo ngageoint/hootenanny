@@ -261,9 +261,7 @@ translate = {
     // Apply one to one translations and don't report errors: missing columns etc
     applyOne2OneQuiet : function(inList, outList, lookup)
     {
-        var endChar = '',
-            tAttrib = '',
-            row = [];
+        var row = [];
 
         for (var col in inList)
         {
@@ -1077,7 +1075,7 @@ translate = {
                 }
             }
         }
-    }, // End applySimpleTxtBiased
+    }, // End applySimpleNumBiased
 
     // buildComplexRules
     // Build the lookup table for the applyComplexRules function

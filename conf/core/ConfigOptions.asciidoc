@@ -2076,6 +2076,14 @@ hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost
 
 If set, the ogr reader will use the value at the specified field to populate node IDs.
 
+=== ogr.reader.ogdi.launder.layer.names
+
+* Data Type: string
+* Default Value: `yes`
+
+GDAL Option: When reading OGDI datasources (VPF etc), setting this to 'yes' causes the layer names to be simplified.
+For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'
+
 === ogr.split.o2s
 
 * Data Type: bool
