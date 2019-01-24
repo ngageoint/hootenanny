@@ -83,7 +83,6 @@ void WayJoiner::resetParents()
     WayPtr way = it->second;
     if (way->hasPid())
     {
-      LOG_VART(way->getElementId());
       way->resetPid();
     }
   }
@@ -175,6 +174,7 @@ void WayJoiner::joinAtNode()
       if (way->hasPid())
         ids.insert(way->getId());
     }
+
     LOG_VART(currentNumSplitParentIds);
     // If we didn't reduce the number of ways from the previous iteration or there are none left
     // to reduce, exit out.
@@ -191,11 +191,13 @@ void WayJoiner::joinAtNode()
     {
       WayPtr way = ways[*it];
       LOG_VART(way->getElementId());
+
       Tags pTags = way->getTags();
       //  Check each of the endpoints for ways to merge
       vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
       LOG_VART(endpoints.size());
       LOG_VART(endpoints);
+
       for (vector<long>::const_iterator e = endpoints.begin(); e != endpoints.end(); ++e)
       {
         //  Find all ways connected to this node
@@ -209,17 +211,13 @@ void WayJoiner::joinAtNode()
           {
             LOG_VART(child->getElementId());
           }
-          else
-          {
-            LOG_TRACE("Child for way with ID: " << way->getId() << " not found.");
-          }
           if (child && way->getId() != child->getId() && areJoinable(way, child))
           {
             Tags cTags = child->getTags();
-            LOG_VART(pTags);
-            LOG_VART(cTags);
+
             LOG_VART(pTags == cTags);
             LOG_VART(pTags.dataOnlyEqual(cTags));
+
             //  Check for equivalent tags
             if (pTags == cTags || pTags.dataOnlyEqual(cTags))
             {
@@ -264,6 +262,7 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
     long id = way_ids[0];
     way_ids.pop_front();
     WayPtr way = ways[id];
+
     if (!way)
     {
       LOG_TRACE("Way with ID: " << id << " does not exist.");
@@ -344,6 +343,7 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
     }
   }
   LOG_VART(sorted);
+
   //  Iterate the sorted ways and merge them
   if (sorted.size() > 1)
   {
@@ -357,10 +357,6 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
       if (ways[sorted[i]])
       {
         LOG_VART((ways[sorted[i]]->getElementId()));
-      }
-      else
-      {
-        LOG_TRACE("No child exists for ID: " << sorted[i]);
       }
       joinWays(parent, ways[sorted[i]]);
     }
@@ -420,14 +416,19 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
   //  Keep the conflated status in the parent if the child being merged is conflated
   if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
     parent->setStatus(Status::Conflated);
+
+  LOG_VART(parent->getNodeIds());
+  LOG_VART(child->getNodeIds());
+
   //  Update any relations that contain the child to use the parent
-  LOG_VART(parent->getNodeIds());
-  LOG_VART(child->getNodeIds());
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
+
   LOG_VART(parent->getNodeIds());
   LOG_VART(child->getNodeIds());
+
   child->getTags().clear();
   RecursiveElementRemover(child->getElementId()).apply(_map);
+
   LOG_VART(parent->getNodeIds());
 }
 
