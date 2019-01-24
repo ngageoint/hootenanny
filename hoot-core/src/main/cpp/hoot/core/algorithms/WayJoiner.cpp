@@ -423,6 +423,17 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   //  Remove the split parent id
   child->resetPid();
 
+  // record one way streets
+  OneWayCriterion oneWayCrit;
+  const bool eitherStreetIsOneWay = oneWayCrit.isSatisfied(parent) || oneWayCrit.isSatisfied(child);
+  LOG_VART(eitherStreetIsOneWay);
+  if (eitherStreetIsOneWay && joinType == JoinAtNodeMergeType::ShareFirstNode)
+  {
+    LOG_TRACE(
+      "Skipping reversal required to join ways due to one or more of the ways being one way streets.");
+    return;
+  }
+
   //  Merge the tags
   Tags pTags = parent->getTags();
   Tags cTags = child->getTags();
@@ -443,7 +454,7 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
     parent->setNodes(child_nodes);
     parent->addNodes(parent_nodes);
   }
-  else if (joinType == JoinAtNodeMergeType::ShareFirstNode && !OneWayCriterion().isSatisfied(child))
+  else if (joinType == JoinAtNodeMergeType::ShareFirstNode)
   {
     // remove the first of the child way nodes, reverse the rest, and prepend to the parent
     child_nodes.erase(child_nodes.begin());
