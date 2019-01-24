@@ -87,6 +87,73 @@ dnc.rules = {
         ['F_CODE','GB010','aeroway:light','yes'], // Airport Lights
     ], // End fcodeOne2oneIn
 
+    // FCODE rules for Export
+    // This is for exporting "unique" DNC features.
+    fcodeOne2oneOut : [
+        ['F_CODE','AC000','facility','yes'], // Processing Plant - Superseded by AL010
+        ['F_CODE','AD010','power','generator'], // Electric Power Station, Power Plant
+        ['F_CODE','AH010','bastion','yes'], // Bastion/Rampart - not in NAS
+        ['F_CODE','AH050','site:type','fortification'], // Fortification - not in NAS
+        ['F_CODE','AL005','boundary','protected_area'], // Animal Sanctuary - not in NAS
+        ['F_CODE','AL015','building','yes'], // Building - NFDD AL013
+        ['F_CODE','AL050','display_sign','yes'], // Display Sign
+        ['F_CODE','AL240','man_made','tower'], // Tower (Non-Communication) - NFDD AL241
+        ['F_CODE','AP030','highway','track'], // Cart Track - mapped to Road for this translation
+        ['F_CODE','AQ010','cableway','yes'], // Aerial Cableway / Ski Lift Lines - Superseded by AT041
+        ['F_CODE','AQ020','aerialway','pylon'], // Aerial Cableway Pylon/Ski Pylon
+        ['F_CODE','AT020','man_made','radar_station'], // Early Warning Radar Site - not in NAS
+        ['F_CODE','AT030','power','line'], // Power Line - Superseded by AT005
+        ['F_CODE','AT040','pylon','yes'], // Power Transmission Pylon
+        ['F_CODE','AT050','use','communication'], // Communication Building
+        ['F_CODE','AT060','cable:type','communication'], // Communication Line - NFDD AT005
+        ['F_CODE','AT080','tower:type','communication'], // Communications Tower - NFDD AL241
+        ['F_CODE','BA020','foreshore','yes'], // Foreshore Region - NFDD BA023
+        ['F_CODE','BA030','place','islet'], // Island
+        ['F_CODE','BA040','natural','water'], // Water
+        ['F_CODE','BB030','barrier','bollard'], // Bollard
+        ['F_CODE','BB040','man_made','breakwater'], // Breakwater/Groyne
+        ['F_CODE','BB105','seamark:harbour:category','fishing'], // Fishing Harbor
+        ['F_CODE','BB140','man_made','pier'], // Jetty
+        ['F_CODE','BB160','mooring','ring'], // Mooring Ring
+        ['F_CODE','BB170','seamark:platform:category','loading'], // Offshore Loading Facility
+        ['F_CODE','BB180','produce','oysters'], // Oyster Bed/Mussel Bed
+        ['F_CODE','BB190','waterway','dock'], // Pier /Wharf /Quay
+        ['F_CODE','BB220','leisure','slipway'], // Ramp (Maritime) - How is this different from BB240??
+        ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
+        ['F_CODE','BB240','leisure','slipway'], // Slipway/Patent Slip  - NFDD BB082
+        ['F_CODE','BC100','leading_line','yes'], // Leading Line - A line which passes through at least two clearly defined objects, along which a vessel can safely travel
+        ['F_CODE','BD000','underwater_hazard','yes'], // Underwater Danger / Underwater Hazard - Not in NAS
+        ['F_CODE','BD010','seamark:water_turbulence:category','breakers'], // Breakers - not in NAS
+        ['F_CODE','BD040','seamark:water_turbulence:category','eddies'], // Eddies
+        ['F_CODE','BD060','seamark:vegetation:category','kelp'], // Kelp/Seaweed
+        ['F_CODE','BD080','seamark:water_turbulence:category','overfalls'], // Overfalls / Tide Rips
+        ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
+        ['F_CODE','BD120','subsea','barrier_reef'], // Reef
+        ['F_CODE','BD120','subsea','barrier-reef'], // Reef
+        ['F_CODE','BD120','subsea','reef'], // Reef
+        ['F_CODE','BD120','subsea','coral_reef'], // Reef
+        ['F_CODE','BG020','monitoring:tide_gauge','yes'], // Tide Gauge
+        ['F_CODE','BG040','current_diagram','yes'], // Current Diagram
+        ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
+        ['F_CODE','BH095','natural','wetland'], // Wetland
+        ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
+        ['F_CODE','BH210','shoreline','yes'], // Inland Shoreline - NFDD BA010 Land/water boundary
+        ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
+        ['F_CODE','EC030','natural','tree'], // Wood - NFDD EC005
+        ['F_CODE','EC030','natural','wood'], // Wood - NFDD EC015
+        ['F_CODE','FA020','boundary','armistice_line'], // Armistice Line
+        ['F_CODE','FA040','boundary','claim_line'], // Claim Line
+        ['F_CODE','FA060','boundary','defacto'], // Defacto Boundary
+        ['F_CODE','FC031','maritime_area','yes'], // Maritime Area
+        ['F_CODE','FC036','restricted_area','yes'], // Restricted Area
+        ['F_CODE','FC170','seamark:type','fairway'], // Safety Fairway
+        ['F_CODE','GA020','aeroway:light','obstacle'], // Air Obstruction Light
+        ['F_CODE','GA035','aeroway','navigationaid'], // Aeronautical NAVAID - FCODE Retired
+        ['F_CODE','GB010','aeroway:light','yes'], // Airport Lights
+        ['F_CODE','ZD040','natural','bay'], // Named Location
+        ['F_CODE','ZD040','tourism','viewpoint'], // Named Location
+    ], // End fcodeOne2oneOut
+
     // One2one rules for Text Fields
     txtBiased : {
         'BER':'berth_identifier', // Berth Identifier
@@ -186,8 +253,6 @@ dnc.rules = {
         ['ACC','3','source:accuracy:horizontal:category','doubtful'],
         ['ACC','5','source:accuracy:horizontal:category','disputed'],
         ['ACC','6','source:accuracy:horizontal:category','undisputed'],
-        ['ACC','7','source:accuracy:horizontal:category','precise'],
-        ['ACC','8','source:accuracy:horizontal:category','abrogated'],
 
 
         // AHC - Associated Hydrographic Category
@@ -206,12 +271,8 @@ dnc.rules = {
 
         // ATN - Aids to Navigation
         // ['ATN','0','navigation_aid','unknown'], // Unknown
-        ['ATN','0',undefined,undefined], // Unknown
         ['ATN','1','navigation_aid','marked'], // Marked
         ['ATN','2','navigation_aid','unmarked'], // Unmarked
-        ['ATN','3','navigation_aid','lit'], // Lit
-        ['ATN','9','navigation_aid','unlit'], // Unlit
-        ['ATN','999','navigation_aid','heliport'], // Other
 
 
         // BFC - Building Function Category
@@ -248,97 +309,25 @@ dnc.rules = {
         ['BFC','30','building','hangar'],
         ['BFC','31','building','customs_house'], // Customs House
         ['BFC','33','building','healthcare'],
-        ['BFC','34','sport','shooting_range'], // Firing Range
         ['BFC','35','amenity','post_office'],
         ['BFC','36','military','barracks'],
         ['BFC','37','amenity','fire_station'],
-        ['BFC','38','amenity','prison'], // Jail
-        ['BFC','40','use','telephone_switching_station'], // Telephone Switching Station
-        ['BFC','51','amenity','marketplace'],
-        ['BFC','52','amenity','townhall'], // Town Hall
         ['BFC','53','amenity','bank'],
-        ['BFC','54','amenity','fuel'],
-        ['BFC','55','leisure','yacht_club'], // Yacht Club/Sailing Club
-        ['BFC','56','amenity','pub'], // Public Inn
-        ['BFC','57','amenity','restaraunt'],
-        ['BFC','58','use','observation'], // Observation
         ['BFC','59','use','research'],
         ['BFC','61','amenity','courthouse'],
-        ['BFC','Courthouse','amenity','courthouse'],
-        ['BFC','62','building','legation'], // Legation
-        ['BFC','63','building','mission'], // Mission
-        ['BFC','64','building','chancery'], // Chancery
-        ['BFC','65','amenity','ambassadorial_residence' ],
-        ['BFC','66','amenity','embassy' ],
-        ['BFC','67','amenity','consulate' ],
-        ['BFC','68','building','guardhouse'],
-        ['BFC','69','building','guardroom'],
-        ['BFC','70','amenity','animal_shelter'], // Kennel
-        ['BFC','71','industrial','oil-mill'], // Oil Mill (Vegetable)
-        ['BFC','72','industrial','aerator'], // Aerator
-        ['BFC','73','industrial','carpentry'], // Carpentry
-        ['BFC','74','craft','sawmilling'], // Sawmill
-        ['BFC','75','man_made','kiln'], // Kiln/Oven
-        ['BFC','76','use','signal_box'], // Signal Box/Railway Signalman's House
         ['BFC','77','use','harbor_masters_office'], // Harbor Master's Office
-        ['BFC','78','building','marine_police'], // Marine Police
-        ['BFC','79','amenity','rescue'], // Rescue
         ['BFC','81','building','maritime_station'], // Maritime Station
         ['BFC','82','man_made','lighthouse'], // Lighthouse
         ['BFC','83','plant','power'],
-        ['BFC','84','industrial','filtration_plant'], // Filtration Plant
         ['BFC','85','amenity','newspaper_plant'],
         ['BFC','86','use','main_telephone_exchange'], // Telephone Exchange (Main)
         ['BFC','87','amenity','auditorium'], // Auditorium
         ['BFC','88','tourism','opera_house'], // Opera House
         ['BFC','89','industrial','manufacturing'],
         ['BFC','90','building','pumping'], // Pumphouse
-        ['BFC','91','building','static_caravan'], // Mobile Home
-        ['BFC','92','man_made','weather_station'], // Weather Station
-        ['BFC','93','building','dependents_housing'], // Dependents Housing/Bivouac Area
-        ['BFC','94','railway','station'],
         ['BFC','95','tourism','hotel'],
         ['BFC','96','amenity','diplomatic_building'],
-        ['BFC','97','building','trading_post'], // Trading Post
-        ['BFC','99','military','battery'], // Battery
-        ['BFC','100','building','healthcare'], // Medical Centre. Dont know if hospital, clinic etc
-        ['BFC','101','building','municipal_hall'], // Municipal Hall
-        ['BFC','102','industrial','oil_gas_facility'], // Not great
-        ['BFC','103','building','outbuilding'], // Outbuilding
-        ['BFC','104','industrial','paper_mill'],
-        ['BFC','105','amenity','reformatory'], // Reformatory
-        ['BFC','106','amenity','sanitarium'], // Sanitarium
-        ['BFC','107','building','satellite_tracking_station'], // Satellite Tracking Station
-        ['BFC','109','social_facility','senior'], // Senior Citizen's Home
-        ['BFC','110','amenity','shipyard'], // Shipyard
-        ['BFC','111','leisure','sports_centre'],
-        ['BFC','112','industrial','steel_mill'], // Steel Mill
-        ['BFC','113','amenity','weigh_scale_(highway)'], // Weigh Scale (Highway)
-        ['BFC','115','tourism','hostel'], // Hostel
-        ['BFC','116','industrial','manufacturing'],
-        ['BFC','117','tourism','motel'],
-        ['BFC','118','amenity','community_centre'],
-        ['BFC','119','amenity','townhall'],
-        ['BFC','120','industrial','motor_vehicle'],
-        ['BFC','121','building','armory'], // Armory
-        ['BFC','122','shop','mall'],
-        ['BFC','123','amenity','prison'], // Correctional Institute
-        ['BFC','124','repair','yes'], // Repair Facility
-        ['BFC','125','building','barn'],
-        ['BFC','126','amenity','astronomical_station'], // Astronomical Station
-        ['BFC','127','amenity','theatre'], // Theater
-        ['BFC','128','amenity','library'],
-        ['BFC','129','aeroway','terminal'], // Airport Terminal
-        ['BFC','130','amenity','bus_station'],
-        ['BFC','131','use','pilot_office'], // Pilot Office
-        ['BFC','132','use','pilot_look-out'], // Pilot Look-out
-        ['BFC','133','building','commercial'],
-        ['BFC','140','building','yes'], // Significant building ???
-        ['BFC','150','military','barracks'],
-        ['BFC','151','building','dormitory'], // Dormitory
-        ['BFC','723','amenity','fire_and_police'], // Combined Fire and Police Station
         ['BFC','999','building','other'],
-        ['BFC','Other','building','other'],
 
 
         // BOT - Bridge Opening Type
@@ -378,7 +367,6 @@ dnc.rules = {
         // BSM - Bridge Span Mobility Type
         ['BSM','0',undefined,undefined], // Unknown
         ['BSM','1','bridge:mobile_span','yes'], // Moveable Span
-        ['BSM','2','bridge:mobile_span','no'], // Fixed Span
 
 
         // CCC - Color Code Category
@@ -506,7 +494,6 @@ dnc.rules = {
         ['HDI','12','depth:hydrographic:information','depth_unknown'],
         ['HDI','13','depth:hydrographic:information','uncovering_height_known'],
         ['HDI','14','depth:hydrographic:information','uncovering_height_unknown'],
-        // ['HDI','15','depth:hydrographic:information','depth_unknown'],
         ['HDI','15',undefined,undefined], // Not Applicable
         
 
@@ -686,19 +673,15 @@ dnc.rules = {
 
 
         // MCC - Material Composition Type
+        ['MCC','-32768',undefined,undefined], // Null
         ['MCC','0',undefined,undefined], // No Information
-        ['MCC','2','material','aluminum'], // Aluminum
         ['MCC','4','material','ash'], // Ash
-        ['MCC','5','material','asphalt'], // Asphalt
-        ['MCC','7','material','bedrock'], // Bedrock
         ['MCC','8','material','boulders'], // Boulders
-        ['MCC','9','material','brick'], // Brick
         ['MCC','12','material','chalk'], // Chalk
         ['MCC','14','material','cinders'], // Cinders
         ['MCC','15','material','cirripedia'], // Cirripedia
         ['MCC','16','material','clay'], // Clay
         ['MCC','18','material','cobble'], // Cobble
-        ['MCC','21','material','concrete'], // Concrete
         ['MCC','24','material','coral'], // Coral
         ['MCC','25','material','coral_head'], // Coral Head
         ['MCC','28','material','diatoms'], // Diatoms
@@ -708,15 +691,11 @@ dnc.rules = {
         ['MCC','45','material','grass'], // Grass / Thatch
         ['MCC','46','material','gravel'], // Gravel
         ['MCC','48','material','ground'], // Ground
-        ['MCC','51','material','iron'], // Iron
         ['MCC','52','material','lava'], // Lava
-        ['MCC','55','material','loess'], // Loess
         ['MCC','58','material','madrepores'], // Madrepores
         ['MCC','59','material','manganese'], // Manganese
         ['MCC','61','material','marl'], // Marl
-        ['MCC','62','material','masonry'], // Masonry
         ['MCC','63','material','mattes'], // mattes
-        ['MCC','64','material','metal'], // Metal
         ['MCC','65','material','mud'], // Mud
         ['MCC','66','material','mussels'], // Mussels
         ['MCC','69','material','ooze'], // ooze
@@ -724,13 +703,11 @@ dnc.rules = {
         ['MCC','73','material','pebbles'], // Pebbles
         ['MCC','74','material','plastic'], // Plastic
         ['MCC','75','material','polyzoa'], // Polyzoa
-        ['MCC','77','material','prestressed_concrete'], // Prestressed Concrete
         ['MCC','78','material','pteropods'], // Pteropods
         ['MCC','79','material','pumice'], // Pumice
         ['MCC','80','material','quartz'], // Quartz
-        ['MCC','83','material','reinforced_concrete'], // Reinforced Concrete
+        ['MCC','81','material','radiolaria'], // Radiolaria
         ['MCC','84','material','rock'], // Rock
-        ['MCC','86','material','rubble'], // Rubble
         ['MCC','88','material','sand'], // Sand
         ['MCC','90','material','schist'], // Schist
         ['MCC','92','material','scoria'], // Scoria
@@ -738,18 +715,11 @@ dnc.rules = {
         ['MCC','94','material','seaweed'], // Seaweed
         ['MCC','96','material','shells'], // Shells
         ['MCC','98','material','shingle'], // Shingle
-        ['MCC','99','material','shingle'], // Shingle
-        ['MCC','103','material','frozen_water'], // Frozen Water
-        ['MCC','104','material','soil'], // Soil
+        ['MCC','99','material','silt'], // Silt
         ['MCC','105','material','spicules'], // Spicules
         ['MCC','106','material','sponge'], // Sponge
-        ['MCC','107','material','steel'], // Steel
         ['MCC','108','material','stone'], // Stone
         ['MCC','111','material','tufa'], // Tufa
-        ['MCC','117','material','wood'], // Wood
-        ['MCC','119','material','evaporite'], // Evaporite
-        ['MCC','150','material','treated_timber'], // Treated Timber
-        ['MCC','152','material','fibreglass'], // Fibreglass
         ['MCC','999','material','other'], // Other
 
 
@@ -846,7 +816,6 @@ dnc.rules = {
         ['MCU','96','material:underlying','shells'], // Shells
         ['MCU','98','material:underlying','shingle'], // Shingle
         ['MCU','99','material:underlying','silt'], // Silt
-        ['MCU','104','material:underlying','soil'], // Soil
         ['MCU','105','material:underlying','spicules'], // Spicules
         ['MCU','106','material:underlying','sponge'], // Sponge
         ['MCU','108','material:underlying','stone'], // Stone
@@ -1191,27 +1160,11 @@ dnc.rules = {
         ['TUC','1','transport:type','road_and_railway'], // Both Road and Railway
         ['TUC','3','transport:type','railway'], // Railroad
         ['TUC','4','transport:type','road'], // Road
-        ['TUC','6','transport:type','road'], // Street
-        ['TUC','7','highway:through_route','yes'],  // Through Route
         ['TUC','12','transport:type','marine'], // Marine
         ['TUC','13','transport:type','air'], // Air 
-        ['TUC','14','transport:type','bus'], // Bus 
         ['TUC','17','transport:type','pedestrian'], // Pedestrian
-        ['TUC','18','transport:type','pipeline'], // Pipeline 
-        ['TUC','20','transport:type','aircraft'], // Aircraft 
-        ['TUC','21','transport:type','ship'], // Ship 
-        ['TUC','22','transport:type','automotive'], // Automotive 
-        ['TUC','31','transport:type','motor_cycle'], // Motor Cycle 
-        ['TUC','34','transport:type','waterway'], // Waterway 
-        ['TUC','35','transport:type','no_transport_use'], // No Transport Use 
-        ['TUC','36','transport:type','slip_road/access_road'], // Slip Road/Access Road 
-        ['TUC','37','transport:type','portage'], // Portage 
+        ['TUC','37','transport:type','aqueduct'], // Aqueduct
         ['TUC','38','transport:type','canal'], // Canal 
-        ['TUC','39','transport:type','caravan_route'], // Caravan Route 
-        ['TUC','40','transport:type','subway'], // Subway 
-        ['TUC','41','transport:type','aqueduct'], // Aqueduct 
-        ['TUC','42','transport:type','both_road_and_runway'], // Both Road and Runway 
-        ['TUC','43','transport:type','recreational_vehicles'], // Recreational Vehicles 
 
 
         // UMC - Underlying Material Characteristics
@@ -1293,6 +1246,7 @@ dnc.rules = {
 
     ], // ##### End of One2One Rules #####
 
+
     // ##### Start of intList #####
     // intList - The list of fields that have to be integer
     intList : [
@@ -1300,6 +1254,8 @@ dnc.rules = {
     'D88', 'D89', 'D90', 'D91', 'DAT', 'DF1', 'DF2', 'DF3', 'DF4', 'DOF', 'EOL', 'HGT', 'LOR', 'LVN', 'OR2',
     'ORC', 'SCALE', 'SOURCE_ID', 'TIM', 'VAL', 'VAV', 'WID', 'WID', 'ZV2'
     ],
+    // ##### End of intList #####
+
 
     // ##### Start of txtLength #####
     // This list is for validateing the lengths of text attributes prior to export
@@ -1310,25 +1266,6 @@ dnc.rules = {
     },
     // ##### End of txtLength #####
 
-// lib_name String (40.0)
-// lib_number String (8.0)
-// lib_type String (1.0)
-
-// ntm_date String (20.0)
-// ntm String (5.0)
-
-// text String (0.0)
-// tile_name String (8.0)
-
-// dan String (255.0)
-// txt String (255.0)
-
-
-
-
-
-
-    // ##### End of intList #####
 
     // Lookup tables for linking an F_CODE to a Layer Name
     layerList : {
@@ -1518,7 +1455,7 @@ dnc.rules = {
         'BJ110A':'SNOWICEA',
         'CA010L':'RELLINE',
         'CA030P':'RELPOINT',
-        'DA010A':'ECAREA',
+        'DA010A':'ECRAREA',
         'DB090A':'EMBANKA',
         'DB090L':'LCRLINE',
         'DB170A':'EMBANKA',

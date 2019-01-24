@@ -184,8 +184,6 @@ mgcp = {
             {
                 if (mgcp.configOut.OgrDebugDumpvalidate == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
-                var othVal = '(' + enumName + ':' + attrValue + ')';
-
                 // Do we have an "Other" value?
                 if (enumValueList.indexOf('999') == -1)
                 {
@@ -203,7 +201,6 @@ mgcp = {
                 }
             }
         } // End Validate Enumerations
-
     }, // End validateAttrs
 
 

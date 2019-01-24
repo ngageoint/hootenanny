@@ -45,7 +45,7 @@ getDbSchema: function()
                        length:"5",
                        type:"String",
                        defValue:""
-                     },// End of FCODE
+                     },
                      { name:"BFC",
                        desc:"Building Function Category",
                        optional:"R",
@@ -81,7 +81,7 @@ getDbSchema: function()
                            { name:"R/R Storage/Repair Facility", value:"26" },
                            { name:"Depot Terminal", value:"27" },
                            { name:"Administration Building", value:"28" },
-                           { name:"Aircraft Maintenance", value:"29" },
+                           { name:"Aircraft Maintenance Shop", value:"29" },
                            { name:"Hangar", value:"30" },
                            { name:"Custom House", value:"31" },
                            { name:"Health Office", value:"33" },
@@ -140,9 +140,7 @@ getDbSchema: function()
                        defValue:"UNK"
                      }
                     ]
-          },// End of feature BUILDNGA
-
-
+          },
         { name:"INDUSTA",
           fcode:"",
           desc:"Industry Area",
@@ -190,7 +188,7 @@ getDbSchema: function()
                        defValue:"99999"
                      }
                     ]
-          },// End of feature INDUSTA
+          },
         { name:"LANDMRKA",
           fcode:"",
           desc:"Landmark Area",
@@ -204,7 +202,7 @@ getDbSchema: function()
                        defValue:""
                      }
                     ]
-          },// End of feature LANDMRKA
+          },
         { name:"PARKA",
           fcode:"",
           desc:"Landmark Area",
@@ -224,7 +222,7 @@ getDbSchema: function()
                        defValue:"UNK"
                      }
                     ]
-          },// End of feature PARKA
+          },
         { name:"TRANSA",
           fcode:"",
           desc:"Transportation Area",
@@ -267,7 +265,7 @@ getDbSchema: function()
                        defValue:"UNK"
                      }
                     ]
-          },// End of feature TRANSA
+          },
         { name:"FENCEL",
           fcode:"",
           desc:"Fence  Line",
@@ -281,7 +279,7 @@ getDbSchema: function()
                        defValue:""
                      }
                     ]
-          },// End of feature FENCEL
+          },
         { name:"PARKL",
           fcode:"",
           desc:"Park Line",
@@ -311,7 +309,7 @@ getDbSchema: function()
                        defValue:"UNK"
                      }
                     ]
-          },// End of feature PARKL
+          },
         { name:"POWERL",
           fcode:"",
           desc:"Power Line",
@@ -340,7 +338,7 @@ getDbSchema: function()
                         ]
                      }
                     ]
-          },// End of feature POWERL
+          },
         { name:"RAILRDL",
           fcode:"",
           desc:"Railroad Line",
@@ -408,7 +406,7 @@ getDbSchema: function()
                         ]
                      }
                     ]
-          },// End of feature RAILRDL
+          },
         { name:"TRANSL",
           fcode:"",
           desc:"Transportation Line",
@@ -601,7 +599,7 @@ getDbSchema: function()
                            { name:"Courthouse", value:"61" },
                            { name:"Harbor Master’s Office", value:"77" },
                            { name:"Maritime Station", value:"81" },
-                           { name:"Ligithouse", value:"82" },
+                           { name:"Lighthouse", value:"82" },
                            { name:"Power Generation", value:"83" },
                            { name:"Newspaper Plant", value:"85" },
                            { name:"Telephone Exchange (Main)", value:"86" },
@@ -809,8 +807,8 @@ getDbSchema: function()
                         ]
                      }
                     ]
-          },// End of feature COMPP
-        { name:"INUDSTP",
+          },
+        { name:"INDUSTP",
           fcode:"",
           desc:"Industry Point",
           geom:"Point",
@@ -1158,7 +1156,7 @@ getDbSchema: function()
                            { name:"Stony, Shingly", value:"14" },
                            { name:"Other", value:"999" },
                         ]
-                     }, // End of SLT
+                     },
                     ]
           },
         { name:"FORESHOL",

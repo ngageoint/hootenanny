@@ -39,21 +39,6 @@ dnc = {
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         dnc.rawSchema = dnc.schema.getDbSchema();
 
-        // Build the DNC fcode/attrs lookup table. Note: This is <GLOBAL>
-        dncAttrLookup = {};
-
-        for (var i=0, sLen = dnc.rawSchema.length; i < sLen; i++)
-        {
-            var attrArray = [];
-            for (var j=0, cLen = dnc.rawSchema[i].columns.length; j < cLen; j++)
-            {
-                attrArray.push(dnc.rawSchema[i].columns[j].name);
-            }
-            // Add the attrArray to the list as <layerName>:[array]  
-            // Eg RIVERL:[array]
-            dncAttrLookup[dnc.rawSchema[i].name] = attrArray;
-        }
-
         // Debug:
         // print("dncAttrLookup: Start");
         // translate.dumpLookup(dncAttrLookup);
@@ -72,6 +57,21 @@ dnc = {
                                       type:'String',
                                       defValue:'' 
                                     });
+        }
+
+        // Build the DNC fcode/attrs lookup table. Note: This is <GLOBAL>
+        dncAttrLookup = {};
+
+        for (var i=0, sLen = dnc.rawSchema.length; i < sLen; i++)
+        {
+            var attrArray = [];
+            for (var j=0, cLen = dnc.rawSchema[i].columns.length; j < cLen; j++)
+            {
+                attrArray.push(dnc.rawSchema[i].columns[j].name);
+            }
+            // Add the attrArray to the list as <layerName>:[array]  
+            // Eg RIVERL:[array]
+            dncAttrLookup[dnc.rawSchema[i].name] = attrArray;
         }
 
         // Now add an o2s[A,L,P] feature to the dnc.rawSchema
@@ -239,7 +239,7 @@ dnc = {
 
     // validateAttrs - Clean up the supplied attr list by dropping anything that should not be part of the
     //                 feature
-    validateAttrs: function(layerName,geometryType,attrs) {
+    validateAttrs: function(layerName,geometryType,attrs,notUsed,transMap) {
 
         var attrList = dncAttrLookup[layerName];
 
@@ -253,6 +253,17 @@ dnc = {
                     if (attrList.indexOf(val) == -1)
                     {
                         hoot.logWarn('Validate: Dropping ' + val + ' from ' + layerName);
+                        if (val in transMap)
+                        {
+                            notUsed[transMap[val][1]] = transMap[val][2];
+                            // Debug:
+                            hoot.logWarn('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+                        }
+                        else
+                        {
+                            hoot.logError('Validate: ' + val + ' missing from transMap');
+                        }
+
                         delete attrs[val];
 
                         // Since we deleted the attribute, Skip the text check
@@ -287,6 +298,17 @@ dnc = {
                 {
                     if (attrList.indexOf(val) == -1)
                     {
+                        if (val in transMap)
+                        {
+                            notUsed[transMap[val][1]] = transMap[val][2];
+                            // Debug:
+                            // print('Validate: re-adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+                        }
+                        else
+                        {
+                            hoot.logError('Validate: ' + val + ' missing from transMap');
+                        }
+
                         delete attrs[val];
 
                         // Since we deleted the attribute, Skip the text check
@@ -324,13 +346,10 @@ dnc = {
         // No quick and easy way to do this unless we build yet another lookup table
         var feature = {};
 
-print('Validate: layerName = ' + layerName);
-
         for (var i=0, sLen = dnc.rawSchema.length; i < sLen; i++)
         {
             if (dnc.rawSchema[i].name == layerName)
             {
-print('Validate: Found: ' + layerName);
                 feature = dnc.rawSchema[i];
                 break;
             }
@@ -359,8 +378,6 @@ print('Validate: Found: ' + layerName);
             {
                 if (dnc.configOut.OgrDebugDumpvalidate == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
-                var othVal = '(' + enumName + ':' + attrValue + ')';
-
                 // Do we have an "Other" value?
                 if (enumValueList.indexOf('999') == -1)
                 {
@@ -376,10 +393,147 @@ print('Validate: Found: ' + layerName);
 
                     hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
                 }
+
+                // Since we either wiped the value or set it to '999', restore the tags for it 
+                if (enumName in transMap)
+                {
+                    notUsed[transMap[enumName][1]] = transMap[enumName][2];
+                    // Debug:
+                    print('Validate: re-adding enumeration ' + transMap[enumName][1] + ' = ' + transMap[enumName][2] + ' to notUsed');
+                }
+                else
+                {
+                    hoot.logError('Validate: ' + enumName + ' missing from transMap');
+                }
             }
         } // End Validate Enumerations
-
     }, // End validateAttrs
+
+
+    // Apply one to one translations and don't report errors: missing columns etc
+    // THis does keep track of what has been used so we can undo it later if needed
+    applyOne2OneModified : function(inList, outList, lookup, transMap)
+    {
+        var row = [];
+
+        for (var col in inList)
+        {
+            var value = inList[col];
+            if (col in lookup)
+            {
+                if (value in lookup[col])
+                {
+                    row = lookup[col][value];
+
+                    // Drop all of the undefined values
+                    if (row[0])
+                    {
+                        outList[row[0]] = row[1];
+                        transMap[row[0]] = [row[1],col,value];
+
+                        // Debug:
+                        // print('Adding: ' + row[0] + ' as ' + transMap[row[0]]);
+                        
+                        delete inList[col];
+                    }
+                }
+            }
+        } // End for col in inList
+    }, // End applyOne2OneModified
+
+
+    // applyTxtToOgr - Apply 0ne2one rules for Text Attributes
+    // The "direction is either "forward" or "backward" - convert to or from
+    applyTxtToOgr : function(attrs, tags, rules, transMap)
+    {
+        // convert Tags to Attrs
+        for (var i in rules)
+        {
+            if (rules[i] in tags)
+            {
+                attrs[i] = tags[rules[i]];
+
+                transMap[i] = ['',rules[i],tags[rules[i]]];
+                // Debug:
+                // print('Txt Adding: ' + i + ' as ' + transMap[attrs[i]]);
+
+                delete tags[rules[i]];
+            }
+        }
+    }, // End applyTxtToOgr
+
+    // applyNumToOgr - Apply 0ne2one rules for Number Attributes
+    // NOTE: This is the toOgr direction
+    applyNumToOgr : function(attrs, tags, rules, intList, transMap)
+    {
+        // convert Tags to Attrs
+        for (var i in rules)
+        {
+            if (rules[i] in tags)
+            {
+                // Strip out anything that is not a number. Get rid of 125m etc
+                var tNum = tags[rules[i]].replace(/-[^0-9\\.]+/g, '');
+
+                if (translate.isNumber(tNum))
+                {
+                    // Now check the Integer attributes
+                    if (intList.indexOf(i) > -1)
+                    {
+                        // Quick bitwise or to strip off anything after the decimal
+                        var tInt = tNum | 0;
+
+                            // Back to a string for a comparison
+                            if ((tInt + '') !== tNum)
+                            {
+                                hoot.logTrace('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
+                            }
+                            tNum = tInt;
+                    } // End in intList
+
+                    attrs[i] = tNum;
+
+                    transMap[i] = ['',rules[i],tags[rules[i]]];
+                    // Debug:
+                    // print('Num Adding: ' + i + ' as ' + transMap[attrs[i]]);
+
+                    delete tags[rules[i]];
+                }
+                else
+                {
+                    hoot.logTrace('Expected a number for:: ' + rules[i] + '. Got ' + tags[rules[i]] + ' instead. Skipping ' + i);
+                }
+            }
+        }
+    }, // End applyNumToOgr
+
+
+    // appendToOsmTags: Unpacks the OSM_TAGS text string, appends a value to it and then re-packs it
+    appendToOsmTags : function (rawTagObj, tag, value)
+    {
+        // Debug:
+        print('appendToOsmTags: in: ' + rawTagObj);
+
+        var tTags = {};
+
+        // Make sure we have something to work with
+        if (rawTagObj)
+        {
+            var tObj = translate.unpackMemo(rawTagObj);
+
+            if (tObj.tags !== '')
+            {
+                tTags = JSON.parse(tObj.tags)
+            }
+        }
+
+        tTags[tag] = value;
+        // Debug:
+        print('appendToOsmTags: out: ' + JSON.stringify(tTags));
+
+        var tStr = '<OSM>' + JSON.stringify(tTags) + '</OSM>';
+        return tStr;
+    },
+
 
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
@@ -419,10 +573,10 @@ print('Validate: Found: ' + layerName);
                 delete attrs[col];
                 col = c; // For the rest of this loop iteration
             }
-
         } // End in attrs loop
 
     }, // End of applyToOsmPreProcessing
+
 
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
@@ -495,8 +649,8 @@ print('Validate: Found: ' + layerName);
     // ##### End of the xxToOsmxx Block #####
 // #####################################################################################################
 
-    // ##### Start of the xxToOgrxx Block #####
 
+    // ##### Start of the xxToOgrxx Block #####
     applyToOgrPreProcessing: function(tags, attrs, geometryType)
     {
         // Remove Hoot assigned tags for the source of the data
@@ -526,7 +680,10 @@ print('Validate: Found: ' + layerName);
                 continue;
             }
 
-        } // End Cleanup loop    
+        } // End Cleanup loop
+
+        // natural water usually has a subtype. If it does, just keep the subtype
+        if (tags.natural == 'water' && tags.water) delete tags.natural;
 
         // // Fix up OSM 'walls' around facilities
         // if (tags.barrier == 'wall' && geometryType == 'Area')
@@ -631,7 +788,7 @@ print('Validate: Found: ' + layerName);
         {
             if (! tags['bridge:movable'])
             {
-            tags['bridge:movable'] = 'unknown';
+                tags['bridge:movable'] = 'yes';
             }
             tags.bridge = 'yes';
             attrs.F_CODE = 'AQ040';
@@ -642,6 +799,68 @@ print('Validate: Found: ' + layerName);
         {
             tags.bridge = 'yes';
             tags.note = translate.appendValue(tags.note,'Viaduct',';');
+        }
+
+        // Exceptions to the rules. Values from TagInfo
+        switch (tags.highway)
+        {
+            case 'bus_stop':
+            case 'corridor':
+            case 'crossing':
+            case 'elevator':
+            case 'footway':
+            case 'give_way':
+            case 'milestone':
+            case 'no':
+            case 'path':
+            case 'priority':
+            case 'rest_area':
+            case 'speed_camera':
+            case 'speed_display':
+            case 'steps':
+            case 'stop':
+            case 'street_lamp':
+            case 'street_light':
+            case 'toll_gantry':
+            case 'traffic_mirror':
+            case 'traffic_sign':
+            case 'traffic_signals':
+                attrs.OSM_TAGS = dnc.appendToOsmTags(attrs.OSM_TAGS,'highway',attrs.highway);
+                delete tags.highway;
+                break;
+        } // End highway switch
+
+        // Exceptions to the rules. Values from TagInfo
+        switch (tags.railway)
+        {
+            case 'buffer_stop':
+            case 'crossing':
+            case 'halt':
+            case 'junction':
+            case 'level_crossing':
+            case 'milestone':
+            case 'phone':
+            case 'platform':
+            case 'platform_edge':
+            case 'radio':
+            case 'railway_crossing':
+            case 'signal_box':
+            case 'station':
+            case 'stop':
+            case 'subway_entrance':
+            case 'switch':
+            case 'vacancy_detection':
+            case 'ventilation_shaft': // ???
+                attrs.OSM_TAGS = dnc.appendToOsmTags(attrs.OSM_TAGS,'railway',attrs.railway);
+                delete tags.railway;
+                break;
+        } // End railway switch
+
+
+        // Bays and beaches can become named locations if they are points
+        if (geometryType == 'Point' && tags.natural)
+        {
+            if (tags.natural == 'bay' || tags.natural == 'beach') attrs.F_CODE = 'ZD040'; // Named Area
         }
 
         // Keep looking for an FCODE
@@ -666,19 +885,82 @@ print('Validate: Found: ' + layerName);
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
 
-
     }, // End applyToOgrPreProcessing
 
 // #####################################################################################################
 
     applyToOgrPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
+        // BFC generally == Building
+        if (attrs.BFC && !attrs.F_CODE) attrs.F_CODE = 'AL015';
+
+        // Tourism: These should be buildings but don't appear in the BFC list
+        switch (tags.tourism)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'alpine_hut':
+            case 'apartment':
+            case 'aquarium':
+            case 'bed_and_breakfast':
+            case 'cabin':
+            case 'chalet':
+            case 'guest_house':
+            case 'hostel':
+            case 'informaton':
+            case 'motel':
+            case 'resort':
+            case 'wilderness_hut':
+                attrs.F_CODE = 'AL015';
+                attrs.BFC = '95'; // Hotel
+                break;
+
+            case 'attraction':
+            case 'gallery':
+                attrs.F_CODE = 'AL015';
+                attrs.BFC = '999'; // Other
+                break;
+
+            case 'view_point':
+                attrs.F_CODE = 'ZD040'; // Named location
+                break;
+
+        } // End tourism switch
+
+        // Landuse. A couple of options for these
+        switch (tags.landuse)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'basin':
+            case 'brownfield':
+            case 'conservation':
+            case 'farm':
+            case 'farmland':
+            case 'field':
+            case 'grass':
+            case 'greenfield':
+            case 'landfill':
+            case 'meadow':
+                attrs.F_CODE = 'DA010'; // Ground Surface Element
+                break;
+
+            case 'village_green':
+            case 'recreation_ground':
+                attrs.F_CODE = 'AK120'; // Park
+                break;
+        } // End landuse switch
+
+
         // If we still don't have an FCODE, try a bit of brute force
         if (!attrs.F_CODE)
         {
             var fcodeMap = {
                 'highway':'AP030', 'railway':'AN010', 'building':'AL015',
                 'ford':'BH070', 'waterway':'BH140', 'bridge':'AQ040',
+                'shop':'AL015'
             };
 
             for (var i in fcodeMap)
@@ -686,11 +968,12 @@ print('Validate: Found: ' + layerName);
                 if (i in tags)
                 {
                     // Debug
-                    print('Added FCODE from Map: ' + fcodeMap[i]);
+                    // print('Added FCODE from Map: ' + fcodeMap[i]);
                     attrs.F_CODE = fcodeMap[i];
                     break;
                 }
             }
+
         } // End !fcode
 
         // Sort out the UUID
@@ -710,7 +993,6 @@ print('Validate: Found: ' + layerName);
     }, // End applyToOgrPostProcessing
 
 // #####################################################################################################
-
     // ##### End of the xxToOgrxx Block #####
 
 
@@ -806,7 +1088,7 @@ print('Validate: Found: ' + layerName);
             {
                 tags[ftag[0]] = ftag[1];
                 // Debug: Dump out the tags from the FCODE
-                print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+                // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
             }
             else
             {
@@ -857,6 +1139,7 @@ print('Validate: Found: ' + layerName);
     {
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
+        var transMap = {}; // A map of translated attributes
         attrs = {}; // The output attributes
         attrs.F_CODE = ''; // Initial setup
 
@@ -903,9 +1186,10 @@ print('Validate: Found: ' + layerName);
         if (dnc.fcodeLookup == undefined)
         {
             // Add the FCODE rules for Export
-            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,dnc.rules.fcodeOne2oneOut);
-
-            dnc.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+            // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,dnc.rules.fcodeOne2oneOut);
+            // dnc.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+            fcodeCommon.one2one.push.apply(dnc.rules.fcodeOne2oneOut,fcodeCommon.one2one);
+            dnc.fcodeLookup = translate.createBackwardsLookup(dnc.rules.fcodeOne2oneOut);
             // Debug
             translate.dumpOne2OneLookup(dnc.fcodeLookup);
         }
@@ -917,7 +1201,7 @@ print('Validate: Found: ' + layerName);
 
             dnc.lookup = translate.createBackwardsLookup(dnc.rules.one2one);
             // Debug
-            translate.dumpOne2OneLookup(dnc.lookup);
+            // translate.dumpOne2OneLookup(dnc.lookup);
         } // End dnc.lookup Undefined
 
         // Override values if appropriate
@@ -935,14 +1219,17 @@ print('Validate: Found: ' + layerName);
         // Debug info. We use this in postprocessing via "tags"
         if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
 
+
         // Apply the simple number and text biased rules
-        // NOTE: These are BACKWARD, not forward!
+        // NOTE: These use the transMap option. This will migrate to the other translations soon
         // NOTE: These delete tags as they are used
-        translate.applySimpleNumBiased(attrs, notUsedTags, dnc.rules.numBiased, 'backward',dnc.rules.intList);
-        translate.applySimpleTxtBiased(attrs, notUsedTags, dnc.rules.txtBiased, 'backward');
+
+        dnc.applyNumToOgr(attrs, notUsedTags, dnc.rules.numBiased, dnc.rules.intList, transMap);
+        dnc.applyTxtToOgr(attrs, notUsedTags, dnc.rules.txtBiased, transMap);
 
         // Apply one2one rules
-        translate.applyOne2One(notUsedTags, attrs, dnc.lookup, dnc.fcodeLookup);
+        // NOTE: This is a local function updates a structure of what got translated so we can undo it if needed
+        dnc.applyOne2OneModified(notUsedTags, attrs, dnc.lookup, transMap);
 
         // Translate the XXX:2, XXX2, XXX:3 etc attributes
         // Note: This deletes tags as they are used
@@ -960,21 +1247,74 @@ print('Validate: Found: ' + layerName);
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
         }
 
-        // If we have unused tags, add them to the extra field we added to the schema field
-        if (Object.keys(notUsedTags).length > 0)
-        {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.OSM_TAGS = translate.appendValue(attrs.OSM_TAGS,tStr,';');
-        }
-
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and
         // push the feature to o2s layer
         var gFcode = attrs.F_CODE + geometryType.toString().charAt(0);
 
-        print('gFcode: ' + gFcode + '  layerName: ' + dnc.rules.layerList[gFcode]);
+        // Debug:
+        // print('gFcode: ' + gFcode + '  layerName: ' + dnc.rules.layerList[gFcode]);
 
-        if (!(gFcode in dnc.rules.layerList))
+        if (gFcode in dnc.rules.layerList)
+        {
+            // Check if we need to make more features
+            // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
+            returnData = dnc.manyFeatures(geometryType,tags,attrs);
+
+            // Debug: Add the first feature
+            //returnData.push({attrs: attrs, tableName: ''});
+            // print('ReturnData.length = ' + returnData.length);
+
+            // Now go through the features and clean them up
+            var gType = geometryType.toString().charAt(0);
+            for (var i = 0, fLen = returnData.length; i < fLen; i++)
+            {
+                // var gFcode = returnData[i]['attrs']['F_CODE'] + gType;
+
+                var tableName = '';
+                tableName = dnc.rules.layerList[returnData[i]['attrs']['F_CODE'] + gType];
+
+                // if (dncAttrLookup[gFcode.toUpperCase()])
+                if (tableName !== '')
+                {
+                    returnData[i]['tableName'] = tableName;
+
+                    // Validate attrs: remove all that are not supposed to be part of a feature
+                    dnc.validateAttrs(tableName,geometryType,returnData[i]['attrs'],notUsedTags,transMap);
+
+                    // If we have unused tags, add them to the extra field we added to the schema field
+                    if (Object.keys(notUsedTags).length > 0)
+                    {
+                        // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+                        var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+                        returnData[i]['attrs']['OSM_TAGS'] = tStr;
+                    }
+                }
+                else
+                {
+                    // If the feature is not valid, just drop it
+                    // Debug
+                    // print('## Skipping: ' + gFcode);
+                    returnData.splice(i,1);
+                }
+            } // End returnData loop
+
+            // Look for Review tags and push them to a review layer if found
+            if (tags['hoot:review:needs'] == 'yes')
+            {
+                var reviewAttrs = {};
+
+                // Note: Some of these may be "undefined"
+                reviewAttrs.note = tags['hoot:review:note'];
+                reviewAttrs.score = tags['hoot:review:score'];
+                reviewAttrs.uuid = tags.uuid;
+                reviewAttrs.source = tags['hoot:review:source'];
+
+                var reviewTable = 'review_' + geometryType.toString().charAt(0);
+                returnData.push({attrs: reviewAttrs, tableName: reviewTable});
+            } // End ReviewTags
+        } // End We have a feature
+        else // We DON'T have a feature
         {
             // For the UI: Throw an error and die if we don't have a valid feature
             if (dnc.configOut.OgrThrowError == 'true')
@@ -1041,58 +1381,7 @@ print('Validate: Found: ' + layerName);
             }
 
             returnData.push({attrs: attrs, tableName: tableName});
-        }
-        else // We have a feature
-        {
-            // Check if we need to make more features
-            // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
-            returnData = dnc.manyFeatures(geometryType,tags,attrs);
-
-            // Debug: Add the first feature
-            //returnData.push({attrs: attrs, tableName: ''});
-
-            print('ReturnData.length = ' + returnData.length);
-            // Now go through the features and clean them up
-            var gType = geometryType.toString().charAt(0);
-            for (var i = 0, fLen = returnData.length; i < fLen; i++)
-            {
-                // var gFcode = returnData[i]['attrs']['F_CODE'] + gType;
-
-                var tableName = '';
-                tableName = dnc.rules.layerList[returnData[i]['attrs']['F_CODE'] + gType];
-
-                // if (dncAttrLookup[gFcode.toUpperCase()])
-                if (tableName !== '')
-                {
-                    // Validate attrs: remove all that are not supposed to be part of a feature
-                    dnc.validateAttrs(tableName,geometryType,returnData[i]['attrs']);
-
-                    returnData[i]['tableName'] = tableName;
-                }
-                else
-                {
-                    // If the feature is not valid, just drop it
-                    // Debug
-                    print('## Skipping: ' + gFcode);
-                    returnData.splice(i,1);
-                }
-            } // End returnData loop
-
-            // Look for Review tags and push them to a review layer if found
-            if (tags['hoot:review:needs'] == 'yes')
-            {
-                var reviewAttrs = {};
-
-                // Note: Some of these may be "undefined"
-                reviewAttrs.note = tags['hoot:review:note'];
-                reviewAttrs.score = tags['hoot:review:score'];
-                reviewAttrs.uuid = tags.uuid;
-                reviewAttrs.source = tags['hoot:review:source'];
-
-                var reviewTable = 'review_' + geometryType.toString().charAt(0);
-                returnData.push({attrs: reviewAttrs, tableName: reviewTable});
-            } // End ReviewTags
-        } // End else We have a feature
+        } // End Don't have a feature
 
         // Debug:
         if (dnc.configOut.OgrDebugDumptags == 'true')
