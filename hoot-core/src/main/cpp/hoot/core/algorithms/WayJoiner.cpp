@@ -206,6 +206,7 @@ void WayJoiner::joinAtNode()
         LOG_VART(way_ids);
         for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
         {
+          LOG_VART(way->getElementId());
           WayPtr child = _map->getWay(*ways);
           if (child)
           {
