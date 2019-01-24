@@ -175,7 +175,8 @@ void WayJoiner::joinAtNode()
         ids.insert(way->getId());
     }
     LOG_VARD(currentNumSplitParentIds);
-    // If we didn't reduce the number of ways from the previous iteration, exit out.
+    // If we didn't reduce the number of ways from the previous iteration or there are none left
+    // to reduce, exit out.
     if (currentNumSplitParentIds == ids.size() || ids.size() == 0)
     {
       break;
