@@ -160,13 +160,12 @@ void WayJoiner::joinAtNode()
   LOG_DEBUG("Joining at node...");
 
   unordered_set<long> ids;
-  unordered_set<long>::size_type firstNumSplitParentIds = ids.max_size();
+  unordered_set<long>::size_type lastNumSplitParentIds = ids.max_size();
   unordered_set<long>::size_type currentNumSplitParentIds = ids.max_size();
   int numIterations = 0;
 
   // keep iterating until we're no longer joining any ways
-  while ((firstNumSplitParentIds == ids.max_size() ||
-          currentNumSplitParentIds != firstNumSplitParentIds) && currentNumSplitParentIds != 0)
+  while (currentNumSplitParentIds != 0)
   {
     WayMap ways = _map->getWays();
     ids.clear();
@@ -177,13 +176,14 @@ void WayJoiner::joinAtNode()
       if (way->hasPid())
         ids.insert(way->getId());
     }
-    LOG_VARD(ids.size());
-    LOG_VARD(firstNumSplitParentIds);
-    if (firstNumSplitParentIds == ids.max_size())
+    lastNumSplitParentIds = ids.size();
+    LOG_VARD(lastNumSplitParentIds);
+    LOG_VARD(currentNumSplitParentIds);
+    if (numIterations > 0 &&
+        (currentNumSplitParentIds == lastNumSplitParentIds || currentNumSplitParentIds == 0))
     {
-      firstNumSplitParentIds = ids.size();
+      break;
     }
-    LOG_VARD(firstNumSplitParentIds);
     currentNumSplitParentIds = ids.size();
     LOG_VARD(currentNumSplitParentIds);
 
