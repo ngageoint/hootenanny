@@ -216,8 +216,10 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   ElementPtr e2 = result->getElement(eid2);
   LOG_VART(e1->getStatus());
   LOG_VART(e2->getStatus());
+  //LOG_VART(e1);
+  //LOG_VART(e2);
 
-  // This isn't always true (?)
+  // This doesn't seem to always be true.
   assert(e1->getStatus() == Status::Unknown1);
 
   // split w2 into sublines
@@ -253,14 +255,18 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
                 scraps2);
 
   LOG_VART(e1Match->getElementId());
+  //LOG_VART(e1Match);
   if (scraps1)
   {
     LOG_VART(scraps1->getElementId());
+    //LOG_VART(scraps1);
   }
   LOG_VART(e2Match->getElementId());
+  //LOG_VART(e2Match);
   if (scraps2)
   {
     LOG_VART(scraps2->getElementId());
+    //LOG_VART(scraps2);
   }
 
   // remove any ways that directly connect from e1Match to e2Match
@@ -278,10 +284,13 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   if (e1Match->getElementType() == ElementType::Way)
   {
-    // The cases involving relations are made necessary by the "else if (matches.size() > 1)" code
-    // block in MultiLineStringSplitter::createSublines.  Arbitrarily, the first way relation member
-    // is being grabbed, which has helped rejoin ways correctly for the situations encountered
-    // in #2867, but possibly something else should be done there instead (?).
+    // The cases involving relations here are made necessary by the "else if (matches.size() > 1)"
+    // code block in MultiLineStringSplitter::createSublines.  Arbitrarily, the first way relation
+    // member is being grabbed, which has helped rejoin ways correctly for the situations
+    // encountered in #2867, but possibly something else should be done there instead (?).  Also,
+    // only the situations encountered with relation in data are being handled here on a case by
+    // case basis to avoid overcomplicating code.  That's why there is a lack of symmetry in the
+    // relation handling code compared to the way handling code.
 
     if (e1->getElementType() == ElementType::Way && e2->getElementType() == ElementType::Way)
     {
@@ -304,8 +313,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           LOG_TRACE(
             "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
         }
-        // Have only seen scraps1 as a relation, not scraps2 yet, and then only when both input
-        // elements are ways, so only handling this particular situation until others are seen.
         else if (scraps1->getElementType() == ElementType::Relation && pid == 0)
         {
           const long firstWayIdInRelation =
@@ -375,8 +382,48 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
             "Set PID: " << w->getPid() << " on: " << scraps2->getElementId() << " (scraps2).");
         }
       }
+
+      //TODO: handle this for e2=relation too?
+      if (e1->getElementType() == ElementType::Relation)
+      {
+        const std::vector<RelationData::Entry> relationMembers = r->getMembers();
+        for (size_t i = 0; i < relationMembers.size(); i++)
+        {
+          ElementPtr member = map->getElement(relationMembers[i].getElementId());
+          if (member && member->getElementType() == ElementType::Way)
+          {
+            Tags mergedTags =
+              TagMergerFactory::mergeTags(e2->getTags(), member->getTags(), ElementType::Way);
+            mergedTags =
+              TagMergerFactory::mergeTags(e1->getTags(), mergedTags, ElementType::Way);
+            member->setTags(mergedTags);
+            //LOG_VART(member);
+          }
+        }
+      }
     }
   } 
+
+  if (e1Match)
+  {
+    LOG_VART(e1Match->getElementId());
+    //LOG_VART(e1Match);
+  }
+  if (scraps1)
+  {
+    LOG_VART(scraps1->getElementId());
+    //LOG_VART(scraps1);
+  }
+  if (e2Match)
+  {
+    LOG_VART(e2Match->getElementId());
+    //LOG_VART(e2Match);
+  }
+  if (scraps2)
+  {
+    LOG_VART(scraps2->getElementId());
+    //LOG_VART(scraps2);
+  }
 
   // remove the old way that was split and snapped
   if (e1 != e1Match && scraps1)
@@ -387,12 +434,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   {
     // remove any reviews that contain this element.
     RemoveReviewsByEidOp(eid1, true).apply(result);
-  }
-
-  LOG_VART(e2Match->getElementId());
-  if (scraps2)
-  {
-    LOG_VART(scraps2->getElementId());
   }
 
   // if there is something left to review against
@@ -407,6 +448,23 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   {
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
     RemoveReviewsByEidOp(eid2, true).apply(result);
+  }
+
+  if (e1Match)
+  {
+    LOG_VART(e1Match->getElementId());
+  }
+  if (scraps1)
+  {
+    LOG_VART(scraps1->getElementId());
+  }
+  if (e2Match)
+  {
+    LOG_VART(e2Match->getElementId());
+  }
+  if (scraps2)
+  {
+    LOG_VART(scraps2->getElementId());
   }
 
   return false;
@@ -575,14 +633,17 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
   const vector<bool>& reverse, vector< pair<ElementId, ElementId>>& replaced,
   const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const
 {  
+  LOG_VART(splitee->getElementId());
+  //LOG_VART(splitee);
+
   MultiLineStringSplitter().split(map, s, reverse, match, scrap);
+
   LOG_VART(match.get());
   if (match.get())
   {
     LOG_VART(match->getElementId());
   }
 
-  LOG_VART(splitee->getElementId());
   vector<ConstWayPtr> waysV = ExtractWaysVisitor::extractWays(map, splitee);
   set<ConstWayPtr, WayPtrCompare> ways;
   ways.insert(waysV.begin(), waysV.end());
@@ -626,10 +687,9 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
     LOG_VART(r->getElementId());
   }
 
-  LOG_VART(splitee);
   LOG_VART(match.get());
-  LOG_VART(match);
-  LOG_VART(match->getTags());
+  //LOG_VART(match);
+  //LOG_VART(match->getTags());
 
   match->setTags(splitee->getTags());
   match->setCircularError(splitee->getCircularError());
@@ -638,6 +698,8 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
   if (scrap)
   {
     LOG_VART(scrap->getElementId());
+    //LOG_VART(scrap);
+
     /*
      * In this example we have a foot path that goes on top of a wall (x) that is being matched with
      * another path (o).
@@ -687,6 +749,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
     else if (splitee->getElementType() == ElementType::Way &&
              scrap->getElementType() == ElementType::Relation)
     {
+      LOG_TRACE("multilinestring: moving tags...");
       RelationPtr r = boost::dynamic_pointer_cast<Relation>(scrap);
       // make sure none of the child ways have tags.
       for (size_t i = 0; i < r->getMembers().size(); i++)
@@ -695,10 +758,10 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       }
     }
 
-    LOG_VART(scrap);
-
+    //LOG_VART(splitee->getTags());
     // make sure the tags are still legit on the scrap.
     scrap->setTags(splitee->getTags());
+    //LOG_VART(scrap);
 
     replaced.push_back(
       std::pair<ElementId, ElementId>(splitee->getElementId(), scrap->getElementId()));

@@ -1,0 +1,1305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="4.1718" minlon="73.50315000000001" maxlat="4.1764" maxlon="73.50859"/>
+    <node visible="true" id="-3093645" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1741971281519872" lon="73.5085899999999981"/>
+    <node visible="true" id="-3093644" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5045469470292261"/>
+    <node visible="true" id="-3093643" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5076471531061486"/>
+    <node visible="true" id="-3093642" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1718000000000002" lon="73.5083631670436120"/>
+    <node visible="true" id="-3093641" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1737690100495461" lon="73.5085899999999981"/>
+    <node visible="true" id="-3093640" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1733988989509916" lon="73.5031500000000051"/>
+    <node visible="true" id="-3093639" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1718000000000002" lon="73.5077461178082245"/>
+    <node visible="true" id="-3093638" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5062608935620005"/>
+    <node visible="true" id="-3093637" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1752360655459499" lon="73.5031500000000051"/>
+    <node visible="true" id="-3093636" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5059033639765858"/>
+    <node visible="true" id="-3093635" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1758814919283909" lon="73.5031500000000051"/>
+    <node visible="true" id="-3093634" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1752994756844553" lon="73.5085899999999981"/>
+    <node visible="true" id="-3093633" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5054954095588187"/>
+    <node visible="true" id="-3093632" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1725217184974879" lon="73.5085899999999981"/>
+    <node visible="true" id="-3093631" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1718000000000002" lon="73.5071133514825590"/>
+    <node visible="true" id="-3093630" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5033323238959753"/>
+    <node visible="true" id="-3093629" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1745421383095938" lon="73.5031500000000051"/>
+    <node visible="true" id="-3093628" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1727873353432727" lon="73.5031500000000051"/>
+    <node visible="true" id="-3093627" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1721878584957288" lon="73.5085899999999981"/>
+    <node visible="true" id="-3093626" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5057060119468986"/>
+    <node visible="true" id="-3093625" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1746331830828742" lon="73.5031500000000051"/>
+    <node visible="true" id="-3093624" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1718000000000002" lon="73.5034205413157480"/>
+    <node visible="true" id="-3093623" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5039175583454636"/>
+    <node visible="true" id="-3093622" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5084008219641873"/>
+    <node visible="true" id="-3093621" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5072511388007968"/>
+    <node visible="true" id="-3093620" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5080693151539180"/>
+    <node visible="true" id="-3093619" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1749866073993482" lon="73.5085899999999981"/>
+    <node visible="true" id="-3093618" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5041251348506393"/>
+    <node visible="true" id="-3093617" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1727395326476788" lon="73.5085899999999981"/>
+    <node visible="true" id="-3093616" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1718000000000002" lon="73.5046717831068008"/>
+    <node visible="true" id="-3093615" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1740177187499992" lon="73.5031500000000051"/>
+    <node visible="true" id="-3093614" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1764000000000001" lon="73.5066320031057785"/>
+    <node visible="true" id="-3093613" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1718000000000002" lon="73.5040642447730193"/>
+    <node visible="true" id="-3093612" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1721577888127293" lon="73.5031500000000051"/>
+    <node visible="true" id="-3093611" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1718000000000002" lon="73.5066135678674328"/>
+    <node visible="true" id="-3093610" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1753954999999996" lon="73.5074778999999978"/>
+    <node visible="true" id="-3093609" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1754375000000001" lon="73.5072755000000058"/>
+    <node visible="true" id="-3093607" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1755567999999998" lon="73.5060172999999963"/>
+    <node visible="true" id="-3093606" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1757173999999999" lon="73.5047404999999969"/>
+    <node visible="true" id="-3093605" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1757382999999999" lon="73.5044754999999981"/>
+    <node visible="true" id="-3093604" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1758043000000002" lon="73.5038600000000031"/>
+    <node visible="true" id="-3093603" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1758668999999999" lon="73.5032786999999956"/>
+    <node visible="true" id="-3093594" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1753349000000002" lon="73.5083984000000044"/>
+    <node visible="true" id="-3093593" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1753505000000004" lon="73.5080138999999946"/>
+    <node visible="true" id="-3093592" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1753689999999999" lon="73.5078514000000069"/>
+    <node visible="true" id="-3093591" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1722736999999999" lon="73.5053364999999985"/>
+    <node visible="true" id="-3093590" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1728591000000002" lon="73.5054109000000011"/>
+    <node visible="true" id="-3093576" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1726590999999997" lon="73.5073141000000021"/>
+    <node visible="true" id="-3093575" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1737003000000001" lon="73.5077565999999933"/>
+    <node visible="true" id="-3093574" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1730738000000001" lon="73.5055959000000030"/>
+    <node visible="true" id="-3093573" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1756560000000000" lon="73.5052548999999971"/>
+    <node visible="true" id="-3093564" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1739421999999999" lon="73.5078594000000010"/>
+    <node visible="true" id="-3093563" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1747477000000002" lon="73.5082017000000008"/>
+    <node visible="true" id="-3093562" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1753210999999997" lon="73.5084590999999961"/>
+    <node visible="true" id="-3093553" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1722248000000004" lon="73.5059578000000045"/>
+    <node visible="true" id="-3093552" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1727768000000003" lon="73.5060181000000057"/>
+    <node visible="true" id="-3093517" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1718696000000000" lon="73.5059068000000053"/>
+    <node visible="true" id="-3093516" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1719309999999998" lon="73.5053048000000047"/>
+    <node visible="true" id="-3093515" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1721294000000002" lon="73.5034586999999959"/>
+    <node visible="true" id="-3093476" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1720572999999996" lon="73.5040975999999944"/>
+    <node visible="true" id="-3093467" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1726884000000002" lon="73.5069617999999991"/>
+    <node visible="true" id="-3093459" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1761201000000003" lon="73.5062140999999940"/>
+    <node visible="true" id="-3093458" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1730533000000003" lon="73.5068016000000028"/>
+    <node visible="true" id="-3093457" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1733073999999997" lon="73.5062288999999964"/>
+    <node visible="true" id="-3093456" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1718092999999996" lon="73.5065376000000015"/>
+    <node visible="true" id="-3093455" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1721513000000003" lon="73.5065675999999968"/>
+    <node visible="true" id="-3093454" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1727337999999996" lon="73.5066144999999977"/>
+    <node visible="true" id="-3093453" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1732921999999997" lon="73.5084159000000028"/>
+    <node visible="true" id="-3093452" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1734080000000002" lon="73.5082124999999991"/>
+    <node visible="true" id="-3093451" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1734806999999998" lon="73.5081052000000028"/>
+    <node visible="true" id="-3093450" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1735061000000000" lon="73.5080552999999952"/>
+    <node visible="true" id="-3093443" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1752184000000003" lon="73.5062810999999954"/>
+    <node visible="true" id="-3093442" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1750689999999997" lon="73.5065172999999987"/>
+    <node visible="true" id="-3093440" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1747737000000003" lon="73.5070491000000032"/>
+    <node visible="true" id="-3093434" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1747382000000002" lon="73.5049819999999983"/>
+    <node visible="true" id="-3093432" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1735343000000000" lon="73.5055416999999949"/>
+    <node visible="true" id="-3093431" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1729988000000002" lon="73.5060797000000008"/>
+    <node visible="true" id="-3093426" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1749026999999996" lon="73.5060816999999957"/>
+    <node visible="true" id="-3093425" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1749089000000001" lon="73.5061165999999986"/>
+    <node visible="true" id="-3093423" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1749251000000003" lon="73.5061340999999970"/>
+    <node visible="true" id="-3093421" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1749599000000002" lon="73.5061515000000014"/>
+    <node visible="true" id="-3093420" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1751934999999998" lon="73.5061963999999932"/>
+    <node visible="true" id="-3093419" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1752171000000002" lon="73.5062051000000025"/>
+    <node visible="true" id="-3093417" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1752282999999997" lon="73.5062250000000006"/>
+    <node visible="true" id="-3093416" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1752282999999997" lon="73.5062537000000020"/>
+    <node visible="true" id="-3093413" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1763855000000003" lon="73.5076439000000050"/>
+    <node visible="true" id="-3093412" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1762532999999999" lon="73.5076112999999935"/>
+    <node visible="true" id="-3093411" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1754102000000000" lon="73.5074051999999938"/>
+    <node visible="true" id="-3093410" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1750901999999996" lon="73.5064837000000040"/>
+    <node visible="true" id="-3093409" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1755043000000001" lon="73.5065235999999942"/>
+    <node visible="true" id="-3093407" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1748861000000002" lon="73.5059636000000012"/>
+    <node visible="true" id="-3093365" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1753114000000000" lon="73.5056598999999977"/>
+    <node visible="true" id="-3093356" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1757270999999996" lon="73.5046324000000055"/>
+    <node visible="true" id="-3093302" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1739645000000003" lon="73.5036740000000037"/>
+    <node visible="true" id="-3093300" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1739004000000000" lon="73.5042916000000019"/>
+    <node visible="true" id="-3093289" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1737985999999996" lon="73.5064528000000053"/>
+    <node visible="true" id="-3093286" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1735869000000001" lon="73.5070374999999956"/>
+    <node visible="true" id="-3093245" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1763396999999998" lon="73.5046808000000027"/>
+    <node visible="true" id="-3093243" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1762863000000001" lon="73.5049154000000016"/>
+    <node visible="true" id="-3093241" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1761435999999996" lon="73.5054101000000060"/>
+    <node visible="true" id="-3093235" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1750461999999997" lon="73.5083498000000048"/>
+    <node visible="true" id="-3093217" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1756783999999998" lon="73.5050779000000034"/>
+    <node visible="true" id="-3093215" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1754160999999996" lon="73.5050370000000015"/>
+    <node visible="true" id="-3093213" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1753330999999996" lon="73.5049405999999976"/>
+    <node visible="true" id="-3093212" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1752045000000004" lon="73.5047485999999992"/>
+    <node visible="true" id="-3093210" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1751817000000004" lon="73.5046631000000019"/>
+    <node visible="true" id="-3093209" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1751085999999997" lon="73.5045006999999941"/>
+    <node visible="true" id="-3093207" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1751028999999997" lon="73.5044151000000028"/>
+    <node visible="true" id="-3093181" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1763529000000004" lon="73.5045420000000007"/>
+    <node visible="true" id="-3093160" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1751300000000002" lon="73.5053659000000010"/>
+    <node visible="true" id="-3093159" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1752814999999996" lon="73.5053074000000066"/>
+    <node visible="true" id="-3093133" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1729130000000003" lon="73.5049714000000023"/>
+    <node visible="true" id="-3093132" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1732313000000003" lon="73.5048797999999977"/>
+    <node visible="true" id="-3093131" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1733682999999999" lon="73.5048584000000034"/>
+    <node visible="true" id="-3093130" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1738132999999999" lon="73.5047177000000005"/>
+    <node visible="true" id="-3093129" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1727007000000000" lon="73.5081967999999932"/>
+    <node visible="true" id="-3093128" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1760824999999997" lon="73.5081181000000043"/>
+    <node visible="true" id="-3093126" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1756219999999997" lon="73.5070256999999998"/>
+    <node visible="true" id="-3093121" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1741752999999999" lon="73.5043098000000015"/>
+    <node visible="true" id="-3093120" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1742736999999996" lon="73.5047488999999956"/>
+    <node visible="true" id="-3093119" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1743908999999997" lon="73.5051603999999941"/>
+    <node visible="true" id="-3093118" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1745064000000003" lon="73.5055902000000003"/>
+    <node visible="true" id="-3093117" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1748196000000002" lon="73.5054846000000026"/>
+    <node visible="true" id="-3093116" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1748452000000000" lon="73.5054748000000018"/>
+    <node visible="true" id="-3093113" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1755898000000000" lon="73.5056993999999975"/>
+    <node visible="true" id="-3093112" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1758519999999999" lon="73.5057666000000012"/>
+    <node visible="true" id="-3093111" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1760222000000002" lon="73.5060856000000058"/>
+    <node visible="true" id="-3093103" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1751725999999998" lon="73.5037956999999977"/>
+    <node visible="true" id="-3093101" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1733525000000000" lon="73.5036218000000048"/>
+    <node visible="true" id="-3093079" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1719910999999996" lon="73.5046985000000035"/>
+    <node visible="true" id="-3093078" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1729129000000000" lon="73.5047815000000071"/>
+    <node visible="true" id="-3093077" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1732149999999999" lon="73.5048146000000031"/>
+    <node visible="true" id="-3093066" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1725440000000003" lon="73.5053742000000057"/>
+    <node visible="true" id="-3093065" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1726147999999998" lon="73.5047584000000001"/>
+    <node visible="true" id="-3093064" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1726909000000001" lon="73.5041585999999967"/>
+    <node visible="true" id="-3093063" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1727451999999996" lon="73.5035419999999959"/>
+    <node visible="true" id="-3093042" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1732082000000004" lon="73.5075467000000060"/>
+    <node visible="true" id="-3093040" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1733621999999997" lon="73.5072016000000019"/>
+    <node visible="true" id="-3093039" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1734413000000004" lon="73.5069696000000050"/>
+    <node visible="true" id="-3093003" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1722029999999997" lon="73.5084145999999947"/>
+    <node visible="true" id="-3093002" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1722707000000003" lon="73.5078019999999981"/>
+    <node visible="true" id="-3093001" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1723537000000004" lon="73.5071949000000018"/>
+    <node visible="true" id="-3093000" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1724117999999999" lon="73.5065833999999967"/>
+    <node visible="true" id="-3092999" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1724787000000001" lon="73.5059784999999977"/>
+    <node visible="true" id="-3092974" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1728430000000003" lon="73.5082426000000027"/>
+    <node visible="true" id="-3092973" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1729754999999997" lon="73.5079242000000050"/>
+    <node visible="true" id="-3092972" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1729944000000003" lon="73.5078701999999993"/>
+    <node visible="true" id="-3092971" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1731128999999996" lon="73.5075061000000005"/>
+    <node visible="true" id="-3092969" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1763795999999997" lon="73.5057606000000021"/>
+    <node visible="true" id="-3092968" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1763330999999999" lon="73.5058800000000048"/>
+    <node visible="true" id="-3092967" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1762041999999999" lon="73.5061460999999952"/>
+    <node visible="true" id="-3092954" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1740452000000001" lon="73.5065349000000055"/>
+    <node visible="true" id="-3092948" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1759738999999998" lon="73.5084259000000060"/>
+    <node visible="true" id="-3092931" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1725705000000000" lon="73.5080121000000020"/>
+    <node visible="true" id="-3092930" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1725592999999996" lon="73.5081521999999978"/>
+    <node visible="true" id="-3092929" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1725382000000000" lon="73.5084425999999951"/>
+    <node visible="true" id="-3092924" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1738812000000003" lon="73.5071707999999973"/>
+    <node visible="true" id="-3092922" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1726646000000001" lon="73.5072172999999935"/>
+    <node visible="true" id="-3092918" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1728329999999998" lon="73.5056816999999967"/>
+    <node visible="true" id="-3092917" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1727312000000003" lon="73.5066681999999929"/>
+    <node visible="true" id="-3092916" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1726007000000003" lon="73.5078211999999951"/>
+    <node visible="true" id="-3092912" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1740329999999997" lon="73.5065617000000060"/>
+    <node visible="true" id="-3092911" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1738569999999999" lon="73.5072664000000060"/>
+    <node visible="true" id="-3092909" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1735186000000004" lon="73.5054716000000070"/>
+    <node visible="true" id="-3092908" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1739847000000001" lon="73.5053395000000052"/>
+    <node visible="true" id="-3092907" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1738428000000001" lon="73.5081696000000022"/>
+    <node visible="true" id="-3092906" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1743041999999999" lon="73.5083092999999934"/>
+    <node visible="true" id="-3092905" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1741843999999997" lon="73.5052524999999974"/>
+    <node visible="true" id="-3092889" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1746319999999999" lon="73.5031634999999994"/>
+    <node visible="true" id="-3092887" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1745621000000002" lon="73.5037513999999987"/>
+    <node visible="true" id="-3092886" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1745174000000000" lon="73.5043497000000059"/>
+    <node visible="true" id="-3092868" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1752298000000003" lon="73.5031919000000045"/>
+    <node visible="true" id="-3092861" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1737409000000003" lon="73.5059353999999985"/>
+    <node visible="true" id="-3092858" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1741710000000003" lon="73.5059533000000016"/>
+    <node visible="true" id="-3092852" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1737180000000000" lon="73.5085732999999948"/>
+    <node visible="true" id="-3092849" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1740842999999996" lon="73.5073895999999962"/>
+    <node visible="true" id="-3092847" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1743300999999997" lon="73.5067386000000056"/>
+    <node visible="true" id="-3092845" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1745115999999998" lon="73.5068785999999932"/>
+    <node visible="true" id="-3092843" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1732680000000002" lon="73.5042203000000001"/>
+    <node visible="true" id="-3092838" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1746331999999997" lon="73.5060055999999946"/>
+    <node visible="true" id="-3092818" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1740632000000000" lon="73.5048127999999963"/>
+    <node visible="true" id="-3092817" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1738650000000002" lon="73.5048752000000007"/>
+    <way visible="true" id="-3093543" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092972"/>
+        <nd ref="-3093450"/>
+        <nd ref="-3092907"/>
+        <nd ref="-3092906"/>
+        <nd ref="-3093645"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Dhevina Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:52:50.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093542" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093644"/>
+        <nd ref="-3093181"/>
+        <nd ref="-3093605"/>
+        <nd ref="-3093207"/>
+        <nd ref="-3092886"/>
+        <nd ref="-3093121"/>
+        <nd ref="-3093300"/>
+        <nd ref="-3092843"/>
+        <nd ref="-3093064"/>
+        <nd ref="-3093476"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Handhuvaree Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093541" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093643"/>
+        <nd ref="-3093413"/>
+        <nd ref="-3093412"/>
+        <nd ref="-3093411"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Champa Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:46:43.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093540" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093642"/>
+        <nd ref="-3093003"/>
+        <nd ref="-3092929"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Nikagas Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093539" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093641"/>
+        <nd ref="-3092852"/>
+        <nd ref="-3093453"/>
+        <nd ref="-3092974"/>
+        <nd ref="-3093129"/>
+        <nd ref="-3092930"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Chandhanee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="surface" v="paving_stones"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093538" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093077"/>
+        <nd ref="-3092843"/>
+        <nd ref="-3093101"/>
+        <nd ref="-3093640"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Muranga Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093537" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093639"/>
+        <nd ref="-3093002"/>
+        <nd ref="-3092916"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Vaidheri Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093536" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093111"/>
+        <nd ref="-3092967"/>
+        <nd ref="-3093638"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Orchid Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093535" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093207"/>
+        <nd ref="-3093103"/>
+        <nd ref="-3092868"/>
+        <nd ref="-3093637"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Iramaa Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093534" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092968"/>
+        <nd ref="-3093636"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Iraaqu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:34:20.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093533" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093634"/>
+        <nd ref="-3093562"/>
+        <nd ref="-3093594"/>
+        <nd ref="-3093593"/>
+        <nd ref="-3093592"/>
+        <nd ref="-3093610"/>
+        <nd ref="-3093411"/>
+        <nd ref="-3093609"/>
+        <nd ref="-3093409"/>
+        <nd ref="-3093607"/>
+        <nd ref="-3093113"/>
+        <nd ref="-3093573"/>
+        <nd ref="-3093217"/>
+        <nd ref="-3093606"/>
+        <nd ref="-3093356"/>
+        <nd ref="-3093605"/>
+        <nd ref="-3093604"/>
+        <nd ref="-3093603"/>
+        <nd ref="-3093635"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Majeedhee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2014-10-09T14:42:24.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093532" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093573"/>
+        <nd ref="-3093241"/>
+        <nd ref="-3093633"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="-1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Shaariu Varudhee"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:34:20.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093531" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093078"/>
+        <nd ref="-3093133"/>
+        <nd ref="-3093590"/>
+        <nd ref="-3092918"/>
+        <nd ref="-3093552"/>
+        <nd ref="-3093454"/>
+        <nd ref="-3092917"/>
+        <nd ref="-3093467"/>
+        <nd ref="-3092922"/>
+        <nd ref="-3093576"/>
+        <nd ref="-3092916"/>
+        <nd ref="-3092931"/>
+        <nd ref="-3092930"/>
+        <nd ref="-3092929"/>
+        <nd ref="-3093632"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Iskandharu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-10-08T14:35:12.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093530" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093631"/>
+        <nd ref="-3093001"/>
+        <nd ref="-3092922"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Maafaithakurufaanu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093529" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093629"/>
+        <nd ref="-3092889"/>
+        <nd ref="-3092868"/>
+        <nd ref="-3093603"/>
+        <nd ref="-3093630"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Shaheed Ali Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093528" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093627"/>
+        <nd ref="-3093003"/>
+        <nd ref="-3093002"/>
+        <nd ref="-3093001"/>
+        <nd ref="-3093000"/>
+        <nd ref="-3092999"/>
+        <nd ref="-3093066"/>
+        <nd ref="-3093065"/>
+        <nd ref="-3093064"/>
+        <nd ref="-3093063"/>
+        <nd ref="-3093628"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="fiЯas 16042011"/>
+        <tag k="name" v="Buruzu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="surface" v="paved"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093527" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093626"/>
+        <nd ref="-3092969"/>
+        <nd ref="-3092968"/>
+        <nd ref="-3092967"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="-1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Funa Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-03-09T18:17:04.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093526" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093625"/>
+        <nd ref="-3092889"/>
+        <nd ref="-3092887"/>
+        <nd ref="-3092886"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Sabudheli Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093525" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093623"/>
+        <nd ref="-3093604"/>
+        <nd ref="-3093103"/>
+        <nd ref="-3092887"/>
+        <nd ref="-3093302"/>
+        <nd ref="-3093101"/>
+        <nd ref="-3093063"/>
+        <nd ref="-3093515"/>
+        <nd ref="-3093624"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Izzuddeen Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093524" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093622"/>
+        <nd ref="-3092948"/>
+        <nd ref="-3093594"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="-1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Sayyid Kiligefaanu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093523" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093126"/>
+        <nd ref="-3093621"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Asurumaa Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:34:21.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093522" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093128"/>
+        <nd ref="-3093620"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Bulbul Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093521" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093619"/>
+        <nd ref="-3093235"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Kudheenaa Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:52:50.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093520" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093618"/>
+        <nd ref="-3093181"/>
+        <nd ref="-3093245"/>
+        <nd ref="-3093243"/>
+        <nd ref="-3093241"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Muniyaa Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093519" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093617"/>
+        <nd ref="-3093129"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Joashee Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:53:28.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093518" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093616"/>
+        <nd ref="-3093079"/>
+        <nd ref="-3093065"/>
+        <nd ref="-3093078"/>
+        <nd ref="-3093077"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Hilaalee Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093517" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093615"/>
+        <nd ref="-3093302"/>
+        <nd ref="-3093300"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Buluekiyaa Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093516" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093614"/>
+        <nd ref="-3093459"/>
+        <nd ref="-3093111"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Fareedhee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093515" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093476"/>
+        <nd ref="-3093613"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Handhuvaree Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093514" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093611"/>
+        <nd ref="-3093456"/>
+        <nd ref="-3093517"/>
+        <nd ref="-3093516"/>
+        <nd ref="-3093079"/>
+        <nd ref="-3093476"/>
+        <nd ref="-3093515"/>
+        <nd ref="-3093612"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Ameenee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2014-10-08T02:57:44.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3093504" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093130"/>
+        <nd ref="-3092817"/>
+        <nd ref="-3092908"/>
+        <nd ref="-3092858"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Naseemee Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093503" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092911"/>
+        <nd ref="-3092849"/>
+        <nd ref="-3093593"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Kaaminee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:53:28.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093502" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093552"/>
+        <nd ref="-3093431"/>
+        <nd ref="-3093457"/>
+        <nd ref="-3093289"/>
+        <nd ref="-3092954"/>
+        <nd ref="-3092912"/>
+        <nd ref="-3092847"/>
+        <nd ref="-3092845"/>
+        <nd ref="-3093440"/>
+        <nd ref="-3093610"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Maaveyo Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093492" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092916"/>
+        <nd ref="-3092972"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Dhevina Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:53:28.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093479" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093209"/>
+        <nd ref="-3093120"/>
+        <nd ref="-3092818"/>
+        <nd ref="-3092817"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Unigas Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093477" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093300"/>
+        <nd ref="-3092818"/>
+        <nd ref="-3092905"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Dhakandhaa Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093396" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093455"/>
+        <nd ref="-3093553"/>
+        <nd ref="-3093591"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Raiveri Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093385" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092969"/>
+        <nd ref="-3093112"/>
+        <tag k="access" v="permissive"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="bicycle" v="private"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="-1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Jahaamuguri Goalhi"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2013-04-11T08:17:14.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093381" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093609"/>
+        <nd ref="-3093126"/>
+        <nd ref="-3093459"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Fandiyaaru magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-10-12T05:34:21.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093373" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092861"/>
+        <nd ref="-3092858"/>
+        <nd ref="-3092838"/>
+        <nd ref="-3093407"/>
+        <nd ref="-3093607"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Jambu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093364" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092917"/>
+        <nd ref="-3093458"/>
+        <nd ref="-3093039"/>
+        <nd ref="-3093286"/>
+        <nd ref="-3092924"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Badifasgandu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:28.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093363" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092912"/>
+        <nd ref="-3092924"/>
+        <nd ref="-3092911"/>
+        <nd ref="-3093575"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Gulabee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093361" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092918"/>
+        <nd ref="-3093574"/>
+        <nd ref="-3092909"/>
+        <nd ref="-3092908"/>
+        <nd ref="-3092905"/>
+        <nd ref="-3093119"/>
+        <nd ref="-3093434"/>
+        <nd ref="-3093212"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Javaahiru Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:28.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093358" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093131"/>
+        <nd ref="-3092909"/>
+        <nd ref="-3093432"/>
+        <nd ref="-3092861"/>
+        <nd ref="-3092954"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Muiveyo Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093340" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093517"/>
+        <nd ref="-3093553"/>
+        <nd ref="-3092999"/>
+        <nd ref="-3093552"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Koarukendi Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093327" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093516"/>
+        <nd ref="-3093591"/>
+        <nd ref="-3093066"/>
+        <nd ref="-3093590"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Riyaasee Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093323" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093574"/>
+        <nd ref="-3093133"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Javaahiru Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093320" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093576"/>
+        <nd ref="-3092971"/>
+        <nd ref="-3093042"/>
+        <nd ref="-3093575"/>
+        <nd ref="-3093564"/>
+        <nd ref="-3093563"/>
+        <nd ref="-3093235"/>
+        <nd ref="-3093562"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Dhilbahaaru Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093317" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093458"/>
+        <nd ref="-3093457"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Binhima Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093316" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093456"/>
+        <nd ref="-3093455"/>
+        <nd ref="-3093000"/>
+        <nd ref="-3093454"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Badifasganu Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093314" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093453"/>
+        <nd ref="-3093452"/>
+        <nd ref="-3093451"/>
+        <nd ref="-3093450"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Ranauraa Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:53:28.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093310" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093040"/>
+        <nd ref="-3093467"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Emboo Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:42.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093308" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093434"/>
+        <nd ref="-3093116"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Yagoothu Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093307" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093432"/>
+        <nd ref="-3093431"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Alamaa Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093301" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093410"/>
+        <nd ref="-3093409"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Asaree Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093299" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093117"/>
+        <nd ref="-3093407"/>
+        <nd ref="-3093426"/>
+        <nd ref="-3093425"/>
+        <nd ref="-3093423"/>
+        <nd ref="-3093421"/>
+        <nd ref="-3093420"/>
+        <nd ref="-3093419"/>
+        <nd ref="-3093417"/>
+        <nd ref="-3093416"/>
+        <nd ref="-3093443"/>
+        <nd ref="-3093410"/>
+        <nd ref="-3093442"/>
+        <nd ref="-3093440"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Asaree Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093275" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093289"/>
+        <nd ref="-3093286"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Saimaa Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093273" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093217"/>
+        <nd ref="-3093215"/>
+        <nd ref="-3093213"/>
+        <nd ref="-3093212"/>
+        <nd ref="-3093210"/>
+        <nd ref="-3093209"/>
+        <nd ref="-3093207"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Alivilaa Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093262" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093356"/>
+        <nd ref="-3093210"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Nooree Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093257" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093113"/>
+        <nd ref="-3093365"/>
+        <nd ref="-3093160"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="-1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Ruvaa Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093254" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093113"/>
+        <nd ref="-3093112"/>
+        <nd ref="-3093111"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="-1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Fareedhee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093242" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093042"/>
+        <nd ref="-3093040"/>
+        <nd ref="-3093039"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Gulalaa Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093214" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093133"/>
+        <nd ref="-3093132"/>
+        <nd ref="-3093131"/>
+        <nd ref="-3093130"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Gulhazaaru Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093208" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3093121"/>
+        <nd ref="-3093120"/>
+        <nd ref="-3093119"/>
+        <nd ref="-3093118"/>
+        <nd ref="-3093117"/>
+        <nd ref="-3093116"/>
+        <nd ref="-3093160"/>
+        <nd ref="-3093159"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Miriyas Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+    <way visible="true" id="-3093172" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3092974"/>
+        <nd ref="-3092973"/>
+        <nd ref="-3092972"/>
+        <nd ref="-3092971"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Baamiyaa Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+    </way>
+</osm>

@@ -116,14 +116,17 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     for (size_t i = 0; i < matches.size(); i++)
     {
       LOG_TRACE(
-        "multilinestring: adding multiple match to relation: " << matches[i]->getElementId());
+        "multilinestring: adding multiple match to relation with ID: " << r->getId() <<
+        " member: " << matches[i]->getElementId());
+      LOG_VART(matches[i]);
       r->addElement("", matches[i]);
     }
+    //LOG_VART(r);
     result = r;
     map->addElement(r);
   }
 
-  LOG_VART(result);
+  //LOG_VART(result);
   return result;
 }
 
