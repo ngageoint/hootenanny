@@ -157,59 +157,86 @@ void WayJoiner::joinSiblings()
 
 void WayJoiner::joinAtNode()
 {
-  LOG_TRACE("Joining at node...");
+  LOG_DEBUG("Joining at node...");
 
-  WayMap ways = _map->getWays();
   unordered_set<long> ids;
-  //  Find all ways that have a split parent id
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  unordered_set<long>::size_type firstNumSplitParentIds = ids.max_size();
+  unordered_set<long>::size_type currentNumSplitParentIds = ids.max_size();
+  int numIterations = 0;
+
+  // keep iterating until we're no longer joining any ways
+  while ((firstNumSplitParentIds == ids.max_size() ||
+          currentNumSplitParentIds != firstNumSplitParentIds) && currentNumSplitParentIds != 0)
   {
-    WayPtr way = it->second;
-    if (way->hasPid())
-      ids.insert(way->getId());
-  }
-  boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
-  //  Iterate all of the nodes and check for compatible ways to join them to
-  for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
-  {
-    LOG_VART(*it);
-    WayPtr way = ways[*it];
-    LOG_VART(way->getElementId());
-    Tags pTags = way->getTags();
-    //  Check each of the endpoints for ways to merge
-    vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
-    LOG_VART(endpoints);
-    for (vector<long>::const_iterator e = endpoints.begin(); e != endpoints.end(); ++e)
+    WayMap ways = _map->getWays();
+    ids.clear();
+    //  Find all ways that have a split parent id
+    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
-      //  Find all ways connected to this node
-      const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
-      LOG_VART(way_ids);
-      for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
+      WayPtr way = it->second;
+      if (way->hasPid())
+        ids.insert(way->getId());
+    }
+    LOG_VARD(ids.size());
+    LOG_VARD(firstNumSplitParentIds);
+    if (firstNumSplitParentIds == ids.max_size())
+    {
+      firstNumSplitParentIds = ids.size();
+    }
+    LOG_VARD(firstNumSplitParentIds);
+    currentNumSplitParentIds = ids.size();
+    LOG_VARD(currentNumSplitParentIds);
+
+    boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
+    //  Iterate all of the nodes and check for compatible ways to join them to
+    for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
+    {
+      LOG_VARD(*it);
+      WayPtr way = ways[*it];
+      LOG_VARD(way->getElementId());
+      Tags pTags = way->getTags();
+      //  Check each of the endpoints for ways to merge
+      vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
+      LOG_VARD(endpoints.size());
+      LOG_VARD(endpoints);
+      for (vector<long>::const_iterator e = endpoints.begin(); e != endpoints.end(); ++e)
       {
-        WayPtr child = _map->getWay(*ways);
-        if (child)
+        //  Find all ways connected to this node
+        const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
+        LOG_VARD(way_ids.size());
+        LOG_VARD(way_ids);
+        for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
         {
-          LOG_VART(child->getElementId());
-        }
-        else
-        {
-          LOG_TRACE("Child for way with ID: " << way->getId() << " not found.");
-        }
-        if (child && way->getId() != child->getId() && areJoinable(way, child))
-        {
-          Tags cTags = child->getTags();
-          LOG_VART(pTags);
-          LOG_VART(cTags);
-          //  Check for equivalent tags
-          if (pTags == cTags || pTags.dataOnlyEqual(cTags))
+          WayPtr child = _map->getWay(*ways);
+          if (child)
           {
-            joinWays(way, child);
-            break;
+            LOG_VART(child->getElementId());
+          }
+          else
+          {
+            LOG_TRACE("Child for way with ID: " << way->getId() << " not found.");
+          }
+          if (child && way->getId() != child->getId() && areJoinable(way, child))
+          {
+            Tags cTags = child->getTags();
+            LOG_VARD(pTags);
+            LOG_VARD(cTags);
+            LOG_VARD(pTags == cTags);
+            LOG_VARD(pTags.dataOnlyEqual(cTags));
+            //  Check for equivalent tags
+            if (pTags == cTags || pTags.dataOnlyEqual(cTags))
+            {
+              joinWays(way, child);
+              break;
+            }
           }
         }
       }
     }
+    numIterations++;
   }
+
+  LOG_DEBUG("Num joinAtNode iterations: " << numIterations);
 }
 
 bool WayJoiner::areJoinable(const WayPtr& w1, const WayPtr& w2)
@@ -397,9 +424,14 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
   if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
     parent->setStatus(Status::Conflated);
   //  Update any relations that contain the child to use the parent
+  LOG_VART(parent->getNodeIds());
+  LOG_VART(child->getNodeIds());
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
+  LOG_VART(parent->getNodeIds());
+  LOG_VART(child->getNodeIds());
   child->getTags().clear();
   RecursiveElementRemover(child->getElementId()).apply(_map);
+  LOG_VART(parent->getNodeIds());
 }
 
 }
