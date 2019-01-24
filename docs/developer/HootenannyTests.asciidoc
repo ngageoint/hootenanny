@@ -14,7 +14,8 @@ Tests are divided into the following groups: current, quick, slow, and glacial.
 in this directory.
 * **quick** - Individual tests that each run in less than 1 sec.
 * **slow** - Individual tests that each run in less than 30 sec.
-* **glacial** - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.
+* **glacial** - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.  Also, hoot-rnd tests usually get placed in this suite, since they employ non-production based functionality that changes less frequently than
+code in hoot-core.
 
 If you want to run the tests for all codebases at the same time, first configure as described in a
 previous section, then run one of the following commands:
