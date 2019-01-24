@@ -159,16 +159,14 @@ void WayJoiner::joinAtNode()
 {
   LOG_DEBUG("Joining at node...");
 
-  unordered_set<long> ids;
-  unordered_set<long>::size_type lastNumSplitParentIds = ids.max_size();
   unordered_set<long>::size_type currentNumSplitParentIds = ids.max_size();
   int numIterations = 0;
 
   // keep iterating until we're no longer joining any ways
-  while (currentNumSplitParentIds != 0)
+  while (currentNumSplitParentIds > 0)
   {
     WayMap ways = _map->getWays();
-    ids.clear();
+    unordered_set<long> ids;
     //  Find all ways that have a split parent id
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
@@ -176,11 +174,9 @@ void WayJoiner::joinAtNode()
       if (way->hasPid())
         ids.insert(way->getId());
     }
-    lastNumSplitParentIds = ids.size();
-    LOG_VARD(lastNumSplitParentIds);
     LOG_VARD(currentNumSplitParentIds);
-    if (numIterations > 0 &&
-        (currentNumSplitParentIds == lastNumSplitParentIds || currentNumSplitParentIds == 0))
+    // If we didn't reduce the number of ways from the previous iteration, exit out.
+    if (currentNumSplitParentIds == ids.size() || ids.size() == 0)
     {
       break;
     }
