@@ -304,8 +304,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           LOG_TRACE(
             "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
         }
-        // Have only seen scraps1 as a relation and only when both elements are ways, so only
-        // handling this particular situation until others are seen.
+        // Have only seen scraps1 as a relation, not scraps2 yet, and then only when both input
+        // elements are ways, so only handling this particular situation until others are seen.
         else if (scraps1->getElementType() == ElementType::Relation && pid == 0)
         {
           const long firstWayIdInRelation =

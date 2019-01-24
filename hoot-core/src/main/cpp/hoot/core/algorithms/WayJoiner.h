@@ -41,6 +41,14 @@ namespace hoot
 class WayJoiner
 {
 public:
+
+  typedef enum
+  {
+    ParentFirst,
+    ParentLast,
+    ShareFirstNode
+  } JoinAtNodeMergeType;
+
   WayJoiner(const OsmMapPtr& map);
 
   /**

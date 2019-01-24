@@ -149,6 +149,7 @@ void WayJoiner::joinSiblings()
   for (map<long, deque<long> >::iterator map_it = w.begin(); map_it != w.end(); ++map_it)
   {
     deque<long>& way_ids = map_it->second;
+    LOG_VART(way_ids);
     while (way_ids.size() > 1)
       rejoinSiblings(way_ids);
   }
@@ -367,7 +368,7 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
   }
 }
 
-void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
+void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
 {
   if (!parent || !child)
     return;
@@ -378,42 +379,79 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
   //  Don't join area ways
   AreaCriterion areaCrit;
   if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
+  {
+    LOG_TRACE("One or more of the ways to be joined are areas...skipping join.");
     return;
+  }
+
   //  Check if the two ways are able to be joined back up
   vector<long> child_nodes = child->getNodeIds();
+  LOG_VART(child_nodes.size());
+  LOG_VART(child_nodes);
   vector<long> parent_nodes = parent->getNodeIds();
+  LOG_VART(parent_nodes.size());
+  LOG_VART(parent_nodes);
   //  Make sure that there are nodes in the ways
   if (parent_nodes.size() == 0 || child_nodes.size() == 0)
+  {
+    LOG_TRACE("One or more of the ways to be joined are empty...skipping join.");
     return;
-  //  First make sure that they begin or end at the same node
-  bool parentFirst;
+  }
+
+  //  First make sure that they share the same node
+  JoinAtNodeMergeType joinType;
+  LOG_VART(child_nodes[0]);
+  LOG_VART(parent_nodes[parent_nodes.size() - 1]);
+  LOG_VART(child_nodes[child_nodes.size() - 1]);
+  LOG_VART(parent_nodes[0]);
   if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
-    parentFirst = true;
+  {
+    joinType = JoinAtNodeMergeType::ParentFirst;
+  }
   else if (child_nodes[child_nodes.size() - 1] == parent_nodes[0])
-    parentFirst = false;
+  {
+    joinType = JoinAtNodeMergeType::ParentLast;
+  }
+  else if (child_nodes[0] == parent_nodes[0])
+  {
+    joinType = JoinAtNodeMergeType::ShareFirstNode;
+  }
   else
     return;
+  LOG_VART(joinType);
+
   //  Remove the split parent id
   child->resetPid();
+
   //  Merge the tags
   Tags pTags = parent->getTags();
   Tags cTags = child->getTags();
   Tags tags = TagMergerFactory::mergeTags(pTags, cTags, ElementType::Way);
   parent->setTags(tags);
+
   //  Remove the duplicate node id of the overlap
-  if (parentFirst)
+  if (joinType == JoinAtNodeMergeType::ParentFirst)
   {
     //  Remove the first node of the child and append to parent
     child_nodes.erase(child_nodes.begin());
     parent->addNodes(child_nodes);
   }
-  else
+  else if (joinType == JoinAtNodeMergeType::ParentLast)
   {
     //  Remove the last of the children and prepend them to the parent
     child_nodes.pop_back();
     parent->setNodes(child_nodes);
     parent->addNodes(parent_nodes);
   }
+  else if (joinType == JoinAtNodeMergeType::ShareFirstNode && !OneWayCriterion().isSatisfied(child))
+  {
+    // remove the first of the child way nodes, reverse the rest, and prepend to the parent
+    child_nodes.erase(child_nodes.begin());
+    std::reverse(child_nodes.begin(), child_nodes.end());
+    parent->setNodes(child_nodes);
+    parent->addNodes(parent_nodes);
+  }
+
   //  Keep the conflated status in the parent if the child being merged is conflated
   if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
     parent->setStatus(Status::Conflated);
@@ -423,13 +461,10 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
 
   //  Update any relations that contain the child to use the parent
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
-
   LOG_VART(parent->getNodeIds());
   LOG_VART(child->getNodeIds());
-
   child->getTags().clear();
   RecursiveElementRemover(child->getElementId()).apply(_map);
-
   LOG_VART(parent->getNodeIds());
 }
 
