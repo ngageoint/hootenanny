@@ -194,6 +194,13 @@ void WayJoiner::joinAtNode()
       LOG_VART(way->getElementId());
 
       Tags pTags = way->getTags();
+      // Ignoring length here during the parent/child tag equals check, since differing values in
+      // that field can cause us to miss a way join.  We'll add that value
+      // up after joining the combined way.
+      pTags.remove(MetadataTags::Length());
+      // TODO: not sure about this; if valid, skipping comparison should probably be extended to all
+      // hoot metadata tags
+      pTags.remove(MetadataTags::ErrorCircular());
       //  Check each of the endpoints for ways to merge
       vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
       LOG_VART(endpoints.size());
@@ -216,6 +223,8 @@ void WayJoiner::joinAtNode()
           if (child && way->getId() != child->getId() && areJoinable(way, child))
           {
             Tags cTags = child->getTags();
+            cTags.remove(MetadataTags::Length());
+            cTags.remove(MetadataTags::ErrorCircular());
 
             LOG_VART(pTags == cTags);
             LOG_VART(pTags.dataOnlyEqual(cTags));
@@ -457,7 +466,45 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   }
   LOG_VART(tags1);
   LOG_VART(tags2);
-  parent->setTags(TagMergerFactory::mergeTags(tags1, tags2, ElementType::Way));
+
+  // If each of these has a length tag, then we need to add up the new value.
+  // This logic should possibly be a part of the merging instead of being done here and should also
+  // add the possibility for multiple options for the length tag key...leaving this as is for now.
+  double totalLength = 0.0;
+  bool eitherTagsHaveLength =
+    tags1.contains(MetadataTags::Length()) || tags2.contains(MetadataTags::Length());
+  if (eitherTagsHaveLength)
+  {
+    double length1 = 0.0;
+    double length2 = 0.0;
+    if (tags1.contains(MetadataTags::Length()))
+    {
+      bool ok = false;
+      length1 = tags1.get(MetadataTags::Length()).toDouble(&ok);
+      if (!ok)
+      {
+        length1 = 0.0;
+      }
+    }
+    if (tags2.contains(MetadataTags::Length()))
+    {
+      bool ok = false;
+      length2 = tags2.get(MetadataTags::Length()).toDouble(&ok);
+      if (!ok)
+      {
+        length2 = 0.0;
+      }
+    }
+    totalLength = length1 + length2;
+  }
+
+  Tags mergedTags = TagMergerFactory::mergeTags(tags1, tags2, ElementType::Way);
+  if (eitherTagsHaveLength)
+  {
+    mergedTags.set(MetadataTags::Length(), QString::number(totalLength));
+  }
+
+  parent->setTags(mergedTags);
   LOG_VART(parent->getTags());
 
   //  Remove the duplicate node id of the overlap

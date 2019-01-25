@@ -71,7 +71,7 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
     ConfigOptions().getNodeComparisonCircularErrorSensitivity();
   if (n->getRawCircularError() >= 0)
   {
-    infoTags["error:circular"] =
+    infoTags[MetadataTags::ErrorCircular()] =
       QString::number(n->getRawCircularError(), 'g', circularErrorComparisonSensitivity);
   }
 

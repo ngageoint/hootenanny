@@ -149,6 +149,8 @@ public:
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
 
+  inline static const QString Length()                  { return "length"; }
+
   /**
    * ID Unique to a training data set with multiary training data.
    * @sa MultiaryMatchComparator
