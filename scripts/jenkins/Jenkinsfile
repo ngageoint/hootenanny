@@ -105,7 +105,7 @@ pipeline {
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
                 // Configure authentication
-                sh "vagrant ssh ${params.box} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
+                sh "vagrant ssh ${params.Box} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
             }       
         }
         stage("Core Tests") {
