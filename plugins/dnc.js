@@ -224,7 +224,7 @@ dnc = {
             translate.applySimpleNumBiased(newFeatures[i]['attrs'], notUsedTags, dnc.rules.numBiased, 'backward',dnc.rules.intList);
             translate.applySimpleTxtBiased(newFeatures[i]['attrs'], notUsedTags, dnc.rules.txtBiased, 'backward');
 
-            // one 2 one - we call the version that knows about OTH fields
+            // one 2 one
             translate.applyOne2One(notUsedTags, newFeatures[i]['attrs'], dnc.lookup, dnc.fcodeLookup);
 
             // post processing
@@ -411,7 +411,7 @@ dnc = {
 
 
     // Apply one to one translations and don't report errors: missing columns etc
-    // THis does keep track of what has been used so we can undo it later if needed
+    // This does keep track of what has been used so we can undo it later if needed
     applyOne2OneModified : function(inList, outList, lookup, transMap)
     {
         var row = [];
@@ -482,12 +482,14 @@ dnc = {
                         // Quick bitwise or to strip off anything after the decimal
                         var tInt = tNum | 0;
 
-                            // Back to a string for a comparison
-                            if ((tInt + '') !== tNum)
-                            {
-                                hoot.logTrace('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
-                            }
-                            tNum = tInt;
+                        // Back to a string for a comparison
+                        if ((tInt + '') !== tNum)
+                        {
+                            hoot.logTrace('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
+                        }
+
+                        tNum = tInt;
+
                     } // End in intList
 
                     attrs[i] = tNum;
@@ -511,7 +513,7 @@ dnc = {
     appendToOsmTags : function (rawTagObj, tag, value)
     {
         // Debug:
-        print('appendToOsmTags: in: ' + rawTagObj);
+        // print('appendToOsmTags: in: ' + rawTagObj);
 
         var tTags = {};
 
@@ -528,7 +530,7 @@ dnc = {
 
         tTags[tag] = value;
         // Debug:
-        print('appendToOsmTags: out: ' + JSON.stringify(tTags));
+        // print('appendToOsmTags: out: ' + JSON.stringify(tTags));
 
         var tStr = '<OSM>' + JSON.stringify(tTags) + '</OSM>';
         return tStr;
@@ -825,7 +827,7 @@ dnc = {
             case 'traffic_mirror':
             case 'traffic_sign':
             case 'traffic_signals':
-                attrs.OSM_TAGS = dnc.appendToOsmTags(attrs.OSM_TAGS,'highway',attrs.highway);
+                attrs.OSM_TAGS = dnc.appendToOsmTags(attrs.OSM_TAGS,'highway',tags.highway);
                 delete tags.highway;
                 break;
         } // End highway switch
@@ -851,7 +853,7 @@ dnc = {
             case 'switch':
             case 'vacancy_detection':
             case 'ventilation_shaft': // ???
-                attrs.OSM_TAGS = dnc.appendToOsmTags(attrs.OSM_TAGS,'railway',attrs.railway);
+                attrs.OSM_TAGS = dnc.appendToOsmTags(attrs.OSM_TAGS,'railway',tags.railway);
                 delete tags.railway;
                 break;
         } // End railway switch
@@ -1350,6 +1352,23 @@ dnc = {
             {
                 tags.raw_id = tags['hoot:id'];
                 delete tags['hoot:id'];
+            }
+
+            // If we have stashed anything in the OSM_TAGS, add it back to tags
+            if (attrs.OSM_TAGS)
+            {
+                var tObj = translate.unpackMemo(attrs.OSM_TAGS);
+                if (tObj.tags !== '')
+                {
+                    var tTags = JSON.parse(tObj.tags);
+                    for (var tg in tTags) 
+                    {
+                        // Debug:
+                        // if (tags[tg]) print('## Overwriteing tag: ' + tg + ' = ' + tags[tg] + '  with: ' + tTags[tg]);
+
+                        tags[tg] = tTags[tg];
+                    }
+                }
             }
 
             // Convert all of the Tags to a string so we can jam it into an attribute
