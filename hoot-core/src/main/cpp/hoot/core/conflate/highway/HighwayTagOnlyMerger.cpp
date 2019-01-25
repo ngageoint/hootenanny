@@ -110,6 +110,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     replaced.push_back(
       std::pair<ElementId, ElementId>(
         elementToRemove->getElementId(), elementToKeep->getElementId()));
+    LOG_VART(elementToKeep);
     // Is this necessary?
     RecursiveElementRemover(elementToRemove->getElementId()).apply(map);
   }
