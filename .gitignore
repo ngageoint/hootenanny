@@ -92,7 +92,13 @@ missing
 Output.osm
 /output.osm
 /output.pgm
-plugins/*_schema.js
+plugins/ggdm30_schema.js
+plugins/tds40_full_schema.js
+plugins/tds61_full_schema.js
+plugins/ggdm30_full_schema.js
+plugins/mgcp_schema.js
+plugins/tds40_schema.js
+plugins/tds61_schema.js
 plugins/etds*_rules.js
 plugins/emgcp*_rules.js
 plugins/eggdm*_rules.js
