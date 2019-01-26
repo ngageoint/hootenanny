@@ -216,8 +216,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   ElementPtr e2 = result->getElement(eid2);
   LOG_VART(e1->getStatus());
   LOG_VART(e2->getStatus());
-  //LOG_VART(e1);
-  //LOG_VART(e2);
 
   // This doesn't seem to always be true.
   assert(e1->getStatus() == Status::Unknown1);
@@ -255,18 +253,14 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
                 scraps2);
 
   LOG_VART(e1Match->getElementId());
-  //LOG_VART(e1Match);
   if (scraps1)
   {
     LOG_VART(scraps1->getElementId());
-    //LOG_VART(scraps1);
   }
   LOG_VART(e2Match->getElementId());
-  //LOG_VART(e2Match);
   if (scraps2)
   {
     LOG_VART(scraps2->getElementId());
-    //LOG_VART(scraps2);
   }
 
   // remove any ways that directly connect from e1Match to e2Match
@@ -383,7 +377,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         }
       }
 
-      //TODO: handle this for e2=relation too?
       if (e1->getElementType() == ElementType::Relation)
       {
         const std::vector<RelationData::Entry> relationMembers = r->getMembers();
@@ -397,7 +390,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
             mergedTags =
               TagMergerFactory::mergeTags(e1->getTags(), mergedTags, ElementType::Way);
             member->setTags(mergedTags);
-            //LOG_VART(member);
           }
         }
       }
@@ -407,22 +399,18 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   if (e1Match)
   {
     LOG_VART(e1Match->getElementId());
-    //LOG_VART(e1Match);
   }
   if (scraps1)
   {
     LOG_VART(scraps1->getElementId());
-    //LOG_VART(scraps1);
   }
   if (e2Match)
   {
     LOG_VART(e2Match->getElementId());
-    //LOG_VART(e2Match);
   }
   if (scraps2)
   {
     LOG_VART(scraps2->getElementId());
-    //LOG_VART(scraps2);
   }
 
   // remove the old way that was split and snapped

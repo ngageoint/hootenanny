@@ -200,9 +200,6 @@ void WayJoiner::joinAtNode()
       // that field can cause us to miss a way join.  We'll add that value
       // up after joining the combined way.
       pTags.remove(MetadataTags::Length());
-      // TODO: not sure about this; if valid, skipping comparison should probably be extended to all
-      // hoot metadata tags
-      //pTags.remove(MetadataTags::ErrorCircular());
       //  Check each of the endpoints for ways to merge
       vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
       LOG_VART(endpoints.size());
@@ -226,7 +223,6 @@ void WayJoiner::joinAtNode()
           {
             Tags cTags = child->getTags();
             cTags.remove(MetadataTags::Length());
-            //cTags.remove(MetadataTags::ErrorCircular());
 
             LOG_VART(pTags == cTags);
             LOG_VART(pTags.dataOnlyEqual(cTags));
@@ -470,8 +466,9 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VART(tags2);
 
   // If each of these has a length tag, then we need to add up the new value.
-  // This logic should possibly be a part of the merging instead of being done here and should also
-  // add the possibility for multiple options for the length tag key...leaving this as is for now.
+  // This logic should possibly be a part of the default tag merging instead of being done here
+  // and should also add the possibility for multiple options for the length tag key...leaving this
+  // as is for now.
   double totalLength = 0.0;
   bool eitherTagsHaveLength =
     tags1.contains(MetadataTags::Length()) || tags2.contains(MetadataTags::Length());
