@@ -166,6 +166,8 @@ void WayJoiner::joinAtNode()
   // keep iterating until we're no longer joining any ways
   while (currentNumSplitParentIds > 0)
   {
+    LOG_TRACE("joinAtNode iteration: " << numIterations + 1);
+
     WayMap ways = _map->getWays();
     ids.clear();
     //  Find all ways that have a split parent id
@@ -200,7 +202,7 @@ void WayJoiner::joinAtNode()
       pTags.remove(MetadataTags::Length());
       // TODO: not sure about this; if valid, skipping comparison should probably be extended to all
       // hoot metadata tags
-      pTags.remove(MetadataTags::ErrorCircular());
+      //pTags.remove(MetadataTags::ErrorCircular());
       //  Check each of the endpoints for ways to merge
       vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
       LOG_VART(endpoints.size());
@@ -224,7 +226,7 @@ void WayJoiner::joinAtNode()
           {
             Tags cTags = child->getTags();
             cTags.remove(MetadataTags::Length());
-            cTags.remove(MetadataTags::ErrorCircular());
+            //cTags.remove(MetadataTags::ErrorCircular());
 
             LOG_VART(pTags == cTags);
             LOG_VART(pTags.dataOnlyEqual(cTags));
