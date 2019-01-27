@@ -401,7 +401,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         }
       }
     }
-  } 
+  }
 
   if (e1Match)
   {
@@ -627,7 +627,7 @@ void HighwaySnapMerger::_snapEnds(WayPtr snapee, WayPtr middle, WayPtr snapTo) c
 void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
   const vector<bool>& reverse, vector< pair<ElementId, ElementId>>& replaced,
   const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const
-{  
+{
   LOG_VART(splitee->getElementId());
   //LOG_VART(splitee);
 
