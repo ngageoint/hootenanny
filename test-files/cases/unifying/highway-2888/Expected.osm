@@ -4709,20 +4709,374 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-185" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-1097"/>
-        <nd ref="-1038"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+    <way visible="true" id="-947" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1050"/>
+        <nd ref="-1022"/>
+        <nd ref="-1018"/>
+        <nd ref="-1024"/>
+        <nd ref="-1026"/>
+        <nd ref="-1028"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="1492"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Haveeree Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-947"/>
+    </way>
+    <way visible="true" id="-899" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-669"/>
+        <nd ref="-693"/>
+        <nd ref="-694"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="512.5"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Haveeree Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-899"/>
+    </way>
+    <way visible="true" id="-850" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1029"/>
+        <nd ref="-1028"/>
+        <tag k="length" v="373.0"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-850"/>
+    </way>
+    <way visible="true" id="-839" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-235"/>
+        <nd ref="-669"/>
+        <nd ref="-667"/>
+        <nd ref="-665"/>
+        <nd ref="-663"/>
+        <tag k="length" v="554.9"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-839"/>
+    </way>
+    <way visible="true" id="-832" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-323"/>
+        <nd ref="-673"/>
+        <nd ref="-674"/>
+        <nd ref="-675"/>
+        <nd ref="-661"/>
+        <nd ref="-662"/>
+        <nd ref="-663"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="512.5"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing;DigitalGlobe"/>
+        <tag k="name" v="Kandi Dhon Maniku Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-832"/>
+    </way>
+    <way visible="true" id="-657" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1063"/>
+        <nd ref="-422"/>
+        <nd ref="-976"/>
+        <nd ref="-406"/>
+        <nd ref="-425"/>
+        <nd ref="-432"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="1351.8"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Chandhanee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="paving_stones"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-657"/>
+    </way>
+    <way visible="true" id="-622" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-371"/>
+        <nd ref="-372"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="length" v="134.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Jamaaludheen Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-622"/>
+    </way>
+    <way visible="true" id="-561" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-297"/>
+        <nd ref="-380"/>
+        <nd ref="-1129"/>
+        <tag k="length" v="269.9"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-561"/>
+    </way>
+    <way visible="true" id="-481" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-167"/>
+        <nd ref="-168"/>
+        <nd ref="-169"/>
+        <nd ref="-170"/>
+        <nd ref="-171"/>
+        <nd ref="-173"/>
+        <nd ref="-175"/>
+        <nd ref="-177"/>
+        <nd ref="-178"/>
+        <nd ref="-206"/>
+        <nd ref="-210"/>
+        <nd ref="-212"/>
+        <nd ref="-214"/>
+        <nd ref="-216"/>
+        <nd ref="-193"/>
+        <nd ref="-195"/>
+        <nd ref="-197"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="412.4"/>
+        <tag k="alt_name" v="Gulabee Magu;Iskandharu Magu"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing;DigitalGlobe"/>
+        <tag k="name" v="Dhilbahaaru Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2014-11-28T17:29:46.000Z;2014-10-08T14:35:12.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-481"/>
+    </way>
+    <way visible="true" id="-434" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1165"/>
+        <nd ref="-273"/>
+        <nd ref="-272"/>
+        <nd ref="-269"/>
+        <nd ref="-233"/>
+        <nd ref="-232"/>
+        <nd ref="-68"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="411.9"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="fiЯas 16042011"/>
+        <tag k="name" v="Buruzu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-434"/>
+    </way>
+    <way visible="true" id="-410" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-105"/>
+        <nd ref="-104"/>
+        <nd ref="-103"/>
+        <nd ref="-102"/>
+        <nd ref="-101"/>
+        <nd ref="-100"/>
+        <nd ref="-1149"/>
+        <tag k="length" v="136.5"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-410"/>
+    </way>
+    <way visible="true" id="-408" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1050"/>
+        <nd ref="-1093"/>
+        <nd ref="-1124"/>
+        <nd ref="-1128"/>
+        <nd ref="-1131"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="length" v="279.6"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Chanbeylee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:34:21.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-408"/>
+    </way>
+    <way visible="true" id="-401" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-87"/>
+        <nd ref="-88"/>
+        <nd ref="-89"/>
+        <nd ref="-90"/>
+        <nd ref="-91"/>
+        <nd ref="-92"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="398"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Lonuziyaaraiy Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-03-09T18:17:04.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-401"/>
+    </way>
+    <way visible="true" id="-393" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-105"/>
+        <nd ref="-327"/>
+        <nd ref="-328"/>
+        <nd ref="-330"/>
+        <nd ref="-331"/>
+        <nd ref="-333"/>
+        <nd ref="-334"/>
+        <nd ref="-335"/>
+        <nd ref="-337"/>
+        <nd ref="-219"/>
+        <nd ref="-221"/>
+        <nd ref="-222"/>
+        <nd ref="-223"/>
+        <nd ref="-225"/>
+        <nd ref="-226"/>
+        <nd ref="-228"/>
+        <nd ref="-229"/>
+        <nd ref="-230"/>
+        <nd ref="-68"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="2731.8"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="fiЯas 16042011"/>
+        <tag k="name" v="Buruzu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-393"/>
+    </way>
+    <way visible="true" id="-371" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1048"/>
+        <nd ref="-1067"/>
+        <nd ref="-1073"/>
+        <nd ref="-1081"/>
+        <nd ref="-1051"/>
+        <nd ref="-1052"/>
+        <nd ref="-1056"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="342.6"/>
+        <tag k="alt_name" v="Medhuziyaarai Magu"/>
+        <tag k="source:imagery" v="Unknown;DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Nasreen Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2015-10-22T17:25:23.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-371"/>
+    </way>
+    <way visible="true" id="-366" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1050"/>
+        <nd ref="-1049"/>
+        <nd ref="-1047"/>
+        <nd ref="-1046"/>
+        <nd ref="-695"/>
+        <nd ref="-694"/>
+        <tag k="length" v="885.5"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-366"/>
+    </way>
+    <way visible="true" id="-364" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1048"/>
+        <nd ref="-893"/>
+        <nd ref="-1045"/>
+        <nd ref="-1044"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="856"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Ameeru Ahmed Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-31T17:36:18.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-364"/>
+    </way>
+    <way visible="true" id="-358" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="-1151"/>
+        <tag k="length" v="239.0"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-358"/>
+    </way>
+    <way visible="true" id="-185" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
+        <nd ref="-1097"/>
+        <nd ref="-1038"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="length" v="67.6"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Handhuvaree Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -4731,16 +5085,14 @@
     <way visible="true" id="-184" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1099"/>
         <nd ref="-1164"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="31.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Izzuddeen Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -4753,17 +5105,15 @@
         <nd ref="-1161"/>
         <nd ref="-1160"/>
         <nd ref="-925"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="138.7"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Shaheed Ali Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -4774,17 +5124,15 @@
         <nd ref="-1158"/>
         <nd ref="-1157"/>
         <nd ref="-1156"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="413.8"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Muniyaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -4805,17 +5153,15 @@
         <nd ref="-1167"/>
         <nd ref="-1166"/>
         <nd ref="-1165"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1710.5"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Shaheed Ali Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -4825,7 +5171,6 @@
         <nd ref="-898"/>
         <nd ref="-1145"/>
         <nd ref="-1144"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -4833,9 +5178,8 @@
         <tag k="source:imagery" v="Unknown;DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:status" v="3"/>
@@ -4845,12 +5189,8 @@
         <nd ref="-999"/>
         <nd ref="-1135"/>
         <nd ref="-1134"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="143.9"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-179"/>
@@ -4865,12 +5205,8 @@
         <nd ref="-1118"/>
         <nd ref="-1117"/>
         <nd ref="-1078"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="657.6"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-178"/>
@@ -4881,19 +5217,17 @@
         <nd ref="-1114"/>
         <nd ref="-1112"/>
         <nd ref="-952"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="389.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Lonuziyaaraiy Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-03-09T18:17:04.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-03-09T18:17:04.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paved"/>
@@ -4907,18 +5241,16 @@
         <nd ref="-1108"/>
         <nd ref="-1107"/>
         <nd ref="-1106"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="108.6"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Haveeree Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -4935,17 +5267,15 @@
         <nd ref="-1101"/>
         <nd ref="-1100"/>
         <nd ref="-1098"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="112.5"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Sosun Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
@@ -4958,17 +5288,15 @@
         <nd ref="-1099"/>
         <nd ref="-1097"/>
         <nd ref="-1096"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="890.8"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Fulooniyaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -4988,23 +5316,15 @@
         <nd ref="-1136"/>
         <nd ref="-1133"/>
         <nd ref="-1131"/>
-        <nd ref="-1128"/>
-        <nd ref="-1124"/>
-        <nd ref="-1093"/>
-        <nd ref="-1050"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1118.4"/>
-        <tag k="alt_name" v="Gandhakoalhi Magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="length" v="838.8"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
-        <tag k="name" v="Chanbeylee Magu"/>
-        <tag k="CateTitle" v="road"/>
+        <tag k="name" v="Gandhakoalhi Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:34:21.000Z;2019-01-14T12:13:00Z;2014-11-28T17:34:22.000Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:34:22.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5023,12 +5343,8 @@
         <nd ref="-1091"/>
         <nd ref="-1090"/>
         <nd ref="-1088"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1123.5"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-172"/>
@@ -5038,16 +5354,14 @@
         <nd ref="-1089"/>
         <nd ref="-1086"/>
         <nd ref="-1041"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="22.9"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Izzuddeen Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5064,17 +5378,15 @@
         <nd ref="-1074"/>
         <nd ref="-1072"/>
         <nd ref="-1071"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1983"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Majeedhee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-09T14:42:24.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-09T14:42:24.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5097,17 +5409,15 @@
         <nd ref="-989"/>
         <nd ref="-1066"/>
         <nd ref="-1064"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1785.3"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Orchid Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
@@ -5118,18 +5428,16 @@
         <nd ref="-1063"/>
         <nd ref="-1061"/>
         <nd ref="-1064"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="129.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Chandhanee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paving_stones"/>
@@ -5147,90 +5455,66 @@
         <nd ref="-1055"/>
         <nd ref="-1054"/>
         <nd ref="-1053"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="188.2"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-167"/>
     </way>
     <way visible="true" id="-166" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1034"/>
-        <nd ref="-1032"/>
-        <nd ref="-1031"/>
-        <nd ref="-1030"/>
         <nd ref="-1029"/>
-        <nd ref="-1028"/>
-        <nd ref="-1026"/>
-        <nd ref="-1024"/>
-        <nd ref="-1018"/>
-        <nd ref="-1022"/>
-        <nd ref="-1050"/>
-        <nd ref="-1049"/>
-        <nd ref="-1047"/>
-        <nd ref="-1046"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-1030"/>
+        <nd ref="-1031"/>
+        <nd ref="-1032"/>
+        <nd ref="-1034"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="2611"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="length" v="373.0"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Haveeree Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-14T12:13:00Z"/>
-        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-166"/>
     </way>
     <way visible="true" id="-165" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1022"/>
         <nd ref="-243"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="41.4"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-165"/>
     </way>
     <way visible="true" id="-164" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1070"/>
-        <nd ref="-1069"/>
-        <nd ref="-1068"/>
-        <nd ref="-1033"/>
-        <nd ref="-1027"/>
-        <nd ref="-1025"/>
-        <nd ref="-1023"/>
-        <nd ref="-1021"/>
         <nd ref="-1048"/>
-        <nd ref="-893"/>
-        <nd ref="-1045"/>
-        <nd ref="-1044"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-1021"/>
+        <nd ref="-1023"/>
+        <nd ref="-1025"/>
+        <nd ref="-1027"/>
+        <nd ref="-1033"/>
+        <nd ref="-1068"/>
+        <nd ref="-1069"/>
+        <nd ref="-1070"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="bicycle" v="yes"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1284"/>
-        <tag k="alt_name" v="Shaeed Abdulla Zuhair Hingun"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="length" v="428.0"/>
+        <tag k="alt_name" v="Ameeru Ahmed Magu"/>
+        <tag k="source:imagery" v="Unknown;DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Ameeru Ahmed Magu"/>
-        <tag k="CateTitle" v="road"/>
+        <tag k="name" v="Shaeed Abdulla Zuhair Hingun"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-31T17:36:18.000Z;2019-01-14T12:13:00Z;2014-11-28T17:51:53.000Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2015-10-31T17:36:18.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="primary"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-164"/>
     </way>
@@ -5239,12 +5523,8 @@
         <nd ref="-1043"/>
         <nd ref="-1053"/>
         <nd ref="-1040"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="191.6"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-163"/>
@@ -5253,43 +5533,23 @@
         <nd ref="-1060"/>
         <nd ref="-1058"/>
         <nd ref="-1056"/>
-        <nd ref="-1052"/>
-        <nd ref="-1051"/>
-        <nd ref="-1081"/>
-        <nd ref="-1073"/>
-        <nd ref="-1067"/>
-        <nd ref="-1048"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="685.2"/>
-        <tag k="alt_name" v="Medhuziyaarai Magu"/>
-        <tag k="source:imagery" v="Unknown;DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Nasreen Goalhi"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2015-10-22T17:25:23.000Z;2019-01-14T12:13:00Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="length" v="342.6"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-162"/>
     </way>
     <way visible="true" id="-161" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1018"/>
         <nd ref="-247"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="43.0"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Bandharumathee Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5303,19 +5563,17 @@
         <nd ref="-1002"/>
         <nd ref="-999"/>
         <nd ref="-998"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1256.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Lonuziyaaraiy Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-03-09T18:17:04.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-03-09T18:17:04.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paved"/>
@@ -5337,18 +5595,16 @@
         <nd ref="-979"/>
         <nd ref="-978"/>
         <nd ref="-976"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="2836"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Fareedhee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-14T12:13:00Z;2014-11-28T17:46:42.000Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-24T18:58:28Z;2014-11-28T17:46:42.000Z"/>
         <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5367,18 +5623,16 @@
         <nd ref="-1016"/>
         <nd ref="-982"/>
         <nd ref="-977"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="183.6"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Hithigas Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2011-08-06T19:57:25.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2011-08-06T19:57:25.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="unclassified"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5397,12 +5651,8 @@
         <nd ref="-952"/>
         <nd ref="-951"/>
         <nd ref="-950"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="666"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-157"/>
@@ -5410,12 +5660,8 @@
     <way visible="true" id="-156" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-949"/>
         <nd ref="-948"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="97.1"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-156"/>
@@ -5449,20 +5695,18 @@
         <nd ref="-968"/>
         <nd ref="-947"/>
         <nd ref="-946"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="bicycle" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="12850.2"/>
         <tag k="sidewalk" v="both"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
@@ -5517,18 +5761,16 @@
         <nd ref="-903"/>
         <nd ref="-923"/>
         <nd ref="-922"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="31915.8"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="alt_name" v="Boduthakurufaanu magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Majeedhee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-09T14:42:24.000Z;2019-01-14T12:13:00Z;2011-06-11T18:24:40.000Z"/>
+        <tag k="source:datetime" v="2014-10-09T14:42:24.000Z;2019-01-24T18:58:28Z;2011-06-11T18:24:40.000Z"/>
         <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5543,7 +5785,6 @@
         <nd ref="-901"/>
         <nd ref="-900"/>
         <nd ref="-899"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -5552,9 +5793,8 @@
         <tag k="source:imagery" v="Unknown;DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Roashanee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:31:39.000Z;2019-01-14T12:13:00Z;2015-10-22T17:25:20.000Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:31:39.000Z;2019-01-24T18:58:28Z;2015-10-22T17:25:20.000Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5563,74 +5803,55 @@
     <way visible="true" id="-152" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-895"/>
         <nd ref="-894"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="54.7"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Naadhee Goalhi"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-152"/>
     </way>
-    <way visible="true" id="-151" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-235"/>
-        <nd ref="-669"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="length" v="42.4"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-151"/>
-    </way>
     <way visible="true" id="-150" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-201"/>
         <nd ref="-228"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="35.1"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Riyaasee Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-150"/>
     </way>
     <way visible="true" id="-149" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-92"/>
-        <nd ref="-874"/>
-        <nd ref="-873"/>
-        <nd ref="-872"/>
         <nd ref="-297"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-872"/>
+        <nd ref="-873"/>
+        <nd ref="-874"/>
+        <nd ref="-92"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="69.1"/>
         <tag k="horse" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="maxspeed" v="25"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Raadhafathi Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-02-02T09:34:55.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-02T09:34:55.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paved"/>
@@ -5649,18 +5870,16 @@
         <nd ref="-871"/>
         <nd ref="-870"/>
         <nd ref="-941"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="238.2"/>
         <tag k="alt_name" v="Iramaa Magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe;Bing"/>
         <tag k="name" v="Alivilaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5675,18 +5894,16 @@
         <nd ref="-857"/>
         <nd ref="-238"/>
         <nd ref="-828"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="263.4"/>
         <tag k="alt_name" v="Sabudheli Magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe;Bing"/>
         <tag k="name" v="Handhuvaree Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-14T12:13:00Z;2014-11-28T17:29:46.000Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-24T18:58:28Z;2014-11-28T17:29:46.000Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5702,17 +5919,15 @@
         <nd ref="-864"/>
         <nd ref="-863"/>
         <nd ref="-1141"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="182.9"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Handhuvaree Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5721,12 +5936,8 @@
     <way visible="true" id="-145" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-862"/>
         <nd ref="-772"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="66.5"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-145"/>
@@ -5738,17 +5949,15 @@
         <nd ref="-831"/>
         <nd ref="-849"/>
         <nd ref="-935"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="132.8"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Fandiyaaru magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2012-10-12T05:34:21.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2012-10-12T05:34:21.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5763,16 +5972,14 @@
         <nd ref="-835"/>
         <nd ref="-834"/>
         <nd ref="-1157"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="68.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Izzuddeen Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5787,17 +5994,15 @@
         <nd ref="-830"/>
         <nd ref="-829"/>
         <nd ref="-828"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="617.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Buluekiyaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5808,17 +6013,15 @@
         <nd ref="-827"/>
         <nd ref="-826"/>
         <nd ref="-825"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="62.9"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Dhakandhaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5840,18 +6043,16 @@
         <nd ref="-824"/>
         <nd ref="-823"/>
         <nd ref="-749"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="900.6"/>
         <tag k="alt_name" v="Muranga Magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Gulhazaaru Goalhi"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5863,12 +6064,8 @@
         <nd ref="-782"/>
         <nd ref="-820"/>
         <nd ref="-487"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="217.2"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-139"/>
@@ -5878,16 +6075,14 @@
         <nd ref="-819"/>
         <nd ref="-467"/>
         <nd ref="-818"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="83.6"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Rah Dhebai Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:54.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:54.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5898,16 +6093,14 @@
         <nd ref="-802"/>
         <nd ref="-801"/>
         <nd ref="-313"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="68.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Izzuddeen Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5916,17 +6109,15 @@
     <way visible="true" id="-136" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1176"/>
         <nd ref="-815"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="68.0"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Iramaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5941,17 +6132,15 @@
         <nd ref="-810"/>
         <nd ref="-809"/>
         <nd ref="-904"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="128.1"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Husnuheenaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -5965,18 +6154,16 @@
         <nd ref="-769"/>
         <nd ref="-768"/>
         <nd ref="-767"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="201"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Haveeree Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -5987,12 +6174,8 @@
         <nd ref="-807"/>
         <nd ref="-806"/>
         <nd ref="-96"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="102"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-133"/>
@@ -6000,12 +6183,8 @@
     <way visible="true" id="-132" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-807"/>
         <nd ref="-152"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="55.8"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-132"/>
@@ -6016,50 +6195,46 @@
         <nd ref="-804"/>
         <nd ref="-803"/>
         <nd ref="-763"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="137.6"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Izzuddeen Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-131"/>
     </way>
     <way visible="true" id="-130" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-910"/>
-        <nd ref="-794"/>
-        <nd ref="-793"/>
-        <nd ref="-792"/>
-        <nd ref="-791"/>
-        <nd ref="-790"/>
-        <nd ref="-789"/>
-        <nd ref="-788"/>
-        <nd ref="-787"/>
-        <nd ref="-786"/>
-        <nd ref="-785"/>
-        <nd ref="-784"/>
-        <nd ref="-800"/>
-        <nd ref="-799"/>
-        <nd ref="-345"/>
         <nd ref="-372"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-345"/>
+        <nd ref="-799"/>
+        <nd ref="-800"/>
+        <nd ref="-784"/>
+        <nd ref="-785"/>
+        <nd ref="-786"/>
+        <nd ref="-787"/>
+        <nd ref="-788"/>
+        <nd ref="-789"/>
+        <nd ref="-790"/>
+        <nd ref="-791"/>
+        <nd ref="-792"/>
+        <nd ref="-793"/>
+        <nd ref="-794"/>
+        <nd ref="-910"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="623.8"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Nikagas Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6072,20 +6247,18 @@
         <nd ref="-798"/>
         <nd ref="-797"/>
         <nd ref="-921"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="bicycle" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1240.2"/>
         <tag k="sidewalk" v="both"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
@@ -6096,18 +6269,16 @@
         <nd ref="-796"/>
         <nd ref="-185"/>
         <nd ref="-1155"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="528.2"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Maafaithakurufaanu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -6116,12 +6287,8 @@
     <way visible="true" id="-127" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-251"/>
         <nd ref="-1028"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="44.5"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-127"/>
@@ -6130,12 +6297,8 @@
         <nd ref="-808"/>
         <nd ref="-470"/>
         <nd ref="-795"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="67.6"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-126"/>
@@ -6147,12 +6310,8 @@
         <nd ref="-10"/>
         <nd ref="-783"/>
         <nd ref="-132"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="828.9"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-125"/>
@@ -6160,12 +6319,8 @@
     <way visible="true" id="-124" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-782"/>
         <nd ref="-781"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="50.3"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-124"/>
@@ -6182,17 +6337,15 @@
         <nd ref="-776"/>
         <nd ref="-775"/>
         <nd ref="-962"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1944.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Falhumathee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6201,12 +6354,8 @@
     <way visible="true" id="-122" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-743"/>
         <nd ref="-963"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="26.6"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-122"/>
@@ -6214,12 +6363,8 @@
     <way visible="true" id="-121" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-745"/>
         <nd ref="-965"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="53.9"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-121"/>
@@ -6231,20 +6376,18 @@
         <nd ref="-110"/>
         <nd ref="-773"/>
         <nd ref="-132"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="bicycle" v="yes"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="833.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="sidewalk" v="both"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="foot" v="yes"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -6259,17 +6402,15 @@
         <nd ref="-766"/>
         <nd ref="-765"/>
         <nd ref="-1034"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="204.9"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -6280,17 +6421,15 @@
         <nd ref="-1172"/>
         <nd ref="-764"/>
         <nd ref="-763"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="248.6"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Sabudheli Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6305,17 +6444,15 @@
         <nd ref="-759"/>
         <nd ref="-758"/>
         <nd ref="-671"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="195.7"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Muiveyo Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6326,17 +6463,15 @@
         <nd ref="-757"/>
         <nd ref="-756"/>
         <nd ref="-755"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="58.5"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Badifasgandu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:31:28.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:28.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6356,18 +6491,16 @@
         <nd ref="-751"/>
         <nd ref="-723"/>
         <nd ref="-671"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1015.2"/>
         <tag k="alt_name" v="Koarukendi Hingun"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Maaveyo Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z;2019-01-14T12:13:00Z;2014-11-28T17:29:47.000Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z;2019-01-24T18:58:28Z;2014-11-28T17:29:47.000Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6376,17 +6509,15 @@
     <way visible="true" id="-114" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-335"/>
         <nd ref="-1138"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="67.5"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Badifasganu Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6395,17 +6526,15 @@
     <way visible="true" id="-113" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-938"/>
         <nd ref="-750"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="-1"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="31.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Ruvaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:31:29.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -6414,12 +6543,8 @@
     <way visible="true" id="-112" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1008"/>
         <nd ref="-986"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="23.4"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-112"/>
@@ -6431,18 +6556,16 @@
         <nd ref="-739"/>
         <nd ref="-738"/>
         <nd ref="-1152"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="133.1"/>
         <tag k="alt_name" v="Nikagas Hingun"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing;DigitalGlobe"/>
         <tag k="name" v="Thabureyzee Higun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:59:00.000Z;2014-11-28T17:43:41.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:59:00.000Z;2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6471,18 +6594,16 @@
         <nd ref="-725"/>
         <nd ref="-724"/>
         <nd ref="-723"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="168.8"/>
         <tag k="alt_name" v="Badifasgandu Magu;Gulabee Magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Saimaa Goalhi"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2014-11-28T17:29:46.000Z;2014-11-28T17:31:28.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2014-11-28T17:29:46.000Z;2014-11-28T17:31:28.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6491,18 +6612,16 @@
     <way visible="true" id="-109" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1155"/>
         <nd ref="-333"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="68.2"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Maafaithakurufaanu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -6513,17 +6632,15 @@
         <nd ref="-712"/>
         <nd ref="-710"/>
         <nd ref="-707"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="62.8"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Filigas Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6535,16 +6652,14 @@
         <nd ref="-701"/>
         <nd ref="-700"/>
         <nd ref="-707"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="148.6"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Violet Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6575,18 +6690,16 @@
         <nd ref="-699"/>
         <nd ref="-698"/>
         <nd ref="-352"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="196.5"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Chandhanee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="surface" v="paving_stones"/>
@@ -6598,17 +6711,15 @@
         <nd ref="-697"/>
         <nd ref="-696"/>
         <nd ref="-1074"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="117.3"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Filigas Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6623,64 +6734,25 @@
         <nd ref="-683"/>
         <nd ref="-679"/>
         <nd ref="-615"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="83.0"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Roashanee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:31:39.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:31:39.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-104"/>
     </way>
-    <way visible="true" id="-103" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1046"/>
-        <nd ref="-695"/>
-        <nd ref="-694"/>
-        <nd ref="-693"/>
-        <nd ref="-669"/>
-        <nd ref="-667"/>
-        <nd ref="-665"/>
-        <nd ref="-663"/>
-        <nd ref="-662"/>
-        <nd ref="-661"/>
-        <nd ref="-675"/>
-        <nd ref="-674"/>
-        <nd ref="-673"/>
-        <nd ref="-323"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="2050"/>
-        <tag k="alt_name" v="Haveeree Hingun"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
-        <tag k="source" v="Bing;DigitalGlobe"/>
-        <tag k="name" v="Kandi Dhon Maniku Goalhi"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2015-10-22T17:25:22.000Z;2019-01-14T12:13:00Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-103"/>
-    </way>
     <way visible="true" id="-102" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-319"/>
         <nd ref="-672"/>
         <nd ref="-663"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="45.3"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-102"/>
@@ -6688,12 +6760,8 @@
     <way visible="true" id="-101" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-237"/>
         <nd ref="-694"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="41.6"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-101"/>
@@ -6703,16 +6771,14 @@
         <nd ref="-668"/>
         <nd ref="-666"/>
         <nd ref="-664"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="45.2"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Roashanee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:31:39.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:31:39.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6725,17 +6791,15 @@
         <nd ref="-656"/>
         <nd ref="-655"/>
         <nd ref="-653"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="269.6"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Neeloafaru Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6746,17 +6810,15 @@
         <nd ref="-651"/>
         <nd ref="-650"/>
         <nd ref="-595"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="132.0"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Daisy Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -6772,17 +6834,15 @@
         <nd ref="-654"/>
         <nd ref="-652"/>
         <nd ref="-649"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="175.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Abadhah Fehi Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:55:00.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:55:00.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -6813,7 +6873,6 @@
         <nd ref="-637"/>
         <nd ref="-635"/>
         <nd ref="-633"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="-1"/>
@@ -6821,12 +6880,11 @@
         <tag k="length" v="669.8"/>
         <tag k="alt_name" v="Alikilegefaanu Magu"/>
         <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing;DigitalGlobe"/>
         <tag k="name" v="Kalhuhuraa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="surface" v="paved"/>
@@ -6848,16 +6906,14 @@
         <nd ref="-631"/>
         <nd ref="-630"/>
         <nd ref="-628"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="411.6"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Rah Dhebai Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:54.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:54.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6869,12 +6925,8 @@
         <nd ref="-625"/>
         <nd ref="-623"/>
         <nd ref="-1076"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="207.7"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-94"/>
@@ -6890,12 +6942,8 @@
         <nd ref="-596"/>
         <nd ref="-624"/>
         <nd ref="-53"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="133.3"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-93"/>
@@ -6907,12 +6955,8 @@
         <nd ref="-616"/>
         <nd ref="-614"/>
         <nd ref="-995"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="69.2"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-92"/>
@@ -6925,17 +6969,15 @@
         <nd ref="-619"/>
         <nd ref="-617"/>
         <nd ref="-615"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="262.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Filigas Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -6949,17 +6991,15 @@
         <nd ref="-608"/>
         <nd ref="-427"/>
         <nd ref="-1080"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="485.7"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Sosun Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -6976,43 +7016,39 @@
         <nd ref="-598"/>
         <nd ref="-597"/>
         <nd ref="-1118"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="119.0"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Sosun Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:24.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:24.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-89"/>
     </way>
     <way visible="true" id="-88" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-577"/>
-        <nd ref="-576"/>
-        <nd ref="-575"/>
-        <nd ref="-595"/>
-        <nd ref="-594"/>
-        <nd ref="-544"/>
-        <nd ref="-593"/>
         <nd ref="-592"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-593"/>
+        <nd ref="-544"/>
+        <nd ref="-594"/>
+        <nd ref="-595"/>
+        <nd ref="-575"/>
+        <nd ref="-576"/>
+        <nd ref="-577"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="-1"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="723.9"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="fiЯas 16042011"/>
         <tag k="name" v="Lily Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-07T20:39:52.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-07T20:39:52.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:status" v="3"/>
@@ -7023,12 +7059,8 @@
         <nd ref="-591"/>
         <nd ref="-590"/>
         <nd ref="-1037"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="68.9"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-87"/>
@@ -7049,12 +7081,8 @@
         <nd ref="-486"/>
         <nd ref="-585"/>
         <nd ref="-906"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="473.8"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-86"/>
@@ -7069,19 +7097,17 @@
         <nd ref="-579"/>
         <nd ref="-578"/>
         <nd ref="-50"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="-1"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="228.2"/>
         <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Alikilegefaanu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="surface" v="paved"/>
@@ -7102,16 +7128,14 @@
         <nd ref="-572"/>
         <nd ref="-568"/>
         <nd ref="-588"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="566.2"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Hithaffinivaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:41:15.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:41:15.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -7125,17 +7149,15 @@
         <nd ref="-562"/>
         <nd ref="-561"/>
         <nd ref="-560"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="231.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Husnuheenaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -7148,12 +7170,8 @@
         <nd ref="-552"/>
         <nd ref="-551"/>
         <nd ref="-433"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="58.4"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-82"/>
@@ -7163,37 +7181,33 @@
         <nd ref="-549"/>
         <nd ref="-548"/>
         <nd ref="-546"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="85.9"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Karankaa Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:55:00.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:55:00.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-81"/>
     </way>
     <way visible="true" id="-80" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-976"/>
         <nd ref="-514"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-976"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="48.2"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Medhuziyaarai Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -7203,18 +7217,16 @@
         <nd ref="-979"/>
         <nd ref="-512"/>
         <nd ref="-991"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="103.7"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Faamdheyri Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:37:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:37:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -7224,17 +7236,15 @@
         <nd ref="-932"/>
         <nd ref="-510"/>
         <nd ref="-509"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="94.7"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Kaaminee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:53:28.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:53:28.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -7244,12 +7254,8 @@
         <nd ref="-504"/>
         <nd ref="-468"/>
         <nd ref="-467"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="55.7"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-77"/>
@@ -7276,7 +7282,6 @@
         <nd ref="-469"/>
         <nd ref="-501"/>
         <nd ref="-1098"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -7285,9 +7290,8 @@
         <tag k="source:imagery" v="Unknown;DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Violet Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -7298,12 +7302,8 @@
         <nd ref="-497"/>
         <nd ref="-494"/>
         <nd ref="-493"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="31.6"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-75"/>
@@ -7340,12 +7340,8 @@
         <nd ref="-472"/>
         <nd ref="-471"/>
         <nd ref="-470"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="627"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-74"/>
@@ -7358,48 +7354,44 @@
         <nd ref="-260"/>
         <nd ref="-445"/>
         <nd ref="-344"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1323.6"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-09T14:42:23.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-09T14:42:23.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-73"/>
     </way>
     <way visible="true" id="-72" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-940"/>
-        <nd ref="-366"/>
-        <nd ref="-364"/>
-        <nd ref="-363"/>
-        <nd ref="-362"/>
-        <nd ref="-361"/>
-        <nd ref="-358"/>
-        <nd ref="-446"/>
-        <nd ref="-444"/>
-        <nd ref="-442"/>
-        <nd ref="-441"/>
-        <nd ref="-439"/>
         <nd ref="-438"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-439"/>
+        <nd ref="-441"/>
+        <nd ref="-442"/>
+        <nd ref="-444"/>
+        <nd ref="-446"/>
+        <nd ref="-358"/>
+        <nd ref="-361"/>
+        <nd ref="-362"/>
+        <nd ref="-363"/>
+        <nd ref="-364"/>
+        <nd ref="-366"/>
+        <nd ref="-940"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="-1"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="378.1"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing;DigitalGlobe"/>
         <tag k="name" v="Shaariu Varudhee"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:34:20.000Z;2014-11-28T17:34:21.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:34:20.000Z;2014-11-28T17:34:21.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -7413,12 +7405,8 @@
         <nd ref="-403"/>
         <nd ref="-401"/>
         <nd ref="-1037"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="265"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-71"/>
@@ -7430,12 +7418,8 @@
         <nd ref="-399"/>
         <nd ref="-434"/>
         <nd ref="-432"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="195.2"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-70"/>
@@ -7444,12 +7428,8 @@
         <nd ref="-433"/>
         <nd ref="-431"/>
         <nd ref="-430"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="20.8"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-69"/>
@@ -7459,12 +7439,8 @@
         <nd ref="-426"/>
         <nd ref="-424"/>
         <nd ref="-423"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="73.6"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-68"/>
@@ -7474,38 +7450,17 @@
         <nd ref="-429"/>
         <nd ref="-428"/>
         <nd ref="-432"/>
-        <nd ref="-425"/>
-        <nd ref="-406"/>
-        <nd ref="-976"/>
-        <nd ref="-422"/>
-        <nd ref="-1063"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1802.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Chandhanee Magu"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-14T12:13:00Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paving_stones"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="length" v="450.6"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-67"/>
     </way>
     <way visible="true" id="-66" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-430"/>
         <nd ref="-421"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="39.6"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-66"/>
@@ -7528,12 +7483,8 @@
         <nd ref="-420"/>
         <nd ref="-417"/>
         <nd ref="-998"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="530.7"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-65"/>
@@ -7542,12 +7493,8 @@
         <nd ref="-968"/>
         <nd ref="-412"/>
         <nd ref="-461"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="102.4"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-64"/>
@@ -7575,18 +7522,16 @@
         <nd ref="-410"/>
         <nd ref="-409"/>
         <nd ref="-406"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="827.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="alt_name" v="Champa Magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Kenery Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z;2014-11-28T17:46:43.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z;2014-11-28T17:46:43.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -7596,38 +7541,30 @@
         <nd ref="-1152"/>
         <nd ref="-398"/>
         <nd ref="-397"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="45.1"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-62"/>
     </way>
     <way visible="true" id="-61" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-105"/>
-        <nd ref="-302"/>
-        <nd ref="-300"/>
-        <nd ref="-299"/>
-        <nd ref="-298"/>
         <nd ref="-297"/>
-        <nd ref="-380"/>
-        <nd ref="-1129"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-298"/>
+        <nd ref="-299"/>
+        <nd ref="-300"/>
+        <nd ref="-302"/>
+        <nd ref="-105"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
+        <tag k="length" v="269.9"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="539.8"/>
         <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="fiЯas 16042011"/>
         <tag k="name" v="Buruzu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paved"/>
@@ -7640,20 +7577,16 @@
         <nd ref="-375"/>
         <nd ref="-374"/>
         <nd ref="-372"/>
-        <nd ref="-371"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="537.6"/>
-        <tag k="alt_name" v="Iskandharu Magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
-        <tag k="source" v="Bing;DigitalGlobe"/>
-        <tag k="name" v="Jamaaludheen Hingun"/>
-        <tag k="CateTitle" v="road"/>
+        <tag k="length" v="403.2"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Iskandharu Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-14T12:13:00Z;2014-10-08T14:35:12.000Z"/>
+        <tag k="source:datetime" v="2014-10-08T14:35:12.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -7662,17 +7595,15 @@
     <way visible="true" id="-59" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-328"/>
         <nd ref="-375"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="35.2"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Nikagas Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -7684,12 +7615,8 @@
         <nd ref="-340"/>
         <nd ref="-339"/>
         <nd ref="-368"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="64.0"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-58"/>
@@ -7701,43 +7628,37 @@
         <nd ref="-360"/>
         <nd ref="-359"/>
         <nd ref="-342"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="17.6"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-57"/>
     </way>
     <way visible="true" id="-56" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-377"/>
-        <nd ref="-395"/>
-        <nd ref="-393"/>
-        <nd ref="-392"/>
-        <nd ref="-390"/>
-        <nd ref="-389"/>
-        <nd ref="-388"/>
-        <nd ref="-385"/>
-        <nd ref="-383"/>
-        <nd ref="-382"/>
-        <nd ref="-356"/>
-        <nd ref="-354"/>
-        <nd ref="-353"/>
         <nd ref="-352"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-353"/>
+        <nd ref="-354"/>
+        <nd ref="-356"/>
+        <nd ref="-382"/>
+        <nd ref="-383"/>
+        <nd ref="-385"/>
+        <nd ref="-388"/>
+        <nd ref="-389"/>
+        <nd ref="-390"/>
+        <nd ref="-392"/>
+        <nd ref="-393"/>
+        <nd ref="-395"/>
+        <nd ref="-377"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="276.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Chandhanee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="surface" v="paving_stones"/>
@@ -7797,40 +7718,36 @@
         <nd ref="-350"/>
         <nd ref="-271"/>
         <nd ref="-347"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="26551"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-09T14:42:23.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-09T14:42:23.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-55"/>
     </way>
     <way visible="true" id="-54" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-393"/>
-        <nd ref="-349"/>
-        <nd ref="-348"/>
-        <nd ref="-346"/>
         <nd ref="-345"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-346"/>
+        <nd ref="-348"/>
+        <nd ref="-349"/>
+        <nd ref="-393"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="85.0"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Joashee Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:53:28.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:53:28.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -7841,62 +7758,26 @@
         <nd ref="-191"/>
         <nd ref="-343"/>
         <nd ref="-342"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="127.2"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-53"/>
-    </way>
-    <way visible="true" id="-52" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-219"/>
-        <nd ref="-337"/>
-        <nd ref="-335"/>
-        <nd ref="-334"/>
-        <nd ref="-333"/>
-        <nd ref="-331"/>
-        <nd ref="-330"/>
-        <nd ref="-328"/>
-        <nd ref="-327"/>
-        <nd ref="-105"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1908"/>
-        <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
-        <tag k="source" v="fiЯas 16042011"/>
-        <tag k="name" v="Buruzu Magu"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-14T12:13:00Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-52"/>
     </way>
     <way visible="true" id="-51" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-321"/>
         <nd ref="-23"/>
         <nd ref="-320"/>
         <nd ref="-318"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="156"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Sabudheli Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -7907,12 +7788,8 @@
         <nd ref="-316"/>
         <nd ref="-315"/>
         <nd ref="-20"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="147.0"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-50"/>
@@ -7923,16 +7800,14 @@
         <nd ref="-311"/>
         <nd ref="-309"/>
         <nd ref="-1142"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="411"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Izzuddeen Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -7949,12 +7824,8 @@
         <nd ref="-286"/>
         <nd ref="-306"/>
         <nd ref="-27"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1021.2"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-48"/>
@@ -7962,12 +7833,8 @@
     <way visible="true" id="-47" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1147"/>
         <nd ref="-292"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="72.9"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-47"/>
@@ -7975,12 +7842,8 @@
     <way visible="true" id="-46" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-324"/>
         <nd ref="-322"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="67.3"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-46"/>
@@ -7995,12 +7858,8 @@
         <nd ref="-261"/>
         <nd ref="-255"/>
         <nd ref="-8"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="663.9"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-45"/>
@@ -8008,39 +7867,35 @@
     <way visible="true" id="-44" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-184"/>
         <nd ref="-916"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="43.9"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Hudhufalhu Goalhi"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-44"/>
     </way>
     <way visible="true" id="-43" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-280"/>
-        <nd ref="-278"/>
         <nd ref="-31"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-278"/>
+        <nd ref="-280"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="73.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="fiЯas 16042011"/>
         <tag k="name" v="Buruzu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paved"/>
@@ -8061,12 +7916,8 @@
         <nd ref="-279"/>
         <nd ref="-277"/>
         <nd ref="-1072"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="142.7"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-42"/>
@@ -8074,12 +7925,8 @@
     <way visible="true" id="-41" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1071"/>
         <nd ref="-274"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="52.0"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-41"/>
@@ -8095,12 +7942,8 @@
         <nd ref="-264"/>
         <nd ref="-263"/>
         <nd ref="-262"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="108.0"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-40"/>
@@ -8116,17 +7959,15 @@
         <nd ref="-244"/>
         <nd ref="-242"/>
         <nd ref="-240"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="189.9"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Naseemee Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -8136,57 +7977,38 @@
         <nd ref="-238"/>
         <nd ref="-236"/>
         <nd ref="-234"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="137.6"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Miriyas Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-38"/>
     </way>
     <way visible="true" id="-37" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-31"/>
-        <nd ref="-276"/>
-        <nd ref="-275"/>
         <nd ref="-1165"/>
-        <nd ref="-273"/>
-        <nd ref="-272"/>
-        <nd ref="-269"/>
-        <nd ref="-233"/>
-        <nd ref="-232"/>
-        <nd ref="-68"/>
-        <nd ref="-230"/>
-        <nd ref="-229"/>
-        <nd ref="-228"/>
-        <nd ref="-226"/>
-        <nd ref="-225"/>
-        <nd ref="-223"/>
-        <nd ref="-222"/>
-        <nd ref="-221"/>
-        <nd ref="-219"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-275"/>
+        <nd ref="-276"/>
+        <nd ref="-31"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
+        <tag k="length" v="411.9"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1647.6"/>
         <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="fiЯas 16042011"/>
         <tag k="name" v="Buruzu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-14T12:13:00Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-37"/>
@@ -8199,65 +8021,57 @@
         <nd ref="-224"/>
         <nd ref="-220"/>
         <nd ref="-218"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="86.2"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-36"/>
     </way>
     <way visible="true" id="-35" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-1044"/>
-        <nd ref="-130"/>
-        <nd ref="-127"/>
-        <nd ref="-125"/>
-        <nd ref="-204"/>
-        <nd ref="-203"/>
-        <nd ref="-200"/>
-        <nd ref="-196"/>
-        <nd ref="-194"/>
-        <nd ref="-215"/>
-        <nd ref="-213"/>
         <nd ref="-211"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-213"/>
+        <nd ref="-215"/>
+        <nd ref="-194"/>
+        <nd ref="-196"/>
+        <nd ref="-200"/>
+        <nd ref="-203"/>
+        <nd ref="-204"/>
+        <nd ref="-125"/>
+        <nd ref="-127"/>
+        <nd ref="-130"/>
+        <nd ref="-1044"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="102.2"/>
         <tag k="alt_name" v="Ameeru Ahmed Magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Meheli Goalhi"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2015-10-31T17:36:18.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2015-10-31T17:36:18.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-35"/>
     </way>
     <way visible="true" id="-34" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-1044"/>
-        <nd ref="-209"/>
-        <nd ref="-208"/>
-        <nd ref="-207"/>
         <nd ref="-899"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-207"/>
+        <nd ref="-208"/>
+        <nd ref="-209"/>
+        <nd ref="-1044"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="86.7"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Kasthoori Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -8267,16 +8081,14 @@
         <nd ref="-98"/>
         <nd ref="-205"/>
         <nd ref="-126"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="69.8"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Handhuvaree Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -8285,16 +8097,14 @@
     <way visible="true" id="-32" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-126"/>
         <nd ref="-1141"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="71.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Handhuvaree Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -8309,17 +8119,15 @@
         <nd ref="-189"/>
         <nd ref="-188"/>
         <nd ref="-1153"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1032.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Vaidheri Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -8328,12 +8136,8 @@
     <way visible="true" id="-30" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-185"/>
         <nd ref="-161"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="68.4"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-30"/>
@@ -8343,17 +8147,15 @@
         <nd ref="-184"/>
         <nd ref="-182"/>
         <nd ref="-181"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="269.8"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Hudhufalhu Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:34.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -8365,60 +8167,39 @@
         <nd ref="-199"/>
         <nd ref="-198"/>
         <nd ref="-197"/>
-        <nd ref="-195"/>
-        <nd ref="-193"/>
-        <nd ref="-216"/>
-        <nd ref="-214"/>
-        <nd ref="-212"/>
-        <nd ref="-210"/>
-        <nd ref="-206"/>
-        <nd ref="-178"/>
-        <nd ref="-177"/>
-        <nd ref="-175"/>
-        <nd ref="-173"/>
-        <nd ref="-171"/>
-        <nd ref="-170"/>
-        <nd ref="-169"/>
-        <nd ref="-168"/>
-        <nd ref="-167"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1649.6"/>
-        <tag k="alt_name" v="Gulabee Magu;Iskandharu Magu"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
-        <tag k="source" v="Bing;DigitalGlobe"/>
-        <tag k="name" v="Dhilbahaaru Magu"/>
-        <tag k="CateTitle" v="road"/>
+        <tag k="length" v="1237.2"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Iskandharu Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2014-11-28T17:29:46.000Z;2014-10-08T14:35:12.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T14:35:12.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-28"/>
     </way>
     <way visible="true" id="-27" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-211"/>
-        <nd ref="-176"/>
-        <nd ref="-174"/>
-        <nd ref="-172"/>
-        <nd ref="-166"/>
-        <nd ref="-165"/>
         <nd ref="-163"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-165"/>
+        <nd ref="-166"/>
+        <nd ref="-172"/>
+        <nd ref="-174"/>
+        <nd ref="-176"/>
+        <nd ref="-211"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="86.3"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Meheli Goalhi"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -8453,12 +8234,8 @@
         <nd ref="-159"/>
         <nd ref="-158"/>
         <nd ref="-156"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="3865.4"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-26"/>
@@ -8468,12 +8245,8 @@
         <nd ref="-154"/>
         <nd ref="-152"/>
         <nd ref="-151"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="272.1"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-25"/>
@@ -8489,19 +8262,17 @@
         <nd ref="-147"/>
         <nd ref="-144"/>
         <nd ref="-1088"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="403.5"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="fiЯas 16042011"/>
         <tag k="name" v="Buruzu Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paved"/>
@@ -8512,12 +8283,8 @@
         <nd ref="-143"/>
         <nd ref="-106"/>
         <nd ref="-119"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="60.6"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-23"/>
@@ -8531,12 +8298,8 @@
         <nd ref="-107"/>
         <nd ref="-135"/>
         <nd ref="-1035"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="141.8"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-22"/>
@@ -8546,12 +8309,8 @@
         <nd ref="-121"/>
         <nd ref="-134"/>
         <nd ref="-132"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="218.8"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-21"/>
@@ -8560,12 +8319,8 @@
         <nd ref="-133"/>
         <nd ref="-131"/>
         <nd ref="-1044"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="54.3"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-20"/>
@@ -8573,12 +8328,8 @@
     <way visible="true" id="-19" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-139"/>
         <nd ref="-124"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="51.4"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-19"/>
@@ -8588,16 +8339,14 @@
         <nd ref="-129"/>
         <nd ref="-128"/>
         <nd ref="-1142"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="603.4"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Izzuddeen Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:43.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -8607,17 +8356,15 @@
         <nd ref="-128"/>
         <nd ref="-126"/>
         <nd ref="-70"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="276.4"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Ujaalaa Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -8631,12 +8378,8 @@
         <nd ref="-119"/>
         <nd ref="-116"/>
         <nd ref="-63"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1868"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-16"/>
@@ -8656,12 +8399,8 @@
         <nd ref="-115"/>
         <nd ref="-114"/>
         <nd ref="-1114"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="261.9"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-15"/>
@@ -8669,12 +8408,8 @@
     <way visible="true" id="-14" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-148"/>
         <nd ref="-113"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="101.5"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-14"/>
@@ -8682,38 +8417,26 @@
     <way visible="true" id="-13" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-110"/>
         <nd ref="-119"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="42.3"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-13"/>
     </way>
     <way visible="true" id="-12" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-89"/>
         <nd ref="-105"/>
-        <nd ref="-104"/>
-        <nd ref="-103"/>
-        <nd ref="-102"/>
-        <nd ref="-101"/>
-        <nd ref="-100"/>
-        <nd ref="-1149"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-89"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="273"/>
+        <tag k="length" v="136.5"/>
         <tag k="horse" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="maxspeed" v="25"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Siththi Maavaa Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-02-02T09:25:36.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-02T09:25:36.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paved"/>
@@ -8725,17 +8448,15 @@
         <nd ref="-99"/>
         <nd ref="-98"/>
         <nd ref="-97"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="335.2"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Aazaadhee Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -8755,33 +8476,27 @@
         <nd ref="-46"/>
         <nd ref="-45"/>
         <nd ref="-94"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="2674.8"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-10"/>
     </way>
     <way visible="true" id="-9" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-51"/>
         <nd ref="-93"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-51"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="50.7"/>
         <tag k="horse" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="maxspeed" v="25"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Raadhafathi Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-02-02T09:34:55.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2015-02-02T09:34:55.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="surface" v="paved"/>
@@ -8792,39 +8507,17 @@
         <nd ref="-975"/>
         <nd ref="-93"/>
         <nd ref="-92"/>
-        <nd ref="-91"/>
-        <nd ref="-90"/>
-        <nd ref="-89"/>
-        <nd ref="-88"/>
-        <nd ref="-87"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="796"/>
-        <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Lonuziyaaraiy Magu"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-03-09T18:17:04.000Z;2019-01-14T12:13:00Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="length" v="398"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-8"/>
     </way>
     <way visible="true" id="-7" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-94"/>
         <nd ref="-87"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="21.3"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-7"/>
@@ -8833,12 +8526,8 @@
         <nd ref="-1112"/>
         <nd ref="-80"/>
         <nd ref="-78"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="length" v="68.1"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-6"/>
@@ -8851,17 +8540,15 @@
         <nd ref="-70"/>
         <nd ref="-69"/>
         <nd ref="-68"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1076.7"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Hilaalee Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -8890,12 +8577,8 @@
         <nd ref="-37"/>
         <nd ref="-408"/>
         <nd ref="-36"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="1833.6"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="CateTitle" v="road"/>
-        <tag k="source:datetime" v="2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-4"/>
@@ -8925,17 +8608,15 @@
         <nd ref="-25"/>
         <nd ref="-995"/>
         <nd ref="-24"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="20645.8"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Ameenee Magu"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:57:44.000Z;2019-01-14T12:13:00Z"/>
+        <tag k="source:datetime" v="2014-10-08T02:57:44.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
@@ -8968,48 +8649,43 @@
         <nd ref="-12"/>
         <nd ref="-11"/>
         <nd ref="-10"/>
-        <tag k="source" v="DigitalGlobe"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="name" v="Boduthakurufaanu Magu"/>
-        <tag k="alt_name" v="Haveeree Hingun"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="highway" v="primary"/>
-        <tag k="length" v="4024.2"/>
-        <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2015-10-22T17:25:22.000Z;2019-01-14T12:13:00Z"/>
         <tag k="bicycle" v="yes"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
-        <tag k="CateTitle" v="road"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="length" v="4024.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="alt_name" v="Haveeree Hingun"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Boduthakurufaanu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-2"/>
     </way>
     <way visible="true" id="-1" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-914"/>
-        <nd ref="-9"/>
-        <nd ref="-8"/>
         <nd ref="-7"/>
-        <nd ref="-1151"/>
-        <tag k="DataSource" v="Ecopia Tech© DigitalGlobe©"/>
+        <nd ref="-8"/>
+        <nd ref="-9"/>
+        <nd ref="-914"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="717"/>
+        <tag k="length" v="478"/>
         <tag k="maxspeed" v="25"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="local knowledge"/>
         <tag k="name" v="Rah Dhebai Hingun"/>
-        <tag k="CateTitle" v="road"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-14T12:13:00Z"/>
-        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-1"/>
