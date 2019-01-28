@@ -307,11 +307,23 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
     return;
   //  Remove the split parent id
   child->resetPid();
+
   //  Merge the tags
-  Tags pTags = parent->getTags();
-  Tags cTags = child->getTags();
-  Tags tags = TagMergerFactory::mergeTags(pTags, cTags, ElementType::Way);
-  parent->setTags(tags);
+  Tags tags1 = parent->getTags();
+  Tags tags2 = child->getTags();
+  LOG_VART(parent->getStatus());
+  LOG_VART(child->getStatus());
+  //  Reverse child/parent tags if only the child is Unknown1, special case for attribute transfer
+  if (child->getStatus() == Status::Unknown1 && parent->getStatus() != Status::Unknown1)
+  {
+    tags1 = child->getTags();
+    tags2 = parent->getTags();
+  }
+  LOG_VART(tags1);
+  LOG_VART(tags2);
+  parent->setTags(TagMergerFactory::mergeTags(tags1, tags2, ElementType::Way));
+  LOG_VART(parent->getTags());
+
   //  Remove the duplicate node id of the overlap
   if (parentFirst)
   {
