@@ -75,6 +75,18 @@ public:
    */
   void addTag(const XmlObject& tag);
   /**
+   * @brief getTagK/V
+   * @param index
+   * @return
+   */
+  QString getTagKey(int index);
+  QString getTagValue(int index);
+  /**
+   * @brief getTagCount
+   * @return Number of tags in this element
+   */
+  int getTagCount() { return _tags.size(); }
+  /**
    * @brief id Get the element ID
    * @return Element ID
    */

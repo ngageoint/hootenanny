@@ -42,6 +42,7 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetUpdateTest);
   CPPUNIT_TEST(runXmlChangesetSplitTest);
   CPPUNIT_TEST(runXmlChangesetSplitWayTest);
+  CPPUNIT_TEST(runXmlChangesetErrorFixTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -174,6 +175,23 @@ public:
     changeset.calculateChangeset(info);
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
+  }
+
+  void runXmlChangesetErrorFixTest()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ChangesetErrorFixInput.osc");
+    //  Fix the bad input changeset
+    changeset.fixMalformedInput();
+
+    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetErrorFixExpected.osc");
+
+    ChangesetInfoPtr info(new ChangesetInfo());
+    changeset.calculateChangeset(info);
+
+    QString change = changeset.getChangesetString(info, 1);
+
+    HOOT_STR_EQUALS(expectedText, change);
   }
 };
 

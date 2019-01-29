@@ -85,6 +85,13 @@ public:
    */
   bool fixChangeset(const QString& update);
   /**
+   * @brief fixMalformedInput Fix bad IDs in data,
+   *  -- Adds must be negative IDs
+   *  -- Modifies must be positive IDs
+   *  -- Deletes must be positive IDs
+   */
+  void fixMalformedInput();
+  /**
    * @brief hasElementsToSend Checks if all elements have been marked as sent
    * @return true if there are elements that haven't been sent yet
    */
@@ -199,14 +206,16 @@ private:
    */
   void updateElement(ChangesetTypeMap& map, long old_id, long new_id, long version);
   /**
-   * @brief fixElement Fix the element with ID by updating the version of the element
+   * @brief fixElement Fix the element with ID by updating the version of the element and merge
+   *     the set of tags
    *     Could expand in the future to correct other issues but for now just fix the version
    * @param map Map of elements (nodes/ways/relations)
    * @param id ID of the element to fix
    * @param version Latest version from OSM API
+   * @param tags Current set of tags on the object
    * @return True if a change was made to fix the element
    */
-  bool fixElement(ChangesetTypeMap& map, long id, long version);
+  bool fixElement(ChangesetTypeMap& map, long id, long version, QMap<QString, QString> tags);
   /**
    * @brief loadElements Load elements from the XML reader of type 'type'
    * @param reader XML reader of the file
@@ -273,7 +282,7 @@ private:
   size_t getObjectCount(ChangesetInfoPtr& changeset, XmlWay* way);
   size_t getObjectCount(ChangesetInfoPtr& changeset, XmlRelation* relation);
   /**
-   * @brief isSent Check if this element's status is "finalized"
+   * @brief isSent Check if this element's status is buffering, sent, or finalized
    * @param element Pointer to the element to check
    * @return true if the element has been sent to the API
    */
@@ -299,6 +308,23 @@ private:
   long getNextNodeId();
   long getNextWayId();
   long getNextRelationId();
+  /**
+   * @brief replaceNode/Way/RelationId
+   * @param old_id
+   * @param new_id
+   */
+  void replaceNodeId(long old_id, long new_id);
+  void replaceWayId(long old_id, long new_id);
+  void replaceRelationId(long old_id, long new_id);
+  /**
+   * @brief replaceNodeIdInWay
+   * @param old_node_id
+   * @param new_node_id
+   * @param way_id
+   */
+  void replaceNodeIdInWay(long old_node_id, long new_node_id, long way_id);
+  void replaceNodeIdInRelation(long old_node_id, long new_node_id, long relation_id);
+  void replaceWayIdInRelation(long old_way_id, long new_way_id, long relation_id);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   XmlElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */

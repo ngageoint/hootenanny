@@ -222,7 +222,7 @@ QString HootApiDbSqlStatementFormatter::changesetToSqlString(const long changese
 {
   Tags tags;
   tags["bot"] = "yes";
-  tags["created_by"] = "hootenanny";
+  tags["created_by"] = HOOT_PACKAGE_NAME;
   return
     _outputFormatStrings[HootApiDb::getChangesetsTableName(_mapId)]
       .arg(QString::number(changesetId))

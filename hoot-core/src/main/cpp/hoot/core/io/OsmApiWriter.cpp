@@ -107,6 +107,8 @@ bool OsmApiWriter::apply()
   }
   //  Split any ways that need splitting
   _changeset.splitLongWays(_capabilities.getWayNodes());
+  //  Fix any changeset input that isn't formatted correctly
+  _changeset.fixMalformedInput();
   //  Start the writer threads
   LOG_INFO("Starting " << _maxWriters << " processing threads.");
   for (int i = 0; i < _maxWriters; ++i)

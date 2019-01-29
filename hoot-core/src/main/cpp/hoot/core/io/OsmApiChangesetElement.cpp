@@ -27,6 +27,8 @@
 
 #include "OsmApiChangesetElement.h"
 
+#include <hoot/core/util/HootException.h>
+
 //  Qt
 #include <QTextStream>
 
@@ -59,6 +61,20 @@ void XmlElement::addTag(const XmlObject& tag)
   //  Make sure that the object is in fact a tag before adding it
   if (tag.first == "tag")
     _tags.push_back(tag);
+}
+
+QString XmlElement::getTagKey(int index)
+{
+  if (index < 0 || index >= _tags.size() || !_tags[index].second.hasAttribute("k"))
+    throw IllegalArgumentException();
+  return _tags[index].second.value("k").toString();
+}
+
+QString XmlElement::getTagValue(int index)
+{
+  if (index < 0 || index >= _tags.size() || !_tags[index].second.hasAttribute("v"))
+    throw IllegalArgumentException();
+  return _tags[index].second.value("v").toString();
 }
 
 QString XmlElement::toString(const QXmlStreamAttributes& attributes, long changesetId) const
