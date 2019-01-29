@@ -93,7 +93,14 @@ public:
    */
   virtual void writeInterpolator(QIODevice& os) const = 0;
 
+  /**
+   * The max number of optimization loop iterations to allow per loop.  Some interplolators may
+   * take an extraordinary time to find a solution (or never find one).  This is meant to possibly
+   * be a temporary solution until such issues can be solved.  See hoot #2893.
+   */
+  virtual void setMaxAllowedPerLoopOptimizationIterations(int maxIterations) = 0;
 
+  virtual int getMaxOptimizationLoopIterations() = 0;
 };
 
 }

@@ -39,6 +39,7 @@ class HilbertRTree;
 class BaseInterpolator : public Interpolator
 {
 public:
+
   BaseInterpolator();
 
   virtual ~BaseInterpolator() {}
@@ -55,7 +56,13 @@ public:
 
   virtual void writeInterpolator(QIODevice& os) const;
 
+  virtual void setMaxAllowedPerLoopOptimizationIterations(int maxIterations)
+  { _maxAllowedPerLoopOptimizationIterations = maxIterations; }
+
+  virtual int getMaxOptimizationLoopIterations() { return _iterations; }
+
 protected:
+
   std::vector<int> _indColumns;
   std::vector<std::string> _indColumnsLabels;
   mutable boost::shared_ptr<HilbertRTree> _index;
@@ -64,6 +71,8 @@ protected:
   // A temp variable used to return the result of interpolate()
   mutable std::vector<double> _result;
   boost::shared_ptr<const DataFrame> _df;
+  int _maxAllowedPerLoopOptimizationIterations;
+  mutable int _iterations;
 
   virtual void _buildModel() = 0;
 
@@ -88,7 +97,6 @@ protected:
    * The data frame and columns are serialized automatically.
    */
   virtual void _writeInterpolator(QIODevice& os) const = 0;
-
 };
 
 }

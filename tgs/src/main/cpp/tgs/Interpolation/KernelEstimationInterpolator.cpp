@@ -121,11 +121,17 @@ void KernelEstimationInterpolator::_buildModel()
     result[0] = _sigma;
     optimizer.step(result, -estimateError());
 
-    while (optimizer.done() == false)
+    int iterations = 0;
+    while (optimizer.done() == false && iterations <= _maxAllowedPerLoopOptimizationIterations)
     {
       double e = -estimateError();
       result = optimizer.step(result, e);
+      iterations++;
       _sigma = result[0];
+    }
+    if (iterations > _iterations)
+    {
+      _iterations = iterations;
     }
   }
 }
@@ -142,12 +148,13 @@ double KernelEstimationInterpolator::_estimateError(unsigned int index) const
     simplePoint[i] = uut[_indColumns[i]];
   }
 
-
   double n0 = Normal::normal(0, _sigma);
 
   KnnIteratorNd it(_getIndex(), simplePoint);
   double wSum = 0.0;
-  while (it.next() && it.getDistance() < _sigma * 3.0)
+  int iterations = 0;
+  while (it.next() && it.getDistance() < _sigma * 3.0 &&
+         iterations <= _maxAllowedPerLoopOptimizationIterations)
   {
     size_t i = it.getId();
     if (i == index)
@@ -178,6 +185,8 @@ double KernelEstimationInterpolator::_estimateError(unsigned int index) const
         predicted[j] += (record[_depColumns[j]] * w);
       }
     }
+
+    iterations++;
   }
   // do less rubber sheeting as we get far away from tie points.
   wSum = std::max(wSum, n0);
@@ -217,7 +226,9 @@ const vector<double>& KernelEstimationInterpolator::interpolate(const vector<dou
 
   KnnIteratorNd it(_getIndex(), simplePoint);
   double wSum = 0.0;
-  while (it.next() && it.getDistance() < _sigma * 3.0)
+  int iterations = 0;
+  while (it.next() && it.getDistance() < _sigma * 3.0 &&
+         iterations <= _maxAllowedPerLoopOptimizationIterations)
   {
     size_t i = it.getId();
     const vector<double>& record = df.getDataVector(i);
@@ -244,6 +255,8 @@ const vector<double>& KernelEstimationInterpolator::interpolate(const vector<dou
         _result[j] += (record[_depColumns[j]] * w);
       }
     }
+
+    iterations++;
   }
   // do less rubber sheeting as we get far away from tie points.
   wSum = std::max(wSum, n0);

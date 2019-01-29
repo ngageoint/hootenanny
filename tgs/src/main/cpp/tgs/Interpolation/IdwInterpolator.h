@@ -43,6 +43,7 @@ namespace Tgs
 class IdwInterpolator : public BaseInterpolator
 {
 public:
+
   static std::string className() { return "Tgs::IdwInterpolator"; }
 
   /**
@@ -67,6 +68,7 @@ public:
   virtual std::string toString() const;
 
 protected:
+
   double _p;
   double _stopDelta;
 

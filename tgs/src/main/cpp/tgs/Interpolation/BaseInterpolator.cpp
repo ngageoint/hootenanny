@@ -46,7 +46,9 @@ using namespace std;
 namespace Tgs
 {
 
-BaseInterpolator::BaseInterpolator()
+BaseInterpolator::BaseInterpolator() :
+_maxAllowedPerLoopOptimizationIterations(INT_MAX),
+_iterations(0)
 {
 }
 

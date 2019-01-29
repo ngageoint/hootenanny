@@ -74,6 +74,7 @@ public:
   }
 
 private:
+
   IdwInterpolator& _idw;
 };
 
@@ -95,13 +96,18 @@ void IdwInterpolator::_buildModel()
     result[0] = _p;
     optimizer.step(result, -estimateError());
 
-    int count = 0;
-    while (optimizer.done() == false)
+    int iterations = 0;
+    while (optimizer.done() == false && iterations <= _maxAllowedPerLoopOptimizationIterations)
     {
       double e = -estimateError();
-      cout << "error: " << e << " count: " << count++ << endl;
+      //cout << "error: " << e << " count: " << iterations << endl;
       result = optimizer.step(result, e);
+      iterations++;
       _p = result[0];
+    }
+    if (iterations > _iterations)
+    {
+      _iterations = iterations;
     }
   }
 }
@@ -153,7 +159,8 @@ const vector<double>& IdwInterpolator::_interpolate(const vector<double>& point,
   KnnIteratorNd it(_getIndex(), simplePoint);
   double wSum = 0.0;
   int samples = 0;
-  while (it.next() && samples < 50)
+  int iterations = 0;
+  while (it.next() && samples < 50 && iterations <= _maxAllowedPerLoopOptimizationIterations)
   {
     size_t i = it.getId();
     if ((int)i == ignoreId)
@@ -192,6 +199,12 @@ const vector<double>& IdwInterpolator::_interpolate(const vector<double>& point,
     {
       _result[j] += (record[_depColumns[j]] * w);
     }
+
+    iterations++;
+  }
+  if (iterations > _iterations)
+  {
+    _iterations = iterations;
   }
 
   for (size_t j = 0; j < _result.size(); j++)

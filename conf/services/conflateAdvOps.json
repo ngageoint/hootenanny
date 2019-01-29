@@ -252,6 +252,16 @@
                 "name":"Minimum Ties Required",
                 "defaultvalue":"4",
                 "hoot_key":"rubber.sheet.minimum.ties"
+            },
+            {
+                "id":"rubber_sheet_max_interpolator_iterations",
+                "minvalue":"1",
+                "elem_type":"int",
+                "description":"The maximum number of interpolation optimization iterations, per optimization loop, an interpolator is allowed to run during rubber sheeting.  Use -1 for no iteration limit.  Not supported by all interpolators.  Can prevent runaway optimizations with some interpolators.  Lower values may result in the selection of a suboptimal interpolator.",
+                "maxvalue":"",
+                "name":"Max Interpolator Iterations",
+                "defaultvalue":"200",
+                "hoot_key":"rubber.sheet.max.interpolator.iterations"
             }
         ]
     },

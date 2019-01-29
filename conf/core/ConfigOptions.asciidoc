@@ -3224,6 +3224,16 @@ met.  e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, 
 statement will be logged instead.  This setting is completely ignored if
 rubber.sheet.fail.when.minimum.tie.points.not.found is set to true.
 
+=== rubber.sheet.max.interpolator.iterations
+
+* Data Type: int
+* Default Value: `200`
+
+The maximum number of interpolation optimization iterations, per optimization loop, an interpolator
+is allowed to run during rubber sheeting.  Use -1 for no iteration limit.  Not supported by all
+interpolators.  Can prevent runaway optimizations with some interpolators.  Lower values may result
+in the selection of a suboptimal interpolator.
+
 === rubber.sheet.minimum.ties
 
 * Data Type: int
