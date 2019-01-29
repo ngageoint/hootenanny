@@ -241,7 +241,7 @@ void MatchFactory::_tempFixDefaults()
            ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayRfClassifier")
   {
     LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier ");
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
   }
   LOG_VARD(ConfigOptions().getConflateMatchHighwayClassifier());
 
