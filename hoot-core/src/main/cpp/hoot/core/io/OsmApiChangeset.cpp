@@ -252,7 +252,6 @@ void XmlChangeset::fixMalformedInput()
       replaceNodeId(old_id, new_id);
     }
   }
-return;
   //  Element modifies/deletes cannot have a negative ID, must be positive
   //  Nothing can be done about an element modify/delete if the ID is negative
   for (int type = TypeModify; type < TypeMax; ++type)

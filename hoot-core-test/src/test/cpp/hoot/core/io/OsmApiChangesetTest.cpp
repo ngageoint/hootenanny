@@ -190,8 +190,11 @@ public:
     changeset.calculateChangeset(info);
 
     QString change = changeset.getChangesetString(info, 1);
-
     HOOT_STR_EQUALS(expectedText, change);
+
+    QString error = changeset.getFailedChangesetString();
+    QString expectedError = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetErrorFixErrors.osc");
+    HOOT_STR_EQUALS(expectedError, error);
   }
 };
 
