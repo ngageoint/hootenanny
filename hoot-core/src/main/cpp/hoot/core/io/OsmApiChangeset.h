@@ -69,8 +69,8 @@ public:
    */
   void loadChangeset(const QString& changesetPath);
   /**
-   * @brief splitLongWays
-   * @param maxWayNodes
+   * @brief splitLongWays The API defaults to only allowing a maximum of 2000 nodes per way, split the way if necessary
+   * @param maxWayNodes Maximum number of nodes per way from the API capabilities query
    */
   void splitLongWays(long maxWayNodes = 2000);
   /**
@@ -86,9 +86,9 @@ public:
   bool fixChangeset(const QString& update);
   /**
    * @brief fixMalformedInput Fix bad IDs in data,
-   *  -- Adds must be negative IDs
-   *  -- Modifies must be positive IDs
-   *  -- Deletes must be positive IDs
+   *  -- Adds must be negative IDs - Positive IDs are fixed by creating new negative IDs
+   *  -- Modifies must be positive IDs - Negative IDs are set as an error and never sent to the API
+   *  -- Deletes must be positive IDs - Negative IDs are set as an error and never sent to the API
    */
   void fixMalformedInput();
   /**
@@ -309,22 +309,13 @@ private:
   long getNextWayId();
   long getNextRelationId();
   /**
-   * @brief replaceNode/Way/RelationId
-   * @param old_id
-   * @param new_id
+   * @brief replaceNode/Way/RelationId Replace the old ID with the new ID in the element ID to ID map
+   * @param old_id ID from changeset file
+   * @param new_id New ID from API or from changeset fixes
    */
   void replaceNodeId(long old_id, long new_id);
   void replaceWayId(long old_id, long new_id);
   void replaceRelationId(long old_id, long new_id);
-  /**
-   * @brief replaceNodeIdInWay
-   * @param old_node_id
-   * @param new_node_id
-   * @param way_id
-   */
-  void replaceNodeIdInWay(long old_node_id, long new_node_id, long way_id);
-  void replaceNodeIdInRelation(long old_node_id, long new_node_id, long relation_id);
-  void replaceWayIdInRelation(long old_way_id, long new_way_id, long relation_id);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   XmlElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
