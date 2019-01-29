@@ -403,7 +403,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       }
       else
       {
-        LOG_DEBUG("Node " << attributes.value("id") << " set to delete.");
+        LOG_TRACE("Node " << attributes.value("id") << " set to delete.");
         _element.reset();
       }
     }
@@ -415,7 +415,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       }
       else
       {
-        LOG_DEBUG("Way " << attributes.value("id") << " set to delete.");
+        LOG_TRACE("Way " << attributes.value("id") << " set to delete.");
         _element.reset();
       }
     }
@@ -427,7 +427,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       }
       else
       {
-        LOG_DEBUG("Relation " << attributes.value("id") << " set to delete.");
+        LOG_TRACE("Relation " << attributes.value("id") << " set to delete.");
         _element.reset();
       }
     }

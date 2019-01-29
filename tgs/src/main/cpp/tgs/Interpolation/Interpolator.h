@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTERPOLATOR_H
 #define INTERPOLATOR_H
@@ -93,7 +93,14 @@ public:
    */
   virtual void writeInterpolator(QIODevice& os) const = 0;
 
+  /**
+   * The max number of optimization loop iterations to allow per loop.  Some interplolators may
+   * take an extraordinary time to find a solution (or never find one).  This is meant to possibly
+   * be a temporary solution until such issues can be solved.  See hoot #2893.
+   */
+  virtual void setMaxAllowedPerLoopOptimizationIterations(int maxIterations) = 0;
 
+  virtual int getMaxOptimizationLoopIterations() = 0;
 };
 
 }
