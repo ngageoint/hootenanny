@@ -28,7 +28,6 @@
 #include "OsmApiWriter.h"
 
 //  Hootenanny
-#include <hoot/core/algorithms/splitter/LargeWaySplitter.h>
 #include <hoot/core/info/VersionDefines.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
