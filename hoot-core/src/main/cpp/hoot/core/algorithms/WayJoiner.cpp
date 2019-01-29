@@ -442,25 +442,39 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   }
 
   //  Merge the tags
-  Tags tags1;
-  Tags tags2;
+
+//  Tags tags1;
+//  Tags tags2;
+//  LOG_VART(parent->getStatus());
+//  LOG_VART(child->getStatus());
+//  if (parent->getStatus() == Status::Unknown1)
+//  {
+//    tags1 = parent->getTags();
+//    tags2 = child->getTags();
+//  }
+//  else if (child->getStatus() == Status::Unknown1)
+//  {
+//    tags2 = parent->getTags();
+//    tags1 = child->getTags();
+//  }
+//  else
+//  {
+//    // don't actually know if this case can occur or not
+//    tags1 = parent->getTags();
+//    tags2 = child->getTags();
+//  }
+//  LOG_VART(tags1);
+//  LOG_VART(tags2);
+
+  Tags tags1 = parent->getTags();
+  Tags tags2 = child->getTags();
   LOG_VART(parent->getStatus());
   LOG_VART(child->getStatus());
-  if (parent->getStatus() == Status::Unknown1)
+  //  Reverse child/parent tags if only the child is Unknown1, special case for attribute transfer
+  if (child->getStatus() == Status::Unknown1 && parent->getStatus() != Status::Unknown1)
   {
-    tags1 = parent->getTags();
-    tags2 = child->getTags();
-  }
-  else if (child->getStatus() == Status::Unknown1)
-  {
-    tags2 = parent->getTags();
     tags1 = child->getTags();
-  }
-  else
-  {
-    // don't actually know if this case can occur or not
-    tags1 = parent->getTags();
-    tags2 = child->getTags();
+    tags2 = parent->getTags();
   }
   LOG_VART(tags1);
   LOG_VART(tags2);
