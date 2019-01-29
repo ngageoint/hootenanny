@@ -259,35 +259,23 @@ void XmlChangeset::fixMalformedInput()
     for (XmlElementMap::iterator it = _nodes[type].begin(); it != _nodes[type].end(); ++it)
     {
       long node_id = it->first;
+      //  Set the node's status to failed if negative
       if (node_id < 1)
-      {
-        //  Set the node's status to failed
-        _allNodes[node_id]->setStatus(XmlElement::ElementStatus::Failed);
-        //  Update the failed count once
-        ++_failedCount;
-      }
+        failNode(node_id);
     }
     for (XmlElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
     {
       long way_id = it->first;
+      //  Set the node's status to failed if negative
       if (way_id < 1)
-      {
-        //  Set the way's status to failed
-        _allWays[way_id]->setStatus(XmlElement::ElementStatus::Failed);
-        //  Update the failed count once
-        ++_failedCount;
-      }
+        failWay(way_id);
     }
     for (XmlElementMap::iterator it = _relations[type].begin(); it != _relations[type].end(); ++it)
     {
       long relation_id = it->first;
+      //  Set the node's status to failed if negative
       if (relation_id < 1)
-      {
-        //  Set the relation's status to failed
-        _allRelations[relation_id]->setStatus(XmlElement::ElementStatus::Failed);
-        //  Update the failed count once
-        ++_failedCount;
-      }
+        failRelation(relation_id);
     }
   }
 }
@@ -984,26 +972,18 @@ void XmlChangeset::updateFailedChangeset(ChangesetInfoPtr changeset)
   //  Iterate the three changeset type arrays looking for elements to mark
   for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
   {
+    //  Set the relation's status to failed
     for (ChangesetInfo::iterator it = changeset->begin(ElementType::Relation, (ChangesetType)current_type);
          it != changeset->end(ElementType::Relation, (ChangesetType)current_type); ++it)
-    {
-      //  Set the relation's status to failed
-      _allRelations[*it]->setStatus(XmlElement::ElementStatus::Failed);
-      //  Update the failed count once
-      ++_failedCount;
-    }
+      failRelation(*it);
+    //  Set the way's status to failed
     for (ChangesetInfo::iterator it = changeset->begin(ElementType::Way, (ChangesetType)current_type);
          it != changeset->end(ElementType::Way, (ChangesetType)current_type); ++it)
-    {
-      _allWays[*it]->setStatus(XmlElement::ElementStatus::Failed);
-      ++_failedCount;
-    }
+      failWay(*it);
+    //  Set the node's status to failed
     for (ChangesetInfo::iterator it = changeset->begin(ElementType::Node, (ChangesetType)current_type);
          it != changeset->end(ElementType::Node, (ChangesetType)current_type); ++it)
-    {
-      _allNodes[*it]->setStatus(XmlElement::ElementStatus::Failed);
-      ++_failedCount;
-    }
+      failNode(*it);
   }
 }
 
@@ -1223,6 +1203,30 @@ void XmlChangeset::replaceRelationId(long old_id, long new_id)
 {
   //  Update the ID to ID map with the new ID so it is used everywhere that the ID is referenced
   _idMap.updateId(ElementType::Relation, old_id, new_id);
+}
+
+void XmlChangeset::failNode(long id)
+{
+  //  Set the node's status to failed
+  _allNodes[id]->setStatus(XmlElement::ElementStatus::Failed);
+  //  Update the failed count once
+  ++_failedCount;
+}
+
+void XmlChangeset::failWay(long id)
+{
+  //  Set the way's status to failed
+  _allWays[id]->setStatus(XmlElement::ElementStatus::Failed);
+  //  Update the failed count once
+  ++_failedCount;
+}
+
+void XmlChangeset::failRelation(long id)
+{
+  //  Set the relation's status to failed
+  _allRelations[id]->setStatus(XmlElement::ElementStatus::Failed);
+  //  Update the failed count once
+  ++_failedCount;
 }
 
 }

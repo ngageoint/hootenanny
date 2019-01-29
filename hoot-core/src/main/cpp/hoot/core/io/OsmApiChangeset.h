@@ -316,6 +316,13 @@ private:
   void replaceNodeId(long old_id, long new_id);
   void replaceWayId(long old_id, long new_id);
   void replaceRelationId(long old_id, long new_id);
+  /**
+   * @brief failNode/Way/Relation Set element's status to failed and up the failed count
+   * @param id ID of the node/way/relation to fail
+   */
+  void failNode(long id);
+  void failWay(long id);
+  void failRelation(long id);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   XmlElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
