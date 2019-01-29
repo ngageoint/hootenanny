@@ -365,11 +365,7 @@ bool XmlChangeset::fixChangeset(const QString& update)
           version = attributes.value("version").toString().toLong();
       }
       else if (name == "tag" && attributes.hasAttribute("k") && attributes.hasAttribute("v"))
-      {
-        QString k = attributes.value("k").toString();
-        QString v = attributes.value("v").toString();
-        tags[k] = v;
-      }
+        tags[attributes.value("k").toString()] = attributes.value("v").toString();
     }
     else if (type == QXmlStreamReader::EndElement)
     {
