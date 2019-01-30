@@ -309,19 +309,20 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           LOG_TRACE(
             "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
         }
-        else if (scraps1->getElementType() == ElementType::Relation && pid == 0)
-        {
-          const long firstWayIdInRelation =
-            _getFirstWayIdFromRelation(boost::dynamic_pointer_cast<Relation>(scraps1), map);
-          LOG_VART(firstWayIdInRelation);
-          if (firstWayIdInRelation != 0)
-          {
-            wMatch->setPid(firstWayIdInRelation);
-            LOG_TRACE(
-              "Set PID: " << firstWayIdInRelation << " on: " << wMatch->getElementId() <<
-              " (e1Match).");
-          }
-        }
+        // TODO: disabled change for #2867
+//        else if (scraps1->getElementType() == ElementType::Relation && pid == 0)
+//        {
+//          const long firstWayIdInRelation =
+//            _getFirstWayIdFromRelation(boost::dynamic_pointer_cast<Relation>(scraps1), map);
+//          LOG_VART(firstWayIdInRelation);
+//          if (firstWayIdInRelation != 0)
+//          {
+//            wMatch->setPid(firstWayIdInRelation);
+//            LOG_TRACE(
+//              "Set PID: " << firstWayIdInRelation << " on: " << wMatch->getElementId() <<
+//              " (e1Match).");
+//          }
+//        }
       }
 
       if (scraps2 && scraps2->getElementType() == ElementType::Way)
@@ -336,7 +337,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), w1, w2))
         wMatch->reverseOrder();
     }
-    else if (e1->getElementType() == ElementType::Relation &&
+    // TODO: disabled fixes for #2867
+    /*else if (e1->getElementType() == ElementType::Relation &&
              e2->getElementType() == ElementType::Relation)
     {
       // Not sure how to handle this yet or why it would be happening in the first place.
@@ -400,7 +402,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           }
         }
       }
-    }
+    }*/
   }
 
   if (e1Match)
