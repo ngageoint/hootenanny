@@ -875,7 +875,7 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/translations'
             });
-            assert.equal(4, trans.length);
+            assert.equal(5, trans.length);
         });
 
         it('should handle /schema GET', function() {
