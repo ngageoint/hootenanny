@@ -112,6 +112,7 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
     if (aNeighbor->getStatus() == s && it != n2w->end() && it->second.size() >= 2)
     {
       double score = _nm.scorePair(nid, neighbors[i]);
+      LOG_VART(score);
 
       if (score > 0.0)
       {
@@ -240,6 +241,7 @@ boost::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
       d[2] = _ties[i].dx() * multiplier;
       d[3] = _ties[i].dy() * multiplier;
     }
+    LOG_VART(d);
     df->addDataVector("", d);
   }
 
@@ -264,8 +266,19 @@ boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   boost::shared_ptr<Interpolator> bestCandidate;
   for (size_t i = 0; i < candidates.size(); i++)
   {
-    boost::shared_ptr<Interpolator> candidate(Factory::getInstance().constructObject<Interpolator>(
-      candidates[i]));
+    LOG_VARD(candidates[i]);
+    boost::shared_ptr<Interpolator> candidate(
+      Factory::getInstance().constructObject<Interpolator>(candidates[i]));
+    // Setting this upper limit prevents some runaway optimizations.  Those conditions should be
+    // fixed as part of #2893.  The default config value was determined in a way to be high enough
+    // so as not to affect existing tests, as well as accomodate a reasonable runtime based on the
+    // size of the dataset.  Some tweaking to the value may need to occur over time.
+    int maxOptIterations = ConfigOptions().getRubberSheetMaxInterpolatorIterations();
+    if (maxOptIterations == -1)
+    {
+      maxOptIterations = INT_MAX;
+    }
+    candidate->setMaxAllowedPerLoopOptimizationIterations(maxOptIterations);
     vector<string> ind;
     ind.push_back("x");
     ind.push_back("y");
@@ -283,6 +296,8 @@ boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
       bestCandidate = candidate;
       bestError = error;
     }
+    LOG_DEBUG(
+      "Max interpolator loop iterations: " << candidate->getMaxOptimizationLoopIterations());
   }
 
   if (bestCandidate.get() == 0)
@@ -480,6 +495,7 @@ const RubberSheet::Match& RubberSheet::_findMatch(long nid1, long nid2)
 
   for (list<Match>::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
+    LOG_VART(it->nid2);
     if (it->nid2 == nid2)
     {
       return *it;
@@ -554,6 +570,7 @@ vector<double> RubberSheet::calculateTiePointDistances()
   for (vector<Tie>::const_iterator it = _ties.begin(); it != _ties.end(); ++it)
   {
     Tie tiePoint = *it;
+    LOG_TRACE(tiePoint.toString());
     tiePointDistances.push_back(tiePoint.c1.distance(tiePoint.c2));
   }
   return tiePointDistances;

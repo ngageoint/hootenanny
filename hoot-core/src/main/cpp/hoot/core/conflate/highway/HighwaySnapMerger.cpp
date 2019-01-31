@@ -33,24 +33,26 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveReviewsByEidOp.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 
 // Qt
@@ -249,6 +251,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       boost::dynamic_pointer_cast<Way>(scraps1)->setPid(w1->getPid());
     if (scraps2 && scraps2->getElementType() == ElementType::Way)
       boost::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
+    // Reverse the way if w2 is one way and w1 isn't the similar direction as w2
+    if (OneWayCriterion().isSatisfied(w2) && !DirectionFinder::isSimilarDirection(map->shared_from_this(), w1, w2))
+      wMatch->reverseOrder();
   }
 
   LOG_VART(e1Match->getElementId());

@@ -11,7 +11,7 @@ var server = require('../TranslationServer.js');
 
 describe('TranslationServer', function () {
 
-    describe('shear wall (AA011) OSM to ORG translations', function() {
+    describe('shear wall (AA011) OSM to OGR translations', function() {
         it('should handle OSM to TDSv40', function() {
             var trans2tds40 = server.handleInputs({
                 osm: "<osm version='0.6' generator='JOSM'><way id='-39158' visible='true'><nd ref='-39156' /><nd ref='-39157' /><tag k='natural' v='shear_wall' /></way></osm>",
@@ -70,7 +70,7 @@ describe('TranslationServer', function () {
         })
     });
 
-    describe('excavating machine (AF050) OSM to ORG tranlsations', function() {
+    describe('excavating machine (AF050) OSM to OGR translation', function() {
         it('should handle OSM to TDSv40', function() {
             var trans2tds40 = server.handleInputs({
                 osm: "<osm version='0.6' generator='JOSM'> <way id='-39012' visible='true'><nd ref='-39010' /><nd ref='-39011' /><tag k='ele:max' v='324' /><tag k='man_made' v='excavating_machine' /><tag k='uuid' v='{9c1b7b24-c3c9-4ef1-aaf0-1d279f4f232d}' /></way></osm>",
@@ -129,7 +129,7 @@ describe('TranslationServer', function () {
             })
         })
     })
-    describe('watercourse_crossing (AQ111) OSM to ORG tranlsations', function() {
+    describe('watercourse_crossing (AQ111) OSM to OGR translation', function() {
         it('should handle OSM to TDSv40', function() {
             var trans2tds40 = server.handleInputs({
                 osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
@@ -188,7 +188,7 @@ describe('TranslationServer', function () {
             })
         })
     })
-    describe('conveyer:type=bucket: (AF021) OSM to ORG tranlsations', function() {
+    describe('conveyer:type=bucket: (AF021) OSM to OGR translation', function() {
 
         it('should handle OSM to TDSv40', function() {
             var trans2tds40 = server.handleInputs({

@@ -27,6 +27,8 @@
 #include "HighwayTagOnlyMerger.h"
 
 // hoot
+#include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -89,6 +91,16 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       elementToRemove = e1;
     }
 
+    // Reverse the way if way to remove is one way and the two ways aren't similar directions
+    if (elementToKeep->getElementType() == ElementType::Way &&
+        elementToRemove->getElementType() == ElementType::Way)
+    {
+      WayPtr wayToKeep = boost::dynamic_pointer_cast<Way>(elementToKeep);
+      WayPtr wayToRemove = boost::dynamic_pointer_cast<Way>(elementToRemove);
+      if (OneWayCriterion().isSatisfied(wayToRemove) &&
+          !DirectionFinder::isSimilarDirection(map->shared_from_this(), wayToKeep, wayToRemove))
+        wayToKeep->reverseOrder();
+    }
     // There actually could be a relation in here, but the default tag merging doesn't use the
     // element type anyway, so not worrying about it for now.
     elementToKeep->setTags(
@@ -98,6 +110,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     replaced.push_back(
       std::pair<ElementId, ElementId>(
         elementToRemove->getElementId(), elementToKeep->getElementId()));
+    LOG_VART(elementToKeep);
     // Is this necessary?
     RecursiveElementRemover(elementToRemove->getElementId()).apply(map);
   }

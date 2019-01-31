@@ -389,18 +389,6 @@ populated.
 
 Path to this file.  Only modified during testing the Hootenanny options command.
 
-=== conflate.enable.old.roads
-
-* Data Type: bool
-* Default Value: `false`
-
-Enable the old road conflation. This is only necessary when using the `conflate` command. See the
-_Command Line Reference_ for details on the `conflate` command.
-
-By default the `conflate` command will first conflate roads using the circa 2012 conflation
-algorithm and then conflate using the newer (circa 2014) unifying algorithm. If the unifying
-algorithm has road conflation enable then the results could get interesting.
-
 === conflate.match.building.model
 
 * Data Type: string
@@ -2088,6 +2076,14 @@ hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost
 
 If set, the ogr reader will use the value at the specified field to populate node IDs.
 
+=== ogr.reader.ogdi.launder.layer.names
+
+* Data Type: string
+* Default Value: `yes`
+
+GDAL Option: When reading OGDI datasources (VPF etc), setting this to 'yes' causes the layer names to be simplified.
+For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'
+
 === ogr.split.o2s
 
 * Data Type: bool
@@ -3227,6 +3223,16 @@ If set to true, rubber sheeting will log a warning if any requirement for rubber
 met.  e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, an info level log
 statement will be logged instead.  This setting is completely ignored if
 rubber.sheet.fail.when.minimum.tie.points.not.found is set to true.
+
+=== rubber.sheet.max.interpolator.iterations
+
+* Data Type: int
+* Default Value: `200`
+
+The maximum number of interpolation optimization iterations, per optimization loop, an interpolator
+is allowed to run during rubber sheeting.  Use -1 for no iteration limit.  Not supported by all
+interpolators.  Can prevent runaway optimizations with some interpolators.  Lower values may result
+in the selection of a suboptimal interpolator.
 
 === rubber.sheet.minimum.ties
 

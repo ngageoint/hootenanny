@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrUtilities.h"
 
@@ -78,6 +78,7 @@ void OgrUtilities::loadDriverInfo()
   _drivers.push_back(OgrDriverInfo("MySQL:",    "MySQL",          false,    true,   GDAL_OF_ALL));
   _drivers.push_back(OgrDriverInfo("CouchDB:",  "CouchDB",        false,    true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo("GFT:",      "GFT",            false,    true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo("gltp:",     "OGR_OGDI",       false,    true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo("MSSQL:",    "MSSQLSpatial",   false,    true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo("ODBC:",     "ODBC",           false,    true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo("OCI:",      "OCI",            false,    true,   GDAL_OF_ALL));
@@ -201,6 +202,14 @@ boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, b
     options["Y_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLatfield();
 //    options["Z_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvZfield();
     options["KEEP_GEOM_COLUMNS"] = ConfigOptions().getOgrReaderCsvKeepGeomFields();
+  }
+  if (QString(driverInfo._driverName) == "OGR_OGDI")
+  {
+    // From the GDAL docs:
+    // From GDAL/OGR 1.8.0, setting the OGR_OGDI_LAUNDER_LAYER_NAMES configuration option
+    // (or environment variable) to YES causes the layer names to be simplified.
+    // For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'
+    options["OGR_OGDI_LAUNDER_LAYER_NAMES"] = ConfigOptions().getOgrReaderOgdiLaunderLayerNames();
   }
 
   boost::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),

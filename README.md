@@ -88,7 +88,7 @@ Access to Hootenanny core capabilities are exposed through a web services API fo
 Command line access is available and exposes additional functionalities not available from the web user interface.  See the "Usage" section below for examples, as well as the Command Line Documentation section of the User Documentation.
 
 # Programming Language Bindings
-Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/user/JavascriptOverview.asciidoc) available which expose core conflation capabilities.
+Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities.
 
 # Supported Data Formats
 See the Hootenanny User Guide [Supported Data Formats section](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc).
