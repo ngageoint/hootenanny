@@ -38,11 +38,18 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, WayJoinerOp)
 
 WayJoinerOp::WayJoinerOp()
 {
+  setConfiguration(conf());
 }
 
-void WayJoinerOp::apply(OsmMapPtr &map)
+void WayJoinerOp::setConfiguration(const Settings& conf)
 {
-  WayJoiner::join(map);
+  ConfigOptions options(conf);
+  _wayJoiner.reset(Factory::getInstance().constructObject<WayJoiner>(options.getWayJoiner()));
+}
+
+void WayJoinerOp::apply(OsmMapPtr& map)
+{
+  _wayJoiner->join(map);
 }
 
 }

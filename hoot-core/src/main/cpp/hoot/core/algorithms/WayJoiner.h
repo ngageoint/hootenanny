@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYJOINER_H
@@ -33,85 +33,31 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
 
+/**
+ * Interface for way joiners
+ */
 class WayJoiner
 {
 public:
 
-  typedef enum
-  {
-    ParentFirst,
-    ParentLast,
-    ShareFirstNode
-  } JoinAtNodeMergeType;
-
-  WayJoiner(const OsmMapPtr& map);
+  static std::string className() { return "hoot::WayJoiner"; }
 
   /**
    * @brief join Runs all joining algorithms
    */
-  static void join(const OsmMapPtr& map);
-  void join();
+  virtual void join(const OsmMapPtr& map) = 0;
 
   /**
    * @brief get/set parent ID reset flag
    */
-  void setLeavePid(bool leavePid) { _leavePid = leavePid; }
-  bool getLeavePid() { return _leavePid; }
+  virtual void setLeavePid(bool leavePid) = 0;
+  virtual bool getLeavePid() const = 0;
 
-private:
-
-  /**
-   * @brief joinParentChild Simplest joining algorithm that joins a way with a parent id to that parent
-   */
-  void joinParentChild();
-
-  /**
-   * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
-   *    attempts to order them into adjoining way order, then joins them
-   */
-  void joinSiblings();
-
-  /**
-   * @brief joinAtNode Joining algorithm that searches all ways that have a parent id and tries
-   *    to join them with adjacent ways that have the same tags
-   */
-  void joinAtNode();
-
-  /**
-   * @brief areJoinable Check the status of the ways to see if they are compatible when joining at a node
-   *    essentially UNKNOWN1 and UNKNOWN2 ways aren't joinable together
-   */
-  bool areJoinable(const WayPtr& w1, const WayPtr& w2);
-
-  /**
-   * @brief resetParents Resets parent id for all ways after joining operation has completed
-   *    does nothing if _leavePid is true
-   */
-  void resetParents();
-
-  /**
-   * @brief rejoinSiblings Function that rejoins ways that all have the same parent id
-   *    but that parent way doesn't exist
-   * @param way_ids Deque of sorted ways to join
-   */
-  void rejoinSiblings(std::deque<long>& way_ids);
-
-  /**
-   * @brief joinWays Function to rejoin two ways
-   * @param parent Way that is modified to include the child way
-   * @param child Way that will be merged into the parent and then deleted
-   */
-  void joinWays(const WayPtr& parent, const WayPtr& child);
-
-  /** Pointer to the map to work on */
-  OsmMapPtr _map;
-  /** Debugging flag to leave parent IDs intact for output */
-  bool _leavePid;
+  virtual int getNumJoined() const = 0;
 };
 
 }

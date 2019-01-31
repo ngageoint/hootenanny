@@ -30,11 +30,13 @@
 
 //  Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
-class WayJoinerOp : public OsmMapOperation
+class WayJoinerOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
 {
 public:
 
@@ -47,7 +49,19 @@ public:
    */
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual QString getDescription() const { return "Joins split ways"; }
+  virtual void setConfiguration(const Settings& conf);
+
+  virtual QString getDescription() const
+  { return "Joins ways split during cleaning and conflation matching operations"; }
+
+  virtual QString getInitStatusMessage() { return "Rejoining ways split during conflation..."; }
+
+  virtual QString getCompletedStatusMessage()
+  { return "Rejoined " + QString::number(_numAffected) + " ways"; }
+
+private:
+
+  boost::shared_ptr<WayJoiner> _wayJoiner;
 };
 
 }

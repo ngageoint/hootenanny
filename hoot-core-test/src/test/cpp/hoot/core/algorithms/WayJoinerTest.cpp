@@ -27,7 +27,7 @@
 
 //  Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/WayJoiner.h>
+#include <hoot/core/algorithms/WayJoiner1.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/algorithms/splitter/CornerSplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
@@ -65,7 +65,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    WayJoiner::join(map);
+    WayJoiner1::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -84,7 +84,7 @@ public:
 
     CornerSplitter::splitCorners(map);
 
-    WayJoiner::join(map);
+    WayJoiner1::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -103,7 +103,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    WayJoiner::join(map);
+    WayJoiner1::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
