@@ -471,7 +471,7 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VARD(wayWithTagsToLose->getElementId());
 
   // deal with one way streets
-  // TODO: this change fixes one road in the Maldives but breaks several others for #2888
+  // TODO: this change is not good yet
   OneWayCriterion oneWayCrit;
   if (oneWayCrit.isSatisfied(wayWithTagsToLose) && !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
       !DirectionFinder::isSimilarDirection(

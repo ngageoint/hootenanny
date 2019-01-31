@@ -52,6 +52,18 @@ namespace hoot
 
 bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr w1, ConstWayPtr w2)
 {
+  // fix for #2888
+  if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
+  {
+    return false;
+  }
+  else if ((w1->getNodeIds()[0] == w2->getNodeIds()[0]) ||
+           (w1->getNodeIds()[w1->getNodeIds().size() - 1] ==
+            w2->getNodeIds()[w2->getNodeIds().size() - 1]))
+  {
+    return false;
+  }
+
   WayDiscretizer wd1(map, w1);
   WayDiscretizer wd2(map, w2);
   vector<Coordinate> cs1, cs2;
@@ -68,18 +80,31 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
     dSumReverse += Distance::euclidean(cs1[i], cs2[pointCount - i - 1]);
   }
 
-  //dSumSame = round(dSumSame * 10000) / 10000;
-  //dSumReverse = round(dSumReverse * 10000) / 10000;
+  // TODO: probably won't be using the rounding or the percent diff...remove
+  const double dSumSameRounded = round(dSumSame * 10) / 10;
+  const double dSumReverseRounded = round(dSumReverse * 10) / 10;
+//  const bool sameDirection = dSumSameRounded < dSumReverseRounded;
+  const double percentageDiffRounded =
+    abs((dSumReverseRounded - dSumSameRounded) / dSumReverseRounded);
+  const double percentageRounded = abs((dSumReverseRounded - dSumSame) / dSumReverse);
+
   const bool sameDirection = dSumSame < dSumReverse;
   QString directionText = "not the same direction";
   if (sameDirection)
   {
     directionText = "same direction";
   }
+  const int coordPrecision = ConfigOptions().getWriterPrecision();
   LOG_DEBUG(
     "Comparing " << w1->getElementId() << " with " << w2->getElementId() << ": " << directionText <<
-    ", same score: " << QString::number(dSumSame, 'g', 17) << ", reverse score: " <<
-    QString::number(dSumReverse, 'g', 17) << ", difference: " << (dSumReverse - dSumSame));
+    ", rounded same score: " << QString::number(dSumSameRounded, 'g', coordPrecision) <<
+    ", rounded reverse score: " << QString::number(dSumReverseRounded, 'g', coordPrecision) <<
+    ", rounded difference: " << (dSumReverseRounded - dSumSameRounded) <<
+    ", rounded percentage difference: " << QString::number(percentageDiffRounded, 'g', coordPrecision) <<
+    ", original same score: " << QString::number(dSumSame, 'g', coordPrecision) <<
+    ", original reverse score: " << QString::number(dSumReverse, 'g', coordPrecision) <<
+    ", original difference: " << QString::number((dSumReverse - dSumSame), 'g', coordPrecision) <<
+    ", original percentage difference: " << QString::number(percentageRounded, 'g', coordPrecision));
   return sameDirection;
 }
 
