@@ -95,9 +95,10 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     LOG_VARD(elementToKeep);
     LOG_VARD(elementToRemove);
 
-    // not sure what implications this has outside of the single test dataset I've tested on so far
-    if (!elementToKeep->getTags().getName().isEmpty() &&
-        !elementToRemove->getTags().getName().isEmpty() &&
+    // don't try to join if there are explicitly conflicting names; fix for #2888; not sure what
+    // implications this has outside of the single test dataset I've tested on so far
+    if (elementToKeep->getTags().hasName() &&
+        elementToRemove->getTags().hasName() &&
         !Tags::haveMatchingName(elementToKeep->getTags(), elementToRemove->getTags()))
     {
       LOG_DEBUG("Conflicting name tags.  Skipping merge.");

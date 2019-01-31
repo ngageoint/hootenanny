@@ -379,6 +379,11 @@ QStringList Tags::getMatchingKeys(const QStringList& k)
   return result;
 }
 
+bool Tags::hasName() const
+{
+  return !getName().isEmpty();
+}
+
 bool Tags::haveMatchingName(const Tags& tags1, const Tags& tags2)
 {
   const QStringList tag1Names = tags1.getNames();

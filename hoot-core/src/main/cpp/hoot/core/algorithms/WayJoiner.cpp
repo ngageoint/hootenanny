@@ -118,21 +118,21 @@ void WayJoiner::joinParentChild()
     long parent_id = way->getPid();
     LOG_VARD(parent_id);
     WayPtr parent = ways[parent_id];
+    Tags parentTags;
     if (parent)
     {
       LOG_VARD(parent->getElementId());
+      parentTags = parent->getTags();
     }
     else
     {
       LOG_DEBUG("Parent with ID: " << parent_id << " does not exist.");
     }
 
-//    if (parent && ((parent->getTags().getName().isEmpty() && !way->getTags().getName().isEmpty()) ||
-//        (way->getTags().getName().isEmpty() && !parent->getTags().getName().isEmpty()) ||
-//        Tags::haveMatchingName(parent->getTags(), way->getTags())))
-    if (parent && !parent->getTags().getName().isEmpty() &&
-        !way->getTags().getName().isEmpty() &&
-        !Tags::haveMatchingName(parent->getTags(), way->getTags()))
+    // don't try to join if there are explicitly conflicting names; fix for #2888
+    Tags wayTags = way->getTags();
+    if (parent && parentTags.hasName() && wayTags.hasName() &&
+        !Tags::haveMatchingName(parentTags, wayTags))
     {
       LOG_DEBUG("Conflicting name tags.  Skipping parent/child join.");
       continue;
@@ -180,8 +180,7 @@ void WayJoiner::joinAtNode()
   unordered_set<long>::size_type currentNumSplitParentIds = ids.max_size();
   int numIterations = 0;
 
-  // keep iterating until we're no longer joining any ways
-  // TODO: enabled change for #2867 (need to check it toggled on/off for #2888)
+  // keep iterating until we're no longer joining any ways; fix for #2867
   while (currentNumSplitParentIds > 0)
   {
     LOG_DEBUG("joinAtNode iteration: " << numIterations + 1);
@@ -244,11 +243,10 @@ void WayJoiner::joinAtNode()
             // change for #2867
             cTags.remove(MetadataTags::Length());
 
-            //  Check for equivalent tags
-            //if (pTags == cTags || pTags.dataOnlyEqual(cTags))
-            // TODO: experimental change for #2888
-            if ((pTags.getName().isEmpty() && !cTags.getName().isEmpty()) ||
-                (cTags.getName().isEmpty() && !pTags.getName().isEmpty()) ||
+            // don't try to join if there are explicitly conflicting names; fix for #2888
+            const bool parentHasName = pTags.hasName();
+            const bool childHasName = cTags.hasName();
+            if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
                 Tags::haveMatchingName(pTags, cTags))
             {
               joinWays(way, child);
@@ -489,6 +487,7 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
         _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_DEBUG("Reversing order of " << wayWithTagsToKeep->getElementId());
+    // make sure this reversal gets done before checking the join type later on
     wayWithTagsToKeep->reverseOrder();
   }
 
@@ -535,13 +534,13 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
 
   //  Merge the tags
 
-  // #2888 fix #1
+  // #2888 fix
   Tags tags1 = wayWithTagsToKeep->getTags();
   Tags tags2 = wayWithTagsToLose->getTags();
   LOG_VARD(tags1);
   LOG_VARD(tags2);
 
-  // If each of these has a length tag, then we need to add up the new value.
+  // If each of these has a length tag, then we need to add up the new value for the joined ways.
   // This logic should possibly be a part of the default tag merging instead of being done here
   // and should also add the possibility for multiple options for the length tag key...leaving this
   // as is for now (fix for #2867)

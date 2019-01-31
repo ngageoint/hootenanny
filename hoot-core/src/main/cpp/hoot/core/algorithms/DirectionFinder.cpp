@@ -55,11 +55,12 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   LOG_VARD(w1->getNodeIds());
   LOG_VARD(w2->getNodeIds());
 
-  // fix for #2888
+  // skip empty ways
   if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
   {
     return false;
   }
+  // check for shared start/end node combos that show reversal; fix for #2888
   else if ((w1->getNodeIds()[0] == w2->getNodeIds()[0]) ||
            (w1->getNodeIds()[w1->getNodeIds().size() - 1] ==
             w2->getNodeIds()[w2->getNodeIds().size() - 1]))
