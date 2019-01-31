@@ -407,19 +407,15 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VARD(child->getStatus());
 
   //  Check if the two ways are able to be joined back up
-  vector<long> child_nodes = child->getNodeIds();
-  LOG_VARD(child_nodes.size());
-  LOG_VARD(child_nodes);
-  vector<long> parent_nodes = parent->getNodeIds();
-  LOG_VARD(parent_nodes.size());
-  LOG_VARD(parent_nodes);
+
   //  Make sure that there are nodes in the ways
-  if (parent_nodes.size() == 0 || child_nodes.size() == 0)
+  if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
   {
     LOG_DEBUG("One or more of the ways to be joined are empty...skipping join.");
     return;
   }
 
+  // make sure tags go in the right direction (may be able to simplify)
   WayPtr wayWithTagsToKeep;
   WayPtr wayWithTagsToLose;
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
@@ -471,8 +467,8 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VARD(wayWithTagsToLose->getElementId());
 
   // deal with one way streets
-  // TODO: this change is not good yet
   OneWayCriterion oneWayCrit;
+  // TODO: Is !oneWayCrit.isSatisfied(wayWithTagsToKeep) to strict?
   if (oneWayCrit.isSatisfied(wayWithTagsToLose) && !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
       !DirectionFinder::isSimilarDirection(
         _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
@@ -480,6 +476,13 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
     LOG_DEBUG("Reversing order of " << wayWithTagsToKeep->getElementId());
     wayWithTagsToKeep->reverseOrder();
   }
+
+  vector<long> parent_nodes = parent->getNodeIds();
+  LOG_VARD(parent_nodes.size());
+  LOG_VARD(parent_nodes);
+  vector<long> child_nodes = child->getNodeIds();
+  LOG_VARD(child_nodes.size());
+  LOG_VARD(child_nodes);
 
   //  First make sure that they share the same node
   JoinAtNodeMergeType joinType;
@@ -505,9 +508,12 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
     LOG_DEBUG("No join type found.");
     return;
   }
+  LOG_VARD(joinType);
+
   //  Remove the split parent id
   child->resetPid();
 
+  // TODO: Disabled changes for #2867
   //  const bool eitherStreetIsOneWay = oneWayCrit.isSatisfied(parent) || oneWayCrit.isSatisfied(child);
   //  LOG_VARD(eitherStreetIsOneWay);
   //  if (eitherStreetIsOneWay && joinType == JoinAtNodeMergeType::ShareFirstNode)
@@ -544,24 +550,15 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
 //  LOG_VARD(tags2);
 
   // #2888 fix #1
-  Tags tags1 = parent->getTags();
-  Tags tags2 = child->getTags();
-  LOG_VARD(parent->getStatus());
-  LOG_VARD(child->getStatus());
-  //  Reverse child/parent tags if only the child is Unknown1, special case for attribute transfer
-  if (child->getStatus() == Status::Unknown1 && parent->getStatus() != Status::Unknown1)
-  {
-    tags1 = child->getTags();
-    tags2 = parent->getTags();
-  }
+  Tags tags1 = wayWithTagsToKeep->getTags();
+  Tags tags2 = wayWithTagsToLose->getTags();
   LOG_VARD(tags1);
   LOG_VARD(tags2);
 
   // If each of these has a length tag, then we need to add up the new value.
   // This logic should possibly be a part of the default tag merging instead of being done here
   // and should also add the possibility for multiple options for the length tag key...leaving this
-  // as is for now.
-  // fix for #2867
+  // as is for now (fix for #2867)
   double totalLength = 0.0;
   bool eitherTagsHaveLength =
     tags1.contains(MetadataTags::Length()) || tags2.contains(MetadataTags::Length());
@@ -590,8 +587,6 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
     totalLength = length1 + length2;
   }
 
-  //Tags mergedTags =
-    //TagMergerFactory::mergeTags(parent->getTags(), child->getTags(), ElementType::Way);
   Tags mergedTags = TagMergerFactory::mergeTags(tags1, tags2, ElementType::Way);
   if (eitherTagsHaveLength)
   {
