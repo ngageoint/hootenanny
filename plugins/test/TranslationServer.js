@@ -173,7 +173,7 @@ describe('TranslationServer', function () {
             assert.equal(attrs.waterway, 'river');
         });
 
-        it('should handle translateFrom GET for MGCP', function() {
+        it('should handle translateFrom GET for GGDMv30', function() {
             //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
             var attrs = server.handleInputs({
                 fcode: 'BH140',

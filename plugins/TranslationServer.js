@@ -41,13 +41,18 @@ var schemaMap = {
 };
 
 //Getting osm tags for fcode
-var fcodeLookup = {
-    TDSv40: require(HOOT_HOME + '/plugins/etds40_osm.js'),
-    TDSv61: require(HOOT_HOME + '/plugins/etds61_osm.js'),
-    MGCP: require(HOOT_HOME + '/plugins/emgcp_osm.js'),
-    // dnc: require(HOOT_HOME + '/plugins/ednc_osm.js'),
-    GGDMv30: require(HOOT_HOME + '/plugins/eggdm30_osm.js')
-};
+// var fcodeLookup = {
+//     TDSv40: require(HOOT_HOME + '/plugins/etds40_osm.js'),
+//     TDSv61: require(HOOT_HOME + '/plugins/etds61_osm.js'),
+//     MGCP: require(HOOT_HOME + '/plugins/emgcp_osm.js'),
+//     // dnc: require(HOOT_HOME + '/plugins/ednc_osm.js'),
+//     GGDMv30: require(HOOT_HOME + '/plugins/eggdm30_osm.js')
+// };
+
+var fcodeLookup = require(HOOT_HOME + '/translations/TranslateFCode.js');
+
+
+
 
 var translationsMap = {
     toogr: {
@@ -375,16 +380,23 @@ var osm2ogr = function(params) {
 // Translated Schema to OSM handler
 var ogr2osm = function(params) {
 
+    // if (params.method === 'POST') {
+    //     //translate tags in xml from a supported schema to osm
+    //     return postHandler(params);
+    // } else if (params.method === 'GET') {
+    //     //Get OSM tags for F_CODE
+    //     createUuid = hoot.UuidHelper.createUuid;
+    //     var osm = fcodeLookup[params.translation].toOSM({
+    //         'Feature Code': params.fcode
+    //     }, '', '');
+
+    //     return osm;
+    // }
     if (params.method === 'POST') {
         //translate tags in xml from a supported schema to osm
         return postHandler(params);
     } else if (params.method === 'GET') {
-        //Get OSM tags for F_CODE
-        createUuid = hoot.UuidHelper.createUuid;
-        var osm = fcodeLookup[params.translation].toOSM({
-            'Feature Code': params.fcode
-        }, '', '');
-
+        var osm = fcodeLookup.translateFCode(params.fcode, params.translation);
         return osm;
     }
 }
