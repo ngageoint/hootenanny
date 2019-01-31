@@ -74,8 +74,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
 
   if (e1 && e2)
   {
-    LOG_VART(e1->getStatus());
-    LOG_VART(e2->getStatus());
+    LOG_VARD(e1->getStatus());
+    LOG_VARD(e2->getStatus());
 
     ElementPtr elementToKeep;
     ElementPtr elementToRemove;
@@ -92,8 +92,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     }
     //LOG_VART(elementToKeep->getElementId());
     //LOG_VART(elementToRemove->getElementId());
-    LOG_VART(elementToKeep);
-    LOG_VART(elementToRemove);
+    LOG_VARD(elementToKeep);
+    LOG_VARD(elementToRemove);
 
     // Reverse the way if way to remove is one way and the two ways aren't similar directions
     if (elementToKeep->getElementType() == ElementType::Way &&
@@ -104,7 +104,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       if (OneWayCriterion().isSatisfied(wayToRemove) &&
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), wayToKeep, wayToRemove))
       {
-        LOG_TRACE("Reversing " << wayToKeep->getElementId());
+        LOG_DEBUG("Reversing " << wayToKeep->getElementId());
         wayToKeep->reverseOrder();
       }
     }
@@ -118,7 +118,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     replaced.push_back(
       std::pair<ElementId, ElementId>(
         elementToRemove->getElementId(), elementToKeep->getElementId()));
-    LOG_VART(elementToKeep);
+    LOG_VARD(elementToKeep);
     // Is this necessary?
     RecursiveElementRemover(elementToRemove->getElementId()).apply(map);
   }

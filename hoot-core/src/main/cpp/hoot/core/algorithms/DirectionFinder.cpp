@@ -52,16 +52,11 @@ namespace hoot
 
 bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr w1, ConstWayPtr w2)
 {
-  LOG_VART(w1->getElementId());
-  LOG_VART(w2->getElementId());
-
   WayDiscretizer wd1(map, w1);
   WayDiscretizer wd2(map, w2);
   vector<Coordinate> cs1, cs2;
   wd1.discretize(5.0, cs1);
   wd2.discretize(5.0, cs2);
-  LOG_VART(cs1.size());
-  LOG_VART(cs2.size());
 
   double dSumSame = 0;
   double dSumReverse = 0;
