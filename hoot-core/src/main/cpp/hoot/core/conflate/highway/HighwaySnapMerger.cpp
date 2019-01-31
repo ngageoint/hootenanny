@@ -280,14 +280,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   if (e1Match->getElementType() == ElementType::Way)
   {
-    // The cases involving relations here are made necessary by the "else if (matches.size() > 1)"
-    // code block in MultiLineStringSplitter::createSublines.  Arbitrarily, the first way relation
-    // member is being grabbed, which has helped rejoin ways correctly for the situations
-    // encountered in #2867, but possibly something else should be done there instead (?).  Also,
-    // only the situations encountered with relation in data are being handled here on a case by
-    // case basis to avoid overcomplicating code.  That's why there is a lack of symmetry in the
-    // relation handling code compared to the way handling code.
-
     if (e1->getElementType() == ElementType::Way && e2->getElementType() == ElementType::Way)
     {
       WayPtr w1 = boost::dynamic_pointer_cast<Way>(e1);
@@ -309,20 +301,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           LOG_TRACE(
             "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
         }
-        // TODO: disabled change for #2867
-//        else if (scraps1->getElementType() == ElementType::Relation && pid == 0)
-//        {
-//          const long firstWayIdInRelation =
-//            _getFirstWayIdFromRelation(boost::dynamic_pointer_cast<Relation>(scraps1), map);
-//          LOG_VART(firstWayIdInRelation);
-//          if (firstWayIdInRelation != 0)
-//          {
-//            wMatch->setPid(firstWayIdInRelation);
-//            LOG_TRACE(
-//              "Set PID: " << firstWayIdInRelation << " on: " << wMatch->getElementId() <<
-//              " (e1Match).");
-//          }
-//        }
       }
 
       if (scraps2 && scraps2->getElementType() == ElementType::Way)
@@ -337,72 +315,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), w1, w2))
         wMatch->reverseOrder();
     }
-    // TODO: disabled fixes for #2867
-    /*else if (e1->getElementType() == ElementType::Relation &&
-             e2->getElementType() == ElementType::Relation)
-    {
-      // Not sure how to handle this yet or why it would be happening in the first place.
-    }
-    else if (e1->getElementType() == ElementType::Relation ||
-             e2->getElementType() == ElementType::Relation)
-    {
-      RelationPtr r;
-      WayPtr w;
-
-      if (e1->getElementType() == ElementType::Relation)
-      {
-        r = boost::dynamic_pointer_cast<Relation>(e1);
-        w = boost::dynamic_pointer_cast<Way>(e2);
-      }
-      else
-      {
-        r = boost::dynamic_pointer_cast<Relation>(e2);
-        w = boost::dynamic_pointer_cast<Way>(e1);
-      }
-
-      const long firstWayIdInRelation =
-        _getFirstWayIdFromRelation(boost::dynamic_pointer_cast<Relation>(r), map);
-      LOG_VART(firstWayIdInRelation);
-      if (firstWayIdInRelation != 0)
-      {
-        WayPtr wMatch = boost::dynamic_pointer_cast<Way>(e1Match);
-        const long pid = Way::getPid(firstWayIdInRelation, w->getId());
-        wMatch->setPid(pid);
-        LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
-
-        if (scraps1 && scraps1->getElementType() == ElementType::Way)
-        {
-          boost::dynamic_pointer_cast<Way>(scraps1)->setPid(firstWayIdInRelation);
-          LOG_TRACE(
-            "Set PID: " << firstWayIdInRelation << " on: " << scraps1->getElementId() <<
-            " (scraps1).");
-        }
-
-        if (scraps2 && scraps2->getElementType() == ElementType::Way)
-        {
-          boost::dynamic_pointer_cast<Way>(scraps2)->setPid(w->getPid());
-          LOG_TRACE(
-            "Set PID: " << w->getPid() << " on: " << scraps2->getElementId() << " (scraps2).");
-        }
-      }
-
-      if (e1->getElementType() == ElementType::Relation)
-      {
-        const std::vector<RelationData::Entry> relationMembers = r->getMembers();
-        for (size_t i = 0; i < relationMembers.size(); i++)
-        {
-          ElementPtr member = map->getElement(relationMembers[i].getElementId());
-          if (member && member->getElementType() == ElementType::Way)
-          {
-            Tags mergedTags =
-              TagMergerFactory::mergeTags(e2->getTags(), member->getTags(), ElementType::Way);
-            mergedTags =
-              TagMergerFactory::mergeTags(e1->getTags(), mergedTags, ElementType::Way);
-            member->setTags(mergedTags);
-          }
-        }
-      }
-    }*/
   }
 
   if (e1Match)

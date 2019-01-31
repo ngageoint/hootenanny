@@ -513,11 +513,6 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   {
     joinType = JoinAtNodeMergeType::ParentLast;
   }
-  // TODO: disabled fix for #2867
-//  else if (child_nodes[0] == parent_nodes[0])
-//  {
-//    joinType = JoinAtNodeMergeType::ShareFirstNode;
-//  }
   else
   {
     LOG_DEBUG("No join type found.");
@@ -537,16 +532,6 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
 
   //  Remove the split parent id
   child->resetPid();
-
-  // TODO: Disabled changes for #2867
-  //  const bool eitherStreetIsOneWay = oneWayCrit.isSatisfied(parent) || oneWayCrit.isSatisfied(child);
-  //  LOG_VARD(eitherStreetIsOneWay);
-  //  if (eitherStreetIsOneWay && joinType == JoinAtNodeMergeType::ShareFirstNode)
-  //  {
-  //    LOG_DEBUG(
-  //      "Skipping reversal required to join ways due to one or more of the ways being one way streets.");
-  //    return;
-  //  }
 
   //  Merge the tags
 
@@ -611,15 +596,6 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
     parent->setNodes(child_nodes);
     parent->addNodes(parent_nodes);
   }
-  // TODO: disabled fix for #2867
-//  else if (joinType == JoinAtNodeMergeType::ShareFirstNode)
-//  {
-//    // remove the first of the child way nodes, reverse the rest, and prepend to the parent
-//    child_nodes.erase(child_nodes.begin());
-//    std::reverse(child_nodes.begin(), child_nodes.end());
-//    parent->setNodes(child_nodes);
-//    parent->addNodes(parent_nodes);
-//  }
 
   //  Keep the conflated status in the parent if the child being merged is conflated
   if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
