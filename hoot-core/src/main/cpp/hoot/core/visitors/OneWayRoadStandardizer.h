@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- *
+ * Replaces all reversed one way roads with regular one way roads
  */
 class OneWayRoadStandardizer : public ElementVisitor, public OperationStatusInfo
 {
@@ -56,7 +56,7 @@ public:
   { return "Standardized " + QString::number(_numAffected) + " one way roads."; }
 
   virtual QString getDescription() const
-  { return ""; }
+  { return "Replaces all reversed one way roads with regular one way roads"; }
 };
 
 }
