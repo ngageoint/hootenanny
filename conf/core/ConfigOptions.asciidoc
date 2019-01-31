@@ -634,13 +634,6 @@ Debugging: The filename to use when saving the debug map during conflation.
 
 List of tags to ignore when performing differential conflation with tags.
 
-=== direction.finder.length.comparison.tolerance
-
-* Data Type: double
-* Default Value: `0.00001`
-
-TODO
-
 === distance.node.criterion.center
 
 * Data Type: string
