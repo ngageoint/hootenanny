@@ -36,6 +36,8 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/criterion/ParallelWayCriterion.h>
+#include <hoot/core/algorithms/extractors/ParallelScoreExtractor.h>
 
 #include <unordered_set>
 #include <vector>
@@ -124,8 +126,22 @@ void WayJoiner::joinParentChild()
     {
       LOG_DEBUG("Parent with ID: " << parent_id << " does not exist.");
     }
-    //  Join this way to the parent
-    joinWays(parent, way);
+
+//    if (parent && ((parent->getTags().getName().isEmpty() && !way->getTags().getName().isEmpty()) ||
+//        (way->getTags().getName().isEmpty() && !parent->getTags().getName().isEmpty()) ||
+//        Tags::haveMatchingName(parent->getTags(), way->getTags())))
+    if (parent && !parent->getTags().getName().isEmpty() &&
+        !way->getTags().getName().isEmpty() &&
+        !Tags::haveMatchingName(parent->getTags(), way->getTags()))
+    {
+      LOG_DEBUG("Conflicting name tags.  Skipping parent/child join.");
+      continue;
+    }
+    else
+    {
+      //  Join this way to the parent
+      joinWays(parent, way);
+    }
   }
 }
 
@@ -468,15 +484,12 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
 
   // deal with one way streets
   OneWayCriterion oneWayCrit;
-  // TODO: Is !oneWayCrit.isSatisfied(wayWithTagsToKeep) too strict?
-  //bool flippedKeepWay = false;
   if (oneWayCrit.isSatisfied(wayWithTagsToLose) && !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
       !DirectionFinder::isSimilarDirection(
         _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_DEBUG("Reversing order of " << wayWithTagsToKeep->getElementId());
     wayWithTagsToKeep->reverseOrder();
-    //flippedKeepWay = true;
   }
 
   vector<long> parent_nodes = parent->getNodeIds();
@@ -508,14 +521,19 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   else
   {
     LOG_DEBUG("No join type found.");
-//    if (flippedKeepWay)
-//    {
-//      LOG_DEBUG("Flipping keep way back to original direction...");
-//      wayWithTagsToKeep->reverseOrder();
-//    }
     return;
   }
   LOG_VARD(joinType);
+
+  // doesn't work
+//  const double parallelScore =
+//    ParallelScoreExtractor().extract(*_map, wayWithTagsToKeep, wayWithTagsToLose);
+//  LOG_VARD(parallelScore);
+//  if (parallelScore < 0.138)
+//  {
+//    LOG_DEBUG("Join failed on parallel score of: " << parallelScore);
+//    return;
+//  }
 
   //  Remove the split parent id
   child->resetPid();
