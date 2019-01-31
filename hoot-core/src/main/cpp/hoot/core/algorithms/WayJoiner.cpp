@@ -470,16 +470,16 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VART(wayWithTagsToKeep->getElementId());
   LOG_VART(wayWithTagsToLose->getElementId());
 
-  // record one way streets
-  // TODO: this change fixes one road in the Maldives but breaks merging for others for #2888
-  OneWayCriterion oneWayCrit;
-  if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
-      !DirectionFinder::isSimilarDirection(
-        _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
-  {
-    LOG_TRACE("Reversing order of " << wayWithTagsToKeep->getElementId());
-    wayWithTagsToKeep->reverseOrder();
-  }
+  // deal with one way streets
+  // TODO: this change fixes one road in the Maldives but breaks several others for #2888
+//  OneWayCriterion oneWayCrit;
+//  if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
+//      !DirectionFinder::isSimilarDirection(
+//        _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
+//  {
+//    LOG_TRACE("Reversing order of " << wayWithTagsToKeep->getElementId());
+//    wayWithTagsToKeep->reverseOrder();
+//  }
 
   //  First make sure that they share the same node
   JoinAtNodeMergeType joinType;
