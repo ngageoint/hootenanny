@@ -468,13 +468,15 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
 
   // deal with one way streets
   OneWayCriterion oneWayCrit;
-  // TODO: Is !oneWayCrit.isSatisfied(wayWithTagsToKeep) to strict?
+  // TODO: Is !oneWayCrit.isSatisfied(wayWithTagsToKeep) too strict?
+  //bool flippedKeepWay = false;
   if (oneWayCrit.isSatisfied(wayWithTagsToLose) && !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
       !DirectionFinder::isSimilarDirection(
         _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_DEBUG("Reversing order of " << wayWithTagsToKeep->getElementId());
     wayWithTagsToKeep->reverseOrder();
+    //flippedKeepWay = true;
   }
 
   vector<long> parent_nodes = parent->getNodeIds();
@@ -506,6 +508,11 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   else
   {
     LOG_DEBUG("No join type found.");
+//    if (flippedKeepWay)
+//    {
+//      LOG_DEBUG("Flipping keep way back to original direction...");
+//      wayWithTagsToKeep->reverseOrder();
+//    }
     return;
   }
   LOG_VARD(joinType);
@@ -524,30 +531,6 @@ void WayJoiner::joinWays(const WayPtr& parent, const WayPtr& child)
   //  }
 
   //  Merge the tags
-
-  // TODO: Disabled changes for #2867
-//  Tags tags1;
-//  Tags tags2;
-//  LOG_VARD(parent->getStatus());
-//  LOG_VARD(child->getStatus());
-//  if (parent->getStatus() == Status::Unknown1)
-//  {
-//    tags1 = parent->getTags();
-//    tags2 = child->getTags();
-//  }
-//  else if (child->getStatus() == Status::Unknown1)
-//  {
-//    tags2 = parent->getTags();
-//    tags1 = child->getTags();
-//  }
-//  else
-//  {
-//    // don't actually know if this case can occur or not
-//    tags1 = parent->getTags();
-//    tags2 = child->getTags();
-//  }
-//  LOG_VARD(tags1);
-//  LOG_VARD(tags2);
 
   // #2888 fix #1
   Tags tags1 = wayWithTagsToKeep->getTags();

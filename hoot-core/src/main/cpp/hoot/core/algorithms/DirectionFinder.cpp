@@ -52,6 +52,9 @@ namespace hoot
 
 bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr w1, ConstWayPtr w2)
 {
+  LOG_VARD(w1->getNodeIds());
+  LOG_VARD(w2->getNodeIds());
+
   // fix for #2888
   if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
   {
