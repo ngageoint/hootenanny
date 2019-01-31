@@ -61,8 +61,8 @@ void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
 bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  LOG_VART(eid1);
-  LOG_VART(eid2);
+  LOG_VARD(eid1);
+  LOG_VARD(eid2);
 
   if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
   {
@@ -90,6 +90,10 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       elementToKeep = e2;
       elementToRemove = e1;
     }
+    //LOG_VART(elementToKeep->getElementId());
+    //LOG_VART(elementToRemove->getElementId());
+    LOG_VART(elementToKeep);
+    LOG_VART(elementToRemove);
 
     // Reverse the way if way to remove is one way and the two ways aren't similar directions
     if (elementToKeep->getElementType() == ElementType::Way &&
@@ -99,8 +103,12 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       WayPtr wayToRemove = boost::dynamic_pointer_cast<Way>(elementToRemove);
       if (OneWayCriterion().isSatisfied(wayToRemove) &&
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), wayToKeep, wayToRemove))
+      {
+        LOG_TRACE("Reversing " << wayToKeep->getElementId());
         wayToKeep->reverseOrder();
+      }
     }
+
     // There actually could be a relation in here, but the default tag merging doesn't use the
     // element type anyway, so not worrying about it for now.
     elementToKeep->setTags(

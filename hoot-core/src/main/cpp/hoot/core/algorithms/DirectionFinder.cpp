@@ -52,11 +52,16 @@ namespace hoot
 
 bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr w1, ConstWayPtr w2)
 {
+  LOG_VART(w1->getElementId());
+  LOG_VART(w2->getElementId());
+
   WayDiscretizer wd1(map, w1);
   WayDiscretizer wd2(map, w2);
   vector<Coordinate> cs1, cs2;
-  wd1.discretize(5, cs1);
-  wd2.discretize(5, cs2);
+  wd1.discretize(5.0, cs1);
+  wd2.discretize(5.0, cs2);
+  LOG_VART(cs1.size());
+  LOG_VART(cs2.size());
 
   double dSumSame = 0;
   double dSumReverse = 0;
@@ -68,8 +73,19 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
     dSumReverse += Distance::euclidean(cs1[i], cs2[pointCount - i - 1]);
   }
 
-  return dSumSame < dSumReverse;
+  //dSumSame = round(dSumSame * 10000) / 10000;
+  //dSumReverse = round(dSumReverse * 10000) / 10000;
+  const bool sameDirection = dSumSame < dSumReverse;
+  QString directionText = "not the same direction";
+  if (sameDirection)
+  {
+    directionText = "same direction";
+  }
+  LOG_DEBUG(
+    "Comparing " << w1->getElementId() << " with " << w2->getElementId() << ": " << directionText <<
+    ", same score: " << QString::number(dSumSame, 'g', 17) << ", reverse score: " <<
+    QString::number(dSumReverse, 'g', 17) << ", difference: " << (dSumReverse - dSumSame));
+  return sameDirection;
 }
-
 
 }

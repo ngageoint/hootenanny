@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef METADATA_TAGS_H
@@ -148,6 +148,8 @@ public:
   inline static const QString RoleOutline()             { return "outline"; }
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
+
+  inline static const QString Length()                  { return "length"; }
 
   /**
    * ID Unique to a training data set with multiary training data.

@@ -43,7 +43,6 @@ public:
   double static euclidean(const Node& n1, const Node& n2);
 
   double static euclidean(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
-
 };
 
 inline double Distance::euclidean(const Node& n1, const Node& n2)
@@ -53,7 +52,7 @@ inline double Distance::euclidean(const Node& n1, const Node& n2)
 }
 
 inline double Distance::euclidean(const geos::geom::Coordinate& c1,
-                                         const geos::geom::Coordinate& c2)
+                                  const geos::geom::Coordinate& c2)
 {
   return sqrt((c1.x - c2.x) * (c1.x - c2.x) +
               (c1.y - c2.y) * (c1.y - c2.y));

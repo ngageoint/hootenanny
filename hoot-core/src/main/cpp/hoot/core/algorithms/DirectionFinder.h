@@ -32,11 +32,13 @@
 
 #include <hoot/core/elements/OsmMap.h>
 
-namespace hoot {
+namespace hoot
+{
 
 class DirectionFinder
 {
 public:
+
   /**
    * Returns true if these lines are generally pointed in a similar direction.
    */

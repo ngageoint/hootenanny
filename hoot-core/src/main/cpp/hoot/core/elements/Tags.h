@@ -280,6 +280,15 @@ public:
    */
   static Tags schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices);
 
+  /**
+   *
+   *
+   * @param tags1
+   * @param tags2
+   * @return
+   */
+  static bool haveMatchingName(const Tags& tags1, const Tags& tags2);
+
 private:
 
   void _valueRegexParser(const QString& str, QString& num, QString& units) const;
