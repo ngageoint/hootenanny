@@ -1,3 +1,69 @@
-20:09:24.547 WARN  .../linearreference/WayString.cpp(  93) Ways must connect at a node in the WayString.
-20:09:25.116 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-output/cmd/NetworkConflateCmdInputReverseTest/output.osm...
-20:09:25.270 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-files/cmd/glacial/NetworkConflateCmdInputReverseTest/output.osm...
+14:19:14.259 WARN  .../linearreference/WayString.cpp(  93) Ways must connect at a node in the WayString.
+14:19:14.844 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from /cmd/NetworkConflateCmdInputReverseTest/output.osm...
+14:19:14.918 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from cial/NetworkConflateCmdInputReverseTest/output.osm...
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 132) Tags do not match:
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 145) < alt_name = K ST NW;US Hwy 29
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 146) > alt_name = K ST NW;K St NW
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 145) < name = K St NW
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 146) > name = US Hwy 29
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 132) Tags do not match:
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 145) < alt_name = I- 66;INTERSTATE 66  BN
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 146) > alt_name = INTERSTATE 66  BN;US Hwy 50
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 145) < name = US Hwy 50
+14:19:14.997 WARN  ...core/scoring/MapComparator.cpp( 146) > name = I- 66
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 132) Tags do not match:
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 145) < alt_name = K ST NW;US Hwy 29
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 146) > alt_name = K ST NW;K St NW
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 145) < name = K St NW
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 146) > name = US Hwy 29
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 132) Tags do not match:
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 145) < alt_name = K ST NW;US Hwy 29
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 146) > alt_name = K ST NW;K St NW
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 145) < name = K St NW
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 146) > name = US Hwy 29
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 132) Tags do not match:
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 145) < alt_name = 14TH ST NW;14th St NW;CONSTITUTION AVE NW;US Hwy 1;US Hwy 50
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 146) > alt_name = 14TH ST NW;14th St NW;CONSTITUTION AVE NW;Constitution Ave NW;US Hwy 50
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 145) < name = Constitution Ave NW
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 146) > name = US Hwy 1
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 132) Tags do not match:
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 145) < alt_name = 14TH ST SW;14th St SW
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 146) > alt_name = 14TH ST SW;US Hwy 1
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 145) < name = US Hwy 1
+14:19:14.998 WARN  ...core/scoring/MapComparator.cpp( 146) > name = 14th St SW
+5523,5524c5523,5524
+<         <tag k="alt_name" v="K ST NW;US Hwy 29"/>
+<         <tag k="name" v="K St NW"/>
+---
+>         <tag k="alt_name" v="K ST NW;K St NW"/>
+>         <tag k="name" v="US Hwy 29"/>
+6149,6150c6149,6150
+<         <tag k="alt_name" v="I- 66;INTERSTATE 66  BN"/>
+<         <tag k="name" v="US Hwy 50"/>
+---
+>         <tag k="alt_name" v="INTERSTATE 66  BN;US Hwy 50"/>
+>         <tag k="name" v="I- 66"/>
+6353,6354c6353,6354
+<         <tag k="alt_name" v="K ST NW;US Hwy 29"/>
+<         <tag k="name" v="K St NW"/>
+---
+>         <tag k="alt_name" v="K ST NW;K St NW"/>
+>         <tag k="name" v="US Hwy 29"/>
+6509,6510c6509,6510
+<         <tag k="alt_name" v="K ST NW;US Hwy 29"/>
+<         <tag k="name" v="K St NW"/>
+---
+>         <tag k="alt_name" v="K ST NW;K St NW"/>
+>         <tag k="name" v="US Hwy 29"/>
+7045,7046c7045,7046
+<         <tag k="alt_name" v="14TH ST NW;14th St NW;CONSTITUTION AVE NW;US Hwy 1;US Hwy 50"/>
+<         <tag k="name" v="Constitution Ave NW"/>
+---
+>         <tag k="alt_name" v="14TH ST NW;14th St NW;CONSTITUTION AVE NW;Constitution Ave NW;US Hwy 50"/>
+>         <tag k="name" v="US Hwy 1"/>
+7091,7092c7091,7092
+<         <tag k="alt_name" v="14TH ST SW;14th St SW"/>
+<         <tag k="name" v="US Hwy 1"/>
+---
+>         <tag k="alt_name" v="14TH ST SW;US Hwy 1"/>
+>         <tag k="name" v="14th St SW"/>

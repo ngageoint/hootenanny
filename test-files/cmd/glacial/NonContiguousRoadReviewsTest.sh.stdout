@@ -1,7 +1,3497 @@
-15:44:21.027 WARN  ...etwork/OsmNetworkExtractor.cpp( 201) Found a non-contiguous relation when extracting a network. Ignoring: Relation:-1
-15:44:38.597 WARN  .../linearreference/WayString.cpp(  93) Ways must connect at a node in the WayString.
-15:44:38.602 WARN  .../linearreference/WayString.cpp(  93) Ways must connect at a node in the WayString.
-15:44:38.662 WARN  .../linearreference/WayString.cpp(  93) Ways must connect at a node in the WayString.
-15:44:38.667 WARN  .../linearreference/WayString.cpp( 104) hoot::WayString: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-15:44:43.157 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-output/cmd/NonContiguousRoadReviewsTest/output.osm...
-15:44:43.305 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-files/cmd/glacial/NonContiguousRoadReviewsTest/output.osm...
+14:21:02.921 WARN  ...etwork/OsmNetworkExtractor.cpp( 206) Found a non-contiguous relation when extracting a network. Ignoring: Relation:-1
+14:21:25.482 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from output/cmd/NonContiguousRoadReviewsTest/output.osm...
+14:21:25.695 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from md/glacial/NonContiguousRoadReviewsTest/output.osm...
+14:21:25.886 WARN  ...core/scoring/MapComparator.cpp( 252) Number of nodes does not match (1: 8985; 2: 8981)
+4,127c4,131
+<     <node visible="true" id="-12693" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1900282177573698" lon="22.4731293363625433"/>
+<     <node visible="true" id="-12692" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1907105411566827" lon="22.4732538677544298"/>
+<     <node visible="true" id="-12691" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1922264738301802" lon="22.4735109270838613"/>
+<     <node visible="true" id="-12681" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2013484439175737" lon="22.4693375924619545"/>
+<     <node visible="true" id="-12677" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1811004418278892" lon="22.4740184121329918"/>
+<     <node visible="true" id="-12670" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2092815509472761" lon="22.3602688365977471"/>
+<     <node visible="true" id="-12669" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2058337089749838" lon="22.3611069861574059"/>
+<     <node visible="true" id="-12668" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2043725603974949" lon="22.3604238458419147"/>
+<     <node visible="true" id="-12667" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2042350404880575" lon="22.3603590428589207"/>
+<     <node visible="true" id="-12666" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2035038481639639" lon="22.3600261181661821"/>
+<     <node visible="true" id="-12665" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2026585212066960" lon="22.3596408643552245"/>
+<     <node visible="true" id="-12662" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2109625213188617" lon="22.3631330235016819"/>
+<     <node visible="true" id="-12661" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2113086530165424" lon="22.3657983945360286"/>
+<     <node visible="true" id="-12652" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1979409433805959" lon="22.4675066796575891"/>
+<     <node visible="true" id="-12651" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1972389092780493" lon="22.4674052296583575"/>
+<     <node visible="true" id="-12650" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1964208468174617" lon="22.4672732160306161"/>
+<     <node visible="true" id="-12649" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1957991684688696" lon="22.4671053345438168"/>
+<     <node visible="true" id="-12648" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1949903813614822" lon="22.4669577796860125"/>
+<     <node visible="true" id="-12641" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1921633041907533" lon="22.4775216506046114"/>
+<     <node visible="true" id="-12640" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1917476043863307" lon="22.4795181511251343"/>
+<     <node visible="true" id="-12635" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1980836627881222" lon="22.4598308300460765"/>
+<     <node visible="true" id="-12634" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1957037024387369" lon="22.4605814454719557"/>
+<     <node visible="true" id="-12630" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1847978524257514" lon="22.4844570374640647"/>
+<     <node visible="true" id="-12629" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1846307816442927" lon="22.4849124302531216"/>
+<     <node visible="true" id="-12623" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1941215116228725" lon="22.4680470318607597"/>
+<     <node visible="true" id="-12617" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1934389852281266" lon="22.4607022676663703"/>
+<     <node visible="true" id="-12616" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1926966422498322" lon="22.4605993843134542"/>
+<     <node visible="true" id="-12615" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1919438644122580" lon="22.4604920974823159"/>
+<     <node visible="true" id="-12611" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2115042596009151" lon="22.3684345933047446"/>
+<     <node visible="true" id="-12607" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2090776309843472" lon="22.3559562573242374"/>
+<     <node visible="true" id="-12606" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2072455794484411" lon="22.3552566957865153"/>
+<     <node visible="true" id="-12600" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1894139528340015" lon="22.4671187262190237"/>
+<     <node visible="true" id="-12599" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1895653692414783" lon="22.4660240523879864"/>
+<     <node visible="true" id="-12598" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1896650433761913" lon="22.4653040320972686"/>
+<     <node visible="true" id="-12593" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2300110191658993" lon="22.3256679301961896"/>
+<     <node visible="true" id="-12592" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2240475102296324" lon="22.3378462353037150"/>
+<     <node visible="true" id="-12585" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1841612937659223" lon="22.4708721203106059"/>
+<     <node visible="true" id="-12584" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1844070893036118" lon="22.4709828990885256"/>
+<     <node visible="true" id="-12583" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1851734139895944" lon="22.4713255854082128"/>
+<     <node visible="true" id="-12582" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1874303205426830" lon="22.4725326798945773"/>
+<     <node visible="true" id="-12578" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1906189203499458" lon="22.4590703709576758"/>
+<     <node visible="true" id="-12577" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1908031091392957" lon="22.4579717840364772"/>
+<     <node visible="true" id="-12576" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1910859760344623" lon="22.4561818818153931"/>
+<     <node visible="true" id="-12572" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1967162699232916" lon="22.4542905044177807"/>
+<     <node visible="true" id="-12567" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1805580866108931" lon="22.4786871970459110"/>
+<     <node visible="true" id="-12566" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1791104524448301" lon="22.4833378521859721"/>
+<     <node visible="true" id="-12561" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1832710586484660" lon="22.4738313186889549"/>
+<     <node visible="true" id="-12552" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1814946069840842" lon="22.4683988599846849"/>
+<     <node visible="true" id="-12551" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1818098089814257" lon="22.4662252753690908"/>
+<     <node visible="true" id="-12550" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1820070684882089" lon="22.4648493293879490"/>
+<     <node visible="true" id="-12549" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1822944543289098" lon="22.4626178119567719"/>
+<     <node visible="true" id="-12548" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1825052160213336" lon="22.4609484193696112"/>
+<     <node visible="true" id="-12547" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1825451742178066" lon="22.4606327446074374"/>
+<     <node visible="true" id="-12543" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1827317453200852" lon="22.4702445484640947"/>
+<     <node visible="true" id="-12536" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1889304193299157" lon="22.4647755824932354"/>
+<     <node visible="true" id="-12535" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1882091959425902" lon="22.4646789538018012"/>
+<     <node visible="true" id="-12534" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1874276024744015" lon="22.4645601992948301"/>
+<     <node visible="true" id="-12533" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1867116681674315" lon="22.4644554920339914"/>
+<     <node visible="true" id="-12526" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1849742294681906" lon="22.4654012366316529"/>
+<     <node visible="true" id="-12525" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1844036255133292" lon="22.4688109925264818"/>
+<     <node visible="true" id="-12524" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1842592963062786" lon="22.4688602623438669"/>
+<     <node visible="true" id="-12523" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1842460905068712" lon="22.4688634262331135"/>
+<     <node visible="true" id="-12510" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2368267586522337" lon="22.3552877720201622"/>
+<     <node visible="true" id="-12509" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2358468633732822" lon="22.3546687897654408"/>
+<     <node visible="true" id="-12508" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2250673537372898" lon="22.3572757066172159"/>
+<     <node visible="true" id="-12507" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2247892091453458" lon="22.3573204607465037"/>
+<     <node visible="true" id="-12506" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2232628550987932" lon="22.3570941655015645"/>
+<     <node visible="true" id="-12502" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1904475170595910" lon="22.4649742182662244"/>
+<     <node visible="true" id="-12495" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1905546787700443" lon="22.4814808007722533"/>
+<     <node visible="true" id="-12485" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1996285545046961" lon="22.4618272997042396"/>
+<     <node visible="true" id="-12484" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1994528777924010" lon="22.4627454163427878"/>
+<     <node visible="true" id="-12483" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1992617643018701" lon="22.4639718603332881"/>
+<     <node visible="true" id="-12482" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1985427956317682" lon="22.4687399458866395"/>
+<     <node visible="true" id="-12449" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2008232922584448" lon="22.4604238756267698"/>
+<     <node visible="true" id="-12448" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2824807846746604" lon="22.5110959624816580"/>
+<     <node visible="true" id="-12447" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2103425000000199" lon="22.4609994999999998"/>
+<     <node visible="true" id="-12441" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1784285840575413" lon="22.4834465538735984"/>
+<     <node visible="true" id="-12440" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1777497461286792" lon="22.4834848847233388"/>
+<     <node visible="true" id="-12439" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1769975256697545" lon="22.4835244471229849"/>
+<     <node visible="true" id="-12429" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1854090609309642" lon="22.4515193274733633"/>
+<     <node visible="true" id="-12428" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1826069436297413" lon="22.4601993647267335"/>
+<     <node visible="true" id="-12427" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1826908305363535" lon="22.4597764253369157"/>
+<     <node visible="true" id="-12424" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2094525889345880" lon="22.3613395429642203"/>
+<     <node visible="true" id="-12418" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1824501821857574" lon="22.4603502391895908"/>
+<     <node visible="true" id="-12417" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1821009965483493" lon="22.4603011422521384"/>
+<     <node visible="true" id="-12416" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1818647761672496" lon="22.4602679287082481"/>
+<     <node visible="true" id="-12410" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1756791990315816" lon="22.4686669275762299"/>
+<     <node visible="true" id="-12409" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1768579518298465" lon="22.4616238415903489"/>
+<     <node visible="true" id="-12408" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1764495830866539" lon="22.4641026682513214"/>
+<     <node visible="true" id="-12379" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1998764427590305" lon="22.5470560990800379"/>
+<     <node visible="true" id="-12378" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2003497975503858" lon="22.5387505115806590"/>
+<     <node visible="true" id="-12377" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2026071909586347" lon="22.5237907214461295"/>
+<     <node visible="true" id="-12376" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2028000423382714" lon="22.5207585474659560"/>
+<     <node visible="true" id="-12375" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1995521646252025" lon="22.5159364699890290"/>
+<     <node visible="true" id="-12374" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1987313122960477" lon="22.5157382319481698"/>
+<     <node visible="true" id="-12373" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1770877555763724" lon="22.4946486336692004"/>
+<     <node visible="true" id="-12367" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1934712808529593" lon="22.4666651543311886"/>
+<     <node visible="true" id="-12366" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1919099180407327" lon="22.4663899709439363"/>
+<     <node visible="true" id="-12358" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1865676696874607" lon="22.4551853708656957"/>
+<     <node visible="true" id="-12357" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1862670518907632" lon="22.4570479633352100"/>
+<     <node visible="true" id="-12356" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1862005712709682" lon="22.4574547540451661"/>
+<     <node visible="true" id="-12355" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1860604040152234" lon="22.4584901949427049"/>
+<     <node visible="true" id="-12347" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1950665044839544" lon="22.4612279687476075"/>
+<     <node visible="true" id="-12346" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1948954000043126" lon="22.4621013687841398"/>
+<     <node visible="true" id="-12345" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1946701412499885" lon="22.4632706063132801"/>
+<     <node visible="true" id="-12344" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1945184089326730" lon="22.4643331151767924"/>
+<     <node visible="true" id="-12333" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1855409468256166" lon="22.4619294187823719"/>
+<     <node visible="true" id="-12332" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1853581393737858" lon="22.4630889686444668"/>
+<     <node visible="true" id="-12325" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1844972917244050" lon="22.4877261111506712"/>
+<     <node visible="true" id="-12324" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1856661505470392" lon="22.4847070813766869"/>
+<     <node visible="true" id="-12317" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1849182742510838" lon="22.4606849029205655"/>
+<     <node visible="true" id="-12316" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1841095525115577" lon="22.4605504042511086"/>
+<     <node visible="true" id="-12315" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1833613446952342" lon="22.4604444975206476"/>
+<     <node visible="true" id="-12314" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1827729012455448" lon="22.4603871428981101"/>
+<     <node visible="true" id="-12306" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1764423027379287" lon="22.4866500704513328"/>
+<     <node visible="true" id="-12298" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1762001507983659" lon="22.4830246345395857"/>
+<     <node visible="true" id="-12292" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1896770419366516" lon="22.4601875957798534"/>
+<     <node visible="true" id="-12291" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1888043119716762" lon="22.4600484710189967"/>
+<     <node visible="true" id="-12290" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1880508180909870" lon="22.4599350364370665"/>
+<     <node visible="true" id="-12284" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1952184818238965" lon="22.4707969718498575"/>
+<     <node visible="true" id="-12283" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1945765722932191" lon="22.4706577562077250"/>
+<     <node visible="true" id="-12277" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1899083958126688" lon="22.4636449329275756"/>
+<     <node visible="true" id="-12276" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1900832297211026" lon="22.4625237941812408"/>
+<     <node visible="true" id="-12275" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1902350708322857" lon="22.4614473004738464"/>
+---
+>     <node visible="true" id="-12618" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1857267027707317" lon="22.4493103748776228"/>
+>     <node visible="true" id="-12617" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1860726835011479" lon="22.4443605682736020"/>
+>     <node visible="true" id="-12616" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1859216899107290" lon="22.4464947409485909"/>
+>     <node visible="true" id="-12613" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1952184818238965" lon="22.4707969718498575"/>
+>     <node visible="true" id="-12612" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1945765722932191" lon="22.4706577562077250"/>
+>     <node visible="true" id="-12606" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1900282177573698" lon="22.4731293363625433"/>
+>     <node visible="true" id="-12605" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1907105411566827" lon="22.4732538677544298"/>
+>     <node visible="true" id="-12604" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1922264738301802" lon="22.4735109270838613"/>
+>     <node visible="true" id="-12594" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2013484439175737" lon="22.4693375924619545"/>
+>     <node visible="true" id="-12590" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1811004418278892" lon="22.4740184121329918"/>
+>     <node visible="true" id="-12583" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2092815509472761" lon="22.3602688365977471"/>
+>     <node visible="true" id="-12582" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2058337089749838" lon="22.3611069861574059"/>
+>     <node visible="true" id="-12581" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2043725603974949" lon="22.3604238458419147"/>
+>     <node visible="true" id="-12580" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2042350404880575" lon="22.3603590428589207"/>
+>     <node visible="true" id="-12579" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2035038481639639" lon="22.3600261181661821"/>
+>     <node visible="true" id="-12578" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2026585212066960" lon="22.3596408643552245"/>
+>     <node visible="true" id="-12575" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2109625213188617" lon="22.3631330235016819"/>
+>     <node visible="true" id="-12574" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2113086530165424" lon="22.3657983945360286"/>
+>     <node visible="true" id="-12565" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1979409433805959" lon="22.4675066796575891"/>
+>     <node visible="true" id="-12564" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1972389092780493" lon="22.4674052296583575"/>
+>     <node visible="true" id="-12563" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1964208468174617" lon="22.4672732160306161"/>
+>     <node visible="true" id="-12562" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1957991684688696" lon="22.4671053345438168"/>
+>     <node visible="true" id="-12561" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1949903813614822" lon="22.4669577796860125"/>
+>     <node visible="true" id="-12554" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1853472339172546" lon="22.4517279619029608"/>
+>     <node visible="true" id="-12553" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1854196109274571" lon="22.4514837266398963"/>
+>     <node visible="true" id="-12546" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1921633041907533" lon="22.4775216506046114"/>
+>     <node visible="true" id="-12545" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1917476043863307" lon="22.4795181511251343"/>
+>     <node visible="true" id="-12540" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1980836627881222" lon="22.4598308300460765"/>
+>     <node visible="true" id="-12539" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1957037024387369" lon="22.4605814454719557"/>
+>     <node visible="true" id="-12535" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1847978524257514" lon="22.4844570374640647"/>
+>     <node visible="true" id="-12534" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1846307816442927" lon="22.4849124302531216"/>
+>     <node visible="true" id="-12528" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1941215116228725" lon="22.4680470318607597"/>
+>     <node visible="true" id="-12522" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1934389852281266" lon="22.4607022676663703"/>
+>     <node visible="true" id="-12521" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1926966422498322" lon="22.4605993843134542"/>
+>     <node visible="true" id="-12520" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1919438644122580" lon="22.4604920974823159"/>
+>     <node visible="true" id="-12516" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2115042596009151" lon="22.3684345933047446"/>
+>     <node visible="true" id="-12512" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2090776309843472" lon="22.3559562573242374"/>
+>     <node visible="true" id="-12511" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2072455794484411" lon="22.3552566957865153"/>
+>     <node visible="true" id="-12505" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1894139528340015" lon="22.4671187262190237"/>
+>     <node visible="true" id="-12504" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1895653692414783" lon="22.4660240523879864"/>
+>     <node visible="true" id="-12503" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1896650433761913" lon="22.4653040320972686"/>
+>     <node visible="true" id="-12498" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2300110191658993" lon="22.3256679301961896"/>
+>     <node visible="true" id="-12497" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2240475102296324" lon="22.3378462353037150"/>
+>     <node visible="true" id="-12490" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1841612937659223" lon="22.4708721203106059"/>
+>     <node visible="true" id="-12489" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1844070893036118" lon="22.4709828990885256"/>
+>     <node visible="true" id="-12488" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1851734139895944" lon="22.4713255854082128"/>
+>     <node visible="true" id="-12487" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1874303205426830" lon="22.4725326798945773"/>
+>     <node visible="true" id="-12483" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1906189203499458" lon="22.4590703709576758"/>
+>     <node visible="true" id="-12482" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1908031091392957" lon="22.4579717840364772"/>
+>     <node visible="true" id="-12481" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1910859760344623" lon="22.4561818818153931"/>
+>     <node visible="true" id="-12477" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1967162699232916" lon="22.4542905044177807"/>
+>     <node visible="true" id="-12472" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1805580866108931" lon="22.4786871970459110"/>
+>     <node visible="true" id="-12471" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1791104524448301" lon="22.4833378521859721"/>
+>     <node visible="true" id="-12466" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1832710586484660" lon="22.4738313186889549"/>
+>     <node visible="true" id="-12462" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1827317453200852" lon="22.4702445484640947"/>
+>     <node visible="true" id="-12455" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1889304193299157" lon="22.4647755824932354"/>
+>     <node visible="true" id="-12454" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1882091959425902" lon="22.4646789538018012"/>
+>     <node visible="true" id="-12453" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1874276024744015" lon="22.4645601992948301"/>
+>     <node visible="true" id="-12452" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1867116681674315" lon="22.4644554920339914"/>
+>     <node visible="true" id="-12445" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1849742294681906" lon="22.4654012366316529"/>
+>     <node visible="true" id="-12444" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1844036255133292" lon="22.4688109925264818"/>
+>     <node visible="true" id="-12443" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1842592963062786" lon="22.4688602623438669"/>
+>     <node visible="true" id="-12442" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1842460905068712" lon="22.4688634262331135"/>
+>     <node visible="true" id="-12429" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2368267586522337" lon="22.3552877720201622"/>
+>     <node visible="true" id="-12428" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2358468633732822" lon="22.3546687897654408"/>
+>     <node visible="true" id="-12427" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2250673537372898" lon="22.3572757066172159"/>
+>     <node visible="true" id="-12426" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2247892091453458" lon="22.3573204607465037"/>
+>     <node visible="true" id="-12425" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2232628550987932" lon="22.3570941655015645"/>
+>     <node visible="true" id="-12421" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1904475170595910" lon="22.4649742182662244"/>
+>     <node visible="true" id="-12414" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1905641216809593" lon="22.4814849361916700"/>
+>     <node visible="true" id="-12404" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1996285545046961" lon="22.4618272997042396"/>
+>     <node visible="true" id="-12403" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1994528777924010" lon="22.4627454163427878"/>
+>     <node visible="true" id="-12402" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1992617643018701" lon="22.4639718603332881"/>
+>     <node visible="true" id="-12401" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1985427956317682" lon="22.4687399458866395"/>
+>     <node visible="true" id="-12368" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2008232922584448" lon="22.4604238756267698"/>
+>     <node visible="true" id="-12367" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2824807846746604" lon="22.5110959624816580"/>
+>     <node visible="true" id="-12366" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2103425000000199" lon="22.4609994999999998"/>
+>     <node visible="true" id="-12363" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2094525889345880" lon="22.3613395429642203"/>
+>     <node visible="true" id="-12357" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1784285840575413" lon="22.4834465538735984"/>
+>     <node visible="true" id="-12356" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1777497461286792" lon="22.4834848847233388"/>
+>     <node visible="true" id="-12355" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1769975256697545" lon="22.4835244471229849"/>
+>     <node visible="true" id="-12326" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1998764427590305" lon="22.5470560990800379"/>
+>     <node visible="true" id="-12325" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2003497975503858" lon="22.5387505115806590"/>
+>     <node visible="true" id="-12324" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2026071909586347" lon="22.5237907214461295"/>
+>     <node visible="true" id="-12323" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2028000423382714" lon="22.5207585474659560"/>
+>     <node visible="true" id="-12322" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1995521646252025" lon="22.5159364699890290"/>
+>     <node visible="true" id="-12321" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1987313122960477" lon="22.5157382319481698"/>
+>     <node visible="true" id="-12320" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1770877555763724" lon="22.4946486336692004"/>
+>     <node visible="true" id="-12314" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1934712808529593" lon="22.4666651543311886"/>
+>     <node visible="true" id="-12313" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1919099180407327" lon="22.4663899709439363"/>
+>     <node visible="true" id="-12306" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1824310544197445" lon="22.4603475497463592"/>
+>     <node visible="true" id="-12305" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1823657199937081" lon="22.4603383634556302"/>
+>     <node visible="true" id="-12304" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1819660623836095" lon="22.4602821699598145"/>
+>     <node visible="true" id="-12303" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1817363133565433" lon="22.4602498663205523"/>
+>     <node visible="true" id="-12296" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1950665044839544" lon="22.4612279687476075"/>
+>     <node visible="true" id="-12295" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1948954000043126" lon="22.4621013687841398"/>
+>     <node visible="true" id="-12294" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1946701412499885" lon="22.4632706063132801"/>
+>     <node visible="true" id="-12293" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1945184089326730" lon="22.4643331151767924"/>
+>     <node visible="true" id="-12284" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1855409468256166" lon="22.4619294187823719"/>
+>     <node visible="true" id="-12283" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1853581393737858" lon="22.4630889686444668"/>
+>     <node visible="true" id="-12277" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1756791990315816" lon="22.4686669275762299"/>
+>     <node visible="true" id="-12276" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1768579518298465" lon="22.4616238415903489"/>
+>     <node visible="true" id="-12275" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1764495830866539" lon="22.4641026682513214"/>
+>     <node visible="true" id="-12268" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1849182742510838" lon="22.4606849029205655"/>
+>     <node visible="true" id="-12267" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1841095525115577" lon="22.4605504042511086"/>
+>     <node visible="true" id="-12266" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1833613446952342" lon="22.4604444975206476"/>
+>     <node visible="true" id="-12265" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1827729012455448" lon="22.4603871428981101"/>
+>     <node visible="true" id="-12257" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1865676696874607" lon="22.4551853708656957"/>
+>     <node visible="true" id="-12256" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1862670518907632" lon="22.4570479633352100"/>
+>     <node visible="true" id="-12255" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1862005712709682" lon="22.4574547540451661"/>
+>     <node visible="true" id="-12254" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1860604040152234" lon="22.4584901949427049"/>
+>     <node visible="true" id="-12247" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1762001507983659" lon="22.4830246345395857"/>
+>     <node visible="true" id="-12239" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1896770419366516" lon="22.4601875957798534"/>
+>     <node visible="true" id="-12238" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1888043119716762" lon="22.4600484710189967"/>
+>     <node visible="true" id="-12237" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1880508180909870" lon="22.4599350364370665"/>
+>     <node visible="true" id="-12230" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1844972917244050" lon="22.4877261111506712"/>
+>     <node visible="true" id="-12229" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1856661505470392" lon="22.4847070813766869"/>
+>     <node visible="true" id="-12219" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1814948067941424" lon="22.4683974031542668"/>
+>     <node visible="true" id="-12218" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1818104075003277" lon="22.4662212913343922"/>
+>     <node visible="true" id="-12217" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1820078663058653" lon="22.4648437382115205"/>
+>     <node visible="true" id="-12216" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1822953948296999" lon="22.4626095968267379"/>
+>     <node visible="true" id="-12215" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1825066704226033" lon="22.4609382944884040"/>
+>     <node visible="true" id="-12214" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1825464197118007" lon="22.4606222185311530"/>
+>     <node visible="true" id="-12213" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1825617772971033" lon="22.4604924265115073"/>
+>     <node visible="true" id="-12205" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1764423027379287" lon="22.4866500704513328"/>
+>     <node visible="true" id="-12199" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1899083958126688" lon="22.4636449329275756"/>
+>     <node visible="true" id="-12198" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1900832297211026" lon="22.4625237941812408"/>
+>     <node visible="true" id="-12197" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1902350708322857" lon="22.4614473004738464"/>
+150,152d153
+<     <node visible="true" id="-9111" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1857810649020788" lon="22.4487232789156295"/>
+<     <node visible="true" id="-9110" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1858022649137561" lon="22.4482833789224259"/>
+<     <node visible="true" id="-9109" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1858882649610298" lon="22.4465023789499725"/>
+266,269d266
+<     <node visible="true" id="-8984" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1883109656196353" lon="22.4217001793699424"/>
+<     <node visible="true" id="-8983" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1896831657279696" lon="22.4176276794653369"/>
+<     <node visible="true" id="-8982" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1895627658321231" lon="22.4137013795195301"/>
+<     <node visible="true" id="-8981" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1939389661761926" lon="22.4007643798256773"/>
+466,470d462
+<     <node visible="true" id="-8658" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1825951645966821" lon="22.4602052786706849"/>
+<     <node visible="true" id="-8657" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1825487645971302" lon="22.4601879786697225"/>
+<     <node visible="true" id="-8656" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1824992645971735" lon="22.4601858786684687"/>
+<     <node visible="true" id="-8655" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1824666645969724" lon="22.4601931786675166"/>
+<     <node visible="true" id="-8654" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1824363645965930" lon="22.4602071786665327"/>
+473a466,468
+>     <node visible="true" id="-8646" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1824533645891444" lon="22.4604880786630368"/>
+>     <node visible="true" id="-8645" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1824954645888330" lon="22.4605001786639562"/>
+>     <node visible="true" id="-8644" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1825392645888435" lon="22.4605001786650931"/>
+594c589,590
+<     <node visible="true" id="-8472" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1857503648864287" lon="22.4493128789064649"/>
+---
+>     <node visible="true" id="-8480" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1826704646073911" lon="22.4598023786782939"/>
+>     <node visible="true" id="-8479" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9" lat="2.1833794646629738" lon="22.4577139787260620"/>
+8989c8985,9311
+<     <way visible="true" id="-7119" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6926" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-8747"/>
+>         <nd ref="-8746"/>
+>         <nd ref="-8745"/>
+>         <nd ref="-8744"/>
+>         <nd ref="-8743"/>
+>         <nd ref="-497"/>
+>         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+>         <tag k="highway" v="residential"/>
+>         <tag k="error:circular" v="15"/>
+>     </way>
+>     <way visible="true" id="-6925" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-2164"/>
+>         <nd ref="-8980"/>
+>         <nd ref="-8979"/>
+>         <nd ref="-8978"/>
+>         <nd ref="-8977"/>
+>         <nd ref="-8976"/>
+>         <nd ref="-8975"/>
+>         <nd ref="-8974"/>
+>         <nd ref="-8263"/>
+>         <nd ref="-8973"/>
+>         <nd ref="-8257"/>
+>         <nd ref="-8972"/>
+>         <nd ref="-8971"/>
+>         <nd ref="-8970"/>
+>         <nd ref="-8969"/>
+>         <nd ref="-8968"/>
+>         <nd ref="-8967"/>
+>         <nd ref="-8966"/>
+>         <nd ref="-8289"/>
+>         <nd ref="-8965"/>
+>         <nd ref="-8964"/>
+>         <nd ref="-8492"/>
+>         <tag k="ref" v="RN6"/>
+>         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+>         <tag k="highway" v="primary"/>
+>         <tag k="error:circular" v="15"/>
+>     </way>
+>     <way visible="true" id="-6923" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12617"/>
+>         <nd ref="-8988"/>
+>         <nd ref="-8987"/>
+>         <nd ref="-8986"/>
+>         <nd ref="-8985"/>
+>         <nd ref="-2228"/>
+>         <tag k="ref" v="RN6"/>
+>         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+>         <tag k="highway" v="primary"/>
+>         <tag k="error:circular" v="15"/>
+>     </way>
+>     <way visible="true" id="-6917" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-8"/>
+>         <nd ref="-12618"/>
+>         <nd ref="-2262"/>
+>         <nd ref="-2261"/>
+>         <nd ref="-2260"/>
+>         <nd ref="-2259"/>
+>         <nd ref="-2258"/>
+>         <nd ref="-298"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="bridge" v="yes"/>
+>         <tag k="condition" v="functional"/>
+>         <tag k="ref" v="RN6"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="no"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{5033398B-9C94-4F16-A44B-1287C0316FC5}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-6914" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-2240"/>
+>         <nd ref="-2239"/>
+>         <nd ref="-2238"/>
+>         <nd ref="-2237"/>
+>         <nd ref="-2236"/>
+>         <nd ref="-2235"/>
+>         <nd ref="-2234"/>
+>         <nd ref="-2233"/>
+>         <nd ref="-2232"/>
+>         <nd ref="-2231"/>
+>         <nd ref="-2230"/>
+>         <nd ref="-2229"/>
+>         <nd ref="-2228"/>
+>         <nd ref="-2227"/>
+>         <nd ref="-2226"/>
+>         <nd ref="-2225"/>
+>         <nd ref="-2224"/>
+>         <nd ref="-2223"/>
+>         <nd ref="-2222"/>
+>         <nd ref="-2221"/>
+>         <nd ref="-2220"/>
+>         <nd ref="-2219"/>
+>         <nd ref="-2218"/>
+>         <nd ref="-2217"/>
+>         <nd ref="-2216"/>
+>         <nd ref="-2215"/>
+>         <nd ref="-2214"/>
+>         <nd ref="-2213"/>
+>         <nd ref="-2212"/>
+>         <nd ref="-2211"/>
+>         <nd ref="-2210"/>
+>         <nd ref="-2209"/>
+>         <nd ref="-2208"/>
+>         <nd ref="-2207"/>
+>         <nd ref="-2206"/>
+>         <nd ref="-2205"/>
+>         <nd ref="-2204"/>
+>         <nd ref="-2203"/>
+>         <nd ref="-2202"/>
+>         <nd ref="-2201"/>
+>         <nd ref="-2200"/>
+>         <nd ref="-2199"/>
+>         <nd ref="-2198"/>
+>         <nd ref="-2197"/>
+>         <nd ref="-2196"/>
+>         <nd ref="-2195"/>
+>         <nd ref="-2194"/>
+>         <nd ref="-2193"/>
+>         <nd ref="-2192"/>
+>         <nd ref="-2191"/>
+>         <nd ref="-2190"/>
+>         <nd ref="-2189"/>
+>         <nd ref="-2188"/>
+>         <nd ref="-2187"/>
+>         <nd ref="-2186"/>
+>         <nd ref="-2185"/>
+>         <nd ref="-2184"/>
+>         <nd ref="-2183"/>
+>         <nd ref="-2182"/>
+>         <nd ref="-2181"/>
+>         <nd ref="-2180"/>
+>         <nd ref="-2179"/>
+>         <nd ref="-2178"/>
+>         <nd ref="-2177"/>
+>         <nd ref="-2176"/>
+>         <nd ref="-2175"/>
+>         <nd ref="-2174"/>
+>         <nd ref="-2173"/>
+>         <nd ref="-2172"/>
+>         <nd ref="-2171"/>
+>         <nd ref="-2170"/>
+>         <nd ref="-2169"/>
+>         <nd ref="-2168"/>
+>         <nd ref="-2167"/>
+>         <nd ref="-2166"/>
+>         <nd ref="-2165"/>
+>         <nd ref="-2164"/>
+>         <nd ref="-2163"/>
+>         <nd ref="-2162"/>
+>         <nd ref="-2161"/>
+>         <nd ref="-2160"/>
+>         <nd ref="-2159"/>
+>         <nd ref="-2158"/>
+>         <nd ref="-2157"/>
+>         <nd ref="-2156"/>
+>         <nd ref="-2155"/>
+>         <nd ref="-2154"/>
+>         <nd ref="-2153"/>
+>         <nd ref="-2152"/>
+>         <nd ref="-2151"/>
+>         <nd ref="-2150"/>
+>         <nd ref="-2149"/>
+>         <nd ref="-2148"/>
+>         <nd ref="-2147"/>
+>         <nd ref="-2146"/>
+>         <nd ref="-2145"/>
+>         <nd ref="-2144"/>
+>         <nd ref="-2143"/>
+>         <nd ref="-2142"/>
+>         <nd ref="-2141"/>
+>         <nd ref="-2140"/>
+>         <nd ref="-2139"/>
+>         <nd ref="-2138"/>
+>         <nd ref="-2137"/>
+>         <nd ref="-2136"/>
+>         <nd ref="-2135"/>
+>         <nd ref="-2134"/>
+>         <nd ref="-2133"/>
+>         <nd ref="-2132"/>
+>         <nd ref="-2131"/>
+>         <nd ref="-2130"/>
+>         <nd ref="-2129"/>
+>         <nd ref="-2128"/>
+>         <nd ref="-2127"/>
+>         <nd ref="-2126"/>
+>         <nd ref="-2125"/>
+>         <nd ref="-2124"/>
+>         <nd ref="-2123"/>
+>         <nd ref="-2122"/>
+>         <nd ref="-2121"/>
+>         <nd ref="-2120"/>
+>         <nd ref="-2119"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="condition" v="functional"/>
+>         <tag k="ref" v="RN6"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="no"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{5033398B-9C94-4F16-A44B-1287C0316FC5}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-6912" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-705"/>
+>         <nd ref="-2255"/>
+>         <nd ref="-2254"/>
+>         <nd ref="-12617"/>
+>         <nd ref="-2253"/>
+>         <nd ref="-2252"/>
+>         <nd ref="-2251"/>
+>         <nd ref="-2250"/>
+>         <nd ref="-2249"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="condition" v="functional"/>
+>         <tag k="ref" v="RN6"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="no"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{5033398B-9C94-4F16-A44B-1287C0316FC5}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-6910" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-298"/>
+>         <nd ref="-12616"/>
+>         <nd ref="-2257"/>
+>         <nd ref="-2256"/>
+>         <nd ref="-705"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="condition" v="functional"/>
+>         <tag k="ref" v="RN6"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="no"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{5033398B-9C94-4F16-A44B-1287C0316FC5}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-6907" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-467"/>
+>         <nd ref="-12612"/>
+>         <nd ref="-891"/>
+>         <nd ref="-12613"/>
+>         <nd ref="-890"/>
+>         <nd ref="-889"/>
+>         <nd ref="-888"/>
+>         <nd ref="-768"/>
+>         <nd ref="-887"/>
+>         <nd ref="-886"/>
+>         <nd ref="-885"/>
+>         <nd ref="-884"/>
+>         <nd ref="-883"/>
+>         <nd ref="-882"/>
+>         <nd ref="-881"/>
+>         <nd ref="-880"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="condition" v="functional"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="fair"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.876Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{C5C59584-2BE7-4F8A-BD12-6B2EA49941FB}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-6902" timestamp="1970-01-01T00:00:00Z" version="1">
+8992c9314
+<         <nd ref="-12691"/>
+---
+>         <nd ref="-12604"/>
+8994,8995c9316,9317
+<         <nd ref="-12692"/>
+<         <nd ref="-12693"/>
+---
+>         <nd ref="-12605"/>
+>         <nd ref="-12606"/>
+9019c9341
+<     <way visible="true" id="-7118" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6901" timestamp="1970-01-01T00:00:00Z" version="1">
+9026c9348
+<     <way visible="true" id="-7113" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6896" timestamp="1970-01-01T00:00:00Z" version="1">
+9034c9356
+<     <way visible="true" id="-7109" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6892" timestamp="1970-01-01T00:00:00Z" version="1">
+9038c9360
+<         <nd ref="-12677"/>
+---
+>         <nd ref="-12590"/>
+9064c9386
+<     <way visible="true" id="-7107" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6890" timestamp="1970-01-01T00:00:00Z" version="1">
+9067c9389
+<         <nd ref="-12670"/>
+---
+>         <nd ref="-12583"/>
+9072c9394
+<     <way visible="true" id="-7100" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6883" timestamp="1970-01-01T00:00:00Z" version="1">
+9074c9396
+<         <nd ref="-12665"/>
+---
+>         <nd ref="-12578"/>
+9076c9398
+<         <nd ref="-12666"/>
+---
+>         <nd ref="-12579"/>
+9079,9080c9401,9402
+<         <nd ref="-12667"/>
+<         <nd ref="-12668"/>
+---
+>         <nd ref="-12580"/>
+>         <nd ref="-12581"/>
+9082c9404
+<         <nd ref="-12669"/>
+---
+>         <nd ref="-12582"/>
+9088c9410
+<         <nd ref="-12670"/>
+---
+>         <nd ref="-12583"/>
+9112c9434
+<     <way visible="true" id="-7098" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6881" timestamp="1970-01-01T00:00:00Z" version="1">
+9117c9439
+<         <nd ref="-12661"/>
+---
+>         <nd ref="-12574"/>
+9122c9444
+<     <way visible="true" id="-7095" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6878" timestamp="1970-01-01T00:00:00Z" version="1">
+9127c9449
+<         <nd ref="-12661"/>
+---
+>         <nd ref="-12574"/>
+9130c9452
+<         <nd ref="-12662"/>
+---
+>         <nd ref="-12575"/>
+9157,9158c9479,9546
+<     <way visible="true" id="-7088" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12640"/>
+---
+>     <way visible="true" id="-6871" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12554"/>
+>         <nd ref="-8596"/>
+>         <nd ref="-8595"/>
+>         <nd ref="-8594"/>
+>         <nd ref="-8593"/>
+>         <nd ref="-8592"/>
+>         <nd ref="-8591"/>
+>         <nd ref="-8590"/>
+>         <nd ref="-8589"/>
+>         <nd ref="-8588"/>
+>         <nd ref="-12267"/>
+>         <nd ref="-8586"/>
+>         <nd ref="-8585"/>
+>         <nd ref="-8584"/>
+>         <nd ref="-8583"/>
+>         <nd ref="-8582"/>
+>         <nd ref="-8581"/>
+>         <nd ref="-8580"/>
+>         <nd ref="-8579"/>
+>         <nd ref="-8578"/>
+>         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+>         <tag k="highway" v="residential"/>
+>         <tag k="error:circular" v="15"/>
+>     </way>
+>     <way visible="true" id="-6865" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12"/>
+>         <nd ref="-1264"/>
+>         <nd ref="-1263"/>
+>         <nd ref="-1262"/>
+>         <nd ref="-12553"/>
+>         <nd ref="-12554"/>
+>         <nd ref="-1261"/>
+>         <nd ref="-1260"/>
+>         <nd ref="-1259"/>
+>         <nd ref="-1258"/>
+>         <nd ref="-1257"/>
+>         <nd ref="-1256"/>
+>         <nd ref="-1255"/>
+>         <nd ref="-1254"/>
+>         <nd ref="-1253"/>
+>         <nd ref="-1252"/>
+>         <nd ref="-1251"/>
+>         <nd ref="-1250"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="condition" v="functional"/>
+>         <tag k="ref" v="RN6"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="no"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-6864" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12545"/>
+9165,9166c9553,9554
+<     <way visible="true" id="-7083" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12635"/>
+---
+>     <way visible="true" id="-6859" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12540"/>
+9175c9563
+<     <way visible="true" id="-7079" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6855" timestamp="1970-01-01T00:00:00Z" version="1">
+9177c9565
+<         <nd ref="-12634"/>
+---
+>         <nd ref="-12539"/>
+9186c9574
+<         <nd ref="-12635"/>
+---
+>         <nd ref="-12540"/>
+9214c9602
+<     <way visible="true" id="-7078" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6854" timestamp="1970-01-01T00:00:00Z" version="1">
+9226c9614
+<         <nd ref="-12582"/>
+---
+>         <nd ref="-12487"/>
+9231c9619
+<     <way visible="true" id="-7073" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6849" timestamp="1970-01-01T00:00:00Z" version="1">
+9267c9655
+<         <nd ref="-12629"/>
+---
+>         <nd ref="-12534"/>
+9269c9657
+<         <nd ref="-12630"/>
+---
+>         <nd ref="-12535"/>
+9300c9688
+<     <way visible="true" id="-7065" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6841" timestamp="1970-01-01T00:00:00Z" version="1">
+9304c9692
+<         <nd ref="-12615"/>
+---
+>         <nd ref="-12520"/>
+9307,9308c9695,9696
+<         <nd ref="-12616"/>
+<         <nd ref="-12617"/>
+---
+>         <nd ref="-12521"/>
+>         <nd ref="-12522"/>
+9333c9721
+<     <way visible="true" id="-7064" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6840" timestamp="1970-01-01T00:00:00Z" version="1">
+9342c9730
+<     <way visible="true" id="-7061" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6837" timestamp="1970-01-01T00:00:00Z" version="1">
+9345c9733
+<         <nd ref="-12611"/>
+---
+>         <nd ref="-12516"/>
+9564c9952
+<     <way visible="true" id="-7058" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6834" timestamp="1970-01-01T00:00:00Z" version="1">
+9571c9959
+<     <way visible="true" id="-7055" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6831" timestamp="1970-01-01T00:00:00Z" version="1">
+9602c9990
+<         <nd ref="-12606"/>
+---
+>         <nd ref="-12511"/>
+9606c9994
+<         <nd ref="-12607"/>
+---
+>         <nd ref="-12512"/>
+9630c10018
+<     <way visible="true" id="-7051" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6827" timestamp="1970-01-01T00:00:00Z" version="1">
+9632c10020
+<         <nd ref="-12598"/>
+---
+>         <nd ref="-12503"/>
+9634,9635c10022,10023
+<         <nd ref="-12599"/>
+<         <nd ref="-12600"/>
+---
+>         <nd ref="-12504"/>
+>         <nd ref="-12505"/>
+9665,9666c10053,10054
+<     <way visible="true" id="-7050" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12592"/>
+---
+>     <way visible="true" id="-6826" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12497"/>
+9679c10067
+<     <way visible="true" id="-7048" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6824" timestamp="1970-01-01T00:00:00Z" version="1">
+9681c10069
+<         <nd ref="-12593"/>
+---
+>         <nd ref="-12498"/>
+9688c10076
+<     <way visible="true" id="-7045" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6821" timestamp="1970-01-01T00:00:00Z" version="1">
+9731c10119
+<         <nd ref="-12592"/>
+---
+>         <nd ref="-12497"/>
+9765c10153
+<         <nd ref="-12593"/>
+---
+>         <nd ref="-12498"/>
+9800c10188
+<     <way visible="true" id="-7040" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6816" timestamp="1970-01-01T00:00:00Z" version="1">
+9802c10190
+<         <nd ref="-12582"/>
+---
+>         <nd ref="-12487"/>
+9811c10199
+<         <nd ref="-12583"/>
+---
+>         <nd ref="-12488"/>
+9813,9814c10201,10202
+<         <nd ref="-12584"/>
+<         <nd ref="-12585"/>
+---
+>         <nd ref="-12489"/>
+>         <nd ref="-12490"/>
+9838c10226
+<     <way visible="true" id="-7036" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6812" timestamp="1970-01-01T00:00:00Z" version="1">
+9845c10233
+<         <nd ref="-12576"/>
+---
+>         <nd ref="-12481"/>
+9849c10237
+<         <nd ref="-12577"/>
+---
+>         <nd ref="-12482"/>
+9851c10239
+<         <nd ref="-12578"/>
+---
+>         <nd ref="-12483"/>
+9875c10263
+<     <way visible="true" id="-7032" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6808" timestamp="1970-01-01T00:00:00Z" version="1">
+9881c10269
+<         <nd ref="-12572"/>
+---
+>         <nd ref="-12477"/>
+9990c10378
+<     <way visible="true" id="-7029" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6805" timestamp="1970-01-01T00:00:00Z" version="1">
+9992c10380
+<         <nd ref="-12566"/>
+---
+>         <nd ref="-12471"/>
+9997c10385
+<         <nd ref="-12567"/>
+---
+>         <nd ref="-12472"/>
+10023c10411
+<     <way visible="true" id="-7028" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6804" timestamp="1970-01-01T00:00:00Z" version="1">
+10025c10413
+<         <nd ref="-12584"/>
+---
+>         <nd ref="-12489"/>
+10030c10418
+<     <way visible="true" id="-7025" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6801" timestamp="1970-01-01T00:00:00Z" version="1">
+10032c10420
+<         <nd ref="-12561"/>
+---
+>         <nd ref="-12466"/>
+10055,10122c10443
+<     <way visible="true" id="-7018" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-1250"/>
+<         <nd ref="-12547"/>
+<         <nd ref="-1249"/>
+<         <nd ref="-12548"/>
+<         <nd ref="-1248"/>
+<         <nd ref="-1247"/>
+<         <nd ref="-1246"/>
+<         <nd ref="-12549"/>
+<         <nd ref="-1245"/>
+<         <nd ref="-12550"/>
+<         <nd ref="-1244"/>
+<         <nd ref="-1243"/>
+<         <nd ref="-12551"/>
+<         <nd ref="-1242"/>
+<         <nd ref="-12552"/>
+<         <nd ref="-1241"/>
+<         <nd ref="-1240"/>
+<         <nd ref="-865"/>
+<         <nd ref="-1239"/>
+<         <nd ref="-1238"/>
+<         <nd ref="-1237"/>
+<         <nd ref="-1236"/>
+<         <nd ref="-1235"/>
+<         <nd ref="-1234"/>
+<         <nd ref="-1233"/>
+<         <nd ref="-1232"/>
+<         <nd ref="-1231"/>
+<         <nd ref="-341"/>
+<         <nd ref="-1230"/>
+<         <nd ref="-1229"/>
+<         <nd ref="-1228"/>
+<         <nd ref="-1227"/>
+<         <nd ref="-1226"/>
+<         <nd ref="-1225"/>
+<         <nd ref="-1224"/>
+<         <nd ref="-1223"/>
+<         <nd ref="-1222"/>
+<         <nd ref="-1221"/>
+<         <nd ref="-1220"/>
+<         <nd ref="-1219"/>
+<         <nd ref="-1218"/>
+<         <nd ref="-1217"/>
+<         <nd ref="-1216"/>
+<         <tag k="width:minimum_traveled_way" v="3"/>
+<         <tag k="source" v="mgcp"/>
+<         <tag k="source:accuracy:horizontal" v="25"/>
+<         <tag k="condition" v="functional"/>
+<         <tag k="ref" v="RN6"/>
+<         <tag k="lanes" v="1"/>
+<         <tag k="oneway" v="yes"/>
+<         <tag k="seasonal" v="no"/>
+<         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+<         <tag k="surface" v="unpaved"/>
+<         <tag k="median" v="no"/>
+<         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+<         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+<         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+<         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<         <tag k="highway" v="road"/>
+<         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+<         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+<         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+<         <tag k="location" v="surface"/>
+<         <tag k="error:circular" v="28.65"/>
+<     </way>
+<     <way visible="true" id="-7016" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6799" timestamp="1970-01-01T00:00:00Z" version="1">
+10124c10445
+<         <nd ref="-12543"/>
+---
+>         <nd ref="-12462"/>
+10156c10477
+<     <way visible="true" id="-7011" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6794" timestamp="1970-01-01T00:00:00Z" version="1">
+10159c10480
+<         <nd ref="-12533"/>
+---
+>         <nd ref="-12452"/>
+10162,10163c10483,10484
+<         <nd ref="-12534"/>
+<         <nd ref="-12535"/>
+---
+>         <nd ref="-12453"/>
+>         <nd ref="-12454"/>
+10165c10486
+<         <nd ref="-12536"/>
+---
+>         <nd ref="-12455"/>
+10189c10510
+<     <way visible="true" id="-7004" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6787" timestamp="1970-01-01T00:00:00Z" version="1">
+10194,10195c10515,10516
+<         <nd ref="-12523"/>
+<         <nd ref="-12524"/>
+---
+>         <nd ref="-12442"/>
+>         <nd ref="-12443"/>
+10197c10518
+<         <nd ref="-12525"/>
+---
+>         <nd ref="-12444"/>
+10200c10521
+<         <nd ref="-12526"/>
+---
+>         <nd ref="-12445"/>
+10224c10545
+<     <way visible="true" id="-7003" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6786" timestamp="1970-01-01T00:00:00Z" version="1">
+10233,10234c10554,10555
+<     <way visible="true" id="-7001" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12510"/>
+---
+>     <way visible="true" id="-6784" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12429"/>
+10241,10242c10562,10563
+<     <way visible="true" id="-6999" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12507"/>
+---
+>     <way visible="true" id="-6782" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12426"/>
+10247c10568
+<         <nd ref="-12509"/>
+---
+>         <nd ref="-12428"/>
+10253c10574
+<     <way visible="true" id="-6997" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6780" timestamp="1970-01-01T00:00:00Z" version="1">
+10256c10577
+<         <nd ref="-12506"/>
+---
+>         <nd ref="-12425"/>
+10262c10583
+<     <way visible="true" id="-6991" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6774" timestamp="1970-01-01T00:00:00Z" version="1">
+10277c10598
+<         <nd ref="-12506"/>
+---
+>         <nd ref="-12425"/>
+10282c10603
+<         <nd ref="-12507"/>
+---
+>         <nd ref="-12426"/>
+10284c10605
+<         <nd ref="-12508"/>
+---
+>         <nd ref="-12427"/>
+10316c10637
+<         <nd ref="-12509"/>
+---
+>         <nd ref="-12428"/>
+10319c10640
+<         <nd ref="-12510"/>
+---
+>         <nd ref="-12429"/>
+10354c10675
+<     <way visible="true" id="-6988" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6771" timestamp="1970-01-01T00:00:00Z" version="1">
+10456c10777
+<     <way visible="true" id="-6986" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6769" timestamp="1970-01-01T00:00:00Z" version="1">
+10458c10779
+<         <nd ref="-12502"/>
+---
+>         <nd ref="-12421"/>
+10485c10806
+<     <way visible="true" id="-6985" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6768" timestamp="1970-01-01T00:00:00Z" version="1">
+10494c10815
+<     <way visible="true" id="-6983" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6766" timestamp="1970-01-01T00:00:00Z" version="1">
+10503c10824
+<     <way visible="true" id="-6981" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6764" timestamp="1970-01-01T00:00:00Z" version="1">
+10506c10827
+<         <nd ref="-12495"/>
+---
+>         <nd ref="-12414"/>
+10531c10852
+<     <way visible="true" id="-6980" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6763" timestamp="1970-01-01T00:00:00Z" version="1">
+10539c10860
+<     <way visible="true" id="-6972" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6755" timestamp="1970-01-01T00:00:00Z" version="1">
+10547c10868
+<         <nd ref="-12483"/>
+---
+>         <nd ref="-12402"/>
+10549c10870
+<         <nd ref="-12484"/>
+---
+>         <nd ref="-12403"/>
+10552c10873
+<         <nd ref="-12485"/>
+---
+>         <nd ref="-12404"/>
+10579c10900
+<     <way visible="true" id="-6970" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6753" timestamp="1970-01-01T00:00:00Z" version="1">
+10586c10907
+<         <nd ref="-12482"/>
+---
+>         <nd ref="-12401"/>
+10611c10932
+<     <way visible="true" id="-6968" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6751" timestamp="1970-01-01T00:00:00Z" version="1">
+10634c10955
+<     <way visible="true" id="-6965" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6748" timestamp="1970-01-01T00:00:00Z" version="1">
+10723,10724c11044,11045
+<     <way visible="true" id="-6964" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12448"/>
+---
+>     <way visible="true" id="-6747" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12367"/>
+10733c11054
+<     <way visible="true" id="-6961" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6744" timestamp="1970-01-01T00:00:00Z" version="1">
+10744c11065
+<     <way visible="true" id="-6959" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6742" timestamp="1970-01-01T00:00:00Z" version="1">
+10754c11075
+<     <way visible="true" id="-6956" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6739" timestamp="1970-01-01T00:00:00Z" version="1">
+10764c11085
+<     <way visible="true" id="-6954" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6737" timestamp="1970-01-01T00:00:00Z" version="1">
+10774,10775c11095,11096
+<     <way visible="true" id="-6952" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12447"/>
+---
+>     <way visible="true" id="-6735" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12366"/>
+10782c11103
+<     <way visible="true" id="-6948" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6731" timestamp="1970-01-01T00:00:00Z" version="1">
+10786c11107
+<         <nd ref="-12449"/>
+---
+>         <nd ref="-12368"/>
+10792c11113
+<     <way visible="true" id="-6944" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6727" timestamp="1970-01-01T00:00:00Z" version="1">
+10802c11123
+<         <nd ref="-12448"/>
+---
+>         <nd ref="-12367"/>
+10829c11150
+<     <way visible="true" id="-6939" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6722" timestamp="1970-01-01T00:00:00Z" version="1">
+10933c11254
+<     <way visible="true" id="-6931" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6714" timestamp="1970-01-01T00:00:00Z" version="1">
+10962,11075c11283,11301
+<         <nd ref="-1905"/>
+<         <nd ref="-1904"/>
+<         <nd ref="-1903"/>
+<         <nd ref="-1902"/>
+<         <nd ref="-1901"/>
+<         <nd ref="-1900"/>
+<         <nd ref="-1899"/>
+<         <nd ref="-1898"/>
+<         <nd ref="-1897"/>
+<         <nd ref="-1896"/>
+<         <nd ref="-1895"/>
+<         <nd ref="-1894"/>
+<         <nd ref="-1893"/>
+<         <nd ref="-1892"/>
+<         <nd ref="-1891"/>
+<         <nd ref="-1890"/>
+<         <nd ref="-1889"/>
+<         <nd ref="-1888"/>
+<         <nd ref="-1887"/>
+<         <tag k="width:minimum_traveled_way" v="3"/>
+<         <tag k="source" v="mgcp"/>
+<         <tag k="source:accuracy:horizontal" v="25"/>
+<         <tag k="condition" v="functional"/>
+<         <tag k="ref" v="RS339"/>
+<         <tag k="lanes" v="1"/>
+<         <tag k="seasonal" v="no"/>
+<         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+<         <tag k="surface" v="unpaved"/>
+<         <tag k="median" v="no"/>
+<         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+<         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.851Z"/>
+<         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+<         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<         <tag k="highway" v="road"/>
+<         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+<         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+<         <tag k="uuid" v="{8E50E735-D174-4162-9905-B182AA6C1902}"/>
+<         <tag k="location" v="surface"/>
+<         <tag k="error:circular" v="28.65"/>
+<     </way>
+<     <way visible="true" id="-6927" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-1212"/>
+<         <nd ref="-1299"/>
+<         <nd ref="-12439"/>
+<         <nd ref="-12440"/>
+<         <nd ref="-1298"/>
+<         <nd ref="-12441"/>
+<         <nd ref="-1297"/>
+<         <tag k="width:minimum_traveled_way" v="3"/>
+<         <tag k="source" v="mgcp"/>
+<         <tag k="source:accuracy:horizontal" v="25"/>
+<         <tag k="condition" v="functional"/>
+<         <tag k="lanes" v="1"/>
+<         <tag k="seasonal" v="fair"/>
+<         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+<         <tag k="surface" v="unpaved"/>
+<         <tag k="median" v="no"/>
+<         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+<         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+<         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+<         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<         <tag k="highway" v="road"/>
+<         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+<         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+<         <tag k="uuid" v="{2D2AEF5B-A92C-4EAD-8CF6-31C6C7521C40}"/>
+<         <tag k="location" v="surface"/>
+<         <tag k="error:circular" v="28.65"/>
+<     </way>
+<     <way visible="true" id="-6921" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-12"/>
+<         <nd ref="-1264"/>
+<         <nd ref="-1263"/>
+<         <nd ref="-1262"/>
+<         <nd ref="-12429"/>
+<         <nd ref="-1261"/>
+<         <nd ref="-1260"/>
+<         <nd ref="-1259"/>
+<         <nd ref="-1258"/>
+<         <nd ref="-1257"/>
+<         <nd ref="-1256"/>
+<         <nd ref="-1255"/>
+<         <nd ref="-1254"/>
+<         <tag k="width:minimum_traveled_way" v="3"/>
+<         <tag k="source" v="mgcp"/>
+<         <tag k="source:accuracy:horizontal" v="25"/>
+<         <tag k="condition" v="functional"/>
+<         <tag k="ref" v="RN6"/>
+<         <tag k="lanes" v="1"/>
+<         <tag k="seasonal" v="no"/>
+<         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+<         <tag k="surface" v="unpaved"/>
+<         <tag k="median" v="no"/>
+<         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+<         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+<         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+<         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<         <tag k="highway" v="road"/>
+<         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+<         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+<         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+<         <tag k="location" v="surface"/>
+<         <tag k="error:circular" v="28.65"/>
+<     </way>
+<     <way visible="true" id="-6918" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-1254"/>
+<         <nd ref="-1253"/>
+<         <nd ref="-1252"/>
+<         <nd ref="-12427"/>
+<         <nd ref="-1251"/>
+<         <nd ref="-12428"/>
+<         <nd ref="-1250"/>
+---
+>         <nd ref="-1905"/>
+>         <nd ref="-1904"/>
+>         <nd ref="-1903"/>
+>         <nd ref="-1902"/>
+>         <nd ref="-1901"/>
+>         <nd ref="-1900"/>
+>         <nd ref="-1899"/>
+>         <nd ref="-1898"/>
+>         <nd ref="-1897"/>
+>         <nd ref="-1896"/>
+>         <nd ref="-1895"/>
+>         <nd ref="-1894"/>
+>         <nd ref="-1893"/>
+>         <nd ref="-1892"/>
+>         <nd ref="-1891"/>
+>         <nd ref="-1890"/>
+>         <nd ref="-1889"/>
+>         <nd ref="-1888"/>
+>         <nd ref="-1887"/>
+11080,11081c11306
+<         <tag k="ref" v="RN6"/>
+<         <tag k="oneway" v="yes"/>
+---
+>         <tag k="ref" v="RS339"/>
+11088d11312
+<         <tag k="junction" v="roundabout"/>
+11090c11314
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.851Z"/>
+11096c11320
+<         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+---
+>         <tag k="uuid" v="{8E50E735-D174-4162-9905-B182AA6C1902}"/>
+11100c11324
+<     <way visible="true" id="-6916" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6712" timestamp="1970-01-01T00:00:00Z" version="1">
+11152c11376
+<         <nd ref="-12424"/>
+---
+>         <nd ref="-12363"/>
+11188,11284c11412,11419
+<     <way visible="true" id="-6912" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-2269"/>
+<         <nd ref="-2268"/>
+<         <nd ref="-2267"/>
+<         <nd ref="-2266"/>
+<         <nd ref="-12416"/>
+<         <nd ref="-12417"/>
+<         <nd ref="-12418"/>
+<         <nd ref="-1250"/>
+<         <tag k="width:minimum_traveled_way" v="3"/>
+<         <tag k="source" v="mgcp;orthophoto"/>
+<         <tag k="source:accuracy:horizontal" v="25"/>
+<         <tag k="condition" v="functional"/>
+<         <tag k="ref" v="orthophoto"/>
+<         <tag k="oneway" v="yes"/>
+<         <tag k="lanes" v="1"/>
+<         <tag k="seasonal" v="fair"/>
+<         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+<         <tag k="alt_name" v="RN6"/>
+<         <tag k="surface" v="unpaved"/>
+<         <tag k="median" v="no"/>
+<         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+<         <tag k="junction" v="roundabout"/>
+<         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+<         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+<         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<         <tag k="highway" v="road"/>
+<         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+<         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+<         <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
+<         <tag k="location" v="surface"/>
+<         <tag k="error:circular" v="28.65"/>
+<     </way>
+<     <way visible="true" id="-6908" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-1216"/>
+<         <nd ref="-2302"/>
+<         <nd ref="-2301"/>
+<         <nd ref="-2300"/>
+<         <nd ref="-2299"/>
+<         <nd ref="-2298"/>
+<         <nd ref="-2297"/>
+<         <nd ref="-2296"/>
+<         <nd ref="-2295"/>
+<         <nd ref="-2294"/>
+<         <nd ref="-2293"/>
+<         <nd ref="-2292"/>
+<         <nd ref="-2291"/>
+<         <nd ref="-2290"/>
+<         <nd ref="-2289"/>
+<         <nd ref="-2288"/>
+<         <nd ref="-2287"/>
+<         <nd ref="-2286"/>
+<         <nd ref="-2285"/>
+<         <nd ref="-2284"/>
+<         <nd ref="-2283"/>
+<         <nd ref="-2282"/>
+<         <nd ref="-2281"/>
+<         <nd ref="-2280"/>
+<         <nd ref="-2279"/>
+<         <nd ref="-12410"/>
+<         <nd ref="-2278"/>
+<         <nd ref="-2277"/>
+<         <nd ref="-857"/>
+<         <tag k="width:minimum_traveled_way" v="3"/>
+<         <tag k="source" v="mgcp"/>
+<         <tag k="source:accuracy:horizontal" v="25"/>
+<         <tag k="condition" v="functional"/>
+<         <tag k="lanes" v="1"/>
+<         <tag k="seasonal" v="fair"/>
+<         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+<         <tag k="surface" v="unpaved"/>
+<         <tag k="median" v="no"/>
+<         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+<         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+<         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+<         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<         <tag k="highway" v="road"/>
+<         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+<         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+<         <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
+<         <tag k="location" v="surface"/>
+<         <tag k="error:circular" v="28.65"/>
+<     </way>
+<     <way visible="true" id="-6905" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-857"/>
+<         <nd ref="-2276"/>
+<         <nd ref="-2275"/>
+<         <nd ref="-2274"/>
+<         <nd ref="-12408"/>
+<         <nd ref="-2273"/>
+<         <nd ref="-2272"/>
+<         <nd ref="-2271"/>
+<         <nd ref="-12409"/>
+<         <nd ref="-2270"/>
+<         <nd ref="-2269"/>
+---
+>     <way visible="true" id="-6708" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-1212"/>
+>         <nd ref="-1299"/>
+>         <nd ref="-12355"/>
+>         <nd ref="-12356"/>
+>         <nd ref="-1298"/>
+>         <nd ref="-12357"/>
+>         <nd ref="-1297"/>
+11296c11431
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+11302c11437
+<         <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
+---
+>         <tag k="uuid" v="{2D2AEF5B-A92C-4EAD-8CF6-31C6C7521C40}"/>
+11306c11441
+<     <way visible="true" id="-6903" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6706" timestamp="1970-01-01T00:00:00Z" version="1">
+11309c11444
+<         <nd ref="-12379"/>
+---
+>         <nd ref="-12326"/>
+11315,11317c11450,11452
+<     <way visible="true" id="-6901" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12377"/>
+<         <nd ref="-12378"/>
+---
+>     <way visible="true" id="-6704" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12324"/>
+>         <nd ref="-12325"/>
+11323,11324c11458,11459
+<     <way visible="true" id="-6899" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12375"/>
+---
+>     <way visible="true" id="-6702" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12322"/>
+11327c11462
+<         <nd ref="-12376"/>
+---
+>         <nd ref="-12323"/>
+11333c11468
+<     <way visible="true" id="-6897" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6700" timestamp="1970-01-01T00:00:00Z" version="1">
+11335c11470
+<         <nd ref="-12374"/>
+---
+>         <nd ref="-12321"/>
+11341c11476
+<     <way visible="true" id="-6895" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-6698" timestamp="1970-01-01T00:00:00Z" version="1">
+11350c11485
+<     <way visible="true" id="-6889" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6692" timestamp="1970-01-01T00:00:00Z" version="1">
+11357c11492
+<         <nd ref="-12379"/>
+---
+>         <nd ref="-12326"/>
+11381c11516
+<     <way visible="true" id="-6887" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6690" timestamp="1970-01-01T00:00:00Z" version="1">
+11400c11535
+<         <nd ref="-12378"/>
+---
+>         <nd ref="-12325"/>
+11429c11564
+<     <way visible="true" id="-6884" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6687" timestamp="1970-01-01T00:00:00Z" version="1">
+11441c11576
+<         <nd ref="-12376"/>
+---
+>         <nd ref="-12323"/>
+11446c11581
+<         <nd ref="-12377"/>
+---
+>         <nd ref="-12324"/>
+11473c11608
+<     <way visible="true" id="-6881" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6684" timestamp="1970-01-01T00:00:00Z" version="1">
+11479,11480c11614,11615
+<         <nd ref="-12374"/>
+<         <nd ref="-12375"/>
+---
+>         <nd ref="-12321"/>
+>         <nd ref="-12322"/>
+11507c11642
+<     <way visible="true" id="-6877" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6680" timestamp="1970-01-01T00:00:00Z" version="1">
+11546c11681
+<     <way visible="true" id="-6871" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6674" timestamp="1970-01-01T00:00:00Z" version="1">
+11548c11683
+<         <nd ref="-12366"/>
+---
+>         <nd ref="-12313"/>
+11550c11685
+<         <nd ref="-12367"/>
+---
+>         <nd ref="-12314"/>
+11573,11580c11708,11717
+<     <way visible="true" id="-6862" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-334"/>
+<         <nd ref="-333"/>
+<         <nd ref="-332"/>
+<         <nd ref="-331"/>
+<         <nd ref="-330"/>
+<         <nd ref="-329"/>
+<         <nd ref="-328"/>
+---
+>     <way visible="true" id="-6669" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-2269"/>
+>         <nd ref="-2268"/>
+>         <nd ref="-2267"/>
+>         <nd ref="-2266"/>
+>         <nd ref="-12303"/>
+>         <nd ref="-12304"/>
+>         <nd ref="-12305"/>
+>         <nd ref="-12306"/>
+>         <nd ref="-1250"/>
+11582c11719
+<         <tag k="source" v="mgcp"/>
+---
+>         <tag k="source" v="mgcp;orthophoto"/>
+11584a11722,11723
+>         <tag k="ref" v="RN6"/>
+>         <tag k="oneway" v="yes"/>
+11590a11730
+>         <tag k="junction" v="roundabout"/>
+11592c11732
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+11598c11738
+<         <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
+---
+>         <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
+11602c11742
+<     <way visible="true" id="-6857" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6664" timestamp="1970-01-01T00:00:00Z" version="1">
+11607,11608c11747,11748
+<         <nd ref="-12344"/>
+<         <nd ref="-12345"/>
+---
+>         <nd ref="-12293"/>
+>         <nd ref="-12294"/>
+11610c11750
+<         <nd ref="-12346"/>
+---
+>         <nd ref="-12295"/>
+11612c11752
+<         <nd ref="-12347"/>
+---
+>         <nd ref="-12296"/>
+11618c11758,11863
+<         <tag k="ref" v="RS339"/>
+---
+>         <tag k="ref" v="RS339"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="fair"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{5E4FEAA0-56F0-41FD-8C02-D7D9F708125E}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-6663" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-884"/>
+>         <nd ref="-8777"/>
+>         <nd ref="-8776"/>
+>         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+>         <tag k="highway" v="residential"/>
+>         <tag k="error:circular" v="15"/>
+>     </way>
+>     <way visible="true" id="-6661" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-8827"/>
+>         <nd ref="-8826"/>
+>         <nd ref="-8825"/>
+>         <nd ref="-8824"/>
+>         <nd ref="-8823"/>
+>         <nd ref="-8780"/>
+>         <nd ref="-8779"/>
+>         <nd ref="-886"/>
+>         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+>         <tag k="highway" v="residential"/>
+>         <tag k="error:circular" v="15"/>
+>     </way>
+>     <way visible="true" id="-6654" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-1216"/>
+>         <nd ref="-2302"/>
+>         <nd ref="-2301"/>
+>         <nd ref="-2300"/>
+>         <nd ref="-2299"/>
+>         <nd ref="-2298"/>
+>         <nd ref="-2297"/>
+>         <nd ref="-2296"/>
+>         <nd ref="-2295"/>
+>         <nd ref="-2294"/>
+>         <nd ref="-2293"/>
+>         <nd ref="-2292"/>
+>         <nd ref="-2291"/>
+>         <nd ref="-2290"/>
+>         <nd ref="-2289"/>
+>         <nd ref="-2288"/>
+>         <nd ref="-2287"/>
+>         <nd ref="-2286"/>
+>         <nd ref="-2285"/>
+>         <nd ref="-2284"/>
+>         <nd ref="-2283"/>
+>         <nd ref="-2282"/>
+>         <nd ref="-2281"/>
+>         <nd ref="-2280"/>
+>         <nd ref="-2279"/>
+>         <nd ref="-12277"/>
+>         <nd ref="-2278"/>
+>         <nd ref="-2277"/>
+>         <nd ref="-857"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="condition" v="functional"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="fair"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-6651" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-857"/>
+>         <nd ref="-2276"/>
+>         <nd ref="-2275"/>
+>         <nd ref="-2274"/>
+>         <nd ref="-12275"/>
+>         <nd ref="-2273"/>
+>         <nd ref="-2272"/>
+>         <nd ref="-2271"/>
+>         <nd ref="-12276"/>
+>         <nd ref="-2270"/>
+>         <nd ref="-2269"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="condition" v="functional"/>
+11626c11871
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+11632c11877
+<         <tag k="uuid" v="{5E4FEAA0-56F0-41FD-8C02-D7D9F708125E}"/>
+---
+>         <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
+11636,11657c11881
+<     <way visible="true" id="-6856" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-884"/>
+<         <nd ref="-8777"/>
+<         <nd ref="-8776"/>
+<         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+<         <tag k="highway" v="residential"/>
+<         <tag k="error:circular" v="15"/>
+<     </way>
+<     <way visible="true" id="-6854" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-8827"/>
+<         <nd ref="-8826"/>
+<         <nd ref="-8825"/>
+<         <nd ref="-8824"/>
+<         <nd ref="-8823"/>
+<         <nd ref="-8780"/>
+<         <nd ref="-8779"/>
+<         <nd ref="-886"/>
+<         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+<         <tag k="highway" v="residential"/>
+<         <tag k="error:circular" v="15"/>
+<     </way>
+<     <way visible="true" id="-6840" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6646" timestamp="1970-01-01T00:00:00Z" version="1">
+11659,11660c11883,11884
+<         <nd ref="-12314"/>
+<         <nd ref="-12315"/>
+---
+>         <nd ref="-12265"/>
+>         <nd ref="-12266"/>
+11662c11886
+<         <nd ref="-12316"/>
+---
+>         <nd ref="-12267"/>
+11664c11888
+<         <nd ref="-12317"/>
+---
+>         <nd ref="-12268"/>
+11690,11697c11914,11921
+<     <way visible="true" id="-6833" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-1204"/>
+<         <nd ref="-1348"/>
+<         <nd ref="-1347"/>
+<         <nd ref="-1346"/>
+<         <nd ref="-1345"/>
+<         <nd ref="-1344"/>
+<         <nd ref="-1343"/>
+---
+>     <way visible="true" id="-6637" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-334"/>
+>         <nd ref="-333"/>
+>         <nd ref="-332"/>
+>         <nd ref="-331"/>
+>         <nd ref="-330"/>
+>         <nd ref="-329"/>
+>         <nd ref="-328"/>
+11709c11933
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.862Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+11715c11939
+<         <tag k="uuid" v="{24A43D12-8542-458D-AC2C-9D0FC6314056}"/>
+---
+>         <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
+11719c11943
+<     <way visible="true" id="-6829" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6633" timestamp="1970-01-01T00:00:00Z" version="1">
+11724c11948
+<         <nd ref="-12298"/>
+---
+>         <nd ref="-12247"/>
+11748c11972
+<     <way visible="true" id="-6824" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6628" timestamp="1970-01-01T00:00:00Z" version="1">
+11751,11752c11975,11976
+<         <nd ref="-12290"/>
+<         <nd ref="-12291"/>
+---
+>         <nd ref="-12237"/>
+>         <nd ref="-12238"/>
+11754c11978
+<         <nd ref="-12292"/>
+---
+>         <nd ref="-12239"/>
+11777,11804c12001,12045
+<     <way visible="true" id="-6822" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-8747"/>
+<         <nd ref="-8746"/>
+<         <nd ref="-8745"/>
+<         <nd ref="-8744"/>
+<         <nd ref="-8743"/>
+<         <nd ref="-497"/>
+<         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+<         <tag k="highway" v="residential"/>
+<         <tag k="error:circular" v="15"/>
+<     </way>
+<     <way visible="true" id="-6819" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-467"/>
+<         <nd ref="-12283"/>
+<         <nd ref="-891"/>
+<         <nd ref="-12284"/>
+<         <nd ref="-890"/>
+<         <nd ref="-889"/>
+<         <nd ref="-888"/>
+<         <nd ref="-768"/>
+<         <nd ref="-887"/>
+<         <nd ref="-886"/>
+<         <nd ref="-885"/>
+<         <nd ref="-884"/>
+<         <nd ref="-883"/>
+<         <nd ref="-882"/>
+<         <nd ref="-881"/>
+<         <nd ref="-880"/>
+---
+>     <way visible="true" id="-6614" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-1250"/>
+>         <nd ref="-12213"/>
+>         <nd ref="-12214"/>
+>         <nd ref="-1249"/>
+>         <nd ref="-12215"/>
+>         <nd ref="-1248"/>
+>         <nd ref="-1247"/>
+>         <nd ref="-1246"/>
+>         <nd ref="-12216"/>
+>         <nd ref="-1245"/>
+>         <nd ref="-12217"/>
+>         <nd ref="-1244"/>
+>         <nd ref="-1243"/>
+>         <nd ref="-12218"/>
+>         <nd ref="-1242"/>
+>         <nd ref="-12219"/>
+>         <nd ref="-1241"/>
+>         <nd ref="-1240"/>
+>         <nd ref="-865"/>
+>         <nd ref="-1239"/>
+>         <nd ref="-1238"/>
+>         <nd ref="-1237"/>
+>         <nd ref="-1236"/>
+>         <nd ref="-1235"/>
+>         <nd ref="-1234"/>
+>         <nd ref="-1233"/>
+>         <nd ref="-1232"/>
+>         <nd ref="-1231"/>
+>         <nd ref="-341"/>
+>         <nd ref="-1230"/>
+>         <nd ref="-1229"/>
+>         <nd ref="-1228"/>
+>         <nd ref="-1227"/>
+>         <nd ref="-1226"/>
+>         <nd ref="-1225"/>
+>         <nd ref="-1224"/>
+>         <nd ref="-1223"/>
+>         <nd ref="-1222"/>
+>         <nd ref="-1221"/>
+>         <nd ref="-1220"/>
+>         <nd ref="-1219"/>
+>         <nd ref="-1218"/>
+>         <nd ref="-1217"/>
+>         <nd ref="-1216"/>
+11808a12050
+>         <tag k="ref" v="RN6"/>
+11810c12052,12053
+<         <tag k="seasonal" v="fair"/>
+---
+>         <tag k="oneway" v="yes"/>
+>         <tag k="seasonal" v="no"/>
+11814a12058
+>         <tag k="junction" v="roundabout"/>
+11816c12060
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.876Z"/>
+---
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+11822c12066
+<         <tag k="uuid" v="{C5C59584-2BE7-4F8A-BD12-6B2EA49941FB}"/>
+---
+>         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+11826c12070
+<     <way visible="true" id="-6815" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6605" timestamp="1970-01-01T00:00:00Z" version="1">
+11831c12075
+<         <nd ref="-12275"/>
+---
+>         <nd ref="-12197"/>
+11833c12077
+<         <nd ref="-12276"/>
+---
+>         <nd ref="-12198"/>
+11835c12079
+<         <nd ref="-12277"/>
+---
+>         <nd ref="-12199"/>
+11860,11861c12104,12134
+<     <way visible="true" id="-825" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12366"/>
+---
+>     <way visible="true" id="-6603" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-1204"/>
+>         <nd ref="-1348"/>
+>         <nd ref="-1347"/>
+>         <nd ref="-1346"/>
+>         <nd ref="-1345"/>
+>         <nd ref="-1344"/>
+>         <nd ref="-1343"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="condition" v="functional"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="fair"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.862Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{24A43D12-8542-458D-AC2C-9D0FC6314056}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-825" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12313"/>
+11867,11868c12140,12141
+<     <way visible="true" id="-824" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12691"/>
+---
+>     <way visible="true" id="-824" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12604"/>
+11874c12147
+<         <nd ref="-12367"/>
+---
+>         <nd ref="-12314"/>
+11879,11880c12152,12153
+<     <way visible="true" id="-807" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12669"/>
+---
+>     <way visible="true" id="-807" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12582"/>
+11886c12159
+<     <way visible="true" id="-771" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-771" timestamp="1970-01-01T00:00:00Z" version="1">
+11893c12166
+<         <nd ref="-12640"/>
+---
+>         <nd ref="-12545"/>
+11899c12172
+<         <nd ref="-12641"/>
+---
+>         <nd ref="-12546"/>
+11925c12198
+<         <nd ref="-12623"/>
+---
+>         <nd ref="-12528"/>
+11950c12223
+<     <way visible="true" id="-745" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-745" timestamp="1970-01-01T00:00:00Z" version="1">
+11992c12265
+<     <way visible="true" id="-724" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-724" timestamp="1970-01-01T00:00:00Z" version="1">
+11999c12272
+<         <nd ref="-12693"/>
+---
+>         <nd ref="-12606"/>
+12011c12284,12297
+<     <way visible="true" id="-600" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-604" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12305"/>
+>         <nd ref="-8653"/>
+>         <nd ref="-8652"/>
+>         <nd ref="-8651"/>
+>         <nd ref="-1250"/>
+>         <tag k="junction" v="roundabout"/>
+>         <tag k="oneway" v="yes"/>
+>         <tag k="ref" v="RN6"/>
+>         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+>         <tag k="highway" v="primary"/>
+>         <tag k="error:circular" v="15"/>
+>     </way>
+>     <way visible="true" id="-600" timestamp="1970-01-01T00:00:00Z" version="1">
+12014c12300
+<         <nd ref="-12332"/>
+---
+>         <nd ref="-12283"/>
+12016c12302
+<         <nd ref="-12333"/>
+---
+>         <nd ref="-12284"/>
+12019c12305
+<         <nd ref="-12355"/>
+---
+>         <nd ref="-12254"/>
+12021c12307
+<         <nd ref="-12356"/>
+---
+>         <nd ref="-12255"/>
+12023c12309
+<         <nd ref="-12357"/>
+---
+>         <nd ref="-12256"/>
+12025c12311
+<         <nd ref="-12358"/>
+---
+>         <nd ref="-12257"/>
+12053c12339,12343
+<     <way visible="true" id="-587" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-591" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12213"/>
+>         <nd ref="-8646"/>
+>         <nd ref="-8645"/>
+>         <nd ref="-8644"/>
+12067c12357
+<     <way visible="true" id="-586" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-586" timestamp="1970-01-01T00:00:00Z" version="1">
+12098,12117c12388,12389
+<     <way visible="true" id="-583" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12428"/>
+<         <nd ref="-8658"/>
+<         <nd ref="-8657"/>
+<         <nd ref="-8656"/>
+<         <nd ref="-8655"/>
+<         <nd ref="-8654"/>
+<         <nd ref="-8653"/>
+<         <nd ref="-8652"/>
+<         <nd ref="-8651"/>
+<         <nd ref="-12418"/>
+<         <tag k="junction" v="roundabout"/>
+<         <tag k="oneway" v="yes"/>
+<         <tag k="ref" v="RN6"/>
+<         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+<         <tag k="highway" v="primary"/>
+<         <tag k="error:circular" v="15"/>
+<     </way>
+<     <way visible="true" id="-533" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12523"/>
+---
+>     <way visible="true" id="-533" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12442"/>
+12124c12396
+<     <way visible="true" id="-528" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-528" timestamp="1970-01-01T00:00:00Z" version="1">
+12126c12398
+<         <nd ref="-12648"/>
+---
+>         <nd ref="-12561"/>
+12128c12400
+<         <nd ref="-12649"/>
+---
+>         <nd ref="-12562"/>
+12131c12403
+<         <nd ref="-12650"/>
+---
+>         <nd ref="-12563"/>
+12133,12134c12405,12406
+<         <nd ref="-12651"/>
+<         <nd ref="-12652"/>
+---
+>         <nd ref="-12564"/>
+>         <nd ref="-12565"/>
+12144c12416
+<         <nd ref="-12681"/>
+---
+>         <nd ref="-12594"/>
+12189c12461
+<     <way visible="true" id="-521" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-521" timestamp="1970-01-01T00:00:00Z" version="1">
+12220c12492
+<     <way visible="true" id="-513" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-513" timestamp="1970-01-01T00:00:00Z" version="1">
+12362,12364c12634,12636
+<     <way visible="true" id="-498" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12667"/>
+<         <nd ref="-12666"/>
+---
+>     <way visible="true" id="-498" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12580"/>
+>         <nd ref="-12579"/>
+12369c12641,12674
+<     <way visible="true" id="-472" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-473" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-2249"/>
+>         <nd ref="-2248"/>
+>         <nd ref="-745"/>
+>         <nd ref="-2247"/>
+>         <nd ref="-2246"/>
+>         <nd ref="-2245"/>
+>         <nd ref="-2244"/>
+>         <nd ref="-2243"/>
+>         <nd ref="-2242"/>
+>         <nd ref="-2241"/>
+>         <nd ref="-2240"/>
+>         <tag k="width:minimum_traveled_way" v="3"/>
+>         <tag k="source" v="mgcp"/>
+>         <tag k="source:accuracy:horizontal" v="25"/>
+>         <tag k="condition" v="functional"/>
+>         <tag k="lanes" v="1"/>
+>         <tag k="seasonal" v="no"/>
+>         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>         <tag k="surface" v="unpaved"/>
+>         <tag k="median" v="no"/>
+>         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+>         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+>         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+>         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+>         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+>         <tag k="highway" v="road"/>
+>         <tag k="source:datetime" v="2010-01-01T00:00:00Z"/>
+>         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+>         <tag k="uuid" v="{5033398B-9C94-4F16-A44B-1287C0316FC5}"/>
+>         <tag k="location" v="surface"/>
+>         <tag k="error:circular" v="28.65"/>
+>     </way>
+>     <way visible="true" id="-472" timestamp="1970-01-01T00:00:00Z" version="1">
+12373c12678
+<         <nd ref="-12306"/>
+---
+>         <nd ref="-12205"/>
+12388c12693
+<         <nd ref="-12373"/>
+---
+>         <nd ref="-12320"/>
+12414c12719
+<     <way visible="true" id="-450" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-450" timestamp="1970-01-01T00:00:00Z" version="1">
+12475c12780
+<     <way visible="true" id="-438" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-438" timestamp="1970-01-01T00:00:00Z" version="1">
+12482c12787
+<     <way visible="true" id="-423" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-423" timestamp="1970-01-01T00:00:00Z" version="1">
+12493c12798
+<     <way visible="true" id="-383" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-383" timestamp="1970-01-01T00:00:00Z" version="1">
+12497c12802
+<         <nd ref="-12449"/>
+---
+>         <nd ref="-12368"/>
+12514c12819
+<         <nd ref="-12447"/>
+---
+>         <nd ref="-12366"/>
+12576c12881
+<     <way visible="true" id="-382" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-382" timestamp="1970-01-01T00:00:00Z" version="1">
+12593c12898
+<         <nd ref="-12324"/>
+---
+>         <nd ref="-12229"/>
+12598c12903
+<         <nd ref="-12325"/>
+---
+>         <nd ref="-12230"/>
+12627c12932
+<     <way visible="true" id="-377" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-377" timestamp="1970-01-01T00:00:00Z" version="1">
+12652c12957
+<     <way visible="true" id="-369" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-369" timestamp="1970-01-01T00:00:00Z" version="1">
+12662c12967
+<     <way visible="true" id="-358" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-358" timestamp="1970-01-01T00:00:00Z" version="1">
+12700c13005
+<     <way visible="true" id="-355" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-355" timestamp="1970-01-01T00:00:00Z" version="1">
+12708c13013
+<     <way visible="true" id="-327" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-327" timestamp="1970-01-01T00:00:00Z" version="1">
+12734c13039
+<     <way visible="true" id="-300" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-300" timestamp="1970-01-01T00:00:00Z" version="1">
+12737c13042
+<         <nd ref="-12317"/>
+---
+>         <nd ref="-12268"/>
+12743c13048
+<     <way visible="true" id="-298" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-298" timestamp="1970-01-01T00:00:00Z" version="1">
+12760c13065
+<     <way visible="true" id="-297" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-297" timestamp="1970-01-01T00:00:00Z" version="1">
+12766c13071
+<         <nd ref="-12291"/>
+---
+>         <nd ref="-12238"/>
+12772c13077
+<         <nd ref="-12535"/>
+---
+>         <nd ref="-12454"/>
+12784c13089
+<     <way visible="true" id="-295" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-295" timestamp="1970-01-01T00:00:00Z" version="1">
+12786c13091
+<         <nd ref="-12652"/>
+---
+>         <nd ref="-12565"/>
+12796c13101
+<     <way visible="true" id="-293" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-293" timestamp="1970-01-01T00:00:00Z" version="1">
+12815c13120
+<     <way visible="true" id="-289" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-289" timestamp="1970-01-01T00:00:00Z" version="1">
+12820c13125
+<         <nd ref="-12615"/>
+---
+>         <nd ref="-12520"/>
+12829c13134
+<     <way visible="true" id="-285" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-285" timestamp="1970-01-01T00:00:00Z" version="1">
+12831c13136
+<         <nd ref="-12617"/>
+---
+>         <nd ref="-12522"/>
+12881c13186
+<         <nd ref="-12495"/>
+---
+>         <nd ref="-12414"/>
+12897c13202
+<     <way visible="true" id="-273" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-273" timestamp="1970-01-01T00:00:00Z" version="1">
+12899,12900c13204,13205
+<         <nd ref="-12630"/>
+<         <nd ref="-12324"/>
+---
+>         <nd ref="-12535"/>
+>         <nd ref="-12229"/>
+12905c13210
+<     <way visible="true" id="-272" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-272" timestamp="1970-01-01T00:00:00Z" version="1">
+12922,12923c13227,13228
+<     <way visible="true" id="-268" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12356"/>
+---
+>     <way visible="true" id="-268" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12255"/>
+12927c13232
+<         <nd ref="-12357"/>
+---
+>         <nd ref="-12256"/>
+12933c13238
+<         <nd ref="-12677"/>
+---
+>         <nd ref="-12590"/>
+12942c13247
+<     <way visible="true" id="-266" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-266" timestamp="1970-01-01T00:00:00Z" version="1">
+12957c13262
+<     <way visible="true" id="-265" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-265" timestamp="1970-01-01T00:00:00Z" version="1">
+12971c13276
+<     <way visible="true" id="-264" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-264" timestamp="1970-01-01T00:00:00Z" version="1">
+12980c13285
+<     <way visible="true" id="-263" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-263" timestamp="1970-01-01T00:00:00Z" version="1">
+12988c13293
+<     <way visible="true" id="-262" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-262" timestamp="1970-01-01T00:00:00Z" version="1">
+12990,13027c13295,13298
+<         <nd ref="-8605"/>
+<         <nd ref="-8602"/>
+<         <nd ref="-8601"/>
+<         <nd ref="-8600"/>
+<         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+<         <tag k="highway" v="unclassified"/>
+<         <tag k="error:circular" v="15"/>
+<     </way>
+<     <way visible="true" id="-261" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-8599"/>
+<         <nd ref="-8729"/>
+<         <nd ref="-8618"/>
+<         <nd ref="-8598"/>
+<         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+<         <tag k="highway" v="unclassified"/>
+<         <tag k="error:circular" v="15"/>
+<     </way>
+<     <way visible="true" id="-260" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12429"/>
+<         <nd ref="-8596"/>
+<         <nd ref="-8595"/>
+<         <nd ref="-8594"/>
+<         <nd ref="-8593"/>
+<         <nd ref="-8592"/>
+<         <nd ref="-8591"/>
+<         <nd ref="-8590"/>
+<         <nd ref="-8589"/>
+<         <nd ref="-8588"/>
+<         <nd ref="-12316"/>
+<         <nd ref="-8586"/>
+<         <nd ref="-8585"/>
+<         <nd ref="-8584"/>
+<         <nd ref="-8583"/>
+<         <nd ref="-8582"/>
+<         <nd ref="-8581"/>
+<         <nd ref="-8580"/>
+<         <nd ref="-8579"/>
+<         <nd ref="-8578"/>
+---
+>         <nd ref="-8605"/>
+>         <nd ref="-8602"/>
+>         <nd ref="-8601"/>
+>         <nd ref="-8600"/>
+13029c13300,13309
+<         <tag k="highway" v="residential"/>
+---
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="15"/>
+>     </way>
+>     <way visible="true" id="-261" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-8599"/>
+>         <nd ref="-8729"/>
+>         <nd ref="-8618"/>
+>         <nd ref="-8598"/>
+>         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+>         <tag k="highway" v="unclassified"/>
+13040c13320
+<     <way visible="true" id="-258" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-258" timestamp="1970-01-01T00:00:00Z" version="1">
+13055c13335
+<     <way visible="true" id="-256" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-256" timestamp="1970-01-01T00:00:00Z" version="1">
+13084,13085c13364,13365
+<     <way visible="true" id="-252" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12607"/>
+---
+>     <way visible="true" id="-252" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12512"/>
+13093c13373
+<     <way visible="true" id="-249" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-249" timestamp="1970-01-01T00:00:00Z" version="1">
+13113,13116c13393,13396
+<     <way visible="true" id="-246" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9">
+<         <nd ref="-8"/>
+<         <nd ref="-8472"/>
+<         <tag k="bridge" v="yes"/>
+---
+>     <way visible="true" id="-248" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-8480"/>
+>         <nd ref="-8479"/>
+>         <nd ref="-12553"/>
+13122c13402
+<     <way visible="true" id="-245" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-245" timestamp="1970-01-01T00:00:00Z" version="1">
+13127c13407
+<         <nd ref="-12306"/>
+---
+>         <nd ref="-12205"/>
+13133c13413
+<         <nd ref="-12441"/>
+---
+>         <nd ref="-12357"/>
+13140c13420
+<         <nd ref="-12440"/>
+---
+>         <nd ref="-12356"/>
+13149c13429
+<         <nd ref="-12439"/>
+---
+>         <nd ref="-12355"/>
+13154,13155c13434,13435
+<     <way visible="true" id="-241" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12566"/>
+---
+>     <way visible="true" id="-241" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12471"/>
+13162c13442
+<     <way visible="true" id="-240" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-240" timestamp="1970-01-01T00:00:00Z" version="1">
+13178c13458
+<     <way visible="true" id="-238" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-238" timestamp="1970-01-01T00:00:00Z" version="1">
+13221c13501
+<     <way visible="true" id="-234" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-234" timestamp="1970-01-01T00:00:00Z" version="1">
+13248c13528
+<     <way visible="true" id="-230" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-230" timestamp="1970-01-01T00:00:00Z" version="1">
+13258c13538
+<     <way visible="true" id="-229" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-229" timestamp="1970-01-01T00:00:00Z" version="1">
+13270c13550
+<     <way visible="true" id="-227" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-227" timestamp="1970-01-01T00:00:00Z" version="1">
+13278c13558
+<     <way visible="true" id="-225" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-225" timestamp="1970-01-01T00:00:00Z" version="1">
+13286c13566
+<     <way visible="true" id="-224" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-224" timestamp="1970-01-01T00:00:00Z" version="1">
+13292c13572
+<         <nd ref="-12275"/>
+---
+>         <nd ref="-12197"/>
+13297c13577
+<         <nd ref="-12347"/>
+---
+>         <nd ref="-12296"/>
+13303c13583
+<     <way visible="true" id="-223" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-223" timestamp="1970-01-01T00:00:00Z" version="1">
+13305c13585
+<         <nd ref="-12616"/>
+---
+>         <nd ref="-12521"/>
+13310c13590
+<     <way visible="true" id="-222" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-222" timestamp="1970-01-01T00:00:00Z" version="1">
+13323c13603
+<     <way visible="true" id="-220" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-220" timestamp="1970-01-01T00:00:00Z" version="1">
+13328c13608
+<         <nd ref="-12277"/>
+---
+>         <nd ref="-12199"/>
+13333,13334c13613,13614
+<     <way visible="true" id="-219" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12536"/>
+---
+>     <way visible="true" id="-219" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12455"/>
+13342c13622
+<         <nd ref="-12548"/>
+---
+>         <nd ref="-12215"/>
+13351,13352c13631,13632
+<         <nd ref="-12427"/>
+<         <nd ref="-8656"/>
+---
+>         <nd ref="-8480"/>
+>         <nd ref="-12306"/>
+13366,13367c13646,13647
+<     <way visible="true" id="-214" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12536"/>
+---
+>     <way visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12455"/>
+13370c13650
+<         <nd ref="-12600"/>
+---
+>         <nd ref="-12505"/>
+13375,13376c13655,13656
+<     <way visible="true" id="-213" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12290"/>
+---
+>     <way visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12237"/>
+13380c13660
+<         <nd ref="-12534"/>
+---
+>         <nd ref="-12453"/>
+13387c13667
+<     <way visible="true" id="-212" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-212" timestamp="1970-01-01T00:00:00Z" version="1">
+13395c13675
+<     <way visible="true" id="-211" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-211" timestamp="1970-01-01T00:00:00Z" version="1">
+13398c13678
+<         <nd ref="-12276"/>
+---
+>         <nd ref="-12198"/>
+13403c13683
+<     <way visible="true" id="-210" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-210" timestamp="1970-01-01T00:00:00Z" version="1">
+13405c13685
+<         <nd ref="-12502"/>
+---
+>         <nd ref="-12421"/>
+13412,13413c13692,13693
+<     <way visible="true" id="-209" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12600"/>
+---
+>     <way visible="true" id="-209" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12505"/>
+13419a13700,13708
+>     <way visible="true" id="-208" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9">
+>         <nd ref="-8480"/>
+>         <nd ref="-1250"/>
+>         <tag k="oneway" v="-1"/>
+>         <tag k="ref" v="RN6"/>
+>         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+>         <tag k="highway" v="primary"/>
+>         <tag k="error:circular" v="15"/>
+>     </way>
+13421c13710
+<         <nd ref="-12298"/>
+---
+>         <nd ref="-12247"/>
+13427c13716
+<     <way visible="true" id="-205" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-205" timestamp="1970-01-01T00:00:00Z" version="1">
+13437,13439c13726,13728
+<     <way visible="true" id="-202" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9">
+<         <nd ref="-8654"/>
+<         <nd ref="-12417"/>
+---
+>     <way visible="true" id="-203" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9">
+>         <nd ref="-12304"/>
+>         <nd ref="-1250"/>
+13441c13730
+<         <tag k="source" v="orthophoto"/>
+---
+>         <tag k="ref" v="orthophoto"/>
+13446c13735
+<     <way visible="true" id="-201" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-201" timestamp="1970-01-01T00:00:00Z" version="1">
+13449c13738
+<         <nd ref="-12599"/>
+---
+>         <nd ref="-12504"/>
+13458c13747
+<     <way visible="true" id="-200" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-200" timestamp="1970-01-01T00:00:00Z" version="1">
+13463c13752
+<         <nd ref="-12315"/>
+---
+>         <nd ref="-12266"/>
+13471c13760
+<     <way visible="true" id="-199" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-199" timestamp="1970-01-01T00:00:00Z" version="1">
+13473c13762
+<         <nd ref="-12526"/>
+---
+>         <nd ref="-12445"/>
+13489c13778
+<     <way visible="true" id="-197" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-197" timestamp="1970-01-01T00:00:00Z" version="1">
+13500c13789
+<         <nd ref="-12416"/>
+---
+>         <nd ref="-12303"/>
+13502c13791
+<         <nd ref="-12547"/>
+---
+>         <nd ref="-12214"/>
+13524c13813
+<     <way visible="true" id="-193" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1">
+13538c13827
+<     <way visible="true" id="-192" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1">
+13563c13852
+<     <way visible="true" id="-191" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1">
+13586c13875
+<         <nd ref="-12611"/>
+---
+>         <nd ref="-12516"/>
+13597c13886
+<         <nd ref="-12611"/>
+---
+>         <nd ref="-12516"/>
+13637c13926
+<     <way visible="true" id="-182" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1">
+13652c13941
+<     <way visible="true" id="-179" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1">
+13668c13957
+<     <way visible="true" id="-176" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1">
+13675c13964
+<         <nd ref="-12583"/>
+---
+>         <nd ref="-12488"/>
+13684,13685c13973,13974
+<     <way visible="true" id="-175" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12346"/>
+---
+>     <way visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12295"/>
+13693c13982
+<         <nd ref="-12484"/>
+---
+>         <nd ref="-12403"/>
+13701c13990
+<     <way visible="true" id="-174" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1">
+13707c13996
+<         <nd ref="-12283"/>
+---
+>         <nd ref="-12612"/>
+13709c13998
+<         <nd ref="-12648"/>
+---
+>         <nd ref="-12561"/>
+13717c14006
+<         <nd ref="-12634"/>
+---
+>         <nd ref="-12539"/>
+13722c14011
+<     <way visible="true" id="-173" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1">
+13730c14019
+<         <nd ref="-12649"/>
+---
+>         <nd ref="-12562"/>
+13734c14023
+<         <nd ref="-12284"/>
+---
+>         <nd ref="-12613"/>
+13743c14032
+<     <way visible="true" id="-172" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1">
+13746c14035
+<         <nd ref="-12483"/>
+---
+>         <nd ref="-12402"/>
+13753c14042
+<         <nd ref="-12345"/>
+---
+>         <nd ref="-12294"/>
+13765c14054
+<     <way visible="true" id="-170" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1">
+13811,13812c14100,14101
+<     <way visible="true" id="-163" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12623"/>
+---
+>     <way visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12528"/>
+13818c14107
+<         <nd ref="-12482"/>
+---
+>         <nd ref="-12401"/>
+13822c14111
+<         <nd ref="-12681"/>
+---
+>         <nd ref="-12594"/>
+13827c14116
+<     <way visible="true" id="-162" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1">
+13834c14123
+<         <nd ref="-12650"/>
+---
+>         <nd ref="-12563"/>
+13845,13846c14134,14135
+<     <way visible="true" id="-161" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12344"/>
+---
+>     <way visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12293"/>
+13855c14144
+<     <way visible="true" id="-160" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1">
+13863c14152
+<         <nd ref="-12651"/>
+---
+>         <nd ref="-12564"/>
+13871,13872c14160,14161
+<     <way visible="true" id="-156" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12345"/>
+---
+>     <way visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12294"/>
+13879c14168
+<     <way visible="true" id="-155" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1">
+13894c14183
+<     <way visible="true" id="-153" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1">
+13904c14193
+<     <way visible="true" id="-152" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1">
+13913c14202
+<     <way visible="true" id="-150" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
+13921c14210
+<         <nd ref="-12692"/>
+---
+>         <nd ref="-12605"/>
+13936c14225
+<         <nd ref="-12582"/>
+---
+>         <nd ref="-12487"/>
+13941c14230
+<     <way visible="true" id="-146" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1">
+13948c14237
+<         <nd ref="-12533"/>
+---
+>         <nd ref="-12452"/>
+13955c14244
+<         <nd ref="-12585"/>
+---
+>         <nd ref="-12490"/>
+13962,13971d14250
+<     <way visible="true" id="-143" timestamp="2016-04-11T14:26:31Z" version="1" changeset="9">
+<         <nd ref="-8472"/>
+<         <nd ref="-9111"/>
+<         <nd ref="-9110"/>
+<         <nd ref="-9109"/>
+<         <tag k="ref" v="RN6"/>
+<         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+<         <tag k="highway" v="primary"/>
+<         <tag k="error:circular" v="15"/>
+<     </way>
+13973c14252
+<         <nd ref="-12524"/>
+---
+>         <nd ref="-12443"/>
+13979c14258
+<     <way visible="true" id="-141" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
+13988c14267
+<     <way visible="true" id="-140" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1">
+13994c14273
+<         <nd ref="-12525"/>
+---
+>         <nd ref="-12444"/>
+13999c14278
+<     <way visible="true" id="-139" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1">
+14014c14293
+<     <way visible="true" id="-137" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
+14038c14317
+<     <way visible="true" id="-133" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1">
+14055c14334
+<     <way visible="true" id="-132" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
+14064c14343
+<     <way visible="true" id="-131" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
+14067c14346
+<         <nd ref="-12424"/>
+---
+>         <nd ref="-12363"/>
+14084c14363
+<     <way visible="true" id="-129" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
+14087c14366
+<         <nd ref="-12551"/>
+---
+>         <nd ref="-12218"/>
+14096c14375
+<     <way visible="true" id="-128" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
+14109c14388
+<     <way visible="true" id="-127" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
+14117,14118c14396,14397
+<     <way visible="true" id="-126" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12667"/>
+---
+>     <way visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12580"/>
+14126c14405
+<     <way visible="true" id="-125" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
+14137c14416
+<     <way visible="true" id="-124" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
+14146c14425
+<     <way visible="true" id="-123" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
+14150c14429
+<         <nd ref="-12666"/>
+---
+>         <nd ref="-12579"/>
+14158c14437
+<     <way visible="true" id="-121" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
+14171c14450
+<         <nd ref="-12584"/>
+---
+>         <nd ref="-12489"/>
+14176c14455
+<     <way visible="true" id="-119" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
+14180c14459
+<         <nd ref="-12543"/>
+---
+>         <nd ref="-12462"/>
+14189,14190c14468,14469
+<     <way visible="true" id="-118" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12552"/>
+---
+>     <way visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12219"/>
+14197c14476
+<     <way visible="true" id="-117" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1">
+14214,14215c14493,14494
+<     <way visible="true" id="-115" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-12549"/>
+---
+>     <way visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-12216"/>
+14223c14502
+<     <way visible="true" id="-114" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1">
+14233c14512
+<         <nd ref="-12333"/>
+---
+>         <nd ref="-12284"/>
+14247c14526
+<         <nd ref="-12332"/>
+---
+>         <nd ref="-12283"/>
+14253c14532
+<         <nd ref="-12333"/>
+---
+>         <nd ref="-12284"/>
+14259c14538
+<     <way visible="true" id="-109" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1">
+14272c14551
+<     <way visible="true" id="-108" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1">
+14277c14556
+<         <nd ref="-12355"/>
+---
+>         <nd ref="-12254"/>
+14282c14561
+<     <way visible="true" id="-107" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1">
+14285c14564
+<         <nd ref="-12358"/>
+---
+>         <nd ref="-12257"/>
+14294c14573
+<     <way visible="true" id="-106" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1">
+14303c14582
+<     <way visible="true" id="-104" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1">
+14310c14589
+<         <nd ref="-12290"/>
+---
+>         <nd ref="-12237"/>
+14331c14610
+<     <way visible="true" id="-102" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1">
+14334c14613
+<         <nd ref="-12577"/>
+---
+>         <nd ref="-12482"/>
+14339c14618
+<     <way visible="true" id="-101" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1">
+14342c14621
+<         <nd ref="-12668"/>
+---
+>         <nd ref="-12581"/>
+14347c14626
+<     <way visible="true" id="-100" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
+14350c14629
+<         <nd ref="-12578"/>
+---
+>         <nd ref="-12483"/>
+14355c14634
+<     <way visible="true" id="-99" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1">
+14357c14636
+<         <nd ref="-12292"/>
+---
+>         <nd ref="-12239"/>
+14363c14642
+<     <way visible="true" id="-98" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1">
+14371,14406d14649
+<     <way visible="true" id="-97" timestamp="2016-04-11T14:26:31Z" version="1">
+<         <nd ref="-9109"/>
+<         <nd ref="-8988"/>
+<         <nd ref="-8987"/>
+<         <nd ref="-8986"/>
+<         <nd ref="-8985"/>
+<         <nd ref="-8984"/>
+<         <nd ref="-8983"/>
+<         <nd ref="-8982"/>
+<         <nd ref="-8981"/>
+<         <nd ref="-8980"/>
+<         <nd ref="-8979"/>
+<         <nd ref="-8978"/>
+<         <nd ref="-8977"/>
+<         <nd ref="-8976"/>
+<         <nd ref="-8975"/>
+<         <nd ref="-8974"/>
+<         <nd ref="-8263"/>
+<         <nd ref="-8973"/>
+<         <nd ref="-8257"/>
+<         <nd ref="-8972"/>
+<         <nd ref="-8971"/>
+<         <nd ref="-8970"/>
+<         <nd ref="-8969"/>
+<         <nd ref="-8968"/>
+<         <nd ref="-8967"/>
+<         <nd ref="-8966"/>
+<         <nd ref="-8289"/>
+<         <nd ref="-8965"/>
+<         <nd ref="-8964"/>
+<         <nd ref="-8492"/>
+<         <tag k="ref" v="RN6"/>
+<         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+<         <tag k="highway" v="primary"/>
+<         <tag k="error:circular" v="15"/>
+<     </way>
+14414c14657
+<     <way visible="true" id="-92" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1">
+14417c14660
+<         <nd ref="-12577"/>
+---
+>         <nd ref="-12482"/>
+14431c14674
+<         <nd ref="-12409"/>
+---
+>         <nd ref="-12276"/>
+14441c14684
+<         <nd ref="-12408"/>
+---
+>         <nd ref="-12275"/>
+14447c14690
+<     <way visible="true" id="-88" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1">
+14460c14703
+<     <way visible="true" id="-87" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1">
+14471c14714
+<     <way visible="true" id="-85" timestamp="2016-04-11T14:26:31Z" version="1">
+---
+>     <way visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1">
+14489,14658d14731
+<     <way visible="true" id="-81" timestamp="2016-04-11T14:26:36Z" version="1">
+<         <nd ref="-8"/>
+<         <nd ref="-2262"/>
+<         <nd ref="-2261"/>
+<         <nd ref="-2260"/>
+<         <nd ref="-2259"/>
+<         <nd ref="-2258"/>
+<         <nd ref="-298"/>
+<         <nd ref="-2257"/>
+<         <nd ref="-2256"/>
+<         <nd ref="-705"/>
+<         <nd ref="-2255"/>
+<         <nd ref="-2254"/>
+<         <nd ref="-2253"/>
+<         <nd ref="-2252"/>
+<         <nd ref="-2251"/>
+<         <nd ref="-2250"/>
+<         <nd ref="-2249"/>
+<         <nd ref="-2248"/>
+<         <nd ref="-745"/>
+<         <nd ref="-2247"/>
+<         <nd ref="-2246"/>
+<         <nd ref="-2245"/>
+<         <nd ref="-2244"/>
+<         <nd ref="-2243"/>
+<         <nd ref="-2242"/>
+<         <nd ref="-2241"/>
+<         <nd ref="-2240"/>
+<         <nd ref="-2239"/>
+<         <nd ref="-2238"/>
+<         <nd ref="-2237"/>
+<         <nd ref="-2236"/>
+<         <nd ref="-2235"/>
+<         <nd ref="-2234"/>
+<         <nd ref="-2233"/>
+<         <nd ref="-2232"/>
+<         <nd ref="-2231"/>
+<         <nd ref="-2230"/>
+<         <nd ref="-2229"/>
+<         <nd ref="-2228"/>
+<         <nd ref="-2227"/>
+<         <nd ref="-2226"/>
+<         <nd ref="-2225"/>
+<         <nd ref="-2224"/>
+<         <nd ref="-2223"/>
+<         <nd ref="-2222"/>
+<         <nd ref="-2221"/>
+<         <nd ref="-2220"/>
+<         <nd ref="-2219"/>
+<         <nd ref="-2218"/>
+<         <nd ref="-2217"/>
+<         <nd ref="-2216"/>
+<         <nd ref="-2215"/>
+<         <nd ref="-2214"/>
+<         <nd ref="-2213"/>
+<         <nd ref="-2212"/>
+<         <nd ref="-2211"/>
+<         <nd ref="-2210"/>
+<         <nd ref="-2209"/>
+<         <nd ref="-2208"/>
+<         <nd ref="-2207"/>
+<         <nd ref="-2206"/>
+<         <nd ref="-2205"/>
+<         <nd ref="-2204"/>
+<         <nd ref="-2203"/>
+<         <nd ref="-2202"/>
+<         <nd ref="-2201"/>
+<         <nd ref="-2200"/>
+<         <nd ref="-2199"/>
+<         <nd ref="-2198"/>
+<         <nd ref="-2197"/>
+<         <nd ref="-2196"/>
+<         <nd ref="-2195"/>
+<         <nd ref="-2194"/>
+<         <nd ref="-2193"/>
+<         <nd ref="-2192"/>
+<         <nd ref="-2191"/>
+<         <nd ref="-2190"/>
+<         <nd ref="-2189"/>
+<         <nd ref="-2188"/>
+<         <nd ref="-2187"/>
+<         <nd ref="-2186"/>
+<         <nd ref="-2185"/>
+<         <nd ref="-2184"/>
+<         <nd ref="-2183"/>
+<         <nd ref="-2182"/>
+<         <nd ref="-2181"/>
+<         <nd ref="-2180"/>
+<         <nd ref="-2179"/>
+<         <nd ref="-2178"/>
+<         <nd ref="-2177"/>
+<         <nd ref="-2176"/>
+<         <nd ref="-2175"/>
+<         <nd ref="-2174"/>
+<         <nd ref="-2173"/>
+<         <nd ref="-2172"/>
+<         <nd ref="-2171"/>
+<         <nd ref="-2170"/>
+<         <nd ref="-2169"/>
+<         <nd ref="-2168"/>
+<         <nd ref="-2167"/>
+<         <nd ref="-2166"/>
+<         <nd ref="-2165"/>
+<         <nd ref="-2164"/>
+<         <nd ref="-2163"/>
+<         <nd ref="-2162"/>
+<         <nd ref="-2161"/>
+<         <nd ref="-2160"/>
+<         <nd ref="-2159"/>
+<         <nd ref="-2158"/>
+<         <nd ref="-2157"/>
+<         <nd ref="-2156"/>
+<         <nd ref="-2155"/>
+<         <nd ref="-2154"/>
+<         <nd ref="-2153"/>
+<         <nd ref="-2152"/>
+<         <nd ref="-2151"/>
+<         <nd ref="-2150"/>
+<         <nd ref="-2149"/>
+<         <nd ref="-2148"/>
+<         <nd ref="-2147"/>
+<         <nd ref="-2146"/>
+<         <nd ref="-2145"/>
+<         <nd ref="-2144"/>
+<         <nd ref="-2143"/>
+<         <nd ref="-2142"/>
+<         <nd ref="-2141"/>
+<         <nd ref="-2140"/>
+<         <nd ref="-2139"/>
+<         <nd ref="-2138"/>
+<         <nd ref="-2137"/>
+<         <nd ref="-2136"/>
+<         <nd ref="-2135"/>
+<         <nd ref="-2134"/>
+<         <nd ref="-2133"/>
+<         <nd ref="-2132"/>
+<         <nd ref="-2131"/>
+<         <nd ref="-2130"/>
+<         <nd ref="-2129"/>
+<         <nd ref="-2128"/>
+<         <nd ref="-2127"/>
+<         <nd ref="-2126"/>
+<         <nd ref="-2125"/>
+<         <nd ref="-2124"/>
+<         <nd ref="-2123"/>
+<         <nd ref="-2122"/>
+<         <nd ref="-2121"/>
+<         <nd ref="-2120"/>
+<         <nd ref="-2119"/>
+<         <tag k="width:minimum_traveled_way" v="3"/>
+<         <tag k="source" v="mgcp"/>
+<         <tag k="source:accuracy:horizontal" v="25"/>
+<         <tag k="condition" v="functional"/>
+<         <tag k="lanes" v="1"/>
+<         <tag k="seasonal" v="no"/>
+<         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+<         <tag k="surface" v="unpaved"/>
+<         <tag k="median" v="no"/>
+<         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+<         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+<         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+<         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+<         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<         <tag k="highway" v="road"/>
+<         <tag k="source:datetime" v="2010-01-01T00:00:00Z"/>
+<         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+<         <tag k="uuid" v="{5033398B-9C94-4F16-A44B-1287C0316FC5}"/>
+<         <tag k="location" v="surface"/>
+<         <tag k="error:circular" v="28.65"/>
+<     </way>
+14710c14783
+<     <way visible="true" id="-78" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1">
+14792c14865
+<     <way visible="true" id="-76" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1">
+14828c14901
+<     <way visible="true" id="-74" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1">
+14882c14955
+<     <way visible="true" id="-73" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1">
+14996c15069
+<     <way visible="true" id="-69" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
+15043c15116
+<     <way visible="true" id="-68" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1">
+15077c15150
+<     <way visible="true" id="-64" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1">
+15200c15273
+<     <way visible="true" id="-60" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
+15224c15297
+<     <way visible="true" id="-58" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
+15263c15336
+<     <way visible="true" id="-57" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
+15327c15400
+<     <way visible="true" id="-56" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
+15598c15671
+<     <way visible="true" id="-50" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
+15694c15767
+<     <way visible="true" id="-49" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
+15911c15984
+<     <way visible="true" id="-47" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
+15962c16035
+<     <way visible="true" id="-46" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
+16106c16179
+<     <way visible="true" id="-44" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
+16436c16509
+<     <way visible="true" id="-40" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
+16480c16553
+<     <way visible="true" id="-39" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
+16783c16856
+<     <way visible="true" id="-33" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
+16824c16897
+<     <way visible="true" id="-32" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+17269c17342
+<     <way visible="true" id="-30" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
+17399c17472
+<     <way visible="true" id="-29" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+17703c17776
+<     <way visible="true" id="-28" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
+17905c17978
+<     <way visible="true" id="-26" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+18080c18153
+<     <way visible="true" id="-25" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+18149c18222
+<     <way visible="true" id="-24" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
+18494c18567
+<     <way visible="true" id="-23" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
+18563c18636
+<     <way visible="true" id="-22" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+18622c18695
+<     <way visible="true" id="-21" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
+18690c18763
+<     <way visible="true" id="-20" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
+19255c19328
+<     <way visible="true" id="-18" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
+19563c19636
+<     <way visible="true" id="-17" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+19634c19707
+<     <way visible="true" id="-16" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+19744c19817
+<     <way visible="true" id="-15" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+20041c20114
+<     <way visible="true" id="-12" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+20182c20255
+<     <way visible="true" id="-11" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+20366c20439
+<     <way visible="true" id="-9" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+21142c21215
+<     <way visible="true" id="-7" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+21309c21382
+<     <way visible="true" id="-6" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+21371c21444
+<     <way visible="true" id="-5" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+21624c21697
+<     <way visible="true" id="-4" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+21990c22063
+<     <way visible="true" id="-3" timestamp="2016-04-11T14:26:36Z" version="1">
+---
+>     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+22338,22389d22410
+<     <relation visible="true" id="-489" timestamp="1970-01-01T00:00:00Z" version="1">
+<         <member type="way" ref="-81" role="reviewee"/>
+<         <member type="way" ref="-97" role="reviewee"/>
+<         <tag k="hoot:review:needs" v="yes"/>
+<         <tag k="hoot:review:type" v="Highway"/>
+<         <tag k="hoot:review:members" v="2"/>
+<         <tag k="hoot:review:score" v="0.731059"/>
+<         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+<         <tag k="hoot:review:sort_order" v="0"/>
+<         <tag k="type" v="review"/>
+<     </relation>
+<     <relation visible="true" id="-488" timestamp="1970-01-01T00:00:00Z" version="1">
+<         <member type="way" ref="-246" role="reviewee"/>
+<         <member type="way" ref="-143" role="reviewee"/>
+<         <member type="way" ref="-97" role="reviewee"/>
+<         <member type="way" ref="-63" role="reviewee"/>
+<         <member type="way" ref="-81" role="reviewee"/>
+<         <tag k="hoot:review:needs" v="yes"/>
+<         <tag k="hoot:review:type" v="Highway"/>
+<         <tag k="hoot:review:members" v="5"/>
+<         <tag k="hoot:review:score" v="0.638107"/>
+<         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+<         <tag k="hoot:review:sort_order" v="2"/>
+<         <tag k="type" v="review"/>
+<     </relation>
+<     <relation visible="true" id="-487" timestamp="1970-01-01T00:00:00Z" version="1">
+<         <member type="way" ref="-246" role="reviewee"/>
+<         <member type="way" ref="-143" role="reviewee"/>
+<         <member type="way" ref="-97" role="reviewee"/>
+<         <member type="way" ref="-81" role="reviewee"/>
+<         <tag k="hoot:review:needs" v="yes"/>
+<         <tag k="hoot:review:type" v="Highway"/>
+<         <tag k="hoot:review:members" v="4"/>
+<         <tag k="hoot:review:score" v="0.659995"/>
+<         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+<         <tag k="hoot:review:sort_order" v="1"/>
+<         <tag k="type" v="review"/>
+<     </relation>
+<     <relation visible="true" id="-486" timestamp="1970-01-01T00:00:00Z" version="1">
+<         <member type="way" ref="-246" role="reviewee"/>
+<         <member type="way" ref="-143" role="reviewee"/>
+<         <member type="way" ref="-97" role="reviewee"/>
+<         <member type="way" ref="-63" role="reviewee"/>
+<         <member type="way" ref="-81" role="reviewee"/>
+<         <tag k="hoot:review:needs" v="yes"/>
+<         <tag k="hoot:review:type" v="Highway"/>
+<         <tag k="hoot:review:members" v="5"/>
+<         <tag k="hoot:review:score" v="0.618635"/>
+<         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+<         <tag k="hoot:review:sort_order" v="3"/>
+<         <tag k="type" v="review"/>
+<     </relation>
