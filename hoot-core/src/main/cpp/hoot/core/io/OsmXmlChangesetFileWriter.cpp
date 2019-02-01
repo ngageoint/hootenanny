@@ -112,7 +112,7 @@ void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
 
     writer.writeStartElement("osmChange");
     writer.writeAttribute("version", "0.6");
-    writer.writeAttribute("generator", "hootenanny");
+    writer.writeAttribute("generator", HOOT_PACKAGE_NAME);
 
     Change::ChangeType last = Change::Unknown;
 

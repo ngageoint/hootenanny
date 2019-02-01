@@ -350,7 +350,7 @@ void HootApiDbWriter::_startNewChangeSet()
   _hootdb.endChangeset();
   Tags tags;
   tags["bot"] = "yes";
-  tags["created_by"] = "hootenanny";
+  tags["created_by"] = HOOT_PACKAGE_NAME;
   _hootdb.beginChangeset(tags);
 }
 

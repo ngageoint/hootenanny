@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootNetworkRequest.h"
@@ -167,6 +167,9 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   if (QNetworkReply::NoError != reply->error())
   {
     _error = reply->errorString();
+    //  Remove authentication information if present
+    if (request.url() != url)
+      _error.replace(request.url().toString(), url.toString(), Qt::CaseInsensitive);
     return false;
   }
 
