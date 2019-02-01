@@ -192,7 +192,7 @@ void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
     }
 
     ctr++;
-    if (ctr % 100 == 0)
+    if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
         "Applied rubber sheet transform to " << ctr << " / " << nm.size() << " nodes...");
@@ -250,6 +250,8 @@ boost::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
 
 boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
 {
+  LOG_INFO("Running interpolator...");
+
   boost::shared_ptr<DataFrame> df = _buildDataFrame(s);
 
   vector<std::string> candidates;
@@ -344,7 +346,7 @@ void RubberSheet::_findTies()
     }
 
     ctr++;
-    if (ctr % 100 == 0)
+    if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
         "Processed intersections for " << ctr << " / " << n2w->size() << " nodes...");

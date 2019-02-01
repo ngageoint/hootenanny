@@ -31,6 +31,9 @@
 
 #include <hoot/core/conflate/network/EdgeString.h>
 
+// Qt
+#include <QRegExp>
+
 namespace hoot
 {
 
@@ -45,6 +48,7 @@ namespace hoot
 class EdgeMatch
 {
 public:
+
   EdgeMatch();
 
   EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2);
@@ -115,6 +119,8 @@ private:
   friend uint qHash(const boost::shared_ptr<const EdgeMatch>& em);
 
   EdgeStringPtr _edges1, _edges2;
+
+  static const QRegExp _portionReplaceRegEx;
 
   void _resetHash() const { _hash = 0; }
 };

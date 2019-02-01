@@ -46,6 +46,7 @@ namespace hoot
 class EdgeString
 {
 public:
+
   /// @todo this structure can likely go away in the near future.
   struct EdgeEntry
   {
@@ -82,6 +83,7 @@ public:
     }
 
   private:
+
     /// The portion of the edge. The portion is always measured starting at "from" regardless of
     /// whether or not reversed is set. It is always a value in [0, 1]. If toPortion < fromPortion
     /// the edge is reversed.

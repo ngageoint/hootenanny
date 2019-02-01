@@ -141,14 +141,11 @@ void ConflictsNetworkMatcher::_removeDupes()
   if (_edgeMatches->getAllMatches().size() < 2)
     return;
 
-  LOG_INFO("Removing duplicate edges...");
-
   QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
   QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
 
   int ctr = 0;
   const int total = _edgeMatches->getAllMatches().size();
-  //potential bottleneck for network conflation here...
   while (it1 != _edgeMatches->getAllMatches().end())
   {
     it2 = it1;
@@ -156,18 +153,22 @@ void ConflictsNetworkMatcher::_removeDupes()
 
     while (it2 != _edgeMatches->getAllMatches().end())
     {
+      LOG_VART(it1.key());
+      LOG_VART(it2.key());
       if (it1.key()->isVerySimilarTo(it2.key()))
       {
         double score1 = it1.value();
         double score2 = it2.value();
+        LOG_VART(score1);
+        LOG_VART(score2);
         if (score1 > score2)
         {
-          LOG_TRACE("Removing " << it2.key()->toString());
+          LOG_DEBUG("Removing " << it2.key()->toString());
           it2 = _edgeMatches->getAllMatches().erase(it2);
         }
         else
         {
-          LOG_TRACE("Removing " << it1.key()->toString());
+          LOG_DEBUG("Removing " << it1.key()->toString());
           it1 = _edgeMatches->getAllMatches().erase(it1);
           it2 = it1;
           ++it2;
@@ -218,23 +219,21 @@ Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
 
 void ConflictsNetworkMatcher::_sanityCheckRelationships()
 {
-  LOG_INFO("Performing relationship sanity check...");
-
   // Check our relationships for sanity...
   int ctr = 0;
   const int total = _scores.keys().size();
-  foreach(ConstEdgeMatchPtr em, _scores.keys())
+  foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
     double myDistance = _getMatchSeparation(em);
 
-    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
+    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
       // If it's a conflict, AND we are a lot closer, ax the other one
       if (r->isConflict())
       {
         double theirDistance = _getMatchSeparation(r->getEdge());
 
-        if (myDistance > 5.0 && myDistance*2.5 < theirDistance)
+        if (myDistance > 5.0 && myDistance * 2.5 < theirDistance)
         {
           LOG_TRACE("Removing insane match: " << r->getEdge()->getUid() << " - "
                     << theirDistance << " keeping: " << em->getUid()
@@ -253,7 +252,7 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
     }
 
     ctr++;
-    if (ctr % 10 == 0)
+    if (ctr % 1000 == 0)
     {
       PROGRESS_INFO("Sanity checked " << ctr << " / " << total << " relationships.");
     }
@@ -262,13 +261,9 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
 
 void ConflictsNetworkMatcher::_createMatchRelationships()
 {
-  LOG_INFO("Creating match relationships...");
-
   int count = 0;
   foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
   {
-    PROGRESS_INFO(count++ << " / " << _edgeMatches->getAllMatches().size());
-
     // if the two edges
     //  - overlap
     //  - contain non-extreme vertices that overlap with any vertex in the other edge (see white
@@ -367,6 +362,13 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
 
     _scores[em] = 1.0;
     _weights[em] = 1.0;
+
+    count++;
+    if (count % 1000 == 0)
+    {
+      PROGRESS_INFO(
+        count << " / " << _edgeMatches->getAllMatches().size() << " match relationships processed.");
+    }
   }
 
   LOG_VART(_scores);
@@ -512,8 +514,6 @@ void ConflictsNetworkMatcher::_iterateSimple()
   // go through all matches
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
-    PROGRESS_INFO(++count << "/" << _scores.size());
-
     double handicap = pow(partialHandicap, em->countPartialMatches());
     LOG_VART(em);
     LOG_VART(_scores[em]);
@@ -629,10 +629,16 @@ void ConflictsNetworkMatcher::_iterateSimple()
              << " " << newWeights[em]);
     LOG_TRACE(em << " " << numerator << "/" << denominator << " " << newScores[em] << " " <<
              newWeights[em]);
+
+    count++;
+    if (count % 1000 == 0)
+    {
+      PROGRESS_INFO(count << " / " << _scores.size() << " matches processed.");
+    }
   }
 
   // Setting this really helps reduce scoring oscillation
-  _weightInfluence = 0.68;
+  _weightInfluence = 0.68; // TODO: move to config
   foreach (ConstEdgeMatchPtr em, newWeights.keys())
   {
     newWeights[em] = pow(newWeights[em] * newWeights.size() / weightSum, _weightInfluence);
@@ -665,6 +671,7 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
   // create an initial estimation of edge match based on typical similarity scores
   _seedEdgeScores();
 
+  // TODO: major bottleneck
   _removeDupes();
 
   _createMatchRelationships();
@@ -675,6 +682,7 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 void ConflictsNetworkMatcher::finalize()
 {
   // Check our relationships
+  int count = 0;
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
     foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
@@ -685,19 +693,23 @@ void ConflictsNetworkMatcher::finalize()
       // If it's a conflict, AND we score a lot better, ax the other one
       if (r->isConflict())
       {
-        if (myScore > 0.3 + theirScore)
+        if (myScore > 0.3 + theirScore) //TODO: move score value to config
         {
           _scores[r->getEdge()] = 1.0e-5;
         }
       }
+    }
+
+    count++;
+    if (count % 100 == 0)
+    {
+      PROGRESS_INFO(count << " / " << _scores.size() << " matches finalized.");
     }
   }
 }
 
 void ConflictsNetworkMatcher::_seedEdgeScores()
 {
-  LOG_INFO("Seeding edge scores...");
-
   EdgeMatchSetFinder finder(_details, _edgeMatches, _n1, _n2);
 
   // our stubs don't need to be bidirectional since they don't create new nodes.
@@ -705,13 +717,10 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
   finder.setIncludePartialMatches(true);
 
   int count = 0;
-
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
-    PROGRESS_INFO(count++ << " / " << em.size() << " edge scores seeded.");
-
     ConstNetworkEdgePtr e1 = it.value();
 
     // find all the n2 edges that are in range of this one
@@ -721,7 +730,6 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     LOG_TRACE("Search Radius: " << _details->getSearchRadius(it.value()));
 
     IntersectionIterator iit = _createIterator(env, _edge2Index);
-
     while (iit.next())
     {
       ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
@@ -735,6 +743,12 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
         // Add all the EdgeMatches that are seeded with this edge pair.
         finder.addEdgeMatches(e1, e2);
       }
+    }
+
+    count++;
+    if (count % 100 == 0)
+    {
+      PROGRESS_INFO(count << " / " << em.size() << " edge scores seeded.");
     }
   }
 

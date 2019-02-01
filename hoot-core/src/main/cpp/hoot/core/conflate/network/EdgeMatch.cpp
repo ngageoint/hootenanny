@@ -32,6 +32,8 @@
 namespace hoot
 {
 
+const QRegExp EdgeMatch::_portionReplaceRegEx = QRegExp("_portion: \\d+\\.\\d+");
+
 /// @todo This could be made faster by only looking at the pointer for comparison. Unfortunately
 /// this would likely break IndexedEdgeMatchSet::contains. Another data structure in there could
 /// certainly alleviate this.
@@ -141,16 +143,16 @@ bool EdgeMatch::isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other)
   QString other2 = other->getString2()->toString();
 
   // Portions can be slightly different sometimes
-  this1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-  other1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-  this2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-  other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  this1.replace(_portionReplaceRegEx, "");
+  other1.replace(_portionReplaceRegEx, "");
+  this2.replace(_portionReplaceRegEx, "");
+  other2.replace(_portionReplaceRegEx, "");
 
   if (0 == this1.compare(other1))
   {
     if (0 == this2.compare((other2)))
     {
-      LOG_TRACE("Matches very similar: " << this << "; " << other);
+      LOG_DEBUG("Matches very similar: " << this << "; " << other);
       return true;
     }
     else
@@ -159,10 +161,10 @@ bool EdgeMatch::isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other)
       other->reverse();
       other2 = other->getString2()->toString();
       other->reverse(); // put it back the way it was
-      other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+      other2.replace(_portionReplaceRegEx, "");
       if (0 == this2.compare(other2))
       {
-        LOG_TRACE("Matches very similar: " << this << "; " << other);
+        LOG_DEBUG("Matches very similar: " << this << "; " << other);
         return true;
       }
     }
@@ -173,15 +175,15 @@ bool EdgeMatch::isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other)
     other->reverse();
     other1 = other->getString1()->toString();
     other->reverse(); // put it back the way it was
-    other1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+    other1.replace(_portionReplaceRegEx, "");
     if (0 == this1.compare(other1))
     {
-      LOG_TRACE("Matches very similar: " << this << "; " << other);
+      LOG_DEBUG("Matches very similar: " << this << "; " << other);
       return true;
     }
   }
 
-  LOG_TRACE("Matches not very similar: " << this << "; " << other);
+  LOG_DEBUG("Matches not very similar: " << this << "; " << other);
   return false;
 }
 

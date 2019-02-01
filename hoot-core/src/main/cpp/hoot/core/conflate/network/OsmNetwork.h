@@ -56,6 +56,7 @@ namespace hoot
 class OsmNetwork
 {
 public:
+
   typedef QMultiHash<ElementId, ConstNetworkVertexPtr> VertexMap;
   typedef QMultiHash<ElementId, ConstNetworkEdgePtr> EdgeMap;
   typedef QMultiHash<ConstNetworkVertexPtr, ConstNetworkEdgePtr> VertexToEdgeMap;
@@ -88,6 +89,7 @@ public:
   QString toString();
 
 private:
+
   QList<ConstNetworkEdgePtr> _edges;
   VertexMap _eidToVertex;
   EdgeMap _eidToEdge;

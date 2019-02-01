@@ -110,7 +110,7 @@ void CornerSplitter::splitCorners()
         // If we make enough of a turn, split the way
         if (delta > threshold)
         {
-          LOG_DEBUG("splitting way with delta: " << delta);
+          LOG_TRACE("splitting way with delta: " << delta);
           _splitWay(pWay->getId(), nodeIdx, pWay->getNodeId(nodeIdx));
           split = true;
         }

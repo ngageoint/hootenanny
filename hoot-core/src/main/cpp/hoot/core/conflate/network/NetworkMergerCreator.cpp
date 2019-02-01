@@ -73,6 +73,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   LOG_TRACE(matchesList);
 
   MatchSet matches = matchesIn;
+  // TODO: major bottleneck
   _removeDuplicates(matches);
   LOG_VART(matches);
 
@@ -87,15 +88,22 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
     if (!matchOverlap)
     {
       // create a merger that can merge multiple partial matches
-      LOG_TRACE("Adding the match to the partial network merger...");
       QSet<ConstEdgeMatchPtr> edgeMatches;
       set< pair<ElementId, ElementId> > pairs;
+      int count = 0;
       foreach (const Match* itm, matches)
       {
         const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(itm);
         edgeMatches.insert(nm->getEdgeMatch());
         set< pair<ElementId, ElementId> > p = nm->getMatchPairs();
         pairs.insert(p.begin(), p.end());
+
+        count++;
+        if (count % 100 == 0)
+        {
+          PROGRESS_INFO(
+            "Added match " << count << " / " << matches.size() << " to partial network merger...");
+        }
       }
       mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
     }
@@ -129,6 +137,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         else // Throw a review
         {
           LOG_TRACE("Marking " << matches.size() << " overlapping matches for review...");
+          int count = 0;
           for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
           {
             set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
@@ -148,6 +157,13 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
                 "reference input data/imagery and manually merge or modify as needed.",
                 m->getMatchName(),
                 m->getScore()));
+
+            count++;
+            if (count % 100 == 0)
+            {
+              PROGRESS_INFO(
+                "Added match " << count << " / " << matches.size() << " for review...");
+            }
           }
         }
       }
@@ -381,8 +397,7 @@ bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
 // duplicate matches in the first place
 void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
 {
-  LOG_TRACE("Removing duplicate matches...");
-
+  int count = 0;
   for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
   {
     const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
@@ -394,10 +409,12 @@ void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
 
       if (nmi && nmj)
       {
-        if (nmi->isVerySimilarTo(nmj))
-          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " is very similar to " << nmj->getEdgeMatch()->getUid());
+        if (hoot::Log::getInstance().getLevel() == hoot::Log::Trace && nmi->isVerySimilarTo(nmj))
+          LOG_TRACE(
+            nmi->getEdgeMatch()->getUid() << " is very similar to " <<
+            nmj->getEdgeMatch()->getUid());
 
-        if (nmi->contains(nmj))
+        if (hoot::Log::getInstance().getLevel() == hoot::Log::Trace && nmi->contains(nmj))
           LOG_TRACE(nmi->getEdgeMatch()->getUid() << " contains " << nmj->getEdgeMatch()->getUid());
 
         if (nmi->isVerySimilarTo(nmj))
@@ -406,10 +423,16 @@ void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
           ++tmp;
           matches.erase(jt);
           jt = tmp;
-        } // end if very similar
-      } // end if valid pointers
-    } // inner for
-  } // outer for
+        }
+      }
+    }
+
+    count++;
+    if (count % 10 == 0)
+    {
+      PROGRESS_INFO("Removed duplicate match " << count << " / " << matches.size() << "...");
+    }
+  }
 }
 
 }

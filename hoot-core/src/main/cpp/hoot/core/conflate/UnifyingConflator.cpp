@@ -241,9 +241,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   /// @todo would it help to sort the matches so the biggest or best ones get merged first?
 
   // convert all the match sets into mergers.
-  LOG_INFO("Creating mergers...");
+  //LOG_INFO("Creating mergers...");
   for (size_t i = 0; i < matchSets.size(); ++i)
   {
+    PROGRESS_INFO("Converting match set " << i + 1 << " / " << matchSets.size() << " to a merger...");
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
   }
 
