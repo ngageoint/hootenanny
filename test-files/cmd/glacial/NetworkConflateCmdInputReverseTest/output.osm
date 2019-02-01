@@ -5520,8 +5520,8 @@
         <nd ref="-753"/>
         <nd ref="-756"/>
         <nd ref="-2682"/>
-        <tag k="alt_name" v="K ST NW;K St NW"/>
-        <tag k="name" v="US Hwy 29"/>
+        <tag k="alt_name" v="K ST NW;US Hwy 29"/>
+        <tag k="name" v="K St NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
     </way>
@@ -6146,8 +6146,8 @@
         <nd ref="-1174"/>
         <nd ref="-1177"/>
         <nd ref="-2703"/>
-        <tag k="alt_name" v="INTERSTATE 66  BN;US Hwy 50"/>
-        <tag k="name" v="I- 66"/>
+        <tag k="alt_name" v="I- 66;INTERSTATE 66  BN"/>
+        <tag k="name" v="US Hwy 50"/>
         <tag k="highway" v="primary"/>
         <tag k="error:circular" v="5"/>
     </way>
@@ -6350,8 +6350,8 @@
         <nd ref="-26"/>
         <nd ref="-405"/>
         <nd ref="-2711"/>
-        <tag k="alt_name" v="K ST NW;K St NW"/>
-        <tag k="name" v="US Hwy 29"/>
+        <tag k="alt_name" v="K ST NW;US Hwy 29"/>
+        <tag k="name" v="K St NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
     </way>
@@ -6506,8 +6506,8 @@
         <nd ref="-1474"/>
         <nd ref="-1475"/>
         <nd ref="-732"/>
-        <tag k="alt_name" v="K ST NW;K St NW"/>
-        <tag k="name" v="US Hwy 29"/>
+        <tag k="alt_name" v="K ST NW;US Hwy 29"/>
+        <tag k="name" v="K St NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
     </way>
@@ -7042,8 +7042,8 @@
         <nd ref="-1151"/>
         <nd ref="-1150"/>
         <nd ref="-2734"/>
-        <tag k="alt_name" v="14TH ST NW;14th St NW;CONSTITUTION AVE NW;Constitution Ave NW;US Hwy 50"/>
-        <tag k="name" v="US Hwy 1"/>
+        <tag k="alt_name" v="14TH ST NW;14th St NW;CONSTITUTION AVE NW;US Hwy 1;US Hwy 50"/>
+        <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
     </way>
@@ -7088,8 +7088,8 @@
         <nd ref="-2915"/>
         <nd ref="-2916"/>
         <nd ref="-1680"/>
-        <tag k="alt_name" v="14TH ST SW;US Hwy 1"/>
-        <tag k="name" v="14th St SW"/>
+        <tag k="alt_name" v="14TH ST SW;14th St SW"/>
+        <tag k="name" v="US Hwy 1"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
     </way>
