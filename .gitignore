@@ -158,7 +158,6 @@ MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
 userfiles/
-matthias_data/
 
 ###### hoot-services ignores
 hoot-services/db.properties
