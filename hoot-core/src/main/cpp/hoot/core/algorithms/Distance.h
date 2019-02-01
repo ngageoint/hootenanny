@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DISTANCE_H
 #define DISTANCE_H
@@ -43,7 +43,6 @@ public:
   double static euclidean(const Node& n1, const Node& n2);
 
   double static euclidean(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
-
 };
 
 inline double Distance::euclidean(const Node& n1, const Node& n2)
@@ -53,7 +52,7 @@ inline double Distance::euclidean(const Node& n1, const Node& n2)
 }
 
 inline double Distance::euclidean(const geos::geom::Coordinate& c1,
-                                         const geos::geom::Coordinate& c2)
+                                  const geos::geom::Coordinate& c2)
 {
   return sqrt((c1.x - c2.x) * (c1.x - c2.x) +
               (c1.y - c2.y) * (c1.y - c2.y));

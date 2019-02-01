@@ -60,6 +60,9 @@ protected:
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 
+  /*
+   * Return true if pair needs review.
+   */
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced);
 

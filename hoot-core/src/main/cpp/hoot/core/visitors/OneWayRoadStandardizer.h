@@ -22,48 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef __WAY_JOINER_OP_H__
-#define __WAY_JOINER_OP_H__
+#ifndef ONE_WAY_ROAD_STANDARDIZER_H
+#define ONE_WAY_ROAD_STANDARDIZER_H
 
-//  Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/Configurable.h>
+// hoot
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
-class WayJoinerOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
+/**
+ * Replaces all reversed one way roads with regular one way roads
+ */
+class OneWayRoadStandardizer : public ElementVisitor, public OperationStatusInfo
 {
+
 public:
 
-  WayJoinerOp();
+  static std::string className() { return "hoot::OneWayRoadStandardizer"; }
 
-  static std::string className() { return "hoot::WayJoinerOp"; }
+  OneWayRoadStandardizer();
 
-  /**
-   * Apply the way joiner to the specified map
-   */
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual QString getDescription() const
-  { return "Joins ways split during cleaning and conflation matching operations"; }
-
-  virtual QString getInitStatusMessage() { return "Rejoining ways split during conflation..."; }
+  virtual QString getInitStatusMessage()
+  { return "Standardizing one way roads..."; }
 
   virtual QString getCompletedStatusMessage()
-  { return "Rejoined " + QString::number(_numAffected) + " ways"; }
+  { return "Standardized " + QString::number(_numAffected) + " one way roads."; }
 
-private:
-
-  boost::shared_ptr<WayJoiner> _wayJoiner;
+  virtual QString getDescription() const
+  { return "Replaces all reversed one way roads with regular one way roads"; }
 };
 
 }
 
-#endif  //  __WAY_JOINER_OP_H__
+#endif // ONE_WAY_ROAD_STANDARDIZER_H

@@ -90,6 +90,20 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       elementToKeep = e2;
       elementToRemove = e1;
     }
+    LOG_VART(elementToKeep->getElementId());
+    LOG_VART(elementToRemove->getElementId());
+    //LOG_VART(elementToKeep);
+    //LOG_VART(elementToRemove);
+
+    // don't try to join if there are explicitly conflicting names; fix for #2888; not sure what
+    // implications this has outside of the single test dataset I've tested on so far
+    if (elementToKeep->getTags().hasName() &&
+        elementToRemove->getTags().hasName() &&
+        !Tags::haveMatchingName(elementToKeep->getTags(), elementToRemove->getTags()))
+    {
+      LOG_TRACE("Conflicting name tags.  Skipping merge.");
+      return false;
+    }
 
     // Reverse the way if way to remove is one way and the two ways aren't similar directions
     if (elementToKeep->getElementType() == ElementType::Way &&
@@ -99,8 +113,12 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       WayPtr wayToRemove = boost::dynamic_pointer_cast<Way>(elementToRemove);
       if (OneWayCriterion().isSatisfied(wayToRemove) &&
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), wayToKeep, wayToRemove))
+      {
+        LOG_TRACE("Reversing " << wayToKeep->getElementId());
         wayToKeep->reverseOrder();
+      }
     }
+
     // There actually could be a relation in here, but the default tag merging doesn't use the
     // element type anyway, so not worrying about it for now.
     elementToKeep->setTags(

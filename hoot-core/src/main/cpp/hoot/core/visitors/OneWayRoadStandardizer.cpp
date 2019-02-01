@@ -22,48 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef __WAY_JOINER_OP_H__
-#define __WAY_JOINER_OP_H__
+#include "OneWayRoadStandardizer.h"
 
-//  Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/ReversedRoadCriterion.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
 
-class WayJoinerOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
+HOOT_FACTORY_REGISTER(ElementVisitor, OneWayRoadStandardizer)
+
+OneWayRoadStandardizer::OneWayRoadStandardizer()
 {
-public:
-
-  WayJoinerOp();
-
-  static std::string className() { return "hoot::WayJoinerOp"; }
-
-  /**
-   * Apply the way joiner to the specified map
-   */
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
-
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual QString getDescription() const
-  { return "Joins ways split during cleaning and conflation matching operations"; }
-
-  virtual QString getInitStatusMessage() { return "Rejoining ways split during conflation..."; }
-
-  virtual QString getCompletedStatusMessage()
-  { return "Rejoined " + QString::number(_numAffected) + " ways"; }
-
-private:
-
-  boost::shared_ptr<WayJoiner> _wayJoiner;
-};
-
 }
 
-#endif  //  __WAY_JOINER_OP_H__
+void OneWayRoadStandardizer::visit(const boost::shared_ptr<Element>& e)
+{
+  if (ReversedRoadCriterion().isSatisfied(e))
+  {
+    WayPtr road = boost::dynamic_pointer_cast<Way>(e);
+    road->reverseOrder();
+    road->getTags().set("oneway", "yes");
+    _numAffected++;
+  }
+}
+
+}

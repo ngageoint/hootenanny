@@ -1612,6 +1612,7 @@ Not necessarily utilized by all parts of the application.
 * Data Type: list
 * Default Value:
 ** `hoot::ReprojectToPlanarOp`
+** `hoot::OneWayRoadStandardizer`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::IntersectionSplitter`
@@ -3793,6 +3794,13 @@ The way subline matcher to use when determining matching sublines.
 
 Distance, in meters, used for sampling way data during angle histogram extraction with the
 SampledAngleHistogramExtractor
+
+=== way.joiner
+
+* Data Type: string
+* Default Value: `hoot::WayJoiner1`
+
+The way joiner implementation to use to repair way splits after a conflation job.
 
 === way.matcher.heading.delta
 

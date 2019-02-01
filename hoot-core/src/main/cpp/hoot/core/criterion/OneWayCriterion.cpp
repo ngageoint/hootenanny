@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OneWayCriterion.h"
 
@@ -43,6 +43,7 @@ bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     result = true;
   }
+  LOG_VART(result);
   return result;
 }
 
