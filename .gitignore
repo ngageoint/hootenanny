@@ -176,5 +176,3 @@ config.rpath
 0
 tbs/0
 .DS_Store
-
-hoot-services/src/main/resources/conf/hoot-services\.conf\.in
