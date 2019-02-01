@@ -158,6 +158,7 @@ MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
 userfiles/
+matthias_data/
 
 ###### hoot-services ignores
 hoot-services/db.properties
@@ -175,3 +176,5 @@ config.rpath
 0
 tbs/0
 .DS_Store
+
+hoot-services/src/main/resources/conf/hoot-services\.conf\.in
