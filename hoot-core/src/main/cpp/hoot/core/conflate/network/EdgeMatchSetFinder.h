@@ -33,9 +33,19 @@
 namespace hoot
 {
 
+struct EdgeMatchScore
+{
+  ConstEdgeMatchPtr match;
+  double score = -1.0;
+};
+
+// Stores a set of edge matches, keyed by similarity; see EdgeMatch::isVerySimilarTo
+typedef QHash<QString, EdgeMatchScore> EdgeMatchSimilarity;
+
 class EdgeMatchSetFinder
 {
 public:
+
   EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
     ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
@@ -45,9 +55,12 @@ public:
    */
   void addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
-  void setAddStubsInBothDirections(bool bidirectionalStubs) { _bidirectionalStubs = bidirectionalStubs; }
+  void setAddStubsInBothDirections(bool bidirectionalStubs)
+  { _bidirectionalStubs = bidirectionalStubs; }
 
   void setIncludePartialMatches(bool include) { _includePartialMatches = include; }
+
+  int getNumSimilarEdgeMatches() const { return _numSimilarEdgeMatches; }
 
 private:
 
@@ -58,6 +71,9 @@ private:
   ConstOsmNetworkPtr _n1, _n2;
   int _steps;
 
+  int _numSimilarEdgeMatches;
+  EdgeMatchSimilarity _edgeMatchSimilarities;
+
   bool _addEdgeMatches(ConstEdgeMatchPtr em);
 
   bool _addEdgeNeighborsToEnd(ConstEdgeMatchPtr em, QSet<ConstNetworkEdgePtr> neighbors1,
@@ -65,9 +81,6 @@ private:
 
   bool _addEdgeNeighborsToStart(ConstEdgeMatchPtr em, QSet<ConstNetworkEdgePtr> neighbors1Set,
     QSet<ConstNetworkEdgePtr> neighbors2Set);
-
-  /// @todo delete me if I'm still not in use.
-  bool _addPartialMatch(ConstEdgeMatchPtr em);
 
   /**
    * Finds which subline match between e1 and e2 and then appends those sublines to em as
@@ -100,18 +113,14 @@ private:
 
   ConstEdgeSublinePtr _snapSublineToString(ConstEdgeStringPtr str, ConstEdgeSublinePtr sub) const;
 
-  /// @todo delete me if I'm still not in use.
   EdgeMatchPtr _trimFromEdge(ConstEdgeMatchPtr em);
-
-  /// @todo delete me if I'm still not in use.
   EdgeMatchPtr _trimToEdge(ConstEdgeMatchPtr em);
+
+  void _addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score);
 };
 
 typedef boost::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
 typedef boost::shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
-
-// not implemented
-bool operator<(ConstEdgeMatchSetFinderPtr, ConstEdgeMatchSetFinderPtr);
 
 }
 

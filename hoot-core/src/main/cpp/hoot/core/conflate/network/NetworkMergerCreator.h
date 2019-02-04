@@ -61,7 +61,6 @@ private:
    */
   const NetworkMatch* _getLargest(const MatchSet& matches) const;
 
-
   /**
    * If one match contains the the rest, return the largest match.
    * Otherwise, return 0.
@@ -78,11 +77,6 @@ private:
    * Returns true if one or more matches are conflicting matches.
    */
   bool _isConflictingSet(const MatchSet& matches) const;
-
-  /**
-   * Removes duplicate matches in the MatchSet
-   */
-  void _removeDuplicates(MatchSet& matches) const;
 };
 
 }

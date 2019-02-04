@@ -138,8 +138,6 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
 
 void RubberSheet::apply(boost::shared_ptr<OsmMap>& map)
 {
-  LOG_INFO("Rubbersheeting the map...");
-
   boost::shared_ptr<OGRSpatialReference> oldSrs = _projection;
   calculateTransform(map);
   _projection = oldSrs;
@@ -250,8 +248,6 @@ boost::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
 
 boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
 {
-  LOG_INFO("Running interpolator...");
-
   boost::shared_ptr<DataFrame> df = _buildDataFrame(s);
 
   vector<std::string> candidates;
@@ -268,7 +264,9 @@ boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   boost::shared_ptr<Interpolator> bestCandidate;
   for (size_t i = 0; i < candidates.size(); i++)
   {
-    LOG_VARD(candidates[i]);
+    PROGRESS_INFO(
+      "Running interpolator: " << candidates[i] << " (" << (i + 1) << " / " <<
+      candidates.size() << ")...");
     boost::shared_ptr<Interpolator> candidate(
       Factory::getInstance().constructObject<Interpolator>(candidates[i]));
     // Setting this upper limit prevents some runaway optimizations.  Those conditions should be
@@ -304,7 +302,7 @@ boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
 
   if (bestCandidate.get() == 0)
   {
-    throw HootException("Unable to determine interpolation candidate.");
+    throw HootException("Unable to determine rubber sheeting interpolation candidate.");
   }
 
   LOG_DEBUG("Best candidate: " << bestCandidate->toString());

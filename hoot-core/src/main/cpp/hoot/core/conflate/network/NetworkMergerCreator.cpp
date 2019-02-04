@@ -73,8 +73,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   LOG_TRACE(matchesList);
 
   MatchSet matches = matchesIn;
-  // TODO: major bottleneck
-  _removeDuplicates(matches);
   LOG_VART(matches);
 
   bool result = false;
@@ -95,7 +93,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       {
         const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(itm);
         edgeMatches.insert(nm->getEdgeMatch());
-        set< pair<ElementId, ElementId> > p = nm->getMatchPairs();
+        set<pair<ElementId, ElementId>> p = nm->getMatchPairs();
         pairs.insert(p.begin(), p.end());
 
         count++;
@@ -124,7 +122,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       else
       {
         double overlapPercent = _getOverlapPercent(matches);
-        if (overlapPercent > 80.0) // Go ahead and merge largest match
+        if (overlapPercent > 80.0) // Go ahead and merge largest match; TODO: move value to config
         {
           const NetworkMatch* largest = _getLargest(matches);
           LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
@@ -391,48 +389,6 @@ bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
   assert(_map != 0);
   bool conflicting = matches.size() > 1;
   return conflicting;
-}
-
-// I dislike the nested for loop here - but whatcha gonna do? Maybe not create
-// duplicate matches in the first place
-void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
-{
-  int count = 0;
-  for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
-  {
-    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
-    MatchSet::iterator jt = it;
-
-    for (++jt; jt != matches.end(); ++jt)
-    {
-      const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
-
-      if (nmi && nmj)
-      {
-        if (hoot::Log::getInstance().getLevel() == hoot::Log::Trace && nmi->isVerySimilarTo(nmj))
-          LOG_TRACE(
-            nmi->getEdgeMatch()->getUid() << " is very similar to " <<
-            nmj->getEdgeMatch()->getUid());
-
-        if (hoot::Log::getInstance().getLevel() == hoot::Log::Trace && nmi->contains(nmj))
-          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " contains " << nmj->getEdgeMatch()->getUid());
-
-        if (nmi->isVerySimilarTo(nmj))
-        {
-          MatchSet::iterator tmp = jt;
-          ++tmp;
-          matches.erase(jt);
-          jt = tmp;
-        }
-      }
-    }
-
-    count++;
-    if (count % 10 == 0)
-    {
-      PROGRESS_INFO("Removed duplicate match " << count << " / " << matches.size() << "...");
-    }
-  }
 }
 
 }

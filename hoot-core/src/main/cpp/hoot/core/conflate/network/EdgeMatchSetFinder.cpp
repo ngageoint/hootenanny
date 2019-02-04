@@ -41,8 +41,10 @@ EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMat
   _includePartialMatches(false),
   _matchSet(matchSet),
   _n1(n1),
-  _n2(n2)
+  _n2(n2),
+  _numSimilarEdgeMatches(0)
 {
+  _edgeMatchSimilarities.clear();
 }
 
 void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
@@ -157,9 +159,6 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   // if we couldn't find a whole string solution and we're supposed to include partial matches
   if (foundSolution == false && _includePartialMatches)
   {
-    // keep the best partial matches at each end and add it to the edge match
-    //foundSolution = _addPartialMatch(em);
-
     foundSolution = _recordMatch(em);
   }
 
@@ -283,76 +282,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
   return foundSolution;
 }
 
-//TODO: not currently being used from _addEdgeMatches
-bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
-{
-  LOG_TRACE("Adding partial match...");
-  LOG_VART(em);
-
-  ConstEdgeLocationPtr from1 = em->getString1()->getFrom();
-  ConstEdgeLocationPtr from2 = em->getString2()->getFrom();
-  ConstEdgeLocationPtr to1 = em->getString1()->getTo();
-  ConstEdgeLocationPtr to2 = em->getString2()->getTo();
-  bool fromMatch = _isCandidateMatch(from1, from2);
-  bool toMatch = _isCandidateMatch(to1, to2);
-
-  /// @todo There is a horribly unlikely edge case that could pop up here.
-  ///
-  ///       ,-----,
-  /// +-----'     `-------+-------------+
-  ///     +--------------------+----+
-  ///     ^^^     ^^^^^^^^^^^^^^^^^^^
-  ///
-  /// In the above case there should be two matches created, but there will likely only be the
-  /// second match. Fixing this should just be a matter of adding a bunch more if statements.
-
-  bool result = false;
-  EdgeMatchPtr newEm;
-
-  // if this is a partial match in the middle of a line.
-  if (em->getString1()->getMembers().size() == 1 && em->getString2()->getMembers().size() == 1)
-  {
-    newEm = em->clone();
-  }
-  else
-  {
-    newEm = em->clone();
-    // trim the ends off the match so you get a partial match
-    if (fromMatch == false)
-    {
-      newEm = _trimFromEdge(newEm);
-      if (!newEm)
-      {
-        return false;
-      }
-    }
-
-    if (toMatch == false)
-    {
-      newEm = _trimToEdge(newEm);
-      if (!newEm)
-      {
-        return false;
-      }
-    }
-  }
-
-  if (newEm)
-  {
-    double score = _scoreMatch(newEm);
-    LOG_VART(newEm);
-    LOG_VART(score);
-    if (score > 0)
-    {
-      _matchSet->addEdgeMatch(newEm, score);
-      result = true;
-    }
-  }
-
-  LOG_VART(result);
-  return result;
-}
-
 void EdgeMatchSetFinder::_appendMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
                                       ConstNetworkEdgePtr e2) const
 {
@@ -429,10 +358,39 @@ void EdgeMatchSetFinder::_prependMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
 bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
 {
   bool result = false;
-  double score = _scoreMatch(em);
+  const double score = _scoreMatch(em);
   LOG_VART(score);
   if (score > 0)
   {
+    // If we already have an edge with a higher score that is very similar to this edge, then don't
+    // add it.
+    const QString matchSimilarityStr = em->toSimilarityString();
+    const EdgeMatchScore existingSimilarMatch = _edgeMatchSimilarities[matchSimilarityStr];
+    //if (_edgeMatchSimilarities.contains(similarityStr))
+    if (existingSimilarMatch.score != -1.0) // -1.0 is the default empty value
+    {
+      //const EdgeMatchScore edgeMatchScore = _edgeMatchSimilarities[similarityStr];
+      if (existingSimilarMatch.score >= score)
+      {
+        _numSimilarEdgeMatches++;
+        return false;
+      }
+      else
+      {
+        _matchSet->setScore(existingSimilarMatch.match, existingSimilarMatch.score);
+        // TODO: what to do about reverse matches here? (not urgent, b/c _bidirectionalStubs is off
+        // by default for ConflictsNetworkMatcher, which is the default
+        return true;
+      }
+    }
+    else
+    {
+      EdgeMatchScore newMatch;
+      newMatch.match = em;
+      newMatch.score = score;
+      _edgeMatchSimilarities[matchSimilarityStr] = newMatch;
+    }
+
     LOG_TRACE("Recording match: " << em);
 
     // if exactly one string is a stub
@@ -442,10 +400,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
       if (_bidirectionalStubs)
       {
         // add it in both directions. In some matchers we don't know which is better.
-        EdgeStringPtr rev1 = em->getString1()->clone();
-        rev1->reverse();
-        EdgeMatchPtr em2(new EdgeMatch(rev1, em->getString2()));
-        _matchSet->addEdgeMatch(em2, score);
+        _addReverseMatch(em, score);
       }
     }
     else
@@ -456,6 +411,14 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
   }
 
   return result;
+}
+
+void EdgeMatchSetFinder::_addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score)
+{
+  EdgeStringPtr rev1 = edgeMatch->getString1()->clone();
+  rev1->reverse();
+  EdgeMatchPtr em2(new EdgeMatch(rev1, edgeMatch->getString2()));
+  _matchSet->addEdgeMatch(em2, score);
 }
 
 double EdgeMatchSetFinder::_scoreMatch(ConstEdgeMatchPtr em) const

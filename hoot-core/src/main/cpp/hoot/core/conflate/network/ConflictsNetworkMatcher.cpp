@@ -117,9 +117,10 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
       {
         // if both the from and to vertices are candidate matches with va
         if (e->getFrom() != e->getTo() && vCandidatesB.contains(e->getFrom()) &&
-          vCandidatesB.contains(e->getTo()))
+            vCandidatesB.contains(e->getTo()))
         {
           createStub = true;
+          break;    // TODO: check this
         }
       }
     }
@@ -131,60 +132,6 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
       newStub->addMember(va->getElement());
       LOG_TRACE("Adding new edge: " << newStub);
       na->addEdge(newStub);
-    }
-  }
-}
-
-void ConflictsNetworkMatcher::_removeDupes()
-{
-  // Bail out if we only have one match
-  if (_edgeMatches->getAllMatches().size() < 2)
-    return;
-
-  QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
-  QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
-
-  int ctr = 0;
-  const int total = _edgeMatches->getAllMatches().size();
-  while (it1 != _edgeMatches->getAllMatches().end())
-  {
-    it2 = it1;
-    ++it2;
-
-    while (it2 != _edgeMatches->getAllMatches().end())
-    {
-      LOG_VART(it1.key());
-      LOG_VART(it2.key());
-      if (it1.key()->isVerySimilarTo(it2.key()))
-      {
-        double score1 = it1.value();
-        double score2 = it2.value();
-        LOG_VART(score1);
-        LOG_VART(score2);
-        if (score1 > score2)
-        {
-          LOG_DEBUG("Removing " << it2.key()->toString());
-          it2 = _edgeMatches->getAllMatches().erase(it2);
-        }
-        else
-        {
-          LOG_DEBUG("Removing " << it1.key()->toString());
-          it1 = _edgeMatches->getAllMatches().erase(it1);
-          it2 = it1;
-          ++it2;
-        }
-      }
-      else
-      {
-        ++it2;
-      }
-    }
-    ++it1;
-
-    ctr++;
-    if (ctr % 10 == 0)
-    {
-      PROGRESS_INFO("Processed " << ctr << " / " << total << " matches for duplicate edges.");
     }
   }
 }
@@ -512,6 +459,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
   int count = 0;
 
   // go through all matches
+  const int total = _scores.keys();
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
     double handicap = pow(partialHandicap, em->countPartialMatches());
@@ -633,7 +581,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
     count++;
     if (count % 1000 == 0)
     {
-      PROGRESS_INFO(count << " / " << _scores.size() << " matches processed.");
+      PROGRESS_INFO(count << " / " << total << " matches processed.");
     }
   }
 
@@ -671,9 +619,6 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
   // create an initial estimation of edge match based on typical similarity scores
   _seedEdgeScores();
 
-  // TODO: major bottleneck
-  _removeDupes();
-
   _createMatchRelationships();
 
   _sanityCheckRelationships();
@@ -683,12 +628,13 @@ void ConflictsNetworkMatcher::finalize()
 {
   // Check our relationships
   int count = 0;
-  foreach(ConstEdgeMatchPtr em, _scores.keys())
+  int total = _scores.size();
+  foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
-    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
+    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
-      double myScore = _scores[em];
-      double theirScore = _scores[r->getEdge()];
+      const double myScore = _scores[em];
+      const double theirScore = _scores[r->getEdge()];
 
       // If it's a conflict, AND we score a lot better, ax the other one
       if (r->isConflict())
@@ -703,7 +649,7 @@ void ConflictsNetworkMatcher::finalize()
     count++;
     if (count % 100 == 0)
     {
-      PROGRESS_INFO(count << " / " << _scores.size() << " matches finalized.");
+      PROGRESS_INFO(count << " / " << total << " edge matches finalized.");
     }
   }
 }
@@ -736,7 +682,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
       LOG_VART(e1);
       LOG_VART(e2);
 
-      double score = _details->getPartialEdgeMatchScore(e1, e2);
+      const double score = _details->getPartialEdgeMatchScore(e1, e2);
       LOG_TRACE("partial edge match score:" << score);
       if (score > 0)
       {
@@ -748,7 +694,9 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     count++;
     if (count % 100 == 0)
     {
-      PROGRESS_INFO(count << " / " << em.size() << " edge scores seeded.");
+      PROGRESS_INFO(
+        count << " / " << em.size() << " edge match scores processed. " <<
+        finder.getNumSimilarEdgeMatches() << " duplicate edge matches discarded.");
     }
   }
 

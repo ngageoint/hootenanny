@@ -112,6 +112,8 @@ public:
 
   QString toString() const;
 
+  QString toSimilarityString() const;
+
 private:
 
   mutable uint _hash;

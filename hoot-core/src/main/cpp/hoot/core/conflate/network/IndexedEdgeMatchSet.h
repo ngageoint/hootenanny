@@ -41,6 +41,7 @@ class IndexedEdgeLinks;
 class IndexedEdgeMatchSet : public EdgeMatchSet
 {
 public:
+
   typedef QHash<ConstEdgeMatchPtr, double> MatchHash;
 
   IndexedEdgeMatchSet();
@@ -93,7 +94,7 @@ public:
    *
    * An exception is thrown if the match doesn't exist.
    */
-  ConstEdgeMatchPtr getMatch(const ConstEdgeMatchPtr &em) const;
+  ConstEdgeMatchPtr getMatch(const ConstEdgeMatchPtr& em) const;
 
   /**
    * Return the score associated with an edge match.
@@ -124,8 +125,9 @@ public:
   virtual QString toString() const;
 
 private:
-  typedef QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr> > EdgeToMatchMap;
-  typedef QHash<ConstNetworkVertexPtr, QSet<ConstEdgeMatchPtr> > VertexToMatchMap;
+
+  typedef QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr>> EdgeToMatchMap;
+  typedef QHash<ConstNetworkVertexPtr, QSet<ConstEdgeMatchPtr>> VertexToMatchMap;
 
   EdgeToMatchMap _edgeToMatch;
   /**

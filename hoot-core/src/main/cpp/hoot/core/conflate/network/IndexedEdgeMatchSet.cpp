@@ -36,7 +36,7 @@ IndexedEdgeMatchSet::IndexedEdgeMatchSet()
 {
 }
 
-void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr &em, double score)
+void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr& em, double score)
 {
   if (!contains(em))
   {
@@ -53,7 +53,7 @@ void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr &em, double score
 }
 
 void IndexedEdgeMatchSet::_addEdgeToMatchMapping(ConstEdgeStringPtr str,
-  const ConstEdgeMatchPtr &em)
+  const ConstEdgeMatchPtr& em)
 {
   QList<EdgeString::EdgeEntry> e = str->getAllEdges();
   foreach (const EdgeString::EdgeEntry& ee, e)
@@ -63,7 +63,7 @@ void IndexedEdgeMatchSet::_addEdgeToMatchMapping(ConstEdgeStringPtr str,
 }
 
 void IndexedEdgeMatchSet::_addVertexToMatchMapping(ConstEdgeStringPtr str,
-  const ConstEdgeMatchPtr &em)
+  const ConstEdgeMatchPtr& em)
 {
   QList<EdgeString::EdgeEntry> e = str->getAllEdges();
 
@@ -122,7 +122,7 @@ boost::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSet::clone() const
   return result;
 }
 
-bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr &em) const
+bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr& em) const
 {
   bool result = false;
 
@@ -144,7 +144,7 @@ bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr &em) const
   return result;
 }
 
-ConstEdgeMatchPtr IndexedEdgeMatchSet::getMatch(const ConstEdgeMatchPtr &em) const
+ConstEdgeMatchPtr IndexedEdgeMatchSet::getMatch(const ConstEdgeMatchPtr& em) const
 {
   MatchHash::const_iterator it = _matches.find(em);
   if (it == _matches.end())

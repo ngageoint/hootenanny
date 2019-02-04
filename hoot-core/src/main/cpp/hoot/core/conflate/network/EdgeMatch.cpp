@@ -41,17 +41,6 @@ bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPt
 {
   bool result = em1.get() == em2.get() ||
     (em1->getString1() == em2->getString1() && em1->getString2() == em2->getString2());
-
-//  bool strResult = em1->toString() == em2->toString();
-//  if (result != strResult)
-//  {
-//    LOG_VARE(result);
-//    LOG_VARE(strResult);
-//    LOG_VARE(em1);
-//    LOG_VARE(em2);
-//    throw HootException();
-//  }
-
   return result;
 }
 
@@ -197,6 +186,26 @@ QString EdgeMatch::getUid() const
 QString EdgeMatch::toString() const
 {
   return QString("s1: %1 s2: %2").arg(_edges1->toString()).arg(_edges2->toString());
+}
+
+QString EdgeMatch::toSimilarityString() const
+{
+  boost::shared_ptr<EdgeMatch> edgeMatch = clone();
+  const QString edgeStr1 = edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
+  const QString edgeStr2 =  edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
+
+  edgeMatch->reverse();
+  const QString edgeStr1Reversed =
+    edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
+  const QString edgeStr2Reversed =
+    edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
+
+  return
+    QString("s1: %1 s2: %2 s1r: %3 s2r: %4")
+      .arg(edgeStr1)
+      .arg(edgeStr2)
+      .arg(edgeStr1Reversed)
+      .arg(edgeStr2Reversed);
 }
 
 }

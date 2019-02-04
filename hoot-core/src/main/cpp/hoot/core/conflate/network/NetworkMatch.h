@@ -43,6 +43,7 @@ namespace hoot
 class NetworkMatch : public Match
 {
 public:
+
   NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
     double score, ConstMatchThresholdPtr mt);
 
@@ -106,15 +107,17 @@ public:
   bool contains(const NetworkMatch* other) const;
 
 protected:
+
   void _discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch);
 
   ConstElementPtr _toElement(ConstNetworkEdgePtr edge) const;
 
 private:
+
   MatchClassification _classification;
   ConstNetworkDetailsPtr _details;
   ConstEdgeMatchPtr _edgeMatch;
-  std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
 };
 
 }
