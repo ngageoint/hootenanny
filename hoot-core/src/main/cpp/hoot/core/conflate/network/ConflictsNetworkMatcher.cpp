@@ -459,7 +459,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
   int count = 0;
 
   // go through all matches
-  const int total = _scores.keys();
+  const int total = _scores.keys().size();
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
     double handicap = pow(partialHandicap, em->countPartialMatches());
