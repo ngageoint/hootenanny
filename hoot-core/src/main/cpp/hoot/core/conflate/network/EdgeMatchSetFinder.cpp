@@ -403,8 +403,8 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     // An EdgeMatchScore returned with a score == -1.0 means that no similar match was found.
     if (existingSimilarMatch.score != -1.0)
     {
-      // If we already have an edge with a higher score that is very similar to this edge, then don't
-      // add it.
+      // If we already have an edge with a higher score that is very similar to this edge, then
+      // don't add it.
       if (existingSimilarMatch.score >= score)
       {
         LOG_TRACE(
@@ -412,7 +412,9 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
           existingSimilarMatch.match << " and with lower score: " << score <<
           ".  Skipping match...");
         _numSimilarEdgeMatches++;
-        return false;
+        // Returning success here is slightly counterintuitive but is the correct thing to do for
+        // the match alg.
+        return true;
       }
       // Otherwise, remove the existing match, since the new one has a higher score.
       else

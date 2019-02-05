@@ -136,60 +136,6 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
   }
 }
 
-void ConflictsNetworkMatcher::_removeDupes()
-{
-  // Bail out if we only have one match
-  if (_edgeMatches->getAllMatches().size() < 2)
-    return;
-
-  QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
-  QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
-
-  int ctr = 0;
-  const int total = _edgeMatches->getAllMatches().size();
-  int matchesRemoved = 0;
-  while (it1 != _edgeMatches->getAllMatches().end())
-  {
-    it2 = it1;
-    ++it2;
-
-    while (it2 != _edgeMatches->getAllMatches().end())
-    {
-      if (it1.key()->isVerySimilarTo(it2.key()))
-      {
-        double score1 = it1.value();
-        double score2 = it2.value();
-        if (score1 > score2)
-        {
-          LOG_TRACE("Removing " << it2.key()->toString());
-          it2 = _edgeMatches->getAllMatches().erase(it2);
-        }
-        else
-        {
-          LOG_TRACE("Removing " << it1.key()->toString());
-          it1 = _edgeMatches->getAllMatches().erase(it1);
-          it2 = it1;
-          ++it2;
-        }
-        matchesRemoved++;
-      }
-      else
-      {
-        ++it2;
-      }
-    }
-    ++it1;
-
-    ctr++;
-    if (ctr % 10 == 0)
-    {
-      PROGRESS_INFO(
-        "Processed " << ctr << " / " << total << " matches for duplicate edge matches.  Removed " <<
-        matchesRemoved << " duplicates.");
-    }
-  }
-}
-
 Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
 {
   // convert the EdgeStrings into WaySublineStrings
@@ -678,9 +624,6 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
   // create an initial estimation of edge match based on typical similarity scores
   _seedEdgeScores();
 
-  // TODO: major bottleneck
-  //_removeDupes();
-
   _createMatchRelationships();
 
   _sanityCheckRelationships();
@@ -758,9 +701,10 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     {
       PROGRESS_INFO(
         count << " / " << em.size() << " edge match scores processed. " <<
-        finder.getNumSimilarEdgeMatches() << " duplicate edge matches discarded.");
+        finder.getNumSimilarEdgeMatches() << " duplicate edge matches removed.");
     }
   }
+  LOG_TRACE("Removed " << finder.getNumSimilarEdgeMatches() << " duplicate edge matches.");
 
   if (Log::getInstance().getLevel() <= Log::Trace)
   {
