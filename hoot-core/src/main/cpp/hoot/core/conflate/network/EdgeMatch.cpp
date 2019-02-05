@@ -188,24 +188,36 @@ QString EdgeMatch::toString() const
   return QString("s1: %1 s2: %2").arg(_edges1->toString()).arg(_edges2->toString());
 }
 
-QString EdgeMatch::toSimilarityString() const
+QString EdgeMatch::getSimilarityString() const
 {
-  boost::shared_ptr<EdgeMatch> edgeMatch = clone();
-  const QString edgeStr1 = edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
-  const QString edgeStr2 =  edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
+  return
+    QString("s1: %1 s2: %2")
+      .arg(getString1()->toString().replace(_portionReplaceRegEx, ""))
+      .arg(getString2()->toString().replace(_portionReplaceRegEx, ""));
+}
+
+QString EdgeMatch::getFirstReversedSimilarityString() const
+{
+  EdgeMatchPtr edgeMatch = clone();
+  const QString edgeStr2 = edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
 
   edgeMatch->reverse();
   const QString edgeStr1Reversed =
     edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
+
+  return QString("s1r: %1 s2: %2").arg(edgeStr1Reversed).arg(edgeStr2);
+}
+
+QString EdgeMatch::getSecondReversedSimilarityString() const
+{
+  EdgeMatchPtr edgeMatch = clone();
+  const QString edgeStr1 = edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
+
+  edgeMatch->reverse();
   const QString edgeStr2Reversed =
     edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
 
-  return
-    QString("s1: %1 s2: %2 s1r: %3 s2r: %4")
-      .arg(edgeStr1)
-      .arg(edgeStr2)
-      .arg(edgeStr1Reversed)
-      .arg(edgeStr2Reversed);
+  return QString("s1: %1 s2r: %2").arg(edgeStr1).arg(edgeStr2Reversed);
 }
 
 }

@@ -136,6 +136,62 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
   }
 }
 
+void ConflictsNetworkMatcher::_removeDupes()
+{
+  // Bail out if we only have one match
+  if (_edgeMatches->getAllMatches().size() < 2)
+    return;
+
+  LOG_INFO("Removing duplicate edge matches...");
+
+  QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
+  QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
+
+  int ctr = 0;
+  const int total = _edgeMatches->getAllMatches().size();
+  int matchesRemoved = 0;
+  while (it1 != _edgeMatches->getAllMatches().end())
+  {
+    it2 = it1;
+    ++it2;
+
+    while (it2 != _edgeMatches->getAllMatches().end())
+    {
+      if (it1.key()->isVerySimilarTo(it2.key()))
+      {
+        double score1 = it1.value();
+        double score2 = it2.value();
+        if (score1 > score2)
+        {
+          LOG_TRACE("Removing " << it2.key()->toString());
+          it2 = _edgeMatches->getAllMatches().erase(it2);
+        }
+        else
+        {
+          LOG_TRACE("Removing " << it1.key()->toString());
+          it1 = _edgeMatches->getAllMatches().erase(it1);
+          it2 = it1;
+          ++it2;
+        }
+        matchesRemoved++;
+      }
+      else
+      {
+        ++it2;
+      }
+    }
+    ++it1;
+
+    ctr++;
+    if (ctr % 10 == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << ctr << " / " << total << " matches for duplicate edge matches.  Removed " <<
+        matchesRemoved << " duplicates.");
+    }
+  }
+}
+
 Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
 {
   // convert the EdgeStrings into WaySublineStrings
@@ -169,6 +225,7 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
   // Check our relationships for sanity...
   int ctr = 0;
   const int total = _scores.keys().size();
+  int matchesRemoved = 0;
   foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
     double myDistance = _getMatchSeparation(em);
@@ -180,7 +237,7 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
       {
         double theirDistance = _getMatchSeparation(r->getEdge());
 
-        if (myDistance > 5.0 && myDistance * 2.5 < theirDistance)
+        if (myDistance > 5.0 && myDistance * 2.5 < theirDistance) // TODO: move values to config
         {
           LOG_TRACE("Removing insane match: " << r->getEdge()->getUid() << " - "
                     << theirDistance << " keeping: " << em->getUid()
@@ -194,14 +251,18 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
 
           // Remove from relationships
           _matchRelationships.remove(r->getEdge());
+
+          matchesRemoved++;
         }
       }
     }
 
     ctr++;
-    if (ctr % 1000 == 0)
+    if (ctr % 100 == 0)
     {
-      PROGRESS_INFO("Sanity checked " << ctr << " / " << total << " relationships.");
+      PROGRESS_INFO(
+        "Sanity checked " << ctr << " / " << total << " relationships. " << matchesRemoved <<
+        " matches removed.");
     }
   }
 }
@@ -618,6 +679,9 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 
   // create an initial estimation of edge match based on typical similarity scores
   _seedEdgeScores();
+
+  // TODO: major bottleneck
+  //_removeDupes();
 
   _createMatchRelationships();
 

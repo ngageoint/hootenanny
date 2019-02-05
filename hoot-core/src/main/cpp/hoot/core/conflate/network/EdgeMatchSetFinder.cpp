@@ -44,7 +44,15 @@ EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMat
   _n2(n2),
   _numSimilarEdgeMatches(0)
 {
+  _resetEdgeMatchSimilarities();
+}
+
+void EdgeMatchSetFinder::_resetEdgeMatchSimilarities()
+{
   _edgeMatchSimilarities.clear();
+  _edgeMatchSimilarities["similar"] = EdgeMatchSimilarity();
+  _edgeMatchSimilarities["similar-second-reversed"] = EdgeMatchSimilarity();
+  _edgeMatchSimilarities["similar-first-reversed"] = EdgeMatchSimilarity();
 }
 
 void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
@@ -355,43 +363,68 @@ void EdgeMatchSetFinder::_prependMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
   _details->extendEdgeMatch(em, e1, e2);
 }
 
+EdgeMatchScore EdgeMatchSetFinder::_getExistingSimilarMatch(ConstEdgeMatchPtr edgeMatch) const
+{
+  QString edgeMatchSimilarityType = "similar";
+  // check all of our similarity indexes for an existing match; this is preserving the same order
+  // of similarity index traversal as the original remove duplicates
+  // code in ConflictsNetworkMatcher but not certain yet if that is actually required or not
+  EdgeMatchScore existingSimilarMatch =
+    _edgeMatchSimilarities[edgeMatchSimilarityType][edgeMatch->getSimilarityString()];
+  if (existingSimilarMatch.score == -1.0) // -1.0 is the default empty value
+  {
+    edgeMatchSimilarityType = "similar-second-reversed";
+    existingSimilarMatch =
+      _edgeMatchSimilarities[edgeMatchSimilarityType][edgeMatch->getSecondReversedSimilarityString()];
+
+    if (existingSimilarMatch.score == -1.0)
+    {
+      edgeMatchSimilarityType = "similar-first-reversed";
+      existingSimilarMatch =
+        _edgeMatchSimilarities[edgeMatchSimilarityType][edgeMatch->getFirstReversedSimilarityString()];
+    }
+  }
+  return existingSimilarMatch;
+}
+
 bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
 {
-  bool result = false;
+  LOG_TRACE("Recording match: " << em);
+
   const double score = _scoreMatch(em);
   LOG_VART(score);
   if (score > 0)
   {
-    // If we already have an edge with a higher score that is very similar to this edge, then don't
-    // add it.
-    const QString matchSimilarityStr = em->toSimilarityString();
-    const EdgeMatchScore existingSimilarMatch = _edgeMatchSimilarities[matchSimilarityStr];
-    //if (_edgeMatchSimilarities.contains(similarityStr))
-    if (existingSimilarMatch.score != -1.0) // -1.0 is the default empty value
+    // We want to avoid adding matches that are very similar to ones we've already found and have
+    // lower score than they do (see EdgeMatch::isVerySimilarTo).  Otherwise we'll have to remove
+    // them before calculating match relationships, which can be very expensive.
+
+    const EdgeMatchScore existingSimilarMatch = _getExistingSimilarMatch(em);
+    // An EdgeMatchScore returned with a score == -1.0 means no similar match was found.
+    if (existingSimilarMatch.score != -1.0)
     {
-      //const EdgeMatchScore edgeMatchScore = _edgeMatchSimilarities[similarityStr];
+      // If we already have an edge with a higher score that is very similar to this edge, then don't
+      // add it.
       if (existingSimilarMatch.score >= score)
       {
+        LOG_TRACE(
+          "Found edge match: " << em << " similar to existing match: " <<
+          existingSimilarMatch.match << " and with lower score: " << score <<
+          ".  Skipping match...");
         _numSimilarEdgeMatches++;
         return false;
       }
+      // Otherwise, remove the existing match, since the new one has a higher score.
       else
       {
-        _matchSet->setScore(existingSimilarMatch.match, existingSimilarMatch.score);
-        // TODO: what to do about reverse matches here? (not urgent, b/c _bidirectionalStubs is off
-        // by default for ConflictsNetworkMatcher, which is the default
-        return true;
+        LOG_TRACE(
+          "Removing similar edge match: " << existingSimilarMatch.match << " with lower score: " <<
+          score << " than found edge match: " << em << "...");;
+        _matchSet->removeEdgeMatch(existingSimilarMatch.match);
       }
     }
-    else
-    {
-      EdgeMatchScore newMatch;
-      newMatch.match = em;
-      newMatch.score = score;
-      _edgeMatchSimilarities[matchSimilarityStr] = newMatch;
-    }
 
-    LOG_TRACE("Recording match: " << em);
+    // add our new match
 
     // if exactly one string is a stub
     if (em->getString1()->isStub() != em->getString2()->isStub())
@@ -407,10 +440,21 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     {
       _matchSet->addEdgeMatch(em, score);
     }
-    result = true;
+
+    // similarity index our new match
+    EdgeMatchScore newMatch;
+    newMatch.match = em;
+    newMatch.score = score;
+    _edgeMatchSimilarities["similar"][em->getSimilarityString()] = newMatch;
+    _edgeMatchSimilarities["similar-first-reversed"][em->getFirstReversedSimilarityString()] =
+      newMatch;
+    _edgeMatchSimilarities["similar-second-reversed"][em->getSecondReversedSimilarityString()] =
+      newMatch;
+
+    return true;
   }
 
-  return result;
+  return false;
 }
 
 void EdgeMatchSetFinder::_addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score)

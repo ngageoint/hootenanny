@@ -112,7 +112,9 @@ public:
 
   QString toString() const;
 
-  QString toSimilarityString() const;
+  QString getSimilarityString() const;
+  QString getFirstReversedSimilarityString() const;
+  QString getSecondReversedSimilarityString() const;
 
 private:
 

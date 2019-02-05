@@ -39,7 +39,7 @@ struct EdgeMatchScore
   double score = -1.0;
 };
 
-// Stores a set of edge matches, keyed by similarity; see EdgeMatch::isVerySimilarTo
+// Stores a set of edge matches, keyed by a similarity string; see EdgeMatch::isVerySimilarTo
 typedef QHash<QString, EdgeMatchScore> EdgeMatchSimilarity;
 
 class EdgeMatchSetFinder
@@ -72,7 +72,10 @@ private:
   int _steps;
 
   int _numSimilarEdgeMatches;
-  EdgeMatchSimilarity _edgeMatchSimilarities;
+  // stores three categories of EdgeMatchSimilarity; one with both edges in the regular direction,
+  // one with the first edge in the regular direction and the second reversed, and one with the
+  // second edge in the regular direction and the first reversed; see EdgeMatch::isVerySimilarTo
+  QMap<QString, EdgeMatchSimilarity> _edgeMatchSimilarities;
 
   bool _addEdgeMatches(ConstEdgeMatchPtr em);
 
@@ -117,6 +120,9 @@ private:
   EdgeMatchPtr _trimToEdge(ConstEdgeMatchPtr em);
 
   void _addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score);
+
+  void _resetEdgeMatchSimilarities();
+  EdgeMatchScore _getExistingSimilarMatch(ConstEdgeMatchPtr edgeMatch) const;
 };
 
 typedef boost::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;

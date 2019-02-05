@@ -42,6 +42,10 @@ class IndexedEdgeMatchSet : public EdgeMatchSet
 {
 public:
 
+  static std::string className() { return "hoot::IndexedEdgeMatchSet"; }
+
+  static unsigned int logWarnCount;
+
   typedef QHash<ConstEdgeMatchPtr, double> MatchHash;
 
   IndexedEdgeMatchSet();
@@ -50,6 +54,8 @@ public:
    * The edge match should not be modified after it has been added to the index.
    */
   void addEdgeMatch(const ConstEdgeMatchPtr& em, double score);
+
+  void removeEdgeMatch(const ConstEdgeMatchPtr& em);
 
   boost::shared_ptr<IndexedEdgeLinks> calculateEdgeLinks();
 
@@ -136,9 +142,10 @@ private:
   VertexToMatchMap _vertexToMatch;
   MatchHash _matches;
 
-  void _addEdgeToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr &em);
-
-  void _addVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr &em);
+  void _addEdgeToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
+  void _addVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
+  void _removeEdgeToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
+  void _removeVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
 };
 
 typedef boost::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;
