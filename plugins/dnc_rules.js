@@ -1267,6 +1267,30 @@ dnc.rules = {
     // ##### End of txtLength #####
 
 
+    // Lookup table for setting default attributes for layers with F_CODE specific defaults
+    defaultList : {
+        'AC000':{'NAM':'N/A','ZV2':'-2147483648'},
+        'AM040':{'NAM':'N/A','ZV2':'-2147483648'},
+        'AM070':{'NAM':'N/A'},
+        'AH050':{'PRO':'-32768','ZV2':'-2147483648'},
+        'AK160':{'PRO':'-32768','ZV2':'-2147483648'},
+        'AN060':{'APT':'-32768','NAM':'N/A'},
+        'GB055':{'APT':'-32768','NAM':'N/A'},
+        'AK020':{'NAM':'N/A'},
+        'AK130':{'SSC':'-32678'},
+        'GA020':{'APT':'-32768','BRF':'-2147483648','COL':'N/A','EXS':'-32768','MCA':'N/A','NAM':'N/A','NST':'-32768','ORC':'-32768'},
+        'GA035':{'APT':'-32768','COL':'N/A','EXS':'42','NAM':'N/A','OLQ':'-32768'},
+        'GB005':{'BRF':'2147483648','COL':'N/A',,'EXS':'28','MCA':'N/A','NST':'-32768','OLQ':'-32768','ORC':'-32768'},
+        'GB010':{'APT':'-32768','BRF':'-2147483648','EXS':'-32768','MCA':'N/A','NAM':'N/A','NST':'-32768','OLQ':'-32768','ORC':'-32768'},
+        'al015':{'SSR':'-32768'},
+        'AL018':{'NAM':'N/A'},
+
+,'NST':'-32768'
+        'AC000':{'':'','':''},
+
+    }, // EnD defaultList
+
+
     // Lookup tables for linking an F_CODE to a Layer Name
     layerList : {
         'AA010A':'LANDMRKA',
@@ -1501,5 +1525,5 @@ dnc.rules = {
         'GB070L':'SEPARTNL',
         'ZC040A':'ENVAREA',
         'ZD040P':'ECRTEXT', // NOTE: This is a TEXT table
-    } // End layerList
+    }, // End layerList
 } // End of dnc.rules

@@ -625,6 +625,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"28" },
                            { name:"Under Construction",value:"5" },
                            { name:"Abandoned / Disused",value:"6" },
@@ -696,7 +697,7 @@ getDbSchema: function()
                        desc:"Station Type",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"-32768",
+                       defValue:"0",
                        enumerations:[
                            { name:"Unknown", value:"0" },
                            { name:"Coast Guard", value:"1" },
