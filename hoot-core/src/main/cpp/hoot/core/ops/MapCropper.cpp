@@ -256,31 +256,21 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
 
   // perform the intersection with the geometry
   boost::shared_ptr<Geometry> g;
-  if (_invert == false)
+  try
   {
-    try
-    {
+    if (_invert)
+      g.reset(fg->difference(_envelopeG.get()));
+    else
       g.reset(fg->intersection(_envelopeG.get()));
-    }
-    catch (const geos::util::GEOSException&)
-    {
-      // try cleaning up the geometry and try again.
-      fg.reset(GeometryUtils::validateGeometry(fg.get()));
-      g.reset(fg->intersection(_envelopeG.get()));
-    }
   }
-  else
+  catch (const geos::util::GEOSException&)
   {
-    try
-    {
+    // try cleaning up the geometry and try again.
+    fg.reset(GeometryUtils::validateGeometry(fg.get()));
+    if (_invert)
       g.reset(fg->difference(_envelopeG.get()));
-    }
-    catch (const geos::util::GEOSException&)
-    {
-      // try cleaning up the geometry and try again.
-      fg.reset(GeometryUtils::validateGeometry(fg.get()));
-      g.reset(fg->difference(_envelopeG.get()));
-    }
+    else
+      g.reset(fg->intersection(_envelopeG.get()));
   }
 
   boost::shared_ptr<FindNodesInWayFactory> nodeFactory(new FindNodesInWayFactory(way));

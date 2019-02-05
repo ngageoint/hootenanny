@@ -26,19 +26,19 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/ApiDbReader.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/io/ApiDbReader.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/RandomNumberUtils.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QTemporaryFile>
