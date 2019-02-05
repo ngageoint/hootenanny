@@ -142,8 +142,6 @@ void ConflictsNetworkMatcher::_removeDupes()
   if (_edgeMatches->getAllMatches().size() < 2)
     return;
 
-  LOG_INFO("Removing duplicate edge matches...");
-
   QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
   QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
 

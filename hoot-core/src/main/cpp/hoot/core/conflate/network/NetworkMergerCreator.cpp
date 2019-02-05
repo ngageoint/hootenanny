@@ -73,7 +73,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   LOG_TRACE(matchesList);
 
   MatchSet matches = matchesIn;
-  // TODO: potential bottleneck
+  // TODO: potential bottleneck and it doesn't seem to be doing anything
   //_removeDuplicates(matches);
   LOG_VART(matches);
 
@@ -393,48 +393,46 @@ bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
   return conflicting;
 }
 
-void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
-{
-  LOG_TRACE("Removing duplicate matches...");
+//void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
+//{
+//  int count = 0;
+//  int numMatchesRemoved = 0;
+//  for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
+//  {
+//    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
+//    MatchSet::iterator jt = it;
 
-  int count = 0;
-  int numMatchesRemoved = 0;
-  for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
-  {
-    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
-    MatchSet::iterator jt = it;
+//    for (++jt; jt != matches.end(); ++jt)
+//    {
+//      const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
 
-    for (++jt; jt != matches.end(); ++jt)
-    {
-      const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
+//      if (nmi && nmj)
+//      {
+//        if (hoot::Log::getInstance().getLevel() == hoot::Log::Trace && nmi->isVerySimilarTo(nmj))
+//          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " is very similar to " << nmj->getEdgeMatch()->getUid());
 
-      if (nmi && nmj)
-      {
-        if (hoot::Log::getInstance().getLevel() == hoot::Log::Trace && nmi->isVerySimilarTo(nmj))
-          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " is very similar to " << nmj->getEdgeMatch()->getUid());
+//        if (hoot::Log::getInstance().getLevel() == hoot::Log::Trace && nmi->contains(nmj))
+//          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " contains " << nmj->getEdgeMatch()->getUid());
 
-        if (hoot::Log::getInstance().getLevel() == hoot::Log::Trace && nmi->contains(nmj))
-          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " contains " << nmj->getEdgeMatch()->getUid());
+//        if (nmi->isVerySimilarTo(nmj))
+//        {
+//          MatchSet::iterator tmp = jt;
+//          ++tmp;
+//          matches.erase(jt);
+//          jt = tmp;
+//          numMatchesRemoved++;
+//        }
+//      }
+//    }
 
-        if (nmi->isVerySimilarTo(nmj))
-        {
-          MatchSet::iterator tmp = jt;
-          ++tmp;
-          matches.erase(jt);
-          jt = tmp;
-          numMatchesRemoved++;
-        }
-      }
-    }
-
-    count++;
-    if (count % 10 == 0)
-    {
-      PROGRESS_INFO(
-        "Processed " << count << " / " << matches.size() << "matches.  Removed " <<
-        numMatchesRemoved << " matches.");
-    }
-  }
-}
+//    count++;
+//    if (count % 10 == 0)
+//    {
+//      PROGRESS_INFO(
+//        "Processed " << count << " / " << matches.size() << "matches.  Removed " <<
+//        numMatchesRemoved << " matches.");
+//    }
+//  }
+//}
 
 }

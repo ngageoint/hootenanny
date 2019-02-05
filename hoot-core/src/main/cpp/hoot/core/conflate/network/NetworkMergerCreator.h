@@ -81,7 +81,7 @@ private:
   /**
    * Removes duplicate matches in the MatchSet
    */
-  void _removeDuplicates(MatchSet& matches) const;
+  //void _removeDuplicates(MatchSet& matches) const;
 };
 
 }

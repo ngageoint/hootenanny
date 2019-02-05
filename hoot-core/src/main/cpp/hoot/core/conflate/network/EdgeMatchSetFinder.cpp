@@ -400,7 +400,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     // them before calculating match relationships, which can be very expensive.
 
     const EdgeMatchScore existingSimilarMatch = _getExistingSimilarMatch(em);
-    // An EdgeMatchScore returned with a score == -1.0 means no similar match was found.
+    // An EdgeMatchScore returned with a score == -1.0 means that no similar match was found.
     if (existingSimilarMatch.score != -1.0)
     {
       // If we already have an edge with a higher score that is very similar to this edge, then don't
@@ -423,6 +423,15 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
         _matchSet->removeEdgeMatch(existingSimilarMatch.match);
       }
     }
+    // similarity index our new match (overwrites the index of any existing matches)
+    EdgeMatchScore newMatch;
+    newMatch.match = em;
+    newMatch.score = score;
+    _edgeMatchSimilarities["similar"][em->getSimilarityString()] = newMatch;
+    _edgeMatchSimilarities["similar-first-reversed"][em->getFirstReversedSimilarityString()] =
+      newMatch;
+    _edgeMatchSimilarities["similar-second-reversed"][em->getSecondReversedSimilarityString()] =
+      newMatch;
 
     // add our new match
 
@@ -440,16 +449,6 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
     {
       _matchSet->addEdgeMatch(em, score);
     }
-
-    // similarity index our new match
-    EdgeMatchScore newMatch;
-    newMatch.match = em;
-    newMatch.score = score;
-    _edgeMatchSimilarities["similar"][em->getSimilarityString()] = newMatch;
-    _edgeMatchSimilarities["similar-first-reversed"][em->getFirstReversedSimilarityString()] =
-      newMatch;
-    _edgeMatchSimilarities["similar-second-reversed"][em->getSecondReversedSimilarityString()] =
-      newMatch;
 
     return true;
   }
