@@ -36,7 +36,7 @@ namespace hoot
 struct EdgeMatchScore
 {
   ConstEdgeMatchPtr match;
-  double score = -1.0;
+  double score = -1.0; //default score to indicate invalid instance
 };
 
 // Stores a set of edge matches, keyed by a similarity string; see EdgeMatch::isVerySimilarTo
@@ -45,6 +45,10 @@ typedef QHash<QString, EdgeMatchScore> EdgeMatchSimilarity;
 class EdgeMatchSetFinder
 {
 public:
+
+  static const QString EDGE_MATCH_SIMILAR_KEY;
+  static const QString EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY;
+  static const QString EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY;
 
   EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
     ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
@@ -122,7 +126,6 @@ private:
   void _addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score);
 
   void _resetEdgeMatchSimilarities();
-  EdgeMatchScore _getExistingSimilarMatch(ConstEdgeMatchPtr edgeMatch) const;
 };
 
 typedef boost::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
