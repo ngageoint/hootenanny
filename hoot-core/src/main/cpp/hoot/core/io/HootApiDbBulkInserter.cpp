@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootApiDbBulkInserter.h"
@@ -59,7 +59,7 @@ HootApiDbBulkInserter::HootApiDbBulkInserter() : OsmApiDbBulkInserter()
   setConfiguration(conf());
 
   _changesetTags["bot"] = "yes";
-  _changesetTags["created_by"] = "hootenanny";
+  _changesetTags["created_by"] = HOOT_PACKAGE_NAME;
 }
 
 HootApiDbBulkInserter::~HootApiDbBulkInserter()

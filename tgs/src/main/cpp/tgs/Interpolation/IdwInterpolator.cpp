@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IdwInterpolator.h"
 
@@ -74,6 +74,7 @@ public:
   }
 
 private:
+
   IdwInterpolator& _idw;
 };
 
@@ -95,13 +96,18 @@ void IdwInterpolator::_buildModel()
     result[0] = _p;
     optimizer.step(result, -estimateError());
 
-    int count = 0;
-    while (optimizer.done() == false)
+    int iterations = 0;
+    while (optimizer.done() == false && iterations <= _maxAllowedPerLoopOptimizationIterations)
     {
       double e = -estimateError();
-      cout << "error: " << e << " count: " << count++ << endl;
+      //cout << "error: " << e << " count: " << iterations << endl;
       result = optimizer.step(result, e);
+      iterations++;
       _p = result[0];
+    }
+    if (iterations > _iterations)
+    {
+      _iterations = iterations;
     }
   }
 }
@@ -153,7 +159,8 @@ const vector<double>& IdwInterpolator::_interpolate(const vector<double>& point,
   KnnIteratorNd it(_getIndex(), simplePoint);
   double wSum = 0.0;
   int samples = 0;
-  while (it.next() && samples < 50)
+  int iterations = 0;
+  while (it.next() && samples < 50 && iterations <= _maxAllowedPerLoopOptimizationIterations)
   {
     size_t i = it.getId();
     if ((int)i == ignoreId)
@@ -192,6 +199,12 @@ const vector<double>& IdwInterpolator::_interpolate(const vector<double>& point,
     {
       _result[j] += (record[_depColumns[j]] * w);
     }
+
+    iterations++;
+  }
+  if (iterations > _iterations)
+  {
+    _iterations = iterations;
   }
 
   for (size_t j = 0; j < _result.size(); j++)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -85,11 +85,14 @@ public:
       //  Get the endpoint URL
       QUrl osm;
       osm.setUrl(args[args.size() - 1]);
+      //  Create a URL without user info for logging
+      QUrl printableUrl = osm;
+      printableUrl.setUserInfo("");
       //  Grab all the changeset files
       QList<QString> changesets;
       for (int i = 0; i < args.size() - 1; ++i)
       {
-        LOG_INFO("Applying changeset " << args[i] << " to " << args[args.size() - 1] << "...");
+        LOG_INFO("Applying changeset " << args[i] << " to " << printableUrl.toString() << "...");
         changesets.append(args[i]);
       }
       //  Do the actual splitting and uploading

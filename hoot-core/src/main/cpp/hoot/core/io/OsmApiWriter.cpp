@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiWriter.h"
@@ -104,6 +104,10 @@ bool OsmApiWriter::apply()
     _changeset.loadChangeset(_changesets[i]);
     _stats.append(SingleStat(QString("Changeset (%1) Time (sec)").arg(_changesets[i]), timer.getElapsedAndRestart()));
   }
+  //  Split any ways that need splitting
+  _changeset.splitLongWays(_capabilities.getWayNodes());
+  //  Fix any changeset input that isn't formatted correctly
+  _changeset.fixMalformedInput();
   //  Start the writer threads
   LOG_INFO("Starting " << _maxWriters << " processing threads.");
   for (int i = 0; i < _maxWriters; ++i)

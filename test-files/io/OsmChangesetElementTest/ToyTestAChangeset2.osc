@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osmChange version="0.6" generator="Hootenanny">
+<osmChange version="0.6" generator="hootenanny">
 	<create>
 		<node id="-3" version="0" lat="38.8540541370891077" lon="-104.9024316099691276" timestamp="" changeset="2"/>
 		<node id="-4" version="0" lat="38.8541298962059614" lon="-104.9023065312240703" timestamp="" changeset="2"/>

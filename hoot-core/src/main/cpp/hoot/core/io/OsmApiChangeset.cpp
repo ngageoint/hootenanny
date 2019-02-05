@@ -29,7 +29,6 @@
 
 //  Hoot
 #include <hoot/core/elements/ElementData.h>
-#include <hoot/core/info/VersionDefines.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
@@ -189,6 +188,98 @@ void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changese
   }
 }
 
+void XmlChangeset::splitLongWays(long maxWayNodes)
+{
+  //  Negative numbers means there is no max set
+  if (maxWayNodes < 0)
+    return;
+  //  Iterate all of the changeset types except delete
+  for (int type = TypeCreate; type < TypeDelete; ++type)
+  {
+    for (XmlElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
+    {
+      XmlWay* way = dynamic_cast<XmlWay*>(it->second.get());
+      while (way->getNodeCount() > maxWayNodes)
+      {
+        //  Create a copy of the way
+        XmlWayPtr newWay(new XmlWay(*way));
+        newWay->changeId(getNextWayId());
+        //  Remove maxWayNodes from the original and add them to this way
+        way->removeNodes(0, maxWayNodes - 1);
+        newWay->removeNodes(maxWayNodes);
+        //  Save the new way
+        _idMap.addId(ElementType::Way, newWay->id());
+        _ways[TypeCreate][newWay->id()] = newWay;
+        _allWays[newWay->id()] = newWay;
+      }
+    }
+  }
+}
+
+void XmlChangeset::fixMalformedInput()
+{
+  //  Element adds cannot have a positive ID, must be negative
+  for (XmlElementMap::iterator it = _relations[TypeCreate].begin(); it != _relations[TypeCreate].end(); ++it)
+  {
+    long old_id = it->first;
+    if (old_id > 0)
+    {
+      //  Get a new negative relation ID
+      long new_id = getNextRelationId();
+      //  Replace old_id everywhere with new_id, in the relation and in other relations
+      replaceRelationId(old_id, new_id);
+    }
+  }
+  for (XmlElementMap::iterator it = _ways[TypeCreate].begin(); it != _ways[TypeCreate].end(); ++it)
+  {
+    long old_id = it->first;
+    if (old_id > 0)
+    {
+      //  Get a new negative way ID
+      long new_id = getNextWayId();
+      //  Replace old_id everywhere with new_id, in the way and in any relations
+      replaceWayId(old_id, new_id);
+    }
+  }
+  for (XmlElementMap::iterator it = _nodes[TypeCreate].begin(); it != _nodes[TypeCreate].end(); ++it)
+  {
+    long old_id = it->first;
+    if (old_id > 0)
+    {
+      //  Get a new negative node ID
+      long new_id = getNextNodeId();
+      //  Replace old_id everywhere with new_id, in the node, and in any ways and relations
+      replaceNodeId(old_id, new_id);
+    }
+  }
+  //  Element modifies/deletes cannot have a negative ID, must be positive
+  //  Nothing can be done about an element modify/delete if the ID is negative
+  for (int type = TypeModify; type < TypeMax; ++type)
+  {
+    for (XmlElementMap::iterator it = _nodes[type].begin(); it != _nodes[type].end(); ++it)
+    {
+      long node_id = it->first;
+      //  Set the node's status to failed if negative
+      if (node_id < 1)
+        failNode(node_id);
+    }
+    for (XmlElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
+    {
+      long way_id = it->first;
+      //  Set the node's status to failed if negative
+      if (way_id < 1)
+        failWay(way_id);
+    }
+    for (XmlElementMap::iterator it = _relations[type].begin(); it != _relations[type].end(); ++it)
+    {
+      long relation_id = it->first;
+      //  Set the node's status to failed if negative
+      if (relation_id < 1)
+        failRelation(relation_id);
+    }
+  }
+}
+
 void XmlChangeset::updateChangeset(const QString &changes)
 {
   /* <diffResult generator="OpenStreetMap Server" version="0.6">
@@ -255,27 +346,53 @@ bool XmlChangeset::fixChangeset(const QString& update)
     LOG_WARN("Unknown element fix format.");
     return success;
   }
+  long id = 0;
+  long version = 0;
+  QMap<QString, QString> tags;
   //  Iterate all of updates and record them
   while (!reader.atEnd() && !reader.hasError())
   {
     type = reader.readNext();
+    QStringRef name = reader.name();
+    QXmlStreamAttributes attributes = reader.attributes();
     if (type == QXmlStreamReader::StartElement)
     {
-      QStringRef name = reader.name();
-      QXmlStreamAttributes attributes = reader.attributes();
-      long id = 0;
-      long version = 0;
-      if (attributes.hasAttribute("id"))
-        id = attributes.value("id").toString().toLong();
-      if (attributes.hasAttribute("version"))
-        version = attributes.value("version").toString().toLong();
+      if (name == "node" || name == "way" || name == "relation")
+      {
+        if (attributes.hasAttribute("id"))
+          id = attributes.value("id").toString().toLong();
+        if (attributes.hasAttribute("version"))
+          version = attributes.value("version").toString().toLong();
+      }
+      else if (name == "tag" && attributes.hasAttribute("k") && attributes.hasAttribute("v"))
+        tags[attributes.value("k").toString()] = attributes.value("v").toString();
+    }
+    else if (type == QXmlStreamReader::EndElement)
+    {
+      bool reset = false;
       //  Fix the element
       if (name == "node")
-        success |= fixElement(_nodes, id, version);
+      {
+        success |= fixElement(_nodes, id, version, tags);
+        reset = true;
+      }
       else if (name == "way")
-        success |= fixElement(_ways, id, version);
+      {
+        success |= fixElement(_ways, id, version, tags);
+        reset = true;
+      }
       else if (name == "relation")
-        success |= fixElement(_relations, id, version);
+      {
+        success |= fixElement(_relations, id, version, tags);
+        reset = true;
+      }
+      //  Reset the id, version, and tags
+      if (reset)
+      {
+        id = 0;
+        version = 0;
+        tags.clear();
+      }
     }
   }
   return success;
@@ -591,11 +708,13 @@ size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, XmlRelation* re
 
 bool XmlChangeset::isSent(XmlElement* element)
 {
-  //  Sent means Finalized
   if (element == NULL)
     return false;
   else
-    return element->getStatus() == XmlElement::ElementStatus::Finalized;
+    //  Sent means Buffering, Sent, or Finalized
+    return element->getStatus() == XmlElement::ElementStatus::Buffering ||
+           element->getStatus() == XmlElement::ElementStatus::Sent ||
+           element->getStatus() == XmlElement::ElementStatus::Finalized;
 }
 
 bool XmlChangeset::canSend(XmlNode* node)
@@ -616,12 +735,13 @@ bool XmlChangeset::canSend(XmlWay* way)
     return false;
   else
   {
-    //  All nodes have to be Available or Finalized
+    //  All nodes have to be Available, Buffered, or Finalized
     for (int i = 0; i < way->getNodeCount(); ++i)
     {
       long id = way->getNode(i);
       if (_allNodes.find(id) != _allNodes.end() &&
-          _allNodes.at(way->getNode(i))->getStatus() == XmlElement::Sent)
+          !isSent(_allNodes[id].get()) &&
+          !canSend(dynamic_cast<XmlNode*>(_allNodes[id].get())))
         return false;
     }
   }
@@ -848,26 +968,18 @@ void XmlChangeset::updateFailedChangeset(ChangesetInfoPtr changeset)
   //  Iterate the three changeset type arrays looking for elements to mark
   for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
   {
+    //  Set the relation's status to failed
     for (ChangesetInfo::iterator it = changeset->begin(ElementType::Relation, (ChangesetType)current_type);
          it != changeset->end(ElementType::Relation, (ChangesetType)current_type); ++it)
-    {
-      //  Set the relation's status to failed
-      _allRelations[*it]->setStatus(XmlElement::ElementStatus::Failed);
-      //  Update the failed count once
-      ++_failedCount;
-    }
+      failRelation(*it);
+    //  Set the way's status to failed
     for (ChangesetInfo::iterator it = changeset->begin(ElementType::Way, (ChangesetType)current_type);
          it != changeset->end(ElementType::Way, (ChangesetType)current_type); ++it)
-    {
-      _allWays[*it]->setStatus(XmlElement::ElementStatus::Failed);
-      ++_failedCount;
-    }
+      failWay(*it);
+    //  Set the node's status to failed
     for (ChangesetInfo::iterator it = changeset->begin(ElementType::Node, (ChangesetType)current_type);
          it != changeset->end(ElementType::Node, (ChangesetType)current_type); ++it)
-    {
-      _allNodes[*it]->setStatus(XmlElement::ElementStatus::Failed);
-      ++_failedCount;
-    }
+      failNode(*it);
   }
 }
 
@@ -878,7 +990,7 @@ QString XmlChangeset::getChangesetString(ChangesetInfoPtr changeset, long change
   ts.setCodec("UTF-8");
   //  OSM Changeset tag
   ts << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-     << "<osmChange version=\"0.6\" generator=\""<< HOOT_NAME << "\">\n";
+     << "<osmChange version=\"0.6\" generator=\""<< HOOT_PACKAGE_NAME << "\">\n";
   //  Creates should go first
   ts << getChangeset(changeset, changeset_id, ChangesetType::TypeCreate);
   //  Then modifies
@@ -1002,7 +1114,7 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
   }
 }
 
-bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version)
+bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap<QString, QString> tags)
 {
   bool success = false;
   //  Negative IDs should never be fixed
@@ -1023,9 +1135,94 @@ bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version)
         //  Change was made
         success = true;
       }
+      //  Update the tags if they are missing
+      for (int i = 0; i < element->getTagCount(); ++i)
+      {
+        QString key = element->getTagKey(i);
+        if (tags.contains(key))
+          tags.remove(key);
+      }
+      //  Add in any tags that are missing
+      QXmlStreamAttributes attributes;
+      for (QMap<QString, QString>::iterator it = tags.begin(); it != tags.end(); ++it)
+        attributes.append("", it.key(), it.value());
+      if (attributes.size() > 0)
+        element->addTag(XmlObject("tag", QXmlStreamAttributes()));
     }
   }
   return success;
+}
+
+long XmlChangeset::getNextNodeId()
+{
+  //  Get a new node ID from the generator
+  long id = _idGen.createNodeId();
+  //  Make sure that ID isn't already being used in the changeset
+  while (_allNodes.find(id) != _allNodes.end())
+    id = _idGen.createNodeId();
+  return id;
+}
+
+long XmlChangeset::getNextWayId()
+{
+  //  Get a new way ID from the generator
+  long id = _idGen.createWayId();
+  //  Make sure that ID isn't already being used in the changeset
+  while (_allWays.find(id) != _allWays.end())
+    id = _idGen.createWayId();
+  return id;
+}
+
+long XmlChangeset::getNextRelationId()
+{
+  //  Get a new relation ID from the generator
+  long id = _idGen.createRelationId();
+  //  Make sure that ID isn't already being used in the changeset
+  while (_allRelations.find(id) != _allRelations.end())
+    id = _idGen.createRelationId();
+  return id;
+}
+
+void XmlChangeset::replaceNodeId(long old_id, long new_id)
+{
+  //  Update the ID to ID map with the new ID so it is used everywhere that the ID is referenced
+  _idMap.updateId(ElementType::Node, old_id, new_id);
+}
+
+void XmlChangeset::replaceWayId(long old_id, long new_id)
+{
+  //  Update the ID to ID map with the new ID so it is used everywhere that the ID is referenced
+  _idMap.updateId(ElementType::Way, old_id, new_id);
+}
+
+void XmlChangeset::replaceRelationId(long old_id, long new_id)
+{
+  //  Update the ID to ID map with the new ID so it is used everywhere that the ID is referenced
+  _idMap.updateId(ElementType::Relation, old_id, new_id);
+}
+
+void XmlChangeset::failNode(long id)
+{
+  //  Set the node's status to failed
+  _allNodes[id]->setStatus(XmlElement::ElementStatus::Failed);
+  //  Update the failed count once
+  ++_failedCount;
+}
+
+void XmlChangeset::failWay(long id)
+{
+  //  Set the way's status to failed
+  _allWays[id]->setStatus(XmlElement::ElementStatus::Failed);
+  //  Update the failed count once
+  ++_failedCount;
+}
+
+void XmlChangeset::failRelation(long id)
+{
+  //  Set the relation's status to failed
+  _allRelations[id]->setStatus(XmlElement::ElementStatus::Failed);
+  //  Update the failed count once
+  ++_failedCount;
 }
 
 }

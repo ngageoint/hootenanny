@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_CHANGESET_H
@@ -44,6 +44,7 @@
 
 //  Hoot
 #include <hoot/core/io/OsmApiChangesetElement.h>
+#include <hoot/core/util/DefaultIdGenerator.h>
 
 namespace hoot
 {
@@ -68,6 +69,11 @@ public:
    */
   void loadChangeset(const QString& changesetPath);
   /**
+   * @brief splitLongWays The API defaults to only allowing a maximum of 2000 nodes per way, split the way if necessary
+   * @param maxWayNodes Maximum number of nodes per way from the API capabilities query
+   */
+  void splitLongWays(long maxWayNodes = 2000);
+  /**
    * @brief updateChangeset Update the changeset with the response from the OSM API after part of the changeset is uploaded
    * @param changes - XML Changeset .OSC formatted text
    */
@@ -79,6 +85,13 @@ public:
    */
   bool fixChangeset(const QString& update);
   /**
+   * @brief fixMalformedInput Fix bad IDs in data,
+   *  -- Adds must be negative IDs - Positive IDs are fixed by creating new negative IDs
+   *  -- Modifies must be positive IDs - Negative IDs are set as an error and never sent to the API
+   *  -- Deletes must be positive IDs - Negative IDs are set as an error and never sent to the API
+   */
+  void fixMalformedInput();
+  /**
    * @brief hasElementsToSend Checks if all elements have been marked as sent
    * @return true if there are elements that haven't been sent yet
    */
@@ -89,7 +102,7 @@ public:
    */
   bool isDone() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) == _processedCount + _failedCount; }
   /** Elements in a changeset can be in three sections, create, modify, and delete.  Max is used for iterating */
-  enum ChangesetType
+  enum ChangesetType : int
   {
     TypeCreate = 0,
     TypeModify,
@@ -193,14 +206,16 @@ private:
    */
   void updateElement(ChangesetTypeMap& map, long old_id, long new_id, long version);
   /**
-   * @brief fixElement Fix the element with ID by updating the version of the element
+   * @brief fixElement Fix the element with ID by updating the version of the element and merge
+   *     the set of tags
    *     Could expand in the future to correct other issues but for now just fix the version
    * @param map Map of elements (nodes/ways/relations)
    * @param id ID of the element to fix
    * @param version Latest version from OSM API
+   * @param tags Current set of tags on the object
    * @return True if a change was made to fix the element
    */
-  bool fixElement(ChangesetTypeMap& map, long id, long version);
+  bool fixElement(ChangesetTypeMap& map, long id, long version, QMap<QString, QString> tags);
   /**
    * @brief loadElements Load elements from the XML reader of type 'type'
    * @param reader XML reader of the file
@@ -267,7 +282,7 @@ private:
   size_t getObjectCount(ChangesetInfoPtr& changeset, XmlWay* way);
   size_t getObjectCount(ChangesetInfoPtr& changeset, XmlRelation* relation);
   /**
-   * @brief isSent Check if this element's status is "finalized"
+   * @brief isSent Check if this element's status is buffering, sent, or finalized
    * @param element Pointer to the element to check
    * @return true if the element has been sent to the API
    */
@@ -285,6 +300,29 @@ private:
    * @param element Pointer to the element to mark
    */
   void markBuffered(XmlElement* element);
+  /**
+   * @brief getNextNode/Way/RelationId searches the Create section of the changeset to find the next available ID
+   *  for the desired element type
+   * @return next available negative node/way/relation ID
+   */
+  long getNextNodeId();
+  long getNextWayId();
+  long getNextRelationId();
+  /**
+   * @brief replaceNode/Way/RelationId Replace the old ID with the new ID in the element ID to ID map
+   * @param old_id ID from changeset file
+   * @param new_id New ID from API or from changeset fixes
+   */
+  void replaceNodeId(long old_id, long new_id);
+  void replaceWayId(long old_id, long new_id);
+  void replaceRelationId(long old_id, long new_id);
+  /**
+   * @brief failNode/Way/Relation Set element's status to failed and up the failed count
+   * @param id ID of the node/way/relation to fail
+   */
+  void failNode(long id);
+  void failWay(long id);
+  void failRelation(long id);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   XmlElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
@@ -309,6 +347,8 @@ private:
   long _failedCount;
   /** Buffer of elements that are about to be pushed into a subset */
   std::vector<XmlElement*> _sendBuffer;
+  /** Negative ID generator */
+  DefaultIdGenerator _idGen;
 };
 
 /** Atomic subset of IDs that are sent to the OSM API, header only class */
