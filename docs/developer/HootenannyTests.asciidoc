@@ -21,9 +21,9 @@ If you want to run the tests for all codebases at the same time, first configure
 previous section, then run one of the following commands:
 
 -------------------
-make -sj($nproc) test-quick # quick tests
-make -sj($nproc) test       # slow tests
-make -sj($nproc) test-all   # glacial tests
+make -sj$(nproc) test-quick # quick tests
+make -sj$(nproc) test       # slow tests
+make -sj$(nproc) test-all   # glacial tests
 ------------------
 
 "quick" is a subset of the "slow" suite, and "quick" and "slow" are subsets of the "glacial" suite.
@@ -317,7 +317,7 @@ The Plugins Test test various translation related operations.  They may be invok
 --------------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure
-make -sj($nproc) plugins-test
+make -sj$(nproc) plugins-test
 --------------
 
 They run by default in the slow test suite.
@@ -345,7 +345,7 @@ To run web services unit tests:
 ---------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure  --with-services
-make -sj($nproc) test
+make -sj$(nproc) test
 -----------
 
 To run both web services unit and integration tests:
@@ -353,7 +353,7 @@ To run both web services unit and integration tests:
 ---------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure  --with-services
-make -sj($nproc) test-all
+make -sj$(nproc) test-all
 -----------
 
 The above commands will run the corresponding Core Tests immediately after the web services test
@@ -445,9 +445,9 @@ To run the User Interface tests with all other glacial tests:
 cd $HOOT_HOME
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
-make -sj($nproc)
+make -sj$(nproc)
 sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
-make -sj($nproc) test-all
+make -sj$(nproc) test-all
 -----------------------
 
 To run the User Interface Tests by themselves:
@@ -456,9 +456,9 @@ To run the User Interface Tests by themselves:
 cd $HOOT_HOME
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
-make -sj($nproc)
+make -sj$(nproc)
 sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
-make -sj($nproc) ui-test
+make -sj$(nproc) ui-test
 -----------------------
 
 You have to add the --with-services option since the UI tests rely on the services to be deployed before they're run.  The tests will fail with an error message otherwise.
