@@ -594,7 +594,7 @@ void Settings::parseCommonArguments(QStringList& args)
         foreach (QString v, values)
         {
           QStringList newList = conf().getList(kvl[0]);
-          if( !newList.contains(v))
+          if (!newList.contains(v))
           {
             throw HootException("Unknown default value: (" + v + ")");
           }
