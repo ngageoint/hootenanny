@@ -36,6 +36,7 @@
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
 
 // Standard
 #include <typeinfo>
@@ -81,7 +82,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*matches.begin());
   if (m)
   {
-    bool matchOverlap = _containsOverlap(matches);
+    const bool matchOverlap = _containsOverlap(matches);
     LOG_VART(matchOverlap);
 
     if (!matchOverlap)
@@ -89,51 +90,72 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       // create a merger that can merge multiple partial matches
       LOG_TRACE("Adding the match to the partial network merger...");
       QSet<ConstEdgeMatchPtr> edgeMatches;
-      set< pair<ElementId, ElementId> > pairs;
+      set<pair<ElementId, ElementId>> pairs;
       foreach (const Match* itm, matches)
       {
         const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(itm);
         edgeMatches.insert(nm->getEdgeMatch());
-        set< pair<ElementId, ElementId> > p = nm->getMatchPairs();
+        set<pair<ElementId, ElementId>> p = nm->getMatchPairs();
         pairs.insert(p.begin(), p.end());
       }
-      mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
+      if (!ConfigOptions().getHighwayMergeTagsOnly())
+      {
+        mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
+      }
+      else
+      {
+        mergers.push_back(new HighwayTagOnlyMerger(pairs));
+      }
     }
     else
     {
-      // If one match completely contains the rest, use the larger match.
-      // This may need to be reverted as we play with more data, but at this point it seems like a
-      // reasonable heuristic.
+      // If one match completely contains the rest, use the larger match.  This may need to be
+      // reverted as we play with more data, but at this point it seems like a reasonable heuristic.
       if (const NetworkMatch* larger = _getLargestContainer(matches))
       {
         LOG_TRACE("Adding the larger match to the partial network merger...");
-        mergers.push_back(
-          new PartialNetworkMerger(
-            larger->getMatchPairs(),
-            QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
-            larger->getNetworkDetails()));
+        if (!ConfigOptions().getHighwayMergeTagsOnly())
+        {
+          mergers.push_back(
+            new PartialNetworkMerger(
+              larger->getMatchPairs(),
+              QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
+              larger->getNetworkDetails()));
+        }
+        else
+        {
+          mergers.push_back(new HighwayTagOnlyMerger(larger->getMatchPairs()));
+        }
       }
       else
       {
         double overlapPercent = _getOverlapPercent(matches);
-        if (overlapPercent > 80.0) // Go ahead and merge largest match
+        // Go ahead and merge largest match
+        if (overlapPercent > 80.0) // TODO: move value to config
         {
           const NetworkMatch* largest = _getLargest(matches);
           LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
-          mergers.push_back(
-            new PartialNetworkMerger(
-              largest->getMatchPairs(),
-              QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
-              largest->getNetworkDetails()));
+          if (!ConfigOptions().getHighwayMergeTagsOnly())
+          {
+            mergers.push_back(
+              new PartialNetworkMerger(
+                largest->getMatchPairs(),
+                QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
+                largest->getNetworkDetails()));
+          }
+          else
+          {
+            mergers.push_back(new HighwayTagOnlyMerger(largest->getMatchPairs()));
+          }
         }
         else // Throw a review
         {
           LOG_TRACE("Marking " << matches.size() << " overlapping matches for review...");
           for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
           {
-            set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
+            set<pair<ElementId, ElementId>> s = (*it)->getMatchPairs();
             set<ElementId> eids;
-            for (set< pair<ElementId, ElementId> >::const_iterator jt = s.begin(); jt != s.end(); ++jt)
+            for (set<pair<ElementId, ElementId>>::const_iterator jt = s.begin(); jt != s.end(); ++jt)
             {
               eids.insert(jt->first);
               eids.insert(jt->second);
