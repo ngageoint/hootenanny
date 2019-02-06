@@ -112,7 +112,12 @@ bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match*
 
   if (hm1 && hm2)
   {
-    return hm1->isConflicting(*hm2, map);
+    const bool conflicting = hm1->isConflicting(*hm2, map);
+    if (conflicting)
+    {
+      LOG_DEBUG("Conflicting matches: " << m1 << ", " << m2);
+    }
+    return conflicting;
   }
   else
   {

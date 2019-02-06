@@ -280,6 +280,7 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Applying post-conflation operations...");
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
 
+  // doing this after the conflate post ops, since some invalid reviews are removed by them
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
   LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");

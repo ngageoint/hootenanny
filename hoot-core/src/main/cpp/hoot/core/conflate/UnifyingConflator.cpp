@@ -101,14 +101,18 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
     {
       const Match* m = matches[i];
       const MatchClassification& mc = m->getClassification();
-      set< pair<ElementId, ElementId> > pairs = m->getMatchPairs();
-      for (set< pair<ElementId, ElementId> >::const_iterator it = pairs.begin();
+      set<pair<ElementId, ElementId>> pairs = m->getMatchPairs();
+      for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
            it != pairs.end(); ++it)
       {
         if (mc.getReviewP() > 0.0)
         {
           ElementPtr e1 = map->getElement(it->first);
           ElementPtr e2 = map->getElement(it->second);
+
+          LOG_DEBUG(
+            "Adding review tags to " << e1->getElementId() << " and " << e2->getElementId() <<
+            "...");
 
           _addScoreTags(e1, mc);
           _addScoreTags(e2, mc);
@@ -165,9 +169,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
   _removeWholeGroups(_matches, matchSets, map);
-  _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
-  LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
-  LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
+  _stats.append(SingleStat("Number of Match Sets", matchSets.size()));
+  LOG_DEBUG("Number of Match Sets: " << matchSets.size());
+  LOG_DEBUG("Number of Matches: " << _matches.size());
 
   // Globally optimize the set of matches to maximize the conflation score.
   {
@@ -177,9 +181,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     if (ConfigOptions(_settings).getUnifyEnableOptimalConstrainedMatches())
     {
       cm.addMatches(_matches.begin(), _matches.end());
-
       cm.setTimeLimit(ConfigOptions(_settings).getUnifyOptimizerTimeLimit());
-
       double cmStart = Time::getTime();
       try
       {
@@ -216,15 +218,13 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Optimized Matches", _matches.size()));
   _stats.append(SingleStat("Number of Matches Optimized per Second",
     (double)allMatches.size() / optimizeMatchesTime));
-
   LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
 
-  //TODO: this isn't right for network
-  LOG_DEBUG("Post constraining match count: " << _matches.size());
-  LOG_INFO("Match count: " << _matches.size());
+  //TODO: this stat isn't right for Network
+  LOG_INFO("Post constraining match count: " << _matches.size());
 
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the
@@ -235,7 +235,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
     LOG_TRACE(SystemInfo::getMemoryUsageString());
   }
-
   LOG_DEBUG("Match sets count: " << matchSets.size());
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   /// @todo would it help to sort the matches so the biggest or best ones get merged first?
@@ -259,7 +258,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
-  vector< pair<ElementId, ElementId> > replaced;
+  vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
     if (i % _taskStatusUpdateInterval == 0)
@@ -305,9 +304,30 @@ void UnifyingConflator::_mapElementIdsToMergers()
   }
 }
 
-void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
-  MatchSetVector &matchSets, const OsmMapPtr &map)
+QString UnifyingConflator::_matchSetToString(const MatchSet& matchSet) const
 {
+  QString str;
+  for (std::set<const Match*, MatchPtrComparator>::const_iterator itr = matchSet.begin();
+       itr != matchSet.end(); ++itr)
+  {
+    const Match* match = *itr;
+    set<pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+    for (std::set<pair<ElementId, ElementId>>::const_iterator itr2 = matchPairs.begin();
+         itr2 != matchPairs.end(); ++itr2)
+    {
+       pair<ElementId, ElementId> elementIdPair = *itr2;
+       str += elementIdPair.first.toString() + " " + elementIdPair.second.toString() + ", ";
+    }
+  }
+  str.chop(2);
+  return str;
+}
+
+void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
+  MatchSetVector& matchSets, const OsmMapPtr& map)
+{
+  LOG_INFO("Removing whole group matches...");
+
   // search the matches for groups (subgraphs) of matches. In other words, groups where all the
   // matches are interrelated by element id
   MatchGraph mg;
@@ -332,6 +352,7 @@ void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
 
     if (wholeGroup)
     {
+      LOG_DEBUG("Removing whole group: " << _matchSetToString(tmpMatchSets[i]));
       matchSets.push_back(tmpMatchSets[i]);
     }
     else

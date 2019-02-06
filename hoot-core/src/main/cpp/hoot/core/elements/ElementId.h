@@ -86,7 +86,7 @@ public:
 
   QString toString() const
   {
-    return getType().toString() + ":" + QString::number(getId());
+    return getType().toString() + "(" + QString::number(getId()) + ")";
   }
 
   QString toString()

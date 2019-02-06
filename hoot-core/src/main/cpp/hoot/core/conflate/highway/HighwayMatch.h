@@ -73,14 +73,15 @@ public:
 
   virtual double getScore() const { return _score; }
 
-  const boost::shared_ptr<SublineStringMatcher>& getSublineMatcher() const { return _sublineMatcher; }
+  const boost::shared_ptr<SublineStringMatcher>& getSublineMatcher() const
+  { return _sublineMatcher; }
 
   virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
 
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
 
   const WaySublineMatchString& getSublineMatch() const { return _sublineMatch; }
 
@@ -104,7 +105,6 @@ private:
 
   bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
     ElementId other1, ElementId other2) const;
-
 };
 
 }

@@ -84,6 +84,7 @@ public:
   void setTimeLimit(double limit) { _timeLimit = limit; }
 
 protected:
+
   const ConstOsmMapPtr& _map;
   std::vector<const Match*> _matches;
 

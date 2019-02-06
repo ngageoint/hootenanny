@@ -45,6 +45,7 @@ GreedyConstrainedMatches::GreedyConstrainedMatches(const ConstOsmMapPtr &map) :
 class MatchComparator
 {
 public:
+
   MatchComparator(const vector<const Match*>& matches) : _matches(matches) {}
 
   bool operator()(size_t i, size_t j)
@@ -53,16 +54,18 @@ public:
   }
 
 private:
+
   const vector<const Match*>& _matches;
 };
 
-vector<const Match *> GreedyConstrainedMatches::calculateSubset()
+vector<const Match*> GreedyConstrainedMatches::calculateSubset()
 {
   _score = -1;
   vector<const Match*> result;
 
   if (_matches.size() == 0)
   {
+    LOG_DEBUG("No match conflicts found.");
     return result;
   }
 
@@ -107,7 +110,8 @@ vector<const Match *> GreedyConstrainedMatches::calculateSubset()
     size_t mi = matchOrder[i];
 
     // see if any of our conflicting matches are already being kept
-    for (MatchConflicts::ConflictMap::const_iterator it = cm.find(mi); it != cm.end() && it.key() == mi; ++it)
+    for (MatchConflicts::ConflictMap::const_iterator it = cm.find(mi);
+         it != cm.end() && it.key() == mi; ++it)
     {
       if (keepers.count(it.value()))
       {
@@ -122,6 +126,10 @@ vector<const Match *> GreedyConstrainedMatches::calculateSubset()
       // while adding EPSILON isn't strictly necessary here it does give consistent scores when
       // comparing between optimal and greedy.
       _score += _matches[mi]->getScore() + EPSILON;
+    }
+    else
+    {
+      LOG_DEBUG("Removing match: " << _matches[mi]);
     }
   }
 

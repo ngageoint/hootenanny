@@ -41,7 +41,7 @@ namespace hoot
 class Match;
 class MatchGraphInternal;
 
-typedef std::vector< MatchSet > MatchSetVector;
+typedef std::vector<MatchSet> MatchSetVector;
 
 /**
  * Represents a graph of matches. At some point I'd like to extend this to include additional
@@ -53,6 +53,7 @@ typedef std::vector< MatchSet > MatchSetVector;
 class MatchGraph
 {
 public:
+
   MatchGraph();
 
   /**
@@ -82,6 +83,7 @@ public:
   void setCheckForConflicts(bool c) { _checkForConflicts = c; }
 
 private:
+
   std::vector<const Match*> _matches;
   bool _checkForConflicts;
   /**

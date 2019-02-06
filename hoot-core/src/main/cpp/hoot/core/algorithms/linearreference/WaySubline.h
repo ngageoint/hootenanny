@@ -45,14 +45,11 @@ class ConstElementVisitor;
 class WaySubline
 {
 public:
+
   WaySubline();
-
   WaySubline(const WayLocation& start, const WayLocation& end);
-
   WaySubline(const WaySubline& from);
-
   WaySubline(const WaySubline& from, const ConstOsmMapPtr &newMap);
-
   WaySubline& operator=(const WaySubline& from);
 
   Meters calculateLength() const;
@@ -146,7 +143,6 @@ private:
 };
 
 bool operator==(const WaySubline& a, const WaySubline& b);
-
 
 }
 

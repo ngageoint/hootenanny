@@ -143,10 +143,9 @@ public:
       if (from != *it)
       {
         const boost::shared_ptr<const Element>& n = _map->getElement(*it);
-
         // score each candidate and push it on the result vector
-        HighwayMatch* m = createMatch(_map, _c, _sublineMatcher, _threshold, _tagAncestorDiff, e, n);
-
+        HighwayMatch* m =
+          createMatch(_map, _c, _sublineMatcher, _threshold, _tagAncestorDiff, e, n);
         if (m)
         {
           _result.push_back(m);
@@ -184,8 +183,10 @@ public:
         tagAncestorDiff->diff(map, e1, e2) <= ConfigOptions().getHighwayMaxEnumDiff())
     {
       // score each candidate and push it on the result vector
-      result = new HighwayMatch(classifier, sublineMatcher, map, e1->getElementId(),
-        e2->getElementId(), threshold);
+      result =
+        new HighwayMatch(
+          classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
+      LOG_VARD(result->getType());
 
       // if we're confident this is a miss
       if (result->getType() == MatchType::Miss)

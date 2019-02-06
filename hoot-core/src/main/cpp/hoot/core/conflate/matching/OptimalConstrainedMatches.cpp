@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-OptimalConstrainedMatches::OptimalConstrainedMatches(const ConstOsmMapPtr &map) :
+OptimalConstrainedMatches::OptimalConstrainedMatches(const ConstOsmMapPtr& map) :
   ConstrainedMatches(map)
 {
   _score = -1;
@@ -56,11 +56,11 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
   // figure out all the pairs of matches that conflict.
   LOG_INFO("Calculating optimal match conflicts...");
   _calculateMatchConflicts();
-  LOG_DEBUG("Done calculating optimal match conflicts");
 
   // if there are no conflicts, then there is nothing to solve.
   if (_conflicts.size() == 0)
   {
+    LOG_DEBUG("No match conflicts found.");
     return _matches;
   }
 
@@ -86,6 +86,10 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
     {
       // it is a keeper
       result.push_back(_matches[i]);
+    }
+    else
+    {
+      LOG_DEBUG("Removing match: " << _matches[i]);
     }
   }
 

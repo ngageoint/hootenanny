@@ -72,7 +72,7 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
 }
 
 void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches,
-  ConflictMap &conflicts)
+  ConflictMap& conflicts)
 {
   LOG_VART(matches.size());
   conflicts.clear();
@@ -91,7 +91,6 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
     if (it->first != lastEid)
     {
       calculateSubsetConflicts(matches, conflicts, matchSet);
-
       // start over with a new match set
       matchSet.clear();
     }
@@ -104,14 +103,15 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
     {
       PROGRESS_INFO(
         "Processed matches for " << eidToMatchCount << " / " << eidToMatches.size() <<
-        " elements...");
+        " elements. Found " << conflicts.size() << " match conflicts.");
     }
   }
+  LOG_INFO("Found " << conflicts.size() << " match conflicts.");
 
   calculateSubsetConflicts(matches, conflicts, matchSet);
 }
 
-void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &matches,
+void MatchConflicts::calculateSubsetConflicts(const vector<const Match*>& matches,
                                               ConflictMap& conflicts, const vector<int>& matchSet)
 {
   LOG_VART(matches.size());
@@ -119,7 +119,7 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &match
   LOG_VART(matchSet.size());
 
   // search for all possible match pair conflicts within a set.
-  int ctr = 0;
+  //int ctr = 0;
   for (size_t i = 0; i < matchSet.size(); i++)
   {
     size_t m1 = matchSet[i];
@@ -137,15 +137,16 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &match
           swap(m1, m2);
         }
         conflicts.insert(m1, m2);
+        LOG_DEBUG("Conflicting subset matches: " << matches[m1] << ", " << matches[m2]);
       }
     }
 
-    ctr++;
-    if (ctr % 10 == 0)
-    {
-      PROGRESS_INFO(
-        "Processed conflicts for " << ctr << " / " << matchSet.size() << " matches...");
-    }
+//    ctr++;
+//    if (ctr % 10 == 0)
+//    {
+//      PROGRESS_INFO(
+//        "Processed conflicts for " << ctr << " / " << matchSet.size() << " matches...");
+//    }
   }
 }
 

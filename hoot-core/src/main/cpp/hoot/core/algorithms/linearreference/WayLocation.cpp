@@ -410,7 +410,8 @@ QString WayLocation::toString() const
 {
   if (isValid())
   {
-    return QString("way: %1 index: %2 fraction: %3").arg(_way->getId()).arg(_segmentIndex).
+    return
+      QString("way(%1) index: %2 fraction: %3").arg(_way->getId()).arg(_segmentIndex).
         arg(_segmentFraction, 0, 'g', 15);
   }
   else

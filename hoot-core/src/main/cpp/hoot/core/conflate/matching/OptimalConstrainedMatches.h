@@ -45,6 +45,7 @@ class IntegerProgrammingSolver;
 class OptimalConstrainedMatches : public ConstrainedMatches
 {
 public:
+
   OptimalConstrainedMatches(const ConstOsmMapPtr& map);
 
   /**

@@ -68,8 +68,11 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
 {
   assert(_eid1 != _eid2);
 
-  const ConstElementPtr e1 = map->getElement(eid1);
-  const ConstElementPtr e2 = map->getElement(eid2);
+  LOG_VARD(_eid1);
+  LOG_VARD(_eid2);
+
+  const ConstElementPtr e1 = map->getElement(_eid1);
+  const ConstElementPtr e2 = map->getElement(_eid2);
 
   //LOG_VARD(e1->getElementId());
   //LOG_VARD(e2->getElementId());
@@ -112,8 +115,10 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
         else                        description.append("Highway orientation not similar.");
 
         //  Use the average of the edge distance extractors
-        double edge = (EdgeDistanceExtractor(ValueAggregatorPtr(new RmseAggregator())).extract(*map, e1, e2) +
-                       EdgeDistanceExtractor(ValueAggregatorPtr(new SigmaAggregator())).extract(*map, e1, e2)) / 2.0;
+        double edge = (EdgeDistanceExtractor(
+                         ValueAggregatorPtr(new RmseAggregator())).extract(*map, e1, e2) +
+                       EdgeDistanceExtractor(
+                         ValueAggregatorPtr(new SigmaAggregator())).extract(*map, e1, e2)) / 2.0;
 
         if (edge >= 90)             description.append("Highway edges very close to each other.");
         else if (edge >= 70)        description.append("Highway edges somewhat close to each other.");
@@ -159,9 +164,9 @@ map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
   return result;
 }
 
-set< pair<ElementId, ElementId> > HighwayMatch::getMatchPairs() const
+set<pair<ElementId, ElementId>> HighwayMatch::getMatchPairs() const
 {
-  set< pair<ElementId, ElementId> > result;
+  set<pair<ElementId, ElementId>> result;
   result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
   return result;
 }
@@ -235,9 +240,9 @@ bool HighwayMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) 
       // checking for subline match containment first. This is very fast to check and if either one
       // is true then we know it is a conflict.
       else if (_sublineMatch.contains(hm->_sublineMatch) ||
-          hm->_sublineMatch.contains(_sublineMatch) ||
-          _isOrderedConflicting(map, sharedEid, o1, o2) ||
-          hm->_isOrderedConflicting(map, sharedEid, o2, o1))
+               hm->_sublineMatch.contains(_sublineMatch) ||
+               _isOrderedConflicting(map, sharedEid, o1, o2) ||
+               hm->_isOrderedConflicting(map, sharedEid, o2, o1))
       {
         result = true;
       }
@@ -294,7 +299,6 @@ bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sh
     return true;
   }
 
-  //boost::shared_ptr<MatchThreshold> mt(new MatchThreshold());
   // check to see if the scraps match other2
   HighwayMatch m0(
     _classifier, _sublineMatcher, copiedMap, scrapsShared->getElementId(), other2, _threshold);
@@ -310,7 +314,7 @@ bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sh
 QString HighwayMatch::toString() const
 {
   stringstream ss;
-  ss << "HighwayMatch " << _eid1.toString() << " " << _eid2.toString() << " P: " << _c.toString();
+  ss << "HighwayMatch " << _eid1 << " " << _eid2 << " P: " << _c.toString();
   return QString::fromUtf8(ss.str().c_str());
 }
 
