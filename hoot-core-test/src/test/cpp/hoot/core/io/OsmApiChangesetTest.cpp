@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //  Hoot
@@ -41,6 +41,8 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetJoinTest);
   CPPUNIT_TEST(runXmlChangesetUpdateTest);
   CPPUNIT_TEST(runXmlChangesetSplitTest);
+  CPPUNIT_TEST(runXmlChangesetSplitWayTest);
+  CPPUNIT_TEST(runXmlChangesetErrorFixTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -160,6 +162,40 @@ public:
     CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalDeleteCount());
   }
 
+  void runXmlChangesetSplitWayTest()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
+    //  Split the ways to a max of 8 nodes per way
+    changeset.splitLongWays(8);
+
+    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetSplitWayExpected.osc");
+
+    ChangesetInfoPtr info(new ChangesetInfo());
+    changeset.calculateChangeset(info);
+
+    HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
+  }
+
+  void runXmlChangesetErrorFixTest()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ChangesetErrorFixInput.osc");
+    //  Fix the bad input changeset
+    changeset.fixMalformedInput();
+
+    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetErrorFixExpected.osc");
+
+    ChangesetInfoPtr info(new ChangesetInfo());
+    changeset.calculateChangeset(info);
+
+    QString change = changeset.getChangesetString(info, 1);
+    HOOT_STR_EQUALS(expectedText, change);
+
+    QString error = changeset.getFailedChangesetString();
+    QString expectedError = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetErrorFixErrors.osc");
+    HOOT_STR_EQUALS(expectedError, error);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiChangesetTest, "quick");

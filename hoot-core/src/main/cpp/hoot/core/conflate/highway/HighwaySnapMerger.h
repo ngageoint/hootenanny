@@ -94,6 +94,8 @@ private:
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
 
+  long _getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map) const;
+
   // for white box testing.
   friend class HighwaySnapMergerTest;
 };

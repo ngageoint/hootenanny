@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLICTSNETWORKMATCHER_H
 #define CONFLICTSNETWORKMATCHER_H
@@ -66,6 +66,7 @@ public:
    */
   static boost::shared_ptr<ConflictsNetworkMatcher> create();
 
+  //TODO: move to config?
   virtual double getMatchThreshold() const { return 0.35; }
 
   virtual void iterate();
@@ -141,12 +142,6 @@ private:
   double _aggregateScores(QList<double> pairs);
 
   void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb);
-
-  /* Removes matches that are very similar to each other, where very similar is defined as being
-   * the same match, but with slight variations in portions. Pairs of matches are evaluated for
-   * similarity, and if similar, the higher-scoring match is kept
-   */
-  void _removeDupes();
 
   /* Gets the separation between the pairs in the match, in terms of Frechet distance */
   Meters _getMatchSeparation(ConstEdgeMatchPtr pMatch);

@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/conflate/cleaning/MapCleaner.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
@@ -276,16 +275,6 @@ boost::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   boost::shared_ptr<MatchComparator> comparator(new MatchComparator());
   //shared_ptr<MatchThreshold> matchThreshold;
   OsmMapPtr conflationCopy(new OsmMap(combinedDataToConflate));
-
-  ConfigOptions configOptions(_settings);
-  if (configOptions.getConflateEnableOldRoads())
-  {
-    // call the old road conflation routine
-    Conflator conflator;
-    conflator.loadSource(conflationCopy);
-    conflator.conflate();
-    conflationCopy.reset(new OsmMap(conflator.getBestMap()));
-  }
 
   UnifyingConflator conflator/*(matchThreshold)*/;
   conflator.setConfiguration(_settings);

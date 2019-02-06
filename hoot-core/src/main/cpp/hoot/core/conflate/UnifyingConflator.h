@@ -108,7 +108,7 @@ private:
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   boost::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;
-  HashMap<ElementId, std::vector<Merger*> > _e2m;
+  HashMap<ElementId, std::vector<Merger*>> _e2m;
   std::vector<const Match*> _matches;
   std::vector<Merger*> _mergers;
   QList<SingleStat> _stats;

@@ -69,6 +69,8 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
 {
   for (size_t i = 0; i < _creators.size(); i++)
   {
+    PROGRESS_INFO("Creating merger " << i + 1 << " / " << _creators.size() << "...");
+
     OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(_creators[i]);
 
     if (omc)

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+	<create>
+		<node id="-1" version="0" lat="38.8549321261880536" lon="-104.8979050333482093" timestamp="" changeset="1"/>
+		<node id="-2" version="0" lat="38.8542471187715179" lon="-104.9010788637033329" timestamp="" changeset="1"/>
+		<node id="-3" version="0" lat="38.8540851073630833" lon="-104.9014476647277121" timestamp="" changeset="1"/>
+		<node id="-4" version="0" lat="38.8541670018907581" lon="-104.8997069874790355" timestamp="" changeset="1"/>
+		<way id="-1" version="0" timestamp="" changeset="1">
+			<nd ref="-3"/>
+			<nd ref="-2"/>
+			<nd ref="-1"/>
+			<tag k="note" v="1"/>
+			<tag k="highway" v="road"/>
+		</way>
+		<way id="-2" version="0" timestamp="" changeset="1">
+			<nd ref="-3"/>
+			<nd ref="-4"/>
+			<nd ref="-1"/>
+			<tag k="note" v="3"/>
+			<tag k="highway" v="road"/>
+		</way>
+		<relation id="-1" version="0" timestamp="" changeset="1">
+			<member type="way" ref="-1" role="forward"/>
+			<member type="way" ref="-2" role="forward"/>
+			<tag k="name" v="Test Relation"/>
+			<tag k="type" v="route"/>
+			<tag k="route" v="road"/>
+		</relation>
+	</create>
+</osmChange>

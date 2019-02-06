@@ -346,7 +346,7 @@ ifeq ($(BUILD_SERVICES),services)
 	(npm run production $(NPM_QUIET) || npm run production $(NPM_QUIET))
 endif
 
-ui-test: services-build build
+ui-test: services-build build docs
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
 	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test CUKE_OPTS=--fail-fast

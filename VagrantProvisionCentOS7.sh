@@ -286,12 +286,16 @@ fi
 
 # Check for a hoot Db
 if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
-    echo "### Creating Services Database..."
+    echo "### Creating Main Services Database..."
     sudo -u postgres createdb $DB_NAME --owner=$DB_USER
-    sudo -u postgres createdb wfsstoredb --owner=$DB_USER
     sudo -u postgres psql -d $DB_NAME -c 'create extension hstore;'
-    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
-    sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
+fi
+
+if ! sudo -u postgres psql -lqt | grep -iw --quiet $WFS_DB_NAME; then
+    echo "### Creating WFS Services Database..."
+    sudo -u postgres createdb $WFS_DB_NAME --owner=$DB_USER
+    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='$WFS_DB_NAME'" > /dev/null
+    sudo -u postgres psql -d $WFS_DB_NAME -c 'create extension postgis;' > /dev/null
 fi
 
 # configure Postgres settings

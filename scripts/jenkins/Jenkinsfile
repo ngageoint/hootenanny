@@ -7,7 +7,7 @@ pipeline {
     environment {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
-        BUILD_VERBOSE = 'yes'
+        BUILD_VERBOSE = 'no'
     }
 
     triggers {
@@ -100,11 +100,12 @@ pipeline {
         stage("Build") {
             when { expression { return params.Build } }
             steps {
-                sh """
-                    vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'
-                """
+                // Set build verbosity
+                sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'"
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
+                // Configure authentication
+                sh "vagrant ssh ${params.Box} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
             }       
         }
         stage("Core Tests") {

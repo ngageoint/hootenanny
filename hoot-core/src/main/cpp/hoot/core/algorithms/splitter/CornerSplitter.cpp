@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CornerSplitter.h"
@@ -110,7 +110,7 @@ void CornerSplitter::splitCorners()
         // If we make enough of a turn, split the way
         if (delta > threshold)
         {
-          LOG_DEBUG("splitting way with delta: " << delta);
+          LOG_TRACE("splitting way with delta: " << delta);
           _splitWay(pWay->getId(), nodeIdx, pWay->getNodeId(nodeIdx));
           split = true;
         }

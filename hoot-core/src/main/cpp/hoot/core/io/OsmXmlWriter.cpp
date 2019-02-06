@@ -197,7 +197,7 @@ void OsmXmlWriter::_initWriter()
 
   _writer->writeStartElement("osm");
   _writer->writeAttribute("version", "0.6");
-  _writer->writeAttribute("generator", "hootenanny");
+  _writer->writeAttribute("generator", HOOT_PACKAGE_NAME);
 }
 
 void OsmXmlWriter::write(ConstOsmMapPtr map, const QString& path)

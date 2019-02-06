@@ -52,6 +52,22 @@
         "name": "Keep building ref geom",
         "defaultvalue": "false",
         "hoot_key": "building.keep.more.complex.geometry.when.auto.merging",
+      },
+      {
+        "id": "tag_merger_default",
+        "elem_type": "string",
+        "description": "The tag merging strategy to use",
+        "name": "Tag Merger",
+        "defaultvalue": "hoot::OverwriteTag1Merger",
+        "hoot_key": "tag.merger.default"
+      },
+      {
+        "id": "way_joiner",
+        "elem_type": "string",
+        "description": "The way joiner to use to rejoin ways split during cleaning and conflation matching",
+        "name": "WayJoiner",
+        "defaultvalue": "hoot::WayJoiner2",
+        "hoot_key": "way.joiner"
       }
     ]
 
