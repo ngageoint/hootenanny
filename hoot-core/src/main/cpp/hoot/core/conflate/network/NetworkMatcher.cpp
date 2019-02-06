@@ -55,7 +55,7 @@ void NetworkMatcher::_createEdge2Index()
 {
   LOG_DEBUG("Creating edge index...");
 
-  // No tuning was done, I just copied these settings from OsmMapIndex.
+  // TODO: No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _edge2Index.reset(new HilbertRTree(mps, 2));

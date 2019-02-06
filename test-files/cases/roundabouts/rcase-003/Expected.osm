@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.544216" minlon="-72.34882018686" maxlat="18.549036" maxlon="-72.340941"/>
-    <node visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457702303256262" lon="-72.3442470443381893">
+    <node visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457702303256262" lon="-72.3442470443381893">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-129"/>
+        <tag k="hoot:id" v="-127"/>
     </node>
     <node visible="true" id="-45" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465998999999968" lon="-72.3472215000000034">
         <tag k="hoot:status" v="1"/>
@@ -185,9 +185,9 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-154" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-38"/>
-        <nd ref="-129"/>
+        <nd ref="-127"/>
         <nd ref="-34"/>
         <nd ref="-33"/>
         <nd ref="-32"/>
@@ -198,7 +198,7 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-158"/>
+        <tag k="hoot:id" v="-154"/>
     </way>
     <way visible="true" id="-6" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="-44"/>

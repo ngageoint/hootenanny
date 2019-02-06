@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGEMATCH_H
 #define EDGEMATCH_H
@@ -30,6 +30,9 @@
 #include <tgs/HashMap.h>
 
 #include <hoot/core/conflate/network/EdgeString.h>
+
+// Qt
+#include <QRegExp>
 
 namespace hoot
 {
@@ -45,6 +48,7 @@ namespace hoot
 class EdgeMatch
 {
 public:
+
   EdgeMatch();
 
   EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2);
@@ -108,6 +112,10 @@ public:
 
   QString toString() const;
 
+  QString getSimilarityString() const;
+  QString getFirstReversedSimilarityString() const;
+  QString getSecondReversedSimilarityString() const;
+
 private:
 
   mutable uint _hash;
@@ -115,6 +123,8 @@ private:
   friend uint qHash(const boost::shared_ptr<const EdgeMatch>& em);
 
   EdgeStringPtr _edges1, _edges2;
+
+  static const QRegExp _portionReplaceRegEx;
 
   void _resetHash() const { _hash = 0; }
 };

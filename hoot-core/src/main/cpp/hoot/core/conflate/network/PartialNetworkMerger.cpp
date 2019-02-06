@@ -90,7 +90,7 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
 void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const
 {
-  LOG_INFO("Applying PartialNetworkMerger...");
+  LOG_DEBUG("Applying PartialNetworkMerger...");
 
   // we changed the sublines so we must update the indices.
   merger->updateSublineMapping();

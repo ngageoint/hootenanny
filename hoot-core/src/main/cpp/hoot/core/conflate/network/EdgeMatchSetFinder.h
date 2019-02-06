@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGEMATCHSETFINDER_H
 #define EDGEMATCHSETFINDER_H
@@ -33,9 +33,23 @@
 namespace hoot
 {
 
+struct EdgeMatchScore
+{
+  ConstEdgeMatchPtr match;
+  double score = -1.0; //default score to indicate invalid instance
+};
+
+// Stores a set of edge matches, keyed by a similarity string; see EdgeMatch::isVerySimilarTo
+typedef QHash<QString, EdgeMatchScore> EdgeMatchSimilarity;
+
 class EdgeMatchSetFinder
 {
 public:
+
+  static const QString EDGE_MATCH_SIMILAR_KEY;
+  static const QString EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY;
+  static const QString EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY;
+
   EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
     ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
@@ -45,9 +59,12 @@ public:
    */
   void addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
-  void setAddStubsInBothDirections(bool bidirectionalStubs) { _bidirectionalStubs = bidirectionalStubs; }
+  void setAddStubsInBothDirections(bool bidirectionalStubs)
+  { _bidirectionalStubs = bidirectionalStubs; }
 
   void setIncludePartialMatches(bool include) { _includePartialMatches = include; }
+
+  int getNumSimilarEdgeMatches() const { return _numSimilarEdgeMatches; }
 
 private:
 
@@ -58,6 +75,12 @@ private:
   ConstOsmNetworkPtr _n1, _n2;
   int _steps;
 
+  int _numSimilarEdgeMatches;
+  // stores three categories of EdgeMatchSimilarity; one with both edges in the regular direction,
+  // one with the first edge in the regular direction and the second reversed, and one with the
+  // second edge in the regular direction and the first reversed; see EdgeMatch::isVerySimilarTo
+  QMap<QString, EdgeMatchSimilarity> _edgeMatchSimilarities;
+
   bool _addEdgeMatches(ConstEdgeMatchPtr em);
 
   bool _addEdgeNeighborsToEnd(ConstEdgeMatchPtr em, QSet<ConstNetworkEdgePtr> neighbors1,
@@ -65,9 +88,6 @@ private:
 
   bool _addEdgeNeighborsToStart(ConstEdgeMatchPtr em, QSet<ConstNetworkEdgePtr> neighbors1Set,
     QSet<ConstNetworkEdgePtr> neighbors2Set);
-
-  /// @todo delete me if I'm still not in use.
-  bool _addPartialMatch(ConstEdgeMatchPtr em);
 
   /**
    * Finds which subline match between e1 and e2 and then appends those sublines to em as
@@ -100,18 +120,16 @@ private:
 
   ConstEdgeSublinePtr _snapSublineToString(ConstEdgeStringPtr str, ConstEdgeSublinePtr sub) const;
 
-  /// @todo delete me if I'm still not in use.
   EdgeMatchPtr _trimFromEdge(ConstEdgeMatchPtr em);
-
-  /// @todo delete me if I'm still not in use.
   EdgeMatchPtr _trimToEdge(ConstEdgeMatchPtr em);
+
+  void _addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score);
+
+  void _resetEdgeMatchSimilarities();
 };
 
 typedef boost::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
 typedef boost::shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
-
-// not implemented
-bool operator<(ConstEdgeMatchSetFinderPtr, ConstEdgeMatchSetFinderPtr);
 
 }
 
