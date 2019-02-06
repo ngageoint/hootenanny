@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "EdgeMatch.h"
 
@@ -32,6 +32,8 @@
 namespace hoot
 {
 
+const QRegExp EdgeMatch::_portionReplaceRegEx = QRegExp("_portion: \\d+\\.\\d+");
+
 /// @todo This could be made faster by only looking at the pointer for comparison. Unfortunately
 /// this would likely break IndexedEdgeMatchSet::contains. Another data structure in there could
 /// certainly alleviate this.
@@ -39,17 +41,6 @@ bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPt
 {
   bool result = em1.get() == em2.get() ||
     (em1->getString1() == em2->getString1() && em1->getString2() == em2->getString2());
-
-//  bool strResult = em1->toString() == em2->toString();
-//  if (result != strResult)
-//  {
-//    LOG_VARE(result);
-//    LOG_VARE(strResult);
-//    LOG_VARE(em1);
-//    LOG_VARE(em2);
-//    throw HootException();
-//  }
-
   return result;
 }
 
@@ -141,16 +132,16 @@ bool EdgeMatch::isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other)
   QString other2 = other->getString2()->toString();
 
   // Portions can be slightly different sometimes
-  this1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-  other1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-  this2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-  other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  this1.replace(_portionReplaceRegEx, "");
+  other1.replace(_portionReplaceRegEx, "");
+  this2.replace(_portionReplaceRegEx, "");
+  other2.replace(_portionReplaceRegEx, "");
 
   if (0 == this1.compare(other1))
   {
     if (0 == this2.compare((other2)))
     {
-      LOG_TRACE("Matches very similar: " << this << "; " << other);
+      LOG_DEBUG("Matches very similar: " << this << "; " << other);
       return true;
     }
     else
@@ -159,10 +150,10 @@ bool EdgeMatch::isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other)
       other->reverse();
       other2 = other->getString2()->toString();
       other->reverse(); // put it back the way it was
-      other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+      other2.replace(_portionReplaceRegEx, "");
       if (0 == this2.compare(other2))
       {
-        LOG_TRACE("Matches very similar: " << this << "; " << other);
+        LOG_DEBUG("Matches very similar: " << this << "; " << other);
         return true;
       }
     }
@@ -173,15 +164,15 @@ bool EdgeMatch::isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other)
     other->reverse();
     other1 = other->getString1()->toString();
     other->reverse(); // put it back the way it was
-    other1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+    other1.replace(_portionReplaceRegEx, "");
     if (0 == this1.compare(other1))
     {
-      LOG_TRACE("Matches very similar: " << this << "; " << other);
+      LOG_DEBUG("Matches very similar: " << this << "; " << other);
       return true;
     }
   }
 
-  LOG_TRACE("Matches not very similar: " << this << "; " << other);
+  LOG_DEBUG("Matches not very similar: " << this << "; " << other);
   return false;
 }
 
@@ -195,6 +186,38 @@ QString EdgeMatch::getUid() const
 QString EdgeMatch::toString() const
 {
   return QString("s1: %1 s2: %2").arg(_edges1->toString()).arg(_edges2->toString());
+}
+
+QString EdgeMatch::getSimilarityString() const
+{
+  return
+    QString("s1: %1 s2: %2")
+      .arg(getString1()->toString().replace(_portionReplaceRegEx, ""))
+      .arg(getString2()->toString().replace(_portionReplaceRegEx, ""));
+}
+
+QString EdgeMatch::getFirstReversedSimilarityString() const
+{
+  EdgeMatchPtr edgeMatch = clone();
+  const QString edgeStr2 = edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
+
+  edgeMatch->reverse();
+  const QString edgeStr1Reversed =
+    edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
+
+  return QString("s1r: %1 s2: %2").arg(edgeStr1Reversed).arg(edgeStr2);
+}
+
+QString EdgeMatch::getSecondReversedSimilarityString() const
+{
+  EdgeMatchPtr edgeMatch = clone();
+  const QString edgeStr1 = edgeMatch->getString1()->toString().replace(_portionReplaceRegEx, "");
+
+  edgeMatch->reverse();
+  const QString edgeStr2Reversed =
+    edgeMatch->getString2()->toString().replace(_portionReplaceRegEx, "");
+
+  return QString("s1: %1 s2r: %2").arg(edgeStr1).arg(edgeStr2Reversed);
 }
 
 }

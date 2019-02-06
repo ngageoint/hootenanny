@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.551137" minlon="-72.337401" maxlat="18.558856" maxlon="-72.3291219"/>
-    <node visible="true" id="-831" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5585906339683433" lon="-72.3335862401604430">
+    <node visible="true" id="-838" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5585906339683433" lon="-72.3335862401604430">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-831"/>
+        <tag k="hoot:id" v="-838"/>
     </node>
-    <node visible="true" id="-821" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5576825857235619" lon="-72.3293464205128771">
+    <node visible="true" id="-828" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5576825857235619" lon="-72.3293464205128771">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-821"/>
+        <tag k="hoot:id" v="-828"/>
     </node>
-    <node visible="true" id="-816" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5527338475482892" lon="-72.3316481106062525">
+    <node visible="true" id="-823" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5527338475482892" lon="-72.3316481106062525">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-816"/>
+        <tag k="hoot:id" v="-823"/>
     </node>
     <node visible="true" id="-309" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5545940999999992" lon="-72.3351892999999961">
         <tag k="hoot:status" v="1"/>
@@ -871,9 +871,9 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1201" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1211" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-159"/>
-        <nd ref="-831"/>
+        <nd ref="-838"/>
         <nd ref="-172"/>
         <nd ref="-171"/>
         <nd ref="-170"/>
@@ -908,12 +908,12 @@
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1201"/>
+        <tag k="hoot:id" v="-1211"/>
     </way>
-    <way visible="true" id="-1195" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1205" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-166"/>
         <nd ref="-165"/>
-        <nd ref="-821"/>
+        <nd ref="-828"/>
         <nd ref="-164"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="OIM/GIS/DTM;osm;mgcp"/>
@@ -942,13 +942,13 @@
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1195"/>
+        <tag k="hoot:id" v="-1205"/>
     </way>
-    <way visible="true" id="-1191" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1201" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-122"/>
         <nd ref="-130"/>
         <nd ref="-121"/>
-        <nd ref="-816"/>
+        <nd ref="-823"/>
         <nd ref="-137"/>
         <nd ref="-120"/>
         <nd ref="-132"/>
@@ -998,9 +998,9 @@
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1191"/>
+        <tag k="hoot:id" v="-1201"/>
     </way>
-    <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-54" timestamp="2017-06-07T14:39:33Z" version="1">
         <nd ref="-101"/>
         <nd ref="-205"/>
         <nd ref="-204"/>
@@ -1043,7 +1043,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-54"/>
     </way>
-    <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-53" timestamp="2017-06-07T14:39:33Z" version="1">
         <nd ref="-101"/>
         <nd ref="-241"/>
         <tag k="width:minimum_traveled_way" v="8"/>
@@ -1066,7 +1066,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-53"/>
     </way>
-    <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-44" timestamp="2017-06-07T14:39:33Z" version="1">
         <nd ref="-245"/>
         <nd ref="-260"/>
         <nd ref="-259"/>
@@ -1082,7 +1082,7 @@
         <nd ref="-249"/>
         <nd ref="-248"/>
         <nd ref="-247"/>
-        <nd ref="-831"/>
+        <nd ref="-838"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.144Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="width:minimum_traveled_way" v="8"/>
@@ -1104,7 +1104,7 @@
         <tag k="hoot:id" v="-44"/>
     </way>
     <way visible="true" id="-43" timestamp="2017-06-07T14:39:33Z" version="1" changeset="110">
-        <nd ref="-831"/>
+        <nd ref="-838"/>
         <nd ref="-306"/>
         <nd ref="-295"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.147Z"/>
@@ -1150,7 +1150,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-42"/>
     </way>
-    <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-38" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-163"/>
         <nd ref="-5"/>
         <nd ref="-4"/>
@@ -1175,7 +1175,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-38"/>
     </way>
-    <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-37" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-161"/>
         <nd ref="-9"/>
         <nd ref="-88"/>
@@ -1270,7 +1270,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-34"/>
     </way>
-    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-33" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-152"/>
         <nd ref="-151"/>
         <nd ref="-150"/>
@@ -1291,7 +1291,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-33"/>
     </way>
-    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-32" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-148"/>
         <nd ref="-151"/>
         <nd ref="-147"/>
@@ -1342,7 +1342,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-30"/>
     </way>
-    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-29" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-135"/>
         <nd ref="-134"/>
         <nd ref="-133"/>
@@ -1371,7 +1371,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-28"/>
     </way>
-    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-27" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-125"/>
         <nd ref="-152"/>
         <nd ref="-124"/>
@@ -1388,7 +1388,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-27"/>
     </way>
-    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-25" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-100"/>
         <nd ref="-99"/>
         <nd ref="-98"/>
@@ -1623,7 +1623,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-12"/>
     </way>
-    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-69"/>
         <nd ref="-68"/>
         <nd ref="-67"/>
@@ -1647,7 +1647,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-11"/>
     </way>
-    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-10" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-64"/>
         <nd ref="-63"/>
         <nd ref="-118"/>
@@ -1679,7 +1679,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-10"/>
     </way>
-    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-9" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-81"/>
         <nd ref="-59"/>
         <nd ref="-158"/>
@@ -1735,7 +1735,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-8"/>
     </way>
-    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-7" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-47"/>
         <nd ref="-46"/>
         <nd ref="-45"/>
@@ -1764,7 +1764,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-6"/>
     </way>
-    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-5" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-1"/>
         <nd ref="-44"/>
         <nd ref="-43"/>
@@ -1808,7 +1808,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-5"/>
     </way>
-    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-4" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-32"/>
         <nd ref="-78"/>
         <nd ref="-31"/>
@@ -1860,7 +1860,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-2"/>
     </way>
-    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1" timestamp="2017-06-07T14:39:34Z" version="1">
         <nd ref="-126"/>
         <nd ref="-26"/>
         <nd ref="-25"/>

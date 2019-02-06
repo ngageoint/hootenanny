@@ -231,7 +231,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     // matches are interrelated by element id
     MatchGraph mg;
     mg.addMatches(_matches.begin(), _matches.end());
-    vector< set<const Match*, MatchPtrComparator> > tmpMatchSets = mg.findSubgraphs(map);
+    vector<set<const Match*, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(map);
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
     LOG_TRACE(SystemInfo::getMemoryUsageString());
   }
@@ -241,9 +241,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   /// @todo would it help to sort the matches so the biggest or best ones get merged first?
 
   // convert all the match sets into mergers.
-  LOG_INFO("Creating mergers...");
+  //LOG_INFO("Creating mergers...");
   for (size_t i = 0; i < matchSets.size(); ++i)
   {
+    PROGRESS_INFO("Converting match set " << i + 1 << " / " << matchSets.size() << " to a merger...");
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
   }
 
@@ -258,7 +259,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
-  LOG_INFO("Applying " << _mergers.size() << " mergers...");
   vector< pair<ElementId, ElementId> > replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
@@ -274,7 +274,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     _replaceElementIds(replaced);
     replaced.clear();
   }
-  LOG_INFO("Mergers applied");
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   size_t mergerCount = _mergers.size();

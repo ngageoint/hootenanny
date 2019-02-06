@@ -74,7 +74,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   LOG_TRACE(matchesList);
 
   MatchSet matches = matchesIn;
-  _removeDuplicates(matches);
   LOG_VART(matches);
 
   bool result = false;
@@ -88,8 +87,8 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
     if (!matchOverlap)
     {
       // create a merger that can merge multiple partial matches
-      LOG_TRACE("Adding the match to the partial network merger...");
       QSet<ConstEdgeMatchPtr> edgeMatches;
+      int count = 0;
       set<pair<ElementId, ElementId>> pairs;
       foreach (const Match* itm, matches)
       {
@@ -97,6 +96,13 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         edgeMatches.insert(nm->getEdgeMatch());
         set<pair<ElementId, ElementId>> p = nm->getMatchPairs();
         pairs.insert(p.begin(), p.end());
+
+        count++;
+        if (count % 100 == 0)
+        {
+          PROGRESS_INFO(
+            "Added match " << count << " / " << matches.size() << " to partial network merger...");
+        }
       }
       if (!ConfigOptions().getHighwayMergeTagsOnly())
       {
@@ -129,9 +135,8 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       }
       else
       {
-        double overlapPercent = _getOverlapPercent(matches);
-        // Go ahead and merge largest match
-        if (overlapPercent > 80.0) // TODO: move value to config
+        const double overlapPercent = _getOverlapPercent(matches);
+        if (overlapPercent > 80.0) // Go ahead and merge largest match; TODO: move value to config
         {
           const NetworkMatch* largest = _getLargest(matches);
           LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
@@ -151,6 +156,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         else // Throw a review
         {
           LOG_TRACE("Marking " << matches.size() << " overlapping matches for review...");
+          int count = 0;
           for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
           {
             set<pair<ElementId, ElementId>> s = (*it)->getMatchPairs();
@@ -170,6 +176,13 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
                 "reference input data/imagery and manually merge or modify as needed.",
                 m->getMatchName(),
                 m->getScore()));
+
+            count++;
+            if (count % 100 == 0)
+            {
+              PROGRESS_INFO(
+                "Added match " << count << " / " << matches.size() << " for review...");
+            }
           }
         }
       }
@@ -397,41 +410,6 @@ bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
   assert(_map != 0);
   bool conflicting = matches.size() > 1;
   return conflicting;
-}
-
-// I dislike the nested for loop here - but whatcha gonna do? Maybe not create
-// duplicate matches in the first place
-void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
-{
-  LOG_TRACE("Removing duplicate matches...");
-
-  for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
-  {
-    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
-    MatchSet::iterator jt = it;
-
-    for (++jt; jt != matches.end(); ++jt)
-    {
-      const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
-
-      if (nmi && nmj)
-      {
-        if (nmi->isVerySimilarTo(nmj))
-          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " is very similar to " << nmj->getEdgeMatch()->getUid());
-
-        if (nmi->contains(nmj))
-          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " contains " << nmj->getEdgeMatch()->getUid());
-
-        if (nmi->isVerySimilarTo(nmj))
-        {
-          MatchSet::iterator tmp = jt;
-          ++tmp;
-          matches.erase(jt);
-          jt = tmp;
-        } // end if very similar
-      } // end if valid pointers
-    } // inner for
-  } // outer for
 }
 
 }
