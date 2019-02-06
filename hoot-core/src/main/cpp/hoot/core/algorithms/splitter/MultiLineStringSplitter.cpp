@@ -91,6 +91,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   {
     LOG_VART(string.getSublines()[i]);
     WayPtr w = string.getSublines()[i].toWay(map, nf);
+    LOG_VART(w->getElementId());
     if (reverse[i])
     {
       w->reverseOrder();

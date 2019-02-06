@@ -29,14 +29,6 @@
 #ifndef MAXIMALNEARESTSUBLINE_H
 #define MAXIMALNEARESTSUBLINE_H
 
-/**
- * @author RoadMatcher
- * @copyright GPL
- * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
- * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
- * appropriate data structures.
- */
-
 // GEOS
 #include <geos/geom/Coordinate.h>
 
@@ -67,6 +59,12 @@ namespace hoot
  * An exact computation of the MNS would require computing a line Voronoi.
  * For this reason, the algorithm used in this class is heuristic-based.
  * It may compute a geometry which is shorter than the actual MNS.
+ *
+ * @author RoadMatcher
+ * @copyright GPL
+ * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
+ * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
+ * appropriate data structures.
  */
 class MaximalNearestSubline
 {
@@ -98,8 +96,8 @@ public:
    * The resulting ways will not be placed in map.
    * @param mnsIndex The index of way that is the MNS is placed in mnsIndex.
    */
-  std::vector< WayPtr > splitWay(OsmMapPtr map) { int a; return splitWay(map, a); }
-  std::vector< WayPtr > splitWay(OsmMapPtr map, int& mnsIndex);
+  std::vector<WayPtr> splitWay(OsmMapPtr map) { int a; return splitWay(map, a); }
+  std::vector<WayPtr> splitWay(OsmMapPtr map, int& mnsIndex);
 
 private:
 

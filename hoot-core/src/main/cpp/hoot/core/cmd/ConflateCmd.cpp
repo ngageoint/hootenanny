@@ -54,6 +54,7 @@
 #include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
+#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
 // Standard
 #include <fstream>
@@ -278,6 +279,10 @@ int ConflateCmd::runSimple(QStringList args)
   // Apply any user specified operations.
   LOG_INFO("Applying post-conflation operations...");
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
+
+  CountUniqueReviewsVisitor countReviewsVis;
+  result->visitRo(countReviewsVis);
+  LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
 
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));

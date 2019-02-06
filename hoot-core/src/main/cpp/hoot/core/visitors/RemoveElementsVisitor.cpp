@@ -104,7 +104,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   assert(_criterion);
   ElementType type = e->getElementType();
   long id = e->getId();
-  LOG_VART(e->getElementId());
+  //LOG_VART(e->getElementId());
   const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
 
   if (_criterion->isSatisfied(ee))

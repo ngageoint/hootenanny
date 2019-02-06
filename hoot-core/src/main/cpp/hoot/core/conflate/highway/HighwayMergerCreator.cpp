@@ -63,10 +63,10 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*
     LOG_VART(m->toString());
     const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m);
     // check to make sure all the input matches are building matches.
-    LOG_VART(hm == 0);
     if (hm == 0)
     {
       // return an empty result
+      LOG_TRACE("Returning empty result due to match not being HighwayMatch: " << m->toString());
       return false;
     }
     // add all the element to element pairs to a set

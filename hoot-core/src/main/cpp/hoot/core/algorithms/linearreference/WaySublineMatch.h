@@ -37,6 +37,7 @@ class WaySublineCollection;
 class WaySublineMatch
 {
 public:
+
   WaySublineMatch();
 
   WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr &newMap);
@@ -68,6 +69,7 @@ public:
   QString toString() const;
 
 private:
+
   WaySubline _ws1, _ws2;
   bool _reversed;
 };

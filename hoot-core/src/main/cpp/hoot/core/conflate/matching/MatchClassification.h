@@ -49,6 +49,7 @@ namespace hoot
 class MatchClassification
 {
 public:
+
   MatchClassification();
 
   /**
@@ -96,6 +97,7 @@ public:
   }
 
 private:
+
   double _match;
   double _miss;
   double _review;

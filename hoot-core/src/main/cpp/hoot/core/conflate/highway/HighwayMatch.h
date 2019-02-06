@@ -54,6 +54,7 @@ class ElementId;
 class HighwayMatch : public Match, public MatchDetails
 {
 public:
+
   HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
                const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
                const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,

@@ -46,6 +46,7 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 using namespace std;
 
@@ -70,6 +71,21 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
   const ConstElementPtr e1 = map->getElement(eid1);
   const ConstElementPtr e2 = map->getElement(eid2);
 
+  //LOG_VARD(e1->getElementId());
+  //LOG_VARD(e2->getElementId());
+  LOG_VARD(e1);
+  if (e1->getElementType() == ElementType::Relation)
+  {
+    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e1);
+    LOG_VARD(OsmUtils::getDetailedRelationString(relation, map));
+  }
+  LOG_VARD(e2);
+  if (e2->getElementType() == ElementType::Relation)
+  {
+    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e2);
+    LOG_VARD(OsmUtils::getDetailedRelationString(relation, map));
+  }
+
   try
   {
     // calculated the shared sublines
@@ -81,8 +97,10 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
     {
       // calculate the match score
       _c = _classifier->classify(map, eid1, eid2, _sublineMatch);
+      LOG_VARD(_c);
 
       MatchType type = getType();
+      LOG_VARD(type);
       QStringList description;
       if (type != MatchType::Match)
       {
@@ -114,6 +132,8 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
     }
 
     _score = _sublineMatch.getLength() * _c.getMatchP();
+    LOG_VARD(_score);
+    LOG_VARD(_explainText);
   }
   // if this is an unsupported geometry configuration
   catch (const NeedsReviewException& e)
