@@ -123,6 +123,17 @@ public:
 
 private:
   /**
+   * @brief The OsmApiFailureInfo struct
+   */
+  struct OsmApiFailureInfo
+  {
+    OsmApiFailureInfo() : success(false), status(0), response("") { }
+    bool success;
+    int status;
+    QString response;
+  };
+  typedef boost::shared_ptr<OsmApiFailureInfo> OsmApiFailureInfoPtr;
+  /**
    * @brief _createChangeset Request a changeset ID from the API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
    * @param request - Network request object initialized with OSM API URL
@@ -143,9 +154,9 @@ private:
    * @param request - Network request object initialized with OSM API URL
    * @param id - ID of the changeset to upload the data to
    * @param changeset - Atomic changeset to upload
-   * @return true if the changeset was uploaded correctly
+   * @return Failure info status, success, HTTP status and response indicating if the changeset was uploaded correctly
    */
-  bool _uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset);
+  OsmApiFailureInfoPtr _uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset);
   /**
    * @brief _parseCapabilities Parse the OSM API capabilities
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities

@@ -205,7 +205,7 @@ public:
       CPPUNIT_ASSERT(writer.containsFailed());
       HOOT_STR_EQUALS(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<osmChange version=\"0.6\" generator=\"Hootenanny\">\n"
+        "<osmChange version=\"0.6\" generator=\"hootenanny\">\n"
         "\t<delete>\n"
         "\t\t<node id=\"-1\" version=\"0\" lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" timestamp=\"\" changeset=\"0\">\n"
         "\t\t\t<tag k=\"node\" v=\"Should fail\"/>\n"

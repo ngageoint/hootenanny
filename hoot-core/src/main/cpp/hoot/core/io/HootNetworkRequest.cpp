@@ -91,7 +91,6 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
 {
   //  Disable logging for the QNetworkAccessManager calls because it logs an error when
   //  run in a sub-thread.  An exception is thrown below for error handling instead of logging
-  boost::shared_ptr<DisableLog> disable(new DisableLog());
   //  Reset status
   _status = 0;
   _content.clear();
@@ -152,8 +151,6 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   }
   //  Wait for finished signal from reply object
   _blockOnReply(reply);
-  //  Enable logging
-  disable.reset();
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
   //  According to the documention this shouldn't ever happen
