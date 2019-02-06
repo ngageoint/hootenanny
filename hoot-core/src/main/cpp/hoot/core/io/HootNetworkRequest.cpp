@@ -89,8 +89,6 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
                                          QNetworkAccessManager::Operation http_op,
                                          const QByteArray& data)
 {
-  //  Disable logging for the QNetworkAccessManager calls because it logs an error when
-  //  run in a sub-thread.  An exception is thrown below for error handling instead of logging
   //  Reset status
   _status = 0;
   _content.clear();
