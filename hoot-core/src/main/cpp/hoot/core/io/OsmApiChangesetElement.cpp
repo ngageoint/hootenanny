@@ -210,6 +210,35 @@ XmlRelation::XmlRelation(const XmlRelation &relation)
 {
 }
 
+bool XmlRelation::hasMember(ElementType::Type type, long id)
+{
+  //  Iterate all of the members
+  for (QList<XmlMember>::iterator it = _members.begin(); it != _members.end(); ++it)
+  {
+    switch (type)
+    {
+    case ElementType::Node:
+      //  Node matches node, and ID matches ID
+      if (it->isNode() && it->getRef() == id)
+        return true;
+      break;
+    case ElementType::Way:
+      //  Way matches way, and ID matches ID
+      if (it->isWay() && it->getRef() == id)
+        return true;
+      break;
+    case ElementType::Relation:
+      //  Relation matches relation, and ID matches ID
+      if (it->isRelation() && it->getRef() == id)
+        return true;
+      break;
+    default:
+      break;
+    }
+  }
+  return false;
+}
+
 QString XmlRelation::toString(long changesetId) const
 {
   QString buffer;
