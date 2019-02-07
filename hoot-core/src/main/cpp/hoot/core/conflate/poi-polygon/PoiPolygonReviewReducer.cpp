@@ -282,9 +282,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  // TODO: move to type extractor method
-  const bool poiIsNatural = poiTags.contains("natural");
-  const bool polyIsNatural = polyTags.contains("natural");
+  const bool poiIsNatural = PoiPolygonTypeScoreExtractor::isNatural(poi);
+  const bool polyIsNatural = PoiPolygonTypeScoreExtractor::isNatural(poly);
 
   //Be more strict reviewing natural features and parks against building features.  This could be
   //extended

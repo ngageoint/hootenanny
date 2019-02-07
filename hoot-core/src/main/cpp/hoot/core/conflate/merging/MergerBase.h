@@ -56,7 +56,6 @@ protected:
 
   virtual PairsSet& getPairs() = 0;
   virtual const PairsSet& getPairs() const = 0;
-
 };
 
 }

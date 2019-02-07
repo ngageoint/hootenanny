@@ -537,6 +537,11 @@ bool PoiPolygonTypeScoreExtractor::isRestaurant(const Tags& tags)
   return tags.get("amenity") == "restaurant" || tags.get("amenity") == "fast_food";
 }
 
+bool PoiPolygonTypeScoreExtractor::isNatural(ConstElementPtr element)
+{
+  return element->getTags().contains("natural");
+}
+
 bool PoiPolygonTypeScoreExtractor::_haveConflictingTags(const QString tagKey, const Tags& t1,
                                                         const Tags& t2, QString& tag1Val,
                                                         QString& tag2Val) const

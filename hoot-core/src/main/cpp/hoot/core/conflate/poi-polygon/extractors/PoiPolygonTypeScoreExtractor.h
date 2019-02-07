@@ -86,6 +86,7 @@ public:
   static bool isReligion(const Tags& tags);
   static bool isRestaurant(ConstElementPtr element);
   static bool isRestaurant(const Tags& tags);
+  static bool isNatural(ConstElementPtr element);
 
   /**
    * Determines if an element has more than one type associated with it

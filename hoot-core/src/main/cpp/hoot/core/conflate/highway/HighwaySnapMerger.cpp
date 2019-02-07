@@ -66,10 +66,9 @@ namespace hoot
 
 unsigned int HighwaySnapMerger::logWarnCount = 0;
 
-HighwaySnapMerger::HighwaySnapMerger(Meters minSplitSize,
+HighwaySnapMerger::HighwaySnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
   const boost::shared_ptr<SublineStringMatcher> &sublineMatcher) :
-_minSplitSize(minSplitSize), // TODO: this isn't used?
 _sublineMatcher(sublineMatcher)
 {
   _pairs = pairs;

@@ -120,7 +120,7 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
             vCandidatesB.contains(e->getTo()))
         {
           createStub = true;
-          break;    // TODO: check this
+          break;
         }
       }
     }
