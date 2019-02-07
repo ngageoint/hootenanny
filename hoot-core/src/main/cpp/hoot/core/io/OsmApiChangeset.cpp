@@ -261,21 +261,21 @@ void XmlChangeset::fixMalformedInput()
       long node_id = it->first;
       //  Set the node's status to failed if negative
       if (node_id < 1)
-        failNode(node_id);
+        failNode(node_id, true);
     }
     for (XmlElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
     {
       long way_id = it->first;
       //  Set the node's status to failed if negative
       if (way_id < 1)
-        failWay(way_id);
+        failWay(way_id, true);
     }
     for (XmlElementMap::iterator it = _relations[type].begin(); it != _relations[type].end(); ++it)
     {
       long relation_id = it->first;
       //  Set the node's status to failed if negative
       if (relation_id < 1)
-        failRelation(relation_id);
+        failRelation(relation_id, true);
     }
   }
 }
@@ -713,7 +713,7 @@ bool XmlChangeset::isSent(XmlElement* element)
   else
     //  Sent means Buffering, Sent, or Finalized
     return element->getStatus() == XmlElement::ElementStatus::Buffering ||
-           element->getStatus() == XmlElement::ElementStatus::Sent ||
+           (element->getStatus() == XmlElement::ElementStatus::Sent && element->id() > 0) ||
            element->getStatus() == XmlElement::ElementStatus::Finalized;
 }
 
@@ -866,7 +866,48 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
   return changeset->size() > 0;
 }
 
-ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset)
+bool XmlChangeset::matchesPlaceholderFailure(const QString& hint,
+                                             long& member_id, ElementType::Type& member_type,
+                                             long& element_id, ElementType::Type& element_type)
+{
+  //  Placeholder node not found for reference -145213 in way -5687
+  //  Placeholder Way not found for reference -12257 in relation -51
+  QRegExp regPlaceholder("Placeholder (node|way|relation) not found for reference (-?[0-9]+) in (node|way|relation) (-?[0-9]+)", Qt::CaseInsensitive);
+  if (hint.contains(regPlaceholder) && regPlaceholder.captureCount() == 4)
+  {
+    //  Get the node/way/relation type and id that caused the failure
+    member_type = ElementType::fromString(regPlaceholder.cap(1));
+    bool success = false;
+    member_id = regPlaceholder.cap(2).toLong(&success);
+    if (!success)
+      return success;
+    //  Get the node/way/relation type and id that failed
+    element_type = ElementType::fromString(regPlaceholder.cap(3));
+    element_id = regPlaceholder.cap(4).toLong(&success);
+    return success;
+  }
+  return false;
+}
+
+bool XmlChangeset::matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type)
+{
+  //  Relation with id  cannot be saved due to Relation with id 1707699
+  QRegExp regRelation("Relation with id (-?[0-9]+)? cannot be saved due to (nodes|way|relation) with id (-?[0-9]+)", Qt::CaseInsensitive);
+  if (hint.contains(regRelation))
+  {
+    QString error = regRelation.cap(1);
+    if (error != "")
+      element_id = error.toLong();
+    //  Get the node/way/relation type and id that failed
+    member_type = ElementType::fromString(regRelation.cap(2));
+    bool success = false;
+    member_id = regRelation.cap(3).toLong(&success);
+    return success;
+  }
+  return false;
+}
+
+ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const QString& splitHint)
 {
   ChangesetInfoPtr split(new ChangesetInfo());
   //  If there is only one element then splitting only marks that element as failed
@@ -874,6 +915,86 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset)
   {
     updateFailedChangeset(changeset);
     return split;
+  }
+  //  Try to use the split hint to split out one failing element
+  if (splitHint != "")
+  {
+    long member_id = 0;
+    long element_id = 0;
+    ElementType::Type member_type = ElementType::Unknown;
+    ElementType::Type element_type = ElementType::Unknown;
+    //  See if the hint is something like: Placeholder node not found for reference -145213 in way -5687
+    if (matchesPlaceholderFailure(splitHint, member_id, member_type, element_id, element_type))
+    {
+      //  Use the type and id to split the changeset
+      if (element_type == ElementType::Way)
+      {
+        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+        {
+          if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
+          {
+            XmlWay* way = dynamic_cast<XmlWay*>(_allWays[element_id].get());
+            //  Add the way to the split and remove from the changeset
+            split->add(element_type, (ChangesetType)current_type, way->id());
+            changeset->remove(element_type, (ChangesetType)current_type, way->id());
+            return split;
+          }
+        }
+      }
+      else if (element_type == ElementType::Relation)
+      {
+        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+        {
+          if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
+          {
+            XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[element_id].get());
+            //  Add the relation to the split and remove from the changeset
+            split->add(element_type, (ChangesetType)current_type, relation->id());
+            changeset->remove(element_type, (ChangesetType)current_type, relation->id());
+            return split;
+          }
+        }
+      }
+    }
+    //  See if the hint is something like: Relation with id  cannot be saved due to Relation with id 1707699
+    if (matchesRelationFailure(splitHint, element_id, member_id, member_type))
+    {
+      if (element_id != 0)
+      {
+        //  If there is a relation id, move just that relation to the split
+        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+        {
+          if (changeset->contains(member_type, (ChangesetType)current_type, element_id))
+          {
+            XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[element_id].get());
+            //  Add the relation to the split and remove from the changeset
+            split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
+            changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
+            return split;
+          }
+        }
+      }
+      else
+      {
+        //  If no relation id is found, move all relations that contain the id/type combination to the split
+        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+        {
+          for (XmlElementMap::iterator it = _relations[current_type].begin(); it != _relations[current_type].end(); ++it)
+          {
+            XmlRelation* relation = dynamic_cast<XmlRelation*>(it->second.get());
+            //  Make sure that the changeset contains this relation and this relation contains the problematic element
+            if (relation->hasMember(member_type, member_id) &&
+                changeset->contains(ElementType::Relation, (ChangesetType)current_type, relation->id()))
+            {
+              //  Add the relation to the split and remove from the changeset
+              split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
+              changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
+              return split;
+            }
+          }
+        }
+      }
+    }
   }
   //  Split the changeset in half (approximately)
   size_t splitSize = changeset->size() / 2;
@@ -1201,28 +1322,38 @@ void XmlChangeset::replaceRelationId(long old_id, long new_id)
   _idMap.updateId(ElementType::Relation, old_id, new_id);
 }
 
-void XmlChangeset::failNode(long id)
+void XmlChangeset::failNode(long id, bool beforeSend)
 {
   //  Set the node's status to failed
   _allNodes[id]->setStatus(XmlElement::ElementStatus::Failed);
   //  Update the failed count once
   ++_failedCount;
+  //  Update sent count as if we already sent it and it failed
+  if (beforeSend)
+    ++_sentCount;
 }
 
-void XmlChangeset::failWay(long id)
+void XmlChangeset::failWay(long id, bool beforeSend)
 {
   //  Set the way's status to failed
   _allWays[id]->setStatus(XmlElement::ElementStatus::Failed);
   //  Update the failed count once
   ++_failedCount;
+  //  Update sent count as if we already sent it and it failed
+  if (beforeSend)
+    ++_sentCount;
 }
 
-void XmlChangeset::failRelation(long id)
+void XmlChangeset::failRelation(long id, bool beforeSend)
 {
   //  Set the relation's status to failed
   _allRelations[id]->setStatus(XmlElement::ElementStatus::Failed);
   //  Update the failed count once
   ++_failedCount;
+  //  Update sent count as if we already sent it and it failed
+  if (beforeSend)
+    ++_sentCount;
+  LOG_TRACE("Failed relation (" << id << ")");
 }
 
 }

@@ -328,6 +328,13 @@ public:
    */
   int getMemberCount() { return _members.size(); }
   /**
+   * @brief hasMember Search the relation for a specific element type with the given ID
+   * @param type Element type to search for (node/way/relation)
+   * @param id ID of the element to search for
+   * @return True if the given element is a member of this relation
+   */
+  bool hasMember(ElementType::Type type, long id);
+  /**
    * @brief toString Get the XML string equivalent for the relation
    * @param changesetId ID of the changeset to insert into the relation
    * @return XML string

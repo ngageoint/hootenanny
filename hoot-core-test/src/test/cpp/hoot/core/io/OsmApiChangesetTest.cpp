@@ -43,6 +43,7 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetSplitTest);
   CPPUNIT_TEST(runXmlChangesetSplitWayTest);
   CPPUNIT_TEST(runXmlChangesetErrorFixTest);
+  CPPUNIT_TEST(runXmlChangesetFailureMatchesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -195,6 +196,90 @@ public:
     QString error = changeset.getFailedChangesetString();
     QString expectedError = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetErrorFixErrors.osc");
     HOOT_STR_EQUALS(expectedError, error);
+  }
+
+  void runXmlChangesetFailureMatchesTest()
+  {
+    XmlChangeset changeset;
+
+    bool found = false;
+    long id = 0;
+    long id2 = 0;
+    ElementType::Type type = ElementType::Unknown;
+    ElementType::Type type2 = ElementType::Unknown;
+    QString hint;
+
+    //  Test Placeholder failure with node in way
+    id = 0;
+    id2 = 0;
+    type = ElementType::Unknown;
+    type2 = ElementType::Unknown;
+    hint = "Placeholder node not found for reference -145213 in way -5687";
+    found = changeset.matchesPlaceholderFailure(hint, id, type, id2, type2);
+    CPPUNIT_ASSERT_EQUAL(true, found);
+    CPPUNIT_ASSERT_EQUAL(-145213L, id);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Node, type);
+    CPPUNIT_ASSERT_EQUAL(-5687L, id2);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Way, type2);
+
+    //  Test Placeholder failure with way in relation
+    id = 0;
+    id2 = 0;
+    type = ElementType::Unknown;
+    type2 = ElementType::Unknown;
+    hint = "Placeholder Way not found for reference -12257 in relation -51";
+    found = changeset.matchesPlaceholderFailure(hint, id, type, id2, type2);
+    CPPUNIT_ASSERT_EQUAL(true, found);
+    CPPUNIT_ASSERT_EQUAL(-12257L, id);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Way, type);
+    CPPUNIT_ASSERT_EQUAL(-51L, id2);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, type2);
+
+    //  Test Placeholder failure with empty string
+    id = 0;
+    id2 = 0;
+    type = ElementType::Unknown;
+    type2 = ElementType::Unknown;
+    hint = "";
+    found = changeset.matchesPlaceholderFailure(hint, id, type, id2, type2);
+    CPPUNIT_ASSERT_EQUAL(false, found);
+    CPPUNIT_ASSERT_EQUAL(0L, id);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Unknown, type);
+    CPPUNIT_ASSERT_EQUAL(0L, id2);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Unknown, type2);
+
+    //  Test relation failure with no relation ID
+    id = 0;
+    id2 = 0;
+    type = ElementType::Unknown;
+    hint = "Relation with id  cannot be saved due to Relation with id 1707699";
+    found = changeset.matchesRelationFailure(hint, id, id2, type);
+    CPPUNIT_ASSERT_EQUAL(true, found);
+    CPPUNIT_ASSERT_EQUAL(0L, id);
+    CPPUNIT_ASSERT_EQUAL(1707699L, id2);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, type);
+
+    //  Test relation failure with relation ID
+    id = 0;
+    id2 = 0;
+    type = ElementType::Unknown;
+    hint = "Relation with id 122 cannot be saved due to Way with id 7699";
+    found = changeset.matchesRelationFailure(hint, id, id2, type);
+    CPPUNIT_ASSERT_EQUAL(true, found);
+    CPPUNIT_ASSERT_EQUAL(122L, id);
+    CPPUNIT_ASSERT_EQUAL(7699L, id2);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Way, type);
+
+    //  Test relation failure with empty string
+    id = 0;
+    id2 = 0;
+    type = ElementType::Unknown;
+    hint = "";
+    found = changeset.matchesRelationFailure(hint, id, id2, type);
+    CPPUNIT_ASSERT_EQUAL(false, found);
+    CPPUNIT_ASSERT_EQUAL(0L, id);
+    CPPUNIT_ASSERT_EQUAL(0L, id2);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Unknown, type);
   }
 };
 
