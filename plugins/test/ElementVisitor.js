@@ -43,6 +43,8 @@ describe('schema', function() {
                 new hoot.TagCriterion({'tag.criterion.kvps':'name=Delete Road'}),
                 {'remove.elements.visitor.recursive':false}));
 
+        assert.equal(map.getElementCount(), 3);
+
         // debug: hoot.saveMap(map, "result.osm");
 
     }).timeout(5000);
