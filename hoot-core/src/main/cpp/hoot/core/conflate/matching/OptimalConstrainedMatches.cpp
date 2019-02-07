@@ -89,7 +89,7 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
     }
     else
     {
-      LOG_DEBUG("Removing match: " << _matches[i]);
+      LOG_TRACE("Removing match: " << _matches[i]);
     }
   }
 

@@ -72,7 +72,6 @@ vector<const Match*> GreedyConstrainedMatches::calculateSubset()
   // figure out all the pairs of matches that conflict.
   LOG_INFO("Calculating greedy match conflicts...");
   _calculateMatchConflicts();
-  LOG_DEBUG("Done calculating greedy match conflicts");
 
   // if there are no conflicts, then there is nothing to solve.
   if (_conflicts.size() == 0)
@@ -129,7 +128,7 @@ vector<const Match*> GreedyConstrainedMatches::calculateSubset()
     }
     else
     {
-      LOG_DEBUG("Removing match: " << _matches[mi]);
+      LOG_TRACE("Removing match: " << _matches[mi]);
     }
   }
 

@@ -51,8 +51,8 @@ MaximalNearestSublineMatcher::MaximalNearestSublineMatcher()
 WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapPtr& map,
   const ConstWayPtr& way1, const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
 {
-  LOG_VARD(way1->getElementId());
-  LOG_VARD(way2->getElementId());
+  LOG_VART(way1->getElementId());
+  LOG_VART(way2->getElementId());
 
   score = 0;
   Meters mrd =
@@ -66,8 +66,8 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
 
   WayPtr way1NonConst = mapCopy->getWay(way1->getId());
   WayPtr way2NonConst = mapCopy->getWay(way2->getId());
-  LOG_VARD(way1NonConst->getNodeIds());
-  LOG_VARD(way2NonConst->getNodeIds());
+  LOG_VART(way1NonConst->getNodeIds());
+  LOG_VART(way2NonConst->getNodeIds());
 
   MaximalNearestSubline mns1(
     mapCopy, way1NonConst, way2NonConst, _minSplitSize, mrd, _maxRelevantAngle, _headingDelta);
@@ -77,18 +77,18 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   if (!interval1[0].isValid() || !interval1[1].isValid() || interval1[0] == interval1[1])
   {
     // if the interval isn't valid then return an invalid result.
-    LOG_DEBUG("Returning invalid result...");
+    LOG_TRACE("Returning invalid result...");
     return WaySublineMatchString();
   }
   _snapToEnds(map, interval1);
   WayPtr subline1 = WaySubline(interval1[0], interval1[1]).toWay(mapCopy);
-  LOG_VARD(subline1->getNodeIds());
+  LOG_VART(subline1->getNodeIds());
 
   MaximalNearestSubline mns2(mapCopy, way2NonConst, subline1, _minSplitSize, -1, -1, _headingDelta);
   std::vector<WayLocation> interval2 = mns2.getInterval();
   if (!interval2[0].isValid() || !interval2[1].isValid() || interval2[0] == interval2[1])
   {
-    LOG_DEBUG("Returning invalid result...");
+    LOG_TRACE("Returning invalid result...");
     return WaySublineMatchString();
   }
   _snapToEnds(map, interval2);
@@ -96,7 +96,7 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   WaySublineMatch match =
     WaySublineMatch(
       WaySubline(interval1[0], interval1[1]), WaySubline(interval2[0], interval2[1]));
-  LOG_VARD(match);
+  LOG_VART(match);
 
   if (subline1->getNodeCount() > 1)
   {
@@ -106,7 +106,7 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
       score = ls->getLength();
     }
   }
-  LOG_VARD(score);
+  LOG_VART(score);
 
   vector<WaySublineMatch> v;
   // switch the subline match to reference a different map.

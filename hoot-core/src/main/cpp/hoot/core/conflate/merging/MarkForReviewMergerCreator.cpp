@@ -70,8 +70,8 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
       matchStrings.append(match->explain());
       score = max<double>(match->getClassification().getReviewP(), score);
       reviewCount++;
-      LOG_VARD(reviewType);
-      LOG_VARD(match->getMatchName());
+      LOG_VART(reviewType);
+      LOG_VART(match->getMatchName());
       if (reviewType.contains(match->getMatchName()) == false)
       {
         reviewType.append(match->getMatchName());

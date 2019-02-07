@@ -109,14 +109,14 @@ bool HighwayMergerAbstract::_mergePair(const OsmMapPtr& map, ElementId eid1, Ele
   // this in the conflict code at this time, so we'll ignore the merge.
   if (!e1 || !e2)
   {
-    LOG_DEBUG("Missing match pair.");
+    LOG_TRACE("Missing match pair.");
     if (!e1)
     {
-      LOG_DEBUG(eid1 << " is missing.");
+      LOG_TRACE(eid1 << " is missing.");
     }
     if (!e2)
     {
-      LOG_DEBUG(eid2 << " is missing.");
+      LOG_TRACE(eid2 << " is missing.");
     }
     _markNeedsReview(result, e1, e2, "Missing match pair", HighwayMatch::getHighwayMatchName());
     return true;

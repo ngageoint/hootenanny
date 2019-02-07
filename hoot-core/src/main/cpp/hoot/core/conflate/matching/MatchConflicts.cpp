@@ -66,8 +66,6 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
     }
   }
 
-  LOG_DEBUG("Element ID to index map calculated.");
-
   return eidToMatches;
 }
 
@@ -119,7 +117,6 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match*>& matche
   LOG_VART(matchSet.size());
 
   // search for all possible match pair conflicts within a set.
-  //int ctr = 0;
   for (size_t i = 0; i < matchSet.size(); i++)
   {
     size_t m1 = matchSet[i];
@@ -137,16 +134,9 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match*>& matche
           swap(m1, m2);
         }
         conflicts.insert(m1, m2);
-        LOG_DEBUG("Conflicting subset matches: " << matches[m1] << ", " << matches[m2]);
+        LOG_TRACE("Conflicting subset matches: " << matches[m1] << ", " << matches[m2]);
       }
     }
-
-//    ctr++;
-//    if (ctr % 10 == 0)
-//    {
-//      PROGRESS_INFO(
-//        "Processed conflicts for " << ctr << " / " << matchSet.size() << " matches...");
-//    }
   }
 }
 

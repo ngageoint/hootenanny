@@ -61,8 +61,8 @@ void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
 bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  LOG_VARD(eid1);
-  LOG_VARD(eid2);
+  LOG_VART(eid1);
+  LOG_VART(eid2);
 
   if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
   {
@@ -73,11 +73,11 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   ElementPtr e2 = map->getElement(eid2);
   if (!e1)
   {
-    LOG_DEBUG(eid1 << " null.");
+    LOG_TRACE(eid1 << " null.");
   }
   if (!e2)
   {
-    LOG_DEBUG(eid2 << " null.");
+    LOG_TRACE(eid2 << " null.");
   }
 
   if (e1 && e2)
@@ -95,10 +95,10 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       elementToKeep = e2;
       elementToRemove = e1;
     }
-    //LOG_VARD(elementToKeep->getElementId());
-    //LOG_VARD(elementToRemove->getElementId());
-    LOG_VARD(elementToKeep);
-    LOG_VARD(elementToRemove);
+    //LOG_VART(elementToKeep->getElementId());
+    //LOG_VART(elementToRemove->getElementId());
+    LOG_VART(elementToKeep);
+    LOG_VART(elementToRemove);
 
     // don't try to join if there are explicitly conflicting names; fix for #2888; not sure what
     // implications this has outside of the single test dataset I've tested on so far
@@ -106,7 +106,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
         elementToRemove->getTags().hasName() &&
         !Tags::haveMatchingName(elementToKeep->getTags(), elementToRemove->getTags()))
     {
-      LOG_DEBUG("Conflicting name tags.  Skipping merge.");
+      LOG_TRACE("Conflicting name tags.  Skipping merge.");
       return false;
     }
 
@@ -119,7 +119,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       if (OneWayCriterion().isSatisfied(wayToRemove) &&
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), wayToKeep, wayToRemove))
       {
-        LOG_DEBUG("Reversing " << wayToKeep->getElementId());
+        LOG_TRACE("Reversing " << wayToKeep->getElementId());
         wayToKeep->reverseOrder();
       }
     }
@@ -133,7 +133,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     replaced.push_back(
       std::pair<ElementId, ElementId>(
         elementToRemove->getElementId(), elementToKeep->getElementId()));
-    LOG_VARD(elementToKeep);
+    LOG_VART(elementToKeep);
     // Is this necessary?
     RecursiveElementRemover(elementToRemove->getElementId()).apply(map);
   }
