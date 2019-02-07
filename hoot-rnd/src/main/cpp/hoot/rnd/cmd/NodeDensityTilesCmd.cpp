@@ -183,15 +183,10 @@ private:
     }
     LOG_VARD(map->getNodeCount());
 
-    if (Log::getInstance().getLevel() <= Log::Debug)
-    {
-      OGREnvelope envelope = CalculateMapBoundsVisitor::getBounds(map);
-      boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(envelope));
-      LOG_VARD(tempEnv->toString());
-      const QString debugMapPath = "tmp/calc-tiles-combined-map-debug.osm";
-      LOG_DEBUG("writing debug output to " << debugMapPath)
-      OsmMapWriterFactory::getInstance().write(map, debugMapPath);
-    }
+//    OGREnvelope envelope = CalculateMapBoundsVisitor::getBounds(map);
+//    boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(envelope));
+//    LOG_VARD(tempEnv->toString());
+    OsmMapWriterFactory::writeDebugMap(map);
 
     return map;
   }

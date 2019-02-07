@@ -72,7 +72,6 @@ public:
 private:
 
   double _distance;
-
 };
 
 }

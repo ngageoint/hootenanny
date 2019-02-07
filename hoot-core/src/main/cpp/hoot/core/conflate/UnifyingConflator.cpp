@@ -136,6 +136,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
+  OsmMapWriterFactory::writeDebugMap(map, "before-matching");
+
   // find all the matches in this map
   if (_matchThreshold.get())
   {
@@ -151,27 +153,30 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_DEBUG("Match count: " << _matches.size());
   LOG_TRACE(SystemInfo::getMemoryUsageString());
 
+  OsmMapWriterFactory::writeDebugMap(map, "after-matching");
+
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
-  _stats.append(SingleStat("Number of Matches Found per Second",
-    (double)_matches.size() / findMatchesTime));
+  _stats.append(
+    SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
 
   vector<const Match*> allMatches = _matches;
 
   // add review tags to all matches that have some review component
   _addReviewTags(map, allMatches);
-  LOG_DEBUG("Pre-constraining match count: " << allMatches.size());
 
+  LOG_DEBUG("Pre-constraining match count: " << allMatches.size());
   _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
   LOG_DEBUG("Number of Matches Before Whole Groups: " << _matches.size());
-
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
   _removeWholeGroups(_matches, matchSets, map);
   _stats.append(SingleStat("Number of Match Sets", matchSets.size()));
   LOG_DEBUG("Number of Match Sets: " << matchSets.size());
   LOG_DEBUG("Number of Matches: " << _matches.size());
+
+  OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
 
   // Globally optimize the set of matches to maximize the conflation score.
   {
@@ -212,19 +217,18 @@ void UnifyingConflator::apply(OsmMapPtr& map)
       _matches = cmMatches;
     }
   }
-
   double optimizeMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Optimize Matches Time (sec)", optimizeMatchesTime));
   _stats.append(SingleStat("Number of Optimized Matches", _matches.size()));
   _stats.append(SingleStat("Number of Matches Optimized per Second",
     (double)allMatches.size() / optimizeMatchesTime));
   LOG_TRACE(SystemInfo::getMemoryUsageString());
-
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
-
   //TODO: this stat isn't right for Network
   LOG_INFO("Post constraining match count: " << _matches.size());
+
+  OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization");
 
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the
@@ -237,8 +241,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   }
   LOG_DEBUG("Match sets count: " << matchSets.size());
   LOG_TRACE(SystemInfo::getMemoryUsageString());
-  /// @todo would it help to sort the matches so the biggest or best ones get merged first?
 
+  OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization-2");
+
+  /// @todo would it help to sort the matches so the biggest or best ones get merged first?
   // convert all the match sets into mergers.
   //LOG_INFO("Creating mergers...");
   for (size_t i = 0; i < matchSets.size(); ++i)
@@ -272,6 +278,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
     replaced.clear();
+
+    OsmMapWriterFactory::writeDebugMap(map, "after-merging");
   }
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());

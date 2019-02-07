@@ -40,6 +40,7 @@ namespace hoot
 {
 
 boost::shared_ptr<OsmMapWriterFactory> OsmMapWriterFactory::_theInstance;
+unsigned int OsmMapWriterFactory::_debugMapCount = 1;
 
 OsmMapWriterFactory::OsmMapWriterFactory()
 {
@@ -62,7 +63,7 @@ boost::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
   LOG_VART(writerOverride);
 
   boost::shared_ptr<OsmMapWriter> writer;
-  if (writerOverride != "" && url != ConfigOptions().getDebugMapFilename())
+  if (writerOverride != "" && url != ConfigOptions().getDebugMapsFilename())
   {
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
   }
@@ -130,18 +131,47 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   return result;
 }
 
-void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap> &map, QString url)
+void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QString url,
+                                const bool silent)
 {
   if (map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap())
   {
-    LOG_INFO("Map is empty. Not writing to " << url << "...");
+    if (!silent)
+    {
+      LOG_INFO("Map is empty. Not writing to " << url << "...");
+    }
   }
   else
   {
-    LOG_INFO("Writing map to " << url << "...");
+    if (!silent)
+    {
+      LOG_INFO("Writing map to " << url << "...");
+    }
     boost::shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
     writer->open(url);
     writer->write(map);
+  }
+}
+
+void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString title)
+{
+  if (ConfigOptions().getDebugMapsWrite())
+  {
+    QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
+    if (!title.isEmpty())
+    {
+      debugMapFileName =
+        debugMapFileName.replace(
+          ".osm", "-" + title + "-" + QString::number(_debugMapCount) + ".osm");
+    }
+    else
+    {
+      debugMapFileName =
+        debugMapFileName.replace(".osm", "-" + QString::number(_debugMapCount) + ".osm");
+    }
+    LOG_DEBUG("Writing debug output to " << debugMapFileName)
+    write(map, debugMapFileName, true);
+    _debugMapCount++;
   }
 }
 

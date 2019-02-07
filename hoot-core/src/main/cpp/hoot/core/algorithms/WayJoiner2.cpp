@@ -39,6 +39,7 @@
 #include <hoot/core/criterion/ParallelWayCriterion.h>
 #include <hoot/core/algorithms/extractors/ParallelScoreExtractor.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 #include <unordered_set>
 #include <vector>
@@ -59,16 +60,26 @@ _numJoined(0)
 void WayJoiner2::join(const OsmMapPtr& map)
 {
   _map = map;
+
   //  Join back any ways with parent ids
   _joinParentChild();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Join any siblings that have the same parent id but the parent isn't connected
   _joinSiblings();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Rejoin any ways that are now connected to their parents
   _joinParentChild();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Run one last join on ways that share a node and have a parent id
   _joinAtNode();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Clear out any remaining unjoined parent ids
   _resetParents();
+  OsmMapWriterFactory::writeDebugMap(map);
 }
 
 void WayJoiner2::_resetParents()

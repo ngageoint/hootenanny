@@ -153,6 +153,8 @@ private:
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
   QString _matchSetToString(const MatchSet& matchSet) const;
+
+  void _writeDebugMap(const ConstOsmMapPtr& map, const int sequence);
 };
 
 }

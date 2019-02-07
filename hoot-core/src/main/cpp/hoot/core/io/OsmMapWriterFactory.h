@@ -27,6 +27,9 @@
 #ifndef OSMMAPWRITERFACTORY_H
 #define OSMMAPWRITERFACTORY_H
 
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+
 // Qt
 #include <QString>
 
@@ -35,7 +38,6 @@
 
 namespace hoot
 {
-class OsmMap;
 class OsmMapWriter;
 
 /**
@@ -51,17 +53,22 @@ public:
 
   bool hasElementOutputStream(QString url);
 
-  static void write(const boost::shared_ptr<const OsmMap>& map, QString url);
+  static void write(const boost::shared_ptr<const OsmMap>& map, QString url,
+                    const bool silent = false);
 
   static QString getWriterName(const QString url);
 
   static bool isSupportedFormat(const QString url);
+
+  static void writeDebugMap(const ConstOsmMapPtr& map, const QString title = "");
 
 private:
 
   OsmMapWriterFactory();
 
   static boost::shared_ptr<OsmMapWriterFactory> _theInstance;
+
+  static unsigned int _debugMapCount;
 };
 
 }
