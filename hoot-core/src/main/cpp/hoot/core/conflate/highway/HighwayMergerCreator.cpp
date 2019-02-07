@@ -74,10 +74,12 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*
     {
       // there should only be one HighwayMatch in a set.
       sublineMatcher = hm->getSublineMatcher();
-      set< pair<ElementId, ElementId> > s = hm->getMatchPairs();
+      set<pair<ElementId, ElementId>> s = hm->getMatchPairs();
+      LOG_VART(s);
       eids.insert(s.begin(), s.end());
     }
   }
+  LOG_VART(eids);
 
   // only add the highway merge if there are elements to merge.
   if (eids.size() > 0)
@@ -115,7 +117,7 @@ bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match*
     const bool conflicting = hm1->isConflicting(*hm2, map);
     if (conflicting)
     {
-      LOG_DEBUG("Conflicting matches: " << m1 << ", " << m2);
+      LOG_TRACE("Conflicting matches: " << m1 << ", " << m2);
     }
     return conflicting;
   }

@@ -49,21 +49,21 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  NetworkMerger(const std::set< std::pair<ElementId, ElementId> >& pairs, ConstEdgeMatchPtr edgeMatch,
+  NetworkMerger(const std::set<std::pair<ElementId, ElementId>>& pairs, ConstEdgeMatchPtr edgeMatch,
     ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   virtual QString toString() const;
 
 protected:
 
-  virtual PairsSet& getPairs() { return _pairs; }
-  virtual const PairsSet& getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() { return _pairs; }
+  virtual const PairsSet& _getPairs() const { return _pairs; }
 
 private:
 
-  std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
   ConstEdgeMatchPtr _edgeMatch;
   ConstNetworkDetailsPtr _details;
 };

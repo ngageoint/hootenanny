@@ -60,15 +60,15 @@ public:
 
 protected:
 
-  virtual PairsSet& getPairs() { return _pairs; }
-  virtual const PairsSet& getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() { return _pairs; }
+  virtual const PairsSet& _getPairs() const { return _pairs; }
 
 private:
 
   boost::shared_ptr<MatchCreator> _matchCreator;
   boost::shared_ptr<MergerCreator> _mergerCreator;
 
-  std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
 
   /**
    * @brief _createReviews Create review entries for each cluster review in the review list.

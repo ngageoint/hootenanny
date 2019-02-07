@@ -306,7 +306,7 @@ void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 
 QString PartialNetworkMerger::toString() const
 {
-  QString s = hoot::toString(getPairs());
+  QString s = hoot::toString(_getPairs());
   return QString("PartialNetworkMerger %1").arg(s);
 }
 

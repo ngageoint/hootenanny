@@ -113,10 +113,10 @@ private:
 
 void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId>>& replaced)
 {
-  vector< pair<ElementId, ElementId> > pairs;
+  vector<pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
 
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
     ElementId eid1 = it->first;
@@ -126,12 +126,17 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
     {
       pairs.push_back(pair<ElementId, ElementId>(eid1, eid2));
     }
+    else
+    {
+      LOG_TRACE(
+        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
+    }
   }
 
   ShortestFirstComparator shortestFirst;
   shortestFirst.map = map;
   sort(pairs.begin(), pairs.end(), shortestFirst);
-  for (vector< pair<ElementId, ElementId> >::const_iterator it = pairs.begin();
+  for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
        it != pairs.end(); ++it)
   {
     ElementId eid1 = it->first;

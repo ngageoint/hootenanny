@@ -55,8 +55,8 @@ public:
 
 protected:
 
-  virtual PairsSet& getPairs() { return _pairs; }
-  virtual const PairsSet& getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() { return _pairs; }
+  virtual const PairsSet& _getPairs() const { return _pairs; }
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 

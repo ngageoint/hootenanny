@@ -250,10 +250,13 @@ int ConflateCmd::runSimple(QStringList args)
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
 
+  OsmMapWriterFactory::writeDebugMap(map, "after-load");
+
   LOG_INFO("Applying pre-conflation operations...");
   NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
-
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
+
+  OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
 
   OsmMapPtr result = map;
 
@@ -279,6 +282,8 @@ int ConflateCmd::runSimple(QStringList args)
   // Apply any user specified operations.
   LOG_INFO("Applying post-conflation operations...");
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
+
+  OsmMapWriterFactory::writeDebugMap(map, "after-post-ops");
 
   // doing this after the conflate post ops, since some invalid reviews are removed by them
   CountUniqueReviewsVisitor countReviewsVis;
@@ -338,8 +343,6 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate && conflateTags)
   {
     LOG_INFO("Generating tag changeset...");
-    //MemChangesetProviderPtr pTagChanges = diffConflator.getTagDiff();
-
     // Write the file!
     QString outFileName = output;
     outFileName.replace(".osm", "");

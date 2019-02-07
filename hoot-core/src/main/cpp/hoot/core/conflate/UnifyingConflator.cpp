@@ -246,7 +246,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   // Would it help to sort the matches so the biggest or best ones get merged first?
   // convert all the match sets into mergers - #2912
-  //LOG_INFO("Creating mergers...");
   for (size_t i = 0; i < matchSets.size(); ++i)
   {
     PROGRESS_INFO("Converting match set " << i + 1 << " / " << matchSets.size() << " to a merger...");
@@ -274,6 +273,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
         _mergers[i]->toString());
     }
     _mergers[i]->apply(map, replaced);
+    LOG_VARD(replaced);
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
@@ -373,7 +373,7 @@ void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
   matches = leftovers;
 }
 
-void UnifyingConflator::_replaceElementIds(const vector< pair<ElementId, ElementId> >& replaced)
+void UnifyingConflator::_replaceElementIds(const vector<pair<ElementId, ElementId>>& replaced)
 {
   for (size_t i = 0; i < replaced.size(); ++i)
   {
