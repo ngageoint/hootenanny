@@ -145,6 +145,10 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
   if (ConfigOptions().getDebugMapsWrite())
   {
     QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
+    if (!debugMapFileName.toLower().endsWith(".osm"))
+    {
+      throw IllegalArgumentException("Debug maps must be written to a .osm file.");
+    }
     const QString fileNumberStr = StringUtils::getNumberStringPaddedWithZeroes(_debugMapCount, 3);
     if (!title.isEmpty())
     {
