@@ -119,7 +119,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
@@ -185,7 +185,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
@@ -229,9 +229,9 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
     // there should be one element replaced
@@ -295,7 +295,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(r->getElementId(), w3->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
@@ -365,7 +365,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
@@ -431,7 +431,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), r->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
@@ -471,7 +471,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
