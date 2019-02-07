@@ -84,7 +84,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*
   {
     if (!ConfigOptions().getHighwayMergeTagsOnly())
     {
-      mergers.push_back(new HighwaySnapMerger(_minSplitSize, eids, sublineMatcher));
+      mergers.push_back(new HighwaySnapMerger(eids, sublineMatcher));
     }
     else
     {
