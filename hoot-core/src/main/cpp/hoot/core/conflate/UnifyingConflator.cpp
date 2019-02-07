@@ -279,7 +279,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     _replaceElementIds(replaced);
     replaced.clear();
 
-    OsmMapWriterFactory::writeDebugMap(map, "after-merging");
+    // Enabling this can result in a lot of files being generated.
+    //OsmMapWriterFactory::writeDebugMap(map, "after-merging");
   }
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());

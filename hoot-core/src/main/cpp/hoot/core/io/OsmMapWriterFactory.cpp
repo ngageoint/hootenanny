@@ -33,6 +33,7 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 
@@ -144,16 +145,15 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
   if (ConfigOptions().getDebugMapsWrite())
   {
     QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
+    const QString fileNumberStr = StringUtils::getNumberStringPaddedWithZeroes(_debugMapCount, 3);
     if (!title.isEmpty())
     {
       debugMapFileName =
-        debugMapFileName.replace(
-          ".osm", "-" + title + "-" + QString::number(_debugMapCount) + ".osm");
+        debugMapFileName.replace(".osm", "-" + fileNumberStr + "-" + title + ".osm");
     }
     else
     {
-      debugMapFileName =
-        debugMapFileName.replace(".osm", "-" + QString::number(_debugMapCount) + ".osm");
+      debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + ".osm");
     }
     LOG_DEBUG("Writing debug output to " << debugMapFileName)
     write(map, debugMapFileName, true);

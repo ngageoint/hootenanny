@@ -103,6 +103,15 @@ public:
    * @note only implemented for long int
    */
   static bool isNumber(const QString input);
+
+  /**
+   *
+   *
+   * @param number
+   * @param padSize
+   * @return
+   */
+  static QString getNumberStringPaddedWithZeroes(const int number, const int padSize);
 };
 
 }

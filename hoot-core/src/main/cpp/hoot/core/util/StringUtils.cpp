@@ -134,4 +134,9 @@ boost::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStri
   return strArr;
 }
 
+QString StringUtils::getNumberStringPaddedWithZeroes(const int number, const int padSize)
+{
+  return QString("%1").arg(number, padSize, 10, QChar('0'));
+}
+
 }
