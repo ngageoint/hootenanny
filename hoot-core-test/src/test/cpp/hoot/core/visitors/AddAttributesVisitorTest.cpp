@@ -76,7 +76,7 @@ public:
     AddAttributesVisitor visitor(attributesToAdd);
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/AddAttributesVisitorTest-runAddAttributesTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -102,7 +102,7 @@ public:
     //attributes, and all of the attributes in the input file are empty.
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest1.osm");
 
     HOOT_FILE_EQUALS(
@@ -128,7 +128,7 @@ public:
     //attributes, and none of the attributes in the input file are empty.
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest2.osm");
 
     HOOT_FILE_EQUALS(

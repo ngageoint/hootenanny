@@ -66,7 +66,7 @@ public:
     map->visitRw(uut);
 
     //All statuses in the file should be updated to Unknown2.
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/StatusUpdateVisitorTest-runUpdateTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -90,7 +90,7 @@ public:
     StatusUpdateVisitor uut(Status::Unknown2, true);
     map->visitRw(uut);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/StatusUpdateVisitorTest-runUpdateOnlyIfInvalidTest.osm");
 
     HOOT_FILE_EQUALS(

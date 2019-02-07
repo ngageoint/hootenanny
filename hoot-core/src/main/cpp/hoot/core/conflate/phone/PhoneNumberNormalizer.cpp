@@ -164,7 +164,7 @@ void PhoneNumberNormalizer::normalizePhoneNumbers(const ElementPtr& element)
           PhoneNumberMatch match;
           numberFinder.Next(&match);
           phoneNumberCount++;
-          // TODO: Is normalization here necessary?  Did PhoneNumberMatcher already do it?
+          // Is normalization here necessary?  Did PhoneNumberMatcher already do it?
           std::string formattedPhoneNumber;
           PhoneNumberUtil::GetInstance()->Format(match.number(), _format, &formattedPhoneNumber);
           // appending all found phone numbers into a single tag value

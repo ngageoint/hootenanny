@@ -303,7 +303,7 @@ boost::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStrea
 
   _inputReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::getInstance().createReader(input));
+      OsmMapReaderFactory::createReader(input));
   _inputReader->open(input);
   boost::shared_ptr<ElementInputStream> inputStream =
     boost::dynamic_pointer_cast<ElementInputStream>(_inputReader);

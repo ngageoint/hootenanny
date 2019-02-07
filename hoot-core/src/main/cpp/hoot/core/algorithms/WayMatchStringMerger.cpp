@@ -219,7 +219,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      //TODO: Possibly change this back to an exception as part of the work to be done in #1311.
+      // Possibly change this back to an exception as part of the work to be done in #1311.
       //throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
 
       //Note: this situation appears to arise when there is a failure to

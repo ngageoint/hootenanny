@@ -74,7 +74,6 @@ size_t MemChangesetProvider::getNumChanges()
 
 // "premature optimization is the root of all evil" - Donald Knuth
 // Possibly use a hash or something here, if this is taking too much time
-// TODO: make this faster if needed
 bool MemChangesetProvider::containsChange(ElementId eID)
 {
   for (std::list<Change>::iterator it = _changes.begin(); it != _changes.end(); ++it)

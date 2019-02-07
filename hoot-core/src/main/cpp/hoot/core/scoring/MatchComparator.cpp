@@ -372,7 +372,6 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       //in the same conflation job (e.g. poi to poi AND poi to poly), due to the fact that in
       //those cases multiple actual/expected states can exist and this logic only records one
       //of them.
-      //@todo The expected miss/actual review tags are sometimes inaccurate.
       const MatchType expectedMatchType(expectedIndex);
       const MatchType actualMatchType(actualIndex);
       _tagTestOutcome(

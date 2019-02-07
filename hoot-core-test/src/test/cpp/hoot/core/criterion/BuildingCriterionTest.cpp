@@ -44,7 +44,7 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, "test-files/criterion/ComplexBuildings.osm");
+    OsmMapReaderFactory::read(map, "test-files/criterion/ComplexBuildings.osm");
 
     BuildingCriterion uut;
     uut.setOsmMap(map.get());

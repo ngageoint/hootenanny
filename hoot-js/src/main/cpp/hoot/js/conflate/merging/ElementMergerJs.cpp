@@ -106,9 +106,9 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
     Handle<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
   }
-  //TODO: This error handling has been proven to not work in that it never seems to return the
+  //This error handling has been proven to not work in that it never seems to return the
   //error message to the nodejs calling service....making debugging a nightmare...or I'm just
-  //doing something wrong here.  Either way, need to fix this.
+  //doing something wrong here.  Either way, need to fix this. - #2231
   catch (const HootException& e)
   {
     LOG_ERROR(e.getWhat());

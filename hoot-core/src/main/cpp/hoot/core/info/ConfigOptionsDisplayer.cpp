@@ -97,8 +97,8 @@ QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(const QString option
     throw HootException("Error opening file for reading: " + configOptionsFile);
   }
 
-  //TODO: replace this w/ some fancy lookahead regex called by grep...doing it by brute force for
-  //now
+  // We could eventually replace this w/ some fancy lookahead regex called by grep...doing it by
+  // brute force for now.
   QString buffer;
   QTextStream ts(&buffer);
   try

@@ -130,7 +130,7 @@ void DbUtils::_modifyTableConstraints(QSqlDatabase& database, const QString tabl
 {
   LOG_VART(database.isOpen());
 
-  //TODO: do we want to do the style that checks constraints at the end here instead?
+  // Do we want to do the style that checks constraints at the end here instead?
   QString operation = "DISABLE";
   if (!disable)
   {

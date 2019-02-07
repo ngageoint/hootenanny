@@ -48,7 +48,6 @@ void KeepBuildingsVisitor::visit(const ConstElementPtr& e)
 
     if (BuildingCriterion().isSatisfied(ee->getTags(), type) == false)
     {
-      /// @todo This could do bad things if the element is in use.
       RemoveElementOp::removeElementNoCheck(_map->shared_from_this(), e->getElementId());
     }
   }

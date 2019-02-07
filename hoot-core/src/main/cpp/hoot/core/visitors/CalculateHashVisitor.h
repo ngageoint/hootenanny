@@ -39,7 +39,7 @@ namespace hoot
  *
  * See this for details: https://github.com/ngageoint/hootenanny/issues/1663
  *
- * @todo This implementation only works for nodes and uses some hacked together string creation
+ * This implementation only works for nodes and uses some hacked together string creation
  * code rather than re-using the GeoJson code in: https://github.com/ngageoint/hootenanny/pull/1658
  * When #1658 is merged it probably makes sense to refactor this to use the GeoJSON writer.
  */

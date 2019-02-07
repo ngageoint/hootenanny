@@ -34,12 +34,10 @@ namespace hoot
 MultipleChangesetProvider::MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection):
   _projection(pProjection)
 {
-  // empty
 }
 
 MultipleChangesetProvider::~MultipleChangesetProvider()
 {
-  // empty
 }
 
 void MultipleChangesetProvider::close()

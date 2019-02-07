@@ -86,6 +86,11 @@ public:
 
   QString toString() const
   {
+    // Now printing element ids as "(id)" rather than ":id" as they used to be. This makes it easier
+    // to trace the events of a single feature when searching through log output w/o having to look
+    // at features that you don't want. e.g. Searching through text for "Way:-1" in the past would
+    // give you "Way:-1", "Way:-12".  Now, you can search for "Way(-1)" instead and not return
+    // results for "Way(-12)".
     return getType().toString() + "(" + QString::number(getId()) + ")";
   }
 

@@ -210,7 +210,7 @@ class NodeDensityPlotCmd : public BaseCommand
       }
 
       boost::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::getInstance().createReader(input, true);
+        OsmMapReaderFactory::createReader(input, true);
       reader->open(input);
       Envelope e = getEnvelope(reader);
       LOG_DEBUG("Envelope: " << GeometryUtils::toString(e));
@@ -225,7 +225,7 @@ class NodeDensityPlotCmd : public BaseCommand
         pixelSize = e.getHeight() / maxSize;
       }
 
-      reader = OsmMapReaderFactory::getInstance().createReader(input, true);
+      reader = OsmMapReaderFactory::createReader(input, true);
       reader->open(input);
       cv::Mat mat = calculateDensity(e, pixelSize, reader);
       Envelope imageEnvelope(e.getMinX(), e.getMinX() + pixelSize * mat.size().width,

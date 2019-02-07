@@ -44,8 +44,6 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||
-          //TODO: Likely this condition needs to be removed and instead the affected data should
-          //be properly translated into OSM before conflation.
           (it.key() == "type" &&
            OsmSchema::getInstance().isAncestor("waterway=" + it.value(), "waterway")))
       {

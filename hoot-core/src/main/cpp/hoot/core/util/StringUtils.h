@@ -100,7 +100,7 @@ public:
    *
    * @param input text to examine
    * @return true if the input is a number; false otherwise
-   * @todo only implemented for long int
+   * @note only implemented for long int
    */
   static bool isNumber(const QString input);
 };

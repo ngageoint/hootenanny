@@ -70,7 +70,7 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runInvalidUserTest);
   CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersPrivateTest);
   CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersPublicTest);
-  //TODO: fix
+  // TODO: fix
   //CPPUNIT_TEST(runMultipleMapsSameNameNoUserPublicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -204,8 +204,8 @@ public:
     HOOT_STR_EQUALS("[1]{-2}", map->getWay(-3)->getNodeIds());
     HOOT_STR_EQUALS("[2]{-2, -3}", map->getWay(-2)->getNodeIds());
     HOOT_STR_EQUALS("[2]{-1, -2}", map->getWay(-1)->getNodeIds());
-    HOOT_STR_EQUALS("[1]{Entry: role: n2, eid: Node:-2}", map->getRelation(-2)->getMembers());
-    HOOT_STR_EQUALS("[2]{Entry: role: n1, eid: Node:-1, Entry: role: w1, eid: Way:-1}",
+    HOOT_STR_EQUALS("[1]{Entry: role: n2, eid: Node(-2)}", map->getRelation(-2)->getMembers());
+    HOOT_STR_EQUALS("[2]{Entry: role: n1, eid: Node(-1), Entry: role: w1, eid: Way(-1)}",
       map->getRelation(-1)->getMembers());
   }
 

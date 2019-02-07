@@ -82,7 +82,6 @@ QStringList ConfPath::_find(QStringList filters, QString path)
 
 QString ConfPath::getHootHome()
 {
-  /// @todo Future us can figure this out. There is a circular reference here.
   QString hootHome;
   if (conf().hasKey("HOOT_HOME"))
   {

@@ -117,7 +117,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
     if (eid.isNull())
     {
       const QString errMsg = "Found a " + MetadataTags::Ref2() + " that references a non-existing " + MetadataTags::Ref1() + ": " + r;
-      //TODO: make _errorOnMissingRef1 configurable from nodejs - see #1175
+      // make _errorOnMissingRef1 configurable from nodejs - see #1175
       //if (_errorOnMissingRef1)
       //{
         //throw IllegalArgumentException(errMsg);

@@ -44,6 +44,8 @@ class OsmMap;
 
 /**
  * Remove all ways outside the given bounds.
+ *
+ * @todo make this a map op - #2936
  */
 class OutsideBoundsRemover
 {

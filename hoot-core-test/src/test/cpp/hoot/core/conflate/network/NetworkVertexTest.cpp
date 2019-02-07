@@ -69,8 +69,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(pN2->getElementId(), pNV2->getElementId());
 
     // toString
-    HOOT_STR_EQUALS("(0) Node:-100", pNV1->toString());
-    HOOT_STR_EQUALS("(1) Node:-200", pNV2->toString());
+    HOOT_STR_EQUALS("(0) Node(-100)", pNV1->toString());
+    HOOT_STR_EQUALS("(1) Node(-200)", pNV2->toString());
 
     // Less Than
     CPPUNIT_ASSERT(pNV2 < pNV1);

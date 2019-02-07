@@ -44,7 +44,7 @@ class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
 
-  //TODO: fix these - keep showing up as diff output even though its identical - #2634
+  // fix these - keep showing up as diff output even though its identical - #2634
   //CPPUNIT_TEST(runBasicPoiTest);
   //CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
 

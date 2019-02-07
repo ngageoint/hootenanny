@@ -130,8 +130,8 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
   return retVal;
 }
 
-//TODO: a lot of similar code in these write methods that could be consolidated into something
-//generic
+// a lot of similar code in these write methods that could be consolidated into something
+// generic
 
 void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& node)
 {

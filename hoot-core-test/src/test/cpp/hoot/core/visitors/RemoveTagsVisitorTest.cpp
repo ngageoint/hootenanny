@@ -68,7 +68,7 @@ public:
     visitor.setNegateCriterion(false);
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/RemoveTagsVisitorTest-runRemoveTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -87,7 +87,7 @@ public:
     visitor.addCriterion(boost::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/RemoveTagsVisitorTest-runFilterTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -106,7 +106,7 @@ public:
     visitor.addCriterion(boost::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/RemoveTagsVisitorTest-runNegatedFilterTest.osm");
 
     HOOT_FILE_EQUALS(

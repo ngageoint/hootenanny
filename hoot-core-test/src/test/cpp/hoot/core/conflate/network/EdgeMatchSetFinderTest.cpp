@@ -64,7 +64,7 @@ public:
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::getInstance().write(copy, QString("tmp/dum.osm"));
+    OsmMapWriterFactory::write(copy, QString("tmp/dum.osm"));
   }
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)
@@ -73,7 +73,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ParitalEdgeMatch.osm",
+    OsmMapReaderFactory::read(map, "test-files/conflate/network/ParitalEdgeMatch.osm",
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
@@ -111,9 +111,7 @@ public:
     uut->addEdgeMatches(network1->getEdgeMap().begin().value(),
       network2->getEdgeMap().begin().value());
 
-    //HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0.681189 } }} s2: [1]{{ _start: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 0 }, _end: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 1 } }}, 0.157195)}",
-    //               [1]{(s1: [1]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0.677924 } }} s2: [1]{{ _start: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 0 }, _end: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 1 } }}, 0.156872)}
-    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0.677924 } }} s2: [1]{{ _start: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 0 }, _end: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 1 } }}, 0.156872)}",
+   HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-9), _portion: 0 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-9), _portion: 0.677924 } }} s2: [1]{{ _start: { _e: (2) Node(-10) -- Way(-2) -- (3) Node(-17), _portion: 0 }, _end: { _e: (2) Node(-10) -- Way(-2) -- (3) Node(-17), _portion: 1 } }}, 0.156872)}",
       matchSet);
   }
 
@@ -131,7 +129,7 @@ public:
     uut->addEdgeMatches(network1->getEdgeMap().begin().value(),
       network2->getEdgeMap().begin().value());
 
-    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node:-23 -- Way:-5 -- (1) Node:-24, _portion: 0 }, _end: { _e: (0) Node:-23 -- Way:-5 -- (1) Node:-24, _portion: 0.740791 } }} s2: [2]{{ _start: { _e: (4) Node:-18 -- Way:-3 -- (3) Node:-20, _portion: 0 }, _end: { _e: (4) Node:-18 -- Way:-3 -- (3) Node:-20, _portion: 1 } }, { _start: { _e: (2) Node:-21 -- Way:-4 -- (3) Node:-20, _portion: 1 }, _end: { _e: (2) Node:-21 -- Way:-4 -- (3) Node:-20, _portion: 0 } }}, 0.102179)}",
+    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-23) -- Way(-5) -- (1) Node(-24), _portion: 0 }, _end: { _e: (0) Node(-23) -- Way(-5) -- (1) Node(-24), _portion: 0.740791 } }} s2: [2]{{ _start: { _e: (4) Node(-18) -- Way(-3) -- (3) Node(-20), _portion: 0 }, _end: { _e: (4) Node(-18) -- Way(-3) -- (3) Node(-20), _portion: 1 } }, { _start: { _e: (2) Node(-21) -- Way(-4) -- (3) Node(-20), _portion: 1 }, _end: { _e: (2) Node(-21) -- Way(-4) -- (3) Node(-20), _portion: 0 } }}, 0.102179)}",
       matchSet);
   }
 
@@ -150,7 +148,7 @@ public:
       network2->getEdgeMap().begin().value());
 
     LOG_VAR(matchSet);
-    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node:-25 -- Way:-6 -- (1) Node:-26, _portion: 0.276842 }, _end: { _e: (0) Node:-25 -- Way:-6 -- (1) Node:-26, _portion: 0.742578 } }} s2: [1]{{ _start: { _e: (2) Node:-27 -- Way:-7 -- (3) Node:-28, _portion: 0 }, _end: { _e: (2) Node:-27 -- Way:-7 -- (3) Node:-28, _portion: 1 } }}, 0.110705)}",
+    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-25) -- Way(-6) -- (1) Node(-26), _portion: 0.276842 }, _end: { _e: (0) Node(-25) -- Way(-6) -- (1) Node(-26), _portion: 0.742578 } }} s2: [1]{{ _start: { _e: (2) Node(-27) -- Way(-7) -- (3) Node(-28), _portion: 0 }, _end: { _e: (2) Node(-27) -- Way(-7) -- (3) Node(-28), _portion: 1 } }}, 0.110705)}",
       matchSet);
   }
 
@@ -169,7 +167,7 @@ public:
       network2->getEdgeMap().begin().value());
 
     LOG_VAR(matchSet);
-    HOOT_STR_EQUALS("[1]{(s1: [3]{{ _start: { _e: (2) Node:-32 -- Way:-9 -- (0) Node:-31, _portion: 0.492033 }, _end: { _e: (2) Node:-32 -- Way:-9 -- (0) Node:-31, _portion: 1 } }, { _start: { _e: (0) Node:-31 -- Way:-12 -- (1) Node:-30, _portion: 0 }, _end: { _e: (0) Node:-31 -- Way:-12 -- (1) Node:-30, _portion: 1 } }, { _start: { _e: (3) Node:-29 -- Way:-8 -- (1) Node:-30, _portion: 1 }, _end: { _e: (3) Node:-29 -- Way:-8 -- (1) Node:-30, _portion: 0.478189 } }} s2: [2]{{ _start: { _e: (4) Node:-35 -- Way:-11 -- (5) Node:-34, _portion: 0 }, _end: { _e: (4) Node:-35 -- Way:-11 -- (5) Node:-34, _portion: 1 } }, { _start: { _e: (6) Node:-33 -- Way:-10 -- (5) Node:-34, _portion: 1 }, _end: { _e: (6) Node:-33 -- Way:-10 -- (5) Node:-34, _portion: 0 } }}, 0.104163)}",
+    HOOT_STR_EQUALS("[1]{(s1: [3]{{ _start: { _e: (2) Node(-32) -- Way(-9) -- (0) Node(-31), _portion: 0.492033 }, _end: { _e: (2) Node(-32) -- Way(-9) -- (0) Node(-31), _portion: 1 } }, { _start: { _e: (0) Node(-31) -- Way(-12) -- (1) Node(-30), _portion: 0 }, _end: { _e: (0) Node(-31) -- Way(-12) -- (1) Node(-30), _portion: 1 } }, { _start: { _e: (3) Node(-29) -- Way(-8) -- (1) Node(-30), _portion: 1 }, _end: { _e: (3) Node(-29) -- Way(-8) -- (1) Node(-30), _portion: 0.478189 } }} s2: [2]{{ _start: { _e: (4) Node(-35) -- Way(-11) -- (5) Node(-34), _portion: 0 }, _end: { _e: (4) Node(-35) -- Way(-11) -- (5) Node(-34), _portion: 1 } }, { _start: { _e: (6) Node(-33) -- Way(-10) -- (5) Node(-34), _portion: 1 }, _end: { _e: (6) Node(-33) -- Way(-10) -- (5) Node(-34), _portion: 0 } }}, 0.104163)}",
       matchSet);
   }
 
@@ -188,7 +186,7 @@ public:
       network2->getEdgeMap().begin().value());
 
     LOG_VAR(matchSet);
-    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node:-38 -- Way:-14 -- (1) Node:-39, _portion: 0.531148 }, _end: { _e: (0) Node:-38 -- Way:-14 -- (1) Node:-39, _portion: 1 } }} s2: [1]{{ _start: { _e: (2) Node:-36 -- Way:-13 -- (3) Node:-37, _portion: 0 }, _end: { _e: (2) Node:-36 -- Way:-13 -- (3) Node:-37, _portion: 1 } }}, 0.10837)}",
+    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-38) -- Way(-14) -- (1) Node(-39), _portion: 0.531148 }, _end: { _e: (0) Node(-38) -- Way(-14) -- (1) Node(-39), _portion: 1 } }} s2: [1]{{ _start: { _e: (2) Node(-36) -- Way(-13) -- (3) Node(-37), _portion: 0 }, _end: { _e: (2) Node(-36) -- Way(-13) -- (3) Node(-37), _portion: 1 } }}, 0.10837)}",
       matchSet);
   }
 

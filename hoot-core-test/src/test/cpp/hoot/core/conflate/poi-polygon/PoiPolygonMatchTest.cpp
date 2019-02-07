@@ -150,7 +150,7 @@ public:
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
     }
 
-    /// @todo fix; see #1177
+    // need to fix; see #1177
     n1->getTags().set("name", "foo");
     n1->setX(-8);
     {

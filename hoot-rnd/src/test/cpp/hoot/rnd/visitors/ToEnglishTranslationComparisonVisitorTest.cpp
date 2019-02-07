@@ -76,7 +76,7 @@ public:
     map->visitRw(visitor);
 
     const QString outputFile = testOutputRoot + "/runTest.osm";
-    OsmMapWriterFactory::getInstance().write(map, outputFile);
+    OsmMapWriterFactory::write(map, outputFile);
 
     HOOT_FILE_EQUALS(goldInputRoot + "/runTest-gold.osm", outputFile);
   }

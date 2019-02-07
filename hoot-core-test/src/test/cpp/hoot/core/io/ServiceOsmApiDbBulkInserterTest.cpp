@@ -44,13 +44,6 @@
 namespace hoot
 {
 
-/*
- * TODO: need tests for:
- *
- * - unresolved way node members
- * - unresolved relation members
- * - config options error handling
- */
 class ServiceOsmApiDbBulkInserterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkInserterTest);
@@ -200,7 +193,7 @@ public:
 
     //verify sequences
 //    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-//    //TODO: fix?
+//    TODO: fix?
 //    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
 //    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
@@ -268,7 +261,7 @@ public:
 
     //verify sequences
 //    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-//    //TODO: fix?
+//    // TODO: fix?
 //    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
 //    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Relation));
@@ -336,7 +329,7 @@ public:
 
     //verify sequences
 //    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-//    //TODO: fix?
+//    // TODO: fix?
 //    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
 //    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Relation));

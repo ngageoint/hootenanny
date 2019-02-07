@@ -41,17 +41,15 @@ namespace hoot
 class OsmMapWriter;
 
 /**
- * A factory for constructing writers based on the URL (Singleton).
+ * A factory for constructing writers based on the URL
  */
 class OsmMapWriterFactory
 {
 public:
 
-  boost::shared_ptr<OsmMapWriter> createWriter(QString url);
+  static boost::shared_ptr<OsmMapWriter> createWriter(QString url);
 
-  static OsmMapWriterFactory& getInstance();
-
-  bool hasElementOutputStream(QString url);
+  static bool hasElementOutputStream(QString url);
 
   static void write(const boost::shared_ptr<const OsmMap>& map, QString url,
                     const bool silent = false);
@@ -63,10 +61,6 @@ public:
   static void writeDebugMap(const ConstOsmMapPtr& map, const QString title = "");
 
 private:
-
-  OsmMapWriterFactory();
-
-  static boost::shared_ptr<OsmMapWriterFactory> _theInstance;
 
   static unsigned int _debugMapCount;
 };

@@ -45,7 +45,7 @@ namespace hoot
  * for sorting OGR inputs.  Those inputs must be converted to an OSM format before sorting, which
  * unfortunately roughly doubles the input parsing time.
  *
- * TODO: This class can be eliminated by swapping its use in MultiaryIngester for
+ * This class can be eliminated by swapping its use in MultiaryIngester for
  * ExternalMergeElementSorter.  See #2622
  */
 class OsmFileSorter

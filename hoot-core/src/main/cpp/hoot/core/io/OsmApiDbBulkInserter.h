@@ -278,7 +278,6 @@ private:
   bool _disableDatabaseConstraintsDuringWrite;
   QString _tempDir;
   bool _disableDatabaseIndexesDuringWrite;
-  //TODO: need test for this
   bool _writeIdSequenceUpdates;
 
   OsmApiDb _database;

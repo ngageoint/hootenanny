@@ -45,10 +45,6 @@ class ChangesetProvider
 
 public:
 
-  /**
-   * @brief getProjection
-   * @return
-   */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   /**

@@ -39,21 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<OsmMapWriterFactory> OsmMapWriterFactory::_theInstance;
 unsigned int OsmMapWriterFactory::_debugMapCount = 1;
-
-OsmMapWriterFactory::OsmMapWriterFactory()
-{
-}
-
-OsmMapWriterFactory& OsmMapWriterFactory::getInstance()
-{
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new OsmMapWriterFactory());
-  }
-  return *_theInstance;
-}
 
 boost::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 {
@@ -147,7 +133,7 @@ void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QStr
     {
       LOG_INFO("Writing map to " << url << "...");
     }
-    boost::shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
+    boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->open(url);
     writer->write(map);
   }

@@ -61,7 +61,7 @@ public:
 
   virtual QString getInitStatusMessage() { return "Removing duplicate review relations..."; }
 
-  //TODO: finish; wasn't obvious how to count the total affected
+  // finish; wasn't obvious how to count the total affected - #2933
   virtual QString getCompletedStatusMessage()
   { return ""; }
 

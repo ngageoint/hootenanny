@@ -165,7 +165,7 @@ double HilbertRTree::_calculatePairwiseOverlap(int parentId, std::vector<double>
     {
       if (i != j)
       {
-        /// @todo remove toBox and implement overlap calculation for BoxInternal
+        // TODO: remove toBox and implement overlap calculation for BoxInternal
         double o = parent->getChildEnvelope(j).calculateOverlap(
           parent->getChildEnvelope(i).toBox());
         overlaps[i] += o;

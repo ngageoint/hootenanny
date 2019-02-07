@@ -123,8 +123,8 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
     }
   }
 
-  /// @todo this will need to replace one scrap with possibly multiple keeper elements
-  /// - think about the case when the way is part of an interstate or bus relation
+  // TODO: this will need to replace one scrap with possibly multiple keeper elements
+  // - think about the case when the way is part of an interstate or bus relation
   // remove the duplicate element.
   merger->replaceScraps();
 }
@@ -275,7 +275,7 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     // be merged for us properly as long as all the ways have matches. If they don't have matches
     // we've got a problem and they should be reviewed. Possibly identify these situations in the
     // match creator?
-    /// @todo add more logic in the match creator that handles this in a more elegant way.
+    // TODO: add more logic in the match creator that handles this in a more elegant way.
 
     set<ElementId> eids;
     foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())

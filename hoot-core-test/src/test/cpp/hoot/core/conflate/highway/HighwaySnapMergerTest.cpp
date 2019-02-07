@@ -125,7 +125,7 @@ public:
     merger.apply(map, replaced);
 
     ElementConverter ec(map);
-    HOOT_STR_EQUALS("[2]{(Way:-1, Way:-5), (Way:-2, Way:-7)}", replaced);
+    HOOT_STR_EQUALS("[2]{(Way(-1), Way(-5)), (Way(-2), Way(-7))}", replaced);
     HOOT_STR_EQUALS("LINESTRING (50.0000000000000000 0.0000000000000000, 100.0000000000000000 0.0000000000000000)",
       ec.convertToLineString(map->getWay(-4))->toString());
     HOOT_STR_EQUALS("LINESTRING (100.0000000000000000 0.0000000000000000, 150.0000000000000000 0.0000000000000000)",
@@ -235,7 +235,7 @@ public:
     merger.apply(map, replaced);
 
     // there should be one element replaced
-    HOOT_STR_EQUALS("[1]{(Way:-2, Way:-6)}", replaced);
+    HOOT_STR_EQUALS("[1]{(Way(-2), Way(-6))}", replaced);
     // the end of Way:-4 should match up with Way:-6
     HOOT_STR_EQUALS("[2]{-1, -2}", map->getWay(-4)->getNodeIds());
     HOOT_STR_EQUALS("[2]{-2, -4}", map->getWay(-6)->getNodeIds());

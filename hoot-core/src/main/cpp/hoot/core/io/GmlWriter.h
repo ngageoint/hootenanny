@@ -52,8 +52,6 @@ class Relation;
 
 /**
  * Writes a map or portion of a map to a GML file. Not completely implemented.
- *
- * @todo write a generic OGR writer.
  */
 class GmlWriter
 {
@@ -72,6 +70,7 @@ public:
   void writePoints(boost::shared_ptr<const OsmMap> map, const QString& path);
 
 protected:
+
   QStringList _columns;
   bool _includeIds;
   bool _includeInfo;

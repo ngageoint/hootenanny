@@ -62,7 +62,7 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
   //Instead, we need to manually add those settings in.
 
   //add the default network settings to the test settings
-  //TODO: starting from conf() makes the config files huge, when I only want to see the ones
+  // starting from conf() makes the config files huge, when I only want to see the ones
   //in _configFile plus those in testSettings, but if I don't start from an existing config (or
   //call loadDefaults) then the config parser errors out...
   Settings updatedSettings = conf();

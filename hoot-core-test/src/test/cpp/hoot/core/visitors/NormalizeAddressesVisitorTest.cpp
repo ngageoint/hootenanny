@@ -64,7 +64,7 @@ public:
     map->visitRw(uut);
 
     const QString outputFile = outputRoot + "/out.osm";
-    OsmMapWriterFactory::getInstance().write(map, outputFile);
+    OsmMapWriterFactory::write(map, outputFile);
 
     CPPUNIT_ASSERT_EQUAL(25, uut._addressNormalizer.getNumNormalized());
     HOOT_FILE_EQUALS("test-files/visitors/NormalizeAddressesVisitorTest/gold.osm", outputFile);

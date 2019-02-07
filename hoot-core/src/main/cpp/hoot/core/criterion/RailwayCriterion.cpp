@@ -47,8 +47,8 @@ bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
     const Tags& tags = e->getTags();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      //TODO: I think we may want to narrow down to a more specific set of railway values here
-      //at some point.
+      // I think we may want to narrow down to a more specific set of railway values here
+      // at some point.
       if (it.key() == "railway" || OsmSchema::getInstance().isAncestor(it.key(), "railway"))
       {
         return true;

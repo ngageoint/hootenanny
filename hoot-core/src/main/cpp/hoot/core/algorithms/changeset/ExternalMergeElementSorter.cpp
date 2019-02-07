@@ -116,7 +116,7 @@ void ExternalMergeElementSorter::_initElementStream()
 
   boost::shared_ptr<PartialOsmMapReader> sortedElementsReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::getInstance().createReader(_sortFinalOutput->fileName()));
+      OsmMapReaderFactory::createReader(_sortFinalOutput->fileName()));
   sortedElementsReader->setUseDataSourceIds(true);
   sortedElementsReader->open(_sortFinalOutput->fileName());
   sortedElementsReader->initializePartial();
@@ -176,7 +176,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
       boost::shared_ptr<PartialOsmMapWriter> writer =
         boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-          OsmMapWriterFactory::getInstance().createWriter(tempOutputFile->fileName()));
+          OsmMapWriterFactory::createWriter(tempOutputFile->fileName()));
       writer->open(tempOutputFile->fileName());
       writer->initializePartial();
       for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin();
@@ -331,7 +331,7 @@ boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutp
   }
   boost::shared_ptr<PartialOsmMapWriter> writer =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-      OsmMapWriterFactory::getInstance().createWriter(_sortFinalOutput->fileName()));
+      OsmMapWriterFactory::createWriter(_sortFinalOutput->fileName()));
   writer->open(_sortFinalOutput->fileName());
   writer->initializePartial();
 
@@ -351,7 +351,7 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
     LOG_VART(fileName);
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(fileName));
+        OsmMapReaderFactory::createReader(fileName));
 
     //By default, OsmXmlReader will not add child references (node ref, elements members) to parent
     //elements if those elements are not present in the data.  For external sorting, where partial

@@ -182,7 +182,7 @@ private:
 
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map, outputFile);
+    OsmMapWriterFactory::write(map, outputFile);
 
     HOOT_FILE_EQUALS(goldFile, outputFile);
   }

@@ -139,7 +139,7 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
       {
         //Up until just before the last conflate job, set the status tag back to 1 so that the
         //accumulated data will conflate with the next dataset.
-        //TODO: there is a bug here that will affect river conflation in that somehow hoot:status=3
+        //there is a bug here that will affect river conflation in that somehow hoot:status=3
         //tags are being left in at some point which causes the SearchRadiusCalculator to skip the
         //features.
         LOG_DEBUG("Setting status tags for map " << QString::number(i + 1) << "...");

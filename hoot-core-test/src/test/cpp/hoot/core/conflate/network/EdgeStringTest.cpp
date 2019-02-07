@@ -46,7 +46,6 @@ class EdgeStringTest : public HootTestFixture
   CPPUNIT_TEST(reverseTest);
   CPPUNIT_TEST(partialTest);
   CPPUNIT_TEST(stubTest);
-  // CPPUNIT_TEST(edgeClosedTest); // See comment below
   CPPUNIT_TEST(addDisconnectedEdgeTest);
   CPPUNIT_TEST(equalsTest);
   CPPUNIT_TEST(containsEdgeStringTest);
@@ -106,10 +105,10 @@ public:
     CPPUNIT_ASSERT(!edgeStr.isStub());
 
     HOOT_STR_EQUALS(
-      "{ _start: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 0 }, _end: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 1 } }",
+      "{ _start: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 0 }, _end: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 1 } }",
       edgeStr.getAllEdges()[0].getSubline()->toString());
     HOOT_STR_EQUALS(
-      "{ _start: { _e: (1) Node:-2 --  --> (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 --  --> (2) Node:-3, _portion: 1 } }",
+      "{ _start: { _e: (1) Node(-2) --  --> (2) Node(-3), _portion: 0 }, _end: { _e: (1) Node(-2) --  --> (2) Node(-3), _portion: 1 } }",
       edgeStr.getAllEdges()[1].getSubline()->toString());
   }
 
@@ -361,37 +360,6 @@ public:
     edgeStr.appendEdge(edge1);
     CPPUNIT_ASSERT(edgeStr.isStub());
   }
-
-  /* This tries to test code that was removed by Surratt on 26SEP2016 [14749b245]
-  void edgeClosedTest()
-  {
-    OsmMapPtr map(new OsmMap());
-    ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
-    ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
-    ConstEdgeSublinePtr edgeSubline(new EdgeSubline(edgeLocStart, edgeLocStart));
-
-    EdgeString edgeStr;
-    edgeStr.appendEdge(edgeSubline);
-    CPPUNIT_ASSERT(edgeStr.isEdgeClosed());
-
-    QString exceptionMsg("");
-    try
-    {
-      edgeStr.appendEdge(edgeSubline);
-    }
-    catch (HootException e)
-    {
-      exceptionMsg = e.what();
-    }
-    HOOT_STR_EQUALS(
-      "Illegal argument, you attempted to add an edge to an edge string that is already closed. Ends in a partial match?",
-      exceptionMsg.toStdString());
-  }
-  */
 
   void addDisconnectedEdgeTest()
   {

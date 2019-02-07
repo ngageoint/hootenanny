@@ -382,8 +382,8 @@ void ImplicitTagRulesSqliteReader::_cacheTags(const QSet<QString>& words, const 
 
 void ImplicitTagRulesSqliteReader::_modifyWordIdsForMultipleRules(QSet<long>& queriedWordIds)
 {
-  //TODO: I'm not sure this is doing what's intended.  Since we're not allowing multiple rule
-  //involvement by default, its not a problem for now.
+  // I'm not sure this is doing what's intended.  Since we're not allowing multiple rule
+  // involvement by default, its not a problem for now.
 
   long wordIdWithHighestTagOccurrenceCount = -1;
   long highestTagOccurrenceCount = -1;
@@ -441,7 +441,6 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
           .arg(_tagsForWordIdsQuery.lastError().text()));
     }
 
-    //TODO: need to explain this logic better
     Tags tags2;
     while (_tagsForWordIdsQuery.next())
     {
@@ -494,8 +493,6 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
 
 void ImplicitTagRulesSqliteReader::_removeTagsWithDuplicatedValues(Tags& tags)
 {
-  //TODO: need to explain this logic better
-
   QStringList tagValues;
   QStringList tagKeysWithDuplicatedValues;
   for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)

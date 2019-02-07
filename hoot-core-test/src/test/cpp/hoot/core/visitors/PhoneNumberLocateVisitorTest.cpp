@@ -65,7 +65,7 @@ public:
     map->visitRw(uut);
 
     const QString outputFile = outputRoot + "/out.osm";
-    OsmMapWriterFactory::getInstance().write(map, outputFile);
+    OsmMapWriterFactory::write(map, outputFile);
 
     CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberLocator.getNumLocated());
     HOOT_FILE_EQUALS("test-files/visitors/PhoneNumberLocateVisitorTest/gold.osm", outputFile);

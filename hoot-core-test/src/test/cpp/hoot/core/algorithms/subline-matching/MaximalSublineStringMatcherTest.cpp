@@ -274,8 +274,8 @@ public:
     WaySublineMatchString s = sublineMatcher->findMatch(map, w1, w2);
     HOOT_STR_EQUALS(
       "matches:\n"
-      "reversed, subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 0 fraction: 0.5\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 0 fraction: 0.5",
+      "reversed, subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 0 fraction: 0.5\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 0 fraction: 0.5",
       s);
 
     CPPUNIT_ASSERT_EQUAL((ConstWayPtr)w1, s.getMatches()[0].getSubline1().getStart().getWay());
@@ -306,8 +306,8 @@ public:
     WaySublineMatchString s = sublineMatcher->findMatch(map, w1, w2);
     HOOT_STR_EQUALS(
       "matches:\n"
-      "reversed, subline 1: start: way: -1 index: 2 fraction: 0.2 end: way: -1 index: 2 fraction: 0.4\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 2 fraction: 0",
+      "reversed, subline 1: start: way(-1) index: 2 fraction: 0.2 end: way(-1) index: 2 fraction: 0.4\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 2 fraction: 0",
       s);
 
     CPPUNIT_ASSERT_EQUAL((ConstWayPtr)w1, s.getMatches()[0].getSubline1().getStart().getWay());
@@ -363,8 +363,8 @@ public:
 
       HOOT_STR_EQUALS("score: 100\n"
         "matches:\n"
-        "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
+        "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0\n"
+        "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
         sm.toString());
     }
 
@@ -388,15 +388,15 @@ public:
           uut._evaluateMatch(map, 10, toWayVector(map, "b1"), toWayVector(map, "b2"),
                              reversed1, reversed2);
 
-      // @todo This test fails with the default subline matcher. The MaximalSublineMatcher
+      // TODO: This test fails with the default subline matcher. The MaximalSublineMatcher
       // performs better, but has other flaws.
-      // r2701 should resolve this.
+      // r2701 should resolve this (need to port issue to github)
 //      HOOT_STR_EQUALS("score: 80\n"
 //        "matches:\n"
-//        "subline 1: start: way: -3 index: 0 fraction: 0 end: way: -3 index: 0 fraction: 0.4\n"
-//        "subline 2: start: way: -4 index: 0 fraction: 0 end: way: -4 index: 1 fraction: 0\n"
-//        "subline 1: start: way: -3 index: 0 fraction: 0.6 end: way: -3 index: 1 fraction: 0\n"
-//        "subline 2: start: way: -4 index: 4 fraction: 0 end: way: -4 index: 5 fraction: 0",
+//        "subline 1: start: way(-3) index: 0 fraction: 0 end: way(-3) index: 0 fraction: 0.4\n"
+//        "subline 2: start: way(-4) index: 0 fraction: 0 end: way(-4) index: 1 fraction: 0\n"
+//        "subline 1: start: way(-3) index: 0 fraction: 0.6 end: way(-3) index: 1 fraction: 0\n"
+//        "subline 2: start: way(-4) index: 4 fraction: 0 end: way(-4) index: 5 fraction: 0",
 //        sm.toString());
     }
 
@@ -409,8 +409,8 @@ public:
 
       HOOT_STR_EQUALS("score: 50\n"
         "matches:\n"
-        "subline 1: start: way: -5 index: 0 fraction: 0.5 end: way: -5 index: 1 fraction: 0\n"
-        "subline 2: start: way: -6 index: 0 fraction: 0 end: way: -6 index: 0 fraction: 0.5",
+        "subline 1: start: way(-5) index: 0 fraction: 0.5 end: way(-5) index: 1 fraction: 0\n"
+        "subline 2: start: way(-6) index: 0 fraction: 0 end: way(-6) index: 0 fraction: 0.5",
         sm.toString());
     }
 
@@ -423,8 +423,8 @@ public:
 
       HOOT_STR_EQUALS("score: 40\n"
         "matches:\n"
-        "subline 1: start: way: -7 index: 0 fraction: 0.3 end: way: -7 index: 0 fraction: 0.7\n"
-        "subline 2: start: way: -8 index: 0 fraction: 0 end: way: -8 index: 1 fraction: 0",
+        "subline 1: start: way(-7) index: 0 fraction: 0.3 end: way(-7) index: 0 fraction: 0.7\n"
+        "subline 2: start: way(-8) index: 0 fraction: 0 end: way(-8) index: 1 fraction: 0",
         sm.toString());
     }
 
@@ -437,10 +437,10 @@ public:
 
       HOOT_STR_EQUALS("score: 80\n"
         "matches:\n"
-        "subline 1: start: way: -10 index: 0 fraction: 0 end: way: -10 index: 0 fraction: 0.375\n"
-        "subline 2: start: way: -12 index: 0 fraction: 0 end: way: -12 index: 1 fraction: 0\n"
-        "subline 1: start: way: -9 index: 0 fraction: 0 end: way: -9 index: 1 fraction: 0\n"
-        "subline 2: start: way: -11 index: 0 fraction: 0.5 end: way: -11 index: 1 fraction: 0",
+        "subline 1: start: way(-10) index: 0 fraction: 0 end: way(-10) index: 0 fraction: 0.375\n"
+        "subline 2: start: way(-12) index: 0 fraction: 0 end: way(-12) index: 1 fraction: 0\n"
+        "subline 1: start: way(-9) index: 0 fraction: 0 end: way(-9) index: 1 fraction: 0\n"
+        "subline 2: start: way(-11) index: 0 fraction: 0.5 end: way(-11) index: 1 fraction: 0",
         sm.toString());
     }
 
@@ -453,10 +453,10 @@ public:
 
       HOOT_STR_EQUALS("score: 50\n"
         "matches:\n"
-        "subline 1: start: way: -13 index: 0 fraction: 0.7 end: way: -13 index: 1 fraction: 0\n"
-        "subline 2: start: way: -15 index: 0 fraction: 0 end: way: -15 index: 0 fraction: 0.375\n"
-        "subline 1: start: way: -13 index: 0 fraction: 0.5 end: way: -13 index: 0 fraction: 0.7\n"
-        "subline 2: start: way: -14 index: 0 fraction: 0 end: way: -14 index: 1 fraction: 0",
+        "subline 1: start: way(-13) index: 0 fraction: 0.7 end: way(-13) index: 1 fraction: 0\n"
+        "subline 2: start: way(-15) index: 0 fraction: 0 end: way(-15) index: 0 fraction: 0.375\n"
+        "subline 1: start: way(-13) index: 0 fraction: 0.5 end: way(-13) index: 0 fraction: 0.7\n"
+        "subline 2: start: way(-14) index: 0 fraction: 0 end: way(-14) index: 1 fraction: 0",
         sm.toString());
     }
 
@@ -474,10 +474,10 @@ public:
 
       HOOT_STR_EQUALS("score: 210\n"
         "matches:\n"
-        "subline 1: start: way: -16 index: 2 fraction: 0 end: way: -16 index: 3 fraction: 0\n"
-        "subline 2: start: way: -18 index: 0 fraction: 0 end: way: -18 index: 1 fraction: 0\n"
-        "subline 1: start: way: -16 index: 0 fraction: 0 end: way: -16 index: 2 fraction: 0\n"
-        "subline 2: start: way: -17 index: 0 fraction: 0 end: way: -17 index: 2 fraction: 0",
+        "subline 1: start: way(-16) index: 2 fraction: 0 end: way(-16) index: 3 fraction: 0\n"
+        "subline 2: start: way(-18) index: 0 fraction: 0 end: way(-18) index: 1 fraction: 0\n"
+        "subline 1: start: way(-16) index: 0 fraction: 0 end: way(-16) index: 2 fraction: 0\n"
+        "subline 2: start: way(-17) index: 0 fraction: 0 end: way(-17) index: 2 fraction: 0",
         sm.toString());
     }
 
@@ -512,8 +512,8 @@ public:
     WaySublineMatchString s = sublineMatcher->findMatch(map, w1, w2);
     HOOT_STR_EQUALS(
       "matches:\n"
-      "subline 1: start: way: -1 index: 1 fraction: 0 end: way: -1 index: 3 fraction: 0\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0.666666666666667 end: way: -2 index: 3 fraction: 0",
+      "subline 1: start: way(-1) index: 1 fraction: 0 end: way(-1) index: 3 fraction: 0\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0.666666666666667 end: way(-2) index: 3 fraction: 0",
       s);
 
     CPPUNIT_ASSERT_EQUAL((ConstWayPtr)w1, s.getMatches()[0].getSubline1().getStart().getWay());
@@ -536,8 +536,8 @@ public:
       WaySublineMatchString match = uut.findMatch(map, r, toWay(map, "a2"));
 
       HOOT_STR_EQUALS("matches:\n"
-        "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
+        "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0\n"
+        "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
         match.toString());
     }
 
@@ -547,10 +547,10 @@ public:
 
       HOOT_STR_EQUALS(
         "matches:\n"
-        "subline 1: start: way: -17 index: 0 fraction: 0 end: way: -17 index: 2 fraction: 0\n"
-        "subline 2: start: way: -16 index: 0 fraction: 0 end: way: -16 index: 2 fraction: 0\n"
-        "subline 1: start: way: -18 index: 0 fraction: 0 end: way: -18 index: 1 fraction: 0\n"
-        "subline 2: start: way: -16 index: 2 fraction: 0 end: way: -16 index: 3 fraction: 0",
+        "subline 1: start: way(-17) index: 0 fraction: 0 end: way(-17) index: 2 fraction: 0\n"
+        "subline 2: start: way(-16) index: 0 fraction: 0 end: way(-16) index: 2 fraction: 0\n"
+        "subline 1: start: way(-18) index: 0 fraction: 0 end: way(-18) index: 1 fraction: 0\n"
+        "subline 2: start: way(-16) index: 2 fraction: 0 end: way(-16) index: 3 fraction: 0",
         match.toString());
     }
 
@@ -560,10 +560,10 @@ public:
 
       HOOT_STR_EQUALS(
         "matches:\n"
-        "subline 1: start: way: -20 index: 0 fraction: 0 end: way: -20 index: 2 fraction: 0\n"
-        "subline 2: start: way: -19 index: 0 fraction: 0 end: way: -19 index: 2 fraction: 0\n"
-        "reversed, subline 1: start: way: -21 index: 0 fraction: 0 end: way: -21 index: 1 fraction: 0\n"
-        "subline 2: start: way: -19 index: 2 fraction: 0 end: way: -19 index: 3 fraction: 0",
+        "subline 1: start: way(-20) index: 0 fraction: 0 end: way(-20) index: 2 fraction: 0\n"
+        "subline 2: start: way(-19) index: 0 fraction: 0 end: way(-19) index: 2 fraction: 0\n"
+        "reversed, subline 1: start: way(-21) index: 0 fraction: 0 end: way(-21) index: 1 fraction: 0\n"
+        "subline 2: start: way(-19) index: 2 fraction: 0 end: way(-19) index: 3 fraction: 0",
         match.toString());
     }
 
@@ -573,10 +573,10 @@ public:
 
       HOOT_STR_EQUALS(
        "matches:\n"
-       "subline 1: start: way: -23 index: 0 fraction: 0 end: way: -23 index: 2 fraction: 0\n"
-       "subline 2: start: way: -22 index: 0 fraction: 0 end: way: -22 index: 2 fraction: 0\n"
-       "reversed, subline 1: start: way: -24 index: 0 fraction: 0.333333333333333 end: way: -24 index: 1 fraction: 0\n"
-       "subline 2: start: way: -22 index: 2 fraction: 0 end: way: -22 index: 3 fraction: 0",
+       "subline 1: start: way(-23) index: 0 fraction: 0 end: way(-23) index: 2 fraction: 0\n"
+       "subline 2: start: way(-22) index: 0 fraction: 0 end: way(-22) index: 2 fraction: 0\n"
+       "reversed, subline 1: start: way(-24) index: 0 fraction: 0.333333333333333 end: way(-24) index: 1 fraction: 0\n"
+       "subline 2: start: way(-22) index: 2 fraction: 0 end: way(-22) index: 3 fraction: 0",
         match.toString());
     }
   }

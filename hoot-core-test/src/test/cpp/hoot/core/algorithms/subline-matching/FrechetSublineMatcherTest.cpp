@@ -87,8 +87,8 @@ public:
 
     HOOT_STR_EQUALS(1, m.size());
     HOOT_STR_EQUALS(
-      "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 5 fraction: 0\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 5 fraction: 0",
+      "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 5 fraction: 0\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 5 fraction: 0",
       m[0].toString());
   }
 
@@ -115,12 +115,12 @@ public:
 
     HOOT_STR_EQUALS(2, m.size());
     HOOT_STR_EQUALS(
-      "subline 1: start: way: -1 index: 2 fraction: 0 end: way: -1 index: 4 fraction: 0\n"
-      "subline 2: start: way: -2 index: 3 fraction: 0 end: way: -2 index: 5 fraction: 0",
+      "subline 1: start: way(-1) index: 2 fraction: 0 end: way(-1) index: 4 fraction: 0\n"
+      "subline 2: start: way(-2) index: 3 fraction: 0 end: way(-2) index: 5 fraction: 0",
       m[0].toString());
     HOOT_STR_EQUALS(
-      "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
+      "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
       m[1].toString());
   }
 
@@ -149,8 +149,8 @@ public:
     vector<WaySublineMatch> m = uut.findMatch(map, w1, w2, score).getMatches();
     HOOT_STR_EQUALS(1, m.size());
     HOOT_STR_EQUALS(
-      "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 9 fraction: 0\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 20 fraction: 0",
+      "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 9 fraction: 0\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 20 fraction: 0",
       m[0].toString());
   }
 

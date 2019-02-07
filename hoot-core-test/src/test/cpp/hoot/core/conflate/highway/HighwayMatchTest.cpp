@@ -108,12 +108,12 @@ public:
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
       mt);
-    HOOT_STR_EQUALS("HighwayMatch Way:-1 Way:-2 P: match: 0.129353 miss: 0.870647 review: 0",
+    HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.129353 miss: 0.870647 review: 0",
                     match12.toString());
 
     HighwayMatch match23(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
       mt);
-    HOOT_STR_EQUALS("HighwayMatch Way:-2 Way:-3 P: match: 0.129353 miss: 0.870647 review: 0",
+    HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.129353 miss: 0.870647 review: 0",
                     match23.toString());
 
     CPPUNIT_ASSERT_EQUAL(true, match12.isConflicting(match23, map));
@@ -158,12 +158,12 @@ public:
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
                          mt);
-    HOOT_STR_EQUALS("HighwayMatch Way:-1 Way:-2 P: match: 0.0921884 miss: 0.907812 review: 0",
+    HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.0921884 miss: 0.907812 review: 0",
                     match12.toString());
 
     HighwayMatch match23(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
                          mt);
-    HOOT_STR_EQUALS("HighwayMatch Way:-2 Way:-3 P: match: 0.0921884 miss: 0.907812 review: 0",
+    HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.0921884 miss: 0.907812 review: 0",
                     match23.toString());
 
     CPPUNIT_ASSERT_EQUAL(false, match12.isConflicting(match23, map));
@@ -206,12 +206,12 @@ public:
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
                          mt);
-    HOOT_STR_EQUALS("HighwayMatch Way:-1 Way:-2 P: match: 0.101976 miss: 0.898024 review: 0",
+    HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.101976 miss: 0.898024 review: 0",
                     match12.toString());
 
     HighwayMatch match23(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
                          mt);
-    HOOT_STR_EQUALS("HighwayMatch Way:-2 Way:-3 P: match: 0.101976 miss: 0.898024 review: 0",
+    HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.101976 miss: 0.898024 review: 0",
                     match23.toString());
 
     CPPUNIT_ASSERT_EQUAL(false, match12.isConflicting(match23, map));
@@ -252,12 +252,12 @@ public:
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
                          mt);
-    HOOT_STR_EQUALS("HighwayMatch Way:-1 Way:-2 P: match: 0.138093 miss: 0.861907 review: 0",
+    HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.138093 miss: 0.861907 review: 0",
                     match12.toString());
 
     HighwayMatch match23(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
                          mt);
-    HOOT_STR_EQUALS("HighwayMatch Way:-2 Way:-3 P: match: 0.138093 miss: 0.861907 review: 0",
+    HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.138093 miss: 0.861907 review: 0",
                     match23.toString());
 
     CPPUNIT_ASSERT_EQUAL(true, match12.isConflicting(match23, map));
@@ -290,8 +290,8 @@ public:
         boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
         boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
     HOOT_STR_EQUALS("matches:\n"
-      "subline 1: start: way: -3 index: 0 fraction: 0.354292349419726 end: way: -3 index: 1 fraction: 0\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
+      "subline 1: start: way(-3) index: 0 fraction: 0.354292349419726 end: way(-3) index: 1 fraction: 0\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
       sublineMatcher->findMatch(
         map,
         boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),

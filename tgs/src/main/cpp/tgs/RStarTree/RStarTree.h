@@ -139,7 +139,7 @@ protected:
 
   typedef std::vector<BoxPair> BoxVector;
 
-  /// @todo store dimensions and such.
+  // TODO: store dimensions and such.
   class Header
   {
   public:

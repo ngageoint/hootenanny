@@ -158,7 +158,7 @@ private:
     for (int i = 0; i < inputs.size(); i++)
     {
       boost::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::getInstance().createReader(inputs.at(i), true, Status::Unknown1);
+        OsmMapReaderFactory::createReader(inputs.at(i), true, Status::Unknown1);
 
       boost::shared_ptr<ApiDbReader> apiDbReader =
         boost::dynamic_pointer_cast<ApiDbReader>(reader);
@@ -324,7 +324,7 @@ private:
       }
     }
 
-    OsmMapWriterFactory::getInstance().write(boundaryMap, outputPath);
+    OsmMapWriterFactory::write(boundaryMap, outputPath);
 
   //      if (Log::getInstance().getLevel() <= Log::Debug)
   //      {

@@ -41,21 +41,6 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<OsmMapReaderFactory> OsmMapReaderFactory::_theInstance;
-
-OsmMapReaderFactory::OsmMapReaderFactory()
-{
-}
-
-OsmMapReaderFactory& OsmMapReaderFactory::getInstance()
-{
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new OsmMapReaderFactory());
-  }
-  return *_theInstance;
-}
-
 bool OsmMapReaderFactory::hasElementInputStream(QString url)
 {
   bool result = false;
@@ -86,9 +71,9 @@ boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString
 {
   QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
 
-  /// @todo hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api
-  /// databases, but by using the factory override during conflation it won't - see #781 for
-  /// potential fix task
+  // hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api
+  // databases, but by using the factory override during conflation it won't - see #781 for
+  // potential fix task
   if (readerOverride == "hoot::OsmApiDbAwareHootApiDbReader" && url.startsWith("osmapidb"))
   {
     readerOverride = "";
@@ -181,8 +166,7 @@ void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool 
                                Status defaultStatus)
 {
   LOG_INFO("Loading map from " << url.right(50) << "...");
-  boost::shared_ptr<OsmMapReader> reader =
-    getInstance().createReader(url, useDataSourceIds, defaultStatus);
+  boost::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, defaultStatus);
   _read(map, reader, url);
 }
 
@@ -190,8 +174,7 @@ void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, bool useDataSource
                                bool useFileStatus, QString url)
 {
   LOG_INFO("Loading map from " << url.right(50) << "...");
-  boost::shared_ptr<OsmMapReader> reader =
-    getInstance().createReader(url, useDataSourceIds, useFileStatus);
+  boost::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, useFileStatus);
   _read(map, reader, url);
 }
 

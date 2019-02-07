@@ -90,7 +90,7 @@ void HootApiDb::_init()
   _nodesInsertElapsed = 0;
   // 500 found experimentally on my desktop -JRS
   _nodesPerBulkInsert = recordsPerBulkInsert;
-  _nodesPerBulkDelete = recordsPerBulkInsert; //TODO: figure out what this should be
+  _nodesPerBulkDelete = recordsPerBulkInsert;
 
   _wayNodesInsertElapsed = 0;
   // arbitrary, needs benchmarking
@@ -411,8 +411,6 @@ void HootApiDb::deleteUser(long userId)
 
 QString HootApiDb::_escapeTags(const Tags& tags)
 {
-  //TODO: this is likely redundant with other code
-
   QStringList l;
   static QChar f1('\\'), f2('"');
 
@@ -867,7 +865,7 @@ void HootApiDb::deleteNode(ConstNodePtr node)
     _nodeBulkDelete->flush();
   }
 
-  //TODO: multiary-poi-ingest: how to update envelope here?
+  // for multiary-poi-ingest: how to update envelope here?
   //ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   //_updateChangesetEnvelope(envelopeNode);
 

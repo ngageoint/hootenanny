@@ -1135,7 +1135,7 @@ void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
   }
 }
 
-/// @todo this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
+// TODO: this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
 void OsmPbfReader::read(QString path, OsmMapPtr map)
 {
   if (_status == Status::Invalid)
@@ -1190,7 +1190,7 @@ void OsmPbfReader::read(OsmMapPtr map)
   map->visitRw(v);
 }
 
-/// @todo make the partial reader handle dir inputs?
+// TODO: make the partial reader handle dir inputs?
 bool OsmPbfReader::isSupported(QString urlStr)
 {
   QFileInfo fileInfo(urlStr);

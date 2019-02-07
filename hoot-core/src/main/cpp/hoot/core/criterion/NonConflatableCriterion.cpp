@@ -48,7 +48,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   //See if our type is known conflatable - return false
-  //TODO: This could probably be made cleaner by adding a "conflatable" attribute to criterion.
+  // This could probably be made cleaner by adding a "conflatable" property to criterion. - #2941
   if (HighwayCriterion().isSatisfied(e))
       return false;
   else if (LinearWaterwayCriterion().isSatisfied(e))

@@ -114,8 +114,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(myNonDirectedEdge.getMembers(), members);
 
     // ToString test
-    HOOT_STR_EQUALS("(0) Node:-100 -- Node:-300 --> (1) Node:-200", myDirectedEdge.toString());
-    HOOT_STR_EQUALS("(0) Node:-100 -- Node:-300 -- (0) Node:-100", myNonDirectedEdge.toString());
+    HOOT_STR_EQUALS("(0) Node(-100) -- Node(-300) --> (1) Node(-200)", myDirectedEdge.toString());
+    HOOT_STR_EQUALS("(0) Node(-100) -- Node(-300) -- (0) Node(-100)", myNonDirectedEdge.toString());
 
   }
 

@@ -44,7 +44,7 @@ namespace hoot
  * Duplicates a POI with some random error.
  * This is not part of the original Perty paper.
  *
- * @todo This should really change the node after it has been duplicated.
+ * This should really change the node after it has been duplicated.
  */
 class PertyDuplicatePoiOp : public OsmMapOperation, public Configurable, public RngConsumer
 {

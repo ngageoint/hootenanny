@@ -242,7 +242,7 @@ bool MultiaryReviewCommand::operator==(const MultiaryReviewCommand& rhs) const
 
 bool MultiaryReviewCommand::applyToMap(OsmMapPtr pMap) const
 {
-  // @TODO: Implement this!
+  // TODO: Implement this!
   (void) pMap;
   return false;
 }

@@ -52,8 +52,6 @@ class Element;
 
 /**
  * Reads in a .osm file into an OsmMap data structure.
- *
- * @todo This could use a nice overhaul for readability and possibly performance.
  */
 class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader
 {

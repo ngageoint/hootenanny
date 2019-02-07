@@ -351,9 +351,9 @@ Change ChangesetDeriver::_nextChange()
       //I don't believe hoot conflation is going to delete reference features (could be wrong)...
       //only modify them.  So, this is a safety feature.  We need to prove this by conflating a lot
       //more data.
-      //TODO: this logic may need to ref the bounds to be more granular; i.e.  Only prevent deleting
-      //ref features crossing the changeset bounds or split features created from former ref
-      //features crossing the changeset bounds
+      // This logic may need to ref the bounds to be more granular; i.e.  Only prevent deleting
+      // ref features crossing the changeset bounds or split features created from former ref
+      // features crossing the changeset bounds
 
       if (Log::getInstance().getLevel() <= Log::Trace &&
           (_fromE->getElementId().getId() == debugId || _toE->getElementId().getId() == debugId))

@@ -35,6 +35,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/Node.h>
 
 // Qt
 #include <QRegExp>
@@ -51,6 +52,7 @@ class TagsTest : public HootTestFixture
   CPPUNIT_TEST(runSplitTest);
   CPPUNIT_TEST(runEqualsTest);
   CPPUNIT_TEST(unitsTest);
+  CPPUNIT_TEST(nameTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -117,6 +119,17 @@ public:
 
     t8.set("length", "10 decimetres");
     CPPUNIT_ASSERT_EQUAL(1.0, QString::number(t8.getLength("length").value(), 'g', 2).toDouble());
+  }
+
+  void nameTest()
+  {
+    Tags tags1;
+    tags1.set("name", "blah");
+    HOOT_STR_EQUALS("blah", tags1.getName());
+
+    Tags tags2;
+    tags2.set("blah", "blah");
+    HOOT_STR_EQUALS("", tags2.getName());
   }
 };
 

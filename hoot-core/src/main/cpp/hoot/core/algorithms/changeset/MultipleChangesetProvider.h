@@ -43,9 +43,6 @@ public:
 
   explicit MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
 
-  /**
-   * @todo: is this even used?
-   */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
   virtual ~MultipleChangesetProvider();

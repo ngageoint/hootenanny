@@ -188,7 +188,6 @@ void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
 void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb,
   ConstNetworkVertexPtr va, ConstNetworkEdgePtr smallWayB)
 {
-  /// @todo break this into smaller functions
   // Find all the edges that connect to eb
   QSet<ConstNetworkEdgePtr> ebNeighborhood = QSet<ConstNetworkEdgePtr>::fromList(
     nb->getEdgesFromVertex(smallWayB->getFrom()));
@@ -420,7 +419,7 @@ void IterativeNetworkMatcher::_normalizeAllScores()
   _normalizeScoresLocal(_vertex21Scores);
 }
 
-/// @todo this method will need to be redefined to take advantage of the new match strings
+// this method will need to be redefined to take advantage of the new match strings
 void IterativeNetworkMatcher::_normalizeScoresGlobal(EdgeScoreMap& t)
 {
   double sum = 0.0;
@@ -456,7 +455,7 @@ void IterativeNetworkMatcher::_normalizeScoresGlobal(VertexScoreMap& t)
   }
 }
 
-/// @todo this method will need to be redefined to take advantage of the new match strings
+// this method will need to be redefined to take advantage of the new match strings
 void IterativeNetworkMatcher::_normalizeScoresLocal(EdgeScoreMap& t)
 {
   EdgeScoreMap oldScores = t;
@@ -609,7 +608,7 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
   }
 }
 
-/// @todo modify this to use the EdgeMatchSet rather than the vertices
+// modify this to use the EdgeMatchSet rather than the vertices
 void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/)
 {
   CostFunction cost;
@@ -649,7 +648,7 @@ void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreM
       double edgeScore = std::max(EPSILON,
         pow(_aggregateScores(scores), _dampening) * pow(_scoreVertices(va, vb), _p));
 
-/// @todo only use the best matches, don't use them all.
+// only use the best matches, don't use them all.
 //      cost.v2 = v2;
 
 //      QSet<EdgeStringPtr> strings1, strings2;

@@ -67,7 +67,7 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   LOG_TRACE("Does not contain tag from tag ignore list");
 
-  //TODO: should use be added as a category here?
+  // TODO: should use be added as a category here?
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags)
       .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());

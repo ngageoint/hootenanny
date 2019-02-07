@@ -60,7 +60,7 @@ QString TagInfo::getInfo(QString input)
   QString finalText;
 
   boost::shared_ptr<OsmMapReader> reader =
-    OsmMapReaderFactory::getInstance().createReader(
+    OsmMapReaderFactory::createReader(
       input, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
@@ -134,7 +134,7 @@ QString TagInfo::getInfo(QString input)
     //needed for JSON data, then either those readers can implement PartialOsmMapReader or the
     //needed readed code can be manually added to this class.
 
-    if (!OsmMapReaderFactory::getInstance().hasElementInputStream(input))
+    if (!OsmMapReaderFactory::hasElementInputStream(input))
     {
       throw HootException("Inputs to tag-values must be streamable.");
     }
@@ -204,7 +204,7 @@ void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result)
       continue;
     }
 
-    // Drop Hoot metadata tags - TODO: needs to be more extensible
+    // Drop Hoot metadata tags
     if (it.key() == "source:ingest:datetime")
     {
       continue;

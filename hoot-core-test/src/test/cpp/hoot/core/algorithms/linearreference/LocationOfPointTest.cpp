@@ -46,7 +46,7 @@ namespace hoot
 class LocationOfPointTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(LocationOfPointTest);
-  //TODO: fixme or remove me - #1737
+  // fixme or remove me - #1737
   //CPPUNIT_TEST(runLocateAfterTest);
   CPPUNIT_TEST_SUITE_END();
 

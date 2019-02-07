@@ -92,7 +92,6 @@ public:
    *
    * @param element the element to examine
    * @return true if the element is a network type; false otherwise
-   * @todo This method could be moved to a more common location.
    */
   static bool isNetworkFeatureType(ConstElementPtr element);
 

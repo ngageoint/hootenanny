@@ -202,8 +202,7 @@ private:
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
   OsmPbfReaderData* _d;
   std::vector<QString> _strings;
-  /// @todo Possibly, it makes sense to replace _map with _partialMap (then rename to _map in base
-  /// class), which was added to PartialOsmMapReader after it was implemented on this class.
+
   OsmMapPtr _map;
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;

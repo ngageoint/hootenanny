@@ -91,7 +91,7 @@ public:
   OsmMapPtr createTestMap(QString path = "test-files/algorithms/WayMatchStringMergerTest.osm")
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, path);
+    OsmMapReaderFactory::read(map, path);
 
     MapProjector::projectToPlanar(map);
 
@@ -189,7 +189,7 @@ public:
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
 
     MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/algorithms/WayMatchStringMergerTestSplit.osm");
 
     HOOT_FILE_EQUALS("test-files/algorithms/WayMatchStringMergerTestSplitExpected.osm",

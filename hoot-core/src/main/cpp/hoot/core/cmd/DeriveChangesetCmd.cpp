@@ -251,8 +251,8 @@ private:
       //If external sorting is enabled and both inputs are streamable, externally sort the elements
       //to avoid potential memory issues.
       LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
-      LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
-      if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
+      LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
+      if (OsmMapReaderFactory::hasElementInputStream(input) &&
           ConfigOptions().getElementSorterElementBufferSize() != -1)
       {
         sortedElements = _sortElementsExternally(input);
@@ -293,7 +293,7 @@ private:
 
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(input));
+        OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
     ElementInputStreamPtr inputStream = boost::dynamic_pointer_cast<ElementInputStream>(reader);

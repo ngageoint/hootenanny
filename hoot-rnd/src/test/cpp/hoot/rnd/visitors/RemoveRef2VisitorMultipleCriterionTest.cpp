@@ -59,7 +59,7 @@ public:
   void runToyTest1()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveRef2VisitorMultipleCriterionInput.osm");
 
     ElementCriterionPtr poiCrit(new PoiCriterion);
@@ -88,7 +88,7 @@ public:
   void runToyTest2()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveRef2VisitorMultipleCriterionInput.osm");
 
     ElementCriterionPtr poiCrit(new PoiCriterion);

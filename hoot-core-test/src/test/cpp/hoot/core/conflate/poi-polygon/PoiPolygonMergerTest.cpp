@@ -188,9 +188,9 @@ public:
   void toyScenario1Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 1", map);
@@ -199,7 +199,7 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
-    HOOT_STR_EQUALS("[6]{(Way:-22, Relation:-1), (Way:-21, Relation:-1), (Way:-20, Relation:-1), (Way:-19, Relation:-1), (Way:-6, Relation:-1), (Node:-145, Relation:-1)}",
+    HOOT_STR_EQUALS("[6]{(Way(-22), Relation(-1)), (Way(-21), Relation(-1)), (Way(-20), Relation(-1)), (Way(-19), Relation(-1)), (Way(-6), Relation(-1)), (Node(-145), Relation(-1))}",
                     replaced);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":-129,\"lat\":0.00173,\"lon\":-0.004071},\n"
@@ -234,9 +234,9 @@ public:
   void toyScenario2Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 2", map);
@@ -245,8 +245,8 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
-    //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy2.osm");
-    HOOT_STR_EQUALS("[6]{(Way:-18, Relation:-1), (Way:-17, Relation:-1), (Way:-16, Relation:-1), (Way:-15, Relation:-1), (Way:-5, Relation:-1), (Node:-120, Relation:-1)}",
+    //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy2.osm");
+    HOOT_STR_EQUALS("[6]{(Way(-18), Relation(-1)), (Way(-17), Relation(-1)), (Way(-16), Relation(-1)), (Way(-15), Relation(-1)), (Way(-5), Relation(-1)), (Node(-120), Relation(-1))}",
                     replaced);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-112,\"lat\":0.002596,\"lon\":0.0009711},\n"
@@ -281,9 +281,9 @@ public:
   void toyScenario3Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 3", map);
@@ -292,8 +292,8 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
-    //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy3.osm");
-    HOOT_STR_EQUALS("[7]{(Way:-14, Relation:-1), (Way:-13, Relation:-1), (Way:-12, Relation:-1), (Way:-11, Relation:-1), (Way:-4, Relation:-1), (Node:-38, Relation:-1), (Node:-83, Relation:-1)}",
+    //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy3.osm");
+    HOOT_STR_EQUALS("[7]{(Way(-14), Relation(-1)), (Way(-13), Relation(-1)), (Way(-12), Relation(-1)), (Way(-11), Relation(-1)), (Way(-4), Relation(-1)), (Node(-38), Relation(-1)), (Node(-83), Relation(-1))}",
                     replaced);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-96,\"lat\":0.0009777,\"lon\":0.002351},\n"
@@ -328,9 +328,9 @@ public:
   void toyScenario4Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 4", map);
@@ -339,8 +339,8 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
-    //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy4.osm");
-    HOOT_STR_EQUALS("[6]{(Way:-10, Relation:-1), (Way:-9, Relation:-1), (Way:-8, Relation:-1), (Way:-3, Relation:-1), (Node:-13, Relation:-1), (Node:-82, Relation:-1)}",
+    //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy4.osm");
+    HOOT_STR_EQUALS("[6]{(Way(-10), Relation(-1)), (Way(-9), Relation(-1)), (Way(-8), Relation(-1)), (Way(-3), Relation(-1)), (Node(-13), Relation(-1)), (Node(-82), Relation(-1))}",
                     replaced);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-84,\"lat\":-0.001932,\"lon\":-0.003431},\n"
@@ -369,9 +369,9 @@ public:
   void toyScenario5Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 5", map);
@@ -382,8 +382,8 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
-    //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy5.osm");
-    HOOT_STR_EQUALS("[1]{(Node:-81, Way:-2)}",
+    //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy5.osm");
+    HOOT_STR_EQUALS("[1]{(Node(-81), Way(-2))}",
                     replaced);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-14,\"lat\":-0.0005151,\"lon\":-0.0005625},\n"
@@ -413,9 +413,9 @@ public:
   void toyScenario6Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingA.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
                                             Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/PoiBuildingB.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
                                             Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 6", map);
@@ -424,8 +424,8 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     uut.apply(map, replaced);
 
-    //OsmMapWriterFactory::getInstance().write(map, "test-output/conflate/PoiBuildingToy6.osm");
-    HOOT_STR_EQUALS("[1]{(Node:-75, Way:-1)}", replaced);
+    //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy6.osm");
+    HOOT_STR_EQUALS("[1]{(Node(-75), Way(-1))}", replaced);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-1,\"lat\":-0.0004775,\"lon\":0.00236},\n"
                     "{\"type\":\"node\",\"id\":-2,\"lat\":-0.0004766,\"lon\":0.001771},\n"

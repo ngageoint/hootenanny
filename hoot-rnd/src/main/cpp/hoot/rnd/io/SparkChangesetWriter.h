@@ -58,7 +58,7 @@ public:
   /**
    * @see OsmChangeWriter
    */
-  virtual bool isSupported(QString url) { return url.endsWith(".spark.1"); }  //TODO: fix
+  virtual bool isSupported(QString url) { return url.endsWith(".spark.1"); }
 
   /**
    * Open the specified filename for writing.

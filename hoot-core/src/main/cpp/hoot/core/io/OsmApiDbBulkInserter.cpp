@@ -521,7 +521,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     //statements to the sql output here for applying at a later time.  we want
     //setval to reflect the last id in the sequence
     QString reserveElementIdsSql;
-    //TODO: may be able to collapse this logic; see notes in _establishIdMapping
+    // may be able to collapse this logic; see notes in _establishIdMapping
     if (_validateData)
     {
       //with data validation on, we increment for each element read and all our counters are
@@ -798,7 +798,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 
   LOG_VART(node);
 
-  //TODO: See #1451.  This changeset bounds calculation actually won't work when ways or relations
+  //See #1451.  This changeset bounds calculation actually won't work when ways or relations
   //are written in separate changesets than the nodes they reference.  Since we're streaming the
   //elements, there's no way to get back to the bounds information.  This bug has always been here,
   //but just recently noticed.

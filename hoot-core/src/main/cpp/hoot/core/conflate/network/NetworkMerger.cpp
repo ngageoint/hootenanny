@@ -79,7 +79,7 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
     // be merged for us properly as long as all the ways have matches. If they don't have matches
     // we've got a problem and they should be reviewed. Possibly identify these situations in the
     // match creator?
-    /// @todo add more logic in the match creator that handles this in a more elegant way.
+    // TODO: add more logic in the match creator that handles this in a more elegant way.
 
     set<ElementId> eids;
     foreach (ConstElementPtr e, _edgeMatch->getString2()->getMembers())
@@ -99,9 +99,9 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
   }
   else
   {
-    /// @todo throw an exception if the input edge match contains partial matches. We will need to
-    /// review this method and add more code with partial matches. E.g.
-    /// - Will we still create relations out of the scrap bits?
+    // Throw an exception if the input edge match contains partial matches. We will need to
+    // review this method and add more code with partial matches. - #2940 E.g.
+    // - Will we still create relations out of the scrap bits?
 
     // convert the EdgeStrings into WaySublineStrings
     WayStringPtr str1 = _details->toWayString(_edgeMatch->getString1());
@@ -150,8 +150,8 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
       }
     }
 
-    /// @todo this will need to replace one scrap with possibly multiple keeper elements
-    /// - think about the case when the way is part of an interstate or bus relation
+    // TODO: this will need to replace one scrap with possibly multiple keeper elements
+    // - think about the case when the way is part of an interstate or bus relation
     // remove the duplicate element.
     LOG_TRACE("Removing duplicate elements...");
     merger->replaceScraps();

@@ -89,7 +89,6 @@ public:
    * The 'type' of command; e.g. 'core' or 'rnd'
    *
    * @return the command typedef
-   * @todo there may be a better way to do this
    */
   virtual QString getType() const { return "core"; }
 };

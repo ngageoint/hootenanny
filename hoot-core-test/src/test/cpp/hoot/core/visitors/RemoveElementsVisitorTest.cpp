@@ -59,7 +59,7 @@ public:
   void runTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorInput.osm");
 
     boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
@@ -78,7 +78,7 @@ public:
   void runRecursiveTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorInput.osm");
 
     boost::shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion());
@@ -97,7 +97,7 @@ public:
   void runNegatedFilterTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorInput.osm");
 
     boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
@@ -115,7 +115,7 @@ public:
   void runReviewRelationTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorTest-reviewRelationTest.osm");
 
     boost::shared_ptr<ReviewRelationCriterion> elementCriterion(new ReviewRelationCriterion());

@@ -104,7 +104,7 @@ public:
     WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
 
     WayLocation wl(map, w1, 90.0);
-    HOOT_STR_EQUALS("way: -1 index: 2 fraction: 0.4", wl);
+    HOOT_STR_EQUALS("way(-1) index: 2 fraction: 0.4", wl);
     HOOT_STR_EQUALS(90, wl.calculateDistanceOnWay());
   }
 

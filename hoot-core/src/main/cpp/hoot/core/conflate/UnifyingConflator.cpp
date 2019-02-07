@@ -172,9 +172,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
   _removeWholeGroups(_matches, matchSets, map);
-  _stats.append(SingleStat("Number of Match Sets", matchSets.size()));
-  LOG_DEBUG("Number of Match Sets: " << matchSets.size());
-  LOG_DEBUG("Number of Matches: " << _matches.size());
+  _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
+  LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
+  LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
 
   OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
 
@@ -225,7 +225,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
-  //TODO: this stat isn't right for Network
+  // TODO: this stat isn't right for Network
   LOG_INFO("Post constraining match count: " << _matches.size());
 
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization");
@@ -244,8 +244,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization-2");
 
-  /// @todo would it help to sort the matches so the biggest or best ones get merged first?
-  // convert all the match sets into mergers.
+  // Would it help to sort the matches so the biggest or best ones get merged first?
+  // convert all the match sets into mergers - #2912
   //LOG_INFO("Creating mergers...");
   for (size_t i = 0; i < matchSets.size(); ++i)
   {

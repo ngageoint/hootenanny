@@ -50,7 +50,6 @@ public:
 
   static unsigned int logWarnCount;
 
-  /// @todo clean me
   class SublineMapping
   {
   public:
@@ -85,6 +84,7 @@ public:
     QString toString() const;
 
   private:
+
     WaySubline _subline2;
     ConstWayPtr _way2;
     WayLocation _start;

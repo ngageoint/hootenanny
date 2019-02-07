@@ -204,7 +204,7 @@ public:
 
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbReaderTest");
     MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm");
     HOOT_STR_EQUALS(
       TestUtils::readFile("test-files/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm"),

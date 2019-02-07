@@ -59,21 +59,17 @@ public:
 
     @param nodeCollectionName
     @param nodes
-    @todo Use a template here to make this method generic for other OSM element types.
-    @todo Move to Element?
     */
   static void printNodes(const QString nodeCollectionName,
-                         const QList<boost::shared_ptr<const Node> >& nodes);
+                         const QList<boost::shared_ptr<const Node>>& nodes);
 
   /**
     Retrieves a collection of node ID's for a collection of nodes
 
     @param nodes a collection of nodes
     @return a collection of node ID's
-    @todo Use a template to make this method generic for other OSM element types.
-    @todo Move to Element?
     */
-  static const QList<long> nodesToNodeIds(const QList<boost::shared_ptr<const Node> >& nodes);
+  static const QList<long> nodesToNodeIds(const QList<boost::shared_ptr<const Node>>& nodes);
 
   /**
     Retrieves a collection of nodes given a collection of node ID's
@@ -81,11 +77,9 @@ public:
     @param nodeIds a collection of node ID's
     @param map the map owning the nodes with the given ID's
     @return a collection of nodes
-    @todo Use a template here to make this method generic for other OSM element types.
-    @todo Move to Element?
     */
-  static QList<boost::shared_ptr<const Node> > nodeIdsToNodes(const QList<long>& nodeIds,
-                                                              boost::shared_ptr<const OsmMap> map);
+  static QList<boost::shared_ptr<const Node>> nodeIdsToNodes(const QList<long>& nodeIds,
+                                                             boost::shared_ptr<const OsmMap> map);
 
   /**
     Converts a OSM node to a coordinate
@@ -145,7 +139,7 @@ public:
    */
   static QString currentTimeAsString();
 
-  //TODO: These logic in these contains methods could probably be consolidated into fewer methods.
+  // The logic in these contains methods could probably be consolidated into fewer methods. - #2932
 
   /**
    * Determines whether a map contains two or more POIs

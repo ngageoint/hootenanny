@@ -86,7 +86,7 @@ public:
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    *
-   * @todo This constructor has gotten a little out of hand.
+   * This constructor has gotten a little out of hand.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
     vector<const Match*>& result, boost::shared_ptr<HighwayClassifier> c,

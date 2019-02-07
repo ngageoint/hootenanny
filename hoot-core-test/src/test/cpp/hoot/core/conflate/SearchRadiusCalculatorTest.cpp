@@ -56,7 +56,7 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SearchRadiusCalculatorTest);
   CPPUNIT_TEST(runCalcResultTest);
-  //TODO: temp disabling this
+  // TODO: temp disabling this
   //CPPUNIT_TEST(runBadPreOpTest);
   CPPUNIT_TEST(runNotEnoughTiePointsTest);
   CPPUNIT_TEST(runPreviouslyConflatedDataTest);

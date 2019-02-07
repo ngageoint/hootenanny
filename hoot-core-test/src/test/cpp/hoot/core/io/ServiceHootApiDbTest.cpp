@@ -225,7 +225,7 @@ public:
     const long relationId = ids->at(4);
 
     vector<RelationData::Entry> members = database.selectMembersForRelation(relationId);
-    HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way:1, Entry: role: noderole, eid: Node:1}",
+    HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way(1), Entry: role: noderole, eid: Node(1)}",
                     members);
   }
 
@@ -281,7 +281,7 @@ public:
     {
       HOOT_STR_EQUALS(relationId, relationResultIterator->value(0).toLongLong());
       vector<RelationData::Entry> members = database.selectMembersForRelation(relationId);
-      HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way:1, Entry: role: noderole, eid: Node:1}",
+      HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way(1), Entry: role: noderole, eid: Node(1)}",
                       members);
       HOOT_STR_EQUALS("type = multistuff\n",
                       ApiDb::unescapeTags(relationResultIterator->value(5)));

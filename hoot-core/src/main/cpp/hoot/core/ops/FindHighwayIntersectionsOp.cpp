@@ -66,7 +66,6 @@ void FindHighwayIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   VisitorOp(new RemoveElementsVisitor(relationCrit)).apply(map);
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
 
-  /// @todo move this to a config file.
   // pragmatically remove "bad" data in OSM afghanistan
   boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("source", "AIMS"));
   RemoveElementsVisitor::removeWays(map, pCrit);

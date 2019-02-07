@@ -145,9 +145,8 @@ WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex,
 
 Meters WayLocation::calculateDistanceFromEnd() const
 {
-  /// @todo this could be made more efficient by using the nodes directly
-  return ElementConverter(getMap()).convertToLineString(getWay())->getLength() -
-      calculateDistanceOnWay();
+  return
+    ElementConverter(getMap()).convertToLineString(getWay())->getLength() - calculateDistanceOnWay();
 }
 
 Meters WayLocation::calculateDistanceOnWay() const

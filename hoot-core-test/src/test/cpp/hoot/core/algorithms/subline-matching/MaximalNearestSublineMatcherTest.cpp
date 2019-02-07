@@ -95,8 +95,8 @@ public:
 
     HOOT_STR_EQUALS(
       "matches:\n"
-      "subline 1: start: way: -1 index: 0 fraction: 0.9 end: way: -1 index: 1 fraction: 0\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 0 fraction: 0.1",
+      "subline 1: start: way(-1) index: 0 fraction: 0.9 end: way(-1) index: 1 fraction: 0\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 0 fraction: 0.1",
       match.toString());
 
     CPPUNIT_ASSERT_EQUAL(true, match.isValid());

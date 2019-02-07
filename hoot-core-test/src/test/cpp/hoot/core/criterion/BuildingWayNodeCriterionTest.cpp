@@ -44,7 +44,7 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/criterion/BuildingWayNodeCriterionTest.osm");
 
     BuildingWayNodeCriterion uut;

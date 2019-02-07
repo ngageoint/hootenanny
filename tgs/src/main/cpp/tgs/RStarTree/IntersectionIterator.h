@@ -59,7 +59,7 @@ public:
 
   virtual bool next();
 
-  /// @todo remove me
+  // TODO: remove me
   int nodeHits;
   int distCalcs;
 

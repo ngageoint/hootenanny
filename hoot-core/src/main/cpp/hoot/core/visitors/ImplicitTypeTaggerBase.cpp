@@ -175,7 +175,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
 
-    //TODO: this is temp for testing until it gets fixed with a schema translation
+    // TODO: this is temp for testing until it gets fixed with a schema translation
     if (e->getTags().get("gnis:feature_type").toLower() == "mine")
     {
       LOG_TRACE("Using custom tagging rule...");
@@ -404,7 +404,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
   const QStringList names, const QStringList nameTokensList, const Tags& elementTags,
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules)
 {
-  //TODO: this method needs cleanup
+  // This method needs cleanup
 
   LOG_TRACE("Attempting match with token group size of 2...");
 
@@ -414,7 +414,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
     QString nameToken = nameTokensList.at(i) + " " + nameTokensList.at(i + 1);
     if (_translateNamesToEnglish)
     {
-      //TODO: can this be combined with the ImplicitTagUtils translate method?
+      // Can this be combined with the ImplicitTagUtils translate method?
       const QString englishNameToken = _translator->translate(nameToken);
       LOG_VART(englishNameToken);
       if (!englishNameToken.isEmpty())
@@ -488,7 +488,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
   bool& namesContainBuilding, bool& namesContainOffice)
 {
-  //TODO: should be possible to combine this logic with
+  // Should be possible to combine this logic with
   //_getImplicitlyDerivedTagsFromMultipleNameTokens into a single method
 
   LOG_TRACE("Attempting match with token group size of 1...");
@@ -500,7 +500,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
     {
       const QString word = nameTokensList.at(i);
       LOG_VART(word);
-      //TODO: can this be combined with the ImplicitTagUtils translate method?
+      // Can this be combined with the ImplicitTagUtils translate method?
       const QString englishNameToken = _translator->translate(word);
       LOG_VART(englishNameToken);
       if (!englishNameToken.isEmpty())
