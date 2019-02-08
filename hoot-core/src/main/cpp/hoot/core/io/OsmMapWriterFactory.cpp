@@ -34,6 +34,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/MapProjector.h>
 
 using namespace std;
 
@@ -159,8 +160,10 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     {
       debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + ".osm");
     }
-    LOG_DEBUG("Writing debug output to " << debugMapFileName)
-    write(map, debugMapFileName, true);
+    LOG_DEBUG("Writing debug output to " << debugMapFileName);
+    OsmMapPtr copy(new OsmMap(map));
+    MapProjector::projectToWgs84(copy);
+    write(copy, debugMapFileName, true);
     _debugMapCount++;
   }
 }
