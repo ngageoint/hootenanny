@@ -39,11 +39,9 @@ public:
 
   static std::string className() { return "hoot::NotCriterion"; }
 
-  NotCriterion() {}
-  NotCriterion(ElementCriterion* c) : _child(c) {}
-  NotCriterion(ElementCriterionPtr c) : _child(c) {}
-
-  //virtual ~NotCriterion() {}
+  NotCriterion();
+  NotCriterion(ElementCriterion* c);
+  NotCriterion(ElementCriterionPtr c);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 

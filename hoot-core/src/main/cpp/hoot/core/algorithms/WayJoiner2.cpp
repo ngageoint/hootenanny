@@ -263,7 +263,7 @@ void WayJoiner2::_joinAtNode()
             }
             else
             {
-              LOG_DEBUG("Ways had conflicting names.  Not joining...");
+              LOG_DEBUG("Ways had conflicting names.  Not joining:");
               LOG_VARD(pTags);
               LOG_VARD(cTags);
             }
@@ -399,11 +399,27 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
     }
     for (size_t i = 1; i < sorted.size(); ++i)
     {
-      if (ways[sorted[i]])
+      WayPtr child = ways[sorted[i]];
+      // don't try to join if there are explicitly conflicting names; fix for #2888
+      bool childHasName = false;
+      Tags childTags;
+      if (child)
       {
-        LOG_VARD((ways[sorted[i]]->getElementId()));
+        LOG_VARD((child->getElementId()));
+        childTags = child->getTags();
+        childHasName = childTags.hasName();
       }
-      _joinWays(parent, ways[sorted[i]]);
+      else
+      {
+        break;
+      }
+      const Tags parentTags = parent->getTags();
+      const bool parentHasName = parentTags.hasName();
+      if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
+          Tags::haveMatchingName(parentTags, childTags))
+      {
+        _joinWays(parent, child);
+      }
     }
 
     //  Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here

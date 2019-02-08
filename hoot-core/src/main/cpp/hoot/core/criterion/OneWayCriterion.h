@@ -43,7 +43,7 @@ public:
 
   static std::string className() { return "hoot::OneWayCriterion"; }
 
-  OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
+  OneWayCriterion(bool isOneWay = true);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 

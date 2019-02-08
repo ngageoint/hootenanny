@@ -117,7 +117,7 @@ bool HighwayMergerAbstract::_mergePair(const OsmMapPtr& map, ElementId eid1, Ele
     {
       LOG_DEBUG(eid2 << " is missing.");
     }
-    LOG_DEBUG("Marking review...");
+    LOG_DEBUG("Marking review for " << e1->getElementId() << " and " << e2->getElementId() << "...");
     _markNeedsReview(result, e1, e2, "Missing match pair", HighwayMatch::getHighwayMatchName());
     return true;
   }

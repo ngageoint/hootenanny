@@ -110,7 +110,7 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
           ElementPtr e1 = map->getElement(it->first);
           ElementPtr e2 = map->getElement(it->second);
 
-          LOG_DEBUG(
+          LOG_TRACE(
             "Adding review tags to " << e1->getElementId() << " and " << e2->getElementId() <<
             "...");
 
@@ -273,7 +273,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
         _mergers[i]->toString());
     }
     _mergers[i]->apply(map, replaced);
-    LOG_VARD(replaced);
+    LOG_VART(replaced);
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
@@ -361,7 +361,7 @@ void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
 
     if (wholeGroup)
     {
-      LOG_DEBUG("Removing whole group: " << _matchSetToString(tmpMatchSets[i]));
+      LOG_TRACE("Removing whole group: " << _matchSetToString(tmpMatchSets[i]));
       matchSets.push_back(tmpMatchSets[i]);
     }
     else
@@ -427,9 +427,9 @@ void UnifyingConflator::_validateConflictSubset(const ConstOsmMapPtr& map,
     {
       if (i < j && MergerFactory::getInstance().isConflicting(map, matches[i], matches[j]))
       {
-        LOG_DEBUG("Conflict");
-        LOG_DEBUG(matches[i]->toString());
-        LOG_DEBUG(matches[j]->toString());
+        LOG_TRACE("Conflict");
+        LOG_TRACE(matches[i]->toString());
+        LOG_TRACE(matches[j]->toString());
       }
     }
   }
