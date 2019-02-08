@@ -136,7 +136,7 @@ ufd = {
         'LC2':'bridge:load_class2', // Load Class Type 2
         'LC3':'bridge:load_class3', // Load Class Type 3
         'LC4':'bridge:load_class4', // Load Class Type 4
-        'LEG':'bridge:length', // Length/Diameter in Meters With Greater Precision
+        'LEG':'length', // Length/Diameter in Meters With Greater Precision
         'LEN':'length', // Length
         'LEN_':'length2', // Length/Diameter2 ?????
         'LNU':'length:interior_useable', // Useable Length
@@ -3210,9 +3210,9 @@ ufd = {
         // #
         // #####
 
-        // Add a UUID
         tags.source = 'ufd:' + layerName.toLowerCase();
 
+        // Add a UUID
         if (attrs.GFID)
         {
             tags.uuid = '{' + attrs.GFID + '}';
@@ -3227,8 +3227,6 @@ ufd = {
 
         // Special Case...
         if (attrs.HWT == '999') tags.amenity = 'religion';
-
-        if (attrs.REL) tags.landuse = 'cemetery';
 
         // End Funky Rules
 
