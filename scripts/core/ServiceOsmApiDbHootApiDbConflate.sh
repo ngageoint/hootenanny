@@ -19,7 +19,7 @@ set -e
 # the behavior is the same as previous described except the random AOI selection is seeded for reproducible results.  
 # This feature is useful in exploring potential issues using this workflow with various datasets.
 
-# TODO: If we add xml changeset apply capabilities, then this script will need to take in a test type param and run twice 
+# If we add xml changeset apply capabilities, then this script will need to take in a test type param and run twice
 # for each test, once for sql and once for xml OR create two completely separate scripts, one for sql changeset derivation 
 # and one for xml changeset derivation.
 

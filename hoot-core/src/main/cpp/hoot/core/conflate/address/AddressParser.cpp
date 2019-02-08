@@ -330,7 +330,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   }
   libpostal_address_parser_response_destroy(parsed);
 
-  // intersections won't have numbers; TODO: unfortunately this lets through a false positive, like:
+  // intersections won't have numbers; unfortunately this lets through a false positive, like:
   // "lrv station-church street"
   if (/*!houseNum.isEmpty() &&*/ !street.isEmpty())
   {

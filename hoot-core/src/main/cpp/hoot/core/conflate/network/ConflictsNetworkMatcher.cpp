@@ -120,7 +120,7 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
             vCandidatesB.contains(e->getTo()))
         {
           createStub = true;
-          break;    // TODO: check this
+          break;
         }
       }
     }
@@ -181,7 +181,8 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
       {
         double theirDistance = _getMatchSeparation(r->getEdge());
 
-        if (myDistance > 5.0 && myDistance * 2.5 < theirDistance) // TODO: move values to config
+        // move values to config - #2913
+        if (myDistance > 5.0 && myDistance * 2.5 < theirDistance)
         {
           LOG_TRACE("Removing insane match: " << r->getEdge()->getUid() << " - "
                     << theirDistance << " keeping: " << em->getUid()
@@ -591,7 +592,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
   }
 
   // Setting this really helps reduce scoring oscillation
-  _weightInfluence = 0.68; // TODO: move to config
+  _weightInfluence = 0.68; // move to config - #2913
   foreach (ConstEdgeMatchPtr em, newWeights.keys())
   {
     newWeights[em] = pow(newWeights[em] * newWeights.size() / weightSum, _weightInfluence);
@@ -644,7 +645,7 @@ void ConflictsNetworkMatcher::finalize()
       // If it's a conflict, AND we score a lot better, ax the other one
       if (r->isConflict())
       {
-        if (myScore > 0.3 + theirScore) //TODO: move score value to config
+        if (myScore > 0.3 + theirScore) // move score value to config - #2913
         {
           _scores[r->getEdge()] = 1.0e-5;
         }

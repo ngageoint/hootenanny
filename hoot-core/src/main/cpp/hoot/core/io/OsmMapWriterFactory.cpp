@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapWriterFactory.h"
 
@@ -33,26 +33,15 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/MapProjector.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-boost::shared_ptr<OsmMapWriterFactory> OsmMapWriterFactory::_theInstance;
-
-OsmMapWriterFactory::OsmMapWriterFactory()
-{
-}
-
-OsmMapWriterFactory& OsmMapWriterFactory::getInstance()
-{
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new OsmMapWriterFactory());
-  }
-  return *_theInstance;
-}
+unsigned int OsmMapWriterFactory::_debugMapCount = 1;
 
 boost::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 {
@@ -62,7 +51,7 @@ boost::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
   LOG_VART(writerOverride);
 
   boost::shared_ptr<OsmMapWriter> writer;
-  if (writerOverride != "" && url != ConfigOptions().getDebugMapFilename())
+  if (writerOverride != "" && url != ConfigOptions().getDebugMapsFilename())
   {
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
   }
@@ -130,18 +119,52 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   return result;
 }
 
-void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap> &map, QString url)
+void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QString url,
+                                const bool silent)
 {
   if (map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap())
   {
-    LOG_INFO("Map is empty. Not writing to " << url << "...");
+    if (!silent)
+    {
+      LOG_INFO("Map is empty. Not writing to " << url << "...");
+    }
   }
   else
   {
-    LOG_INFO("Writing map to " << url << "...");
-    boost::shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
+    if (!silent)
+    {
+      LOG_INFO("Writing map to " << url << "...");
+    }
+    boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->open(url);
     writer->write(map);
+  }
+}
+
+void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString title)
+{
+  if (ConfigOptions().getDebugMapsWrite())
+  {
+    QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
+    if (!debugMapFileName.toLower().endsWith(".osm"))
+    {
+      throw IllegalArgumentException("Debug maps must be written to a .osm file.");
+    }
+    const QString fileNumberStr = StringUtils::getNumberStringPaddedWithZeroes(_debugMapCount, 3);
+    if (!title.isEmpty())
+    {
+      debugMapFileName =
+        debugMapFileName.replace(".osm", "-" + fileNumberStr + "-" + title + ".osm");
+    }
+    else
+    {
+      debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + ".osm");
+    }
+    LOG_DEBUG("Writing debug output to " << debugMapFileName);
+    OsmMapPtr copy(new OsmMap(map));
+    MapProjector::projectToWgs84(copy);
+    write(copy, debugMapFileName, true);
+    _debugMapCount++;
   }
 }
 

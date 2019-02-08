@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MultiaryReviewCommand.h"
@@ -242,7 +242,7 @@ bool MultiaryReviewCommand::operator==(const MultiaryReviewCommand& rhs) const
 
 bool MultiaryReviewCommand::applyToMap(OsmMapPtr pMap) const
 {
-  // @TODO: Implement this!
+  // TODO: Implement this!
   (void) pMap;
   return false;
 }

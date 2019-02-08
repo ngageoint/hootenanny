@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -66,7 +66,7 @@ public:
     map->visitRw(uut);
 
     //All statuses in the file should be updated to Unknown2.
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/StatusUpdateVisitorTest-runUpdateTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -90,7 +90,7 @@ public:
     StatusUpdateVisitor uut(Status::Unknown2, true);
     map->visitRw(uut);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/StatusUpdateVisitorTest-runUpdateOnlyIfInvalidTest.osm");
 
     HOOT_FILE_EQUALS(

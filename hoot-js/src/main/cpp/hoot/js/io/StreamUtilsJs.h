@@ -90,7 +90,7 @@ inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
 }
 
 /**
- * @todo strangely this class can sometimes cause objects to go wonky.
+ * Strangely, this class can sometimes cause objects to go wonky.
  */
 template <class T>
 QString toJson(const v8::Local<T> object)

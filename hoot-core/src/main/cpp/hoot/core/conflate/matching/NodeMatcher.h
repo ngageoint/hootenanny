@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NODEMATCHER_H
@@ -92,7 +92,6 @@ public:
    *
    * @param element the element to examine
    * @return true if the element is a network type; false otherwise
-   * @todo This method could be moved to a more common location.
    */
   static bool isNetworkFeatureType(ConstElementPtr element);
 

@@ -143,7 +143,7 @@ public:
         {
           //Don't like throwing an exception here from the command line, but this error needs to
           //bubble up to the web service.
-          //TODO: The better thing to do here would be to return an error code and have the services
+          //The better thing to do here would be to return an error code and have the services
           //scripts look for it, I think.
           throw HootException(
             "The changeset will not be written because conflicts exist in the target OSM API database.");

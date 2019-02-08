@@ -58,7 +58,6 @@ public:
 
   virtual void setMinSplitSize(Meters minSplitSize) { _minSplitSize = minSplitSize; }
 
-  /// @todo not used?  need some refactoring here
   virtual void setHeadingDelta(Meters /*headingDelta*/) { }
 
   virtual QString getDescription() const

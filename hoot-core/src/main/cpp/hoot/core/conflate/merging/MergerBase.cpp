@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MergerBase.h"
 
@@ -35,14 +35,19 @@ set<ElementId> MergerBase::getImpactedElementIds() const
 {
   set<ElementId> result;
 
-  const PairsSet& pairs = getPairs();
+  const PairsSet& pairs = _getPairs();
+  LOG_VART(hoot::toString(pairs));
   // make sure the map contains all our elements and they aren't conflated.
-  for (set< pair<ElementId, ElementId> >::const_iterator it = pairs.begin();
-    it != pairs.end(); ++it)
+  for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+       it != pairs.end(); ++it)
   {
+    LOG_VART(it->first);
+    LOG_VART(it->second);
+
     result.insert(it->first);
     result.insert(it->second);
   }
+  LOG_VART(result);
 
   return result;
 }
@@ -51,11 +56,15 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 {
   bool result = true;
 
-  const PairsSet& pairs = getPairs();
+  const PairsSet& pairs = _getPairs();
+  LOG_VART(hoot::toString(pairs));
   // make sure the map contains all our elements and they aren't conflated.
   for (set< pair<ElementId, ElementId> >::const_iterator it = pairs.begin();
-    it != pairs.end() && result; ++it)
+       it != pairs.end() && result; ++it)
   {
+    LOG_VART(it->first);
+    LOG_VART(it->second);
+
     result &= map->containsElement(it->first);
     result &= map->containsElement(it->second);
 
@@ -65,21 +74,29 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
       result &= map->getElement(it->second)->getStatus() != Status::Conflated;
     }
   }
+  LOG_VART(result);
 
   return result;
 }
 
 void MergerBase::replace(ElementId oldEid, ElementId newEid)
 {
-  PairsSet& pairs = getPairs();
+  LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
 
-  set< pair<ElementId, ElementId> >::iterator it = pairs.begin();
+  PairsSet& pairs = _getPairs();
+  LOG_VARD(hoot::toString(pairs));
+
+  set<pair<ElementId, ElementId>>::iterator it = pairs.begin();
   while (it != pairs.end())
   {
+    LOG_VART(it->first);
+    LOG_VART(it->second);
+
     if (it->first == oldEid)
     {
       pair<ElementId, ElementId> newP = *it;
       newP.first = newEid;
+      LOG_VART(newP);
       pairs.insert(newP);
       pairs.erase(it++);
     }
@@ -87,6 +104,7 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
     {
       pair<ElementId, ElementId> newP = *it;
       newP.second = newEid;
+      LOG_VART(newP);
       pairs.insert(newP);
       pairs.erase(it++);
     }
@@ -95,6 +113,8 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
       ++it;
     }
   }
+
+  LOG_VART(hoot::toString(pairs));
 }
 
 }

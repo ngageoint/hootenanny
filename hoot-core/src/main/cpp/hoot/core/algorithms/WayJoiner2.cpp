@@ -39,6 +39,7 @@
 #include <hoot/core/criterion/ParallelWayCriterion.h>
 #include <hoot/core/algorithms/extractors/ParallelScoreExtractor.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 #include <unordered_set>
 #include <vector>
@@ -59,21 +60,31 @@ _numJoined(0)
 void WayJoiner2::join(const OsmMapPtr& map)
 {
   _map = map;
+
   //  Join back any ways with parent ids
   _joinParentChild();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Join any siblings that have the same parent id but the parent isn't connected
   _joinSiblings();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Rejoin any ways that are now connected to their parents
   _joinParentChild();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Run one last join on ways that share a node and have a parent id
   _joinAtNode();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Clear out any remaining unjoined parent ids
   _resetParents();
+  OsmMapWriterFactory::writeDebugMap(map);
 }
 
 void WayJoiner2::_resetParents()
 {
-  LOG_TRACE("Resetting parents...");
+  LOG_DEBUG("Resetting parents...");
 
   if (_leavePid)
     return;
@@ -91,7 +102,7 @@ void WayJoiner2::_resetParents()
 
 void WayJoiner2::_joinParentChild()
 {
-  LOG_TRACE("Joining parents to children...");
+  LOG_DEBUG("Joining parents to children...");
 
   WayMap ways = _map->getWays();
   vector<long> ids;
@@ -104,27 +115,27 @@ void WayJoiner2::_joinParentChild()
   }
   //  Sort the ids so that the smallest is first (i.e. largest negative id is the last one allocated)
   sort(ids.begin(), ids.end());
-  LOG_VART(ids);
+  LOG_VARD(ids);
   //  Iterate all of the ids
   for (vector<long>::const_iterator it = ids.begin(); it != ids.end(); ++it)
   {
     WayPtr way = ways[*it];
     if (way)
     {
-      LOG_VART(way->getElementId());
+      LOG_VARD(way->getElementId());
     }
     long parent_id = way->getPid();
-    LOG_VART(parent_id);
+    LOG_VARD(parent_id);
     WayPtr parent = ways[parent_id];
     Tags parentTags;
     if (parent)
     {
-      LOG_VART(parent->getElementId());
+      LOG_VARD(parent->getElementId());
       parentTags = parent->getTags();
     }
     else
     {
-      LOG_TRACE("Parent with ID: " << parent_id << " does not exist.");
+      LOG_DEBUG("Parent with ID: " << parent_id << " does not exist.");
     }
 
     // don't try to join if there are explicitly conflicting names; fix for #2888
@@ -132,7 +143,7 @@ void WayJoiner2::_joinParentChild()
     if (parent && parentTags.hasName() && wayTags.hasName() &&
         !Tags::haveMatchingName(parentTags, wayTags))
     {
-      LOG_TRACE("Conflicting name tags.  Skipping parent/child join.");
+      LOG_DEBUG("Conflicting name tags.  Skipping parent/child join.");
       continue;
     }
     else
@@ -145,7 +156,7 @@ void WayJoiner2::_joinParentChild()
 
 void WayJoiner2::_joinSiblings()
 {
-  LOG_TRACE("Joining siblings...");
+  LOG_DEBUG("Joining siblings...");
 
   WayMap ways = _map->getWays();
   // Get a list of ways that still have a parent
@@ -164,7 +175,7 @@ void WayJoiner2::_joinSiblings()
   for (map<long, deque<long> >::iterator map_it = w.begin(); map_it != w.end(); ++map_it)
   {
     deque<long>& way_ids = map_it->second;
-    LOG_VART(way_ids);
+    LOG_VARD(way_ids);
     while (way_ids.size() > 1)
       _rejoinSiblings(way_ids);
   }
@@ -172,7 +183,7 @@ void WayJoiner2::_joinSiblings()
 
 void WayJoiner2::_joinAtNode()
 {
-  LOG_TRACE("Joining at node...");
+  LOG_DEBUG("Joining at node...");
 
   unordered_set<long> ids;
   unordered_set<long>::size_type currentNumSplitParentIds = ids.max_size();
@@ -181,7 +192,7 @@ void WayJoiner2::_joinAtNode()
   // keep iterating until we're no longer joining any ways; fix for #2867
   while (currentNumSplitParentIds > 0)
   {
-    LOG_TRACE("joinAtNode iteration: " << numIterations + 1);
+    LOG_DEBUG("joinAtNode iteration: " << numIterations + 1);
 
     WayMap ways = _map->getWays();
     ids.clear();
@@ -193,7 +204,7 @@ void WayJoiner2::_joinAtNode()
         ids.insert(way->getId());
     }
 
-    LOG_VART(currentNumSplitParentIds);
+    LOG_VARD(currentNumSplitParentIds);
     // If we didn't reduce the number of ways from the previous iteration or there are none left
     // to reduce, exit out.
     if (currentNumSplitParentIds == ids.size() || ids.size() == 0)
@@ -201,14 +212,14 @@ void WayJoiner2::_joinAtNode()
       break;
     }
     currentNumSplitParentIds = ids.size();
-    LOG_VART(currentNumSplitParentIds);
+    LOG_VARD(currentNumSplitParentIds);
 
     boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
     //  Iterate all of the nodes and check for compatible ways to join them to
     for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
     {
       WayPtr way = ways[*it];
-      LOG_VART(way->getElementId());
+      LOG_VARD(way->getElementId());
 
       Tags pTags = way->getTags();
       // Ignoring length here during the parent/child tag equals check, since differing values in
@@ -218,22 +229,22 @@ void WayJoiner2::_joinAtNode()
       pTags.remove(MetadataTags::Length());
       //  Check each of the endpoints for ways to merge
       vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
-      LOG_VART(endpoints.size());
-      LOG_VART(endpoints);
+      LOG_VARD(endpoints.size());
+      LOG_VARD(endpoints);
 
       for (vector<long>::const_iterator e = endpoints.begin(); e != endpoints.end(); ++e)
       {
         //  Find all ways connected to this node
         const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
-        LOG_VART(way_ids.size());
-        LOG_VART(way_ids);
+        LOG_VARD(way_ids.size());
+        LOG_VARD(way_ids);
         for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
         {
-          LOG_VART(way->getElementId());
+          LOG_VARD(way->getElementId());
           WayPtr child = _map->getWay(*ways);
           if (child)
           {
-            LOG_VART(child->getElementId());
+            LOG_VARD(child->getElementId());
           }
           if (child && way->getId() != child->getId() && _areJoinable(way, child))
           {
@@ -252,8 +263,9 @@ void WayJoiner2::_joinAtNode()
             }
             else
             {
-              LOG_VART(pTags);
-              LOG_VART(cTags);
+              LOG_DEBUG("Ways had conflicting names.  Not joining...");
+              LOG_VARD(pTags);
+              LOG_VARD(cTags);
             }
           }
         }
@@ -262,7 +274,7 @@ void WayJoiner2::_joinAtNode()
     numIterations++;
   }
 
-  LOG_TRACE("Num joinAtNode iterations: " << numIterations);
+  LOG_DEBUG("Num joinAtNode iterations: " << numIterations);
 }
 
 bool WayJoiner2::_areJoinable(const WayPtr& w1, const WayPtr& w2)
@@ -279,8 +291,8 @@ bool WayJoiner2::_areJoinable(const WayPtr& w1, const WayPtr& w2)
 
 void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
 {
-  LOG_TRACE("Rejoining siblings...");
-  LOG_VART(way_ids);
+  LOG_DEBUG("Rejoining siblings...");
+  LOG_VARD(way_ids);
 
   WayMap ways = _map->getWays();
   WayPtr start;
@@ -296,12 +308,12 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
 
     if (!way)
     {
-      LOG_TRACE("Way with ID: " << id << " does not exist.");
+      LOG_DEBUG("Way with ID: " << id << " does not exist.");
       continue;
     }
     else
     {
-      LOG_VART(way->getElementId());
+      LOG_VARD(way->getElementId());
     }
 
     if (sorted.empty())
@@ -313,13 +325,13 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
     }
     else
     {
-      LOG_VART(way->getElementId());
-      LOG_VART(start->getElementId());
-      LOG_VART(end->getElementId());
-      LOG_VART(way->getFirstNodeId());
-      LOG_VART(way->getLastNodeId());
-      LOG_VART(start->getFirstNodeId());
-      LOG_VART(end->getLastNodeId());
+      LOG_VARD(way->getElementId());
+      LOG_VARD(start->getElementId());
+      LOG_VARD(end->getElementId());
+      LOG_VARD(way->getFirstNodeId());
+      LOG_VARD(way->getLastNodeId());
+      LOG_VARD(start->getFirstNodeId());
+      LOG_VARD(end->getLastNodeId());
 
       OneWayCriterion oneWayCrit;
 
@@ -344,7 +356,7 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
         //  Roads that aren't one way can be reversed but still be valid
         if (start->getFirstNodeId() == way->getFirstNodeId())
         {
-          LOG_TRACE("Reversing " << way->getElementId() << "...");
+          LOG_DEBUG("Reversing " << way->getElementId() << "...");
           way->reverseOrder();
           sorted.push_front(id);
           start = way;
@@ -352,7 +364,7 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
         }
         else if (end->getLastNodeId() == way->getLastNodeId())
         {
-          LOG_TRACE("Reversing " << way->getElementId() << "...");
+          LOG_DEBUG("Reversing " << way->getElementId() << "...");
           way->reverseOrder();
           sorted.push_back(id);
           end = way;
@@ -361,7 +373,7 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
         else
         {
           //  Requeue the way and up the failure count
-          LOG_TRACE("Way with ID: " << id << " cannot be rejoined (1).");
+          LOG_DEBUG("Way with ID: " << id << " cannot be rejoined (1).");
           way_ids.push_back(id);
           failure_count++;
         }
@@ -369,13 +381,13 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
       else
       {
         //  Requeue the way and up the failure count
-        LOG_TRACE("Way with ID: " << id << " cannot be rejoined (2).");
+        LOG_DEBUG("Way with ID: " << id << " cannot be rejoined (2).");
         way_ids.push_back(id);
         failure_count++;
       }
     }
   }
-  LOG_VART(sorted);
+  LOG_VARD(sorted);
 
   //  Iterate the sorted ways and merge them
   if (sorted.size() > 1)
@@ -383,13 +395,13 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
     WayPtr parent = ways[sorted[0]];
     if (parent)
     {
-      LOG_VART(parent->getElementId());
+      LOG_VARD(parent->getElementId());
     }
     for (size_t i = 1; i < sorted.size(); ++i)
     {
       if (ways[sorted[i]])
       {
-        LOG_VART((ways[sorted[i]]->getElementId()));
+        LOG_VARD((ways[sorted[i]]->getElementId()));
       }
       _joinWays(parent, ways[sorted[i]]);
     }
@@ -404,26 +416,28 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (!parent || !child)
     return;
 
-  LOG_VART(parent->getId());
-  LOG_VART(child->getId());
+  LOG_VARD(parent->getId());
+  LOG_VARD(child->getId());
+  //LOG_VARD(parent);
+  //LOG_VARD(child);
 
   //  Don't join area ways
   AreaCriterion areaCrit;
   if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
   {
-    LOG_TRACE("One or more of the ways to be joined are areas...skipping join.");
+    LOG_DEBUG("One or more of the ways to be joined are areas...skipping join.");
     return;
   }
 
-  LOG_VART(parent->getStatus());
-  LOG_VART(child->getStatus());
+  LOG_VARD(parent->getStatus());
+  LOG_VARD(child->getStatus());
 
   //  Check if the two ways are able to be joined back up
 
   //  Make sure that there are nodes in the ways
   if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
   {
-    LOG_TRACE("One or more of the ways to be joined are empty...skipping join.");
+    LOG_DEBUG("One or more of the ways to be joined are empty...skipping join.");
     return;
   }
 
@@ -475,8 +489,8 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     wayWithTagsToKeep = parent;
     wayWithTagsToLose = child;
   }
-  LOG_VART(wayWithTagsToKeep->getElementId());
-  LOG_VART(wayWithTagsToLose->getElementId());
+  LOG_VARD(wayWithTagsToKeep->getElementId());
+  LOG_VARD(wayWithTagsToLose->getElementId());
 
   // deal with one way streets
   OneWayCriterion oneWayCrit;
@@ -484,24 +498,24 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
       !DirectionFinder::isSimilarDirection(
         _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
   {
-    LOG_TRACE("Reversing order of " << wayWithTagsToKeep->getElementId());
+    LOG_DEBUG("Reversing order of " << wayWithTagsToKeep->getElementId());
     // make sure this reversal gets done before checking the join type later on
     wayWithTagsToKeep->reverseOrder();
   }
 
   vector<long> parent_nodes = parent->getNodeIds();
-  LOG_VART(parent_nodes.size());
-  LOG_VART(parent_nodes);
+  LOG_VARD(parent_nodes.size());
+  LOG_VARD(parent_nodes);
   vector<long> child_nodes = child->getNodeIds();
-  LOG_VART(child_nodes.size());
-  LOG_VART(child_nodes);
+  LOG_VARD(child_nodes.size());
+  LOG_VARD(child_nodes);
 
   //  First make sure that they share the same node
   JoinAtNodeMergeType joinType;
-  LOG_VART(child_nodes[0]);
-  LOG_VART(parent_nodes[parent_nodes.size() - 1]);
-  LOG_VART(child_nodes[child_nodes.size() - 1]);
-  LOG_VART(parent_nodes[0]);
+  LOG_VARD(child_nodes[0]);
+  LOG_VARD(parent_nodes[parent_nodes.size() - 1]);
+  LOG_VARD(child_nodes[child_nodes.size() - 1]);
+  LOG_VARD(parent_nodes[0]);
   if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
   {
     joinType = JoinAtNodeMergeType::ParentFirst;
@@ -512,18 +526,18 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
   else
   {
-    LOG_TRACE("No join type found.");
+    LOG_DEBUG("No join type found.");
     return;
   }
-  LOG_VART(joinType);
+  LOG_VARD(joinType);
 
   // doesn't work
 //  const double parallelScore =
 //    ParallelScoreExtractor().extract(*_map, wayWithTagsToKeep, wayWithTagsToLose);
-//  LOG_VART(parallelScore);
+//  LOG_VARD(parallelScore);
 //  if (parallelScore < 0.138)
 //  {
-//    LOG_TRACE("Join failed on parallel score of: " << parallelScore);
+//    LOG_DEBUG("Join failed on parallel score of: " << parallelScore);
 //    return;
 //  }
 
@@ -535,8 +549,8 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   // #2888 fix
   Tags tags1 = wayWithTagsToKeep->getTags();
   Tags tags2 = wayWithTagsToLose->getTags();
-  LOG_VART(tags1);
-  LOG_VART(tags2);
+  LOG_VARD(tags1);
+  LOG_VARD(tags2);
 
   // If each of these has a length tag, then we need to add up the new value for the joined ways.
   // This logic should possibly be a part of the default tag merging instead of being done here
@@ -577,7 +591,7 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
 
   parent->setTags(mergedTags);
-  LOG_VART(parent->getTags());
+  LOG_VARD(parent->getTags());
 
   //  Remove the duplicate node id of the overlap
   if (joinType == JoinAtNodeMergeType::ParentFirst)
@@ -598,16 +612,16 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
     parent->setStatus(Status::Conflated);
 
-  LOG_VART(parent->getNodeIds());
-  LOG_VART(child->getNodeIds());
+  LOG_VARD(parent->getNodeIds());
+  LOG_VARD(child->getNodeIds());
 
   //  Update any relations that contain the child to use the parent
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
-  LOG_VART(parent->getNodeIds());
-  LOG_VART(child->getNodeIds());
+  LOG_VARD(parent->getNodeIds());
+  LOG_VARD(child->getNodeIds());
   child->getTags().clear();
   RecursiveElementRemover(child->getElementId()).apply(_map);
-  LOG_VART(parent->getNodeIds());
+  LOG_VARD(parent->getNodeIds());
 
   _numJoined++;
 }

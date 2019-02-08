@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONTYPESCOREEXTRACTOR_H
 #define POIPOLYGONTYPESCOREEXTRACTOR_H
@@ -86,6 +86,7 @@ public:
   static bool isReligion(const Tags& tags);
   static bool isRestaurant(ConstElementPtr element);
   static bool isRestaurant(const Tags& tags);
+  static bool isNatural(ConstElementPtr element);
 
   /**
    * Determines if an element has more than one type associated with it

@@ -45,7 +45,7 @@ class IterativeNetworkMatcherTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(IterativeNetworkMatcherTest);
   CPPUNIT_TEST(toyTest);
-  /// @todo this isn't being actively tested now, we're using vagabond for now...
+  // this isn't being actively tested now, we're using vagabond for now...
   //CPPUNIT_TEST(edgeMatchTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -65,7 +65,7 @@ public:
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::getInstance().write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
+    OsmMapWriterFactory::write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
       QLatin1Char('0')));
   }
 
@@ -76,9 +76,9 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestE1.osm", true,
+    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestE1.osm", true,
       Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestE2.osm", true,
+    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestE2.osm", true,
       Status::Unknown2);
     MapCleaner().apply(map);
     MapProjector::projectToPlanar(map);
@@ -98,7 +98,7 @@ public:
     IterativeNetworkMatcherPtr uut(new IterativeNetworkMatcher());
     uut->matchNetworks(map, network1, network2);
 
-    /// @todo sloppy quick & dirty test to keep things moving
+    // sloppy quick & dirty test to keep things moving
     HOOT_STR_EQUALS("[4]{(s1: [2]{Node:-225 -- Way:-232 -- Node:-230, Node:-288 -- Way:-236 -- Node:-230 (reverse)} s2: [2]{Node:-212 -- Way:-273 -- Node:-213, Node:-213 -- Way:-214 -- Node:-213}, 1), (s1: [2]{Node:-288 -- Way:-236 -- Node:-230, Node:-225 -- Way:-232 -- Node:-230 (reverse)} s2: [2]{Node:-213 -- Way:-214 -- Node:-213, Node:-212 -- Way:-273 -- Node:-213 (reverse)}, 1), (s1: [2]{Node:-33 -- Way:-45 -- Node:-37, Node:-41 -- Way:-47 -- Node:-37 (reverse)} s2: [1]{Node:-17 -- Way:-27 -- Node:-23}, 1), (s1: [2]{Node:-75 -- Way:-73 -- Node:-77, Node:-101 -- Way:-99 -- Node:-77 (reverse)} s2: [1]{Node:-144 -- Way:-148 -- Node:-151}, 1)}",
       uut->_edgeMatches);
   }
@@ -110,19 +110,19 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", false,
+//    OsmMapReaderFactory::read(map, "test-files/conflate/network/DcGisRoads.osm", false,
 //      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb-multi10.osm", false,
+//    OsmMapReaderFactory::read(map, "tmp/dcperb-multi10.osm", false,
 //      Status::Unknown2);
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB1.osm", false,
       Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB2.osm", false,
       Status::Unknown2);
 
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/iterative/highway-001/Input1.osm", false,
+//    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/iterative/highway-001/Input1.osm", false,
 //      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/iterative/highway-001/Input2.osm", false,
+//    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/iterative/highway-001/Input2.osm", false,
 //      Status::Unknown2);
 
     MapCleaner().apply(map);

@@ -116,8 +116,7 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   vector< pair<ElementId, ElementId> > replaced =
       toCpp< vector< pair<ElementId, ElementId> > >(args[3]);
 
-  HighwaySnapMergerPtr snapMerger(new HighwaySnapMerger(
-    ConfigOptions().getWayMergerMinSplitSize(), pairs, sublineMatcher));
+  HighwaySnapMergerPtr snapMerger(new HighwaySnapMerger(pairs, sublineMatcher));
   snapMerger->apply(map, replaced);
 
   // modify the parameter that was passed in

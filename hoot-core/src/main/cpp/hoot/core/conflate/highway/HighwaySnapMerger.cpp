@@ -66,10 +66,9 @@ namespace hoot
 
 unsigned int HighwaySnapMerger::logWarnCount = 0;
 
-HighwaySnapMerger::HighwaySnapMerger(Meters minSplitSize,
+HighwaySnapMerger::HighwaySnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
   const boost::shared_ptr<SublineStringMatcher> &sublineMatcher) :
-_minSplitSize(minSplitSize), // TODO: this isn't used?
 _sublineMatcher(sublineMatcher)
 {
   _pairs = pairs;
@@ -114,10 +113,10 @@ private:
 
 void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId>>& replaced)
 {
-  vector< pair<ElementId, ElementId> > pairs;
+  vector<pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
 
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
     ElementId eid1 = it->first;
@@ -127,12 +126,17 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
     {
       pairs.push_back(pair<ElementId, ElementId>(eid1, eid2));
     }
+    else
+    {
+      LOG_TRACE(
+        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
+    }
   }
 
   ShortestFirstComparator shortestFirst;
   shortestFirst.map = map;
   sort(pairs.begin(), pairs.end(), shortestFirst);
-  for (vector< pair<ElementId, ElementId> >::const_iterator it = pairs.begin();
+  for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
        it != pairs.end(); ++it)
   {
     ElementId eid1 = it->first;
@@ -447,7 +451,7 @@ void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayP
           // about connections (e.g. lollipop style).
           if (_directConnect(map, w))
           {
-            /// @todo This should likely remove the way even if it is part of another relation.
+            // This should likely remove the way even if it is part of another relation - #2938
             RecursiveElementRemover(w->getElementId()).apply(map);
           }
         }

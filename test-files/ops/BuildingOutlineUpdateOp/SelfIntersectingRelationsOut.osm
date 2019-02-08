@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="8.382019700000001" minlon="-13.1567342" maxlat="8.889438800000001" maxlon="-12.9969995"/>
     <node visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.3829472971881263" lon="-13.1560971900159327"/>
     <node visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.3829472971881263" lon="-13.1560971900159327"/>
     <node visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.3835674000000004" lon="-13.1565426999999993"/>
@@ -306,7 +307,7 @@
         <tag k="hoot:review:type" v="Bad Geometry"/>
         <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:score" v="-1"/>
-        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Way:-4."/>
+        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Way(-4)."/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -315,7 +316,7 @@
         <tag k="hoot:review:type" v="Bad Geometry"/>
         <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:score" v="-1"/>
-        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Way:-1."/>
+        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Way(-1)."/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">

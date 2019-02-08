@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADERFACTORY_H
 #define OSMMAPREADERFACTORY_H
@@ -43,28 +43,27 @@ class OsmMap;
 class OsmMapReader;
 
 /**
- * A factory for constructing readers based on the URL (Singleton).
+ * A factory for constructing readers based on the URL
  */
 class OsmMapReaderFactory
 {
 
 public:
 
-  boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
-                                               Status defaultStatus = Status::Invalid);
+  static boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
+                                                      Status defaultStatus = Status::Invalid);
   //Note the url as the last param here...was getting runtime overlap between these two where
   //bools were being passed as status ints and vice versa.  May need to do some more refactoring
   //here to make things cleaner.
-  boost::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus, QString url);
-
-  static OsmMapReaderFactory& getInstance();
+  static boost::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus,
+                                                      QString url);
 
   /**
    * Returns true if a partial reader is available for the given URL.
    */
-  bool hasPartialReader(QString url);
+  static bool hasPartialReader(QString url);
 
-  bool hasElementInputStream(QString url);
+  static bool hasElementInputStream(QString url);
 
   static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
@@ -77,14 +76,10 @@ public:
 
 private:
 
-  OsmMapReaderFactory();
+  static void _read(
+    boost::shared_ptr<OsmMap> map, boost::shared_ptr<OsmMapReader> reader, const QString url);
 
-  static boost::shared_ptr<OsmMapReaderFactory> _theInstance;
-
-  static void _read(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OsmMapReader> reader,
-             const QString url);
-
-  boost::shared_ptr<OsmMapReader> _createReader(const QString url);
+  static boost::shared_ptr<OsmMapReader> _createReader(const QString url);
 };
 
 }

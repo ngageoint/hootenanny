@@ -152,6 +152,7 @@ private:
 
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
+  QString _matchSetToString(const MatchSet& matchSet) const;
 };
 
 }

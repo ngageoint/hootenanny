@@ -122,7 +122,7 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
   Meters distanceMean = distanceSum / v.size();
 
-  /// @todo Make me better.
+  // TODO: Make me better.
   // E.g. if s1 = 50 & s2 = 50, then sigma = 70.
   // This is a placeholder for the probability. Mike Porter will help me out w/ a better
   // approximation later.

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSTRINGMERGER_H
 #define WAYSTRINGMERGER_H
@@ -50,7 +50,6 @@ public:
 
   static unsigned int logWarnCount;
 
-  /// @todo clean me
   class SublineMapping
   {
   public:
@@ -85,6 +84,7 @@ public:
     QString toString() const;
 
   private:
+
     WaySubline _subline2;
     ConstWayPtr _way2;
     WayLocation _start;

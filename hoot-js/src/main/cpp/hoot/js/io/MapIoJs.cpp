@@ -85,7 +85,7 @@ void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
       status = (Status::Type)args[3]->ToInteger()->Value();
     }
 
-    OsmMapReaderFactory::getInstance().read(map->getMap(), url, useFileId, status);
+    OsmMapReaderFactory::read(map->getMap(), url, useFileId, status);
 
     args.GetReturnValue().SetUndefined();
   }
@@ -147,7 +147,7 @@ void MapIoJs::saveMap(const FunctionCallbackInfo<Value>& args)
   String::Utf8Value param1(args[1]->ToString());
   QString url = QString::fromUtf8(*param1);
 
-  OsmMapWriterFactory::getInstance().write(map, url);
+  OsmMapWriterFactory::write(map, url);
 
   args.GetReturnValue().SetUndefined();
 }

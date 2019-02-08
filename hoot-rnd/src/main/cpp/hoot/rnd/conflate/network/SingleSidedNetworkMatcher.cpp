@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SingleSidedNetworkMatcher.h"
 
@@ -201,7 +201,7 @@ void SingleSidedNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr 
   _links = _edgeMatches->calculateEdgeLinks();
 }
 
-/// @todo this method will need to be redefined to take advantage of the new match strings
+// this method will need to be redefined to take advantage of the new match strings
 void SingleSidedNetworkMatcher::_normalizeScores()
 {
   // normalize the scores based on each edge in the second input. The value can be less than 1.
@@ -296,8 +296,8 @@ void SingleSidedNetworkMatcher::_seedVertexScores()
   }
 }
 
-/// @todo modify this method to take a EdgeMatchSet or just one half of the set. -- dunno how
-/// that will work yet.
+// modify this method to take a EdgeMatchSet or just one half of the set. -- dunno how
+// that will work yet.
 void SingleSidedNetworkMatcher::_updateEdgeScores()
 {
   EdgeMatchScoreMap newScores;
@@ -391,8 +391,8 @@ void SingleSidedNetworkMatcher::_updateEdgeScores()
   _edge2Scores = newScores;
 }
 
-/// @todo modify this method to take a EdgeMatchSet or just one half of the set. -- dunno how
-/// that will work yet.
+// modify this method to take a EdgeMatchSet or just one half of the set. -- dunno how
+// that will work yet.
 void SingleSidedNetworkMatcher::_updateEdgeScoresAdditive()
 {
   EdgeMatchScoreMap newScores;
@@ -485,7 +485,7 @@ void SingleSidedNetworkMatcher::_updateEdgeScoresAdditive()
   _edge2Scores = newScores;
 }
 
-/// @todo modify this to use the EdgeMatchSet rather than the vertices
+// modify this to use the EdgeMatchSet rather than the vertices
 void SingleSidedNetworkMatcher::_updateVertexScores()
 {
 }

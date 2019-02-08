@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -150,7 +150,7 @@ public:
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
     }
 
-    /// @todo fix; see #1177
+    // need to fix; see #1177
     n1->getTags().set("name", "foo");
     n1->setX(-8);
     {

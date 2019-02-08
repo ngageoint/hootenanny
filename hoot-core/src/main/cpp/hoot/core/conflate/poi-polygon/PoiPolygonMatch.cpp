@@ -393,7 +393,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
-      //TODO: b/c this is a miss, don't think it will get added to the output anywhere...
+      // TODO: b/c this is a miss, don't think it will actually get added to the output anywhere...
       _explainText = "Match score automatically dropped by review reduction.";
     }
   }
@@ -430,7 +430,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
     if (_explainText.isEmpty())
     {
-      //TODO: move this somewhere else?...or start values out at 0.0?
+      // TODO: move this somewhere else?...or start values out at 0.0?
       if (_typeScore < 0.0)
       {
         _typeScore = 0.0;
@@ -447,7 +447,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       const QString nameMatchStr = _nameScore >= _nameScoreThreshold ? "yes" : "no";
       const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
       const QString distanceMatchStr = _distance <= _matchDistanceThreshold ? "yes" : "no";
-      //TODO: these score contributions are hardcoded
+      // TODO: these score contributions are hardcoded
       _explainText =
         QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: %3 (%4m; score: 2/2), type: %5 (score: %6/1), name: %7 (score: %8/1), address: %9 (score: %10/1). Max distance allowed for match: %11m, max distance allowed for review: %12m.")
           .arg(evidence)

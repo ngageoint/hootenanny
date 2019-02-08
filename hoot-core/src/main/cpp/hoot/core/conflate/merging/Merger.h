@@ -43,6 +43,7 @@ namespace hoot
 class Merger
 {
 public:
+
   virtual ~Merger() {}
 
   /**

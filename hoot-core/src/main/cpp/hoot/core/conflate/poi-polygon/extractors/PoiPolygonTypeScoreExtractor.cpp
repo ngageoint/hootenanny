@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonTypeScoreExtractor.h"
 
@@ -183,7 +183,7 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QStr
   }
 
   //If the tag key is already OSM, then no need to translate it.
-  //TODO: Should this also have use and/or building categories be added here?
+  // TODO: Should this also have use and/or building categories be added here?
   if (_getTagValueTokens("poi").contains(tagValue))
   {
     LOG_TRACE("Input tag value to translate: " << tagValue << " is already a poi tag value.");
@@ -462,7 +462,7 @@ bool PoiPolygonTypeScoreExtractor::isReligion(const Tags& tags)
   return tags.get("amenity").toLower() == "place_of_worship" ||
          tags.get("building").toLower() == "church" ||
          tags.get("building").toLower() == "mosque" ||
-         //TODO: this one is an alias of building=mosque, so we should be getting it from there
+         // TODO: this one is an alias of building=mosque, so we should be getting it from there
          //instead
          tags.get("amenity").toLower() == "mosque" ||
          tags.get("building").toLower() == "synagogue";
@@ -535,6 +535,11 @@ bool PoiPolygonTypeScoreExtractor::isRestaurant(ConstElementPtr element)
 bool PoiPolygonTypeScoreExtractor::isRestaurant(const Tags& tags)
 {
   return tags.get("amenity") == "restaurant" || tags.get("amenity") == "fast_food";
+}
+
+bool PoiPolygonTypeScoreExtractor::isNatural(ConstElementPtr element)
+{
+  return element->getTags().contains("natural");
 }
 
 bool PoiPolygonTypeScoreExtractor::_haveConflictingTags(const QString tagKey, const Tags& t1,

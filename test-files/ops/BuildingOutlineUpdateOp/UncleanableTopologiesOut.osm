@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-13.52587648770018" minlon="-172.3076125432203" maxlat="-13.52322358770161" maxlon="-172.3043568"/>
     <node visible="true" id="-453" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5232235877016116" lon="-172.3057521726027232"/>
     <node visible="true" id="-452" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5232235877016134" lon="-172.3056548908227796"/>
     <node visible="true" id="-451" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5258764877001791" lon="-172.3075333203389619"/>
@@ -1679,7 +1680,7 @@
         <tag k="hoot:review:type" v="Bad Geometry"/>
         <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:score" v="-1"/>
-        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation:-7."/>
+        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation(-7)."/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1688,7 +1689,7 @@
         <tag k="hoot:review:type" v="Bad Geometry"/>
         <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:score" v="-1"/>
-        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation:-6."/>
+        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation(-6)."/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">

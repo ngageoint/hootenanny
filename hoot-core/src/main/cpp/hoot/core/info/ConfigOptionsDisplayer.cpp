@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConfigOptionsDisplayer.h"
@@ -97,8 +97,8 @@ QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(const QString option
     throw HootException("Error opening file for reading: " + configOptionsFile);
   }
 
-  //TODO: replace this w/ some fancy lookahead regex called by grep...doing it by brute force for
-  //now
+  // We could eventually replace this w/ some fancy lookahead regex called by grep...doing it by
+  // brute force for now.
   QString buffer;
   QTextStream ts(&buffer);
   try

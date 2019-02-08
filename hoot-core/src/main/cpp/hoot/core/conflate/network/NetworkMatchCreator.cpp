@@ -140,9 +140,10 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
       MapProjector::projectToWgs84(copy);
       conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+      // TODO: use config opt for debug file path
       QString name = QString("tmp/debug-%1.osm").arg(i, 3, 10, QLatin1Char('0'));
       LOG_INFO("Writing debug map: " << name);
-      OsmMapWriterFactory::getInstance().write(copy, name);
+      OsmMapWriterFactory::write(copy, name);
     }
   }
 
@@ -160,7 +161,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
     QString name = QString("tmp/debug-final.osm");
     LOG_INFO("Writing debug map: " << name);
-    OsmMapWriterFactory::getInstance().write(copy, name);
+    OsmMapWriterFactory::write(copy, name);
   }
 
   LOG_DEBUG("Retrieving edge scores...");

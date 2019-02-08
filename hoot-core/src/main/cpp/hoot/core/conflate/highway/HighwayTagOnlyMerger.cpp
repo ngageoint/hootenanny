@@ -34,36 +34,149 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
 
+#include <hoot/core/visitors/LengthOfWaysVisitor.h>
+
 namespace hoot
 {
+
+// TODO: remove
+//class ShortestFirstComparator
+//{
+//public:
+
+//  bool operator()(const std::pair<ElementId, ElementId>& p1, const std::pair<ElementId, ElementId>& p2)
+//  {
+//    return std::min(getLength(p1.first), getLength(p1.second)) <
+//        std::min(getLength(p2.first), getLength(p2.second));
+//  }
+
+//  Meters getLength(const ElementId& eid)
+//  {
+//    Meters result;
+//    if (_lengthMap.contains(eid))
+//    {
+//      result = _lengthMap[eid];
+//    }
+//    else
+//    {
+//      LengthOfWaysVisitor v;
+//      v.setOsmMap(map.get());
+//      map->getElement(eid)->visitRo(*map, v);
+//      result = v.getLengthOfWays();
+//      _lengthMap[eid] = result;
+//    }
+//    return result;
+//  }
+
+//  virtual QString getDescription() const { return ""; }
+
+//  OsmMapPtr map;
+
+//private:
+
+//  QHash<ElementId, Meters> _lengthMap;
+//};
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs)
 {
   _pairs = pairs;
+  LOG_VARD(hoot::toString(_pairs));
 }
 
 void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
                                  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
+  LOG_VARD(hoot::toString(_pairs));
+  LOG_VARD(hoot::toString(replaced));
+
   for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
        it != _pairs.end(); ++it)
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
+    LOG_DEBUG("eid1 before replacement check: " << eid1);
+    LOG_DEBUG("eid2 before replacement check: " << eid2);
+
+//    for (size_t i = 0; i < replaced.size(); i++)
+//    {
+//      if (eid1 == replaced[i].first)
+//      {
+//        eid1 = replaced[i].second;
+//      }
+//      if (eid2 == replaced[i].first)
+//      {
+//        eid2 = replaced[i].second;
+//      }
+//    }
+//    LOG_DEBUG("eid1 after replacement check: " << eid1);
+//    LOG_DEBUG("eid2 after replacement check: " << eid2);
 
     if (map->containsElement(eid1) && map->containsElement(eid2))
     {
       _mergePair(map, eid1, eid2, replaced);
     }
+    else
+    {
+      LOG_DEBUG(
+        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
+    }
   }
 }
+
+//void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
+//                                 std::vector<std::pair<ElementId, ElementId>>& replaced)
+//{
+//  LOG_VARD(hoot::toString(_pairs));
+//  LOG_VARD(hoot::toString(replaced));
+
+//  std::vector<std::pair<ElementId, ElementId>> pairs;
+//  pairs.reserve(_pairs.size());
+
+//  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
+//       it != _pairs.end();  ++it)
+//  {
+//    ElementId eid1 = it->first;
+//    ElementId eid2 = it->second;
+
+//    if (map->containsElement(eid1) && map->containsElement(eid2))
+//    {
+//      pairs.push_back(std::pair<ElementId, ElementId>(eid1, eid2));
+//    }
+//    else
+//    {
+//      LOG_DEBUG(
+//        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
+//    }
+//  }
+
+//  ShortestFirstComparator shortestFirst;
+//  shortestFirst.map = map;
+//  sort(pairs.begin(), pairs.end(), shortestFirst);
+//  for (std::vector<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+//       it != pairs.end(); ++it)
+//  {
+//    ElementId eid1 = it->first;
+//    ElementId eid2 = it->second;
+
+//    for (size_t i = 0; i < replaced.size(); i++)
+//    {
+//      if (eid1 == replaced[i].first)
+//      {
+//        eid1 = replaced[i].second;
+//      }
+//      if (eid2 == replaced[i].first)
+//      {
+//        eid2 = replaced[i].second;
+//      }
+//    }
+
+//    _mergePair(map, eid1, eid2, replaced);
+//  }
+//}
 
 bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  LOG_VART(eid1);
-  LOG_VART(eid2);
-
   if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
   {
     return true;
@@ -71,12 +184,17 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
 
   ElementPtr e1 = map->getElement(eid1);
   ElementPtr e2 = map->getElement(eid2);
+  if (!e1)
+  {
+    LOG_DEBUG(eid1 << " null.");
+  }
+  if (!e2)
+  {
+    LOG_DEBUG(eid2 << " null.");
+  }
 
   if (e1 && e2)
   {
-    LOG_VART(e1->getStatus());
-    LOG_VART(e2->getStatus());
-
     ElementPtr elementToKeep;
     ElementPtr elementToRemove;
     assert(!(e1->getStatus() == Status::Conflated && e2->getStatus() == Status::Conflated));
@@ -90,10 +208,10 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       elementToKeep = e2;
       elementToRemove = e1;
     }
-    LOG_VART(elementToKeep->getElementId());
-    LOG_VART(elementToRemove->getElementId());
-    //LOG_VART(elementToKeep);
-    //LOG_VART(elementToRemove);
+    //LOG_VART(elementToKeep->getElementId());
+    //LOG_VART(elementToRemove->getElementId());
+    LOG_VARD(elementToKeep);
+    LOG_VARD(elementToRemove);
 
     // don't try to join if there are explicitly conflicting names; fix for #2888; not sure what
     // implications this has outside of the single test dataset I've tested on so far
@@ -101,7 +219,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
         elementToRemove->getTags().hasName() &&
         !Tags::haveMatchingName(elementToKeep->getTags(), elementToRemove->getTags()))
     {
-      LOG_TRACE("Conflicting name tags.  Skipping merge.");
+      LOG_DEBUG("Conflicting name tags.  Skipping merge.");
       return false;
     }
 
@@ -114,7 +232,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       if (OneWayCriterion().isSatisfied(wayToRemove) &&
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), wayToKeep, wayToRemove))
       {
-        LOG_TRACE("Reversing " << wayToKeep->getElementId());
+        LOG_DEBUG("Reversing " << wayToKeep->getElementId());
         wayToKeep->reverseOrder();
       }
     }
@@ -128,7 +246,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     replaced.push_back(
       std::pair<ElementId, ElementId>(
         elementToRemove->getElementId(), elementToKeep->getElementId()));
-    LOG_VART(elementToKeep);
+    LOG_VARD(elementToKeep);
     // Is this necessary?
     RecursiveElementRemover(elementToRemove->getElementId()).apply(map);
   }
