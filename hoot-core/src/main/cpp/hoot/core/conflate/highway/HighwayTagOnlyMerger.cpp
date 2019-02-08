@@ -83,14 +83,14 @@ private:
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs)
 {
   _pairs = pairs;
-  LOG_VARD(hoot::toString(_pairs));
+  LOG_VART(hoot::toString(_pairs));
 }
 
 void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
                                  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  LOG_VARD(hoot::toString(_pairs));
-  LOG_VARD(hoot::toString(replaced));
+  LOG_VART(hoot::toString(_pairs));
+  LOG_VART(hoot::toString(replaced));
 
   std::vector<std::pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
@@ -100,8 +100,8 @@ void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
-    LOG_VARD(eid1);
-    LOG_VARD(eid2);
+    LOG_VART(eid1);
+    LOG_VART(eid2);
 
     if (map->containsElement(eid1) && map->containsElement(eid2))
     {
@@ -113,7 +113,7 @@ void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
         "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
     }
   }
-  LOG_VARD(hoot::toString(pairs));
+  LOG_VART(hoot::toString(pairs));
 
   ShortestFirstComparator shortestFirst;
   shortestFirst.map = map;
@@ -123,15 +123,15 @@ void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
-    LOG_DEBUG("eid1 before replacement check: " << eid1);
-    LOG_DEBUG("eid2 before replacement check: " << eid2);
+    LOG_TRACE("eid1 before replacement check: " << eid1);
+    LOG_TRACE("eid2 before replacement check: " << eid2);
 
     for (size_t i = 0; i < replaced.size(); i++)
     {
-      LOG_VARD(eid1);
-      LOG_VARD(eid2);
-      LOG_VARD(replaced[i].first);
-      LOG_VARD(replaced[i].second);
+      LOG_VART(eid1);
+      LOG_VART(eid2);
+      LOG_VART(replaced[i].first);
+      LOG_VART(replaced[i].second);
       if (eid1 == replaced[i].first)
       {
         LOG_DEBUG("Changing " << eid1 << " to " << replaced[i].second << "...");
@@ -144,8 +144,8 @@ void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
       }
     }
 
-    LOG_DEBUG("eid1 after replacement check: " << eid1);
-    LOG_DEBUG("eid2 after replacement check: " << eid2);
+    LOG_TRACE("eid1 after replacement check: " << eid1);
+    LOG_TRACE("eid2 after replacement check: " << eid2);
 
     _mergePair(map, eid1, eid2, replaced);
   }

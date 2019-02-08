@@ -165,14 +165,14 @@ public:
     boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ConstElementPtr e1, ConstElementPtr e2)
   {
-    if (e1)
-    {
-      LOG_VART(e1->getElementId());
-    }
-    if (e2)
-    {
-      LOG_VART(e2->getElementId());
-    }
+//    if (e1)
+//    {
+//      LOG_VART(e1->getElementId());
+//    }
+//    if (e2)
+//    {
+//      LOG_VART(e2->getElementId());
+//    }
 
     HighwayMatch* result = 0;
 
@@ -186,7 +186,6 @@ public:
       result =
         new HighwayMatch(
           classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
-      LOG_VARD(result->getType());
 
       // if we're confident this is a miss
       if (result->getType() == MatchType::Miss)
@@ -239,13 +238,10 @@ public:
 
   bool isMatchCandidate(ConstElementPtr element)
   {
-    LOG_VART(element->getElementId());
-
     if (_filter && !_filter->isSatisfied(element))
     {
       return false;
     }
-
     return HighwayCriterion().isSatisfied(element);
   }
 

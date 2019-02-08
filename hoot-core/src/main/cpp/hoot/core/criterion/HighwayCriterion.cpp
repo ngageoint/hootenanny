@@ -39,6 +39,8 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
+  LOG_VART(element->getElementId());
+
   bool result = false;
   const Tags& tags = element->getTags();
   const ElementType type = element->getElementType();
@@ -70,13 +72,9 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   }
   LOG_VART(result);
 
-  if (Log::getInstance().getLevel() <= Log::Trace && result)
+  if (result)
   {
     LOG_TRACE("isLinearHighway; key: " << key);
-    if (tags.contains("name"))
-    {
-      LOG_VART(tags.get("name"));
-    }
   }
 
   return result;

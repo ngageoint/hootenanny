@@ -45,7 +45,8 @@ bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
   const int reviewTagCount =
     tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
 
-  LOG_VART(e);
+  //LOG_VART(e);
+  LOG_VART(e->getElementId());
   LOG_VART(informationCount);
   LOG_VART(_treatReviewTagsAsMetadata);
   LOG_VART(reviewTagCount);

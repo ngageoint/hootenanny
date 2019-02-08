@@ -115,7 +115,7 @@ void WayJoiner2::_joinParentChild()
   }
   //  Sort the ids so that the smallest is first (i.e. largest negative id is the last one allocated)
   sort(ids.begin(), ids.end());
-  LOG_VARD(ids);
+  LOG_VART(ids);
   //  Iterate all of the ids
   for (vector<long>::const_iterator it = ids.begin(); it != ids.end(); ++it)
   {
@@ -292,7 +292,7 @@ bool WayJoiner2::_areJoinable(const WayPtr& w1, const WayPtr& w2)
 void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
 {
   LOG_DEBUG("Rejoining siblings...");
-  LOG_VARD(way_ids);
+  LOG_VART(way_ids);
 
   WayMap ways = _map->getWays();
   WayPtr start;
@@ -434,8 +434,8 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
 
   LOG_VARD(parent->getId());
   LOG_VARD(child->getId());
-  //LOG_VARD(parent);
-  //LOG_VARD(child);
+  LOG_VARD(parent->getStatus());
+  LOG_VARD(child->getStatus());
 
   //  Don't join area ways
   AreaCriterion areaCrit;
@@ -444,9 +444,6 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     LOG_DEBUG("One or more of the ways to be joined are areas...skipping join.");
     return;
   }
-
-  LOG_VARD(parent->getStatus());
-  LOG_VARD(child->getStatus());
 
   //  Check if the two ways are able to be joined back up
 
@@ -457,10 +454,11 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return;
   }
 
-  // make sure tags go in the right direction (may be able to simplify)
+  // make sure tags go in the right direction (TODO: this is a mess)
   WayPtr wayWithTagsToKeep;
   WayPtr wayWithTagsToLose;
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
+  LOG_VARD(tagMergerClassName);
   if (parent->getStatus() == Status::Unknown1)
   {
     if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
@@ -480,7 +478,8 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
       wayWithTagsToLose = child;
     }
   }
-  else if (child->getStatus() == Status::Unknown1)
+  else if (child->getStatus() == Status::Unknown1 ||
+           (parent->getStatus() == Status::Conflated && child->getStatus() == Status::Conflated))
   {
     if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
         tagMergerClassName == "hoot::OverwriteTag2Merger")
@@ -499,9 +498,9 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
       wayWithTagsToLose = child;
     }
   }
+  //??
   else
   {
-    // don't actually know if this case can occur or not
     wayWithTagsToKeep = parent;
     wayWithTagsToLose = child;
   }

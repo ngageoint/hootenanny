@@ -48,7 +48,6 @@ bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     result = true;
   }
-  LOG_VART(result);
   return result;
 }
 
