@@ -72,7 +72,6 @@ private:
 
   double _sampleDistance;
   double _headingDelta;
-
 };
 
 }

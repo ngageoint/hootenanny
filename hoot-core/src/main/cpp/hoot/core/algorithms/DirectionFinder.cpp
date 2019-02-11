@@ -37,6 +37,8 @@ using namespace geos::geom;
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/util/Units.h>
 
 // Standard
 #include <iostream>
@@ -61,6 +63,67 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
     LOG_DEBUG("Skipping one or more empty ways...");
     return false;
   }
+  // check for shared start/end node combos that show reversal; fix for #2888
+  else if ((w1->getNodeIds()[0] == w2->getNodeIds()[0]) ||
+           (w1->getNodeIds()[w1->getNodeIds().size() - 1] ==
+            w2->getNodeIds()[w2->getNodeIds().size() - 1]))
+  {
+    const long startNodeId1 = w1->getNodeIds()[0];
+    const long startNodeId2 = w2->getNodeIds()[0];
+    const long endNodeId1 = w1->getNodeIds()[w1->getNodeIds().size() - 1];
+    const long endNodeId2 = w2->getNodeIds()[w2->getNodeIds().size() - 1];
+    //if (map->containsNode(startNodeId1) && map->containsNode(startNodeId2))
+    //{
+      const Radians angle1 =
+        //toDegrees(
+          WayHeading::calculateHeading(
+            map->getNode(startNodeId1)->toCoordinate(),
+            map->getNode(endNodeId1)->toCoordinate())/*)*/;
+      const Radians angle2 =
+        //toDegrees(
+          WayHeading::calculateHeading(
+            map->getNode(startNodeId2)->toCoordinate(),
+            map->getNode(endNodeId2)->toCoordinate())/*)*/;
+      Radians deltaMagnitude = WayHeading::deltaMagnitude(angle1, angle2);
+      const double diffAngle = toDegrees(deltaMagnitude);
+      LOG_VARD(diffAngle);
+      if (diffAngle > 20.0)
+      {
+        LOG_DEBUG(
+          "Skipping ways with large difference in orientation angle: " << diffAngle << " degrees...");
+        return false;
+      }
+//    }
+//    else
+//    {
+//      LOG_DEBUG("Couldn't find one of the nodes: " << startNodeId1 << " or " << startNodeId2);
+//    }
+  }
+//  else if ((w1->getNodeIds()[w1->getNodeIds().size() - 1] ==
+//            w2->getNodeIds()[w2->getNodeIds().size() - 1]))
+//  {
+//    const long startNodeId1 = w1->getNodeIds()[w1->getNodeIds().size() - 1];
+//    const long startNodeId2 = w2->getNodeIds()[w2->getNodeIds().size() - 1];
+//    if (map->containsNode(startNodeId1) && map->containsNode(startNodeId2))
+//    {
+//      const double angle =
+//        toDegrees(
+//          WayHeading::calculateHeading(
+//            map->getNode(startNodeId1)->toCoordinate(),
+//            map->getNode(startNodeId2)->toCoordinate()));
+//      LOG_VARD(angle);
+//      if (angle > 20.0)
+//      {
+//        LOG_DEBUG(
+//          "Skipping ways with large difference in orientation angle: " << angle << " degrees...");
+//        return false;
+//      }
+//    }
+//    else
+//    {
+//      LOG_DEBUG("Couldn't find one of the nodes: " << startNodeId1 << " or " << startNodeId2);
+//    }
+//  }
 
   WayDiscretizer wd1(map, w1);
   WayDiscretizer wd2(map, w2);
@@ -79,7 +142,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   }
 
   const double percentageDiff = abs((dSumReverse - dSumSame) / dSumReverse);
-  const bool sameDirection = dSumSame < dSumReverse || percentageDiff <= 0.0001;
+  const bool sameDirection = dSumSame < dSumReverse /*|| percentageDiff <= 0.0001*/;
   QString directionText = "**not the same direction**";
   if (sameDirection)
   {

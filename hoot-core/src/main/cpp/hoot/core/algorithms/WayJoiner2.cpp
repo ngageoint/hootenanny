@@ -41,6 +41,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/SampledAngleHistogramExtractor.h>
 
 #include <unordered_set>
 #include <vector>
@@ -525,9 +526,12 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return;
   }
 
-  const double angleScore =
+  const double angleScore1 =
     AngleHistogramExtractor().extract(*_map, wayWithTagsToKeep, wayWithTagsToLose);
-  LOG_VARD(angleScore);
+  LOG_VARD(angleScore1);
+  //const double angleScore2 =
+    //SampledAngleHistogramExtractor().extract(*_map, wayWithTagsToKeep, wayWithTagsToLose);
+  //LOG_VARD(angleScore2);
   if (/*angleScore >= 0.98 && */oneWayCrit.isSatisfied(wayWithTagsToLose) &&
       !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
       !DirectionFinder::isSimilarDirection(
