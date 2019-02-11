@@ -39,8 +39,6 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
-  LOG_VART(element->getElementId());
-
   bool result = false;
   const Tags& tags = element->getTags();
   const ElementType type = element->getElementType();
@@ -68,14 +66,12 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   if (result)
   {
     result = !AreaCriterion().isSatisfied(element);
-    LOG_VART(result);
   }
-  LOG_VART(result);
 
-  if (result)
-  {
-    LOG_TRACE("isLinearHighway; key: " << key);
-  }
+//  if (result)
+//  {
+//    LOG_TRACE("element: " << element->getElementId() << " isLinearHighway; key: " << key);
+//  }
 
   return result;
 }

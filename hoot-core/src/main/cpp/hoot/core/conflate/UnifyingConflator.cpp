@@ -248,7 +248,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // convert all the match sets into mergers - #2912
   for (size_t i = 0; i < matchSets.size(); ++i)
   {
-    PROGRESS_INFO("Converting match set " << i + 1 << " / " << matchSets.size() << " to a merger...");
+    PROGRESS_INFO(
+      "Converting match set " << i + 1 << " / " << matchSets.size() << " to a merger...");
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
   }
 
@@ -350,8 +351,7 @@ void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
   for (size_t i = 0; i < tmpMatchSets.size(); i++)
   {
     bool wholeGroup = false;
-    for (MatchSet::const_iterator it = tmpMatchSets[i].begin();
-         it != tmpMatchSets[i].end(); ++it)
+    for (MatchSet::const_iterator it = tmpMatchSets[i].begin(); it != tmpMatchSets[i].end(); ++it)
     {
       if ((*it)->isWholeGroup())
       {

@@ -112,8 +112,8 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, boost:
   // pressume it is a valid intersection
   double p = 1.0;
 
-  LOG_VART(w1->getElementId());
-  LOG_VART(w2->getElementId());
+  //LOG_VART(w1->getElementId());
+  //LOG_VART(w2->getElementId());
 
   int i1 = w1->getNodeIndex(intersectingNode);
   int i2 = w2->getNodeIndex(intersectingNode);

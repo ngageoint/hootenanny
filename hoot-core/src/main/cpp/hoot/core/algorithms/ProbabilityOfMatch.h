@@ -78,7 +78,6 @@ private:
   static boost::shared_ptr<ProbabilityOfMatch> _theInstance;
   double _parallelExp;
   double _dMax;
-
 };
 
 }

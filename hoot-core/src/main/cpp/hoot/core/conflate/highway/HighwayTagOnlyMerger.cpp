@@ -35,6 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 
 namespace hoot
 {
@@ -275,13 +276,19 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       return false;
     }
 
-    // Reverse the way if way to remove is one way and the two ways aren't similar directions
+
+    // Reverse the way if way to remove is one way and the two ways aren't in similar directions
     if (elementWithTagsToKeep->getElementType() == ElementType::Way &&
         elementWithTagsToRemove->getElementType() == ElementType::Way)
     {
       WayPtr wayWithTagsToKeep = boost::dynamic_pointer_cast<Way>(elementWithTagsToKeep);
       WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(elementWithTagsToRemove);
-      if (isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
+
+      const double angleScore =
+        AngleHistogramExtractor().extract(*map, wayWithTagsToKeep, wayWithTagsToRemove);
+      LOG_VARD(angleScore);
+
+      if (/*angleScore >= 0.37 &&*/ isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
           !DirectionFinder::isSimilarDirection(
              map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
       {

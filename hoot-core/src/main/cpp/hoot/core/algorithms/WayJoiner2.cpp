@@ -40,6 +40,7 @@
 #include <hoot/core/algorithms/extractors/ParallelScoreExtractor.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 
 #include <unordered_set>
 #include <vector>
@@ -508,8 +509,27 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VARD(wayWithTagsToLose->getElementId());
 
   // deal with one way streets
+
   OneWayCriterion oneWayCrit;
-  if (oneWayCrit.isSatisfied(wayWithTagsToLose) && !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
+
+  const bool keepElementExplicitlyNotAOneWayStreet =
+    wayWithTagsToKeep->getTags().get("oneway") == "no";
+  const bool removeElementExplicitlyNotAOneWayStreet =
+    wayWithTagsToLose->getTags().get("oneway") == "no";
+  if ((oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
+       removeElementExplicitlyNotAOneWayStreet) ||
+      (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
+       keepElementExplicitlyNotAOneWayStreet))
+  {
+    LOG_DEBUG("Conflicting one way street tags.  Skipping join.");
+    return;
+  }
+
+  const double angleScore =
+    AngleHistogramExtractor().extract(*_map, wayWithTagsToKeep, wayWithTagsToLose);
+  LOG_VARD(angleScore);
+  if (/*angleScore >= 0.98 && */oneWayCrit.isSatisfied(wayWithTagsToLose) &&
+      !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
       !DirectionFinder::isSimilarDirection(
         _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
   {

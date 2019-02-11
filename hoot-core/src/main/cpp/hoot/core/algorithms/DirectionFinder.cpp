@@ -58,13 +58,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   // skip empty ways
   if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
   {
-    return false;
-  }
-  // check for shared start/end node combos that show reversal; fix for #2888
-  else if ((w1->getNodeIds()[0] == w2->getNodeIds()[0]) ||
-           (w1->getNodeIds()[w1->getNodeIds().size() - 1] ==
-            w2->getNodeIds()[w2->getNodeIds().size() - 1]))
-  {
+    LOG_DEBUG("Skipping one or more empty ways...");
     return false;
   }
 
@@ -85,7 +79,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   }
 
   const double percentageDiff = abs((dSumReverse - dSumSame) / dSumReverse);
-  const bool sameDirection = dSumSame < dSumReverse;
+  const bool sameDirection = dSumSame < dSumReverse || percentageDiff <= 0.0001;
   QString directionText = "**not the same direction**";
   if (sameDirection)
   {

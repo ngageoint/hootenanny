@@ -192,7 +192,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       break;
     }
   }
-  LOG_VART(firstIndex);
+  //LOG_VART(firstIndex);
 
   // if the first index wasn't an endpoint.
   if (firstIndex != -1)

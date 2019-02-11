@@ -111,13 +111,13 @@ bool HighwayMergerAbstract::_mergePair(const OsmMapPtr& map, ElementId eid1, Ele
   {
     if (!e1)
     {
-      LOG_DEBUG(eid1 << " is missing.");
+      LOG_TRACE(eid1 << " is missing.");
     }
     if (!e2)
     {
-      LOG_DEBUG(eid2 << " is missing.");
+      LOG_TRACE(eid2 << " is missing.");
     }
-    LOG_DEBUG("Marking review for " << e1->getElementId() << " and " << e2->getElementId() << "...");
+    LOG_TRACE("Marking review for " << e1->getElementId() << " and " << e2->getElementId() << "...");
     _markNeedsReview(result, e1, e2, "Missing match pair", HighwayMatch::getHighwayMatchName());
     return true;
   }
