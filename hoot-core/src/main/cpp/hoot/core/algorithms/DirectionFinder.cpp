@@ -63,67 +63,6 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
     LOG_DEBUG("Skipping one or more empty ways...");
     return false;
   }
-  // check for shared start/end node combos that show reversal; fix for #2888
-  else if ((w1->getNodeIds()[0] == w2->getNodeIds()[0]) ||
-           (w1->getNodeIds()[w1->getNodeIds().size() - 1] ==
-            w2->getNodeIds()[w2->getNodeIds().size() - 1]))
-  {
-    const long startNodeId1 = w1->getNodeIds()[0];
-    const long startNodeId2 = w2->getNodeIds()[0];
-    const long endNodeId1 = w1->getNodeIds()[w1->getNodeIds().size() - 1];
-    const long endNodeId2 = w2->getNodeIds()[w2->getNodeIds().size() - 1];
-    //if (map->containsNode(startNodeId1) && map->containsNode(startNodeId2))
-    //{
-      const Radians angle1 =
-        //toDegrees(
-          WayHeading::calculateHeading(
-            map->getNode(startNodeId1)->toCoordinate(),
-            map->getNode(endNodeId1)->toCoordinate())/*)*/;
-      const Radians angle2 =
-        //toDegrees(
-          WayHeading::calculateHeading(
-            map->getNode(startNodeId2)->toCoordinate(),
-            map->getNode(endNodeId2)->toCoordinate())/*)*/;
-      Radians deltaMagnitude = WayHeading::deltaMagnitude(angle1, angle2);
-      const double diffAngle = toDegrees(deltaMagnitude);
-      LOG_VARD(diffAngle);
-      if (diffAngle > 20.0)
-      {
-        LOG_DEBUG(
-          "Skipping ways with large difference in orientation angle: " << diffAngle << " degrees...");
-        return false;
-      }
-//    }
-//    else
-//    {
-//      LOG_DEBUG("Couldn't find one of the nodes: " << startNodeId1 << " or " << startNodeId2);
-//    }
-  }
-//  else if ((w1->getNodeIds()[w1->getNodeIds().size() - 1] ==
-//            w2->getNodeIds()[w2->getNodeIds().size() - 1]))
-//  {
-//    const long startNodeId1 = w1->getNodeIds()[w1->getNodeIds().size() - 1];
-//    const long startNodeId2 = w2->getNodeIds()[w2->getNodeIds().size() - 1];
-//    if (map->containsNode(startNodeId1) && map->containsNode(startNodeId2))
-//    {
-//      const double angle =
-//        toDegrees(
-//          WayHeading::calculateHeading(
-//            map->getNode(startNodeId1)->toCoordinate(),
-//            map->getNode(startNodeId2)->toCoordinate()));
-//      LOG_VARD(angle);
-//      if (angle > 20.0)
-//      {
-//        LOG_DEBUG(
-//          "Skipping ways with large difference in orientation angle: " << angle << " degrees...");
-//        return false;
-//      }
-//    }
-//    else
-//    {
-//      LOG_DEBUG("Couldn't find one of the nodes: " << startNodeId1 << " or " << startNodeId2);
-//    }
-//  }
 
   WayDiscretizer wd1(map, w1);
   WayDiscretizer wd2(map, w2);
@@ -142,7 +81,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   }
 
   const double percentageDiff = abs((dSumReverse - dSumSame) / dSumReverse);
-  const bool sameDirection = dSumSame < dSumReverse /*|| percentageDiff <= 0.0001*/;
+  const bool sameDirection = dSumSame < dSumReverse;
   QString directionText = "**not the same direction**";
   if (sameDirection)
   {
@@ -156,6 +95,51 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
     ", difference: " << QString::number((dSumReverse - dSumSame), 'g', coordPrecision) <<
     ", percentage difference: " << QString::number(percentageDiff, 'g', coordPrecision));
   return sameDirection;
+}
+
+bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr way1,
+                                          ConstWayPtr way2)
+{
+  LOG_VARD(way1->getNodeIds());
+  LOG_VARD(way2->getNodeIds());
+
+  // skip empty ways
+  if (way1->getNodeIds().size() == 0 || way2->getNodeIds().size() == 0)
+  {
+    LOG_DEBUG("Skipping one or more empty ways...");
+    return false;
+  }
+
+  const double diffAngle = _getAngleDiff(map, way1, way2);
+  LOG_VARD(diffAngle);
+  if (diffAngle >= ConfigOptions().getDirectionFinderAngleThreshold())
+  {
+    LOG_DEBUG("Ways have large difference in orientation angle: " << diffAngle << " degrees.");
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+double DirectionFinder::_getAngleDiff(const ConstOsmMapPtr& map, ConstWayPtr way1, ConstWayPtr way2)
+{
+  const std::vector<long> way1NodeIds = way1->getNodeIds();
+  const std::vector<long> way2NodeIds = way2->getNodeIds();
+  const long startNodeId1 = way1NodeIds[0];
+  const long startNodeId2 = way2NodeIds[0];
+  const long endNodeId1 = way1NodeIds[way1NodeIds.size() - 1];
+  const long endNodeId2 = way2NodeIds[way2NodeIds.size() - 1];
+  const Radians angle1 =
+    WayHeading::calculateHeading(
+      map->getNode(startNodeId1)->toCoordinate(),
+      map->getNode(endNodeId1)->toCoordinate());
+  const Radians angle2 =
+    WayHeading::calculateHeading(
+      map->getNode(startNodeId2)->toCoordinate(),
+      map->getNode(endNodeId2)->toCoordinate());;
+  return toDegrees(WayHeading::deltaMagnitude(angle1, angle2));
 }
 
 }

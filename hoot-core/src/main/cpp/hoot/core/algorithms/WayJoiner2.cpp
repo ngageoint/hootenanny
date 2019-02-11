@@ -36,12 +36,8 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/criterion/ParallelWayCriterion.h>
-#include <hoot/core/algorithms/extractors/ParallelScoreExtractor.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/algorithms/extractors/SampledAngleHistogramExtractor.h>
 
 #include <unordered_set>
 #include <vector>
@@ -500,7 +496,7 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
       wayWithTagsToLose = child;
     }
   }
-  //??
+  // does this make sense??
   else
   {
     wayWithTagsToKeep = parent;
@@ -526,15 +522,10 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return;
   }
 
-  const double angleScore1 =
-    AngleHistogramExtractor().extract(*_map, wayWithTagsToKeep, wayWithTagsToLose);
-  LOG_VARD(angleScore1);
-  //const double angleScore2 =
-    //SampledAngleHistogramExtractor().extract(*_map, wayWithTagsToKeep, wayWithTagsToLose);
-  //LOG_VARD(angleScore2);
-  if (/*angleScore >= 0.98 && */oneWayCrit.isSatisfied(wayWithTagsToLose) &&
+  if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
       !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
-      !DirectionFinder::isSimilarDirection(
+      // note the use of an alternative isSimilarDirection method
+      !DirectionFinder::isSimilarDirection2(
         _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_DEBUG("Reversing order of " << wayWithTagsToKeep->getElementId());
@@ -569,16 +560,6 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return;
   }
   LOG_VARD(joinType);
-
-  // doesn't work
-//  const double parallelScore =
-//    ParallelScoreExtractor().extract(*_map, wayWithTagsToKeep, wayWithTagsToLose);
-//  LOG_VARD(parallelScore);
-//  if (parallelScore < 0.138)
-//  {
-//    LOG_DEBUG("Join failed on parallel score of: " << parallelScore);
-//    return;
-//  }
 
   //  Remove the split parent id
   child->resetPid();

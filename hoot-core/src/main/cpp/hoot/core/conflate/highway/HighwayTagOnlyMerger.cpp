@@ -29,58 +29,11 @@
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/algorithms/extractors/SampledAngleHistogramExtractor.h>
 
 namespace hoot
 {
-
-// TODO: move to separate class?
-class ShortestFirstComparator
-{
-public:
-
-  bool operator()(const std::pair<ElementId, ElementId>& p1,
-                  const std::pair<ElementId, ElementId>& p2)
-  {
-    return
-      std::min(getLength(p1.first), getLength(p1.second)) <
-        std::min(getLength(p2.first), getLength(p2.second));
-  }
-
-  Meters getLength(const ElementId& eid)
-  {
-    Meters result;
-    if (_lengthMap.contains(eid))
-    {
-      result = _lengthMap[eid];
-    }
-    else
-    {
-      LengthOfWaysVisitor v;
-      v.setOsmMap(map.get());
-      map->getElement(eid)->visitRo(*map, v);
-      result = v.getLengthOfWays();
-      _lengthMap[eid] = result;
-    }
-    return result;
-  }
-
-  //commenting this out results in a crash...what??
-  virtual QString getDescription() const { return ""; }
-
-  OsmMapPtr map;
-
-private:
-
-  QHash<ElementId, Meters> _lengthMap;
-};
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs)
 {
@@ -152,53 +105,6 @@ void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
     _mergePair(map, eid1, eid2, replaced);
   }
 }
-
-//void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
-//                                 std::vector<std::pair<ElementId, ElementId>>& replaced)
-//{
-//  LOG_VARD(hoot::toString(_pairs));
-//  LOG_VARD(hoot::toString(replaced));
-
-//  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-//       it != _pairs.end(); ++it)
-//  {
-//    ElementId eid1 = it->first;
-//    ElementId eid2 = it->second;
-//    LOG_DEBUG("eid1 before replacement check: " << eid1);
-//    LOG_DEBUG("eid2 before replacement check: " << eid2);
-
-//    for (size_t i = 0; i < replaced.size(); i++)
-//    {
-//      LOG_VARD(eid1);
-//      LOG_VARD(eid2);
-//      LOG_VARD(replaced[i].first);
-//      LOG_VARD(replaced[i].second);
-//      if (eid1 == replaced[i].first)
-//      {
-//        LOG_DEBUG("Changing " << eid1 << " to " << replaced[i].second << "...");
-//        eid1 = replaced[i].second;
-//      }
-//      if (eid2 == replaced[i].first)
-//      {
-//        LOG_DEBUG("Changing " << eid2 << " to " << replaced[i].second << "...");
-//        eid2 = replaced[i].second;
-//      }
-//    }
-
-//    LOG_DEBUG("eid1 after replacement check: " << eid1);
-//    LOG_DEBUG("eid2 after replacement check: " << eid2);
-
-//    if (map->containsElement(eid1) && map->containsElement(eid2))
-//    {
-//      _mergePair(map, eid1, eid2, replaced);
-//    }
-//    else
-//    {
-//      LOG_DEBUG(
-//        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
-//    }
-//  }
-//}
 
 bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   std::vector<std::pair<ElementId, ElementId>>& replaced)
@@ -284,15 +190,9 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       WayPtr wayWithTagsToKeep = boost::dynamic_pointer_cast<Way>(elementWithTagsToKeep);
       WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(elementWithTagsToRemove);
 
-      const double angleScore1 =
-        AngleHistogramExtractor().extract(*map, wayWithTagsToKeep, wayWithTagsToRemove);
-      LOG_VARD(angleScore1);
-      //const double angleScore2 =
-        //SampledAngleHistogramExtractor().extract(*map, wayWithTagsToKeep, wayWithTagsToRemove);
-      //LOG_VARD(angleScore2);
-
-      if (/*angleScore >= 0.37 &&*/ isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
-          !DirectionFinder::isSimilarDirection(
+      if (isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
+          // note the use of an alternative isSimilarDirection method
+          !DirectionFinder::isSimilarDirection2(
              map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
       {
         LOG_DEBUG("Reversing " << wayWithTagsToKeep->getElementId());
@@ -314,8 +214,6 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       replaced.push_back(
         std::pair<ElementId, ElementId>(
           elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));
-      // This clobbers too many features when tracking replaced ids.
-      //RecursiveElementRemover(elementWithTagsToRemove->getElementId()).apply(map);
     }
   }
 

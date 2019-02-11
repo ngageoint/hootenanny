@@ -30,9 +30,50 @@
 // Hoot
 #include <hoot/core/conflate/merging/MergerBase.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/visitors/LengthOfWaysVisitor.h>
 
 namespace hoot
 {
+
+class ShortestFirstComparator
+{
+public:
+
+  bool operator()(const std::pair<ElementId, ElementId>& p1,
+                  const std::pair<ElementId, ElementId>& p2)
+  {
+    return
+      std::min(getLength(p1.first), getLength(p1.second)) <
+        std::min(getLength(p2.first), getLength(p2.second));
+  }
+
+  Meters getLength(const ElementId& eid)
+  {
+    Meters result;
+    if (_lengthMap.contains(eid))
+    {
+      result = _lengthMap[eid];
+    }
+    else
+    {
+      LengthOfWaysVisitor v;
+      v.setOsmMap(map.get());
+      map->getElement(eid)->visitRo(*map, v);
+      result = v.getLengthOfWays();
+      _lengthMap[eid] = result;
+    }
+    return result;
+  }
+
+  // commenting this out results in a crash...what??
+  virtual QString getDescription() const { return ""; }
+
+  OsmMapPtr map;
+
+private:
+
+  QHash<ElementId, Meters> _lengthMap;
+};
 
 /**
  * Base class for road merging
