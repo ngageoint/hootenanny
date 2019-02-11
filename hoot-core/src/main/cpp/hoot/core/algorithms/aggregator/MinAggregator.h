@@ -40,11 +40,11 @@ public:
 
   MinAggregator();
 
-  virtual double aggregate(std::vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const { return "MinAggregator"; }
+  virtual QString toString() const override { return "MinAggregator"; }
 
-  virtual QString getDescription() const { return "Aggregates data based on the minimum value"; }
+  virtual QString getDescription() const override { return "Aggregates data based on the minimum value"; }
 };
 
 }

@@ -47,9 +47,9 @@ public:
 
   AttributeScoreExtractor(bool useWeight = false);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual std::string getClassName() const override { return className(); }
 
-  virtual std::string getName() const;
+  virtual std::string getName() const override;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -60,7 +60,7 @@ public:
 
 protected:
 
-  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
+  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 
   bool _useWeight;
 };

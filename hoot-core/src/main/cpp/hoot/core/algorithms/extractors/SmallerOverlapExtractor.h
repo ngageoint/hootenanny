@@ -58,10 +58,10 @@ public:
 
   static std::string className() { return "hoot::SmallerOverlapExtractor"; }
 
-  virtual std::string getClassName() const { return SmallerOverlapExtractor::className(); }
+  virtual std::string getClassName() const override { return SmallerOverlapExtractor::className(); }
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const;
+    const boost::shared_ptr<const Element>& candidate) const override;
 
   virtual QString getDescription() const
   { return "Uses Symmetric Difference with buffering and the feature with more overlap"; }

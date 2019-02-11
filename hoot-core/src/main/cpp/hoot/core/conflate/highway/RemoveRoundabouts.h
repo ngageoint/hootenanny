@@ -72,7 +72,7 @@ public:
    * @brief apply - Apply the RemoveRoundabouts op
    * @param pMap - Target map
    */
-  void apply(boost::shared_ptr<OsmMap>& pMap);
+  void apply(boost::shared_ptr<OsmMap>& pMap) override;
 
   // Remove roundabouts, store them, replace them with simple intersections
   /**
@@ -82,7 +82,7 @@ public:
    */
   void removeRoundabouts(std::vector<RoundaboutPtr> &removed);
 
-  virtual QString getDescription() const { return "Removes roundabouts from roads"; }
+  virtual QString getDescription() const override { return "Removes roundabouts from roads"; }
 
 private:
 

@@ -46,7 +46,7 @@ public:
 
   WeightedShapeDistanceExtractor();
 
-  virtual std::string getClassName() const { return className(); }
+  virtual std::string getClassName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates shape distance between features"; }

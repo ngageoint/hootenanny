@@ -54,16 +54,16 @@ public:
 
   static std::string className() { return "hoot::MinSumWordSetDistance"; }
 
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
 
-  virtual QString toString() const
+  virtual QString toString() const override
   { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Returns a string comparison score based on Minimum Sum Wordset Distance"; }
 
 private:

@@ -48,7 +48,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   virtual ~ChangesetDeriver();
 
@@ -65,7 +65,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange();
+  virtual Change readNextChange() override;
 
   long getNumFromElementsParsed() const { return _numFromElementsParsed; }
   long getNumToElementsParsed() const { return _numToElementsParsed; }

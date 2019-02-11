@@ -47,13 +47,13 @@ public:
    */
   QuantileAggregator(double quantile);
 
-  virtual double aggregate(std::vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const override;
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString toString() const { return QString("QuantileAggregator %1").arg(_quantile); }
+  virtual QString toString() const override { return QString("QuantileAggregator %1").arg(_quantile); }
 
-  virtual QString getDescription() const { return "Aggregates data based on the quantile value"; }
+  virtual QString getDescription() const override { return "Aggregates data based on the quantile value"; }
 
 private:
 

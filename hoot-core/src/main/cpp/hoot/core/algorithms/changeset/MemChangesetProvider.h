@@ -46,7 +46,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   virtual ~MemChangesetProvider();
 
@@ -63,7 +63,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange();
+  virtual Change readNextChange() override;
 
   void addChange(Change newChange);
 

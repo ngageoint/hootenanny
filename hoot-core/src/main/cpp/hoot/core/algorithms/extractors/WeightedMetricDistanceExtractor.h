@@ -49,9 +49,9 @@ public:
   // Get point aggregator from ConfigOptions()
   WeightedMetricDistanceExtractor(Meters searchRadius = -1);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual std::string getClassName() const override { return className(); }
 
-  virtual std::string getName() const;
+  virtual std::string getName() const override;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -64,7 +64,7 @@ public:
 
 protected:
 
-  double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
+  double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 
   boost::shared_ptr<ValueAggregator> _pointAgg;
   Meters _searchRadius;

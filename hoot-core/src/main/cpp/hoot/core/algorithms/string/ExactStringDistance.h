@@ -50,11 +50,11 @@ public:
 
   ExactStringDistance();
 
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
-  QString toString() const { return "ExactStringDistance"; }
+  QString toString() const override { return "ExactStringDistance"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Returns a matching string comparison score only if the strings match exactly (ignoring case)"; }
 };
 

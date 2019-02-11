@@ -58,13 +58,13 @@ public:
 
   CornerSplitter(boost::shared_ptr<OsmMap> map);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map) override;
 
   static void splitCorners(boost::shared_ptr<OsmMap> map);
 
   void splitCorners();
 
-  virtual QString getDescription() const { return "Splits sharp road corners"; }
+  virtual QString getDescription() const override { return "Splits sharp road corners"; }
 
 private:
 

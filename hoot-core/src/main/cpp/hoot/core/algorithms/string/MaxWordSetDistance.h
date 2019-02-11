@@ -49,15 +49,15 @@ public:
   MaxWordSetDistance(StringDistancePtr d);
   MaxWordSetDistance() {}
 
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void setStringDistance(const StringDistancePtr& sd) { _d = sd; }
 
-  virtual QString toString() const { return "MaxWordSet " + _d->toString(); }
+  virtual QString toString() const override { return "MaxWordSet " + _d->toString(); }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Returns a score based on the max (best) pairwise word comparison within two sets of words"; }
 
 private:

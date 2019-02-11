@@ -48,10 +48,10 @@ public:
   HighwayRfClassifier();
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match);
+    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
+    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
 
 private:
   // these are mutable because we do a lazy load.

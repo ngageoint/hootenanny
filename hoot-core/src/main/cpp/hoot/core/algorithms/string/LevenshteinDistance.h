@@ -53,7 +53,7 @@ public:
    */
   LevenshteinDistance(double alpha = -1);
 
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
   static double score(const char* s1, const char* s2)
   {
@@ -114,9 +114,9 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  QString toString() const { return QString("Levenshtein %1").arg(_alpha); }
+  QString toString() const override { return QString("Levenshtein %1").arg(_alpha); }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Returns a string comparison score derived using Levenshtein Distance"; }
 
 private:

@@ -95,7 +95,7 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ElementInputStream
@@ -110,7 +110,7 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual ElementPtr readNextElement();
+  virtual ElementPtr readNextElement() override;
 
   void setMaxElementsPerFile(long max) { _maxElementsPerFile = max; }
   void setRetainTempFiles(bool retain) { _retainTempFiles = retain; }
