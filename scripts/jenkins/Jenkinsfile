@@ -162,8 +162,8 @@ pipeline {
     post {
         always {
             script {
-                    // Send build notification
-                    notifySlack(currentBuild.result, "#builds_hoot")
+                // Send build notification
+                notifySlack(currentBuild.result, "#builds_hoot")
             }
         }
         success {
@@ -180,9 +180,9 @@ pipeline {
         }
         failure {
             script {
-                    // Copy over any UI failure screenshots and send to slack
-                    sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
-                    postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+                // Copy over any UI failure screenshots and send to slack
+                sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
             }
         }
     }
