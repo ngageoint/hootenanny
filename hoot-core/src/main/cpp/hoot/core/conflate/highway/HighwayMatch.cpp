@@ -71,19 +71,19 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
   const ConstElementPtr e1 = map->getElement(_eid1);
   const ConstElementPtr e2 = map->getElement(_eid2);
 
-    LOG_VART(e1->getElementId());
-    LOG_VART(e2->getElementId());
+  LOG_VART(e1->getElementId());
+  LOG_VART(e2->getElementId());
 //  LOG_VART(e1);
-//  if (Log::getInstance().getLevel() <= Log::Debug && e1->getElementType() == ElementType::Relation)
+//  if (Log::getInstance().getLevel() <= Log::Trace && e1->getElementType() == ElementType::Relation)
 //  {
 //    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e1);
-//    LOG_VART(OsmUtils::getDetailedRelationString(relation, map));
+//    LOG_VARD(OsmUtils::getDetailedRelationString(relation, map));
 //  }
 //  LOG_VART(e2);
-//  if (Log::getInstance().getLevel() <= Log::Debug && e2->getElementType() == ElementType::Relation)
+//  if (Log::getInstance().getLevel() <= Log::Trace && e2->getElementType() == ElementType::Relation)
 //  {
 //    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e2);
-//    LOG_VART(OsmUtils::getDetailedRelationString(relation, map));
+//    LOG_VARD(OsmUtils::getDetailedRelationString(relation, map));
 //  }
 
   try

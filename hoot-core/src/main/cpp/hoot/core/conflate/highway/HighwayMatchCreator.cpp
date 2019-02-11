@@ -165,15 +165,6 @@ public:
     boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ConstElementPtr e1, ConstElementPtr e2)
   {
-//    if (e1)
-//    {
-//      LOG_VART(e1->getElementId());
-//    }
-//    if (e2)
-//    {
-//      LOG_VART(e2->getElementId());
-//    }
-
     HighwayMatch* result = 0;
 
     HighwayCriterion highwayCrit;
@@ -186,7 +177,6 @@ public:
       result =
         new HighwayMatch(
           classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
-
       // if we're confident this is a miss
       if (result->getType() == MatchType::Miss)
       {
