@@ -48,7 +48,7 @@ public:
   ElementInIdListCriterion() {}
   explicit ElementInIdListCriterion(const std::vector<long>& ids);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ElementInIdListCriterion()); }

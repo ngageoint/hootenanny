@@ -53,7 +53,7 @@ public:
 
   PoiPolygonPhoneNumberScoreExtractor();
 
-  virtual std::string getClassName() const
+  virtual std::string getClassName() const override
   { return PoiPolygonPhoneNumberScoreExtractor::className(); }
 
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,

@@ -44,7 +44,7 @@ public:
 
   ImplicitTagEligiblePoiCriterion() {}
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ImplicitTagEligiblePoiCriterion()); }
@@ -55,7 +55,7 @@ public:
    * @param tags tags to examine
    * @return a list of key/value pairs (key=value)
    */
-  virtual QStringList getEligibleKvps(const Tags& tags) const;
+  virtual QStringList getEligibleKvps(const Tags& tags) const override;
 
   /**
    * Returns true if the input tags contain at least one key/value pair which could be applied
@@ -64,7 +64,7 @@ public:
    * @param tags tags to examine
    * @return true if any eligible tags are present; false otherwise
    */
-  virtual bool hasEligibleKvp(const Tags& tags) const;
+  virtual bool hasEligibleKvp(const Tags& tags) const override;
 
   virtual QString getDescription() const
   { return "Identifies POIs eligible for type tag addition"; }

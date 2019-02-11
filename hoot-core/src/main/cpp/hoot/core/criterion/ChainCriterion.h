@@ -50,7 +50,7 @@ public:
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
 

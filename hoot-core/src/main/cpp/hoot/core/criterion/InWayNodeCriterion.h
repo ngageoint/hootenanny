@@ -52,7 +52,7 @@ public:
   InWayNodeCriterion() {}
   InWayNodeCriterion(const OsmMap& map, const std::vector<long>& wayIds);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new InWayNodeCriterion()); }
 

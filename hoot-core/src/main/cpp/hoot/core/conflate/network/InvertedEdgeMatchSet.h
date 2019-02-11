@@ -42,7 +42,7 @@ public:
 
   virtual bool contains(const EdgeMatchPtr &em) const = 0;
 
-  virtual QString toString() const { assert(false); return ""; }
+  virtual QString toString() const override { assert(false); return ""; }
 };
 
 }

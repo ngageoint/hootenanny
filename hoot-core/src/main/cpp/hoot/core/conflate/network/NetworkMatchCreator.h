@@ -51,13 +51,13 @@ public:
    * Search the provided map for network matches and add the matches to the matches vector.
    */
   virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
-                             ConstMatchThresholdPtr threshold);
+                             ConstMatchThresholdPtr threshold) override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
+  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
 private:
 
