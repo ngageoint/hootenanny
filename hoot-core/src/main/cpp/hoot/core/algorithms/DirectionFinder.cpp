@@ -60,7 +60,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   // skip empty ways
   if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
   {
-    LOG_DEBUG("Skipping one or more empty ways...");
+    LOG_TRACE("Skipping one or more empty ways...");
     return false;
   }
 
@@ -88,7 +88,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
     directionText = "**same direction**";
   }
   const int coordPrecision = ConfigOptions().getWriterPrecision();
-  LOG_DEBUG(
+  LOG_TRACE(
     "Comparing " << w1->getElementId() << " with " << w2->getElementId() << ": " << directionText <<
     ", same score: " << QString::number(dSumSame, 'g', coordPrecision) <<
     ", reverse score: " << QString::number(dSumReverse, 'g', coordPrecision) <<
@@ -106,7 +106,7 @@ bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr
   // skip empty ways
   if (way1->getNodeIds().size() == 0 || way2->getNodeIds().size() == 0)
   {
-    LOG_DEBUG("Skipping one or more empty ways...");
+    LOG_TRACE("Skipping one or more empty ways...");
     return false;
   }
 
@@ -114,7 +114,7 @@ bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr
   LOG_VARD(diffAngle);
   if (diffAngle >= ConfigOptions().getDirectionFinderAngleThreshold())
   {
-    LOG_DEBUG("Ways have large difference in orientation angle: " << diffAngle << " degrees.");
+    LOG_TRACE("Ways have large difference in orientation angle: " << diffAngle << " degrees.");
     return false;
   }
   else
@@ -131,15 +131,15 @@ double DirectionFinder::_getAngleDiff(const ConstOsmMapPtr& map, ConstWayPtr way
   const long startNodeId2 = way2NodeIds[0];
   const long endNodeId1 = way1NodeIds[way1NodeIds.size() - 1];
   const long endNodeId2 = way2NodeIds[way2NodeIds.size() - 1];
-  const Radians angle1 =
-    WayHeading::calculateHeading(
-      map->getNode(startNodeId1)->toCoordinate(),
-      map->getNode(endNodeId1)->toCoordinate());
-  const Radians angle2 =
-    WayHeading::calculateHeading(
-      map->getNode(startNodeId2)->toCoordinate(),
-      map->getNode(endNodeId2)->toCoordinate());;
-  return toDegrees(WayHeading::deltaMagnitude(angle1, angle2));
+  return
+    toDegrees(
+      WayHeading::deltaMagnitude(
+        WayHeading::calculateHeading(
+          map->getNode(startNodeId1)->toCoordinate(),
+          map->getNode(endNodeId1)->toCoordinate()),
+        WayHeading::calculateHeading(
+          map->getNode(startNodeId2)->toCoordinate(),
+          map->getNode(endNodeId2)->toCoordinate())));
 }
 
 }
