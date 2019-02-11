@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKMERGERCREATOR_H
 #define NETWORKMERGERCREATOR_H
@@ -61,7 +61,6 @@ private:
    */
   const NetworkMatch* _getLargest(const MatchSet& matches) const;
 
-
   /**
    * If one match contains the the rest, return the largest match.
    * Otherwise, return 0.
@@ -78,11 +77,6 @@ private:
    * Returns true if one or more matches are conflicting matches.
    */
   bool _isConflictingSet(const MatchSet& matches) const;
-
-  /**
-   * Removes duplicate matches in the MatchSet
-   */
-  void _removeDuplicates(MatchSet& matches) const;
 };
 
 }

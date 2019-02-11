@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -49,7 +49,6 @@ class PoiPolygonNameScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonNameScoreExtractorTest);
   CPPUNIT_TEST(scoreTest);
-  CPPUNIT_TEST(elementNameTest);
   CPPUNIT_TEST(translateTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -69,18 +68,6 @@ public:
     WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
     way2->getTags().set("name", "dfghdgf");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.10669, uut.extract(*map, node1, way2), 0.001);
-  }
-
-  //TODO: move this test to Tags
-  void elementNameTest()
-  {
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set("name", "blah");
-    HOOT_STR_EQUALS("blah", node1->getTags().getName());
-
-    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set("blah", "blah");
-    HOOT_STR_EQUALS("", node2->getTags().getName());
   }
 
   void translateTest()

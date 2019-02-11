@@ -35,6 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -75,7 +76,7 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
 
-      LOG_INFO("Applying operation: " << s);
+      LOG_DEBUG("Applying operation: " << s);
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
@@ -103,7 +104,7 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
-      LOG_INFO("Applying operation: " << s);
+      LOG_DEBUG("Applying operation: " << s);
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
@@ -132,6 +133,8 @@ void NamedOp::apply(OsmMapPtr& map)
     }
 
     LOG_DEBUG("Element count after operation: " << map->getElementCount());
+
+    OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
   }
 }
 

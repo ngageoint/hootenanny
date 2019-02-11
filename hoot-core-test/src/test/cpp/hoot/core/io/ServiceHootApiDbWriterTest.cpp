@@ -334,7 +334,7 @@ public:
                    (qlonglong)_mapId);
   }
 
-  // TODO: merge this into ServicesDbTestUtils::compareRecords
+  // merge this into ServicesDbTestUtils::compareRecords - #2934
   void compareRecords(QString sql, QString expected, QVariant v1 = QVariant())
   {
     HootApiDb db;

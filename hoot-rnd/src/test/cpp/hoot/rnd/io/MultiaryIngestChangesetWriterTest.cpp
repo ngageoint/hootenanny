@@ -183,7 +183,7 @@ public:
 
 //  void passingUnicodeConversionTest()
 //  {
-//    //TODO: to use this you have to comment out the line:
+//    // to use this you have to comment out the line:
       //if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
       //in SparkChangesetWriter
 
@@ -224,7 +224,7 @@ public:
 //  //this reproduces #1772
 //  void failingUnicodeConversionTest()
 //  {
-//    //TODO: to use this you have to comment out the line:
+//    // to use this you have to comment out the line:
 //    //if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
 //    //in SparkChangesetWriter
 

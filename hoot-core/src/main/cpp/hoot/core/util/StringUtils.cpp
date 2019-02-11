@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "StringUtils.h"
@@ -132,6 +132,11 @@ boost::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStri
     strArr->push_back(std::make_pair("", str));
   }
   return strArr;
+}
+
+QString StringUtils::getNumberStringPaddedWithZeroes(const int number, const int padSize)
+{
+  return QString("%1").arg(number, padSize, 10, QChar('0'));
 }
 
 }

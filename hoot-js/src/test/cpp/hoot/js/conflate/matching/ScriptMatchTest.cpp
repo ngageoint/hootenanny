@@ -50,7 +50,7 @@ namespace hoot
 class ScriptMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ScriptMatchTest);
-  //TODO: should this test be re-enabled?
+  // TODO: should this test be re-enabled?
   //CPPUNIT_TEST(cacheTest);
   CPPUNIT_TEST(conflictTest);
   CPPUNIT_TEST_SUITE_END();
@@ -63,7 +63,7 @@ public:
     conf().set(co.getUuidHelperRepeatableKey(), true);
     conf().set(co.getReaderUseFileStatusKey(), true);
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, "test-files/algorithms/js/ScriptMatchTest.osm",
+    OsmMapReaderFactory::read(map, "test-files/algorithms/js/ScriptMatchTest.osm",
       true);
     MapProjector::projectToPlanar(map);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef COMMAND_H
@@ -89,7 +89,6 @@ public:
    * The 'type' of command; e.g. 'core' or 'rnd'
    *
    * @return the command typedef
-   * @todo there may be a better way to do this
    */
   virtual QString getType() const { return "core"; }
 };

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.8913895" minlon="-77.0551" maxlat="38.89231451948048" maxlon="-77.0544829"/>
-    <node visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915695736800160" lon="-77.0546845234517832">
+    <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915695736800160" lon="-77.0546845234517832">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-70"/>
+        <tag k="hoot:id" v="-66"/>
     </node>
-    <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921501924884581" lon="-77.0546814644102511">
+    <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921501924884581" lon="-77.0546814644102511">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-67"/>
+        <tag k="hoot:id" v="-63"/>
     </node>
     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8919859999999673" lon="-77.0547249999999906">
         <tag k="hoot:status" v="2"/>
@@ -85,44 +85,44 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>
         <nd ref="-8"/>
         <nd ref="-7"/>
         <nd ref="-6"/>
         <nd ref="-5"/>
         <nd ref="-4"/>
-        <nd ref="-70"/>
+        <nd ref="-66"/>
         <nd ref="-9"/>
         <tag k="alt_name" v="Rock Crk and Potomac Pkwy NW"/>
         <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-113"/>
+        <tag k="hoot:id" v="-109"/>
     </way>
-    <way visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-11"/>
         <nd ref="-10"/>
-        <nd ref="-67"/>
+        <nd ref="-63"/>
         <nd ref="-9"/>
         <tag k="alt_name" v="Rock Crk and Potomac Pkwy NW"/>
         <tag k="name" v="OHIO DR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-111"/>
+        <tag k="hoot:id" v="-107"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-67"/>
+        <nd ref="-63"/>
         <nd ref="-21"/>
         <nd ref="-20"/>
         <nd ref="-19"/>
         <nd ref="-18"/>
         <nd ref="-17"/>
         <nd ref="-16"/>
-        <nd ref="-70"/>
+        <nd ref="-66"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBBULKINSERTER_H
 #define HOOTAPIDBBULKINSERTER_H
@@ -44,7 +44,7 @@ class HootApiDbSqlStatementFormatter;
  * database writing creates a brand new database for every layer that has no constraints to start
  * with.
  *
- * TODO: Having this class inheriting from OsmApiDbBulkInserter is not the cleanest approach but
+ * Having this class inheriting from OsmApiDbBulkInserter is not the cleanest approach but
  * allowed for reducing a lot of redundant code up front without involving a massive amount of
  * refactoring work.  The better long term approach is probably to create a ApiDbBulkinserter base
  * class and have both this class and OsmApiDbBulkInserter inherit from it.

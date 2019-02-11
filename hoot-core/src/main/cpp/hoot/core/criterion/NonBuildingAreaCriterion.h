@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NONBUILDINGAREACRITERION_H
 #define NONBUILDINGAREACRITERION_H
@@ -36,7 +36,7 @@ namespace hoot
 /**
  * A criterion that will either keep or remove areas, but not if the areas are also buildings.
  *
- * TODO: should be able to accomplish the same thing with a not building and is area chain but
+ * Should be able to accomplish the same thing with a not building and is area chain but
  * couldn't.  See comments in train-area/RemoveIrrelevants.js
  */
 class NonBuildingAreaCriterion : public ElementCriterion

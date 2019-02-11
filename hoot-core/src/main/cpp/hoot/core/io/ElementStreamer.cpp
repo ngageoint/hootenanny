@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementStreamer.h"
 
@@ -52,15 +52,15 @@ bool ElementStreamer::isStreamableIo(const QString input, const QString output)
     writerName = OsmMapWriterFactory::getWriterName(output);
   }
   LOG_VARD(writerName);
-  LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
-  LOG_VARD(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
+  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
+  LOG_VARD(OsmMapWriterFactory::hasElementOutputStream(output));
   LOG_VARD(ConfigUtils::boundsOptionEnabled());
   LOG_VARD(ConfigOptions().getWriterXmlSortById());
   LOG_VARD(ConfigUtils::boundsOptionEnabled());
 
   return
-    OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
-    OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
+    OsmMapReaderFactory::hasElementInputStream(input) &&
+    OsmMapWriterFactory::hasElementOutputStream(output) &&
     //the XML writer can't keep sorted output when streaming, so require an additional config
     //option be specified in order to stream when writing that format
     (writerName != "hoot::OsmXmlWriter" ||
@@ -91,7 +91,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
   {
     if (!opName.trimmed().isEmpty())
     {
-      //TODO: can this be cleaned up?
+      // Can this be cleaned up?
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
@@ -155,7 +155,7 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
     LOG_VARD(opName);
     if (!opName.trimmed().isEmpty())
     {
-      //TODO: can this be cleaned up?
+      // Can this be cleaned up?
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
@@ -212,7 +212,7 @@ void ElementStreamer::stream(const QString input, const QString out, const QStri
 void ElementStreamer::stream(const QStringList inputs, const QString out,
                              const QStringList convertOps)
 {
-  boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
+  boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(out);
   writer->open(out);
   boost::shared_ptr<ElementOutputStream> streamWriter =
     boost::dynamic_pointer_cast<ElementOutputStream>(writer);
@@ -225,7 +225,7 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
     LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
 
     boost::shared_ptr<OsmMapReader> reader =
-      OsmMapReaderFactory::getInstance().createReader(
+      OsmMapReaderFactory::createReader(
         in, ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     reader->open(in);

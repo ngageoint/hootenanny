@@ -102,7 +102,7 @@ bool OsmApiWriter::apply()
   {
     LOG_INFO("Loading changeset: " << _changesets[i]);
     _changeset.loadChangeset(_changesets[i]);
-    _stats.append(SingleStat(QString("Changeset (%1) Time (sec)").arg(_changesets[i]), timer.getElapsedAndRestart()));
+    _stats.append(SingleStat(QString("Changeset (%1) Load Time (sec)").arg(_changesets[i]), timer.getElapsedAndRestart()));
   }
   //  Split any ways that need splitting
   _changeset.splitLongWays(_capabilities.getWayNodes());
@@ -169,7 +169,7 @@ bool OsmApiWriter::apply()
       }
     }
   }
-  PROGRESS_INFO("Upload progress: 100%");
+  LOG_INFO("Upload progress: 100%");
   //  Wait for the threads to shutdown
   for (int i = 0; i < _maxWriters; ++i)
     _threadPool[i].join();
@@ -225,7 +225,8 @@ void OsmApiWriter::_changesetThreadFunc()
       //  Display the changeset in TRACE mode
       LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << _changeset.getChangesetString(workInfo, id));
       //  Upload the changeset
-      if (_uploadChangeset(request, id, _changeset.getChangesetString(workInfo, id)))
+      OsmApiFailureInfoPtr info = _uploadChangeset(request, id, _changeset.getChangesetString(workInfo, id));
+      if (info->success)
       {
         //  Display the upload response in TRACE mode
         LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << QString(request->getResponseContent()));
@@ -243,7 +244,7 @@ void OsmApiWriter::_changesetThreadFunc()
         //  Log the error
         LOG_ERROR("Error uploading changeset: " << id << "\t" << request->getErrorString());
         //  Split the changeset on conflict errors
-        switch (request->getHttpStatus())
+        switch (info->status)
         {
         case 400:   //  Placeholder ID is missing or not unique
         case 404:   //  Diff contains elements where the given ID could not be found
@@ -251,7 +252,7 @@ void OsmApiWriter::_changesetThreadFunc()
         case 412:   //  Precondition Failed, Relation with id cannot be saved due to other member
           {
             _changesetMutex.lock();
-            ChangesetInfoPtr split = _changeset.splitChangeset(workInfo);
+            ChangesetInfoPtr split = _changeset.splitChangeset(workInfo, info->response);
             _changesetMutex.unlock();
             if (split->size() > 0)
             {
@@ -527,12 +528,12 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
  *  When a relation has elements that do not exist or are not visible:
  *   "Relation with id #{id} cannot be saved due to #{element} with id #{element.id}"
  */
-bool OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset)
+OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset)
 {
-  bool success = false;
+  OsmApiFailureInfoPtr info(new OsmApiFailureInfo());
   //  Don't even attempt if the ID is bad
   if (id < 1)
-    return false;
+    return info;
   try
   {
     QUrl change = _url;
@@ -543,27 +544,28 @@ bool OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, cons
 
     request->networkRequest(change, headers, QNetworkAccessManager::Operation::PostOperation, changeset.toUtf8());
 
-    QString responseXml = QString::fromUtf8(request->getResponseContent().data());
+    info->response = QString::fromUtf8(request->getResponseContent().data());
+    info->status = request->getHttpStatus();
 
-    switch (request->getHttpStatus())
+    switch (info->status)
     {
     case 200:
-      success = true;
+      info->success = true;
       break;
     case 400:
-      LOG_WARN("Changeset Upload Error: Error parsing XML changeset\n" << responseXml);
+      LOG_WARN("Changeset Upload Error: Error parsing XML changeset\n" << info->response);
       break;
     case 404:
       LOG_WARN("Unknown changeset or elements don't exist");
       break;
     case 409:
-      LOG_WARN("Changeset conflict: " << responseXml);
+      LOG_WARN("Changeset conflict: " << info->response);
       break;
     case 412:
-      LOG_WARN("Changeset precondition failed: " << responseXml);
+      LOG_WARN("Changeset precondition failed: " << info->response);
       break;
     default:
-      LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());
+      LOG_WARN("Uknown HTTP response code: " << info->status);
       break;
     }
   }
@@ -571,7 +573,7 @@ bool OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, cons
   {
     LOG_WARN(ex.what());
   }
-  return success;
+  return info;
 }
 
 bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset)
@@ -580,9 +582,10 @@ bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPt
   //  Can only work on changesets of size 1
   if (changeset->size() != 1)
     return false;
-  for(int elementType = 0; elementType < ElementType::Type::Unknown; ++elementType)
+  for(int elementType = ElementType::Node; elementType < ElementType::Unknown; ++elementType)
   {
-    for (int changesetType = 0; changesetType < XmlChangeset::ChangesetType::TypeMax; ++changesetType)
+    //  Creates cannot be fixed with this method, skip them here
+    for (int changesetType = XmlChangeset::TypeModify; changesetType < XmlChangeset::TypeMax; ++changesetType)
     {
       ChangesetInfo::iterator element = changeset->begin((ElementType::Type)elementType, (XmlChangeset::ChangesetType)changesetType);
       if (element != changeset->end((ElementType::Type)elementType, (XmlChangeset::ChangesetType)changesetType))

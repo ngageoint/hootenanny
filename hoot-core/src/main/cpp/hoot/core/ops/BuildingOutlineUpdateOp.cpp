@@ -168,7 +168,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
       const QString errMsg =
         QString("Element with uncleanable topology.  Error occurred during union ") +
         QString("operation of element: ") + buildingMember->getElementId().toString();
-      //TODO: if _unionOutline gets activated, make a ReviewMaker mem var to use for this
+      // If _unionOutline gets activated, make a ReviewMaker mem var to use for this
       ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
       if (logWarnCount < Log::getWarnMessageLimit())
       {
@@ -242,7 +242,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
           }
 
           {
-            //TODO: There are some strange scoping/casting issues going on here, where if I try
+            // There are some strange scoping/casting issues going on here, where if I try
             //to consolidate the unioning code for ways and relations into this method, the
             //resulting output differs significantly.  I believe the casting going on in
             //GeometryConverter is related to the cause.  If that's solved, then the duplicated

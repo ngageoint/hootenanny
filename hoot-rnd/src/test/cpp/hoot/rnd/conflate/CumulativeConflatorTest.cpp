@@ -36,7 +36,6 @@ class CumulativeConflatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CumulativeConflatorTest);
   CPPUNIT_TEST(basicTest);
-  //TODO: more error handling tests
   CPPUNIT_TEST_SUITE_END();
 
 public:

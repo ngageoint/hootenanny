@@ -148,7 +148,7 @@ public:
       ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
 
       MapProjector::projectToWgs84(map);
-      OsmMapWriterFactory::getInstance().write(map, outDir + "/" + outFileName);
+      OsmMapWriterFactory::write(map, outDir + "/" + outFileName);
     }
     catch (const HootException& e)
     {

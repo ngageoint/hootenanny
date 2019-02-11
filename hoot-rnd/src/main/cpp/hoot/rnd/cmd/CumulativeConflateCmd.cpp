@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -53,7 +53,7 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    //TODO: make this work with stats
+    // doesn't work with stats yet
     if (args.contains("--stats"))
     {
       throw HootException("Multi-conflation does not work with the --stats option.");

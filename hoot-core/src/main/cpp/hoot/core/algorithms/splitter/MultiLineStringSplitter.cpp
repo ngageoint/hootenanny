@@ -91,6 +91,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   {
     LOG_VART(string.getSublines()[i]);
     WayPtr w = string.getSublines()[i].toWay(map, nf);
+    LOG_VART(w->getElementId());
     if (reverse[i])
     {
       w->reverseOrder();
@@ -111,7 +112,8 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   // if there were multiple matches then create a relation to contain the matches.
   else if (matches.size() > 1)
   {
-    RelationPtr r(new Relation(matches[0]->getStatus(), map->createNextRelationId(),
+    RelationPtr r(
+      new Relation(matches[0]->getStatus(), map->createNextRelationId(),
       matches[0]->getCircularError(), MetadataTags::RelationMultilineString()));
     for (size_t i = 0; i < matches.size(); i++)
     {

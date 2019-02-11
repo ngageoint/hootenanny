@@ -90,7 +90,7 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
 void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const
 {
-  LOG_INFO("Applying PartialNetworkMerger...");
+  LOG_DEBUG("Applying PartialNetworkMerger...");
 
   // we changed the sublines so we must update the indices.
   merger->updateSublineMapping();
@@ -123,8 +123,8 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
     }
   }
 
-  /// @todo this will need to replace one scrap with possibly multiple keeper elements
-  /// - think about the case when the way is part of an interstate or bus relation
+  // TODO: this will need to replace one scrap with possibly multiple keeper elements
+  // - think about the case when the way is part of an interstate or bus relation
   // remove the duplicate element.
   merger->replaceScraps();
 }
@@ -275,7 +275,7 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     // be merged for us properly as long as all the ways have matches. If they don't have matches
     // we've got a problem and they should be reviewed. Possibly identify these situations in the
     // match creator?
-    /// @todo add more logic in the match creator that handles this in a more elegant way.
+    // TODO: add more logic in the match creator that handles this in a more elegant way.
 
     set<ElementId> eids;
     foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())
@@ -306,7 +306,7 @@ void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 
 QString PartialNetworkMerger::toString() const
 {
-  QString s = hoot::toString(getPairs());
+  QString s = hoot::toString(_getPairs());
   return QString("PartialNetworkMerger %1").arg(s);
 }
 

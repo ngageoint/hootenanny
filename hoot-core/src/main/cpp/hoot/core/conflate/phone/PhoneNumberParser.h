@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PHONE_NUMBER_PARSER_H
@@ -51,7 +51,7 @@ struct ElementPhoneNumber
  * Looks at tag keys containing "phone" by default and can be expanded with additional tag keys.
  *
  * @todo This class is being entirely tested from PoiPolygonPhoneNumberScoreExtractorTest.  Move
- * related tests to a new PhoneNumberParserTest class.
+ * related tests to a new PhoneNumberParserTest class. - #2931
  */
 class PhoneNumberParser : public Configurable
 {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -98,8 +98,8 @@ public:
     vector<bool> reverse(1, false);
     MultiLineStringSplitter().split(map, string, reverse, match, scraps);
 
-    HOOT_STR_EQUALS("Way:-2", match->getElementId());
-    HOOT_STR_EQUALS("Relation:-1", scraps->getElementId());
+    HOOT_STR_EQUALS("Way(-2)", match->getElementId());
+    HOOT_STR_EQUALS("Relation(-1)", scraps->getElementId());
     WayPtr m1 = map->getWay(match->getId());
     WayPtr s1 = map->getWay(-3);
     WayPtr s2 = map->getWay(-4);
@@ -112,12 +112,9 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, w1c);
-    //LOG_VAR(way1->getElementId());
-    //LOG_VAR(way1->getNodeIds());
+    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, w1c);;
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
       way1->getCircularError(), MetadataTags::RelationMultilineString()));
-    //LOG_VAR(relation->getElementId());
     relation->addElement("", way1->getElementId());
     map->addElement(relation);
 
@@ -129,23 +126,19 @@ public:
 
     ElementPtr match;
     MultiLineStringSplitter().split(map, multiLineStringLocation, match);
-    //LOG_VAR(match->getElementId());
 
     CPPUNIT_ASSERT_EQUAL((size_t)3, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWays().size());
 
-    HOOT_STR_EQUALS("Way:-2", match->getElementId());
+    HOOT_STR_EQUALS("Way(-2)", match->getElementId());
     WayPtr matchWay = map->getWay(match->getId());
-    //LOG_VAR(matchWay->getNodeIds());
     const std::vector<long>& matchWayNodeIds = matchWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL(-1L, matchWayNodeIds.at(0));
     CPPUNIT_ASSERT_EQUAL(-3L, matchWayNodeIds.at(1));
     way1 = map->getWay(-1);
     const std::vector<long>& way1NodeIds = way1->getNodeIds();
-    //LOG_VAR(way1->getNodeIds());
     CPPUNIT_ASSERT_EQUAL(-1L, way1NodeIds.at(0));
     CPPUNIT_ASSERT_EQUAL(-2L, way1NodeIds.at(1));
-    //HOOT_STR_EQUALS(m1->getNodeId(0), s1->getLastNodeId()););
   }
 
 };

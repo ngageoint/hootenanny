@@ -86,6 +86,9 @@ void MaximalSublineStringMatcher::_configureSublineMatcher()
 WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPtr& map,
   const ConstElementPtr& e1, const ConstElementPtr& e2, Meters maxRelevantDistance) const
 {
+  LOG_VART(e1->getElementId());
+  LOG_VART(e2->getElementId());
+
   assert(_maxAngle >= 0);
   if (maxRelevantDistance == -1)
   {
@@ -102,9 +105,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   vector<ConstWayPtr> ways1 = ExtractWaysVisitor::extractWays(map, e1);
   vector<ConstWayPtr> ways2 = ExtractWaysVisitor::extractWays(map, e2);
   LOG_VART(ways1.size());
-  LOG_VART(ways1);
   LOG_VART(ways2.size());
-  LOG_VART(ways2);
 
   if ((ways1.size() > 4 && ways2.size() > 4) || (ways1.size() + ways2.size() > 7))
   {
@@ -165,8 +166,8 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
     for (size_t j = 0; j < prep2.size(); j++)
     {
       double score;
-      WaySublineMatchString m = _sublineMatcher->findMatch(copiedMap, prep1[i], prep2[j], score,
-        maxDistance);
+      WaySublineMatchString m =
+        _sublineMatcher->findMatch(copiedMap, prep1[i], prep2[j], score, maxDistance);
 
       scoreSum += score;
       matches.insert(matches.end(), m.getMatches().begin(), m.getMatches().end());

@@ -55,7 +55,8 @@ void OsmUtils::printNodes(const QString nodeCollectionName,
   {
     LOG_DEBUG(nodeCollectionName);
     LOG_VARD(nodes.size());
-    for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+    for (QList<boost::shared_ptr<const Node>>::const_iterator it = nodes.begin();
+         it != nodes.end(); ++it)
     {
       boost::shared_ptr<const Node> node = *it;
       LOG_VARD(node->toString());
@@ -214,6 +215,18 @@ bool OsmUtils::containsPois(ConstOsmMapPtr map)
       ConstElementVisitorPtr(new ElementCountVisitor()),
       map);
   return poiCount > 0;
+}
+
+QString OsmUtils::getDetailedRelationString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+{
+  QString str = relation->toString() + "\nMember Detail:\n";
+  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    str += member->toString() + "\n";
+  }
+  return str;
 }
 
 }

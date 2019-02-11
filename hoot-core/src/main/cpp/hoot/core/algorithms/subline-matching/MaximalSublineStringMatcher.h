@@ -63,7 +63,7 @@ public:
   virtual void setMaxRelevantAngle(Radians r);
 
   /**
-   * @todo minSplitSize is not supported at this time.
+   * minSplitSize is not supported at this time.
    */
   virtual void setMinSplitSize(Meters minSplitSize);
 

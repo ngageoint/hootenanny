@@ -63,6 +63,8 @@ public:
   /** Constructors */
   XmlChangeset();
   explicit XmlChangeset(const QList<QString>& changesets);
+  /**  Allow test class to access protected members for white box testing */
+  friend class OsmApiChangesetTest;
   /**
    * @brief loadChangeset Load changeset file, can be called multiple times on changeset that are split across files
    * @param changesetPath
@@ -119,9 +121,10 @@ public:
    * @brief splitChangeset Split the subset in half, this happens if a subset fails.  This essentially is a binary search
    *  for the failing element(s) to isolate them into single element changesets that are then marked as failed.
    * @param changeset - Pointer to the current subset that failed, is changed to include half of the resulting split
+   * @param splitHint - Text hint possibly indicating which record is failing
    * @return pointer to half of the subset to be sent back to the OSM API
    */
-  ChangesetInfoPtr splitChangeset(ChangesetInfoPtr changeset);
+  ChangesetInfoPtr splitChangeset(ChangesetInfoPtr changeset, const QString& splitHint = "");
   /**
    * @brief updateFailedChangeset Update the changeset to mark elements as failed if the ChangesetInfo object has been "fixed"
    * @param changeset - Pointer to changeset info object with one element that has failed
@@ -319,10 +322,33 @@ private:
   /**
    * @brief failNode/Way/Relation Set element's status to failed and up the failed count
    * @param id ID of the node/way/relation to fail
+   * @param beforeSend True if it was set to failed before sending
    */
-  void failNode(long id);
-  void failWay(long id);
-  void failRelation(long id);
+  void failNode(long id, bool beforeSend = false);
+  void failWay(long id, bool beforeSend = false);
+  void failRelation(long id, bool beforeSend = false);
+  /**
+   * @brief matchesPlaceholderFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Placeholder node not found for reference -145213 in way -5687"
+   * @param hint Error message from OSM API
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
+   * @return True if the message matches and was parsed
+   */
+  bool matchesPlaceholderFailure(const QString& hint,
+                                 long& member_id, ElementType::Type& member_type,
+                                 long& element_id, ElementType::Type& element_type);
+  /**
+   * @brief matchesRelationFailure Checks the return from the API to see if it is similar to the following error message:
+   * @param hint Error message from OSM API
+   * @param element_id ID of the element that failed
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @return True if the message matches and was parsed
+   */
+  bool matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   XmlElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
@@ -360,7 +386,7 @@ public:
   typedef typename container::iterator iterator;
   typedef typename container::const_iterator const_iterator;
   /** Constructor */
-  ChangesetInfo() { }
+  ChangesetInfo() : _changesetIssuesResolved(false) { }
   /**
    * @brief add Add an element ID of a certain type to the changeset type
    * @param element_type Describes the 'id' argument as a node, way, or relation

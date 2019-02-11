@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -143,7 +143,7 @@ public:
     OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/polygon/BuildingMergerTest-runMatchTest.osm");
 
-    HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
+    HOOT_STR_EQUALS("[3]{(Way(-15), Way(-7)), (Way(-14), Way(-7)), (Way(-13), Way(-7))}", replaced);
   }
 
   void runTagTest()
@@ -172,7 +172,7 @@ public:
     BuildingMerger bm(pairs);
     bm.apply(map, replaced);
 
-    HOOT_STR_EQUALS("[3]{(Way:-26, Relation:-1), (Way:-25, Relation:-1), (Way:-14, Relation:-1)}",
+    HOOT_STR_EQUALS("[3]{(Way(-26), Relation(-1)), (Way(-25), Relation(-1)), (Way(-14), Relation(-1))}",
                     replaced);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-218,\"lat\":39.593278,\"lon\":-104.80656},\n"
@@ -216,7 +216,7 @@ public:
       map,
       "test-output/conflate/polygon/BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-true.osm");
     HOOT_STR_EQUALS(
-      "[3]{(Way:-18, Relation:-1), (Way:-17, Relation:-1), (Way:-1, Relation:-1)}", replaced);
+      "[3]{(Way(-18), Relation(-1)), (Way(-17), Relation(-1)), (Way(-1), Relation(-1))}", replaced);
   }
 
   void runKeepMoreComplexGeometryWhenAutoMergingTest2()
@@ -234,7 +234,7 @@ public:
     writer.write(
       map,
       "test-output/conflate/polygon/BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-false.osm");
-    HOOT_STR_EQUALS("[2]{(Way:-18, Way:-1), (Way:-17, Way:-1)}", replaced);
+    HOOT_STR_EQUALS("[2]{(Way(-18), Way(-1)), (Way(-17), Way(-1))}", replaced);
   }
 
 private:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveRef2Visitor.h"
 
@@ -117,7 +117,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
     if (eid.isNull())
     {
       const QString errMsg = "Found a " + MetadataTags::Ref2() + " that references a non-existing " + MetadataTags::Ref1() + ": " + r;
-      //TODO: make _errorOnMissingRef1 configurable from nodejs - see #1175
+      // make _errorOnMissingRef1 configurable from nodejs - see #1175
       //if (_errorOnMissingRef1)
       //{
         //throw IllegalArgumentException(errMsg);

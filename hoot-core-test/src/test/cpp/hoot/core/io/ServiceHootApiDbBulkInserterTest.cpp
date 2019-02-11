@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -47,10 +47,6 @@ namespace hoot
  * OsmApiDbBulkWriter.  Rather than add tests for the unneeded features, its a better idea to
  * rework the inheritance of the two classes as described in HootApiDbBulkWriter to get rid of the
  * unneeded functionality in HootApiDbBulkWriter.
- *
- * @todo probably need some more user permission related tests similar to what's in
- * ServiceHootApiDbWriterTest after consolidating some of the logic between HootApiDbBulkInserter
- * and HootApiDbWriter open methods
  */
 class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 {
@@ -127,7 +123,7 @@ public:
     reader.close();
     const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
     boost::shared_ptr<OsmMapWriter> actualMapWriter =
-      OsmMapWriterFactory::getInstance().createWriter(actualOutputFile);
+      OsmMapWriterFactory::createWriter(actualOutputFile);
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);
 
@@ -142,7 +138,7 @@ public:
     LOG_VARD(numChangesets);
     CPPUNIT_ASSERT_EQUAL(8L, numChangesets);
 
-    //TODO: This needs to be enabled (or some check similar to it), but doing so will require
+    // TODO: This needs to be enabled (or some check similar to it), but doing so will require
     //ignoring the map and changeset ID's in the file that will change with each test run.
 //    TestUtils::verifyStdMatchesOutputIgnoreDate(
 //      "test-files/io/ServiceHootApiDbBulkInserterTest/psql-offline.sql",

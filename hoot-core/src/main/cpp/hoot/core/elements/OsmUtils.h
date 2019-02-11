@@ -51,166 +51,170 @@ class Status;
   */
 class OsmUtils
 {
-  public:
+public:
 
-    /**
-      Prints a collection of nodes for debugging purposes (couldn't find a way to do this with the
-      debug logger).
+  /**
+    Prints a collection of nodes for debugging purposes (couldn't find a way to do this with the
+    debug logger).
 
-      @param nodeCollectionName
-      @param nodes
-      @todo Use a template here to make this method generic for other OSM element types.
-      @todo Move to Element?
-      */
-    static void printNodes(const QString nodeCollectionName,
-                           const QList<boost::shared_ptr<const Node> >& nodes);
+    @param nodeCollectionName
+    @param nodes
+    */
+  static void printNodes(const QString nodeCollectionName,
+                         const QList<boost::shared_ptr<const Node>>& nodes);
 
-    /**
-      Retrieves a collection of node ID's for a collection of nodes
+  /**
+    Retrieves a collection of node ID's for a collection of nodes
 
-      @param nodes a collection of nodes
-      @return a collection of node ID's
-      @todo Use a template to make this method generic for other OSM element types.
-      @todo Move to Element?
-      */
-    static const QList<long> nodesToNodeIds(const QList<boost::shared_ptr<const Node> >& nodes);
+    @param nodes a collection of nodes
+    @return a collection of node ID's
+    */
+  static const QList<long> nodesToNodeIds(const QList<boost::shared_ptr<const Node>>& nodes);
 
-    /**
-      Retrieves a collection of nodes given a collection of node ID's
+  /**
+    Retrieves a collection of nodes given a collection of node ID's
 
-      @param nodeIds a collection of node ID's
-      @param map the map owning the nodes with the given ID's
-      @return a collection of nodes
-      @todo Use a template here to make this method generic for other OSM element types.
-      @todo Move to Element?
-      */
-    static QList<boost::shared_ptr<const Node> > nodeIdsToNodes(const QList<long>& nodeIds,
-                                                                boost::shared_ptr<const OsmMap> map);
+    @param nodeIds a collection of node ID's
+    @param map the map owning the nodes with the given ID's
+    @return a collection of nodes
+    */
+  static QList<boost::shared_ptr<const Node>> nodeIdsToNodes(const QList<long>& nodeIds,
+                                                             boost::shared_ptr<const OsmMap> map);
 
-    /**
-      Converts a OSM node to a coordinate
+  /**
+    Converts a OSM node to a coordinate
 
-      @param node the node to convert
-      @returns a coordinate
-      */
-    static geos::geom::Coordinate nodeToCoord(boost::shared_ptr<const Node> node);
+    @param node the node to convert
+    @returns a coordinate
+    */
+  static geos::geom::Coordinate nodeToCoord(boost::shared_ptr<const Node> node);
 
-    /**
-      Converts OSM nodes to a coordinates
+  /**
+    Converts OSM nodes to a coordinates
 
-      @param nodes the nodes to convert
-      @returns coordinates
-      */
-    static QList<geos::geom::Coordinate> nodesToCoords(const QList<boost::shared_ptr<const Node> >& nodes);
+    @param nodes the nodes to convert
+    @returns coordinates
+    */
+  static QList<geos::geom::Coordinate> nodesToCoords(
+    const QList<boost::shared_ptr<const Node> >& nodes);
 
-    /**
-      Converts a coordinate to an OSM node
+  /**
+    Converts a coordinate to an OSM node
 
-      @param coord the coordinate to convert
-      @param map the map owning the node to be created
-      @returns a node
-      */
-    static boost::shared_ptr<const Node> coordToNode(const geos::geom::Coordinate& coord,
-                                                     boost::shared_ptr<const OsmMap> map);
+    @param coord the coordinate to convert
+    @param map the map owning the node to be created
+    @returns a node
+    */
+  static boost::shared_ptr<const Node> coordToNode(const geos::geom::Coordinate& coord,
+                                                   boost::shared_ptr<const OsmMap> map);
 
-    /**
-      Converts coordinates to OSM nodes
+  /**
+    Converts coordinates to OSM nodes
 
-      @param coords the coordinates to convert
-      @param map the map owning the nodes to be created
-      @returns nodes
-      */
-    static QList<boost::shared_ptr<const Node> > coordsToNodes(const QList<geos::geom::Coordinate>& coords,
-                                                               boost::shared_ptr<const OsmMap> map);
+    @param coords the coordinates to convert
+    @param map the map owning the nodes to be created
+    @returns nodes
+    */
+  static QList<boost::shared_ptr<const Node> > coordsToNodes(
+    const QList<geos::geom::Coordinate>& coords, boost::shared_ptr<const OsmMap> map);
 
-    /**
-      Converts a 64-bit unsigned int timestamp (seconds from epoch) to a QString (utc zulu)
+  /**
+    Converts a 64-bit unsigned int timestamp (seconds from epoch) to a QString (utc zulu)
 
-      @param timestamp quint64 time encoding in seconds from the epoch (1970-01-01T00:00:00Z)
-      */
-    static QString toTimeString(quint64 timestamp);
+    @param timestamp quint64 time encoding in seconds from the epoch (1970-01-01T00:00:00Z)
+    */
+  static QString toTimeString(quint64 timestamp);
 
-    /**
-      Converts a utc zulu timestamp to time since the epoch in seconds.
+  /**
+    Converts a utc zulu timestamp to time since the epoch in seconds.
 
-      @param timestamp in utc zulu string to be convered to seconds from the epoch (1970-01-01 00:00:00)
-      */
-    static quint64 fromTimeString(QString timestamp);
+    @param timestamp in utc zulu string to be convered to seconds from the epoch (1970-01-01 00:00:00)
+    */
+  static quint64 fromTimeString(QString timestamp);
 
-    /**
-     * Returns a time string for the current time
-     *
-     * @return
-     */
-    static QString currentTimeAsString();
+  /**
+   * Returns a time string for the current time
+   *
+   * @return
+   */
+  static QString currentTimeAsString();
 
-    //TODO: These logic in these contains methods could probably be consolidated into fewer methods.
+  // The logic in these contains methods could probably be consolidated into fewer methods. - #2932
 
-    /**
-     * Determines whether a map contains two or more POIs
-     *
-     * @param map the map to examine
-     * @return true if the map meets the specified criteria; false otherwise
-     */
-    static bool containsTwoOrMorePois(ConstOsmMapPtr map);
+  /**
+   * Determines whether a map contains two or more POIs
+   *
+   * @param map the map to examine
+   * @return true if the map meets the specified criteria; false otherwise
+   */
+  static bool containsTwoOrMorePois(ConstOsmMapPtr map);
 
-    /**
-     * Determines whether a map contains two or more buildings
-     *
-     * @param map the map to examine
-     * @return true if the map meets the specified criteria; false otherwise
-     */
-    static bool containsTwoOrMoreBuildings(ConstOsmMapPtr map);
+  /**
+   * Determines whether a map contains two or more buildings
+   *
+   * @param map the map to examine
+   * @return true if the map meets the specified criteria; false otherwise
+   */
+  static bool containsTwoOrMoreBuildings(ConstOsmMapPtr map);
 
-    /**
-     * Determines whether a map contains two or more areas
-     *
-     * @param map the map to examine
-     * @return true if the map meets the specified criteria; false otherwise
-     */
-    static bool containsTwoOrMoreAreas(ConstOsmMapPtr map);
+  /**
+   * Determines whether a map contains two or more areas
+   *
+   * @param map the map to examine
+   * @return true if the map meets the specified criteria; false otherwise
+   */
+  static bool containsTwoOrMoreAreas(ConstOsmMapPtr map);
 
-    /**
-     * Determines whether a map contains one polygon and one POI under the POI to Polygon conflation
-     * definition
-     *
-     * @param map the map to examine
-     * @return true if the map meets the specified criteria; false otherwise
-     */
-    static bool containsOnePolygonAndOnePoi(ConstOsmMapPtr map);
+  /**
+   * Determines whether a map contains one polygon and one POI under the POI to Polygon conflation
+   * definition
+   *
+   * @param map the map to examine
+   * @return true if the map meets the specified criteria; false otherwise
+   */
+  static bool containsOnePolygonAndOnePoi(ConstOsmMapPtr map);
 
-    /**
-     * Determines whether a map contains any polygons under the POI to Polygon conflation
-     * definition
-     *
-     * @param map the map to examine
-     * @return true if the map meets the specified criteria; false otherwise
-     */
-    static bool containsPoiPolyPolys(ConstOsmMapPtr map);
+  /**
+   * Determines whether a map contains any polygons under the POI to Polygon conflation
+   * definition
+   *
+   * @param map the map to examine
+   * @return true if the map meets the specified criteria; false otherwise
+   */
+  static bool containsPoiPolyPolys(ConstOsmMapPtr map);
 
-    /**
-     * Determines whether a map contains any areas
-     *
-     * @param map the map to examine
-     * @return ttrue if the map meets the specified criteria; false otherwise
-     */
-    static bool containsAreas(ConstOsmMapPtr map);
+  /**
+   * Determines whether a map contains any areas
+   *
+   * @param map the map to examine
+   * @return ttrue if the map meets the specified criteria; false otherwise
+   */
+  static bool containsAreas(ConstOsmMapPtr map);
 
-    /**
-     * Determines whether a map contains any buildings
-     *
-     * @param map the map to examine
-     * @return true if the map meets the specified criteria; false otherwise
-     */
-    static bool containsBuildings(ConstOsmMapPtr map);
+  /**
+   * Determines whether a map contains any buildings
+   *
+   * @param map the map to examine
+   * @return true if the map meets the specified criteria; false otherwise
+   */
+  static bool containsBuildings(ConstOsmMapPtr map);
 
-    /**
-     * Determines whether a map contains any POIs
-     *
-     * @param map the map to examine
-     * @return true if the map meets the specified criteria; false otherwise
-     */
-    static bool containsPois(ConstOsmMapPtr map);
+  /**
+   * Determines whether a map contains any POIs
+   *
+   * @param map the map to examine
+   * @return true if the map meets the specified criteria; false otherwise
+   */
+  static bool containsPois(ConstOsmMapPtr map);
+
+  /**
+   *
+   *
+   * @param relation
+   * @param map
+   * @return
+   */
+  static QString getDetailedRelationString(ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKMATCH_H
 #define NETWORKMATCH_H
@@ -43,6 +43,7 @@ namespace hoot
 class NetworkMatch : public Match
 {
 public:
+
   NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
     double score, ConstMatchThresholdPtr mt);
 
@@ -106,15 +107,17 @@ public:
   bool contains(const NetworkMatch* other) const;
 
 protected:
+
   void _discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch);
 
   ConstElementPtr _toElement(ConstNetworkEdgePtr edge) const;
 
 private:
+
   MatchClassification _classification;
   ConstNetworkDetailsPtr _details;
   ConstEdgeMatchPtr _edgeMatch;
-  std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
 };
 
 }

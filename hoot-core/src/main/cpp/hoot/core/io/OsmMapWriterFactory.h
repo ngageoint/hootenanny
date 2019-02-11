@@ -22,10 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPWRITERFACTORY_H
 #define OSMMAPWRITERFACTORY_H
+
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QString>
@@ -35,33 +38,31 @@
 
 namespace hoot
 {
-class OsmMap;
 class OsmMapWriter;
 
 /**
- * A factory for constructing writers based on the URL (Singleton).
+ * A factory for constructing writers based on the URL
  */
 class OsmMapWriterFactory
 {
 public:
 
-  boost::shared_ptr<OsmMapWriter> createWriter(QString url);
+  static boost::shared_ptr<OsmMapWriter> createWriter(QString url);
 
-  static OsmMapWriterFactory& getInstance();
+  static bool hasElementOutputStream(QString url);
 
-  bool hasElementOutputStream(QString url);
-
-  static void write(const boost::shared_ptr<const OsmMap>& map, QString url);
+  static void write(const boost::shared_ptr<const OsmMap>& map, QString url,
+                    const bool silent = false);
 
   static QString getWriterName(const QString url);
 
   static bool isSupportedFormat(const QString url);
 
+  static void writeDebugMap(const ConstOsmMapPtr& map, const QString title = "");
+
 private:
 
-  OsmMapWriterFactory();
-
-  static boost::shared_ptr<OsmMapWriterFactory> _theInstance;
+  static unsigned int _debugMapCount;
 };
 
 }

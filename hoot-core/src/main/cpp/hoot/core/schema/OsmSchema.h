@@ -428,7 +428,7 @@ public:
    * @param tagList string tag list to check against
    * @return true if any tag in a set of input tags is contained in a string list of tags; false
    * otherwise
-   * @todo If we came up with a way to support key=* wildcards in the Tags class, then we could
+   * @note If we came up with a way to support key=* wildcards in the Tags class, then we could
    * probably get rid of this method altogether and just check against the tags whereever this
    * method is being called.
    */
