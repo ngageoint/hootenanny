@@ -60,13 +60,6 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   {
     return false;
   }
-  // check for shared start/end node combos that show reversal; fix for #2888
-  else if ((w1->getNodeIds()[0] == w2->getNodeIds()[0]) ||
-           (w1->getNodeIds()[w1->getNodeIds().size() - 1] ==
-            w2->getNodeIds()[w2->getNodeIds().size() - 1]))
-  {
-    return false;
-  }
 
   WayDiscretizer wd1(map, w1);
   WayDiscretizer wd2(map, w2);
