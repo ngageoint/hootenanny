@@ -30,6 +30,10 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // Boost Includes
 #include <boost/shared_ptr.hpp>
@@ -139,73 +143,27 @@ public:
    */
   static QString currentTimeAsString();
 
-  // The logic in these contains methods could probably be consolidated into fewer methods. - #2932
-
   /**
-   * Determines whether a map contains two or more POIs
+   * Determines whether a map contains a minimum or a fixed amount of elements matching the criterion type
+   * Only objects of type ElementCriterion are allowed, all others will return false
    *
    * @param map the map to examine
+   * @param minCount the minmal count of elements required (if exactCount == false)
+   * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
    */
-  static bool containsTwoOrMorePois(ConstOsmMapPtr map);
+  template<class C> static bool contains(ConstOsmMapPtr map, int minCount = 1, bool exactCount = false)
+  {
+    if(!std::is_base_of<ElementCriterion,C>::value) return false;
 
-  /**
-   * Determines whether a map contains two or more buildings
-   *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
-   */
-  static bool containsTwoOrMoreBuildings(ConstOsmMapPtr map);
-
-  /**
-   * Determines whether a map contains two or more areas
-   *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
-   */
-  static bool containsTwoOrMoreAreas(ConstOsmMapPtr map);
-
-  /**
-   * Determines whether a map contains one polygon and one POI under the POI to Polygon conflation
-   * definition
-   *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
-   */
-  static bool containsOnePolygonAndOnePoi(ConstOsmMapPtr map);
-
-  /**
-   * Determines whether a map contains any polygons under the POI to Polygon conflation
-   * definition
-   *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
-   */
-  static bool containsPoiPolyPolys(ConstOsmMapPtr map);
-
-  /**
-   * Determines whether a map contains any areas
-   *
-   * @param map the map to examine
-   * @return ttrue if the map meets the specified criteria; false otherwise
-   */
-  static bool containsAreas(ConstOsmMapPtr map);
-
-  /**
-   * Determines whether a map contains any buildings
-   *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
-   */
-  static bool containsBuildings(ConstOsmMapPtr map);
-
-  /**
-   * Determines whether a map contains any POIs
-   *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
-   */
-  static bool containsPois(ConstOsmMapPtr map);
+    const long count =
+      (long)FilteredVisitor::getStat(
+        ElementCriterionPtr(new C()),
+        ConstElementVisitorPtr(new ElementCountVisitor()),
+        map);
+    LOG_VART(count);
+    return exactCount ? (count == minCount) : (count >= minCount);
+  }
 
   /**
    *
