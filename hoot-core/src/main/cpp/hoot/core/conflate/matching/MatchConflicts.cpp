@@ -47,7 +47,7 @@ MatchConflicts::MatchConflicts(const ConstOsmMapPtr& map) :
 MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
   const vector<const Match*>& matches) const
 {
-  LOG_DEBUG("Calculating element ID to index map...");
+  LOG_TRACE("Calculating element ID to index map...");
   EidIndexMap eidToMatches;
 
   // map each eid to all corresponding matches.
@@ -60,9 +60,9 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
       eidToMatches.insert(pair<ElementId, size_t>(it->second, i));
     }
 
-    if (i % 10 == 0)
+    if (i % 100 == 0)
     {
-      PROGRESS_DEBUG(i << " element ID indexes processed");
+      PROGRESS_TRACE(i << " element ID indexes processed");
     }
   }
 
@@ -82,7 +82,7 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
   // the set of indexes to all the matches that use a common ElementId
   vector<int> matchSet;
   long eidToMatchCount = 0;
-  LOG_INFO("Calculating match subset conflicts...");
+  LOG_DEBUG("Calculating match subset conflicts...");
   for (EidIndexMap::iterator it = eidToMatches.begin(); it != eidToMatches.end(); ++it)
   {
     // if we got a new Eid.
@@ -97,7 +97,7 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
     lastEid = it->first;
 
     eidToMatchCount++;
-    if (eidToMatchCount % 10 == 0)
+    if (eidToMatchCount % 100 == 0)
     {
       PROGRESS_INFO(
         "Processed matches for " << eidToMatchCount << " / " << eidToMatches.size() <<

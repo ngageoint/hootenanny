@@ -54,6 +54,7 @@ namespace hoot
 class IntegerProgrammingSolver
 {
 public:
+
   IntegerProgrammingSolver();
 
   virtual ~IntegerProgrammingSolver();

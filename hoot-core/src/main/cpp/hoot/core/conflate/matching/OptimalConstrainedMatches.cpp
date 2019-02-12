@@ -54,7 +54,6 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
   }
 
   // figure out all the pairs of matches that conflict.
-  LOG_INFO("Calculating optimal match conflicts...");
   _calculateMatchConflicts();
 
   // if there are no conflicts, then there is nothing to solve.
@@ -72,6 +71,7 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
     solver.setTimeLimit(_timeLimit);
   }
 
+  LOG_INFO("Calculating optimal match conflicts...");
   // solve the Integer Programming problem.
   solver.solve();
   _score = solver.getObjectiveValue();
