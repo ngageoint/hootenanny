@@ -267,11 +267,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
-    if (i % _taskStatusUpdateInterval == 0)
+    if (i % 10 == 0)
     {
-      PROGRESS_INFO(
-        "Applying merger: " << i + 1 << " / " << _mergers.size() << " - " <<
-        _mergers[i]->toString());
+      PROGRESS_INFO("Applying merger: " << i + 1 << " / " << _mergers.size());
     }
     _mergers[i]->apply(map, replaced);
     LOG_VART(replaced);

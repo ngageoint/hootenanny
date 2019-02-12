@@ -265,6 +265,8 @@ public:
 
   ConstOsmMapPtr getMap() { return _map; }
 
+  long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
+
 private:
 
   const ConstOsmMapPtr& _map;
@@ -319,12 +321,13 @@ Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid
 void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Creating matches with: " << className() << "...");
+  LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   HighwayMatchVisitor v(
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
     _filter);
   map->visitRo(v);
+  LOG_INFO("Found " << v.getNumMatchCandidatesFound() << " highway match candidates.");
 }
 
 vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const

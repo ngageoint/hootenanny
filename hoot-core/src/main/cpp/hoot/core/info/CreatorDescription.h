@@ -73,9 +73,7 @@ public:
   };
 
   CreatorDescription();
-
   CreatorDescription(std::string className, QString description, bool experimental);
-
   CreatorDescription(std::string className, QString description, BaseFeatureType featureType,
                      bool experimental);
 
@@ -84,9 +82,9 @@ public:
   QString description;
   BaseFeatureType baseFeatureType;
 
-  static QString BaseFeatureTypeToString(BaseFeatureType t);
+  static QString baseFeatureTypeToString(BaseFeatureType t);
 
-  static BaseFeatureType StringToBaseFeatureType(QString s);
+  static BaseFeatureType stringToBaseFeatureType(QString s);
 
   /* These two functions, getFeatureCalcType & getElementCriterion could be pushed down into the
    * classes that are derived from MatchCreator, and that would seem logical and clean - BUT

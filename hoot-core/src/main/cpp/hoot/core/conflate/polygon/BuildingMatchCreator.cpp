@@ -265,6 +265,8 @@ public:
 
   ConstOsmMapPtr getMap() { return _map; }
 
+  long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
+
 private:
 
   const ConstOsmMapPtr& _map;
@@ -321,12 +323,13 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Creating matches with: " << className() << "...");
+  LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(
     map, matches, _getRf(), threshold, _filter, Status::Unknown1,
     ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne());
   map->visitRo(v);
+  LOG_INFO("Found " << v.getNumMatchCandidatesFound() << " building match candidates.");
 }
 
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const

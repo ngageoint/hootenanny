@@ -64,7 +64,7 @@ baseFeatureType(featureType)
 {
 }
 
-QString CreatorDescription::BaseFeatureTypeToString(BaseFeatureType t)
+QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
 {
   switch (t)
   {
@@ -91,7 +91,7 @@ QString CreatorDescription::BaseFeatureTypeToString(BaseFeatureType t)
   }
 }
 
-CreatorDescription::BaseFeatureType CreatorDescription::StringToBaseFeatureType(QString s)
+CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(QString s)
 {
   s = s.toLower();
   if (0 == s.compare("poi"))
@@ -172,7 +172,7 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
 
 QString CreatorDescription::toString() const
 {
-  return QString::fromStdString(className) + ";" + BaseFeatureTypeToString(baseFeatureType);
+  return QString::fromStdString(className) + ";" + baseFeatureTypeToString(baseFeatureType);
 }
 
 }
