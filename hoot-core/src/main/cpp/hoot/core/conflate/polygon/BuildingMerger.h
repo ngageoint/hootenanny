@@ -51,12 +51,12 @@ public:
    */
   explicit BuildingMerger(const std::set< std::pair<ElementId, ElementId> >& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) override;
 
   static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
                                                   const std::set<ElementId>& eids);
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
   /**
    * Utility method that allows for merging an unlimited number of buildings
@@ -73,8 +73,8 @@ public:
 
 protected:
 
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() override { return _pairs; }
+  virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
 

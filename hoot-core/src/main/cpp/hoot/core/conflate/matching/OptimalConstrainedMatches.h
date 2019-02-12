@@ -53,7 +53,7 @@ public:
    * scores. All matches will be considered so if you don't want matches below a threshold included
    * then don't add them.
    */
-  virtual std::vector<const Match*> calculateSubset();
+  virtual std::vector<const Match*> calculateSubset() override;
 
 private:
 

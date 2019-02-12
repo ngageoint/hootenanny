@@ -90,14 +90,14 @@ public:
   virtual ~HighwayMergerAbstract() {}
 
   virtual void apply(const OsmMapPtr& map,
-                     std::vector< std::pair<ElementId, ElementId> >& replaced) = 0;
+                     std::vector< std::pair<ElementId, ElementId> >& replaced) override = 0;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
 protected:
 
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() override { return _pairs; }
+  virtual const PairsSet& _getPairs() const override { return _pairs; }
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 

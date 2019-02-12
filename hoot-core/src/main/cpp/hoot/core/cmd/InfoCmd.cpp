@@ -61,7 +61,7 @@ public:
   virtual QString getDescription() const
   { return "Displays information about Hootenanny capabilities"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     //only allowing one option per command
     const QStringList supportedOpts = _getSupportedOptions();

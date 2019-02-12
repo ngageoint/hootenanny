@@ -52,14 +52,14 @@ public:
   NetworkMerger(const std::set<std::pair<ElementId, ElementId>>& pairs, ConstEdgeMatchPtr edgeMatch,
     ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
 protected:
 
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() override { return _pairs; }
+  virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
 

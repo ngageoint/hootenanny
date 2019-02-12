@@ -52,7 +52,7 @@ public:
 
   virtual QString getDescription() const { return "Sorts a map to the OSM standard"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     if (args.size() != 2)
     {
