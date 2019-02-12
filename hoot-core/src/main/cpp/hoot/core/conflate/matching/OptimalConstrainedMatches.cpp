@@ -71,7 +71,7 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
     solver.setTimeLimit(_timeLimit);
   }
 
-  LOG_INFO("Calculating optimal match conflicts...");
+  LOG_INFO("Calculating optimal match conflicts with an Integer Programming solution...");
   // solve the Integer Programming problem.
   solver.solve();
   _score = solver.getObjectiveValue();

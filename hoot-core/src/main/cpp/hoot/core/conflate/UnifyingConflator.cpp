@@ -211,10 +211,14 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     if (gm.getScore() > cm.getScore())
     {
       _matches = gmMatches;
+      LOG_DEBUG("Using greedy matches with a higher score of: " << gm.getScore());
     }
     else
     {
       _matches = cmMatches;
+      LOG_DEBUG(
+        "Using matches obtained by the an Integer Programming solution with a higher score of: " <<
+        cm.getScore());
     }
   }
   double optimizeMatchesTime = timer.getElapsedAndRestart();
