@@ -81,7 +81,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -105,5 +105,40 @@ public class ConflateCommandTest {
 
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads", conflateCommand.getSubstitutionMap().get("INPUT1"));
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads", conflateCommand.getSubstitutionMap().get("INPUT2"));
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testCreateConflateCommandHoot2() {
+    	String jobId = UUID.randomUUID().toString();
+
+    	ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setUserEmail("test@test.com");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2Commands("");
+        conflateParams.setConflationType("Attribute");
+
+        String debugLevel = "error";
+
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        assertEquals(jobId, conflateCommand.getJobId());
+        assertEquals(true, conflateCommand.getTrackable());
+        assertNotNull(conflateCommand.getSubstitutionMap());
+        assertNotNull(conflateCommand.getWorkDir());
+        assertNotNull(conflateCommand.getCommand());
+
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        assertEquals(expectedCommand, conflateCommand.getCommand());
+
+        assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_TYPE"));
+        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_TYPE").toString().equals("-C Attribute.conf"));
+
     }
 }

@@ -74,17 +74,6 @@ class ConflateCommand extends ExternalCommand {
 
         String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
 
-        if (params.getAdvancedOptions() != null) {
-            String[] advOptions = params.getAdvancedOptions().trim().split("-D ");
-            Arrays.stream(advOptions).forEach((option) -> {
-                if (!option.isEmpty()) {
-                    options.add(option.trim());
-                };
-            });
-        }
-
-        List<String> hootOptions = toHootOptions(options);
-
         String stats = "";
         if (params.getCollectStats()) {
             // Don't include non-error log messages in stdout because we are redirecting to file
@@ -93,6 +82,8 @@ class ConflateCommand extends ExternalCommand {
             //Hootenanny map statistics such as node and way count
             stats = "--stats";
         }
+
+        Map<String, Object> substitutionMap = new HashMap<>();
 
         // Detect Differential Conflation
         String conflationCommand = params.getConflationCommand();
@@ -108,11 +99,27 @@ class ConflateCommand extends ExternalCommand {
           differential = "--differential";
         }
 
+        if (params.getAdvancedOptions() != null) { // hoot 1
+            substitutionMap.put("CONFLATION_TYPE", "");
+        	Arrays.stream(toOptionsList(params.getAdvancedOptions())).forEach((option) -> {
+                if (!option.isEmpty()) {
+                    options.add(option.trim());
+                };
+            });
+        }
 
-        Map<String, Object> substitutionMap = new HashMap<>();
+        if (params.getHoot2Commands() != null) { // hoot 2
+        	substitutionMap.put("CONFLATION_TYPE", "-C " + ConflationConfs.get(params.getConflationType()));
+        	Arrays.stream(toOptionsList(params.getHoot2Commands())).forEach((option) -> {
+        		if (!option.isEmpty()) {
+        			options.add(option.trim());
+        		}
+        	});
+        }
+
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
-        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("HOOT_OPTIONS", toHootOptions(options));
         substitutionMap.put("INPUT1", input1);
         substitutionMap.put("INPUT2", input2);
         substitutionMap.put("OUTPUT", output);
@@ -120,8 +127,12 @@ class ConflateCommand extends ExternalCommand {
         substitutionMap.put("DIFF_TAGS", diffTags);
         substitutionMap.put("STATS", stats);
 
-        String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         super.configureCommand(command, substitutionMap, caller);
+    }
+
+    private String[] toOptionsList(String optionsString) {
+    	return optionsString.trim().split("-D ");
     }
 
     @Override

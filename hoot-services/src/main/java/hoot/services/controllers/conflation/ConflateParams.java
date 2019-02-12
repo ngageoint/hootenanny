@@ -74,6 +74,9 @@ public class ConflateParams {
     @JsonProperty("CONFLATION_COMMAND")
     private String conflationCommand;
 
+    @JsonProperty("HOOT_2_COMMANDS")
+	private String hoot2Commands;
+
     public String getInputType1() {
         return inputType1;
     }
@@ -186,6 +189,14 @@ public class ConflateParams {
         this.conflationCommand = conflationCommand;
     }
 
+	public String getHoot2Commands() {
+		return this.hoot2Commands;
+	}
+
+	public void setHoot2Commands(String hoot2Commands) {
+		this.hoot2Commands = hoot2Commands;
+	}
+
     @Override
     public String toString() {
         return "ConflateParams{" +
@@ -205,4 +216,5 @@ public class ConflateParams {
                 ", conflationCommand='" + conflationCommand + '\'' +
                 '}';
     }
+
 }
