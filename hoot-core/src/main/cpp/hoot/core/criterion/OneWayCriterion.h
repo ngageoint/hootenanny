@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ONEWAYCRITERION_H
@@ -43,7 +43,7 @@ public:
 
   static std::string className() { return "hoot::OneWayCriterion"; }
 
-  OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
+  OneWayCriterion(bool isOneWay = true);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 

@@ -105,7 +105,6 @@ private:
   Histogram& _angleHistogram;
   double _sampleDistance;
   double _headingDelta;
-
 };
 
 SampledAngleHistogramExtractor::SampledAngleHistogramExtractor()

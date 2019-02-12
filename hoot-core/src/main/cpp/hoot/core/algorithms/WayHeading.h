@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYHEADING_H
@@ -52,14 +52,15 @@ public:
    */
   static Radians calculateHeading(const WayLocation& loc, Meters delta = 0.001);
 
-  static Radians calculateHeading(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
+  static Radians calculateHeading(const geos::geom::Coordinate& c1,
+                                  const geos::geom::Coordinate& c2);
 
   static geos::geom::Coordinate calculateVector(const WayLocation& loc, Meters delta = 0.001);
 
-  static geos::geom::Coordinate calculateVector(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
+  static geos::geom::Coordinate calculateVector(const geos::geom::Coordinate& c1,
+                                                const geos::geom::Coordinate& c2);
 
   static Radians deltaMagnitude(Radians r1, Radians r2);
-
 };
 
 }

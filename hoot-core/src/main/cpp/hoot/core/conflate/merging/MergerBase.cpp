@@ -84,7 +84,7 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
   LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
 
   PairsSet& pairs = _getPairs();
-  LOG_VARD(hoot::toString(pairs));
+  LOG_VART(hoot::toString(pairs));
 
   set<pair<ElementId, ElementId>>::iterator it = pairs.begin();
   while (it != pairs.end())

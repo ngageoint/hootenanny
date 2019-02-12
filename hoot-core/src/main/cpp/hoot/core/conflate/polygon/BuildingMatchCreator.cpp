@@ -228,9 +228,6 @@ public:
 
   bool isMatchCandidate(ConstElementPtr element)
   {
-    LOG_VART(element->getElementId());
-    LOG_VART(_filter.get());
-
     if (_filter && !_filter->isSatisfied(element))
     {
       return false;
