@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDB_H
 #define OSMAPIDB_H
@@ -121,7 +121,7 @@ public:
    *
    * @param tableName database table name associated with the sequence
    * @return the next sequence ID for the given type
-   * @todo need to make use of sequence and table strings more consistent here
+   * @todo need to make use of sequence and table strings more consistently here
    */
   long getNextId(const QString tableName);
 
@@ -145,7 +145,7 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
-  //TODO: the three methods below may be able to be combined somehow
+  // the three table name methods below may be able to be combined somehow
 
   /**
    * @see ApiDb::elementTypeToElementTableName

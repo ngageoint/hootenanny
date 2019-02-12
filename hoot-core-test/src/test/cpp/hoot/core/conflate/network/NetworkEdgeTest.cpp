@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -114,8 +114,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(myNonDirectedEdge.getMembers(), members);
 
     // ToString test
-    HOOT_STR_EQUALS("(0) Node:-100 -- Node:-300 --> (1) Node:-200", myDirectedEdge.toString());
-    HOOT_STR_EQUALS("(0) Node:-100 -- Node:-300 -- (0) Node:-100", myNonDirectedEdge.toString());
+    HOOT_STR_EQUALS("(0) Node(-100) -- Node(-300) --> (1) Node(-200)", myDirectedEdge.toString());
+    HOOT_STR_EQUALS("(0) Node(-100) -- Node(-300) -- (0) Node(-100)", myNonDirectedEdge.toString());
 
   }
 

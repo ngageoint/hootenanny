@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -170,7 +170,7 @@ public:
 
     stringstream ss;
     ss << subgraphs;
-    CPPUNIT_ASSERT_EQUAL(string("[3]{[1]{pairs: [1]{(Way:1, Way:2)} p: 1}, [3]{pairs: [1]{(Way:3, Way:4)} p: 1, pairs: [1]{(Way:4, Way:5)} p: 0.9, pairs: [1]{(Way:4, Way:5)} p: 0.9}, [1]{pairs: [1]{(Way:6, Way:6)} p: 1}}"),
+    CPPUNIT_ASSERT_EQUAL(string("[3]{[1]{pairs: [1]{(Way(1), Way(2))} p: 1}, [3]{pairs: [1]{(Way(3), Way(4))} p: 1, pairs: [1]{(Way(4), Way(5))} p: 0.9, pairs: [1]{(Way(4), Way(5))} p: 0.9}, [1]{pairs: [1]{(Way(6), Way(6))} p: 1}}"),
       ss.str());
 
     delete [] fm;

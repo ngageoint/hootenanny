@@ -146,7 +146,7 @@ public:
     CPPUNIT_ASSERT(hashString == QString(hashBytes.toHex()));
   }
 
-  //@TODO: Create a test that applies commands to a map
+  // TODO: Create a test that applies commands to a map
 
 };
 

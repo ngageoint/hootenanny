@@ -63,7 +63,7 @@ public:
     conf().set(co.getUuidHelperRepeatableKey(), true);
     conf().set(co.getReaderUseFileStatusKey(), true);
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/algorithms/js/ScriptMatchTest.osm", true);
     MapProjector::projectToPlanar(map);
 

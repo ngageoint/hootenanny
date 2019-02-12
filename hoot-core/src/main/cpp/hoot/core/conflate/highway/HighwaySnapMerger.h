@@ -49,7 +49,7 @@ public:
 
   static unsigned int logWarnCount;
 
-  HighwaySnapMerger(Meters minSplitSize,
+  HighwaySnapMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
 
@@ -62,7 +62,6 @@ protected:
 
 private:
 
-  double _minSplitSize;
   boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   ReviewMarker _reviewMarker;

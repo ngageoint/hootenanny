@@ -136,7 +136,8 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       else
       {
         const double overlapPercent = _getOverlapPercent(matches);
-        if (overlapPercent > 80.0) // Go ahead and merge largest match; TODO: move value to config
+        // move value to config - #2913
+        if (overlapPercent > 80.0) // Go ahead and merge largest match
         {
           const NetworkMatch* largest = _getLargest(matches);
           LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());

@@ -109,7 +109,7 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   bool toMatch = _isCandidateMatch(to1, to2);
   bool foundSolution = false;
 
-  if (_steps > 20) //TODO: make this configurable
+  if (_steps > 20) // make this configurable - #2913
   {
     LOG_VART(_steps);
     return false;
@@ -118,8 +118,8 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   LOG_VART(fromMatch);
   LOG_VART(toMatch);
 
-  /// @todo Possibly continue to evaluate matches even if we find an end point. This may make
-  /// the search space very large, but would avoid missing matches.
+  // Possibly continue to evaluate matches even if we find an end point. This may make
+  // the search space very large, but would avoid missing matches. - #2939
   if (fromMatch && toMatch)
   {
     foundSolution = _recordMatch(em);

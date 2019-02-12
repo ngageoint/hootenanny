@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYMATCH_H
 #define HIGHWAYMATCH_H
@@ -54,6 +54,7 @@ class ElementId;
 class HighwayMatch : public Match, public MatchDetails
 {
 public:
+
   HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
                const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
                const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
@@ -72,14 +73,15 @@ public:
 
   virtual double getScore() const { return _score; }
 
-  const boost::shared_ptr<SublineStringMatcher>& getSublineMatcher() const { return _sublineMatcher; }
+  const boost::shared_ptr<SublineStringMatcher>& getSublineMatcher() const
+  { return _sublineMatcher; }
 
   virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
 
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
 
   const WaySublineMatchString& getSublineMatch() const { return _sublineMatch; }
 
@@ -103,7 +105,6 @@ private:
 
   bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
     ElementId other1, ElementId other2) const;
-
 };
 
 }

@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/cleaning/MapCleaner.h>
-#include <hoot/core/conflate/SearchRadiusCalculator.h>
+#include <hoot/core/ops/SearchRadiusCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -56,7 +56,7 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SearchRadiusCalculatorTest);
   CPPUNIT_TEST(runCalcResultTest);
-  //TODO: temp disabling this
+  // TODO: temp disabling this
   //CPPUNIT_TEST(runBadPreOpTest);
   CPPUNIT_TEST(runNotEnoughTiePointsTest);
   CPPUNIT_TEST(runPreviouslyConflatedDataTest);

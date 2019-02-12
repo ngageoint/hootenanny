@@ -42,8 +42,27 @@ public:
   /**
    * Returns true if these lines are generally pointed in a similar direction.
    */
-  static bool isSimilarDirection(const hoot::ConstOsmMapPtr &map, hoot::ConstWayPtr w1,
+  static bool isSimilarDirection(const hoot::ConstOsmMapPtr& map, hoot::ConstWayPtr w1,
     hoot::ConstWayPtr w2);
+
+  /**
+   * Returns true if these lines are generally pointed in a similar direction.
+   *
+   * This is an alternative implementation written for Attribute Conflation, which may possibly
+   * replace the original at some point after extensive testing.
+   *
+   * @param map map containing the ways for which to compare direction
+   * @param way1 the first way to compare direction for
+   * @param way2 the second way to compare direction for
+   * @return true if both ways are running in a similar direction; false otherwise
+   * @see direction.finder.angle.threshold
+   */
+  static bool isSimilarDirection2(const hoot::ConstOsmMapPtr& map, hoot::ConstWayPtr way1,
+    hoot::ConstWayPtr way2);
+
+private:
+
+  static double _getAngleDiff(const ConstOsmMapPtr& map, ConstWayPtr way1, ConstWayPtr way2);
 };
 
 }

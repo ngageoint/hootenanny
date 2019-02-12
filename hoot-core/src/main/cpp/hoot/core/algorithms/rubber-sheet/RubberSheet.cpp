@@ -212,7 +212,7 @@ boost::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
 
   vector<double> d(4);
 
-  /// @todo This should be replaced with an circular error based method at some point.
+  // TODO: This should be replaced with an circular error based method at some point.
   double multiplier;
   if (_ref)
   {

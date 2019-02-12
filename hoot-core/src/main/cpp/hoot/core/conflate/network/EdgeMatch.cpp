@@ -34,9 +34,9 @@ namespace hoot
 
 const QRegExp EdgeMatch::_portionReplaceRegEx = QRegExp("_portion: \\d+\\.\\d+");
 
-/// @todo This could be made faster by only looking at the pointer for comparison. Unfortunately
-/// this would likely break IndexedEdgeMatchSet::contains. Another data structure in there could
-/// certainly alleviate this.
+// This could be made faster by only looking at the pointer for comparison. Unfortunately
+// this would likely break IndexedEdgeMatchSet::contains. Another data structure in there could
+// certainly alleviate this.
 bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPtr& em2)
 {
   bool result = em1.get() == em2.get() ||

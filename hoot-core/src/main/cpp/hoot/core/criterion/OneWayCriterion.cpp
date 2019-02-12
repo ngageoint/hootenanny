@@ -35,6 +35,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
 
+OneWayCriterion::OneWayCriterion(bool isOneWay) :
+_isOneWay(isOneWay)
+{
+}
+
 bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
@@ -43,7 +48,6 @@ bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     result = true;
   }
-  LOG_VART(result);
   return result;
 }
 

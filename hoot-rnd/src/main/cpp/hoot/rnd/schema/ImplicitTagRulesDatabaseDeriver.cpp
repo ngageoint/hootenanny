@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ImplicitTagRulesDatabaseDeriver.h"
 
@@ -219,7 +219,7 @@ void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
   _schemaTagValues.clear();
   _wordsNotInSchema.clear();
 
-  //TODO: should the use and/or building categories be added here?
+  // TODO: should the use and/or building categories be added here?
   const std::vector<SchemaVertex> tags =
     OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::poi());
   StringTokenizer tokenizer;
@@ -438,8 +438,8 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
 
 void ImplicitTagRulesDatabaseDeriver::_writeCustomRules(long& linesWrittenCount)
 {
-  //TODO: would like to know somehow if any of the custom rules overlap with the db derived
-  //rules from the public data
+  // would like to know somehow if any of the custom rules overlap with the db derived
+  // rules from the public data - #2300
 
   LOG_DEBUG("Writing custom rules...");
   long ruleCount = 0;

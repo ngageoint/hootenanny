@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DataConverter.h"
 
@@ -272,7 +272,7 @@ void DataConverter::_fillElementCache(QString inputUrl,
 {
   // Setup reader
   boost::shared_ptr<OsmMapReader> reader =
-    OsmMapReaderFactory::getInstance().createReader(inputUrl);
+    OsmMapReaderFactory::createReader(inputUrl);
   reader->open(inputUrl);
   boost::shared_ptr<ElementInputStream> streamReader =
     boost::dynamic_pointer_cast<ElementInputStream>(reader);
@@ -318,7 +318,7 @@ void DataConverter::_transToOgrMT(QString input,
   bool finishedTranslating = false;
 
   // Read all elements
-  // TODO: We should figure out a way to make this not-memory bound in the future
+  // We should figure out a way to make this not-memory bound in the future
   _fillElementCache(input, pElementCache, elementQ);
   LOG_INFO("Element Cache Filled");
 
@@ -362,9 +362,8 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   //translations is done.  Currently, it depends that a translation script is set directly on it
   //(vs using a translation visitor).  See #2416.
 
-  OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
-  if (readerFactory.hasElementInputStream(input) &&
-      //TODO: this ops restriction needs to be removed and the ops applied during streaming.
+  if (OsmMapReaderFactory::hasElementInputStream(input) &&
+      // This ops restriction needs to be removed and the ops applied during streaming.
       _convertOps.size() == 0 &&
       //none of the convert bounding box supports are able to do streaming I/O at this point
       !ConfigUtils::boundsOptionEnabled())
@@ -526,7 +525,7 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
-  //LOG_VART(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
+  //LOG_VART(OsmMapReaderFactory::hasElementInputStream(input));
 
   //For non OGR conversions, the translation must be passed in as an op.
   if (!_translation.trimmed().isEmpty())
@@ -591,7 +590,7 @@ void DataConverter::_exportToShapeWithCols(const QString output, const QStringLi
                                            OsmMapPtr map)
 {
   boost::shared_ptr<OsmMapWriter> writer =
-    OsmMapWriterFactory::getInstance().createWriter(output);
+    OsmMapWriterFactory::createWriter(output);
   boost::shared_ptr<ShapefileWriter> shapeFileWriter =
     boost::dynamic_pointer_cast<ShapefileWriter>(writer);
   //currently only one shape file writer, and this is it

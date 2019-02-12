@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -63,7 +63,7 @@ public:
     CPPUNIT_ASSERT(edgeSublineMatch.getSubline1() == edgeSubline1);
     CPPUNIT_ASSERT(edgeSublineMatch.getSubline2() == edgeSubline2);
     HOOT_STR_EQUALS(
-      "{subline1: { _start: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 0 }, _end: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 0.7 } }, subline2: { _start: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 0.7 }, _end: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 0 } }}",
+      "{subline1: { _start: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 0 }, _end: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 0.7 } }, subline2: { _start: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 0.7 }, _end: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 0 } }}",
       edgeSublineMatch.toString());
   }
 

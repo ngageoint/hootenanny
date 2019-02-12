@@ -89,10 +89,9 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     }
   }
 
-  //TODO: In #2069, a ScriptMatch and a NetworkMatch are being grouped together, which
-  //ultimately causes the exception below to be thrown.  For now, attempting to bypass and only
-  //log a warning.  This also required additional error handling in ScriptMerger (see
-  //ScriptMerger::_applyMergePair).
+  // In #2069, a ScriptMatch and a NetworkMatch are being grouped together, which ultimately causes
+  // the exception below to be thrown.  For now, attempting to bypass and only log a warning.  This
+  // also required additional error handling in ScriptMerger (see ScriptMerger::_applyMergePair).
   if (logWarnCount < Log::getWarnMessageLimit())
   {
     LOG_WARN("Unable to create merger for the provided set of matches: " << matches);
@@ -103,7 +102,6 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
   }
   logWarnCount++;
-
   //throw HootException("Error creating a merger for the provided set of matches.");
 }
 
@@ -128,7 +126,7 @@ vector<CreatorDescription> MergerFactory::getAllAvailableCreators() const
   return result;
 }
 
-MergerFactory &MergerFactory::getInstance()
+MergerFactory& MergerFactory::getInstance()
 {
   if (!_theInstance.get())
   {
@@ -150,10 +148,9 @@ bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, co
   // if any creator considers a match conflicting then it is a conflict
   for (size_t i = 0; i < _creators.size(); i++)
   {
-    LOG_VART(_creators[i]);
     if (_creators[i]->isConflicting(map, m1, m2))
     {
-      LOG_TRACE("conflicting");
+      LOG_TRACE("Conflicting matches: " << m1 << ", " << m2);
       return true;
     }
   }
@@ -172,8 +169,7 @@ void MergerFactory::registerDefaultCreators()
     if (className.length() > 0)
     {
       args.removeFirst();
-      MergerCreator* mc =
-        Factory::getInstance().constructObject<MergerCreator>(className);
+      MergerCreator* mc = Factory::getInstance().constructObject<MergerCreator>(className);
       registerCreator(mc);
 
       if (args.size() > 0)

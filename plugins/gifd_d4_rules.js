@@ -468,7 +468,7 @@ gifd.rules = {
        'LC2':'bridge:load_class4', // Load Class Type 2
        'LC3':'bridge:load_class4', // Load Class Type 3
        'LC4':'bridge:load_class4', // Load Class Type 4
-       'LEG':'bridge:length', // Length/Diameter in Meters With Greater Precision
+       'LEG':'length', // Length/Diameter in Meters With Greater Precision
        'LEN_':'length', // Length/Diameter
        'LNU':'length:interior_useable', // Useable Length
        'LOG':'gradient:length', // Length of Gradient

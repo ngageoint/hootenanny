@@ -66,7 +66,7 @@ public:
    */
   static boost::shared_ptr<ConflictsNetworkMatcher> create();
 
-  //TODO: move to config?
+  // move to config - #2913
   virtual double getMatchThreshold() const { return 0.35; }
 
   virtual void iterate();

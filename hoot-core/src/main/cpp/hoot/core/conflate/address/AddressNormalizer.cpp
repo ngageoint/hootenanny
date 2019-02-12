@@ -93,9 +93,9 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString address) const
   QSet<QString> normalizedAddresses;
 
   size_t num_expansions;
-  //TODO: specifying a language in the options is optional, but could we get better performance if
-  //we did specify one when we know what it is (would have to check to see if it was supported
-  //first, of course)?
+  // specifying a language in the options is optional, but could we get better performance if
+  // we did specify one when we know what it is (would have to check to see if it was supported
+  // first, of course)?
   char** expansions =
     libpostal_expand_address(
       addressToNormalize.toUtf8().data(), libpostal_get_default_options(),

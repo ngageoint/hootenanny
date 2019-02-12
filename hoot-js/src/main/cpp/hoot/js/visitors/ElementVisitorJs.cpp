@@ -86,7 +86,7 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
   ConstElementVisitor* constVis = dynamic_cast<ConstElementVisitor*>(vis);
   if (!constVis)
   {
-    // TODO: We need to allow ElementVisitor as well. - #2831
+    // We need to allow ElementVisitor as well. - #2831
     throw HootException(
       QString("Only ConstElementVisitors may be used in Hootenanny Javascript.  Change your ") +
       QString("ElementVisitor class to inherit from ConstElementVisitor or ElementOsmMapVisitor."));

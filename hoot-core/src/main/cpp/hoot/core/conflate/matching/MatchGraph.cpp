@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchGraph.h"
 
@@ -67,6 +67,7 @@ namespace hoot
 class MatchEdge
 {
 public:
+
   MatchEdge() : match(0) {}
   MatchEdge(const Match* m) : match(m) {}
 
@@ -82,6 +83,7 @@ public:
 class MatchVertex
 {
 public:
+
   MatchVertex() {}
   MatchVertex(ElementId e) : eid(e) {}
 
@@ -105,6 +107,7 @@ typedef graph_traits <MatchBoostGraph>::edge_descriptor MatchEdgeId;
 class MatchGraphInternal
 {
 public:
+
   MatchGraphInternal(const vector<const Match*>& matches) : _matches(matches) {}
 
   /**
@@ -130,6 +133,7 @@ public:
     }
 
   private:
+
     MatchBoostGraph* _graph;
     double _threshold;
   };
@@ -162,9 +166,9 @@ public:
       // if this is a solid match, then add it into the group.
       if (type == MatchType::Match)
       {
-        set< pair<ElementId, ElementId> > eids = m->getMatchPairs();
-        for (set< pair<ElementId, ElementId> >::const_iterator it = eids.begin(); it != eids.end();
-          ++it)
+        set<pair<ElementId, ElementId>> eids = m->getMatchPairs();
+        for (set< pair<ElementId, ElementId>>::const_iterator it = eids.begin();
+             it != eids.end(); ++it)
         {
           dsm.joinT(it->first, it->second);
         }
@@ -240,6 +244,7 @@ public:
   }
 
 private:
+
   MatchBoostGraph _graph;
   QHash<ElementId, MatchVertexId> _eid2Vertex;
   const vector<const Match*>& _matches;

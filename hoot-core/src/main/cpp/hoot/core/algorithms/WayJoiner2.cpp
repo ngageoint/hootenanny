@@ -36,9 +36,8 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/criterion/ParallelWayCriterion.h>
-#include <hoot/core/algorithms/extractors/ParallelScoreExtractor.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 #include <unordered_set>
 #include <vector>
@@ -59,16 +58,26 @@ _numJoined(0)
 void WayJoiner2::join(const OsmMapPtr& map)
 {
   _map = map;
+
   //  Join back any ways with parent ids
   _joinParentChild();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Join any siblings that have the same parent id but the parent isn't connected
   _joinSiblings();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Rejoin any ways that are now connected to their parents
   _joinParentChild();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Run one last join on ways that share a node and have a parent id
   _joinAtNode();
+  OsmMapWriterFactory::writeDebugMap(map);
+
   //  Clear out any remaining unjoined parent ids
   _resetParents();
+  OsmMapWriterFactory::writeDebugMap(map);
 }
 
 void WayJoiner2::_resetParents()
@@ -252,6 +261,7 @@ void WayJoiner2::_joinAtNode()
             }
             else
             {
+              LOG_TRACE("Ways had conflicting names.  Not joining:");
               LOG_VART(pTags);
               LOG_VART(cTags);
             }
@@ -387,11 +397,27 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
     }
     for (size_t i = 1; i < sorted.size(); ++i)
     {
-      if (ways[sorted[i]])
+      WayPtr child = ways[sorted[i]];
+      // don't try to join if there are explicitly conflicting names; fix for #2888
+      bool childHasName = false;
+      Tags childTags;
+      if (child)
       {
-        LOG_VART((ways[sorted[i]]->getElementId()));
+        LOG_VART((child->getElementId()));
+        childTags = child->getTags();
+        childHasName = childTags.hasName();
       }
-      _joinWays(parent, ways[sorted[i]]);
+      else
+      {
+        break;
+      }
+      const Tags parentTags = parent->getTags();
+      const bool parentHasName = parentTags.hasName();
+      if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
+          Tags::haveMatchingName(parentTags, childTags))
+      {
+        _joinWays(parent, child);
+      }
     }
 
     //  Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here
@@ -406,6 +432,8 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
 
   LOG_VART(parent->getId());
   LOG_VART(child->getId());
+  LOG_VART(parent->getStatus());
+  LOG_VART(child->getStatus());
 
   //  Don't join area ways
   AreaCriterion areaCrit;
@@ -414,9 +442,6 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     LOG_TRACE("One or more of the ways to be joined are areas...skipping join.");
     return;
   }
-
-  LOG_VART(parent->getStatus());
-  LOG_VART(child->getStatus());
 
   //  Check if the two ways are able to be joined back up
 
@@ -427,10 +452,11 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return;
   }
 
-  // make sure tags go in the right direction (may be able to simplify)
+  // make sure tags go in the right direction (TODO: this is a mess)
   WayPtr wayWithTagsToKeep;
   WayPtr wayWithTagsToLose;
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
+  LOG_VART(tagMergerClassName);
   if (parent->getStatus() == Status::Unknown1)
   {
     if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
@@ -450,7 +476,8 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
       wayWithTagsToLose = child;
     }
   }
-  else if (child->getStatus() == Status::Unknown1)
+  else if (child->getStatus() == Status::Unknown1 ||
+           (parent->getStatus() == Status::Conflated && child->getStatus() == Status::Conflated))
   {
     if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
         tagMergerClassName == "hoot::OverwriteTag2Merger")
@@ -469,9 +496,9 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
       wayWithTagsToLose = child;
     }
   }
+  // does this make sense??
   else
   {
-    // don't actually know if this case can occur or not
     wayWithTagsToKeep = parent;
     wayWithTagsToLose = child;
   }
@@ -479,9 +506,26 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VART(wayWithTagsToLose->getElementId());
 
   // deal with one way streets
+
   OneWayCriterion oneWayCrit;
-  if (oneWayCrit.isSatisfied(wayWithTagsToLose) && !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
-      !DirectionFinder::isSimilarDirection(
+
+  const bool keepElementExplicitlyNotAOneWayStreet =
+    wayWithTagsToKeep->getTags().get("oneway") == "no";
+  const bool removeElementExplicitlyNotAOneWayStreet =
+    wayWithTagsToLose->getTags().get("oneway") == "no";
+  if ((oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
+       removeElementExplicitlyNotAOneWayStreet) ||
+      (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
+       keepElementExplicitlyNotAOneWayStreet))
+  {
+    LOG_TRACE("Conflicting one way street tags.  Skipping join.");
+    return;
+  }
+
+  if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
+      !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
+      // note the use of an alternative isSimilarDirection method
+      !DirectionFinder::isSimilarDirection2(
         _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE("Reversing order of " << wayWithTagsToKeep->getElementId());
@@ -516,16 +560,6 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return;
   }
   LOG_VART(joinType);
-
-  // doesn't work
-//  const double parallelScore =
-//    ParallelScoreExtractor().extract(*_map, wayWithTagsToKeep, wayWithTagsToLose);
-//  LOG_VART(parallelScore);
-//  if (parallelScore < 0.138)
-//  {
-//    LOG_TRACE("Join failed on parallel score of: " << parallelScore);
-//    return;
-//  }
 
   //  Remove the split parent id
   child->resetPid();

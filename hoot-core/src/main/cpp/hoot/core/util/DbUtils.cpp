@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DbUtils.h"
@@ -130,7 +130,7 @@ void DbUtils::_modifyTableConstraints(QSqlDatabase& database, const QString tabl
 {
   LOG_VART(database.isOpen());
 
-  //TODO: do we want to do the style that checks constraints at the end here instead?
+  // Do we want to do the style that checks constraints at the end here instead?
   QString operation = "DISABLE";
   if (!disable)
   {

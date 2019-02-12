@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayCriterion.h"
 
@@ -66,18 +66,12 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   if (result)
   {
     result = !AreaCriterion().isSatisfied(element);
-    LOG_VART(result);
   }
-  LOG_VART(result);
 
-  if (Log::getInstance().getLevel() <= Log::Trace && result)
-  {
-    LOG_TRACE("isLinearHighway; key: " << key);
-    if (tags.contains("name"))
-    {
-      LOG_VART(tags.get("name"));
-    }
-  }
+//  if (result)
+//  {
+//    LOG_TRACE("element: " << element->getElementId() << " isLinearHighway; key: " << key);
+//  }
 
   return result;
 }

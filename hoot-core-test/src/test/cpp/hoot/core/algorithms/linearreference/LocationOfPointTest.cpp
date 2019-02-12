@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -46,7 +46,7 @@ namespace hoot
 class LocationOfPointTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(LocationOfPointTest);
-  //TODO: fixme or remove me - #1737
+  // fixme or remove me - #1737
   //CPPUNIT_TEST(runLocateAfterTest);
   CPPUNIT_TEST_SUITE_END();
 

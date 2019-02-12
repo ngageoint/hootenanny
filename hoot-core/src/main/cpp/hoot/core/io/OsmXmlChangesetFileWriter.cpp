@@ -186,7 +186,7 @@ void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
   }
 }
 
-//TODO: consolidate redundant tag code in these element write methods
+// Consolidate redundant tag code in these element write methods - #2942
 
 void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
 {

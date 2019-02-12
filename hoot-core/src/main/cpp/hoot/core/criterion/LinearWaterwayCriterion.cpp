@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LinearWaterwayCriterion.h"
@@ -44,8 +44,6 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||
-          //TODO: Likely this condition needs to be removed and instead the affected data should
-          //be properly translated into OSM before conflation.
           (it.key() == "type" &&
            OsmSchema::getInstance().isAncestor("waterway=" + it.value(), "waterway")))
       {

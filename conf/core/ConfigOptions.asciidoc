@@ -505,19 +505,6 @@ are: reference, cookieCutter, average, and advancedConflation.
 A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
 User Guide "Feature Filtering" section for filter usage examples.
 
-=== conflator.manipulators
-
-* Data Type: list
-* Default Value:
-** `hoot::WayMerger`
-
-List of manipulators to enable in the conflator.
-
-Some of the possible options include:
-
-* `hoot::WayMerger`
-* `hoot::WayTagMerger`
-
 === conflator.min.valid.score
 
 * Data Type: double
@@ -616,12 +603,21 @@ Creates example review tags for debugging. All reviews created with this mechani
 
 Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,maxy
 
-=== debug.map.filename
+=== debug.maps.filename
 
 * Data Type: string
 * Default Value: `tmp/debug.osm`
 
 Debugging: The filename to use when saving the debug map during conflation.
+
+=== debug.maps.write
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, multiple debug maps will be generated during a conflation job.  The output path of the maps
+is controlled by debug.maps.filename.  The maps can be large and slow things down
+significantly.
 
 === differential.tag.ignore.list
 
@@ -633,6 +629,15 @@ Debugging: The filename to use when saving the debug map during conflation.
 ** `source:imagery`
 
 List of tags to ignore when performing differential conflation with tags.
+
+=== direction.finder.angle.threshold
+
+* Data Type: double
+* Default Value: `45.0`
+
+Maximum angle different in degrees that two line features can have and still be considered as
+going in the same direction by DirectionFinder::isSimilarDirection2.  Used by Attribute Conflation
+only.
 
 === distance.node.criterion.center
 
@@ -1790,7 +1795,8 @@ See also:
 * Default Value: `false`
 
 If true debug maps will be generated at every iteration when using network conflation. This is
-useful when debugging. The maps can be large and slow things down significantly.
+useful when debugging. The maps can be large and slow things down significantly. This setting is
+independent of conflate.write.debug.maps.
 
 === network.matcher
 

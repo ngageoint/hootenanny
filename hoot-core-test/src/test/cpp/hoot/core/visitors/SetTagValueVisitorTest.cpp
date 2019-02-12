@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -69,7 +69,7 @@ public:
     SetTagValueVisitor visitor("key3", "value3");
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/SetTagValueVisitorTest-runAddNewTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -86,7 +86,7 @@ public:
     SetTagValueVisitor visitor("key2", "value2");
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/SetTagValueVisitorTest-runOverwriteExistingTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -103,7 +103,7 @@ public:
     SetTagValueVisitor visitor("key1", "value1b", true);
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/SetTagValueVisitorTest-runAppendValueTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -120,7 +120,7 @@ public:
     SetTagValueVisitor visitor("key3", "value3", false, "hoot::NodeCriterion");
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/SetTagValueVisitorTest-runFilterTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -140,7 +140,7 @@ public:
     SetTagValueVisitor visitor("key2", "updatedValue", false, "", false);
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/SetTagValueVisitorTest-runOverwriteDisabledTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -157,7 +157,7 @@ public:
     SetTagValueVisitor visitor("key3", "value3", false, "hoot::NodeCriterion", false, true);
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/SetTagValueVisitorTest-runNegatedFilterTest.osm");
 
     HOOT_FILE_EQUALS(

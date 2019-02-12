@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ImplicitTagUtils.h"
 
@@ -99,7 +99,7 @@ void ImplicitTagUtils::_filterOutStreets(QString& name)
   {
     return;
   }
-  //TODO: This one seems kind of awkward and probably needs to be rethought or expanded somehow...
+  // TODO: This one seems kind of awkward and probably needs to be rethought or expanded somehow...
   //apparently its to catch address parts like "2nd" or "3rd"
   else if (name.endsWith("th") || name.endsWith("nd"))
   {
