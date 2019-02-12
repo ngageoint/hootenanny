@@ -54,8 +54,8 @@ namespace hoot
 
 bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr w1, ConstWayPtr w2)
 {
-  LOG_VARD(w1->getNodeIds());
-  LOG_VARD(w2->getNodeIds());
+  LOG_VART(w1->getNodeIds());
+  LOG_VART(w2->getNodeIds());
 
   // skip empty ways
   if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
@@ -100,8 +100,8 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
 bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr way1,
                                           ConstWayPtr way2)
 {
-  LOG_VARD(way1->getNodeIds());
-  LOG_VARD(way2->getNodeIds());
+  LOG_VART(way1->getNodeIds());
+  LOG_VART(way2->getNodeIds());
 
   // skip empty ways
   if (way1->getNodeIds().size() == 0 || way2->getNodeIds().size() == 0)
@@ -111,7 +111,7 @@ bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr
   }
 
   const double diffAngle = _getAngleDiff(map, way1, way2);
-  LOG_VARD(diffAngle);
+  LOG_VART(diffAngle);
   if (diffAngle >= ConfigOptions().getDirectionFinderAngleThreshold())
   {
     LOG_TRACE("Ways have large difference in orientation angle: " << diffAngle << " degrees.");
