@@ -37,6 +37,8 @@ using namespace geos::geom;
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/util/Units.h>
 
 // Standard
 #include <iostream>
@@ -58,13 +60,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   // skip empty ways
   if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
   {
-    return false;
-  }
-  // check for shared start/end node combos that show reversal; fix for #2888
-  else if ((w1->getNodeIds()[0] == w2->getNodeIds()[0]) ||
-           (w1->getNodeIds()[w1->getNodeIds().size() - 1] ==
-            w2->getNodeIds()[w2->getNodeIds().size() - 1]))
-  {
+    LOG_TRACE("Skipping one or more empty ways...");
     return false;
   }
 
@@ -92,13 +88,58 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
     directionText = "**same direction**";
   }
   const int coordPrecision = ConfigOptions().getWriterPrecision();
-  LOG_DEBUG(
+  LOG_TRACE(
     "Comparing " << w1->getElementId() << " with " << w2->getElementId() << ": " << directionText <<
     ", same score: " << QString::number(dSumSame, 'g', coordPrecision) <<
     ", reverse score: " << QString::number(dSumReverse, 'g', coordPrecision) <<
     ", difference: " << QString::number((dSumReverse - dSumSame), 'g', coordPrecision) <<
     ", percentage difference: " << QString::number(percentageDiff, 'g', coordPrecision));
   return sameDirection;
+}
+
+bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr way1,
+                                          ConstWayPtr way2)
+{
+  LOG_VARD(way1->getNodeIds());
+  LOG_VARD(way2->getNodeIds());
+
+  // skip empty ways
+  if (way1->getNodeIds().size() == 0 || way2->getNodeIds().size() == 0)
+  {
+    LOG_TRACE("Skipping one or more empty ways...");
+    return false;
+  }
+
+  const double diffAngle = _getAngleDiff(map, way1, way2);
+  LOG_VARD(diffAngle);
+  if (diffAngle >= ConfigOptions().getDirectionFinderAngleThreshold())
+  {
+    LOG_TRACE("Ways have large difference in orientation angle: " << diffAngle << " degrees.");
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+double DirectionFinder::_getAngleDiff(const ConstOsmMapPtr& map, ConstWayPtr way1, ConstWayPtr way2)
+{
+  const std::vector<long> way1NodeIds = way1->getNodeIds();
+  const std::vector<long> way2NodeIds = way2->getNodeIds();
+  const long startNodeId1 = way1NodeIds[0];
+  const long startNodeId2 = way2NodeIds[0];
+  const long endNodeId1 = way1NodeIds[way1NodeIds.size() - 1];
+  const long endNodeId2 = way2NodeIds[way2NodeIds.size() - 1];
+  return
+    toDegrees(
+      WayHeading::deltaMagnitude(
+        WayHeading::calculateHeading(
+          map->getNode(startNodeId1)->toCoordinate(),
+          map->getNode(endNodeId1)->toCoordinate()),
+        WayHeading::calculateHeading(
+          map->getNode(startNodeId2)->toCoordinate(),
+          map->getNode(endNodeId2)->toCoordinate())));
 }
 
 }

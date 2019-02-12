@@ -45,15 +45,13 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveReviewsByEidOp.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
-#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 
 // Qt
 #include <QSet>
@@ -73,43 +71,6 @@ _sublineMatcher(sublineMatcher)
 {
   _pairs = pairs;
 }
-
-class ShortestFirstComparator
-{
-public:
-
-  bool operator()(const pair<ElementId, ElementId>& p1, const pair<ElementId, ElementId>& p2)
-  {
-    return min(getLength(p1.first), getLength(p1.second)) <
-        min(getLength(p2.first), getLength(p2.second));
-  }
-
-  Meters getLength(const ElementId& eid)
-  {
-    Meters result;
-    if (_lengthMap.contains(eid))
-    {
-      result = _lengthMap[eid];
-    }
-    else
-    {
-      LengthOfWaysVisitor v;
-      v.setOsmMap(map.get());
-      map->getElement(eid)->visitRo(*map, v);
-      result = v.getLengthOfWays();
-      _lengthMap[eid] = result;
-    }
-    return result;
-  }
-
-  virtual QString getDescription() const { return ""; }
-
-  OsmMapPtr map;
-
-private:
-
-  QHash<ElementId, Meters> _lengthMap;
-};
 
 void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId>>& replaced)
 {
