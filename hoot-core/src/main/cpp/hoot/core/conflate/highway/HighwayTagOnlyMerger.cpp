@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -48,6 +49,10 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, E
 HighwaySnapMerger(pairs, sublineMatcher),
 _performBridgeGeometryMerging(true)
 {
+  if (!ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
+  {
+    _performBridgeGeometryMerging = false;
+  }
 }
 
 bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
@@ -110,20 +115,20 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       elementWithTagsToKeep = e2;
       elementWithTagsToRemove = e1;
     }
-    LOG_VART(elementWithTagsToKeep->getElementId());
-    LOG_VART(elementWithTagsToRemove->getElementId());
+    LOG_VARD(elementWithTagsToKeep->getElementId());
+    LOG_VARD(elementWithTagsToRemove->getElementId());
 
     if (elementWithTagsToKeep->getTags().hasName() &&
         elementWithTagsToRemove->getTags().hasName() &&
         !Tags::haveMatchingName(
           elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags()))
     {
-      LOG_TRACE("Conflicting name tags.  Skipping merge.");
+      LOG_DEBUG("Conflicting name tags.  Skipping merge.");
       return false;
     }
 
-    LOG_VART(elementWithTagsToKeep->getElementId());
-    LOG_VART(elementWithTagsToRemove->getElementId());
+    LOG_VARD(elementWithTagsToKeep->getElementId());
+    LOG_VARD(elementWithTagsToRemove->getElementId());
     //LOG_VARD(elementWithTagsToKeep);
     //LOG_VARD(elementWithTagsToRemove);
 
@@ -140,7 +145,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
         (isAOneWayStreet.isSatisfied(elementWithTagsToRemove) &&
          keepElementExplicitlyNotAOneWayStreet))
     {
-      LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
+      LOG_DEBUG("Conflicting one way street tags.  Skipping merge.");
       return false;
     }
 
@@ -156,7 +161,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
           !DirectionFinder::isSimilarDirection2(
              map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
       {
-        LOG_TRACE("Reversing " << wayWithTagsToKeep->getElementId());
+        LOG_DEBUG("Reversing " << wayWithTagsToKeep->getElementId());
         wayWithTagsToKeep->reverseOrder();
       }
     }
@@ -167,11 +172,11 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       TagMergerFactory::mergeTags(
         elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way));
     elementWithTagsToKeep->setStatus(Status::Conflated);
-    LOG_TRACE("Keeping element: " << elementWithTagsToKeep);
+    LOG_DEBUG("Keeping element: " << elementWithTagsToKeep);
 
     if (removeSecondaryElement)
     {
-      LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
+      LOG_DEBUG("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
       replaced.push_back(
         std::pair<ElementId, ElementId>(
           elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));

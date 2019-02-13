@@ -39,6 +39,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 #include <unordered_set>
 #include <vector>
@@ -263,9 +264,9 @@ void WayJoiner2::_joinAtNode()
             }
             else
             {
-              LOG_TRACE("Ways had conflicting names.  Not joining:");
-              LOG_VART(pTags);
-              LOG_VART(cTags);
+              LOG_DEBUG("Ways had conflicting names.  Not joining:");
+              LOG_VARD(pTags);
+              LOG_VARD(cTags);
             }
           }
         }
@@ -420,6 +421,12 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
       {
         _joinWays(parent, child);
       }
+      else
+      {
+        LOG_DEBUG("Ways had conflicting names.  Not joining:");
+        LOG_VARD(parentTags);
+        LOG_VARD(childTags);
+      }
     }
 
     //  Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here
@@ -442,7 +449,7 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   //  Make sure that there are nodes in the ways
   if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
   {
-    LOG_TRACE("One or more of the ways to be joined are empty. Skipping join.");
+    LOG_DEBUG("One or more of the ways to be joined are empty. Skipping join.");
     return;
   }
 
@@ -450,7 +457,7 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   AreaCriterion areaCrit;
   if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
   {
-    LOG_TRACE("One or more of the ways to be joined are areas. Skipping join.");
+    LOG_DEBUG("One or more of the ways to be joined are areas. Skipping join.");
     return;
   }
 
@@ -504,8 +511,8 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     wayWithTagsToKeep = parent;
     wayWithTagsToLose = child;
   }
-  LOG_VART(wayWithTagsToKeep);
-  LOG_VART(wayWithTagsToLose);
+  LOG_VARD(wayWithTagsToKeep);
+  LOG_VARD(wayWithTagsToLose);
 
   // deal with bridges
 
@@ -513,7 +520,8 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   const bool e1IsBridge = isBridge.isSatisfied(wayWithTagsToKeep);
   const bool e2IsBridge = isBridge.isSatisfied(wayWithTagsToLose);
   const bool onlyOneIsABridge = (e1IsBridge && !e2IsBridge) || (e2IsBridge && !e1IsBridge);
-  if (onlyOneIsABridge)
+  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
+      onlyOneIsABridge)
   {
     LOG_DEBUG("Only one of the features to be joined is a bridge. Skipping join.");
     return;
@@ -537,7 +545,7 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
       (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
        keepElementExplicitlyNotAOneWayStreet))
   {
-    LOG_TRACE("Conflicting one way street tags.  Skipping join.");
+    LOG_DEBUG("Conflicting one way street tags.  Skipping join.");
     return;
   }
 
@@ -652,7 +660,7 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   child->getTags().clear();
   RecursiveElementRemover(child->getElementId()).apply(_map);
 
-  LOG_VART(parent);
+  LOG_VARD(parent);
 
   _numJoined++;
 }

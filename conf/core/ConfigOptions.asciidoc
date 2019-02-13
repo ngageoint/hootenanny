@@ -218,6 +218,15 @@ setting may cause writing to an OSM API database to occur more slowly.
 
 The precision of numeric values written to Attribute-Relation (.arff) files.
 
+=== attribute.conflation.allow.ref.geometry.changes.for.bridges
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate
+bridge features.  If false, any bridge features represented in the secondary dataset, but not in the
+reference dataset will be lost.
+
 === attribute.score.extractor.use.weight
 
 * Data Type: bool

@@ -85,10 +85,6 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
-    //LOG_TRACE("eid1 before replacement check: " << eid1);
-    //LOG_TRACE("eid2 before replacement check: " << eid2);
-    LOG_DEBUG("e1 before replacement check: " << map->getElement(eid1));
-    LOG_DEBUG("e2 before replacement check: " << map->getElement(eid2));
 
     if (map->containsElement(eid1) && map->containsElement(eid2))
     {
@@ -117,6 +113,11 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
       LOG_VART(eid2);
       LOG_VART(replaced[i].first);
       LOG_VART(replaced[i].second);
+
+      //LOG_TRACE("eid1 before replacement check: " << eid1);
+      //LOG_TRACE("eid2 before replacement check: " << eid2);
+      LOG_DEBUG("e1 before replacement check: " << map->getElement(eid1));
+      LOG_DEBUG("e2 before replacement check: " << map->getElement(eid2));
 
       if (eid1 == replaced[i].first)
       {
