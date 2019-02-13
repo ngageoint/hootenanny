@@ -6,7 +6,7 @@
 config.vm.network :forwarded_port, :guest => 8585, :host => 8585
 ```
 
-...in terminal
+...in your terminal
 
 ```
 vagrant reload
