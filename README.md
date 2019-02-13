@@ -57,35 +57,29 @@ In addition to conflating maps together, Hootenanny can also:
 * Translate feature tags using standardized or user defined schemas
 * [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) feature tags to English
 
-# Supported Data Formats
-See the Hootenanny User Guide [Supported Data Formats section](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc).
+# [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
 # Tag Schemas
-Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas.  By default, Hootenanny 
-supports automated schema conversion between: 
+Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 
 * Topographic Data Store (TDS) v6.1/v4.0 
 * Multi-National Geospatial Co-Production Program (MGCP)
 * Geonames
 * OSM 
 * [others](https://github.com/ngageoint/hootenanny/tree/master/translations)
 
-Users are also able to define their own custom translations.  For custom translations, a specific mapping can be defined based on an uploaded dataset using a semi-automated Translation Assistant.  More details on the translation capabilities of Hootenanny can be found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
+Users are also able to define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc).
 
 # Documentation
-User and technical documentation may be found locally after installation in 'hoot/docs' or 
-[included with each release](https://github.com/ngageoint/hootenanny/releases). 
+[included with each release](https://github.com/ngageoint/hootenanny/releases) or locally look in 'hoot/docs'
 
 [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
 
-If you have any support questions please create an issue in the [Hootenanny GitHub repository](https://github.com/ngageoint/hootenanny).
+If you have any support questions, please create an issue in the [Hootenanny GitHub repository](https://github.com/ngageoint/hootenanny).
 
 # Installation
-Hootenanny is supported on Red Hat/CentOS:
-
 [Instructions](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md) to launch a Hootenanny CentOS virtual machine
 
-[Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation 
-to CentOS 7.x.
+[Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation to CentOS 7.x.
 
 # Web User Interface
 [Hootenanny's](https://github.com/ngageoint/hootenanny-ui) [web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
