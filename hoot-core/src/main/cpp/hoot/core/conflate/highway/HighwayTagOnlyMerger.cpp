@@ -66,20 +66,20 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     // If just one of the features is a bridge, we want the bridge feature to separate from the road
     // feature its being merged with.  So, use the normal geometry AND tag merger.
     BridgeCriterion isBridge;
-    const bool onlyOneIsABridge =
-      (isBridge.isSatisfied(e1) && !isBridge.isSatisfied(e2)) ||
-      (isBridge.isSatisfied(e2) && !isBridge.isSatisfied(e1));
+    const bool e1IsBridge = isBridge.isSatisfied(e1);
+    const bool e2IsBridge = isBridge.isSatisfied(e2);
+    const bool onlyOneIsABridge = (e1IsBridge && !e2IsBridge) || (e2IsBridge && !e1IsBridge);
     if (onlyOneIsABridge)
     {
       if (!_performBridgeGeometryMerging)
       {
-        LOG_TRACE(
+        LOG_DEBUG(
           "Unable to perform geometric bridge merging due to invalid subline string matcher.  << "
           "Performing tag only merge...");
       }
       else
       {
-        LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge.");
+        LOG_DEBUG("Using tag and geometry merger, since just one of the features is a bridge...");
         return HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
       }
     }

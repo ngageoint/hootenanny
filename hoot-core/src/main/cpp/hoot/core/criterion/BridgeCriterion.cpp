@@ -16,7 +16,8 @@ BridgeCriterion::BridgeCriterion()
 
 bool BridgeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return !e->getTags().isFalse("bridge") && e->getTags().contains("bridge");
+  const Tags& tags = e->getTags();
+  return !tags.isFalse("bridge") && !tags.get("bridge").trimmed().isEmpty();
 }
 
 }

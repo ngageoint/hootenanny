@@ -510,12 +510,12 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   // deal with bridges
 
   BridgeCriterion isBridge;
-  const bool onlyOneIsABridge =
-    (isBridge.isSatisfied(wayWithTagsToLose) && !isBridge.isSatisfied(wayWithTagsToKeep)) ||
-    (isBridge.isSatisfied(wayWithTagsToKeep) && !isBridge.isSatisfied(wayWithTagsToLose));
+  const bool e1IsBridge = isBridge.isSatisfied(wayWithTagsToKeep);
+  const bool e2IsBridge = isBridge.isSatisfied(wayWithTagsToLose);
+  const bool onlyOneIsABridge = (e1IsBridge && !e2IsBridge) || (e2IsBridge && !e1IsBridge);
   if (onlyOneIsABridge)
   {
-    LOG_TRACE("Only one of the features to be joined is a bridge. Skipping join.");
+    LOG_DEBUG("Only one of the features to be joined is a bridge. Skipping join.");
     return;
   }
 
