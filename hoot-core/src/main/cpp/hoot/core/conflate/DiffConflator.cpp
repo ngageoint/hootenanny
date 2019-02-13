@@ -397,12 +397,12 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
   return pDeriver;
 }
 
-void DiffConflator::writeChangeset( OsmMapPtr pResultMap, QString &output, bool conflateTags, bool separateOutput)
+void DiffConflator::writeChangeset( OsmMapPtr pResultMap, QString &output, bool separateOutput)
 {
   // Write a changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);
 
-  if (!conflateTags)
+  if (!_conflateTags)
   {
     // only one changeset to write
     OsmXmlChangesetFileWriter writer;

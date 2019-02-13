@@ -123,6 +123,9 @@ public:
    */
   QList<SingleStat> getStats() const { return _stats; }
 
+  void enableTags() { _conflateTags = true; }
+  bool conflatingTags() const { return _conflateTags;}
+
   virtual void readObject(QDataStream& /*is*/) {}
 
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
@@ -170,7 +173,7 @@ public:
    */
   void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
 
-  void writeChangeset(OsmMapPtr pResultMap, QString &output, bool conflateTags, bool separateOutput);
+  void writeChangeset(OsmMapPtr pResultMap, QString &output, bool separateOutput);
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
@@ -181,6 +184,7 @@ private:
   const MatchFactory& _matchFactory;
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   Settings _settings;
+  bool _conflateTags = false;
 
   // Stores the matches we found
   std::vector<const Match*> _matches;

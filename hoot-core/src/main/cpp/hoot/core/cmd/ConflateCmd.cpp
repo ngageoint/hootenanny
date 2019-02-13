@@ -106,21 +106,24 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_VARD(displayStats);
   LOG_VARD(outputStatsFile);
 
+  DiffConflator diffConflator;
+
   bool isDiffConflate = false;
+
   if (args.contains("--differential"))
   {
     isDiffConflate = true;
-    args.removeAt(args.indexOf("--differential"));
+    args.removeAt(args.indexOf("--differential"));    
+
+    // Check for tags argument "--Include-Tags"
+
+    if (args.contains("--include-tags"))
+    {
+      diffConflator.enableTags();
+      args.removeAt(args.indexOf("--include-tags"));
+    }
   }
   LOG_VARD(isDiffConflate);
-
-  // Check for tags argument "--Include-Tags"
-  bool conflateTags = false;
-  if (args.contains("--include-tags"))
-  {
-    conflateTags = true;
-    args.removeAt(args.indexOf("--include-tags"));
-  }
 
   // Check for separate output files (for geometry & tags)
   bool separateOutput = false;
@@ -168,7 +171,6 @@ int ConflateCmd::runSimple(QStringList args)
                    ConfigOptions().getReaderConflateUseDataSourceIds1(),
                    Status::Unknown1);
 
-  DiffConflator diffConflator;
   ChangesetProviderPtr pTagChanges;
   if (isDiffConflate)
   {
@@ -228,7 +230,7 @@ int ConflateCmd::runSimple(QStringList args)
   {
     // call the diff conflator
     diffConflator.apply(result);
-    if (conflateTags)
+    if (diffConflator.conflatingTags())
     {
       pTagChanges = diffConflator.getTagDiff();
     }
@@ -260,12 +262,12 @@ int ConflateCmd::runSimple(QStringList args)
   // Figure out what to write
   if (isDiffConflate && output.endsWith(".osc"))
   {
-    diffConflator.writeChangeset(result, output, conflateTags, separateOutput);
+    diffConflator.writeChangeset(result, output, separateOutput);
   }
   else
   {
     // Write a map
-    if (conflateTags)
+    if (isDiffConflate && diffConflator.conflatingTags())
     {
       // Add tag changes to our map
       diffConflator.addChangesToMap(result, pTagChanges);
@@ -274,7 +276,7 @@ int ConflateCmd::runSimple(QStringList args)
   }
 
   // Do the tags if we need to
-  if (isDiffConflate && conflateTags)
+  if (isDiffConflate && diffConflator.conflatingTags())
   {
     LOG_INFO("Generating tag changeset...");
     // Write the file!
