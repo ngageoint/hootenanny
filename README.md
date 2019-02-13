@@ -5,7 +5,7 @@
 # Overview
 _Hootenanny_: 
 
-1. a gathering at which folksingers entertain often with the audience joining in
+1. A gathering at which folksingers entertain often with the audience joining in
 
 _Conflation_: 
 
@@ -60,7 +60,7 @@ In addition to conflating maps together, Hootenanny can also:
 # [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
 # Tag Schemas
-Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 
+Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports automated schema conversion between: 
 * Topographic Data Store (TDS) v6.1/v4.0 
 * Multi-National Geospatial Co-Production Program (MGCP)
 * Geonames
@@ -77,16 +77,16 @@ Users are also able to define their own [custom translations](https://github.com
 If you have any support questions, please create an issue in the [Hootenanny GitHub repository](https://github.com/ngageoint/hootenanny).
 
 # Installation
-[Instructions](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md) to launch a Hootenanny CentOS virtual machine
+[Instructions](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md) to launch a Hootenanny virtual machine
 
-[Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation to CentOS 7.x.
+[Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation
 
 # Web User Interface
 [Hootenanny's](https://github.com/ngageoint/hootenanny-ui) [web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience.
 
 # Web Services API
-Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  The API documentation can be found in each [release](https://github.com/ngageoint/hootenanny/releases) at: docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz.
+Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  The API documentation can be found in each [release](https://github.com/ngageoint/hootenanny/releases) in the 'docs' folder.
 
 # Command Line Interface
 [Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.  [Examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
