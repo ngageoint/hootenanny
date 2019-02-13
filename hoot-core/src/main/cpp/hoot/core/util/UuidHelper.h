@@ -40,6 +40,7 @@ namespace hoot
 class UuidHelper
 {
 public:
+
   UuidHelper();
 
   /**

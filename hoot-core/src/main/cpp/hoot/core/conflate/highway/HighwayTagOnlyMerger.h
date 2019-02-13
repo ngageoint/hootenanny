@@ -28,15 +28,16 @@
 #define HIGHWAY_TAG_ONLY_MERGER_H
 
 // Hoot
-#include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
+#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 
 namespace hoot
 {
 
 /**
  * Merges road tags only, keeping ref1 tags
+ * Merges bridges separately from roads
  */
-class HighwayTagOnlyMerger : public HighwayMergerAbstract
+class HighwayTagOnlyMerger : public HighwaySnapMerger
 {
 
 public:
@@ -44,14 +45,18 @@ public:
   static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
 
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
-
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                       const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
 
 protected:
 
   virtual bool _mergePair(
     const OsmMapPtr& map, ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced);
+
+private:
+
+  bool _performBridgeGeometryMerging;
 };
 
 typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;

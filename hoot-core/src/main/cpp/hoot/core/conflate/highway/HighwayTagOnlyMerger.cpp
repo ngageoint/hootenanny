@@ -31,102 +31,61 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 
 namespace hoot
 {
 
-HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs)
+HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs) :
+HighwaySnapMerger(pairs, boost::shared_ptr<SublineStringMatcher>()),
+_performBridgeGeometryMerging(false)
 {
-  _pairs = pairs;
-  LOG_VART(hoot::toString(_pairs));
 }
 
-void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
-                                 std::vector<std::pair<ElementId, ElementId>>& replaced)
+HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                                     const boost::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+HighwaySnapMerger(pairs, sublineMatcher),
+_performBridgeGeometryMerging(true)
 {
-  LOG_VART(hoot::toString(_pairs));
-  LOG_VART(hoot::toString(replaced));
-
-  std::vector<std::pair<ElementId, ElementId>> pairs;
-  pairs.reserve(_pairs.size());
-
-  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-       it != _pairs.end(); ++it)
-  {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
-    LOG_VART(eid1);
-    LOG_VART(eid2);
-
-    if (map->containsElement(eid1) && map->containsElement(eid2))
-    {
-      pairs.push_back(std::pair<ElementId, ElementId>(eid1, eid2));
-    }
-    else
-    {
-      LOG_TRACE(
-        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
-    }
-  }
-  LOG_VART(hoot::toString(pairs));
-
-  ShortestFirstComparator shortestFirst;
-  shortestFirst.map = map;
-  sort(pairs.begin(), pairs.end(), shortestFirst);
-  for (std::vector<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-       it != pairs.end(); ++it)
-  {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
-    LOG_TRACE("eid1 before replacement check: " << eid1);
-    LOG_TRACE("eid2 before replacement check: " << eid2);
-
-    for (size_t i = 0; i < replaced.size(); i++)
-    {
-      LOG_VART(eid1);
-      LOG_VART(eid2);
-      LOG_VART(replaced[i].first);
-      LOG_VART(replaced[i].second);
-      if (eid1 == replaced[i].first)
-      {
-        LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
-        eid1 = replaced[i].second;
-      }
-      if (eid2 == replaced[i].first)
-      {
-        LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
-        eid2 = replaced[i].second;
-      }
-    }
-
-    LOG_TRACE("eid1 after replacement check: " << eid1);
-    LOG_TRACE("eid2 after replacement check: " << eid2);
-
-    _mergePair(map, eid1, eid2, replaced);
-  }
 }
 
 bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
-  {
-    return true;
-  }
-
   ElementPtr e1 = map->getElement(eid1);
   ElementPtr e2 = map->getElement(eid2);
-  if (!e1)
+
+  if (!e1 || !e2)
   {
-    LOG_TRACE(eid1 << " null.");
-  }
-  if (!e2)
-  {
-    LOG_TRACE(eid2 << " null.");
+    return HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced);
   }
 
   if (e1 && e2)
   {
+    // If just one of the features is a bridge, we want the bridge feature to separate from the road
+    // feature its being merged with.  So, use the normal geometry AND tag merger.
+    BridgeCriterion isBridge;
+    const bool onlyOneIsABridge =
+      (isBridge.isSatisfied(e1) && !isBridge.isSatisfied(e2)) ||
+      (isBridge.isSatisfied(e2) && !isBridge.isSatisfied(e1));
+    if (onlyOneIsABridge)
+    {
+      if (!_performBridgeGeometryMerging)
+      {
+        LOG_TRACE(
+          "Unable to perform geometric bridge merging due to invalid subline string matcher.  << "
+          "Performing tag only merge...");
+      }
+      else
+      {
+        LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge.");
+        return HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
+      }
+    }
+
+    // Otherwise, proceed with tag only merging.
+
     ElementPtr elementWithTagsToKeep;
     ElementPtr elementWithTagsToRemove;
     bool removeSecondaryElement = true;
@@ -151,25 +110,27 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       elementWithTagsToKeep = e2;
       elementWithTagsToRemove = e1;
     }
-    //LOG_VART(elementWithTagsToKeep->getElementId());
-    //LOG_VART(elementWithTagsToRemove->getElementId());
-    LOG_VART(elementWithTagsToKeep);
-    LOG_VART(elementWithTagsToRemove);
+    LOG_VART(elementWithTagsToKeep->getElementId());
+    LOG_VART(elementWithTagsToRemove->getElementId());
 
-    // don't try to merge if there are explicitly conflicting names; fix for #2888; not sure what
-    // implications this has outside of the single test dataset I've tested on so far
     if (elementWithTagsToKeep->getTags().hasName() &&
         elementWithTagsToRemove->getTags().hasName() &&
         !Tags::haveMatchingName(
-           elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags()))
+          elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags()))
     {
       LOG_TRACE("Conflicting name tags.  Skipping merge.");
       return false;
     }
 
+    LOG_VART(elementWithTagsToKeep->getElementId());
+    LOG_VART(elementWithTagsToRemove->getElementId());
+    //LOG_VARD(elementWithTagsToKeep);
+    //LOG_VARD(elementWithTagsToRemove);
+
     OneWayCriterion isAOneWayStreet;
 
     // don't try to merge streets with conflicting one way info
+    // TODO: use Tags::isFalse here instead
     const bool keepElementExplicitlyNotAOneWayStreet =
       elementWithTagsToKeep->getTags().get("oneway") == "no";
     const bool removeElementExplicitlyNotAOneWayStreet =
@@ -206,11 +167,11 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       TagMergerFactory::mergeTags(
         elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way));
     elementWithTagsToKeep->setStatus(Status::Conflated);
-    LOG_VART(elementWithTagsToKeep);
+    LOG_TRACE("Keeping element: " << elementWithTagsToKeep);
 
     if (removeSecondaryElement)
     {
-      LOG_TRACE("Removing " << elementWithTagsToRemove->getElementId() << "...");
+      LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
       replaced.push_back(
         std::pair<ElementId, ElementId>(
           elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));

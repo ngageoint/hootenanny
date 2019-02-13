@@ -137,7 +137,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
   OsmMapWriterFactory::writeDebugMap(map, "before-matching");
-
   // find all the matches in this map
   if (_matchThreshold.get())
   {
@@ -152,7 +151,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   }
   LOG_DEBUG("Match count: " << _matches.size());
   LOG_TRACE(SystemInfo::getMemoryUsageString());
-
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
   double findMatchesTime = timer.getElapsedAndRestart();
@@ -175,7 +173,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
   LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
   LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
-
   OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
 
   // Globally optimize the set of matches to maximize the conflation score.
@@ -231,7 +228,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   //_validateConflictSubset(map, _matches);
   // TODO: this stat isn't right for Network
   LOG_INFO("Post constraining match count: " << _matches.size());
-
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization");
 
   {
@@ -244,8 +240,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     LOG_TRACE(SystemInfo::getMemoryUsageString());
   }
   LOG_DEBUG("Match sets count: " << matchSets.size());
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
-
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization-2");
 
   // Would it help to sort the matches so the biggest or best ones get merged first?
@@ -283,8 +277,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     replaced.clear();
 
     // Enabling this can result in a lot of files being generated.
-    //OsmMapWriterFactory::writeDebugMap(map, "after-merging");
+    if (i % 10 == 0)
+    {
+      OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
+    }
   }
+  OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   size_t mergerCount = _mergers.size();

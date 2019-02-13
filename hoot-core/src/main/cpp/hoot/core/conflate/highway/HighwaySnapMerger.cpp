@@ -66,7 +66,7 @@ unsigned int HighwaySnapMerger::logWarnCount = 0;
 
 HighwaySnapMerger::HighwaySnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
-  const boost::shared_ptr<SublineStringMatcher> &sublineMatcher) :
+  const boost::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 _sublineMatcher(sublineMatcher)
 {
   _pairs = pairs;
@@ -74,6 +74,9 @@ _sublineMatcher(sublineMatcher)
 
 void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId>>& replaced)
 {
+  LOG_VART(hoot::toString(_pairs));
+  LOG_VART(hoot::toString(replaced));
+
   vector<pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
 
@@ -82,6 +85,10 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
+    //LOG_TRACE("eid1 before replacement check: " << eid1);
+    //LOG_TRACE("eid2 before replacement check: " << eid2);
+    LOG_DEBUG("e1 before replacement check: " << map->getElement(eid1));
+    LOG_DEBUG("e2 before replacement check: " << map->getElement(eid2));
 
     if (map->containsElement(eid1) && map->containsElement(eid2))
     {
@@ -93,6 +100,7 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
         "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
     }
   }
+  LOG_VART(hoot::toString(pairs));
 
   ShortestFirstComparator shortestFirst;
   shortestFirst.map = map;
@@ -105,15 +113,27 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
 
     for (size_t i = 0; i < replaced.size(); i++)
     {
+      LOG_VART(eid1);
+      LOG_VART(eid2);
+      LOG_VART(replaced[i].first);
+      LOG_VART(replaced[i].second);
+
       if (eid1 == replaced[i].first)
       {
+        LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
         eid1 = replaced[i].second;
       }
       if (eid2 == replaced[i].first)
       {
+        LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
         eid2 = replaced[i].second;
       }
     }
+
+    //LOG_TRACE("eid1 after replacement check: " << eid1);
+    //LOG_TRACE("eid2 after replacement check: " << eid2);
+    LOG_DEBUG("e1 after replacement check: " << map->getElement(eid1));
+    LOG_DEBUG("e2 after replacement check: " << map->getElement(eid2));
 
     _mergePair(map, eid1, eid2, replaced);
   }

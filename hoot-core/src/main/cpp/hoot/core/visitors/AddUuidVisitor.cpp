@@ -30,20 +30,29 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/UuidHelper.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddUuidVisitor)
 
+AddUuidVisitor::AddUuidVisitor()
+{
+}
+
 AddUuidVisitor::AddUuidVisitor(QString key) : _key(key)
 {
+}
+
+void AddUuidVisitor::setConfiguration(const Settings& conf)
+{
+  _key = ConfigOptions(conf).getAddUuidVisitorKey();
 }
 
 void AddUuidVisitor::visit(const ConstElementPtr& e)
 {
   boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
-
   ee->getTags()[_key] = UuidHelper::createUuid().toString();
 }
 

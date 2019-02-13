@@ -91,7 +91,6 @@ QUuid UuidHelper::toUuid(const QByteArray& bytes)
   result.insert(16, "-");
   result.insert(12, "-");
   result.insert(8, "-");
-
   return QUuid(QString(result));
 }
 

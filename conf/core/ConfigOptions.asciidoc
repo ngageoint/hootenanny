@@ -85,6 +85,13 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== add.uuid.visitor.key
+
+* Data Type: string
+* Default Value: ``
+
+Tag key used by AddUuidVisitor for adding custom unique ID's to data.
+
 === address.additional.tag.keys
 
 * Data Type: list
