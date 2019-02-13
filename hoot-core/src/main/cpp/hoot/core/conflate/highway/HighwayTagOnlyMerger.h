@@ -45,13 +45,13 @@ public:
 
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 protected:
 
   virtual bool _mergePair(
     const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced);
+    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 };
 
 typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;

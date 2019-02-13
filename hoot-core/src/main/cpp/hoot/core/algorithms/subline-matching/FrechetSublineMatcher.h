@@ -51,13 +51,13 @@ public:
    *  input ways.
    */
   virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const;
+    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
 
-  virtual void setMaxRelevantAngle(Radians angle) { _maxAngle = angle; }
+  virtual void setMaxRelevantAngle(Radians angle) override { _maxAngle = angle; }
 
-  virtual void setMinSplitSize(Meters /*minSplitSize*/) { }
+  virtual void setMinSplitSize(Meters /*minSplitSize*/) override { }
 
-  virtual void setHeadingDelta(Meters /*headingDelta*/) { }
+  virtual void setHeadingDelta(Meters /*headingDelta*/) override { }
 
   virtual void setConfiguration(const Settings &conf);
 

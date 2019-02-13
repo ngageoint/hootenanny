@@ -44,13 +44,13 @@ public:
 
   virtual ~MergerBase() {}
 
-  virtual std::set<ElementId> getImpactedElementIds() const;
+  virtual std::set<ElementId> getImpactedElementIds() const override;
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 
   virtual void replace(ElementId oldEid, ElementId newEid);
 
-  virtual QString toString() const { return QString("Unimplemented toString()"); }
+  virtual QString toString() const override { return QString("Unimplemented toString()"); }
 
 protected:
 

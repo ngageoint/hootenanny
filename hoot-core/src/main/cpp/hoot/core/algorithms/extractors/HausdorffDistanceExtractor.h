@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HAUSDORFFDISTANCEMATCHER_H
 #define HAUSDORFFDISTANCEMATCHER_H
@@ -48,7 +48,7 @@ public:
   static std::string className() { return "hoot::HausdorffDistanceExtractor"; }
 
   virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const;
+    const boost::shared_ptr<const Element>& candidate) const override;
 
   virtual std::string getClassName() const { return HausdorffDistanceExtractor::className(); }
 

@@ -53,15 +53,15 @@ public:
 
   static std::string className() { return "hoot::SampledAngleHistogramExtractor"; }
 
-  virtual std::string getClassName() const { return SampledAngleHistogramExtractor::className(); }
+  virtual std::string getClassName() const override { return SampledAngleHistogramExtractor::className(); }
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
   void setSampleDistance(double sampleDistance) { _sampleDistance = sampleDistance; }
 
   void setHeadingDelta(double headingDelta) { _headingDelta = headingDelta; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram"; }
 
 protected:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __EXACT_STRING_DISTANCE_H__
 #define __EXACT_STRING_DISTANCE_H__
@@ -50,11 +50,11 @@ public:
 
   ExactStringDistance();
 
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
-  QString toString() const { return "ExactStringDistance"; }
+  QString toString() const override { return "ExactStringDistance"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Returns a matching string comparison score only if the strings match exactly (ignoring case)"; }
 };
 

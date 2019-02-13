@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMERGECREATOR_H
 #define BUILDINGMERGECREATOR_H
@@ -44,9 +44,9 @@ public:
   /**
    * If all the matches are BuildingMatches, a single BuildingMerge will be created and returned.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const;
+  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const override;
 
   virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
 };

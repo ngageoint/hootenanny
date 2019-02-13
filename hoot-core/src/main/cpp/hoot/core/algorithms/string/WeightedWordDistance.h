@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WEIGHTEDWORDDISTANCE_H
 #define WEIGHTEDWORDDISTANCE_H
@@ -55,15 +55,15 @@ public:
   WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary);
   WeightedWordDistance();
 
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void setStringDistance(const StringDistancePtr& sd) { _d = sd; }
 
-  virtual QString toString() const { return "WeightedWordDistance " + _d->toString(); }
+  virtual QString toString() const override { return "WeightedWordDistance " + _d->toString(); }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Returns a score based on the best pairwise comparison within two sets of words"; }
 
 private:
