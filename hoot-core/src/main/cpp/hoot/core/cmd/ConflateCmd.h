@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 
 // Standard
 #include <fstream>
@@ -58,12 +57,6 @@ public:
   void printStats(const QList<SingleStat>& stats);
 
   virtual int runSimple(QStringList args);
-
-private:
-
-  boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
-
-  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr pMap);
 };
 
 }

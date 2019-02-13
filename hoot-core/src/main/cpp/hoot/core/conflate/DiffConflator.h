@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
 #include <hoot/core/io/Serializable.h>
@@ -154,6 +155,13 @@ public:
   void storeOriginalMap(OsmMapPtr& pMap);
 
   /**
+   * @brief storeOriginalMap - Mark input1 elements (Use Ref1 visitor, because
+   * it's already coded up)
+   * @param pMap - Map to add the changes to
+   */
+  void markInputElements(OsmMapPtr pMap);
+
+  /**
    * @brief addChangesToMap - Adds the changes to a map, as regular elements.
    *                          This is useful for visualizing tag-diff output
    *                          in JOSM and the hoot UI
@@ -161,6 +169,10 @@ public:
    * @param pChanges - Changeset provider
    */
   void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
+
+  void writeChangeset(OsmMapPtr pResultMap, QString &output, bool conflateTags, bool separateOutput);
+
+  void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
 private:
 
@@ -207,6 +219,8 @@ private:
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
 
+  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr pMap);
+
   // Calculates and stores the tag differential as a set of change objects
   void _calcAndStoreTagChanges();
 
@@ -216,6 +230,8 @@ private:
 
   // Creates a change object using the original element and new tags
   Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);
+
+  boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
 };
 
 }

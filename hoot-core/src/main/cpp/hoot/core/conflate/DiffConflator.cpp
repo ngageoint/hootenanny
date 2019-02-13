@@ -27,27 +27,34 @@
 #include "DiffConflator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
+#include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
+#include <hoot/core/visitors/LengthOfWaysVisitor.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // standard
 #include <algorithm>
@@ -189,6 +196,16 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 
   // Use the copy constructor
   _pOriginalMap.reset(new OsmMap(pMap));
+}
+
+void DiffConflator::markInputElements(OsmMapPtr pMap)
+{
+  // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
+  Settings visitorConf;
+  visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
+  boost::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
+  pRef1v->setConfiguration(visitorConf);
+  pMap->visitRw(*pRef1v);
 }
 
 void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges)
@@ -354,6 +371,85 @@ void DiffConflator::_printMatches(vector<const Match*> matches, const MatchType&
       LOG_DEBUG(match);
     }
   }
+}
+
+// Convenience function used when deriving a changeset
+boost::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
+{
+  //Conflation requires all data to be in memory, so no point in adding support for
+  //ExternalMergeElementSorter here.
+
+  InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
+  InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
+  boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
+  return delta;
+}
+
+ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
+{
+  // Make empty map
+  OsmMapPtr pEmptyMap(new OsmMap());
+
+  // Get Changeset Deriver
+  boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
+
+  // Return the provider
+  return pDeriver;
+}
+
+void DiffConflator::writeChangeset( OsmMapPtr pResultMap, QString &output, bool conflateTags, bool separateOutput)
+{
+  // Write a changeset
+  ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);
+
+  if (!conflateTags)
+  {
+    // only one changeset to write
+    OsmXmlChangesetFileWriter writer;
+    writer.write(output, pGeoChanges);
+  }
+  else if (separateOutput)
+  {
+    // write two changesets
+    OsmXmlChangesetFileWriter writer;
+    writer.write(output, pGeoChanges);
+
+    QString outFileName = output;
+    outFileName.replace(".osc", "");
+    outFileName.append(".tags.osc");
+    OsmXmlChangesetFileWriter tagChangeWriter;
+    tagChangeWriter.write(outFileName, _pTagChanges);
+  }
+  else
+  {
+    // write unified output
+    MultipleChangesetProviderPtr pChanges(new MultipleChangesetProvider(pResultMap->getProjection()));
+    pChanges->addChangesetProvider(pGeoChanges);
+    pChanges->addChangesetProvider(_pTagChanges);
+    OsmXmlChangesetFileWriter writer;
+    writer.write(output, pChanges);
+  }
+}
+
+void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats)
+{
+  // Differential specific stats - get some numbers for our output
+
+  ElementCriterionPtr pPoiCrit(new PoiCriterion());
+  CriterionCountVisitor poiCounter;
+  poiCounter.addCriterion(pPoiCrit);
+  pResultMap->visitRo(poiCounter);
+  stats.append((SingleStat("Count of New POIs", poiCounter.getCount())));
+
+  ElementCriterionPtr pBuildingCrit(new BuildingCriterion(pResultMap));
+  CriterionCountVisitor buildingCounter;
+  buildingCounter.addCriterion(pBuildingCrit);
+  pResultMap->visitRo(buildingCounter);
+  stats.append((SingleStat("Count of New Buildings", buildingCounter.getCount())));
+
+  LengthOfWaysVisitor lengthVisitor;
+  pResultMap->visitRo(lengthVisitor);
+  stats.append((SingleStat("Km of New Road", lengthVisitor.getStat() / 1000.0)));
 }
 
 }

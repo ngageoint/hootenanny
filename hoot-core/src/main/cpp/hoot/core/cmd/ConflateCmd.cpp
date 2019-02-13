@@ -46,13 +46,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
-#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
@@ -80,30 +74,6 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
   {
     cout << stats[i].name << sep << stats[i].value << endl;
   }
-}
-
-// Convenience function used when deriving a changeset
-boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
-{
-  //Conflation requires all data to be in memory, so no point in adding support for
-  //ExternalMergeElementSorter here.
-
-  InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
-  InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
-  boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
-  return delta;
-}
-
-ChangesetProviderPtr ConflateCmd::_getChangesetFromMap(OsmMapPtr pMap)
-{
-  // Make empty map
-  OsmMapPtr pEmptyMap(new OsmMap());
-
-  // Get Changeset Deriver
-  boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
-
-  // Return the provider
-  return pDeriver;
 }
 
 int ConflateCmd::runSimple(QStringList args)
@@ -204,13 +174,7 @@ int ConflateCmd::runSimple(QStringList args)
   {
     // Store original IDs for tag diff
     diffConflator.storeOriginalMap(map);
-
-    // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
-    Settings visitorConf;
-    visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
-    boost::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
-    pRef1v->setConfiguration(visitorConf);
-    map->visitRw(*pRef1v);
+    diffConflator.markInputElements(map);
   }
 
   // read input 2
@@ -296,41 +260,11 @@ int ConflateCmd::runSimple(QStringList args)
   // Figure out what to write
   if (isDiffConflate && output.endsWith(".osc"))
   {
-    // Write a changeset
-    ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(result);
-
-    if (!conflateTags)
-    {
-      // only one changeset to write
-      OsmXmlChangesetFileWriter writer;
-      writer.write(output, pGeoChanges);
-    }
-    else if (separateOutput)
-    {
-      // write two changesets
-      OsmXmlChangesetFileWriter writer;
-      writer.write(output, pGeoChanges);
-
-      QString outFileName = output;
-      outFileName.replace(".osc", "");
-      outFileName.append(".tags.osc");
-      OsmXmlChangesetFileWriter tagChangeWriter;
-      tagChangeWriter.write(outFileName, pTagChanges);
-    }
-    else
-    {
-      // write unified output
-      MultipleChangesetProviderPtr pChanges(new MultipleChangesetProvider(result->getProjection()));
-      pChanges->addChangesetProvider(pGeoChanges);
-      pChanges->addChangesetProvider(pTagChanges);
-      OsmXmlChangesetFileWriter writer;
-      writer.write(output, pChanges);
-    }
+    diffConflator.writeChangeset(result, output, conflateTags, separateOutput);
   }
   else
   {
     // Write a map
-
     if (conflateTags)
     {
       // Add tag changes to our map
@@ -385,23 +319,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   if (isDiffConflate)
   {
-    // Differential specific stats - get some numbers for our output
-
-    ElementCriterionPtr pPoiCrit(new PoiCriterion());
-    CriterionCountVisitor poiCounter;
-    poiCounter.addCriterion(pPoiCrit);
-    result->visitRo(poiCounter);
-    stats.append((SingleStat("Count of New POIs", poiCounter.getCount())));
-
-    ElementCriterionPtr pBuildingCrit(new BuildingCriterion(result));
-    CriterionCountVisitor buildingCounter;
-    buildingCounter.addCriterion(pBuildingCrit);
-    result->visitRo(buildingCounter);
-    stats.append((SingleStat("Count of New Buildings", buildingCounter.getCount())));
-
-    LengthOfWaysVisitor lengthVisitor;
-    result->visitRo(lengthVisitor);
-    stats.append((SingleStat("Km of New Road", lengthVisitor.getStat() / 1000.0)));
+    diffConflator.calculateStats(result, stats);
   }
 
   if (displayStats)
