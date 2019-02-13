@@ -34,6 +34,7 @@ public class FolderRecord {
     private long id;
     private long parentId;
     private String name;
+    private long userId;
     private boolean isPublic;
 
     public FolderRecord() {}
@@ -60,6 +61,14 @@ public class FolderRecord {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public void setPublic(Boolean publicCol) {
