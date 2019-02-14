@@ -166,4 +166,15 @@ long OsmUtils::getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& 
   }
 }
 
+void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map)
+{
+  LOG_VARD(element);
+  if (element->getElementType() == ElementType::Relation)
+  {
+    ConstRelationPtr relation =
+      boost::dynamic_pointer_cast<const Relation>(element);
+    LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+  }
+}
+
 }

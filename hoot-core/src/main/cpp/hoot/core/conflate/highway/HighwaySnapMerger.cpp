@@ -182,20 +182,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   ElementPtr e2 = result->getElement(eid2);
   //LOG_VART(e1->getStatus());
   //LOG_VART(e2->getStatus());
-  LOG_VARD(e1);
-  if (Log::getInstance().getLevel() <= Log::Debug && e1->getElementType() == ElementType::Relation)
-  {
-    ConstRelationPtr relation =
-      boost::dynamic_pointer_cast<const Relation>(e1);
-    LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
-  }
-  LOG_VARD(e2);
-  if (Log::getInstance().getLevel() <= Log::Debug && e2->getElementType() == ElementType::Relation)
-  {
-    ConstRelationPtr relation =
-      boost::dynamic_pointer_cast<const Relation>(e2);
-    LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
-  }
+  OsmUtils::logElementDetail(e1, map);
+  OsmUtils::logElementDetail(e2, map);
 
   // This doesn't seem to always be true.
   //assert(e1->getStatus() == Status::Unknown1);

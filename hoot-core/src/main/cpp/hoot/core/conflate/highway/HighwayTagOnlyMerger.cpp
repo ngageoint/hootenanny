@@ -132,22 +132,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       }
     }
 
-    LOG_VARD(e1);
-    if (Log::getInstance().getLevel() <= Log::Debug &&
-        e1->getElementType() == ElementType::Relation)
-    {
-      ConstRelationPtr relation =
-        boost::dynamic_pointer_cast<const Relation>(e1);
-      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
-    }
-    LOG_VARD(e2);
-    if (Log::getInstance().getLevel() <= Log::Debug &&
-        e2->getElementType() == ElementType::Relation)
-    {
-      ConstRelationPtr relation =
-        boost::dynamic_pointer_cast<const Relation>(e2);
-      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
-    }
+    OsmUtils::logElementDetail(e1, map);
+    OsmUtils::logElementDetail(e2, map);
 
     // handle relations coming from HighwaySnapMerger's previous handling of bridges
 //    if (e1->getElementType() == ElementType::Relation ||
@@ -175,22 +161,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
 
     //LOG_VARD(elementWithTagsToKeep->getElementId());
     //LOG_VARD(elementWithTagsToRemove->getElementId());
-    LOG_VARD(elementWithTagsToKeep);
-    if (Log::getInstance().getLevel() <= Log::Debug &&
-        elementWithTagsToKeep->getElementType() == ElementType::Relation)
-    {
-      ConstRelationPtr relation =
-        boost::dynamic_pointer_cast<const Relation>(elementWithTagsToKeep);
-      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
-    }
-    LOG_VARD(elementWithTagsToRemove);
-    if (Log::getInstance().getLevel() <= Log::Debug &&
-        elementWithTagsToRemove->getElementType() == ElementType::Relation)
-    {
-      ConstRelationPtr relation =
-        boost::dynamic_pointer_cast<const Relation>(elementWithTagsToRemove);
-      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
-    }
+    OsmUtils::logElementDetail(elementWithTagsToKeep, map);
+    OsmUtils::logElementDetail(elementWithTagsToRemove, map);
 
     OneWayCriterion isAOneWayStreet;
 

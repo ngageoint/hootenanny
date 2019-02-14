@@ -224,6 +224,14 @@ public:
    * @return
    */
   static long getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map);
+
+  /**
+   *
+   *
+   * @param element
+   * @param map
+   */
+  static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map);
 };
 
 }
