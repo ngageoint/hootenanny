@@ -150,10 +150,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     _determineKeeperFeature(
       e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
 
-    if (elementWithTagsToKeep->getTags().hasName() &&
-        elementWithTagsToRemove->getTags().hasName() &&
-        !Tags::haveMatchingName(
-          elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags()))
+    if (_nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
     {
       LOG_DEBUG("Conflicting name tags.  Skipping merge.");
       return false;
@@ -164,39 +161,15 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     OsmUtils::logElementDetail(elementWithTagsToKeep, map);
     OsmUtils::logElementDetail(elementWithTagsToRemove, map);
 
-    OneWayCriterion isAOneWayStreet;
-
     // don't try to merge streets with conflicting one way info
-    // TODO: use Tags::isFalse here instead
-    const bool keepElementExplicitlyNotAOneWayStreet =
-      elementWithTagsToKeep->getTags().get("oneway") == "no";
-    const bool removeElementExplicitlyNotAOneWayStreet =
-      elementWithTagsToRemove->getTags().get("oneway") == "no";
-    if ((isAOneWayStreet.isSatisfied(elementWithTagsToKeep) &&
-         removeElementExplicitlyNotAOneWayStreet) ||
-        (isAOneWayStreet.isSatisfied(elementWithTagsToRemove) &&
-         keepElementExplicitlyNotAOneWayStreet))
+    if (_oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
     {
       LOG_DEBUG("Conflicting one way street tags.  Skipping merge.");
       return false;
     }
 
     // Reverse the way if way to remove is one way and the two ways aren't in similar directions
-    if (elementWithTagsToKeep->getElementType() == ElementType::Way &&
-        elementWithTagsToRemove->getElementType() == ElementType::Way)
-    {
-      WayPtr wayWithTagsToKeep = boost::dynamic_pointer_cast<Way>(elementWithTagsToKeep);
-      WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(elementWithTagsToRemove);
-
-      if (isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
-          // note the use of an alternative isSimilarDirection method
-          !DirectionFinder::isSimilarDirection2(
-             map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
-      {
-        LOG_DEBUG("Reversing " << wayWithTagsToKeep->getElementId() << "...");
-        wayWithTagsToKeep->reverseOrder();
-      }
-    }
+    _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove, map);
 
     // There actually could be a relation in here, but the default tag merging doesn't use that
     // element type anyway, so not worrying about it for now.
@@ -216,6 +189,49 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   }
 
   return false;
+}
+
+bool HighwayTagOnlyMerger::_nameConflictExists(ElementPtr element1, ElementPtr element2) const
+{
+  return
+    element1->getTags().hasName() && element2->getTags().hasName() &&
+      !Tags::haveMatchingName(
+        element1->getTags(), element2->getTags());
+}
+
+bool HighwayTagOnlyMerger::_explicitlyNotAOneWayStreet(ElementPtr element) const
+{
+  // TODO: use Tags::isFalse here instead
+  return element->getTags().get("oneway") == "no";
+}
+
+bool HighwayTagOnlyMerger::_oneWayConflictExists(ElementPtr element1, ElementPtr element2) const
+{
+  OneWayCriterion isAOneWayStreet;
+  return
+    (isAOneWayStreet.isSatisfied(element1) && _explicitlyNotAOneWayStreet(element2)) ||
+    (isAOneWayStreet.isSatisfied(element2) && _explicitlyNotAOneWayStreet(element1));
+}
+
+void HighwayTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,
+                                                       ElementPtr elementWithTagsToRemove,
+                                                       const OsmMapPtr& map)
+{
+  OneWayCriterion isAOneWayStreet;
+  if (elementWithTagsToKeep->getElementType() == ElementType::Way &&
+      elementWithTagsToRemove->getElementType() == ElementType::Way)
+  {
+    WayPtr wayWithTagsToKeep = boost::dynamic_pointer_cast<Way>(elementWithTagsToKeep);
+    WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(elementWithTagsToRemove);
+    if (isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
+        // note the use of an alternative isSimilarDirection method
+        !DirectionFinder::isSimilarDirection2(
+           map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
+    {
+      LOG_DEBUG("Reversing " << wayWithTagsToKeep->getElementId() << "...");
+      wayWithTagsToKeep->reverseOrder();
+    }
+  }
 }
 
 }

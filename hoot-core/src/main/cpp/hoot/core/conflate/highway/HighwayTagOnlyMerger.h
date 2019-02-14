@@ -62,6 +62,13 @@ private:
 
   void _determineKeeperFeature(ElementPtr element1, ElementPtr element2, ElementPtr& keeper,
                                ElementPtr& toRemove, bool& removeSecondaryElement);
+
+  bool _explicitlyNotAOneWayStreet(ElementPtr element) const;
+  void _handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,
+                                   ElementPtr elementWithTagsToRemove, const OsmMapPtr& map);
+  bool _oneWayConflictExists(ElementPtr element1, ElementPtr element2) const;
+
+  bool _nameConflictExists(ElementPtr element1, ElementPtr element2) const;
 };
 
 typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;
