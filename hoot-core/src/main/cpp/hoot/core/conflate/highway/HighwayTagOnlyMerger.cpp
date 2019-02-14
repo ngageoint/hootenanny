@@ -59,6 +59,36 @@ _performBridgeGeometryMerging(true)
   }
 }
 
+void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementPtr element2,
+                                                   ElementPtr& keeper, ElementPtr& toRemove,
+                                                   bool& removeSecondaryElement)
+{
+  removeSecondaryElement = true;
+  if (element1->getStatus() == Status::Conflated && element2->getStatus() == Status::Conflated)
+  {
+    keeper = element1;
+    toRemove = element2;
+    if (toRemove->getElementType() == ElementType::Way)
+    {
+      WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(toRemove);
+      wayWithTagsToRemove->setPid(element1->getElementId().getId());
+      removeSecondaryElement = false;
+    }
+  }
+  else if (element1->getStatus() == Status::Unknown1 || element1->getStatus() == Status::Conflated)
+  {
+    keeper = element1;
+    toRemove = element2;
+  }
+  else if (element1->getStatus() == Status::Unknown2 || element2->getStatus() == Status::Conflated)
+  {
+    keeper = element2;
+    toRemove = element1;
+  }
+  LOG_VARD(keeper->getElementId());
+  LOG_VARD(toRemove->getElementId());
+}
+
 bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
@@ -130,30 +160,9 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
 
     ElementPtr elementWithTagsToKeep;
     ElementPtr elementWithTagsToRemove;
-    bool removeSecondaryElement = true;
-    if (e1->getStatus() == Status::Conflated && e2->getStatus() == Status::Conflated)
-    {
-      elementWithTagsToKeep = e1;
-      elementWithTagsToRemove = e2;
-      if (elementWithTagsToRemove->getElementType() == ElementType::Way)
-      {
-        WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(elementWithTagsToRemove);
-        wayWithTagsToRemove->setPid(e1->getElementId().getId());
-        removeSecondaryElement = false;
-      }
-    }
-    else if (e1->getStatus() == Status::Unknown1 || e1->getStatus() == Status::Conflated)
-    {
-      elementWithTagsToKeep = e1;
-      elementWithTagsToRemove = e2;
-    }
-    else if (e1->getStatus() == Status::Unknown2 || e2->getStatus() == Status::Conflated)
-    {
-      elementWithTagsToKeep = e2;
-      elementWithTagsToRemove = e1;
-    }
-    LOG_VARD(elementWithTagsToKeep->getElementId());
-    LOG_VARD(elementWithTagsToRemove->getElementId());
+    bool removeSecondaryElement;
+    _determineKeeperFeature(
+      e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
 
     if (elementWithTagsToKeep->getTags().hasName() &&
         elementWithTagsToRemove->getTags().hasName() &&

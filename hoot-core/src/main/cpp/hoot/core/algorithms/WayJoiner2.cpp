@@ -437,8 +437,6 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
 
 void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
 {
-  // TODO: clean this up by breaking out into multiple functions
-
   if (!parent || !child)
     return;
 

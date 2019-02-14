@@ -59,6 +59,9 @@ protected:
 private:
 
   bool _performBridgeGeometryMerging;
+
+  void _determineKeeperFeature(ElementPtr element1, ElementPtr element2, ElementPtr& keeper,
+                               ElementPtr& toRemove, bool& removeSecondaryElement);
 };
 
 typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;
