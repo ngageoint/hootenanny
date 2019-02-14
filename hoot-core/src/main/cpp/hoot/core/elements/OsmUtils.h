@@ -144,7 +144,8 @@ public:
   static QString currentTimeAsString();
 
   /**
-   * Determines whether a map contains a minimum or a fixed amount of elements matching the criterion type
+   * Determines whether a map contains a minimum or a fixed amount of elements matching the
+   * criterion type
    * Only objects of type ElementCriterion are allowed, all others will return false
    *
    * @param map the map to examine
@@ -152,9 +153,10 @@ public:
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
    */
-  template<class C> static bool contains(ConstOsmMapPtr map, int minCount = 1, bool exactCount = false)
+  template<class C> static bool contains(ConstOsmMapPtr map, int minCount = 1,
+                                         bool exactCount = false)
   {
-    if(!std::is_base_of<ElementCriterion,C>::value) return false;
+    if (!std::is_base_of<ElementCriterion,C>::value) return false;
 
     const long count =
       (long)FilteredVisitor::getStat(
@@ -166,13 +168,62 @@ public:
   }
 
   /**
+   * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
+   * times
+   * Only objects of type ElementCriterion are allowed, all others will return false
+   *
+   * @param element the element to examine
+   * @param minCount the minmal count of elements required (if exactCount == false)
+   * @param exactCount if true, the count must be exactly minCount
+   * @return true if the elements meet the specified criterion the specified number of times
+   */
+  template<class C> static bool isSatisfied(const std::vector<ConstElementPtr>& elements,
+                                            int minCount = 1, bool exactCount = false)
+  {
+    if (!std::is_base_of<ElementCriterion,C>::value) return false;
+
+    int count = 0;
+    ElementCriterionPtr crit(new C());
+    for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin(); itr != elements.end();
+         ++itr)
+    {
+      if (crit->isSatisfied(*itr))
+      {
+        count++;
+      }
+    }
+
+    LOG_VART(count);
+    return exactCount ? (count == minCount) : (count >= minCount);
+  }
+
+  /**
    *
    *
    * @param relation
    * @param map
    * @return
    */
-  static QString getDetailedRelationString(ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  static QString getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+
+  /**
+   *
+   *
+   * @param relation
+   * @param map
+   * @return
+   */
+  static QString getRelationMembersDetailedString(ConstRelationPtr& relation,
+                                                  const ConstOsmMapPtr& map);
+
+  /**
+   *
+   *
+   * @param relation
+   * @param map
+   * @return
+   */
+  static long getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map);
 };
 
 }

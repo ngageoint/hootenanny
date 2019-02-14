@@ -34,6 +34,7 @@
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 namespace hoot
 {
@@ -73,28 +74,57 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   {
     // If just one of the features is a bridge, we want the bridge feature to separate from the road
     // feature its being merged with.  So, use the normal geometry AND tag merger.
-    BridgeCriterion isBridge;
-    const bool e1IsBridge = isBridge.isSatisfied(e1);
-    const bool e2IsBridge = isBridge.isSatisfied(e2);
-    const bool onlyOneIsABridge = (e1IsBridge && !e2IsBridge) || (e2IsBridge && !e1IsBridge);
+    std::vector<ConstElementPtr> elements;
+    elements.push_back(e1);
+    elements.push_back(e2);
+    const bool onlyOneIsABridge = OsmUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
     if (onlyOneIsABridge)
     {
       if (!_performBridgeGeometryMerging)
       {
-        LOG_TRACE(
+        LOG_DEBUG(
           "Unable to perform geometric bridge merging due to invalid subline string matcher.  << "
           "Performing tag only merge...");
       }
       else
       {
-        LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
-        return HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
+        LOG_DEBUG("Using tag and geometry merger, since just one of the features is a bridge...");
+        const bool needsReview = HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
+        if (needsReview)
+        {
+          LOG_DEBUG("HighwaySnapMerger returned review.");
+        }
+        return needsReview;
 //        if (!HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced))
 //        {
 //          return false;
 //        }
       }
     }
+
+    LOG_VARD(e1);
+    if (Log::getInstance().getLevel() <= Log::Debug &&
+        e1->getElementType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation =
+        boost::dynamic_pointer_cast<const Relation>(e1);
+      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+    }
+    LOG_VARD(e2);
+    if (Log::getInstance().getLevel() <= Log::Debug &&
+        e2->getElementType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation =
+        boost::dynamic_pointer_cast<const Relation>(e2);
+      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+    }
+
+    // handle relations coming from HighwaySnapMerger's previous handling of bridges
+//    if (e1->getElementType() == ElementType::Relation ||
+//        e2->getElementType() == ElementType::Relation)
+//    {
+
+//    }
 
     // Otherwise, proceed with tag only merging.
 
@@ -122,22 +152,36 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       elementWithTagsToKeep = e2;
       elementWithTagsToRemove = e1;
     }
-    LOG_VART(elementWithTagsToKeep->getElementId());
-    LOG_VART(elementWithTagsToRemove->getElementId());
+    LOG_VARD(elementWithTagsToKeep->getElementId());
+    LOG_VARD(elementWithTagsToRemove->getElementId());
 
     if (elementWithTagsToKeep->getTags().hasName() &&
         elementWithTagsToRemove->getTags().hasName() &&
         !Tags::haveMatchingName(
           elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags()))
     {
-      LOG_TRACE("Conflicting name tags.  Skipping merge.");
+      LOG_DEBUG("Conflicting name tags.  Skipping merge.");
       return false;
     }
 
-    LOG_VART(elementWithTagsToKeep->getElementId());
-    LOG_VART(elementWithTagsToRemove->getElementId());
-    //LOG_VARD(elementWithTagsToKeep);
-    //LOG_VARD(elementWithTagsToRemove);
+    //LOG_VARD(elementWithTagsToKeep->getElementId());
+    //LOG_VARD(elementWithTagsToRemove->getElementId());
+    LOG_VARD(elementWithTagsToKeep);
+    if (Log::getInstance().getLevel() <= Log::Debug &&
+        elementWithTagsToKeep->getElementType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation =
+        boost::dynamic_pointer_cast<const Relation>(elementWithTagsToKeep);
+      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+    }
+    LOG_VARD(elementWithTagsToRemove);
+    if (Log::getInstance().getLevel() <= Log::Debug &&
+        elementWithTagsToRemove->getElementType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation =
+        boost::dynamic_pointer_cast<const Relation>(elementWithTagsToRemove);
+      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+    }
 
     OneWayCriterion isAOneWayStreet;
 
@@ -152,7 +196,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
         (isAOneWayStreet.isSatisfied(elementWithTagsToRemove) &&
          keepElementExplicitlyNotAOneWayStreet))
     {
-      LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
+      LOG_DEBUG("Conflicting one way street tags.  Skipping merge.");
       return false;
     }
 
@@ -168,7 +212,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
           !DirectionFinder::isSimilarDirection2(
              map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
       {
-        LOG_TRACE("Reversing " << wayWithTagsToKeep->getElementId() << "...");
+        LOG_DEBUG("Reversing " << wayWithTagsToKeep->getElementId() << "...");
         wayWithTagsToKeep->reverseOrder();
       }
     }
@@ -179,11 +223,11 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       TagMergerFactory::mergeTags(
         elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way));
     elementWithTagsToKeep->setStatus(Status::Conflated);
-    LOG_TRACE("Keeping element: " << elementWithTagsToKeep);
+    LOG_DEBUG("Keeping element: " << elementWithTagsToKeep);
 
     if (removeSecondaryElement)
     {
-      LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
+      LOG_DEBUG("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
       replaced.push_back(
         std::pair<ElementId, ElementId>(
           elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));

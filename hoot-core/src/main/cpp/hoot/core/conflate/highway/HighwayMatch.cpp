@@ -75,13 +75,13 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
   if (Log::getInstance().getLevel() <= Log::Trace && e1->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e1);
-    LOG_VART(OsmUtils::getDetailedRelationString(relation, map));
+    LOG_VART(OsmUtils::getRelationMembersDetailedString(relation, map));
   }
   LOG_VART(e2);
   if (Log::getInstance().getLevel() <= Log::Trace && e2->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e2);
-    LOG_VART(OsmUtils::getDetailedRelationString(relation, map));
+    LOG_VART(OsmUtils::getRelationMembersDetailedString(relation, map));
   }
 
   try

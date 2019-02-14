@@ -124,16 +124,46 @@ QString OsmUtils::currentTimeAsString()
   return QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
-QString OsmUtils::getDetailedRelationString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+QString OsmUtils::getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
 {
-  QString str = relation->toString() + "\nMember Detail:\n";
+  return relation->toString() + getRelationMembersDetailedString(relation, map);
+}
+
+QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
+                                                   const ConstOsmMapPtr& map)
+{
+  QString str = "\nMember Detail:\n";
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
+    str += "Member #" + QString::number(i) + ":\n";
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
     str += member->toString() + "\n";
   }
   return str;
+}
+
+long OsmUtils::getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map)
+{
+  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  QSet<long> wayMemberIds;
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member->getElementType() == ElementType::Way)
+    {
+      wayMemberIds.insert(member->getId());
+    }
+  }
+  LOG_VART(wayMemberIds);
+  if (wayMemberIds.size() > 0)
+  {
+    return wayMemberIds.toList().at(0);
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 }
