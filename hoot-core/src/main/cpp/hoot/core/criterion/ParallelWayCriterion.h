@@ -59,7 +59,7 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  ElementCriterionPtr clone()
+  virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ParallelWayCriterion(_map, _baseWay, _isParallel)); }
 
   virtual QString getDescription() const

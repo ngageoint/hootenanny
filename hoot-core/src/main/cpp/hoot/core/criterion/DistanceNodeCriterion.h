@@ -55,7 +55,7 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  ElementCriterionPtr clone()
+  virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
 
   virtual QString getDescription() const

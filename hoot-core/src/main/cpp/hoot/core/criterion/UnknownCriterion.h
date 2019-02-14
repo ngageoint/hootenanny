@@ -47,7 +47,7 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
 
   virtual QString getDescription() const
   { return "Identifies elements which have not been conflated"; }

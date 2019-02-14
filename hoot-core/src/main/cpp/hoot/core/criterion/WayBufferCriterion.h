@@ -73,7 +73,7 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  ElementCriterionPtr clone()
+  virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent)); }
 
   virtual QString getDescription() const { return "Allows for operations on ways with buffers"; }

@@ -21,13 +21,9 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  ElementCriterionPtr clone() { return ElementCriterionPtr(new BridgeCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BridgeCriterion()); }
 
   virtual QString getDescription() const { return "Identifies bridges"; }
-
-private:
-
-  bool _isOneWay;
 };
 
 }

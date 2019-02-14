@@ -49,7 +49,7 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  ElementCriterionPtr clone()
+  virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
 
   virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
