@@ -108,13 +108,13 @@ class ConflateCommand extends ExternalCommand {
             });
         }
 
-        if (params.getHoot2Commands() != null) { // hoot 2
-        	substitutionMap.put("CONFLATION_TYPE", "-C " + ConflationConfs.get(params.getConflationType()));
-        	Arrays.stream(toOptionsList(params.getHoot2Commands())).forEach((option) -> {
-        		if (!option.isEmpty()) {
-        			options.add(option.trim());
-        		}
-        	});
+        if (params.getHoot2() != null) { // hoot 2
+        	substitutionMap.put("CONFLATION_TYPE",ConflationConfs.get(params.getConflationType()));
+//        	Arrays.stream(toOptionsList(params.getHoot2Commands())).forEach((option) -> {
+//        		if (!option.isEmpty()) {
+//        			options.add(option.trim());
+//        		}
+//        	});
         }
 
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);
@@ -127,7 +127,7 @@ class ConflateCommand extends ExternalCommand {
         substitutionMap.put("DIFF_TAGS", diffTags);
         substitutionMap.put("STATS", stats);
 
-        String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         super.configureCommand(command, substitutionMap, caller);
     }
 

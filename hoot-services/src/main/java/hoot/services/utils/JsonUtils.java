@@ -86,7 +86,7 @@ public final class JsonUtils {
 
         // Special handling of ADV_OPTIONS
         String key = "ADV_OPTIONS";
-        if (json.containsKey(key)) {
+        if (json.get(key) != null) {
             String advopts = json.get(key).toString();
             String cleanup = advopts
                     .replaceAll("-D \"", "'")

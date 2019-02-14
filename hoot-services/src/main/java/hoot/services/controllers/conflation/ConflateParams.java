@@ -77,6 +77,9 @@ public class ConflateParams {
     @JsonProperty("HOOT_2_COMMANDS")
 	private String hoot2Commands;
 
+    @JsonProperty("HOOT_2")
+    private Boolean hoot2;
+
     public String getInputType1() {
         return inputType1;
     }
@@ -195,6 +198,14 @@ public class ConflateParams {
 
 	public void setHoot2Commands(String hoot2Commands) {
 		this.hoot2Commands = hoot2Commands;
+	}
+
+	public void setHoot2(boolean hoot2) {
+		this.hoot2 = hoot2;
+	}
+
+	public Boolean getHoot2() {
+		return this.hoot2;
 	}
 
     @Override
