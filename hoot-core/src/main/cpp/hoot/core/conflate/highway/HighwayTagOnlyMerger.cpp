@@ -150,7 +150,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     _determineKeeperFeature(
       e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
 
-    if (_nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+    if (OsmUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
     {
       LOG_DEBUG("Conflicting name tags.  Skipping merge.");
       return false;
@@ -189,14 +189,6 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   }
 
   return false;
-}
-
-bool HighwayTagOnlyMerger::_nameConflictExists(ElementPtr element1, ElementPtr element2) const
-{
-  return
-    element1->getTags().hasName() && element2->getTags().hasName() &&
-      !Tags::haveMatchingName(
-        element1->getTags(), element2->getTags());
 }
 
 void HighwayTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,

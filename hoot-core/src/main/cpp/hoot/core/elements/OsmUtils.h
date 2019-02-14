@@ -249,6 +249,15 @@ public:
    * @return
    */
   static bool explicitlyNotAOneWayStreet(ElementPtr element);
+
+  /**
+   *
+   *
+   * @param element1
+   * @param element2
+   * @return
+   */
+  static bool nameConflictExists(ElementPtr element1, ElementPtr element2);
 };
 
 }

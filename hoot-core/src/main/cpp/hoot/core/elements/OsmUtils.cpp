@@ -192,4 +192,11 @@ bool OsmUtils::explicitlyNotAOneWayStreet(ElementPtr element)
   return element->getTags().get("oneway") == "no";
 }
 
+bool OsmUtils::nameConflictExists(ElementPtr element1, ElementPtr element2)
+{
+  return
+    element1->getTags().hasName() && element2->getTags().hasName() &&
+      !Tags::haveMatchingName(element1->getTags(), element2->getTags());
+}
+
 }
