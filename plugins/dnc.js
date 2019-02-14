@@ -276,15 +276,6 @@ dnc = {
             attrArray.push(feature.columns[j].name);
         }
 
-
-        // if (attrList === undefined)
-        // {
-        //     // If we can't find an entry in attrList then we have a problem,
-        //     // Throw an error message and return. 
-        //     hoot.logError('Validate: No attrList for ' + layerName);
-        //     return;
-        // }
-
         // First: Go through the translated attributes
         for (var val in attrs)
         {
@@ -331,50 +322,44 @@ dnc = {
             } // End in txtLength
         } // End attr loop
 
-        // Second: Look at the F_CODE and check if there is anything that has a manditory value
+        // Grab the F_CODE and the geometry for use in lookup tables
         var gFcode = attrs.F_CODE + geometryType.toString().charAt(0)
-        if (dnc.rules.defaultList[gFcode])
-        {
-            // Debug:
-            print('Found manditory: ' + gFcode);
 
-        } // End manditory check
-
-        // Third: Now go through the feature and loot at enumerations
+        // Second: Now go through the feature, check the values and look at enumerations
         // for (var i=0, cLen = feature['columns'].length; i < cLen; i++)
         for (var i=0, cLen = feature.columns.length; i < cLen; i++)
         {
-            // Skip non enumeratied attributes
+            var colName = feature.columns[i].name;
 
-            var enumName = feature.columns[i].name;
-
-            // If the attribute is missing, check if we need to specify a default value for it.
-            // Or, just let the core assing the default when it writes the feature.
-            if (!attrs[enumName])
+            // See if we have a default/mandatory value
+            if (dnc.rules.defaultList[attrs.F_CODE])
             {
-                if (dnc.rules.defaultList[attrs.F_CODE])
+                // Debug:
+                print('Found: ' + gFcode + ' in the default list');
+                if (dnc.rules.defaultList[gFcode][attrs[colName]])
                 {
                     // Debug:
-                    print('Found: ' + gFcode + ' in the default list');
-                    if (dnc.rules.defaultList[gFcode][attrs[enumName]])
+                    print('Setting: ' + colName + ' to ' + dnc.rules.defaultList[gFcode][attrs[colName]]);
+                    attrs[colName] = dnc.rules.defaultList[gFcode][attrs[colName]];
+
+                    // We wiped the value so try to restore the tags for it
+                    // NOTE: If this was an empty default, there is nothing to restore
+                    if (colName in transMap)
                     {
+                        notUsed[transMap[colName][1]] = transMap[colName][2];
                         // Debug:
-                        print('Setting: ' + enumName + ' to ' + dnc.rules.defaultList[gFcode][attrs[enumName]]);
-                        attrs[enumName] = dnc.rules.defaultList[gFcode][attrs[enumName]];
+                        print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
                     }
+
+                    // Since we eddited the attribute, no point checking if it is enumerated.
+                    continue;
                 }
-                
-                continue;
-            } // End default check
-
-
+            } // End F_CODE in defaultList
+            
             // Now check if having a value for the attribute is actually valid
             if (feature.columns[i].type == 'enumeration')
             {
-                // Debug:
-                print('Starting Enumerations');
-
-                var attrValue = attrs[enumName];
+                var attrValue = attrs[colName];
                 var enumList = feature.columns[i].enumerations;
                 var enumValueList = [];
 
@@ -384,37 +369,30 @@ dnc = {
                 // Check if it is a valid enumerated value
                 if (enumValueList.indexOf(attrValue) == -1)
                 {
-                    // Debug: 
-                    print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
-
                     // Do we have an "Other" value?
-                    if (enumValueList.indexOf('999') == -1)
+                    if (enumValueList.indexOf('999') == -1 || attrValue == undefined)
                     {
                         // No: Set the offending enumerated value to the default value
-                        attrs[enumName] = feature.columns[i].defValue;
+                        attrs[colName] = feature.columns[i].defValue;
 
                         // Debug:
-                        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to its default value (' + feature.columns[i].defValue + ')');
                     }
                     else
                     {
                         // Yes: Set the offending enumerated value to the "other" value
-                        attrs[enumName] = '999';
+                        attrs[colName] = '999';
 
                         // Debug:
-                        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
+                        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to Other (999)');
                     }
 
-                    // Since we either wiped the value or set it to '999', restore the tags for it 
-                    if (enumName in transMap)
+                    // Since we either wiped the value or set it to '999', try to restore the tags for it 
+                    if (colName in transMap)
                     {
-                        notUsed[transMap[enumName][1]] = transMap[enumName][2];
+                        notUsed[transMap[colName][1]] = transMap[colName][2];
                         // Debug:
-                        print('Validate: re-adding enumeration ' + transMap[enumName][1] + ' = ' + transMap[enumName][2] + ' to notUsed');
-                    }
-                    else
-                    {
-                        hoot.logError('Validate: ' + enumName + ' missing from transMap');
+                        print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
                     }
                 }
 
@@ -1018,8 +996,6 @@ dnc = {
                 break;
 
             case 'AL015P':
-                // Debug:
-                print('Got AL015');
                 if (attrs.BFC == '81')
                 {
                     if (!attrs.COL) attrs.COL = 'N/A'
@@ -1035,6 +1011,7 @@ dnc = {
                 break;
 
             case 'BB010A': // Anchorage
+            case 'BB010L': // Anchorage
                 if (!attrs.MAC) attrs.MAC = '11';
                 break;
 
@@ -1042,8 +1019,43 @@ dnc = {
                 if (!attrs.PRO) attrs.PRO = '130';
                 break;
 
+            case 'FC021L': // Maritime Limit Boundary
+                switch (attrs.MBL)
+                {
+                    case undefined:
+                        break;
+
+                    case '-32768':
+                        if (!attrs.COD) attrs.COD = '1';
+                        if (!attrs.MAC) attrs.MAC = '0';
+                        if (!attrs.MBL) attrs.MBL = '0';
+                        if (!attrs.OPS) attrs.OPS = '1';
+                        break;
+
+                    case '13':
+                        if (!attrs.DRP) attrs.DRP = 'UNK';
+                        if (!attrs.LAF) attrs.LAF = '0';
+                        // Fall through to default
+
+                    default:
+                        if (!attrs.DRP) attrs.DRP = 'N/A';
+                        if (!attrs.COD) attrs.COD = '-32768';
+                        if (!attrs.MAC) attrs.MAC = '-32768';
+                        if (!attrs.NAM) attrs.NAM = 'N/A';
+                        if (!attrs.OPS) attrs.OPS = '-32768';
+                        if (!attrs.PRO) attrs.PRO = '-32768';
+                        break;
+                } // End MBL
+
+                break;
+
             case 'FC031A': // Maritime Area
                 if (!attrs.DAN && attrs.ATN == '2') attrs.DAN = 'N/A';
+                break;
+
+            case 'FC021P': // Maritime Limit Boundary
+            case 'FC036P': // Restricted Area
+                if (!attrs.MAC) attrs.MAC = '0';
                 break;
 
 
