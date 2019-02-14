@@ -435,6 +435,60 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
   }
 }
 
+void WayJoiner2::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper,
+                                         WayPtr& toRemove)
+{
+  // TODO: this is a mess
+
+  const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
+  LOG_VARD(tagMergerClassName);
+  if (parent->getStatus() == Status::Unknown1)
+  {
+    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
+        tagMergerClassName == "hoot::OverwriteTag2Merger")
+    {
+      keeper = child;
+      toRemove = parent;
+    }
+    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+    else
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+  }
+  else if (child->getStatus() == Status::Unknown1 ||
+           (parent->getStatus() == Status::Conflated && child->getStatus() == Status::Conflated))
+  {
+    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
+        tagMergerClassName == "hoot::OverwriteTag2Merger")
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
+    {
+      keeper = child;
+      toRemove = parent;
+    }
+    else
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+  }
+  // does this make sense??
+  else
+  {
+    keeper = parent;
+    toRemove = child;
+  }
+}
+
 void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
 {
   if (!parent || !child)
@@ -462,61 +516,14 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return;
   }
 
-  // make sure tags go in the right direction (TODO: this is a mess)
+  // make sure tags go in the right direction
   WayPtr wayWithTagsToKeep;
   WayPtr wayWithTagsToLose;
-  const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
-  LOG_VARD(tagMergerClassName);
-  if (parent->getStatus() == Status::Unknown1)
-  {
-    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
-        tagMergerClassName == "hoot::OverwriteTag2Merger")
-    {
-      wayWithTagsToKeep = child;
-      wayWithTagsToLose = parent;
-    }
-    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
-    {
-      wayWithTagsToKeep = parent;
-      wayWithTagsToLose = child;
-    }
-    else
-    {
-      wayWithTagsToKeep = parent;
-      wayWithTagsToLose = child;
-    }
-  }
-  else if (child->getStatus() == Status::Unknown1 ||
-           (parent->getStatus() == Status::Conflated && child->getStatus() == Status::Conflated))
-  {
-    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
-        tagMergerClassName == "hoot::OverwriteTag2Merger")
-    {
-      wayWithTagsToKeep = parent;
-      wayWithTagsToLose = child;
-    }
-    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
-    {
-      wayWithTagsToKeep = child;
-      wayWithTagsToLose = parent;
-    }
-    else
-    {
-      wayWithTagsToKeep = parent;
-      wayWithTagsToLose = child;
-    }
-  }
-  // does this make sense??
-  else
-  {
-    wayWithTagsToKeep = parent;
-    wayWithTagsToLose = child;
-  }
+  _determineKeeperFeature(parent, child, wayWithTagsToKeep, wayWithTagsToLose);
   LOG_VARD(wayWithTagsToKeep);
   LOG_VARD(wayWithTagsToLose);
 
   // deal with bridges
-
   std::vector<ConstElementPtr> elements;
   elements.push_back(wayWithTagsToKeep);
   elements.push_back(wayWithTagsToLose);

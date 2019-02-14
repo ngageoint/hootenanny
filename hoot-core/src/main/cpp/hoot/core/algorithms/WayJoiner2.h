@@ -121,6 +121,8 @@ private:
    * @param child Way that will be merged into the parent and then deleted
    */
   void _joinWays(const WayPtr& parent, const WayPtr& child);
+
+  void _determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove);
 };
 
 }
