@@ -114,10 +114,10 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
       LOG_VART(replaced[i].first);
       LOG_VART(replaced[i].second);
 
-      //LOG_TRACE("eid1 before replacement check: " << eid1);
-      //LOG_TRACE("eid2 before replacement check: " << eid2);
-      LOG_DEBUG("e1 before replacement check: " << map->getElement(eid1));
-      LOG_DEBUG("e2 before replacement check: " << map->getElement(eid2));
+      LOG_TRACE("eid1 before replacement check: " << eid1);
+      LOG_TRACE("eid2 before replacement check: " << eid2);
+      //LOG_DEBUG("e1 before replacement check: " << map->getElement(eid1));
+      //LOG_DEBUG("e2 before replacement check: " << map->getElement(eid2));
 
       if (eid1 == replaced[i].first)
       {
@@ -130,10 +130,10 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
         eid2 = replaced[i].second;
       }
 
-      //LOG_TRACE("eid1 after replacement check: " << eid1);
-      //LOG_TRACE("eid2 after replacement check: " << eid2);
-      LOG_DEBUG("e1 after replacement check: " << map->getElement(eid1));
-      LOG_DEBUG("e2 after replacement check: " << map->getElement(eid2));
+      LOG_TRACE("eid1 after replacement check: " << eid1);
+      LOG_TRACE("eid2 after replacement check: " << eid2);
+      //LOG_DEBUG("e1 after replacement check: " << map->getElement(eid1));
+      //LOG_DEBUG("e2 after replacement check: " << map->getElement(eid2));
     }
 
     _mergePair(map, eid1, eid2, replaced);
@@ -202,10 +202,10 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
-  //LOG_VART(e1->getStatus());
-  //LOG_VART(e2->getStatus());
-  LOG_VARD(e1);
-  LOG_VARD(e2);
+  LOG_VART(e1->getStatus());
+  LOG_VART(e2->getStatus());
+  //LOG_VARD(e1);
+  //LOG_VARD(e2);
 
   // This doesn't seem to always be true.
   //assert(e1->getStatus() == Status::Unknown1);
@@ -218,15 +218,15 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   }
   catch (const NeedsReviewException& e)
   {
-    LOG_VARD(e.getWhat());
+    LOG_VART(e.getWhat());
     _markNeedsReview(result, e1, e2, e.getWhat(), HighwayMatch::getHighwayMatchName());
     return true;
   }
-  LOG_VARD(match);
+  LOG_VART(match);
 
   if (!match.isValid())
   {
-    LOG_DEBUG("Complex conflict causes an empty match");
+    LOG_TRACE("Complex conflict causes an empty match");
     _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
                      HighwayMatch::getHighwayMatchName());
     return true;
@@ -367,8 +367,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     LOG_VART(scraps2->getElementId());
   }
 
-  LOG_VARD(map->getElement(eid1));
-  LOG_VARD(map->getElement(eid2));
+//  LOG_VARD(map->getElement(eid1));
+//  LOG_VARD(map->getElement(eid2));
 
   return false;
 }

@@ -60,7 +60,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   // skip empty ways
   if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
   {
-    LOG_DEBUG("Skipping one or more empty ways...");
+    LOG_TRACE("Skipping one or more empty ways...");
     return false;
   }
 
