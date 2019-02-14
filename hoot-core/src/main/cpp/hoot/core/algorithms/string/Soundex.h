@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SOUNDEX_H
 #define SOUNDEX_H
@@ -52,7 +52,7 @@ public:
 
   Soundex();
 
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
   /**
    * Compares word1 & word2 by encoding the strings and counting each mismatched character as an
@@ -76,9 +76,9 @@ public:
    */
   static QString toDigit(QChar c);
 
-  QString toString() const { return "Soundex"; }
+  QString toString() const override { return "Soundex"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Returns a string comparison score based on the Soundex algorithm"; }
 };
 

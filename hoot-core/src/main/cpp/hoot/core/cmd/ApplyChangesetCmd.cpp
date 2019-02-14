@@ -54,7 +54,7 @@ public:
 
   virtual QString getDescription() const { return "Writes an OSM changeset"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     bool showStats = false;
     bool showProgress = false;

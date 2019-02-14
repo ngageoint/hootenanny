@@ -52,7 +52,7 @@ public:
 
   virtual QString getDescription() const { return "Converts between map formats"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     if (args.size() < 2)
     {

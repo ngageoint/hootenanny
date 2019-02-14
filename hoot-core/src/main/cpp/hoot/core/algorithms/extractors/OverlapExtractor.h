@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OVERLAPEXTRACTOR_H
 #define OVERLAPEXTRACTOR_H
@@ -55,10 +55,10 @@ public:
 
   static std::string className() { return "hoot::OverlapExtractor"; }
 
-  virtual std::string getClassName() const { return OverlapExtractor::className(); }
+  virtual std::string getClassName() const override { return OverlapExtractor::className(); }
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const;
+    const boost::shared_ptr<const Element>& candidate) const override;
 
   virtual QString getDescription() const
   { return "Uses symmetric difference as the criterion for determining match scores"; }

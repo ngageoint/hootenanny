@@ -46,7 +46,7 @@ public:
 
   GreedyConstrainedMatches(const ConstOsmMapPtr& map);
 
-  virtual std::vector<const Match*> calculateSubset();
+  virtual std::vector<const Match*> calculateSubset() override;
 };
 
 }
