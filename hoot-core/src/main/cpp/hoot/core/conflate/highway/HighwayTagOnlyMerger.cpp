@@ -49,6 +49,9 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, E
 HighwaySnapMerger(pairs, sublineMatcher),
 _performBridgeGeometryMerging(true)
 {
+  // Merging geometries for bridges is governed both by a config option and whether a subline
+  // matcher gets passed in, since not all calling merger creators have a subline matcher available
+  // to pass in at this point.
   if (!ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
   {
     _performBridgeGeometryMerging = false;
@@ -86,6 +89,10 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       {
         LOG_DEBUG("Using tag and geometry merger, since just one of the features is a bridge...");
         return HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
+//        if (!HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced))
+//        {
+//          return false;
+//        }
       }
     }
 
@@ -161,7 +168,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
           !DirectionFinder::isSimilarDirection2(
              map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
       {
-        LOG_DEBUG("Reversing " << wayWithTagsToKeep->getElementId());
+        LOG_DEBUG("Reversing " << wayWithTagsToKeep->getElementId() << "...");
         wayWithTagsToKeep->reverseOrder();
       }
     }

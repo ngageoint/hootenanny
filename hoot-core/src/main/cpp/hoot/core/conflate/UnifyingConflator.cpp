@@ -277,10 +277,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     replaced.clear();
 
     // Enabling this can result in a lot of files being generated.
-    if (i % 10 == 0)
-    {
-      OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
-    }
+//    if (i % 10 == 0)
+//    {
+//      OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
+//    }
   }
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 

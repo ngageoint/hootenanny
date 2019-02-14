@@ -50,7 +50,7 @@ public:
 
   virtual void replace(ElementId oldEid, ElementId newEid);
 
-  virtual QString toString() const { return QString("Unimplemented toString()"); }
+  virtual QString toString() const = 0;
 
 protected:
 

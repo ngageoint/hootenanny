@@ -129,12 +129,12 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elem
         LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
         eid2 = replaced[i].second;
       }
-    }
 
-    //LOG_TRACE("eid1 after replacement check: " << eid1);
-    //LOG_TRACE("eid2 after replacement check: " << eid2);
-    LOG_DEBUG("e1 after replacement check: " << map->getElement(eid1));
-    LOG_DEBUG("e2 after replacement check: " << map->getElement(eid2));
+      //LOG_TRACE("eid1 after replacement check: " << eid1);
+      //LOG_TRACE("eid2 after replacement check: " << eid2);
+      LOG_DEBUG("e1 after replacement check: " << map->getElement(eid1));
+      LOG_DEBUG("e2 after replacement check: " << map->getElement(eid2));
+    }
 
     _mergePair(map, eid1, eid2, replaced);
   }
@@ -202,11 +202,13 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
-  LOG_VART(e1->getStatus());
-  LOG_VART(e2->getStatus());
+  //LOG_VART(e1->getStatus());
+  //LOG_VART(e2->getStatus());
+  LOG_VARD(e1);
+  LOG_VARD(e2);
 
   // This doesn't seem to always be true.
-  assert(e1->getStatus() == Status::Unknown1);
+  //assert(e1->getStatus() == Status::Unknown1);
 
   // split w2 into sublines
   WaySublineMatchString match;
@@ -216,15 +218,15 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   }
   catch (const NeedsReviewException& e)
   {
-    LOG_VART(e.getWhat());
+    LOG_VARD(e.getWhat());
     _markNeedsReview(result, e1, e2, e.getWhat(), HighwayMatch::getHighwayMatchName());
     return true;
   }
-  LOG_VART(match);
+  LOG_VARD(match);
 
   if (!match.isValid())
   {
-    LOG_TRACE("Complex conflict causes an empty match");
+    LOG_DEBUG("Complex conflict causes an empty match");
     _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
                      HighwayMatch::getHighwayMatchName());
     return true;
@@ -299,7 +301,10 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       // Reverse the way if w2 is one way and w1 isn't the similar direction as w2
       if (OneWayCriterion().isSatisfied(w2) &&
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), w1, w2))
+      {
+        LOG_DEBUG("Reversing " << wMatch->getElementId() << "...");
         wMatch->reverseOrder();
+      }
     }
   }
 
@@ -361,6 +366,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   {
     LOG_VART(scraps2->getElementId());
   }
+
+  LOG_VARD(map->getElement(eid1));
+  LOG_VARD(map->getElement(eid2));
 
   return false;
 }

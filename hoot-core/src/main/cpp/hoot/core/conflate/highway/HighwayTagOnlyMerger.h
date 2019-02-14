@@ -34,8 +34,10 @@ namespace hoot
 {
 
 /**
- * Merges road tags only, keeping ref1 tags
- * Merges bridges separately from roads
+ * merges roads together by merging tags only, keeping ref1 tags
+ * merges bridges separately from roads; merges tags and optionally geometries for bridges
+ *
+ * The inheritance from HighwaySnapMerger is to support the geometry merging option for bridges.
  */
 class HighwayTagOnlyMerger : public HighwaySnapMerger
 {

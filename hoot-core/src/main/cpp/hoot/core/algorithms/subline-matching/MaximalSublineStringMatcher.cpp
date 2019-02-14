@@ -104,8 +104,8 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   // multilinestrings may contain multiple ways
   vector<ConstWayPtr> ways1 = ExtractWaysVisitor::extractWays(map, e1);
   vector<ConstWayPtr> ways2 = ExtractWaysVisitor::extractWays(map, e2);
-  LOG_VART(ways1.size());
-  LOG_VART(ways2.size());
+  LOG_VARD(ways1.size());
+  LOG_VARD(ways2.size());
 
   if ((ways1.size() > 4 && ways2.size() > 4) || (ways1.size() + ways2.size() > 7))
   {
@@ -119,7 +119,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   LOG_TRACE("Finding best match...");
   ScoredMatch scoredResult =
     _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1, reversed2);
-  LOG_VART(scoredResult);
+  LOG_VARD(scoredResult);
 
   // convert the best match into a WaySublineStringMatch and return.
   try
@@ -127,7 +127,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
     WaySublineMatchString result = scoredResult.matches;
     // this likely shouldn't be necessary. See https://github.com/ngageoint/hootenanny/issues/157.
     result.removeEmptyMatches();
-    LOG_VART(result);
+    LOG_VARD(result);
     return result;
   }
   catch (const OverlappingMatchesException& /*e*/)
@@ -349,7 +349,6 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   LOG_TRACE("Validating element " << eid << "...");
 
   ConstElementPtr e = map->getElement(eid);
-  LOG_VART(e.get());
 
   if (e->getElementType() == ElementType::Relation)
   {
@@ -375,7 +374,6 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
-    LOG_VART(w.get());
 
     if (w->getNodeCount() <= 1)
     {
