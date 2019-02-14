@@ -41,6 +41,9 @@ function initialize()
     // Set the schema type for the export
     hoot.Settings.set({"osm.map.writer.schema":"DNC"});
     hoot.Settings.set({"ogr.esri.fdname":""});
+
+    // We need this to avoid errors with int & LongLong
+    hoot.Settings.set({"ogr.strict.checking":"off"});
 }
 
 // Layer name filter - Filter out all layers that match this regexp

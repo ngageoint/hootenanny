@@ -60,19 +60,19 @@ dnc = {
         }
 
         // Build the DNC fcode/attrs lookup table. Note: This is <GLOBAL>
-        dncAttrLookup = {};
+        // dncAttrLookup = {};
 
-        for (var i=0, sLen = dnc.rawSchema.length; i < sLen; i++)
-        {
-            var attrArray = [];
-            for (var j=0, cLen = dnc.rawSchema[i].columns.length; j < cLen; j++)
-            {
-                attrArray.push(dnc.rawSchema[i].columns[j].name);
-            }
-            // Add the attrArray to the list as <layerName>:[array]  
-            // Eg RIVERL:[array]
-            dncAttrLookup[dnc.rawSchema[i].name] = attrArray;
-        }
+        // for (var i=0, sLen = dnc.rawSchema.length; i < sLen; i++)
+        // {
+        //     var attrArray = [];
+        //     for (var j=0, cLen = dnc.rawSchema[i].columns.length; j < cLen; j++)
+        //     {
+        //         attrArray.push(dnc.rawSchema[i].columns[j].name);
+        //     }
+        //     // Add the attrArray to the list as <layerName>:[array]  
+        //     // Eg RIVERL:[array]
+        //     dncAttrLookup[dnc.rawSchema[i].name] = attrArray;
+        // }
 
         // Now add an o2s[A,L,P] feature to the dnc.rawSchema
         // We can drop features but this is a nice way to see what we would drop
@@ -238,114 +238,14 @@ dnc = {
 
 
     // validateAttrs - Clean up the supplied attr list by dropping anything that should not be part of the
-    //                 feature
+    //                 feature. Also, set per feature defaults where appropriate.
     validateAttrs: function(layerName,geometryType,attrs,notUsed,transMap) {
 
-        var attrList = dncAttrLookup[layerName];
-
-        if (attrList != undefined)
-        {
-            // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (dnc.configOut.OgrDebugDumpvalidate == 'true')
-            {
-                for (var val in attrs)
-                {
-                    if (attrList.indexOf(val) == -1)
-                    {
-                        hoot.logWarn('Validate: Dropping ' + val + ' from ' + layerName);
-                        if (val in transMap)
-                        {
-                            notUsed[transMap[val][1]] = transMap[val][2];
-                            // Debug:
-                            hoot.logWarn('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-                        }
-                        else
-                        {
-                            hoot.logError('Validate: ' + val + ' missing from transMap');
-                        }
-
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
-                    }
-
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in dnc.rules.txtLength)
-                    {
-                        if (attrs[val].length > dnc.rules.txtLength[val])
-                        {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= dnc.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + dnc.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,dnc.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
-                    } // End in txtLength
-                }
-            }
-            else
-            {
-                for (var val in attrs)
-                {
-                    if (attrList.indexOf(val) == -1)
-                    {
-                        if (val in transMap)
-                        {
-                            notUsed[transMap[val][1]] = transMap[val][2];
-                            // Debug:
-                            // print('Validate: re-adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-                        }
-                        else
-                        {
-                            hoot.logError('Validate: ' + val + ' missing from transMap');
-                        }
-
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
-                    }
-
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in dnc.rules.txtLength)
-                    {
-                        if (attrs[val].length > dnc.rules.txtLength[val])
-                        {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= dnc.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + dnc.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,dnc.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
-                    } // End in txtLength
-                }
-            } // End getOgrDebugDumpvalidate
-        }
-        else
-        {
-            hoot.logWarn('Validate: No attrList for ' + layerName);
-        }
+        // Debug:
+        print('Validate: ' + attrs.F_CODE + ' Geom:' + geometryType + ' LayerName:' + layerName);
 
         // No quick and easy way to do this unless we build yet another lookup table
         var feature = {};
-
         for (var i=0, sLen = dnc.rawSchema.length; i < sLen; i++)
         {
             if (dnc.rawSchema[i].name == layerName)
@@ -355,58 +255,176 @@ dnc = {
             }
         }
 
-        // Now validate the Enumerated values
-        for (var i=0, cLen = feature['columns'].length; i < cLen; i++)
+        // Sanity checkoing
+        if (feature.name === undefined)
+        {
+            // If we can't find an entry in attrArray then we have a problem,
+            // Throw an error message and return. 
+            hoot.logError('Validate: No feature for ' + layerName);
+            return;
+        }
+        else
+        {
+            // Debug:
+            print('FeatureName: ' + feature.name);
+        }
+
+
+        var attrArray = [];
+        for (var j=0, cLen = feature.columns.length; j < cLen; j++)
+        {
+            attrArray.push(feature.columns[j].name);
+        }
+
+
+        // if (attrList === undefined)
+        // {
+        //     // If we can't find an entry in attrList then we have a problem,
+        //     // Throw an error message and return. 
+        //     hoot.logError('Validate: No attrList for ' + layerName);
+        //     return;
+        // }
+
+        // First: Go through the translated attributes
+        for (var val in attrs)
+        {
+            if (attrArray.indexOf(val) == -1)
+            {
+                // Debug:
+                print('Validate: Dropping ' + val + ' from ' + layerName);
+                if (val in transMap)
+                {
+                    notUsed[transMap[val][1]] = transMap[val][2];
+                    // Debug:
+                    print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+                }
+                else
+                {
+                    hoot.logError('Validate: ' + val + ' missing from transMap');
+                }
+
+                delete attrs[val];
+
+                // Since we deleted the attribute, Skip the text check
+                continue;
+            }
+
+            // Now check the length of the text fields
+            // We need more info from the customer about this: What to do if it is too long
+            if (val in dnc.rules.txtLength)
+            {
+                if (attrs[val].length > dnc.rules.txtLength[val])
+                {
+                    // First try splitting the attribute and grabbing the first value
+                    var tStr = attrs[val].split(';');
+                    if (tStr[0].length <= dnc.rules.txtLength[val])
+                    {
+                        attrs[val] = tStr[0];
+                    }
+                    else
+                    {
+                        hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + dnc.rules.txtLength[val] + ' characters.');
+                        // Still too long. Chop to the maximum length
+                        attrs[val] = tStr[0].substring(0,dnc.rules.txtLength[val]);
+                    }
+                } // End text attr length > max length
+            } // End in txtLength
+        } // End attr loop
+
+        // Second: Look at the F_CODE and check if there is anything that has a manditory value
+        var gFcode = attrs.F_CODE + geometryType.toString().charAt(0)
+        if (dnc.rules.defaultList[gFcode])
+        {
+            // Debug:
+            print('Found manditory: ' + gFcode);
+
+        } // End manditory check
+
+        // Third: Now go through the feature and loot at enumerations
+        // for (var i=0, cLen = feature['columns'].length; i < cLen; i++)
+        for (var i=0, cLen = feature.columns.length; i < cLen; i++)
         {
             // Skip non enumeratied attributes
-            if (feature.columns[i].type !== 'enumeration') continue;
 
             var enumName = feature.columns[i].name;
 
-            // Skip stuff that is missing and will end up as a default value
-            if (!attrs[enumName]) continue;
-
-            var attrValue = attrs[enumName];
-            var enumList = feature.columns[i].enumerations;
-            var enumValueList = [];
-
-            // Pull all of the values out of the enumerated list to make life easier
-            for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
-
-            // Check if it is a valid enumerated value
-            if (enumValueList.indexOf(attrValue) == -1)
+            // If the attribute is missing, check if we need to specify a default value for it.
+            // Or, just let the core assing the default when it writes the feature.
+            if (!attrs[enumName])
             {
-                if (dnc.configOut.OgrDebugDumpvalidate == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
-
-                // Do we have an "Other" value?
-                if (enumValueList.indexOf('999') == -1)
+                if (dnc.rules.defaultList[attrs.F_CODE])
                 {
-                    // No: Set the offending enumerated value to the default value
-                    attrs[enumName] = feature.columns[i].defValue;
-
-                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
-                }
-                else
-                {
-                    // Yes: Set the offending enumerated value to the "other" value
-                    attrs[enumName] = '999';
-
-                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
-                }
-
-                // Since we either wiped the value or set it to '999', restore the tags for it 
-                if (enumName in transMap)
-                {
-                    notUsed[transMap[enumName][1]] = transMap[enumName][2];
                     // Debug:
-                    //print('Validate: re-adding enumeration ' + transMap[enumName][1] + ' = ' + transMap[enumName][2] + ' to notUsed');
+                    print('Found: ' + gFcode + ' in the default list');
+                    if (dnc.rules.defaultList[gFcode][attrs[enumName]])
+                    {
+                        // Debug:
+                        print('Setting: ' + enumName + ' to ' + dnc.rules.defaultList[gFcode][attrs[enumName]]);
+                        attrs[enumName] = dnc.rules.defaultList[gFcode][attrs[enumName]];
+                    }
                 }
-                else
+                
+                continue;
+            } // End default check
+
+
+            // Now check if having a value for the attribute is actually valid
+            if (feature.columns[i].type == 'enumeration')
+            {
+                // Debug:
+                print('Starting Enumerations');
+
+                var attrValue = attrs[enumName];
+                var enumList = feature.columns[i].enumerations;
+                var enumValueList = [];
+
+                // Pull all of the values out of the enumerated list to make life easier
+                for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
+
+                // Check if it is a valid enumerated value
+                if (enumValueList.indexOf(attrValue) == -1)
                 {
-                    hoot.logError('Validate: ' + enumName + ' missing from transMap');
+                    // Debug: 
+                    print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
+
+                    // Do we have an "Other" value?
+                    if (enumValueList.indexOf('999') == -1)
+                    {
+                        // No: Set the offending enumerated value to the default value
+                        attrs[enumName] = feature.columns[i].defValue;
+
+                        // Debug:
+                        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    }
+                    else
+                    {
+                        // Yes: Set the offending enumerated value to the "other" value
+                        attrs[enumName] = '999';
+
+                        // Debug:
+                        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
+                    }
+
+                    // Since we either wiped the value or set it to '999', restore the tags for it 
+                    if (enumName in transMap)
+                    {
+                        notUsed[transMap[enumName][1]] = transMap[enumName][2];
+                        // Debug:
+                        print('Validate: re-adding enumeration ' + transMap[enumName][1] + ' = ' + transMap[enumName][2] + ' to notUsed');
+                    }
+                    else
+                    {
+                        hoot.logError('Validate: ' + enumName + ' missing from transMap');
+                    }
                 }
-            }
-        } // End Validate Enumerations
+
+                continue;
+            } // End validate Enumerations
+
+            // Since we did the enumerations, Text and Numbers are next
+
+
+        } // End feature attributes
     }, // End validateAttrs
 
 
@@ -992,6 +1010,46 @@ dnc = {
         {
             if (dnc.configOut.OgrAddUuid == 'true') attrs.OSM_UUID = createUuid().replace('{','').replace('}','');
         }
+
+        // Fix some of the default values
+        switch (attrs.F_CODE + geometryType.toString().charAt(0))
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'AL015P':
+                // Debug:
+                print('Got AL015');
+                if (attrs.BFC == '81')
+                {
+                    if (!attrs.COL) attrs.COL = 'N/A'
+                    if (!attrs.EXS) attrs.EXS = '-32768'
+                    if (!attrs.SSR) attrs.SSR = '-32768'
+                }
+                else
+                {
+                    if (!attrs.SST) attrs.SST = '-32768'
+                    if (!attrs.STA) attrs.STA = '-32768'
+
+                }
+                break;
+
+            case 'BB010A': // Anchorage
+                if (!attrs.MAC) attrs.MAC = '11';
+                break;
+
+            case 'FC021A': // Maritime Limit Boundary
+                if (!attrs.PRO) attrs.PRO = '130';
+                break;
+
+            case 'FC031A': // Maritime Area
+                if (!attrs.DAN && attrs.ATN == '2') attrs.DAN = 'N/A';
+                break;
+
+
+        }
+
+
     }, // End applyToOgrPostProcessing
 
 // #####################################################################################################

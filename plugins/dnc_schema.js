@@ -753,7 +753,7 @@ getDbSchema: function()
                      }
                     ]
           },
-        { name:"COMPP",
+        { name:"COMMP",
           fcode:"",
           desc:"Communications Point",
           geom:"Point",
@@ -2908,7 +2908,7 @@ getDbSchema: function()
                        optional:"R",
                        length:"255",
                        type:"String",
-                       defValue:"N/A"
+                       defValue:"UNK"
                      },
                      { name:"DAT",
                        desc:"Date",
@@ -5410,7 +5410,7 @@ getDbSchema: function()
                      }
                     ]
           },
-        { name:"PIPLINL",
+        { name:"PIPELINL",
           fcode:"",
           desc:"Pipeline Line",
           geom:"Line",
@@ -5631,7 +5631,7 @@ getDbSchema: function()
                      }
                     ]
           },
-        { name:"HAZARDA",
+        { name:"HAZARDP",
           fcode:"",
           desc:"Hazard Point",
           geom:"Point",
