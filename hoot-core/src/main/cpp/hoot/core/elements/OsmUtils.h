@@ -232,6 +232,23 @@ public:
    * @param map
    */
   static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map);
+
+  /**
+   *
+   *
+   * @param element1
+   * @param element2
+   * @return
+   */
+  static bool oneWayConflictExists(ElementPtr element1, ElementPtr element2);
+
+  /**
+   *
+   *
+   * @param element
+   * @return
+   */
+  static bool explicitlyNotAOneWayStreet(ElementPtr element);
 };
 
 }

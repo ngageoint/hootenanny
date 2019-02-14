@@ -37,6 +37,7 @@
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 
 //Qt
 #include <QDateTime>
@@ -175,6 +176,20 @@ void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMa
       boost::dynamic_pointer_cast<const Relation>(element);
     LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
   }
+}
+
+bool OsmUtils::oneWayConflictExists(ElementPtr element1, ElementPtr element2)
+{
+  OneWayCriterion isAOneWayStreet;
+  return
+    (isAOneWayStreet.isSatisfied(element1) && explicitlyNotAOneWayStreet(element2)) ||
+    (isAOneWayStreet.isSatisfied(element2) && explicitlyNotAOneWayStreet(element1));
+}
+
+bool OsmUtils::explicitlyNotAOneWayStreet(ElementPtr element)
+{
+  // TODO: use Tags::isFalse here instead
+  return element->getTags().get("oneway") == "no";
 }
 
 }

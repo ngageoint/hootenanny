@@ -489,6 +489,21 @@ void WayJoiner2::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& ke
   }
 }
 
+void WayJoiner2::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, WayPtr wayWithTagsToLose)
+{
+  OneWayCriterion oneWayCrit;
+  if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
+      !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
+      // note the use of an alternative isSimilarDirection method
+      !DirectionFinder::isSimilarDirection2(
+        _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
+  {
+    LOG_DEBUG("Reversing order of " << wayWithTagsToKeep->getElementId());
+    // make sure this reversal gets done before checking the join type later on
+    wayWithTagsToKeep->reverseOrder();
+  }
+}
+
 void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
 {
   if (!parent || !child)
@@ -537,36 +552,15 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
 
   // deal with one way streets
 
-  OneWayCriterion oneWayCrit;
-  LOG_VARD(oneWayCrit.isSatisfied(wayWithTagsToKeep));
-  LOG_VARD(oneWayCrit.isSatisfied(wayWithTagsToLose));
-
-  // TODO: use Tags::isFalse here instead
-  const bool keepElementExplicitlyNotAOneWayStreet =
-    wayWithTagsToKeep->getTags().get("oneway") == "no";
-  const bool removeElementExplicitlyNotAOneWayStreet =
-    wayWithTagsToLose->getTags().get("oneway") == "no";
-  LOG_VARD(keepElementExplicitlyNotAOneWayStreet);
-  LOG_VARD(removeElementExplicitlyNotAOneWayStreet);
-  if ((oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
-       removeElementExplicitlyNotAOneWayStreet) ||
-      (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
-       keepElementExplicitlyNotAOneWayStreet))
+  // don't try to join streets with conflicting one way info
+  if (OsmUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_DEBUG("Conflicting one way street tags.  Skipping join.");
     return;
   }
 
-  if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
-      !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
-      // note the use of an alternative isSimilarDirection method
-      !DirectionFinder::isSimilarDirection2(
-        _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
-  {
-    LOG_DEBUG("Reversing order of " << wayWithTagsToKeep->getElementId());
-    // make sure this reversal gets done before checking the join type later on
-    wayWithTagsToKeep->reverseOrder();
-  }
+  // Reverse the way if way to remove is one way and the two ways aren't in similar directions
+  _handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
 
   // determine what type of join we have
 

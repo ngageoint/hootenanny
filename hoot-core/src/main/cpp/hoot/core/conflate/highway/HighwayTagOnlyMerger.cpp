@@ -162,7 +162,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     OsmUtils::logElementDetail(elementWithTagsToRemove, map);
 
     // don't try to merge streets with conflicting one way info
-    if (_oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+    if (OsmUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
     {
       LOG_DEBUG("Conflicting one way street tags.  Skipping merge.");
       return false;
@@ -197,20 +197,6 @@ bool HighwayTagOnlyMerger::_nameConflictExists(ElementPtr element1, ElementPtr e
     element1->getTags().hasName() && element2->getTags().hasName() &&
       !Tags::haveMatchingName(
         element1->getTags(), element2->getTags());
-}
-
-bool HighwayTagOnlyMerger::_explicitlyNotAOneWayStreet(ElementPtr element) const
-{
-  // TODO: use Tags::isFalse here instead
-  return element->getTags().get("oneway") == "no";
-}
-
-bool HighwayTagOnlyMerger::_oneWayConflictExists(ElementPtr element1, ElementPtr element2) const
-{
-  OneWayCriterion isAOneWayStreet;
-  return
-    (isAOneWayStreet.isSatisfied(element1) && _explicitlyNotAOneWayStreet(element2)) ||
-    (isAOneWayStreet.isSatisfied(element2) && _explicitlyNotAOneWayStreet(element1));
 }
 
 void HighwayTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,
