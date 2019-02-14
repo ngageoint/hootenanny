@@ -605,36 +605,10 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   // This logic should possibly be a part of the default tag merging instead of being done here
   // and should also add the possibility for multiple options for the length tag key...leaving this
   // as is for now (fix for #2867)
-  double totalLength = 0.0;
-  const bool eitherTagsHaveLength =
-    tags1.contains(MetadataTags::Length()) || tags2.contains(MetadataTags::Length());
-  if (eitherTagsHaveLength)
-  {
-    double length1 = 0.0;
-    double length2 = 0.0;
-    if (tags1.contains(MetadataTags::Length()))
-    {
-      bool ok = false;
-      length1 = tags1.get(MetadataTags::Length()).toDouble(&ok);
-      if (!ok)
-      {
-        length1 = 0.0;
-      }
-    }
-    if (tags2.contains(MetadataTags::Length()))
-    {
-      bool ok = false;
-      length2 = tags2.get(MetadataTags::Length()).toDouble(&ok);
-      if (!ok)
-      {
-        length2 = 0.0;
-      }
-    }
-    totalLength = length1 + length2;
-  }
+  const double totalLength = _getTotalLengthFromTags(tags1, tags2);
 
   Tags mergedTags = TagMergerFactory::mergeTags(tags1, tags2, ElementType::Way);
-  if (eitherTagsHaveLength)
+  if (totalLength != -1.0)
   {
     mergedTags.set(MetadataTags::Length(), QString::number(totalLength));
   }
@@ -667,6 +641,38 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VARD(parent);
 
   _numJoined++;
+}
+
+double WayJoiner2::_getTotalLengthFromTags(const Tags& tags1, const Tags& tags2) const
+{
+  double totalLength = -1.0;
+  const bool eitherTagsHaveLength =
+    tags1.contains(MetadataTags::Length()) || tags2.contains(MetadataTags::Length());
+  if (eitherTagsHaveLength)
+  {
+    double length1 = 0.0;
+    double length2 = 0.0;
+    if (tags1.contains(MetadataTags::Length()))
+    {
+      bool ok = false;
+      length1 = tags1.get(MetadataTags::Length()).toDouble(&ok);
+      if (!ok)
+      {
+        length1 = 0.0;
+      }
+    }
+    if (tags2.contains(MetadataTags::Length()))
+    {
+      bool ok = false;
+      length2 = tags2.get(MetadataTags::Length()).toDouble(&ok);
+      if (!ok)
+      {
+        length2 = 0.0;
+      }
+    }
+    totalLength = length1 + length2;
+  }
+  return totalLength;
 }
 
 }

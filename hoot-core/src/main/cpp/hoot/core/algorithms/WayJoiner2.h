@@ -125,6 +125,8 @@ private:
   void _determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove);
 
   void _handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, WayPtr wayWithTagsToLose);
+
+  double _getTotalLengthFromTags(const Tags& tags1, const Tags& tags2) const;
 };
 
 }
