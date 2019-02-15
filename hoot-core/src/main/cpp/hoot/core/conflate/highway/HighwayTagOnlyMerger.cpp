@@ -29,230 +29,215 @@
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
-
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
+#include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 namespace hoot
 {
 
-// TODO: remove
-//class ShortestFirstComparator
-//{
-//public:
-
-//  bool operator()(const std::pair<ElementId, ElementId>& p1, const std::pair<ElementId, ElementId>& p2)
-//  {
-//    return std::min(getLength(p1.first), getLength(p1.second)) <
-//        std::min(getLength(p2.first), getLength(p2.second));
-//  }
-
-//  Meters getLength(const ElementId& eid)
-//  {
-//    Meters result;
-//    if (_lengthMap.contains(eid))
-//    {
-//      result = _lengthMap[eid];
-//    }
-//    else
-//    {
-//      LengthOfWaysVisitor v;
-//      v.setOsmMap(map.get());
-//      map->getElement(eid)->visitRo(*map, v);
-//      result = v.getLengthOfWays();
-//      _lengthMap[eid] = result;
-//    }
-//    return result;
-//  }
-
-//  virtual QString getDescription() const { return ""; }
-
-//  OsmMapPtr map;
-
-//private:
-
-//  QHash<ElementId, Meters> _lengthMap;
-//};
-
-HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs)
+HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs) :
+HighwaySnapMerger(pairs, boost::shared_ptr<SublineStringMatcher>()),
+_performBridgeGeometryMerging(false)
 {
-  _pairs = pairs;
-  LOG_VARD(hoot::toString(_pairs));
 }
 
-void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
-                                 std::vector<std::pair<ElementId, ElementId>>& replaced)
+HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                                     const boost::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+HighwaySnapMerger(pairs, sublineMatcher),
+_performBridgeGeometryMerging(true)
 {
-  LOG_VARD(hoot::toString(_pairs));
-  LOG_VARD(hoot::toString(replaced));
-
-  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-       it != _pairs.end(); ++it)
+  // Merging geometries for bridges is governed both by a config option and whether a subline
+  // matcher gets passed in, since not all calling merger creators have a subline matcher available
+  // to pass in at this point.
+  if (!ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
   {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
-    LOG_DEBUG("eid1 before replacement check: " << eid1);
-    LOG_DEBUG("eid2 before replacement check: " << eid2);
-
-//    for (size_t i = 0; i < replaced.size(); i++)
-//    {
-//      if (eid1 == replaced[i].first)
-//      {
-//        eid1 = replaced[i].second;
-//      }
-//      if (eid2 == replaced[i].first)
-//      {
-//        eid2 = replaced[i].second;
-//      }
-//    }
-//    LOG_DEBUG("eid1 after replacement check: " << eid1);
-//    LOG_DEBUG("eid2 after replacement check: " << eid2);
-
-    if (map->containsElement(eid1) && map->containsElement(eid2))
-    {
-      _mergePair(map, eid1, eid2, replaced);
-    }
-    else
-    {
-      LOG_DEBUG(
-        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
-    }
+    _performBridgeGeometryMerging = false;
   }
 }
 
-//void HighwayTagOnlyMerger::apply(const OsmMapPtr& map,
-//                                 std::vector<std::pair<ElementId, ElementId>>& replaced)
-//{
-//  LOG_VARD(hoot::toString(_pairs));
-//  LOG_VARD(hoot::toString(replaced));
-
-//  std::vector<std::pair<ElementId, ElementId>> pairs;
-//  pairs.reserve(_pairs.size());
-
-//  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-//       it != _pairs.end();  ++it)
-//  {
-//    ElementId eid1 = it->first;
-//    ElementId eid2 = it->second;
-
-//    if (map->containsElement(eid1) && map->containsElement(eid2))
-//    {
-//      pairs.push_back(std::pair<ElementId, ElementId>(eid1, eid2));
-//    }
-//    else
-//    {
-//      LOG_DEBUG(
-//        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
-//    }
-//  }
-
-//  ShortestFirstComparator shortestFirst;
-//  shortestFirst.map = map;
-//  sort(pairs.begin(), pairs.end(), shortestFirst);
-//  for (std::vector<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-//       it != pairs.end(); ++it)
-//  {
-//    ElementId eid1 = it->first;
-//    ElementId eid2 = it->second;
-
-//    for (size_t i = 0; i < replaced.size(); i++)
-//    {
-//      if (eid1 == replaced[i].first)
-//      {
-//        eid1 = replaced[i].second;
-//      }
-//      if (eid2 == replaced[i].first)
-//      {
-//        eid2 = replaced[i].second;
-//      }
-//    }
-
-//    _mergePair(map, eid1, eid2, replaced);
-//  }
-//}
+void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementPtr element2,
+                                                   ElementPtr& keeper, ElementPtr& toRemove,
+                                                   bool& removeSecondaryElement)
+{
+  removeSecondaryElement = true;
+  if (element1->getStatus() == Status::Conflated && element2->getStatus() == Status::Conflated)
+  {
+    keeper = element1;
+    toRemove = element2;
+    if (toRemove->getElementType() == ElementType::Way)
+    {
+      WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(toRemove);
+      wayWithTagsToRemove->setPid(element1->getElementId().getId());
+      removeSecondaryElement = false;
+    }
+  }
+  else if (element1->getStatus() == Status::Unknown1 || element1->getStatus() == Status::Conflated)
+  {
+    keeper = element1;
+    toRemove = element2;
+  }
+  else if (element1->getStatus() == Status::Unknown2 || element2->getStatus() == Status::Conflated)
+  {
+    keeper = element2;
+    toRemove = element1;
+  }
+  LOG_VART(keeper->getElementId());
+  LOG_VART(toRemove->getElementId());
+}
 
 bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
-  {
-    return true;
-  }
-
   ElementPtr e1 = map->getElement(eid1);
   ElementPtr e2 = map->getElement(eid2);
-  if (!e1)
+
+  if (!e1 || !e2)
   {
-    LOG_DEBUG(eid1 << " null.");
-  }
-  if (!e2)
-  {
-    LOG_DEBUG(eid2 << " null.");
+    return HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced);
   }
 
   if (e1 && e2)
   {
-    ElementPtr elementToKeep;
-    ElementPtr elementToRemove;
-    assert(!(e1->getStatus() == Status::Conflated && e2->getStatus() == Status::Conflated));
-    if (e1->getStatus() == Status::Unknown1 || e1->getStatus() == Status::Conflated)
+    // If just one of the features is a bridge, we want the bridge feature to separate from the road
+    // feature its being merged with.  So, use the normal geometry AND tag merger.
+    std::vector<ConstElementPtr> elements;
+    elements.push_back(e1);
+    elements.push_back(e2);
+    const bool onlyOneIsABridge = OsmUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
+    if (onlyOneIsABridge)
     {
-      elementToKeep = e1;
-      elementToRemove = e2;
-    }
-    else if (e1->getStatus() == Status::Unknown2 || e2->getStatus() == Status::Conflated)
-    {
-      elementToKeep = e2;
-      elementToRemove = e1;
-    }
-    //LOG_VART(elementToKeep->getElementId());
-    //LOG_VART(elementToRemove->getElementId());
-    LOG_VARD(elementToKeep);
-    LOG_VARD(elementToRemove);
-
-    // don't try to join if there are explicitly conflicting names; fix for #2888; not sure what
-    // implications this has outside of the single test dataset I've tested on so far
-    if (elementToKeep->getTags().hasName() &&
-        elementToRemove->getTags().hasName() &&
-        !Tags::haveMatchingName(elementToKeep->getTags(), elementToRemove->getTags()))
-    {
-      LOG_DEBUG("Conflicting name tags.  Skipping merge.");
-      return false;
-    }
-
-    // Reverse the way if way to remove is one way and the two ways aren't similar directions
-    if (elementToKeep->getElementType() == ElementType::Way &&
-        elementToRemove->getElementType() == ElementType::Way)
-    {
-      WayPtr wayToKeep = boost::dynamic_pointer_cast<Way>(elementToKeep);
-      WayPtr wayToRemove = boost::dynamic_pointer_cast<Way>(elementToRemove);
-      if (OneWayCriterion().isSatisfied(wayToRemove) &&
-          !DirectionFinder::isSimilarDirection(map->shared_from_this(), wayToKeep, wayToRemove))
+      if (!_performBridgeGeometryMerging)
       {
-        LOG_DEBUG("Reversing " << wayToKeep->getElementId());
-        wayToKeep->reverseOrder();
+        LOG_TRACE(
+          "Unable to perform geometric bridge merging due to invalid subline string matcher.  << "
+          "Performing tag only merge...");
+      }
+      else
+      {
+        LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
+        const bool needsReview = HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
+        if (needsReview)
+        {
+          LOG_TRACE("HighwaySnapMerger returned review.");
+        }
+        return needsReview;
+//        if (!HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced))
+//        {
+//          return false;
+//        }
       }
     }
 
-    // There actually could be a relation in here, but the default tag merging doesn't use the
-    // element type anyway, so not worrying about it for now.
-    elementToKeep->setTags(
+    OsmUtils::logElementDetail(e1, map);
+    OsmUtils::logElementDetail(e2, map);
+
+//    // hope this isn't happening
+//    if (e1->getElementType() == ElementType::Relation &&
+//        e2->getElementType() == ElementType::Relation)
+//    {
+//      throw HootException("Two relations passed to HighwayOnlyTagMerger.");
+//    }
+
+//    //TODO: finish
+
+//    std::vector<WayPtr> ways;
+
+//    // handle relations coming from HighwaySnapMerger's previous handling of bridges
+//    if (e1->getElementType() == ElementType::Relation ||
+//        e2->getElementType() == ElementType::Relation)
+//    {
+//      RelationPtr relation;
+//      if (e1->getElementType() == ElementType::Relation)
+//      {
+//        relation = boost::dynamic_pointer_cast<Relation>(e1);
+//      }
+//      else if (e2->getElementType() == ElementType::Relation)
+//      {
+//        relation = boost::dynamic_pointer_cast<Relation>(e2);
+//      }
+
+//      const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+//      for (size_t i = 0; i < relationMembers.size(); i++)
+//      {
+//        ElementPtr member = map->getElement(relationMembers[i].getElementId());
+//        if (member && member->getElementType() == ElementType::Way)
+//        {
+//          ways.push_back(boost::dynamic_pointer_cast<Way>(member));
+//        }
+//      }
+//    }
+
+    // Otherwise, proceed with tag only merging.
+
+    ElementPtr elementWithTagsToKeep;
+    ElementPtr elementWithTagsToRemove;
+    bool removeSecondaryElement;
+    _determineKeeperFeature(
+      e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
+
+    if (OsmUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+    {
+      LOG_TRACE("Conflicting name tags.  Skipping merge.");
+      return false;
+    }
+
+    //LOG_VART(elementWithTagsToKeep->getElementId());
+    //LOG_VART(elementWithTagsToRemove->getElementId());
+    OsmUtils::logElementDetail(elementWithTagsToKeep, map);
+    OsmUtils::logElementDetail(elementWithTagsToRemove, map);
+
+    // don't try to merge streets with conflicting one way info
+    if (OsmUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+    {
+      LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
+      return false;
+    }
+
+    // Reverse the way if way to remove is one way and the two ways aren't in similar directions
+    _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove, map);
+
+    // merge the tags
+    elementWithTagsToKeep->setTags(
       TagMergerFactory::mergeTags(
-        elementToKeep->getTags(), elementToRemove->getTags(), ElementType::Way));
-    elementToKeep->setStatus(Status::Conflated);
-    replaced.push_back(
-      std::pair<ElementId, ElementId>(
-        elementToRemove->getElementId(), elementToKeep->getElementId()));
-    LOG_VARD(elementToKeep);
-    // Is this necessary?
-    RecursiveElementRemover(elementToRemove->getElementId()).apply(map);
+        elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way));
+    elementWithTagsToKeep->setStatus(Status::Conflated);
+    LOG_TRACE("Keeping element: " << elementWithTagsToKeep);
+
+    if (removeSecondaryElement)
+    {
+      LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
+      replaced.push_back(
+        std::pair<ElementId, ElementId>(
+          elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));
+    }
   }
 
   return false;
 }
 
+void HighwayTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,
+                                                       ElementPtr elementWithTagsToRemove,
+                                                       const OsmMapPtr& map)
+{
+  OneWayCriterion isAOneWayStreet;
+  if (elementWithTagsToKeep->getElementType() == ElementType::Way &&
+      elementWithTagsToRemove->getElementType() == ElementType::Way)
+  {
+    WayPtr wayWithTagsToKeep = boost::dynamic_pointer_cast<Way>(elementWithTagsToKeep);
+    WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(elementWithTagsToRemove);
+    if (isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
+        // note the use of an alternative isSimilarDirection method
+        !DirectionFinder::isSimilarDirection2(
+           map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
+    {
+      LOG_TRACE("Reversing " << wayWithTagsToKeep->getElementId() << "...");
+      wayWithTagsToKeep->reverseOrder();
+    }
+  }
 }
 
+}

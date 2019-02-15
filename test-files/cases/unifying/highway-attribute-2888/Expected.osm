@@ -458,19 +458,7 @@
         <tag k="hoot:id" v="-1064"/>
     </node>
     <node visible="true" id="-1063" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919" lat="4.1790874884300004" lon="73.5104440270399948">
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Chandhanee Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="surface" v="paving_stones"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1063"/>
     </node>
     <node visible="true" id="-1062" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919" lat="4.1705626791999997" lon="73.5138239280600061">
@@ -770,18 +758,7 @@
         <tag k="hoot:id" v="-989"/>
     </node>
     <node visible="true" id="-988" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919" lat="4.1761373714800003" lon="73.5062160965299825">
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Fareedhee Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z"/>
-        <tag k="highway" v="primary"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-988"/>
     </node>
     <node visible="true" id="-987" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919" lat="4.1761698147599997" lon="73.5062662644400007">
@@ -4732,74 +4709,27 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1000" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-111"/>
-        <nd ref="-109"/>
-        <nd ref="-108"/>
-        <nd ref="-107"/>
-        <nd ref="-135"/>
-        <nd ref="-1035"/>
-        <tag k="length" v="141.8"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-1000"/>
-    </way>
-    <way visible="true" id="-984" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1084"/>
-        <nd ref="-1082"/>
-        <nd ref="-1110"/>
-        <nd ref="-1108"/>
-        <nd ref="-1107"/>
-        <nd ref="-1106"/>
-        <nd ref="-1159"/>
-        <nd ref="-762"/>
-        <nd ref="-770"/>
-        <nd ref="-769"/>
-        <nd ref="-768"/>
-        <nd ref="-767"/>
+    <way visible="true" id="-947" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1050"/>
+        <nd ref="-1022"/>
+        <nd ref="-1018"/>
+        <nd ref="-1024"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="363.9"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="1119"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Haveeree Hingun"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-984"/>
-    </way>
-    <way visible="true" id="-979" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-840"/>
-        <nd ref="-824"/>
-        <nd ref="-823"/>
-        <nd ref="-749"/>
-        <nd ref="-748"/>
-        <nd ref="-747"/>
-        <nd ref="-761"/>
-        <nd ref="-760"/>
-        <nd ref="-759"/>
-        <nd ref="-758"/>
-        <nd ref="-671"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="796.1"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="Bing"/>
-        <tag k="name" v="Muiveyo Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-979"/>
+        <tag k="hoot:id" v="-947"/>
     </way>
-    <way visible="true" id="-925" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-917" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-976"/>
         <nd ref="-978"/>
         <nd ref="-979"/>
@@ -4810,44 +4740,20 @@
         <nd ref="-985"/>
         <nd ref="-986"/>
         <nd ref="-987"/>
-        <nd ref="-988"/>
-        <nd ref="-1015"/>
-        <nd ref="-1017"/>
-        <nd ref="-938"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="2836"/>
-        <tag k="source:imagery" v="Unknown;DigitalGlobe"/>
+        <tag k="length" v="1701.6"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Fareedhee Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z;2019-01-24T18:58:28Z;2015-10-22T17:25:21.000Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-925"/>
-    </way>
-    <way visible="true" id="-913" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-976"/>
-        <nd ref="-422"/>
-        <nd ref="-1063"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="450.6"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Chandhanee Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paving_stones"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-913"/>
+        <tag k="hoot:id" v="-917"/>
     </way>
     <way visible="true" id="-878" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-930"/>
@@ -4880,10 +4786,20 @@
         <nd ref="-903"/>
         <nd ref="-923"/>
         <nd ref="-922"/>
+        <nd ref="-1080"/>
+        <nd ref="-1079"/>
+        <nd ref="-1078"/>
+        <nd ref="-1077"/>
+        <nd ref="-1076"/>
+        <nd ref="-1075"/>
+        <nd ref="-1074"/>
+        <nd ref="-1072"/>
+        <nd ref="-1071"/>
+        <nd ref="-274"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="28369.6"/>
+        <tag k="length" v="30352.6"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Majeedhee Magu"/>
@@ -4914,6 +4830,27 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-862"/>
     </way>
+    <way visible="true" id="-839" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-663"/>
+        <nd ref="-665"/>
+        <nd ref="-667"/>
+        <nd ref="-669"/>
+        <nd ref="-235"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="length" v="554.9"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Haveeree Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-839"/>
+    </way>
     <way visible="true" id="-832" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-323"/>
         <nd ref="-673"/>
@@ -4930,14 +4867,41 @@
         <tag k="length" v="557.8"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="Bing;DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
         <tag k="name" v="Kandi Dhon Maniku Goalhi"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-832"/>
+    </way>
+    <way visible="true" id="-766" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-560"/>
+        <nd ref="-559"/>
+        <nd ref="-558"/>
+        <nd ref="-557"/>
+        <nd ref="-555"/>
+        <nd ref="-646"/>
+        <nd ref="-643"/>
+        <nd ref="-642"/>
+        <nd ref="-640"/>
+        <nd ref="-637"/>
+        <nd ref="-635"/>
+        <nd ref="-633"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="334.9"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Kalhuhuraa Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-766"/>
     </way>
     <way visible="true" id="-751" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-521"/>
@@ -4998,24 +4962,52 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-720"/>
     </way>
-    <way visible="true" id="-517" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-238"/>
-        <nd ref="-828"/>
+    <way visible="true" id="-622" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-371"/>
+        <nd ref="-372"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="131.7"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="length" v="134.4"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Handhuvaree Hingun"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Jamaaludheen Hingun"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-517"/>
+        <tag k="hoot:id" v="-622"/>
     </way>
-    <way visible="true" id="-484" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-571" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-311"/>
+        <nd ref="-845"/>
+        <nd ref="-844"/>
+        <nd ref="-843"/>
+        <nd ref="-842"/>
+        <nd ref="-841"/>
+        <nd ref="-840"/>
+        <nd ref="-824"/>
+        <nd ref="-823"/>
+        <nd ref="-749"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="length" v="300.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Gulhazaaru Goalhi"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-571"/>
+    </way>
+    <way visible="true" id="-500" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-219"/>
+        <nd ref="-721"/>
         <nd ref="-199"/>
         <nd ref="-720"/>
         <nd ref="-719"/>
@@ -5028,7 +5020,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="507.6"/>
+        <tag k="length" v="761.4"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Maaveyo Magu"/>
@@ -5037,7 +5029,136 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-484"/>
+        <tag k="hoot:id" v="-500"/>
+    </way>
+    <way visible="true" id="-481" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-167"/>
+        <nd ref="-168"/>
+        <nd ref="-169"/>
+        <nd ref="-170"/>
+        <nd ref="-171"/>
+        <nd ref="-173"/>
+        <nd ref="-175"/>
+        <nd ref="-177"/>
+        <nd ref="-178"/>
+        <nd ref="-206"/>
+        <nd ref="-210"/>
+        <nd ref="-212"/>
+        <nd ref="-214"/>
+        <nd ref="-216"/>
+        <nd ref="-193"/>
+        <nd ref="-195"/>
+        <nd ref="-197"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="412.4"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Iskandharu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-10-08T14:35:12.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-481"/>
+    </way>
+    <way visible="true" id="-442" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1172"/>
+        <nd ref="-764"/>
+        <nd ref="-763"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="length" v="124.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Sabudheli Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-442"/>
+    </way>
+    <way visible="true" id="-432" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-767"/>
+        <nd ref="-768"/>
+        <nd ref="-769"/>
+        <nd ref="-770"/>
+        <nd ref="-762"/>
+        <nd ref="-1159"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="length" v="100.5"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Haveeree Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-432"/>
+    </way>
+    <way visible="true" id="-414" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-66"/>
+        <nd ref="-113"/>
+        <nd ref="-774"/>
+        <nd ref="-110"/>
+        <nd ref="-773"/>
+        <nd ref="-132"/>
+        <nd ref="-96"/>
+        <nd ref="-151"/>
+        <nd ref="-798"/>
+        <nd ref="-797"/>
+        <nd ref="-921"/>
+        <nd ref="-920"/>
+        <nd ref="-919"/>
+        <nd ref="-918"/>
+        <nd ref="-917"/>
+        <nd ref="-916"/>
+        <nd ref="-915"/>
+        <nd ref="-914"/>
+        <nd ref="-913"/>
+        <nd ref="-967"/>
+        <nd ref="-966"/>
+        <nd ref="-965"/>
+        <nd ref="-964"/>
+        <nd ref="-963"/>
+        <nd ref="-962"/>
+        <nd ref="-961"/>
+        <nd ref="-960"/>
+        <nd ref="-959"/>
+        <nd ref="-958"/>
+        <nd ref="-957"/>
+        <nd ref="-973"/>
+        <nd ref="-972"/>
+        <nd ref="-971"/>
+        <nd ref="-970"/>
+        <nd ref="-969"/>
+        <nd ref="-968"/>
+        <nd ref="-947"/>
+        <nd ref="-946"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="14169"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Boduthakurufaanu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-414"/>
     </way>
     <way visible="true" id="-408" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-368"/>
@@ -5052,42 +5173,19 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="623.2"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="559.2"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Chanbeylee Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z;2014-11-28T17:34:21.000Z"/>
-        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2014-11-28T17:34:21.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-408"/>
     </way>
-    <way visible="true" id="-398" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-998"/>
-        <nd ref="-1115"/>
-        <nd ref="-1114"/>
-        <nd ref="-1112"/>
-        <nd ref="-952"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="length" v="389.1"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="maxspeed" v="30"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Lonuziyaaraiy Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-03-09T18:17:04.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-398"/>
-    </way>
-    <way visible="true" id="-363" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-373" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-31"/>
         <nd ref="-30"/>
         <nd ref="-29"/>
@@ -5107,7 +5205,7 @@
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="bicycle" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1341.4"/>
+        <tag k="length" v="948.5"/>
         <tag k="sidewalk" v="both"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
@@ -5118,7 +5216,27 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-363"/>
+        <tag k="hoot:id" v="-373"/>
+    </way>
+    <way visible="true" id="-370" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1172"/>
+        <nd ref="-321"/>
+        <nd ref="-23"/>
+        <nd ref="-320"/>
+        <nd ref="-318"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="156"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Sabudheli Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-370"/>
     </way>
     <way visible="true" id="-185" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1097"/>
@@ -5230,13 +5348,13 @@
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="251.8"/>
-        <tag k="source:imagery" v="Unknown;DigitalGlobe"/>
+        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="unclassified"/>
+        <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-180"/>
     </way>
@@ -5266,30 +5384,50 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-178"/>
     </way>
-    <way visible="true" id="-175" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-891"/>
-        <nd ref="-1087"/>
-        <nd ref="-1085"/>
-        <nd ref="-1083"/>
-        <nd ref="-1109"/>
-        <nd ref="-1105"/>
-        <nd ref="-1103"/>
-        <nd ref="-1101"/>
-        <nd ref="-1100"/>
-        <nd ref="-1098"/>
+    <way visible="true" id="-177" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-998"/>
+        <nd ref="-1115"/>
+        <nd ref="-1114"/>
+        <nd ref="-1112"/>
+        <nd ref="-952"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="112.5"/>
+        <tag k="length" v="458.4"/>
+        <tag k="maxspeed" v="30"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="Bing"/>
-        <tag k="name" v="Sosun Magu"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Lonuziyaaraiy Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:datetime" v="2014-03-09T18:17:04.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="primary"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-175"/>
+        <tag k="hoot:id" v="-177"/>
+    </way>
+    <way visible="true" id="-176" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1084"/>
+        <nd ref="-1082"/>
+        <nd ref="-1110"/>
+        <nd ref="-1108"/>
+        <nd ref="-1107"/>
+        <nd ref="-1106"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="154.8"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Haveeree Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-176"/>
     </way>
     <way visible="true" id="-174" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1082"/>
@@ -5300,15 +5438,15 @@
         <nd ref="-1096"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="890.8"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="890.8"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Fulooniyaa Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-174"/>
     </way>
@@ -5356,16 +5494,16 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="1498"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="643.5"/>
         <tag k="maxspeed" v="30"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="fiЯas 16042011"/>
         <tag k="name" v="Buruzu Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-172"/>
@@ -5387,31 +5525,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-171"/>
-    </way>
-    <way visible="true" id="-170" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-922"/>
-        <nd ref="-1080"/>
-        <nd ref="-1079"/>
-        <nd ref="-1078"/>
-        <nd ref="-1077"/>
-        <nd ref="-1076"/>
-        <nd ref="-1075"/>
-        <nd ref="-1074"/>
-        <nd ref="-1072"/>
-        <nd ref="-1071"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1983"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Majeedhee Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-09T14:42:24.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="primary"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-170"/>
     </way>
     <way visible="true" id="-169" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-988"/>
@@ -5483,12 +5596,6 @@
         <tag k="hoot:id" v="-167"/>
     </way>
     <way visible="true" id="-166" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1046"/>
-        <nd ref="-1047"/>
-        <nd ref="-1049"/>
-        <nd ref="-1050"/>
-        <nd ref="-1022"/>
-        <nd ref="-1018"/>
         <nd ref="-1024"/>
         <nd ref="-1026"/>
         <nd ref="-1028"/>
@@ -5501,7 +5608,7 @@
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="2611"/>
+        <tag k="length" v="1119"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Haveeree Hingun"/>
@@ -5560,27 +5667,27 @@
         <tag k="hoot:id" v="-163"/>
     </way>
     <way visible="true" id="-162" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1060"/>
-        <nd ref="-1058"/>
-        <nd ref="-1056"/>
-        <nd ref="-1052"/>
-        <nd ref="-1051"/>
-        <nd ref="-1081"/>
-        <nd ref="-1073"/>
-        <nd ref="-1067"/>
         <nd ref="-1048"/>
+        <nd ref="-1067"/>
+        <nd ref="-1073"/>
+        <nd ref="-1081"/>
+        <nd ref="-1051"/>
+        <nd ref="-1052"/>
+        <nd ref="-1056"/>
+        <nd ref="-1058"/>
+        <nd ref="-1060"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="685.2"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="685.2"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Medhuziyaarai Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-162"/>
     </way>
@@ -5611,21 +5718,55 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="1256.1"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="597"/>
         <tag k="maxspeed" v="30"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Lonuziyaaraiy Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-03-09T18:17:04.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-160"/>
     </way>
+    <way visible="true" id="-159" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-987"/>
+        <nd ref="-988"/>
+        <nd ref="-1015"/>
+        <nd ref="-1017"/>
+        <nd ref="-938"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="1134.4"/>
+        <tag k="source:imagery" v="Unknown;DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Fareedhee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:46:42.000Z;2015-10-22T17:25:21.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-159"/>
+    </way>
     <way visible="true" id="-158" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1114"/>
+        <nd ref="-114"/>
+        <nd ref="-115"/>
+        <nd ref="-117"/>
+        <nd ref="-118"/>
+        <nd ref="-120"/>
+        <nd ref="-122"/>
+        <nd ref="-150"/>
+        <nd ref="-153"/>
+        <nd ref="-155"/>
+        <nd ref="-157"/>
+        <nd ref="-160"/>
+        <nd ref="-137"/>
         <nd ref="-977"/>
         <nd ref="-982"/>
         <nd ref="-1016"/>
@@ -5641,7 +5782,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="183.6"/>
+        <tag k="length" v="353.7"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
@@ -5666,66 +5807,37 @@
         <nd ref="-952"/>
         <nd ref="-951"/>
         <nd ref="-950"/>
-        <tag k="length" v="666"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="length" v="1918.7"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Ameenee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-10-08T02:57:44.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-157"/>
     </way>
     <way visible="true" id="-156" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-949"/>
         <nd ref="-948"/>
-        <tag k="length" v="97.1"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-156"/>
-    </way>
-    <way visible="true" id="-155" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-921"/>
-        <nd ref="-920"/>
-        <nd ref="-919"/>
-        <nd ref="-918"/>
-        <nd ref="-917"/>
-        <nd ref="-916"/>
-        <nd ref="-915"/>
-        <nd ref="-914"/>
-        <nd ref="-913"/>
-        <nd ref="-967"/>
-        <nd ref="-966"/>
-        <nd ref="-965"/>
-        <nd ref="-964"/>
-        <nd ref="-963"/>
-        <nd ref="-962"/>
-        <nd ref="-961"/>
-        <nd ref="-960"/>
-        <nd ref="-959"/>
-        <nd ref="-958"/>
-        <nd ref="-957"/>
-        <nd ref="-973"/>
-        <nd ref="-972"/>
-        <nd ref="-971"/>
-        <nd ref="-970"/>
-        <nd ref="-969"/>
-        <nd ref="-968"/>
-        <nd ref="-947"/>
-        <nd ref="-946"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="length" v="87.3"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="12850.2"/>
-        <tag k="sidewalk" v="both"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Boduthakurufaanu Magu"/>
+        <tag k="name" v="Hithigas Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:datetime" v="2011-08-06T19:57:25.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="unclassified"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-155"/>
+        <tag k="hoot:id" v="-156"/>
     </way>
     <way visible="true" id="-154" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-898"/>
@@ -5749,15 +5861,15 @@
         <nd ref="-930"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="3546.2"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="251.8"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-154"/>
     </way>
@@ -5765,10 +5877,19 @@
         <nd ref="-893"/>
         <nd ref="-892"/>
         <nd ref="-891"/>
+        <nd ref="-1087"/>
+        <nd ref="-1085"/>
+        <nd ref="-1083"/>
+        <nd ref="-1109"/>
+        <nd ref="-1105"/>
+        <nd ref="-1103"/>
+        <nd ref="-1101"/>
+        <nd ref="-1100"/>
+        <nd ref="-1098"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="141.5"/>
+        <tag k="length" v="225"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Sosun Magu"/>
@@ -5795,15 +5916,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-152"/>
-    </way>
-    <way visible="true" id="-151" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-235"/>
-        <nd ref="-669"/>
-        <tag k="length" v="42.4"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-151"/>
     </way>
     <way visible="true" id="-150" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-201"/>
@@ -5880,17 +5992,18 @@
         <nd ref="-858"/>
         <nd ref="-857"/>
         <nd ref="-238"/>
+        <nd ref="-828"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="131.7"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="263.4"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="Bing"/>
-        <tag k="name" v="Sabudheli Magu"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Handhuvaree Hingun"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:21.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-147"/>
     </way>
@@ -6000,15 +6113,15 @@
         <nd ref="-825"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="62.9"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="62.9"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Dhakandhaa Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-11-28T17:29:47.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-141"/>
     </way>
@@ -6019,16 +6132,10 @@
         <nd ref="-1167"/>
         <nd ref="-846"/>
         <nd ref="-311"/>
-        <nd ref="-845"/>
-        <nd ref="-844"/>
-        <nd ref="-843"/>
-        <nd ref="-842"/>
-        <nd ref="-841"/>
-        <nd ref="-840"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="900.6"/>
+        <tag k="length" v="600.4"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Muranga Magu"/>
@@ -6056,10 +6163,17 @@
         <nd ref="-819"/>
         <nd ref="-467"/>
         <nd ref="-818"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="83.6"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Rah Dhebai Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:51:54.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-138"/>
     </way>
     <way visible="true" id="-137" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
@@ -6119,6 +6233,24 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-135"/>
+    </way>
+    <way visible="true" id="-134" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1106"/>
+        <nd ref="-1159"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="length" v="100.5"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Haveeree Hingun"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-134"/>
     </way>
     <way visible="true" id="-133" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-124"/>
@@ -6191,30 +6323,6 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-130"/>
     </way>
-    <way visible="true" id="-129" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-132"/>
-        <nd ref="-96"/>
-        <nd ref="-151"/>
-        <nd ref="-798"/>
-        <nd ref="-797"/>
-        <nd ref="-921"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1240.2"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Boduthakurufaanu Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="primary"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-129"/>
-    </way>
     <way visible="true" id="-128" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-921"/>
         <nd ref="-796"/>
@@ -6223,15 +6331,15 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="528.2"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="528.2"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Maafaithakurufaanu Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2015-02-17T19:01:34.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-128"/>
     </way>
@@ -6261,21 +6369,10 @@
         <nd ref="-10"/>
         <nd ref="-783"/>
         <nd ref="-132"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="length" v="828.9"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Boduthakurufaanu Magu"/>
-        <tag k="foot" v="yes"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-02-17T19:01:33.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="primary"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-125"/>
     </way>
     <way visible="true" id="-124" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
@@ -6331,60 +6428,52 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-121"/>
     </way>
-    <way visible="true" id="-120" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-66"/>
-        <nd ref="-113"/>
-        <nd ref="-774"/>
-        <nd ref="-110"/>
-        <nd ref="-773"/>
-        <nd ref="-132"/>
-        <tag k="length" v="833.4"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-120"/>
-    </way>
     <way visible="true" id="-119" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-930"/>
-        <nd ref="-780"/>
-        <nd ref="-779"/>
-        <nd ref="-778"/>
-        <nd ref="-777"/>
-        <nd ref="-766"/>
-        <nd ref="-765"/>
         <nd ref="-1034"/>
+        <nd ref="-765"/>
+        <nd ref="-766"/>
+        <nd ref="-777"/>
+        <nd ref="-778"/>
+        <nd ref="-779"/>
+        <nd ref="-780"/>
+        <nd ref="-930"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="204.9"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="length" v="373.0"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Boduthakurufaanu magu"/>
+        <tag k="name" v="Haveeree Hingun"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-119"/>
     </way>
-    <way visible="true" id="-118" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-321"/>
-        <nd ref="-1172"/>
-        <nd ref="-764"/>
-        <nd ref="-763"/>
+    <way visible="true" id="-117" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
+        <nd ref="-749"/>
+        <nd ref="-748"/>
+        <nd ref="-747"/>
+        <nd ref="-761"/>
+        <nd ref="-760"/>
+        <nd ref="-759"/>
+        <nd ref="-758"/>
+        <nd ref="-671"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="248.6"/>
+        <tag k="length" v="195.7"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
-        <tag k="name" v="Sabudheli Magu"/>
+        <tag k="name" v="Muiveyo Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-118"/>
+        <tag k="hoot:id" v="-117"/>
     </way>
     <way visible="true" id="-116" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-197"/>
@@ -6393,15 +6482,15 @@
         <nd ref="-755"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="58.5"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="58.5"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Badifasgandu Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-11-28T17:31:28.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-116"/>
     </way>
@@ -6409,12 +6498,10 @@
         <nd ref="-1139"/>
         <nd ref="-722"/>
         <nd ref="-219"/>
-        <nd ref="-721"/>
-        <nd ref="-199"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="507.6"/>
+        <tag k="length" v="253.8"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Koarukendi Hingun"/>
@@ -6443,8 +6530,8 @@
         <tag k="hoot:id" v="-114"/>
     </way>
     <way visible="true" id="-113" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-938"/>
         <nd ref="-750"/>
+        <nd ref="-938"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
@@ -6480,10 +6567,10 @@
         <tag k="length" v="133.1"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Nikagas Hingun"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Thabureyzee Higun"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:59:00.000Z;2019-01-24T18:58:28Z"/>
         <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
@@ -6582,47 +6669,6 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-107"/>
     </way>
-    <way visible="true" id="-106" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-912"/>
-        <nd ref="-612"/>
-        <nd ref="-692"/>
-        <nd ref="-690"/>
-        <nd ref="-689"/>
-        <nd ref="-687"/>
-        <nd ref="-686"/>
-        <nd ref="-684"/>
-        <nd ref="-682"/>
-        <nd ref="-681"/>
-        <nd ref="-680"/>
-        <nd ref="-678"/>
-        <nd ref="-677"/>
-        <nd ref="-676"/>
-        <nd ref="-711"/>
-        <nd ref="-709"/>
-        <nd ref="-708"/>
-        <nd ref="-706"/>
-        <nd ref="-704"/>
-        <nd ref="-703"/>
-        <nd ref="-702"/>
-        <nd ref="-699"/>
-        <nd ref="-698"/>
-        <nd ref="-352"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="196.5"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Chandhanee Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paving_stones"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-106"/>
-    </way>
     <way visible="true" id="-105" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-707"/>
         <nd ref="-697"/>
@@ -6665,19 +6711,19 @@
         <tag k="hoot:id" v="-104"/>
     </way>
     <way visible="true" id="-103" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-663"/>
-        <nd ref="-665"/>
-        <nd ref="-667"/>
         <nd ref="-669"/>
         <nd ref="-693"/>
         <nd ref="-694"/>
         <nd ref="-695"/>
         <nd ref="-1046"/>
+        <nd ref="-1047"/>
+        <nd ref="-1049"/>
+        <nd ref="-1050"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1537.5"/>
+        <tag k="length" v="1258.5"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Haveeree Hingun"/>
@@ -6704,14 +6750,14 @@
         <nd ref="-664"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="45.2"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="45.2"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="Roashanee Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2015-10-22T17:31:39.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-100"/>
     </way>
@@ -6767,54 +6813,46 @@
         <nd ref="-649"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="175.4"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="175.4"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Abadhah Fehi Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-11-28T17:55:00.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-97"/>
     </way>
     <way visible="true" id="-96" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-544"/>
-        <nd ref="-543"/>
-        <nd ref="-542"/>
-        <nd ref="-539"/>
-        <nd ref="-537"/>
-        <nd ref="-574"/>
-        <nd ref="-571"/>
-        <nd ref="-570"/>
-        <nd ref="-569"/>
-        <nd ref="-567"/>
-        <nd ref="-565"/>
-        <nd ref="-563"/>
         <nd ref="-560"/>
-        <nd ref="-559"/>
-        <nd ref="-558"/>
-        <nd ref="-557"/>
-        <nd ref="-555"/>
-        <nd ref="-646"/>
-        <nd ref="-643"/>
-        <nd ref="-642"/>
-        <nd ref="-640"/>
-        <nd ref="-637"/>
-        <nd ref="-635"/>
-        <nd ref="-633"/>
+        <nd ref="-563"/>
+        <nd ref="-565"/>
+        <nd ref="-567"/>
+        <nd ref="-569"/>
+        <nd ref="-570"/>
+        <nd ref="-571"/>
+        <nd ref="-574"/>
+        <nd ref="-537"/>
+        <nd ref="-539"/>
+        <nd ref="-542"/>
+        <nd ref="-543"/>
+        <nd ref="-544"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="669.8"/>
+        <tag k="length" v="334.9"/>
+        <tag k="maxspeed" v="30"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="Bing"/>
-        <tag k="name" v="Kalhuhuraa Magu"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Alikilegefaanu Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
+        <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-96"/>
     </way>
@@ -6920,19 +6958,19 @@
         <nd ref="-1080"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="485.7"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="485.7"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Sosun Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-90"/>
     </way>
-    <way visible="true" id="-89" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-89" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1080"/>
         <nd ref="-605"/>
         <nd ref="-604"/>
@@ -6945,7 +6983,7 @@
         <nd ref="-1118"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="238"/>
+        <tag k="length" v="119.0"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
@@ -7027,16 +7065,16 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="228.2"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="228.2"/>
         <tag k="maxspeed" v="30"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Alikilegefaanu Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-11-28T17:51:53.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-85"/>
@@ -7123,8 +7161,8 @@
         <tag k="hoot:id" v="-81"/>
     </way>
     <way visible="true" id="-80" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-976"/>
         <nd ref="-514"/>
+        <nd ref="-976"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
@@ -7212,7 +7250,7 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-76"/>
     </way>
-    <way visible="true" id="-75" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-75" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-405"/>
         <nd ref="-497"/>
         <nd ref="-494"/>
@@ -7262,6 +7300,50 @@
         <tag k="hoot:id" v="-74"/>
     </way>
     <way visible="true" id="-73" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-237"/>
+        <nd ref="-235"/>
+        <nd ref="-319"/>
+        <nd ref="-317"/>
+        <nd ref="-314"/>
+        <nd ref="-310"/>
+        <nd ref="-338"/>
+        <nd ref="-336"/>
+        <nd ref="-332"/>
+        <nd ref="-329"/>
+        <nd ref="-326"/>
+        <nd ref="-325"/>
+        <nd ref="-323"/>
+        <nd ref="-295"/>
+        <nd ref="-291"/>
+        <nd ref="-288"/>
+        <nd ref="-287"/>
+        <nd ref="-1070"/>
+        <nd ref="-308"/>
+        <nd ref="-307"/>
+        <nd ref="-895"/>
+        <nd ref="-305"/>
+        <nd ref="-304"/>
+        <nd ref="-303"/>
+        <nd ref="-133"/>
+        <nd ref="-301"/>
+        <nd ref="-296"/>
+        <nd ref="-381"/>
+        <nd ref="-379"/>
+        <nd ref="-376"/>
+        <nd ref="-373"/>
+        <nd ref="-370"/>
+        <nd ref="-369"/>
+        <nd ref="-396"/>
+        <nd ref="-394"/>
+        <nd ref="-391"/>
+        <nd ref="-387"/>
+        <nd ref="-386"/>
+        <nd ref="-384"/>
+        <nd ref="-357"/>
+        <nd ref="-355"/>
+        <nd ref="-351"/>
+        <nd ref="-350"/>
+        <nd ref="-271"/>
         <nd ref="-347"/>
         <nd ref="-448"/>
         <nd ref="-447"/>
@@ -7269,17 +7351,20 @@
         <nd ref="-260"/>
         <nd ref="-445"/>
         <nd ref="-344"/>
+        <nd ref="-191"/>
+        <nd ref="-343"/>
+        <nd ref="-342"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="1323.6"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="18177.6"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-10-09T14:42:23.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-73"/>
     </way>
@@ -7303,10 +7388,10 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="378.1"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="Bing;DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe;Bing"/>
         <tag k="name" v="Shaariu Varudhee"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:34:20.000Z;2014-11-28T17:34:21.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:34:21.000Z;2014-11-28T17:34:20.000Z;2019-01-24T18:58:28Z"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
@@ -7325,19 +7410,6 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-71"/>
-    </way>
-    <way visible="true" id="-70" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-466"/>
-        <nd ref="-402"/>
-        <nd ref="-400"/>
-        <nd ref="-399"/>
-        <nd ref="-434"/>
-        <nd ref="-432"/>
-        <tag k="length" v="195.2"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-70"/>
     </way>
     <way visible="true" id="-69" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-433"/>
@@ -7369,6 +7441,8 @@
         <tag k="hoot:id" v="-68"/>
     </way>
     <way visible="true" id="-67" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1063"/>
+        <nd ref="-422"/>
         <nd ref="-976"/>
         <nd ref="-406"/>
         <nd ref="-425"/>
@@ -7376,11 +7450,47 @@
         <nd ref="-428"/>
         <nd ref="-429"/>
         <nd ref="-912"/>
+        <nd ref="-612"/>
+        <nd ref="-692"/>
+        <nd ref="-690"/>
+        <nd ref="-689"/>
+        <nd ref="-687"/>
+        <nd ref="-686"/>
+        <nd ref="-684"/>
+        <nd ref="-682"/>
+        <nd ref="-681"/>
+        <nd ref="-680"/>
+        <nd ref="-678"/>
+        <nd ref="-677"/>
+        <nd ref="-676"/>
+        <nd ref="-711"/>
+        <nd ref="-709"/>
+        <nd ref="-708"/>
+        <nd ref="-706"/>
+        <nd ref="-704"/>
+        <nd ref="-703"/>
+        <nd ref="-702"/>
+        <nd ref="-699"/>
+        <nd ref="-698"/>
+        <nd ref="-352"/>
+        <nd ref="-353"/>
+        <nd ref="-354"/>
+        <nd ref="-356"/>
+        <nd ref="-382"/>
+        <nd ref="-383"/>
+        <nd ref="-385"/>
+        <nd ref="-388"/>
+        <nd ref="-389"/>
+        <nd ref="-390"/>
+        <nd ref="-392"/>
+        <nd ref="-393"/>
+        <nd ref="-395"/>
+        <nd ref="-377"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1351.8"/>
+        <tag k="length" v="2217"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Chandhanee Magu"/>
@@ -7429,10 +7539,18 @@
         <nd ref="-968"/>
         <nd ref="-412"/>
         <nd ref="-461"/>
-        <tag k="length" v="102.4"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="length" v="1474.7"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="name" v="Ameenee Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-10-08T02:57:44.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-64"/>
     </way>
     <way visible="true" id="-63" timestamp="2019-01-24T18:58:28Z" version="1">
@@ -7440,9 +7558,14 @@
         <nd ref="-436"/>
         <nd ref="-435"/>
         <nd ref="-466"/>
+        <nd ref="-402"/>
+        <nd ref="-400"/>
+        <nd ref="-399"/>
+        <nd ref="-434"/>
+        <nd ref="-432"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="413.6"/>
+        <tag k="length" v="608.8"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
@@ -7484,16 +7607,16 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="539.8"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="404.4"/>
         <tag k="maxspeed" v="30"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="fiЯas 16042011"/>
         <tag k="name" v="Buruzu Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-61"/>
@@ -7504,19 +7627,18 @@
         <nd ref="-375"/>
         <nd ref="-374"/>
         <nd ref="-372"/>
-        <nd ref="-371"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="537.6"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="403.2"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Iskandharu Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-10-08T14:35:12.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-60"/>
     </way>
@@ -7544,42 +7666,19 @@
         <nd ref="-360"/>
         <nd ref="-359"/>
         <nd ref="-342"/>
-        <tag k="length" v="17.6"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-57"/>
-    </way>
-    <way visible="true" id="-56" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-352"/>
-        <nd ref="-353"/>
-        <nd ref="-354"/>
-        <nd ref="-356"/>
-        <nd ref="-382"/>
-        <nd ref="-383"/>
-        <nd ref="-385"/>
-        <nd ref="-388"/>
-        <nd ref="-389"/>
-        <nd ref="-390"/>
-        <nd ref="-392"/>
-        <nd ref="-393"/>
-        <nd ref="-395"/>
-        <nd ref="-377"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="length" v="276.4"/>
+        <tag k="length" v="17.6"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Chandhanee Magu"/>
+        <tag k="name" v="Boduthakurufaanu magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2014-10-09T14:42:23.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="surface" v="paving_stones"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-56"/>
+        <tag k="hoot:id" v="-57"/>
     </way>
     <way visible="true" id="-55" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-252"/>
@@ -7590,54 +7689,10 @@
         <nd ref="-241"/>
         <nd ref="-239"/>
         <nd ref="-237"/>
-        <nd ref="-235"/>
-        <nd ref="-319"/>
-        <nd ref="-317"/>
-        <nd ref="-314"/>
-        <nd ref="-310"/>
-        <nd ref="-338"/>
-        <nd ref="-336"/>
-        <nd ref="-332"/>
-        <nd ref="-329"/>
-        <nd ref="-326"/>
-        <nd ref="-325"/>
-        <nd ref="-323"/>
-        <nd ref="-295"/>
-        <nd ref="-291"/>
-        <nd ref="-288"/>
-        <nd ref="-287"/>
-        <nd ref="-1070"/>
-        <nd ref="-308"/>
-        <nd ref="-307"/>
-        <nd ref="-895"/>
-        <nd ref="-305"/>
-        <nd ref="-304"/>
-        <nd ref="-303"/>
-        <nd ref="-133"/>
-        <nd ref="-301"/>
-        <nd ref="-296"/>
-        <nd ref="-381"/>
-        <nd ref="-379"/>
-        <nd ref="-376"/>
-        <nd ref="-373"/>
-        <nd ref="-370"/>
-        <nd ref="-369"/>
-        <nd ref="-396"/>
-        <nd ref="-394"/>
-        <nd ref="-391"/>
-        <nd ref="-387"/>
-        <nd ref="-386"/>
-        <nd ref="-384"/>
-        <nd ref="-357"/>
-        <nd ref="-355"/>
-        <nd ref="-351"/>
-        <nd ref="-350"/>
-        <nd ref="-271"/>
-        <nd ref="-347"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="26551"/>
+        <tag k="length" v="7586"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu magu"/>
@@ -7669,17 +7724,6 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-54"/>
     </way>
-    <way visible="true" id="-53" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-344"/>
-        <nd ref="-191"/>
-        <nd ref="-343"/>
-        <nd ref="-342"/>
-        <tag k="length" v="127.2"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-53"/>
-    </way>
     <way visible="true" id="-52" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-105"/>
         <nd ref="-327"/>
@@ -7707,25 +7751,6 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-52"/>
-    </way>
-    <way visible="true" id="-51" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-321"/>
-        <nd ref="-23"/>
-        <nd ref="-320"/>
-        <nd ref="-318"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="156"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="Bing"/>
-        <tag k="name" v="Sabudheli Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-51"/>
     </way>
     <way visible="true" id="-50" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-876"/>
@@ -7866,15 +7891,6 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-42"/>
     </way>
-    <way visible="true" id="-41" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-1071"/>
-        <nd ref="-274"/>
-        <tag k="length" v="52.0"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-41"/>
-    </way>
     <way visible="true" id="-40" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-191"/>
         <nd ref="-190"/>
@@ -7987,29 +8003,30 @@
         <tag k="hoot:id" v="-36"/>
     </way>
     <way visible="true" id="-35" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-1044"/>
-        <nd ref="-130"/>
-        <nd ref="-127"/>
-        <nd ref="-125"/>
-        <nd ref="-204"/>
-        <nd ref="-203"/>
-        <nd ref="-200"/>
-        <nd ref="-196"/>
-        <nd ref="-194"/>
-        <nd ref="-215"/>
-        <nd ref="-213"/>
         <nd ref="-211"/>
+        <nd ref="-213"/>
+        <nd ref="-215"/>
+        <nd ref="-194"/>
+        <nd ref="-196"/>
+        <nd ref="-200"/>
+        <nd ref="-203"/>
+        <nd ref="-204"/>
+        <nd ref="-125"/>
+        <nd ref="-127"/>
+        <nd ref="-130"/>
+        <nd ref="-1044"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="oneway" v="yes"/>
         <tag k="length" v="102.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Ameeru Ahmed Magu"/>
+        <tag k="name" v="Meheli Goalhi"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2015-10-31T17:36:18.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:datetime" v="2014-11-28T17:58:16.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-35"/>
     </way>
@@ -8124,27 +8141,11 @@
         <nd ref="-199"/>
         <nd ref="-198"/>
         <nd ref="-197"/>
-        <nd ref="-195"/>
-        <nd ref="-193"/>
-        <nd ref="-216"/>
-        <nd ref="-214"/>
-        <nd ref="-212"/>
-        <nd ref="-210"/>
-        <nd ref="-206"/>
-        <nd ref="-178"/>
-        <nd ref="-177"/>
-        <nd ref="-175"/>
-        <nd ref="-173"/>
-        <nd ref="-171"/>
-        <nd ref="-170"/>
-        <nd ref="-169"/>
-        <nd ref="-168"/>
-        <nd ref="-167"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1649.6"/>
+        <tag k="length" v="1237.2"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Iskandharu Magu"/>
@@ -8167,7 +8168,7 @@
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="86.3"/>
+        <tag k="length" v="102.2"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Meheli Goalhi"/>
@@ -8235,10 +8236,21 @@
         <nd ref="-147"/>
         <nd ref="-144"/>
         <nd ref="-1088"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="length" v="403.5"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="fiЯas 16042011"/>
+        <tag k="name" v="Buruzu Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:20.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-24"/>
     </way>
     <way visible="true" id="-23" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
@@ -8251,10 +8263,15 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-23"/>
     </way>
-    <way visible="true" id="-22" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-111"/>
-        <nd ref="-112"/>
+    <way visible="true" id="-22" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-120"/>
+        <nd ref="-112"/>
+        <nd ref="-111"/>
+        <nd ref="-109"/>
+        <nd ref="-108"/>
+        <nd ref="-107"/>
+        <nd ref="-135"/>
+        <nd ref="-1035"/>
         <tag k="length" v="141.8"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
@@ -8340,36 +8357,6 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-16"/>
-    </way>
-    <way visible="true" id="-15" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1114"/>
-        <nd ref="-114"/>
-        <nd ref="-115"/>
-        <nd ref="-117"/>
-        <nd ref="-118"/>
-        <nd ref="-120"/>
-        <nd ref="-122"/>
-        <nd ref="-150"/>
-        <nd ref="-153"/>
-        <nd ref="-155"/>
-        <nd ref="-157"/>
-        <nd ref="-160"/>
-        <nd ref="-137"/>
-        <nd ref="-977"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="length" v="261.9"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="name" v="Hithigas Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2011-08-06T19:57:25.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-15"/>
     </way>
     <way visible="true" id="-14" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-148"/>
@@ -8504,17 +8491,10 @@
     <way visible="true" id="-7" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-94"/>
         <nd ref="-87"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="length" v="21.3"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="name" v="Rah Dhebai Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:51:54.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-7"/>
     </way>
     <way visible="true" id="-6" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
@@ -8605,15 +8585,15 @@
         <nd ref="-24"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="length" v="20645.8"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="20645.8"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Ameenee Magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-10-08T02:57:44.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="primary"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-3"/>
     </way>
@@ -8654,16 +8634,16 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
-        <tag k="length" v="717"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="717"/>
         <tag k="maxspeed" v="25"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="local knowledge"/>
         <tag k="name" v="Rah Dhebai Hingun"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2014-11-28T17:43:41.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-1"/>

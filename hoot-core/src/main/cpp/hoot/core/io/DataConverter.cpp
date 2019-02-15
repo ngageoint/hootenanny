@@ -114,7 +114,8 @@ void ogrWriterThread::run()
   v8::Locker v8Lock(threadIsolate);
 
   bool done = false;
-  std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
+  std::pair<boost::shared_ptr<geos::geom::Geometry>,
+    std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
 
   // Setup writer
   boost::shared_ptr<OgrWriter> ogrWriter;

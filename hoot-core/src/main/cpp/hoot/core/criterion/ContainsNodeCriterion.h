@@ -48,7 +48,7 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone()
+  virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ContainsNodeCriterion(_nodeId)); }
 
   virtual QString getDescription() const

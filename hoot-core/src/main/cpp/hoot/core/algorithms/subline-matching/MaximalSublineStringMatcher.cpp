@@ -349,7 +349,6 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   LOG_TRACE("Validating element " << eid << "...");
 
   ConstElementPtr e = map->getElement(eid);
-  LOG_VART(e.get());
 
   if (e->getElementType() == ElementType::Relation)
   {
@@ -375,7 +374,6 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
-    LOG_VART(w.get());
 
     if (w->getNodeCount() <= 1)
     {

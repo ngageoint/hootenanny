@@ -68,6 +68,14 @@
         "name": "WayJoiner",
         "defaultvalue": "hoot::WayJoiner2",
         "hoot_key": "way.joiner"
+      },
+      {
+        "id": "attribute_allow_ref_geometry_bridge_changes",
+        "elem_type": "bool",
+        "description": "If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate bridge features.  If false, any bridge features represented in the secondary dataset, but not in the reference dataset will be lost.",
+        "name": "Allow Reference Geometry Changes For Bridges",
+        "defaultvalue": "true",
+        "hoot_key": "attribute.conflation.allow.ref.geometry.changes.for.bridges",
       }
     ]
 
