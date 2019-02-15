@@ -77,16 +77,10 @@ void ClosePointHash::resetIterator()
 
 int64_t ClosePointHash::_toBin(double x, double y)
 {
-  struct
-  {
-    int32_t x;
-    int32_t y;
-  } p;
+  uint64_t xi = (uint32_t)(x / _binSize + 0.5);
+  uint64_t yi = (uint32_t)(y / _binSize + 0.5);
 
-  p.x = (int32_t)(x / _binSize + 0.5);
-  p.y = (int32_t)(y / _binSize + 0.5);
-
-  return *(int64_t *)&p;
+  return (yi << 32) | xi;
 }
 
 }
