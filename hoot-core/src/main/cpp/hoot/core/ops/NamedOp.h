@@ -50,11 +50,11 @@ public:
   NamedOp();
   NamedOp(QStringList namedOps);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const override { return ""; }
 
 private:
 

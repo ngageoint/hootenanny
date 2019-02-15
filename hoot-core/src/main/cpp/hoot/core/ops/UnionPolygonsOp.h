@@ -47,11 +47,11 @@ public:
 
   UnionPolygonsOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual QString getDescription() const { return "Combines all areas"; }
+  virtual QString getDescription() const override { return "Combines all areas"; }
 };
 
 }

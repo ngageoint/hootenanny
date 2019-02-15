@@ -49,7 +49,7 @@ public:
   TagValueNumericRangeCriterion(const QStringList tagKeys, const long rangeMin,
                                 const long rangeMax);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new TagValueNumericRangeCriterion()); }

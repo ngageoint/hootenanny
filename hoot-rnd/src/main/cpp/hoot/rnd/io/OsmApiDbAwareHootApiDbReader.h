@@ -47,9 +47,9 @@ public:
 
   virtual ~OsmApiDbAwareHootApiDbReader();
 
-  virtual void open(QString urlStr);
+  virtual void open(QString urlStr) override;
 
-  virtual QString supportedFormats() { return "osmapidb://"; }
+  virtual QString supportedFormats() override { return "osmapidb://"; }
 
 protected:
 

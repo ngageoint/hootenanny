@@ -71,7 +71,7 @@ public:
    * @brief apply - perform the operation on the map (see class description)
    * @param map - map to operate on
    */
-  virtual void apply(boost::shared_ptr<OsmMap> &map);
+  virtual void apply(boost::shared_ptr<OsmMap> &map) override;
 
   /**
    * @brief getClassName - get the namespace-qualified class name
@@ -79,7 +79,7 @@ public:
    */
   virtual std::string getClassName() const { return className(); }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Allows for filtering building parts out of buildings"; }
 
 private:

@@ -58,16 +58,16 @@ public:
 
   static std::string className() { return "hoot::MeanWordSetDistance"; }
 
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
   virtual void setConfiguration(const Settings& conf) { _tokenizer.setConfiguration(conf); }
 
   virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
 
-  virtual QString toString() const
+  virtual QString toString() const override
   { return QString("MeanWordSet %1 %2").arg(_p).arg(_d->toString()); }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Returns a score based on the mean distance between two sets of words"; }
 
 private:

@@ -45,7 +45,7 @@ public:
 
   ProvenanceAwareOverwriteTagMerger(bool swap = false);
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   virtual QString getDescription() const
   { return "Overwrites tags secondary feature tags with reference tags while maintaining provenance (experimental)"; }

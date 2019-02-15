@@ -51,7 +51,7 @@ public:
 
   const boost::shared_ptr<geos::geom::Geometry>& getUnion() const { return _result; }
 
-  virtual void visit(const boost::shared_ptr<const Element>& e);
+  virtual void visit(const boost::shared_ptr<const Element>& e) override;
 
   virtual QString getDescription() const { return "Unions all areas to create a single geometry"; }
 

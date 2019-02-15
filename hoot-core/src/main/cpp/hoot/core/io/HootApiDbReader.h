@@ -59,11 +59,11 @@ public:
 
 protected:
 
-  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
+  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) override;
+  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
 
-  virtual boost::shared_ptr<ApiDb> _getDatabase() const { return _database; }
+  virtual boost::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
   virtual QString supportedFormats() { return "hootapidb://"; }
 

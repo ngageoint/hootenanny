@@ -45,7 +45,7 @@ public:
 
   RailwayCriterion();
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RailwayCriterion()); }

@@ -43,7 +43,7 @@ public:
   static std::string className() { return "hoot::ExactTagDifferencer"; }
 
   virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-    const ConstElementPtr& e2) const;
+    const ConstElementPtr& e2) const override;
 };
 
 }

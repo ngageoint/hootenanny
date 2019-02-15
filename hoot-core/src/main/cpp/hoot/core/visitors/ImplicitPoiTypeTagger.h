@@ -45,7 +45,7 @@ public:
   ImplicitPoiTypeTagger();
   ImplicitPoiTypeTagger(const QString databasePath);
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Adds tags to POIs implicitly derived from their names"; }
 
 protected:

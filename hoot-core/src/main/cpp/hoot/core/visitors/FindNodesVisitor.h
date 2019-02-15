@@ -45,9 +45,9 @@ public:
 
   FindNodesVisitor(ElementCriterion* pCrit);
 
-  void setOsmMap(const OsmMap* map) { _map = map; }
+  void setOsmMap(const OsmMap* map) override { _map = map; }
 
-  void visit(const boost::shared_ptr<const Element>& e);
+  void visit(const boost::shared_ptr<const Element>& e) override;
 
   // Get matching IDs
   std::vector<long> getIds() { return _nodeIds; }

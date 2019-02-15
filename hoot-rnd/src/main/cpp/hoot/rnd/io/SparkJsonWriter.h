@@ -77,17 +77,17 @@ public:
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstNodePtr& n);
+  virtual void writePartial(const ConstNodePtr& n) override;
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstWayPtr&) { throw NotImplementedException(); }
+  virtual void writePartial(const ConstWayPtr&) override { throw NotImplementedException(); }
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstRelationPtr&) { throw NotImplementedException(); }
+  virtual void writePartial(const ConstRelationPtr&) override { throw NotImplementedException(); }
 
   //no point in showing this in the format list at this point, since its not actively maintained
   virtual QString supportedFormats() { return ""; }

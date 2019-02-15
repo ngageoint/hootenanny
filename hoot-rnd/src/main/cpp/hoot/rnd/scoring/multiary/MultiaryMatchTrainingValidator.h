@@ -41,9 +41,9 @@ public:
   /**
    * @see OsmMapOperation::apply()
    */
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const override { return "TODO"; }
 };
 
 }

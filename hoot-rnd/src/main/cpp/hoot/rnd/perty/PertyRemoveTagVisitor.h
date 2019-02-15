@@ -58,7 +58,7 @@ public:
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
 

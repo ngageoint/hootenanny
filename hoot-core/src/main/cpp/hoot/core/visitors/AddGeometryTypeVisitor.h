@@ -40,7 +40,7 @@ public:
 
   AddGeometryTypeVisitor();
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const { return "Adds geometry types"; }
 };

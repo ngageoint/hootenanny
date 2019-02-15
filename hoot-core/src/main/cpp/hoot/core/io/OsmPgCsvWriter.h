@@ -82,14 +82,14 @@ public:
    * @brief write Write map to set of PGCSV files
    * @param map Pointer to map object to write to PGCSV
    */
-  virtual void write(ConstOsmMapPtr map);
+  virtual void write(ConstOsmMapPtr map) override;
   /**
    * @brief writePartial Write a single node/way/relation to the correct stream
    * @param n/w/r - Pointer to the node/way/relation to write to PGCSV
    */
-  virtual void writePartial(const ConstNodePtr& n);
-  virtual void writePartial(const ConstWayPtr& w);
-  virtual void writePartial(const ConstRelationPtr& r);
+  virtual void writePartial(const ConstNodePtr& n) override;
+  virtual void writePartial(const ConstWayPtr& w) override;
+  virtual void writePartial(const ConstRelationPtr& r) override;
   /**
    * @brief finalizePartial Finalize the map write
    */

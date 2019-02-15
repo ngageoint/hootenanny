@@ -52,7 +52,7 @@ public:
 
   double getStat() const { return _reviews.size(); }
 
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e) override;
 
   virtual QString getDescription() const { return "Counts the number of unique feature reviews"; }
 

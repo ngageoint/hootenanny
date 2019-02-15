@@ -48,11 +48,11 @@ public:
 
   ToEnglishTranslationComparisonVisitor();
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Translates selected tags to English and scores them against known translations"; }
 
 private:

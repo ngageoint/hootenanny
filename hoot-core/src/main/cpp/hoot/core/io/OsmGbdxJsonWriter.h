@@ -57,7 +57,7 @@ public:
    * @brief Create a directory to hold all of the GeoJSON files
    * @param url
    */
-  virtual void open(QString path);
+  virtual void open(QString path) override;
 
   /**
    * @brief write Write the OsmMap out in GeoJSON format with one feature per file, writer must be "open"
@@ -70,9 +70,9 @@ public:
    * @param url Filename ending in ".gbdx"
    * @return
    */
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".gbdx"); }
+  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".gbdx"); }
 
-  virtual QString supportedFormats() { return ".gdbx"; }
+  virtual QString supportedFormats() override { return ".gdbx"; }
 
 protected:
 

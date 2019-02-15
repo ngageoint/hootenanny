@@ -54,7 +54,7 @@ public:
 
   double getStat() const { return getLengthOfWays(); }
 
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e) override;
 
   virtual QString getDescription() const { return "Calculates the length of all ways"; }
 

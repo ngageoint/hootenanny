@@ -51,7 +51,7 @@ public:
 
   virtual QString getType() const { return "rnd"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     // doesn't work with stats yet
     if (args.contains("--stats"))

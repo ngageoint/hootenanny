@@ -55,7 +55,7 @@ public:
 
   double getStat() const { return getArea(); }
 
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e) override;
 
   virtual QString getDescription() const
   { return "Calculates feature area totals for map statistics"; }

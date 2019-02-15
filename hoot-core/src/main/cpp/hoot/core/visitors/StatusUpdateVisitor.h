@@ -48,7 +48,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const { return "Sets element statuses"; }
 

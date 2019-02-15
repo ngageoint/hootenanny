@@ -50,7 +50,7 @@ public:
   /**
    * Returns true if the element satisfies the criterion.
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NotCriterion(_child->clone())); }

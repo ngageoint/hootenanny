@@ -49,7 +49,7 @@ public:
   TagCriterion();
   TagCriterion(const QString& k, const QString& v);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   void setConfiguration(const Settings& s);
 

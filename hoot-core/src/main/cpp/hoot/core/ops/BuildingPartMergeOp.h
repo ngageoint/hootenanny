@@ -87,7 +87,7 @@ public:
 
   BuildingPartMergeOp();
 
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(OsmMapPtr& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -98,7 +98,7 @@ public:
   RelationPtr combineParts(const OsmMapPtr &map,
     const std::vector< boost::shared_ptr<Element> >& parts);
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Implicitly merges individual building parts into a single part"; }
 
 private:

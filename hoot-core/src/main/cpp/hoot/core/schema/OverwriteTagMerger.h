@@ -49,7 +49,7 @@ public:
 
   virtual ~OverwriteTagMerger() {}
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   // leave empty to avoid duplicate tag mergers displayed by the info command
   virtual QString getDescription() const { return ""; }

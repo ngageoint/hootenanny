@@ -53,7 +53,7 @@ public:
 
   BuildingOutlineRemoveOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap> &map);
+  virtual void apply(boost::shared_ptr<OsmMap> &map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -66,7 +66,7 @@ public:
   virtual QString getCompletedStatusMessage()
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
-  virtual QString getDescription() const { return "Removes the outline around buildings"; }
+  virtual QString getDescription() const override { return "Removes the outline around buildings"; }
 
 private:
 

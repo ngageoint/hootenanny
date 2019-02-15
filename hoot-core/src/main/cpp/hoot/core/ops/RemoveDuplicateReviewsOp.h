@@ -51,7 +51,7 @@ public:
 
   RemoveDuplicateReviewsOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -65,7 +65,7 @@ public:
   virtual QString getCompletedStatusMessage()
   { return ""; }
 
-  virtual QString getDescription() const { return "Removes duplicate reviews"; }
+  virtual QString getDescription() const override { return "Removes duplicate reviews"; }
 
 private:
 

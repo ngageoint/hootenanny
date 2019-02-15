@@ -59,22 +59,22 @@ public:
    *
    * "mic" stands for "multiary ingest changeset"
    */
-  virtual bool isSupported(QString url) { return url.endsWith(".mic"); }
+  virtual bool isSupported(QString url) override { return url.endsWith(".mic"); }
 
   /**
    * Open the specified filename for writing.
    */
-  virtual void open(QString fileName);
+  virtual void open(QString fileName) override;
 
   /**
    * @see OsmChangeWriter
    */
-  virtual void writeChange(const Change& change);
+  virtual void writeChange(const Change& change) override;
 
   virtual void setConfiguration(const Settings& conf);
 
   QString getElementPayloadFormat() const { return _elementPayloadFormat; }
-  virtual void setElementPayloadFormat(const QString format);
+  virtual void setElementPayloadFormat(const QString format) override;
 
 private:
 

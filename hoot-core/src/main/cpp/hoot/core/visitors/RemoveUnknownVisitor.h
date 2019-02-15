@@ -44,7 +44,7 @@ public:
 
   void set(Status status) { _status = status; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const { return "Removes all elements of a given status"; }
 
@@ -70,7 +70,7 @@ public:
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
 
-  virtual QString getDescription() const { return "Removes all elements with a status of Unknown1"; }
+  virtual QString getDescription() const override { return "Removes all elements with a status of Unknown1"; }
 };
 
 /**
@@ -84,7 +84,7 @@ public:
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
 
-  virtual QString getDescription() const { return "Removes all elements with a status of Unknown2"; }
+  virtual QString getDescription() const override { return "Removes all elements with a status of Unknown2"; }
 };
 
 }

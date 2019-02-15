@@ -56,7 +56,7 @@ public:
 
   BuildingOutlineUpdateOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -71,7 +71,7 @@ public:
   virtual QString getCompletedStatusMessage()
   { return ""; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Updates any multi-part building outlines that changed during conflation"; }
 
 private:

@@ -65,7 +65,7 @@ public:
    * @param url Filename ending in ".geojson"
    * @return
    */
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".geojson"); }
+  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".geojson"); }
 
   /**
    * @brief setConfiguration allows configuration settings to override the defaults
@@ -73,7 +73,7 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString supportedFormats() { return ".geojson"; }
+  virtual QString supportedFormats() override { return ".geojson"; }
 
 protected:
 

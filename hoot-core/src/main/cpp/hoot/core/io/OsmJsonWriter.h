@@ -67,14 +67,14 @@ public:
 
   OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
 
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".json"); }
+  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".json"); }
 
   /**
    * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
    */
   static QString markupString(const QString& str);
 
-  virtual void open(QString url);
+  virtual void open(QString url) override;
 
   virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
 
@@ -99,7 +99,7 @@ public:
    */
   void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
 
-  virtual QString supportedFormats() { return ".json"; }
+  virtual QString supportedFormats() override { return ".json"; }
 
 protected:
 

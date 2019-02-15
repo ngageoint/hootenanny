@@ -75,7 +75,7 @@ public:
 
     @see ConstElementVisitor
     */
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   /**
     @see RngConsumer

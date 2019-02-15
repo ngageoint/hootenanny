@@ -49,7 +49,7 @@ public:
 
   TranslationOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   void setConfiguration(const Settings& conf);
 
@@ -58,7 +58,7 @@ public:
    */
   void setPath(QString path) { _translator.setPath(path); }
 
-  virtual QString getDescription() const { return "Translates features to a schema"; }
+  virtual QString getDescription() const override { return "Translates features to a schema"; }
 
 private:
 

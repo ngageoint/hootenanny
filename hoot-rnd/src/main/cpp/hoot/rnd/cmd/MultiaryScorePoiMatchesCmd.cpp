@@ -107,7 +107,7 @@ public:
 
   virtual QString getType() const { return "rnd"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     bool showConfusion = false;
     if (args.contains("--confusion"))

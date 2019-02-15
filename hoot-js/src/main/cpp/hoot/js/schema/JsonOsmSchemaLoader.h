@@ -48,11 +48,11 @@ public:
 
   virtual ~JsonOsmSchemaLoader() {}
 
-  virtual bool isSupported(QString url) const { return url.endsWith(".json"); }
+  virtual bool isSupported(QString url) const override { return url.endsWith(".json"); }
 
-  virtual void load(QString path, OsmSchema& s);
+  virtual void load(QString path, OsmSchema& s) override;
 
-  virtual std::set<QString> getDependencies() { return _deps; }
+  virtual std::set<QString> getDependencies() override { return _deps; }
 
 protected:
 

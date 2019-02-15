@@ -62,12 +62,12 @@ public:
    * This merger is very aggressive and will merge pretty much any set of matches that are passed
    * in. This should generally be the last merger.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const;
+  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const override;
 
   /**
    * Returns a description of this merger creator.
    */
-  virtual std::vector<CreatorDescription> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const override;
 
   virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
 };

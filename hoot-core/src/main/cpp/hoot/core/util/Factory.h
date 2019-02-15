@@ -80,15 +80,15 @@ public:
   /**
    * We cast it to "Base" so that the any pointer works as expected.
    */
-  boost::any create()
+  boost::any create() override
   {
     Base* b = new T();
     return dynamic_cast<Base*>(b);
   }
 
-  std::string getBaseName() { return _baseName; }
+  std::string getBaseName() override { return _baseName; }
 
-  std::string getName() { return _name; }
+  std::string getName() override { return _name; }
 
 private:
 
