@@ -263,6 +263,16 @@ public:
    * @return true if their name tags conflict; false otherwise
    */
   static bool nameConflictExists(ConstElementPtr element1, ConstElementPtr element2);
+
+  /**
+   * Determines if there are specific highway type conflicts between elements
+   *
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @return true if both have specific highway tags (other than highway=road) and they disagree;
+   * false otherwise
+   */
+  static bool nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2);
 };
 
 }

@@ -182,8 +182,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   ElementPtr e2 = result->getElement(eid2);
   //LOG_VART(e1->getStatus());
   //LOG_VART(e2->getStatus());
-  OsmUtils::logElementDetail(e1, map, Log::Debug, "HighwaySnapMerger: e1");
-  OsmUtils::logElementDetail(e2, map, Log::Debug, "HighwaySnapMerger: e2");
+  OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwaySnapMerger: e1");
+  OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwaySnapMerger: e2");
 
   // This doesn't seem to always be true.
   //assert(e1->getStatus() == Status::Unknown1);
@@ -204,7 +204,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   if (!match.isValid())
   {
-    LOG_DEBUG("Complex conflict causes an empty match");
+    LOG_TRACE("Complex conflict causes an empty match");
     _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
                      HighwayMatch::getHighwayMatchName());
     return true;
@@ -280,7 +280,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       if (OneWayCriterion().isSatisfied(w2) &&
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), w1, w2))
       {
-        LOG_DEBUG("Reversing " << wMatch->getElementId() << "...");
+        LOG_TRACE("Reversing " << wMatch->getElementId() << "...");
         wMatch->reverseOrder();
       }
     }
@@ -345,8 +345,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     LOG_VART(scraps2->getElementId());
   }
 
-  LOG_VARD(map->getElement(eid1));
-  LOG_VARD(map->getElement(eid2));
+  LOG_VART(map->getElement(eid1));
+  LOG_VART(map->getElement(eid2));
 
   return false;
 }

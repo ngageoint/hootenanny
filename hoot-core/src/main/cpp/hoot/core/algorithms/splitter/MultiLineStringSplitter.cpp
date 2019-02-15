@@ -71,8 +71,8 @@ boost::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFac
 }
 
 ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
-  const WaySublineCollection& string, const vector<bool> &reverse,
-  GeometryConverter::NodeFactory *nf) const
+  const WaySublineCollection& string, const vector<bool>& reverse,
+  GeometryConverter::NodeFactory* nf) const
 {
   assert(reverse.size() == string.getSublines().size());
   // if there were no matches then the result will be null
@@ -117,17 +117,17 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
       matches[0]->getCircularError(), MetadataTags::RelationMultilineString()));
     for (size_t i = 0; i < matches.size(); i++)
     {
-      LOG_DEBUG(
+      LOG_TRACE(
         "multilinestring: adding multiple match to relation with ID: " << r->getId() <<
         " member: " << matches[i]->getElementId());
       LOG_VART(matches[i]);
       r->addElement("", matches[i]);
     }
     result = r;
+    LOG_TRACE("Multilinestring split relation: " << result);
     map->addElement(r);
   }
 
-  LOG_VARD(result);
   return result;
 }
 
@@ -153,7 +153,6 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
   // create all the sublines that fall within the positive WaySublineCollection and put them into
   // the match element.
   match = createSublines(map, positive, reverse, nf);
-  LOG_VART(match.get());
 
   // create all the sublines that fall within the negative WaySublineCollection and put them into
   // the scraps element.

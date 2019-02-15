@@ -133,7 +133,7 @@ QString OsmUtils::getRelationDetailedString(ConstRelationPtr& relation, const Co
 QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
                                                    const ConstOsmMapPtr& map)
 {
-  QString str = "\nMember Detail:\n";
+  QString str = "\nMember Detail:\n\n";
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
@@ -177,7 +177,7 @@ void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMa
     if (element->getElementType() == ElementType::Relation)
     {
       ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
-      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+      LOG_VAR(OsmUtils::getRelationMembersDetailedString(relation, map));
     }
   }
 }
@@ -204,6 +204,15 @@ bool OsmUtils::nameConflictExists(ConstElementPtr element1, ConstElementPtr elem
   return
     element1->getTags().hasName() && element2->getTags().hasName() &&
       !Tags::haveMatchingName(element1->getTags(), element2->getTags());
+}
+
+bool OsmUtils::nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+{
+  const QString element1HighwayVal = element1->getTags().get("highway");
+  const QString element2HighwayVal = element2->getTags().get("highway");
+  return
+    element1HighwayVal != "road" && element2HighwayVal != "road" &&
+    element1HighwayVal != element2HighwayVal;
 }
 
 }

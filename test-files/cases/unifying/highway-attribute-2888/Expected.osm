@@ -5104,6 +5104,22 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-432"/>
     </way>
+    <way visible="true" id="-417" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1145"/>
+        <nd ref="-1144"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="length" v="125.9"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="name" v="Boduthakurufaanu magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-417"/>
+    </way>
     <way visible="true" id="-414" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-66"/>
         <nd ref="-113"/>
@@ -5185,7 +5201,27 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-408"/>
     </way>
-    <way visible="true" id="-373" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-370" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1172"/>
+        <nd ref="-321"/>
+        <nd ref="-23"/>
+        <nd ref="-320"/>
+        <nd ref="-318"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="length" v="156"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Sabudheli Magu"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-370"/>
+    </way>
+    <way visible="true" id="-363" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-31"/>
         <nd ref="-30"/>
         <nd ref="-29"/>
@@ -5216,27 +5252,7 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-373"/>
-    </way>
-    <way visible="true" id="-370" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1172"/>
-        <nd ref="-321"/>
-        <nd ref="-23"/>
-        <nd ref="-320"/>
-        <nd ref="-318"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="156"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source" v="Bing"/>
-        <tag k="name" v="Sabudheli Magu"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-370"/>
+        <tag k="hoot:id" v="-363"/>
     </way>
     <way visible="true" id="-185" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1097"/>
@@ -5343,18 +5359,17 @@
     <way visible="true" id="-180" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-898"/>
         <nd ref="-1145"/>
-        <nd ref="-1144"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="length" v="125.9"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="251.8"/>
-        <tag k="source:imagery" v="DigitalGlobe;Unknown"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="DigitalGlobe"/>
         <tag k="name" v="Boduthakurufaanu magu"/>
         <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
         <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-180"/>
     </way>
