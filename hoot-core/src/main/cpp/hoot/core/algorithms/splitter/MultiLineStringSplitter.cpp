@@ -172,4 +172,3 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const MultiLineStringL
 }
 
 }
-
