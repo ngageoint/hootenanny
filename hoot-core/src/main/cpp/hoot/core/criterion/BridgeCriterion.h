@@ -22,45 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef WAYDIRECTIONCRITERION_H
-#define WAYDIRECTIONCRITERION_H
+#ifndef BRIDGE_CRITERION_H
+#define BRIDGE_CRITERION_H
 
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
+// hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class Way;
-
-class WayDirectionCriterion : public ElementCriterion
+/**
+ * Identifies bridges
+ */
+class BridgeCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::WayDirectionCriterion"; }
+  static std::string className() { return "hoot::BridgeCriterion"; }
 
-  WayDirectionCriterion(const ConstOsmMapPtr& map,
-                        ConstWayPtr baseWay,
-                        bool similarDirection = true);
+  BridgeCriterion();
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BridgeCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
-
-private:
-
-  ConstOsmMapPtr _map;
-  ConstWayPtr _baseWay;
-  bool _similarDirection;
+  virtual QString getDescription() const { return "Identifies bridges"; }
 };
 
 }
 
-#endif // WAYDIRECTIONCRITERION_H
+#endif // BRIDGE_CRITERION_H

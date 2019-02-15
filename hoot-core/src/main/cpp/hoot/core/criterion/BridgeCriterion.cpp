@@ -22,45 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef WAYDIRECTIONCRITERION_H
-#define WAYDIRECTIONCRITERION_H
+#include "BridgeCriterion.h"
 
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
-class Way;
+HOOT_FACTORY_REGISTER(ElementCriterion, BridgeCriterion)
 
-class WayDirectionCriterion : public ElementCriterion
+BridgeCriterion::BridgeCriterion()
 {
-public:
-
-  static std::string className() { return "hoot::WayDirectionCriterion"; }
-
-  WayDirectionCriterion(const ConstOsmMapPtr& map,
-                        ConstWayPtr baseWay,
-                        bool similarDirection = true);
-
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
-
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
-
-  virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
-
-private:
-
-  ConstOsmMapPtr _map;
-  ConstWayPtr _baseWay;
-  bool _similarDirection;
-};
-
 }
 
-#endif // WAYDIRECTIONCRITERION_H
+bool BridgeCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  const Tags& tags = e->getTags();
+  return !tags.isFalse("bridge") && !tags.get("bridge").trimmed().isEmpty();
+}
+
+}

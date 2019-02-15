@@ -38,6 +38,9 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 #include <unordered_set>
 #include <vector>
@@ -141,6 +144,7 @@ void WayJoiner2::_joinParentChild()
     if (parent && parentTags.hasName() && wayTags.hasName() &&
         !Tags::haveMatchingName(parentTags, wayTags))
     {
+      // TODO: move this check down to _joinWays?
       LOG_TRACE("Conflicting name tags.  Skipping parent/child join.");
       continue;
     }
@@ -253,6 +257,7 @@ void WayJoiner2::_joinAtNode()
             // don't try to join if there are explicitly conflicting names; fix for #2888
             const bool parentHasName = pTags.hasName();
             const bool childHasName = cTags.hasName();
+            // TODO: use OsmUtils::nameConflictExists here instead
             if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
                 Tags::haveMatchingName(pTags, cTags))
             {
@@ -413,15 +418,91 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
       }
       const Tags parentTags = parent->getTags();
       const bool parentHasName = parentTags.hasName();
+      // TODO: use OsmUtils::nameConflictExists here instead
       if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
           Tags::haveMatchingName(parentTags, childTags))
       {
         _joinWays(parent, child);
       }
+      else
+      {
+        LOG_TRACE("Ways had conflicting names.  Not joining:");
+        LOG_VART(parentTags);
+        LOG_VART(childTags);
+      }
     }
 
     //  Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here
     parent->resetPid();
+  }
+}
+
+void WayJoiner2::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper,
+                                         WayPtr& toRemove)
+{
+  // TODO: this is a mess
+
+  const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
+  LOG_VART(tagMergerClassName);
+  if (parent->getStatus() == Status::Unknown1)
+  {
+    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
+        tagMergerClassName == "hoot::OverwriteTag2Merger")
+    {
+      keeper = child;
+      toRemove = parent;
+    }
+    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+    else
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+  }
+  else if (child->getStatus() == Status::Unknown1 ||
+           (parent->getStatus() == Status::Conflated && child->getStatus() == Status::Conflated))
+  {
+    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
+        tagMergerClassName == "hoot::OverwriteTag2Merger")
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
+    {
+      keeper = child;
+      toRemove = parent;
+    }
+    else
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+  }
+  // does this make sense??
+  else
+  {
+    keeper = parent;
+    toRemove = child;
+  }
+}
+
+void WayJoiner2::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, WayPtr wayWithTagsToLose)
+{
+  OneWayCriterion oneWayCrit;
+  if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
+      !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
+      // note the use of an alternative isSimilarDirection method
+      !DirectionFinder::isSimilarDirection2(
+        _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
+  {
+    LOG_TRACE("Reversing order of " << wayWithTagsToKeep->getElementId());
+    // make sure this reversal gets done before checking the join type later on
+    wayWithTagsToKeep->reverseOrder();
   }
 }
 
@@ -435,103 +516,55 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VART(parent->getStatus());
   LOG_VART(child->getStatus());
 
-  //  Don't join area ways
-  AreaCriterion areaCrit;
-  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
-  {
-    LOG_TRACE("One or more of the ways to be joined are areas...skipping join.");
-    return;
-  }
-
   //  Check if the two ways are able to be joined back up
 
   //  Make sure that there are nodes in the ways
   if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
   {
-    LOG_TRACE("One or more of the ways to be joined are empty...skipping join.");
+    LOG_TRACE("One or more of the ways to be joined are empty. Skipping join.");
     return;
   }
 
-  // make sure tags go in the right direction (TODO: this is a mess)
+  //  Don't join area ways
+  AreaCriterion areaCrit;
+  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
+  {
+    LOG_TRACE("One or more of the ways to be joined are areas. Skipping join.");
+    return;
+  }
+
+  // make sure tags go in the right direction
   WayPtr wayWithTagsToKeep;
   WayPtr wayWithTagsToLose;
-  const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
-  LOG_VART(tagMergerClassName);
-  if (parent->getStatus() == Status::Unknown1)
+  _determineKeeperFeature(parent, child, wayWithTagsToKeep, wayWithTagsToLose);
+  LOG_VART(wayWithTagsToKeep);
+  LOG_VART(wayWithTagsToLose);
+
+  // deal with bridges
+  std::vector<ConstElementPtr> elements;
+  elements.push_back(wayWithTagsToKeep);
+  elements.push_back(wayWithTagsToLose);
+  const bool onlyOneIsABridge = OsmUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
+  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
+      onlyOneIsABridge)
   {
-    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
-        tagMergerClassName == "hoot::OverwriteTag2Merger")
-    {
-      wayWithTagsToKeep = child;
-      wayWithTagsToLose = parent;
-    }
-    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
-    {
-      wayWithTagsToKeep = parent;
-      wayWithTagsToLose = child;
-    }
-    else
-    {
-      wayWithTagsToKeep = parent;
-      wayWithTagsToLose = child;
-    }
+    LOG_TRACE("Only one of the features to be joined is a bridge. Skipping join.");
+    return;
   }
-  else if (child->getStatus() == Status::Unknown1 ||
-           (parent->getStatus() == Status::Conflated && child->getStatus() == Status::Conflated))
-  {
-    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
-        tagMergerClassName == "hoot::OverwriteTag2Merger")
-    {
-      wayWithTagsToKeep = parent;
-      wayWithTagsToLose = child;
-    }
-    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
-    {
-      wayWithTagsToKeep = child;
-      wayWithTagsToLose = parent;
-    }
-    else
-    {
-      wayWithTagsToKeep = parent;
-      wayWithTagsToLose = child;
-    }
-  }
-  // does this make sense??
-  else
-  {
-    wayWithTagsToKeep = parent;
-    wayWithTagsToLose = child;
-  }
-  LOG_VART(wayWithTagsToKeep->getElementId());
-  LOG_VART(wayWithTagsToLose->getElementId());
 
   // deal with one way streets
 
-  OneWayCriterion oneWayCrit;
-
-  const bool keepElementExplicitlyNotAOneWayStreet =
-    wayWithTagsToKeep->getTags().get("oneway") == "no";
-  const bool removeElementExplicitlyNotAOneWayStreet =
-    wayWithTagsToLose->getTags().get("oneway") == "no";
-  if ((oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
-       removeElementExplicitlyNotAOneWayStreet) ||
-      (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
-       keepElementExplicitlyNotAOneWayStreet))
+  // don't try to join streets with conflicting one way info
+  if (OsmUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE("Conflicting one way street tags.  Skipping join.");
     return;
   }
 
-  if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
-      !oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
-      // note the use of an alternative isSimilarDirection method
-      !DirectionFinder::isSimilarDirection2(
-        _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
-  {
-    LOG_TRACE("Reversing order of " << wayWithTagsToKeep->getElementId());
-    // make sure this reversal gets done before checking the join type later on
-    wayWithTagsToKeep->reverseOrder();
-  }
+  // Reverse the way if way to remove is one way and the two ways aren't in similar directions
+  _handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
+
+  // determine what type of join we have
 
   vector<long> parent_nodes = parent->getNodeIds();
   LOG_VART(parent_nodes.size());
@@ -569,15 +602,53 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   // #2888 fix
   Tags tags1 = wayWithTagsToKeep->getTags();
   Tags tags2 = wayWithTagsToLose->getTags();
-  LOG_VART(tags1);
-  LOG_VART(tags2);
 
   // If each of these has a length tag, then we need to add up the new value for the joined ways.
   // This logic should possibly be a part of the default tag merging instead of being done here
   // and should also add the possibility for multiple options for the length tag key...leaving this
   // as is for now (fix for #2867)
-  double totalLength = 0.0;
-  bool eitherTagsHaveLength =
+  const double totalLength = _getTotalLengthFromTags(tags1, tags2);
+
+  Tags mergedTags = TagMergerFactory::mergeTags(tags1, tags2, ElementType::Way);
+  if (totalLength != -1.0)
+  {
+    mergedTags.set(MetadataTags::Length(), QString::number(totalLength));
+  }
+  parent->setTags(mergedTags);
+
+  //  Remove the duplicate node id of the overlap
+  if (joinType == JoinAtNodeMergeType::ParentFirst)
+  {
+    //  Remove the first node of the child and append to parent
+    child_nodes.erase(child_nodes.begin());
+    parent->addNodes(child_nodes);
+  }
+  else if (joinType == JoinAtNodeMergeType::ParentLast)
+  {
+    //  Remove the last of the children and prepend them to the parent
+    child_nodes.pop_back();
+    parent->setNodes(child_nodes);
+    parent->addNodes(parent_nodes);
+  }
+
+  //  Keep the conflated status in the parent if the child being merged is conflated
+  if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
+    parent->setStatus(Status::Conflated);
+
+  //  Update any relations that contain the child to use the parent and remove the child.
+  ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
+  child->getTags().clear();
+  RecursiveElementRemover(child->getElementId()).apply(_map);
+
+  LOG_VART(parent);
+
+  _numJoined++;
+}
+
+double WayJoiner2::_getTotalLengthFromTags(const Tags& tags1, const Tags& tags2) const
+{
+  double totalLength = -1.0;
+  const bool eitherTagsHaveLength =
     tags1.contains(MetadataTags::Length()) || tags2.contains(MetadataTags::Length());
   if (eitherTagsHaveLength)
   {
@@ -603,47 +674,7 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     }
     totalLength = length1 + length2;
   }
-
-  Tags mergedTags = TagMergerFactory::mergeTags(tags1, tags2, ElementType::Way);
-  if (eitherTagsHaveLength)
-  {
-    mergedTags.set(MetadataTags::Length(), QString::number(totalLength));
-  }
-
-  parent->setTags(mergedTags);
-  LOG_VART(parent->getTags());
-
-  //  Remove the duplicate node id of the overlap
-  if (joinType == JoinAtNodeMergeType::ParentFirst)
-  {
-    //  Remove the first node of the child and append to parent
-    child_nodes.erase(child_nodes.begin());
-    parent->addNodes(child_nodes);
-  }
-  else if (joinType == JoinAtNodeMergeType::ParentLast)
-  {
-    //  Remove the last of the children and prepend them to the parent
-    child_nodes.pop_back();
-    parent->setNodes(child_nodes);
-    parent->addNodes(parent_nodes);
-  }
-
-  //  Keep the conflated status in the parent if the child being merged is conflated
-  if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
-    parent->setStatus(Status::Conflated);
-
-  LOG_VART(parent->getNodeIds());
-  LOG_VART(child->getNodeIds());
-
-  //  Update any relations that contain the child to use the parent
-  ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
-  LOG_VART(parent->getNodeIds());
-  LOG_VART(child->getNodeIds());
-  child->getTags().clear();
-  RecursiveElementRemover(child->getElementId()).apply(_map);
-  LOG_VART(parent->getNodeIds());
-
-  _numJoined++;
+  return totalLength;
 }
 
 }
