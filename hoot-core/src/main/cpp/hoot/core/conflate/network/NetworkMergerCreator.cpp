@@ -110,6 +110,9 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       }
       else
       {
+        // TODO: We have no subline string matcher to pass to this merger here, so we won't be able
+        // to perform the special case for bridge merging until we get one (applies to the rest
+        // of the calls to HighwayTagOnlyMerger in this class as well).
         mergers.push_back(new HighwayTagOnlyMerger(pairs));
       }
     }

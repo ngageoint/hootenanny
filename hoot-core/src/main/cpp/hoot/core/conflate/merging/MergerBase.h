@@ -50,8 +50,6 @@ public:
 
   virtual void replace(ElementId oldEid, ElementId newEid);
 
-  virtual QString toString() const override { return QString("Unimplemented toString()"); }
-
 protected:
 
   // TODO: Is any inheriting class actually implementing this in a custom fashion?

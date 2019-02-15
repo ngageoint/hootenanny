@@ -24,45 +24,26 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAY_TAG_ONLY_MERGER_H
-#define HIGHWAY_TAG_ONLY_MERGER_H
 
-// Hoot
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include "BridgeCriterion.h"
+
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
-/**
- * merges roads together by merging tags only, keeping ref1 tags
- * merges bridges separately from roads; merges tags and optionally geometries for bridges
- *
- * The inheritance from HighwaySnapMerger is to support the geometry merging option for bridges.
- */
-class HighwayTagOnlyMerger : public HighwaySnapMerger
+HOOT_FACTORY_REGISTER(ElementCriterion, BridgeCriterion)
+
+BridgeCriterion::BridgeCriterion()
 {
-
-public:
-
-  static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
-
-  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
-  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                       const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
-
-protected:
-
-  virtual bool _mergePair(
-    const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
-
-private:
-
-  bool _performBridgeGeometryMerging;
-};
-
-typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;
-
 }
 
-#endif // HIGHWAY_TAG_ONLY_MERGER_H
+bool BridgeCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  const Tags& tags = e->getTags();
+  return !tags.isFalse("bridge") && !tags.get("bridge").trimmed().isEmpty();
+}
+
+}

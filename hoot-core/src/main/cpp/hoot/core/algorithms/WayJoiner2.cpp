@@ -38,6 +38,8 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 #include <unordered_set>
 #include <vector>
@@ -141,6 +143,7 @@ void WayJoiner2::_joinParentChild()
     if (parent && parentTags.hasName() && wayTags.hasName() &&
         !Tags::haveMatchingName(parentTags, wayTags))
     {
+      // TODO: move this check down to _joinWays?
       LOG_TRACE("Conflicting name tags.  Skipping parent/child join.");
       continue;
     }
@@ -418,6 +421,12 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
       {
         _joinWays(parent, child);
       }
+      else
+      {
+        LOG_TRACE("Ways had conflicting names.  Not joining:");
+        LOG_VART(parentTags);
+        LOG_VART(childTags);
+      }
     }
 
     //  Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here
@@ -435,20 +444,20 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VART(parent->getStatus());
   LOG_VART(child->getStatus());
 
-  //  Don't join area ways
-  AreaCriterion areaCrit;
-  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
-  {
-    LOG_TRACE("One or more of the ways to be joined are areas...skipping join.");
-    return;
-  }
-
   //  Check if the two ways are able to be joined back up
 
   //  Make sure that there are nodes in the ways
   if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
   {
-    LOG_TRACE("One or more of the ways to be joined are empty...skipping join.");
+    LOG_TRACE("One or more of the ways to be joined are empty. Skipping join.");
+    return;
+  }
+
+  //  Don't join area ways
+  AreaCriterion areaCrit;
+  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
+  {
+    LOG_TRACE("One or more of the ways to be joined are areas. Skipping join.");
     return;
   }
 
@@ -502,17 +511,35 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     wayWithTagsToKeep = parent;
     wayWithTagsToLose = child;
   }
-  LOG_VART(wayWithTagsToKeep->getElementId());
-  LOG_VART(wayWithTagsToLose->getElementId());
+  LOG_VART(wayWithTagsToKeep);
+  LOG_VART(wayWithTagsToLose);
+
+  // deal with bridges
+
+  BridgeCriterion isBridge;
+  const bool e1IsBridge = isBridge.isSatisfied(wayWithTagsToKeep);
+  const bool e2IsBridge = isBridge.isSatisfied(wayWithTagsToLose);
+  const bool onlyOneIsABridge = (e1IsBridge && !e2IsBridge) || (e2IsBridge && !e1IsBridge);
+  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
+      onlyOneIsABridge)
+  {
+    LOG_TRACE("Only one of the features to be joined is a bridge. Skipping join.");
+    return;
+  }
 
   // deal with one way streets
 
   OneWayCriterion oneWayCrit;
+  LOG_VART(oneWayCrit.isSatisfied(wayWithTagsToKeep));
+  LOG_VART(oneWayCrit.isSatisfied(wayWithTagsToLose));
 
+  // TODO: use Tags::isFalse here instead
   const bool keepElementExplicitlyNotAOneWayStreet =
     wayWithTagsToKeep->getTags().get("oneway") == "no";
   const bool removeElementExplicitlyNotAOneWayStreet =
     wayWithTagsToLose->getTags().get("oneway") == "no";
+  LOG_VART(keepElementExplicitlyNotAOneWayStreet);
+  LOG_VART(removeElementExplicitlyNotAOneWayStreet);
   if ((oneWayCrit.isSatisfied(wayWithTagsToKeep) &&
        removeElementExplicitlyNotAOneWayStreet) ||
       (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
@@ -532,6 +559,8 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     // make sure this reversal gets done before checking the join type later on
     wayWithTagsToKeep->reverseOrder();
   }
+
+  // determine what type of join we have
 
   vector<long> parent_nodes = parent->getNodeIds();
   LOG_VART(parent_nodes.size());
@@ -569,15 +598,13 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   // #2888 fix
   Tags tags1 = wayWithTagsToKeep->getTags();
   Tags tags2 = wayWithTagsToLose->getTags();
-  LOG_VART(tags1);
-  LOG_VART(tags2);
 
   // If each of these has a length tag, then we need to add up the new value for the joined ways.
   // This logic should possibly be a part of the default tag merging instead of being done here
   // and should also add the possibility for multiple options for the length tag key...leaving this
   // as is for now (fix for #2867)
   double totalLength = 0.0;
-  bool eitherTagsHaveLength =
+  const bool eitherTagsHaveLength =
     tags1.contains(MetadataTags::Length()) || tags2.contains(MetadataTags::Length());
   if (eitherTagsHaveLength)
   {
@@ -609,9 +636,7 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   {
     mergedTags.set(MetadataTags::Length(), QString::number(totalLength));
   }
-
   parent->setTags(mergedTags);
-  LOG_VART(parent->getTags());
 
   //  Remove the duplicate node id of the overlap
   if (joinType == JoinAtNodeMergeType::ParentFirst)
@@ -632,16 +657,12 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
     parent->setStatus(Status::Conflated);
 
-  LOG_VART(parent->getNodeIds());
-  LOG_VART(child->getNodeIds());
-
-  //  Update any relations that contain the child to use the parent
+  //  Update any relations that contain the child to use the parent and remove the child.
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
-  LOG_VART(parent->getNodeIds());
-  LOG_VART(child->getNodeIds());
   child->getTags().clear();
   RecursiveElementRemover(child->getElementId()).apply(_map);
-  LOG_VART(parent->getNodeIds());
+
+  LOG_VART(parent);
 
   _numJoined++;
 }

@@ -105,6 +105,11 @@ private:
 
   bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
     ElementId other1, ElementId other2) const;
+
+  void _updateNonMatchDescriptionBasedOnGeometricProperties(QStringList& description,
+                                                            const ConstOsmMapPtr& map,
+                                                            const ConstElementPtr e1,
+                                                            const ConstElementPtr e2);
 };
 
 }

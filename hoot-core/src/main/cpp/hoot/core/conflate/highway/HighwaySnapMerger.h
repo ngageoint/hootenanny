@@ -30,11 +30,11 @@
 // Hoot
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
 {
 
-class SublineStringMatcher;
 class WaySublineCollection;
 
 /**
@@ -58,7 +58,7 @@ public:
 protected:
 
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                          std::vector< std::pair<ElementId, ElementId> >& replaced);
+                          std::vector<std::pair<ElementId, ElementId>>& replaced);
 
 private:
 

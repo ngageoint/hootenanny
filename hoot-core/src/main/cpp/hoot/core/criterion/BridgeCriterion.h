@@ -24,45 +24,34 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAY_TAG_ONLY_MERGER_H
-#define HIGHWAY_TAG_ONLY_MERGER_H
 
-// Hoot
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#ifndef BRIDGE_CRITERION_H
+#define BRIDGE_CRITERION_H
+
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * merges roads together by merging tags only, keeping ref1 tags
- * merges bridges separately from roads; merges tags and optionally geometries for bridges
- *
- * The inheritance from HighwaySnapMerger is to support the geometry merging option for bridges.
+ * Identifies bridges
  */
-class HighwayTagOnlyMerger : public HighwaySnapMerger
+class BridgeCriterion : public ElementCriterion
 {
-
 public:
 
-  static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
+  static std::string className() { return "hoot::BridgeCriterion"; }
 
-  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
-  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                       const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  BridgeCriterion();
 
-protected:
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  virtual bool _mergePair(
-    const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BridgeCriterion()); }
 
-private:
-
-  bool _performBridgeGeometryMerging;
+  virtual QString getDescription() const { return "Identifies bridges"; }
 };
-
-typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;
 
 }
 
-#endif // HIGHWAY_TAG_ONLY_MERGER_H
+#endif // BRIDGE_CRITERION_H
