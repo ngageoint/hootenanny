@@ -37,6 +37,7 @@
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 
 //Qt
 #include <QDateTime>
@@ -124,16 +125,78 @@ QString OsmUtils::currentTimeAsString()
   return QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
-QString OsmUtils::getDetailedRelationString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+QString OsmUtils::getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
 {
-  QString str = relation->toString() + "\nMember Detail:\n";
+  return relation->toString() + getRelationMembersDetailedString(relation, map);
+}
+
+QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
+                                                   const ConstOsmMapPtr& map)
+{
+  QString str = "\nMember Detail:\n";
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
+    str += "Member #" + QString::number(i) + ":\n";
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
     str += member->toString() + "\n";
   }
   return str;
+}
+
+long OsmUtils::getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map)
+{
+  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  QSet<long> wayMemberIds;
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member->getElementType() == ElementType::Way)
+    {
+      wayMemberIds.insert(member->getId());
+    }
+  }
+  LOG_VART(wayMemberIds);
+  if (wayMemberIds.size() > 0)
+  {
+    return wayMemberIds.toList().at(0);
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map)
+{
+  LOG_VARD(element);
+  if (element->getElementType() == ElementType::Relation)
+  {
+    ConstRelationPtr relation =
+      boost::dynamic_pointer_cast<const Relation>(element);
+    LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+  }
+}
+
+bool OsmUtils::oneWayConflictExists(ElementPtr element1, ElementPtr element2)
+{
+  OneWayCriterion isAOneWayStreet;
+  return
+    (isAOneWayStreet.isSatisfied(element1) && explicitlyNotAOneWayStreet(element2)) ||
+    (isAOneWayStreet.isSatisfied(element2) && explicitlyNotAOneWayStreet(element1));
+}
+
+bool OsmUtils::explicitlyNotAOneWayStreet(ElementPtr element)
+{
+  // TODO: use Tags::isFalse here instead
+  return element->getTags().get("oneway") == "no";
+}
+
+bool OsmUtils::nameConflictExists(ElementPtr element1, ElementPtr element2)
+{
+  return
+    element1->getTags().hasName() && element2->getTags().hasName() &&
+      !Tags::haveMatchingName(element1->getTags(), element2->getTags());
 }
 
 }
