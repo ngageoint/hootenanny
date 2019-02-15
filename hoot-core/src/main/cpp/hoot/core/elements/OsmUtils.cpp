@@ -169,17 +169,20 @@ long OsmUtils::getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& 
 
 void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map)
 {
-  LOG_VARD(element);
+  LOG_VART(element);
   if (element->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr relation =
       boost::dynamic_pointer_cast<const Relation>(element);
-    LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+    LOG_VART(OsmUtils::getRelationMembersDetailedString(relation, map));
   }
 }
 
 bool OsmUtils::oneWayConflictExists(ElementPtr element1, ElementPtr element2)
 {
+  // Technically, this should also take into account reverse one ways and check direction.  Since
+  // we have a map pre-op standardizing all the ways to not be reversed, not worrying about it for
+  // now.
   OneWayCriterion isAOneWayStreet;
   return
     (isAOneWayStreet.isSatisfied(element1) && explicitlyNotAOneWayStreet(element2)) ||
