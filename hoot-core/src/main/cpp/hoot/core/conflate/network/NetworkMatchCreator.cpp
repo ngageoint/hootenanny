@@ -83,7 +83,7 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Extracting networks...");
+  LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(threshold);
 
   // use another class to extract graph nodes and graph edges.
@@ -177,11 +177,12 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
-      LOG_TRACE("is match");
       LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }
+
+  LOG_INFO("Found " << matches.size() << " highway match candidates.");
 }
 
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const

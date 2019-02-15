@@ -30,6 +30,10 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // Boost Includes
 #include <boost/shared_ptr.hpp>
@@ -139,82 +143,122 @@ public:
    */
   static QString currentTimeAsString();
 
-  // The logic in these contains methods could probably be consolidated into fewer methods. - #2932
-
   /**
-   * Determines whether a map contains two or more POIs
+   * Determines whether a map contains a minimum or a fixed amount of elements matching the
+   * criterion type
+   * Only objects of type ElementCriterion are allowed, all others will return false
    *
    * @param map the map to examine
+   * @param minCount the minmal count of elements required (if exactCount == false)
+   * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
    */
-  static bool containsTwoOrMorePois(ConstOsmMapPtr map);
+  template<class C> static bool contains(ConstOsmMapPtr map, int minCount = 1,
+                                         bool exactCount = false)
+  {
+    if (!std::is_base_of<ElementCriterion,C>::value) return false;
+
+    const long count =
+      (long)FilteredVisitor::getStat(
+        ElementCriterionPtr(new C()),
+        ConstElementVisitorPtr(new ElementCountVisitor()),
+        map);
+    LOG_VART(count);
+    return exactCount ? (count == minCount) : (count >= minCount);
+  }
 
   /**
-   * Determines whether a map contains two or more buildings
+   * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
+   * times
+   * Only objects of type ElementCriterion are allowed, all others will return false
    *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
+   * @param element the element to examine
+   * @param minCount the minmal count of elements required (if exactCount == false)
+   * @param exactCount if true, the count must be exactly minCount
+   * @return true if the elements meet the specified criterion the specified number of times
    */
-  static bool containsTwoOrMoreBuildings(ConstOsmMapPtr map);
+  template<class C> static bool isSatisfied(const std::vector<ConstElementPtr>& elements,
+                                            int minCount = 1, bool exactCount = false)
+  {
+    if (!std::is_base_of<ElementCriterion,C>::value) return false;
+
+    int count = 0;
+    ElementCriterionPtr crit(new C());
+    for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin(); itr != elements.end();
+         ++itr)
+    {
+      if (crit->isSatisfied(*itr))
+      {
+        count++;
+      }
+    }
+
+    LOG_VART(count);
+    return exactCount ? (count == minCount) : (count >= minCount);
+  }
 
   /**
-   * Determines whether a map contains two or more areas
+   * Get a more detailed string representation of a relation
    *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
+   * @param relation relation to get info from
+   * @param map map owning the relation
+   * @return a detailed relation string
    */
-  static bool containsTwoOrMoreAreas(ConstOsmMapPtr map);
+  static QString getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
   /**
-   * Determines whether a map contains one polygon and one POI under the POI to Polygon conflation
-   * definition
+   * Get a detailed string representing a relation's members
    *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
+   * @param relation relation to get info from
+   * @param map map owning the relation
+   * @return a detailed relations members string
    */
-  static bool containsOnePolygonAndOnePoi(ConstOsmMapPtr map);
+  static QString getRelationMembersDetailedString(ConstRelationPtr& relation,
+                                                  const ConstOsmMapPtr& map);
 
   /**
-   * Determines whether a map contains any polygons under the POI to Polygon conflation
-   * definition
+   * Returns the first way ID from a set of relation members
    *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
+   * @param relation relation to check way ID for
+   * @param map map owning the relation
+   * @return a way ID
    */
-  static bool containsPoiPolyPolys(ConstOsmMapPtr map);
+  static long getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map);
 
   /**
-   * Determines whether a map contains any areas
+   * Logs a detailed printout for an element
    *
-   * @param map the map to examine
-   * @return ttrue if the map meets the specified criteria; false otherwise
+   * @param element the element to log
+   * @param map map owning the element
    */
-  static bool containsAreas(ConstOsmMapPtr map);
+  static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map);
 
   /**
-   * Determines whether a map contains any buildings
+   * Determines if two elements have conflicting one way street tags
    *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @return true if their one way tags conflict; false otherwise
    */
-  static bool containsBuildings(ConstOsmMapPtr map);
+  static bool oneWayConflictExists(ElementPtr element1, ElementPtr element2);
 
   /**
-   * Determines whether a map contains any POIs
+   * Determines if a way has an explicitly negative one way tag (oneway=no, etc.)
    *
-   * @param map the map to examine
-   * @return true if the map meets the specified criteria; false otherwise
+   * @param element the element to examine
+   * @return true if the element contains a tag indicating it is not a one way street; false
+   * otherwise
    */
-  static bool containsPois(ConstOsmMapPtr map);
+  static bool explicitlyNotAOneWayStreet(ElementPtr element);
 
   /**
+   * Determines if two elements have conflicting name tags
    *
-   *
-   * @param relation
-   * @param map
-   * @return
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @return true if their name tags conflict; false otherwise
    */
-  static QString getDetailedRelationString(ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  static bool nameConflictExists(ElementPtr element1, ElementPtr element2);
 };
 
 }

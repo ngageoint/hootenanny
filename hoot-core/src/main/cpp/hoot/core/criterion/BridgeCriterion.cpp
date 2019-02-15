@@ -22,48 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "NoInformationCriterion.h"
+
+#include "BridgeCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, BridgeCriterion)
 
-bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
+BridgeCriterion::BridgeCriterion()
 {
-  const Tags tags = e->getTags();
-  const int informationCount = tags.getInformationCount();
-  const int reviewTagCount =
-    tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
-
-  //LOG_VART(e);
-  LOG_VART(e->getElementId());
-  LOG_VART(informationCount);
-  LOG_VART(_treatReviewTagsAsMetadata);
-  LOG_VART(reviewTagCount);
-
-  bool isSatisified = informationCount == 0;
-  if (!_treatReviewTagsAsMetadata)
-  {
-    isSatisified &= reviewTagCount == 0;
-  }
-  LOG_VART(isSatisified);
-  return isSatisified;
 }
 
-void NoInformationCriterion::setConfiguration(const Settings& conf)
+bool BridgeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  _treatReviewTagsAsMetadata = ConfigOptions(conf).getWriterCleanReviewTags();
+  const Tags& tags = e->getTags();
+  return !tags.isFalse("bridge") && !tags.get("bridge").trimmed().isEmpty();
 }
 
 }
-

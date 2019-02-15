@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayRfClassifier.h"
 
@@ -312,7 +312,7 @@ void HighwayRfClassifier::_init() const
     }
 
     vector<string> factorLabels = _rf->getFactorLabels();
-    LOG_VARD(factorLabels);
+    LOG_VART(factorLabels);
 
     QStringList extractorNames;
     for (size_t i = 0; i < _extractors.size(); i++)
@@ -331,9 +331,9 @@ void HighwayRfClassifier::_init() const
       }
       _rfFactorLabels.append(fn);
     }
-    LOG_VARD(extractorNames);
-    LOG_VARD(missingExtractors);
-    LOG_VARD(_rfFactorLabels);
+    LOG_VART(extractorNames);
+    LOG_VART(missingExtractors);
+    LOG_VART(_rfFactorLabels);
 
     if (missingExtractors.size() > 0)
     {

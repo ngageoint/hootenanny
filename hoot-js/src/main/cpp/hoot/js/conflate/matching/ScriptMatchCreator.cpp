@@ -451,6 +451,8 @@ public:
   Meters getCustomSearchRadius() const { return _customSearchRadius; }
   void setCustomSearchRadius(Meters searchRadius) { _customSearchRadius = searchRadius; }
 
+  long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
+
 private:
 
   // don't hold on to the map.
@@ -553,10 +555,18 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
   LOG_VART(_scriptPath);
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
   QFileInfo scriptFileInfo(_scriptPath);
-  LOG_INFO(
-    "Creating matches with: " << className() << "; rules: " << scriptFileInfo.fileName() << "...");
+
+  LOG_DEBUG(
+    "Creating matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
   map->visitRo(v);
+//  LOG_INFO(
+//    "Found " << v.getNumMatchCandidatesFound() << " " <<
+//    scriptFileInfo.fileName().replace(".js", "") << " match candidates.");
+  LOG_INFO(
+    "Found " << v.getNumMatchCandidatesFound() << " " <<
+    CreatorDescription::baseFeatureTypeToString(
+      _getScriptDescription(_scriptPath).baseFeatureType) << " match candidates.");
 }
 
 vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
@@ -564,8 +574,7 @@ vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
 
   // find all the files that end with .js in [ConfPath]/rules/
-  QStringList scripts = ConfPath::find(QStringList() << "*.js", "rules");
-
+  const QStringList scripts = ConfPath::find(QStringList() << "*.js", "rules");
   // go through each script
   for (int i = 0; i < scripts.size(); i++)
   {
@@ -659,7 +668,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   if (ToLocal(&plugin)->Has(featureTypeStr))
   {
     Handle<Value> value = ToLocal(&plugin)->Get(featureTypeStr);
-    result.baseFeatureType = CreatorDescription::StringToBaseFeatureType(toCpp<QString>(value));
+    result.baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
   }
 
   QFileInfo fi(path);
