@@ -137,7 +137,7 @@ QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
-    str += "Member #" + QString::number(i) + ":\n";
+    str += "Member #" + QString::number(i + 1) + ":\n";
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
     str += member->toString() + "\n";
   }
@@ -167,15 +167,18 @@ long OsmUtils::getFirstWayIdFromRelation(ConstRelationPtr relation, const OsmMap
   }
 }
 
-void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map)
+void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
+                                const Log::WarningLevel& logLevel, const QString message)
 {
-  // TODO: pass in trace level
-  LOG_VARD(element);
-  if (element->getElementType() == ElementType::Relation)
+  if (Log::getInstance().getLevel() <= logLevel)
   {
-    ConstRelationPtr relation =
-      boost::dynamic_pointer_cast<const Relation>(element);
-    LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+    LOG_VAR(message);
+    LOG_VAR(element);
+    if (element->getElementType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+      LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
+    }
   }
 }
 

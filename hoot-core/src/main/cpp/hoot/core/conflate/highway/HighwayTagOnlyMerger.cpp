@@ -133,8 +133,10 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       }
     }
 
-    OsmUtils::logElementDetail(e1, map);
-    OsmUtils::logElementDetail(e2, map);
+    OsmUtils::logElementDetail(
+      e1, map, Log::Debug, "HighwayTagOnlyMerger: e1");
+    OsmUtils::logElementDetail(
+      e2, map, Log::Debug, "HighwayTagOnlyMerger: e2");
 
 //    // hope this isn't happening
 //    if (e1->getElementType() == ElementType::Relation &&
@@ -182,8 +184,10 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
 
     //LOG_VART(elementWithTagsToKeep->getElementId());
     //LOG_VART(elementWithTagsToRemove->getElementId());
-    OsmUtils::logElementDetail(elementWithTagsToKeep, map);
-    OsmUtils::logElementDetail(elementWithTagsToRemove, map);
+    OsmUtils::logElementDetail(
+      elementWithTagsToKeep, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToKeep");
+    OsmUtils::logElementDetail(
+      elementWithTagsToRemove, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToRemove");
 
     if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
     {

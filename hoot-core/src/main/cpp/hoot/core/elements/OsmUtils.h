@@ -230,8 +230,12 @@ public:
    *
    * @param element the element to log
    * @param map map owning the element
+   * @param logLevel granularity at which to log the element
+   * @param message optional message
    */
-  static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map);
+  static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
+                               const Log::WarningLevel& logLevel = Log::Trace,
+                               const QString message = "");
 
   /**
    * Determines if two elements have conflicting one way street tags
