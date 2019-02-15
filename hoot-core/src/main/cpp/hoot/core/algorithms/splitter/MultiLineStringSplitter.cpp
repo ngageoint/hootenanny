@@ -117,7 +117,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
       matches[0]->getCircularError(), MetadataTags::RelationMultilineString()));
     for (size_t i = 0; i < matches.size(); i++)
     {
-      LOG_DEBUG(
+      LOG_TRACE(
         "multilinestring: adding multiple match to relation with ID: " << r->getId() <<
         " member: " << matches[i]->getElementId());
       LOG_VART(matches[i]);
@@ -128,7 +128,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     map->addElement(r);
   }
 
-  LOG_VARD(result);
+  LOG_VART(result);
   return result;
 }
 

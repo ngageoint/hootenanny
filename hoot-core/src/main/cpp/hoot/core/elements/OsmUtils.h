@@ -198,10 +198,10 @@ public:
   }
 
   /**
+   * Get a more detailed string representation of a relation
    *
-   *
-   * @param relation
-   * @param map
+   * @param relation relation to get info from
+   * @param map map owning the relation
    * @return
    */
   static QString getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map);
