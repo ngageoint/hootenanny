@@ -144,9 +144,9 @@ QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
   return str;
 }
 
-long OsmUtils::getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map)
+long OsmUtils::getFirstWayIdFromRelation(ConstRelationPtr relation, const OsmMapPtr& map)
 {
-  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   QSet<long> wayMemberIds;
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
@@ -169,16 +169,17 @@ long OsmUtils::getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& 
 
 void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map)
 {
-  LOG_VART(element);
+  // TODO: pass in trace level
+  LOG_VARD(element);
   if (element->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr relation =
       boost::dynamic_pointer_cast<const Relation>(element);
-    LOG_VART(OsmUtils::getRelationMembersDetailedString(relation, map));
+    LOG_VARD(OsmUtils::getRelationMembersDetailedString(relation, map));
   }
 }
 
-bool OsmUtils::oneWayConflictExists(ElementPtr element1, ElementPtr element2)
+bool OsmUtils::oneWayConflictExists(ConstElementPtr element1, ConstElementPtr element2)
 {
   // Technically, this should also take into account reverse one ways and check direction.  Since
   // we have a map pre-op standardizing all the ways to not be reversed, not worrying about it for
@@ -189,13 +190,13 @@ bool OsmUtils::oneWayConflictExists(ElementPtr element1, ElementPtr element2)
     (isAOneWayStreet.isSatisfied(element2) && explicitlyNotAOneWayStreet(element1));
 }
 
-bool OsmUtils::explicitlyNotAOneWayStreet(ElementPtr element)
+bool OsmUtils::explicitlyNotAOneWayStreet(ConstElementPtr element)
 {
   // TODO: use Tags::isFalse here instead
   return element->getTags().get("oneway") == "no";
 }
 
-bool OsmUtils::nameConflictExists(ElementPtr element1, ElementPtr element2)
+bool OsmUtils::nameConflictExists(ConstElementPtr element1, ConstElementPtr element2)
 {
   return
     element1->getTags().hasName() && element2->getTags().hasName() &&

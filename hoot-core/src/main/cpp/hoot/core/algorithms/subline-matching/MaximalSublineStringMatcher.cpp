@@ -119,7 +119,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   LOG_TRACE("Finding best match...");
   ScoredMatch scoredResult =
     _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1, reversed2);
-  LOG_VART(scoredResult);
+  LOG_VARD(scoredResult);
 
   // convert the best match into a WaySublineStringMatch and return.
   try
@@ -127,7 +127,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
     WaySublineMatchString result = scoredResult.matches;
     // this likely shouldn't be necessary. See https://github.com/ngageoint/hootenanny/issues/157.
     result.removeEmptyMatches();
-    LOG_VART(result);
+    LOG_VARD(result);
     return result;
   }
   catch (const OverlappingMatchesException& /*e*/)

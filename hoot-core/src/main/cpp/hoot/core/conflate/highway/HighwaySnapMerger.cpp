@@ -204,7 +204,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   if (!match.isValid())
   {
-    LOG_TRACE("Complex conflict causes an empty match");
+    LOG_DEBUG("Complex conflict causes an empty match");
     _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
                      HighwayMatch::getHighwayMatchName());
     return true;
@@ -280,7 +280,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       if (OneWayCriterion().isSatisfied(w2) &&
           !DirectionFinder::isSimilarDirection(map->shared_from_this(), w1, w2))
       {
-        LOG_TRACE("Reversing " << wMatch->getElementId() << "...");
+        LOG_DEBUG("Reversing " << wMatch->getElementId() << "...");
         wMatch->reverseOrder();
       }
     }
@@ -345,8 +345,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     LOG_VART(scraps2->getElementId());
   }
 
-  LOG_VART(map->getElement(eid1));
-  LOG_VART(map->getElement(eid2));
+  LOG_VARD(map->getElement(eid1));
+  LOG_VARD(map->getElement(eid2));
 
   return false;
 }

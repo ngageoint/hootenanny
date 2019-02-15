@@ -64,7 +64,6 @@ void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
       if (uniqueMembers.size() < (int)members.size())
       {
         _numAffected += ((int)members.size() - uniqueMembers.size());
-        LOG_VARD(_numAffected);
         relation->setMembers(uniqueMembers.toList().toVector().toStdVector());
       }
     }

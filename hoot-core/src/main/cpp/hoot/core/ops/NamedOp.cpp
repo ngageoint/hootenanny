@@ -70,7 +70,7 @@ void NamedOp::apply(OsmMapPtr& map)
     }
 
     timer.restart();
-    LOG_DEBUG("Element count before operation: " << map->getElementCount());
+    LOG_DEBUG("Element count before operation " << s << ": " << map->getElementCount());
     if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
       boost::shared_ptr<OsmMapOperation> t(
@@ -132,7 +132,7 @@ void NamedOp::apply(OsmMapPtr& map)
       throw HootException("Unexpected named operation: " + s);
     }
 
-    LOG_DEBUG("Element count after operation: " << map->getElementCount());
+    LOG_DEBUG("Element count after operation " << s << ": " << map->getElementCount());
 
     OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
   }
