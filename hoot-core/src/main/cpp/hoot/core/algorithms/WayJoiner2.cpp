@@ -41,6 +41,8 @@
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 #include <unordered_set>
 #include <vector>
@@ -491,7 +493,8 @@ void WayJoiner2::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& ke
   }
 }
 
-void WayJoiner2::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, WayPtr wayWithTagsToLose)
+void WayJoiner2::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep,
+                                             ConstWayPtr wayWithTagsToLose)
 {
   OneWayCriterion oneWayCrit;
   if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&
@@ -561,6 +564,15 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return;
   }
 
+  // If two roads disagree in highway type, don't join back up.
+  HighwayCriterion highwayCrit;
+  if (highwayCrit.isSatisfied(wayWithTagsToKeep) && highwayCrit.isSatisfied(wayWithTagsToLose) &&
+      OsmUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
+  {
+    LOG_TRACE("Conflicting highway type tags.  Skipping join.")
+    return;
+  }
+
   // Reverse the way if way to remove is one way and the two ways aren't in similar directions
   _handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
 
@@ -614,6 +626,7 @@ void WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   {
     mergedTags.set(MetadataTags::Length(), QString::number(totalLength));
   }
+
   parent->setTags(mergedTags);
 
   //  Remove the duplicate node id of the overlap
