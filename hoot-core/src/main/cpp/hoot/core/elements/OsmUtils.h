@@ -144,7 +144,8 @@ public:
   static QString currentTimeAsString();
 
   /**
-   * Determines whether a map contains a minimum or a fixed amount of elements matching the criterion type
+   * Determines whether a map contains a minimum or a fixed amount of elements matching the
+   * criterion type
    * Only objects of type ElementCriterion are allowed, all others will return false
    *
    * @param map the map to examine
@@ -152,9 +153,10 @@ public:
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
    */
-  template<class C> static bool contains(ConstOsmMapPtr map, int minCount = 1, bool exactCount = false)
+  template<class C> static bool contains(ConstOsmMapPtr map, int minCount = 1,
+                                         bool exactCount = false)
   {
-    if(!std::is_base_of<ElementCriterion,C>::value) return false;
+    if (!std::is_base_of<ElementCriterion,C>::value) return false;
 
     const long count =
       (long)FilteredVisitor::getStat(
@@ -166,13 +168,97 @@ public:
   }
 
   /**
+   * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
+   * times
+   * Only objects of type ElementCriterion are allowed, all others will return false
    *
-   *
-   * @param relation
-   * @param map
-   * @return
+   * @param element the element to examine
+   * @param minCount the minmal count of elements required (if exactCount == false)
+   * @param exactCount if true, the count must be exactly minCount
+   * @return true if the elements meet the specified criterion the specified number of times
    */
-  static QString getDetailedRelationString(ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  template<class C> static bool isSatisfied(const std::vector<ConstElementPtr>& elements,
+                                            int minCount = 1, bool exactCount = false)
+  {
+    if (!std::is_base_of<ElementCriterion,C>::value) return false;
+
+    int count = 0;
+    ElementCriterionPtr crit(new C());
+    for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin(); itr != elements.end();
+         ++itr)
+    {
+      if (crit->isSatisfied(*itr))
+      {
+        count++;
+      }
+    }
+
+    LOG_VART(count);
+    return exactCount ? (count == minCount) : (count >= minCount);
+  }
+
+  /**
+   * Get a more detailed string representation of a relation
+   *
+   * @param relation relation to get info from
+   * @param map map owning the relation
+   * @return a detailed relation string
+   */
+  static QString getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+
+  /**
+   * Get a detailed string representing a relation's members
+   *
+   * @param relation relation to get info from
+   * @param map map owning the relation
+   * @return a detailed relations members string
+   */
+  static QString getRelationMembersDetailedString(ConstRelationPtr& relation,
+                                                  const ConstOsmMapPtr& map);
+
+  /**
+   * Returns the first way ID from a set of relation members
+   *
+   * @param relation relation to check way ID for
+   * @param map map owning the relation
+   * @return a way ID
+   */
+  static long getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map);
+
+  /**
+   * Logs a detailed printout for an element
+   *
+   * @param element the element to log
+   * @param map map owning the element
+   */
+  static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if two elements have conflicting one way street tags
+   *
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @return true if their one way tags conflict; false otherwise
+   */
+  static bool oneWayConflictExists(ElementPtr element1, ElementPtr element2);
+
+  /**
+   * Determines if a way has an explicitly negative one way tag (oneway=no, etc.)
+   *
+   * @param element the element to examine
+   * @return true if the element contains a tag indicating it is not a one way street; false
+   * otherwise
+   */
+  static bool explicitlyNotAOneWayStreet(ElementPtr element);
+
+  /**
+   * Determines if two elements have conflicting name tags
+   *
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @return true if their name tags conflict; false otherwise
+   */
+  static bool nameConflictExists(ElementPtr element1, ElementPtr element2);
 };
 
 }

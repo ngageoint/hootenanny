@@ -71,20 +71,8 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
   const ConstElementPtr e1 = map->getElement(_eid1);
   const ConstElementPtr e2 = map->getElement(_eid2);
 
-  LOG_VART(e1->getElementId());
-  LOG_VART(e2->getElementId());
-//  LOG_VART(e1);
-//  if (Log::getInstance().getLevel() <= Log::Trace && e1->getElementType() == ElementType::Relation)
-//  {
-//    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e1);
-//    LOG_VARD(OsmUtils::getDetailedRelationString(relation, map));
-//  }
-//  LOG_VART(e2);
-//  if (Log::getInstance().getLevel() <= Log::Trace && e2->getElementType() == ElementType::Relation)
-//  {
-//    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e2);
-//    LOG_VARD(OsmUtils::getDetailedRelationString(relation, map));
-//  }
+  OsmUtils::logElementDetail(e1, map);
+  OsmUtils::logElementDetail(e2, map);
 
   try
   {
@@ -104,22 +92,7 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
       QStringList description;
       if (type != MatchType::Match)
       {
-        //  Check the Angle Histogram
-        double angle = AngleHistogramExtractor().extract(*map, e1, e2);
-        if (angle >= 0.75)          description.append("Very similar highway orientation.");
-        else if (angle >= 0.5)      description.append("Similar highway orientation.");
-        else if (angle >= 0.25)     description.append("Semi-similar highway orientation.");
-        else                        description.append("Highway orientation not similar.");
-
-        //  Use the average of the edge distance extractors
-        double edge = (EdgeDistanceExtractor(
-                         ValueAggregatorPtr(new RmseAggregator())).extract(*map, e1, e2) +
-                       EdgeDistanceExtractor(
-                         ValueAggregatorPtr(new SigmaAggregator())).extract(*map, e1, e2)) / 2.0;
-
-        if (edge >= 90)             description.append("Highway edges very close to each other.");
-        else if (edge >= 70)        description.append("Highway edges somewhat close to each other.");
-        else                        description.append("Highway edges not very close to each other.");
+        _updateNonMatchDescriptionBasedOnGeometricProperties(description, map, e1, e2);
       }
 
       if (description.length() > 0)
@@ -144,6 +117,29 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
     _c.setReviewP(1.0);
     _explainText = e.getWhat();
   }
+}
+
+void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(QStringList& description,
+                                                                        const ConstOsmMapPtr& map,
+                                                                        const ConstElementPtr e1,
+                                                                        const ConstElementPtr e2)
+{
+  //  Check the Angle Histogram
+  double angle = AngleHistogramExtractor().extract(*map, e1, e2);
+  if (angle >= 0.75)          description.append("Very similar highway orientation.");
+  else if (angle >= 0.5)      description.append("Similar highway orientation.");
+  else if (angle >= 0.25)     description.append("Semi-similar highway orientation.");
+  else                        description.append("Highway orientation not similar.");
+
+  //  Use the average of the edge distance extractors
+  double edge = (EdgeDistanceExtractor(
+                   ValueAggregatorPtr(new RmseAggregator())).extract(*map, e1, e2) +
+                 EdgeDistanceExtractor(
+                   ValueAggregatorPtr(new SigmaAggregator())).extract(*map, e1, e2)) / 2.0;
+
+  if (edge >= 90)             description.append("Highway edges very close to each other.");
+  else if (edge >= 70)        description.append("Highway edges somewhat close to each other.");
+  else                        description.append("Highway edges not very close to each other.");
 }
 
 QString HighwayMatch::explain() const

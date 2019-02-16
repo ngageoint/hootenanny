@@ -128,7 +128,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     map->addElement(r);
   }
 
-  //LOG_VART(result);
+  LOG_VART(result);
   return result;
 }
 

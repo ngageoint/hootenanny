@@ -33,6 +33,12 @@ Hootenanny is developed under the open source General Public License (GPL) and m
 
 Additional feature types can be made conflatable using Hootenanny's [pluggable conflation architecture](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 
+# Types of Conflation
+* **Reference Conflation** - Conflate the best geometry and tag parts of map B into map A.
+* **Horizontal (Cookie Cutter) Conflation** - Define a specifc region in map A that should not be modified at all and stitch in data from map B around it.
+* **Differential Conflation** - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A.  Optionally, you can configure to overwrite tags in A from B even when there is overlap.
+* **Attribute Conflation** - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with some configurable exceptions).
+
 # Feature Summary
 In addition to conflating maps together, Hootenanny can also:
 * Add [missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features

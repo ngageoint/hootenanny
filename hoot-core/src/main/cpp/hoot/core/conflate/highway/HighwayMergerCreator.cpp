@@ -90,7 +90,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*
     }
     else
     {
-      mergers.push_back(new HighwayTagOnlyMerger(eids));
+      mergers.push_back(new HighwayTagOnlyMerger(eids, sublineMatcher));
     }
     result = true;
   }
