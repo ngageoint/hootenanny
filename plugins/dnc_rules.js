@@ -35,26 +35,89 @@ dnc.rules = {
     // FCODE rules for Import
     // This is where anything "unique" to DNC goes.
     fcodeOne2oneIn : [
+        ['F_CODE','AA010','landuse','surface_mining'], // Extraction Mine
+        ['F_CODE','AB000','landuse','landfill'], // Disposal Site / Waste Pile
+        ['F_CODE','AB010','amenity','recycling'], // Wrecking Yard/Scrap Yard, Recycling Site
         ['F_CODE','AC000','facility','yes'], // Processing Plant - Superseded by AL010
+        ['F_CODE','AC030','water','settling_basin'], // Settling Basin/Sludge Pond, Settling Pond
+        ['F_CODE','AD010','power','plant'], // Electric Power Station, Power Plant
+        ['F_CODE','AD030','power','substation'], // Power Substation, Substation/Transformer Yard
+        ['F_CODE','AF010','man_made','chimney'], // Chimney/Smokestack
+        ['F_CODE','AF030','tower:type','cooling'], // Cooling Tower
+        ['F_CODE','AF040','man_made','crane'], // Crane
+        ['F_CODE','AF070','man_made','flare'], // Flare Pipe
         ['F_CODE','AH010','bastion','yes'], // Bastion/Rampart - not in NAS
         ['F_CODE','AH050','site:type','fortification'], // Fortification - not in NAS
+        ['F_CODE','AJ050','man_made','windmill'], // Windmill
+        ['F_CODE','AK020','tourism','theme_park_attraction'], // Amusement Park Attraction
+        ['F_CODE','AK040','leisure','pitch'], // Athletic Field, Sports Ground
+        ['F_CODE','AK080','man_made','outdoor_theatre_screen'], // Outdoor Theatre Screen
+        ['F_CODE','AK090','leisure','fairground'], // Fairground
+        ['F_CODE','AK100','leisure','golf_course'], // Golf Course
+        ['F_CODE','AK120','leisure','park'], // Park
+        ['F_CODE','AK130','leisure','track'], // Racetrack
+        ['F_CODE','AK160','leisure','stadium'], // Stadium/Amphitheater
+        ['F_CODE','AK180','tourism','zoo'], // Zoo/Safari Park
         ['F_CODE','AL005','boundary','protected_area'], // Animal Sanctuary - not in NAS
         ['F_CODE','AL015','building','yes'], // Building - NFDD AL013
+        ['F_CODE','AL018','building:superstructure','yes'], // Building Superstructure Addition
+        ['F_CODE','AL020','landuse','built_up_area'], // Built-up Area
+        ['F_CODE','AL025','man_made','cairn'], // Cairn
+        ['F_CODE','AL030','landuse','cemetery'], // Cemetery
         ['F_CODE','AL050','display_sign','yes'], // Display Sign
+        ['F_CODE','AL070','barrier','fence'], // Fence
+        ['F_CODE','AL073','man_made','flagpole'], // Flagpole
+        ['F_CODE','AL130','historic','monument'], // Memorial Monument
+        ['F_CODE','AL200','historic','ruins'], // Ruins
         ['F_CODE','AL240','man_made','tower'], // Tower (Non-Communication) - NFDD AL241
+        ['F_CODE','AL260','barrier','wall'], // Wall
+        ['F_CODE','AM010','landuse','depot'], // Storage Depot
+        ['F_CODE','AM020','man_made','silo'], // Grain Bin/Silo, Grain Storage Structure
+        ['F_CODE','AM030','man_made','grain_elevator'], // Grain Elevator
+        ['F_CODE','AM040','landuse','mineral_pile'], // Mineral Pile
+        ['F_CODE','AM070','man_made','storage_tank'], // Storage Tank
+        ['F_CODE','AM080','man_made','water_tower'], // Water Tower
+        ['F_CODE','AN010','railway','rail'], // Railway
+        ['F_CODE','AN060','service','yard'], // Railway Yard
+        ['F_CODE','AP020','junction','yes'], // Road Interchange - See RIT
+        ['F_CODE','AP030','highway','road'], // Road - See Custom rules
         ['F_CODE','AQ010','cableway','yes'], // Aerial Cableway / Ski Lift Lines - Superseded by AT041
         ['F_CODE','AQ020','aerialway','pylon'], // Aerial Cableway Pylon/Ski Pylon
-        ['F_CODE','AT020','man_made','radar_station'], // Early Warning Radar Site - not in NAS
+        ['F_CODE','AQ040','bridge','yes'], // Bridge
+        ['F_CODE','AQ045','bridge:span','yes'], // Bridge Span
+        ['F_CODE','AQ060','control_tower','yes'], // Control Tower
+        ['F_CODE','AQ070','route','ferry'], // Ferry Crossing
+        ['F_CODE','AQ080','amenity','ferry_terminal'], // Ferry Station, Ferry Site
+        ['F_CODE','AQ110','seamark:type','mooring'], // Mooring Mast
+        ['F_CODE','AQ113','man_made','pipeline'], // Pipeline
+        ['F_CODE','AQ116','man_made','pumping_station'], // Pumping Station
+        ['F_CODE','AQ130','tunnel','yes'], // Tunnel
+        ['F_CODE','AT005','cable','yes'], // Cable
+        ['F_CODE','AT010','landmark','dish_aerial'], // Dish Aerial
+        ['F_CODE','AT020','radar:use','early_warning'], // Early Warning Radar Site - not in NAS
         ['F_CODE','AT030','power','line'], // Power Line - Superseded by AT005
         ['F_CODE','AT040','pylon','yes'], // Power Transmission Pylon
+        ['F_CODE','AT045','man_made','radar_station'], // Radar Station, Radar Transmitter
         ['F_CODE','AT050','use','communication'], // Communication Building
         ['F_CODE','AT060','cable:type','communication'], // Communication Line - NFDD AT005
         ['F_CODE','AT080','tower:type','communication'], // Communications Tower - NFDD AL241
+        ['F_CODE','BA010','natural','coastline'], // Coastline/Shoreline, Land Water Boundary
         ['F_CODE','BA020','foreshore','yes'], // Foreshore Region - NFDD BA023
+        ['F_CODE','BA030','place','island'], // Island
+        ['F_CODE','BA040','water','tidal'], // Tidal Water
+        ['F_CODE','BB010','seamark:type','anchorage'], // GGDM3/NAS7 Anchorage
+        ['F_CODE','BB020','seamark:type','berth'], // GGDM3/NAS7 BERTH
         ['F_CODE','BB030','barrier','bollard'], // Bollard
         ['F_CODE','BB040','man_made','breakwater'], // Breakwater/Groyne
+        ['F_CODE','BB050','seamark:type','calling-in_point'], // GGDM3/NAS7 CALLING_IN_POINT
+        ['F_CODE','BB080','seamark:mooring:category','dolphin'], // GGDM3/NAS7 DOLPHIN
+        ['F_CODE','BB090','dock','drydock'], // Dry Dock
+        ['F_CODE','BB100','seamark:fishing_facility:category','stake'], // GGDM3/NAS7 Fishing Stakes
         ['F_CODE','BB105','seamark:harbour:category','fishing'], // Fishing Harbor
+        ['F_CODE','BB110','man_made','fish_traps'], // Fish Traps/Fish Weirs
+        ['F_CODE','BB115','seamark:type','gridiron'], // GGDM3/NAS7 NAUTICAL_GRIDIRON
         ['F_CODE','BB140','man_made','pier'], // Jetty
+        ['F_CODE','BB150','beach_landing_site','yes'], // GGDM3/NAS7 BEACH_LANDING_SITE
         ['F_CODE','BB160','mooring','ring'], // Mooring Ring
         ['F_CODE','BB170','seamark:platform:category','loading'], // Offshore Loading Facility
         ['F_CODE','BB180','produce','oysters'], // Oyster Bed/Mussel Bed
@@ -62,93 +125,102 @@ dnc.rules = {
         ['F_CODE','BB220','leisure','slipway'], // Ramp (Maritime) - How is this different from BB240??
         ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
         ['F_CODE','BB240','leisure','slipway'], // Slipway/Patent Slip  - NFDD BB082
-        ['F_CODE','BC100','leading_line','yes'], // Leading Line - A line which passes through at least two clearly defined objects, along which a vessel can safely travel
+        ['F_CODE','BC010','seamark:type','beacon'], // GGDM3/NAS7 Beacon
+        ['F_CODE','BC020','seamark:buoy','yes'], // GGDM3/NAS7 BUOY
+        ['F_CODE','BC040','seamark:light','yes'], // GGDM3/NAS7 MARITIME_NAVIGATION_LIGHT
+        ['F_CODE','BC055','seamark:type','navigation_marker'], // GGDM3/NAS7 MARITIME_NAVIGATION_MARKER
+        ['F_CODE','BC060','seamark:type','light_sector'], // GGDM3/NAS7 LIGHT_SECTOR
+        ['F_CODE','BC070','seamark:type','light_vessel'], // Light Vessel
+        ['F_CODE','BC080','seamark:type','insubstatial_navigation_marker'], // GGDM3/NAS7 INSUBSTANTIAL_NAV_MARK
+        ['F_CODE','BC100','leading_line','yes'], // Leading Line
         ['F_CODE','BD000','underwater_hazard','yes'], // Underwater Danger / Underwater Hazard - Not in NAS
         ['F_CODE','BD010','seamark:water_turbulence:category','breakers'], // Breakers - not in NAS
+        ['F_CODE','BD020','seamark:obstruction:category','crib'], // GGDM3/NAS7 Crib
+        ['F_CODE','BD030','discolored_water','yes'], // GGDM3/NAS7 Discolored Water
         ['F_CODE','BD040','seamark:water_turbulence:category','eddies'], // Eddies
+        ['F_CODE','BD050','foul_ground','yes'], // GGDM3/NAS7 Foul Ground
         ['F_CODE','BD060','seamark:vegetation:category','kelp'], // Kelp/Seaweed
         ['F_CODE','BD080','seamark:water_turbulence:category','overfalls'], // Overfalls / Tide Rips
+        ['F_CODE','BD100','structural_pile','yes'], // Structural Pile
         ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
+        ['F_CODE','BD120','natural','reef'], // GGDM3/NAS7 Reef
+        ['F_CODE','BD130','seamark:obstruction:category','rock'], // GGDM3/NAS7 Hazardous Rock
+        ['F_CODE','BD140','seamark:obstruction:category','stump'], // Snag / Stump
+        ['F_CODE','BD180','historic','wreck'], // GGDM3/NAS7 Wreck
+        ['F_CODE','BE010','seamark:type','depth_curve'], // GGDM3/NAS7 DEPTH_CURVE
+        ['F_CODE','BE020','seamark:type','sounding'], // GGDM3/NAS7 SOUNDING
+        ['F_CODE','BF010','seamark:type','seabed_area'], // GGDM3/NAS7 BOTTOM_CHARACTER_REGION
+        ['F_CODE','BG010','seamark:type','water_movement'], // GGDM3/NAS7 WATER_MOVEMENT_DATA_LOCATION
         ['F_CODE','BG020','monitoring:tide_gauge','yes'], // Tide Gauge
+        ['F_CODE','BG030','seamark:type','observation_station'], // GGDM3/NAS7 TIDAL_STREAM_OBSERVE_STATION
         ['F_CODE','BG040','current_diagram','yes'], // Current Diagram
+        ['F_CODE','BH010','bridge','aqueduct'], // Aqueduct
+        ['F_CODE','BH020','waterway','canal'], // Canal
+        ['F_CODE','BH050','landuse','aquaculture'], // GGDM3/NAS7 MARICULTURE_SITE
         ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
+        ['F_CODE','BH090','water','intermittent'], // Land Subject to Inundation
         ['F_CODE','BH095','natural','wetland'], // Wetland
+        ['F_CODE','BH120','waterway','rapids'], // Rapids
         ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
+        ['F_CODE','BH140','waterway','river'], // River - See custom rules
+        ['F_CODE','BH155','landuse','salt_pond'], // Salt Evaporator
+        ['F_CODE','BH180','waterway','waterfall'], // Waterfall
         ['F_CODE','BH210','shoreline','yes'], // Inland Shoreline - NFDD BA010 Land/water boundary
+        ['F_CODE','BI020','waterway','dam'], // Dam/Weir
+        ['F_CODE','BI030','lock','yes'], // Lock
+        ['F_CODE','BI040','waterway','flow_control'], // Sluice Gate
+        ['F_CODE','BJ030','natural','glacier'], // Glacier
+        ['F_CODE','BJ060','natural','ice_peak'], // Ice Peak
+        ['F_CODE','BJ065','natural','ice_shelf'], // Ice Shelf
+        ['F_CODE','BJ100','landcover','snowfield'], // Snow Field and/or Ice-field
+        ['F_CODE','BJ110','natural','tundra'], // Tundra
+        ['F_CODE','CA010','contour','elevation'], // Elevation Contour
+        ['F_CODE','CA030','geological','spot_elevation'], // Spot Elevation
+        ['F_CODE','DA010','geological','soil_surface_region'], // Soil Surface Region
+        ['F_CODE','DB090','embankment','yes'], // Embankment, Embankment/Fill
+        ['F_CODE','DB170','natural','dune'], // Sand Dune/Sand Hills
+        ['F_CODE','DB180','natural','volcano'], // Volcano
+        ['F_CODE','EA030','landuse','plant_nursery'], // Plant Nursery
+        ['F_CODE','EA040','landuse','orchard'], // Orchard/Plantation
+        ['F_CODE','EA050','landuse','vineyard'], // Vineyard
         ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
+        ['F_CODE','FA000','boundary','administrative'], // GGDM3/NAS7 Administrative Boundary
+        ['F_CODE','FA001','boundary','administrative_area'], // Administrative Area
         ['F_CODE','FA020','boundary','armistice_line'], // Armistice Line
         ['F_CODE','FA040','boundary','claim_line'], // Claim Line
         ['F_CODE','FA060','boundary','defacto'], // Defacto Boundary
+        ['F_CODE','FA110','boundary','date_line'], // GGDM3/NAS7 International Date Line
+        ['F_CODE','FC021','seamark:type','boundary'], // GGDM3/NAS7 MARITIME_LIMIT
         ['F_CODE','FC031','maritime_area','yes'], // Maritime Area
         ['F_CODE','FC036','restricted_area','yes'], // Restricted Area
+        ['F_CODE','FC041','seamark:type','traffic_separation_scheme'], // GGDM3/NAS7 TRAFFIC_SEPARATION_SCHEME
+        ['F_CODE','FC100','seamark:type','measured_distance_line'], // GGDM3/NAS7 MEASURED_DISTANCE_LINE
+        ['F_CODE','FC130','seamark:type','radar_line'], // GGDM3/NAS7 MARITIME_RADAR_REF_LINE
+        ['F_CODE','FC165','seamark:type','route'], // GGDM3/NAS7 MARITIME_ROUTE
         ['F_CODE','FC170','seamark:type','fairway'], // Safety Fairway
+        ['F_CODE','FC177','waterway','swept_area'], // GGDM3/NAS7 SWEPT_AREA
         ['F_CODE','GA020','aeroway:light','obstacle'], // Air Obstruction Light
         ['F_CODE','GA035','aeroway','navigationaid'], // Aeronautical NAVAID - FCODE Retired
+        ['F_CODE','GB005','aeroway','aerodrome'], // Land Aerodrome
         ['F_CODE','GB010','aeroway:light','yes'], // Airport Lights
+        ['F_CODE','GB055','aeroway','runway'], // Runway
+        ['F_CODE','GB070','seamark:type','seaplane_landing_area'], // Seaplane Run
+        ['F_CODE','ZC040','natural','magnetic_anomoly'], // GGDM3/NAS7 LOCAL_MAGNETIC_ANOMALY
+        ['F_CODE','ZD040','named_location','yes'], // Named Location
     ], // End fcodeOne2oneIn
 
     // FCODE rules for Export
     // This is for exporting "unique" DNC features.
     fcodeOne2oneOut : [
-        ['F_CODE','AC000','facility','yes'], // Processing Plant - Superseded by AL010
         ['F_CODE','AD010','power','generator'], // Electric Power Station, Power Plant
-        ['F_CODE','AH010','bastion','yes'], // Bastion/Rampart - not in NAS
-        ['F_CODE','AH050','site:type','fortification'], // Fortification - not in NAS
-        ['F_CODE','AL005','boundary','protected_area'], // Animal Sanctuary - not in NAS
-        ['F_CODE','AL015','building','yes'], // Building - NFDD AL013
-        ['F_CODE','AL050','display_sign','yes'], // Display Sign
-        ['F_CODE','AL240','man_made','tower'], // Tower (Non-Communication) - NFDD AL241
         ['F_CODE','AP030','highway','track'], // Cart Track - mapped to Road for this translation
-        ['F_CODE','AQ010','cableway','yes'], // Aerial Cableway / Ski Lift Lines - Superseded by AT041
-        ['F_CODE','AQ020','aerialway','pylon'], // Aerial Cableway Pylon/Ski Pylon
-        ['F_CODE','AT020','man_made','radar_station'], // Early Warning Radar Site - not in NAS
-        ['F_CODE','AT030','power','line'], // Power Line - Superseded by AT005
-        ['F_CODE','AT040','pylon','yes'], // Power Transmission Pylon
-        ['F_CODE','AT050','use','communication'], // Communication Building
-        ['F_CODE','AT060','cable:type','communication'], // Communication Line - NFDD AT005
-        ['F_CODE','AT080','tower:type','communication'], // Communications Tower - NFDD AL241
-        ['F_CODE','BA020','foreshore','yes'], // Foreshore Region - NFDD BA023
         ['F_CODE','BA030','place','islet'], // Island
         ['F_CODE','BA040','natural','water'], // Water
-        ['F_CODE','BB030','barrier','bollard'], // Bollard
-        ['F_CODE','BB040','man_made','breakwater'], // Breakwater/Groyne
-        ['F_CODE','BB105','seamark:harbour:category','fishing'], // Fishing Harbor
-        ['F_CODE','BB140','man_made','pier'], // Jetty
-        ['F_CODE','BB160','mooring','ring'], // Mooring Ring
-        ['F_CODE','BB170','seamark:platform:category','loading'], // Offshore Loading Facility
-        ['F_CODE','BB180','produce','oysters'], // Oyster Bed/Mussel Bed
-        ['F_CODE','BB190','waterway','dock'], // Pier /Wharf /Quay
-        ['F_CODE','BB220','leisure','slipway'], // Ramp (Maritime) - How is this different from BB240??
-        ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
-        ['F_CODE','BB240','leisure','slipway'], // Slipway/Patent Slip  - NFDD BB082
-        ['F_CODE','BC100','leading_line','yes'], // Leading Line - A line which passes through at least two clearly defined objects, along which a vessel can safely travel
-        ['F_CODE','BD000','underwater_hazard','yes'], // Underwater Danger / Underwater Hazard - Not in NAS
-        ['F_CODE','BD010','seamark:water_turbulence:category','breakers'], // Breakers - not in NAS
-        ['F_CODE','BD040','seamark:water_turbulence:category','eddies'], // Eddies
-        ['F_CODE','BD060','seamark:vegetation:category','kelp'], // Kelp/Seaweed
-        ['F_CODE','BD080','seamark:water_turbulence:category','overfalls'], // Overfalls / Tide Rips
-        ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
         ['F_CODE','BD120','subsea','barrier-reef'], // Reef
         ['F_CODE','BD120','subsea','reef'], // Reef
         ['F_CODE','BD120','subsea','coral_reef'], // Reef
-        ['F_CODE','BG020','monitoring:tide_gauge','yes'], // Tide Gauge
-        ['F_CODE','BG040','current_diagram','yes'], // Current Diagram
-        ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
-        ['F_CODE','BH095','natural','wetland'], // Wetland
-        ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
-        ['F_CODE','BH210','shoreline','yes'], // Inland Shoreline - NFDD BA010 Land/water boundary
-        ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
         ['F_CODE','EC030','natural','tree'], // Wood - NFDD EC005
         ['F_CODE','EC030','natural','wood'], // Wood - NFDD EC015
-        ['F_CODE','FA020','boundary','armistice_line'], // Armistice Line
-        ['F_CODE','FA040','boundary','claim_line'], // Claim Line
-        ['F_CODE','FA060','boundary','defacto'], // Defacto Boundary
-        ['F_CODE','FC031','maritime_area','yes'], // Maritime Area
-        ['F_CODE','FC036','restricted_area','yes'], // Restricted Area
-        ['F_CODE','FC170','seamark:type','fairway'], // Safety Fairway
-        ['F_CODE','GA020','aeroway:light','obstacle'], // Air Obstruction Light
-        ['F_CODE','GA035','aeroway','navigationaid'], // Aeronautical NAVAID - FCODE Retired
-        ['F_CODE','GB010','aeroway:light','yes'], // Airport Lights
         ['F_CODE','ZD040','natural','bay'], // Named Location
         ['F_CODE','ZD040','tourism','viewpoint'], // Named Location
     ], // End fcodeOne2oneOut
@@ -357,7 +429,7 @@ dnc.rules = {
         // ['BTC','0','seamark:buoy:type','unknown'], // Unknown
         ['BTC','0',undefined,undefined], // Unknown
         ['BTC','4','seamark:buoy_special_purpose:category','lanby'], // Large Navigational Buoy (LANBY)
-        ['BTC','6','seamark:type','light_float'], // Light Float
+        ['BTC','6','seamark:buoy:type','light_float'], // Light Float
         ['BTC','7','seamark:mooring:category','buoy'], // Mooring
         ['BTC','10','seamark:buoy_special_purpose:category','odas'], // Ocean Data Acquisition System (ODAS)
         ['BTC','35','seamark:type','articulated_lights'], // Articulated Lights
@@ -1337,12 +1409,12 @@ dnc.rules = {
         'BI040L':{'NAM':'N/A'},
         'BJ030A':{'SIC':'-32768'},
         'BJ065A':{'SIC':'-32768'},
-        'BJ110A':{'SIC':'-32768'},
+        'BJ100A':{'SIC':'-32768'},
         'DB090A':{'EXS':'-32768'},
         'DB170A':{'EXS':'-32768','USE':'-32768','VRR':'-32678'},
-        'FA020L':{'USE':'N/A'},
-        'FA040L':{'NM4':'N/A','USE':'N/A'},
-        'FA110L':{'NM3':'N/A','NM4':'N/A','USE':'N/A'},
+        'FA020L':{'USE':'-32768'},
+        'FA040L':{'NM4':'N/A','USE':'-32768'},
+        'FA110L':{'NM3':'N/A','NM4':'N/A','USE':'-32768'},
         'FC021P':{'COD':'-32768','MAC':'0','WID':'-2147483648','TIM':'-32768','TXT':'N/A'},
         'FC036A':{'COD':'-32768','EXS':'-32678','NAM':'N/A','OPS':'-32768'},
         'FC036L':{'COD':'-32768','DRP':'N/A','EXS':'-32768','MBL':'-32768','NAM':'N/A','OPS':'-32768','PBV':'-32768','PRO':'0'},
@@ -1562,7 +1634,8 @@ dnc.rules = {
         'EC030A':'TREEA',
         'EC030P':'TREEP',
         'FA000L':'ADMINL',
-        'FA000L':'COALINE',
+        // 'FA000L':'COALINE', // Fixing this in the manyFeatures function
+        'FA001A':'COAAREA',
         'FA020L':'BOUNDRYL',
         'FA040L':'BOUNDRYL',
         'FA060L':'BOUNDRYL',

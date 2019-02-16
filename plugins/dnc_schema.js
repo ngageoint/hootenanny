@@ -633,7 +633,7 @@ getDbSchema: function()
                        defValue:"0",
                        enumerations:[
                            { name:"Null",value:"-32768" },
-                           { name:"Unknown",value:"28" },
+                           { name:"Unknown",value:"0" },
                            { name:"Under Construction",value:"5" },
                            { name:"Abandoned / Disused",value:"6" },
                            { name:"Destroyed",value:"7" },

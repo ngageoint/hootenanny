@@ -16,5 +16,17 @@
         "isA": "seamark:type",
         "name": "seamark:type=*",
         "objectType": "tag"
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "seamark:type",
+        "name": "seamark:type=measured_distance_line",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "seamark:type",
+        "name": "seamark:type=radar_line",
+        "objectType": "tag"
     }
 ]

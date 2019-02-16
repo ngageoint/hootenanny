@@ -59,21 +59,6 @@ dnc = {
                                     });
         }
 
-        // Build the DNC fcode/attrs lookup table. Note: This is <GLOBAL>
-        // dncAttrLookup = {};
-
-        // for (var i=0, sLen = dnc.rawSchema.length; i < sLen; i++)
-        // {
-        //     var attrArray = [];
-        //     for (var j=0, cLen = dnc.rawSchema[i].columns.length; j < cLen; j++)
-        //     {
-        //         attrArray.push(dnc.rawSchema[i].columns[j].name);
-        //     }
-        //     // Add the attrArray to the list as <layerName>:[array]  
-        //     // Eg RIVERL:[array]
-        //     dncAttrLookup[dnc.rawSchema[i].name] = attrArray;
-        // }
-
         // Now add an o2s[A,L,P] feature to the dnc.rawSchema
         // We can drop features but this is a nice way to see what we would drop
         dnc.rawSchema = translate.addEmptyFeature(dnc.rawSchema);
@@ -94,8 +79,17 @@ dnc = {
         // Add the first feature to the structure that we return
         var returnData = [{attrs:attrs, tableName:''}];
 
-        // Quit early if we don't need to check anything. We are only looking at linework
+        // Quit early if we don't need to check anything. We are only looking at linework from now on
         if (geometryType !== 'Line') return returnData;
+
+        // Admin Line vs Coastline - FA000
+        // I have no idea why this F_CODE is in two layers.
+        if (attrs.F_CODE == 'FA000')
+        {
+            returnData.push({attrs:attrs, tableName:'COALINE'});
+            return returnData;
+        }
+
 
         // Only looking at roads & railways with something else tacked on
         if (!(tags.highway || tags.railway)) return returnData;
@@ -242,7 +236,7 @@ dnc = {
     validateAttrs: function(layerName,geometryType,attrs,notUsed,transMap) {
 
         // Debug:
-        print('Validate: ' + attrs.F_CODE + ' Geom:' + geometryType + ' LayerName:' + layerName);
+        // print('Validate: ' + attrs.F_CODE + ' Geom:' + geometryType + ' LayerName:' + layerName);
 
         // No quick and easy way to do this unless we build yet another lookup table
         var feature = {};
@@ -263,11 +257,11 @@ dnc = {
             hoot.logError('Validate: No feature for ' + layerName);
             return;
         }
-        else
-        {
+        // else
+        // {
             // Debug:
-            print('FeatureName: ' + feature.name);
-        }
+            // print('FeatureName: ' + feature.name);
+        // }
 
 
         var attrArray = [];
@@ -282,12 +276,12 @@ dnc = {
             if (attrArray.indexOf(val) == -1)
             {
                 // Debug:
-                print('Validate: Dropping ' + val + ' from ' + layerName);
+                // print('Validate: Dropping ' + val + ' from ' + layerName);
                 if (val in transMap)
                 {
                     notUsed[transMap[val][1]] = transMap[val][2];
                     // Debug:
-                    print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+                    // print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
                 }
                 else
                 {
@@ -335,11 +329,11 @@ dnc = {
             if (dnc.rules.defaultList[attrs.F_CODE])
             {
                 // Debug:
-                print('Found: ' + gFcode + ' in the default list');
+                // print('Found: ' + gFcode + ' in the default list');
                 if (dnc.rules.defaultList[gFcode][attrs[colName]])
                 {
                     // Debug:
-                    print('Setting: ' + colName + ' to ' + dnc.rules.defaultList[gFcode][attrs[colName]]);
+                    // print('Setting: ' + colName + ' to ' + dnc.rules.defaultList[gFcode][attrs[colName]]);
                     attrs[colName] = dnc.rules.defaultList[gFcode][attrs[colName]];
 
                     // We wiped the value so try to restore the tags for it
@@ -348,7 +342,7 @@ dnc = {
                     {
                         notUsed[transMap[colName][1]] = transMap[colName][2];
                         // Debug:
-                        print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
+                        // print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
                     }
 
                     // Since we eddited the attribute, no point checking if it is enumerated.
@@ -376,7 +370,7 @@ dnc = {
                         attrs[colName] = feature.columns[i].defValue;
 
                         // Debug:
-                        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to its default value (' + feature.columns[i].defValue + ')');
+                        // print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to its default value (' + feature.columns[i].defValue + ')');
                     }
                     else
                     {
@@ -384,7 +378,7 @@ dnc = {
                         attrs[colName] = '999';
 
                         // Debug:
-                        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to Other (999)');
+                        // print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to Other (999)');
                     }
 
                     // Since we either wiped the value or set it to '999', try to restore the tags for it 
@@ -392,7 +386,7 @@ dnc = {
                     {
                         notUsed[transMap[colName][1]] = transMap[colName][2];
                         // Debug:
-                        print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
+                        // print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
                     }
                 }
 
@@ -602,17 +596,16 @@ dnc = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
-            ["t.man_made == 'radar_station'","t['radar:use'] = 'early_warning';"],
+            ["t['radar:use'] == 'early_warning' && !(t.man_made == 'radar_station')","t.man_made = 'radar_station'"],
             ["t['cable:type'] && !(t.cable)","t.cable = 'yes';"],
             ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
             ["t.foreshore && !(t.tidal)","t.tidal = 'yes'; t.natural = 'water'"],
-            ["t.tidal && !(t.water)","t.natural = 'water'"]
+            ["t.water == 'tidal' && !(t.natural)","t.natural = 'water'"]
+            // ["t.tidal && !(t.water)","t.natural = 'water'"]
             ];
 
             dnc.osmPostRules = translate.buildComplexRules(rulesList);
         }
-
-        // translate.applyComplexRules(tags,attrs,rulesList);
         translate.applyComplexRules(tags,attrs,dnc.osmPostRules);
 
         // Unpack the OSM_TAGS attribute if it exists
@@ -679,6 +672,29 @@ dnc = {
             }
 
         } // End Cleanup loop
+
+        if (dnc.dncPreRules == undefined)
+        {
+            // ##############
+            // A "new" way of specifying rules. Jason came up with this while playing around with NodeJs
+            //
+            // Rules format:  ["test expression","output result"];
+            // Note: t = tags, a = attrs and attrs can only be on the RHS
+            var rulesList = [
+            ["t['radar:use'] == 'early_warning' && t.man_made == 'radar_station'","delete t.man_made"]
+            ];
+
+            dnc.dncPreRules = translate.buildComplexRules(rulesList);
+        }
+
+        // Apply the rulesList
+        // translate.applyComplexRules(tags,attrs,dnc.dncPreRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = dnc.dncPreRules.length; i < rLen; i++)
+        {
+            if (dnc.dncPreRules[i][0](tags)) dnc.dncPreRules[i][1](tags,attrs);
+        }
+
 
         // natural water usually has a subtype. If it does, just keep the subtype
         if (tags.natural == 'water' && tags.water) delete tags.natural;
@@ -875,6 +891,9 @@ dnc = {
                     {
                         var row = dnc.fcodeLookup[col][value];
                         attrs.F_CODE = row[1];
+
+                        // Debug:
+                        // print('F_CODE: ' + col + ' = ' + value + ' makes ' + row[1]);
                     }
                 }
             }
@@ -882,6 +901,22 @@ dnc = {
 
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
+
+        // Now, re-translate some of the NAS building F_CODES to DNC
+        var buildingList = ['AD041','AH060','AJ080','AJ085','AJ110','AK110','AL014','AL019','AL099','AL250','AL371','GB230']; 
+        if (buildingList.indexOf(attrs.F_CODE) > -1)
+        {
+            attrs.F_CODE = 'AL015'; // General Building
+        }
+
+        // Some more custom F_CODE fixes
+        if (!attrs.F_CODE)
+        {
+            if (tags.aeroway == 'heliport') attrs.F_CODE = 'GB005'; // Airport
+            if (tags.landcover == 'snowfield' || tags.landcover == 'ice-field') attrs.F_CODE = 'BJ100'; // Snowfield/Icefield
+            if (tags.aeroway == 'heliport') attrs.F_CODE = 'GB005'; // Airport
+
+        }
 
     }, // End applyToOgrPreProcessing
 
@@ -1057,10 +1092,7 @@ dnc = {
             case 'FC036P': // Restricted Area
                 if (!attrs.MAC) attrs.MAC = '0';
                 break;
-
-
-        }
-
+        } // End default fixes
 
     }, // End applyToOgrPostProcessing
 
@@ -1123,10 +1155,7 @@ dnc = {
         // the fcode one2one rules
         if (dnc.fcodeLookup == undefined)
         {
-            // Add the FCODE rules for Import
-            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,dnc.rules.fcodeOne2oneIn);
-
-            dnc.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+            dnc.fcodeLookup = translate.createLookup(dnc.rules.fcodeOne2oneIn);
             // translate.dumpOne2OneLookup(dnc.fcodeLookup);
         }
 
@@ -1258,9 +1287,8 @@ dnc = {
         if (dnc.fcodeLookup == undefined)
         {
             // Add the FCODE rules for Export
-            // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,dnc.rules.fcodeOne2oneOut);
-            // dnc.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
-            fcodeCommon.one2one.push.apply(dnc.rules.fcodeOne2oneOut,fcodeCommon.one2one);
+            // We use the input rules and add the output ones on to the list
+            dnc.rules.fcodeOne2oneIn.push.apply(dnc.rules.fcodeOne2oneOut,dnc.rules.fcodeOne2oneIn);
             dnc.fcodeLookup = translate.createBackwardsLookup(dnc.rules.fcodeOne2oneOut);
             // Debug
             // translate.dumpOne2OneLookup(dnc.fcodeLookup);
@@ -1312,6 +1340,27 @@ dnc = {
         // dnc.applyToOgrPostProcessing(tags, attrs, geometryType);
         dnc.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
+        // Now figure out of the tags we used to find the F_CODE are still in the notUsedTags list
+        // If so, delete them
+        for (var col in notUsedTags)
+        {
+            var value = notUsedTags[col];
+            if (col in dnc.fcodeLookup)
+            {
+                if (value in dnc.fcodeLookup[col])
+                {
+                    var row = dnc.fcodeLookup[col][value];
+                    if (attrs.F_CODE == row[1])
+                    {
+                        // Debug:
+                        // print('F_CODE: Dropping ' + col + '=' + value + ' from notUsedTags');
+                        delete notUsedTags[col];
+                        break;
+                    }
+                }
+            }
+        } // End clean notUsedTags
+
         // Debug
         if (dnc.configOut.OgrDebugDumptags == 'true')
         {
@@ -1349,7 +1398,8 @@ dnc = {
                 // if (dncAttrLookup[gFcode.toUpperCase()])
                 if (tableName !== '')
                 {
-                    returnData[i]['tableName'] = tableName;
+                    // If we have already set the tablename, don't stomp on it
+                    if (returnData[i]['tableName'] == '') returnData[i]['tableName'] = tableName;
 
                     // Validate attrs: remove all that are not supposed to be part of a feature
                     dnc.validateAttrs(tableName,geometryType,returnData[i]['attrs'],notUsedTags,transMap);
