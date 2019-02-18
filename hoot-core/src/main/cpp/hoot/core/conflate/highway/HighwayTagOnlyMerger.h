@@ -64,7 +64,10 @@ private:
                                ElementPtr& toRemove, bool& removeSecondaryElement);
 
   void _handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,
-                                   ElementPtr elementWithTagsToRemove, const OsmMapPtr& map);
+                                   ConstElementPtr elementWithTagsToRemove, const OsmMapPtr& map);
+
+  bool _conflictExists(ConstElementPtr elementWithTagsToKeep,
+                       ConstElementPtr elementWithTagsToRemove) const;
 };
 
 typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;

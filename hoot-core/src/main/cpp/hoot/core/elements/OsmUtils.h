@@ -223,15 +223,19 @@ public:
    * @param map map owning the relation
    * @return a way ID
    */
-  static long getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map);
+  static long getFirstWayIdFromRelation(ConstRelationPtr relation, const OsmMapPtr& map);
 
   /**
    * Logs a detailed printout for an element
    *
    * @param element the element to log
    * @param map map owning the element
+   * @param logLevel granularity at which to log the element
+   * @param message optional message
    */
-  static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map);
+  static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
+                               const Log::WarningLevel& logLevel = Log::Trace,
+                               const QString message = "");
 
   /**
    * Determines if two elements have conflicting one way street tags
@@ -240,7 +244,7 @@ public:
    * @param element2 the second element to examine
    * @return true if their one way tags conflict; false otherwise
    */
-  static bool oneWayConflictExists(ElementPtr element1, ElementPtr element2);
+  static bool oneWayConflictExists(ConstElementPtr element1, ConstElementPtr element2);
 
   /**
    * Determines if a way has an explicitly negative one way tag (oneway=no, etc.)
@@ -249,7 +253,7 @@ public:
    * @return true if the element contains a tag indicating it is not a one way street; false
    * otherwise
    */
-  static bool explicitlyNotAOneWayStreet(ElementPtr element);
+  static bool explicitlyNotAOneWayStreet(ConstElementPtr element);
 
   /**
    * Determines if two elements have conflicting name tags
@@ -258,7 +262,17 @@ public:
    * @param element2 the second element to examine
    * @return true if their name tags conflict; false otherwise
    */
-  static bool nameConflictExists(ElementPtr element1, ElementPtr element2);
+  static bool nameConflictExists(ConstElementPtr element1, ConstElementPtr element2);
+
+  /**
+   * Determines if there are specific highway type conflicts between elements
+   *
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @return true if both have specific highway tags (other than highway=road) and they disagree;
+   * false otherwise
+   */
+  static bool nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2);
 };
 
 }

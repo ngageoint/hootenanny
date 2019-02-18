@@ -1792,4 +1792,20 @@ void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv)
   d->updateOrCreateVertex(tv);
 }
 
+QString OsmSchema::getParentKvp(const QString kvp1, const QString kvp2)
+{
+  if (isAncestor(kvp1, kvp2))
+  {
+    return kvp2;
+  }
+  else if (isAncestor(kvp2, kvp1))
+  {
+    return kvp1;
+  }
+  else
+  {
+    return kvp1;
+  }
+}
+
 }
