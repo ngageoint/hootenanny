@@ -221,7 +221,6 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     elementWithTagsToKeep->setStatus(Status::Conflated);
     OsmUtils::logElementDetail(
       elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: keeper element");
-
     // mark element for replacement
     if (removeSecondaryElement)
     {

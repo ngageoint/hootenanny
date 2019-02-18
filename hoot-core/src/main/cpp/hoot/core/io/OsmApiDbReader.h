@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBREADER_H
 #define OSMAPIDBREADER_H
@@ -53,11 +53,11 @@ public:
 
 protected:
 
-  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
+  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) override;
+  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
 
-  virtual boost::shared_ptr<ApiDb> _getDatabase() const { return _database; }
+  virtual boost::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
 private:
 

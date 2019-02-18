@@ -61,15 +61,15 @@ public:
   HootApiDbBulkInserter();
   virtual ~HootApiDbBulkInserter();
 
-  virtual bool isSupported(QString url);
-  virtual void open(QString url);
+  virtual bool isSupported(QString url) override;
+  virtual void open(QString url) override;
 
   virtual void finalizePartial();
-  virtual void writePartial(const ConstNodePtr& node);
-  virtual void writePartial(const ConstWayPtr& way);
-  virtual void writePartial(const ConstRelationPtr& relation);
+  virtual void writePartial(const ConstNodePtr& node) override;
+  virtual void writePartial(const ConstWayPtr& way) override;
+  virtual void writePartial(const ConstRelationPtr& relation) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
   long getMapId() const { return _database.getMapId(); }
 
@@ -78,7 +78,7 @@ public:
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
-  virtual QString supportedFormats() { return "hootapidb://"; }
+  virtual QString supportedFormats() override { return "hootapidb://"; }
 
 protected:
 
@@ -89,7 +89,7 @@ protected:
 
   //creates the output files containing the data
   virtual void _createNodeOutputFiles();
-  virtual QStringList _createSectionNameList();
+  virtual QStringList _createSectionNameList() override;
   virtual void _createWayOutputFiles();
   virtual void _createRelationOutputFiles();
 
@@ -98,10 +98,10 @@ protected:
   virtual void _writeRelationMember(const unsigned long sourceRelationDbId,
                             const RelationData::Entry& member,
                             const unsigned long memberDbId,
-                            const unsigned int memberSequenceIndex);
+                            const unsigned int memberSequenceIndex) override;
   virtual void _writeWay(const unsigned long wayDbId, const Tags& tags);
-  virtual void _writeWayNodes(const unsigned long wayId, const std::vector<long>& wayNodeIds);
-  virtual void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId);
+  virtual void _writeWayNodes(const unsigned long wayId, const std::vector<long>& wayNodeIds) override;
+  virtual void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId) override;
 
   virtual void _writeCombinedSqlFile();
   virtual void _writeDataToDb();

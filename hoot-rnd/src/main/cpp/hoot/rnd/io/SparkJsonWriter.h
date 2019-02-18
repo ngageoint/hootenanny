@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPARKJSONWRITER_H
 #define SPARKJSONWRITER_H
@@ -77,17 +77,17 @@ public:
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstNodePtr& n);
+  virtual void writePartial(const ConstNodePtr& n) override;
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstWayPtr&) { throw NotImplementedException(); }
+  virtual void writePartial(const ConstWayPtr&) override { throw NotImplementedException(); }
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstRelationPtr&) { throw NotImplementedException(); }
+  virtual void writePartial(const ConstRelationPtr&) override { throw NotImplementedException(); }
 
   //no point in showing this in the format list at this point, since its not actively maintained
   virtual QString supportedFormats() { return ""; }
