@@ -49,9 +49,17 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateNameRemover)
 
 DuplicateNameRemover::DuplicateNameRemover() :
-_caseSensitive(true)
+_caseSensitive(true),
+_preserveOriginalName(false)
 {
-  setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
+  setConfiguration(conf());
+}
+
+void DuplicateNameRemover::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts = ConfigOptions(conf);
+  setCaseSensitive(opts.getDuplicateNameCaseSensitive());
+  _preserveOriginalName = opts.getDuplicateNamePreserveOriginalName();
 }
 
 void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
@@ -63,10 +71,23 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     const WayPtr& w = it->second;
+    LOG_VART(w);
+
+    // If we have a name that is not an alt name, let's record it here so we can preserve it
+    // as the main name later on.
+    const QStringList tagNameKeys = Tags::getNameKeys(w->getTags());
+    LOG_VART(tagNameKeys);
+    QString name = w->getTags().getName().trimmed();
+    LOG_VART(name);
+    if (w->getTags().get("alt_name").toLower().contains(name.toLower()))
+    {
+      name = "";
+    }
 
     QStringList list = w->getTags().getNames();
     // add in alt names
     list.append(w->getTags().getList("alt_name"));
+    LOG_VART(list);
 
     // remove empty names
     QStringList list2 = list;
@@ -78,6 +99,10 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
         list.append(list2[i]);
       }
     }
+    LOG_VART(list);
+
+    const Qt::CaseSensitivity caseSensitivity =
+      _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
 
     // filter on case sensitivity and "best name"
     QStringList filtered;
@@ -86,11 +111,11 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
       bool done = false;
       for (int j = 0; j < filtered.size() && done == false; j++)
       {
-        const Qt::CaseSensitivity caseSensitivity =
-          _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
         if (filtered[j].compare(list[i], caseSensitivity) == 0)
         {
+          LOG_VART(list[i]);
           filtered[j] = _getBestName(filtered[j], list[i]);
+          LOG_VART(filtered[j]);
           done = true;
         }
       }
@@ -100,6 +125,7 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
         filtered.append(list[i]);
       }
     }
+    LOG_VART(filtered);
 
     _numAffected = list.size() - filtered.size();
 
@@ -107,11 +133,22 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
     {
       if (filtered.size() != list.size())
       {
-        w->getTags().insert("name", filtered[0]);
-        filtered.pop_front();
-        // If there are additional names, put them in alt_name
+        LOG_VART(w->getTags());
+        if (_preserveOriginalName && !name.isEmpty() &&
+            filtered[0].compare(name, caseSensitivity) != 0)
+        {
+          // preserve the original "name"
+          filtered.removeAll(name);
+        }
+        else
+        {
+          w->getTags().insert("name", filtered[0]);
+          filtered.pop_front();
+        }
+        LOG_VART(filtered);
         if (filtered.size() > 0)
         {
+          // If there are additional names, put them in alt_name.
           w->getTags().insert("alt_name", QStringList(filtered).join(";"));
         }
       }
@@ -120,6 +157,8 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
     {
       w->getTags().remove("alt_name");
     }
+
+    LOG_VART(w);
   }
 }
 

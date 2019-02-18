@@ -107,9 +107,9 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   if (e1 && e2)
   {
     OsmUtils::logElementDetail(
-      e1, map, Log::Debug, "HighwayTagOnlyMerger: e1");
+      e1, map, Log::Trace, "HighwayTagOnlyMerger: e1");
     OsmUtils::logElementDetail(
-      e2, map, Log::Debug, "HighwayTagOnlyMerger: e2");
+      e2, map, Log::Trace, "HighwayTagOnlyMerger: e2");
 
 
     // If just one of the features is a bridge, we want the bridge feature to separate from the road
@@ -134,6 +134,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
         {
           LOG_TRACE("HighwaySnapMerger returned review.");
         }
+        LOG_VART(map->getElement(eid1));
+        LOG_VART(map->getElement(eid2));
         return needsReview;
 //        if (!HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced))
 //        {
@@ -199,9 +201,9 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     //LOG_VART(elementWithTagsToKeep->getElementId());
     //LOG_VART(elementWithTagsToRemove->getElementId());
     OsmUtils::logElementDetail(
-      elementWithTagsToKeep, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToKeep");
+      elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
     OsmUtils::logElementDetail(
-      elementWithTagsToRemove, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToRemove");
+      elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
 
     if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
     {
@@ -218,7 +220,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     elementWithTagsToKeep->setTags(mergedTags);
     elementWithTagsToKeep->setStatus(Status::Conflated);
     OsmUtils::logElementDetail(
-      elementWithTagsToKeep, map, Log::Debug, "HighwayTagOnlyMerger: keeper element");
+      elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: keeper element");
 
     // mark element for replacement
     if (removeSecondaryElement)
