@@ -122,7 +122,7 @@ dnc.rules = {
         ['F_CODE','BB170','seamark:platform:category','loading'], // Offshore Loading Facility
         ['F_CODE','BB180','produce','oysters'], // Oyster Bed/Mussel Bed
         ['F_CODE','BB190','waterway','dock'], // Pier /Wharf /Quay
-        ['F_CODE','BB220','leisure','slipway'], // Ramp (Maritime) - How is this different from BB240??
+        ['F_CODE','BB220','seamark:shoreline_construction:category','ramp'], // Ramp (Maritime) - How is this different from BB240??
         ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
         ['F_CODE','BB240','leisure','slipway'], // Slipway/Patent Slip  - NFDD BB082
         ['F_CODE','BC010','seamark:type','beacon'], // GGDM3/NAS7 Beacon
@@ -213,12 +213,17 @@ dnc.rules = {
     // This is for exporting "unique" DNC features.
     fcodeOne2oneOut : [
         ['F_CODE','AD010','power','generator'], // Electric Power Station, Power Plant
+        ['F_CODE','AK120','leisure','common'], // Park
+        ['F_CODE','AK120','leisure','playground'], // Park
+        ['F_CODE','AL020','landuse','residential'], // Built Up Area
+        ['F_CODE','AL260','barrier','retaining_wall'], // Wall
         ['F_CODE','AP030','highway','track'], // Cart Track - mapped to Road for this translation
         ['F_CODE','BA030','place','islet'], // Island
         ['F_CODE','BA040','natural','water'], // Water
         ['F_CODE','BD120','subsea','barrier-reef'], // Reef
         ['F_CODE','BD120','subsea','reef'], // Reef
         ['F_CODE','BD120','subsea','coral_reef'], // Reef
+        ['F_CODE','BH080','water','pond'], // Lake / Pond
         ['F_CODE','EC030','natural','tree'], // Wood - NFDD EC005
         ['F_CODE','EC030','natural','wood'], // Wood - NFDD EC015
         ['F_CODE','ZD040','natural','bay'], // Named Location

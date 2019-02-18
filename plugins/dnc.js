@@ -915,7 +915,6 @@ dnc = {
             if (tags.aeroway == 'heliport') attrs.F_CODE = 'GB005'; // Airport
             if (tags.landcover == 'snowfield' || tags.landcover == 'ice-field') attrs.F_CODE = 'BJ100'; // Snowfield/Icefield
             if (tags.aeroway == 'heliport') attrs.F_CODE = 'GB005'; // Airport
-
         }
 
     }, // End applyToOgrPreProcessing
