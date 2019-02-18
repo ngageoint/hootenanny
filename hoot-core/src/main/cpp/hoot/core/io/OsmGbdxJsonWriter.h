@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_GBDX_JSON_WRITER
 #define OSM_GBDX_JSON_WRITER
@@ -57,7 +57,7 @@ public:
    * @brief Create a directory to hold all of the GeoJSON files
    * @param url
    */
-  virtual void open(QString path);
+  virtual void open(QString path) override;
 
   /**
    * @brief write Write the OsmMap out in GeoJSON format with one feature per file, writer must be "open"
@@ -70,9 +70,9 @@ public:
    * @param url Filename ending in ".gbdx"
    * @return
    */
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".gbdx"); }
+  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".gbdx"); }
 
-  virtual QString supportedFormats() { return ".gdbx"; }
+  virtual QString supportedFormats() override { return ".gdbx"; }
 
 protected:
 

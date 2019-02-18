@@ -61,9 +61,9 @@ public:
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
-  virtual QString explain() const { return _explainText; }
+  virtual QString explain() const override { return _explainText; }
 
-  virtual QString getMatchName() const { return _matchName; }
+  virtual QString getMatchName() const override { return _matchName; }
 
   virtual double getProbability() const;
 
@@ -84,7 +84,7 @@ public:
 
   boost::shared_ptr<PluginContext> getScript() const { return _script; }
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const;
 

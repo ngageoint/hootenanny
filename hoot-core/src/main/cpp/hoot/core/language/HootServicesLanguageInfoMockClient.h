@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOT_SERVICES_LANGUAGE_INFO_MOCK_CLIENT_H
@@ -60,7 +60,7 @@ public:
    * @param type type of app to retrieve; "translator" or "detector"
    * @return a property tree containing the language app information
    */
-  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type);
+  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type) override;
 
   /**
    * Retrieves translation available languages info
@@ -68,7 +68,7 @@ public:
    * @param type type of language information to retrieve; "translatable" or "detectable"
    * @return a property tree containing the language information
    */
-  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type);
+  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type) override;
 };
 
 }

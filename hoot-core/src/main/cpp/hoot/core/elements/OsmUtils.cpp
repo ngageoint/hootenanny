@@ -37,6 +37,7 @@
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 
 //Qt
 #include <QDateTime>
@@ -124,16 +125,94 @@ QString OsmUtils::currentTimeAsString()
   return QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
-QString OsmUtils::getDetailedRelationString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+QString OsmUtils::getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
 {
-  QString str = relation->toString() + "\nMember Detail:\n";
+  return relation->toString() + getRelationMembersDetailedString(relation, map);
+}
+
+QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
+                                                   const ConstOsmMapPtr& map)
+{
+  QString str = "\nMember Detail:\n\n";
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
+    str += "Member #" + QString::number(i + 1) + ":\n";
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
     str += member->toString() + "\n";
   }
   return str;
+}
+
+long OsmUtils::getFirstWayIdFromRelation(ConstRelationPtr relation, const OsmMapPtr& map)
+{
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  QSet<long> wayMemberIds;
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member->getElementType() == ElementType::Way)
+    {
+      wayMemberIds.insert(member->getId());
+    }
+  }
+  LOG_VART(wayMemberIds);
+  if (wayMemberIds.size() > 0)
+  {
+    return wayMemberIds.toList().at(0);
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
+                                const Log::WarningLevel& logLevel, const QString message)
+{
+  if (Log::getInstance().getLevel() <= logLevel)
+  {
+    LOG_VAR(message);
+    LOG_VAR(element);
+    if (element->getElementType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+      LOG_VAR(OsmUtils::getRelationMembersDetailedString(relation, map));
+    }
+  }
+}
+
+bool OsmUtils::oneWayConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+{
+  // Technically, this should also take into account reverse one ways and check direction.  Since
+  // we have a map pre-op standardizing all the ways to not be reversed, not worrying about it for
+  // now.
+  OneWayCriterion isAOneWayStreet;
+  return
+    (isAOneWayStreet.isSatisfied(element1) && explicitlyNotAOneWayStreet(element2)) ||
+    (isAOneWayStreet.isSatisfied(element2) && explicitlyNotAOneWayStreet(element1));
+}
+
+bool OsmUtils::explicitlyNotAOneWayStreet(ConstElementPtr element)
+{
+  // TODO: use Tags::isFalse here instead
+  return element->getTags().get("oneway") == "no";
+}
+
+bool OsmUtils::nameConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+{
+  return
+    element1->getTags().hasName() && element2->getTags().hasName() &&
+      !Tags::haveMatchingName(element1->getTags(), element2->getTags());
+}
+
+bool OsmUtils::nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+{
+  const QString element1HighwayVal = element1->getTags().get("highway");
+  const QString element2HighwayVal = element2->getTags().get("highway");
+  return
+    element1HighwayVal != "road" && element2HighwayVal != "road" &&
+    element1HighwayVal != element2HighwayVal;
 }
 
 }
