@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TagComparator.h"
@@ -554,6 +554,9 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result)
 
 void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
 {
+  LOG_VART(t1);
+  LOG_VART(t2);
+
   set<QString> altNames, nonAltNames;
   set<QString> toRemove;
 
@@ -578,6 +581,10 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
       }
     }
   }
+  LOG_VART(altNames);
+  LOG_VART(nonAltNames);
+  LOG_VART(toRemove);
+  LOG_VART(result);
 
   for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); ++it2)
   {
@@ -607,12 +614,18 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
       }
     }
   }
+  LOG_VART(altNames);
+  LOG_VART(nonAltNames);
+  LOG_VART(toRemove);
+  LOG_VART(result);
 
   for (set<QString>::const_iterator it = toRemove.begin(); it != toRemove.end(); ++it)
   {
     t1.remove(*it);
     t2.remove(*it);
   }
+  LOG_VART(t1);
+  LOG_VART(t2);
 
   // add all the altNames that don't exist in nonAltNames
   QStringList l;
@@ -623,11 +636,13 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
       l.append(*it);
     }
   }
+  LOG_VART(l);
 
   if (l.size() > 0)
   {
     result.setList("alt_name", l);
   }
+  LOG_VART(result);
 }
 
 void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result)

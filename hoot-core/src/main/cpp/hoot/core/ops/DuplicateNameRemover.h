@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUPLICATENAMEREMOVER_H
@@ -37,16 +37,17 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
-  class OsmMap;
+class OsmMap;
 
 /**
  * Searches for ways that contain the same name multiple times in the name and/or alt_name fields.
  * Any duplicates in the alt_name field will be removed.
  */
-class DuplicateNameRemover : public OsmMapOperation, public OperationStatusInfo
+class DuplicateNameRemover : public OsmMapOperation, public OperationStatusInfo, public Configurable
 {
 public:
 
@@ -61,6 +62,8 @@ public:
    */
   static void removeDuplicates(boost::shared_ptr<OsmMap> map);
 
+  virtual void setConfiguration(const Settings& conf);
+
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
   virtual QString getInitStatusMessage() { return "Removing duplicate name tags..."; }
@@ -70,15 +73,18 @@ public:
 
   virtual QString getDescription() const { return "Removes duplicate name tags from a feature"; }
 
-protected:
+private:
+
+  bool _caseSensitive;
+  // If the feature has a name tag, enabling this will preserve the name tag value in the "name"
+  // tag.  Otherwise, names and alternate names are treated equally.  Currently, this setting is
+  // used by Attribute Conflation only, but possibly could be made the default behavior at some
+  // point.
+  bool _preserveOriginalName;
 
   boost::shared_ptr<OsmMap> _map;
 
   QString _getBestName(QString n1, QString n2);
-
-private:
-
-  bool _caseSensitive;
 };
 
 }
