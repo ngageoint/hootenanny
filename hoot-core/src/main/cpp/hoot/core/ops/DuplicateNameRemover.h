@@ -41,7 +41,7 @@
 
 namespace hoot
 {
-  class OsmMap;
+class OsmMap;
 
 /**
  * Searches for ways that contain the same name multiple times in the name and/or alt_name fields.
@@ -73,19 +73,18 @@ public:
 
   virtual QString getDescription() const { return "Removes duplicate name tags from a feature"; }
 
-protected:
-
-  boost::shared_ptr<OsmMap> _map;
-
-  QString _getBestName(QString n1, QString n2);
-
 private:
 
   bool _caseSensitive;
   // If the feature has a name tag, enabling this will preserve the name tag value in the "name"
   // tag.  Otherwise, names and alternate names are treated equally.  Currently, this setting is
-  // used by Attribute Conflation only.
+  // used by Attribute Conflation only, but possibly could be made the default behavior at some
+  // point.
   bool _preserveOriginalName;
+
+  boost::shared_ptr<OsmMap> _map;
+
+  QString _getBestName(QString n1, QString n2);
 };
 
 }
