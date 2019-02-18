@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef AVERAGETAGMERGER_H
 #define AVERAGETAGMERGER_H
@@ -40,7 +40,7 @@ public:
 
   AverageTagMerger();
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   virtual QString getDescription() const
   { return "Keeps tags from both features; overlapping tags are averaged together"; }

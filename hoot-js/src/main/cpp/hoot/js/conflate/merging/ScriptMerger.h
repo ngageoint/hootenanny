@@ -48,14 +48,14 @@ public:
   ScriptMerger(boost::shared_ptr<PluginContext> script, v8::Persistent<v8::Object>& plugin,
     const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Returns true if the plugin has a function with the specified name.
    */
   bool hasFunction(QString name) const;
 
-  virtual QString toString() const { return QString("ScriptMerger"); }
+  virtual QString toString() const override { return QString("ScriptMerger"); }
 
 protected:
 
@@ -78,8 +78,8 @@ protected:
   v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map,
                       std::vector<std::pair<ElementId, ElementId>> &replaced) const;
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() override { return _pairs; }
+  virtual const PairsSet& _getPairs() const override { return _pairs; }
 };
 
 }

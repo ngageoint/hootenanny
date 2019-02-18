@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EUCLIDEANDISTANCEEXTRACTOR_H
 #define EUCLIDEANDISTANCEEXTRACTOR_H
@@ -38,7 +38,7 @@ public:
   static std::string className() { return "hoot::EuclideanDistanceExtractor"; }
 
   virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const;
+    const boost::shared_ptr<const Element>& candidate) const override;
 
   virtual std::string getClassName() const { return EuclideanDistanceExtractor::className(); }
 

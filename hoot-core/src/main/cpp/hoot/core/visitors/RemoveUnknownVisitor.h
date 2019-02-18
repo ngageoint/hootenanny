@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVE_UNKNOWN_VISITOR_H
 #define REMOVE_UNKNOWN_VISITOR_H
@@ -44,7 +44,7 @@ public:
 
   void set(Status status) { _status = status; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const { return "Removes all elements of a given status"; }
 
@@ -70,7 +70,7 @@ public:
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
 
-  virtual QString getDescription() const { return "Removes all elements with a status of Unknown1"; }
+  virtual QString getDescription() const override { return "Removes all elements with a status of Unknown1"; }
 };
 
 /**
@@ -84,7 +84,7 @@ public:
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
 
-  virtual QString getDescription() const { return "Removes all elements with a status of Unknown2"; }
+  virtual QString getDescription() const override { return "Removes all elements with a status of Unknown2"; }
 };
 
 }

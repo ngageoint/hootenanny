@@ -122,19 +122,15 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
 void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QString url,
                                 const bool silent)
 {
-  if (map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap())
+  bool skipEmptyMap = map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap();
+
+  if (!silent)
   {
-    if (!silent)
-    {
-      LOG_INFO("Map is empty. Not writing to " << url << "...");
-    }
+    LOG_INFO((skipEmptyMap ? "Map is empty. Not writing to " : "Writing map to ") << url << "...");
   }
-  else
+
+  if (!skipEmptyMap)
   {
-    if (!silent)
-    {
-      LOG_INFO("Writing map to " << url << "...");
-    }
     boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->open(url);
     writer->write(map);

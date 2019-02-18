@@ -64,7 +64,7 @@ public:
   TagAdvancedCriterion();
   TagAdvancedCriterion(const QString filterJsonStrOrPath);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagAdvancedCriterion()); }
 
