@@ -82,7 +82,7 @@ public:
   virtual QString getDescription() const
   { return "Marks road sections that implicitly appear to be divided highways"; }
 
-protected:
+private:
 
   boost::shared_ptr<const OsmMap> _inputMap;
   boost::shared_ptr<OsmMap> _result;

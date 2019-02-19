@@ -77,7 +77,6 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
   try
   {
     // calculated the shared sublines
-    LOG_VART(ConfigOptions().getSearchRadiusHighway());
     _sublineMatch =
       _sublineMatcher->findMatch(map, e1, e2, ConfigOptions().getSearchRadiusHighway());
 
@@ -85,7 +84,6 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
     {
       // calculate the match score
       _c = _classifier->classify(map, eid1, eid2, _sublineMatch);
-      LOG_VART(_c);
 
       MatchType type = getType();
       LOG_VART(type);
@@ -107,8 +105,6 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
     }
 
     _score = _sublineMatch.getLength() * _c.getMatchP();
-    LOG_VART(_score);
-    LOG_VART(_explainText);
   }
   // if this is an unsupported geometry configuration
   catch (const NeedsReviewException& e)
@@ -117,6 +113,10 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
     _c.setReviewP(1.0);
     _explainText = e.getWhat();
   }
+
+  LOG_VART(_score);
+  LOG_VART(_c);
+  LOG_VART(_explainText);
 }
 
 void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(QStringList& description,

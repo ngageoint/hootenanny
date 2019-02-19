@@ -133,7 +133,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
 
 
 void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollection& string,
-  const vector<bool> &reverse, ElementPtr& match, ElementPtr &scraps,
+  const vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
   GeometryConverter::NodeFactory *nf) const
 {
   LOG_TRACE("Splitting " << string.toString().left(100) << "...");

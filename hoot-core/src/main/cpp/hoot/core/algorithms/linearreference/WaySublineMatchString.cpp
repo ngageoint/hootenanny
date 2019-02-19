@@ -49,8 +49,8 @@ WaySublineMatchString::WaySublineMatchString(const MatchCollection& m)
       if (i != j && m[i].overlaps(m[j]))
       {
         LOG_VART(m);
-        throw OverlappingMatchesException(QString("The match collection must not contain "
-          "overlapping matches."));
+        throw OverlappingMatchesException(
+          "The match collection must not contain overlapping matches.");
       }
     }
   }

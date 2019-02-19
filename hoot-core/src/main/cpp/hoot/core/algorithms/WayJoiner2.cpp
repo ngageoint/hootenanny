@@ -442,7 +442,7 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
 void WayJoiner2::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper,
                                          WayPtr& toRemove)
 {
-  // TODO: this is a mess
+  // this is kind of a mess
 
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
   LOG_VART(tagMergerClassName);

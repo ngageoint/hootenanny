@@ -137,9 +137,9 @@ QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
-    str += "Member #" + QString::number(i + 1) + ":\n";
+    str += "Member #" + QString::number(i + 1) + ":\n\n";
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    str += member->toString() + "\n";
+    str += member->toString() + "\n\n";
   }
   return str;
 }
