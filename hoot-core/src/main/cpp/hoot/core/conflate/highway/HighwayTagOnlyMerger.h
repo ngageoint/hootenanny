@@ -77,7 +77,7 @@ private:
   bool _conflictExists(ConstElementPtr elementWithTagsToKeep,
                        ConstElementPtr elementWithTagsToRemove) const;
 
-  void _copyTagsToWayMembers(ConstElementPtr e1, ConstElementPtr e2, const OsmMapPtr& map);
+  void _copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, const OsmMapPtr& map);
   bool _mergeWays(ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
                   const bool removeSecondaryElement, const OsmMapPtr& map,
                   std::vector<std::pair<ElementId, ElementId>>& replaced);

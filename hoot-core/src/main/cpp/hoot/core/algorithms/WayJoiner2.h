@@ -127,6 +127,8 @@ private:
   void _handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, ConstWayPtr wayWithTagsToLose);
 
   double _getTotalLengthFromTags(const Tags& tags1, const Tags& tags2) const;
+
+  void _removeHootCreatedMultiLineStringRelations(const OsmMapPtr& map);
 };
 
 }

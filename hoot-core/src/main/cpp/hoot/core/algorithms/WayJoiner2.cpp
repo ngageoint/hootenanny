@@ -29,7 +29,6 @@
 
 //  Hoot
 #include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -43,6 +42,15 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+//#include <hoot/core/criterion/TagCriterion.h>
+//#include <hoot/core/schema/MetadataTags.h>
+//#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
+//#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+//#include <hoot/core/criterion/OrCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/MultiLineStringCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 
 #include <unordered_set>
 #include <vector>
@@ -66,23 +74,53 @@ void WayJoiner2::join(const OsmMapPtr& map)
 
   //  Join back any ways with parent ids
   _joinParentChild();
-  OsmMapWriterFactory::writeDebugMap(map);
 
   //  Join any siblings that have the same parent id but the parent isn't connected
   _joinSiblings();
-  OsmMapWriterFactory::writeDebugMap(map);
 
   //  Rejoin any ways that are now connected to their parents
   _joinParentChild();
-  OsmMapWriterFactory::writeDebugMap(map);
 
   //  Run one last join on ways that share a node and have a parent id
   _joinAtNode();
-  OsmMapWriterFactory::writeDebugMap(map);
 
   //  Clear out any remaining unjoined parent ids
   _resetParents();
+
+  // Remove all the relations created by the MultiLineStringSplitter.
+
+  // This isn't the best place to do this, but Attribute Conflation is already using
+  // RemoveElementsVisitor with another criterion in its config and RemoveElementsVisitor doesn't
+  // support multiple criteria.  Adding support to it for multiple criteria is an option, but
+  // implementation for it, as well as supporting it in the config file could be messy...want to
+  // think about it more before rushing something.  Also negative about this, is that it assumes
+  // we're always using Attribute Conflation with WayJoiner2, which is currently the case, but
+  // really too tightly coupled of a relationship regardless.
+  _removeHootCreatedMultiLineStringRelations(map);
+
   OsmMapWriterFactory::writeDebugMap(map);
+}
+
+void WayJoiner2::_removeHootCreatedMultiLineStringRelations(const OsmMapPtr& map)
+{
+  LOG_TRACE("Removing multilinestring relations created during conflation...");
+//  ElementCriterionPtr crit(
+//    new ChainCriterion(
+//      new MultiLineStringCriterion(),
+//      new OrCriterion(
+//        new TagCriterion(
+//          MetadataTags::HootRelationCreatedBy(),
+//          QString::fromStdString(MultiLineStringSplitter::className())),
+//        new TagCriterion(
+//          MetadataTags::HootRelationCreatedBy(),
+//          QString::fromStdString(HighwaySnapMerger::className())))));
+  // This may be a little dangerous, but will have to do for now...
+  ElementCriterionPtr crit(
+    new ChainCriterion(new MultiLineStringCriterion(), new StatusCriterion(Status::Conflated)));
+  RemoveElementsVisitor vis(crit);
+  vis.setRecursive(false);
+  map->visitRw(vis);
+  LOG_VART(vis.getCount());
 }
 
 void WayJoiner2::_resetParents()

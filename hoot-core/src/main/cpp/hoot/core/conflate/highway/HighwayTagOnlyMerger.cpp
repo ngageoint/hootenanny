@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/schema/MetadataTags.h>
 //#include <hoot/core/ops/RecursiveElementRemover.h>
 //#include <hoot/core/ops/RemoveRelationOp.h>
 
@@ -72,13 +73,13 @@ _performBridgeGeometryMerging(true)
 
 HighwayTagOnlyMerger::~HighwayTagOnlyMerger()
 {
-//  LOG_VARD(_numRelationsEncountered);
-//  LOG_VARD(_numUnknown1Relations);
-//  LOG_VARD(_numUnknown2Relations);
-//  LOG_VARD(_numConflatedRelations);
-//  LOG_VARD(_relationMemberSizeDistributionUnknown1);
-//  LOG_VARD(_relationMemberSizeDistributionUnknown2);
-//  LOG_VARD(_relationMemberSizeDistributionConflated);
+//  LOG_VART(_numRelationsEncountered);
+//  LOG_VART(_numUnknown1Relations);
+//  LOG_VART(_numUnknown2Relations);
+//  LOG_VART(_numConflatedRelations);
+//  LOG_VART(_relationMemberSizeDistributionUnknown1);
+//  LOG_VART(_relationMemberSizeDistributionUnknown2);
+//  LOG_VART(_relationMemberSizeDistributionConflated);
 }
 
 void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementPtr element2,
@@ -90,6 +91,7 @@ void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementP
   {
     keeper = element1;
     toRemove = element2;
+    // TODO: This is ignoring the contents of multilinestring relations.
     if (toRemove->getElementType() == ElementType::Way)
     {
       WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(toRemove);
@@ -140,20 +142,20 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     {
       if (!_performBridgeGeometryMerging)
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Unable to perform geometric bridge merging due to invalid subline string matcher.  << "
           "Performing tag only merge...");
       }
       else
       {
-        LOG_DEBUG("Using tag and geometry merger, since just one of the features is a bridge...");
+        LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
         const bool needsReview = HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
         if (needsReview)
         {
-          LOG_DEBUG("HighwaySnapMerger returned review.");
+          LOG_TRACE("HighwaySnapMerger returned review.");
         }
-        LOG_VARD(map->getElement(eid1));
-        LOG_VARD(map->getElement(eid2));
+        LOG_VART(map->getElement(eid1));
+        LOG_VART(map->getElement(eid2));
         return needsReview;
       }
     }
@@ -170,8 +172,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     bool removeSecondaryElement;
     _determineKeeperFeature(
       e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
-    //LOG_VARD(elementWithTagsToKeep->getElementId());
-    //LOG_VARD(elementWithTagsToRemove->getElementId());
+    //LOG_VART(elementWithTagsToKeep->getElementId());
+    //LOG_VART(elementWithTagsToRemove->getElementId());
     OsmUtils::logElementDetail(
       elementWithTagsToKeep, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToKeep");
     OsmUtils::logElementDetail(
@@ -202,6 +204,7 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   Tags mergedTags =
     TagMergerFactory::mergeTags(
       elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way);
+  // TODO: This is ignoring the contents of multilinestring relations.
   elementWithTagsToKeep->setTags(mergedTags);
   elementWithTagsToKeep->setStatus(Status::Conflated);
   OsmUtils::logElementDetail(
@@ -210,7 +213,7 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   // TODO: The multilinestring relations marked for replacement aren't being removed.
   if (removeSecondaryElement)
   {
-    LOG_DEBUG("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
+    LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
     replaced.push_back(
       std::pair<ElementId, ElementId>(
         elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));
@@ -219,8 +222,7 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   return true;
 }
 
-void HighwayTagOnlyMerger::_copyTagsToWayMembers(ConstElementPtr e1, ConstElementPtr e2,
-                                                 const OsmMapPtr& map)
+void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, const OsmMapPtr& map)
 {
   // hope this isn't happening
   assert(!(e1->getElementType() == ElementType::Relation &&
@@ -232,48 +234,48 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ConstElementPtr e1, ConstElemen
   {
     _numRelationsEncountered++;
 
-    ConstRelationPtr relation;
+    RelationPtr relation;
     if (e1->getElementType() == ElementType::Relation)
     {
-      relation = boost::dynamic_pointer_cast<const Relation>(e1);
+      relation = boost::dynamic_pointer_cast<Relation>(e1);
     }
     else
     {
-      relation = boost::dynamic_pointer_cast<const Relation>(e2);
+      relation = boost::dynamic_pointer_cast<Relation>(e2);
     }
 
-//    if (relation->getStatus() == Status::Unknown1)
-//    {
-//      _numUnknown1Relations++;
-//    }
-//    else if (relation->getStatus() == Status::Unknown2)
-//    {
-//      _numUnknown2Relations++;
-//    }
-//    else if (relation->getStatus() == Status::Conflated)
-//    {
-//      _numConflatedRelations++;
-//    }
+    if (relation->getStatus() == Status::Unknown1)
+    {
+      _numUnknown1Relations++;
+    }
+    else if (relation->getStatus() == Status::Unknown2)
+    {
+      _numUnknown2Relations++;
+    }
+    else if (relation->getStatus() == Status::Conflated)
+    {
+      _numConflatedRelations++;
+    }
 
     const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-    LOG_VARD(relationMembers.size());
+    LOG_VART(relationMembers.size());
     assert(relationMembers.size() >= 2);
 
-//    if (relation->getStatus() == Status::Unknown1 &&
-//        !_relationMemberSizeDistributionUnknown1.contains(relationMembers.size()))
-//    {
-//      _relationMemberSizeDistributionUnknown1.append(relationMembers.size());
-//    }
-//    else if (relation->getStatus() == Status::Unknown2 &&
-//             !_relationMemberSizeDistributionUnknown2.contains(relationMembers.size()))
-//    {
-//      _relationMemberSizeDistributionUnknown2.append(relationMembers.size());
-//    }
-//    else if (relation->getStatus() == Status::Conflated &&
-//             !_relationMemberSizeDistributionConflated.contains(relationMembers.size()))
-//    {
-//      _relationMemberSizeDistributionConflated.append(relationMembers.size());
-//    }
+    if (relation->getStatus() == Status::Unknown1 &&
+        !_relationMemberSizeDistributionUnknown1.contains(relationMembers.size()))
+    {
+      _relationMemberSizeDistributionUnknown1.append(relationMembers.size());
+    }
+    else if (relation->getStatus() == Status::Unknown2 &&
+             !_relationMemberSizeDistributionUnknown2.contains(relationMembers.size()))
+    {
+      _relationMemberSizeDistributionUnknown2.append(relationMembers.size());
+    }
+    else if (relation->getStatus() == Status::Conflated &&
+             !_relationMemberSizeDistributionConflated.contains(relationMembers.size()))
+    {
+      _relationMemberSizeDistributionConflated.append(relationMembers.size());
+    }
 
     // Simply copy the tags that were pushed up from the way members to the parent relation,
     // presumably by the MultiLineStringSplitter.
@@ -295,14 +297,15 @@ bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep
 {
   if (OsmUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
-    LOG_DEBUG("Conflicting name tags.  Skipping merge.");
+    LOG_TRACE("Conflicting name tags.  Skipping merge.");
     return true;
   }
 
   // don't try to merge streets with conflicting one way info
+  // TODO: This is ignoring the contents of multilinestring relations.
   if (OsmUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
-    LOG_DEBUG("Conflicting one way street tags.  Skipping merge.");
+    LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
     return true;
   }
 
@@ -326,7 +329,7 @@ void HighwayTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTag
         !DirectionFinder::isSimilarDirection2(
            map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
     {
-      LOG_DEBUG("Reversing " << wayWithTagsToKeep->getElementId() << "...");
+      LOG_TRACE("Reversing " << wayWithTagsToKeep->getElementId() << "...");
       wayWithTagsToKeep->reverseOrder();
     }
   }

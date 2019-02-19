@@ -40,6 +40,9 @@ class FindNodesInWayFactory;
 class MultiLineStringSplitter
 {
 public:
+
+  static std::string className() { return "hoot::MultiLineStringSplitter"; }
+
   MultiLineStringSplitter();
 
   /**
@@ -68,8 +71,9 @@ public:
    * @param scraps Contains all the bits that don't match the subline string. This element will be
    *  created and added to the map. If nothing matches or the line length is zero then @a scraps
    */
-  void split(const OsmMapPtr& map, const WaySublineCollection& string, const std::vector<bool>& reverse,
-    ElementPtr& match, ElementPtr& scraps, GeometryConverter::NodeFactory *nf = 0) const;
+  void split(const OsmMapPtr& map, const WaySublineCollection& string,
+             const std::vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
+             GeometryConverter::NodeFactory *nf = 0) const;
 
   /**
    * Split a multi-line string at a given location and put the matching subline into @a match.
@@ -85,7 +89,9 @@ public:
              ElementPtr& match) const;
 
 private:
-  boost::shared_ptr<FindNodesInWayFactory> _createNodeFactory(const WaySublineCollection& string) const;
+
+  boost::shared_ptr<FindNodesInWayFactory> _createNodeFactory(
+    const WaySublineCollection& string) const;
 };
 
 }
