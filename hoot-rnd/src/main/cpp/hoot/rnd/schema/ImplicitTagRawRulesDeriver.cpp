@@ -625,7 +625,7 @@ void ImplicitTagRawRulesDeriver::_sortByWord(boost::shared_ptr<QTemporaryFile> i
 
   //sort by word, then by tag
   const QString cmd =
-    "sort -t'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
+    "sort -t$'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
      input->fileName() + " -o " + _output->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
