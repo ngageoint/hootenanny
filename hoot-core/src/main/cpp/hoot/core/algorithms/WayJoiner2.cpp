@@ -29,6 +29,7 @@
 
 //  Hoot
 #include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>

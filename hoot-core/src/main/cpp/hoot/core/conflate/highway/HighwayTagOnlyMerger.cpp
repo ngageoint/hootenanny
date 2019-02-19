@@ -214,8 +214,6 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
   if (e1->getElementType() == ElementType::Relation ||
       e2->getElementType() == ElementType::Relation)
   {
-    _numRelationsEncountered++;
-
     RelationPtr relation;
     if (e1->getElementType() == ElementType::Relation)
     {
@@ -226,38 +224,9 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
       relation = boost::dynamic_pointer_cast<Relation>(e2);
     }
 
-    if (relation->getStatus() == Status::Unknown1)
-    {
-      _numUnknown1Relations++;
-    }
-    else if (relation->getStatus() == Status::Unknown2)
-    {
-      _numUnknown2Relations++;
-    }
-    else if (relation->getStatus() == Status::Conflated)
-    {
-      _numConflatedRelations++;
-    }
-
     const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
     LOG_VART(relationMembers.size());
     assert(relationMembers.size() >= 2);
-
-    if (relation->getStatus() == Status::Unknown1 &&
-        !_relationMemberSizeDistributionUnknown1.contains(relationMembers.size()))
-    {
-      _relationMemberSizeDistributionUnknown1.append(relationMembers.size());
-    }
-    else if (relation->getStatus() == Status::Unknown2 &&
-             !_relationMemberSizeDistributionUnknown2.contains(relationMembers.size()))
-    {
-      _relationMemberSizeDistributionUnknown2.append(relationMembers.size());
-    }
-    else if (relation->getStatus() == Status::Conflated &&
-             !_relationMemberSizeDistributionConflated.contains(relationMembers.size()))
-    {
-      _relationMemberSizeDistributionConflated.append(relationMembers.size());
-    }
 
     // Simply copy the tags that were pushed up from the way members to the parent relation,
     // presumably by the MultiLineStringSplitter.

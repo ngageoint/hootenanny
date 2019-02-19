@@ -4129,9 +4129,93 @@
         <nd ref="-791"/>
         <nd ref="-792"/>
         <nd ref="-729"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
+        <tag k="name" v="Av. Oeste 4"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lanes" v="2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-7909"/>
+    </way>
+    <way visible="true" id="-7908" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-699"/>
+        <nd ref="-734"/>
+        <nd ref="-735"/>
+        <nd ref="-736"/>
+        <nd ref="-737"/>
+        <nd ref="-738"/>
+        <nd ref="-739"/>
+        <nd ref="-740"/>
+        <nd ref="-741"/>
+        <nd ref="-742"/>
+        <nd ref="-743"/>
+        <nd ref="-744"/>
+        <nd ref="-745"/>
+        <nd ref="-746"/>
+        <nd ref="-747"/>
+        <nd ref="-748"/>
+        <nd ref="-749"/>
+        <nd ref="-750"/>
+        <nd ref="-751"/>
+        <nd ref="-752"/>
+        <nd ref="-753"/>
+        <nd ref="-754"/>
+        <nd ref="-755"/>
+        <nd ref="-756"/>
+        <nd ref="-757"/>
+        <nd ref="-758"/>
+        <nd ref="-759"/>
+        <nd ref="-760"/>
+        <nd ref="-761"/>
+        <nd ref="-762"/>
+        <nd ref="-763"/>
+        <nd ref="-764"/>
+        <nd ref="-765"/>
+        <nd ref="-766"/>
+        <nd ref="-767"/>
+        <nd ref="-768"/>
+        <nd ref="-769"/>
+        <nd ref="-770"/>
+        <nd ref="-771"/>
+        <nd ref="-772"/>
+        <nd ref="-773"/>
+        <nd ref="-774"/>
+        <nd ref="-775"/>
+        <nd ref="-776"/>
+        <nd ref="-777"/>
+        <nd ref="-778"/>
+        <nd ref="-779"/>
+        <nd ref="-780"/>
+        <nd ref="-781"/>
+        <nd ref="-782"/>
+        <nd ref="-5196"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
+        <tag k="name" v="Av. Oeste 4"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lanes" v="2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-7908"/>
     </way>
     <way visible="true" id="-7907" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5196"/>
@@ -4159,14 +4243,6 @@
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-7907"/>
-    </way>
-    <way visible="true" id="-7904" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-5193"/>
-        <nd ref="-700"/>
-        <nd ref="-699"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-7904"/>
     </way>
     <way visible="true" id="-7902" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5192"/>
@@ -4451,56 +4527,8 @@
         <tag k="hoot:id" v="-366"/>
     </way>
     <way visible="true" id="-365" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-5196"/>
-        <nd ref="-782"/>
-        <nd ref="-781"/>
-        <nd ref="-780"/>
-        <nd ref="-779"/>
-        <nd ref="-778"/>
-        <nd ref="-777"/>
-        <nd ref="-776"/>
-        <nd ref="-775"/>
-        <nd ref="-774"/>
-        <nd ref="-773"/>
-        <nd ref="-772"/>
-        <nd ref="-771"/>
-        <nd ref="-770"/>
-        <nd ref="-769"/>
-        <nd ref="-768"/>
-        <nd ref="-767"/>
-        <nd ref="-766"/>
-        <nd ref="-765"/>
-        <nd ref="-764"/>
-        <nd ref="-763"/>
-        <nd ref="-762"/>
-        <nd ref="-761"/>
-        <nd ref="-760"/>
-        <nd ref="-759"/>
-        <nd ref="-758"/>
-        <nd ref="-757"/>
-        <nd ref="-756"/>
-        <nd ref="-755"/>
-        <nd ref="-754"/>
-        <nd ref="-753"/>
-        <nd ref="-752"/>
-        <nd ref="-751"/>
-        <nd ref="-750"/>
-        <nd ref="-749"/>
-        <nd ref="-748"/>
-        <nd ref="-747"/>
-        <nd ref="-746"/>
-        <nd ref="-745"/>
-        <nd ref="-744"/>
-        <nd ref="-743"/>
-        <nd ref="-742"/>
-        <nd ref="-741"/>
-        <nd ref="-740"/>
-        <nd ref="-739"/>
-        <nd ref="-738"/>
-        <nd ref="-737"/>
-        <nd ref="-736"/>
-        <nd ref="-735"/>
-        <nd ref="-734"/>
+        <nd ref="-5193"/>
+        <nd ref="-700"/>
         <nd ref="-699"/>
         <nd ref="-250"/>
         <nd ref="-698"/>
@@ -7414,55 +7442,4 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-1"/>
     </way>
-    <relation visible="true" id="-455" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-365" role=""/>
-        <member type="way" ref="-7909" role=""/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
-        <tag k="name" v="Av. Oeste 4"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="type" v="multilinestring"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-455"/>
-    </relation>
-    <relation visible="true" id="-454" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-97" role=""/>
-        <member type="way" ref="-7904" role=""/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="name" v="Av. Sucre"/>
-        <tag k="lanes" v="3"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="highway" v="primary"/>
-        <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2015-06-12T14:51:52.000Z;2014-04-25T15:54:46.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
-        <tag k="motor_vehicle" v="permissive"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="type" v="multilinestring"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-454"/>
-    </relation>
 </osm>
