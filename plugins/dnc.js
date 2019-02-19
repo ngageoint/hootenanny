@@ -86,7 +86,8 @@ dnc = {
         // I have no idea why this F_CODE is in two layers.
         if (attrs.F_CODE == 'FA000')
         {
-            returnData.push({attrs:attrs, tableName:'COALINE'});
+            // returnData.push({attrs:attrs, tableName:'COALINE'});
+            returnData.push({attrs:{'F_CODE':'FA000X'}, tableName:'COALINE'});
             return returnData;
         }
 
@@ -270,7 +271,7 @@ dnc = {
             attrArray.push(feature.columns[j].name);
         }
 
-        // First: Go through the translated attributes
+        // First: Go through the translated attributes and drop those that are not valid for the feature
         for (var val in attrs)
         {
             if (attrArray.indexOf(val) == -1)
@@ -326,15 +327,16 @@ dnc = {
             var colName = feature.columns[i].name;
 
             // See if we have a default/mandatory value
-            if (dnc.rules.defaultList[attrs.F_CODE])
+            if (dnc.rules.defaultList[gFcode])
             {
                 // Debug:
                 // print('Found: ' + gFcode + ' in the default list');
-                if (dnc.rules.defaultList[gFcode][attrs[colName]])
+                // if (dnc.rules.defaultList[gFcode][attrs[colName]])
+                if (dnc.rules.defaultList[gFcode][colName])
                 {
                     // Debug:
-                    // print('Setting: ' + colName + ' to ' + dnc.rules.defaultList[gFcode][attrs[colName]]);
-                    attrs[colName] = dnc.rules.defaultList[gFcode][attrs[colName]];
+                    // print('Setting: ' + colName + ' to ' + dnc.rules.defaultList[gFcode][colName]);
+                    attrs[colName] = dnc.rules.defaultList[gFcode][colName];
 
                     // We wiped the value so try to restore the tags for it
                     // NOTE: If this was an empty default, there is nothing to restore
@@ -370,7 +372,7 @@ dnc = {
                         attrs[colName] = feature.columns[i].defValue;
 
                         // Debug:
-                        // print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to its default value (' + feature.columns[i].defValue + ')');
+                        // print('Validate: 2: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to its default value (' + feature.columns[i].defValue + ')');
                     }
                     else
                     {
@@ -378,7 +380,7 @@ dnc = {
                         attrs[colName] = '999';
 
                         // Debug:
-                        // print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to Other (999)');
+                        // print('Validate: 2: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to Other (999)');
                     }
 
                     // Since we either wiped the value or set it to '999', try to restore the tags for it 
@@ -386,7 +388,7 @@ dnc = {
                     {
                         notUsed[transMap[colName][1]] = transMap[colName][2];
                         // Debug:
-                        // print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
+                        // print('Validate: 2: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
                     }
                 }
 
@@ -1399,6 +1401,10 @@ dnc = {
                 {
                     // If we have already set the tablename, don't stomp on it
                     if (returnData[i]['tableName'] == '') returnData[i]['tableName'] = tableName;
+
+                    // This is UGLY
+                    // FA000 appears in two layers. Both with different attribute lists
+                    if (returnData[i]['attrs']['F_CODE'] == 'FA000X') returnData[i]['attrs']['F_CODE'] = 'FA000';
 
                     // Validate attrs: remove all that are not supposed to be part of a feature
                     dnc.validateAttrs(tableName,geometryType,returnData[i]['attrs'],notUsedTags,transMap);

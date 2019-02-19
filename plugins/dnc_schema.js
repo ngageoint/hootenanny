@@ -1019,7 +1019,7 @@ getDbSchema: function()
                        desc:"Material Composition Category",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"1",
+                       defValue:"0",
                        enumerations:[
                            { name:"Unknown", value:"0" },
                            { name:"Boulders", value:"8" },
@@ -1036,7 +1036,7 @@ getDbSchema: function()
                        desc:"Material Compsition Secondary",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"1",
+                       defValue:"0",
                        enumerations:[
                            { name:"Unknown", value:"0" },
                            { name:"Gravel", value:"46" },
@@ -1205,7 +1205,7 @@ getDbSchema: function()
                        desc:"Material Composition Category",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"1",
+                       defValue:"0",
                        enumerations:[
                            { name:"Unknown", value:"0" },
                            { name:"Boulders", value:"8" },
@@ -1222,7 +1222,7 @@ getDbSchema: function()
                        desc:"Material Compsition Secondary",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"1",
+                       defValue:"0",
                        enumerations:[
                            { name:"Unknown", value:"0" },
                            { name:"Gravel", value:"46" },

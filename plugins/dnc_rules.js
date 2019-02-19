@@ -1431,7 +1431,7 @@ dnc.rules = {
         'FC170L':{'EXS':'-32768','IAS':'-32768','OPS':'-32768','TSP':'-32768'},
         'GA020P':{'APT':'-32768','BRF':'-2147483648','COL':'N/A','EXS':'-32768','MCA':'N/A','NAM':'N/A','NST':'-32768','ORC':'-32768'},
         'GA035P':{'APT':'-32768','COL':'N/A','EXS':'42','NAM':'N/A','OLQ':'-32768'},
-        'GB005P':{'BRF':'2147483648','COL':'N/A','EXS':'28','MCA':'N/A','NST':'-32768','OLQ':'-32768','ORC':'-32768'},
+        'GB005P':{'BRF':'-2147483648','COL':'N/A','EXS':'28','MCA':'N/A','NST':'-32768','OLQ':'-32768','ORC':'-32768'},
         'GB010P':{'APT':'-32768','BRF':'-2147483648','EXS':'-32768','MCA':'N/A','NAM':'N/A','NST':'-32768','OLQ':'-32768','ORC':'-32768'},
         'GB055A':{'APT':'-32768','NAM':'N/A'},
         'GB070A':{'TSP':'-32768','WID':'-2147483648'},
@@ -1639,7 +1639,7 @@ dnc.rules = {
         'EC030A':'TREEA',
         'EC030P':'TREEP',
         'FA000L':'ADMINL',
-        // 'FA000L':'COALINE', // Fixing this in the manyFeatures function
+        'FA000XL':'COALINE', // Fixing this in the manyFeatures and validateAttributesfunctions
         'FA001A':'COAAREA',
         'FA020L':'BOUNDRYL',
         'FA040L':'BOUNDRYL',
