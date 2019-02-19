@@ -61,14 +61,6 @@ private:
 
   bool _performBridgeGeometryMerging;
 
-//  static int _numRelationsEncountered;
-//  static QList<int> _relationMemberSizeDistributionUnknown1;
-//  static QList<int> _relationMemberSizeDistributionUnknown2;
-//  static QList<int> _relationMemberSizeDistributionConflated;
-//  static int _numUnknown1Relations;
-//  static int _numUnknown2Relations;
-//  static int _numConflatedRelations;
-
   void _determineKeeperFeature(ElementPtr element1, ElementPtr element2, ElementPtr& keeper,
                                ElementPtr& toRemove, bool& removeSecondaryElement);
 

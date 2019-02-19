@@ -124,9 +124,6 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
       LOG_VART(matches[i]);
       r->addElement("", matches[i]);
     }
-    // This tag is so we can remove it later for Attribute Conflation.  There may be a better
-    // way to handle the situation in the future that doesn't require this tag be used.
-    //r->getTags().set(MetadataTags::HootRelationCreatedBy(), QString::fromStdString(className()));
     result = r;
     LOG_TRACE("Multilinestring split relation: " << result);
     map->addElement(r);

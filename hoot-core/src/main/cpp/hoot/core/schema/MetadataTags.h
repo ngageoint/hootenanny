@@ -109,8 +109,6 @@ public:
   inline static const QString HootScoreReview()         { return "hoot:score:review"; }
   inline static const QString HootScoreUuid()           { return "hoot:score:uuid"; }
 
-  //inline static const QString HootRelationCreatedBy()   { return "hoot:relation:created:by"; }
-
   static const QString HOOT_STATUS;
   inline static const QString& HootStatus()             { return HOOT_STATUS; }
 

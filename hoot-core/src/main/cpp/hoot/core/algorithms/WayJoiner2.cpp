@@ -43,11 +43,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-//#include <hoot/core/criterion/TagCriterion.h>
-//#include <hoot/core/schema/MetadataTags.h>
-//#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
-//#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
-//#include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/MultiLineStringCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
@@ -104,16 +99,6 @@ void WayJoiner2::join(const OsmMapPtr& map)
 void WayJoiner2::_removeHootCreatedMultiLineStringRelations(const OsmMapPtr& map)
 {
   LOG_TRACE("Removing multilinestring relations created during conflation...");
-//  ElementCriterionPtr crit(
-//    new ChainCriterion(
-//      new MultiLineStringCriterion(),
-//      new OrCriterion(
-//        new TagCriterion(
-//          MetadataTags::HootRelationCreatedBy(),
-//          QString::fromStdString(MultiLineStringSplitter::className())),
-//        new TagCriterion(
-//          MetadataTags::HootRelationCreatedBy(),
-//          QString::fromStdString(HighwaySnapMerger::className())))));
   // This may be a little dangerous, but will have to do for now...
   ElementCriterionPtr crit(
     new ChainCriterion(new MultiLineStringCriterion(), new StatusCriterion(Status::Conflated)));

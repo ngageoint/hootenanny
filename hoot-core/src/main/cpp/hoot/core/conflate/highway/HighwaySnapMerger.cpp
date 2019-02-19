@@ -548,8 +548,6 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       {
         r->addElement("", scrap);
       }
-      // see related description in MultiLineStringSplitter
-      //r->getTags().set(MetadataTags::HootRelationCreatedBy(), QString::fromStdString(className()));
       scrap = r;
       map->addElement(r);
     }
@@ -603,8 +601,6 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       RelationPtr r(new Relation(splitee->getStatus(), map->createNextRelationId(),
         splitee->getCircularError(), MetadataTags::RelationMultilineString()));
       r->addElement("", scrap->getElementId());
-      // see related description in MultiLineStringSplitter
-      //r->getTags().set(MetadataTags::HootRelationCreatedBy(), QString::fromStdString(className()));
       scrap = r;
       LOG_VART(r->getElementId());
       map->addElement(r);

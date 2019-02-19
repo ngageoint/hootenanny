@@ -35,20 +35,9 @@
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/schema/MetadataTags.h>
-//#include <hoot/core/ops/RecursiveElementRemover.h>
-//#include <hoot/core/ops/RemoveRelationOp.h>
 
 namespace hoot
 {
-
-//int HighwayTagOnlyMerger::_numRelationsEncountered = 0;
-//QList<int> HighwayTagOnlyMerger::_relationMemberSizeDistributionUnknown1;
-//QList<int> HighwayTagOnlyMerger::_relationMemberSizeDistributionUnknown2;
-//QList<int> HighwayTagOnlyMerger::_relationMemberSizeDistributionConflated;
-//int HighwayTagOnlyMerger::_numUnknown1Relations = 0;
-//int HighwayTagOnlyMerger::_numUnknown2Relations = 0;
-//int HighwayTagOnlyMerger::_numConflatedRelations = 0;
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs) :
 HighwaySnapMerger(pairs, boost::shared_ptr<SublineStringMatcher>()),
@@ -73,13 +62,6 @@ _performBridgeGeometryMerging(true)
 
 HighwayTagOnlyMerger::~HighwayTagOnlyMerger()
 {
-//  LOG_VART(_numRelationsEncountered);
-//  LOG_VART(_numUnknown1Relations);
-//  LOG_VART(_numUnknown2Relations);
-//  LOG_VART(_numConflatedRelations);
-//  LOG_VART(_relationMemberSizeDistributionUnknown1);
-//  LOG_VART(_relationMemberSizeDistributionUnknown2);
-//  LOG_VART(_relationMemberSizeDistributionConflated);
 }
 
 void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementPtr element2,
@@ -175,9 +157,9 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     //LOG_VART(elementWithTagsToKeep->getElementId());
     //LOG_VART(elementWithTagsToRemove->getElementId());
     OsmUtils::logElementDetail(
-      elementWithTagsToKeep, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToKeep");
+      elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
     OsmUtils::logElementDetail(
-      elementWithTagsToRemove, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToRemove");
+      elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
 
     return
       _mergeWays(
@@ -208,7 +190,7 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   elementWithTagsToKeep->setTags(mergedTags);
   elementWithTagsToKeep->setStatus(Status::Conflated);
   OsmUtils::logElementDetail(
-    elementWithTagsToKeep, map, Log::Debug, "HighwayTagOnlyMerger: keeper element");
+    elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: keeper element");
   // mark element for replacement
   // TODO: The multilinestring relations marked for replacement aren't being removed.
   if (removeSecondaryElement)
