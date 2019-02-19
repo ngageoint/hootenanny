@@ -6424,6 +6424,91 @@ getDbSchema: function()
                        defValue:"UNK"
                      },
                     ]
+          },
+        { name:"DQYAREA",
+          fcode:"",
+          desc:"Data Quality Area",
+          geom:"Area",
+          columns:[
+                     { name:"SOURCE_ID",
+                       desc:"Chart identifier",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"NAME",
+                       desc:"Name",
+                       optional:"R",
+                       length:"40",
+                       type:"String",
+                       defValue:""
+                     },
+                     { name:"COMP_DATE",
+                       desc:"Name",
+                       optional:"R",
+                       length:"20",
+                       type:"String",
+                       defValue:"N/A"
+                     },
+                     { name:"EDITION",
+                       desc:"Edition",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"PRINT_DATE",
+                       desc:"Chart Edition Date",
+                       optional:"R",
+                       length:"40",
+                       type:"String",
+                       defValue:""
+                     },
+                     { name:"SCALE",
+                       desc:"Scale",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"REF_LAT",
+                       desc:"Reference Latitude",
+                       optional:"R",
+                       type:"Real",
+                       defValue:""
+                     },
+                     { name:"ABS_HORIZ_ACC",
+                       desc:"Absolute Horizontal Accuracy",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"ABS_VERT_ACC",
+                       desc:"Absolute Vertical Accuracy",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"DATUM",
+                       desc:"Datum",
+                       optional:"R",
+                       length:"40",
+                       type:"String",
+                       defValue:""
+                     },
+                     { name:"LINEAGE",
+                       desc:"Linage",
+                       optional:"R",
+                       length:"100",
+                       type:"String",
+                       defValue:""
+                     },
+                     { name:"SOURCE_INFO",
+                       desc:"Source Information",
+                       optional:"R",
+                       length:"100",
+                       type:"String",
+                       defValue:""
+                     },
+                    ]
           }
     ]; // End of schema
 

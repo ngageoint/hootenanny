@@ -284,10 +284,11 @@ dnc = {
                     // Debug:
                     // print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
                 }
-                else
-                {
-                    hoot.logError('Validate: ' + val + ' missing from transMap');
-                }
+                // else
+                // {
+                    // Debug:
+                //     hoot.logError('Validate: ' + val + ' missing from transMap');
+                // }
 
                 delete attrs[val];
 
@@ -578,6 +579,9 @@ dnc = {
         if (attrs.F_CODE == 'AP020') tags.junction = 'yes';
         if (attrs.F_CODE == 'AP030') tags.highway = 'road';
         if (attrs.F_CODE == 'BH140') tags.waterway = 'river';
+
+        // The Data Quality layer doesn't have an F_CODE
+        if (layerName.toLowerCase() == 'dqyarea_dqy') tags['source:metadata'] = 'dataset';
 
         // If we have a UFI, store it.
         tags.source = 'dnc:' + layerName.toLowerCase();;

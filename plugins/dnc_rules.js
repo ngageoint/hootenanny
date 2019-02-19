@@ -206,7 +206,7 @@ dnc.rules = {
         ['F_CODE','GB055','aeroway','runway'], // Runway
         ['F_CODE','GB070','seamark:type','seaplane_landing_area'], // Seaplane Run
         ['F_CODE','ZC040','natural','magnetic_anomoly'], // GGDM3/NAS7 LOCAL_MAGNETIC_ANOMALY
-        ['F_CODE','ZD040','named_location','yes'], // Named Location
+        ['F_CODE','ZD040','named_location','yes'] // Named Location
     ], // End fcodeOne2oneIn
 
     // FCODE rules for Export
@@ -228,6 +228,7 @@ dnc.rules = {
         ['F_CODE','EC030','natural','wood'], // Wood - NFDD EC015
         ['F_CODE','ZD040','natural','bay'], // Named Location
         ['F_CODE','ZD040','tourism','viewpoint'], // Named Location
+        ['F_CODE','DQ','source:metadata','dataset'] // Fake F_CODE for the Data Quality layer
     ], // End fcodeOne2oneOut
 
     // One2one rules for Text Fields
@@ -1633,6 +1634,7 @@ dnc.rules = {
         'DB090L':'LCRLINE',
         'DB170A':'EMBANKA',
         'DB180A':'VOLCANOA',
+        'DQA':'DQYAREA',  // Fake F_CODE since DQ doesn't have an F_CODE
         'EA030A':'ORCHARDA',
         'EA040A':'ORCHARDA',
         'EA050A':'ORCHARDA',
