@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYMATCHTRAININGVALIDATOR_H
 #define MULTIARYMATCHTRAININGVALIDATOR_H
@@ -41,9 +41,9 @@ public:
   /**
    * @see OsmMapOperation::apply()
    */
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const override { return "TODO"; }
 };
 
 }

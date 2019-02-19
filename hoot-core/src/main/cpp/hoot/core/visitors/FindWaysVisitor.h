@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDWAYSVISITOR_H
 #define FINDWAYSVISITOR_H
@@ -44,9 +44,9 @@ public:
 
   FindWaysVisitor(ElementCriterion* pCrit);
 
-  void setOsmMap(const OsmMap* map) { _map = map; }
+  void setOsmMap(const OsmMap* map) override { _map = map; }
 
-  void visit(const boost::shared_ptr<const Element>& e);
+  void visit(const boost::shared_ptr<const Element>& e) override;
 
   std::vector<long> getIds() { return _wayIds; }
 

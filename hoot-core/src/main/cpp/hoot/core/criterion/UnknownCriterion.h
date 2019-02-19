@@ -45,7 +45,7 @@ public:
 
   static std::string className() { return "hoot::UnknownCriterion"; }
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNION_POLYGONS_OP_H
 #define UNION_POLYGONS_OP_H
@@ -47,11 +47,11 @@ public:
 
   UnionPolygonsOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual QString getDescription() const { return "Combines all areas"; }
+  virtual QString getDescription() const override { return "Combines all areas"; }
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBAWAREHOOTAPIDBREADER_H
 #define OSMAPIDBAWAREHOOTAPIDBREADER_H
@@ -47,9 +47,9 @@ public:
 
   virtual ~OsmApiDbAwareHootApiDbReader();
 
-  virtual void open(QString urlStr);
+  virtual void open(QString urlStr) override;
 
-  virtual QString supportedFormats() { return "osmapidb://"; }
+  virtual QString supportedFormats() override { return "osmapidb://"; }
 
 protected:
 

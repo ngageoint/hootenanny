@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SHAPEFILEWRITER_H
@@ -60,9 +60,9 @@ public:
 
   ShapefileWriter() { _includeInfo = true; _includeIds = false; _circularErrorIndex = -1; }
 
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".shp"); }
+  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".shp"); }
 
-  virtual void open(QString url);
+  virtual void open(QString url) override;
 
   QStringList getColumns(ConstOsmMapPtr map, ElementType type) const;
 
@@ -90,7 +90,7 @@ public:
 
   void writePolygons(ConstOsmMapPtr map, const QString& path);
 
-  virtual QString supportedFormats() { return ".shp"; }
+  virtual QString supportedFormats() override { return ".shp"; }
 
 protected:
 
