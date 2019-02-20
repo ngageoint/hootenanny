@@ -218,9 +218,13 @@ void WayJoiner2::_joinSiblings()
 
 void WayJoiner2::_joinUnsplitWaysAtNode()
 {
+  // This could possibly be done inside of _joinAtNode to avoid an additional pass over the way
+  // data by relaxing restrictions on what can be joined.
+
   LOG_TRACE("Joining unsplit ways at node...");
 
   HighwayCriterion highwayCrit;
+  OneWayCriterion oneWayCrit;
   boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
   const WayMap ways = _map->getWays();
   int joinAttempts = 0;
@@ -228,7 +232,8 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     WayPtr wayToJoin = wayItr->second;
-    if (wayToJoin->getTags().get("highway") == "road" && !wayToJoin->getTags().hasName())
+    if (wayToJoin->getTags().get("highway") == "road" && !wayToJoin->getTags().hasName() &&
+        !oneWayCrit.isSatisfied(wayToJoin))
     {
       const vector<long> endpoints({ wayToJoin->getFirstNodeId(), wayToJoin->getLastNodeId() });
       for (vector<long>::const_iterator endpointItr = endpoints.begin();
@@ -239,14 +244,18 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
              connectedItr != connectedWaysIds.end(); ++connectedItr)
         {
           WayPtr connectedWay = _map->getWay(*connectedItr);
-          // Not sure why the connected way could be empty...
+          // Not sure how the connected way could be empty...
           if (connectedWay && highwayCrit.isSatisfied(connectedWay))
           {
             LOG_TRACE("_joinUnsplitWaysAtNode wayToJoin: " << wayToJoin);
             LOG_TRACE("_joinUnsplitWaysAtNode connected way: " << connectedWay);
             const QString roadVal = connectedWay->getTags().get("highway").trimmed();
+
+            // Since this is basically an unmarked, non-oneway road, let's check both the regular
+            // and reversed versions of the way we want to join.
             WayPtr reversedWayToJoinCopy(new Way(*wayToJoin));
             reversedWayToJoinCopy->reverseOrder();
+
             if (!roadVal.isEmpty() && roadVal != "road" && connectedWay->getTags().hasName() &&
                 (DirectionFinder::isSimilarDirection2(_map, wayToJoin, connectedWay) ||
                  DirectionFinder::isSimilarDirection2(_map, reversedWayToJoinCopy, connectedWay)))
