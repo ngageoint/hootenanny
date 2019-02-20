@@ -44,7 +44,6 @@ public:
   virtual void preGeometryChange(Element* element) = 0;
 
   virtual void postGeometryChange(Element* element) = 0;
-
 };
 
 }

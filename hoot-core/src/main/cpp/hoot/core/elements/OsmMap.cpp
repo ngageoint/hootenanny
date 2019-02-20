@@ -189,7 +189,6 @@ void OsmMap::addNode(const NodePtr& n)
   _nodes[n->getId()] = n;
   n->registerListener(_index.get());
   _index->addNode(n);
-  //_nodeCounter = std::min(n->getId() - 1, _nodeCounter);
 }
 
 void OsmMap::addNodes(const std::vector<NodePtr>& nodes)

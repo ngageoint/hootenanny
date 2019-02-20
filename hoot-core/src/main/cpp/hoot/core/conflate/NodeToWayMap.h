@@ -46,7 +46,7 @@ class Way;
  * Traverses an OsmMap and creates a map from node id to a set of way IDs. This is handy when
  * trying to find intersections.
  */
-class NodeToWayMap : public std::map<long, std::set<long> >
+class NodeToWayMap : public std::map<long, std::set<long>>
 {
 public:
 
@@ -74,7 +74,6 @@ public:
 private:
 
   std::set<long> _emptySet;
-
 };
 
 }
