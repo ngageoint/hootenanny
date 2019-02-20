@@ -102,14 +102,14 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
 
   if (!e1 || !e2)
   {
-    LOG_DEBUG("One element missing.  Marking for review...");
+    LOG_TRACE("One element missing.  Marking for review...");
     return HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced);
   }
 
   if (e1 && e2)
   {
-    LOG_VARD(e1->getElementId());
-    LOG_VARD(e2->getElementId());
+    LOG_VART(e1->getElementId());
+    LOG_VART(e2->getElementId());
     OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayTagOnlyMerger: e1");
     OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayTagOnlyMerger: e2");
 
@@ -124,7 +124,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     {
       if (!_performBridgeGeometryMerging)
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Unable to perform geometric bridge merging due to invalid subline string matcher.  " <<
           "Performing tag only merge...");
       }
@@ -134,10 +134,10 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
         const bool needsReview = HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
         if (needsReview)
         {
-          LOG_DEBUG("HighwaySnapMerger returned review.");
+          LOG_TRACE("HighwaySnapMerger returned review.");
         }
-        LOG_VARD(map->getElement(eid1));
-        LOG_VARD(map->getElement(eid2));
+        LOG_VART(map->getElement(eid1));
+        LOG_VART(map->getElement(eid2));
         return needsReview;
       }
     }
@@ -195,7 +195,7 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   // TODO: The multilinestring relations marked for replacement aren't being removed.
   if (removeSecondaryElement)
   {
-    LOG_DEBUG("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
+    LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
     replaced.push_back(
       std::pair<ElementId, ElementId>(
         elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));
@@ -248,7 +248,7 @@ bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep
 {
   if (OsmUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
-    LOG_DEBUG("Conflicting name tags.  Skipping merge.");
+    LOG_TRACE("Conflicting name tags.  Skipping merge.");
     return true;
   }
 
@@ -256,7 +256,7 @@ bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep
   // TODO: This is ignoring the contents of multilinestring relations.
   if (OsmUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
-    LOG_DEBUG("Conflicting one way street tags.  Skipping merge.");
+    LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
     return true;
   }
 
@@ -280,7 +280,7 @@ void HighwayTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTag
         !DirectionFinder::isSimilarDirection2(
            map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
     {
-      LOG_DEBUG("Reversing " << wayWithTagsToKeep->getElementId() << "...");
+      LOG_TRACE("Reversing " << wayWithTagsToKeep->getElementId() << "...");
       wayWithTagsToKeep->reverseOrder();
     }
   }

@@ -125,6 +125,11 @@ private:
    */
   bool _joinWays(const WayPtr& parent, const WayPtr& child);
 
+  /*
+   * A more aggressive joining approach that tries to join up any unnamed generic roads in the
+   * output with a non-generic named road.  Best to be run after other joining routines and will
+   * likely result in some undesirable joins.
+   */
   void _joinUnsplitWaysAtNode();
 
   void _determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove);
