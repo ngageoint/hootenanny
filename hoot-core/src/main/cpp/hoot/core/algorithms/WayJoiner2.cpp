@@ -85,7 +85,6 @@ void WayJoiner2::join(const OsmMapPtr& map)
 
   // Try to find ref roads that possibly didn't match during the matching phase but can still be
   // joined up.
-  //attribute.conflation.aggressive.highway.rejoining
   if (ConfigOptions().getAttributeConflationAggressiveHighwayJoining())
   {
     _joinUnsplitWaysAtNode();
@@ -219,7 +218,7 @@ void WayJoiner2::_joinSiblings()
 
 void WayJoiner2::_joinUnsplitWaysAtNode()
 {
-  LOG_DEBUG("Joining unsplit ways at node...");
+  LOG_TRACE("Joining unsplit ways at node...");
 
   HighwayCriterion highwayCrit;
   boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
@@ -243,8 +242,8 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
           // Not sure why the connected way could be empty...
           if (connectedWay && highwayCrit.isSatisfied(connectedWay))
           {
-            LOG_DEBUG("_joinUnsplitWaysAtNode wayToJoin: " << wayToJoin);
-            LOG_DEBUG("_joinUnsplitWaysAtNode connected way: " << connectedWay);
+            LOG_TRACE("_joinUnsplitWaysAtNode wayToJoin: " << wayToJoin);
+            LOG_TRACE("_joinUnsplitWaysAtNode connected way: " << connectedWay);
             const QString roadVal = connectedWay->getTags().get("highway").trimmed();
             WayPtr reversedWayToJoinCopy(new Way(*wayToJoin));
             reversedWayToJoinCopy->reverseOrder();
@@ -252,21 +251,21 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
                 (DirectionFinder::isSimilarDirection2(_map, wayToJoin, connectedWay) ||
                  DirectionFinder::isSimilarDirection2(_map, reversedWayToJoinCopy, connectedWay)))
             {
-              LOG_DEBUG(
+              LOG_TRACE(
                 "Attempting unsplit join on unsplit way: " << wayToJoin->getElementId() <<
                 " and connected way: " << connectedWay->getElementId() << "...");
               joinAttempts++;
               if (_joinWays(connectedWay, wayToJoin))
               {
                 successfulJoins++;
-                LOG_DEBUG(
+                LOG_TRACE(
                   "Successfully joined unsplit way: " << wayToJoin->getElementId() <<
                   " and connected way: " << connectedWay->getElementId());
                 break;
               }
               else
               {
-                LOG_DEBUG(
+                LOG_TRACE(
                   "Unable to join unsplit way: " << wayToJoin->getElementId() <<
                   " and connected way: " << connectedWay->getElementId());
               }
@@ -276,7 +275,7 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
       }
     }
   }
-  LOG_DEBUG(
+  LOG_TRACE(
     "Successfully joined " << successfulJoins << " unsplit ways on " << joinAttempts <<
     " attempts.");
 }
@@ -601,7 +600,7 @@ bool WayJoiner2::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep,
       !DirectionFinder::isSimilarDirection2(
         _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToLose))
   {
-    LOG_DEBUG("Reversing order of " << wayWithTagsToKeep->getElementId());
+    LOG_TRACE("Reversing order of " << wayWithTagsToKeep->getElementId());
     // make sure this reversal gets done before checking the join type later on
     wayWithTagsToKeep->reverseOrder();
     return true;
@@ -614,33 +613,33 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (!parent || !child)
     return false;
 
-  LOG_VARD(parent->getId());
-  LOG_VARD(child->getId());
-  LOG_VARD(parent->getStatus());
-  LOG_VARD(child->getStatus());
+  LOG_VART(parent->getId());
+  LOG_VART(child->getId());
+  LOG_VART(parent->getStatus());
+  LOG_VART(child->getStatus());
 
   //  Check if the two ways are able to be joined back up
 
   //  Make sure that there are nodes in the ways
   if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
   {
-    LOG_DEBUG("One or more of the ways to be joined are empty. Skipping join.");
+    LOG_TRACE("One or more of the ways to be joined are empty. Skipping join.");
     return false;
   }
 
   // determine what type of join we have, if any
 //  vector<long> parent_nodes = parent->getNodeIds();
-//  LOG_VARD(parent_nodes.size());
-//  LOG_VARD(parent_nodes);
+//  LOG_VART(parent_nodes.size());
+//  LOG_VART(parent_nodes);
 //  vector<long> child_nodes = child->getNodeIds();
-//  LOG_VARD(child_nodes.size());
-//  LOG_VARD(child_nodes);
+//  LOG_VART(child_nodes.size());
+//  LOG_VART(child_nodes);
 //  //  make sure that they share the same node
 //  JoinAtNodeMergeType joinType;
-//  LOG_VARD(child_nodes[0]);
-//  LOG_VARD(parent_nodes[parent_nodes.size() - 1]);
-//  LOG_VARD(child_nodes[child_nodes.size() - 1]);
-//  LOG_VARD(parent_nodes[0]);
+//  LOG_VART(child_nodes[0]);
+//  LOG_VART(parent_nodes[parent_nodes.size() - 1]);
+//  LOG_VART(child_nodes[child_nodes.size() - 1]);
+//  LOG_VART(parent_nodes[0]);
 //  if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
 //  {
 //    joinType = JoinAtNodeMergeType::ParentFirst;
@@ -651,16 +650,16 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
 //  }
 //  else
 //  {
-//    LOG_DEBUG("No join type found.");
+//    LOG_TRACE("No join type found.");
 //    return false;
 //  }
-//  LOG_VARD(joinType);
+//  LOG_VART(joinType);
 
   //  Don't join area ways
   AreaCriterion areaCrit;
   if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
   {
-    LOG_DEBUG("One or more of the ways to be joined are areas. Skipping join.");
+    LOG_TRACE("One or more of the ways to be joined are areas. Skipping join.");
     return false;
   }
 
@@ -668,23 +667,23 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   WayPtr wayWithTagsToKeep;
   WayPtr wayWithTagsToLose;
   _determineKeeperFeature(parent, child, wayWithTagsToKeep, wayWithTagsToLose);
-  LOG_VARD(wayWithTagsToKeep);
-  LOG_VARD(wayWithTagsToLose);
+  LOG_VART(wayWithTagsToKeep);
+  LOG_VART(wayWithTagsToLose);
 
   const bool keeperWasReversed = _handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
 
   vector<long> parent_nodes = parent->getNodeIds();
-  LOG_VARD(parent_nodes.size());
-  LOG_VARD(parent_nodes);
+  LOG_VART(parent_nodes.size());
+  LOG_VART(parent_nodes);
   vector<long> child_nodes = child->getNodeIds();
-  LOG_VARD(child_nodes.size());
-  LOG_VARD(child_nodes);
+  LOG_VART(child_nodes.size());
+  LOG_VART(child_nodes);
   //  make sure that they share the same node
   JoinAtNodeMergeType joinType;
-  LOG_VARD(child_nodes[0]);
-  LOG_VARD(parent_nodes[parent_nodes.size() - 1]);
-  LOG_VARD(child_nodes[child_nodes.size() - 1]);
-  LOG_VARD(parent_nodes[0]);
+  LOG_VART(child_nodes[0]);
+  LOG_VART(parent_nodes[parent_nodes.size() - 1]);
+  LOG_VART(child_nodes[child_nodes.size() - 1]);
+  LOG_VART(parent_nodes[0]);
   if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
   {
     joinType = JoinAtNodeMergeType::ParentFirst;
@@ -695,17 +694,17 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
   else
   {
-    LOG_DEBUG("No join type found.");
+    LOG_TRACE("No join type found.");
 
     if (keeperWasReversed)
     {
-      LOG_DEBUG("Reverting reversed keeper way...");
+      LOG_TRACE("Reverting reversed keeper way...");
       wayWithTagsToKeep->reverseOrder();
     }
 
     return false;
   }
-  LOG_VARD(joinType);
+  LOG_VART(joinType);
 
   // deal with bridges
   std::vector<ConstElementPtr> elements;
@@ -715,14 +714,14 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
       onlyOneIsABridge)
   {
-    LOG_DEBUG("Only one of the features to be joined is a bridge. Skipping join.");
+    LOG_TRACE("Only one of the features to be joined is a bridge. Skipping join.");
     return false;
   }
 
   // don't try to join streets with conflicting one way info
   if (OsmUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
-    LOG_DEBUG("Conflicting one way street tags.  Skipping join.");
+    LOG_TRACE("Conflicting one way street tags.  Skipping join.");
     return false;
   }
 
@@ -731,7 +730,7 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (highwayCrit.isSatisfied(wayWithTagsToKeep) && highwayCrit.isSatisfied(wayWithTagsToLose) &&
       OsmUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
-    LOG_DEBUG("Conflicting highway type tags.  Skipping join.")
+    LOG_TRACE("Conflicting highway type tags.  Skipping join.")
     return false;
   }
 
@@ -787,7 +786,7 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   child->getTags().clear();
   RecursiveElementRemover(child->getElementId()).apply(_map);
 
-  LOG_VARD(parent);
+  LOG_VART(parent);
 
   _numJoined++;
 
