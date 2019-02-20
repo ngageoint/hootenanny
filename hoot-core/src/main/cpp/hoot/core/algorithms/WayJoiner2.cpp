@@ -85,9 +85,13 @@ void WayJoiner2::join(const OsmMapPtr& map)
 
   // Try to find ref roads that possibly didn't match during the matching phase but can still be
   // joined up.
-  //_joinUnsplitWaysAtNode();
+  //attribute.conflation.aggressive.highway.rejoining
+  if (ConfigOptions().getAttributeConflationAggressiveHighwayJoining())
+  {
+    _joinUnsplitWaysAtNode();
+  }
 
-  // Remove all the relations created by the MultiLineStringSplitter.
+  // Remove all the relations created during conflation.
 
   // This isn't the best place to do this, but Attribute Conflation is already using
   // RemoveElementsVisitor with another criterion in its config and RemoveElementsVisitor doesn't
@@ -217,7 +221,7 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
 {
   LOG_DEBUG("Joining unsplit ways at node...");
 
-  HighwayCriterion highwayCrit;;
+  HighwayCriterion highwayCrit;
   boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
   const WayMap ways = _map->getWays();
   int joinAttempts = 0;
@@ -227,7 +231,7 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
     WayPtr wayToJoin = wayItr->second;
     if (wayToJoin->getTags().get("highway") == "road" && !wayToJoin->getTags().hasName())
     {
-      vector<long> endpoints({ wayToJoin->getFirstNodeId(), wayToJoin->getLastNodeId() });
+      const vector<long> endpoints({ wayToJoin->getFirstNodeId(), wayToJoin->getLastNodeId() });
       for (vector<long>::const_iterator endpointItr = endpoints.begin();
            endpointItr != endpoints.end(); ++endpointItr)
       {
@@ -236,16 +240,22 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
              connectedItr != connectedWaysIds.end(); ++connectedItr)
         {
           WayPtr connectedWay = _map->getWay(*connectedItr);
-          //LOG_VARD(connectedWay); //
           // Not sure why the connected way could be empty...
           if (connectedWay && highwayCrit.isSatisfied(connectedWay))
           {
+            LOG_DEBUG("_joinUnsplitWaysAtNode wayToJoin: " << wayToJoin);
+            LOG_DEBUG("_joinUnsplitWaysAtNode connected way: " << connectedWay);
             const QString roadVal = connectedWay->getTags().get("highway").trimmed();
-            if (!roadVal.isEmpty() && roadVal != "road" && connectedWay->getTags().hasName())
+            WayPtr reversedWayToJoinCopy(new Way(*wayToJoin));
+            reversedWayToJoinCopy->reverseOrder();
+            if (!roadVal.isEmpty() && roadVal != "road" && connectedWay->getTags().hasName() &&
+                (DirectionFinder::isSimilarDirection2(_map, wayToJoin, connectedWay) ||
+                 DirectionFinder::isSimilarDirection2(_map, reversedWayToJoinCopy, connectedWay)))
             {
               LOG_DEBUG(
                 "Attempting unsplit join on unsplit way: " << wayToJoin->getElementId() <<
                 " and connected way: " << connectedWay->getElementId() << "...");
+              joinAttempts++;
               if (_joinWays(connectedWay, wayToJoin))
               {
                 successfulJoins++;
@@ -260,7 +270,6 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
                   "Unable to join unsplit way: " << wayToJoin->getElementId() <<
                   " and connected way: " << connectedWay->getElementId());
               }
-              joinAttempts++;
             }
           }
         }
@@ -620,34 +629,32 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
 
   // determine what type of join we have, if any
-
-  vector<long> parent_nodes = parent->getNodeIds();
-  LOG_VARD(parent_nodes.size());
-  LOG_VARD(parent_nodes);
-  vector<long> child_nodes = child->getNodeIds();
-  LOG_VARD(child_nodes.size());
-  LOG_VARD(child_nodes);
-
-  //  First make sure that they share the same node
-  JoinAtNodeMergeType joinType;
-  LOG_VARD(child_nodes[0]);
-  LOG_VARD(parent_nodes[parent_nodes.size() - 1]);
-  LOG_VARD(child_nodes[child_nodes.size() - 1]);
-  LOG_VARD(parent_nodes[0]);
-  if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
-  {
-    joinType = JoinAtNodeMergeType::ParentFirst;
-  }
-  else if (child_nodes[child_nodes.size() - 1] == parent_nodes[0])
-  {
-    joinType = JoinAtNodeMergeType::ParentLast;
-  }
-  else
-  {
-    LOG_TRACE("No join type found.");
-    return false;
-  }
-  LOG_VARD(joinType);
+//  vector<long> parent_nodes = parent->getNodeIds();
+//  LOG_VARD(parent_nodes.size());
+//  LOG_VARD(parent_nodes);
+//  vector<long> child_nodes = child->getNodeIds();
+//  LOG_VARD(child_nodes.size());
+//  LOG_VARD(child_nodes);
+//  //  make sure that they share the same node
+//  JoinAtNodeMergeType joinType;
+//  LOG_VARD(child_nodes[0]);
+//  LOG_VARD(parent_nodes[parent_nodes.size() - 1]);
+//  LOG_VARD(child_nodes[child_nodes.size() - 1]);
+//  LOG_VARD(parent_nodes[0]);
+//  if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
+//  {
+//    joinType = JoinAtNodeMergeType::ParentFirst;
+//  }
+//  else if (child_nodes[child_nodes.size() - 1] == parent_nodes[0])
+//  {
+//    joinType = JoinAtNodeMergeType::ParentLast;
+//  }
+//  else
+//  {
+//    LOG_DEBUG("No join type found.");
+//    return false;
+//  }
+//  LOG_VARD(joinType);
 
   //  Don't join area ways
   AreaCriterion areaCrit;
@@ -663,6 +670,42 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   _determineKeeperFeature(parent, child, wayWithTagsToKeep, wayWithTagsToLose);
   LOG_VARD(wayWithTagsToKeep);
   LOG_VARD(wayWithTagsToLose);
+
+  const bool keeperWasReversed = _handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
+
+  vector<long> parent_nodes = parent->getNodeIds();
+  LOG_VARD(parent_nodes.size());
+  LOG_VARD(parent_nodes);
+  vector<long> child_nodes = child->getNodeIds();
+  LOG_VARD(child_nodes.size());
+  LOG_VARD(child_nodes);
+  //  make sure that they share the same node
+  JoinAtNodeMergeType joinType;
+  LOG_VARD(child_nodes[0]);
+  LOG_VARD(parent_nodes[parent_nodes.size() - 1]);
+  LOG_VARD(child_nodes[child_nodes.size() - 1]);
+  LOG_VARD(parent_nodes[0]);
+  if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
+  {
+    joinType = JoinAtNodeMergeType::ParentFirst;
+  }
+  else if (child_nodes[child_nodes.size() - 1] == parent_nodes[0])
+  {
+    joinType = JoinAtNodeMergeType::ParentLast;
+  }
+  else
+  {
+    LOG_DEBUG("No join type found.");
+
+    if (keeperWasReversed)
+    {
+      LOG_DEBUG("Reverting reversed keeper way...");
+      wayWithTagsToKeep->reverseOrder();
+    }
+
+    return false;
+  }
+  LOG_VARD(joinType);
 
   // deal with bridges
   std::vector<ConstElementPtr> elements;
@@ -698,7 +741,7 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   child->resetPid();
 
   // Reverse the way if way to remove is one way and the two ways aren't in similar directions
-  _handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
+  //_handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
 
   //  Merge the tags
 
