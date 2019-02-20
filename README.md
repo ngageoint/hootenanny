@@ -33,10 +33,10 @@ Hootenanny is developed under the open source General Public License (GPL) and m
 
 Additional feature types can be made conflatable using Hootenanny's [pluggable conflation architecture](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 
-# Types of Conflation
-* **Reference Conflation** - Conflate the best geometry and tag parts of map B into map A.
-* **Horizontal (Cookie Cutter) Conflation** - Define a specifc region in map A that should not be modified at all and stitch in data from map B around it.
-* **Differential Conflation** - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A.  Optionally, you can configure to overwrite tags in A from B even when there is overlap.
+# Types of [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc)
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - Conflate the best geometry and tag parts of map B into map A.
+* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - Define a specifc region in map A that should not be modified at all and stitch in data from map B around it.
+* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A.  Optionally, you can configure to overwrite tags in A from B even when there is overlap.
 * **Attribute Conflation** - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with some configurable exceptions).
 
 # Feature Summary
@@ -76,12 +76,12 @@ Hootenanny leverages the OSM key value pair tag concept to support translation b
 Users are also able to define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations).
 
 # Installation
-* [Instructions](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md) to launch a Hootenanny virtual machine
+* [Instructions](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md) to launch a virtual machine
 * [Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation
 
 # Support
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
-* If you have any support questions, please create an issue in the [Hootenanny GitHub repository](https://github.com/ngageoint/hootenanny).
+* If you have any support questions, please create an issue in this repository.
 
 # Documentation
 * [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
