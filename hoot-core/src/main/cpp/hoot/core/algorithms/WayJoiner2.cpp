@@ -627,42 +627,6 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return false;
   }
 
-  // determine what type of join we have, if any
-//  vector<long> parent_nodes = parent->getNodeIds();
-//  LOG_VART(parent_nodes.size());
-//  LOG_VART(parent_nodes);
-//  vector<long> child_nodes = child->getNodeIds();
-//  LOG_VART(child_nodes.size());
-//  LOG_VART(child_nodes);
-//  //  make sure that they share the same node
-//  JoinAtNodeMergeType joinType;
-//  LOG_VART(child_nodes[0]);
-//  LOG_VART(parent_nodes[parent_nodes.size() - 1]);
-//  LOG_VART(child_nodes[child_nodes.size() - 1]);
-//  LOG_VART(parent_nodes[0]);
-//  if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
-//  {
-//    joinType = JoinAtNodeMergeType::ParentFirst;
-//  }
-//  else if (child_nodes[child_nodes.size() - 1] == parent_nodes[0])
-//  {
-//    joinType = JoinAtNodeMergeType::ParentLast;
-//  }
-//  else
-//  {
-//    LOG_TRACE("No join type found.");
-//    return false;
-//  }
-//  LOG_VART(joinType);
-
-  //  Don't join area ways
-  AreaCriterion areaCrit;
-  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
-  {
-    LOG_TRACE("One or more of the ways to be joined are areas. Skipping join.");
-    return false;
-  }
-
   // make sure tags go in the right direction
   WayPtr wayWithTagsToKeep;
   WayPtr wayWithTagsToLose;
@@ -670,6 +634,8 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   LOG_VART(wayWithTagsToKeep);
   LOG_VART(wayWithTagsToLose);
 
+  // Reverse the way if way to remove is one way and the two ways aren't in similar directions.
+  // This needs to be done before we check the merge type.
   const bool keeperWasReversed = _handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
 
   vector<long> parent_nodes = parent->getNodeIds();
@@ -706,6 +672,14 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
   LOG_VART(joinType);
 
+  //  Don't join area ways
+  AreaCriterion areaCrit;
+  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
+  {
+    LOG_TRACE("One or more of the ways to be joined are areas. Skipping join.");
+    return false;
+  }
+
   // deal with bridges
   std::vector<ConstElementPtr> elements;
   elements.push_back(wayWithTagsToKeep);
@@ -738,9 +712,6 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
 
   //  Remove the split parent id
   child->resetPid();
-
-  // Reverse the way if way to remove is one way and the two ways aren't in similar directions
-  //_handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
 
   //  Merge the tags
 
