@@ -49,6 +49,7 @@ public:
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
                        const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  ~HighwayTagOnlyMerger();
 
 protected:
 
@@ -65,9 +66,13 @@ private:
 
   void _handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,
                                    ConstElementPtr elementWithTagsToRemove, const OsmMapPtr& map);
-
   bool _conflictExists(ConstElementPtr elementWithTagsToKeep,
                        ConstElementPtr elementWithTagsToRemove) const;
+
+  void _copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, const OsmMapPtr& map);
+  bool _mergeWays(ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
+                  const bool removeSecondaryElement, const OsmMapPtr& map,
+                  std::vector<std::pair<ElementId, ElementId>>& replaced);
 };
 
 typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;

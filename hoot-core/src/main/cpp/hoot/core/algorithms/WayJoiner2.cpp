@@ -43,6 +43,10 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/MultiLineStringCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 
 #include <unordered_set>
 #include <vector>
@@ -66,23 +70,43 @@ void WayJoiner2::join(const OsmMapPtr& map)
 
   //  Join back any ways with parent ids
   _joinParentChild();
-  OsmMapWriterFactory::writeDebugMap(map);
 
   //  Join any siblings that have the same parent id but the parent isn't connected
   _joinSiblings();
-  OsmMapWriterFactory::writeDebugMap(map);
 
   //  Rejoin any ways that are now connected to their parents
   _joinParentChild();
-  OsmMapWriterFactory::writeDebugMap(map);
 
   //  Run one last join on ways that share a node and have a parent id
   _joinAtNode();
-  OsmMapWriterFactory::writeDebugMap(map);
 
   //  Clear out any remaining unjoined parent ids
   _resetParents();
+
+  // Remove all the relations created by the MultiLineStringSplitter.
+
+  // This isn't the best place to do this, but Attribute Conflation is already using
+  // RemoveElementsVisitor with another criterion in its config and RemoveElementsVisitor doesn't
+  // support multiple criteria.  Adding support to it for multiple criteria is an option, but
+  // implementation for it, as well as supporting it in the config file could be messy...want to
+  // think about it more before rushing something.  Also negative about this, is that it assumes
+  // we're always using Attribute Conflation with WayJoiner2, which is currently the case, but
+  // really too tightly coupled of a relationship regardless.
+  _removeHootCreatedMultiLineStringRelations(map);
+
   OsmMapWriterFactory::writeDebugMap(map);
+}
+
+void WayJoiner2::_removeHootCreatedMultiLineStringRelations(const OsmMapPtr& map)
+{
+  LOG_TRACE("Removing multilinestring relations created during conflation...");
+  // This may be a little dangerous, but will have to do for now...
+  ElementCriterionPtr crit(
+    new ChainCriterion(new MultiLineStringCriterion(), new StatusCriterion(Status::Conflated)));
+  RemoveElementsVisitor vis(crit);
+  vis.setRecursive(false);
+  map->visitRw(vis);
+  LOG_VART(vis.getCount());
 }
 
 void WayJoiner2::_resetParents()
@@ -442,7 +466,7 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
 void WayJoiner2::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper,
                                          WayPtr& toRemove)
 {
-  // TODO: this is a mess
+  // this is kind of a mess
 
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
   LOG_VART(tagMergerClassName);

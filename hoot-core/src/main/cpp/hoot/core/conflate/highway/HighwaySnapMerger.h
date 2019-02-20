@@ -88,7 +88,7 @@ private:
    */
   void _splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
                      const std::vector<bool>& reverse,
-                     std::vector< std::pair<ElementId, ElementId> >& replaced,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced,
                      const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;

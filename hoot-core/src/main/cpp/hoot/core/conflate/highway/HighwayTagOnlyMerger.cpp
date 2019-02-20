@@ -35,8 +35,6 @@
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
@@ -62,6 +60,10 @@ _performBridgeGeometryMerging(true)
   }
 }
 
+HighwayTagOnlyMerger::~HighwayTagOnlyMerger()
+{
+}
+
 void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementPtr element2,
                                                    ElementPtr& keeper, ElementPtr& toRemove,
                                                    bool& removeSecondaryElement)
@@ -71,6 +73,7 @@ void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementP
   {
     keeper = element1;
     toRemove = element2;
+    // TODO: This is ignoring the contents of multilinestring relations.
     if (toRemove->getElementType() == ElementType::Way)
     {
       WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(toRemove);
@@ -78,6 +81,7 @@ void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementP
       removeSecondaryElement = false;
     }
   }
+  // TODO: Should pid's be getting set in these two cases as well?
   else if (element1->getStatus() == Status::Unknown1 || element1->getStatus() == Status::Conflated)
   {
     keeper = element1;
@@ -106,14 +110,12 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
 
   if (e1 && e2)
   {
-    OsmUtils::logElementDetail(
-      e1, map, Log::Trace, "HighwayTagOnlyMerger: e1");
-    OsmUtils::logElementDetail(
-      e2, map, Log::Trace, "HighwayTagOnlyMerger: e2");
-
+    OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayTagOnlyMerger: e1");
+    OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayTagOnlyMerger: e2");
 
     // If just one of the features is a bridge, we want the bridge feature to separate from the road
     // feature its being merged with.  So, use the normal geometry AND tag merger.
+
     std::vector<ConstElementPtr> elements;
     elements.push_back(e1);
     elements.push_back(e2);
@@ -137,67 +139,21 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
         LOG_VART(map->getElement(eid1));
         LOG_VART(map->getElement(eid2));
         return needsReview;
-//        if (!HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced))
-//        {
-//          return false;
-//        }
       }
     }
 
     // Otherwise, proceed with tag only merging.
 
-//    std::vector<WayPtr> ways;
+    // copy relation tags back to their way members
+    _copyTagsToWayMembers(e1, e2, map);
 
-//    // hope this isn't happening
-//    assert(!(e1->getElementType() == ElementType::Relation &&
-//             e2->getElementType() == ElementType::Relation));
-
-//    // handle relations coming from HighwaySnapMerger's previous handling of bridges
-//    if (e1->getElementType() == ElementType::Relation ||
-//        e2->getElementType() == ElementType::Relation)
-//    {
-//      RelationPtr relation;
-//      if (e1->getElementType() == ElementType::Relation)
-//      {
-//        relation = boost::dynamic_pointer_cast<Relation>(e1);
-//      }
-//      else
-//      {
-//        relation = boost::dynamic_pointer_cast<Relation>(e2);
-//      }
-
-//      const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-
-//      // Shouldn't be happening, right?
-//      LOG_VART(relationMembers.size());
-//      assert(relationMembers.size() >= 2);
-
-//      for (size_t i = 0; i < relationMembers.size(); i++)
-//      {
-//        ElementPtr member = map->getElement(relationMembers[i].getElementId());
-//        if (member && member->getElementType() == ElementType::Way)
-//        {
-//          ways.push_back(boost::dynamic_pointer_cast<Way>(member));
-//          //RecursiveElementRemover(member->getElementId()).apply(map);
-//        }
-//      }
-//      //RecursiveElementRemover(relation->getElementId()).apply(map);
-
-//      //LOG_TRACE("One feature was a relation, so skipping merge.");
-//      //return false;
-//    }
-
-//    for (std::vector<WayPtr>::const_iterator itr = ways.begin(); ways != ways.end(); ++itr)
-//    {
-
-//    }
+    // Merge the ways, bringing the secondary feature's attributes over to the reference feature.
 
     ElementPtr elementWithTagsToKeep;
     ElementPtr elementWithTagsToRemove;
     bool removeSecondaryElement;
     _determineKeeperFeature(
       e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
-
     //LOG_VART(elementWithTagsToKeep->getElementId());
     //LOG_VART(elementWithTagsToRemove->getElementId());
     OsmUtils::logElementDetail(
@@ -205,33 +161,86 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     OsmUtils::logElementDetail(
       elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
 
-    if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
-    {
-      return false;
-    }
-
-    // Reverse the way if way to remove is one way and the two ways aren't in similar directions
-    _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove, map);
-
-    // merge the tags
-    Tags mergedTags =
-      TagMergerFactory::mergeTags(
-        elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way);
-    elementWithTagsToKeep->setTags(mergedTags);
-    elementWithTagsToKeep->setStatus(Status::Conflated);
-    OsmUtils::logElementDetail(
-      elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: keeper element");
-    // mark element for replacement
-    if (removeSecondaryElement)
-    {
-      LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
-      replaced.push_back(
-        std::pair<ElementId, ElementId>(
-          elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));
-    }
+    return
+      _mergeWays(
+        elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, map, replaced);
   }
 
   return false;
+}
+
+bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
+                                      ElementPtr elementWithTagsToRemove,
+                                      const bool removeSecondaryElement, const OsmMapPtr& map,
+                                      std::vector<std::pair<ElementId, ElementId>>& replaced)
+{
+  if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+  {
+    return false;
+  }
+
+  // Reverse the way if way to remove is one way and the two ways aren't in similar directions
+  _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove, map);
+
+  // merge the tags
+  Tags mergedTags =
+    TagMergerFactory::mergeTags(
+      elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way);
+  // TODO: This is ignoring the contents of multilinestring relations.
+  elementWithTagsToKeep->setTags(mergedTags);
+  elementWithTagsToKeep->setStatus(Status::Conflated);
+  OsmUtils::logElementDetail(
+    elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: keeper element");
+  // mark element for replacement
+  // TODO: The multilinestring relations marked for replacement aren't being removed.
+  if (removeSecondaryElement)
+  {
+    LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
+    replaced.push_back(
+      std::pair<ElementId, ElementId>(
+        elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));
+  }
+
+  return true;
+}
+
+void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, const OsmMapPtr& map)
+{
+  // hope this isn't happening
+  assert(!(e1->getElementType() == ElementType::Relation &&
+           e2->getElementType() == ElementType::Relation));
+
+  // handle relations coming from HighwaySnapMerger's previous handling of bridges
+  if (e1->getElementType() == ElementType::Relation ||
+      e2->getElementType() == ElementType::Relation)
+  {
+    RelationPtr relation;
+    if (e1->getElementType() == ElementType::Relation)
+    {
+      relation = boost::dynamic_pointer_cast<Relation>(e1);
+    }
+    else
+    {
+      relation = boost::dynamic_pointer_cast<Relation>(e2);
+    }
+
+    const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+    LOG_VART(relationMembers.size());
+    assert(relationMembers.size() >= 2);
+
+    // Simply copy the tags that were pushed up from the way members to the parent relation,
+    // presumably by the MultiLineStringSplitter.
+    for (size_t i = 0; i < relationMembers.size(); i++)
+    {
+      ElementPtr member = map->getElement(relationMembers[i].getElementId());
+      if (member && member->getElementType() == ElementType::Way)
+      {
+        WayPtr wayMember = boost::dynamic_pointer_cast<Way>(member);;
+        wayMember->setTags(
+          TagMergerFactory::mergeTags(wayMember->getTags(), relation->getTags(), ElementType::Way));
+      }
+    }
+  }
 }
 
 bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep,
@@ -244,6 +253,7 @@ bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep
   }
 
   // don't try to merge streets with conflicting one way info
+  // TODO: This is ignoring the contents of multilinestring relations.
   if (OsmUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
@@ -257,6 +267,7 @@ void HighwayTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTag
                                                        ConstElementPtr elementWithTagsToRemove,
                                                        const OsmMapPtr& map)
 {
+  // TODO: This is ignoring the contents of multilinestring relations.
   OneWayCriterion isAOneWayStreet;
   if (elementWithTagsToKeep->getElementType() == ElementType::Way &&
       elementWithTagsToRemove->getElementType() == ElementType::Way)

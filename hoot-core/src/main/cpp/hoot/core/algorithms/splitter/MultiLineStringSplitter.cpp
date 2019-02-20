@@ -38,6 +38,7 @@
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;
 
@@ -131,10 +132,9 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   return result;
 }
 
-
 void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollection& string,
-  const vector<bool> &reverse, ElementPtr& match, ElementPtr &scraps,
-  GeometryConverter::NodeFactory *nf) const
+  const vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
+  GeometryConverter::NodeFactory* nf) const
 {
   LOG_TRACE("Splitting " << string.toString().left(100) << "...");
 

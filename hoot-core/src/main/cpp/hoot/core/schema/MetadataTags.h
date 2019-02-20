@@ -167,7 +167,6 @@ public:
    */
   inline static const QString TrainingReview()          { return "REVIEW"; }
 
-
 private:
 
   MetadataTags() { }

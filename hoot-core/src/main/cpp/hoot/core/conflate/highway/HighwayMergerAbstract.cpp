@@ -51,7 +51,6 @@
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/ops/RemoveElementOp.h>
 
 using namespace geos::geom;
 using namespace std;

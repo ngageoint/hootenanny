@@ -515,14 +515,10 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
   const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const
 {
   LOG_VART(splitee->getElementId());
-  //LOG_VART(splitee);
 
   MultiLineStringSplitter().split(map, s, reverse, match, scrap);
 
-  if (match.get())
-  {
-    LOG_VART(match->getElementId());
-  }
+  LOG_VART(match->getElementId());
 
   vector<ConstWayPtr> waysV = ExtractWaysVisitor::extractWays(map, splitee);
   set<ConstWayPtr, WayPtrCompare> ways;
@@ -574,7 +570,6 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
 
   if (scrap)
   {
-   // LOG_VART(scrap->getElementId());
     LOG_VART(scrap);
 
     /*
@@ -635,7 +630,6 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       }
     }
 
-    //LOG_VART(splitee->getTags());
     // make sure the tags are still legit on the scrap.
     scrap->setTags(splitee->getTags());
     LOG_VART(scrap);
