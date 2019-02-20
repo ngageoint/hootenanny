@@ -22,23 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/ApiDbReader.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/io/ApiDbReader.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/RandomNumberUtils.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QTemporaryFile>
@@ -65,7 +65,7 @@ public:
 
   virtual QString getType() const { return "rnd"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     if (args.size() < 2)
     {
@@ -158,7 +158,7 @@ private:
     for (int i = 0; i < inputs.size(); i++)
     {
       boost::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::getInstance().createReader(inputs.at(i), true, Status::Unknown1);
+        OsmMapReaderFactory::createReader(inputs.at(i), true, Status::Unknown1);
 
       boost::shared_ptr<ApiDbReader> apiDbReader =
         boost::dynamic_pointer_cast<ApiDbReader>(reader);
@@ -183,15 +183,10 @@ private:
     }
     LOG_VARD(map->getNodeCount());
 
-    if (Log::getInstance().getLevel() <= Log::Debug)
-    {
-      OGREnvelope envelope = CalculateMapBoundsVisitor::getBounds(map);
-      boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(envelope));
-      LOG_VARD(tempEnv->toString());
-      const QString debugMapPath = "tmp/calc-tiles-combined-map-debug.osm";
-      LOG_DEBUG("writing debug output to " << debugMapPath)
-      OsmMapWriterFactory::getInstance().write(map, debugMapPath);
-    }
+//    OGREnvelope envelope = CalculateMapBoundsVisitor::getBounds(map);
+//    boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(envelope));
+//    LOG_VARD(tempEnv->toString());
+    OsmMapWriterFactory::writeDebugMap(map);
 
     return map;
   }
@@ -329,7 +324,7 @@ private:
       }
     }
 
-    OsmMapWriterFactory::getInstance().write(boundaryMap, outputPath);
+    OsmMapWriterFactory::write(boundaryMap, outputPath);
 
   //      if (Log::getInstance().getLevel() <= Log::Debug)
   //      {

@@ -38,25 +38,23 @@ public:
 
   static std::string className() { return "hoot::MergerBase"; }
 
-  typedef std::set< std::pair<ElementId, ElementId> > PairsSet;
+  typedef std::set<std::pair<ElementId, ElementId>> PairsSet;
 
   MergerBase() {}
 
   virtual ~MergerBase() {}
 
-  virtual std::set<ElementId> getImpactedElementIds() const;
+  virtual std::set<ElementId> getImpactedElementIds() const override;
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 
   virtual void replace(ElementId oldEid, ElementId newEid);
 
-  virtual QString toString() const { return QString("Unimplemented toString()"); }
-
 protected:
 
-  virtual PairsSet& getPairs() = 0;
-  virtual const PairsSet& getPairs() const = 0;
-
+  // TODO: Is any inheriting class actually implementing this in a custom fashion?
+  virtual PairsSet& _getPairs() = 0;
+  virtual const PairsSet& _getPairs() const = 0;
 };
 
 }

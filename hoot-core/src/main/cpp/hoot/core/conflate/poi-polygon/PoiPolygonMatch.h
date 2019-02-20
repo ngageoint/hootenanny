@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMATCH_H
 #define POIPOLYGONMATCH_H
@@ -51,7 +51,7 @@ namespace hoot
  * This is an additive, rule based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
  *
- * @todo This could use some refactoring.
+ * This class could use some refactoring.
  */
 class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 {
@@ -163,7 +163,7 @@ private:
   //requirement for matching
   bool _closeDistanceMatch;
 
-  //TODO: should be able to shrink some of this scorer code down with some abstraction
+  // should be able to shrink some of this scorer code down with some abstraction
 
   PoiPolygonTypeScoreExtractor _typeScorer;
   double _typeScore;

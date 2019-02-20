@@ -77,7 +77,7 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>
 {
   for (size_t i = 0; i < _creators.size(); ++i)
   {
-    LOG_INFO("Launching match creator " << i +1 << " / " << _creators.size() << "...");
+    LOG_DEBUG("Launching match creator " << i +1 << " / " << _creators.size() << "...");
     boost::shared_ptr<MatchCreator> matchCreator = _creators[i];
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
@@ -273,7 +273,7 @@ void MatchFactory::setConfiguration(const Settings& s)
 
 MatchFactory& MatchFactory::getInstance()
 {
-  /* TODO: remove this hack after the following UI issues are fixed:
+  /* remove this hack after the following UI issues are fixed:
    *
    * https://github.com/ngageoint/hootenanny-ui/issues/969
    * https://github.com/ngageoint/hootenanny-ui/issues/970

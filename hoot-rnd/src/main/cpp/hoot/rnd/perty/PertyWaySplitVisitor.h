@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTY_WAY_SPLIT_VISITOR_H
 #define PERTY_WAY_SPLIT_VISITOR_H
@@ -75,7 +75,7 @@ public:
 
     @see ConstElementVisitor
     */
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   /**
     @see RngConsumer

@@ -465,6 +465,8 @@ void Settings::parseCommonArguments(QStringList& args)
   hootTestCmdsIgnore.append("--names");
   hootTestCmdsIgnore.append("--all-names");
   hootTestCmdsIgnore.append("--diff");
+  hootTestCmdsIgnore.append("--include");
+  hootTestCmdsIgnore.append("--exclude");
 
   const QString optionInputFormatErrorMsg =
     "define must takes the form key=value (or key+=value, key++=value, or key-=value).";
@@ -517,8 +519,7 @@ void Settings::parseCommonArguments(QStringList& args)
       args = args.mid(1);
     }
     //HootTest settings have already been parsed by this point
-    else if (hootTestCmdsIgnore.contains(args[0]) || args[0].contains("--include") ||
-             args[0].contains("--exclude"))
+    else if (hootTestCmdsIgnore.contains(args[0]))
     {
       args = args.mid(1);
     }
@@ -594,6 +595,10 @@ void Settings::parseCommonArguments(QStringList& args)
         foreach (QString v, values)
         {
           QStringList newList = conf().getList(kvl[0]);
+          if (!newList.contains(v))
+          {
+            throw HootException("Unknown default value: (" + v + ")");
+          }
           newList.removeAll(v);
           conf().set(kvl[0], newList);
         }

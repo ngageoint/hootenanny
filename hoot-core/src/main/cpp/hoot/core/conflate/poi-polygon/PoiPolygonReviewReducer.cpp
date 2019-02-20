@@ -223,7 +223,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //these seem to be clustered together tightly a lot in cities, so up the requirement a bit
-  //TODO: using custom match/review distances or custom score requirements may be a better way to
+  // TODO: using custom match/review distances or custom score requirements may be a better way to
   //handle these types
   if (poiTags.get("tourism") == "hotel" && polyTags.get("tourism") == "hotel" &&
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
@@ -282,9 +282,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  //TODO: move to type extractor method
-  const bool poiIsNatural = poiTags.contains("natural");
-  const bool polyIsNatural = polyTags.contains("natural");
+  const bool poiIsNatural = PoiPolygonTypeScoreExtractor::isNatural(poi);
+  const bool polyIsNatural = PoiPolygonTypeScoreExtractor::isNatural(poly);
 
   //Be more strict reviewing natural features and parks against building features.  This could be
   //extended
@@ -515,7 +514,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
           if (PoiPolygonTypeScoreExtractor::isPark(polyNeighbor))
           {
-            //TODO: should this be OsmSchema::elementHasName instead?
+            // Should this be OsmSchema::elementHasName instead?
             otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
             otherParkPolyNameScore = nameScorer.extract(*_map, poi, polyNeighbor);
             otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;

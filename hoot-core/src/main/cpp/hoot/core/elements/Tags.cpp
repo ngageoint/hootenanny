@@ -379,6 +379,30 @@ QStringList Tags::getMatchingKeys(const QStringList& k)
   return result;
 }
 
+bool Tags::hasName() const
+{
+  return !getName().isEmpty();
+}
+
+bool Tags::haveMatchingName(const Tags& tags1, const Tags& tags2)
+{
+  const QStringList tag1Names = tags1.getNames();
+  const QStringList tag2Names = tags2.getNames();
+  for (int i = 0; i < tag1Names.size(); i++)
+  {
+    const QString tag1Name = tag1Names[i];
+    for (int j = 0; j < tag2Names.size(); j++)
+    {
+      const QString tag2Name = tag2Names[j];
+      if (tag1Name.compare(tag2Name, Qt::CaseInsensitive) == 0)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 QStringList Tags::getNames() const
 {
   QStringList result;
@@ -401,7 +425,7 @@ QStringList Tags::getNames() const
 
 QString Tags::getName() const
 {
-  QString name = get("name").toLower().trimmed();
+  QString name = get("name").trimmed();
   if (!name.isEmpty())
   {
     return name;
@@ -411,7 +435,7 @@ QString Tags::getName() const
     QStringList names = getNames();
     for (int i = 0; i < names.size(); i++)
     {
-      name = names.at(i).toLower().trimmed();
+      name = names.at(i).trimmed();
       //arbitrarily returning the first name here
       if (!name.isEmpty())
       {
@@ -438,6 +462,21 @@ const QStringList& Tags::getNameKeys()
   }
 
   return _nameKeys;
+}
+
+QStringList Tags::getNameKeys(const Tags& tags)
+{
+  QStringList nameKeysInTags;
+  const QStringList globalNameKeys = getNameKeys();
+  for (int i = 0; i < globalNameKeys.size(); i++)
+  {
+    const QString nameKey = globalNameKeys.at(i);
+    if (tags.contains(nameKey))
+    {
+      nameKeysInTags.append(nameKey);
+    }
+  }
+  return nameKeysInTags;
 }
 
 int Tags::getNonDebugCount() const

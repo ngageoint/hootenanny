@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef KSKIPBIGRAMDISTANCE_H
@@ -90,15 +90,15 @@ public:
    * Returns a value from 1 (very similar) to 0 (very dissimilar) describing the distance between
    * two strings based on their k-skip bi-grams
    */
-  virtual double compare(const QString& s1, const QString& s2) const { return score(s1, s2); }
+  virtual double compare(const QString& s1, const QString& s2) const override { return score(s1, s2); }
 
   QSet<QString> getBigrams(const QString& str) const;
 
   double score(const QString& s1, const QString& s2) const;
 
-  QString toString() const { return QString("%1-skip bi-gram").arg(_k); }
+  QString toString() const override { return QString("%1-skip bi-gram").arg(_k); }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Returns a string comparison score derived using Skip-gram modelling"; }
 
 private:

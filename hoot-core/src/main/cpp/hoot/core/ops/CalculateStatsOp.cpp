@@ -94,11 +94,11 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
 }
 
 boost::shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
-    const vector< boost::shared_ptr<MatchCreator> > &matchCreators,
-    const QString &matchCreatorName,
-    CreatorDescription::BaseFeatureType &featureType)
+    const vector<boost::shared_ptr<MatchCreator>>& matchCreators,
+    const QString& matchCreatorName,
+    CreatorDescription::BaseFeatureType& featureType)
 {
-  for (vector< boost::shared_ptr<MatchCreator> >::const_iterator matchIt = matchCreators.begin();
+  for (vector<boost::shared_ptr<MatchCreator>>::const_iterator matchIt = matchCreators.begin();
        matchIt != matchCreators.end(); ++matchIt)
   {
     vector<CreatorDescription> desc = (*matchIt)->getAllCreators();
@@ -403,7 +403,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _applyVisitor(constMap, &v2);
     _stats.append(SingleStat("Longest Tag", v2.getStat()));
 
-    //TODO: this should be moved into _generateFeatureStats
+    // TODO: this should be moved into _generateFeatureStats
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
@@ -570,7 +570,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
                                              const long poisMergedIntoPolys)
 {
   LOG_VARD(poisMergedIntoPolys);
-  const QString description = CreatorDescription::BaseFeatureTypeToString(featureType);
+  const QString description = CreatorDescription::baseFeatureTypeToString(featureType);
   LOG_VARD(description);
 
   double totalFeatures = 0.0;

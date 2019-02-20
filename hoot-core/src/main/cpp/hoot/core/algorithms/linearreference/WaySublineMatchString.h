@@ -87,7 +87,7 @@ public:
 
   const MatchCollection& getMatches() const { return _matches; }
 
-  /// @todo move reverse vector into the way subline string, but keep the interface identical
+  // TODO: move reverse vector into the way subline string, but keep the interface identical
   std::vector<bool> getReverseVector1() const;
   std::vector<bool> getReverseVector2() const;
 

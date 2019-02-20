@@ -86,7 +86,7 @@ public:
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    *
-   * @todo This constructor has gotten a little out of hand.
+   * This constructor has gotten a little out of hand.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
     vector<const Match*>& result, boost::shared_ptr<HighwayClassifier> c,
@@ -143,10 +143,9 @@ public:
       if (from != *it)
       {
         const boost::shared_ptr<const Element>& n = _map->getElement(*it);
-
         // score each candidate and push it on the result vector
-        HighwayMatch* m = createMatch(_map, _c, _sublineMatcher, _threshold, _tagAncestorDiff, e, n);
-
+        HighwayMatch* m =
+          createMatch(_map, _c, _sublineMatcher, _threshold, _tagAncestorDiff, e, n);
         if (m)
         {
           _result.push_back(m);
@@ -166,15 +165,6 @@ public:
     boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ConstElementPtr e1, ConstElementPtr e2)
   {
-    if (e1)
-    {
-      LOG_VART(e1->getElementId());
-    }
-    if (e2)
-    {
-      LOG_VART(e2->getElementId());
-    }
-
     HighwayMatch* result = 0;
 
     HighwayCriterion highwayCrit;
@@ -184,9 +174,9 @@ public:
         tagAncestorDiff->diff(map, e1, e2) <= ConfigOptions().getHighwayMaxEnumDiff())
     {
       // score each candidate and push it on the result vector
-      result = new HighwayMatch(classifier, sublineMatcher, map, e1->getElementId(),
-        e2->getElementId(), threshold);
-
+      result =
+        new HighwayMatch(
+          classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
       // if we're confident this is a miss
       if (result->getType() == MatchType::Miss)
       {
@@ -238,13 +228,10 @@ public:
 
   bool isMatchCandidate(ConstElementPtr element)
   {
-    LOG_VART(element->getElementId());
-
     if (_filter && !_filter->isSatisfied(element))
     {
       return false;
     }
-
     return HighwayCriterion().isSatisfied(element);
   }
 
@@ -277,6 +264,8 @@ public:
   }
 
   ConstOsmMapPtr getMap() { return _map; }
+
+  long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
 private:
 
@@ -332,12 +321,13 @@ Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid
 void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Creating matches with: " << className() << "...");
+  LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   HighwayMatchVisitor v(
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
     _filter);
   map->visitRo(v);
+  LOG_INFO("Found " << v.getNumMatchCandidatesFound() << " highway match candidates.");
 }
 
 vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const

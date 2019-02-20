@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -87,7 +87,7 @@ public:
       WaySublineCollection uut;
       uut.addSubline(WaySubline(WayLocation(map, w1, 0.0), WayLocation(map, w1, 20.0)));
 
-      HOOT_STR_EQUALS("start: way: -1 index: 2 fraction: 0 end: way: -1 index: 3 fraction: 0",
+      HOOT_STR_EQUALS("start: way(-1) index: 2 fraction: 0 end: way(-1) index: 3 fraction: 0",
                       uut.invert());
     }
 
@@ -95,7 +95,7 @@ public:
       WaySublineCollection uut;
       uut.addSubline(WaySubline(WayLocation(map, w1, 20.0), WayLocation(map, w1, 30.0)));
 
-      HOOT_STR_EQUALS("start: way: -1 index: 0 fraction: 0 end: way: -1 index: 2 fraction: 0",
+      HOOT_STR_EQUALS("start: way(-1) index: 0 fraction: 0 end: way(-1) index: 2 fraction: 0",
                       uut.invert());
     }
 
@@ -103,8 +103,8 @@ public:
       WaySublineCollection uut;
       uut.addSubline(WaySubline(WayLocation(map, w1, 10.0), WayLocation(map, w1, 20.0)));
 
-      HOOT_STR_EQUALS("start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
-        "start: way: -1 index: 2 fraction: 0 end: way: -1 index: 3 fraction: 0",
+      HOOT_STR_EQUALS("start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0\n"
+        "start: way(-1) index: 2 fraction: 0 end: way(-1) index: 3 fraction: 0",
         uut.invert());
     }
 
@@ -113,10 +113,10 @@ public:
       uut.addSubline(WaySubline(WayLocation(map, w1, 10.0), WayLocation(map, w1, 20.0)));
       uut.addSubline(WaySubline(WayLocation(map, w2, 10.0), WayLocation(map, w2, 20.0)));
 
-      HOOT_STR_EQUALS("start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0\n"
-                      "start: way: -2 index: 2 fraction: 0 end: way: -2 index: 3 fraction: 0\n"
-                      "start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
-                      "start: way: -1 index: 2 fraction: 0 end: way: -1 index: 3 fraction: 0",
+      HOOT_STR_EQUALS("start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0\n"
+                      "start: way(-2) index: 2 fraction: 0 end: way(-2) index: 3 fraction: 0\n"
+                      "start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0\n"
+                      "start: way(-1) index: 2 fraction: 0 end: way(-1) index: 3 fraction: 0",
                       uut.invert());
     }
 
@@ -125,8 +125,8 @@ public:
       uut.addSubline(WaySubline(WayLocation(map, w1, 10.0), WayLocation(map, w1, 30.0)));
       uut.addSubline(WaySubline(WayLocation(map, w2, 0.0), WayLocation(map, w2, 20.0)));
 
-      HOOT_STR_EQUALS("start: way: -2 index: 2 fraction: 0 end: way: -2 index: 3 fraction: 0\n"
-                      "start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0",
+      HOOT_STR_EQUALS("start: way(-2) index: 2 fraction: 0 end: way(-2) index: 3 fraction: 0\n"
+                      "start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0",
                       uut.invert());
     }
   }

@@ -63,7 +63,7 @@ public:
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::getInstance().write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
+    OsmMapWriterFactory::write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
       QLatin1Char('0')));
   }
 
@@ -74,29 +74,29 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
+//    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB1.osm", true,
 //      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
+//    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB2.osm", false,
 //      Status::Unknown2);
 
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", true,
+//    OsmMapReaderFactory::read(map, "test-files/conflate/network/DcGisRoads.osm", true,
 //      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb.osm", false,
+//    OsmMapReaderFactory::read(map, "tmp/dcperb.osm", false,
 //      Status::Unknown2);
 
-//    OsmMapReaderFactory::getInstance().read(map, "tmp/sub1.osm", true,
+//    OsmMapReaderFactory::read(map, "tmp/sub1.osm", true,
 //      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "tmp/sub2.osm", false,
+//    OsmMapReaderFactory::read(map, "tmp/sub2.osm", false,
 //      Status::Unknown2);
 
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD1.osm", true,
+//    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestD1.osm", true,
 //      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD2.osm", true,
+//    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestD2.osm", true,
 //      Status::Unknown2);
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/vagabond/highway-001/Input1.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/vagabond/highway-001/Input1.osm", false,
       Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/vagabond/highway-001/Input2.osm", false,
+    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/vagabond/highway-001/Input2.osm", false,
       Status::Unknown2);
 
     MapCleaner().apply(map);

@@ -428,7 +428,7 @@ public:
    * @param tagList string tag list to check against
    * @return true if any tag in a set of input tags is contained in a string list of tags; false
    * otherwise
-   * @todo If we came up with a way to support key=* wildcards in the Tags class, then we could
+   * @note If we came up with a way to support key=* wildcards in the Tags class, then we could
    * probably get rid of this method altogether and just check against the tags whereever this
    * method is being called.
    */
@@ -441,6 +441,16 @@ public:
    * @return a set of tags
    */
   Tags getAliasTags(const Tags& tags);
+
+  /**
+   * Determine the ancestor between two tags
+   *
+   * @param kvp1 first tag to examine
+   * @param kvp2 second tag to examine
+   * @return tag that is the ancestor of the other or the first tag if neither is an ancestor of
+   * each other
+   */
+  QString getParentKvp(const QString kvp1, const QString kvp2);
 
 private:
 

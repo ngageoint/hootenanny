@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSublineStringMatcher.h"
 
@@ -59,6 +59,54 @@ MaximalSublineStringMatcher::MaximalSublineStringMatcher()
   setConfiguration(conf());
 }
 
+void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
+{
+  ConfigOptions co(s);
+  setMaxRelevantAngle(toRadians(co.getWayMatcherMaxAngle()));
+  setMinSplitSize(co.getWayMergerMinSplitSize());
+  setHeadingDelta(co.getWayMatcherHeadingDelta());
+
+  _sublineMatcher.reset(
+    Factory::getInstance().constructObject<SublineMatcher>(co.getWaySublineMatcher()));
+  _configureSublineMatcher();
+}
+
+void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
+{
+  if (r > M_PI)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
+               "of radians?");
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+  _maxAngle = r;
+}
+
+void MaximalSublineStringMatcher::setMinSplitSize(Meters minSplitSize)
+{
+  _minSplitsize = minSplitSize;
+  _configureSublineMatcher();
+}
+
+void MaximalSublineStringMatcher::setHeadingDelta(Meters headingDelta)
+{
+  _headingDelta = headingDelta;
+  _configureSublineMatcher();
+}
+
+void MaximalSublineStringMatcher::setSublineMatcher(boost::shared_ptr<SublineMatcher> sm)
+{
+  _sublineMatcher = sm;
+  _configureSublineMatcher();
+}
+
 vector<WayPtr> MaximalSublineStringMatcher::_changeMap(const vector<ConstWayPtr>& ways,
   OsmMapPtr map) const
 {
@@ -86,6 +134,9 @@ void MaximalSublineStringMatcher::_configureSublineMatcher()
 WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPtr& map,
   const ConstElementPtr& e1, const ConstElementPtr& e2, Meters maxRelevantDistance) const
 {
+  LOG_VART(e1->getElementId());
+  LOG_VART(e2->getElementId());
+
   assert(_maxAngle >= 0);
   if (maxRelevantDistance == -1)
   {
@@ -135,9 +186,9 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
 }
 
 MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateMatch(
-  const ConstOsmMapPtr &map, Meters maxDistance, const vector<ConstWayPtr>& ways1,
-  const vector<ConstWayPtr> &ways2, const vector<bool>& reversed1,
-  const vector<bool> &reversed2) const
+  const ConstOsmMapPtr& map, Meters maxDistance, const vector<ConstWayPtr>& ways1,
+  const vector<ConstWayPtr>& ways2, const vector<bool>& reversed1,
+  const vector<bool>& reversed2) const
 {
   vector<WaySublineMatch> matches;
 
@@ -163,8 +214,8 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
     for (size_t j = 0; j < prep2.size(); j++)
     {
       double score;
-      WaySublineMatchString m = _sublineMatcher->findMatch(copiedMap, prep1[i], prep2[j], score,
-        maxDistance);
+      WaySublineMatchString m =
+        _sublineMatcher->findMatch(copiedMap, prep1[i], prep2[j], score, maxDistance);
 
       scoreSum += score;
       matches.insert(matches.end(), m.getMatches().begin(), m.getMatches().end());
@@ -293,60 +344,11 @@ void MaximalSublineStringMatcher::_reverseWays(const vector<WayPtr> &ways,
   }
 }
 
-void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
-{
-  ConfigOptions co(s);
-  setMaxRelevantAngle(toRadians(co.getWayMatcherMaxAngle()));
-  setMinSplitSize(co.getWayMergerMinSplitSize());
-  setHeadingDelta(co.getWayMatcherHeadingDelta());
-
-  _sublineMatcher.reset(
-    Factory::getInstance().constructObject<SublineMatcher>(co.getWaySublineMatcher()));
-  _configureSublineMatcher();
-}
-
-void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
-{
-  if (r > M_PI)
-  {
-    if (logWarnCount < Log::getWarnMessageLimit())
-    {
-      LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
-               "of radians?");
-    }
-    else if (logWarnCount == Log::getWarnMessageLimit())
-    {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-    }
-    logWarnCount++;
-  }
-  _maxAngle = r;
-}
-
-void MaximalSublineStringMatcher::setMinSplitSize(Meters minSplitSize)
-{
-  _minSplitsize = minSplitSize;
-  _configureSublineMatcher();
-}
-
-void MaximalSublineStringMatcher::setHeadingDelta(Meters headingDelta)
-{
-  _headingDelta = headingDelta;
-  _configureSublineMatcher();
-}
-
-void MaximalSublineStringMatcher::setSublineMatcher(boost::shared_ptr<SublineMatcher> sm)
-{
-  _sublineMatcher = sm;
-  _configureSublineMatcher();
-}
-
 void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, ElementId eid) const
 {
   LOG_TRACE("Validating element " << eid << "...");
 
   ConstElementPtr e = map->getElement(eid);
-  LOG_VART(e.get());
 
   if (e->getElementType() == ElementType::Relation)
   {
@@ -372,7 +374,6 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
-    LOG_VART(w.get());
 
     if (w->getNodeCount() <= 1)
     {

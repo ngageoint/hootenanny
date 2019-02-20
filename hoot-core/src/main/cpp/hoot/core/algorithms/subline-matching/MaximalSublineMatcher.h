@@ -50,16 +50,15 @@ public:
    *  input ways.
    */
   virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const;
+    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
 
   virtual void setConfiguration(const Settings &conf);
 
-  virtual void setMaxRelevantAngle(Radians r) { _maxAngle = r; }
+  virtual void setMaxRelevantAngle(Radians r) override { _maxAngle = r; }
 
-  virtual void setMinSplitSize(Meters minSplitSize) { _minSplitSize = minSplitSize; }
+  virtual void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
 
-  /// @todo not used?  need some refactoring here
-  virtual void setHeadingDelta(Meters /*headingDelta*/) { }
+  virtual void setHeadingDelta(Meters /*headingDelta*/) override { }
 
   virtual QString getDescription() const
   { return "Matches lines based on the maximal subline found"; }

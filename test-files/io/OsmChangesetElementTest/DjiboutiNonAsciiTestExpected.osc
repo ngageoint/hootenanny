@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osmChange version="0.6" generator="Hootenanny">
+<osmChange version="0.6" generator="hootenanny">
 	<create>
 		<node id="-1" version="0" lat="11.6021625999999998" lon="43.1529881000000017" timestamp="" changeset="1">
 			<tag k="name:ar" v="فندق لا سيستا"/>

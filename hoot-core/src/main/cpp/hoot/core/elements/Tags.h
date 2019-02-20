@@ -127,6 +127,14 @@ public:
   static const QStringList& getNameKeys();
 
   /**
+   * Get name keys for a set of tags
+   *
+   * @param tags tags to parse name keys from
+   * @return a list of name keys
+   */
+  static QStringList getNameKeys(const Tags& tags);
+
+  /**
    * Return all the names for the current feature.
    */
   QStringList getNames() const;
@@ -279,6 +287,22 @@ public:
    * @return a set of tags
    */
   static Tags schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices);
+
+  /**
+   * Determines if two set of tags have a matching name
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @return true if the tags have at least one matching name; false otherwise
+   */
+  static bool haveMatchingName(const Tags& tags1, const Tags& tags2);
+
+  /**
+   * Determines whether a name exists in the set of tag
+   *
+   * @return true if at least one name exists; false otherwise
+   */
+  bool hasName() const;
 
 private:
 

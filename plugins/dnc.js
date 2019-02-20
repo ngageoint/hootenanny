@@ -399,7 +399,7 @@ dnc = {
                 {
                     notUsed[transMap[enumName][1]] = transMap[enumName][2];
                     // Debug:
-                    print('Validate: re-adding enumeration ' + transMap[enumName][1] + ' = ' + transMap[enumName][2] + ' to notUsed');
+                    //print('Validate: re-adding enumeration ' + transMap[enumName][1] + ' = ' + transMap[enumName][2] + ' to notUsed');
                 }
                 else
                 {
@@ -1193,7 +1193,7 @@ dnc = {
             fcodeCommon.one2one.push.apply(dnc.rules.fcodeOne2oneOut,fcodeCommon.one2one);
             dnc.fcodeLookup = translate.createBackwardsLookup(dnc.rules.fcodeOne2oneOut);
             // Debug
-            translate.dumpOne2OneLookup(dnc.fcodeLookup);
+            // translate.dumpOne2OneLookup(dnc.fcodeLookup);
         }
 
         if (dnc.lookup == undefined)

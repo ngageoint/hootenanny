@@ -38,6 +38,7 @@
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;
 
@@ -71,8 +72,8 @@ boost::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFac
 }
 
 ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
-  const WaySublineCollection& string, const vector<bool> &reverse,
-  GeometryConverter::NodeFactory *nf) const
+  const WaySublineCollection& string, const vector<bool>& reverse,
+  GeometryConverter::NodeFactory* nf) const
 {
   assert(reverse.size() == string.getSublines().size());
   // if there were no matches then the result will be null
@@ -89,7 +90,9 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   // extract all the sublines into ways.
   for (size_t i = 0; i < string.getSublines().size(); i++)
   {
+    LOG_VART(string.getSublines()[i]);
     WayPtr w = string.getSublines()[i].toWay(map, nf);
+    LOG_VART(w->getElementId());
     if (reverse[i])
     {
       w->reverseOrder();
@@ -97,6 +100,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     if (ElementConverter(map).calculateLength(w) > 0)
     {
       matches.push_back(w);
+      LOG_TRACE("Adding " << w->getElementId() << " to map...");
       map->addElement(w);
     }
   }
@@ -109,25 +113,28 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   // if there were multiple matches then create a relation to contain the matches.
   else if (matches.size() > 1)
   {
-    RelationPtr r(new Relation(matches[0]->getStatus(), map->createNextRelationId(),
+    RelationPtr r(
+      new Relation(matches[0]->getStatus(), map->createNextRelationId(),
       matches[0]->getCircularError(), MetadataTags::RelationMultilineString()));
     for (size_t i = 0; i < matches.size(); i++)
     {
       LOG_TRACE(
-        "multilinestring: adding multiple match to relation: " << matches[i]->getElementId());
+        "multilinestring: adding multiple match to relation with ID: " << r->getId() <<
+        " member: " << matches[i]->getElementId());
+      LOG_VART(matches[i]);
       r->addElement("", matches[i]);
     }
     result = r;
+    LOG_TRACE("Multilinestring split relation: " << result);
     map->addElement(r);
   }
 
   return result;
 }
 
-
 void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollection& string,
-  const vector<bool> &reverse, ElementPtr& match, ElementPtr &scraps,
-  GeometryConverter::NodeFactory *nf) const
+  const vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
+  GeometryConverter::NodeFactory* nf) const
 {
   LOG_TRACE("Splitting " << string.toString().left(100) << "...");
 
@@ -146,7 +153,6 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
   // create all the sublines that fall within the positive WaySublineCollection and put them into
   // the match element.
   match = createSublines(map, positive, reverse, nf);
-  LOG_VART(match.get());
 
   // create all the sublines that fall within the negative WaySublineCollection and put them into
   // the scraps element.
@@ -166,4 +172,3 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const MultiLineStringL
 }
 
 }
-

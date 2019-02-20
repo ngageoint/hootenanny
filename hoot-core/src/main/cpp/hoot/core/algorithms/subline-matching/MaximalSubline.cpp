@@ -220,7 +220,8 @@ vector< pair<WayLocation, WayLocation> > MaximalSubline::_discretizePointPairs(
 {
   LOG_TRACE("Discretizing point pairs...");
 
-  /// @todo this requires a more robust mechanism for generating point pairs. -JRS r2701
+  // TODO: this requires a more robust mechanism for generating point pairs - r2701 (need to port
+  // issue to github)
 
   LOG_TRACE("Calculating offset...");
 

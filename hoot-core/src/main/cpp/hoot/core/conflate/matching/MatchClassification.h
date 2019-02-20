@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCLASSIFICATION_H
 #define MATCHCLASSIFICATION_H
@@ -49,6 +49,7 @@ namespace hoot
 class MatchClassification
 {
 public:
+
   MatchClassification();
 
   /**
@@ -96,6 +97,7 @@ public:
   }
 
 private:
+
   double _match;
   double _miss;
   double _review;

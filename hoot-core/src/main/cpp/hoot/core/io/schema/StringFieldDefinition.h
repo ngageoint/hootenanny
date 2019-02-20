@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STRINGFIELDDEFINITION_H
 #define STRINGFIELDDEFINITION_H
@@ -37,11 +37,11 @@ class StringFieldDefinition : public FieldDefinition
 public:
   StringFieldDefinition();
 
-  virtual QVariant::Type getType() const { return QVariant::String; }
+  virtual QVariant::Type getType() const override { return QVariant::String; }
 
-  virtual void validate(const QVariant& v, StrictChecking strict) const;
+  virtual void validate(const QVariant& v, StrictChecking strict) const override;
 
-  virtual QVariant getDefaultValue() const;
+  virtual QVariant getDefaultValue() const override;
 
   virtual bool hasDefaultValue() const;
 

@@ -46,16 +46,16 @@ public:
   static unsigned int logWarnCount;
 
   ScriptMerger(boost::shared_ptr<PluginContext> script, v8::Persistent<v8::Object>& plugin,
-    const std::set<std::pair<ElementId, ElementId> > &pairs);
+    const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Returns true if the plugin has a function with the specified name.
    */
   bool hasFunction(QString name) const;
 
-  virtual QString toString() const { return QString("ScriptMerger"); }
+  virtual QString toString() const override { return QString("ScriptMerger"); }
 
 protected:
 
@@ -68,19 +68,18 @@ protected:
    * Calls mergePair in the JS.
    */
   virtual void _applyMergePair(
-    const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
+    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
   /**
    * Calls mergeSet in the JS.
    */
   virtual void _applyMergeSets(
-    const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
+    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 
   v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map,
-                      std::vector<std::pair<ElementId, ElementId> > &replaced) const;
-  virtual PairsSet& getPairs() { return _pairs; }
-  virtual const PairsSet& getPairs() const { return _pairs; }
-
+                      std::vector<std::pair<ElementId, ElementId>> &replaced) const;
+  virtual PairsSet& _getPairs() override { return _pairs; }
+  virtual const PairsSet& _getPairs() const override { return _pairs; }
 };
 
 }

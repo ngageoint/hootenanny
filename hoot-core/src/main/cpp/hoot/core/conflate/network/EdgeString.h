@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGESTRING_H
 #define EDGESTRING_H
@@ -46,7 +46,7 @@ namespace hoot
 class EdgeString
 {
 public:
-  /// @todo this structure can likely go away in the near future.
+
   struct EdgeEntry
   {
     EdgeEntry(ConstEdgeSublinePtr subline) : _subline(subline)
@@ -82,6 +82,7 @@ public:
     }
 
   private:
+
     /// The portion of the edge. The portion is always measured starting at "from" regardless of
     /// whether or not reversed is set. It is always a value in [0, 1]. If toPortion < fromPortion
     /// the edge is reversed.
@@ -238,7 +239,6 @@ private:
   friend class EdgeStringTest;
 
   QList<EdgeEntry> _edges;
-
 };
 
 typedef boost::shared_ptr<EdgeString> EdgeStringPtr;

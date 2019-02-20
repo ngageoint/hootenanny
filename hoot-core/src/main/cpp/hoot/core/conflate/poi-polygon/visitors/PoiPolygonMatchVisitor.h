@@ -70,6 +70,8 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
+  long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
+
 private:
 
   // white box testing

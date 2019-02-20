@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DISTANCESCOREEXTRACTOR_H
 #define DISTANCESCOREEXTRACTOR_H
@@ -46,14 +46,14 @@ public:
 
   DistanceScoreExtractor();
 
-  virtual std::string getClassName() const { return className(); }
+  virtual std::string getClassName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates metric distance between features"; }
 
 protected:
 
-  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
+  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 };
 
 }

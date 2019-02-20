@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -52,7 +52,7 @@ public:
 
   virtual QString getDescription() const { return "Sorts a map to the OSM standard"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     if (args.size() != 2)
     {
@@ -71,7 +71,7 @@ public:
       return 0;
     }
 
-    if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
+    if (OsmMapReaderFactory::hasElementInputStream(input) &&
         ConfigOptions().getElementSorterElementBufferSize() != -1)
     {
       _sortExternally(input, output);
@@ -103,7 +103,7 @@ private:
   {
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(input));
+        OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
     reader->initializePartial();
@@ -116,7 +116,7 @@ private:
 
     boost::shared_ptr<PartialOsmMapWriter> writer =
       boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-        OsmMapWriterFactory::getInstance().createWriter(output));
+        OsmMapWriterFactory::createWriter(output));
     writer->open(output);
     writer->initializePartial();
     while (sorted->hasMoreElements())

@@ -130,7 +130,7 @@ public:
   MaximalSubline(MatchCriteria* criteria, Meters minSplitSize);
 
   /**
-   * @todo This code is still experimental at best.
+   * This code is still experimental at best.
    *
    * Given two ways, find all the matching and non-conflicting sublines between w1 and w2. This
    * method can give very different results from "findMaximalSubline". It will search for the

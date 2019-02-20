@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PhoneNumberParser.h"
@@ -126,7 +126,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
       {
         // If we're not using a region code to see if the number is valid, then just check for at
         // least one digit (vanity numbers can have letters).
-        // TODO: consider getting rid of this, as its too weak of a check
+        // consider getting rid of this, as its too weak of a check
         if (StringUtils::hasDigit(tagValue))
         {
           _addPhoneNumber(element.getTags().getName(), tagKey, tagValue, parsedPhoneNums);

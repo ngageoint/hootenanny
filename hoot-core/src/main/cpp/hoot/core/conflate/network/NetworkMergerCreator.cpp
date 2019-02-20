@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMergerCreator.h"
 
@@ -36,6 +36,7 @@
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
 
 // Standard
 #include <typeinfo>
@@ -73,7 +74,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   LOG_TRACE(matchesList);
 
   MatchSet matches = matchesIn;
-  _removeDuplicates(matches);
   LOG_VART(matches);
 
   bool result = false;
@@ -81,59 +81,91 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*matches.begin());
   if (m)
   {
-    bool matchOverlap = _containsOverlap(matches);
+    const bool matchOverlap = _containsOverlap(matches);
     LOG_VART(matchOverlap);
 
     if (!matchOverlap)
     {
       // create a merger that can merge multiple partial matches
-      LOG_TRACE("Adding the match to the partial network merger...");
       QSet<ConstEdgeMatchPtr> edgeMatches;
-      set< pair<ElementId, ElementId> > pairs;
+      int count = 0;
+      set<pair<ElementId, ElementId>> pairs;
       foreach (const Match* itm, matches)
       {
         const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(itm);
         edgeMatches.insert(nm->getEdgeMatch());
-        set< pair<ElementId, ElementId> > p = nm->getMatchPairs();
+        set<pair<ElementId, ElementId>> p = nm->getMatchPairs();
         pairs.insert(p.begin(), p.end());
+
+        count++;
+        if (count % 100 == 0)
+        {
+          PROGRESS_INFO(
+            "Added match " << count << " / " << matches.size() << " to partial network merger...");
+        }
       }
-      mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
-    }
-    else
-    {
-      // If one match completely contains the rest, use the larger match.
-      // This may need to be reverted as we play with more data, but at this point it seems like a
-      // reasonable heuristic.
-      if (const NetworkMatch* larger = _getLargestContainer(matches))
+      if (!ConfigOptions().getHighwayMergeTagsOnly())
       {
-        LOG_TRACE("Adding the larger match to the partial network merger...");
-        mergers.push_back(
-          new PartialNetworkMerger(
-            larger->getMatchPairs(),
-            QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
-            larger->getNetworkDetails()));
+        mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
       }
       else
       {
-        double overlapPercent = _getOverlapPercent(matches);
+        // TODO: We need to allow for HighwayTagOnlyMerger to spawn off PartialNetworkMerger here,
+        // I guess...but that's kind of nasty... (applies to the rest of the calls to
+        // HighwayTagOnlyMerger in this class as well).
+        mergers.push_back(new HighwayTagOnlyMerger(pairs));
+      }
+    }
+    else
+    {
+      // If one match completely contains the rest, use the larger match.  This may need to be
+      // reverted as we play with more data, but at this point it seems like a reasonable heuristic.
+      if (const NetworkMatch* larger = _getLargestContainer(matches))
+      {
+        LOG_TRACE("Adding the larger match to the partial network merger...");
+        if (!ConfigOptions().getHighwayMergeTagsOnly())
+        {
+          mergers.push_back(
+            new PartialNetworkMerger(
+              larger->getMatchPairs(),
+              QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
+              larger->getNetworkDetails()));
+        }
+        else
+        {
+          mergers.push_back(new HighwayTagOnlyMerger(larger->getMatchPairs()));
+        }
+      }
+      else
+      {
+        const double overlapPercent = _getOverlapPercent(matches);
+        // move value to config - #2913
         if (overlapPercent > 80.0) // Go ahead and merge largest match
         {
           const NetworkMatch* largest = _getLargest(matches);
           LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
-          mergers.push_back(
-            new PartialNetworkMerger(
-              largest->getMatchPairs(),
-              QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
-              largest->getNetworkDetails()));
+          if (!ConfigOptions().getHighwayMergeTagsOnly())
+          {
+            mergers.push_back(
+              new PartialNetworkMerger(
+                largest->getMatchPairs(),
+                QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
+                largest->getNetworkDetails()));
+          }
+          else
+          {
+            mergers.push_back(new HighwayTagOnlyMerger(largest->getMatchPairs()));
+          }
         }
         else // Throw a review
         {
           LOG_TRACE("Marking " << matches.size() << " overlapping matches for review...");
+          int count = 0;
           for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
           {
-            set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
+            set<pair<ElementId, ElementId>> s = (*it)->getMatchPairs();
             set<ElementId> eids;
-            for (set< pair<ElementId, ElementId> >::const_iterator jt = s.begin(); jt != s.end(); ++jt)
+            for (set<pair<ElementId, ElementId>>::const_iterator jt = s.begin(); jt != s.end(); ++jt)
             {
               eids.insert(jt->first);
               eids.insert(jt->second);
@@ -148,6 +180,13 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
                 "reference input data/imagery and manually merge or modify as needed.",
                 m->getMatchName(),
                 m->getScore()));
+
+            count++;
+            if (count % 100 == 0)
+            {
+              PROGRESS_INFO(
+                "Added match " << count << " / " << matches.size() << " for review...");
+            }
           }
         }
       }
@@ -375,41 +414,6 @@ bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
   assert(_map != 0);
   bool conflicting = matches.size() > 1;
   return conflicting;
-}
-
-// I dislike the nested for loop here - but whatcha gonna do? Maybe not create
-// duplicate matches in the first place
-void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
-{
-  LOG_TRACE("Removing duplicate matches...");
-
-  for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
-  {
-    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
-    MatchSet::iterator jt = it;
-
-    for (++jt; jt != matches.end(); ++jt)
-    {
-      const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
-
-      if (nmi && nmj)
-      {
-        if (nmi->isVerySimilarTo(nmj))
-          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " is very similar to " << nmj->getEdgeMatch()->getUid());
-
-        if (nmi->contains(nmj))
-          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " contains " << nmj->getEdgeMatch()->getUid());
-
-        if (nmi->isVerySimilarTo(nmj))
-        {
-          MatchSet::iterator tmp = jt;
-          ++tmp;
-          matches.erase(jt);
-          jt = tmp;
-        } // end if very similar
-      } // end if valid pointers
-    } // inner for
-  } // outer for
 }
 
 }

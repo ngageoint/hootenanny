@@ -45,7 +45,7 @@ using namespace std;
 namespace hoot
 {
 
-WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr &map, ConstWayPtr way) :
+WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, ConstWayPtr way) :
   _map(map)
 {
   _way = way;
@@ -53,6 +53,10 @@ WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr &map, ConstWayPtr way) :
   // Go through all the nodes
   double l = 0;
   const std::vector<long>& nodeIds = _way->getNodeIds();
+  if (nodeIds.size() == 0)
+  {
+    throw IllegalArgumentException("Empty way passed to WayDiscretizer.");
+  }
   ConstNodePtr lastNode = _map->getNode(nodeIds[0]);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {

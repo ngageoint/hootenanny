@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SparkJsonWriter.h"
 
@@ -107,7 +107,7 @@ void SparkJsonWriter::writePartial(const ConstNodePtr& n)
   result += QString::number(e.getMinY(), 'g', 16) % "\t";
   result += QString::number(e.getMaxX(), 'g', 16) % "\t";
   result += QString::number(e.getMaxY(), 'g', 16) % "\t";
-  /// @todo Update after https://github.com/ngageoint/hootenanny/issues/1663
+  // Update after https://github.com/ngageoint/hootenanny/issues/1663
   result += CalculateHashVisitor::toHashString(n) % "\t";
   result += "{\"element\":{\"type\":\"node\"";
   result += ",\"id\":" % QString::number(copy->getId(), 'g', 16);

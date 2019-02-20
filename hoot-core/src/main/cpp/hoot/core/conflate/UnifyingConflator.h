@@ -52,10 +52,9 @@ class MergerFactory;
 class ElementId;
 
 /**
- * A different form of conflation from the standard greedy conflation. This is a work in progress
- * see the developer documentation for details and #2376 and #2452 for details.
+ * A different form of conflation from the standard greedy conflation.
  *
- * This is named unifying because it unifies the building conflation and road conflation approaches.
+ * This is named Unifying because it unifies the building conflation and road conflation approaches.
  *
  * Re-entrant but not thread safe.
  *
@@ -108,7 +107,7 @@ private:
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   boost::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;
-  HashMap<ElementId, std::vector<Merger*> > _e2m;
+  HashMap<ElementId, std::vector<Merger*>> _e2m;
   std::vector<const Match*> _matches;
   std::vector<Merger*> _mergers;
   QList<SingleStat> _stats;
@@ -152,6 +151,7 @@ private:
 
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
+  QString _matchSetToString(const MatchSet& matchSet) const;
 };
 
 }

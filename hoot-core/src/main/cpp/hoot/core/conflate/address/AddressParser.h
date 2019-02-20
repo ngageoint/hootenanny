@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDRESS_PARSER_H
 #define ADDRESS_PARSER_H
@@ -55,7 +55,7 @@ class Relation;
  * Address normalization and translation is handled by libpostal, which uses ML trained on OSM
  * data.  There is also an option to do language pre-translation with a custom translator.
  *
- * TODO: current addresses not being parsed:
+ * current addresses not being parsed (#2937):
  *
  * 16th &amp; Bryant Streets
  * 16TH &amp; HOFF ST. PARKING GARAGE

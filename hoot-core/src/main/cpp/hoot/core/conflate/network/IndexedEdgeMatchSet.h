@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __INDEXED_EDGE_MATCH_SET_H__
 #define __INDEXED_EDGE_MATCH_SET_H__
@@ -41,6 +41,11 @@ class IndexedEdgeLinks;
 class IndexedEdgeMatchSet : public EdgeMatchSet
 {
 public:
+
+  static std::string className() { return "hoot::IndexedEdgeMatchSet"; }
+
+  static unsigned int logWarnCount;
+
   typedef QHash<ConstEdgeMatchPtr, double> MatchHash;
 
   IndexedEdgeMatchSet();
@@ -49,6 +54,8 @@ public:
    * The edge match should not be modified after it has been added to the index.
    */
   void addEdgeMatch(const ConstEdgeMatchPtr& em, double score);
+
+  void removeEdgeMatch(const ConstEdgeMatchPtr& em);
 
   boost::shared_ptr<IndexedEdgeLinks> calculateEdgeLinks();
 
@@ -93,7 +100,7 @@ public:
    *
    * An exception is thrown if the match doesn't exist.
    */
-  ConstEdgeMatchPtr getMatch(const ConstEdgeMatchPtr &em) const;
+  ConstEdgeMatchPtr getMatch(const ConstEdgeMatchPtr& em) const;
 
   /**
    * Return the score associated with an edge match.
@@ -121,11 +128,12 @@ public:
 
   void setScore(ConstEdgeMatchPtr em, double score) { _matches[em] = score; }
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
 private:
-  typedef QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr> > EdgeToMatchMap;
-  typedef QHash<ConstNetworkVertexPtr, QSet<ConstEdgeMatchPtr> > VertexToMatchMap;
+
+  typedef QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr>> EdgeToMatchMap;
+  typedef QHash<ConstNetworkVertexPtr, QSet<ConstEdgeMatchPtr>> VertexToMatchMap;
 
   EdgeToMatchMap _edgeToMatch;
   /**
@@ -134,9 +142,10 @@ private:
   VertexToMatchMap _vertexToMatch;
   MatchHash _matches;
 
-  void _addEdgeToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr &em);
-
-  void _addVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr &em);
+  void _addEdgeToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
+  void _addVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
+  void _removeEdgeToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
+  void _removeVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
 };
 
 typedef boost::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -104,7 +104,7 @@ public:
     WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
 
     WayLocation wl(map, w1, 90.0);
-    HOOT_STR_EQUALS("way: -1 index: 2 fraction: 0.4", wl);
+    HOOT_STR_EQUALS("way(-1) index: 2 fraction: 0.4", wl);
     HOOT_STR_EQUALS(90, wl.calculateDistanceOnWay());
   }
 

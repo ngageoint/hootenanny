@@ -51,7 +51,6 @@
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/ops/RemoveElementOp.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -93,9 +92,6 @@ void HighwayMergerAbstract::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1
 bool HighwayMergerAbstract::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   vector<pair<ElementId, ElementId>>& /*replaced*/)
 {
-  LOG_VART(eid1);
-  LOG_VART(eid2);
-
   OsmMapPtr result = map;
 
   ElementPtr e1 = result->getElement(eid1);
@@ -112,7 +108,6 @@ bool HighwayMergerAbstract::_mergePair(const OsmMapPtr& map, ElementId eid1, Ele
   // this in the conflict code at this time, so we'll ignore the merge.
   if (!e1 || !e2)
   {
-    LOG_TRACE("Missing match pair.");
     if (!e1)
     {
       LOG_TRACE(eid1 << " is missing.");
@@ -121,6 +116,7 @@ bool HighwayMergerAbstract::_mergePair(const OsmMapPtr& map, ElementId eid1, Ele
     {
       LOG_TRACE(eid2 << " is missing.");
     }
+    LOG_TRACE("Marking review for " << e1->getElementId() << " and " << e2->getElementId() << "...");
     _markNeedsReview(result, e1, e2, "Missing match pair", HighwayMatch::getHighwayMatchName());
     return true;
   }

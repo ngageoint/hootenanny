@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SEARCH_RADIUS_CALCULATOR_H
@@ -52,9 +52,9 @@ public:
 
   SearchRadiusCalculator();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
-  virtual boost::any getResult() { boost::any result = _result; return result; }
+  virtual boost::any getResult() override { boost::any result = _result; return result; }
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -66,7 +66,7 @@ public:
 
   void setPrecision(int precision) { _precision = precision; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates a search radius using tie points found by rubbersheeting"; }
 
 private:

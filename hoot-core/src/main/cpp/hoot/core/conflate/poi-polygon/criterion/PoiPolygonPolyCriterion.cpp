@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonPolyCriterion.h"
 
@@ -67,7 +67,7 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   LOG_TRACE("Does not contain tag from tag ignore list");
 
-  //TODO: should use be added as a category here?
+  // TODO: should use be added as a category here?
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags)
       .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());

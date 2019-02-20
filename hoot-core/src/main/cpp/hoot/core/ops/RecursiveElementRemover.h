@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RECURSIVEELEMENTREMOVER_H
 #define RECURSIVEELEMENTREMOVER_H
@@ -66,10 +66,12 @@ public:
 
   /**
    * @param eid The element to recursively delete.
-   * @param criterion If this is specified then only elements that return true to "isSatisfied" will be
-   * deleted. Even if isSatisfied returns false the children of that element will still be searched.
+   * @param criterion If this is specified then only elements that return true to "isSatisfied"
+   * will be deleted. Even if isSatisfied returns false the children of that element will still
+   * be searched.
    */
   RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion = 0);
+
   /**
    * It is expected that the eid will be populated with addElement after construction.
    */
@@ -82,7 +84,7 @@ public:
    */
   virtual void apply(const boost::shared_ptr<OsmMap>& map);
 
-  virtual QString getDescription() const { return "Recursively removes elements"; }
+  virtual QString getDescription() const { return "Recursively removes elements from a map"; }
 
 private:
 

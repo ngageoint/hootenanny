@@ -119,13 +119,13 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
 
     ElementConverter ec(map);
-    HOOT_STR_EQUALS("[2]{(Way:-1, Way:-5), (Way:-2, Way:-7)}", replaced);
+    HOOT_STR_EQUALS("[2]{(Way(-1), Way(-5)), (Way(-2), Way(-7))}", replaced);
     HOOT_STR_EQUALS("LINESTRING (50.0000000000000000 0.0000000000000000, 100.0000000000000000 0.0000000000000000)",
       ec.convertToLineString(map->getWay(-4))->toString());
     HOOT_STR_EQUALS("LINESTRING (100.0000000000000000 0.0000000000000000, 150.0000000000000000 0.0000000000000000)",
@@ -138,7 +138,7 @@ public:
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15",
+                    "circular error: 15\n",
                     map->getWay(-4)->toString());
     HOOT_STR_EQUALS("way(-5)\n"
                     "nodes: [2]{-6, -2}\n"
@@ -146,7 +146,7 @@ public:
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15",
+                    "circular error: 15\n",
                     map->getWay(-5)->toString());
     HOOT_STR_EQUALS("way(-7)\n"
                     "nodes: [2]{-1, -4}\n"
@@ -154,7 +154,7 @@ public:
                     "status: unknown2\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15",
+                    "circular error: 15\n",
                     map->getWay(-7)->toString());
   }
 
@@ -185,7 +185,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
@@ -198,7 +198,7 @@ public:
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15",
+                    "circular error: 15\n",
                     map->getWay(-4)->toString());
   }
 
@@ -229,13 +229,13 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
     // there should be one element replaced
-    HOOT_STR_EQUALS("[1]{(Way:-2, Way:-6)}", replaced);
+    HOOT_STR_EQUALS("[1]{(Way(-2), Way(-6))}", replaced);
     // the end of Way:-4 should match up with Way:-6
     HOOT_STR_EQUALS("[2]{-1, -2}", map->getWay(-4)->getNodeIds());
     HOOT_STR_EQUALS("[2]{-2, -4}", map->getWay(-6)->getNodeIds());
@@ -295,7 +295,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(r->getElementId(), w3->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
@@ -365,7 +365,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
@@ -431,7 +431,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), r->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);
@@ -471,7 +471,7 @@ public:
     set< pair<ElementId, ElementId> > pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(5, pairs, sublineMatcher);
+    HighwaySnapMerger merger(pairs, sublineMatcher);
 
     vector< pair<ElementId, ElementId> > replaced;
     merger.apply(map, replaced);

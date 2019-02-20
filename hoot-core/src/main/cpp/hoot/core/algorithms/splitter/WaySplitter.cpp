@@ -112,7 +112,7 @@ WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scr
   return splits[1];
 }
 
-vector< WayPtr > WaySplitter::split(const OsmMapPtr& map, WayPtr a,
+vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr a,
   WayLocation& splitPoint)
 {
   WaySplitter s(map, a);
@@ -128,7 +128,7 @@ void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
   if (l > maxSize)
   {
     WayLocation wl (map, w, l / 2.0);
-    vector< WayPtr > children = WaySplitter(map, w).split(wl);
+    vector<WayPtr> children = WaySplitter(map, w).split(wl);
 
     for (size_t i = 0; i < children.size(); i++)
     {
@@ -137,9 +137,9 @@ void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
   }
 }
 
-vector< WayPtr > WaySplitter::split(WayLocation& splitPoint)
+vector<WayPtr> WaySplitter::split(WayLocation& splitPoint)
 {
-  vector< WayPtr > result;
+  vector<WayPtr> result;
 
   if (splitPoint.isFirst() || splitPoint.isLast())
   {

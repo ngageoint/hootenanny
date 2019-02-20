@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -94,9 +94,9 @@ public:
       boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
       uut.createMatches(map, matches, threshold);
       HOOT_STR_EQUALS(2, matches.size());
-      HOOT_STR_EQUALS("PoiPolygonMatch Node:1 Way:-1 P: match: 1 miss: 0 review: 0, distance: 0, close match: 1, type score: 0, name score: 1, address score: -1",
+      HOOT_STR_EQUALS("PoiPolygonMatch Node(1) Way(-1) P: match: 1 miss: 0 review: 0, distance: 0, close match: 1, type score: 0, name score: 1, address score: -1",
                       matches[0]->toString());
-      HOOT_STR_EQUALS("PoiPolygonMatch Node:2 Way:-1 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0, address score: 0",
+      HOOT_STR_EQUALS("PoiPolygonMatch Node(2) Way(-1) P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0, address score: 0",
                       matches[1]->toString());
     }
   }

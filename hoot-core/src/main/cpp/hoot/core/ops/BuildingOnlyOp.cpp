@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingOnlyOp.h"
 
@@ -57,7 +57,7 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
 
   // Setup a visitor to remove superfluous tags
   RemoveTagsVisitor removeTagVtor;
-  removeTagVtor.addKey("error:circular");
+  removeTagVtor.addKey(MetadataTags::ErrorCircular());
   removeTagVtor.addKey("OBJECTID");
   removeTagVtor.addKey("PAGENUMBER");
   removeTagVtor.addKey("SHAPE_AREA");

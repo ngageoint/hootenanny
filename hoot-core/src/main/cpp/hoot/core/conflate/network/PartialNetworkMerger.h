@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALNETWORKMERGER_H
 #define PARTIALNETWORKMERGER_H
@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- * @todo Rename to NetworkMerger and delete NetworkMerger
+ * Rename to NetworkMerger and delete NetworkMerger?
  * Merges one or more partial matches. The matches must not be conflicting.
  */
 class PartialNetworkMerger : public MergerBase, public EidMapper
@@ -66,8 +66,8 @@ public:
 
 protected:
 
-  virtual PairsSet& getPairs() { return _pairs; }
-  virtual const PairsSet& getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() { return _pairs; }
+  virtual const PairsSet& _getPairs() const { return _pairs; }
 
 private:
 

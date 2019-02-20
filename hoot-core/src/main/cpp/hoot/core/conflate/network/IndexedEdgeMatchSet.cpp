@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IndexedEdgeMatchSet.h"
 
@@ -32,11 +32,13 @@
 namespace hoot
 {
 
+unsigned int IndexedEdgeMatchSet::logWarnCount = 0;
+
 IndexedEdgeMatchSet::IndexedEdgeMatchSet()
 {
 }
 
-void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr &em, double score)
+void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr& em, double score)
 {
   if (!contains(em))
   {
@@ -53,7 +55,7 @@ void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr &em, double score
 }
 
 void IndexedEdgeMatchSet::_addEdgeToMatchMapping(ConstEdgeStringPtr str,
-  const ConstEdgeMatchPtr &em)
+                                                 const ConstEdgeMatchPtr& em)
 {
   QList<EdgeString::EdgeEntry> e = str->getAllEdges();
   foreach (const EdgeString::EdgeEntry& ee, e)
@@ -63,10 +65,9 @@ void IndexedEdgeMatchSet::_addEdgeToMatchMapping(ConstEdgeStringPtr str,
 }
 
 void IndexedEdgeMatchSet::_addVertexToMatchMapping(ConstEdgeStringPtr str,
-  const ConstEdgeMatchPtr &em)
+                                                   const ConstEdgeMatchPtr& em)
 {
   QList<EdgeString::EdgeEntry> e = str->getAllEdges();
-
   foreach (const EdgeString::EdgeEntry& ee, e)
   {
     if (ee.getSubline()->getStart()->isExtreme())
@@ -76,6 +77,58 @@ void IndexedEdgeMatchSet::_addVertexToMatchMapping(ConstEdgeStringPtr str,
     if (ee.getSubline()->getEnd()->isExtreme())
     {
       _vertexToMatch[ee.getSubline()->getEnd()->getVertex()].insert(em);
+    }
+  }
+}
+
+void IndexedEdgeMatchSet::removeEdgeMatch(const ConstEdgeMatchPtr& em)
+{
+  if (contains(em))
+  {
+    _matches.remove(em);
+
+    _removeEdgeToMatchMapping(em->getString1(), em);
+    _removeEdgeToMatchMapping(em->getString2(), em);
+    _removeVertexToMatchMapping(em->getString1(), em);
+    _removeVertexToMatchMapping(em->getString2(), em);
+  }
+  else
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Attempted to remove edge match that doesn't exist: " << em);
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+}
+
+void IndexedEdgeMatchSet::_removeEdgeToMatchMapping(ConstEdgeStringPtr str,
+                                                    const ConstEdgeMatchPtr& em)
+{
+  QList<EdgeString::EdgeEntry> e = str->getAllEdges();
+  foreach (const EdgeString::EdgeEntry& ee, e)
+  {
+    _edgeToMatch[ee.getEdge()].remove(em);
+  }
+}
+
+void IndexedEdgeMatchSet::_removeVertexToMatchMapping(ConstEdgeStringPtr str,
+                                                      const ConstEdgeMatchPtr& em)
+{
+  QList<EdgeString::EdgeEntry> e = str->getAllEdges();
+  foreach (const EdgeString::EdgeEntry& ee, e)
+  {
+    if (ee.getSubline()->getStart()->isExtreme())
+    {
+      _vertexToMatch[ee.getSubline()->getStart()->getVertex()].remove(em);
+    }
+    if (ee.getSubline()->getEnd()->isExtreme())
+    {
+      _vertexToMatch[ee.getSubline()->getEnd()->getVertex()].remove(em);
     }
   }
 }
@@ -122,7 +175,7 @@ boost::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSet::clone() const
   return result;
 }
 
-bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr &em) const
+bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr& em) const
 {
   bool result = false;
 
@@ -144,7 +197,7 @@ bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr &em) const
   return result;
 }
 
-ConstEdgeMatchPtr IndexedEdgeMatchSet::getMatch(const ConstEdgeMatchPtr &em) const
+ConstEdgeMatchPtr IndexedEdgeMatchSet::getMatch(const ConstEdgeMatchPtr& em) const
 {
   MatchHash::const_iterator it = _matches.find(em);
   if (it == _matches.end())
