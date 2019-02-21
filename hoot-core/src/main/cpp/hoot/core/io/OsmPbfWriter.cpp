@@ -45,7 +45,7 @@
 using namespace hoot::pb;
 
 // Qt
-#include <Qt/qendian.h>
+#include <qendian.h>
 
 // Standard Includes
 #include <fstream>

@@ -42,6 +42,7 @@
 
 // Qt
 #include <QDateTime>
+#include <QNetworkCookie>
 #include <QSqlError>
 
 using namespace geos::geom;

@@ -41,6 +41,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
+#include <QNetworkCookie>
 #include <QStringList>
 
 // Tgs

@@ -48,6 +48,9 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
+// Qt
+#include <QNetworkCookie>
+
 using namespace std;
 
 namespace hoot

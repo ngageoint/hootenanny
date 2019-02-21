@@ -39,6 +39,7 @@
 
 // Qt
 #include <QVariant>
+#include <QNetworkCookie>
 
 // std
 #include <iostream>

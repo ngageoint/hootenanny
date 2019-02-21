@@ -49,7 +49,7 @@ unsigned int Log::_warnMessageLimit = 0;
 
 boost::shared_ptr<Log> Log::_theInstance = NULL;
 
-void myLoggerFunction(QtMsgType type, const char* msg)
+void myLoggerFunction(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
   Log::WarningLevel l = Log::Fatal;
   switch(type)
@@ -66,9 +66,11 @@ void myLoggerFunction(QtMsgType type, const char* msg)
   case QtFatalMsg:
     l = Log::Fatal;
     break;
+  case QtInfoMsg:
+    l = Log::Info;
   }
 
-  Log::getInstance().log(l, msg);
+  Log::getInstance().log(l, msg, context.file, context.function, context.line);
 }
 
 static void cplErrorHandler(CPLErr eErrClass, int err_no, const char *msg)
@@ -101,7 +103,7 @@ static void cplErrorHandler(CPLErr eErrClass, int err_no, const char *msg)
 Log::Log()
 {
   _level = Log::Info;
-  qInstallMsgHandler(myLoggerFunction);
+  qInstallMessageHandler(myLoggerFunction);
   CPLSetErrorHandler(cplErrorHandler);
 }
 

@@ -42,6 +42,7 @@
 #include <QByteArray>
 #include <QVariant>
 #include <QMap>
+#include <QNetworkCookie>
 
 // std
 #include <iostream>

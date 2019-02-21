@@ -48,6 +48,9 @@
 #include <tgs/BigContainers/BigMap.h>
 #include <tgs/System/Time.h>
 
+// Qt
+#include <QNetworkCookie>
+
 using namespace std;
 
 namespace hoot

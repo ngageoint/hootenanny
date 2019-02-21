@@ -30,7 +30,7 @@
 #include <cmath>
 
 //Qt Includes
-#include <QtConcurrentMap>
+#include <QtConcurrent/QtConcurrent>
 #include <QThreadPool>
 
 

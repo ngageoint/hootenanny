@@ -27,6 +27,9 @@
 
 #include "HootNetworkCookieJar.h"
 
+// Qt
+#include <QNetworkCookie>
+
 namespace hoot
 {
 

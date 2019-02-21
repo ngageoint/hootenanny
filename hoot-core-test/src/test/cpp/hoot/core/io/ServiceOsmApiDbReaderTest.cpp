@@ -48,6 +48,9 @@
 #include <hoot/core/io/OsmApiDbBulkInserter.h>
 #include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
+// Qt
+#include <QNetworkCookie>
+
 using namespace std;
 
 namespace hoot

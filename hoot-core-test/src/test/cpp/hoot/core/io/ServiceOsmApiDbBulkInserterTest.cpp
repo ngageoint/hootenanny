@@ -41,6 +41,9 @@
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
+#include <QNetworkCookie>
+
 namespace hoot
 {
 

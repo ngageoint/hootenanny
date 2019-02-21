@@ -41,6 +41,7 @@
 
 //  Qt
 #include <QTextCodec>
+#include <QNetworkCookie>
 
 using namespace std;
 
@@ -429,11 +430,11 @@ public:
       HootApiDb::unescapeTags("\"fixme\"=>\"check: building or just a \"paved\" place\""));
     //  Complicated case from a user where the value contains the key/value separator '=>',
     //  this example isn't a Latin string but a UTF-8 string, change the codec temporarily
-    QTextCodec* oldCodec = QTextCodec::codecForCStrings();
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    QTextCodec* oldCodec = QTextCodec::codecForLocale();
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
     HOOT_STR_EQUALS("network = DB\nroute = train\n" + MetadataTags::ErrorCircular() + " = 15\ninterval = 120\nservice = high_speed\nvia = Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\noperator = DB Fernverkehr AG\n" + MetadataTags::HootStatus() + " = 1\nfrom = Berlin Ostbahnhof\nalt_name = ICE11 München\npublic_transport:version = 2\ntype = route\nto = München Hbf\nref = ICE11\nname = ICE 11: Berlin => Frankfurt => München\n",
           HootApiDb::unescapeTags("\"to\"=>\"München Hbf\", \"ref\"=>\"ICE11\", \"via\"=>\"Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\", \"from\"=>\"Berlin Ostbahnhof\", \"name\"=>\"ICE 11: Berlin => Frankfurt => München\", \"type\"=>\"route\", \"route\"=>\"train\", \"network\"=>\"DB\", \"service\"=>\"high_speed\", \"alt_name\"=>\"ICE11 München\", \"interval\"=>\"120\", \"operator\"=>\"DB Fernverkehr AG\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\", \"public_transport:version\"=>\"2\""));
-    QTextCodec::setCodecForCStrings(oldCodec);
+    QTextCodec::setCodecForLocale(oldCodec);
   }
 
   const boost::shared_ptr<QList<long> > insertTestMap1(HootApiDb& database)

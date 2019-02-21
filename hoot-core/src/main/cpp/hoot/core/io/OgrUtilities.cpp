@@ -118,7 +118,7 @@ QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly)
   {
     if (readOnly || it->_is_rw)
     {
-      formats.insert(QString::fromAscii(it->_indicator));
+      formats.insert(QString::fromLatin1(it->_indicator));
     }
   }
   return formats;

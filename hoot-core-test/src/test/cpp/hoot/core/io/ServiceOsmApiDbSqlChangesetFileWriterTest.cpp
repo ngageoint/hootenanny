@@ -31,6 +31,9 @@
 #include <hoot/core/algorithms/changeset/TestOsmChangesetProvider.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
 
+// Qt
+#include <QNetworkCookie>
+
 namespace hoot
 {
 

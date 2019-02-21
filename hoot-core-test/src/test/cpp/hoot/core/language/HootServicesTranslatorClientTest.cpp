@@ -40,6 +40,9 @@
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 
+// Qt
+#include <QNetworkCookie>
+
 namespace hoot
 {
 

@@ -42,6 +42,7 @@
 #include <QByteArray>
 #include <QVariant>
 #include <QMap>
+#include <QNetworkCookie>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
