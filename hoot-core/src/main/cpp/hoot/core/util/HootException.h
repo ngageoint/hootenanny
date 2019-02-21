@@ -67,7 +67,7 @@ public:
 
   const QString& getWhat() const { return _what; }
 
-  virtual const char* what() const throw() { _tmp = _what.toAscii(); return _tmp.constData(); }
+  virtual const char* what() const throw() { _tmp = _what.toLatin1(); return _tmp.constData(); }
 
 private:
 

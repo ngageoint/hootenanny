@@ -110,7 +110,7 @@ void TranslateDictionary::load(QString path)
   try
   {
     pt::ptree pt;
-    pt::read_json(path.toAscii().data(), pt);
+    pt::read_json(path.toLatin1().data(), pt);
 
     _loadTags(pt);
   }

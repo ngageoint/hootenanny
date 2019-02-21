@@ -151,7 +151,7 @@ boost::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url
   if (url.toLower().endsWith(".shp"))
     source = url.mid(0, url.length() - 4);
 
-  boost::shared_ptr<GDALDataset> result(driver->Create(source.toAscii(), 0, 0, 0, GDT_Unknown, NULL));
+  boost::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, NULL));
   if (result == NULL)
   {
     throw HootException("Unable to create data source: " + source +

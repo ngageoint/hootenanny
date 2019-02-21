@@ -109,7 +109,7 @@ void PythonTranslator::_init()
   setenv("PYTHONPATH", pythonPath.join(":").toUtf8().constData(), 1);
   Py_Initialize();
 
-  char* data = moduleName.toAscii().data();
+  char* data = moduleName.toLatin1().data();
   PyObject* module = PyImport_ImportModule(data);
 
   if (module == NULL)

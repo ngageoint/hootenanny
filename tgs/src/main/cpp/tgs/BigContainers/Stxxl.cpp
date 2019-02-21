@@ -121,7 +121,7 @@ void Stxxl::setConfig(QString configFile)
 
   // initialize the environment variable for loading STXXL configuration. If the environment
   // variable has already been set then overwrite it (that is the 1 at the end).
-  setenv("STXXLCFG", _configFileTmp.fileName().toAscii().data(), 1);
+  setenv("STXXLCFG", _configFileTmp.fileName().toLatin1().data(), 1);
 }
 
 }

@@ -98,7 +98,7 @@ void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& arg
   }
   else if (result.type() == typeid(QString))
   {
-    args.GetReturnValue().Set(String::NewFromUtf8(current, any_cast<QString>(result).toAscii().data()));
+    args.GetReturnValue().Set(String::NewFromUtf8(current, any_cast<QString>(result).toLatin1().data()));
   }
   else
   {

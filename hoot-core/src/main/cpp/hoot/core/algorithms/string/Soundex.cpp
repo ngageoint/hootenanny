@@ -115,7 +115,7 @@ QString Soundex::encode(QString s)
 
 QString Soundex::toDigit(QChar c)
 {
-  char a = c.toAscii();
+  char a = c.toLatin1();
   switch (a)
   {
   case 'B':

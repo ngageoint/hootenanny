@@ -80,7 +80,7 @@ PoiRfClassifier::PoiRfClassifier()
   QString path = ConfPath::search(ConfigOptions().getConflateMatchPoiModel());
   LOG_INFO("Loading POI model from: " << path);
 
-  QFile file(path.toAscii().data());
+  QFile file(path.toLatin1().data());
   if (!file.open(QIODevice::ReadOnly))
   {
     throw HootException("Error opening file: " + path);
