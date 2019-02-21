@@ -4,6 +4,7 @@
 
 QT += xml \
     testlib \
+    concurrent \
 
 TEMPLATE = lib
 win32:CONFIG += dll
