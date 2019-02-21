@@ -46,9 +46,10 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getInitStatusMessage() { return "Removing review relations with no members..."; }
+  virtual QString getInitStatusMessage() const
+  { return "Removing review relations with no members..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " empty review relations"; }
 
   virtual QString getDescription() const { return "Removes empty review relations"; }

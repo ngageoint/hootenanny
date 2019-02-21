@@ -53,10 +53,10 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getInitStatusMessage()
+  virtual QString getInitStatusMessage() const
   { return "Removing references to elements that do not exist..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " missing elements"; }
 
   virtual QString getDescription() const

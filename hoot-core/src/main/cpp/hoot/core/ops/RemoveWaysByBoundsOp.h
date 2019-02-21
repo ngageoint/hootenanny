@@ -25,8 +25,13 @@
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef OUTSIDEBOUNDSREMOVER_H
-#define OUTSIDEBOUNDSREMOVER_H
+#ifndef REMOVE_WAYS_BY_BOUNDS_OP_H
+#define REMOVE_WAYS_BY_BOUNDS_OP_H
+
+// Hoot
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/Configurable.h>
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -40,35 +45,38 @@
 namespace hoot
 {
 
-class OsmMap;
-
 /**
- * Remove all ways outside the given bounds.
- *
- * @todo make this a map op - #2936
+ * Remove all ways either inside or outside the given bounds.
  */
-class OutsideBoundsRemover
+class RemoveWaysByBoundsOp : public OsmMapOperation, public OperationStatusInfo,
+  public Configurable
 {
 public:
 
-  OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e,
+  RemoveWaysByBoundsOp(boost::shared_ptr<OsmMap> map);
+  RemoveWaysByBoundsOp(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e,
                        bool inverse = false);
 
-  /**
-   * Removes ways completely outside the given envelope.
-   */
-  static void removeWays(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e,
-                         bool inverse = false);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  void removeWays();
+  virtual QString getInitStatusMessage();
+  virtual QString getCompletedStatusMessage();
+
+  virtual QString getDescription() const
+  { return "Removes ways in relation to a specified bounds"; }
+
+  virtual void setConfiguration(const Settings& conf);
+
+  void setBounds(const geos::geom::Envelope& bounds) { _envelope = bounds; }
+  void setInvertBounds(const bool invert) { _inverse = invert; }
 
 protected:
 
-  boost::shared_ptr<OsmMap> _inputMap;
   geos::geom::Envelope _envelope;
   bool _inverse;
+  boost::shared_ptr<OsmMap> _map;
 };
 
 }
 
-#endif // OUTSIDEBOUNDSREMOVER_H
+#endif // REMOVE_WAYS_BY_BOUNDS_OP_H

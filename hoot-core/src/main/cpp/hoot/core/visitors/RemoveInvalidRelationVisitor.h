@@ -51,10 +51,10 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getInitStatusMessage()
+  virtual QString getInitStatusMessage() const
   { return "Removing invalid and multiline string relations..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numMembersRemoved) + " relation members and " +
     QString::number(_numAffected) + " relations"; }
 

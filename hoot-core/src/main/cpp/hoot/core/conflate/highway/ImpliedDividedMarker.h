@@ -73,10 +73,10 @@ public:
 
   boost::shared_ptr<OsmMap> markDivided();
 
-  virtual QString getInitStatusMessage()
+  virtual QString getInitStatusMessage() const
   { return "Marking road sections that appear to be divided highways..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Marked " + QString::number(_numAffected) + " road sections as divided highways"; }
 
   virtual QString getDescription() const

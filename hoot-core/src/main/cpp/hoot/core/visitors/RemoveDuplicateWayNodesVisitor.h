@@ -53,9 +53,9 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getInitStatusMessage() { return "Removing duplicate way nodes..."; }
+  virtual QString getInitStatusMessage() const { return "Removing duplicate way nodes..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " duplicate way nodes"; }
 
   virtual QString getDescription() const { return "Removes duplicate way nodes"; }

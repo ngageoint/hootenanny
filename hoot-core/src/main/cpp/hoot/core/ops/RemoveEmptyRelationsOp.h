@@ -53,9 +53,9 @@ public:
 
   long getNumRemoved() const { return _numAffected; }
 
-  virtual QString getInitStatusMessage() { return "Removing empty relations..."; }
+  virtual QString getInitStatusMessage() const { return "Removing empty relations..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " empty relations"; }
 
   virtual QString getDescription() const { return "Removes relations with no members"; }

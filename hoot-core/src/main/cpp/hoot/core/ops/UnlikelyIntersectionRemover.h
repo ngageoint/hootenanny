@@ -68,9 +68,9 @@ public:
    */
   static void removeIntersections(boost::shared_ptr<OsmMap> map);
 
-  virtual QString getInitStatusMessage() { return "Removing unlikely intersections..."; }
+  virtual QString getInitStatusMessage() const { return "Removing unlikely intersections..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " unlikely intersections"; }
 
   virtual QString getDescription() const

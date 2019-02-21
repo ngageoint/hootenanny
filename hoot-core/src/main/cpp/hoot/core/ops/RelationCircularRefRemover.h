@@ -53,10 +53,10 @@ public:
 
   void apply(OsmMapPtr& map);
 
-  virtual QString getInitStatusMessage()
+  virtual QString getInitStatusMessage() const
   { return "Removing relation members with circular references..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) +
            " relation members involved in circular references"; }
 

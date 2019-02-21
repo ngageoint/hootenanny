@@ -64,9 +64,9 @@ public:
   virtual void visit(const ConstElementPtr& e);
   virtual void visit(const boost::shared_ptr<Element>& e1) override;
 
-  virtual QString getInitStatusMessage() { return "Removing duplicate areas..."; }
+  virtual QString getInitStatusMessage() const { return "Removing duplicate areas..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " duplicate areas"; }
 
   virtual QString getDescription() const { return "Removes duplicate areas"; }

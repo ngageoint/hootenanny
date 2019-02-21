@@ -67,9 +67,9 @@ public:
 
   void removeWays();
 
-  virtual QString getInitStatusMessage() { return "Removing superfluous ways..."; }
+  virtual QString getInitStatusMessage() const { return "Removing superfluous ways..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " superfluous ways"; }
 
   virtual QString getDescription() const

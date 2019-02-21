@@ -47,10 +47,10 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual QString getInitStatusMessage()
+  virtual QString getInitStatusMessage() const
   { return "Adding geospatial sorting tags to review relations..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Added " + QString::number(_numAffected) + " sorting tags"; }
 
   virtual QString getDescription() const

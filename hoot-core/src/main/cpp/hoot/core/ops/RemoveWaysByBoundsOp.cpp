@@ -25,43 +25,56 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "OutsideBoundsRemover.h"
+#include "RemoveWaysByBoundsOp.h"
 
 // GEOS
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-OutsideBoundsRemover::OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const Envelope& e,
-                                           bool inverse)
+HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveWaysByBoundsOp)
+
+RemoveWaysByBoundsOp::RemoveWaysByBoundsOp() :
+_inverse(false)
 {
-  _inputMap = map;
-  _envelope = e;
-  _inverse = inverse;
+  setConfiguration(conf());
 }
 
-
-void OutsideBoundsRemover::removeWays(boost::shared_ptr<OsmMap> map, const Envelope& e,
-                                      bool inverse)
+RemoveWaysByBoundsOp::RemoveWaysByBoundsOp(const Envelope& e, bool inverse) :
+_envelope(e),
+_inverse(inverse)
 {
-  OutsideBoundsRemover obr(map, e, inverse);
+}
+
+void RemoveWaysByBoundsOp::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts(conf);
+  _inverse = opts.getWayRemoverInvertBounds();
+  _envelope = GeometryUtils::envelopeFromConfigString(opts.getWayRemoverBounds());
+}
+
+void RemoveWaysByBoundsOp::apply(boost::shared_ptr<OsmMap>& map)
+{
+  _numAffected = 0;
+  _map = map;
+
+  RemoveWaysByBoundsOp obr(map, e, inverse);
   return obr.removeWays();
 }
 
-void OutsideBoundsRemover::removeWays()
+void RemoveWaysByBoundsOp::removeWays()
 {
-  LOG_INFO("Removing ways outside bounds...");
-
-  const WayMap ways = _inputMap->getWays();
+  const WayMap ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
@@ -72,7 +85,8 @@ void OutsideBoundsRemover::removeWays()
       // if the way envelope doesn't intersect the given envelope.
       if (_envelope.intersects(e) == false)
       {
-        RemoveWayOp::removeWay(_inputMap, w->getId());
+        RemoveWayOp::removeWay(_map, w->getId());
+        _numAffected++;
       }
     }
     else
@@ -80,10 +94,31 @@ void OutsideBoundsRemover::removeWays()
       // if the way envelope intersects the given envelope.
       if (_envelope.intersects(e) == true)
       {
-        RemoveWayOp::removeWay(_inputMap, w->getId());
+        RemoveWayOp::removeWay(_map, w->getId());
+        _numAffected++;
       }
     }
   }
+}
+
+QString RemoveWaysByBoundsOp::getInitStatusMessage() const
+{
+  return "Removing ways in relation to the given bounds...";
+}
+
+QString RemoveWaysByBoundsOp::getCompletedStatusMessage() const
+{
+  QString msg = "Removed " + QString::number(_numAffected) + " ways ";
+  if (_inverse)
+  {
+    msg += "outside";
+  }
+  else
+  {
+    msg += "inside";
+  }
+  msg += " bounds: " + _envelope.toString();
+  return msg;
 }
 
 }

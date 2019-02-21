@@ -49,14 +49,14 @@ public:
 
     e.g. "Removing duplicate ways..."
     */
-  virtual QString getInitStatusMessage() = 0;
+  virtual QString getInitStatusMessage() const = 0;
 
   /**
     Returns a user friendly message indicating a summary of the work performed by the visitor
 
     e.g. "Removed 20 duplicate ways"
     */
-  virtual QString getCompletedStatusMessage() = 0;
+  virtual QString getCompletedStatusMessage() const = 0;
 };
 
 }
