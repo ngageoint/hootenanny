@@ -18,7 +18,6 @@ INCLUDEPATH += \
     $${DEPENDPATH}
 
 CONFIG += rtti \
-    qtestlib \
     debug
 
 include(../Configure.pri)

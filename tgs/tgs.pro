@@ -2,7 +2,8 @@
 # General statistics and machine learning utilities
 ##########################
 
-QT += xml
+QT += xml \
+    testlib \
 
 TEMPLATE = lib
 win32:CONFIG += dll
@@ -14,7 +15,6 @@ include(../Configure.pri)
 CONFIG -= flat
 
 CONFIG += rtti \
-    qtestlib \
     debug
 
 DESTDIR = ../lib/
