@@ -183,19 +183,13 @@ sudo yum -y install \
     zip \
 
 # Fix missing qmake
-sudo rm /etc/alternatives/qmake
-sudo ln -s /usr/bin/qmake-qt5 /etc/alternatives/qmake
-sudo ln -s /etc/alternatives/qmake /usr/bin/qmake
-
-qmake --version
-
-#if ! hash qmake >/dev/null 2>&1 ; then
-#    if hash qmake-qt4 >/dev/null 2>&1 ; then
-#      sudo alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt4 500
-#    else
-#      echo "##### No qmake! #####"
-#    fi
-#fi
+if ! hash qmake >/dev/null 2>&1 ; then
+    if hash qmake-qt5 >/dev/null 2>&1 ; then
+      sudo alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt5 500
+    else
+      echo "##### No qmake! #####"
+    fi
+fi
 
 cd $HOOT_HOME
 

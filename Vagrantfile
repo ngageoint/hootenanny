@@ -5,27 +5,27 @@ Vagrant.configure(2) do |config|
   # Hoot port mapping
   tomcatPort = ENV['TOMCAT_PORT']
   if tomcatPort.nil?
-    tomcatPort = '8888'
+    tomcatPort = '9888'
   end
 
   transPort = ENV['NODEJS_PORT']
   if transPort.nil?
-    transPort = '8094'
+    transPort = '9094'
   end
 
   mergePort = ENV['P2P_PORT']
   if mergePort.nil?
-    mergePort = '8096'
+    mergePort = '9096'
   end
 
   disableForwarding = ENV['DISABLE_VAGRANT_FORWARDING']
   if disableForwarding.nil?
     # tomcat service
-    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort
+    config.vm.network "forwarded_port", guest: 9080, host: tomcatPort
     # translation nodejs service
-    config.vm.network "forwarded_port", guest: 8094, host: transPort
+    config.vm.network "forwarded_port", guest: 9094, host: transPort
     # merge nodejs service
-    config.vm.network "forwarded_port", guest: 8096, host: mergePort
+    config.vm.network "forwarded_port", guest: 9096, host: mergePort
   end
 
   def aws_provider(config, os)
@@ -78,16 +78,14 @@ Vagrant.configure(2) do |config|
 
   # Centos7 box - Preprovisioned for compiling hootenanny
   config.vm.define "default", primary: true do |hoot_centos7_prov|
-    hoot_centos7_prov.vm.box = "bento/centos-7.3"
-#    hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
-    hoot_centos7_prov.vm.hostname = "centos7"
-#    hoot_centos7_prov.vm.hostname = "centos7-hoot"
+    hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
+    hoot_centos7_prov.vm.hostname = "centos7-hoot"
     hoot_centos7_prov.vm.synced_folder ".", "/home/vagrant/hoot"
 
-#    hoot_centos7_prov.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
-#    hoot_centos7_prov.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-#    hoot_centos7_prov.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-#    hoot_centos7_prov.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+    hoot_centos7_prov.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
+    hoot_centos7_prov.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    hoot_centos7_prov.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+    hoot_centos7_prov.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
 
     aws_provider(hoot_centos7_prov, 'CentOS7')
   end
@@ -109,9 +107,9 @@ Vagrant.configure(2) do |config|
   # Centos7 - Hoot core ONLY. No UI
   config.vm.define "hoot_centos7_core", autostart: false do |hoot_centos7_core|
     # Turn off port forwarding
-    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort, disabled: true
-    config.vm.network "forwarded_port", guest: 8094, host: transPort, disabled: true
-    config.vm.network "forwarded_port", guest: 8096, host: mergePort, disabled: true
+    config.vm.network "forwarded_port", guest: 9080, host: tomcatPort, disabled: true
+    config.vm.network "forwarded_port", guest: 9094, host: transPort, disabled: true
+    config.vm.network "forwarded_port", guest: 9096, host: mergePort, disabled: true
 
     hoot_centos7_core.vm.box = "bento/centos-7.2"
     hoot_centos7_core.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.2"
