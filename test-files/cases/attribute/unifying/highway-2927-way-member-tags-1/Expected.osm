@@ -1663,19 +1663,20 @@
         <tag k="hoot:id" v="-22"/>
     </way>
     <way visible="true" id="-20" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-12"/>
         <nd ref="-98"/>
         <nd ref="-99"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z;2019-01-17T19:50:05.652Z"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="z_order" v="-999999"/>
         <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="uuid" v="{8c42bbbc-4fa7-4783-af94-380567b82677}"/>
+        <tag k="uuid" v="{8c42bbbc-4fa7-4783-af94-380567b82677};{91e682fc-aab4-4f57-9433-93fc6aba65a7}"/>
         <tag k="name" v="Av. Sur 19"/>
-        <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="source:datetime" v="2015-09-08T18:26:40.000Z;2019-01-17T19:50:06Z"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -1688,14 +1689,15 @@
         <nd ref="-96"/>
         <nd ref="-97"/>
         <nd ref="-98"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <nd ref="-13"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z;2019-01-17T19:50:05.652Z"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="z_order" v="-999999"/>
         <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38}"/>
+        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38};{a83901bd-313c-47d3-8568-691619ebbd2d}"/>
         <tag k="name" v="Av. Este 10 bis"/>
         <tag k="attribution" v="osm"/>
         <tag k="way_area" v="-999999"/>
@@ -1890,42 +1892,6 @@
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-14"/>
-    </way>
-    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-13"/>
-        <nd ref="-98"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.652Z"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="uuid" v="{a83901bd-313c-47d3-8568-691619ebbd2d}"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-13"/>
-    </way>
-    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-12"/>
-        <nd ref="-98"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.652Z"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="uuid" v="{91e682fc-aab4-4f57-9433-93fc6aba65a7}"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-12"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>

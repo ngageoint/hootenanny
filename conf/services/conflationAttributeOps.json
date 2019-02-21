@@ -84,6 +84,14 @@
         "name": "Preserve Original Name During Duplicate Name Removal",
         "defaultvalue": "true",
         "hoot_key": "duplicate.name.preserve.original.name",
+      },
+      {
+        "id": "attribute_aggressive_highway_joining",
+        "elem_type": "bool",
+        "description": "If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific highway attribution into those with less specific highway attribution and no names.  Enabling this option may result in some false positive road joining.",
+        "name": "Aggressively Join Unmerged Roads",
+        "defaultvalue": "true",
+        "hoot_key": "attribute.conflation.aggressive.highway.joining",
       }
     ]
 

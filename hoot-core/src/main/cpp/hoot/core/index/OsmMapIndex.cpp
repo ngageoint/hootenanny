@@ -427,7 +427,6 @@ boost::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
   {
     _nodeToWayMap.reset(new NodeToWayMap(_map));
   }
-
   return _nodeToWayMap;
 }
 
