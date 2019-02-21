@@ -110,7 +110,7 @@ Access to Hootenanny core capabilities are exposed through a web services API fo
 ## Programming Language Bindings
 Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities. 
 
-# [Contributing](ttps://github.com/ngageoint/hootenanny/blob/master/docs/developer/CONTRIBUTING.md)
+# [Contributing](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/CONTRIBUTING.md)
 
 # Redistribution
 Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe.  The government has "unlimited rights" and is releasing this software to increase the impact of government instruments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the GNU General Public License. The GPL license is available in LICENSE.txt
