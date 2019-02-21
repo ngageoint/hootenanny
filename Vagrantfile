@@ -78,14 +78,16 @@ Vagrant.configure(2) do |config|
 
   # Centos7 box - Preprovisioned for compiling hootenanny
   config.vm.define "default", primary: true do |hoot_centos7_prov|
-    hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
-    hoot_centos7_prov.vm.hostname = "centos7-hoot"
+    hoot_centos7_prov.vm.box = "bento/centos-7.3"
+#    hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
+    hoot_centos7_prov.vm.hostname = "centos7"
+#    hoot_centos7_prov.vm.hostname = "centos7-hoot"
     hoot_centos7_prov.vm.synced_folder ".", "/home/vagrant/hoot"
 
-    hoot_centos7_prov.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
-    hoot_centos7_prov.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    hoot_centos7_prov.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-    hoot_centos7_prov.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+#    hoot_centos7_prov.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
+#    hoot_centos7_prov.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+#    hoot_centos7_prov.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+#    hoot_centos7_prov.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
 
     aws_provider(hoot_centos7_prov, 'CentOS7')
   end
