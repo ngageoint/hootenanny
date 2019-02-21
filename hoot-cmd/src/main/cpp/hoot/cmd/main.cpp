@@ -42,7 +42,7 @@ using namespace geos::geom;
 using namespace hoot;
 
 // Qt
-#include <QtGui/QApplication>
+#include <QCoreApplication>
 #include <QString>
 #include <QTime>
 

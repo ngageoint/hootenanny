@@ -4,6 +4,7 @@
 
 QT += testlib \
     xml \
+    concurrent \
 
 TARGET = hoot.bin
 TEMPLATE = app

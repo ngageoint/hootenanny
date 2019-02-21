@@ -60,7 +60,7 @@ using namespace geos::geom;
 using namespace hoot;
 
 // Qt
-#include <QtGui/QApplication>
+#include <QCoreApplication>
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
