@@ -36,6 +36,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/GeometryUtils.h>
+
 
 using namespace geos::geom;
 
@@ -47,10 +49,9 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveWaysByBoundsOp)
 RemoveWaysByBoundsOp::RemoveWaysByBoundsOp() :
 _inverse(false)
 {
-  setConfiguration(conf());
 }
 
-RemoveWaysByBoundsOp::RemoveWaysByBoundsOp(const Envelope& e, bool inverse) :
+RemoveWaysByBoundsOp::RemoveWaysByBoundsOp(const Envelope& e, const bool inverse) :
 _envelope(e),
 _inverse(inverse)
 {
@@ -68,17 +69,16 @@ void RemoveWaysByBoundsOp::apply(boost::shared_ptr<OsmMap>& map)
   _numAffected = 0;
   _map = map;
 
-  RemoveWaysByBoundsOp obr(map, e, inverse);
-  return obr.removeWays();
+  _removeWays();
 }
 
-void RemoveWaysByBoundsOp::removeWays()
+void RemoveWaysByBoundsOp::_removeWays()
 {
   const WayMap ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
-    Envelope e = w->getEnvelopeInternal(_inputMap);
+    Envelope e = w->getEnvelopeInternal(_map);
 
     if (_inverse == false)
     {
@@ -117,7 +117,7 @@ QString RemoveWaysByBoundsOp::getCompletedStatusMessage() const
   {
     msg += "inside";
   }
-  msg += " bounds: " + _envelope.toString();
+  msg += " bounds: " + QString::fromStdString(_envelope.toString());
   return msg;
 }
 

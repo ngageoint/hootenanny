@@ -53,14 +53,15 @@ class RemoveWaysByBoundsOp : public OsmMapOperation, public OperationStatusInfo,
 {
 public:
 
-  RemoveWaysByBoundsOp(boost::shared_ptr<OsmMap> map);
-  RemoveWaysByBoundsOp(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e,
-                       bool inverse = false);
+  static std::string className() { return "hoot::RemoveWaysByBoundsOp"; }
+
+  RemoveWaysByBoundsOp();
+  RemoveWaysByBoundsOp(const geos::geom::Envelope& e, const bool inverse = false);
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual QString getInitStatusMessage();
-  virtual QString getCompletedStatusMessage();
+  virtual QString getInitStatusMessage() const;
+  virtual QString getCompletedStatusMessage() const;
 
   virtual QString getDescription() const
   { return "Removes ways in relation to a specified bounds"; }
@@ -75,6 +76,8 @@ protected:
   geos::geom::Envelope _envelope;
   bool _inverse;
   boost::shared_ptr<OsmMap> _map;
+
+  void _removeWays();
 };
 
 }
