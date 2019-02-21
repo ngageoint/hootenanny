@@ -27,7 +27,7 @@ sudo service tomcat8 restart
 
 4. (Using eclipse) add a new debug configuration that attaches to the service at port 8585
 
- - debug configurations -> Remove Java Application ...
+ - run -> debug configurations -> Remote Java Application ...
  - set host as localhost
  - port as 8585
  - click apply
