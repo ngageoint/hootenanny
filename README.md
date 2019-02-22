@@ -31,7 +31,7 @@ Hootenanny is developed under the open source General Public License (GPL) and m
 * Utility polylines (power lines)
 * Waterway polylines
 
-Additional feature types can be made conflatable using Hootenanny's [pluggable conflation architecture](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
+Additional feature types can be made conflatable via custom script by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 
 # Types of [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc)
 * **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - Conflate the best geometry and tag parts of map B into map A.
