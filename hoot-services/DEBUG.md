@@ -13,7 +13,7 @@ vagrant reload
 ```
 
 
-2. ssh'd into your vagrant vm change the JAVA_OPTS variable to...
+2. ssh'd into your vagrant vm change the JAVA_OPTS in the `/etc/tomcat8/tomcat8.conf` file to..
 
 ```
 JAVA_OPTS="-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Djdk.tls.ephemeralDHKeySize=2048 -Xdebug -Xrunjdwp:transport=dt_socket,address=8585,server=y,suspend=n"
