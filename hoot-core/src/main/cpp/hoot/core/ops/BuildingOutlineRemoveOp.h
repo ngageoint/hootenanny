@@ -61,9 +61,9 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  virtual QString getInitStatusMessage() { return "Removing outlines around buildings..."; }
+  virtual QString getInitStatusMessage() const { return "Removing outlines around buildings..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
   virtual QString getDescription() const override { return "Removes the outline around buildings"; }

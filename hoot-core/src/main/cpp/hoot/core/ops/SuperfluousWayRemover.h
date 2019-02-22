@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SUPERFLUOUSWAYREMOVER_H
@@ -67,9 +67,9 @@ public:
 
   void removeWays();
 
-  virtual QString getInitStatusMessage() { return "Removing superfluous ways..."; }
+  virtual QString getInitStatusMessage() const { return "Removing superfluous ways..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " superfluous ways"; }
 
   virtual QString getDescription() const

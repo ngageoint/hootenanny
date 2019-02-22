@@ -54,9 +54,10 @@ public:
   virtual QString getDescription() const
   { return "Joins ways split during cleaning and conflation matching operations"; }
 
-  virtual QString getInitStatusMessage() { return "Rejoining ways split during conflation..."; }
+  virtual QString getInitStatusMessage() const
+  { return "Rejoining ways split during conflation..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Rejoined " + QString::number(_numAffected) + " ways"; }
 
 private:
