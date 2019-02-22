@@ -99,7 +99,7 @@ class ConflateCommand extends ExternalCommand {
           differential = "--differential";
         }
 
-        if (params.getAdvancedOptions() != null) { // hoot 1
+        if (params.getAdvancedOptions() != null && !params.getAdvancedOptions().isEmpty()) { // hoot 1
             substitutionMap.put("CONFLATION_TYPE", "");
         	Arrays.stream(toOptionsList(params.getAdvancedOptions())).forEach((option) -> {
                 if (!option.isEmpty()) {
@@ -109,12 +109,10 @@ class ConflateCommand extends ExternalCommand {
         }
 
         if (params.getHoot2() != null) { // hoot 2
-        	substitutionMap.put("CONFLATION_TYPE",ConflationConfs.get(params.getConflationType()));
-//        	Arrays.stream(toOptionsList(params.getHoot2Commands())).forEach((option) -> {
-//        		if (!option.isEmpty()) {
-//        			options.add(option.trim());
-//        		}
-//        	});
+        	String conflationType = ConflationConfs.get(params.getConflationType());
+        	if (conflationType != null) {
+        		substitutionMap.put("CONFLATION_TYPE", conflationType + ".conf");
+        	}
         }
 
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);
