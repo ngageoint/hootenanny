@@ -38,11 +38,8 @@ OTHER_FILES = \
     $$files(../conf/schema/*.json, true) \
     $$files(../docs/*.asciidoc, true) \
     ../conf/core/ConfigOptions.asciidoc \
-    ../conf/core/Attribute.conf \
-    ../conf/core/Diff.conf \
-    ../conf/core/Horizontal.conf \
-    ../conf/core/Network.conf \
-    ../conf/core/Reference.conf \
+    ../conf/core/*Conflation.conf \
+    ../conf/core/*Algorithm.conf \
     ../scripts/jenkins/Jenkinsfile
 
 include(../Configure.pri)
