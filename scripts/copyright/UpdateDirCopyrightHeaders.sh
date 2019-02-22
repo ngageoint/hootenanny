@@ -2,10 +2,8 @@
 set -e
 exitCode=0
 
-if [ -a LicenseTemplate.txt ] ; then
-    LICENSE_TEMPLATE=LicenseTemplate.txt
-elif [ -a ../LicenseTemplate.txt ] ; then
-    LICENSE_TEMPLATE=../LicenseTemplate.txt
+if [ -a $HOOT_HOME/scripts/copyright/LicenseTemplate.txt ] ; then
+    LICENSE_TEMPLATE=$HOOT_HOME/scripts/copyright/LicenseTemplate.txt
 else
     echo "Error: LicenseTemplate.txt not found"
     exit 1
