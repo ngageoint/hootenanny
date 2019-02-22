@@ -44,6 +44,7 @@ namespace hoot
 class NodeReplacements
 {
 public:
+
   NodeReplacements();
 
   HashMap<long, long>& getReplacements() { return _r; }
