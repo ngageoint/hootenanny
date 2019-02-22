@@ -110,10 +110,8 @@ See the User Guide for more detail.
     # Bring two maps closer in alignment
     hoot rubber-sheet input1.osm input2.osm output.osm
     
-    # Display the extent of a map
+    # Display the geospatial extent of a map
     hoot extent input.osm
-    
-    Map extent (minx,miny,maxx,maxy): -104.902,38.8532,-104.896,38.855
 
     # Determine if a map is sorted to the OSM standard
     hoot is-sorted input.osm
@@ -295,6 +293,15 @@ See the User Guide for more detail.
     # Add missing attributes to corrupted elements
     hoot convert -D convert.ops="hoot::AddAttributesVisitor" \
       -D add.attributes.visitor.kvps="changeset=1" input.osm output.osm
+
+    # Remove ways outside of a specified bounding box (minx,miny,maxx,maxy)
+    hoot convert -D convert.ops="hoot::RemoveWaysByBoundsOp" \
+      -D way.remover.bounds="-104.902,38.8532,-104.896,38.855" input.osm output.osm
+
+    # Remove ways inside a specified bounding box (minx,miny,maxx,maxy)
+    hoot convert -D convert.ops="hoot::RemoveWaysByBoundsOp" \
+      -D way.remover.bounds="-104.902,38.8532,-104.896,38.855" -D way.remover.invert.bounds=true \ 
+      input.osm output.osm
 -----
       
 ==== Utilities
