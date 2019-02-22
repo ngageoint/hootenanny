@@ -102,14 +102,17 @@ Users are also able to define their own [custom translations](https://github.com
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience.
 
 ## Web Services API
-Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  The API documentation can be found in each [release](https://github.com/ngageoint/hootenanny/releases) in the 'docs' folder.  The web services use 
-[OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
+Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  The API documentation can be found in each [release](https://github.com/ngageoint/hootenanny/releases) in the 'docs' folder.  
+
+The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
 
 ## Command Line Interface
-[Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.  [Examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
+[Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.  
+
+[Examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
 ## Programming Language Bindings
-Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities. 
+Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
 
 # [Contributing](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/CONTRIBUTING.md)
 
