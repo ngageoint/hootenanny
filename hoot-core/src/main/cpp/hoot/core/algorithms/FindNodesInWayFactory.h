@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDNODESINWAYFACTORY_H
 #define FINDNODESINWAYFACTORY_H
@@ -48,7 +48,7 @@ public:
   void addWay(const ConstWayPtr& w);
 
   virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
-    Status s, double circularError);
+    Status s, double circularError) override;
 
 private:
 

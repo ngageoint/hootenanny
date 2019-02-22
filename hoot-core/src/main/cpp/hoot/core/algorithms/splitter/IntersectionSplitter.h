@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef INTERSECTIONSPLITTER_H
@@ -60,7 +60,7 @@ public:
 
   IntersectionSplitter(boost::shared_ptr<OsmMap> map);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map) override;
 
   static void splitIntersections(boost::shared_ptr<OsmMap> map);
 
@@ -71,7 +71,7 @@ public:
   virtual QString getCompletedStatusMessage()
   { return "Split " + QString::number(_numAffected) + " road intersections"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Makes all road intersections contain only way end nodes"; }
 
 private:

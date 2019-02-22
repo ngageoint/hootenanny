@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -54,7 +54,7 @@ public:
 
   virtual QString getDescription() const { return "Writes an OSM changeset"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     bool showStats = false;
     bool showProgress = false;
@@ -85,11 +85,14 @@ public:
       //  Get the endpoint URL
       QUrl osm;
       osm.setUrl(args[args.size() - 1]);
+      //  Create a URL without user info for logging
+      QUrl printableUrl = osm;
+      printableUrl.setUserInfo("");
       //  Grab all the changeset files
       QList<QString> changesets;
       for (int i = 0; i < args.size() - 1; ++i)
       {
-        LOG_INFO("Applying changeset " << args[i] << " to " << args[args.size() - 1] << "...");
+        LOG_INFO("Applying changeset " << args[i] << " to " << printableUrl.toString() << "...");
         changesets.append(args[i]);
       }
       //  Do the actual splitting and uploading
@@ -140,7 +143,7 @@ public:
         {
           //Don't like throwing an exception here from the command line, but this error needs to
           //bubble up to the web service.
-          //TODO: The better thing to do here would be to return an error code and have the services
+          //The better thing to do here would be to return an error code and have the services
           //scripts look for it, I think.
           throw HootException(
             "The changeset will not be written because conflicts exist in the target OSM API database.");

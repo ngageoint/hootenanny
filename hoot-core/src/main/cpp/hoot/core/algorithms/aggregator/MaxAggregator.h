@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXAGGREGATOR_H
 #define MAXAGGREGATOR_H
@@ -40,11 +40,11 @@ public:
 
   MaxAggregator();
 
-  virtual double aggregate(std::vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const { return "MaxAggregator"; }
+  virtual QString toString() const override { return "MaxAggregator"; }
 
-  virtual QString getDescription() const { return "Aggregates data based on the maximum value"; }
+  virtual QString getDescription() const override { return "Aggregates data based on the maximum value"; }
 };
 
 }

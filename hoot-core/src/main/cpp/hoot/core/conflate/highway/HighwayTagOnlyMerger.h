@@ -28,15 +28,18 @@
 #define HIGHWAY_TAG_ONLY_MERGER_H
 
 // Hoot
-#include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
+#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 
 namespace hoot
 {
 
 /**
- * Merges road tags only, keeping ref1 tags
+ * merges roads together by merging tags only, keeping ref1 tags
+ * merges bridges separately from roads; merges tags and optionally geometries for bridges
+ *
+ * The inheritance from HighwaySnapMerger is to support the geometry merging option for bridges.
  */
-class HighwayTagOnlyMerger : public HighwayMergerAbstract
+class HighwayTagOnlyMerger : public HighwaySnapMerger
 {
 
 public:
@@ -44,14 +47,32 @@ public:
   static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
 
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
-
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                       const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  ~HighwayTagOnlyMerger();
 
 protected:
 
   virtual bool _mergePair(
     const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced);
+    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+
+private:
+
+  bool _performBridgeGeometryMerging;
+
+  void _determineKeeperFeature(ElementPtr element1, ElementPtr element2, ElementPtr& keeper,
+                               ElementPtr& toRemove, bool& removeSecondaryElement);
+
+  void _handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,
+                                   ConstElementPtr elementWithTagsToRemove, const OsmMapPtr& map);
+  bool _conflictExists(ConstElementPtr elementWithTagsToKeep,
+                       ConstElementPtr elementWithTagsToRemove) const;
+
+  void _copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, const OsmMapPtr& map);
+  bool _mergeWays(ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
+                  const bool removeSecondaryElement, const OsmMapPtr& map,
+                  std::vector<std::pair<ElementId, ElementId>>& replaced);
 };
 
 typedef boost::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;

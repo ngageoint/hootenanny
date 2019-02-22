@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef METADATA_TAGS_H
@@ -38,7 +38,7 @@ namespace hoot
  * Metadata tag names that are used throughout the code.  This class centralizes them
  * into one place in the code base.  This class also includes a couple of key values too.
  *
- * @todo These static methods cause the QString to be recreated from the ASCII version every time
+ * These static methods cause the QString to be recreated from the ASCII version every time
  * the method is called. This does two things.
  * 1. The QString is recreated and duplicate RAM is allocated, used then freed
  * 2. The QString must parse the ASCII which takes time.
@@ -149,6 +149,8 @@ public:
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
 
+  inline static const QString Length()                  { return "length"; }
+
   /**
    * ID Unique to a training data set with multiary training data.
    * @sa MultiaryMatchComparator
@@ -164,7 +166,6 @@ public:
    * @sa MultiaryMatchComparator
    */
   inline static const QString TrainingReview()          { return "REVIEW"; }
-
 
 private:
 

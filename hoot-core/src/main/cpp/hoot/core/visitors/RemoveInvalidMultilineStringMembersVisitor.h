@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
 #define REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
@@ -52,7 +52,7 @@ public:
   virtual QString getInitStatusMessage()
   { return "Removing invalid multiline string relation members..."; }
 
-  //TODO: finish; wasn't obvious how to count the total affected
+  // finish; wasn't obvious how to count the total affected - #2933
   virtual QString getCompletedStatusMessage()
   { return ""; }
 

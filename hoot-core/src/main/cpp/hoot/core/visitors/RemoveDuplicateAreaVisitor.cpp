@@ -174,11 +174,10 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
   {
     return;
   }
-  LOG_VART(e1->getElementId());
+  //LOG_VART(e1->getElementId());
 
   AreaCriterion areaCrit;
   boost::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
-  LOG_VART(env.get());
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
       CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||

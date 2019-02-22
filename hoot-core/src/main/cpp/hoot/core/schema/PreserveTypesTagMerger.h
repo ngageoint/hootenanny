@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PRESERVETYPESTAGMERGER_H
 #define PRESERVETYPESTAGMERGER_H
@@ -47,7 +47,7 @@ public:
 
   PreserveTypesTagMerger();
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   virtual QString getDescription() const
   { return "Keeps tags from both features and preserves overlapping type tags"; }

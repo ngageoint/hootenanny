@@ -63,7 +63,7 @@ public:
   virtual void setMaxRelevantAngle(Radians r);
 
   /**
-   * @todo minSplitSize is not supported at this time.
+   * minSplitSize is not supported at this time.
    */
   virtual void setMinSplitSize(Meters minSplitSize);
 
@@ -118,9 +118,9 @@ private:
 
   std::vector<ConstWayPtr> _extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e) const;
 
-  ScoredMatch _findBestMatch(const ConstOsmMapPtr &map, Meters maxDistance,
-    std::vector<ConstWayPtr>& ways1, std::vector<ConstWayPtr> &ways2, std::vector<bool>& reversed1,
-    std::vector<bool> &reversed2, size_t i = 0, size_t j = 0) const;
+  ScoredMatch _findBestMatch(const ConstOsmMapPtr& map, Meters maxDistance,
+    std::vector<ConstWayPtr>& ways1, std::vector<ConstWayPtr>& ways2, std::vector<bool>& reversed1,
+    std::vector<bool>& reversed2, size_t i = 0, size_t j = 0) const;
 
   void _insertElementIds(const std::vector<ConstWayPtr>& ways, std::set<ElementId>& elements) const;
 

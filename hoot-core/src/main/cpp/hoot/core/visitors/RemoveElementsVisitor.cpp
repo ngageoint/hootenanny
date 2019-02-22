@@ -104,7 +104,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   assert(_criterion);
   ElementType type = e->getElementType();
   long id = e->getId();
-  LOG_VART(id);
+  //LOG_VART(e->getElementId());
   const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
 
   if (_criterion->isSatisfied(ee))
@@ -122,7 +122,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 }
 
 void RemoveElementsVisitor::removeWays(boost::shared_ptr<OsmMap> pMap,
-                       const boost::shared_ptr<ElementCriterion>& pCrit)
+                                       const boost::shared_ptr<ElementCriterion>& pCrit)
 {
   RemoveElementsVisitor v(pCrit);
   pMap->visitWaysRw(v);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootApiDbBulkInserter.h"
@@ -59,7 +59,7 @@ HootApiDbBulkInserter::HootApiDbBulkInserter() : OsmApiDbBulkInserter()
   setConfiguration(conf());
 
   _changesetTags["bot"] = "yes";
-  _changesetTags["created_by"] = "hootenanny";
+  _changesetTags["created_by"] = HOOT_PACKAGE_NAME;
 }
 
 HootApiDbBulkInserter::~HootApiDbBulkInserter()
@@ -106,7 +106,7 @@ void HootApiDbBulkInserter::open(QString url)
 
 void HootApiDbBulkInserter::_getOrCreateMap()
 {
-  // TODO: There's a lot of overlap between this and similar code in HootApiDbWriter that needs
+  // There's a lot of overlap between this and similar code in HootApiDbWriter that needs
   // merging.
 
   if (_userEmail.isEmpty())
@@ -245,8 +245,7 @@ void HootApiDbBulkInserter::_writeDataToDb()
 
   //hoot api db starts with no indexes at all, since a brand new databas is created for each layer,
   //so let's create it now
-  //TODO: This causes SQL exceptions with certain datasets, so disabling index creation for now. -
-  //#2216
+  // This causes SQL exceptions with certain datasets, so disabling index creation for now. - #2216
   //_database.createPendingMapIndexes();
 }
 
@@ -395,7 +394,7 @@ void HootApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 
   LOG_VART(node);
 
-  //TODO: See #1451.  This changeset bounds calculation actually won't work when ways or relations
+  //See #1451.  This changeset bounds calculation actually won't work when ways or relations
   //are written in separate changesets than the nodes they reference.  Since we're streaming the
   //elements, there's no way to get back to the bounds information.  This bug has always been here,
   //but just recently noticed.
@@ -651,7 +650,7 @@ void HootApiDbBulkInserter::_incrementChangesInChangeset()
   //To stay in sync with how HootApiDb assigns changeset ID's, we'll get the initial changeset ID
   //if this is the first record being writen.  Changeset ID's will then be retrieved with each call
   //to _writeChangeset.
-  //TODO: This seems to be writing double the amount of changesets needed with every other changeset
+  //This seems to be writing double the amount of changesets needed with every other changeset
   //being empty. - #2217
   if (_changesetData.changesInChangeset ==/*>*/ 0)
   {

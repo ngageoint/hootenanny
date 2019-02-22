@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DIRECTIONFINDER_H
 #define DIRECTIONFINDER_H
@@ -32,16 +32,37 @@
 
 #include <hoot/core/elements/OsmMap.h>
 
-namespace hoot {
+namespace hoot
+{
 
 class DirectionFinder
 {
 public:
+
   /**
    * Returns true if these lines are generally pointed in a similar direction.
    */
-  static bool isSimilarDirection(const hoot::ConstOsmMapPtr &map, hoot::ConstWayPtr w1,
+  static bool isSimilarDirection(const hoot::ConstOsmMapPtr& map, hoot::ConstWayPtr w1,
     hoot::ConstWayPtr w2);
+
+  /**
+   * Returns true if these lines are generally pointed in a similar direction.
+   *
+   * This is an alternative implementation written for Attribute Conflation, which may possibly
+   * replace the original at some point after extensive testing.
+   *
+   * @param map map containing the ways for which to compare direction
+   * @param way1 the first way to compare direction for
+   * @param way2 the second way to compare direction for
+   * @return true if both ways are running in a similar direction; false otherwise
+   * @see direction.finder.angle.threshold
+   */
+  static bool isSimilarDirection2(const hoot::ConstOsmMapPtr& map, hoot::ConstWayPtr way1,
+    hoot::ConstWayPtr way2);
+
+private:
+
+  static double _getAngleDiff(const ConstOsmMapPtr& map, ConstWayPtr way1, ConstWayPtr way2);
 };
 
 }

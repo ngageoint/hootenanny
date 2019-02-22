@@ -197,7 +197,7 @@ void OsmXmlWriter::_initWriter()
 
   _writer->writeStartElement("osm");
   _writer->writeAttribute("version", "0.6");
-  _writer->writeAttribute("generator", "hootenanny");
+  _writer->writeAttribute("generator", HOOT_PACKAGE_NAME);
 }
 
 void OsmXmlWriter::write(ConstOsmMapPtr map, const QString& path)
@@ -220,8 +220,8 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     _initWriter();
   }
 
-  //TODO: The coord sys and schema entries don't get written to streamed output b/c we don't have
-  //the map object to read the coord sys from.
+  // The coord sys and schema entries don't get written to streamed output b/c we don't have
+  // the map object to read the coord sys from.
 
   int epsg = map->getProjection()->GetEPSGGeogCS();
   if (epsg > -1)

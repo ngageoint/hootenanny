@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ImplicitTagRawRulesDeriver.h"
 
@@ -303,7 +303,7 @@ boost::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStrea
 
   _inputReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::getInstance().createReader(input));
+      OsmMapReaderFactory::createReader(input));
   _inputReader->open(input);
   boost::shared_ptr<ElementInputStream> inputStream =
     boost::dynamic_pointer_cast<ElementInputStream>(_inputReader);
@@ -625,7 +625,7 @@ void ImplicitTagRawRulesDeriver::_sortByWord(boost::shared_ptr<QTemporaryFile> i
 
   //sort by word, then by tag
   const QString cmd =
-    "sort -t'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
+    "sort -t$'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
      input->fileName() + " -o " + _output->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {

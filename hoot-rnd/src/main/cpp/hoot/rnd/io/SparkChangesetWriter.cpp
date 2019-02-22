@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SparkChangesetWriter.h"
 
@@ -102,7 +102,7 @@ void SparkChangesetWriter::open(QString fileName)
   // find a match creator that can provide the search bounds.
   foreach (boost::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
   {
-    //TODO: Why is ScriptMatchVisitor::calculateSearchRadius getting called a ton of times by this?
+    // Why is ScriptMatchVisitor::calculateSearchRadius getting called a ton of times by this?
     SearchRadiusProviderPtr sbc = boost::dynamic_pointer_cast<SearchRadiusProvider>(mc);
     if (sbc.get())
     {
@@ -211,8 +211,8 @@ void SparkChangesetWriter::writeChange(const Change& change)
 
     //element payload
 
-    //TODO: some of this may be redundant with what's in OsmJsonWriter and in
-    //MultiaryIngestChangesetWriter
+    // some of this may be redundant with what's in OsmJsonWriter and in
+    // MultiaryIngestChangesetWriter
 
 //    //using elements in an array here, since that's what OsmJsonReader expects when using that
 //    //to parse (although we're not currently doing that with multiary ingest due to #1772)
@@ -250,7 +250,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
       NodePtr previousNodeCopy =
         (boost::dynamic_pointer_cast<const Node>(change.getPreviousElement()))->cloneSp();
 
-      _exportTagsVisitor.visit(previousNodeCopy); //TODO: is this needed?
+      _exportTagsVisitor.visit(previousNodeCopy); // is this needed?
       // element hash before change
       deleteChangeLine += QString(previousNodeCopy->getTags()[MetadataTags::HootHash()]) + "\n";
     }

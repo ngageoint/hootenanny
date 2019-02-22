@@ -65,11 +65,11 @@ public:
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
   virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
-    ConstMatchThresholdPtr threshold);
+    ConstMatchThresholdPtr threshold) override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual void setArguments(QStringList args);
+  virtual void setArguments(QStringList args) override;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -78,9 +78,9 @@ public:
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
    */
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
+  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
 private:
 

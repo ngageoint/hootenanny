@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayMatchStringMerger.h"
 
@@ -219,7 +219,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      //TODO: Possibly change this back to an exception as part of the work to be done in #1311.
+      // Possibly change this back to an exception as part of the work to be done in #1311.
       //throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
 
       //Note: this situation appears to arise when there is a failure to

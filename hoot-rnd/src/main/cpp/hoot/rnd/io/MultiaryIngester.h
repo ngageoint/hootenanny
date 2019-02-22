@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYINGESTER_H
 #define MULTIARYINGESTER_H
@@ -50,7 +50,7 @@ class ElementInputStream;
  * This class requires that the input be a streamable format, the output layer be a Hootenanny
  * API database layer, and the changeset output format be a Spark changeset.
  *
- * TODO: Use of OsmFileSorter by this class can be eliminated by swapping it for
+ * Use of OsmFileSorter by this class can be eliminated by swapping it for
  * ExternalMergeElementSorter.  See #2622
  *
  * TODO: 9/12/18 - I believe that there is a critical bug in that hoot api db data sources aren't

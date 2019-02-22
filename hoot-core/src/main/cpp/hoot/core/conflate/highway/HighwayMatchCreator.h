@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYMATCHCREATOR_H
 #define HIGHWAYMATCHCREATOR_H
@@ -56,9 +56,9 @@ public:
    * Search the provided map for highway matches and add the matches to the matches vector.
    */
   virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
-    ConstMatchThresholdPtr threshold);
+    ConstMatchThresholdPtr threshold) override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const override;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -67,9 +67,9 @@ public:
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
    */
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
+  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
 private:
 

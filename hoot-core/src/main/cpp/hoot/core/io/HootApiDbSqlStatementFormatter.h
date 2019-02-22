@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBSQLSTATEMENTFORMATTER_H
 #define HOOTAPIDBSQLSTATEMENTFORMATTER_H
@@ -52,7 +52,7 @@ static const QString HOOTAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEF
  * Converts OSM elements and their children into executable Postgres SQL COPY statements against an
  * Hootenanny API database
  *
- * TODO: It may be possible to reduce duplicated code by sharing some with
+ * It may be possible to reduce duplicated code by sharing some with
  * OsmApiDbSqlStatementFormatter.
  */
 class HootApiDbSqlStatementFormatter

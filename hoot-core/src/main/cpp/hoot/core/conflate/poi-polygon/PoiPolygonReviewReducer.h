@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONREVIEWREDUCER_H
 #define POIPOLYGONREVIEWREDUCER_H
@@ -54,7 +54,7 @@ class PoiPolygonReviewReducer
 
 public:
 
-  //TODO: encapsulate all these params in a class...this is nasty
+  // encapsulate all these params in a class...this is nasty
   PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
                           const std::set<ElementId>& poiNeighborIds, double distance,
                           double nameScoreThreshold, double nameScore, bool nameMatch,
@@ -71,7 +71,7 @@ public:
    * @param poi the POI feature to be examined
    * @param poly the polygon feature to be examined
    * @return return true if the features trigger a review reduction rule; false otherwise
-   * @todo this desperately needs to be broken up into more modular pieces
+   * @note this needs to be broken up into more modular pieces
    */
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
 

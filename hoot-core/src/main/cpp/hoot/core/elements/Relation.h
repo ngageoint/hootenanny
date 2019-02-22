@@ -93,9 +93,11 @@ public:
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
 
-  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
+  virtual geos::geom::Envelope* getEnvelope(
+    const boost::shared_ptr<const ElementProvider>& ep) const;
 
-  geos::geom::Envelope getEnvelopeInternal(const boost::shared_ptr<const ElementProvider>& ep) const;
+  geos::geom::Envelope getEnvelopeInternal(
+    const boost::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Relation); }
 
@@ -105,14 +107,16 @@ public:
    * Returns true if this is a multipolygon type. No checking is done to determine if the geometry
    * is valid.
    */
-  bool isMultiPolygon() const { return _relationData->getType() == MetadataTags::RelationMultiPolygon(); }
+  bool isMultiPolygon() const
+  { return _relationData->getType() == MetadataTags::RelationMultiPolygon(); }
 
   /**
    * Returns true if this is a review.
    */
   bool isReview() const { return _relationData->getType() == MetadataTags::RelationReview(); }
 
-  bool isRestriction() const { return _relationData->getType() == MetadataTags::RelationRestriction(); }
+  bool isRestriction() const
+  { return _relationData->getType() == MetadataTags::RelationRestriction(); }
 
   /**
    * Remove all members that meet the speicified criteria. If no members meet the criteria then
@@ -126,7 +130,8 @@ public:
    * Replaces all instances of from in the relation with to. If from is not in the relation then
    * no changes are made.
    */
-  void replaceElement(const boost::shared_ptr<const Element>& from, const boost::shared_ptr<const Element>& to);
+  void replaceElement(const boost::shared_ptr<const Element>& from,
+                      const boost::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
 
   /**
@@ -172,7 +177,7 @@ private:
   void _visitRo(const ElementProvider& map, ConstElementVisitor& filter,
     QList<long>& visitedRelations) const;
 
-  void _visitRw(ElementProvider &map, ConstElementVisitor& filter,
+  void _visitRw(ElementProvider& map, ConstElementVisitor& filter,
     QList<long> &visitedRelations);
 };
 

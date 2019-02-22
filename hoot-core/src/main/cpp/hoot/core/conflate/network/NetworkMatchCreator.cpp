@@ -83,7 +83,7 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Extracting networks...");
+  LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(threshold);
 
   // use another class to extract graph nodes and graph edges.
@@ -140,9 +140,10 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
       MapProjector::projectToWgs84(copy);
       conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+      // TODO: use config opt for debug file path
       QString name = QString("tmp/debug-%1.osm").arg(i, 3, 10, QLatin1Char('0'));
       LOG_INFO("Writing debug map: " << name);
-      OsmMapWriterFactory::getInstance().write(copy, name);
+      OsmMapWriterFactory::write(copy, name);
     }
   }
 
@@ -160,7 +161,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
     QString name = QString("tmp/debug-final.osm");
     LOG_INFO("Writing debug map: " << name);
-    OsmMapWriterFactory::getInstance().write(copy, name);
+    OsmMapWriterFactory::write(copy, name);
   }
 
   LOG_DEBUG("Retrieving edge scores...");
@@ -176,11 +177,12 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
-      LOG_TRACE("is match");
       LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }
+
+  LOG_INFO("Found " << matches.size() << " highway match candidates.");
 }
 
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const

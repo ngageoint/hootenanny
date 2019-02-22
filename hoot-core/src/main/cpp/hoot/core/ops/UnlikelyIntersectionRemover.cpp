@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "UnlikelyIntersectionRemover.h"
@@ -112,8 +112,8 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, boost:
   // pressume it is a valid intersection
   double p = 1.0;
 
-  LOG_VART(w1->getElementId());
-  LOG_VART(w2->getElementId());
+  //LOG_VART(w1->getElementId());
+  //LOG_VART(w2->getElementId());
 
   int i1 = w1->getNodeIndex(intersectingNode);
   int i2 = w2->getNodeIndex(intersectingNode);

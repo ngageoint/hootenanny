@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryIngestChangesetWriter.h"
 
@@ -144,7 +144,7 @@ void MultiaryIngestChangesetWriter::writeChange(const Change& change)
 
   if (_elementPayloadFormat == QLatin1String("json"))
   {
-    //TODO: some of this may be redundant with what's in OsmJsonWriter and in SparkChangesetWriter
+    // some of this may be redundant with what's in OsmJsonWriter and in SparkChangesetWriter
 
     //using elements in an array here, since that's what OsmJsonReader expects when using that
     //to parse (although we're not currently doing that with multiary ingest due to #1772)

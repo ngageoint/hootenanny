@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootNetworkRequest.h"
@@ -89,9 +89,6 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
                                          QNetworkAccessManager::Operation http_op,
                                          const QByteArray& data)
 {
-  //  Disable logging for the QNetworkAccessManager calls because it logs an error when
-  //  run in a sub-thread.  An exception is thrown below for error handling instead of logging
-  boost::shared_ptr<DisableLog> disable(new DisableLog());
   //  Reset status
   _status = 0;
   _content.clear();
@@ -152,8 +149,6 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   }
   //  Wait for finished signal from reply object
   _blockOnReply(reply);
-  //  Enable logging
-  disable.reset();
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
   //  According to the documention this shouldn't ever happen
@@ -167,6 +162,9 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   if (QNetworkReply::NoError != reply->error())
   {
     _error = reply->errorString();
+    //  Remove authentication information if present
+    if (request.url() != url)
+      _error.replace(request.url().toString(), url.toString(), Qt::CaseInsensitive);
     return false;
   }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCRITERIONVISITORINPUTSTREAM_H
 #define ELEMENTCRITERIONVISITORINPUTSTREAM_H
@@ -81,7 +81,7 @@ public:
   /**
    * Returns the source's projection.
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @brief hasMoreElements
@@ -94,7 +94,7 @@ public:
    * @return Pointer to an elemement that is read from elementSource and is satisfied by the
    *    criterion.
    */
-  virtual ElementPtr readNextElement();
+  virtual ElementPtr readNextElement() override;
 
   long getNumFeaturesTotal() const { return _numFeaturesTotal; }
 

@@ -85,6 +85,13 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== add.uuid.visitor.key
+
+* Data Type: string
+* Default Value: ``
+
+Tag key used by AddUuidVisitor for adding custom unique ID's to data.
+
 === address.additional.tag.keys
 
 * Data Type: list
@@ -210,6 +217,15 @@ setting may cause writing to an OSM API database to occur more slowly.
 * Default Value: `17`
 
 The precision of numeric values written to Attribute-Relation (.arff) files.
+
+=== attribute.conflation.allow.ref.geometry.changes.for.bridges
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate
+bridge features.  If false, any bridge features represented in the secondary dataset, but not in the
+reference dataset will be lost.
 
 === attribute.score.extractor.use.weight
 
@@ -505,19 +521,6 @@ are: reference, cookieCutter, average, and advancedConflation.
 A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
 User Guide "Feature Filtering" section for filter usage examples.
 
-=== conflator.manipulators
-
-* Data Type: list
-* Default Value:
-** `hoot::WayMerger`
-
-List of manipulators to enable in the conflator.
-
-Some of the possible options include:
-
-* `hoot::WayMerger`
-* `hoot::WayTagMerger`
-
 === conflator.min.valid.score
 
 * Data Type: double
@@ -616,12 +619,21 @@ Creates example review tags for debugging. All reviews created with this mechani
 
 Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,maxy
 
-=== debug.map.filename
+=== debug.maps.filename
 
 * Data Type: string
 * Default Value: `tmp/debug.osm`
 
 Debugging: The filename to use when saving the debug map during conflation.
+
+=== debug.maps.write
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, multiple debug maps will be generated during a conflation job.  The output path of the maps
+is controlled by debug.maps.filename.  The maps can be large and slow things down
+significantly.
 
 === differential.tag.ignore.list
 
@@ -633,6 +645,15 @@ Debugging: The filename to use when saving the debug map during conflation.
 ** `source:imagery`
 
 List of tags to ignore when performing differential conflation with tags.
+
+=== direction.finder.angle.threshold
+
+* Data Type: double
+* Default Value: `45.0`
+
+Maximum angle different in degrees that two line features can have and still be considered as
+going in the same direction by DirectionFinder::isSimilarDirection2.  Used by Attribute Conflation
+only.
 
 === distance.node.criterion.center
 
@@ -679,6 +700,14 @@ case also matches.  If false, cleaning and conflation merge operations will cons
 the same text but differing case as the same with each other.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
+
+=== duplicate.name.preserve.original.name
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the Duplicate Name Remover will always preserve the original name tag.  Otherwise, it
+will treat name and alternate name tags equally.
 
 === duplicate.way.remover.strict.tag.matching
 
@@ -1612,6 +1641,7 @@ Not necessarily utilized by all parts of the application.
 * Data Type: list
 * Default Value:
 ** `hoot::ReprojectToPlanarOp`
+** `hoot::OneWayRoadStandardizer`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::IntersectionSplitter`
@@ -1789,7 +1819,8 @@ See also:
 * Default Value: `false`
 
 If true debug maps will be generated at every iteration when using network conflation. This is
-useful when debugging. The maps can be large and slow things down significantly.
+useful when debugging. The maps can be large and slow things down significantly. This setting is
+independent of conflate.write.debug.maps.
 
 === network.matcher
 
@@ -3793,6 +3824,13 @@ The way subline matcher to use when determining matching sublines.
 
 Distance, in meters, used for sampling way data during angle histogram extraction with the
 SampledAngleHistogramExtractor
+
+=== way.joiner
+
+* Data Type: string
+* Default Value: `hoot::WayJoiner1`
+
+The way joiner implementation to use to repair way splits after a conflation job.
 
 === way.matcher.heading.delta
 

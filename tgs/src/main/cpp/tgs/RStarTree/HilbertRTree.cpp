@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HilbertRTree.h"
@@ -165,7 +165,7 @@ double HilbertRTree::_calculatePairwiseOverlap(int parentId, std::vector<double>
     {
       if (i != j)
       {
-        /// @todo remove toBox and implement overlap calculation for BoxInternal
+        // TODO: remove toBox and implement overlap calculation for BoxInternal
         double o = parent->getChildEnvelope(j).calculateOverlap(
           parent->getChildEnvelope(i).toBox());
         overlaps[i] += o;

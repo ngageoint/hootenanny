@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REPLACEROUNDABOUTS_H
@@ -70,7 +70,7 @@ public:
    * @brief apply - Apply the ReplaceRoundabouts Op to the map.
    * @param pMap - Map to operate on.
    */
-  void apply(boost::shared_ptr<OsmMap>& pMap);
+  void apply(boost::shared_ptr<OsmMap>& pMap) override;
 
   /**
    * @brief replaceRoundabouts - Loops through all the roundabouts stored
@@ -83,11 +83,11 @@ public:
   virtual QString getInitStatusMessage()
   { return "Replacing roundabouts with simple intersections..."; }
 
-  //TODO: finish; wasn't obvious how to count the total affected
+  // finish; wasn't obvious how to count the total affected - #2933
   virtual QString getCompletedStatusMessage()
   { return ""; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Replaces road roundabouts with simple intersections"; }
 
 private:

@@ -334,9 +334,9 @@ QString Way::toString() const
   ss << "version: " << getVersion() << endl;
   ss << "visible: " << getVisible() << endl;
   if (hasCircularError())
-    ss << "circular error: " << getCircularError();
+    ss << "circular error: " << getCircularError() << endl;
   if (hasPid())
-    ss << "parent id: " << getPid() << endl;
+    ss << "parent id: (" << getPid() << ")" << endl;
   return QString::fromStdString(ss.str());
 }
 
@@ -363,9 +363,9 @@ long Way::getPid(const ConstWayPtr& p, const ConstWayPtr& c)
 
 long Way::getPid(long p, long c)
 {
-  if (p != WayData::PID_EMPTY)      return p;
-  else if(c != WayData::PID_EMPTY)  return c;
-  else                              return WayData::PID_EMPTY;
+  if (p != WayData::PID_EMPTY)          return p;
+  else if (c != WayData::PID_EMPTY)     return c;
+  else                                  return WayData::PID_EMPTY;
 }
 
 }

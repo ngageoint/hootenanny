@@ -203,8 +203,8 @@ public:
 
     HOOT_STR_EQUALS(1, m.size());
     HOOT_STR_EQUALS(
-      "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
+      "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
       m[0].toString());
   }
 
@@ -231,8 +231,8 @@ public:
 
     HOOT_STR_EQUALS(1, m.size());
     HOOT_STR_EQUALS(
-      "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
-      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
+      "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0\n"
+      "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
       m[0].toString());
   }
 
@@ -251,8 +251,8 @@ public:
     double bestScore;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w52, w812, bestScore);
     HOOT_STR_EQUALS(
-      "[1]{subline 1: start: way: -1 index: 2 fraction: 0.440972029007195 end: way: -1 index: 2 fraction: 0.553077810038132\n"
-      "subline 2: start: way: -2 index: 2 fraction: 0 end: way: -2 index: 3 fraction: 0}",
+      "[1]{subline 1: start: way(-1) index: 2 fraction: 0.440972029007195 end: way(-1) index: 2 fraction: 0.553077810038132\n"
+      "subline 2: start: way(-2) index: 2 fraction: 0 end: way(-2) index: 3 fraction: 0}",
       m);
   }
 
@@ -276,10 +276,10 @@ public:
     double bestScore;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, bestScore);
     LOG_VAR(m);
-    /// @todo not valid compare
+    // not a valid compare - #172
 //    HOOT_STR_EQUALS(
-//      "[1]{subline 1: start: way: -18 index: 2 fraction: 0.440972029332128 end: way: -18 index: 2 fraction: 0.553077811243426\n"
-//      "subline 2: start: way: -17 index: 2 fraction: 0 end: way: -17 index: 3 fraction: 0}",
+//      "[1]{subline 1: start: way(-18) index: 2 fraction: 0.440972029332128 end: way(-18) index: 2 fraction: 0.553077811243426\n"
+//      "subline 2: start: way(-17) index: 2 fraction: 0 end: way(-17) index: 3 fraction: 0}",
 //      m);
   }
 
@@ -306,8 +306,8 @@ public:
 
       HOOT_STR_EQUALS(1, m.size());
       HOOT_STR_EQUALS(
-        "subline 1: start: way: -1 index: 0 fraction: 0.021 end: way: -1 index: 1 fraction: 0\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
+        "subline 1: start: way(-1) index: 0 fraction: 0.021 end: way(-1) index: 1 fraction: 0\n"
+        "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
         m[0].toString());
     }
 
@@ -332,8 +332,8 @@ public:
 
       HOOT_STR_EQUALS(1, m.size());
       HOOT_STR_EQUALS(
-        "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 0 fraction: 0.979\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
+        "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 0 fraction: 0.979\n"
+        "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
         m[0].toString());
     }
 
@@ -361,8 +361,8 @@ public:
 
       HOOT_STR_EQUALS(1, m.size());
       HOOT_STR_EQUALS(
-        "subline 1: start: way: -2 index: 1 fraction: 0.2 end: way: -2 index: 2 fraction: 0\n"
-        "subline 2: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0",
+        "subline 1: start: way(-2) index: 1 fraction: 0.2 end: way(-2) index: 2 fraction: 0\n"
+        "subline 2: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0",
         m[0].toString());
     }
 
@@ -395,8 +395,8 @@ public:
 
       HOOT_STR_EQUALS(1, m.size());
       HOOT_STR_EQUALS(
-        "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 2 fraction: 0.666666666666667\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 2 fraction: 0",
+        "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 2 fraction: 0.666666666666667\n"
+        "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 2 fraction: 0",
         m[0].toString());
     }
   }
@@ -423,8 +423,8 @@ public:
 
         HOOT_STR_EQUALS(1, m.size());
         HOOT_STR_EQUALS(
-          "subline 1: start: way: -3 index: 0 fraction: 0 end: way: -3 index: 10 fraction: 0.834339910124657\n"
-          "subline 2: start: way: -6 index: 0 fraction: 0 end: way: -6 index: 17 fraction: 0",
+          "subline 1: start: way(-3) index: 0 fraction: 0 end: way(-3) index: 10 fraction: 0.834339910124657\n"
+          "subline 2: start: way(-6) index: 0 fraction: 0 end: way(-6) index: 17 fraction: 0",
           m[0].toString());
       }
 
@@ -474,8 +474,8 @@ public:
 
       HOOT_STR_EQUALS(1, m.size());
       HOOT_STR_EQUALS(
-        "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 3 fraction: 0\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 3 fraction: 0",
+        "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 3 fraction: 0\n"
+        "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 3 fraction: 0",
         m[0].toString());
     }
   }
@@ -509,8 +509,8 @@ public:
 
       HOOT_STR_EQUALS(1, m.size());
       HOOT_STR_EQUALS(
-        "subline 1: start: way: -1 index: 2 fraction: 0 end: way: -1 index: 3 fraction: 0\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
+        "subline 1: start: way(-1) index: 2 fraction: 0 end: way(-1) index: 3 fraction: 0\n"
+        "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
         m[0].toString());
     }
   }

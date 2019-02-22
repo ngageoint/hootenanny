@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NoInformationCriterion.h"
 
@@ -45,7 +45,8 @@ bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
   const int reviewTagCount =
     tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
 
-  LOG_VART(e);
+  //LOG_VART(e);
+  LOG_VART(e->getElementId());
   LOG_VART(informationCount);
   LOG_VART(_treatReviewTagsAsMetadata);
   LOG_VART(reviewTagCount);

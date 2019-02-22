@@ -22,10 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiChangesetElement.h"
+
+#include <hoot/core/util/HootException.h>
 
 //  Qt
 #include <QTextStream>
@@ -43,11 +45,36 @@ XmlElement::XmlElement(const XmlObject& object, ElementIdToIdMap* idMap)
 {
 }
 
+XmlElement::XmlElement(const XmlElement& element)
+  : _type(element._type),
+    _id(element._id),
+    _version(element._version),
+    _object(element._object),
+    _tags(element._tags),
+    _idMap(element._idMap),
+    _status(element._status)
+{
+}
+
 void XmlElement::addTag(const XmlObject& tag)
 {
   //  Make sure that the object is in fact a tag before adding it
   if (tag.first == "tag")
     _tags.push_back(tag);
+}
+
+QString XmlElement::getTagKey(int index)
+{
+  if (index < 0 || index >= _tags.size() || !_tags[index].second.hasAttribute("k"))
+    throw IllegalArgumentException();
+  return _tags[index].second.value("k").toString();
+}
+
+QString XmlElement::getTagValue(int index)
+{
+  if (index < 0 || index >= _tags.size() || !_tags[index].second.hasAttribute("v"))
+    throw IllegalArgumentException();
+  return _tags[index].second.value("v").toString();
 }
 
 QString XmlElement::toString(const QXmlStreamAttributes& attributes, long changesetId) const
@@ -60,6 +87,8 @@ QString XmlElement::toString(const QXmlStreamAttributes& attributes, long change
   {
     const QXmlStreamAttribute& attribute = attributes.at(i);
     QStringRef name = attribute.name();
+    if (name == "action")
+      continue;
     ts << name.toString() << "=\"";
     //  Some attributes need to be overridden
     if (name == "changeset")    //  Changeset ID is provided by the OSM API
@@ -106,6 +135,11 @@ XmlNode::XmlNode(const XmlObject& node, ElementIdToIdMap* idMap)
   _type = ElementType::Node;
 }
 
+XmlNode::XmlNode(const XmlNode &node)
+  : XmlElement(node)
+{
+}
+
 QString XmlNode::toString(long changesetId) const
 {
   QString buffer;
@@ -131,6 +165,21 @@ XmlWay::XmlWay(const XmlObject& way, ElementIdToIdMap* idMap)
   _type = ElementType::Way;
 }
 
+XmlWay::XmlWay(const XmlWay &way)
+  : XmlElement(way),
+    _nodes(way._nodes)
+{
+}
+
+void XmlWay::removeNodes(int position, int count)
+{
+  if (position < 0 || count == 0 || _nodes.size() < 1)
+    return;
+  if (count < 0 || count >= _nodes.size())
+    count = _nodes.size() - position;
+  _nodes.remove(position, count);
+}
+
 QString XmlWay::toString(long changesetId) const
 {
   QString buffer;
@@ -153,6 +202,41 @@ XmlRelation::XmlRelation(const XmlObject& relation, ElementIdToIdMap* idMap)
 {
   //  Override the type
   _type = ElementType::Relation;
+}
+
+XmlRelation::XmlRelation(const XmlRelation &relation)
+  : XmlElement(relation),
+    _members(relation._members)
+{
+}
+
+bool XmlRelation::hasMember(ElementType::Type type, long id)
+{
+  //  Iterate all of the members
+  for (QList<XmlMember>::iterator it = _members.begin(); it != _members.end(); ++it)
+  {
+    switch (type)
+    {
+    case ElementType::Node:
+      //  Node matches node, and ID matches ID
+      if (it->isNode() && it->getRef() == id)
+        return true;
+      break;
+    case ElementType::Way:
+      //  Way matches way, and ID matches ID
+      if (it->isWay() && it->getRef() == id)
+        return true;
+      break;
+    case ElementType::Relation:
+      //  Relation matches relation, and ID matches ID
+      if (it->isRelation() && it->getRef() == id)
+        return true;
+      break;
+    default:
+      break;
+    }
+  }
+  return false;
 }
 
 QString XmlRelation::toString(long changesetId) const

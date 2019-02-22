@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDB_H
 #define OSMAPIDB_H
@@ -60,9 +60,9 @@ public:
 
   virtual void close();
 
-  virtual bool isSupported(const QUrl& url);
+  virtual bool isSupported(const QUrl& url) override;
 
-  virtual void open(const QUrl& url);
+  virtual void open(const QUrl& url) override;
 
   virtual void commit();
 
@@ -71,17 +71,17 @@ public:
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual std::vector<long> selectNodeIdsForWay(long wayId);
+  virtual std::vector<long> selectNodeIdsForWay(long wayId) override;
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  virtual boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
+  virtual boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
 
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId);
+  virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId) override;
 
   /**
     * Deletes data in the Osm Api db
@@ -121,7 +121,7 @@ public:
    *
    * @param tableName database table name associated with the sequence
    * @return the next sequence ID for the given type
-   * @todo need to make use of sequence and table strings more consistent here
+   * @todo need to make use of sequence and table strings more consistently here
    */
   long getNextId(const QString tableName);
 
@@ -145,12 +145,12 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
-  //TODO: the three methods below may be able to be combined somehow
+  // the three table name methods below may be able to be combined somehow
 
   /**
    * @see ApiDb::elementTypeToElementTableName
    */
-  virtual QString elementTypeToElementTableName(const ElementType& elementType) const;
+  virtual QString elementTypeToElementTableName(const ElementType& elementType) const override;
 
   /**
    * Converts a table type to a OSM API database table name
@@ -158,7 +158,7 @@ public:
    * @param tableType table type enum to convert
    * @return a database table name string
    */
-  virtual QString tableTypeToTableName(const TableType& tableType) const;
+  virtual QString tableTypeToTableName(const TableType& tableType) const override;
 
   /**
    * Returns an OSM API database table name

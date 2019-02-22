@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbAwareHootApiDbWriter.h"
 
@@ -130,8 +130,8 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
   return retVal;
 }
 
-//TODO: a lot of similar code in these write methods that could be consolidated into something
-//generic
+// a lot of similar code in these write methods that could be consolidated into something
+// generic
 
 void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& node)
 {

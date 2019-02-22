@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OneWayCriterion.h"
 
@@ -35,15 +35,22 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
 
+OneWayCriterion::OneWayCriterion(bool isOneWay) :
+_isOneWay(isOneWay)
+{
+}
+
 bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  bool result = false;
-  const QString oneway = e->getTags()["oneway"].toLower();
-  if (e->getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
+  if (e->getElementType() == ElementType::Way)
   {
-    result = true;
+    const QString oneway = e->getTags()["oneway"].toLower();
+    if (e->getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
+    {
+      return true;
+    }
   }
-  return result;
+  return false;
 }
 
 }

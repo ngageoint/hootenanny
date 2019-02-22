@@ -635,6 +635,7 @@ public class Map extends Maps {
             mapLayer.setName(mapLayerRecord.getDisplayName());
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
             mapLayer.setPublicCol(mapLayerRecord.getPublicCol());
+            mapLayer.setUserId(mapLayerRecord.getUserId());
             java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore(mapLayerRecord.getTags());
             if (tags.containsKey("lastAccessed")) {
                 mapLayer.setLastAccessed(tags.get("lastAccessed"));

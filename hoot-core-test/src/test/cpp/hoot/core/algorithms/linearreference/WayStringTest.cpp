@@ -220,7 +220,7 @@ public:
 
     // Try to create a waystring with sublines with different ways that are not
     // consecutive
-    //TODO: re-enable this as part of #1312
+    // re-enable this as part of #1312
 //    exThrown = false;
 //    try
 //    {
@@ -287,7 +287,7 @@ public:
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 1",
+                    "circular error: 1\n",
                     wayCopy);
   }
 
@@ -323,7 +323,7 @@ public:
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 1",
+                    "circular error: 1\n",
                     wayCopy);
   }
 
@@ -367,7 +367,7 @@ public:
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 1",
+                    "circular error: 1\n",
                     wayCopy);
   }
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "IntersectionSplitter.h"
@@ -192,7 +192,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       break;
     }
   }
-  LOG_VART(firstIndex);
 
   // if the first index wasn't an endpoint.
   if (firstIndex != -1)
@@ -229,7 +228,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     {
       // split the way and remove it from the map
       WayLocation wl(_map, way, firstIndex, 0.0);
-      vector< boost::shared_ptr<Way> > splits = WaySplitter::split(_map, way, wl);
+      vector<boost::shared_ptr<Way>> splits = WaySplitter::split(_map, way, wl);
 
       // if a split occurred.
       if (splits.size() > 1)

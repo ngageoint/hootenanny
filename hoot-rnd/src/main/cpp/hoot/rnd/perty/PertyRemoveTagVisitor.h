@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTY_REMOVE_TAG_VISITOR_H
 #define PERTY_REMOVE_TAG_VISITOR_H
@@ -58,7 +58,7 @@ public:
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
 

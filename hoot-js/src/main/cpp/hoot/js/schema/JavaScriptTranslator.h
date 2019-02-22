@@ -92,7 +92,7 @@ public:
   virtual boost::shared_ptr<const Schema> getOgrOutputSchema();
 
   // Filter for file names
-  virtual const QString getLayerNameFilter();
+  virtual const QString getLayerNameFilter() override;
 
   /**
    * Uses the specified script text instead of loading the script from a file.

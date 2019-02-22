@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbSqlStatementFormatter.h"
 
@@ -115,8 +115,6 @@ void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delim
 
 QString OsmApiDbSqlStatementFormatter::escapeCopyToData(const QString stringToOutput)
 {
-  //TODO: this is likely redundant with other code
-
   QString escapedString = stringToOutput;
   // Escape any special characters as required by
   //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
@@ -138,7 +136,7 @@ QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& 
   QStringList sqlStrs;
 
   const QString nodeIdStr = QString::number(nodeId);
-  //TODO: should be able to use OsmApiDb::toOsmApiDbCoord here instead
+  // TODO: should be able to use OsmApiDb::toOsmApiDbCoord here instead
   QString nodeYNanodegreesStr;
   QString nodeXNanodegreesStr;
   if (validate)

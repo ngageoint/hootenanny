@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbSqlStatementFormatter.h"
 
@@ -222,7 +222,7 @@ QString HootApiDbSqlStatementFormatter::changesetToSqlString(const long changese
 {
   Tags tags;
   tags["bot"] = "yes";
-  tags["created_by"] = "hootenanny";
+  tags["created_by"] = HOOT_PACKAGE_NAME;
   return
     _outputFormatStrings[HootApiDb::getChangesetsTableName(_mapId)]
       .arg(QString::number(changesetId))

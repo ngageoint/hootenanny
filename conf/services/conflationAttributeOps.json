@@ -60,6 +60,30 @@
         "name": "Tag Merger",
         "defaultvalue": "hoot::OverwriteTag1Merger",
         "hoot_key": "tag.merger.default"
+      },
+      {
+        "id": "way_joiner",
+        "elem_type": "string",
+        "description": "The way joiner to use to rejoin ways split during cleaning and conflation matching",
+        "name": "WayJoiner",
+        "defaultvalue": "hoot::WayJoiner2",
+        "hoot_key": "way.joiner"
+      },
+      {
+        "id": "attribute_allow_ref_geometry_bridge_changes",
+        "elem_type": "bool",
+        "description": "If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate bridge features.  If false, any bridge features represented in the secondary dataset, but not in the reference dataset will be lost.",
+        "name": "Allow Reference Geometry Changes For Bridges",
+        "defaultvalue": "true",
+        "hoot_key": "attribute.conflation.allow.ref.geometry.changes.for.bridges",
+      },
+      {
+        "id": "duplicate_name_preserve_original_name",
+        "elem_type": "bool",
+        "description": "If true, the Duplicate Name Remover will always preserve the original name tag.  Otherwise, it will treat name and alternate name tags equally.",
+        "name": "Preserve Original Name During Duplicate Name Removal",
+        "defaultvalue": "true",
+        "hoot_key": "duplicate.name.preserve.original.name",
       }
     ]
 

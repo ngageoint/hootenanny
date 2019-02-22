@@ -124,7 +124,7 @@ boost::shared_ptr<Way> DualWaySplitter::_createOneWay(boost::shared_ptr<const Wa
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
   if (newLs == 0)
   {
-    /// @todo MultiLineString not handled properly See r2275
+    // TODO: MultiLineString not handled properly See r2275 (need to port issue to github)
 
     if (logWarnCount < Log::getWarnMessageLimit())
     {
