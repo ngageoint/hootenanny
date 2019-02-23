@@ -708,7 +708,7 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
     return false;
   }
 
-  // If two roads disagree in highway type, don't join back up.
+  // If two roads disagree in highway type and aren't generic, don't join back up.
   HighwayCriterion highwayCrit;
   if (highwayCrit.isSatisfied(wayWithTagsToKeep) && highwayCrit.isSatisfied(wayWithTagsToLose) &&
       OsmUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))

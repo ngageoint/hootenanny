@@ -157,9 +157,9 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     //LOG_VART(elementWithTagsToKeep->getElementId());
     //LOG_VART(elementWithTagsToRemove->getElementId());
     OsmUtils::logElementDetail(
-      elementWithTagsToKeep, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToKeep");
+      elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
     OsmUtils::logElementDetail(
-      elementWithTagsToRemove, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToRemove");
+      elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
 
     return
       _mergeWays(
@@ -257,6 +257,13 @@ bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep
   if (OsmUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
+    return true;
+  }
+
+  // If two roads disagree in highway type and aren't generic, don't merge.
+  if (OsmUtils::nonGenericHighwayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+  {
+    LOG_TRACE("Conflicting highway type tags.  Skipping join.")
     return true;
   }
 
