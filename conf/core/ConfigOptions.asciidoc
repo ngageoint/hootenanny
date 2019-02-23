@@ -218,6 +218,15 @@ setting may cause writing to an OSM API database to occur more slowly.
 
 The precision of numeric values written to Attribute-Relation (.arff) files.
 
+=== attribute.conflation.aggressive.highway.joining
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific
+highway attribution into those with less specific highway attribution and no names.  Enabling this
+option may result in some false positive road joining.
+
 === attribute.conflation.allow.ref.geometry.changes.for.bridges
 
 * Data Type: bool
@@ -3866,6 +3875,21 @@ databases are capped at 2000 nodes per way.
 * Default Value: `5`
 
 The minimum size that a way should be split into for merging. Units in meters.
+
+=== way.remover.bounds
+
+* Data Type: string
+* Default Value: ``
+
+Bounds used by the RemoveWaysByBoundsOp when removing ways, of the form: minx,miny,maxx,maxy
+
+=== way.remover.invert.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the RemoveWaysByBoundsOp will remove ways outside of the bounds specified by
+way.remover.bounds.  Otherwise it will remove ways within the specified bounds.
 
 === way.splitter.max.length
 

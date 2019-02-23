@@ -92,8 +92,6 @@ void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementP
     keeper = element2;
     toRemove = element1;
   }
-  LOG_VART(keeper->getElementId());
-  LOG_VART(toRemove->getElementId());
 }
 
 bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
@@ -110,6 +108,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
 
   if (e1 && e2)
   {
+    LOG_VART(e1->getElementId());
+    LOG_VART(e2->getElementId());
     OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayTagOnlyMerger: e1");
     OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayTagOnlyMerger: e2");
 
@@ -125,7 +125,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
       if (!_performBridgeGeometryMerging)
       {
         LOG_TRACE(
-          "Unable to perform geometric bridge merging due to invalid subline string matcher.  << "
+          "Unable to perform geometric bridge merging due to invalid subline string matcher.  " <<
           "Performing tag only merge...");
       }
       else
@@ -157,9 +157,9 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     //LOG_VART(elementWithTagsToKeep->getElementId());
     //LOG_VART(elementWithTagsToRemove->getElementId());
     OsmUtils::logElementDetail(
-      elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
+      elementWithTagsToKeep, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToKeep");
     OsmUtils::logElementDetail(
-      elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
+      elementWithTagsToRemove, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToRemove");
 
     return
       _mergeWays(
