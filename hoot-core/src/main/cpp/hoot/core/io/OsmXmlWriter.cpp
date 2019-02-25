@@ -136,14 +136,14 @@ void OsmXmlWriter::open(QString url)
 
 void OsmXmlWriter::close()
 {
-  if (_writer.get())
+  if (_fp.get() && _fp->isOpen())
   {
-    _writer->writeEndElement();
-    _writer->writeEndDocument();
-  }
+    if (_writer.get())
+    {
+      _writer->writeEndElement();
+      _writer->writeEndDocument();
+    }
 
-  if (_fp.get())
-  {
     _fp->close();
   }
 }
