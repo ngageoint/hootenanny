@@ -111,11 +111,11 @@ bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr
   }
 
   const double diffAngle = _getAngleDiff(map, way1, way2);
-  LOG_VART(diffAngle);
+  LOG_VARD(diffAngle);
   const double angleThreshold = ConfigOptions().getDirectionFinderAngleThreshold();
   if (diffAngle >= angleThreshold)
   {
-    LOG_TRACE(
+    LOG_DEBUG(
       "Ways have large difference in orientation angle: " << diffAngle <<
       " degrees (threshold: " << angleThreshold << ").");
     return false;
