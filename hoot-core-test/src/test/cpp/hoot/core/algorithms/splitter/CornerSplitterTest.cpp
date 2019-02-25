@@ -31,6 +31,7 @@
 #include <hoot/core/algorithms/splitter/CornerSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
@@ -46,6 +47,7 @@ class CornerSplitterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CornerSplitterTest);
   CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runRoundedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -75,6 +77,34 @@ public:
 
     HOOT_FILE_EQUALS("test-output/conflate/splitter/CornerSplitterOut.osm",
                      "test-files/conflate/splitter/CornerSplitterExpected.osm");
+  }
+
+  void runRoundedTest()
+  {
+    OsmXmlReader reader;
+
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/conflate/splitter/CornerSplitter.osm", map);
+
+    MapProjector::projectToWgs84(map);
+
+    Settings s;
+    //  Turn on the rounded corner splitting
+    s.set(ConfigOptions::getCornerSplitterRoundedSplitKey(), true);
+    s.set(ConfigOptions::getCornerSplitterRoundedMaxNodeCountKey(), 10);
+    s.set(ConfigOptions::getCornerSplitterRoundedThresholdKey(), 75.0);
+
+    CornerSplitter splitter(map);
+    splitter.setConfiguration(s);
+    splitter.splitCorners();
+
+    OsmXmlWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(map, "test-output/conflate/splitter/CornerSplitterRoundedOut.osm");
+
+    HOOT_FILE_EQUALS("test-output/conflate/splitter/CornerSplitterRoundedOut.osm",
+                     "test-files/conflate/splitter/CornerSplitterRoundedExpected.osm");
   }
 
 };

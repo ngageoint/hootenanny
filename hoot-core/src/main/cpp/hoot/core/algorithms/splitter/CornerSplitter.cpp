@@ -28,17 +28,19 @@
 #include "CornerSplitter.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QDebug>
+#include <QTextStream>
 
 using namespace std;
 
@@ -48,13 +50,20 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, CornerSplitter)
 
 CornerSplitter::CornerSplitter()
+  : _cornerThreshold(ConfigOptions().getCornerSplitterThresholdDefaultValue()),
+    _splitRounded(ConfigOptions().getCornerSplitterRoundedSplitDefaultValue()),
+    _roundedThreshold(ConfigOptions().getCornerSplitterRoundedThresholdDefaultValue()),
+    _roundedMaxNodeCount(ConfigOptions().getCornerSplitterRoundedMaxNodeCountDefaultValue())
 {
-
 }
 
 CornerSplitter::CornerSplitter(boost::shared_ptr<OsmMap> map)
+  : _map(map),
+    _cornerThreshold(ConfigOptions().getCornerSplitterThresholdDefaultValue()),
+    _splitRounded(ConfigOptions().getCornerSplitterRoundedSplitDefaultValue()),
+    _roundedThreshold(ConfigOptions().getCornerSplitterRoundedThresholdDefaultValue()),
+    _roundedMaxNodeCount(ConfigOptions().getCornerSplitterRoundedMaxNodeCountDefaultValue())
 {
-  _map = map;
 }
 
 void CornerSplitter::splitCorners(boost::shared_ptr<OsmMap> map)
@@ -75,6 +84,7 @@ void CornerSplitter::splitCorners()
     }
   }
 
+  double threshold = toRadians(_cornerThreshold);
   // Traverse each way, looking for corners to split
   // Splitting a way will usually result in adding a new way to _todoWays
   for (size_t i = 0; i < _todoWays.size(); i++)
@@ -100,12 +110,10 @@ void CornerSplitter::splitCorners()
         double h2 = atan2(next.getCoordinate().y - current.getCoordinate().y,
                           next.getCoordinate().x - current.getCoordinate().x);
 
-        double threshold = toRadians(55.0);
         double delta = fabs(h2-h1);
 
         if (delta > M_PI)
           delta = twopi - delta;
-
 
         // If we make enough of a turn, split the way
         if (delta > threshold)
@@ -117,11 +125,107 @@ void CornerSplitter::splitCorners()
       }
     }
   }
+  //  Try out the rounded corner splitting algorithm if desired
+  if (_splitRounded)
+    _splitRoundedCorners();
+}
+
+void CornerSplitter::_splitRoundedCorners()
+{
+  _todoWays.clear();
+  //  Get a list of ways (that look like roads) in the map
+  HighwayCriterion highwayCriterion;
+  for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
+  {
+    if (highwayCriterion.isSatisfied(it->second))
+      _todoWays.push_back(it->first);
+  }
+  //  Use the threashold from the configuration for rounded corners
+  const double threshold = toRadians(_roundedThreshold);
+  //  Display trace
+  bool trace = Log::getInstance().getLevel() == Log::Trace;
+  //  Traverse each way, looking for corners to split
+  //  Splitting a way will usually result in adding a new way to _todoWays
+  for (size_t i = 0; i < _todoWays.size(); i++)
+  {
+    ConstWayPtr pWay = _map->getWay(_todoWays[i]);
+    size_t nodeCount = pWay->getNodeCount();
+
+    // If the way has less than 4 nodes it can't be rounded
+    if (nodeCount >= 4)
+    {
+      //  Precalculate the headings between points
+      QVector<double> headings;
+      QVector<double> distances;
+      for (size_t nodeIdx = 0; nodeIdx < nodeCount - 1; ++nodeIdx)
+      {
+        //  Get the current and next way locations
+        WayLocation current(_map, pWay, nodeIdx, 0.0);
+        WayLocation next(_map, pWay, nodeIdx + 1, 0.0);
+        //  Calculate and store the heading from point A to point B
+        double heading = atan2(next.getCoordinate().y - current.getCoordinate().y,
+                               next.getCoordinate().x - current.getCoordinate().x);
+        headings.push_back(heading);
+        //  Maybe we can do something with the distance, maybe not
+        double distance = Distance::euclidean(next.getCoordinate(), current.getCoordinate());
+        distances.push_back(distance);
+      }
+      int max_start_index = 0;
+      double max_total_delta = 0.0;
+      //  Iterate the headings `max_node_count` at a time to find the largest heading delta and use that section as the curve
+      for (int start_index = 0; start_index < headings.size() - 2; ++start_index)
+      {
+        double total = 0.0;
+        for (int i = 0; i < _roundedMaxNodeCount && start_index + i + 1 < headings.size(); ++i)
+        {
+          double delta = headings[start_index + i + 1] - headings[start_index + i];
+          total += delta;
+        }
+        //  Save the highest heading delta and the start index of that subline
+        if (fabs(total) > fabs(max_total_delta))
+        {
+          max_start_index = start_index;
+          max_total_delta = total;
+        }
+      }
+      //  Make the split if the heading delta exceeds the threashold
+      if (fabs(max_total_delta) > threshold)
+      {
+        //  Find the middle of the threshold to split at
+        double mid_point = max_total_delta / 2.0;
+        double total = 0.0;
+        for (int index = max_start_index + 1; index < max_start_index + _roundedMaxNodeCount && index < headings.size(); ++index)
+        {
+          double delta = headings[index] - headings[index - 1];
+          total += delta;
+          //  Split the way once the cumulative heading delta exceeds the midpoint delta value
+          if (fabs(total) > fabs(mid_point))
+          {
+            _splitWay(pWay->getId(), index + 1, pWay->getNodeId(index + 1));
+            break;
+          }
+        }
+      }
+      //  Only build up the tables and display them in trace mode
+      if (trace)
+      {
+        QString buffer;
+        QTextStream ts(&buffer);
+        for (int i = 0; i < headings.size(); ++i)
+          ts << QString().setNum(headings[i], 'f') << "\t| " << QString().setNum(distances[i], 'f') << "\n";
+        //  Output a bunch of stuff here to help develop the algorithm
+        LOG_TRACE("\nWay: " << pWay->getTags().getName() <<
+                  "\nHeadings\t| Distances" <<
+                  "\n" << ts.readAll()
+                 );
+      }
+    }
+  }
 }
 
 void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
 {
-  boost::shared_ptr<Way> pWay = _map->getWay(wayId);
+  WayPtr pWay = _map->getWay(wayId);
   if (!pWay)
   {
     LOG_TRACE("way at " << wayId << " does not exist.");
@@ -133,7 +237,7 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
 
   // split the way and remove it from the map
   WayLocation wayLoc(_map, pWay, nodeIdx, 0.0);
-  vector< boost::shared_ptr<Way> > splits = WaySplitter::split(_map, pWay, wayLoc);
+  vector<WayPtr> splits = WaySplitter::split(_map, pWay, wayLoc);
 
   // Process splits
   if (splits.size() > 1)
@@ -147,7 +251,7 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
     // Make sure any ways that are part of relations continue to be part of those relations after
     // they're split.
     QList<ElementPtr> newWays;
-    foreach (const boost::shared_ptr<Way>& w, splits)
+    foreach (const WayPtr& w, splits)
       newWays.append(w);
 
     _map->replace(pWay, newWays);
@@ -163,6 +267,15 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
 void CornerSplitter::apply(boost::shared_ptr<OsmMap> &map)
 {
   splitCorners(map);
+}
+
+void CornerSplitter::setConfiguration(const Settings& conf)
+{
+  ConfigOptions options(conf);
+  _cornerThreshold = options.getCornerSplitterThreshold();
+  _splitRounded = options.getCornerSplitterRoundedSplit();
+  _roundedThreshold = options.getCornerSplitterRoundedThreshold();
+  _roundedMaxNodeCount = options.getCornerSplitterRoundedMaxNodeCount();
 }
 
 }
