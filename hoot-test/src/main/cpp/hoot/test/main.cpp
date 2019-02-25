@@ -373,6 +373,8 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
 
 int main(int argc, char *argv[])
 {
+  qSetGlobalQHashSeed(0);
+
   if (argc == 1)
   {
     cout << argv[0] << " Usage:\n"

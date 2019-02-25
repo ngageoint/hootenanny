@@ -53,6 +53,8 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+  qSetGlobalQHashSeed(0);
+
   Hoot::getInstance().init();
 
   v8Engine::setPlatformInit();
